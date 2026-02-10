@@ -18,7 +18,8 @@ from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
 from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
-from .RecipeEngine import GameRecipe, GameItem, DefinitionSource
+from .RandomGameItems import RandomGameItems
+from .RecipeEngine import GameRecipe, GameItem, DefinitionSource, TechCatalyst, Category, OneItemCatalyst
 from .Shapes import get_shapes
 from .FactorioSettings import FactorioSettings
 from .Technologies import Technology
@@ -161,7 +162,7 @@ class FactorioBobs(World):
                 new_ingredients = {}
                 liquids_used = 0
                 for ingredient_name in ingredients_name:
-                    ingredient = self.modpack.recipe_engine.all_ingredients[ingredient_name]
+                    ingredient = self.modpack.recipe_engine.get_game_item(ingredient_name)
                     if ingredient.is_fluid:
                         liquids_used += 1
                     new_ingredients[ingredient] = 1
@@ -169,11 +170,13 @@ class FactorioBobs(World):
                 custom_products = {}
                 if product_name not in self.custom_products:
                     self.custom_products[product_name] = GameItem(self.modpack.recipe_engine, product_name,
-                                                                  DefinitionSource.WORLD, self.modpack.recipe_engine)
+                                                                  DefinitionSource.WORLD)
                 custom_products[self.custom_products[product_name]] = 1
                 self.custom_recipes[product_name] = GameRecipe(self.modpack.recipe_engine, product_name,
-                                                               DefinitionSource.WORLD, new_ingredients, custom_products,
+                                                               DefinitionSource.WORLD, self.get_category(new_ingredients),
+                                                               new_ingredients, custom_products,
                                                                1)
+                self.custom_products[product_name].crafted_by.add(self.custom_recipes[product_name])
                 # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
             self.options.additional_logic.value = self.options.additional_logic.option_none
             slot_options = slot_data[FactorioBobs.SLOT_OPTIONS_KEY]
@@ -339,11 +342,11 @@ class FactorioBobs(World):
 
         victory_tech: set[Technology] = set()
         if self.options.silo != Silo.option_spawn:
-            victory_tech |= self.get_internal_item("rocket-silo").all_unlocking_technologies()
-            victory_tech |= self.get_internal_item("cargo-landing-pad").all_unlocking_technologies()
-        victory_tech |= self.get_internal_item("rocket-part").all_unlocking_technologies()
+            victory_tech |= self.get_item_tech_req("rocket-silo")
+            victory_tech |= self.get_item_tech_req("cargo-landing-pad")
+        victory_tech |= self.get_item_tech_req("rocket-part")
         if self.options.goal == Goal.option_satellite:
-            victory_tech |= self.get_internal_item("satellite").all_unlocking_technologies()
+            victory_tech |= self.get_item_tech_req("satellite")
         victory_tech_names = set(tech.name for tech in victory_tech)
         if self.options.silo == Silo.option_spawn:
             victory_tech_names -= {"rocket-silo"}
@@ -365,7 +368,38 @@ class FactorioBobs(World):
 
     def get_internal_item(self, name: str) -> GameItem:
         return self.custom_products[name] if name in self.custom_products \
-            else self.modpack.recipe_engine.all_ingredients[name]
+            else self.modpack.recipe_engine.get_game_item(name)
+
+    def get_item_tech_req(self, item_name: str) -> set[Technology]: # todo this is temp replace this with bootstrap
+        if item_name not in self.custom_recipes:
+            item = self.modpack.recipe_engine.get_game_item(item_name)
+            if not item.has_calculated_raw:
+                raise RuntimeError(f"Item {item_name} has no calculated raw data, run GenPrecalc on pack")
+            return item.get_req_techs()
+        recipe = self.custom_recipes[item_name]
+        req = set()
+        for item in recipe.ingredients:
+            if not item.has_calculated_raw:
+                raise RuntimeError(f"Item {item_name} has no calculated raw data, run GenPrecalc on pack")
+            req |= item.get_req_techs()
+
+        for catalyst in recipe.technologies:
+            req.add(catalyst.tech)
+
+        ordered_machines = sorted(recipe.category.machines, key=lambda m: m.cost)
+        for machine in ordered_machines:
+            if machine.is_valid:
+                req |= machine.get_req_techs()
+                break
+
+        for catalyst in recipe.needed_items:
+            item = catalyst.item
+            if item.is_valid:
+                req |= item.get_req_techs()
+                break
+            else:
+                raise RuntimeError(f"Item {item_name} is invalid")
+        return req
 
     def generate_basic(self):
         start_location_hints: typing.Set[str] = self.options.start_location_hints.value
@@ -402,148 +436,111 @@ class FactorioBobs(World):
                 spoiler_handle.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
     @staticmethod
-    def get_category(category: str, liquids: int) -> str:
-        categories = {1: "crafting-with-fluid",
+    def get_category(ingredients: typing.Iterable[GameItem], preferred="crafting") -> str: # todo extract number of fluid input for categories
+        num_liquids = sum(1 for ingredient in ingredients if ingredient.is_fluid)
+        categories = {0: preferred,
+                      1: "crafting-with-fluid",
                       2: "chemistry"}
-        return categories.get(liquids, category)
+        return categories[num_liquids]
 
     def make_custom_recipe(self, name:str, products: dict[GameItem, int], ingredients_num: int, energy: int,
-                           pool: list[GameItem], allow_liquids: int = 2, category = "crafting")-> GameRecipe:
-        assert len(pool) >= ingredients_num, f"Can't pick {ingredients_num} many items from pool {pool}."
+                           pool: RandomGameItems, pool_index: int, allow_liquids: int = 2, category = "crafting")-> GameRecipe:
+        # assert len(pool) >= ingredients_num, f"Can't pick {ingredients_num} many items from pool {pool}."
         new_ingredients = {}
         liquids_used = 0
+        bad_items: list[GameItem] = []
+        if self.options.no_earlier_pools.value:
+            get_item = lambda: pool.pop_item_from_pool(pool_index)
+        else:
+            get_item = lambda: pool.pop_item_from_pool(0, pool_index)
+
         for _ in range(ingredients_num):
-            new_ingredient: GameItem = self.random.sample(pool, 1)[0]
-            pool.remove(new_ingredient)
+            new_ingredient = get_item()
+            while liquids_used == allow_liquids and new_ingredient.is_fluid:
+                # liquids already at max for current recipe.
+                # Return the liquid to the pool and get a new lambda_ingredient.
+                bad_items.append(new_ingredient)
+                new_ingredient: GameItem = get_item()
             if new_ingredient.is_fluid:
-                while liquids_used == allow_liquids and new_ingredient.is_fluid:
-                    # liquids already at max for current recipe.
-                    # Return the liquid to the pool and get a new lambda_ingredient.
-                    pool.append(new_ingredient)
-                    new_ingredient: GameItem = self.random.sample(pool, 1)[0]
-                    pool.remove(new_ingredient)
-                liquids_used += 1 if new_ingredient.is_fluid else 0
+                liquids_used += 1
             new_ingredients[new_ingredient] = 1
 
         custom_products = {}
         for product, amount in products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = GameItem(product.name, product.is_fluid, self.modpack.recipe_engine)
+                self.custom_products[product.name] = GameItem(self.modpack.recipe_engine, product.name,
+                                                              DefinitionSource.WORLD, product.is_fluid)
             custom_products[self.custom_products[product.name]] = amount
-        return GameRecipe(name, self.get_category(category, liquids_used), new_ingredients,
-                      custom_products, energy, self.modpack.recipe_engine)
+        recipe = GameRecipe(self.modpack.recipe_engine, name, DefinitionSource.WORLD,
+                            self.get_category(new_ingredients, category), new_ingredients,
+                      custom_products, energy)
+        return recipe
 
-    def make_quick_recipe(self, original: GameRecipe, pool: set[GameItem], allow_liquids: int = 2,
-                          ingredients_offset: int = 0) -> GameRecipe:
-        count: int = len(original.ingredients) + ingredients_offset
-        assert len(pool) >= count, f"Can't pick {count} many items from pool {pool}."
-        pool = list(sorted(pool, key=lambda item: item.name))
-        new_ingredients = {}
-        liquids_used = 0
-        for _ in range(count):
-            new_ingredient: GameItem = self.random.sample(pool, 1)[0]
-            pool.remove(new_ingredient)
-            if new_ingredient.is_fluid:
-                while liquids_used == allow_liquids and new_ingredient.is_fluid:
-                    # liquids already at max for current recipe.
-                    # Return the liquid to the pool and get a new lambda_ingredient.
-                    pool.append(new_ingredient)
-                    new_ingredient: GameItem = self.random.sample(pool, 1)[0]
-                    pool.remove(new_ingredient)
-                liquids_used += 1 if new_ingredient.is_fluid else 0
-            new_ingredients[new_ingredient] = 1
-
-        custom_products = {}
-        for product, amount in original.products.items():
-            if product.name not in self.custom_products:
-                self.custom_products[product.name] = GameItem(product.name, product.is_fluid, self.modpack.recipe_engine)
-            custom_products[self.custom_products[product.name]] = amount
-        return GameRecipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
-                      custom_products, original.energy, self.modpack.recipe_engine)
-
-    def make_balanced_recipe(self, original: GameRecipe, pool: list[GameItem], factor: float = 1,
+    def make_balanced_recipe(self, original: GameRecipe, pool: RandomGameItems, pool_index = -1, factor: float = 1,
                              allow_liquids: int = 2, ingredients_offset: int = 0) -> GameRecipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
-        target_raw = int(sum((count for ingredient, count in original.get_raw_ingredients().items())) * factor)
-        target_energy = original.total_energy * factor
+        target_energy = int(sum((count.score for ingredient, count in original.ingredients.keys())) * factor)
         target_num_ingredients = len(original.ingredients) + ingredients_offset
-        remaining_raw = target_raw
         remaining_energy = target_energy
         remaining_num_ingredients = target_num_ingredients
-        fallback_pool = []
+        bad_items: list[GameItem] = []
         liquids_used = 0
+        if self.options.no_earlier_pools.value:
+            get_item = lambda: pool.pop_item_from_pool(pool_index)
+        else:
+            get_item = lambda: pool.pop_item_from_pool(0, pool_index)
 
         # fill all but one slot with random ingredients, last with a good match
-        while remaining_num_ingredients > 0 and pool:
-            ingredient = pool.pop()
+        while remaining_num_ingredients > 0:
+            ingredient = get_item()
+            if not ingredient.is_valid_pool:
+                continue
+            assert ingredient.has_calculated_raw, f"{ingredient}: Calculated raw not available"
             if liquids_used == allow_liquids and ingredient.is_fluid:
-                continue  # can't use this lambda_ingredient as we already have maximum liquid in our recipe.
-            ingredient_raw = 0
-            if ingredient.name in self.modpack.recipe_engine.all_ingredients:
-                ingredient_recipe = ingredient.best_recipe
-                if ingredient_recipe:
-                    ingredient_raw = sum((count for ingredient, count in ingredient_recipe.get_raw_ingredients().items()))
-                    ingredient_energy = ingredient_recipe.total_energy
-                else:
-                    ingredient_energy = 1
-                    self.logger.warning(f"no best recipe for ingredient: {ingredient.name}")
-            else:
-                # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
-                ingredient_energy = 2
-            if not ingredient_raw:
-                ingredient_raw = 1
+                continue  # can't use this ingredient as we already have maximum liquid in our recipe.
+            ingredient_energy = ingredient.score
             if remaining_num_ingredients == 1:
-                max_raw = 1.1 * remaining_raw
-                min_raw = 0.9 * remaining_raw
                 max_energy = 1.1 * remaining_energy
                 min_energy = 0.9 * remaining_energy
             else:
-                max_raw = remaining_raw * 0.75
-                min_raw = (remaining_raw - max_raw) / remaining_num_ingredients
                 max_energy = remaining_energy * 0.75
                 min_energy = (remaining_energy - max_energy) / remaining_num_ingredients
-            min_num_raw = min_raw / ingredient_raw
-            max_num_raw = max_raw / ingredient_raw
             min_num_energy = min_energy / ingredient_energy
             max_num_energy = max_energy / ingredient_energy
-            min_num = int(max(1, min_num_raw, min_num_energy))
-            max_num = int(min(1000, max_num_raw, max_num_energy))
+            min_num = int(max(1, min_num_energy))
+            max_num = int(min(1000, max_num_energy))
             if min_num > max_num:
-                fallback_pool.append(ingredient)
-                continue  # can't use that lambda_ingredient
+                bad_items.append(ingredient)
+                continue  # can't use that ingredient
             num = self.random.randint(min_num, max_num)
             new_ingredients[ingredient] = num
-            remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
             if ingredient.is_fluid:
                 liquids_used += 1
 
         # fill failed slots with whatever we got
-        pool.extend(fallback_pool)
-        fallback_pool = []
+        pool.return_items(bad_items)
+        bad_items = []
         while remaining_num_ingredients > 0 and pool:
-            ingredient: GameItem = pool.pop()
+            ingredient: GameItem = get_item()
+            if not ingredient.is_valid_pool:
+                continue
+            if not ingredient.has_calculated_raw:
+                raise RuntimeError(f"{ingredient}: Calculated raw not available")
             if liquids_used == allow_liquids and ingredient.is_fluid:
-                fallback_pool.append(ingredient)
+                bad_items.append(ingredient)
                 continue  # can't use this lambda_ingredient as we already have maximum liquid in our recipe.
 
-            ingredient_recipe = ingredient.best_recipe
-            if not ingredient_recipe:
-                self.logger.warning(f"missing recipe for {ingredient}")
-                continue
-            ingredient_raw = sum((count for ingredient, count in ingredient.get_raw_ingredients().items()))
-            ingredient_energy = ingredient_recipe.total_energy
-            num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
+            ingredient_energy = ingredient.score
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
-            num = int(min(num_raw, num_energy))
+            num = int(num_energy)
             if num < 1:
-                fallback_pool.append(ingredient)
+                bad_items.append(ingredient)
                 continue
 
             new_ingredients[ingredient] = num
-            remaining_raw -= num * ingredient_raw
             remaining_energy -= num * ingredient_energy
             remaining_num_ingredients -= 1
             if ingredient.is_fluid:
@@ -553,33 +550,19 @@ class FactorioBobs(World):
         if remaining_num_ingredients > 1:
             self.logger.warning("could not randomize recipe")
 
-        pool.extend(fallback_pool)
+        pool.return_items(bad_items)
 
         custom_products = {}
         for product, amount in original.products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = GameItem(product.name, product.is_fluid, self.modpack.recipe_engine)
+                self.custom_products[product.name] = GameItem(self.modpack.recipe_engine, product.name,
+                                                              DefinitionSource.WORLD, product.is_fluid)
             custom_products[self.custom_products[product.name]] = amount
 
-        return GameRecipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
-                      custom_products, original.energy, self.modpack.recipe_engine)
-
-    def get_internal_item_pools(self) -> dict[str, list[GameItem]]:
-        automation_pool, ordered_items = self.modpack.recipe_engine.get_ordered_items()
-        item_pools: dict[str, list[GameItem]] = {"automation-science-pack":
-                                                         list(sorted(automation_pool, key=lambda item: item.name))}
-
-        ordered_items = ordered_items[:int(len(ordered_items) * (self.options.percent_items_in_game.value / 100))]
-
-        pool_names = self.modpack.ordered_science_packs[1:self.options.number_of_science_packs.value]
-        if self.options.additional_rocket_pool.value:
-            pool_names.append("rocket")
-
-        items_per_pool = len(ordered_items) / len(pool_names)
-
-        for i, pool_name in enumerate(pool_names):
-            item_pools[pool_name] = ordered_items[int(i*items_per_pool):int((i+1)*items_per_pool)]
-        return item_pools
+        recipe = GameRecipe(self.modpack.recipe_engine, original.name, DefinitionSource.WORLD,
+                            self.get_category(new_ingredients, original.category.name), new_ingredients,
+                      custom_products, original.energy)
+        return recipe
 
     def set_custom_technologies(self):
         custom_technologies = {}
@@ -592,62 +575,49 @@ class FactorioBobs(World):
         # for name, item in all_ingredients.items():
         #     print(f"{name}: {item.get_raw_ingredients()}")
         ingredients_offset = self.options.recipe_ingredients_offset
-        science_pack_pools = self.get_internal_item_pools()
 
-        valid_pool = []
+        pools = RandomGameItems(self)
+
         for index, pack in enumerate(self.modpack.ordered_science_packs[:self.options.number_of_science_packs.value]):
-            if self.options.no_earlier_pools.value:
-                valid_pool = science_pack_pools[pack]
-            else:
-                valid_pool += science_pack_pools[pack]
-            if self.options.recipe_ingredients or self.modpack.recipe_engine.all_ingredients[pack].best_recipe is None:
-                pack_item = self.modpack.recipe_engine.all_ingredients[pack]
+            if self.options.recipe_ingredients or not self.modpack.recipe_engine.get_game_item(pack).best_recipes:
+                pack_item = self.modpack.recipe_engine.get_game_item(pack)
                 return_amount = index//2 + 1
                 new_recipe = self.make_custom_recipe(pack, {pack_item: return_amount},
                                                      index//2 + 2 + ingredients_offset.value,
-                                                     return_amount*5, valid_pool)
+                                                     return_amount*5, pools, index)
                 new_recipe.productivity = True
                 self.custom_recipes[pack] = new_recipe
 
         original_rocket_part = self.modpack.recipe_engine.recipes["rocket-part"]
-        if self.options.additional_rocket_pool.value:
-            rocket_pool = science_pack_pools["rocket"]
-        else:
-            rocket_pool = science_pack_pools[self.modpack.ordered_science_packs[self.options.number_of_science_packs.value-1]]
-        custom_rocket_part = GameItem("rocket-part", False, self.modpack.recipe_engine)
+        custom_rocket_part = GameItem(self.modpack.recipe_engine, "rocket-part", DefinitionSource.WORLD, False)
         self.custom_products[custom_rocket_part.name] = custom_rocket_part
-        self.custom_recipes["rocket-part"] = GameRecipe("rocket-part", original_rocket_part.category,
-                                                     {item: 10 for item in self.random.sample(rocket_pool, 3 + ingredients_offset)},
+        self.custom_recipes["rocket-part"] = GameRecipe(self.modpack.recipe_engine, "rocket-part", DefinitionSource.WORLD,
+                                                        original_rocket_part.category,
+                                                     {pools.pop_item_from_pool(-1): 10 for _ in range(3 + ingredients_offset)},
                                                      {custom_rocket_part: 1},
-                                                     original_rocket_part.energy, self.modpack.recipe_engine)
+                                                     original_rocket_part.energy)
         self.custom_recipes["rocket-part"].productivity = True
 
-        if self.options.silo.value == Silo.option_randomize_recipe \
-                or self.options.satellite.value == Satellite.option_randomize_recipe:
-            if self.options.no_earlier_pools.value:
-                valid_pool = rocket_pool
-            else:
-                valid_pool += rocket_pool
+        if self.options.silo.value == Silo.option_randomize_recipe:
+            old_recipe = self.modpack.recipe_engine.recipes["rocket-silo"]
+            new_recipe = self.make_balanced_recipe(
+                old_recipe, pools, -1,
+                factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
+                ingredients_offset=ingredients_offset.value)
+            self.custom_recipes["rocket-silo"] = new_recipe
 
-            if self.options.silo.value == Silo.option_randomize_recipe:
-                old_recipe = self.modpack.recipe_engine.recipes["rocket-silo"]
-                new_recipe = self.make_balanced_recipe(
-                    old_recipe, valid_pool,
-                    factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
-                    ingredients_offset=ingredients_offset.value)
-                self.custom_recipes["rocket-silo"] = new_recipe
+        if self.options.satellite.value == Satellite.option_randomize_recipe:
+            old_recipe = self.modpack.recipe_engine.recipes["satellite"]
+            new_recipe = self.make_balanced_recipe(
+                old_recipe, pools, -1,
+                factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
+                ingredients_offset=ingredients_offset.value)
+            self.custom_recipes["satellite"] = new_recipe
 
-            if self.options.satellite.value == Satellite.option_randomize_recipe:
-                old_recipe = self.modpack.recipe_engine.recipes["satellite"]
-                new_recipe = self.make_balanced_recipe(
-                    old_recipe, valid_pool,
-                    factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
-                    ingredients_offset=ingredients_offset.value)
-                self.custom_recipes["satellite"] = new_recipe
-        bridge = GameItem("ap-energy-bridge", False, self.modpack.recipe_engine)
+        bridge = GameItem(self.modpack.recipe_engine, "ap-energy-bridge", DefinitionSource.WORLD, False)
         self.custom_products["ap-energy-bridge"] = bridge
         new_recipe = self.make_custom_recipe(bridge.name, {bridge: 1}, 6+ingredients_offset.value, 10,
-            science_pack_pools[self.modpack.ordered_science_packs[0]])
+            pools, 0)
         for ingredient_name in new_recipe.ingredients:
             new_recipe.ingredients[ingredient_name] = self.random.randint(50, 500)
         self.custom_recipes[bridge.name] = new_recipe
@@ -661,7 +631,7 @@ class FactorioBobs(World):
             needed_items.add(self.get_internal_item("satellite"))
 
         for item in needed_items:
-            self.progression_technologies |= item.all_unlocking_technologies()
+            self.progression_technologies |= item.get_req_techs()
 
 
     def create_item(self, name: str) -> FactorioItem:
@@ -706,7 +676,7 @@ class FactorioBobs(World):
             science_pack_name = self.modpack.ordered_science_packs[complexity]
             rule = self.get_science_pack_rule(complexity)
             needed_items = {item for item in rule.needed_items() if not state.has(item, self.player)}
-            ingredients = self.get_internal_item(science_pack_name).best_recipe.ingredients
+            ingredients = self.get_internal_item(science_pack_name).best_recipe.ingredients # todo fix
             return [{"text": f"pack name: {science_pack_name}\n"},
                     {"text": f"ingredients: {ingredients}\n"},
                     {"text": f"needed items: {needed_items}\n"}]

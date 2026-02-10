@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import math
 from enum import Enum
-from functools import cached_property
+from functools import cached_property, cache
 from typing import TYPE_CHECKING, TypeVar
 
 import pulp
@@ -42,8 +42,8 @@ class RecipeEngine:
         self.recipes: dict[str, GameRecipe] = {}
 
         self.item_catalysts: dict[GameItem, OneItemCatalyst] = {}
-        self.categories: dict[str, CategoryCatalyst] = {}
-        self.fluid_mining: TechCatalyst | None = None
+        self.categories: dict[str, Category] = {}
+        self.fluid_mining: set[GameRecipe] = set()
 
         self.custom_invalid: set[GameItem] = set()
 
@@ -61,6 +61,12 @@ class RecipeEngine:
         self.__load_settings()
         self.__link_recipes()
         self.__remove_bad_items()
+
+        goal_items = {"rocket-part", "satellite", "rocket-silo"}
+        non_randomizable_items = set(self.modpack.ordered_science_packs) | goal_items
+
+        for item_name in non_randomizable_items:
+            self.get_game_item(item_name).is_valid_pool = False
 
         try:
             with self.modpack.open_file("Cache/precalc.json") as file:
@@ -96,10 +102,9 @@ class RecipeEngine:
                 ingredient.is_valid_ingredient = False
 
     def __register_categories(self) -> None:
-
-        def get_category(name: str) -> CategoryCatalyst:
+        def get_category(name: str) -> Category:
             if name not in self.categories:
-                self.categories[name] = CategoryCatalyst(self, name, DefinitionSource.EXTRACTED)
+                self.categories[name] = Category(self, name, DefinitionSource.EXTRACTED)
             return self.categories[name]
 
         with self.modpack.open_file("Extractor/machines.json") as file:
@@ -110,7 +115,7 @@ class RecipeEngine:
                 for category in categories:
                     get_category(category).manual = True
                 get_category("basic-crafting").manual = True # somehow this is implied and not exported
-                get_category("basic-solid").manual = True # somehow this is implied and not exported
+                get_category("basic-solid").manual = True # this is not a crafting category so not extracted todo look if some ores can't do this
                 continue
 
             item = self.get_item_from_entity(entity)
@@ -127,16 +132,15 @@ class RecipeEngine:
 
         for resource_name, resource_data in raw_resources.items():
             if "required_fluid" in resource_data:
-                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED,
+                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
                                                                        {resource_data["required_fluid"]: resource_data["fluid_amount"]},
                                                                        resource_data["products"], resource_data["mining_time"])
                 if resource_data["category"] == "basic-solid":
-                    self.recipes[f"resource_{resource_name}"].catalysts.add(self.fluid_mining)
+                    self.fluid_mining.add(self.recipes[f"resource_{resource_name}"])
             else:
-                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED,
+                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
                                                                        {},
                                                                        resource_data["products"], resource_data["mining_time"])
-            self.recipes[f"resource_{resource_name}"].catalysts.add(self.categories[resource_data["category"]])
         del raw_resources
 
         with self.modpack.open_file("Extractor/recipes.json") as file:
@@ -144,23 +148,23 @@ class RecipeEngine:
 
         for recipe_name, recipe_data in raw_recipes.items():
             # example "wheat-seeds":{"ingredients":{"wood":100},"products":{"wheat-seeds":1},"category":"organic-synth-recipes","energy":30}
-            if recipe_data["category"] not in self.categories:
+            if recipe_data["category"] not in self.categories: # No way to craft skip recipe
+                self.modpack.logger.debug(f"Recipe {recipe_name} has invalid category {recipe_data['category']}.")
                 continue
-            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.EXTRACTED,
+            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.EXTRACTED, recipe_data["category"],
                                                    recipe_data["ingredients"], recipe_data["products"],
                                                    recipe_data["energy"])
-            self.recipes[recipe_name].catalysts.add(self.categories[recipe_data["category"]])
         del raw_recipes
 
         with self.modpack.open_file("Extractor/generators.json") as file:
             raw_generators = json.load(file)
         for entity, product in raw_generators.items():
             item = self.get_item_from_entity(entity)
-            self.categories[f"generator_{item.name}"] = CategoryCatalyst(self, f"generator_{item.name}",
-                                                                         DefinitionSource.EXTRACTED)
+            self.categories[f"generator_{item.name}"] = Category(self, f"generator_{item.name}",
+                                                                 DefinitionSource.EXTRACTED)
             self.categories[f"generator_{item.name}"].machines.add(item)
             self.recipes[f"generator_{item.name}"] = GameRecipe(self, f"generator_{item.name}",
-                                                                DefinitionSource.EXTRACTED,
+                                                                DefinitionSource.EXTRACTED, f"generator_{item.name}",
                                                                 {}, {product: 1},
                                                                 GENERATOR_ENERGY)
         del raw_generators
@@ -174,7 +178,7 @@ class RecipeEngine:
                     fluids.add(special["fluid"])
             del raw_tiles
             for fluid in fluids:
-                self.recipes[f"pump_{fluid}"] = GameRecipe(self, f"pump_{fluid}", DefinitionSource.EXTRACTED,
+                self.recipes[f"pump_{fluid}"] = GameRecipe(self, f"pump_{fluid}", DefinitionSource.EXTRACTED, "offshore-pump",
                                                            {}, {fluid: 1}, GENERATOR_ENERGY)
 
         try:
@@ -187,19 +191,23 @@ class RecipeEngine:
             # TODO add optional crafting_machine_tints
             # TODO add group for AP recipes
             # TODO add support for custom techs for recipes
-            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.CUSTOM,
+            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.CUSTOM, recipe_data["category"],
                                                    recipe_data["ingredients"], recipe_data["products"], recipe_data["energy"])
-            self.recipes[recipe_name].catalysts.add(self.categories[recipe_data["category"]])
 
     def __link_technologies(self):
         for technology in self.modpack.base_technology_table.values():
             if "mining-with-fluid" in technology.modifiers:
-                self.fluid_mining = TechCatalyst(self, DefinitionSource.EXTRACTED, technology)
+                fluid_mining_tech = TechCatalyst(self, DefinitionSource.EXTRACTED, technology) # todo Multiple/none?
+                for recipe in self.fluid_mining:
+                    recipe.technologies.add(fluid_mining_tech)
             if not technology.unlocks:
                 continue
             catalyst = TechCatalyst(self, DefinitionSource.EXTRACTED, technology)
             for recipe_name in technology.unlocks:
-                self.recipes[recipe_name].catalysts.add(catalyst)
+                if recipe_name in self.recipes:
+                    self.recipes[recipe_name].technologies.add(catalyst)
+                else:
+                    self.modpack.logger.debug(f"Technology {technology.name} unlocked unknown recipe: {recipe_name}")
 
     def __load_settings(self) -> None:
         with self.modpack.open_file("recipeEngineSettings.json") as file:
@@ -208,7 +216,8 @@ class RecipeEngine:
         if "missed_machines" in raw_settings:
             for name, categories in raw_settings["missed_machines"].items():
                 for category in categories:
-                    self.categories[category].machines.add(self.get_game_item(name, DefinitionSource.CUSTOM))
+                    item = self.get_item_from_entity(category)
+                    self.get_category(category).machines.add(item)
 
         if "invalid_ingredients" in raw_settings:
             for ingredient in raw_settings["invalid_ingredients"]:
@@ -231,17 +240,16 @@ class RecipeEngine:
                     if item.is_valid_pool:
                         self.modpack.logger.warning(f"{item.name} is used but not method of obtaining it detected.\n"
                                                     "Consider disabling it or adding a custom recipe")
+            self.modpack.logger.warning(f"{item.name} is defined but not used or craftable")
             item.set_invalid()
 
-    def run_pulp_solver(self, goal: GameItem, invalid_catalysts: set[Catalyst]=None, remove_waste=False) \
+    def run_pulp_solver(self, goal: GameItem, remove_waste=False) \
             -> tuple[int, float, set[GameRecipe], set[GameRecipe], dict[GameItem, float]]:
-        if invalid_catalysts is None:
-            invalid_catalysts: set[Catalyst] = set()
         probBest = pulp.LpProblem("CraftingOptimization", pulp.LpMinimize)
 
         recipe_qty = {
             recipe: pulp.LpVariable(f"recipe_{recipe.name}", lowBound=0)
-            for recipe in self.recipes.values() if not (recipe.catalysts & invalid_catalysts)
+            for recipe in self.recipes.values()
         }
         waste = {
             item: pulp.LpVariable(f"waste_{item.name}", lowBound=0)
@@ -288,8 +296,8 @@ class RecipeEngine:
             can_rec = can_get_recipe[recipe]
 
             probBest += rec_qty <= can_rec * big_M
-            req = ({can_get_item[cat.item] for cat in recipe.catalysts if isinstance(cat, OneItemCatalyst)}
-                   | {can_get_category[cat] for cat in recipe.catalysts if isinstance(cat, CategoryCatalyst)}
+            req = ({can_get_item[cat.item] for cat in recipe.needed_items}
+                   | {can_get_category[recipe.category]}
                    | {can_get_item[ingredient] for ingredient in recipe.ingredients})
             for catalyst in req:
                 probBest += can_rec <= catalyst
@@ -357,13 +365,35 @@ class RecipeEngine:
 
     def get_game_item(self, item: GameItem | str, source: DefinitionSource = DefinitionSource.IMPLIED) -> GameItem:
         if type(item) is GameItem:
-            return item
+            if item.ctx is self:
+                return item
+            else:
+                item = item.name # should never happen but just in case
         if item in self.game_items:
             return self.game_items[item]
         if source != DefinitionSource.EXTRACTED:
             raise RuntimeError(f"{item} is not a valid ingredient")
         self.game_items[item] = GameItem(self, item, DefinitionSource.IMPLIED)
         return self.game_items[item]
+
+    def get_category(self, category: Category | str, source: DefinitionSource = DefinitionSource.IMPLIED) -> Category:
+        if type(category) is Category:
+            if category.ctx is self:
+                return category
+            else:
+                category = category.name # should never happen but just in case
+        if category in self.categories:
+            return self.categories[category]
+        if source != DefinitionSource.EXTRACTED:
+            raise RuntimeError(f"{category} is not a valid category")
+        self.categories[category] = Category(self, category, DefinitionSource.IMPLIED)
+        return self.categories[category]
+
+    def get_pool_items(self) -> set[GameItem]:
+        for item in self.game_items.values():
+            item.raw_calculate()
+        valid_ingredients = {x for x in self.game_items.values() if x.is_valid_pool}
+        return valid_ingredients
 
 
 class GameItem(RecipeEngineType):
@@ -379,7 +409,7 @@ class GameItem(RecipeEngineType):
 
         self.is_valid: bool = True
         self.__is_valid_first_pool: bool = True
-        self.is_valid_pool: bool = True
+        self.__is_valid_pool: bool = True
 
         self.used_in: set[GameRecipe] = set()
         self.crafted_by: set[GameRecipe] = set()
@@ -391,6 +421,14 @@ class GameItem(RecipeEngineType):
     @is_valid_first_pool.setter
     def is_valid_first_pool(self, is_valid_first_pool: bool) -> None:
         self.__is_valid_first_pool = is_valid_first_pool
+
+    @property
+    def is_valid_pool(self) -> bool:
+        return self.__is_valid_pool and self.is_valid
+
+    @is_valid_pool.setter
+    def is_valid_pool(self, is_valid_pool: bool) -> None:
+        self.__is_valid_pool = is_valid_pool
 
     def raw_calculate(self) -> None:
         if self.has_calculated_raw:
@@ -427,22 +465,36 @@ class GameItem(RecipeEngineType):
         if self.name in self.ctx.game_items:
             del self.ctx.game_items[self.name]
 
+    def get_req_techs(self) -> set[Technology]:
+        techs = set()
+        for recipe in self.best_recipes:
+            if recipe in self.ctx.modpack.start_unlocked_recipes:
+                continue
+            for tech_cat in recipe.technologies:
+                techs.add(tech_cat.tech)
+        return techs
+
 
 class GameRecipe(RecipeEngineType):
-    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource,
+    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource, category: Category | str,
                  ingredients: dict[GameItem | str, float], products: dict[GameItem | str, float], energy: float):
         super().__init__(ctx, name, source)
 
         self.has_calculated_raw: bool = False
-        self.req_techs: set[TechCatalyst] | None = None
         self.is_valid: bool = True
+
+        self.is_starter: bool = name in ctx.modpack.start_unlocked_recipes
 
         self.ingredients: dict[GameItem, float] = {ctx.get_game_item(ingredient, source): amount
                                                    for ingredient, amount in ingredients.items()}
         self.products: dict[GameItem, float] = {ctx.get_game_item(product, source): amount
                                                 for product, amount in products.items()}
         self.energy = energy
-        self.catalysts: set[Catalyst] = set()
+        self.technologies: set[TechCatalyst] = set()
+        self.category: Category = ctx.get_category(category)
+        self.needed_items: set[ItemCatalyst] = set()
+
+        self.productivity: bool | None = None # ternary set to override default
 
         if not self.ingredients:
             self.cost: float = self.energy
@@ -457,18 +509,11 @@ class GameRecipe(RecipeEngineType):
             new_amount = self.products[ingredient] - amount
             if new_amount >= 0:
                 del self.ingredients[ingredient]
-                self.catalysts.add(ctx.get_item_catalyst(ingredient))
+                self.needed_items.add(ctx.get_item_catalyst(ingredient))
                 self.products[ingredient] = new_amount
             else:
                 del self.products[ingredient]
                 self.ingredients[ingredient] = -new_amount
-
-    @cached_property
-    def category(self) -> str | None:
-        for cat in self.catalysts:
-            if type(cat) is CategoryCatalyst:
-                return cat.name
-        return None
 
     def link(self) -> None:
         for ingredient in self.ingredients:
@@ -489,19 +534,6 @@ class GameRecipe(RecipeEngineType):
         if self.name in self.ctx.recipes:
             del self.ctx.recipes[self.name]
 
-    def raw_calculate(self) -> None:
-        if self.has_calculated_raw:
-            return
-        self.has_calculated_raw = True
-
-        self.req_techs = set()
-        for catalyst in self.catalysts:
-            catalyst.raw_calculate()
-            if not catalyst.is_valid:
-                self.set_invalid()
-                return
-            self.req_techs |= catalyst.req_techs
-
 
 
 class Catalyst(RecipeEngineType):
@@ -520,74 +552,12 @@ class ItemCatalyst(Catalyst):
         super().__init__(ctx, name, source)
         self.item: GameItem | None = None
 
-    def calculate_tech(self, invalid_cat: set[Catalyst] | None = None) -> set[TechCatalyst] | None:
-        # if self.has_calculated_raw: # TODO optimise this could do with some caching
-        #     return
-        # self.has_calculated_raw = True
 
-        self.item.raw_calculate()
-        if invalid_cat:
-            invalid_cat: set[Catalyst] = {self} | invalid_cat
-        else:
-            invalid_cat: set[Catalyst] = {self}
-
-        status, _, recipes, _, _ = self.ctx.run_pulp_solver(self.item, invalid_catalysts=invalid_cat)
-        if status != pulp.LpStatusOptimal:
-            self.ctx.modpack.logger.debug(f"{self}: {status}, {recipes}")
-            return None  # critically failed
-        req_cat: set[Catalyst] = set(cat for recipe in recipes for cat in recipe.catalysts)
-        item_cat: set[ItemCatalyst] = set(cat for cat in req_cat if isinstance(cat, ItemCatalyst))
-        tech_cat: set[Catalyst] = set(cat for cat in req_cat if isinstance(cat, TechCatalyst))
-        for cat in item_cat:
-            ret = cat.calculate_tech(invalid_cat=invalid_cat)
-            if ret is None:
-                invalid_cat.add(cat)
-                return self.calculate_tech(invalid_cat=invalid_cat)
-            tech_cat |= ret
-        return tech_cat
-
-
-class CategoryCatalyst(ItemCatalyst):
+class Category(ItemCatalyst):
     def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
         super().__init__(ctx, name, source)
         self.machines: set[GameItem] = set()
         self.manual = False
-
-    def raw_calculate(self):
-        if self.has_calculated_raw:
-            return
-        self.has_calculated_raw: bool = True
-        if self.manual:
-            self.has_calculated_raw: bool = True
-            self.req_techs = set() # todo check is not manual early
-            return
-
-        ordered_machines = sorted(self.machines, key=lambda x: x.score)
-        for machine in ordered_machines:
-            self.item = machine
-            self.req_techs = self.calculate_tech()
-            if self.req_techs is not None:
-                return
-
-        self.ctx.modpack.logger.warning(f"{self}: unable to bootstrap")
-        self.is_valid = False # todo better is invalid
-
-    def calculate_tech(self, invalid_cat: set[Catalyst] | None = None) -> set[TechCatalyst] | None:
-        if self.manual:
-            return set()
-        store_best = self.item
-
-        ordered_machines = sorted(self.machines, key=lambda x: x.score)
-        calc_tech: set[TechCatalyst] = set()
-        for machine in ordered_machines:
-            self.item = machine
-            calc_tech = super().calculate_tech(invalid_cat)
-            if calc_tech is not None:
-                break
-
-        if self.has_calculated_raw:
-            self.item = store_best
-        return calc_tech
 
 
 class OneItemCatalyst(ItemCatalyst):
@@ -595,17 +565,6 @@ class OneItemCatalyst(ItemCatalyst):
                  item: GameItem):
         super().__init__(item.ctx, item.name, source)
         self.item = item
-
-    def raw_calculate(self):
-        if self.has_calculated_raw or not self.item.is_valid:
-            return
-        self.has_calculated_raw = True
-
-        self.req_techs = self.calculate_tech()
-        if self.req_techs is None:
-            self.ctx.modpack.logger.warning(f"{self}: unable to bootstrap")
-            self.is_valid = False # todo better is invalid
-
 
 class TechCatalyst(Catalyst):
     def __init__(self, ctx: RecipeEngine, source: DefinitionSource, tech: Technology):
