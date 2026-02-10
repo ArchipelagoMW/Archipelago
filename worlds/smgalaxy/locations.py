@@ -60,12 +60,12 @@ locspecialstages_table: dict[str, SMGLocationData]  = {
 }
 
 locbosses_table: dict[str, SMGLocationData]  = {
-    "BJ: Megaleg's Moon": SMGLocationData([regname.BOWJR1, "Power Star"], regname.BOWJR1, 170000026),
-    "B: The Fiery Stronghold": SMGLocationData([regname.BOWSER1, "Power Star"], regname.BOWSER1, 170000027),
-    "BJ: Sinking the Airships": SMGLocationData([regname.BOWJR2, "Power Star"], regname.BOWJR2, 170000028),
-    "BJ: King Kaliente's Spicy Return": SMGLocationData([regname.BOWJR3, "Power Star"], regname.BOWJR3, 170000029),
-    "B: Darkness on the Horizon": SMGLocationData([regname.BOWSER2, "Power Star"], regname.BOWSER2, 170000030),
-    "B: The Fate of the Universe": SMGLocationData([regname.BOWSER3, "Power Star"], regname.BOWSER3, 170000120)
+    "BJ: Megaleg's Moon": SMGLocationData([regname.BOWJR1, "Power Star", "Boss Star"], regname.BOWJR1, 170000026),
+    "B: The Fiery Stronghold": SMGLocationData([regname.BOWSER1, "Power Star", "Boss Star"], regname.BOWSER1, 170000027),
+    "BJ: Sinking the Airships": SMGLocationData([regname.BOWJR2, "Power Star", "Boss Star"], regname.BOWJR2, 170000028),
+    "BJ: King Kaliente's Spicy Return": SMGLocationData([regname.BOWJR3, "Power Star", "Boss Star"], regname.BOWJR3, 170000029),
+    "B: Darkness on the Horizon": SMGLocationData([regname.BOWSER2, "Power Star", "Boss Star"], regname.BOWSER2, 170000030),
+    "B: The Fate of the Universe": SMGLocationData([regname.BOWSER3, "Power Star", "Boss Star"], regname.BOWSER3, 170000120)
 }
 
 locSJ_table: dict[str, SMGLocationData]  = {
@@ -185,22 +185,22 @@ locHL_table: dict[str, SMGLocationData]  = {
 }
 
 locPC_table: dict[str, SMGLocationData]  = {
-    "TT: Luigi's Purple Coins": SMGLocationData(["Toy Time Galaxy", "Power Star"], regname.TOYTIME, 170000091),
-    "DN: Battlestation's Purple Coins": SMGLocationData(["Dreadnought Galaxy", "Power Star"], regname.DREADNOUGHT, 170000102),
-    "MM: Red-Hot Purple Coins": SMGLocationData(["Melty Molten Galaxy", "Power Star"], regname.MELTY, 170000108),
-    "DD: Plunder the Purple Coins": SMGLocationData(["Deep Dark Galaxy", "Power Star"], regname.DEEPDARK, 170000096),
-    "SS: Purple Coins by the Seaside": SMGLocationData(["Sea Slide Galaxy", "Power Star"], regname.SEASLIDE, 170000084),
-    "GE: Purple Coin Omelet": SMGLocationData(["Good Egg Galaxy", "Power Star"], regname.GOODEGG, 170000005),
-    "GG: Gateway's Purple coins": SMGLocationData([regname.GATEWAY, "Power Star"], regname.GATEWAY, 170000020),
-    "BR: Purple Coins on the Battlerock": SMGLocationData(["Battlerock Galaxy", "Power Star"], regname.BATTLEROCK, 17000004),
-    "SJ: Purple Coin Spacewalk": SMGLocationData(["Space Junk Galaxy", "Power Star"], regname.SPACEJUNK, 170000036),
-    "GG: Purple Coins on the Puzzle Cube": SMGLocationData(["Gusty Garden Galaxy", "Power Star"], regname.GUSTY, 170000059),
-    "BB: Beachcombing for Purple Coins": SMGLocationData(["Bubble Breeze Galaxy", "Power Star"], regname.BUBBLEBREEZE, 170000047),
-    "FF: Purple Coins on the Summit": SMGLocationData(["Freezeflame Galaxy", "Power Star"], regname.FREEZEFLAME, 170000066),
-    "G: Purple Coins in the Bone Pen": SMGLocationData([regname.GHOSTLY, "Power Star"], regname.GHOSTLY, 170000053),
-    "GL: Purple Coins in the Woods": SMGLocationData(["Gold Leaf Galaxy", "Power Star"], regname.GOLDLEAF, 170000078),
-    "DDune: Purple Coin in the Desert": SMGLocationData(["Dusty Dune Galaxy", "Power Star"], regname.DUSTY, 170000070),
-    "HH: The Honeyhive's Purple Coins": SMGLocationData(["Honeyhive Galaxy", "Power Star"], regname.HONEYHIVE, 170000011)
+    "TT: Luigi's Purple Coins": SMGLocationData(["Toy Time Galaxy", "Power Star", "Purple Coins"], regname.TOYTIME, 170000091),
+    "DN: Battlestation's Purple Coins": SMGLocationData(["Dreadnought Galaxy", "Power Star", "Purple Coins"], regname.DREADNOUGHT, 170000102),
+    "MM: Red-Hot Purple Coins": SMGLocationData(["Melty Molten Galaxy", "Power Star", "Purple Coins"], regname.MELTY, 170000108),
+    "DD: Plunder the Purple Coins": SMGLocationData(["Deep Dark Galaxy", "Power Star", "Purple Coins"], regname.DEEPDARK, 170000096),
+    "SS: Purple Coins by the Seaside": SMGLocationData(["Sea Slide Galaxy", "Power Star", "Purple Coins"], regname.SEASLIDE, 170000084),
+    "GE: Purple Coin Omelet": SMGLocationData(["Good Egg Galaxy", "Power Star", "Purple Coins"], regname.GOODEGG, 170000005),
+    "GG: Gateway's Purple coins": SMGLocationData([regname.GATEWAY, "Power Star", "Purple Coins"], regname.GATEWAY, 170000020),
+    "BR: Purple Coins on the Battlerock": SMGLocationData(["Battlerock Galaxy", "Power Star", "Purple Coins"], regname.BATTLEROCK, 17000004),
+    "SJ: Purple Coin Spacewalk": SMGLocationData(["Space Junk Galaxy", "Power Star", "Purple Coins"], regname.SPACEJUNK, 170000036),
+    "GG: Purple Coins on the Puzzle Cube": SMGLocationData(["Gusty Garden Galaxy", "Power Star", "Purple Coins"], regname.GUSTY, 170000059),
+    "BB: Beachcombing for Purple Coins": SMGLocationData(["Bubble Breeze Galaxy", "Power Star", "Purple Coins"], regname.BUBBLEBREEZE, 170000047),
+    "FF: Purple Coins on the Summit": SMGLocationData(["Freezeflame Galaxy", "Power Star", "Purple Coins"], regname.FREEZEFLAME, 170000066),
+    "G: Purple Coins in the Bone Pen": SMGLocationData([regname.GHOSTLY, "Power Star", "Purple Coins"], regname.GHOSTLY, 170000053),
+    "GL: Purple Coins in the Woods": SMGLocationData(["Gold Leaf Galaxy", "Power Star", "Purple Coins"], regname.GOLDLEAF, 170000078),
+    "DDune: Purple Coin in the Desert": SMGLocationData(["Dusty Dune Galaxy", "Power Star", "Purple Coins"], regname.DUSTY, 170000070),
+    "HH: The Honeyhive's Purple Coins": SMGLocationData(["Honeyhive Galaxy", "Power Star", "Purple Coins"], regname.HONEYHIVE, 170000011)
 }
 
 base_stars_locations = {**locGE_table, **locHH_table,
