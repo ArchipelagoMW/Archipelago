@@ -2,6 +2,12 @@ from dataclasses import dataclass
 
 from Options import Choice, Range, PerGameCommonOptions, OptionSet, Toggle, OptionCounter
 
+class Character(Choice):
+    """"Play as Mario or Luigi?"""
+    display_name = "Character Select"
+    internal_name = "character_select"
+    option_Mario = 0
+    option_Luigi = 1
 
 class GalaxyShuffle(OptionSet):
     """
