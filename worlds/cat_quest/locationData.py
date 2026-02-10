@@ -11,49 +11,49 @@ class Location(TypedDict):
 templeLocations: List[Location] = [
     {
         "inGameId": "flamepurr",
-        "name": "Visited Arcane Temple of Flamepurr",
+        "name": "The Catpital Temple (Flamepurr)",
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
     },
     {
         "inGameId": "healing_paw",
-        "name": "Visited Arcane Temple of Healing Paw",
+        "name": "Bermewda's Triangle Temple (Healing Paw)",
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
     },
     {
         "inGameId": "lightnyan",
-        "name": "Visited Arcane Temple of Lightnyan",
+        "name": "East Pawt Temple (Lightnyan)",
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
     },
     {
         "inGameId": "cattrap",
-        "name": "Visited Arcane Temple of Cattrap",
+        "name": "Windmew City Temple (Cattrap)",
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
     },
     {
         "inGameId": "purrserk",
-        "name": "Visited Arcane Temple of Purrserk",
+        "name": "South Pawt Temple (Purrserk)",
         "art": "either",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
     },
     {
         "inGameId": "astropaw",
-        "name": "Visited Arcane Temple of Astropaw",
+        "name": "Death Isle Temple (Astropaw)",
         "art": "either",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
     },
     {
         "inGameId": "freezepaw",
-        "name": "Visited Arcane Temple of Freezepaw",
+        "name": "Felingard Lake Temple (Freezepaw)",
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
         "hasFist": False
