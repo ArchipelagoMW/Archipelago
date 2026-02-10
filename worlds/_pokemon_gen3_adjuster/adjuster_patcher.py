@@ -57,7 +57,7 @@ def get_patch_from_sprite_pack(_sprite_pack_path: str, _rom_version: str):
 
     global sprite_pack_data, resource_address_to_insert_to
     # Build patch data, fetch end of file
-    sprite_pack_data = {"length": 16777216, "data": []}
+    sprite_pack_data = {"length": 16*1024*1024, "data": []}
     if _rom_version == "Emerald":
         DATA_ADDRESSES_INFO["data_address_beginning"] = ((data_addresses["sEmpty6"] >> 12) + 1) << 12
     resource_address_to_insert_to = int(DATA_ADDRESSES_INFO["data_address_beginning"])
