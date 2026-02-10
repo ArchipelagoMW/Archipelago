@@ -41,6 +41,8 @@ def create_regular_locations(world: CatQuestWorld) -> None:
     if world.options.include_temples:
         included_locations.extend(templeLocations)
     
+    #if world.options.include_monuments:
+    #    included_locations.extend(monumentLocations)
 
     for loc in included_locations:
         Felingard.locations.append(

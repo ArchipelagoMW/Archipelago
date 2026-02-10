@@ -47,12 +47,17 @@ class IncludeEXPQuestRewards(Toggle):
     display_name = "Include EXP Quest Rewards"
     default = True
 
+class IncludeCoinQuestRewards(Toggle):
+    """Choose if you want to receive coins as quest rewards"""
+    display_name = "Include Coin Quest Rewards"
+    default = True
 
 @dataclass
 class CatQuestOptions(PerGameCommonOptions):
     goal: Goal
     skill_upgrade: SkillUpgrade
     include_temples: IncludeTemples
+    include_monuments: IncludeMonuments
     include_quest_reward_exp: IncludeEXPQuestRewards
     include_quest_reward_coins: IncludeCoinQuestRewards
     
