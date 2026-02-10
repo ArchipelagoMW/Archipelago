@@ -1,13 +1,17 @@
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld
 
-#from .Options import option_groups, option_presets
+
+from .Options import option_groups, option_presets
 
 
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
 class SMGWebWorld(WebWorld):
     game = "Super Mario Galaxy"
     theme = "ice"
+
+    options_presets = option_presets
+    option_groups = option_groups
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",

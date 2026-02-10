@@ -1,9 +1,11 @@
 from dataclasses import dataclass
+from typing import Dict, Any
 
+import Options
 from Options import Choice, Range, PerGameCommonOptions, OptionSet, Toggle, OptionCounter
 
 class Character(Choice):
-    """"Play as Mario or Luigi?"""
+    """Play as Mario or Luigi?"""
     display_name = "Character Select"
     internal_name = "character_select"
     option_Mario = 0
@@ -181,6 +183,7 @@ class Dome6Offsets(OptionCounter):
 class SMGOptions(PerGameCommonOptions):
     enable_purple_coin_stars: EnablePurpleCoinStars
     stars_to_finish: StarstoFinish
+    character_select: Character
     # dome_one_counts: Dome1Offsets
     # dome_two_counts: Dome2Offsets
     # dome_three_counts: Dome3Offsets
@@ -190,4 +193,29 @@ class SMGOptions(PerGameCommonOptions):
     #dome_shuffle: ShuffleDomes Enable when Ready
     #galaxy_shuffle: GalaxyShuffle Enable when Ready
 
+option_groups = [
+    Options.OptionGroup("Extra Locations", [
+        EnablePurpleCoinStars,
+    ]),
+    Options.OptionGroup("Access Options", [
+        StarstoFinish,
+        #ShuffleDomes,
+        #GalaxyShuffle
+    ]),
+    #Options.OptionGroup("Dome Offsets", [
+    #    Dome1Offsets,
+    #    Dome2Offsets,
+    #    Dome3Offsets,
+    #    Dome4Offsets,
+    #    Dome5Offsets,
+    #    Dome6Offsets
+    #]),
+    Options.OptionGroup("Cosmetics", [
+        Character,
+    ]),
+]
 
+
+option_presets = Dict[str, Dict[str, Any]] = {
+
+}
