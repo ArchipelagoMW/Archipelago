@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import math
 from enum import Enum
-from functools import cached_property, cache
 from typing import TYPE_CHECKING, TypeVar
 
 import pulp
@@ -72,6 +71,10 @@ class RecipeEngine:
                 raw_logic_pre_compute = json.load(file)
             for name, data in raw_logic_pre_compute.items():
                 item = self.get_game_item(name)
+                if "invalid" in data:
+                    if item.name not in {"space-science-pack"}:
+                        item.set_invalid()
+                    continue
                 item.best_recipes = data["recipes"]
                 item.score = data["score"]
                 item.has_calculated_raw = True
@@ -131,13 +134,13 @@ class RecipeEngine:
 
         for resource_name, resource_data in raw_resources.items():
             if "required_fluid" in resource_data:
-                GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
+                GameRecipe(self, f"resource_{resource_name}", DefinitionSource.EXTRACTED, resource_data["category"],
                            {resource_data["required_fluid"]: resource_data["fluid_amount"]},
                            resource_data["products"], resource_data["mining_time"])
                 if resource_data["category"] == "basic-solid":
                     self.fluid_mining.add(self.recipes[f"resource_{resource_name}"])
             else:
-                GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
+                GameRecipe(self, f"resource_{resource_name}", DefinitionSource.EXTRACTED, resource_data["category"],
                            {},
                            resource_data["products"], resource_data["mining_time"])
         del raw_resources
@@ -226,6 +229,8 @@ class RecipeEngine:
 
     def __remove_bad_items(self):
         for name, item in self.game_items.copy().items():
+            if item.name in {"space-science-pack"}:
+                continue # todo remove this when silo recipes added
             if item not in self.custom_invalid:
                 if item.crafted_by:
                     continue
@@ -233,7 +238,7 @@ class RecipeEngine:
                     if item.is_valid_pool:
                         self.modpack.logger.warning(f"{item.name} is used but not method of obtaining it detected.\n"
                                                     "Consider disabling it or adding a custom recipe")
-            self.modpack.logger.warning(f"{item.name} is defined but not used or craftable")
+                self.modpack.logger.warning(f"{item.name} is defined but not used or craftable")
             item.set_invalid()
 
     def run_pulp_solver(self, goal: GameItem, remove_waste=False) \
