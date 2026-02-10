@@ -41,7 +41,7 @@ Optionally, you can override some randomization settings from the command line:
 - `-apmusicrando 0` will disable music rando.
 - `-apresetlevelondeath 0` will disable resetting the level on death.
 - `-apdeathlinkoff` will force DeathLink off if it's enabled.
-- `-skill <1-5>` changes the game difficulty, from 1 (I'm too young to die) to 5 (Nightmare!)
+- `-skill <1-5>` changes the game difficulty, from 1 (thou needeth a wet-nurse) to 5 (black plague possesses thee)
 
 ## Archipelago Text Client
 
