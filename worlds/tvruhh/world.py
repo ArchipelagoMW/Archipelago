@@ -1,5 +1,4 @@
 from collections.abc import Mapping
-from collections import defaultdict
 from typing import Any
 
 from worlds.AutoWorld import World
@@ -21,8 +20,8 @@ class TVRUHHWorld(World):
     options_dataclass = tvruhh_options.TVRUHHOptions
     options: tvruhh_options.TVRUHHOptions
 
-    location_name_to_id = locations.big_bad_list_of_all_locations_with_IDs
-    item_name_to_id = items.big_bad_list_of_all_items_with_IDs
+    location_name_to_id = locations.requestbbl()
+    item_name_to_id = items.requestbbl()
 
     origin_region_name = "Start"
 
@@ -38,9 +37,6 @@ class TVRUHHWorld(World):
     def create_items(self) -> None:
         items.create_all_items(self)
         locations.create_extra_locations(self, self.bonus_gift_locations+self.options.bonus_gift_amount.value)
-        self.item_name_to_id = items.big_bad_list_of_all_items_with_IDs
-        self.location_name_to_id = locations.big_bad_list_of_all_locations_with_IDs
-        self.location_name_to_id.update(locations.extra_location_list)
     
     def create_item(self, name: str, chosenList = items.filler_item_list) -> items.TVRUHHItem:
         return items.create_item_with_default_classification(self, name, chosenList)
@@ -48,7 +44,8 @@ class TVRUHHWorld(World):
     def get_filler_item_name(self) -> str:
         return items.get_random_filler_item_name(self)
 
-    # def generate_output(self, output_directory):
+    # below function causes error, allows seeing all the print debugs (because those are not saved in the log files for some reason)
+    # def generate_output(self):
     #     items.error()
 
     def fill_slot_data(self) -> Mapping[str, Any]:

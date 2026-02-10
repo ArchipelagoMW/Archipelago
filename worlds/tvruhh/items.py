@@ -88,6 +88,23 @@ def create_all_items(world: TVRUHHWorld) -> None:
     world.multiworld.itempool += itempool
 
 
+def requestbbl() -> dict[str:int]:
+    updatebbl(monster_list)
+    updatebbl(power_gift_list)
+    updatebbl(bonus_gift_list)
+    updatebbl(quick_gift_list)
+    updatebbl(dreamscape_list)
+    updatebbl(music_list)
+    updatebbl(other_items_list)
+    return big_bad_list_of_all_items_with_IDs
+
+
+def updatebbl(whichlist: dict) -> None:
+    for x in whichlist:
+        big_bad_list_of_all_items_with_IDs.update({x: whichlist[x][0]})
+
+
+
 # function responsible for all items
 def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> list[Item]:
     items: list[Item] = []
@@ -95,10 +112,8 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
         if not min_id == -1:
             if whichlist[x][0] >= min_id and whichlist[x][0] <= max_id:
                 items.append(world.create_item(x,whichlist))
-                big_bad_list_of_all_items_with_IDs.update({x: whichlist[x]})
         else:
             items.append(world.create_item(x,whichlist))
-            big_bad_list_of_all_items_with_IDs.update({x: whichlist[x]})
     return items
 
 

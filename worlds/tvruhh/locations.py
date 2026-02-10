@@ -27,7 +27,7 @@ def create_all_locations(world: TVRUHHWorld) -> None:
 
 
 big_bad_list_of_all_locations_with_IDs = {
-    
+    "Dream: Love at First Shot": 1000000
 }
 extra_location_list = {
 
@@ -46,7 +46,6 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
 def create_extra_locations(world: TVRUHHWorld, amount: int) -> None:
     bonus_locations = world.get_region("Start")
     bonus_locations.add_locations(get_location_names_with_ids(load_extra_locations(amount),extra_location_list))
-    world.location_name_to_id.update(extra_location_list)
 
 
 def load_all_lists(world: TVRUHHWorld, chosenlist: str = "") -> dict[str, int | None]:
@@ -85,14 +84,12 @@ def load_location_list(parentlist: dict,childlist: str,world,min_id = -1, max_id
                 else:
                     print("TVRUHH:", x, "not disabled, adding as location...")
                     names.append(x)
-                    big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
         else:
             if world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                 print("TVRUHH:", x, "was disabled, is not added as location.")
             else:
                 print("TVRUHH:", x, "not disabled, adding as location...")
                 names.append(x)
-                big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
     locations = get_location_names_with_ids(names,parentlist[childlist])
     print(names)
     return locations
@@ -106,12 +103,10 @@ def load_remaining_locations(whichlist: dict,world: TVRUHHWorld,min_id = -1, max
                     if not world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                         print("TVRUHH:", x, "not disabled, adding as location...")
                         names.append(x)
-                        big_bad_list_of_all_locations_with_IDs.update({x: whichlist[x]})
             else:
                 if not world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                     print("TVRUHH:", x, "not disabled, adding as location...")
                     names.append(x)
-                    big_bad_list_of_all_locations_with_IDs.update({x: whichlist[x]})
     locations = get_location_names_with_ids(names,whichlist)
     return locations
 
@@ -121,14 +116,33 @@ def load_extra_locations(amount: int) -> dict[str, int | None]:
     while a <= amount: 
         x = "Bonus Gift " + ((a).__str__())
         l.append(x)
-        extra_location_list.update({str(x): int(1440000 + a+1999)})
         a += 1
     return l
 
 def create_events(world: TVRUHHWorld) -> None:
     pass
 
+def requestbbl() -> dict[str:int]: 
+    # normal locations
+    updatebbl(dream_list, "starting_dreams")
+    
+    # bonus locations
+    a: int = 1
+    while a <= 1000: 
+        x = "Bonus Gift " + ((a).__str__())
+        big_bad_list_of_all_locations_with_IDs.update({str(x): int(1440000 + a+1999)})
+        a += 1
+    
+    return big_bad_list_of_all_locations_with_IDs
 
+def updatebbl(parentlist, childlist = {}) -> None:
+    if childlist == {}:
+        for x in parentlist:
+            if not x is dict:
+                big_bad_list_of_all_locations_with_IDs.update({x: parentlist[x]})
+    else:
+        for x in parentlist[childlist]:
+            big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
 
 
 
