@@ -246,6 +246,7 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
     elif layout == TechTreeLayout.option_irregular:
 
         #print("starting the tech tree layout")
+        # TODO: Fix issue of techs going into their own tree's and thus being seen too early.
         
         #Made by: CosmicWolf @brattycosmicwolf
         #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
