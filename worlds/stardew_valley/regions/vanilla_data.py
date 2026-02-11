@@ -8,75 +8,240 @@ from ..strings.region_names import LogicRegion, Region as RegionName
 vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.menu, (Entrance.to_stardew_valley,)),
     RegionData(RegionName.stardew_valley, (Entrance.to_farmhouse,)),
-    RegionData(RegionName.farm_house,
-               (Entrance.farmhouse_to_farm, Entrance.downstairs_to_cellar, LogicEntrance.farmhouse_cooking, LogicEntrance.watch_queen_of_sauce)),
-    RegionData(RegionName.cellar),
-    RegionData(RegionName.farm,
-               (Entrance.farm_to_backwoods, Entrance.farm_to_bus_stop, Entrance.farm_to_forest, Entrance.farm_to_farmcave, Entrance.enter_greenhouse,
-                Entrance.enter_coop, Entrance.enter_barn, Entrance.enter_shed, Entrance.enter_slime_hutch, LogicEntrance.grow_spring_crops,
-                LogicEntrance.grow_summer_crops, LogicEntrance.grow_fall_crops, LogicEntrance.grow_winter_crops, LogicEntrance.shipping,
-                LogicEntrance.fishing, LogicEntrance.find_secret_notes,)),
-    RegionData(RegionName.backwoods, (Entrance.backwoods_to_mountain,)),
-    RegionData(RegionName.bus_stop,
-               (Entrance.bus_stop_to_town, Entrance.take_bus_to_desert, Entrance.bus_stop_to_tunnel_entrance)),
-    RegionData(RegionName.forest,
-               (Entrance.forest_to_town, Entrance.enter_secret_woods, Entrance.forest_to_wizard_tower,
-                Entrance.forest_to_marnie_ranch, Entrance.forest_to_leah_cottage, Entrance.forest_to_sewer,
-                Entrance.forest_to_mastery_cave, Entrance.forest_beach_shortcut, Entrance.feed_trash_bear,
-                LogicEntrance.buy_from_traveling_merchant, LogicEntrance.has_giant_stump, LogicEntrance.fish_in_waterfall,
-                LogicEntrance.attend_flower_dance, LogicEntrance.attend_trout_derby, LogicEntrance.attend_festival_of_ice, LogicEntrance.buy_from_hat_mouse)),
+    RegionData(
+        RegionName.farm_house,
+        (
+            Entrance.farmhouse_to_farm,
+            Entrance.downstairs_to_cellar,
+            LogicEntrance.farmhouse_cooking,
+            LogicEntrance.watch_queen_of_sauce,
+        ),
+    ),
+    RegionData(RegionName.cellar, (Entrance.cellar_to_downstairs,)),
+    RegionData(
+        RegionName.farm,
+        (
+            Entrance.farm_to_farmhouse,
+            Entrance.farm_to_backwoods,
+            Entrance.farm_to_bus_stop,
+            Entrance.farm_to_forest,
+            Entrance.farm_to_farmcave,
+            Entrance.enter_greenhouse,
+            Entrance.enter_coop,
+            Entrance.enter_barn,
+            Entrance.enter_shed,
+            Entrance.enter_slime_hutch,
+            LogicEntrance.grow_spring_crops,
+            LogicEntrance.grow_summer_crops,
+            LogicEntrance.grow_fall_crops,
+            LogicEntrance.grow_winter_crops,
+            LogicEntrance.shipping,
+            LogicEntrance.fishing,
+            LogicEntrance.find_secret_notes,
+        ),
+    ),
+    RegionData(
+        RegionName.backwoods,
+        (Entrance.backwoods_to_farm, Entrance.backwoods_tunnel_shortcut, Entrance.backwoods_to_mountain),
+    ),
+    RegionData(
+        RegionName.bus_stop,
+        (
+            Entrance.bus_stop_to_farm,
+            Entrance.bus_stop_to_town,
+            Entrance.take_bus_to_desert,
+            Entrance.bus_stop_to_tunnel_entrance,
+            Entrance.minecart_bus_stop_to_mines,
+            Entrance.minecart_bus_stop_to_quarry,
+            Entrance.minecart_bus_stop_to_town,
+        ),
+    ),
+    RegionData(
+        RegionName.forest,
+        (
+            Entrance.forest_to_farm,
+            Entrance.forest_to_town,
+            Entrance.enter_secret_woods,
+            Entrance.forest_to_wizard_tower,
+            Entrance.forest_to_marnie_ranch,
+            Entrance.forest_to_leah_cottage,
+            Entrance.forest_to_sewer,
+            Entrance.forest_to_mastery_cave,
+            Entrance.forest_beach_shortcut,
+            LogicEntrance.feed_trash_bear,
+            LogicEntrance.buy_from_traveling_merchant,
+            LogicEntrance.has_giant_stump,
+            LogicEntrance.fish_in_waterfall,
+            LogicEntrance.attend_flower_dance,
+            LogicEntrance.attend_trout_derby,
+            LogicEntrance.attend_festival_of_ice,
+            LogicEntrance.buy_from_hat_mouse,
+        ),
+    ),
     RegionData(LogicRegion.forest_waterfall),
     RegionData(RegionName.trash_bear),
-    RegionData(RegionName.farm_cave),
-    RegionData(RegionName.greenhouse,
-               (LogicEntrance.grow_spring_crops_in_greenhouse, LogicEntrance.grow_summer_crops_in_greenhouse, LogicEntrance.grow_fall_crops_in_greenhouse,
-                LogicEntrance.grow_winter_crops_in_greenhouse, LogicEntrance.grow_indoor_crops_in_greenhouse)),
-    RegionData(RegionName.mountain,
-               (Entrance.mountain_to_railroad, Entrance.mountain_to_tent, Entrance.mountain_to_carpenter_shop,
-                Entrance.mountain_to_town, Entrance.mountain_to_maru_room, Entrance.mountain_to_outside_adventure_guild,
-                Entrance.mountain_lake_to_outside_adventure_guild_shortcut, Entrance.mountain_town_shortcut, Entrance.mountain_jojamart_shortcut)),
-    RegionData(RegionName.outside_adventure_guild, (Entrance.mountain_to_the_mines, Entrance.enter_quarry, Entrance.mountain_to_adventurer_guild,)),
-    RegionData(RegionName.maru_room),
-    RegionData(RegionName.tunnel_entrance, (Entrance.tunnel_entrance_to_bus_tunnel, Entrance.tunnel_backwoods_shortcut,)),
-    RegionData(RegionName.bus_tunnel),
-    RegionData(RegionName.town,
-               (Entrance.town_to_community_center, Entrance.town_to_beach, Entrance.town_to_hospital, Entrance.town_to_pierre_general_store,
-                Entrance.town_to_saloon, Entrance.town_to_alex_house, Entrance.town_to_trailer, Entrance.town_to_mayor_manor, Entrance.town_to_sam_house,
-                Entrance.town_to_haley_house, Entrance.town_to_sewer, Entrance.town_to_clint_blacksmith, Entrance.town_to_museum, Entrance.town_to_jojamart,
-                Entrance.town_tidepools_shortcut,
-                Entrance.purchase_movie_ticket, LogicEntrance.buy_books, LogicEntrance.attend_egg_festival, LogicEntrance.attend_fair,
-                LogicEntrance.attend_spirit_eve, LogicEntrance.attend_winter_star, LogicEntrance.search_garbage_cans)),
-    RegionData(RegionName.beach,
-               (Entrance.beach_to_willy_fish_shop, Entrance.enter_elliott_house, Entrance.enter_tide_pools, LogicEntrance.attend_luau,
-                LogicEntrance.attend_moonlight_jellies, LogicEntrance.attend_night_market, LogicEntrance.attend_squidfest)),
-    RegionData(RegionName.railroad, (Entrance.enter_bathhouse_entrance, Entrance.enter_witch_warp_cave)),
-    RegionData(RegionName.ranch),
-    RegionData(RegionName.leah_house),
-    RegionData(RegionName.mastery_cave),
-    RegionData(RegionName.sewer, (Entrance.enter_mutant_bug_lair,)),
-    RegionData(RegionName.mutant_bug_lair),
-    RegionData(RegionName.wizard_tower, (Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, LogicEntrance.purchase_wizard_blueprints)),
-    RegionData(RegionName.wizard_basement),
+    RegionData(RegionName.farm_cave, (Entrance.farmcave_to_farm,)),
+    RegionData(
+        RegionName.greenhouse,
+        (
+            Entrance.leave_greenhouse,
+            LogicEntrance.grow_spring_crops_in_greenhouse,
+            LogicEntrance.grow_summer_crops_in_greenhouse,
+            LogicEntrance.grow_fall_crops_in_greenhouse,
+            LogicEntrance.grow_winter_crops_in_greenhouse,
+            LogicEntrance.grow_indoor_crops_in_greenhouse,
+        ),
+    ),
+    RegionData(
+        RegionName.mountain,
+        (
+            Entrance.mountain_to_backwoods,
+            Entrance.mountain_to_railroad,
+            Entrance.mountain_to_tent,
+            Entrance.mountain_to_carpenter_shop,
+            Entrance.mountain_to_town,
+            Entrance.mountain_to_maru_room,
+            Entrance.mountain_to_outside_adventure_guild,  # can't randomize
+            Entrance.mountain_lake_to_outside_adventure_guild_shortcut,  # can't randomize
+            Entrance.mountain_town_shortcut,
+        ),
+    ),
+    RegionData(
+        RegionName.outside_adventure_guild,
+        (
+            Entrance.mountain_to_the_mines,
+            Entrance.enter_quarry,  # can't randomize
+            Entrance.mountain_to_adventurer_guild,
+            Entrance.mountain_jojamart_shortcut,
+            Entrance.outside_adventure_guild_to_mountain_lake_shortcut,
+        ),
+    ),
+    RegionData(RegionName.maru_room, (Entrance.maru_room_to_carpenter_shop, Entrance.maru_room_to_mountain)),
+    RegionData(
+        RegionName.tunnel_entrance,
+        (
+            Entrance.tunnel_entrance_to_bus_stop,
+            Entrance.tunnel_entrance_to_bus_tunnel,
+            Entrance.tunnel_backwoods_shortcut,  # can't randomize
+        ),
+    ),
+    RegionData(RegionName.bus_tunnel, (Entrance.bus_tunnel_to_tunnel_entrance,)),
+    RegionData(
+        RegionName.town,
+        (
+            Entrance.town_to_bus_stop,
+            Entrance.town_to_forest,
+            Entrance.town_to_mountain,
+            Entrance.town_mountain_shortcut,
+            Entrance.town_to_community_center,
+            Entrance.town_to_beach,
+            Entrance.town_to_hospital,
+            Entrance.town_to_pierre_general_store,
+            Entrance.town_to_saloon,
+            Entrance.town_to_alex_house,
+            Entrance.town_to_trailer,
+            Entrance.town_to_mayor_manor,
+            Entrance.town_to_sam_house,
+            Entrance.town_to_haley_house,
+            Entrance.town_to_sewer,
+            Entrance.town_to_clint_blacksmith,
+            Entrance.town_to_museum,
+            Entrance.town_to_jojamart,
+            Entrance.town_tidepools_shortcut,
+            Entrance.jojamart_mountain_shortcut,
+            Entrance.minecart_town_to_bus_stop,
+            Entrance.minecart_town_to_mines,
+            Entrance.minecart_town_to_quarry,
+            LogicEntrance.purchase_movie_ticket,
+            LogicEntrance.buy_books,
+            LogicEntrance.attend_egg_festival,
+            LogicEntrance.attend_fair,
+            LogicEntrance.attend_spirit_eve,
+            LogicEntrance.attend_winter_star,
+            LogicEntrance.search_garbage_cans,
+        ),
+    ),
+    RegionData(
+        RegionName.beach,
+        (
+            Entrance.beach_forest_shortcut,
+            Entrance.beach_to_town,
+            Entrance.beach_to_willy_fish_shop,
+            Entrance.enter_elliott_house,
+            Entrance.enter_tide_pools,  # can't randomize
+            LogicEntrance.attend_luau,
+            LogicEntrance.attend_moonlight_jellies,
+            LogicEntrance.attend_night_market,
+            LogicEntrance.attend_squidfest,
+        ),
+    ),
+    RegionData(
+        RegionName.railroad,
+        (Entrance.railroad_to_mountain, Entrance.enter_bathhouse_entrance, Entrance.enter_witch_warp_cave),
+    ),
+    RegionData(RegionName.ranch, (Entrance.marnie_ranch_to_forest,)),
+    RegionData(RegionName.leah_house, (Entrance.leah_cottage_to_forest,)),
+    RegionData(RegionName.mastery_cave, (Entrance.mastery_cave_to_forest,)),
+    RegionData(RegionName.sewer, (Entrance.sewer_to_town, Entrance.sewer_to_forest, Entrance.enter_mutant_bug_lair)),
+    RegionData(RegionName.mutant_bug_lair, (Entrance.leave_mutant_bug_lair,)),
+    RegionData(
+        RegionName.wizard_tower,
+        (
+            Entrance.wizard_tower_to_forest,
+            Entrance.enter_wizard_basement,
+            Entrance.use_desert_obelisk,  # TODO: figure out how to fix these
+            Entrance.use_earth_obelisk,
+            Entrance.use_water_obelisk,
+            LogicEntrance.purchase_wizard_blueprints,
+        ),
+    ),
+    RegionData(RegionName.wizard_basement, (Entrance.wizard_basement_to_witch_warp, Entrance.leave_wizard_basement)),
     RegionData(LogicRegion.wizard_blueprints),
-    RegionData(RegionName.tent),
-    RegionData(RegionName.carpenter, (Entrance.enter_sebastian_room,)),
-    RegionData(RegionName.sebastian_room),
-    RegionData(RegionName.adventurer_guild, (Entrance.adventurer_guild_to_bedroom,)),
+    RegionData(RegionName.tent, (Entrance.tent_to_mountain,)),
+    RegionData(
+        RegionName.carpenter,
+        (
+            Entrance.carpenter_shop_to_mountain,
+            Entrance.carpenter_shop_to_maru_room,  # can't randomize
+            Entrance.enter_sebastian_room,
+        ),
+    ),
+    RegionData(RegionName.sebastian_room, (Entrance.leave_sebastian_room,)),
+    RegionData(
+        RegionName.adventurer_guild,
+        (Entrance.adventurer_guild_to_mountain, Entrance.adventurer_guild_to_bedroom),  # can't randomize
+    ),
     RegionData(RegionName.adventurer_guild_bedroom),
-    RegionData(RegionName.community_center,
-               (Entrance.access_crafts_room, Entrance.access_pantry, Entrance.access_fish_tank,
-                Entrance.access_boiler_room, Entrance.access_bulletin_board, Entrance.access_vault)),
+    RegionData(
+        RegionName.community_center,
+        (
+            Entrance.community_center_to_town,
+            Entrance.access_crafts_room,  # can't randomize
+            Entrance.access_pantry,  # can't randomize
+            Entrance.access_fish_tank,  # can't randomize
+            Entrance.access_boiler_room,  # can't randomize
+            Entrance.access_bulletin_board,  # can't randomize
+            Entrance.access_vault,  # can't randomize
+        ),
+    ),
     RegionData(RegionName.crafts_room),
     RegionData(RegionName.pantry),
     RegionData(RegionName.fish_tank),
     RegionData(RegionName.boiler_room),
     RegionData(RegionName.bulletin_board),
     RegionData(RegionName.vault),
-    RegionData(RegionName.hospital, (Entrance.enter_harvey_room,)),
-    RegionData(RegionName.harvey_room),
-    RegionData(RegionName.pierre_store, (Entrance.enter_sunroom,)),
-    RegionData(RegionName.sunroom),
-    RegionData(RegionName.saloon, (Entrance.play_journey_of_the_prairie_king, Entrance.play_junimo_kart)),
+    RegionData(RegionName.hospital, (Entrance.hospital_to_town, Entrance.enter_harvey_room)),
+    RegionData(RegionName.harvey_room, (Entrance.leave_harvey_room,)),
+    RegionData(RegionName.pierre_store, (Entrance.pierre_general_store_to_town, Entrance.enter_sunroom)),
+    RegionData(RegionName.sunroom, (Entrance.leave_sunroom,)),
+    RegionData(
+        RegionName.saloon,
+        (
+            Entrance.saloon_to_town,
+            Entrance.play_journey_of_the_prairie_king,  # can't randomize
+            Entrance.play_junimo_kart,  # can't randomize
+        ),
+    ),
     RegionData(RegionName.jotpk_world_1, (Entrance.reach_jotpk_world_2,)),
     RegionData(RegionName.jotpk_world_2, (Entrance.reach_jotpk_world_3,)),
     RegionData(RegionName.jotpk_world_3),
@@ -84,37 +249,59 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.junimo_kart_2, (Entrance.reach_junimo_kart_3,)),
     RegionData(RegionName.junimo_kart_3, (Entrance.reach_junimo_kart_4,)),
     RegionData(RegionName.junimo_kart_4),
-    RegionData(RegionName.alex_house),
-    RegionData(RegionName.trailer),
-    RegionData(RegionName.mayor_house, (Entrance.enter_lewis_bedroom,)),
-    RegionData(RegionName.lewis_bedroom, (Entrance.enter_shorts_maze,)),
-    RegionData(RegionName.purple_shorts_maze),
-    RegionData(RegionName.sam_house),
-    RegionData(RegionName.haley_house),
-    RegionData(RegionName.blacksmith, (LogicEntrance.blacksmith_copper,)),
-    RegionData(RegionName.museum),
-    RegionData(RegionName.jojamart, (Entrance.enter_abandoned_jojamart,)),
-    RegionData(RegionName.abandoned_jojamart, (Entrance.enter_movie_theater,)),
+    RegionData(RegionName.alex_house, (Entrance.alex_house_to_town,)),
+    RegionData(RegionName.trailer, (Entrance.trailer_to_town,)),
+    RegionData(RegionName.mayor_house, (Entrance.mayor_manor_to_town, Entrance.enter_lewis_bedroom)),  # can't randomize
+    RegionData(RegionName.lewis_bedroom, (Entrance.leave_lewis_bedroom, Entrance.enter_shorts_maze)),  # can't randomize
+    RegionData(RegionName.purple_shorts_maze, (Entrance.leave_shorts_maze,)),
+    RegionData(RegionName.sam_house, (Entrance.sam_house_to_town,)),
+    RegionData(RegionName.haley_house, (Entrance.haley_house_to_town,)),
+    RegionData(RegionName.blacksmith, (Entrance.clint_blacksmith_to_town, LogicEntrance.blacksmith_copper)),
+    RegionData(RegionName.museum, (Entrance.museum_to_town,)),
+    RegionData(RegionName.jojamart, (Entrance.jojamart_to_town, Entrance.enter_abandoned_jojamart)),  # can't randomize
+    RegionData(RegionName.abandoned_jojamart, (Entrance.enter_movie_theater,)),  # can't randomize
     RegionData(RegionName.movie_ticket_stand),
     RegionData(RegionName.movie_theater),
-    RegionData(RegionName.fish_shop),
-    RegionData(RegionName.elliott_house),
-    RegionData(RegionName.tide_pools),
-    RegionData(RegionName.bathhouse_entrance, (Entrance.enter_mens_locker_room, Entrance.enter_womens_locker_room)),
-    RegionData(RegionName.mens_locker_room, (Entrance.mens_lockers_to_public_bath,)),
-    RegionData(RegionName.womens_locker_room, (Entrance.womens_lockers_to_public_bath,)),
-    RegionData(RegionName.public_bath),
-    RegionData(RegionName.witch_warp_cave, (Entrance.enter_witch_swamp,)),
-    RegionData(RegionName.witch_swamp, (Entrance.enter_witch_hut,)),
-    RegionData(RegionName.witch_hut, (Entrance.witch_warp_to_wizard_basement,)),
-    RegionData(RegionName.quarry, (Entrance.enter_quarry_mine_entrance,)),
-    RegionData(RegionName.quarry_mine_entrance, (Entrance.enter_quarry_mine,)),
+    RegionData(RegionName.fish_shop, (Entrance.willy_fish_shop_to_beach,)),
+    RegionData(RegionName.elliott_house, (Entrance.leave_elliott_house,)),
+    RegionData(RegionName.tide_pools, (Entrance.tidepools_town_shortcut, Entrance.leave_tide_pools)),
+    RegionData(
+        RegionName.bathhouse_entrance,
+        (Entrance.leave_bathhouse_entrance, Entrance.enter_mens_locker_room, Entrance.enter_womens_locker_room),
+    ),
+    RegionData(RegionName.mens_locker_room, (Entrance.leave_mens_locker_room, Entrance.mens_lockers_to_public_bath)),
+    RegionData(
+        RegionName.womens_locker_room, (Entrance.leave_womens_locker_room, Entrance.womens_lockers_to_public_bath)
+    ),
+    RegionData(RegionName.public_bath, (Entrance.public_bath_to_mens_lockers, Entrance.public_bath_to_womens_lockers)),
+    RegionData(RegionName.witch_warp_cave, (Entrance.leave_witch_warp_cave, Entrance.enter_witch_swamp)),
+    RegionData(RegionName.witch_swamp, (Entrance.leave_witch_swamp, Entrance.enter_witch_hut)),
+    RegionData(RegionName.witch_hut, (Entrance.leave_witch_hut, Entrance.witch_warp_to_wizard_basement)),
+    RegionData(
+        RegionName.quarry,
+        (
+            Entrance.leave_quarry,
+            Entrance.enter_quarry_mine_entrance,
+            Entrance.minecart_quarry_to_bus_stop,
+            Entrance.minecart_quarry_to_mines,
+            Entrance.minecart_quarry_to_town,
+        ),
+    ),
+    RegionData(RegionName.quarry_mine_entrance, (Entrance.leave_quarry_mine_entrance, Entrance.enter_quarry_mine)),
     RegionData(RegionName.quarry_mine),
-    RegionData(RegionName.secret_woods, (LogicEntrance.buy_from_lost_items_shop,)),
-    RegionData(RegionName.desert, (Entrance.enter_skull_cavern_entrance, Entrance.enter_oasis, LogicEntrance.attend_desert_festival)),
-    RegionData(RegionName.oasis, (Entrance.enter_casino,)),
-    RegionData(RegionName.casino),
-    RegionData(RegionName.skull_cavern_entrance, (Entrance.enter_skull_cavern,)),
+    RegionData(RegionName.secret_woods, (Entrance.leave_secret_woods, LogicEntrance.buy_from_lost_items_shop)),
+    RegionData(
+        RegionName.desert,
+        (
+            Entrance.take_bus_from_desert,
+            Entrance.enter_skull_cavern_entrance,
+            Entrance.enter_oasis,
+            LogicEntrance.attend_desert_festival,
+        ),
+    ),
+    RegionData(RegionName.oasis, (Entrance.leave_oasis, Entrance.enter_casino)),
+    RegionData(RegionName.casino, (Entrance.leave_casino,)),
+    RegionData(RegionName.skull_cavern_entrance, (Entrance.leave_skull_cavern_entrance, Entrance.enter_skull_cavern)),
     RegionData(RegionName.skull_cavern, (Entrance.mine_in_skull_cavern, Entrance.mine_to_skull_cavern_floor_25)),
     RegionData(RegionName.skull_cavern_mining),
     RegionData(RegionName.skull_cavern_25, (Entrance.mine_to_skull_cavern_floor_50,)),
@@ -125,13 +312,21 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.skull_cavern_150, (Entrance.mine_to_skull_cavern_floor_175,)),
     RegionData(RegionName.skull_cavern_175, (Entrance.mine_to_skull_cavern_floor_200,)),
     RegionData(RegionName.skull_cavern_200),
-
     RegionData(RegionName.coop),
     RegionData(RegionName.barn),
     RegionData(RegionName.shed),
     RegionData(RegionName.slime_hutch),
-
-    RegionData(RegionName.mines, (LogicEntrance.talk_to_mines_dwarf, Entrance.dig_to_mines_floor_5)),
+    RegionData(
+        RegionName.mines,
+        (
+            Entrance.the_mines_to_mountain,
+            LogicEntrance.talk_to_mines_dwarf,
+            Entrance.dig_to_mines_floor_5,
+            Entrance.minecart_mines_to_bus_stop,
+            Entrance.minecart_mines_to_quarry,
+            Entrance.minecart_mines_to_town,
+        ),
+    ),
     RegionData(RegionName.mines_floor_5, (Entrance.dig_to_mines_floor_10,)),
     RegionData(RegionName.mines_floor_10, (Entrance.dig_to_mines_floor_15,)),
     RegionData(RegionName.mines_floor_15, (Entrance.dig_to_mines_floor_20,)),
@@ -156,7 +351,6 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.mines_floor_110, (Entrance.dig_to_mines_floor_115,)),
     RegionData(RegionName.mines_floor_115, (Entrance.dig_to_mines_floor_120,)),
     RegionData(RegionName.mines_floor_120),
-
     RegionData(LogicRegion.mines_dwarf_shop),
     RegionData(LogicRegion.blacksmith_copper, (LogicEntrance.blacksmith_iron,)),
     RegionData(LogicRegion.blacksmith_iron, (LogicEntrance.blacksmith_gold,)),
@@ -165,23 +359,26 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.kitchen),
     RegionData(LogicRegion.queen_of_sauce),
     RegionData(LogicRegion.fishing),
-
     RegionData(LogicRegion.spring_farming),
     RegionData(LogicRegion.summer_farming, (LogicEntrance.grow_summer_fall_crops_in_summer,)),
     RegionData(LogicRegion.fall_farming, (LogicEntrance.grow_summer_fall_crops_in_fall,)),
     RegionData(LogicRegion.winter_farming),
     RegionData(LogicRegion.summer_or_fall_farming),
     RegionData(LogicRegion.indoor_farming),
-
     RegionData(LogicRegion.shipping),
     RegionData(LogicRegion.secret_notes),
-    RegionData(LogicRegion.traveling_cart, (LogicEntrance.buy_from_traveling_merchant_sunday,
-                                            LogicEntrance.buy_from_traveling_merchant_monday,
-                                            LogicEntrance.buy_from_traveling_merchant_tuesday,
-                                            LogicEntrance.buy_from_traveling_merchant_wednesday,
-                                            LogicEntrance.buy_from_traveling_merchant_thursday,
-                                            LogicEntrance.buy_from_traveling_merchant_friday,
-                                            LogicEntrance.buy_from_traveling_merchant_saturday)),
+    RegionData(
+        LogicRegion.traveling_cart,
+        (
+            LogicEntrance.buy_from_traveling_merchant_sunday,
+            LogicEntrance.buy_from_traveling_merchant_monday,
+            LogicEntrance.buy_from_traveling_merchant_tuesday,
+            LogicEntrance.buy_from_traveling_merchant_wednesday,
+            LogicEntrance.buy_from_traveling_merchant_thursday,
+            LogicEntrance.buy_from_traveling_merchant_friday,
+            LogicEntrance.buy_from_traveling_merchant_saturday,
+        ),
+    ),
     RegionData(LogicRegion.traveling_cart_sunday),
     RegionData(LogicRegion.traveling_cart_monday),
     RegionData(LogicRegion.traveling_cart_tuesday),
@@ -189,7 +386,9 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.traveling_cart_thursday),
     RegionData(LogicRegion.traveling_cart_friday),
     RegionData(LogicRegion.traveling_cart_saturday),
-    RegionData(LogicRegion.raccoon_daddy, (LogicEntrance.buy_from_raccoon_1, LogicEntrance.can_complete_raccoon_requests_1)),
+    RegionData(
+        LogicRegion.raccoon_daddy, (LogicEntrance.buy_from_raccoon_1, LogicEntrance.can_complete_raccoon_requests_1)
+    ),
     RegionData(LogicRegion.raccoon_request_1, (LogicEntrance.can_complete_raccoon_requests_2,)),
     RegionData(LogicRegion.raccoon_request_2, (LogicEntrance.can_complete_raccoon_requests_3,)),
     RegionData(LogicRegion.raccoon_request_3, (LogicEntrance.can_complete_raccoon_requests_4,)),
@@ -204,7 +403,6 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.raccoon_shop_4, (LogicEntrance.buy_from_raccoon_5,)),
     RegionData(LogicRegion.raccoon_shop_5, (LogicEntrance.buy_from_raccoon_6,)),
     RegionData(LogicRegion.raccoon_shop_6),
-
     RegionData(LogicRegion.egg_festival),
     RegionData(LogicRegion.desert_festival),
     RegionData(LogicRegion.flower_dance),
@@ -217,7 +415,10 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.night_market),
     RegionData(LogicRegion.winter_star),
     RegionData(LogicRegion.squidfest),
-    RegionData(LogicRegion.bookseller, (LogicEntrance.buy_permanent_books, LogicEntrance.buy_rare_books, LogicEntrance.buy_experience_books,)),
+    RegionData(
+        LogicRegion.bookseller,
+        (LogicEntrance.buy_permanent_books, LogicEntrance.buy_rare_books, LogicEntrance.buy_experience_books),
+    ),
     RegionData(LogicRegion.bookseller_permanent),
     RegionData(LogicRegion.bookseller_rare),
     RegionData(LogicRegion.bookseller_experience),
@@ -225,135 +426,429 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.lost_items_shop),
     RegionData(LogicRegion.garbage_cans),
 )
-ginger_island_regions = (
-    # This overrides the regions from vanilla... When regions are moved to content packs, overriding existing entrances should no longer be necessary.
-    RegionData(RegionName.mountain,
-               (Entrance.mountain_to_railroad, Entrance.mountain_to_tent, Entrance.mountain_to_carpenter_shop,
-                Entrance.mountain_to_outside_adventure_guild,
-                Entrance.mountain_lake_to_outside_adventure_guild_shortcut, Entrance.mountain_town_shortcut, Entrance.mountain_jojamart_shortcut,
-                Entrance.mountain_to_town, Entrance.mountain_to_maru_room, Entrance.mountain_to_leo_treehouse)),
-    RegionData(RegionName.outside_adventure_guild, (Entrance.mountain_to_the_mines, Entrance.enter_quarry, Entrance.mountain_to_adventurer_guild,)),
-    RegionData(RegionName.wizard_tower,
-               (Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, Entrance.use_island_obelisk, LogicEntrance.purchase_wizard_blueprints,)),
-    RegionData(RegionName.fish_shop, (Entrance.fish_shop_to_boat_tunnel,)),
-    RegionData(RegionName.mines_floor_120, (Entrance.dig_to_dangerous_mines_20, Entrance.dig_to_dangerous_mines_60, Entrance.dig_to_dangerous_mines_100)),
-    RegionData(RegionName.skull_cavern_200, (Entrance.enter_dangerous_skull_cavern,)),
-
-    RegionData(RegionName.leo_treehouse),
-    RegionData(RegionName.boat_tunnel, (Entrance.boat_to_ginger_island,)),
-    RegionData(RegionName.dangerous_skull_cavern),
-    RegionData(RegionName.island_south,
-               (Entrance.island_south_to_west, Entrance.island_south_to_north, Entrance.island_south_to_east, Entrance.island_south_to_southeast,
-                Entrance.use_island_resort, Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_docks_to_dig_site,
-                Entrance.parrot_express_docks_to_jungle), ),
-    RegionData(RegionName.island_resort),
-    RegionData(RegionName.island_west,
-               (Entrance.island_west_to_islandfarmhouse, Entrance.island_west_to_gourmand_cave, Entrance.island_west_to_crystals_cave,
-                Entrance.island_west_to_shipwreck, Entrance.island_west_to_qi_walnut_room, Entrance.use_farm_obelisk, Entrance.parrot_express_jungle_to_docks,
-                Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_jungle_to_volcano, LogicEntrance.grow_spring_crops_on_island,
-                LogicEntrance.grow_summer_crops_on_island, LogicEntrance.grow_fall_crops_on_island, LogicEntrance.grow_winter_crops_on_island,
-                LogicEntrance.grow_indoor_crops_on_island), ),
-    RegionData(RegionName.island_east, (Entrance.island_east_to_leo_hut, Entrance.island_east_to_island_shrine)),
-    RegionData(RegionName.island_shrine),
-    RegionData(RegionName.island_south_east, (Entrance.island_southeast_to_pirate_cove,)),
-    RegionData(RegionName.island_north,
-               (Entrance.talk_to_island_trader, Entrance.island_north_to_field_office, Entrance.island_north_to_dig_site, Entrance.island_north_to_volcano,
-                Entrance.parrot_express_volcano_to_dig_site, Entrance.parrot_express_volcano_to_jungle, Entrance.parrot_express_volcano_to_docks), ),
-    RegionData(RegionName.volcano, (Entrance.climb_to_volcano_5, Entrance.volcano_to_secret_beach)),
-    RegionData(RegionName.volcano_secret_beach),
-    RegionData(RegionName.volcano_floor_5, (Entrance.talk_to_volcano_dwarf, Entrance.climb_to_volcano_10)),
-    RegionData(RegionName.volcano_dwarf_shop),
-    RegionData(RegionName.volcano_floor_10),
-    RegionData(RegionName.island_trader),
-    RegionData(RegionName.island_farmhouse, (LogicEntrance.island_cooking,)),
-    RegionData(RegionName.gourmand_frog_cave),
-    RegionData(RegionName.colored_crystals_cave),
-    RegionData(RegionName.shipwreck),
-    RegionData(RegionName.qi_walnut_room),
-    RegionData(RegionName.leo_hut),
-    RegionData(RegionName.pirate_cove),
-    RegionData(RegionName.field_office),
-    RegionData(RegionName.dig_site,
-               (Entrance.dig_site_to_professor_snail_cave, Entrance.parrot_express_dig_site_to_volcano,
-                Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_dig_site_to_jungle), ),
-
-    RegionData(RegionName.professor_snail_cave),
-    RegionData(RegionName.dangerous_mines_20),
-    RegionData(RegionName.dangerous_mines_60),
-    RegionData(RegionName.dangerous_mines_100),
-)
 
 # Exists and where they lead
 vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.to_stardew_valley, RegionName.stardew_valley),
     ConnectionData(Entrance.to_farmhouse, RegionName.farm_house),
-    ConnectionData(Entrance.farmhouse_to_farm, RegionName.farm),
-    ConnectionData(Entrance.downstairs_to_cellar, RegionName.cellar),
-    ConnectionData(Entrance.farm_to_backwoods, RegionName.backwoods),
-    ConnectionData(Entrance.farm_to_bus_stop, RegionName.bus_stop),
-    ConnectionData(Entrance.farm_to_forest, RegionName.forest),
-    ConnectionData(Entrance.farm_to_farmcave, RegionName.farm_cave, flag=RandomizationFlag.NON_PROGRESSION),
-    ConnectionData(Entrance.enter_greenhouse, RegionName.greenhouse),
+    ConnectionData(
+        Entrance.farmhouse_to_farm, RegionName.farm, flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.farm_to_farmhouse,
+        RegionName.farm_house,
+        flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.downstairs_to_cellar, RegionName.cellar, flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.cellar_to_downstairs,
+        RegionName.farm_house,
+        flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.farm_to_backwoods,
+        RegionName.backwoods,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.backwoods_to_farm, RegionName.farm, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.farm_to_bus_stop, RegionName.bus_stop, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.bus_stop_to_farm, RegionName.farm, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.farm_to_forest, RegionName.forest, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.forest_to_farm, RegionName.farm, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.farm_to_farmcave,
+        RegionName.farm_cave,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.farmcave_to_farm,
+        RegionName.farm,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_greenhouse,
+        RegionName.greenhouse,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_greenhouse, RegionName.farm, flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR
+    ),
     ConnectionData(Entrance.enter_coop, RegionName.coop),
     ConnectionData(Entrance.enter_barn, RegionName.barn),
     ConnectionData(Entrance.enter_shed, RegionName.shed),
     ConnectionData(Entrance.enter_slime_hutch, RegionName.slime_hutch),
-    ConnectionData(Entrance.use_desert_obelisk, RegionName.desert),
-    ConnectionData(Entrance.backwoods_to_mountain, RegionName.mountain),
-    ConnectionData(Entrance.bus_stop_to_town, RegionName.town),
-    ConnectionData(Entrance.bus_stop_to_tunnel_entrance, RegionName.tunnel_entrance),
-    ConnectionData(Entrance.tunnel_entrance_to_bus_tunnel, RegionName.bus_tunnel, flag=RandomizationFlag.NON_PROGRESSION),
-    ConnectionData(Entrance.take_bus_to_desert, RegionName.desert),
-    ConnectionData(Entrance.forest_to_town, RegionName.town),
-    ConnectionData(Entrance.forest_to_wizard_tower, RegionName.wizard_tower,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_wizard_basement, RegionName.wizard_basement, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.forest_to_marnie_ranch, RegionName.ranch,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.forest_to_leah_cottage, RegionName.leah_house,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_secret_woods, RegionName.secret_woods),
-    ConnectionData(Entrance.forest_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(
+        Entrance.use_desert_obelisk,
+        RegionName.desert,
+        flag=RandomizationFlag.TRANSITION
+        | RandomizationFlag.TO_OUTDOOR
+        | RandomizationFlag.ENDGAME
+        | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.use_earth_obelisk,
+        RegionName.mountain,
+        flag=RandomizationFlag.TRANSITION
+        | RandomizationFlag.TO_OUTDOOR
+        | RandomizationFlag.ENDGAME
+        | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.use_water_obelisk,
+        RegionName.beach,
+        flag=RandomizationFlag.TRANSITION
+        | RandomizationFlag.TO_OUTDOOR
+        | RandomizationFlag.ENDGAME
+        | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_bus_stop_to_mines,
+        RegionName.mines,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_bus_stop_to_quarry,
+        RegionName.quarry,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_bus_stop_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_mines_to_bus_stop,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_mines_to_quarry,
+        RegionName.quarry,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_mines_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_quarry_to_bus_stop,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_quarry_to_mines,
+        RegionName.mines,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_quarry_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_town_to_bus_stop,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_town_to_mines,
+        RegionName.mines,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.minecart_town_to_quarry,
+        RegionName.quarry,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.backwoods_to_mountain,
+        RegionName.mountain,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.mountain_to_backwoods,
+        RegionName.backwoods,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.bus_stop_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_bus_stop, RegionName.bus_stop, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.bus_stop_to_tunnel_entrance,
+        RegionName.tunnel_entrance,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.tunnel_entrance_to_bus_stop,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.tunnel_entrance_to_bus_tunnel,
+        RegionName.bus_tunnel,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.bus_tunnel_to_tunnel_entrance,
+        RegionName.tunnel_entrance,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.take_bus_to_desert, RegionName.desert, flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.take_bus_from_desert,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.forest_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_forest, RegionName.forest, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.forest_to_wizard_tower,
+        RegionName.wizard_tower,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.wizard_tower_to_forest,
+        RegionName.forest,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_wizard_basement,
+        RegionName.wizard_basement,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_wizard_basement,
+        RegionName.wizard_tower,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.forest_to_marnie_ranch,
+        RegionName.ranch,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.marnie_ranch_to_forest,
+        RegionName.forest,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.forest_to_leah_cottage,
+        RegionName.leah_house,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leah_cottage_to_forest,
+        RegionName.forest,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_secret_woods,
+        RegionName.secret_woods,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_secret_woods, RegionName.forest, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.forest_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.sewer_to_forest, RegionName.forest, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+    ),
     # We remove the bit for masteries, because the mastery cave is to be excluded from the randomization if masteries are not shuffled.
-    ConnectionData(Entrance.forest_to_mastery_cave, RegionName.mastery_cave, flag=RandomizationFlag.BUILDINGS ^ RandomizationFlag.EXCLUDE_MASTERIES),
-    ConnectionData(Entrance.feed_trash_bear, RegionName.trash_bear),
-    ConnectionData(Entrance.town_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.enter_mutant_bug_lair, RegionName.mutant_bug_lair, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.mountain_to_railroad, RegionName.railroad),
-    ConnectionData(Entrance.mountain_to_tent, RegionName.tent,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.mountain_to_carpenter_shop, RegionName.carpenter,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.mountain_to_maru_room, RegionName.maru_room,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_sebastian_room, RegionName.sebastian_room, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(
+        Entrance.forest_to_mastery_cave,
+        RegionName.mastery_cave,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR | RandomizationFlag.MASTERY_CAVE,
+    ),
+    ConnectionData(
+        Entrance.mastery_cave_to_forest,
+        RegionName.forest,
+        flag=(RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR) ^ RandomizationFlag.MASTERY_CAVE,
+    ),
+    ConnectionData(LogicEntrance.feed_trash_bear, RegionName.trash_bear),
+    ConnectionData(
+        Entrance.town_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.sewer_to_town, RegionName.town, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.enter_mutant_bug_lair,
+        RegionName.mutant_bug_lair,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_mutant_bug_lair, RegionName.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.mountain_to_railroad,
+        RegionName.railroad,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.railroad_to_mountain,
+        RegionName.mountain,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.mountain_to_tent, RegionName.tent, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.tent_to_mountain,
+        RegionName.mountain,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.mountain_to_carpenter_shop,
+        RegionName.carpenter,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.carpenter_shop_to_mountain,
+        RegionName.mountain,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.mountain_to_maru_room,
+        RegionName.maru_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.maru_room_to_mountain,
+        RegionName.mountain,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_sebastian_room,
+        RegionName.sebastian_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_sebastian_room,
+        RegionName.carpenter,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(Entrance.carpenter_shop_to_maru_room, RegionName.maru_room),
+    ConnectionData(Entrance.maru_room_to_carpenter_shop, RegionName.carpenter),
     ConnectionData(Entrance.mountain_to_outside_adventure_guild, RegionName.outside_adventure_guild),
-    ConnectionData(Entrance.mountain_to_adventurer_guild, RegionName.adventurer_guild,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(Entrance.outside_adventure_guild_to_mountain, RegionName.mountain),
+    ConnectionData(
+        Entrance.mountain_to_adventurer_guild,
+        RegionName.adventurer_guild,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.adventurer_guild_to_mountain,
+        RegionName.outside_adventure_guild,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
     ConnectionData(Entrance.adventurer_guild_to_bedroom, RegionName.adventurer_guild_bedroom),
     ConnectionData(Entrance.enter_quarry, RegionName.quarry),
-    ConnectionData(Entrance.enter_quarry_mine_entrance, RegionName.quarry_mine_entrance,
-                   flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(Entrance.leave_quarry, RegionName.mountain),
+    ConnectionData(
+        Entrance.enter_quarry_mine_entrance,
+        RegionName.quarry_mine_entrance,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_quarry_mine_entrance,
+        RegionName.quarry,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
     ConnectionData(Entrance.enter_quarry_mine, RegionName.quarry_mine),
-    ConnectionData(Entrance.mountain_to_town, RegionName.town),
-    ConnectionData(Entrance.town_to_community_center, RegionName.community_center,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        Entrance.mountain_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_mountain, RegionName.mountain, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_community_center,
+        RegionName.community_center,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.community_center_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
     ConnectionData(Entrance.access_crafts_room, RegionName.crafts_room),
     ConnectionData(Entrance.access_pantry, RegionName.pantry),
     ConnectionData(Entrance.access_fish_tank, RegionName.fish_tank),
     ConnectionData(Entrance.access_boiler_room, RegionName.boiler_room),
     ConnectionData(Entrance.access_bulletin_board, RegionName.bulletin_board),
     ConnectionData(Entrance.access_vault, RegionName.vault),
-    ConnectionData(Entrance.town_to_hospital, RegionName.hospital,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_harvey_room, RegionName.harvey_room, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.town_to_pierre_general_store, RegionName.pierre_store,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_sunroom, RegionName.sunroom, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.town_to_clint_blacksmith, RegionName.blacksmith,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.town_to_saloon, RegionName.saloon,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        Entrance.town_to_hospital,
+        RegionName.hospital,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.hospital_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.enter_harvey_room,
+        RegionName.harvey_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_harvey_room, RegionName.hospital, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_pierre_general_store,
+        RegionName.pierre_store,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.pierre_general_store_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_sunroom, RegionName.sunroom, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.leave_sunroom, RegionName.pierre_store, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_clint_blacksmith,
+        RegionName.blacksmith,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.clint_blacksmith_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.town_to_saloon, RegionName.saloon, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.saloon_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
     ConnectionData(Entrance.play_journey_of_the_prairie_king, RegionName.jotpk_world_1),
     ConnectionData(Entrance.reach_jotpk_world_2, RegionName.jotpk_world_2),
     ConnectionData(Entrance.reach_jotpk_world_3, RegionName.jotpk_world_3),
@@ -361,33 +856,111 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.reach_junimo_kart_2, RegionName.junimo_kart_2),
     ConnectionData(Entrance.reach_junimo_kart_3, RegionName.junimo_kart_3),
     ConnectionData(Entrance.reach_junimo_kart_4, RegionName.junimo_kart_4),
-    ConnectionData(Entrance.town_to_sam_house, RegionName.sam_house,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.town_to_haley_house, RegionName.haley_house,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.town_to_mayor_manor, RegionName.mayor_house,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        Entrance.town_to_sam_house,
+        RegionName.sam_house,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.sam_house_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_haley_house,
+        RegionName.haley_house,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.haley_house_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.town_to_mayor_manor,
+        RegionName.mayor_house,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.mayor_manor_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+    ),
     ConnectionData(Entrance.enter_lewis_bedroom, RegionName.lewis_bedroom),
-    ConnectionData(Entrance.enter_shorts_maze, RegionName.purple_shorts_maze, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.town_to_alex_house, RegionName.alex_house,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.town_to_trailer, RegionName.trailer,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.town_to_museum, RegionName.museum,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.town_to_jojamart, RegionName.jojamart,
-                   flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.purchase_movie_ticket, RegionName.movie_ticket_stand),
+    ConnectionData(Entrance.leave_lewis_bedroom, RegionName.mayor_house),
+    ConnectionData(
+        Entrance.enter_shorts_maze,
+        RegionName.purple_shorts_maze,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_shorts_maze,
+        RegionName.lewis_bedroom,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.town_to_alex_house,
+        RegionName.alex_house,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.alex_house_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_trailer, RegionName.trailer, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.trailer_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_museum, RegionName.museum, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.museum_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.town_to_jojamart,
+        RegionName.jojamart,
+        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.jojamart_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(LogicEntrance.purchase_movie_ticket, RegionName.movie_ticket_stand),
     ConnectionData(Entrance.enter_abandoned_jojamart, RegionName.abandoned_jojamart),
     ConnectionData(Entrance.enter_movie_theater, RegionName.movie_theater),
-    ConnectionData(Entrance.town_to_beach, RegionName.beach),
-    ConnectionData(Entrance.enter_elliott_house, RegionName.elliott_house,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.beach_to_willy_fish_shop, RegionName.fish_shop,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        Entrance.town_to_beach, RegionName.beach, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.beach_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.enter_elliott_house,
+        RegionName.elliott_house,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_elliott_house, RegionName.beach, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.beach_to_willy_fish_shop,
+        RegionName.fish_shop,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.willy_fish_shop_to_beach,
+        RegionName.beach,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+    ),
     ConnectionData(Entrance.enter_tide_pools, RegionName.tide_pools),
-    ConnectionData(Entrance.mountain_to_the_mines, RegionName.mines,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(Entrance.leave_tide_pools, RegionName.beach),
+    ConnectionData(
+        Entrance.mountain_to_the_mines, RegionName.mines, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.the_mines_to_mountain,
+        RegionName.outside_adventure_guild,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
     ConnectionData(Entrance.dig_to_mines_floor_5, RegionName.mines_floor_5),
     ConnectionData(Entrance.dig_to_mines_floor_10, RegionName.mines_floor_10),
     ConnectionData(Entrance.dig_to_mines_floor_15, RegionName.mines_floor_15),
@@ -412,11 +985,28 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.dig_to_mines_floor_110, RegionName.mines_floor_110),
     ConnectionData(Entrance.dig_to_mines_floor_115, RegionName.mines_floor_115),
     ConnectionData(Entrance.dig_to_mines_floor_120, RegionName.mines_floor_120),
-    ConnectionData(Entrance.enter_skull_cavern_entrance, RegionName.skull_cavern_entrance,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_oasis, RegionName.oasis,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_casino, RegionName.casino, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(
+        Entrance.enter_skull_cavern_entrance,
+        RegionName.skull_cavern_entrance,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_skull_cavern_entrance,
+        RegionName.desert,
+        RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_oasis, RegionName.oasis, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.leave_oasis, RegionName.desert, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+    ),
+    ConnectionData(
+        Entrance.enter_casino, RegionName.casino, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.leave_casino, RegionName.oasis, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
     ConnectionData(Entrance.enter_skull_cavern, RegionName.skull_cavern),
     ConnectionData(Entrance.mine_in_skull_cavern, RegionName.skull_cavern_mining),
     ConnectionData(Entrance.mine_to_skull_cavern_floor_25, RegionName.skull_cavern_25),
@@ -427,26 +1017,131 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.mine_to_skull_cavern_floor_150, RegionName.skull_cavern_150),
     ConnectionData(Entrance.mine_to_skull_cavern_floor_175, RegionName.skull_cavern_175),
     ConnectionData(Entrance.mine_to_skull_cavern_floor_200, RegionName.skull_cavern_200),
-    ConnectionData(Entrance.enter_witch_warp_cave, RegionName.witch_warp_cave, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.enter_witch_swamp, RegionName.witch_swamp, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.enter_witch_hut, RegionName.witch_hut, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.witch_warp_to_wizard_basement, RegionName.wizard_basement, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.enter_bathhouse_entrance, RegionName.bathhouse_entrance,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.enter_mens_locker_room, RegionName.mens_locker_room, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.enter_womens_locker_room, RegionName.womens_locker_room, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.mens_lockers_to_public_bath, RegionName.public_bath, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.womens_lockers_to_public_bath, RegionName.public_bath, flag=RandomizationFlag.BUILDINGS),
-
-    ConnectionData(Entrance.town_tidepools_shortcut, RegionName.tide_pools),
-    ConnectionData(Entrance.forest_beach_shortcut, RegionName.beach),
-    ConnectionData(Entrance.mountain_jojamart_shortcut, RegionName.town),
+    ConnectionData(
+        Entrance.enter_witch_warp_cave,
+        RegionName.witch_warp_cave,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_witch_warp_cave,
+        RegionName.railroad,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_witch_swamp,
+        RegionName.witch_swamp,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(Entrance.leave_witch_swamp, RegionName.witch_warp_cave, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR),
+    ConnectionData(
+        Entrance.enter_witch_hut, RegionName.witch_hut, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(Entrance.leave_witch_hut, RegionName.witch_swamp, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR),
+    ConnectionData(
+        Entrance.witch_warp_to_wizard_basement,
+        RegionName.wizard_basement,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.wizard_basement_to_witch_warp,
+        RegionName.witch_hut,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_bathhouse_entrance,
+        RegionName.bathhouse_entrance,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_bathhouse_entrance,
+        RegionName.railroad,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_mens_locker_room,
+        RegionName.mens_locker_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_mens_locker_room,
+        RegionName.bathhouse_entrance,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.enter_womens_locker_room,
+        RegionName.womens_locker_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_womens_locker_room,
+        RegionName.bathhouse_entrance,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.mens_lockers_to_public_bath,
+        RegionName.public_bath,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.public_bath_to_mens_lockers,
+        RegionName.mens_locker_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.womens_lockers_to_public_bath,
+        RegionName.public_bath,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.public_bath_to_womens_lockers,
+        RegionName.womens_locker_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.town_tidepools_shortcut,
+        RegionName.tide_pools,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
+    ConnectionData(
+        Entrance.tidepools_town_shortcut,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
+    ConnectionData(
+        Entrance.forest_beach_shortcut,
+        RegionName.beach,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
+    ConnectionData(
+        Entrance.beach_forest_shortcut,
+        RegionName.forest,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
+    ConnectionData(
+        Entrance.mountain_jojamart_shortcut,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
+    ConnectionData(
+        Entrance.jojamart_mountain_shortcut,
+        RegionName.outside_adventure_guild,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
     ConnectionData(Entrance.tunnel_backwoods_shortcut, RegionName.backwoods),
-    ConnectionData(Entrance.mountain_town_shortcut, RegionName.town),
+    ConnectionData(Entrance.backwoods_tunnel_shortcut, RegionName.tunnel_entrance),
+    ConnectionData(
+        Entrance.mountain_town_shortcut,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
+    ConnectionData(
+        Entrance.town_mountain_shortcut,
+        RegionName.mountain,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+    ),
     ConnectionData(Entrance.mountain_lake_to_outside_adventure_guild_shortcut, RegionName.outside_adventure_guild),
-
+    ConnectionData(Entrance.outside_adventure_guild_to_mountain_lake_shortcut, RegionName.mountain),
     ConnectionData(LogicEntrance.talk_to_mines_dwarf, LogicRegion.mines_dwarf_shop),
-
     ConnectionData(LogicEntrance.buy_from_traveling_merchant, LogicRegion.traveling_cart),
     ConnectionData(LogicEntrance.buy_from_traveling_merchant_sunday, LogicRegion.traveling_cart_sunday),
     ConnectionData(LogicEntrance.buy_from_traveling_merchant_monday, LogicRegion.traveling_cart_monday),
@@ -473,7 +1168,6 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.buy_from_raccoon_6, LogicRegion.raccoon_shop_6),
     ConnectionData(LogicEntrance.farmhouse_cooking, LogicRegion.kitchen),
     ConnectionData(LogicEntrance.watch_queen_of_sauce, LogicRegion.queen_of_sauce),
-
     ConnectionData(LogicEntrance.grow_spring_crops, LogicRegion.spring_farming),
     ConnectionData(LogicEntrance.grow_summer_crops, LogicRegion.summer_farming),
     ConnectionData(LogicEntrance.grow_fall_crops, LogicRegion.fall_farming),
@@ -485,7 +1179,6 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.grow_indoor_crops_in_greenhouse, LogicRegion.indoor_farming),
     ConnectionData(LogicEntrance.grow_summer_fall_crops_in_summer, LogicRegion.summer_or_fall_farming),
     ConnectionData(LogicEntrance.grow_summer_fall_crops_in_fall, LogicRegion.summer_or_fall_farming),
-
     ConnectionData(LogicEntrance.shipping, LogicRegion.shipping),
     ConnectionData(LogicEntrance.find_secret_notes, LogicRegion.secret_notes),
     ConnectionData(LogicEntrance.blacksmith_copper, LogicRegion.blacksmith_copper),
@@ -515,72 +1208,10 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.purchase_wizard_blueprints, LogicRegion.wizard_blueprints),
 )
 
-ginger_island_connections = (
-    ConnectionData(Entrance.use_island_obelisk, RegionName.island_south),
-    ConnectionData(Entrance.use_farm_obelisk, RegionName.farm),
-    ConnectionData(Entrance.mountain_to_leo_treehouse, RegionName.leo_treehouse, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(Entrance.fish_shop_to_boat_tunnel, RegionName.boat_tunnel, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.boat_to_ginger_island, RegionName.island_south),
-    ConnectionData(Entrance.enter_dangerous_skull_cavern, RegionName.dangerous_skull_cavern),
-    ConnectionData(Entrance.dig_to_dangerous_mines_20, RegionName.dangerous_mines_20),
-    ConnectionData(Entrance.dig_to_dangerous_mines_60, RegionName.dangerous_mines_60),
-    ConnectionData(Entrance.dig_to_dangerous_mines_100, RegionName.dangerous_mines_100),
-    ConnectionData(Entrance.island_south_to_west, RegionName.island_west),
-    ConnectionData(Entrance.island_south_to_north, RegionName.island_north),
-    ConnectionData(Entrance.island_south_to_east, RegionName.island_east),
-    ConnectionData(Entrance.island_south_to_southeast, RegionName.island_south_east),
-    ConnectionData(Entrance.use_island_resort, RegionName.island_resort),
-    ConnectionData(Entrance.island_west_to_islandfarmhouse, RegionName.island_farmhouse, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_west_to_gourmand_cave, RegionName.gourmand_frog_cave, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_west_to_crystals_cave, RegionName.colored_crystals_cave, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_west_to_shipwreck, RegionName.shipwreck, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_west_to_qi_walnut_room, RegionName.qi_walnut_room, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_east_to_leo_hut, RegionName.leo_hut, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_east_to_island_shrine, RegionName.island_shrine, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_southeast_to_pirate_cove, RegionName.pirate_cove, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_north_to_field_office, RegionName.field_office, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_north_to_dig_site, RegionName.dig_site),
-    ConnectionData(Entrance.dig_site_to_professor_snail_cave, RegionName.professor_snail_cave, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.island_north_to_volcano, RegionName.volcano, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.volcano_to_secret_beach, RegionName.volcano_secret_beach, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(Entrance.talk_to_island_trader, RegionName.island_trader),
-    ConnectionData(Entrance.climb_to_volcano_5, RegionName.volcano_floor_5),
-    ConnectionData(Entrance.talk_to_volcano_dwarf, RegionName.volcano_dwarf_shop),
-    ConnectionData(Entrance.climb_to_volcano_10, RegionName.volcano_floor_10),
-    ConnectionData(Entrance.parrot_express_jungle_to_docks, RegionName.island_south),
-    ConnectionData(Entrance.parrot_express_dig_site_to_docks, RegionName.island_south),
-    ConnectionData(Entrance.parrot_express_volcano_to_docks, RegionName.island_south),
-    ConnectionData(Entrance.parrot_express_volcano_to_jungle, RegionName.island_west),
-    ConnectionData(Entrance.parrot_express_docks_to_jungle, RegionName.island_west),
-    ConnectionData(Entrance.parrot_express_dig_site_to_jungle, RegionName.island_west),
-    ConnectionData(Entrance.parrot_express_docks_to_dig_site, RegionName.dig_site),
-    ConnectionData(Entrance.parrot_express_volcano_to_dig_site, RegionName.dig_site),
-    ConnectionData(Entrance.parrot_express_jungle_to_dig_site, RegionName.dig_site),
-    ConnectionData(Entrance.parrot_express_dig_site_to_volcano, RegionName.island_north),
-    ConnectionData(Entrance.parrot_express_docks_to_volcano, RegionName.island_north),
-    ConnectionData(Entrance.parrot_express_jungle_to_volcano, RegionName.island_north),
-    ConnectionData(LogicEntrance.grow_spring_crops_on_island, LogicRegion.spring_farming),
-    ConnectionData(LogicEntrance.grow_summer_crops_on_island, LogicRegion.summer_farming),
-    ConnectionData(LogicEntrance.grow_fall_crops_on_island, LogicRegion.fall_farming),
-    ConnectionData(LogicEntrance.grow_winter_crops_on_island, LogicRegion.winter_farming),
-    ConnectionData(LogicEntrance.grow_indoor_crops_on_island, LogicRegion.indoor_farming),
-    ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen),
+
+connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType(
+    {connection.name: connection for connection in vanilla_connections}
 )
-
-connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType({
-    connection.name: connection
-    for connection in vanilla_connections
-})
-regions_without_ginger_island_by_name: Mapping[str, RegionData] = MappingProxyType({
-    region.name: region
-    for region in vanilla_regions
-})
-
-connections_with_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType({
-    connection.name: connection
-    for connection in vanilla_connections + ginger_island_connections
-})
-regions_with_ginger_island_by_name: Mapping[str, RegionData] = MappingProxyType({
-    region.name: region
-    for region in vanilla_regions + ginger_island_regions
-})
+regions_without_ginger_island_by_name: Mapping[str, RegionData] = MappingProxyType(
+    {region.name: region for region in vanilla_regions}
+)

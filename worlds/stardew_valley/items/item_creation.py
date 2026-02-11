@@ -232,10 +232,19 @@ def create_skills(item_factory: StardewItemFactory, content: StardewContent, ite
         items.append(item_factory(Wallet.mastery_of_the_five_ways))
 
 
-def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
-    useful_buildings_classification = ItemClassification.progression_skip_balancing if goal_is_perfection(options) else ItemClassification.useful
-    items.append(item_factory("Earth Obelisk", classification_pre_fill=useful_buildings_classification))
-    items.append(item_factory("Water Obelisk", classification_pre_fill=useful_buildings_classification))
+def create_wizard_buildings(
+    item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]
+):
+    useful_buildings_classification = (
+        ItemClassification.progression_skip_balancing if goal_is_perfection(options) else ItemClassification.useful
+    )
+    er_obelisk_classification = (
+        ItemClassification.progression_skip_balancing
+        if goal_is_perfection(options) or options.entrance_randomization.randomized_transitions()
+        else ItemClassification.useful
+    )
+    items.append(item_factory("Earth Obelisk", classification_pre_fill=er_obelisk_classification))
+    items.append(item_factory("Water Obelisk", classification_pre_fill=er_obelisk_classification))
     items.append(item_factory("Desert Obelisk"))
     items.append(item_factory("Junimo Hut"))
     items.append(item_factory("Gold Clock", classification_pre_fill=useful_buildings_classification))

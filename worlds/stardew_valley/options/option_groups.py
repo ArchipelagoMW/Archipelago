@@ -17,6 +17,7 @@ else:
             options.BundlePrice,
             options.BundlePerRoom,
             options.EntranceRandomization,
+            options.EntranceRandomizationBehaviour,
             options.ExcludeGingerIsland,
         ]),
         OptionGroup("Major Unlocks", [

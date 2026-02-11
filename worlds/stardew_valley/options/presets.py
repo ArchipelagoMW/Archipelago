@@ -132,7 +132,7 @@ hard_settings = {
     options.BundleRandomization.internal_name:          options.BundleRandomization.option_remixed,
     options.BundlePrice.internal_name:                  options.BundlePrice.option_expensive,
     options.BundlePerRoom.internal_name:                options.BundlePerRoom.option_one_extra,
-    options.EntranceRandomization.internal_name:        options.EntranceRandomization.option_buildings_without_house,
+    options.EntranceRandomization.internal_name:        options.EntranceRandomization.option_buildings,
     options.StartWithout.internal_name:                 options.StartWithout.preset_easy,
     options.SeasonRandomization.internal_name:          options.SeasonRandomization.option_randomized,
     options.Cropsanity.internal_name:                   options.Cropsanity.option_enabled,

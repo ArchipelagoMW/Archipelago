@@ -4,10 +4,15 @@ from collections.abc import Container
 from dataclasses import dataclass, field
 from enum import IntFlag
 
+from ..strings.entrance_names import Entrance, LogicEntrance
 connector_keyword = " to "
 
 
 def reverse_connection_name(name: str) -> str | None:
+    if name == Entrance.boat_to_ginger_island:
+        return Entrance.boat_from_ginger_island
+    if name == Entrance.boat_from_ginger_island:
+        return Entrance.boat_to_ginger_island
     try:
         origin, destination = name.split(connector_keyword)
     except ValueError:
@@ -25,27 +30,29 @@ class RandomizationFlag(IntFlag):
 
     # Randomization options
     # The first 4 bits are used to mark if an entrance is eligible for randomization according to the entrance randomization options.
-    BIT_PELICAN_TOWN = 1  # 0b0001
-    BIT_NON_PROGRESSION = 1 << 1  # 0b0010
-    BIT_BUILDINGS = 1 << 2  # 0b0100
-    BIT_EVERYTHING = 1 << 3  # 0b1000
 
-    # Content flag for entrances exclusions
-    # The next 2 bits are used to mark if an entrance is to be excluded from randomization according to the content options.
-    # Those bits must be removed from an entrance flags when then entrance must be excluded.
-    __UNUSED = 1 << 4  # 0b010000
-    EXCLUDE_MASTERIES = 1 << 5  # 0b100000
+    PELICAN_TOWN = 0b000001
+    NON_PROGRESSION = 0b000010
+    BUILDINGS = 0b000100
+    OVERWORLD = 0b001000
+    TRANSITION = 0b010000
 
-    # Entrance groups
-    # The last bit is used to add additional qualifiers on entrances to group them
-    # Those bits should be added when an entrance need additional qualifiers.
-    LEAD_TO_OPEN_AREA = 1 << 6
+    ENDGAME = 0b01 << 6
+    MASTERY_CAVE = 0b10 << 6
 
-    # Tags to apply on connections
-    EVERYTHING = EXCLUDE_MASTERIES | BIT_EVERYTHING
-    BUILDINGS = EVERYTHING | BIT_BUILDINGS
-    NON_PROGRESSION = BUILDINGS | BIT_NON_PROGRESSION
-    PELICAN_TOWN = NON_PROGRESSION | BIT_PELICAN_TOWN
+    TO_INDOOR = 0b01 << 8
+    TO_OUTDOOR = 0b10 << 8
+
+    FARMHOUSE = 0b1 << 10
+
+    IS_ONE_WAY = 0b1 << 11
+
+    ALWAYS_ACCEPT = TO_INDOOR | TO_OUTDOOR | IS_ONE_WAY
+    SET_PELICAN_TOWN = PELICAN_TOWN | ALWAYS_ACCEPT
+    SET_NON_PROGRESSION = SET_PELICAN_TOWN | NON_PROGRESSION
+    SET_BUILDINGS = SET_NON_PROGRESSION | BUILDINGS
+    SET_OVERWORLD = SET_BUILDINGS | OVERWORLD
+    SET_EVERYTHING = SET_OVERWORLD | TRANSITION
 
 
 @dataclass(frozen=True)
@@ -81,10 +88,12 @@ class ConnectionData:
 
     @property
     def reverse(self) -> str | None:
+        if RandomizationFlag.IS_ONE_WAY in self.flag:
+            return None
         return reverse_connection_name(self.name)
 
     def is_eligible_for_randomization(self, chosen_randomization_flag: RandomizationFlag) -> bool:
-        return chosen_randomization_flag and chosen_randomization_flag in self.flag
+        return bool(self.flag) and self.flag in chosen_randomization_flag
 
 
 @dataclass(frozen=True)

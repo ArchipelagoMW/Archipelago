@@ -43,6 +43,13 @@ class ChefsanityOptionName:
     friendship = "Friendship"
 
 
+class EntranceRandomizerBehaviourOptionName:
+    chaos = "Chaos"
+    decoupled = "Decoupled"
+    same_type = "Same Type"
+    shuffle_farmhouse = "Shuffle Farmhouse"
+
+
 class StartWithoutOptionName:
     tools = "Tools"
     backpack = "Backpack"

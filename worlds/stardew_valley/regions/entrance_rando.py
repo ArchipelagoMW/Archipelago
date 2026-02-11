@@ -1,11 +1,16 @@
-from BaseClasses import Region
+from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
 from .model import ConnectionData, RandomizationFlag, reverse_connection_name, RegionData
 from ..content import StardewContent
 from ..options import EntranceRandomization
+from ..strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName
 
 
-def create_player_randomization_flag(entrance_randomization_choice: EntranceRandomization, content: StardewContent):
+def create_player_randomization_flag(
+    entrance_randomization_choice: EntranceRandomization,
+    entrance_behavour_choice: set[EntranceRandomizerBehaviourOptionName],
+    content: StardewContent,
+):
     """Return the flag that a connection is expected to have to be randomized. Only the bit corresponding to the player randomization choice will be enabled.
 
     Other bits for content exclusion might also be enabled, tho the preferred solution to exclude content should be to not create those regions at alls, when possible.
@@ -16,19 +21,22 @@ def create_player_randomization_flag(entrance_randomization_choice: EntranceRand
         return flag
 
     if entrance_randomization_choice == EntranceRandomization.option_pelican_town:
-        flag |= RandomizationFlag.BIT_PELICAN_TOWN
+        flag |= RandomizationFlag.SET_PELICAN_TOWN
     elif entrance_randomization_choice == EntranceRandomization.option_non_progression:
-        flag |= RandomizationFlag.BIT_NON_PROGRESSION
-    elif entrance_randomization_choice in (
-            EntranceRandomization.option_buildings,
-            EntranceRandomization.option_buildings_without_house,
-            EntranceRandomization.option_chaos
-    ):
-        flag |= RandomizationFlag.BIT_BUILDINGS
+        flag |= RandomizationFlag.SET_NON_PROGRESSION
+    elif entrance_randomization_choice == EntranceRandomization.option_buildings:
+        flag |= RandomizationFlag.SET_BUILDINGS
+    elif entrance_randomization_choice == EntranceRandomization.option_overworld:
+        flag |= RandomizationFlag.SET_OVERWORLD
+    elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
+        flag |= RandomizationFlag.SET_EVERYTHING
 
-    if not content.features.skill_progression.are_masteries_shuffled:
-        flag |= RandomizationFlag.EXCLUDE_MASTERIES
+    if EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behavour_choice:
+        flag |= RandomizationFlag.FARMHOUSE
+    if content.features.skill_progression.are_masteries_shuffled:
+        flag |= RandomizationFlag.MASTERY_CAVE
 
+    flag |= RandomizationFlag.ENDGAME
     return flag
 
 
@@ -50,8 +58,17 @@ def connect_regions(region_data_by_name: dict[str, RegionData], connection_data_
 def create_entrance_rando_target(origin: Region, destination: Region, connection_data: ConnectionData) -> None:
     """We need our own function to create the GER targets, because the Stardew Mod have very specific expectations for the name of the entrances.
     We need to know exactly which entrances to swap in both directions."""
-    origin.create_exit(connection_data.name)
-    destination.create_er_target(connection_data.reverse)
+
+    if RandomizationFlag.IS_ONE_WAY in connection_data.flag:
+        origin.create_exit(connection_data.name).randomization_type = EntranceType.ONE_WAY
+        destination.create_er_target(connection_data.name).randomization_type = EntranceType.ONE_WAY
+        return
+
+    rev = connection_data.reverse
+    assert rev is not None, f"Could not get reverse of '{connection_data.name}'"
+
+    origin.create_exit(connection_data.name).randomization_type = EntranceType.TWO_WAY
+    destination.create_er_target(rev).randomization_type = EntranceType.TWO_WAY
 
 
 def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
@@ -67,7 +84,6 @@ def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
     swapped_connections = {}
 
     for entrance, exit_ in placements.pairings:
-        swapped_connections[entrance] = reverse_connection_name(exit_)
-        swapped_connections[exit_] = reverse_connection_name(entrance)
+        swapped_connections[entrance] = reverse_connection_name(exit_) or exit_
 
     return swapped_connections

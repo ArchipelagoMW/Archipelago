@@ -8,7 +8,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName, EntranceRandomizerBehaviourOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -212,13 +212,32 @@ class EntranceRandomization(Choice):
     option_disabled = 0
     option_pelican_town = 1
     option_non_progression = 2
-    option_buildings_without_house = 3
-    option_buildings = 4
-    # option_everything = 10
-    option_chaos = 12
-    # option_buildings_one_way = 6
-    # option_everything_one_way = 7
-    # option_chaos_one_way = 8
+    option_buildings = 3
+    option_overworld = 4
+    option_everywhere = 5
+
+    def randomized_transitions(self) -> bool:
+        return self.value >= self.option_everywhere
+
+
+class EntranceRandomizationBehaviour(OptionSet):
+    """Modifications to how ER will behave within the randomized locations.
+    - Chaos: all Enabled entrances are reshuffled every day!
+    - Decoupled: Going into an entrance and going back might bring you somewhere different.
+    - Same-Type: Going in a door will take you only to entrances coming out of a door and similarly for map transitions -> map transitions etc.
+    - Shuffle Farmhouse: shuffles the farmhouse with the other locations
+    """
+
+    internal_name = "er_behaviour"
+    display_name = "Entrance Randomizer Behaviour"
+    valid_keys = frozenset(
+        {
+            EntranceRandomizerBehaviourOptionName.chaos,
+            EntranceRandomizerBehaviourOptionName.decoupled,
+            EntranceRandomizerBehaviourOptionName.same_type,
+            EntranceRandomizerBehaviourOptionName.shuffle_farmhouse,
+        }
+    )
 
 
 class StartWithout(OptionSet):
@@ -1184,6 +1203,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     bundle_price: BundlePrice
     bundle_per_room: BundlePerRoom
     entrance_randomization: EntranceRandomization
+    entrance_randomization_behaviour: EntranceRandomizationBehaviour
     start_without: StartWithout
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity

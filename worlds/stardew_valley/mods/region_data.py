@@ -1,10 +1,19 @@
-from .mod_data import ModNames
 from ..content.mods.sve import SVE_GINGER_ISLAND_PACK
-from ..regions.model import RegionData, ConnectionData, MergeFlag, RandomizationFlag, ModRegionsData
-from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, BoardingHouseEntrance, \
-    JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance, AlectoEntrance
-from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, BoardingHouseRegion, \
-    AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion, AlectoRegion, LaceyRegion
+from ..regions.model import (ConnectionData, MergeFlag, ModRegionsData,
+                             RandomizationFlag, RegionData)
+from ..strings.entrance_names import (AlecEntrance, AlectoEntrance,
+                                      AyeishaEntrance, BoardingHouseEntrance,
+                                      DeepWoodsEntrance, Entrance,
+                                      EugeneEntrance, JasperEntrance,
+                                      JunaEntrance, LaceyEntrance,
+                                      LogicEntrance, MagicEntrance,
+                                      RileyEntrance, SVEEntrance, YobaEntrance)
+from ..strings.region_names import (AlecRegion, AlectoRegion, AyeishaRegion,
+                                    BoardingHouseRegion, DeepWoodsRegion,
+                                    EugeneRegion, JasperRegion, JunaRegion,
+                                    LaceyRegion, LogicRegion, MagicRegion,
+                                    Region, RileyRegion, SVERegion, YobaRegion)
+from .mod_data import ModNames
 
 deep_woods_regions = [
     RegionData(Region.farm, (DeepWoodsEntrance.use_woods_obelisk,)),
@@ -58,8 +67,11 @@ eugene_regions = [
 ]
 
 eugene_entrances = [
-    ConnectionData(EugeneEntrance.forest_to_garden, EugeneRegion.eugene_garden,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        EugeneEntrance.forest_to_garden,
+        EugeneRegion.eugene_garden,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
     ConnectionData(EugeneEntrance.garden_to_bedroom, EugeneRegion.eugene_bedroom, flag=RandomizationFlag.BUILDINGS),
 ]
 
@@ -87,8 +99,11 @@ alec_regions = [
 ]
 
 alec_entrances = [
-    ConnectionData(AlecEntrance.forest_to_petshop, AlecRegion.pet_store,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        AlecEntrance.forest_to_petshop,
+        AlecRegion.pet_store,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
     ConnectionData(AlecEntrance.petshop_to_bedroom, AlecRegion.alec_bedroom, flag=RandomizationFlag.BUILDINGS),
 ]
 
@@ -107,8 +122,11 @@ juna_regions = [
 ]
 
 juna_entrances = [
-    ConnectionData(JunaEntrance.forest_to_juna_cave, JunaRegion.juna_cave,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        JunaEntrance.forest_to_juna_cave,
+        JunaRegion.juna_cave,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    )
 ]
 
 ayeisha_regions = [
@@ -117,8 +135,11 @@ ayeisha_regions = [
 ]
 
 ayeisha_entrances = [
-    ConnectionData(AyeishaEntrance.bus_stop_to_mail_van, AyeishaRegion.mail_van,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        AyeishaEntrance.bus_stop_to_mail_van,
+        AyeishaRegion.mail_van,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    )
 ]
 
 riley_regions = [
@@ -127,8 +148,11 @@ riley_regions = [
 ]
 
 riley_entrances = [
-    ConnectionData(RileyEntrance.town_to_riley, RileyRegion.riley_house,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        RileyEntrance.town_to_riley,
+        RileyRegion.riley_house,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    )
 ]
 
 sve_main_land_regions = [
@@ -208,7 +232,11 @@ sve_ginger_island_regions = [
 ]
 
 sve_main_land_connections = [
-    ConnectionData(SVEEntrance.town_to_jenkins, SVERegion.jenkins_residence, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        SVEEntrance.town_to_jenkins,
+        SVERegion.jenkins_residence,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
     ConnectionData(SVEEntrance.jenkins_to_cellar, SVERegion.jenkins_cellar, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.forest_to_bmv, SVERegion.blue_moon_vineyard),
     ConnectionData(SVEEntrance.bmv_to_beach, Region.beach),
@@ -217,14 +245,27 @@ sve_main_land_connections = [
     ConnectionData(SVEEntrance.town_to_bridge, SVERegion.shearwater),
     ConnectionData(SVEEntrance.plot_to_bridge, SVERegion.shearwater),
     ConnectionData(SVEEntrance.bus_stop_to_shed, SVERegion.grandpas_shed),
-    ConnectionData(SVEEntrance.grandpa_shed_to_interior, SVERegion.grandpas_shed_interior,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(SVEEntrance.grandpa_interior_to_upstairs, SVERegion.grandpas_shed_upstairs, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(
+        SVEEntrance.grandpa_shed_to_interior,
+        SVERegion.grandpas_shed_interior,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        SVEEntrance.grandpa_interior_to_upstairs, SVERegion.grandpas_shed_upstairs, flag=RandomizationFlag.BUILDINGS
+    ),
     ConnectionData(SVEEntrance.grandpa_shed_to_town, Region.town),
-    ConnectionData(SVEEntrance.bmv_to_sophia, SVERegion.sophias_house, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        SVEEntrance.bmv_to_sophia,
+        SVERegion.sophias_house,
+        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+    ),
     ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside),
     ConnectionData(SVEEntrance.guild_to_interior, Region.adventurer_guild, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.backwoods_to_grove, SVERegion.enchanted_grove, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        SVEEntrance.backwoods_to_grove,
+        SVERegion.enchanted_grove,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
     ConnectionData(SVEEntrance.grove_to_outpost_warp, SVERegion.grove_outpost_warp),
     ConnectionData(SVEEntrance.outpost_warp_to_outpost, SVERegion.galmoran_outpost, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.grove_to_wizard_warp, SVERegion.grove_wizard_warp),
@@ -244,7 +285,9 @@ sve_main_land_connections = [
     ConnectionData(SVEEntrance.outpost_to_badlands_entrance, SVERegion.badlands_entrance, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.badlands_entrance_to_badlands, SVERegion.crimson_badlands, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.badlands_to_cave, SVERegion.badlands_cave, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.guild_to_mines, Region.mines, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(
+        SVEEntrance.guild_to_mines, Region.mines, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR
+    ),
     ConnectionData(SVEEntrance.mountain_to_guild_summit, SVERegion.guild_summit),
     ConnectionData(SVEEntrance.forest_to_west, SVERegion.forest_west),
     ConnectionData(SVEEntrance.secret_woods_to_west, SVERegion.forest_west),
@@ -330,13 +373,13 @@ boarding_house_regions = [
 boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.bus_stop_to_boarding_house_plateau, BoardingHouseRegion.boarding_house_plateau),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_boarding_house_first, BoardingHouseRegion.boarding_house_first,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR),
     ConnectionData(BoardingHouseEntrance.boarding_house_first_to_boarding_house_second, BoardingHouseRegion.boarding_house_second,
                    flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_buffalo_ranch, BoardingHouseRegion.buffalo_ranch,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_abandoned_mines_entrance, BoardingHouseRegion.abandoned_mines_entrance,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_the_lost_valley, BoardingHouseRegion.lost_valley_minecart,
                    flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_abandoned_mines_1a, BoardingHouseRegion.abandoned_mines_1a,
@@ -353,6 +396,333 @@ boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, BoardingHouseRegion.lost_valley_ruins, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_1, BoardingHouseRegion.lost_valley_house_1, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2, BoardingHouseRegion.lost_valley_house_2, flag=RandomizationFlag.BUILDINGS),
+]
+
+ginger_island_regions = [
+    RegionData(Region.mountain, (Entrance.mountain_to_leo_treehouse,)),
+    RegionData(Region.wizard_tower, (Entrance.use_island_obelisk,)),
+    RegionData(Region.fish_shop, (Entrance.fish_shop_to_boat_tunnel,)),
+    RegionData(
+        Region.mines_floor_120,
+        (Entrance.dig_to_dangerous_mines_20, Entrance.dig_to_dangerous_mines_60, Entrance.dig_to_dangerous_mines_100),
+    ),
+    RegionData(Region.skull_cavern_200, (Entrance.enter_dangerous_skull_cavern,)),
+    RegionData(Region.leo_treehouse, (Entrance.leo_treehouse_to_mountain,)),
+    RegionData(Region.boat_tunnel, (Entrance.boat_tunnel_to_fish_shop, Entrance.boat_to_ginger_island)),
+    RegionData(Region.dangerous_skull_cavern),
+    RegionData(
+        Region.island_south,
+        (
+            Entrance.boat_from_ginger_island,
+            Entrance.island_south_to_west,
+            Entrance.island_south_to_north,
+            Entrance.island_south_to_east,
+            Entrance.island_south_to_southeast,
+            Entrance.use_island_resort,
+            Entrance.parrot_express_docks_to_volcano,
+            Entrance.parrot_express_docks_to_dig_site,
+            Entrance.parrot_express_docks_to_jungle,
+        ),
+    ),
+    RegionData(Region.island_resort),
+    RegionData(
+        Region.island_west,
+        (
+            Entrance.island_west_to_south,
+            Entrance.island_west_to_island_farmhouse,
+            Entrance.island_west_to_gourmand_cave,
+            Entrance.island_west_to_crystals_cave,
+            Entrance.island_west_to_shipwreck,
+            Entrance.island_west_to_qi_walnut_room,
+            Entrance.use_farm_obelisk,
+            Entrance.parrot_express_jungle_to_docks,
+            Entrance.parrot_express_jungle_to_dig_site,
+            Entrance.parrot_express_jungle_to_volcano,
+            LogicEntrance.grow_spring_crops_on_island,
+            LogicEntrance.grow_summer_crops_on_island,
+            LogicEntrance.grow_fall_crops_on_island,
+            LogicEntrance.grow_winter_crops_on_island,
+            LogicEntrance.grow_indoor_crops_on_island,
+        ),
+    ),
+    RegionData(
+        Region.island_east,
+        (Entrance.island_east_to_south, Entrance.island_east_to_leo_hut, Entrance.island_east_to_island_shrine),
+    ),
+    RegionData(Region.island_shrine, (Entrance.island_shrine_to_island_east,)),
+    RegionData(
+        Region.island_south_east, (Entrance.island_southeast_to_south, Entrance.island_southeast_to_pirate_cove)
+    ),
+    RegionData(
+        Region.island_north,
+        (
+            Entrance.island_north_to_south,
+            Entrance.talk_to_island_trader,
+            Entrance.island_north_to_field_office,
+            Entrance.island_north_to_dig_site,
+            Entrance.island_north_to_volcano,
+            Entrance.parrot_express_volcano_to_dig_site,
+            Entrance.parrot_express_volcano_to_jungle,
+            Entrance.parrot_express_volcano_to_docks,
+        ),
+    ),
+    RegionData(
+        Region.volcano,
+        (Entrance.volcano_to_island_north, Entrance.climb_to_volcano_5, Entrance.volcano_to_secret_beach),
+    ),
+    RegionData(Region.volcano_secret_beach, (Entrance.secret_beach_to_volcano,)),
+    RegionData(Region.volcano_floor_5, (Entrance.talk_to_volcano_dwarf, Entrance.climb_to_volcano_10)),
+    RegionData(Region.volcano_dwarf_shop),
+    RegionData(Region.volcano_floor_10),
+    RegionData(Region.island_trader),
+    RegionData(Region.island_farmhouse, (Entrance.island_farmhouse_to_island_west, LogicEntrance.island_cooking)),
+    RegionData(Region.gourmand_frog_cave, (Entrance.gourmand_cave_to_island_west,)),
+    RegionData(Region.colored_crystals_cave, (Entrance.crystals_cave_to_island_west,)),
+    RegionData(Region.shipwreck, (Entrance.shipwreck_to_island_west,)),
+    RegionData(Region.qi_walnut_room, (Entrance.qi_walnut_room_to_island_west,)),
+    RegionData(Region.leo_hut, (Entrance.leo_hut_to_island_east,)),
+    RegionData(Region.pirate_cove, (Entrance.pirate_cove_to_island_southeast,)),
+    RegionData(Region.field_office, (Entrance.field_office_to_island_north,)),
+    RegionData(
+        Region.dig_site,
+        (
+            Entrance.dig_site_to_island_north,
+            Entrance.dig_site_to_professor_snail_cave,
+            Entrance.parrot_express_dig_site_to_volcano,
+            Entrance.parrot_express_dig_site_to_docks,
+            Entrance.parrot_express_dig_site_to_jungle,
+        ),
+    ),
+    RegionData(Region.professor_snail_cave, (Entrance.professor_snail_cave_to_dig_site,)),
+    RegionData(Region.dangerous_mines_20),
+    RegionData(Region.dangerous_mines_60),
+    RegionData(Region.dangerous_mines_100),
+]
+
+
+ginger_island_connections = [
+    ConnectionData(Entrance.use_island_obelisk, Region.island_south),
+    ConnectionData(
+        Entrance.use_farm_obelisk,
+        Region.farm,
+        flag=RandomizationFlag.TRANSITION
+        | RandomizationFlag.TO_OUTDOOR
+        | RandomizationFlag.ENDGAME
+        | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.mountain_to_leo_treehouse,
+        Region.leo_treehouse,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.leo_treehouse_to_mountain,
+        Region.mountain,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.fish_shop_to_boat_tunnel,
+        Region.boat_tunnel,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.boat_tunnel_to_fish_shop,
+        Region.fish_shop,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.boat_to_ginger_island,
+        Region.island_south,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.boat_from_ginger_island,
+        Region.boat_tunnel,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(Entrance.enter_dangerous_skull_cavern, Region.dangerous_skull_cavern),
+    ConnectionData(Entrance.dig_to_dangerous_mines_20, Region.dangerous_mines_20),
+    ConnectionData(Entrance.dig_to_dangerous_mines_60, Region.dangerous_mines_60),
+    ConnectionData(Entrance.dig_to_dangerous_mines_100, Region.dangerous_mines_100),
+    ConnectionData(
+        Entrance.island_south_to_west,
+        Region.island_west,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_west_to_south,
+        Region.island_south,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_south_to_north,
+        Region.island_north,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_north_to_south,
+        Region.island_south,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_south_to_east,
+        Region.island_east,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_east_to_south,
+        Region.island_south,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_south_to_southeast,
+        Region.island_south_east,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_southeast_to_south,
+        Region.island_south,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(Entrance.use_island_resort, Region.island_resort),
+    ConnectionData(
+        Entrance.island_west_to_island_farmhouse,
+        Region.island_farmhouse,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_farmhouse_to_island_west,
+        Region.island_west,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_west_to_gourmand_cave,
+        Region.gourmand_frog_cave,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.gourmand_cave_to_island_west,
+        Region.island_west,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_west_to_crystals_cave,
+        Region.colored_crystals_cave,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.crystals_cave_to_island_west,
+        Region.island_west,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_west_to_shipwreck,
+        Region.shipwreck,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.shipwreck_to_island_west,
+        Region.island_west,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_west_to_qi_walnut_room,
+        Region.qi_walnut_room,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.qi_walnut_room_to_island_west,
+        Region.island_west,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_east_to_leo_hut, Region.leo_hut, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.leo_hut_to_island_east,
+        Region.island_east,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_east_to_island_shrine,
+        Region.island_shrine,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_shrine_to_island_east,
+        Region.island_east,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_southeast_to_pirate_cove,
+        Region.pirate_cove,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.pirate_cove_to_island_southeast,
+        Region.island_south_east,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_north_to_field_office,
+        Region.field_office,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.field_office_to_island_north,
+        Region.island_north,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(Entrance.island_north_to_dig_site, Region.dig_site),
+    ConnectionData(Entrance.dig_site_to_island_north, Region.island_north),
+    ConnectionData(
+        Entrance.dig_site_to_professor_snail_cave,
+        Region.professor_snail_cave,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+    ),
+    ConnectionData(
+        Entrance.professor_snail_cave_to_dig_site,
+        Region.dig_site,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.island_north_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(
+        Entrance.volcano_to_island_north,
+        Region.island_north,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.volcano_to_secret_beach,
+        Region.volcano_secret_beach,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+    ),
+    ConnectionData(
+        Entrance.secret_beach_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+    ),
+    ConnectionData(Entrance.talk_to_island_trader, Region.island_trader),
+    ConnectionData(Entrance.climb_to_volcano_5, Region.volcano_floor_5),
+    ConnectionData(Entrance.talk_to_volcano_dwarf, Region.volcano_dwarf_shop),
+    ConnectionData(Entrance.climb_to_volcano_10, Region.volcano_floor_10),
+    ConnectionData(Entrance.parrot_express_jungle_to_docks, Region.island_south),
+    ConnectionData(Entrance.parrot_express_dig_site_to_docks, Region.island_south),
+    ConnectionData(Entrance.parrot_express_volcano_to_docks, Region.island_south),
+    ConnectionData(Entrance.parrot_express_volcano_to_jungle, Region.island_west),
+    ConnectionData(Entrance.parrot_express_docks_to_jungle, Region.island_west),
+    ConnectionData(Entrance.parrot_express_dig_site_to_jungle, Region.island_west),
+    ConnectionData(Entrance.parrot_express_docks_to_dig_site, Region.dig_site),
+    ConnectionData(Entrance.parrot_express_volcano_to_dig_site, Region.dig_site),
+    ConnectionData(Entrance.parrot_express_jungle_to_dig_site, Region.dig_site),
+    ConnectionData(Entrance.parrot_express_dig_site_to_volcano, Region.island_north),
+    ConnectionData(Entrance.parrot_express_docks_to_volcano, Region.island_north),
+    ConnectionData(Entrance.parrot_express_jungle_to_volcano, Region.island_north),
+    ConnectionData(LogicEntrance.grow_spring_crops_on_island, LogicRegion.spring_farming),
+    ConnectionData(LogicEntrance.grow_summer_crops_on_island, LogicRegion.summer_farming),
+    ConnectionData(LogicEntrance.grow_fall_crops_on_island, LogicRegion.fall_farming),
+    ConnectionData(LogicEntrance.grow_winter_crops_on_island, LogicRegion.winter_farming),
+    ConnectionData(LogicEntrance.grow_indoor_crops_on_island, LogicRegion.indoor_farming),
+    ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen),
 ]
 
 vanilla_connections_to_remove_by_content_pack: dict[str, tuple[str, ...]] = {
@@ -377,4 +747,5 @@ region_data_by_content_pack = {
     ModNames.alecto: ModRegionsData(ModNames.alecto, alecto_regions, alecto_entrances),
     ModNames.lacey: ModRegionsData(ModNames.lacey, lacey_regions, lacey_entrances),
     ModNames.boarding_house: ModRegionsData(ModNames.boarding_house, boarding_house_regions, boarding_house_entrances),
+    ModNames.ginger_island: ModRegionsData(ModNames.ginger_island, ginger_island_regions, ginger_island_connections),
 }

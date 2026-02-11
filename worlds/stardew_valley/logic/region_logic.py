@@ -12,13 +12,6 @@ always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.
                                                      Region.haley_house, Region.sam_house, Region.jojamart, Region.fish_shop}
 always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er}
 
-always_regions_by_setting = {EntranceRandomization.option_disabled: always_accessible_regions_without_er,
-                             EntranceRandomization.option_pelican_town: always_accessible_regions_without_er,
-                             EntranceRandomization.option_non_progression: always_accessible_regions_with_non_progression_er,
-                             EntranceRandomization.option_buildings_without_house: main_outside_area,
-                             EntranceRandomization.option_buildings: main_outside_area,
-                             EntranceRandomization.option_chaos: always_accessible_regions_without_er}
-
 
 class RegionLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
@@ -30,18 +23,12 @@ class RegionLogic(BaseLogic):
 
     @cache_self1
     def can_reach(self, region_name: str) -> StardewRule:
-        if region_name in always_regions_by_setting[self.options.entrance_randomization]:
-            return true_
-
         if region_name not in self.regions:
             return false_
 
         return Reach(region_name, "Region", self.player)
 
     def can_reach_any(self, *region_names: str) -> StardewRule:
-        if any(r in always_regions_by_setting[self.options.entrance_randomization] for r in region_names):
-            return true_
-
         return self.logic.or_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
     def can_reach_all(self, *region_names: str) -> StardewRule:
