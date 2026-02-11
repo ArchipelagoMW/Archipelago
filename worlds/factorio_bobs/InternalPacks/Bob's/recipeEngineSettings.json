@@ -1,18 +1,4 @@
 {
-  "root_categories": [
-    "basic-solid",
-    "basic-fluid",
-    "water",
-    "bob-air-pump"
-  ],
-  "missed_machines": {
-    "bob-steam-mining-drill": [
-      "basic-solid"
-    ],
-    "bob-water-miner-1": [
-      "water"
-    ]
-  },
   "excluded_automation_ingredients": [
     "bob-diamond-ore",
     "bob-amethyst-ore",
@@ -35,48 +21,11 @@
     "bob-small-alien-artifact-blue",
     "bob-small-alien-artifact-purple"
   ],
-  "raw_cost": {
-    "iron-ore": 1,
-    "copper-ore": 1,
-    "stone": 1,
-    "crude-oil": 1,
-    "water": 0.5,
-    "coal": 1,
-    "steam": 0.5,
-    "bob-liquid-air": 0.5,
-    "bob-lithia-water": 1
-  },
   "invalid_ingredients": [
     "raw-fish",
     "depleted-uranium-fuel-cell",
     "bob-depleted-thorium-fuel-cell",
     "bob-depleted-deuterium-fuel-cell",
     "bob-fusion-catalyst"
-  ],
-  "req_machines_for_category": {
-    "crafting": "character",
-    "basic-crafting": "character",
-    "advanced-crafting": "bob-steam-assembling-machine",
-    "crafting-with-fluid": "bob-steam-assembling-machine",
-    "smelting": "stone-furnace",
-    "oil-processing": "oil-refinery",
-    "chemistry": "chemical-plant",
-    "centrifuging": "centrifuge",
-    "rocket-building": "rocket-silo",
-    "basic-fluid": "pumpjack",
-    "basic-solid": "character",
-    "parameters": "stone-furnace",
-    "bob-chemical-furnace": "bob-stone-chemical-furnace",
-    "water": "bob-water-miner-1",
-    "bob-void-fluid": "bob-void-pump",
-    "electronics": "bob-electronics-machine-1",
-    "electronics-with-fluid": "bob-electronics-machine-1",
-    "bob-air-pump": "bob-air-pump",
-    "bob-water-pump": "bob-water-pump",
-    "barrelling": "bob-water-pump",
-    "bob-greenhouse": "bob-greenhouse",
-    "bob-electrolysis": "bob-electrolyser",
-    "bob-distillery": "bob-distillery",
-    "bob-mixing-furnace": "bob-stone-mixing-furnace"
-  }
+  ]
 }

@@ -1,41 +1,7 @@
 {
-  "root_categories": [
-    "basic-solid",
-    "basic-fluid"
-  ],
-  "missed_machines": {
-    "electric-mining-drill": [
-      "basic-solid"
-    ],
-    "pumpjack": [
-      "basic-fluid"
-    ]
-  },
-  "raw_cost": {
-    "iron-ore": 1,
-    "copper-ore": 1,
-    "stone": 1,
-    "crude-oil": 0.5,
-    "water": 0.001,
-    "coal": 1,
-    "steam": 0.01
-  },
   "invalid_ingredients": [
     "raw-fish",
     "depleted-uranium-fuel-cell",
     "wood"
-  ],
-  "req_machines_for_category": {
-    "crafting": "character",
-    "basic-crafting": "character",
-    "advanced-crafting": "assembling-machine-1",
-    "crafting-with-fluid": "assembling-machine-1",
-    "smelting": "stone-furnace",
-    "oil-processing": "oil-refinery",
-    "chemistry": "chemical-plant",
-    "centrifuging": "centrifuge",
-    "rocket-building": "rocket-silo",
-    "basic-fluid": "pumpjack",
-    "basic-solid": "character"
-  }
+  ]
 }

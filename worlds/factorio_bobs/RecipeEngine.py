@@ -219,8 +219,8 @@ class RecipeEngine:
 
         if "missed_machines" in raw_settings:
             for name, categories in raw_settings["missed_machines"].items():
+                item = self.get_item_from_entity(name)
                 for category in categories:
-                    item = self.get_item_from_entity(category)
                     self.get_category(category).machines.add(item)
 
         if "invalid_ingredients" in raw_settings:

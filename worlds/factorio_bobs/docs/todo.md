@@ -6,6 +6,19 @@ if anyone decides to pick one up please tell me
 
 if you pick one up and then decide to do something else, add research notes here
 
+# boot-strap logic
+- this is needed to ensure recipes are possible and speed up best logic
+- should be able to be implemented as separate logic mode but would ignore most recursion
+- probably going to be a modified dykstra with multi start and 2 found modes
+- 2 found modes being automated and manual
+- if manual node finds another manual node look if it's a positive loop if it is, make it automated
+- this would only find minimum recipe loops and method to hint? (can LP be applied here?)
+
+# add `pulp` library to internal apworld
+- `pulp` is the python library used for linear programming (LP)
+- this would remove the requirement for precalculating
+- caching on the system ontop of packs would need to be implemented
+
 # rocket silo products
 - needs to be added to extractor
 - silo is its own prototype https://lua-api.factorio.com/latest/prototypes/RocketSiloPrototype.html
@@ -30,3 +43,7 @@ if you pick one up and then decide to do something else, add research notes here
 # energy sources and uses
 - `void` is no energy source needed
 - can custom be defined?
+
+# infinite research
+- already (mostly) extracted (extract max level instead?)
+- how options?
