@@ -5,6 +5,7 @@ from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource, HatMouseSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.animal_names import Animal
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.event_names import Event
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
@@ -28,22 +29,36 @@ class MoneyLogic(BaseLogic):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
+
+        if CustomLogicOptionName.nightmare_money in self.options.custom_logic:
+            amount /= 20
+        elif CustomLogicOptionName.extreme_money in self.options.custom_logic:
+            amount /= 8
+        elif CustomLogicOptionName.hard_money in self.options.custom_logic:
+            amount /= 2
+        elif CustomLogicOptionName.easy_money in self.options.custom_logic:
+            amount *= 4
+
         if amount <= 1000:
             return self.logic.true_
 
+        shipping_rule = self.logic.shipping.can_use_shipping_bin
         pierre_rule = self.logic.region.can_reach_all(Region.pierre_store, Region.forest)
         willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
         clint_rule = self.logic.region.can_reach_all(Region.blacksmith, Region.mines_floor_5)
         robin_rule = self.logic.region.can_reach_all(Region.carpenter, Region.secret_woods)
-        shipping_rule = self.logic.shipping.can_use_shipping_bin
         farming_rule = self.logic.farming.can_plant_and_grow_item(Season.not_winter)
 
-        if amount <= 2500:
-            selling_any_rule = pierre_rule | willy_rule | clint_rule | robin_rule | shipping_rule
+        if amount <= 2000:
+            selling_any_rule = shipping_rule | pierre_rule | willy_rule | clint_rule | robin_rule
+            return selling_any_rule
+
+        if amount <= 3000:
+            selling_any_rule = shipping_rule | pierre_rule | willy_rule
             return selling_any_rule
 
         if amount <= 5000:
-            selling_all_rule = (pierre_rule & farming_rule) | (pierre_rule & willy_rule & clint_rule & robin_rule) | shipping_rule
+            selling_all_rule = shipping_rule | (pierre_rule & farming_rule) | (pierre_rule & willy_rule & clint_rule & robin_rule)
             return selling_all_rule
 
         if amount <= 10000:
@@ -60,7 +75,8 @@ class MoneyLogic(BaseLogic):
     def can_spend(self, amount: int) -> StardewRule:
         if self.options.starting_money == -1:
             return True_()
-        return self.logic.money.can_have_earned_total(amount * 5)
+        spend_earned_multiplier = 5  # We assume that if you earned 5x an amount, you can reasonably spend that amount on things
+        return self.logic.money.can_have_earned_total(amount * spend_earned_multiplier)
 
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:

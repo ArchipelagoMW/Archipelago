@@ -75,6 +75,7 @@ else:
             options.Mods,
             options.BundleWhitelist,
             options.BundleBlacklist,
+            options.CustomLogic,
             ap_options.ProgressionBalancing,
             ap_options.Accessibility,
         ]),

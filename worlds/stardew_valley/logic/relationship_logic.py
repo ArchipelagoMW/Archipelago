@@ -6,6 +6,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
 from ..stardew_rule import StardewRule, True_, false_, true_
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.building_names import Building
 from ..strings.generic_names import Generic
@@ -181,11 +182,10 @@ class RelationshipLogic(BaseLogic):
                 previous_heart = max(hearts - heart_size, 0)
                 rules.append(self.logic.relationship.has_hearts(npc, previous_heart))
 
-        if hearts > 2 or hearts > heart_size:
+        if CustomLogicOptionName.ignore_birthdays not in self.options.custom_logic:
             rules.append(self.logic.season.has(villager.birthday))
-
-        if villager.birthday == Generic.any:
-            rules.append(self.logic.season.has_all() | self.logic.time.has_year_three)  # push logic back for any birthday-less villager
+            if villager.birthday == Generic.any:
+                rules.append(self.logic.season.has_all() | self.logic.time.has_year_three)  # push logic back for any birthday-less villager
 
         if villager.bachelor:
             if hearts > 10:

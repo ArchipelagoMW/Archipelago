@@ -331,11 +331,8 @@ def create_friendsanity_items(item_factory: StardewItemFactory, options: Stardew
         for _ in content.features.friendsanity.get_randomized_hearts(villager):
             items.append(item_factory(item_name))
 
-    need_pet = options.goal == Goal.option_grandpa_evaluation
-    pet_item_classification = ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful
-
     for _ in content.features.friendsanity.get_pet_randomized_hearts():
-        items.append(item_factory(friendsanity.pet_heart_item_name, classification_pre_fill=pet_item_classification))
+        items.append(item_factory(friendsanity.pet_heart_item_name, classification_pre_fill=ItemClassification.progression_skip_balancing))
 
 
 def create_babies(item_factory: StardewItemFactory, items: List[Item], random: Random):

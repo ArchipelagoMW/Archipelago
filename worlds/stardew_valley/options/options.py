@@ -8,7 +8,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -914,6 +914,49 @@ class TrapDistribution(OptionCounter):
     }
 
 
+class CustomLogic(OptionSet):
+    """Enable various customizations to the logic of the generator.
+    Some flags are inherently incompatible with each other, the harder flag takes priority.
+    Some of these toggles can, if the player is not careful, force them to reset days.
+    Chair Skips: Chair skips are considered in-logic
+    Easy Fishing: +2 Required fishing levels
+    Hard Fishing: -2 Required fishing levels
+    Extreme Fishing: -4 Required fishing levels
+    Easy Mining: +1 required pickaxes and +2 required mining levels
+    Hard Mining: -1 required pickaxes and -2 required mining levels
+    Extreme Mining: -2 required pickaxes and -4 required mining levels
+    Easy Combat: +1 required weapon and +2 required combat levels
+    Hard Combat: -1 required weapon and -2 required combat levels
+    Extreme Combat: -2 required weapon and -4 required combat levels
+    Deep Mining: x2 Mine depth expectations
+    Very Deep Mining: x4 Mine depth expectations
+    Ignore Birthdays: Villager birthdays are not considered in logic
+    Easy Money: x0.25 to earnings expectations
+    Hard Money: x2 to earnings expectations
+    Extreme Money: x8 to earnings expectations
+    Nightmare Money: x20 to earnings expectations
+    Bomb Hoeing: Hoeing ground is in logic without a hoe
+    Rain Watering: Watering crops is in logic without a watering can
+    Critical Free Samples: Free samples of items are considered in logic without a renewable source
+    """
+    internal_name = "custom_logic"
+    display_name = "Custom Logic"
+    valid_keys = frozenset({
+        CustomLogicOptionName.chair_skips,
+        CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
+        CustomLogicOptionName.easy_mining, CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
+        CustomLogicOptionName.easy_combat, CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
+        CustomLogicOptionName.deep_mining, CustomLogicOptionName.very_deep_mining,
+        CustomLogicOptionName.ignore_birthdays,
+        CustomLogicOptionName.easy_money, CustomLogicOptionName.hard_money, CustomLogicOptionName.extreme_money, CustomLogicOptionName.nightmare_money,
+        CustomLogicOptionName.bomb_hoeing, CustomLogicOptionName.rain_watering,
+        CustomLogicOptionName.critical_free_samples,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(preset_none)
+
+
 class MultipleDaySleepEnabled(Toggle):
     """Enable the ability to sleep automatically for multiple days straight?"""
     internal_name = "multiple_day_sleep_enabled"
@@ -1186,6 +1229,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     enabled_filler_buffs: EnabledFillerBuffs
     trap_difficulty: TrapDifficulty
     trap_distribution: TrapDistribution
+    custom_logic: CustomLogic
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting

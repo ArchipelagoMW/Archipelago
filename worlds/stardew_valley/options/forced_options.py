@@ -3,7 +3,7 @@ import logging
 import Options as ap_options
 from . import options
 from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
-from ..mods.mod_data import ModNames, mod_combination_is_valid, get_invalid_mod_combination
+from ..mods.mod_data import mod_combination_is_valid, get_invalid_mod_combination
 from ..options.settings import StardewSettings
 from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName
 
@@ -52,14 +52,18 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
             world_options.hatsanity.value.add(HatsanityOptionName.difficult)
             message = f"Hatsanity Near or Post Perfection {message_template} Hatsanity setting reduced."
             logger.warning(message)
+    if not settings.allow_custom_logic:
+        world_options.custom_logic.value = options.CustomLogic.preset_none
+        message = f"Custom Logic {message_template} All flags toggled off."
+        logger.warning(message)
     if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_allowed:
         world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
         message = f"Jojapocalypse {message_template} Disabled."
         logger.warning(message)
-    if not settings.allow_sve and ModNames.sve in options.Mods:
-        world_options.mods.value.remove(ModNames.sve)
-        message = f"Stardew Valley Expanded {message_template} Removed from Mods."
-        logger.warning(message)
+    # if not settings.allow_sve and ModNames.sve in options.Mods:
+    #     world_options.mods.value.remove(ModNames.sve)
+    #     message = f"Stardew Valley Expanded {message_template} Removed from Mods."
+    #     logger.warning(message)
     prevent_illegal_mod_combinations(world_options, player, player_name)
 
 

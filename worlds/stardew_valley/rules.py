@@ -32,7 +32,7 @@ from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.animal_product_names import AnimalProduct
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, StartWithoutOptionName
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, StartWithoutOptionName, CustomLogicOptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade, Bookseller
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -238,8 +238,8 @@ def set_skills_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, 
 
 def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions,
                        content: StardewContent):
-    set_mines_floor_entrance_rules(logic, rule_collector)
-    set_skull_cavern_floor_entrance_rules(logic, rule_collector)
+    set_mines_floor_entrance_rules(logic, rule_collector, world_options)
+    set_skull_cavern_floor_entrance_rules(logic, rule_collector, world_options)
     set_blacksmith_entrance_rules(logic, rule_collector)
     set_skill_entrance_rules(logic, rule_collector, content)
     set_traveling_merchant_day_entrance_rules(logic, rule_collector)
@@ -249,7 +249,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.mountain_to_outside_adventure_guild, logic.received("Landslide Removed"))
     rule_collector.set_entrance_rule(Entrance.enter_quarry,
                                      (logic.received("Bridge Repair") | logic.mod.magic.can_blink()) & logic.tool.has_tool(Tool.pickaxe))
-    rule_collector.set_entrance_rule(Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | (logic.mod.magic.can_blink()))
+    rule_collector.set_entrance_rule(Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | logic.mod.magic.can_blink() | logic.ability.can_chair_skip())
     rule_collector.set_entrance_rule(Entrance.town_to_community_center, logic.received("Community Center Key"))
     rule_collector.set_entrance_rule(Entrance.forest_to_wizard_tower, logic.received("Wizard Invitation"))
     rule_collector.set_entrance_rule(Entrance.forest_to_sewer, logic.wallet.has_rusty_key())
@@ -376,39 +376,49 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
         rule_collector.set_entrance_rule(LaceyEntrance.forest_to_hat_house, logic.relationship.has_hearts(ModNPC.lacey, 2))
 
 
-def set_mines_floor_entrance_rules(logic, rule_collector: StardewRuleCollector):
+def set_mines_floor_entrance_rules(logic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     for floor in range(5, 120 + 5, 5):
-        rule = logic.mine.has_mine_elevator_to_floor(floor - 10)
+        elevator_difference = 10
+        if CustomLogicOptionName.very_deep_mining in world_options.custom_logic:
+            elevator_difference = 40
+        elif CustomLogicOptionName.deep_mining in world_options.custom_logic:
+            elevator_difference = 20
+        rule = logic.mine.has_mine_elevator_to_floor(floor - elevator_difference)
         if floor == 5 or floor == 45 or floor == 85:
             rule = rule & logic.mine.can_progress_in_the_mines_from_floor(floor)
         rule_collector.set_entrance_rule(dig_to_mines_floor(floor), rule)
 
 
-def set_skull_cavern_floor_entrance_rules(logic, rule_collector: StardewRuleCollector):
+def set_skull_cavern_floor_entrance_rules(logic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     rule_collector.set_entrance_rule(Entrance.mine_in_skull_cavern, logic.mine.can_progress_in_the_mines_from_floor(120))
 
     for floor in range(25, 200 + 25, 25):
-        rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - 25)
+        elevator_difference = 25
+        if CustomLogicOptionName.very_deep_mining in world_options.custom_logic:
+            elevator_difference = 50
+        elif CustomLogicOptionName.deep_mining in world_options.custom_logic:
+            elevator_difference = 100
+        rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - elevator_difference)
         if floor == 25 or floor == 75 or floor == 125:
             rule = rule & logic.mine.can_progress_in_the_skull_cavern_from_floor(floor)
         rule_collector.set_entrance_rule(dig_to_skull_floor(floor), rule)
 
 
 def set_skill_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent):
-    rule_collector.set_entrance_rule(LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_fall_crops, logic.farming.has_farming_tools & logic.season.has_fall)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_winter_crops, logic.farming.has_farming_tools & logic.season.has_winter)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_spring_crops_in_greenhouse, logic.farming.has_farming_tools)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_summer_crops_in_greenhouse, logic.farming.has_farming_tools)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_fall_crops_in_greenhouse, logic.farming.has_farming_tools)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_winter_crops_in_greenhouse, logic.farming.has_farming_tools)
-    rule_collector.set_entrance_rule(LogicEntrance.grow_indoor_crops_in_greenhouse, logic.farming.has_farming_tools)
-    rule_collector.set_island_entrance_rule(LogicEntrance.grow_spring_crops_on_island, logic.farming.has_farming_tools)
-    rule_collector.set_island_entrance_rule(LogicEntrance.grow_summer_crops_on_island, logic.farming.has_farming_tools)
-    rule_collector.set_island_entrance_rule(LogicEntrance.grow_fall_crops_on_island, logic.farming.has_farming_tools)
-    rule_collector.set_island_entrance_rule(LogicEntrance.grow_winter_crops_on_island, logic.farming.has_farming_tools)
-    rule_collector.set_island_entrance_rule(LogicEntrance.grow_indoor_crops_on_island, logic.farming.has_farming_tools)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools_and_water & logic.season.has_spring)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools_and_water & logic.season.has_summer)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_fall_crops, logic.farming.has_farming_tools_and_water & logic.season.has_fall)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_winter_crops, logic.farming.has_farming_tools_and_water & logic.season.has_winter)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_spring_crops_in_greenhouse, logic.farming.has_farming_and_watering_tools)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_summer_crops_in_greenhouse, logic.farming.has_farming_and_watering_tools)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_fall_crops_in_greenhouse, logic.farming.has_farming_and_watering_tools)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_winter_crops_in_greenhouse, logic.farming.has_farming_and_watering_tools)
+    rule_collector.set_entrance_rule(LogicEntrance.grow_indoor_crops_in_greenhouse, logic.farming.has_farming_and_watering_tools)
+    rule_collector.set_island_entrance_rule(LogicEntrance.grow_spring_crops_on_island, logic.farming.has_farming_tools_and_water)
+    rule_collector.set_island_entrance_rule(LogicEntrance.grow_summer_crops_on_island, logic.farming.has_farming_tools_and_water)
+    rule_collector.set_island_entrance_rule(LogicEntrance.grow_fall_crops_on_island, logic.farming.has_farming_tools_and_water)
+    rule_collector.set_island_entrance_rule(LogicEntrance.grow_winter_crops_on_island, logic.farming.has_farming_tools_and_water)
+    rule_collector.set_island_entrance_rule(LogicEntrance.grow_indoor_crops_on_island, logic.farming.has_farming_tools_and_water)
     rule_collector.set_entrance_rule(LogicEntrance.grow_summer_fall_crops_in_summer, true_)
     rule_collector.set_entrance_rule(LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
@@ -476,7 +486,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
         Entrance.island_west_to_islandfarmhouse: logic.received("Island Farmhouse"),
         Entrance.island_west_to_gourmand_cave: logic.received("Island Farmhouse"),
-        Entrance.island_north_to_dig_site: dig_site_rule,
+        Entrance.island_north_to_dig_site: dig_site_rule | logic.ability.can_chair_skip(),
         Entrance.dig_site_to_professor_snail_cave: logic.received("Open Professor Snail Cave"),
         Entrance.talk_to_island_trader: logic.received("Island Trader"),
         Entrance.island_south_to_southeast: logic.received("Island Resort"),
