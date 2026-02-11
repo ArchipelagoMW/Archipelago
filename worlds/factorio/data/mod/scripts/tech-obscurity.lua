@@ -12,8 +12,7 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 -- TODO:
--- Blind hints that are out bound. The spam is way too high.
--- fix the tech tree shape.
+-- fix free items.
 
 local function send_hint(technologies, force)
     --technologies => tech_name = true
