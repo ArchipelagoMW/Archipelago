@@ -159,10 +159,10 @@ dream_list = {
     "Dream: Monster Admirer" : [1000001, []],
     "Dream: Monster Hugger" : [1000002, []],
     "Dream: Monster Lover" : [1000003, []],
-    "Dream: Nightmarephile" : [1000004, []],
-    "Dream: Teramonstrophile" : [1000005, []],
-    "Dream: Weapon of Mass Affection" : [1000006, []],
-    "Dream: Lovepocalyps" : [1000007, []],
+    "Dream: Nightmarephile" : [1000004, ["grind"]],
+    "Dream: Teramonstrophile" : [1000005, ["grind"]],
+    "Dream: Weapon of Mass Affection" : [1000006, ["very_grind"]],
+    "Dream: Lovepocalypse" : [1000007, ["very_grind"]],
 }
 
 other_locations_list = {
