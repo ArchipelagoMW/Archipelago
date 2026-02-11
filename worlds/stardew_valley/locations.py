@@ -360,7 +360,7 @@ def extend_desert_festival_chef_locations(randomized_locations: List[LocationDat
     if options.festival_locations == FestivalLocations.option_easy:
         randomized_locations.append(location_table["Desert Chef"])
     elif options.festival_locations == FestivalLocations.option_hard:
-        festival_chef_locations = locations_by_tag[LocationTags.DESERT_FESTIVAL_CHEF]
+        festival_chef_locations = locations_by_tag[LocationTags.DESERT_FESTIVAL_CHEF_MEAL]
         location_to_add = random.choice(festival_chef_locations)
         randomized_locations.append(location_to_add)
 
