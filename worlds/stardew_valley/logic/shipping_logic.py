@@ -19,9 +19,17 @@ class ShippingLogic(BaseLogic):
     def can_use_shipping_bin(self) -> StardewRule:
         return self.logic.building.has_building(Building.shipping_bin)
 
+    @cached_property
+    def can_use_island_shipping_bin(self) -> StardewRule:
+        return self.logic.received("Island Farmhouse")
+
+    @cached_property
+    def can_use_any_shipping_bin(self) -> StardewRule:
+        return self.logic.or_(self.logic.shipping.can_use_shipping_bin, self.logic.shipping.can_use_island_shipping_bin)
+
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
-        return self.logic.shipping.can_use_shipping_bin & self.logic.has(item)
+        return self.logic.shipping.can_use_any_shipping_bin & self.logic.has(item)
 
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "
@@ -29,5 +37,5 @@ class ShippingLogic(BaseLogic):
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
             if not self.content.are_all_enabled(location.content_packs):
                 continue
-            all_items_to_ship.append(location.name[len(shipsanity_prefix):])
-        return self.logic.building.has_building(Building.shipping_bin) & self.logic.has_all(*all_items_to_ship)
+            all_items_to_ship.append(location.name[len(shipsanity_prefix) :])
+        return self.logic.shipping.can_use_any_shipping_bin & self.logic.has_all(*all_items_to_ship)

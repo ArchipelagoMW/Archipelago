@@ -329,6 +329,7 @@ class LogicEntrance:
     farmhouse_cooking = "Farmhouse Cooking"
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
+    island_shipping = "Use Island Shipping Bin"
     watch_queen_of_sauce = "Watch Queen of Sauce"
 
     @staticmethod

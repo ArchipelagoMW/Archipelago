@@ -591,6 +591,7 @@ ginger_island_regions = [
             Entrance.parrot_express_farm_to_volcano,
             Entrance.parrot_express_farm_to_dig_site,
             Entrance.parrot_express_farm_to_docks,
+            LogicEntrance.island_shipping,
             LogicEntrance.grow_spring_crops_on_island,
             LogicEntrance.grow_summer_crops_on_island,
             LogicEntrance.grow_fall_crops_on_island,
@@ -749,6 +750,10 @@ ginger_island_connections = [
         Region.island_farmhouse,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.OUT_TO_IN,
+    ),
+    ConnectionData(
+        LogicEntrance.island_shipping,
+        LogicRegion.shipping
     ),
     ConnectionData(
         Entrance.island_farmhouse_to_island_west,

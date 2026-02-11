@@ -290,6 +290,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     # rule_collector.set_island_entrance_rule(LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
+    if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false: 
+        rule_collector.set_entrance_rule(LogicEntrance.island_shipping, logic.shipping.can_use_island_shipping_bin)
     rule_collector.set_entrance_rule(LogicEntrance.find_secret_notes,
                                      logic.quest.has_magnifying_glass() & (logic.ability.can_chop_trees() | logic.mine.can_mine_in_the_mines_floor_1_40()))
     rule_collector.set_entrance_rule(LogicEntrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
@@ -1146,7 +1148,7 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
 
     if SecretsanityOptionName.difficult in world_options.secretsanity:
         rule_collector.set_location_rule("Secret: Free The Forsaken Souls", logic.action.can_watch(Channel.sinister_signal))
-        rule_collector.set_location_rule("Secret: Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
+        rule_collector.set_location_rule("Secret: Annoy the Moon Man", logic.shipping.can_use_any_shipping_bin & logic.time.has_lived_months(6))
         rule_collector.set_location_rule("Secret: Strange Sighting", logic.region.can_reach_all(Region.bus_stop, Region.town) & logic.time.has_lived_months(6))
         rule_collector.set_location_rule("Secret: Sea Monster Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
         rule_collector.set_location_rule("Secret: ...Bigfoot?",
