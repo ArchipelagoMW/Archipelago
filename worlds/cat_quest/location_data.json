@@ -1,406 +1,608 @@
 [
   {
     "name": "A Whole New World",
-    "id": "MainQuest_001_PC"
+    "id": "MainQuest_001_PC",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Catpital (1)",
-    "id": "MainQuest_002"
+    "id": "MainQuest_002",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Catpital (2)",
-    "id": "MainQuest_003"
+    "id": "MainQuest_003",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Dragon and the Cat",
-    "id": "MainQuest_004"
+    "id": "MainQuest_004",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Old Ruins",
-    "id": "MainQuest_005"
+    "id": "MainQuest_005",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "Of Sea and Rock (1)",
-    "id": "MainQuest_006"
+    "id": "MainQuest_006",
+    "art": "water",
+    "hasFist": true
   },
   {
     "name": "Of Sea and Rock (2)",
-    "id": "MainQuest_007"
+    "id": "MainQuest_007",
+    "art": "both",
+    "hasFist": true
   },
   {
     "name": "The Old Friend",
-    "id": "MainQuest_008"
+    "id": "MainQuest_008",
+    "art": "both",
+    "hasFist": true
   },
   {
     "name": "The Dragonblood",
-    "id": "MainQuest_009"
+    "id": "MainQuest_009",
+    "art": "both",
+    "hasFist": true
   },
   {
     "name": "The Dragonsbane",
-    "id": "MainQuest_010"
+    "id": "MainQuest_010",
+    "art": "both",
+    "hasFist": true
   },
   {
     "name": "The Dragons Void",
-    "id": "MainQuest_011"
+    "id": "MainQuest_011",
+    "art": "both",
+    "hasFist": true
   },
   {
     "name": "Epilogue",
-    "id": "MainQuest_012"
+    "id": "MainQuest_012",
+    "art": "both",
+    "hasFist": true
   },
   {
     "name": "I. The Strange Charm",
-    "id": "sanctuary_one"
+    "id": "sanctuary_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Escape",
-    "id": "sanctuary_two"
+    "id": "sanctuary_two",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. The Sacrifice",
-    "id": "sanctuary_three"
+    "id": "sanctuary_three",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "IV. The Sanctuary",
-    "id": "sanctuary_four"
+    "id": "sanctuary_four",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "I. The Servant of God",
-    "id": "greatspirit_one"
+    "id": "greatspirit_one",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "II. The Offerings",
-    "id": "greatspirit_two"
+    "id": "greatspirit_two",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "III. The Prayer",
-    "id": "greatspirit_three"
+    "id": "greatspirit_three",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "IV. The Godcat, Mauth",
-    "id": "greatspirit_four"
+    "id": "greatspirit_four",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "The First Day of Kitmas",
-    "id": "kitmas_one"
+    "id": "kitmas_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Second Day of Kitmas",
-    "id": "kitmas_two"
+    "id": "kitmas_two",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Third Day of Kitmas",
-    "id": "kitmas_three"
+    "id": "kitmas_three",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "The Fourth Day of Kitmas",
-    "id": "kitmas_four"
+    "id": "kitmas_four",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "Mewry Kitmas!",
-    "id": "kitmas_five"
+    "id": "kitmas_five",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "I. The Missing Soldiers",
-    "id": "missing_one"
+    "id": "missing_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Rescue",
-    "id": "missing_two"
+    "id": "missing_two",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "I. The King's Mage",
-    "id": "faded_king_one"
+    "id": "faded_king_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Mage Search",
-    "id": "faded_king_three"
+    "id": "faded_king_three",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. The Spirits",
-    "id": "faded_king_four"
+    "id": "faded_king_four",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "IV. The Lion King",
-    "id": "faded_king_five"
+    "id": "faded_king_five",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "I. The East Suspicion",
-    "id": "east_one"
+    "id": "east_one",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "II. The East Shipment",
-    "id": "east_two"
+    "id": "east_two",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "III. The East Escort",
-    "id": "east_three"
+    "id": "east_three",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "IV. The East Catfrontation",
-    "id": "east_four"
+    "id": "east_four",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "I. Meat Meat Meat!",
-    "id": "meatmeatmeat"
+    "id": "meatmeatmeat",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. Meatmeatmeatmeat!!",
-    "id": "red_riding_kitty"
+    "id": "red_riding_kitty",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. Meat Disposal Crew",
-    "id": "distraction"
+    "id": "distraction",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "IV. The Meat Seller",
-    "id": "crafty_merchant"
+    "id": "crafty_merchant",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "I. The Growling Peasant",
-    "id": "the_whisperer_one"
+    "id": "the_whisperer_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Catnip Ritual",
-    "id": "the_whisperer_two"
+    "id": "the_whisperer_two",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. The Circle",
-    "id": "the_whisperer_three"
+    "id": "the_whisperer_three",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "IV. Fur-reedom!",
-    "id": "the_whisperer_four"
+    "id": "the_whisperer_four",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "V. The Whispurrer",
-    "id": "the_whisperer_five"
+    "id": "the_whisperer_five",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "I. Path to Water Walking",
-    "id": "waters_one"
+    "id": "waters_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Fusion",
-    "id": "waters_three"
+    "id": "waters_three",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. Rogue Mages",
-    "id": "waters_four"
+    "id": "waters_four",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "IV. The Miracle",
-    "id": "waters_five"
+    "id": "waters_five",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "I. The West Investigation",
-    "id": "west_one"
+    "id": "west_one",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "II. The West Heist",
-    "id": "west_two"
+    "id": "west_two",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "III. The Magic Lock",
-    "id": "west_three"
+    "id": "west_three",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "IV. The Revelation",
-    "id": "west_four"
+    "id": "west_four",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "I. The Flying Bush",
-    "id": "magesold_one"
+    "id": "magesold_one",
+    "art": "either",
+    "hasFist": true
   },
   {
     "name": "II. The Magic Tree",
-    "id": "magesold_two"
+    "id": "magesold_two",
+    "art": "either",
+    "hasFist": true
   },
   {
     "name": "III. The Cult",
-    "id": "magesold_three"
+    "id": "magesold_three",
+    "art": "either",
+    "hasFist": true
   },
   {
     "name": "IV. Dragonflight",
-    "id": "magesold_four"
+    "id": "magesold_four",
+    "art": "either",
+    "hasFist": true
   },
   {
     "name": "I. The Missing Pages",
-    "id": "darkpast_one"
+    "id": "darkpast_one",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Protected Pages",
-    "id": "darkpast_two"
+    "id": "darkpast_two",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "III. The Runaway Archeologist",
-    "id": "darkpast_three"
+    "id": "darkpast_three",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "IV. The Treasure",
-    "id": "darkpast_four"
+    "id": "darkpast_four",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "I. Blacksmith Assistance",
-    "id": "blacksmith_assistance"
+    "id": "blacksmith_assistance",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "II. Blacksmith Apprentice",
-    "id": "blacksmith_apprentice"
+    "id": "blacksmith_apprentice",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "III. Blacksmith Journeyman",
-    "id": "blacksmith_journeyman"
+    "id": "blacksmith_journeyman",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "IV. Blacksmith Master",
-    "id": "blacksmith_master"
+    "id": "blacksmith_master",
+    "art": "none",
+    "hasFist": true
   },
   {
     "name": "The Dragon Worshippers",
-    "id": "wyvern_attack"
+    "id": "wyvern_attack",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Heirloom Armor",
-    "id": "the_heirloom"
+    "id": "the_heirloom",
+    "art": "water",
+    "hasFist": true
   },
   {
     "name": "The Furbidden History",
-    "id": "furbidden_mystery"
+    "id": "furbidden_mystery",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Golden Key",
-    "id": "golden_key"
+    "id": "golden_key",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "The Ultimate Dragonsbane",
-    "id": "ultimate_dragonsbane"
+    "id": "ultimate_dragonsbane",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "The Pawtato Mystery",
-    "id": "pawtato_one"
+    "id": "pawtato_one",
+    "art": "water",
+    "hasFist": false
   },
   {
     "name": "Everyone's invited!",
-    "id": "advertising_one"
+    "id": "advertising_one",
+    "art": "flight",
+    "hasFist": false
   },
   {
     "name": "The Forgotten Hero",
-    "id": "slashy_one"
+    "id": "slashy_one",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "I. The Catnip Cure",
-    "id": "catnip_cure_A"
+    "id": "catnip_cure_A",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "I. The Catnip Cure...again",
-    "id": "catnip_cure_B"
+    "id": "catnip_cure_B",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Knightmare",
-    "id": "knightmare_A"
+    "id": "knightmare_A",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "II. The Knightmare... again",
-    "id": "knightmare_B"
+    "id": "knightmare_B",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. The Book",
-    "id": "book_A"
+    "id": "book_A",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "III. The Book...again",
-    "id": "book_B"
+    "id": "book_B",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "IV. The Twin Resolution",
-    "id": "resolution_A"
+    "id": "resolution_A",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "The Catpital Temple (Flamepurr)",
-    "id": "flamepurr"
+    "id": "flamepurr",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Bermewda's Triangle Temple (Healing Paw)",
-    "id": "healing_paw"
+    "id": "healing_paw",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "East Pawt Temple (Lightnyan)",
-    "id": "lightnyan"
+    "id": "lightnyan",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Windmew City Temple (Cattrap)",
-    "id": "cattrap"
+    "id": "cattrap",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "South Pawt Temple (Purrserk)",
-    "id": "purrserk"
+    "id": "purrserk",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "Death Isle Temple (Astropaw)",
-    "id": "astropaw"
+    "id": "astropaw",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "Felingard Lake Temple (Freezepaw)",
-    "id": "freezepaw"
+    "id": "freezepaw",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument by The Catpital",
-    "id": "MonumentTrigger_Catpital"
+    "id": "MonumentTrigger_Catpital",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument in Puss Plains",
-    "id": "MonumentTrigger_PussPlains"
+    "id": "MonumentTrigger_PussPlains",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument below The Furbidden Fields",
-    "id": "MonumentTrigger_TwinPeaks"
+    "id": "MonumentTrigger_TwinPeaks",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument at South Point",
-    "id": "MonumentTrigger_SouthPoint"
+    "id": "MonumentTrigger_SouthPoint",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument along East Pawt River",
-    "id": "MonumentTrigger_EastPawt"
+    "id": "MonumentTrigger_EastPawt",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument by Hilly Hills Coast",
-    "id": "MonumentTrigger_HillyHills_01"
+    "id": "MonumentTrigger_HillyHills_01",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument by The Unknown Head",
-    "id": "MonumentTrigger_HillyHills_02"
+    "id": "MonumentTrigger_HillyHills_02",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument above Mountain Pass",
-    "id": "MonumentTrigger_MountainPass"
+    "id": "MonumentTrigger_MountainPass",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument by Windmew Lake",
-    "id": "MonumentTrigger_Windmew"
+    "id": "MonumentTrigger_Windmew",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument at North Point",
-    "id": "MonumentTrigger_NorthPoint"
+    "id": "MonumentTrigger_NorthPoint",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument by Winters Edge",
-    "id": "MonumentTrigger_Purrning"
+    "id": "MonumentTrigger_Purrning",
+    "art": "none",
+    "hasFist": false
   },
   {
     "name": "Monument on Old Master's Island",
-    "id": "MonumentTrigger_OldMaster"
+    "id": "MonumentTrigger_OldMaster",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "Monument on Key Island",
-    "id": "MonumentTrigger_KeyIsland"
+    "id": "MonumentTrigger_KeyIsland",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "Monument on Monster Isle",
-    "id": "MonumentTrigger_MonsterIsle"
+    "id": "MonumentTrigger_MonsterIsle",
+    "art": "either",
+    "hasFist": false
   },
   {
     "name": "Monument on Death Isle",
-    "id": "MonumentTrigger_DeathIsle"
+    "id": "MonumentTrigger_DeathIsle",
+    "art": "either",
+    "hasFist": false
   }
 ]
