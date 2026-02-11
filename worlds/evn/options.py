@@ -58,6 +58,7 @@ class AlwaysAvailableShops(Toggle):
 class IgnoreTechReq(Toggle):
     """
     When on, tech level requirements are ignored. Any unlocked ships / outf will be available at any spob with shipyard / outfitters.
+    Also ignores license requirements (ex: heavy weapons)
     """
     display_name = "Ignore Tech Requirements"
 

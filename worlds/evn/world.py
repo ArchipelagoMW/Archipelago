@@ -172,6 +172,8 @@ class EVNWorld(World):
                         #new_id = self.location_id_to_name[target_id].address if target_id in self.location_id_to_name else None
                         new_id = associated_location["address"]
                         if (new_id is not None):
+                            #TESTING
+                            #new_id = 9999
                             if (current_val is not None) and (current_val != ""):
                                 output_file_string += f'"b{new_id} {current_val}"\t'  # No logic needed for this one
                             else:
@@ -199,6 +201,8 @@ class EVNWorld(World):
         output_file_string += "\r\n"
         # then, the ship data
         for ship in ships.ship_table.keys():
+            if ship in items.specific_exclusions:
+                continue
             temp_ship = ships.ship_table[ship]
             for column in ships.ship_columns.keys():
                 current_val = temp_ship[column]
@@ -214,6 +218,8 @@ class EVNWorld(World):
                         #associated_item = items.ev_item_bank[target_id]
                         new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                         if (new_id is not None):
+                            #TESTING:
+                            #new_id = 9999
                             output_file_string += f'"b{new_id}"\t'
                         else:
                             logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
@@ -225,6 +231,17 @@ class EVNWorld(World):
                     output_file_string += f'100\t' # considering altering hire chance too
                 elif (column == "tech_level" and self.options.ignore_tech):
                     output_file_string += f'1\t'
+                elif (column == "require_bits" and self.options.ignore_tech): 
+                    output_file_string += f"0x0000000000000000\t"
+                elif (column == "flags_3" and (self.options.always_avail_shops or self.options.ignore_tech)):
+                    flag1 = 0x0100
+                    flag2 = 0x0200
+                    current_flag = int(current_val,16)
+                    if (not current_flag & flag1):
+                        current_flag += flag1 # int(flag1,16)
+                    if (not current_flag & flag2):
+                        current_flag += flag2 # int(flag2,16)
+                    output_file_string += f'0x{current_flag:04x}\t'
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"
@@ -252,6 +269,8 @@ class EVNWorld(World):
                             #associated_item = items.ev_item_bank[target_id]
                             new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                             if (new_id is not None):
+                                #TESTING:
+                                #new_id = 9999
                                 output_file_string += f'"b{new_id}"\t'
                             else:
                                 logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
@@ -263,6 +282,17 @@ class EVNWorld(World):
                         output_file_string += f'100\t'
                     elif (column == "tech_level" and self.options.ignore_tech):
                         output_file_string += f'1\t'
+                    elif (column == "require_bits" and self.options.ignore_tech): 
+                        output_file_string += f"0x0000000000000001\t"
+                    elif (column == "flags" and (self.options.always_avail_shops or self.options.ignore_tech)):
+                        flag1 = 0x0100  # show only if req bits met (or has 1)
+                        flag2 = 0x4000  # show only if availability is met (or has 1)
+                        current_flag = int(current_val,16)
+                        if (not current_flag & flag1):
+                            current_flag += flag1 # int(flag1,16)
+                        if (not current_flag & flag2):
+                            current_flag += flag2 # int(flag2,16)
+                        output_file_string += f'0x{current_flag:04x}\t'
                     else:
                         output_file_string += default_val
                 output_file_string += "\r\n"

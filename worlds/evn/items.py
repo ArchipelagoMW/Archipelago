@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, TypedDict
+from typing import TYPE_CHECKING, Dict, List, TypedDict
 
 from flask_caching import logger
 
@@ -35,11 +35,23 @@ CREDIT_IDS = {
 # }
 
 # maxes are noted but not yet enforced or in the data
+# type_offset: Dict[str, int] = {
+#     "Credits": 9900, # Special case! These won't actually be set - the client will check for these ids and make its own adjustment.
+#     "ship": 1550,   # 1550 - 1999 will be ships. We have 288/450 ships, so this should be safe.
+#     "outf": 3100,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
+# }
+# ADJUSTED FOR THE 128 OFFSET START ID OF EACH TYPE
+starting_id = 128
 type_offset: Dict[str, int] = {
     "Credits": 9900, # Special case! These won't actually be set - the client will check for these ids and make its own adjustment.
-    "ship": 1550,   # 1550 - 1999 will be ships. We have 288/450 ships, so this should be safe.
-    "outf": 3100,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
+    "ship": 1550 - starting_id,   # 1550 - 1999 will be ships. We have 288/450 ships, so this should be safe.
+    "outf": 3100 - starting_id,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
 }
+
+# I am bothered by having to do this, or at least using this solution.
+specific_exclusions: List[int] = [
+    895 + type_offset["ship"], #escape pod
+]
 
 #EVNItemData = TypedDict("EVNItemData", {"name": str, "classification": ItemClassification, "code": int})
 class EVNItemData(TypedDict, total=False): 
@@ -83,26 +95,36 @@ def get_items() -> Dict[int, EVNItemData]:
 
     # ships
     # turns out, the ship names are not unique due to the various models. We could add the subname, but just cat ID.
+    #i = 0
     for ship in ships.ship_table.keys():
         temp_ship = ships.ship_table[ship]
         item_id = type_offset["ship"] + (int)(temp_ship["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
+        if item_id in specific_exclusions:
+            continue
+        #item_id = type_offset["ship"] + i # IDs started at 128 and were not guaranteed to be contiguous
         ret_bank[item_id] = EVNItemData(
             name=temp_ship["name"].strip() + temp_ship["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
             classification=ItemClassification.progression,
             code=item_id,
             origin="ship"
         )
+        #i += 1
 
     # outf
+    #j = 0
     for outf in outfits.outf_table.keys():
         temp_outf = outfits.outf_table[outf]
         item_id = type_offset["outf"] + (int)(temp_outf["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
+        if item_id in specific_exclusions:
+            continue
+        #item_id = type_offset["outf"] + j
         ret_bank[item_id] = EVNItemData(
             name=temp_outf["name"].strip() + temp_outf["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
             classification=ItemClassification.progression | ItemClassification.useful, # or useful?
             code=item_id,
             origin="outf"
         )
+        #j += 1
 
     logger.info(f"data bank size: {len(ret_bank)}")
     return ret_bank
