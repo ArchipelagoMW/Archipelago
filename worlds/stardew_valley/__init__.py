@@ -36,7 +36,7 @@ from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .stardew_rule.rule_explain import RuleExplanation
-from .strings.ap_names.ap_option_names import StartWithoutOptionName
+from .strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName, StartWithoutOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
@@ -430,7 +430,7 @@ class StardewValleyWorld(World):
 
     def connect_entrances(self) -> None:
         no_target_groups = {0: [0]}
-        placement = entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
+        placement = entrance_rando.randomize_entrances(self, coupled=EntranceRandomizerBehaviourOptionName.decoupled not in self.options.entrance_randomization_behaviour, target_group_lookup=no_target_groups)
         self.randomized_entrances = prepare_mod_data(placement)
 
     def generate_basic(self):
