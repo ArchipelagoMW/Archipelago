@@ -425,7 +425,9 @@ class DeepWoodsEntrance:
 @final
 class EugeneEntrance:
     forest_to_garden = "Forest to Eugene's Garden"
+    garden_to_forest = "Eugene's Garden to Forest"
     garden_to_bedroom = "Eugene's Garden to Eugene's Bedroom"
+    bedroom_to_garden = "Eugene's Bedroom to Eugene's Garden"
 
 
 @final

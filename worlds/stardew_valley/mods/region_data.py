@@ -69,8 +69,8 @@ deep_woods_entrances = [
 
 eugene_regions = [
     RegionData(Region.forest, (EugeneEntrance.forest_to_garden,)),
-    RegionData(EugeneRegion.eugene_garden, (EugeneEntrance.garden_to_bedroom,)),
-    RegionData(EugeneRegion.eugene_bedroom),
+    RegionData(EugeneRegion.eugene_garden, (EugeneEntrance.garden_to_bedroom, EugeneEntrance.garden_to_forest)),
+    RegionData(EugeneRegion.eugene_bedroom, (EugeneEntrance.bedroom_to_garden,)),
 ]
 
 eugene_entrances = [
@@ -80,7 +80,24 @@ eugene_entrances = [
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_OUT,
     ),
-    ConnectionData(EugeneEntrance.garden_to_bedroom, EugeneRegion.eugene_bedroom, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(
+        EugeneEntrance.garden_to_forest,
+        Region.forest,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_OUT,
+    ),
+    ConnectionData(
+        EugeneEntrance.garden_to_bedroom,
+        EugeneRegion.eugene_bedroom,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN,
+    ),
+    ConnectionData(
+        EugeneEntrance.bedroom_to_garden,
+        EugeneRegion.eugene_garden,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT,
+    ),
 ]
 
 magic_regions = [RegionData(Region.pierre_store, (MagicEntrance.store_to_altar,)), RegionData(MagicRegion.altar)]
