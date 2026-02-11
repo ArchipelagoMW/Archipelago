@@ -70,7 +70,7 @@ def create_entrance_rando_target(origin: Region, destination: Region, connection
 
     if RandomizationFlag.IS_ONE_WAY in connection_data.flag:
         origin.create_exit(connection_data.name).randomization_type = EntranceType.ONE_WAY
-        destination.create_er_target(connection_data.name).randomization_type = EntranceType.ONE_WAY
+        destination.create_er_target(f"{connection_data.name} exit").randomization_type = EntranceType.ONE_WAY
         return
 
     rev = connection_data.reverse

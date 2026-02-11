@@ -667,7 +667,12 @@ ginger_island_regions = [
 
 
 ginger_island_connections = [
-    ConnectionData(Entrance.use_island_obelisk, Region.island_south),
+    ConnectionData(
+        Entrance.use_island_obelisk,
+        Region.island_south,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
+    ),
     ConnectionData(
         Entrance.use_farm_obelisk,
         Region.farm,
@@ -751,10 +756,7 @@ ginger_island_connections = [
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.OUT_TO_IN,
     ),
-    ConnectionData(
-        LogicEntrance.island_shipping,
-        LogicRegion.shipping
-    ),
+    ConnectionData(LogicEntrance.island_shipping, LogicRegion.shipping),
     ConnectionData(
         Entrance.island_farmhouse_to_island_west,
         Region.island_west,
