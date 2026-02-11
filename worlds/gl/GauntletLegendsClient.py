@@ -73,12 +73,21 @@ class RetroSocket:
         except asyncio.TimeoutError:
             logger.error("Timeout while waiting for socket response")
             return None
+        except ConnectionResetError:
+            logger.error("The connection was reset.")
+            return None
+        except OSError as e:
+            logger.error(f"Socket error during read: {e}")
+            return None
 
     async def status(self) -> str:
         message = "GET_STATUS"
         self.send(message)
-        data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
-        return data.decode()
+        try:
+            data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
+            return data.decode()
+        except (asyncio.TimeoutError, ConnectionResetError, OSError):
+            pass
 
 
 def message_format(arg: str, params: str) -> str:
