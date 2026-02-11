@@ -63,46 +63,139 @@ fillers = [
 ]
 
 
+monumentLocations = [
+    {
+        "inGameId": "MonumentTrigger_Catpital",
+        "name": "Monument by The Catpital",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_PussPlains",
+        "name": "Monument in Puss Plains",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_TwinPeaks",
+        "name": "Monument below The Furbidden Fields",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_SouthPoint",
+        "name": "Monument at South Point",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_EastPawt",
+        "name": "Monument along East Pawt River",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_HillyHills_01",
+        "name": "Monument by Hilly Hills Coast",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_HillyHills_02",
+        "name": "Monument by The Unknown Head",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_MountainPass",
+        "name": "Monument above Mountain Pass",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_Windmew",
+        "name": "Monument by Windmew Lake",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_NorthPoint",
+        "name": "Monument at North Point",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_Purrning",
+        "name": "Monument by Winters Edge",
+        "art": "none",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_OldMaster",
+        "name": "Monument on Old Master's Island",
+        "art": "either",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_KeyIsland",
+        "name": "Monument on Key Island",
+        "art": "either",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_MonsterIsle",
+        "name": "Monument on Monster Isle",
+        "art": "either",
+        "hasFist": False
+    },
+    {
+        "inGameId": "MonumentTrigger_DeathIsle",
+        "name": "Monument on Death Isle",
+        "art": "either",
+        "hasFist": False
+    }
+]
+
 templeLocations = [
     {
         "inGameId": "flamepurr",
-        "name": "Visited Arcane Temple of Flamepurr",
+        "name": "The Catpital Temple (Flamepurr)",
         "art": "none",
         "hasFist": False
     },
     {
         "inGameId": "healing_paw",
-        "name": "Visited Arcane Temple of Healing Paw",
+        "name": "Bermewda's Triangle Temple (Healing Paw)",
         "art": "none",
         "hasFist": False
     },
     {
         "inGameId": "lightnyan",
-        "name": "Visited Arcane Temple of Lightnyan",
+        "name": "East Pawt Temple (Lightnyan)",
         "art": "none",
         "hasFist": False
     },
     {
         "inGameId": "cattrap",
-        "name": "Visited Arcane Temple of Cattrap",
+        "name": "Windmew City Temple (Cattrap)",
         "art": "none",
         "hasFist": False
     },
     {
         "inGameId": "purrserk",
-        "name": "Visited Arcane Temple of Purrserk",
+        "name": "South Pawt Temple (Purrserk)",
         "art": "either",
         "hasFist": False
     },
     {
         "inGameId": "astropaw",
-        "name": "Visited Arcane Temple of Astropaw",
+        "name": "Death Isle Temple (Astropaw)",
         "art": "either",
         "hasFist": False
     },
     {
         "inGameId": "freezepaw",
-        "name": "Visited Arcane Temple of Freezepaw",
+        "name": "Felingard Lake Temple (Freezepaw)",
         "art": "none",
         "hasFist": False
     }
@@ -618,7 +711,7 @@ questLocations = [
 
 # All items in the exact order they should be loaded
 all_items = fillers + royal_arts + skills + prog_skills + prog_skill_uprades + prog_magic_levels + misc
-all_locations = questLocations + templeLocations
+all_locations = questLocations + templeLocations + monumentLocations
 
 # Map: numeric ID → item
 
