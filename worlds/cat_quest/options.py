@@ -8,7 +8,7 @@ class Goal(Choice):
     Questsanity: Complete all quests in the game
     Max Level: Reach level 99
     Max Level and Main Quest: Complete the main quest and reach level 99
-    Spellmastery: Get all spells to max level
+    Spellmastery: Get all skills to max level
     """
     display_name = "Goal"
     option_main_quest = 0
@@ -21,9 +21,9 @@ class Goal(Choice):
 class SkillUpgrade(Choice):
     """Choose how skills will be upgraded.
     Coins: You upgrade skills in-game using coins. (The vanilla way)
-    Progressive Skills: Each spell is added to the itempool 10 times.
-    Upgrades: Each spell is added to the itempool once, allowing usage of that spell. Additionally, 9 upgrades for each spell are added to the itempool, that will be applied once the skill is aquired.
-    Magic Levels: Each spell is added to the itempool once, allowing usage of that spell. Additionally, 9 magic levels are added to the itempool, that will upgrade all acquired spells.
+    Progressive Skills: Each skill is added to the itempool 10 times.
+    Upgrades: Each skill is added to the itempool once, allowing usage of that skill. Additionally, 9 upgrades for each skill are added to the itempool, that will be applied once the skill is aquired.
+    Magic Levels: Each skill is added to the itempool once, allowing usage of that skill. Additionally, 9 magic levels are added to the itempool, that will upgrade all acquired skills.
     """
     display_name = "Skills Upgrades"
     option_coins = 0
