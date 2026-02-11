@@ -453,6 +453,7 @@ class YobaEntrance:
 @final
 class JunaEntrance:
     forest_to_juna_cave = "Forest to Juna's Cave"
+    juna_cave_to_forest = "Juna's Cave to Forest"
 
 
 @final

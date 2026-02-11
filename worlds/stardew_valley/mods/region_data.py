@@ -123,7 +123,10 @@ yoba_entrances = [
     ConnectionData(YobaEntrance.secret_woods_to_clearing, YobaRegion.yoba_clearing, flag=RandomizationFlag.BUILDINGS)
 ]
 
-juna_regions = [RegionData(Region.forest, (JunaEntrance.forest_to_juna_cave,)), RegionData(JunaRegion.juna_cave)]
+juna_regions = [
+    RegionData(Region.forest, (JunaEntrance.forest_to_juna_cave,)),
+    RegionData(JunaRegion.juna_cave, (JunaEntrance.juna_cave_to_forest,)),
+]
 
 juna_entrances = [
     ConnectionData(
@@ -131,7 +134,13 @@ juna_entrances = [
         JunaRegion.juna_cave,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN,
-    )
+    ),
+    ConnectionData(
+        JunaEntrance.juna_cave_to_forest,
+        Region.forest,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT,
+    ),
 ]
 
 ayeisha_regions = [
