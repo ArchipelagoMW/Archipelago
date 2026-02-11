@@ -100,8 +100,8 @@ jasper_entrances = [
 ]
 alec_regions = [
     RegionData(Region.forest, (AlecEntrance.forest_to_petshop,)),
-    RegionData(AlecRegion.pet_store, (AlecEntrance.petshop_to_bedroom,)),
-    RegionData(AlecRegion.alec_bedroom),
+    RegionData(AlecRegion.pet_store, (AlecEntrance.petshop_to_bedroom, AlecEntrance.petshop_to_forest)),
+    RegionData(AlecRegion.alec_bedroom, (AlecEntrance.bedroom_to_petshop,)),
 ]
 
 alec_entrances = [
@@ -111,7 +111,11 @@ alec_entrances = [
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN,
     ),
+    ConnectionData(
+        AlecEntrance.petshop_to_forest, Region.forest, flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.IN_TO_OUT
+    ),
     ConnectionData(AlecEntrance.petshop_to_bedroom, AlecRegion.alec_bedroom, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(AlecEntrance.bedroom_to_petshop, AlecRegion.pet_store, flag=RandomizationFlag.BUILDINGS),
 ]
 
 yoba_regions = [

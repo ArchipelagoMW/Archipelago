@@ -442,7 +442,9 @@ class JasperEntrance:
 @final
 class AlecEntrance:
     forest_to_petshop = "Forest to Alec's Pet Shop"
+    petshop_to_forest = "Alec's Pet Shop to Forest"
     petshop_to_bedroom = "Alec's Pet Shop to Alec's Bedroom"
+    bedroom_to_petshop = "Alec's Bedroom to Alec's Pet Shop"
 
 
 @final
