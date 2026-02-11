@@ -542,6 +542,7 @@ class SVEEntrance:
 @final
 class AlectoEntrance:
     witch_hut_to_witch_attic = "Witch's Hut to Witch's Attic"
+    witch_attic_to_witch_hut = "Witch's Attic to Witch's Hut"
 
 
 @final

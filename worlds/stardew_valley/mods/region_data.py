@@ -399,11 +399,22 @@ sve_ginger_island_connections = [
 
 alecto_regions = [
     RegionData(Region.witch_hut, (AlectoEntrance.witch_hut_to_witch_attic,)),
-    RegionData(AlectoRegion.witch_attic),
+    RegionData(AlectoRegion.witch_attic, (AlectoEntrance.witch_attic_to_witch_hut,)),
 ]
 
 alecto_entrances = [
-    ConnectionData(AlectoEntrance.witch_hut_to_witch_attic, AlectoRegion.witch_attic, flag=RandomizationFlag.BUILDINGS)
+    ConnectionData(
+        AlectoEntrance.witch_hut_to_witch_attic,
+        AlectoRegion.witch_attic,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN,
+    ),
+    ConnectionData(
+        AlectoEntrance.witch_attic_to_witch_hut,
+        Region.witch_hut,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN,
+    ),
 ]
 
 lacey_regions = [RegionData(Region.forest, (LaceyEntrance.forest_to_hat_house,)), RegionData(LaceyRegion.hat_house)]
