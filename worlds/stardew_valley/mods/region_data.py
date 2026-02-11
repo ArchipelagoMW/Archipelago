@@ -168,7 +168,10 @@ ayeisha_entrances = [
     ),
 ]
 
-riley_regions = [RegionData(Region.town, (RileyEntrance.town_to_riley,)), RegionData(RileyRegion.riley_house)]
+riley_regions = [
+    RegionData(Region.town, (RileyEntrance.town_to_riley,)),
+    RegionData(RileyRegion.riley_house, (RileyEntrance.riley_to_town,)),
+]
 
 riley_entrances = [
     ConnectionData(
@@ -176,7 +179,10 @@ riley_entrances = [
         RileyRegion.riley_house,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN,
-    )
+    ),
+    ConnectionData(
+        RileyEntrance.riley_to_town, Region.town, flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.IN_TO_OUT
+    ),
 ]
 
 sve_main_land_regions = [

@@ -468,6 +468,7 @@ class AyeishaEntrance:
 @final
 class RileyEntrance:
     town_to_riley = "Town to Riley's House"
+    riley_to_town = "Riley's House to Town"
 
 
 @final
