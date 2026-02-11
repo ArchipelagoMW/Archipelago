@@ -5492,6 +5492,7 @@
     "johto": true,
     "exits": [
       "REGION_ROUTE_42_ECRUTEAK_GATE",
+      "REGION_ROUTE_42:HEADBUTT",
       "REGION_MOUNT_MORTAR_1F_OUTSIDE:WEST:ENTRANCE"
     ],
     "locations": [
@@ -5504,7 +5505,15 @@
     ],
     "wild_encounters": {
       "surfing": "ROUTE_42",
-      "fishing": "Lake",
+      "fishing": "Lake"
+    }
+  },
+  "REGION_ROUTE_42:HEADBUTT": {
+    "johto": true,
+    "exits": [],
+    "locations": [],
+    "events": [],
+    "wild_encounters": {
       "headbutt": "Town"
     }
   },
@@ -5526,7 +5535,8 @@
   "REGION_ROUTE_42:CENTERFRUIT": {
     "johto": true,
     "exits": [
-      "REGION_ROUTE_42:CENTER"
+      "REGION_ROUTE_42:CENTER",
+      "REGION_ROUTE_42:HEADBUTT"
     ],
     "locations": [
       "FRUITTREE_ROUTE_42_1",
@@ -5535,10 +5545,7 @@
     ],
     "events": [
       "EVENT_SAW_SUICUNE_ON_ROUTE_42"
-    ],
-    "wild_encounters": {
-      "headbutt": "Town"
-    }
+    ]
   },
   "REGION_ROUTE_42:EAST": {
     "johto": true,

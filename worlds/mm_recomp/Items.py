@@ -434,19 +434,23 @@ item_data_table: Dict[str, MMRItemData] = {
     ),
     "Boss Key (Woodfall)": MMRItemData(
         code=0x3469420090074,
-        type=ItemClassification.progression
+        type=ItemClassification.progression,
+        can_create=lambda options: options.bosskeysanity.value
     ),
     "Boss Key (Snowhead)": MMRItemData(
         code=0x3469420090174,
-        type=ItemClassification.progression
+        type=ItemClassification.progression,
+        can_create=lambda options: options.bosskeysanity.value
     ),
     "Boss Key (Great Bay)": MMRItemData(
         code=0x3469420090274,
-        type=ItemClassification.progression
+        type=ItemClassification.progression,
+        can_create=lambda options: options.bosskeysanity.value
     ),
     "Boss Key (Stone Tower)": MMRItemData(
         code=0x3469420090374,
-        type=ItemClassification.progression
+        type=ItemClassification.progression,
+        can_create=lambda options: options.bosskeysanity.value
     ),
     "Odolwa's Remains": MMRItemData(
         code=0x3469420000055,

@@ -1,5 +1,5 @@
 # DSZeldaClient
-Shared Archipelago Client Submodule for Zelda: Phantom Hourglass and Spirit Tracks
+Shared Archipelago Client Submodule for Zelda: [Phantom Hourglass](https://github.com/carrotinator/Archipelago) and [Spirit Tracks](https://github.com/DayKat/spirit-tracks)
 
 # I'm bad at git so here are command line instructions to future me
 Apparently pycharm *can* handle submodules just fine! i think you still need to set it up in command line, but once it's in pycharm can push submodule updates!

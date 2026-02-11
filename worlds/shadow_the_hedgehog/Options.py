@@ -222,12 +222,31 @@ class KeyCollectionMethod(Choice):
     option_both = 2
     default = option_arch
 
-class Checkpointsanity(DefaultOnToggle):
+class Checkpointsanity(Toggle):
     """
         Determines whether checkpoint sanity is enabled.
         This only adds checks and does not add anything to the pool.
     """
     display_name = "Checkpoint Sanity"
+
+class CheckpointShuffle(Choice):
+    """
+        Determines whether checkpoint shuffle is enabled.
+        This only adds checks and does not add anything to the pool.
+    """
+    display_name = "Checkpoint Shuffle"
+    option_off = 0
+    option_unlocks_only = 1
+    option_start_and_unlock = 2
+    default = option_off
+
+class CheckpointConvenience(DefaultOnToggle):
+    """
+        Determines whether checkpoint convenience is enabled, allowing warping back to a checkpoint
+        On re-entering a stage if it has been enabled before.
+        Requires Checkpoint sanity.
+    """
+    display_name = "Checkpoint Convenience"
 
 class CharacterSanity(DefaultOnToggle):
     """
@@ -452,6 +471,13 @@ class PercentOverrides(OptionDict):
     display_name = "Percent Overrides"
     valid_keys = Names.getValidPercentOverrides()
     default = {}
+
+class MusicShuffle(Toggle):
+    """
+        Toggle for shuffling the stage music upon entering a stage
+    """
+    display_name = "Music Shuffle"
+
 
 class WeaponGroups(OptionSet):
     """
@@ -847,6 +873,21 @@ class TrapFillPercentage(Range):
     range_end = 100
     default = 5
 
+
+class PlandoCheckpointSpawns(OptionDict):
+    """
+        Advanced YAML setting to provide keys to dictate percentage based overrides.
+        Read the setup_en.yaml for more information.
+    """
+    display_name = "Plando Checkpoint Spawns"
+    default = {}
+
+class LastWayEnemysanity(DefaultOnToggle):
+    """
+        Toggle to disable enemy sanity for last way. Only applicable when enemysanity is enabled.
+    """
+    display_name = "Last Way Enemysanity"
+
 @dataclass
 class ShadowTheHedgehogOptions(PerGameCommonOptions):
     #goal: Goal
@@ -879,6 +920,8 @@ class ShadowTheHedgehogOptions(PerGameCommonOptions):
     keys_required_for_doors: KeysRequiredForDoors
     key_collection_method: KeyCollectionMethod
     checkpoint_sanity: Checkpointsanity
+    checkpoint_shuffle: CheckpointShuffle
+    checkpoint_convenience: CheckpointConvenience
     starting_stages: StartingStages
     select_gates: SelectGates
     select_gates_count: SelectGatesCount
@@ -947,6 +990,10 @@ class ShadowTheHedgehogOptions(PerGameCommonOptions):
     checkpoint_trap_enabled: CheckpointTraps
     poison_trap_enabled: PoisonTraps
     trap_fill_percentage: TrapFillPercentage
+
+    plando_checkpoint_spawns: PlandoCheckpointSpawns
+    music_shuffle: MusicShuffle
+    last_way_enemysanity: LastWayEnemysanity
 
 
 shadow_option_groups = [

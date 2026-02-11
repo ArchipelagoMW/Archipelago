@@ -2,7 +2,9 @@ import logging
 import struct
 import sys
 import typing
+import asyncio
 from base64 import b64encode
+from enum import Enum
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
@@ -127,6 +129,22 @@ K64_BOSS_REQUIREMENTS = crystal_requirements
 K64_LEVEL_ADDRESS = 0x1FFF230
 
 
+class DeathState(Enum):
+    Alive = 0
+    IsKillingPlayer = 1
+    Dead = 2
+
+K64_WORLD_REMAP = {
+    0: "Pop Star",
+    1: "Rock Star",
+    2: "Aqua Star",
+    3: "Neo Star",
+    4: "Shiver Star",
+    5: "Ripple Star",
+    6: "Zero-Two"
+}
+
+
 class K64Client(BizHawkClient):
     game = "Kirby 64 - The Crystal Shards"
     system = "N64"
@@ -138,6 +156,7 @@ class K64Client(BizHawkClient):
     split_power_combos: typing.Optional[bool] = None
     boss_requirements: typing.Optional[bytes] = None
     crystal_label: "MDLabel" = None
+    death_state: DeathState = DeathState.Alive
 
     def interpret_copy_ability(self, current, new_ability):
         if self.split_power_combos:
@@ -172,6 +191,7 @@ class K64Client(BizHawkClient):
         # and he only dies after taking a hit at 0 hp
         # all of the handling is in basepatch
         from worlds._bizhawk import write
+        self.death_state = DeathState.IsKillingPlayer
         await write(ctx.bizhawk_ctx, [(K64_DEATHLINK_SET, int.to_bytes(1, 4, "big"), "RDRAM")])
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -202,6 +222,13 @@ class K64Client(BizHawkClient):
         self.rom = game_name
         ctx.items_handling = 0b111
         return True
+
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+        if cmd == "Bounced":
+            if "tags" in args:
+                assert ctx.slot is not None
+                if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
+                    asyncio.create_task(self.deathlink_kill_player(ctx))
 
     async def update_crystal_label(self, ctx: "BizHawkClientContext"):
         from kvui import TooltipLabel
@@ -305,6 +332,16 @@ class K64Client(BizHawkClient):
         if boss_crystals[6] != 0:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
+
+        if self.death_link:
+            if self.death_state != DeathState.Dead and int.from_bytes(health_visual, "big") == 0:
+                if self.death_state == DeathState.Alive:
+                    # send a death link
+                    await ctx.send_death(
+                        f"{ctx.player_names[ctx.slot]} couldn't handle {K64_WORLD_REMAP[int.from_bytes(current_level, 'big')]}.")
+                self.death_state = DeathState.Dead
+            elif int.from_bytes(health_visual, "big") != 0 and self.death_state == DeathState.Dead:
+                self.death_state = DeathState.Alive
 
         writes = []
 

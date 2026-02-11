@@ -34,6 +34,11 @@ sub_tank = "Sub Tank"
 chip_quick_charge = "Quick Charge Chip"
 chip_speedster = "Speedster Chip"
 chip_super_recover = "Super Recover Chip"
+chip_rapid_five = "Rapid Five Chip"
+chip_speed_shot = "Speed Shot Chip"
+chip_buster_plus = "Buster Plus Chip"
+chip_weapon_plus = "Weapon Plus Chip"
+chip_item_plus = "Item Plus Chip"
 
 # Medals
 maverick_medal = "Maverick Medal"

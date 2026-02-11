@@ -1,3 +1,5 @@
+from enum import IntEnum
+
 ROM_HASH = "f2dc6c4e093e4f8c6cbea80e8dbd62cb"
 AGES_ROM_HASH = "c4639cc61c049e5a085526bb6cac03bb"
 
@@ -56,7 +58,10 @@ DUNGEON_NAMES = [
     "Unicorn's Cave",
     "Ancient Ruins",
     "Explorer's Crypt",
-    "Sword & Shield Dungeon"
+    "Sword & Shield Dungeon",
+    "",
+    "",
+    "Linked Hero's Cave"
 ]
 
 VALID_RUPEE_PRICE_VALUES = [
@@ -216,6 +221,7 @@ ITEM_GROUPS = {
         "Small Key (Ancient Ruins)",
         "Small Key (Explorer's Crypt)",
         "Small Key (Sword & Shield Dungeon)",
+        "Small Key (Linked Hero's Cave)",
     ],
     "Boss Keys": [
         "Boss Key (Gnarled Root Dungeon)",
@@ -257,6 +263,7 @@ ITEM_GROUPS = {
         "Master Key (Ancient Ruins)",
         "Master Key (Explorer's Crypt)",
         "Master Key (Sword & Shield Dungeon)",
+        "Master Key (Linked Hero's Cave)",
     ],
     "Essences": [
         "Fertile Soil",
@@ -399,6 +406,19 @@ LOCATION_GROUPS = {
         "Sword & Shield Dungeon (B1F): Boss Reward",
         "Sword & Shield Dungeon: Essence",
     ],
+    "D11": [
+        "Linked Hero's Cave: Alternate Entrance Chest",
+        "Linked Hero's Cave: First Reward",
+        "Linked Hero's Cave: Checkerboard Drop",
+        "Linked Hero's Cave: Second Reward",
+        "Linked Hero's Cave: Torch Chest",
+        "Linked Hero's Cave: Flooded Room Drop",
+        "Linked Hero's Cave: Third Reward",
+        "Linked Hero's Cave: Fourth Reward",
+        "Linked Hero's Cave: Gauntlet",
+        "Linked Hero's Cave: Boomerang Maze",
+        "Linked Hero's Cave: Final Reward"
+    ],
     "Trade Sequence": [
         "Horon Village: Dr. Left Reward",
         "North Horon: Malon Trade",
@@ -468,3 +488,10 @@ COLLECT_POE_SKIP_ROOM = 0x81
 COLLECT_MAKU_TREE = 0x82
 COLLECT_D5_ARMOS_PUZZLE = 0x83
 COLLECT_D4_SCRUB_ROOM = 0x84
+
+
+class OracleOfSeasonsConnectionType(IntEnum):
+    CONNECT_PORTAL_OVERWORLD = 1
+    CONNECT_PORTAL_SUBROSIA = 2
+    CONNECT_DUNGEON_OVERWORLD = 3
+    CONNECT_DUNGEON_INSIDE = 4

@@ -229,6 +229,8 @@ class WebWorld(metaclass=WebWorldRegister):
     # Ashipelago customization
     server_version : str
     """version of the ap world installed on ashipelago"""
+    display_name : Optional[str]
+    """Overridden name to display on the webhost"""
     discord_channel: Optional[str]
     """link to the discord channel for the world"""
     pop_tracker: Optional[str]
@@ -286,6 +288,10 @@ class WebWorld(metaclass=WebWorldRegister):
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
+
+    # Ashipelago customization
+    is_experimental = False
+    """Whether this world is an experimental game."""
 
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""

@@ -50,6 +50,17 @@
                             {% elif patch.game == "Donkey Kong 64" %}
                                 <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                     Download .lanky File...</a>
+                            {% elif patch.game == "Final Fantasy XIV" %}
+                                    No .apmanual required for this version. Must use the Dalamud plugin.
+                            {% elif patch.game == "FZeroGX Manual_Only" %}
+                                <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                                    Download Patch File...
+                            {% elif patch.game == "Pikmin 2" %}
+                                <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                                    Download .appik2 File...
+                            {% elif patch.game == "Twilight Princess" %}
+                                <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                                    Download .aptp File...
                             {% else %}
                                 Unsupported game patch file for this game.
                             {% endif %}

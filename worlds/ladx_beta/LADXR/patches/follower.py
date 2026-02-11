@@ -2,16 +2,7 @@ from ..assembler import ASM
 from ..utils import createTileData
 
 
-def patchFollowerCreation(rom, *, bowwow_everywhere=False, extra_spawn_index=0):
-    extra_spawn_options = [
-        "",
-        "fox",
-        "navi",
-        "ghost",
-        "yipyip",
-    ]
-    extra_spawn = extra_spawn_options[extra_spawn_index]
-
+def patchFollowerCreation(rom, *, bowwow_everywhere=False, extra_spawn=""):
     rom.patch(0x01, 0x1FB3, 0x2162, ASM("""
     ; Never spawn in sidescrollers
     ldh  a, [hIsSideScrolling]

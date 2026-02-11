@@ -25,12 +25,23 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.KAKARIKO_VILLAGE, world, [
         (EventLocations.KAK_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.KAK_GATE, Events.KAKARIKO_GATE_OPEN,
-         lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
         (EventLocations.KAK_GATE_GUARD, Events.SOLD_KEATON_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
                                                                                                     bundle)),
     ])
+
+    # Open Kak Gate from the start if open gate is on, otherwise create an event in Kak for it
+    if world.options.kakariko_gate == "open":
+        add_events(Regions.ROOT, world, [
+            (EventLocations.KAK_GATE, Events.KAKARIKO_GATE_OPEN,
+             lambda bundle: True),
+        ])
+    else:
+        add_events(Regions.KAKARIKO_VILLAGE, world, [
+            (EventLocations.KAK_GATE, Events.KAKARIKO_GATE_OPEN,
+             lambda bundle: (is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle))),
+        ])
+
     # Locations
     add_locations(Regions.KAKARIKO_VILLAGE, world, [
         (Locations.SHEIK_IN_KAKARIKO,
@@ -52,7 +63,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle) and can_bonk_trees(bundle)),
         (Locations.KAK_GS_WATCHTOWER, lambda bundle: is_child(bundle) and (
             can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.LONGSHOT) or (
-                can_do_trick(Tricks.KAK_TOWER_GS, bundle) and can_jump_slash(bundle)) and can_get_nighttime_gs(bundle))),
+                can_do_trick(Tricks.KAK_TOWER_GS, bundle) and can_jump_slash_except_hammer(bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.KAK_NEAR_POTION_SHOP_POT1, lambda bundle: is_child(
             bundle) and can_break_pots(bundle)),
         (Locations.KAK_NEAR_POTION_SHOP_POT2, lambda bundle: is_child(
@@ -222,7 +233,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.KAK_GRANNYS_POTION_SHOP,
          lambda bundle: is_adult(bundle) and can_open_overworld_door(Items.GRANNYS_POTION_SHOP_KEY, bundle)),
         (Regions.KAK_POTION_SHOP_BACK,
-         lambda bundle: is_adult(bundle) and at_day(bundle) and can_open_overworld_door(Items.GRANNYS_POTION_SHOP_KEY,
+         lambda bundle: is_adult(bundle) and at_day(bundle) and can_open_overworld_door(Items.KAK_POTION_SHOP_KEY,
                                                                                         bundle)),
     ])
 
@@ -423,7 +434,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.KAKARIKO_VILLAGE,
          lambda bundle: is_adult(bundle) or has_item(Events.KAKARIKO_GATE_OPEN, bundle) or can_do_trick(
              Tricks.VISIBLE_COLLISION, bundle)),
-        (Regions.DEATH_MOUNTAIN, lambda bundle: True)
+        (Regions.DEATH_MOUNTAIN_TRAIL, lambda bundle: True)
     ])
 
     # Kak Well

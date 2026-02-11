@@ -1,0 +1,33 @@
+Twilight Princess:
+  Twilight Princess:
+
+  # TPRando Settings
+  # open_map: false
+  # faron_woods_logic: closed # Need to craft generation to be consistent
+  # castle_requirements: open
+  # palace_requirements: open
+  # skip_lakebed_entrance: true
+  # skip_arbiters_grounds_entrance: true
+  # skip_snowpeak_entrance: true
+  # skip_city_in_the_sky_entrance: true
+  # goron_mines_entrance: open
+  # tot_entrance: open
+  # dungeon_rewards_progression: true
+  # transform_anywhere: true
+  # increase_wallet: true
+  # damage_magnification: vanilla
+  # bonks_do_damage: false
+  overworld_shuffled: true
+
+  # AP world settings
+  # logic_rules: glitched
+  # early_shadow_crystal: false
+  # small_key_settings: own_dungeon
+  # big_key_settings: own_dungeon
+
+  # Hard coded settings
+  # skip_prologue: true
+  # faron_twilight_cleared: true
+  # eldin_twilight_cleared: true
+  # lanayru_twilight_cleared: true
+  # skip_mdh: true

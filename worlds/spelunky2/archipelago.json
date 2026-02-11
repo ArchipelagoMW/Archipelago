@@ -2,7 +2,7 @@
     "game": "Spelunky 2", 
     "authors": ["Eszenn","DDRKhat"], 
     "minimum_ap_version": "0.6.4",
-    "world_version": "0.3.8",
+    "world_version": "0.3.9",
     "version": 7,
     "compatible_version": 7
 }

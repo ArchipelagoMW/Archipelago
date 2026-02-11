@@ -1,0 +1,16 @@
+[
+{"name": "ToF Enter Boss", "sections": [{"name": "ToF Enter Boss"}], "map_locations": [{"map": "Temple of Fire 4F", "x": 128, "y": 92}]},
+{"name": "Blaaz Exit", "sections": [{"name": "Blaaz Exit"}], "map_locations": [{"map": "Blaaz Arena", "x": 128, "y": 164}]},
+{"name": "ToC Enter Boss", "sections": [{"name": "ToC Enter Boss"}], "map_locations": [{"map": "Temple of Courage 3F", "x": 128, "y": 100}]},
+{"name": "Crayk Exit", "sections": [{"name": "Crayk Exit"}], "map_locations": [{"map": "Crayk Arena", "x": 128, "y": 156}]},
+{"name": "ToW Enter Boss", "sections": [{"name": "ToW Enter Boss"}], "map_locations": [{"map": "Temple of Wind 2F", "x": 136, "y": 44}]},
+{"name": "Cyclok Exit", "sections": [{"name": "Cyclok Exit"}], "map_locations": [{"map": "Cyclok Arena", "x": 128, "y": 133}]},
+{"name": "Ghost Ship Cubus Sisters Reunion", "sections": [{"name": "Ghost Ship Cubus Sisters Reunion"}], "map_locations": [{"map": "Ghost Ship B1", "x": 38, "y": 86}]},
+{"name": "Cubus Sisters Blue Warp", "sections": [{"name": "Cubus Sisters Blue Warp"}], "map_locations": [{"map": "Cubus Sisters Arena", "x": 126, "y": 134}]},
+{"name": "GT Enter Boss", "sections": [{"name": "GT Enter Boss"}], "map_locations": [{"map": "Goron Temple B4", "x": 128, "y": 96}]},
+{"name": "Dongo Exit", "sections": [{"name": "Dongo Exit"}], "map_locations": [{"map": "Dongorongo Arena", "x": 128, "y": 150}]},
+{"name": "ToI Enter Boss", "sections": [{"name": "ToI Enter Boss"}], "map_locations": [{"map": "Temple of Ice B1", "x": 132, "y": 20}]},
+{"name": "Gleeok Exit", "sections": [{"name": "Gleeok Exit"}], "map_locations": [{"map": "Gleeok Arena", "x": 128, "y": 156}]},
+{"name": "MT Enter Boss", "sections": [{"name": "MT Enter Boss"}], "map_locations": [{"map": "Mutoh's Temple B3", "x": 128, "y": 40}]},
+{"name": "Eox Exit", "sections": [{"name": "Eox Exit"}], "map_locations": [{"map": "Eox Arena", "x": 124, "y": 168}]}
+]

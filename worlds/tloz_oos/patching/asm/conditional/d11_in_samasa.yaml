@@ -1,0 +1,42 @@
+22/7e94/room1cf: |
+  ; Room in samasa desert, summer, below the oasis. 
+  ; Remove all the sinkholes and add the dungeon entrance
+  db $03,$1c,$af,$0a,$04,$09,$b3,$b4,$b3,$b4,$52,$0a,$04,$06,$f0,$c0
+  db $af,$06,$06,$06,$52,$0a,$0b,$04,$04
+  
+  /ifdef d11_no_alt_entrance
+  db $04
+  /else
+  db $c4
+  /endif
+  
+  db $52,$0c,$03,$af,$35,$42
+  db $0a,$43,$cf,$52,$50,$62,$40,$40,$40,$63,$1c,$f0,$af,$54,$52,$50
+  db $b0,$e8,$b0,$51
+  
+  /ifdef d11_no_alt_entrance
+  db $af
+  /else
+  db $eb
+  /endif
+  
+  db $52,$df,$7f,$af,$52,$52
+
+11/5ce9/: db $ee ; remove both sinkhole interactions
+
+04/748f/: |
+  ; replace a bad warp placed on 00 pointing to linked hero's
+  db $40,$cf
+  dw warpSourceDesert
+
+04//warpSourceDesert: |
+  ; Main entrance
+  db $00,$55,$04,$54
+  ; Side entrance
+  db $80,$58,$52,$59
+
+04/6d7c/group0WarpDestTable0a: |
+  ; There's an unused dest here
+  db $cf,$55,$01
+
+04/7b35/: db $0a ; use the above dest

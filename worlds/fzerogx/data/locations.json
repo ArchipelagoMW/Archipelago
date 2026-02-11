@@ -1,0 +1,1552 @@
+[
+  {
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": [],
+    
+		"name": "Story (Chapter 1 - Captain Falcon Trains)",
+    
+		"region": "Story (Chapter 1 - Captain Falcon Trains)"
+  },
+  {
+    
+		"name": "Story (Chapter 2 - Goroh: The Vengeful Samurai)",
+    
+		"region": "Story (Chapter 2 - Goroh: The Vengeful Samurai)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Chapter 3 - High Stakes in Mute City)",
+    
+		"region": "Story (Chapter 3 - High Stakes in Mute City)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Chapter 4 - Challenge of the Bloody Chain)",
+    
+		"region": "Story (Chapter 4 - Challenge of the Bloody Chain)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Chapter 5 - Save Jody Summer!)",
+    
+		"region": "Story (Chapter 5 - Save Jody Summer!)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Chapter 6 - Black Shadow's Trap)",
+    
+		"region": "Story (Chapter 6 - Black Shadow's Trap)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Chapter 7 - The F-Zero Grand Prix)",
+    
+		"region": "Story (Chapter 7 - The F-Zero Grand Prix)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Chapter 8 - Secrets of the Champion Belt)",
+    
+		"region": "Story (Chapter 8 - Secrets of the Champion Belt)",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Story (Finale - Enter The Creators)",
+    
+		"region": "Story (Finale - Enter The Creators)",
+    
+		"victory": true,
+    
+		"category": [
+      "Story"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Twist Road (Novice)",
+    
+		"region": "Ruby Cup (Novice)",
+    
+		"category": [
+      "Ruby Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Twist Road (Standard)",
+    
+		"region": "Ruby Cup (Standard)",
+    
+		"category": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Twist Road (Expert)",
+    
+		"region": "Ruby Cup (Expert)",
+    
+		"category": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Twist Road (Master)",
+    
+		"region": "Ruby Cup (Master)",
+    
+		"category": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Split Oval (Novice)",
+    
+		"region": "Ruby Cup (Novice)",
+    
+		"category": [
+      "Ruby Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Split Oval (Standard)",
+    
+		"region": "Ruby Cup (Standard)",
+    
+		"category": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Split Oval (Expert)",
+    
+		"region": "Ruby Cup (Expert)",
+    
+		"category": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Split Oval (Master)",
+    
+		"region": "Ruby Cup (Master)",
+    
+		"category": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Surface Slide (Novice)",
+    
+		"region": "Ruby Cup (Novice)",
+    
+		"category": [
+      "Ruby Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Surface Slide (Standard)",
+    
+		"region": "Ruby Cup (Standard)",
+    
+		"category": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Surface Slide (Expert)",
+    
+		"region": "Ruby Cup (Expert)",
+    
+		"category": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Surface Slide (Master)",
+    
+		"region": "Ruby Cup (Master)",
+    
+		"category": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Loop Cross (Novice)",
+    
+		"region": "Ruby Cup (Novice)",
+    
+		"category": [
+      "Ruby Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Loop Cross (Standard)",
+    
+		"region": "Ruby Cup (Standard)",
+    
+		"category": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Loop Cross (Expert)",
+    
+		"region": "Ruby Cup (Expert)",
+    
+		"category": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Loop Cross (Master)",
+    
+		"region": "Ruby Cup (Master)",
+    
+		"category": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Multiplex (Novice)",
+    
+		"region": "Ruby Cup (Novice)",
+    
+		"category": [
+      "Ruby Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Multiplex (Standard)",
+    
+		"region": "Ruby Cup (Standard)",
+    
+		"category": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Multiplex (Expert)",
+    
+		"region": "Ruby Cup (Expert)",
+    
+		"category": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Multiplex (Master)",
+    
+		"region": "Ruby Cup (Master)",
+    
+		"category": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Ruby Cup 1st Place (Novice)",
+    
+		"region": "Ruby Cup (Novice)",
+    
+		"category": [
+      "Ruby Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Ruby Cup 1st Place (Standard)",
+    
+		"region": "Ruby Cup (Standard)",
+    
+		"category": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Ruby Cup 1st Place (Expert)",
+    
+		"region": "Ruby Cup (Expert)",
+    
+		"category": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Ruby Cup 1st Place (Master)",
+    
+		"region": "Ruby Cup (Master)",
+    
+		"category": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Drift Highway (Novice)",
+    
+		"region": "Sapphire Cup (Novice)",
+    
+		"category": [
+      "Sapphire Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Drift Highway (Standard)",
+    
+		"region": "Sapphire Cup (Standard)",
+    
+		"category": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Drift Highway (Expert)",
+    
+		"region": "Sapphire Cup (Expert)",
+    
+		"category": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Drift Highway (Master)",
+    
+		"region": "Sapphire Cup (Master)",
+    
+		"category": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Aero Drive (Novice)",
+    
+		"region": "Sapphire Cup (Novice)",
+    
+		"category": [
+      "Sapphire Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Aero Drive (Standard)",
+    
+		"region": "Sapphire Cup (Standard)",
+    
+		"category": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Aero Drive (Expert)",
+    
+		"region": "Sapphire Cup (Expert)",
+    
+		"category": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Aero Drive (Master)",
+    
+		"region": "Sapphire Cup (Master)",
+    
+		"category": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Mobius Ring (Novice)",
+    
+		"region": "Sapphire Cup (Novice)",
+    
+		"category": [
+      "Sapphire Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Mobius Ring (Standard)",
+    
+		"region": "Sapphire Cup (Standard)",
+    
+		"category": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Mobius Ring (Expert)",
+    
+		"region": "Sapphire Cup (Expert)",
+    
+		"category": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Mobius Ring (Master)",
+    
+		"region": "Sapphire Cup (Master)",
+    
+		"category": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Long Pipe (Novice)",
+    
+		"region": "Sapphire Cup (Novice)",
+    
+		"category": [
+      "Sapphire Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Long Pipe (Standard)",
+    
+		"region": "Sapphire Cup (Standard)",
+    
+		"category": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Long Pipe (Expert)",
+    
+		"region": "Sapphire Cup (Expert)",
+    
+		"category": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Long Pipe (Master)",
+    
+		"region": "Sapphire Cup (Master)",
+    
+		"category": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Serial Gaps (Novice)",
+    
+		"region": "Sapphire Cup (Novice)",
+    
+		"category": [
+      "Sapphire Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Serial Gaps (Standard)",
+    
+		"region": "Sapphire Cup (Standard)",
+    
+		"category": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Serial Gaps (Expert)",
+    
+		"region": "Sapphire Cup (Expert)",
+    
+		"category": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Mute City - Serial Gaps (Master)",
+    
+		"region": "Sapphire Cup (Master)",
+    
+		"category": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sapphire Cup 1st Place (Novice)",
+    
+		"region": "Sapphire Cup (Novice)",
+    
+		"category": [
+      "Sapphire Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sapphire Cup 1st Place (Standard)",
+    
+		"region": "Sapphire Cup (Standard)",
+    
+		"category": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sapphire Cup 1st Place (Expert)",
+    
+		"region": "Sapphire Cup (Expert)",
+    
+		"category": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sapphire Cup 1st Place (Master)",
+    
+		"region": "Sapphire Cup (Master)",
+    
+		"category": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Cylinder Knot (Novice)",
+    
+		"region": "Emerald Cup (Novice)",
+    
+		"category": [
+      "Emerald Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Cylinder Knot (Standard)",
+    
+		"region": "Emerald Cup (Standard)",
+    
+		"category": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Cylinder Knot (Expert)",
+    
+		"region": "Emerald Cup (Expert)",
+    
+		"category": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Cylinder Knot (Master)",
+    
+		"region": "Emerald Cup (Master)",
+    
+		"category": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Intersection (Novice)",
+    
+		"region": "Emerald Cup (Novice)",
+    
+		"category": [
+      "Emerald Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Intersection (Standard)",
+    
+		"region": "Emerald Cup (Standard)",
+    
+		"category": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Intersection (Expert)",
+    
+		"region": "Emerald Cup (Expert)",
+    
+		"category": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Intersection (Master)",
+    
+		"region": "Emerald Cup (Master)",
+    
+		"category": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Double Branches (Novice)",
+    
+		"region": "Emerald Cup (Novice)",
+    
+		"category": [
+      "Emerald Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Double Branches (Standard)",
+    
+		"region": "Emerald Cup (Standard)",
+    
+		"category": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Double Branches (Expert)",
+    
+		"region": "Emerald Cup (Expert)",
+    
+		"category": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Casino Palace - Double Branches (Master)",
+    
+		"region": "Emerald Cup (Master)",
+    
+		"category": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Half Pipe (Novice)",
+    
+		"region": "Emerald Cup (Novice)",
+    
+		"category": [
+      "Emerald Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Half Pipe (Standard)",
+    
+		"region": "Emerald Cup (Standard)",
+    
+		"category": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Half Pipe (Expert)",
+    
+		"region": "Emerald Cup (Expert)",
+    
+		"category": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Half Pipe (Master)",
+    
+		"region": "Emerald Cup (Master)",
+    
+		"category": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Ordeal (Novice)",
+    
+		"region": "Emerald Cup (Novice)",
+    
+		"category": [
+      "Emerald Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Ordeal (Standard)",
+    
+		"region": "Emerald Cup (Standard)",
+    
+		"category": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Ordeal (Expert)",
+    
+		"region": "Emerald Cup (Expert)",
+    
+		"category": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Big Blue - Ordeal (Master)",
+    
+		"region": "Emerald Cup (Master)",
+    
+		"category": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Emerald Cup 1st Place (Novice)",
+    
+		"region": "Emerald Cup (Novice)",
+    
+		"category": [
+      "Emerald Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Emerald Cup 1st Place (Standard)",
+    
+		"region": "Emerald Cup (Standard)",
+    
+		"category": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Emerald Cup 1st Place (Expert)",
+    
+		"region": "Emerald Cup (Expert)",
+    
+		"category": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Emerald Cup 1st Place (Master)",
+    
+		"region": "Emerald Cup (Master)",
+    
+		"category": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Cosmo Terminal - Trident (Novice)",
+    
+		"region": "Diamond Cup (Novice)",
+    
+		"category": [
+      "Diamond Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Cosmo Terminal - Trident (Standard)",
+    
+		"region": "Diamond Cup (Standard)",
+    
+		"category": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Cosmo Terminal - Trident (Expert)",
+    
+		"region": "Diamond Cup (Expert)",
+    
+		"category": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Cosmo Terminal - Trident (Master)",
+    
+		"region": "Diamond Cup (Master)",
+    
+		"category": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Lateral Shift (Novice)",
+    
+		"region": "Diamond Cup (Novice)",
+    
+		"category": [
+      "Diamond Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Lateral Shift (Standard)",
+    
+		"region": "Diamond Cup (Standard)",
+    
+		"category": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Lateral Shift (Expert)",
+    
+		"region": "Diamond Cup (Expert)",
+    
+		"category": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Sand Ocean - Lateral Shift (Master)",
+    
+		"region": "Diamond Cup (Master)",
+    
+		"category": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Undulation (Novice)",
+    
+		"region": "Diamond Cup (Novice)",
+    
+		"category": [
+      "Diamond Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Undulation (Standard)",
+    
+		"region": "Diamond Cup (Standard)",
+    
+		"category": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Undulation (Expert)",
+    
+		"region": "Diamond Cup (Expert)",
+    
+		"category": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Fire Field - Undulation (Master)",
+    
+		"region": "Diamond Cup (Master)",
+    
+		"category": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Dragon Slope (Novice)",
+    
+		"region": "Diamond Cup (Novice)",
+    
+		"category": [
+      "Diamond Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Dragon Slope (Standard)",
+    
+		"region": "Diamond Cup (Standard)",
+    
+		"category": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Dragon Slope (Expert)",
+    
+		"region": "Diamond Cup (Expert)",
+    
+		"category": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Dragon Slope (Master)",
+    
+		"region": "Diamond Cup (Master)",
+    
+		"category": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Phantom Road - Slim-line Slits (Novice)",
+    
+		"region": "Diamond Cup (Novice)",
+    
+		"category": [
+      "Diamond Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Phantom Road - Slim-line Slits (Standard)",
+    
+		"region": "Diamond Cup (Standard)",
+    
+		"category": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Phantom Road - Slim-line Slits (Expert)",
+    
+		"region": "Diamond Cup (Expert)",
+    
+		"category": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Phantom Road - Slim-line Slits (Master)",
+    
+		"region": "Diamond Cup (Master)",
+    
+		"category": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Diamond Cup 1st Place (Novice)",
+    
+		"region": "Diamond Cup (Novice)",
+    
+		"category": [
+      "Diamond Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Diamond Cup 1st Place (Standard)",
+    
+		"region": "Diamond Cup (Standard)",
+    
+		"category": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Diamond Cup 1st Place (Expert)",
+    
+		"region": "Diamond Cup (Expert)",
+    
+		"category": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Diamond Cup 1st Place (Master)",
+    
+		"region": "Diamond Cup (Master)",
+    
+		"category": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Screw Drive (Novice)",
+    
+		"region": "AX Cup (Novice)",
+    
+		"category": [
+      "AX Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Screw Drive (Standard)",
+    
+		"region": "AX Cup (Standard)",
+    
+		"category": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Screw Drive (Expert)",
+    
+		"region": "AX Cup (Expert)",
+    
+		"category": [
+      "AX Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Aeropolis - Screw Drive (Master)",
+    
+		"region": "AX Cup (Master)",
+    
+		"category": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Outer Space - Meteor Stream (Novice)",
+    
+		"region": "AX Cup (Novice)",
+    
+		"category": [
+      "AX Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Outer Space - Meteor Stream (Standard)",
+    
+		"region": "AX Cup (Standard)",
+    
+		"category": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Outer Space - Meteor Stream (Expert)",
+    
+		"region": "AX Cup (Expert)",
+    
+		"category": [
+      "AX Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Outer Space - Meteor Stream (Master)",
+    
+		"region": "AX Cup (Master)",
+    
+		"category": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Cylinder Wave (Novice)",
+    
+		"region": "AX Cup (Novice)",
+    
+		"category": [
+      "AX Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Cylinder Wave (Standard)",
+    
+		"region": "AX Cup (Standard)",
+    
+		"category": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Cylinder Wave (Expert)",
+    
+		"region": "AX Cup (Expert)",
+    
+		"category": [
+      "AX Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Port Town - Cylinder Wave (Master)",
+    
+		"region": "AX Cup (Master)",
+    
+		"category": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Thunder Road (Novice)",
+    
+		"region": "AX Cup (Novice)",
+    
+		"category": [
+      "AX Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Thunder Road (Standard)",
+    
+		"region": "AX Cup (Standard)",
+    
+		"category": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Thunder Road (Expert)",
+    
+		"region": "AX Cup (Expert)",
+    
+		"category": [
+      "AX Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Lightning - Thunder Road (Master)",
+    
+		"region": "AX Cup (Master)",
+    
+		"category": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Spiral (Novice)",
+    
+		"region": "AX Cup (Novice)",
+    
+		"category": [
+      "AX Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Spiral (Standard)",
+    
+		"region": "AX Cup (Standard)",
+    
+		"category": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Spiral (Expert)",
+    
+		"region": "AX Cup (Expert)",
+    
+		"category": [
+      "AX Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "Green Plant - Spiral (Master)",
+    
+		"region": "AX Cup (Master)",
+    
+		"category": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "AX Cup 1st Place (Novice)",
+    
+		"region": "AX Cup (Novice)",
+    
+		"category": [
+      "AX Cup (Novice)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "AX Cup 1st Place (Standard)",
+    
+		"region": "AX Cup (Standard)",
+    
+		"category": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "AX Cup 1st Place (Expert)",
+    
+		"region": "AX Cup (Expert)",
+    
+		"category": [
+      "AX Cup (Expert)"
+    ],
+    
+		"requires": []
+  },
+  {
+    
+		"name": "AX Cup 1st Place (Master)",
+    
+		"region": "AX Cup (Master)",
+    
+		"category": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": []
+  }
+]

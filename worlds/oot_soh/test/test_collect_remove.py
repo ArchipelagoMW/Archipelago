@@ -5,10 +5,10 @@ from .bases import SohTestBase
 
 class TestCollectRemoveAllOff(SohTestBase):
     options = {"shuffle_childs_wallet": False, "shuffle_swim": False, "shuffle_deku_stick_bag": False,
-               "shuffle_deku_nut_bag": False, "bombchu_bag": False}
+               "shuffle_deku_nut_bag": False, "bombchu_bag": "none", "shuffle_ocarinas": True}
     world: SohWorld
     optional_prog_item_set = {Items.PROGRESSIVE_SCALE, Items.PROGRESSIVE_WALLET, Items.PROGRESSIVE_STICK_CAPACITY,
-                              Items.PROGRESSIVE_NUT_CAPACITY, Items.PROGRESSIVE_BOMBCHU}
+                              Items.PROGRESSIVE_NUT_CAPACITY, Items.BOMBCHU_BAG}
 
     def test_single_of_each(self):
         """
@@ -71,7 +71,7 @@ class TestCollectRemoveAllOff(SohTestBase):
 
 class TestCollectRemoveAllOn(SohTestBase):
     options = {"shuffle_childs_wallet": True, "shuffle_swim": True, "shuffle_deku_stick_bag": True,
-               "shuffle_deku_nut_bag": True, "bombchu_bag": True}
+               "shuffle_deku_nut_bag": True, "bombchu_bag": "single_bag", "shuffle_ocarinas": True}
     world: SohWorld
 
     def test_single_of_each(self):

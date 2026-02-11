@@ -100,15 +100,25 @@ class BossWarpsWithRemains(DefaultOnToggle):
 
 class ShuffleSpiderHouseReward(Toggle):
     """Choose whether to shuffle the Mask of Truth given at the end of the Southern Spider House and the Wallet Upgrade at the end of the Ocean Spider House."""
-    display_name = "Shuffle Swamphouse Reward"
+    display_name = "Shuffle Spider House Rewards"
+
+
+class RequiredSkullTokens(Range):
+    """The number of Gold Skulltula Tokens needed to get the reward from their respective Spider House.
+    All 30 Tokens from each Spider House are still shuffled into the item pool regardless of the selection.
+    Valid amounts are within the range 0-30."""
+    display_name = "Required Skulltula Tokens"
+    range_start = 0
+    range_end = 30
+    default = 30
 
 
 class Skullsanity(Choice):
     """Choose what items gold skulltulas can give.
     
-    vanilla: Keep the swamphouse in generation, but only place Skulltula tokens there.
+    vanilla: Keep the Spider Houses in generation, but only place Skulltula tokens there.
     anything: Any item can be given by any Skulltula, and tokens can be found anywhere in any world.
-    ignore: Remove the swamphouse from generation entirely, lowering the hint percentage."""
+    ignore: Remove the Spider Houses from generation entirely, lowering the hint percentage and removing them from the spoiler log."""
     display_name = "Skullsanity"
     option_vanilla = 0
     option_anything = 1
@@ -162,14 +172,40 @@ class ShuffleGreatFairyRewards(Toggle):
     display_name = "Shuffle Great Fairy Rewards"
 
 
-class Keysanity(Toggle):
-    """Choose whether Small Keys are shuffled into the pool."""
-    display_name = "Keysanity"
+class RequiredStrayFairies(Range):
+    """The number of Stray Fairies needed to get the reward from their respective Great Fairy (excluding North Clock Town's Great Fairy of Magic).
+    All 15 Stray Fairies from each dungeon are still shuffled into the item pool regardless of the selection.
+    Valid amounts are within the range 0-15."""
+    display_name = "Required Stray Fairies"
+    range_start = 0
+    range_end = 15
+    default = 15
 
 
 class Fairysanity(Toggle):
     """Choose whether Stray Fairies are shuffled into the pool."""
     display_name = "Fairysanity"
+
+
+class Keysanity(Toggle):
+    """Choose whether Small Keys are shuffled into the pool or placed in their vanilla locations."""
+    display_name = "Keysanity"
+
+class BossKeysanity(Toggle):
+    """Choose whether Boss Keys are shuffled into the pool or placed in their vanilla locations."""
+    display_name = "BossKeysanity"    
+
+
+class CuriostityShopTrades(Toggle):
+    """Choose whether to shuffle the rupees given for trading bottled items at the Curiostity Shop."""
+    display_name = "Curiostity Shop Trades"
+
+
+class IntroChecks(Toggle):
+    """Choose whether to shuffle the checks normally found before entering the Clock Tower.
+    
+    A way backwards through these areas has been added through the stone door at the bottom of the Clock Tower Interior."""
+    display_name = "Enable Intro Checks"
 
 
 class StartWithConsumables(DefaultOnToggle):
@@ -246,14 +282,19 @@ class MMROptions(PerGameCommonOptions):
     shuffle_boss_remains: ShuffleBossRemains
     remains_allow_boss_warps: BossWarpsWithRemains
     shuffle_spiderhouse_reward: ShuffleSpiderHouseReward
+    required_skull_tokens: RequiredSkullTokens
     skullsanity: Skullsanity
     shopsanity: Shopsanity
     scrubsanity: Scrubsanity
     shop_prices: ShopPrices
     cowsanity: Cowsanity
     shuffle_great_fairy_rewards: ShuffleGreatFairyRewards
-    keysanity: Keysanity
+    required_stray_fairies: RequiredStrayFairies
     fairysanity: Fairysanity
+    keysanity: Keysanity
+    bosskeysanity: BossKeysanity
+    curiostity_shop_trades: CuriostityShopTrades
+    intro_checks: IntroChecks
     start_with_consumables: StartWithConsumables
     permanent_chateau_romani: PermanentChateauRomani
     start_with_inverted_time: StartWithInvertedTime

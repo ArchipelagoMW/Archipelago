@@ -40,6 +40,14 @@
     { "from": "Space", "to": "GD Ocean Depths", "requires": [ { "item": "Tornado Aerodynamic Adjustments" } ] },
     { "from": "GD Ocean Depths", "to": "GD Core", "requires": [ { "item": "Electrical Insulation" }, { "item": "Spacesuit" } ] },
 
+    // Reaching the end of the tower can be also done with Threader, if Echo Hike is enabled (declared later).
+    { "from": "Space", "to": "GD Tower End via Imaging Rule", "requires": [
+            { "item": "Translator (Giant's Deep)" },
+            { "item": "Imaging Rule" },
+            { "item": "Spacesuit" } ] 
+    },
+    { "from": "GD Tower End via Imaging Rule", "to": "GD Tower End", "requires": [] },
+    
     { "from": "Space", "to": "Interloper Core", "requires": [ { "item": "Scout" }, { "item": "Ghost Matter Wavelength" }, { "item": "Spacesuit" } ] },
 
     // representing frequencies/shuttles/etc as abstract regions turns out to be much faster than an anyOf rule
@@ -310,10 +318,10 @@
         { "item": "Silent Running Mode" } // to fly into Dark Bramble safely and follow the Scout marker
     ] },
 
-    { "category": "hn2", "from": "Space", "to": "Jam 3 Galaxy", "requires": [
+    { "category": "hn2", "from": "Space", "to": "Jam 3 Galaxy (HN2)", "requires": [
         { "item": "Spacesuit" } // we don't have proper HN2 suitless logic, so simply require suit for all of it
     ] },
-    { "category": "hn2", "from": "Jam 3 Galaxy", "to": "Magistarium", "requires": [] },
+    { "category": "hn2", "from": "Jam 3 Galaxy (HN2)", "to": "Magistarium", "requires": [] },
     { "category": "hn2", "from": "Magistarium", "to": "Magistarium Library", "requires": [ { "item": "Magistarium Library Access Code" } ] },
     { "category": "hn2", "from": "Magistarium", "to": "Magistarium Dormitories", "requires": [ { "item": "Magistarium Dormitory Access Code" } ] },
     { "category": "hn2", "from": "Magistarium", "to": "Magistarium Engine Room", "requires": [ { "item": "Magistarium Engine Access Code" } ] },
@@ -328,5 +336,93 @@
     ] },
     { "category": "fq", "from": "Lost Strings", "to": "Banjo Galaxy", "requires": [
         { "item": "Launch Codes" }
-    ] }
+    ] },
+
+    // Warping to Deep Bramble only requires a Black Hole Core, and High Energy Lab access is guaranteed if you have access to the Vessel
+    { "category": "fc", "from": "The Vessel", "to": "Deep Bramble", "requires": [] },
+    // Space access already requires Launch Codes
+    { "category": "fc", "from": "Space", "to": "Deep Bramble via Warp Drive", "requires": [ { "item":  "Deep Bramble Coordinates" } ] },
+    { "category": "fc", "from": "Deep Bramble", "to": "Lover's Rock", "requires": [
+        { "item": "Signalscope" },
+        { "item": "Nomai Trailmarkers Frequency" }
+    ] },
+    { "category": "fc", "from": "Deep Bramble", "to": "Folly's Exterior", "requires": [
+        { "item": "Signalscope" },
+        { "item": "Gravitational Anomaly Signal" }
+    ] },
+    { "category": "fc", "from": "Deep Bramble via Warp Drive", "to": "Graviton's Folly", "requires": [
+        { "item": "Signalscope" },
+        { "item": "Gravitational Anomaly Signal" }
+    ] },
+    { "category": "fc", "from": "Graviton's Folly", "to": "Folly's Core", "requires": [
+        { "item": "Translator (Deep Bramble)" },
+        { "item": "Expanded Dictionary" },
+        { "item": "Spacesuit" }
+    ] },
+    { "category": "fc", "from": "Deep Bramble via Warp Drive", "to": "Shattered Hearth", "requires": [
+        { "item": "Signalscope" },
+        { "anyOf": [
+            { "item": "Geothermal Activity Signal" },
+            { "item": "Echolocation Tones Frequency" },
+            { "allOf": [ { "item": "Quantum Fluctuations Frequency" }, { "item": "Hot Shard Signal" } ] }
+        ] }
+    ] },
+    { "category": "fc", "from": "Deep Bramble via Warp Drive", "to": "Dangerous Node", "requires": [
+        { "item": "Signalscope" },
+        { "item": "Echolocation Tones Frequency" }
+    ] },
+
+    { "category": "fc", "from": "Shattered Hearth", "to": "Magma's Recursion", "requires": [ { "item":  "Thermal Insulation" }, { "item": "Spacesuit" } ] },
+    { "category": "fc", "from": "Magma's Recursion", "to": "Bramble's Heart", "requires": [ { "item":  "Probability Rule" }, { "item": "Entanglement Rule" } ] },
+    { "category": "fc", "from": "Magma's Recursion", "to": "Eye Signal Lab", "requires": [
+        { "region": "Lover's Rock" },
+        { "item": "Crystal Repair Manual" }
+    ] },
+
+    { "category": "fc", "from": "Shattered Hearth", "to": "Enzyme Lab", "requires": [ { "item":  "Taming Techniques" }, { "item":  "Spacesuit" } ] },
+    { "category": "fc", "from": "Shattered Hearth", "to": "Translation Lab", "requires": [ { "item":  "Scout" } ] },
+    { "category": "fc", "from": "Shattered Hearth", "to": "Venomous Reject", "requires": [
+        { "item": "Scout" },
+        { "item": "Taming Techniques" },
+        { "item": "Silent Running Mode" },
+        { "item": "Spacesuit" }
+    ] },
+
+    { "category": "fc", "from": "Bramble's Heart", "to": "Bramble's Finale", "requires": [
+        { "region": "Venomous Reject" },
+        { "region": "Dangerous Node" },
+        { "item": "Translator (Deep Bramble)" },
+        { "item": "Expanded Dictionary" }
+    ] },
+
+    { "category": "eh", "from": "Space", "to": "Jam 3 Galaxy (EH)", "requires": [
+        { "item": "Spacesuit" } // We don't have proper EH suitless logic, so simply require suit for all of it.
+    ] },
+    { "category": "eh", "from": "Jam 3 Galaxy (EH)", "to": "Echo Hike", "requires": [ { "item": "Spacesuit" } ] },
+
+    // Alternate way to reach the end of the tower.
+    { "category": "eh", "from": "Space", "to": "GD Tower End via Threader", "requires": [
+        { "item": "Translator (Giant's Deep)" },
+        { "item": "Threader" },
+        { "item": "Spacesuit" } ] 
+    },
+    { "category": "eh", "from": "GD Tower End via Threader", "to": "GD Tower End", "requires": [] },
+
+    // Alternate way to reach the forge.
+    { "category": "eh", "from": "Brittle Hollow", "to": "Forge via Threader", "requires": [
+        { "item": "Threader" },
+        { "item": "Spacesuit" } ]
+    },
+    { "category": "eh", "from": "Forge via Threader", "to": "Black Hole Forge", "requires": []},
+
+    // Alternate way to navigate the Stranger.
+    { "category": "eh&dlc", "from": "Stranger Sunside Hangar", "to": "Stranger via Threader", "requires": [ { "item": "Threader" } ] },
+    { "category": "eh&dlc", "from": "Stranger via Threader", "to": "Cinder Isles", "requires": [] },
+    { "category": "eh&dlc", "from": "Stranger via Threader", "to": "Hidden Gorge", "requires": [] },
+    { "category": "eh&dlc", "from": "Stranger via Threader", "to": "Reservoir", "requires": [] },
+    { "category": "eh&dlc", "from": "Stranger via Threader", "to": "Abandoned Temple", "requires": [ { "item": "Stranger Light Modulator" } ] },
+    
+    // Alternate way to reach FC Eye Signal Lab.
+    { "category": "eh&fc", "from": "Magma's Recursion", "to": "Eye Signal Lab via Threader", "requires": [ { "item": "Threader" } ] },
+    { "category": "eh&fc", "from": "Eye Signal Lab via Threader", "to": "Eye Signal Lab", "requires": [] }
 ]

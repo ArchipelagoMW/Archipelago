@@ -15,6 +15,12 @@ class Spelunky2Goal(IntEnum):
     CO = 2
 
 
+class Spelunky2ShortcutMode(IntEnum):
+    OFF = 0
+    PROGRESSIVE = 1
+    INDIVIDUAL = 2
+
+
 class WorldName(StrEnum):
     # Worlds
     DWELLING = "Dwelling"
@@ -34,7 +40,6 @@ class WorldName(StrEnum):
 class ShortcutName(StrEnum):
     # Shortcuts
     PROGRESSIVE = f"Progressive{SHORTCUT_SUFFIX}"
-    DWELLING = f"{WorldName.DWELLING.value}{SHORTCUT_SUFFIX}"
     JUNGLE = f"{WorldName.JUNGLE.value}{SHORTCUT_SUFFIX}"
     VOLCANA = f"{WorldName.VOLCANA.value}{SHORTCUT_SUFFIX}"
     OLMECS_LAIR = f"{WorldName.OLMECS_LAIR.value}{SHORTCUT_SUFFIX}"

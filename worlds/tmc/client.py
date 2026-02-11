@@ -1,17 +1,26 @@
 import asyncio
+import json
 import logging
+import pkgutil
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
+from Options import Toggle
 from Utils import async_start
-from .._bizhawk import guarded_write, RequestFailedError, read, ConnectorError, write
+
+from .._bizhawk import ConnectorError, RequestFailedError, guarded_write, read, write
 from .._bizhawk.client import BizHawkClient
-from .locations import all_locations, events, LocationData
+from .locations import LocationData, all_locations, events
 
 if TYPE_CHECKING:
     from .._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
 
 logger = logging.getLogger("Client")
+
+
+def get_version() -> str:
+    return json.loads(pkgutil.get_data(__name__, "archipelago.json").decode())["world_version"]
+
 
 
 def _cmd_deathlink(self: "BizHawkClientCommandProcessor"):
@@ -106,6 +115,7 @@ class MinishCapClient(BizHawkClient):
     events_sent = set()
     player_name: str | None
     seed_verify = False
+    version_checked = False
 
     def __init__(self) -> None:
         super().__init__()
@@ -149,6 +159,20 @@ class MinishCapClient(BizHawkClient):
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
 
+        if ctx.slot_data["remote_items"] == Toggle.option_true and not ctx.items_handling & 0b010:
+            ctx.items_handling = 0b111
+            async_start(ctx.send_msgs([{
+                "cmd": "ConnectUpdate",
+                "items_handling": ctx.items_handling
+            }]))
+
+            # Need to make sure items handling updates and we get the correct list of received items
+            # before continuing. Otherwise we might give some duplicate items and skip others.
+            # Should patch remote_items option value into the ROM in the future to guarantee we get the
+            # right item list before entering this part of the code
+            await asyncio.sleep(0.75)
+            return
+
         try:
             if ctx.server_seed_name is None:
                 return
@@ -176,6 +200,15 @@ class MinishCapClient(BizHawkClient):
                     self.previous_death_link = ctx.last_death_link
                     await ctx.update_death_link(True)
                 logger.info("Deathlink Mode: %s", get_deathlink_mode_name(self.death_link_mode))
+
+            if not self.version_checked:
+                self.version_checked = True
+                multiworld_version = ctx.slot_data["version"]
+                client_version = get_version()
+                if multiworld_version != client_version:
+                    logger.warn(f"The multiworld was generated on v{multiworld_version} but the client is using "
+                                f"v{client_version}. Consult the apworld releases page to ensure the versions are "
+                                "compatible.")
 
             # Handle giving the player items
             read_result = await read(ctx.bizhawk_ctx, [

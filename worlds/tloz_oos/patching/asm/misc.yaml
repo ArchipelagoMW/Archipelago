@@ -113,8 +113,48 @@
 05/6996/: db $00,$00,$04,$08,$0c    # @standardItems
 
 # Move the D5 dropping magnet ball up to not block the path when using the somaria block
-15/4f28/: db $28
+15/4f29/: db $38
 
 # Skip the screen to select link, secret or new game and skip to new game
 02/41cf/: db $02
 # 02/427d/ up to 02/42e3/ (included) => FREE SPACE
+
+# Remove the original reference to the exterior of Bipin & Blossom house map function
+04/614e/: db $00
+# Attach the modified function above to Farore's room by extending the group4 tile changer table
+04//roomTileChangerCodeGroup4DataExt: |
+  db $61,$2e
+  db $78,$02
+  db $2e,$04
+  db $64,$05
+  db $89,$06
+  db $bb,$07
+  db $e8,$08 ; Remove access to stairs behind Farore on 2 essences (static_items.yaml), replacing bipin&blossom sign
+  /ifdef d3Entrance
+  db d3Entrance,$03 ; Add water tiles to the entrance of the dungeon, replacing the shop minigame
+  /endif
+  db $00
+04/611c/: dw roomTileChangerCodeGroup4DataExt
+04/611e/: |
+  /ifdef d11Drowning
+  dw $616c
+  /endif
+
+04/616c/: db $30,$03 ; Adds water tiles to the entrance of D11, but is only read if the above redirect is triggered
+
+04/6230/: |
+  ; Check if floodgate is open
+  ld a,(wOverworldRoomFlags+$81)
+  rlca
+  ret c
+
+  ; Add water to the entrance
+  ld h,$cf
+  ld l,$a7
+  ld (hl),$fd ; water
+  ld l,$97
+  ld (hl),$fa ; shallow water
+  ret
+
+05/49cc/: db $18 ; jr, avoids the code that puts you in the animal companion's coord
+# 05:49ce to 05:49e5 is free, TODO: might be needed in ER

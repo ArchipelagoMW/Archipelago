@@ -1,0 +1,471 @@
+[
+    {
+        "name": "Blue Emerald (#1)",
+        "type": "toggle",
+        "img": "images/items/blueemerald(#1).png",
+        "img_mods": "",
+        "codes": "blueemerald(#1),Blue Emerald (#1)"
+    },
+    {
+        "name": "Yellow Emerald (#2)",
+        "type": "toggle",
+        "img": "images/items/yellowemerald(#2).png",
+        "img_mods": "",
+        "codes": "yellowemerald(#2),Yellow Emerald (#2)"
+    },
+    {
+        "name": "Pink Emerald (#3)",
+        "type": "toggle",
+        "img": "images/items/pinkemerald(#3).png",
+        "img_mods": "",
+        "codes": "pinkemerald(#3),Pink Emerald (#3)"
+    },
+    {
+        "name": "Green Emerald (#4)",
+        "type": "toggle",
+        "img": "images/items/greenemerald(#4).png",
+        "img_mods": "",
+        "codes": "greenemerald(#4),Green Emerald (#4)"
+    },
+    {
+        "name": "Red Emerald (#5)",
+        "type": "toggle",
+        "img": "images/items/redemerald(#5).png",
+        "img_mods": "",
+        "codes": "redemerald(#5),Red Emerald (#5)"
+    },
+    {
+        "name": "Grey Emerald (#6)",
+        "type": "toggle",
+        "img": "images/items/greyemerald(#6).png",
+        "img_mods": "",
+        "codes": "greyemerald(#6),Grey Emerald (#6)"
+    },
+    {
+        "name": "Green Hill Key",
+        "type": "toggle",
+        "img": "images/items/greenhillkey.png",
+        "img_mods": "",
+        "codes": "greenhillkey,Green Hill Key"
+    },
+    {
+        "name": "Marble Zone Key",
+        "type": "toggle",
+        "img": "images/items/marblezonekey.png",
+        "img_mods": "",
+        "codes": "marblezonekey,Marble Zone Key"
+    },
+    {
+        "name": "Spring Yard Key",
+        "type": "toggle",
+        "img": "images/items/springyardkey.png",
+        "img_mods": "",
+        "codes": "springyardkey,Spring Yard Key"
+    },
+    {
+        "name": "Labyrinth Key",
+        "type": "toggle",
+        "img": "images/items/labyrinthkey.png",
+        "img_mods": "",
+        "codes": "labyrinthkey,Labyrinth Key"
+    },
+    {
+        "name": "Starlight Key",
+        "type": "toggle",
+        "img": "images/items/starlightkey.png",
+        "img_mods": "",
+        "codes": "starlightkey,Starlight Key"
+    },
+    {
+        "name": "Scrap Brain Key",
+        "type": "toggle",
+        "img": "images/items/scrapbrainkey.png",
+        "img_mods": "",
+        "codes": "scrapbrainkey,Scrap Brain Key"
+    },
+    {
+        "name": "Final Zone Key",
+        "type": "toggle",
+        "img": "images/items/finalzonekey.png",
+        "img_mods": "",
+        "codes": "finalzonekey,Final Zone Key"
+    },
+    {
+        "name": "Special Stage Key",
+        "type": "consumable",
+        "img": "images/items/specialstagekey.png",
+        "img_mods": "",
+        "codes": "specialstagekey,Special Stage Key"
+    },
+    {
+        "name": "Disable GOAL blocks",
+        "type": "toggle",
+        "img": "images/items/disablegoalblocks.png",
+        "img_mods": "",
+        "codes": "disablegoalblocks,Disable GOAL blocks"
+    },
+    {
+        "name": "Disable R blocks",
+        "type": "toggle",
+        "img": "images/items/disablerblocks.png",
+        "img_mods": "",
+        "codes": "disablerblocks,Disable R blocks"
+    },
+    {
+        "name": "Shiny Ring",
+        "type": "consumable",
+        "img": "images/items/shinyring.png",
+        "img_mods": "",
+        "codes": "shinyring,Shiny Ring"
+    },
+    {
+        "name": "Gold Ring",
+        "type": "consumable",
+        "img": "images/items/goldring.png",
+        "img_mods": "",
+        "codes": "goldring,Gold Ring"
+    },
+    {
+        "name": "Invincibility",
+        "type": "consumable",
+        "img": "images/items/invincibility.png",
+        "img_mods": "",
+        "codes": "invincibility,Invincibility"
+    },
+    {
+        "name": "Shield",
+        "type": "consumable",
+        "img": "images/items/shield.png",
+        "img_mods": "",
+        "codes": "shield,Shield"
+    },
+    {
+        "name": "Great Speed Shoes",
+        "type": "consumable",
+        "img": "images/items/greatspeedshoes.png",
+        "img_mods": "",
+        "codes": "greatspeedshoes,Great Speed Shoes"
+    },
+    {
+        "name": "Scary Speed Shoes",
+        "type": "consumable",
+        "img": "images/items/scaryspeedshoes.png",
+        "img_mods": "",
+        "codes": "scaryspeedshoes,Scary Speed Shoes"
+    },
+    {
+        "name": "Fresh Chilli Dogs (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "freshchillidogs(junk),Fresh Chilli Dogs (Junk)"
+    },
+    {
+        "name": "Couple of Grumpy Flickies (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "coupleofgrumpyflickies(junk),Couple of Grumpy Flickies (Junk)"
+    },
+    {
+        "name": "Plastic Souvenir Ring (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "plasticsouvenirring(junk),Plastic Souvenir Ring (Junk)"
+    },
+    {
+        "name": "Genuine Signed Prop Ring (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "genuinesignedpropring(junk),Genuine Signed Prop Ring (Junk)"
+    },
+    {
+        "name": "Small Gold Ring with Flowy Writing (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "smallgoldringwithflowywriting(junk),Small Gold Ring with Flowy Writing (Junk)"
+    },
+    {
+        "name": "Box of Popcorn (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "boxofpopcorn(junk),Box of Popcorn (Junk)"
+    },
+    {
+        "name": "Probably Important Plane Parts (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "probablyimportantplaneparts(junk),Probably Important Plane Parts (Junk)"
+    },
+    {
+        "name": "Nyanazon Delivery (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "nyanazondelivery(junk),Nyanazon Delivery (Junk)"
+    },
+    {
+        "name": "Chao Plushie (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "chaoplushie(junk),Chao Plushie (Junk)"
+    },
+    {
+        "name": "Amy's Favourite Sonic Plushie (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "amy'sfavouritesonicplushie(junk),Amy's Favourite Sonic Plushie (Junk)"
+    },
+    {
+        "name": "Eggman's Kitchen Sink (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "eggman'skitchensink(junk),Eggman's Kitchen Sink (Junk)"
+    },
+    {
+        "name": "Chao Cosplaying as an Emerald (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "chaocosplayingasanemerald(junk),Chao Cosplaying as an Emerald (Junk)"
+    },
+    {
+        "name": "Tail's Tail Floof (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "tail'stailfloof(junk),Tail's Tail Floof (Junk)"
+    },
+    {
+        "name": "Companion Cube (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "companioncube(junk),Companion Cube (Junk)"
+    },
+    {
+        "name": "Worn Out Super Shoes (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "wornoutsupershoes(junk),Worn Out Super Shoes (Junk)"
+    },
+    {
+        "name": "Missing Car Keys (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "missingcarkeys(junk),Missing Car Keys (Junk)"
+    },
+    {
+        "name": "Lost Sock (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "lostsock(junk),Lost Sock (Junk)"
+    },
+    {
+        "name": "Expired IOU for Unobtainium (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "expirediouforunobtainium(junk),Expired IOU for Unobtainium (Junk)"
+    },
+    {
+        "name": "Point Mass (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "pointmass(junk),Point Mass (Junk)"
+    },
+    {
+        "name": "Spherical Cow (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "sphericalcow(junk),Spherical Cow (Junk)"
+    },
+    {
+        "name": "Square Gold Ring (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "squaregoldring(junk),Square Gold Ring (Junk)"
+    },
+    {
+        "name": "Triangular Gold Ring (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "triangulargoldring(junk),Triangular Gold Ring (Junk)"
+    },
+    {
+        "name": "Eggmobile Owner Manual (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "eggmobileownermanual(junk),Eggmobile Owner Manual (Junk)"
+    },
+    {
+        "name": "Flying Battery Extended Warranty (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "flyingbatteryextendedwarranty(junk),Flying Battery Extended Warranty (Junk)"
+    },
+    {
+        "name": "Defective Rock (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "defectiverock(junk),Defective Rock (Junk)"
+    },
+    {
+        "name": "Knuckles's Brass Knuckles (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "knuckles'sbrassknuckles(junk),Knuckles's Brass Knuckles (Junk)"
+    },
+    {
+        "name": "Fidget Spinner (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "fidgetspinner(junk),Fidget Spinner (Junk)"
+    },
+    {
+        "name": "Betamax Tape (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "betamaxtape(junk),Betamax Tape (Junk)"
+    },
+    {
+        "name": "Mass Produced Treasure Map (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "massproducedtreasuremap(junk),Mass Produced Treasure Map (Junk)"
+    },
+    {
+        "name": "Missing Collision Geometry (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "missingcollisiongeometry(junk),Missing Collision Geometry (Junk)"
+    },
+    {
+        "name": "Ford's Spare Towel (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "ford'ssparetowel(junk),Ford's Spare Towel (Junk)"
+    },
+    {
+        "name": "1:10 Scale Lockpicks (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "1:10scalelockpicks(junk),1:10 Scale Lockpicks (Junk)"
+    },
+    {
+        "name": "Death Egg Purchase Receipt (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "deatheggpurchasereceipt(junk),Death Egg Purchase Receipt (Junk)"
+    },
+    {
+        "name": "Casino Night Zone's Gambling Permit (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "casinonightzone'sgamblingpermit(junk),Casino Night Zone's Gambling Permit (Junk)"
+    },
+    {
+        "name": "10 duplicate Sonic TCG cards (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "10duplicatesonictcgcards(junk),10 duplicate Sonic TCG cards (Junk)"
+    },
+    {
+        "name": "Defective Spring (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "defectivespring(junk),Defective Spring (Junk)"
+    },
+    {
+        "name": "Eggman's Refurbished Missile (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "eggman'srefurbishedmissile(junk),Eggman's Refurbished Missile (Junk)"
+    },
+    {
+        "name": "Morph Ball (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "morphball(junk),Morph Ball (Junk)"
+    },
+    {
+        "name": "Electronic Device Marked Critical (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "electronicdevicemarkedcritical(junk),Electronic Device Marked Critical (Junk)"
+    },
+    {
+        "name": "Dereferenced Null Pointer (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "dereferencednullpointer(junk),Dereferenced Null Pointer (Junk)"
+    },
+    {
+        "name": "Plastic Chaos Emerald (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "plasticchaosemerald(junk),Plastic Chaos Emerald (Junk)"
+    },
+    {
+        "name": "Empty Iron Bru Bottle (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "emptyironbrubottle(junk),Empty Iron Bru Bottle (Junk)"
+    },
+    {
+        "name": "Additional Pylons (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "additionalpylons(junk),Additional Pylons (Junk)"
+    },
+    {
+        "name": "Reticulated Splines (Junk)",
+        "type": "toggle",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "reticulatedsplines(junk),Reticulated Splines (Junk)"
+    },
+    {
+        "name": "Space intentionally left blank (Junk)",
+        "type": "consumable",
+        "img": "images/items/junk.png",
+        "img_mods": "",
+        "codes": "spaceintentionallyleftblank(junk),Space intentionally left blank (Junk)"
+    }
+]

@@ -1,0 +1,257 @@
+[
+  {
+    "name": "Bannan Island",
+    "sections": [
+      {
+        "name": "Ocean NW Bannan"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 351,
+        "y": 95
+      }
+    ]
+  },
+  {
+    "name": "Cannon Island",
+    "sections": [
+      {
+        "name": "Ocean SW Cannon"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 337,
+        "y": 643
+      }
+    ]
+  },
+  {
+    "name": "Dee Ess",
+    "sections": [
+      {
+        "name": "Ocean SE Dee Ess"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 825,
+        "y": 715
+      }
+    ]
+  },
+  {
+    "name": "Ghost Ship",
+    "sections": [
+      {
+        "name": "Ocean NW Board Ghost Ship"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 78,
+        "y": 201
+      }
+    ]
+  },
+  {
+    "name": "Goron Island",
+    "sections": [
+      {
+        "name": "Ocean SE Goron"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 677,
+        "y": 697
+      }
+    ]
+  },
+  {
+    "name": "Harrow Island",
+    "sections": [
+      {
+        "name": "Ocean SE Harrow"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 693,
+        "y": 487
+      }
+    ]
+  },
+  {
+    "name": "Isle of Ember",
+    "sections": [
+      {
+        "name": "Ocean SW Ember"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 399,
+        "y": 733
+      }
+    ]
+  },
+  {
+    "name": "Isle of Frost",
+    "sections": [
+      {
+        "name": "Ocean SE Frost"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 915,
+        "y": 503
+      }
+    ]
+  },
+  {
+    "name": "Isle of Gust",
+    "sections": [
+      {
+        "name": "Ocean NW Gust"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 275,
+        "y": 271
+      }
+    ]
+  },
+  {
+    "name": "Isle of Ruins",
+    "sections": [
+      {
+        "name": "Ocean NE Ruins"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 701,
+        "y": 221
+      }
+    ]
+  },
+  {
+    "name": "Isle of the Dead",
+    "sections": [
+      {
+        "name": "Ocean NE IotD"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 879,
+        "y": 131
+      }
+    ]
+  },
+  {
+    "name": "Maze Island",
+    "sections": [
+      {
+        "name": "Ocean NE Maze"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 751,
+        "y": 55
+      }
+    ]
+  },
+  {
+    "name": "Mercay Island",
+    "sections": [
+      {
+        "name": "Ocean SW Mercay"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 411,
+        "y": 539
+      }
+    ]
+  },
+  {
+    "name": "Molida Island",
+    "sections": [
+      {
+        "name": "Ocean SW Molida"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 103,
+        "y": 625
+      }
+    ]
+  },
+  {
+    "name": "Spirit Island",
+    "sections": [
+      {
+        "name": "Ocean SW Spirit"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 111,
+        "y": 719
+      }
+    ]
+  },
+  {
+    "name": "Uncharted Island",
+    "sections": [
+      {
+        "name": "Ocean NW Uncharted"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 391,
+        "y": 199
+      }
+    ]
+  },
+  {
+    "name": "Zauz's Island",
+    "sections": [
+      {
+        "name": "Ocean NW Zauz"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 243,
+        "y": 59
+      }
+    ]
+  }
+]

@@ -1,0 +1,750 @@
+[
+  {
+    "name": "Beedle's Ship",
+    "sections": [
+      {
+        "name": "Beedle Membership Bronze"
+      },
+      {
+        "name": "Beedle Membership Gold"
+      },
+      {
+        "name": "Beedle Membership Platinum"
+      },
+      {
+        "name": "Beedle Membership Silver"
+      },
+      {
+        "name": "Beedle Membership VIP"
+      },
+      {
+        "name": "Beedle Shop Bomb Bag"
+      },
+      {
+        "name": "Beedle Shop Wisdom Gem"
+      },
+      {
+        "name": "Masked Beedle Courage Gem"
+      },
+      {
+        "name": "Masked Beedle Heart Container"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 472,
+        "y": 421
+      }
+    ]
+  },
+  {
+    "name": "Fish",
+    "sections": [
+      {
+        "name": "Fishing Catch Skippyjack"
+      },
+      {
+        "name": "Fishing Catch Toona"
+      },
+      {
+        "name": "Fishing Catch Loovar"
+      },
+      {
+        "name": "Fishing Catch Rusty Swordfish"
+      },
+      {
+        "name": "Fishing Catch Legendary Neptoona"
+      },
+      {
+        "name": "Fishing Catch Stowfish"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 472,
+        "y": 437
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Golden Frog Square",
+    "sections": [
+      {
+        "name": "Ocean NE Golden Frog Square"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 851,
+        "y": 260
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Man of Smiles",
+    "sections": [
+      {
+        "name": "Man Of Smiles' Item 1"
+      },
+      {
+        "name": "Man Of Smiles' Item 2"
+      },
+      {
+        "name": "Man of Smiles' Prize Postcard"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 934,
+        "y": 292
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #24 Ruins W",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #24 Ruins W"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 579,
+        "y": 199
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #25 Dead E",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #25 Dead E"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 917,
+        "y": 135
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #26 Ruins SW",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #26 Ruins SW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 655,
+        "y": 224
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #27 Maze E",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #27 Maze E"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 802,
+        "y": 59
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #28 Ruins NW",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #28 Ruins NW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 648,
+        "y": 141
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #29 Maze W",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #29 Maze W"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 627,
+        "y": 45
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #30 Ruins S",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #30 Ruins S"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 700,
+        "y": 305
+      }
+    ]
+  },
+  {
+    "name": "Ocean NE Salvage #31 Dead S",
+    "sections": [
+      {
+        "name": "Ocean NE Salvage #31 Dead S"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 879,
+        "y": 259
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Golden Frog N",
+    "sections": [
+      {
+        "name": "Ocean NW Golden Frog N"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 303,
+        "y": 136
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Prince of Red",
+    "sections": [
+      {
+        "name": "Prince of Red Lions Combat Reward"
+      },
+      {
+        "name": "Prince of Red Lions Trade Quest Item"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 428,
+        "y": 286
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #10 Gusts SE",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #10 Gusts SE"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 343,
+        "y": 287
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #11 Gusts N",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #11 Gusts N"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 281,
+        "y": 187
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #19 Gusts NE",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #19 Gusts NE"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 351,
+        "y": 176
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #20 Bannan E",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #20 Bannan E"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 453,
+        "y": 63
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #3 Gusts SW",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #3 Gusts SW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 235,
+        "y": 288
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #4 Bannan SE",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #4 Bannan SE"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 428,
+        "y": 112
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #6 Bannan W",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #6 Bannan W"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 275,
+        "y": 89
+      }
+    ]
+  },
+  {
+    "name": "Ocean NW Salvage #7 Gusts E",
+    "sections": [
+      {
+        "name": "Ocean NW Salvage #7 Gusts E"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 401,
+        "y": 252
+      }
+    ]
+  },
+  {
+    "name": "Ocean Pirate Ambush Item",
+    "sections": [
+      {
+        "name": "Ocean Miniblin Pirate Ambush Item"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 297,
+        "y": 206
+      },
+      {
+        "map": "Sea Overview",
+        "x": 608,
+        "y": 550
+      },
+      {
+        "map": "Sea Overview",
+        "x": 922,
+        "y": 78
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Golden Frog Omega",
+    "sections": [
+      {
+        "name": "Ocean SE Golden Frog Omega"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 805,
+        "y": 644
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Golden Frog W",
+    "sections": [
+      {
+        "name": "Ocean SE Golden Frog W"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 861,
+        "y": 460
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Hoiger Howgendoogen",
+    "sections": [
+      {
+        "name": "Hoiger Howgendoogen Trade Quest Item"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 840,
+        "y": 516
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #12 Dee Ess N",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #12 Dee Ess N"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 865,
+        "y": 640
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #13 Harrow E",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #13 Harrow E"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 736,
+        "y": 460
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #14 Goron NW",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #14 Goron NW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 616,
+        "y": 598
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #15 Goron W",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #15 Goron W"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 594,
+        "y": 644
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #16 Goron NE",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #16 Goron NE"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 803,
+        "y": 581
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #17 Frost S",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #17 Frost S"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 937,
+        "y": 676
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #22 Harrow S",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #22 Harrow S"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 700,
+        "y": 523
+      }
+    ]
+  },
+  {
+    "name": "Ocean SE Salvage #23 Frost NW",
+    "sections": [
+      {
+        "name": "Ocean SE Salvage #23 Frost NW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 891,
+        "y": 451
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Golden Frog Phi",
+    "sections": [
+      {
+        "name": "Ocean SW Golden Frog Phi"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 81,
+        "y": 536
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Golden Frog X",
+    "sections": [
+      {
+        "name": "Ocean SW Golden Frog X"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 403,
+        "y": 616
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Nyave",
+    "sections": [
+      {
+        "name": "Nyave Trade Quest Item"
+      },
+      {
+        "name": "Nyave Gift"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 48,
+        "y": 726
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #1 Molida SW",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #1 Molida SW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 51,
+        "y": 660
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #18 Cannon S",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #18 Cannon S"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 314,
+        "y": 720
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #2 Mercay NE",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #2 Mercay NE"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 432,
+        "y": 451
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #21 Molida NW",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #21 Molida NW"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 53,
+        "y": 534
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #5 Molida N",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #5 Molida N"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 133,
+        "y": 561
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #8 Mercay SE",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #8 Mercay SE"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 433,
+        "y": 567
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage #9 Cannon W",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage #9 Cannon W"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 254,
+        "y": 682
+      }
+    ]
+  },
+  {
+    "name": "Ocean SW Salvage Courage Crest",
+    "sections": [
+      {
+        "name": "Ocean SW Salvage Courage Crest"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Sea Overview",
+        "x": 277,
+        "y": 572
+      }
+    ]
+  },
+  { "name": "Events - SS Wayfarer", "sections": [{"name": "EVENT: SS Wayfarer Give Wood Heart"}], "map_locations": [{
+      "map": "Sea Overview",
+      "x": 770,
+      "y": 550
+    }] },
+  { "name": "Events - Bellumbeck", "sections": [{"name": "GOAL: Bellumbeck"}, {"name": "GOAL"}], "map_locations": [{
+      "map": "Sea Overview",
+      "x": 250,
+      "y": 455
+    }
+  ]
+  }
+]

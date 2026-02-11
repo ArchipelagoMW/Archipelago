@@ -151,6 +151,16 @@ class MMXWorld(World):
             itempool += [self.create_item(ItemName.chip_speedster)]
         if self.options.super_recover_in_pool:
             itempool += [self.create_item(ItemName.chip_super_recover)]
+        if self.options.rapid_five_in_pool:
+            itempool += [self.create_item(ItemName.chip_rapid_five)]
+        if self.options.speed_shot_in_pool:
+            itempool += [self.create_item(ItemName.chip_speed_shot)]
+        if self.options.buster_plus_in_pool:
+            itempool += [self.create_item(ItemName.chip_buster_plus)]
+        if self.options.weapon_plus_in_pool:
+            itempool += [self.create_item(ItemName.chip_weapon_plus)]
+        #if self.options.item_plus_in_pool:
+        #    itempool += [self.create_item(ItemName.chip_item_plus)]
 
         # Add upgrades into the pool
         sigma_open = self.options.sigma_open.value

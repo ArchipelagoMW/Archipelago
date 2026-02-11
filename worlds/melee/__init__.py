@@ -52,7 +52,7 @@ class SSBMWeb(WebWorld):
 
 
 class SSBMWorld(World):
-    """Bottom text"""
+    """Super Smash Bros. Melee is a party game with a fair few single player modes. This focuses on Event Match, where you have to complete 51 battles with special conditions. Groups of event matches are locked behind requirements, and several of them require specific characters."""
     
     game = "Super Smash Bros. Melee"
     option_definitions = SSBMOptions

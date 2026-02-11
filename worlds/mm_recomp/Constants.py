@@ -83,3 +83,48 @@ default_shop_prices = [
     0,      # SI_SHIELD_HERO_4 (curiosity shop, unused)
     0,      # SI_SHIELD_MIRROR (curiosity shop, unused)
 ]
+
+shop_location_to_id = {
+    # Trading Post
+    "Clock Town Trading Post Shop Item 1": SHOP_ID_TRADING_POST_1,
+    "Clock Town Trading Post Shop Item 2": SHOP_ID_TRADING_POST_2,
+    "Clock Town Trading Post Shop Item 3": SHOP_ID_TRADING_POST_3,
+    "Clock Town Trading Post Shop Item 4": SHOP_ID_TRADING_POST_4,
+    "Clock Town Trading Post Shop Item 5": SHOP_ID_TRADING_POST_5,
+    "Clock Town Trading Post Shop Item 6": SHOP_ID_TRADING_POST_6,
+    "Clock Town Trading Post Shop Item 7": SHOP_ID_TRADING_POST_7,
+    "Clock Town Trading Post Shop Item 8": SHOP_ID_TRADING_POST_8,
+    # Trading Post (Night)
+    "Clock Town Trading Post Shop (Night) Item 1": SHOP_ID_TRADING_POST_NIGHT_1,
+    "Clock Town Trading Post Shop (Night) Item 2": SHOP_ID_TRADING_POST_NIGHT_2,
+    "Clock Town Trading Post Shop (Night) Item 3": SHOP_ID_TRADING_POST_NIGHT_3,
+    "Clock Town Trading Post Shop (Night) Item 4": SHOP_ID_TRADING_POST_NIGHT_4,
+    "Clock Town Trading Post Shop (Night) Item 5": SHOP_ID_TRADING_POST_NIGHT_5,
+    "Clock Town Trading Post Shop (Night) Item 6": SHOP_ID_TRADING_POST_NIGHT_6,
+    "Clock Town Trading Post Shop (Night) Item 7": SHOP_ID_TRADING_POST_NIGHT_7,
+    "Clock Town Trading Post Shop (Night) Item 8": SHOP_ID_TRADING_POST_NIGHT_8,
+    # Bomb Shop
+    "Clock Town Bomb Shop Item 1": SHOP_ID_BOMB_SHOP_1,
+    "Clock Town Bomb Shop Item 2": SHOP_ID_BOMB_SHOP_2,
+    "Clock Town Bomb Shop Item 3": SHOP_ID_BOMB_SHOP_3,
+    "Clock Town Bomb Shop Item 3 (Stop Thief)": SHOP_ID_BOMB_SHOP_3_UPGRADE,
+    # Curiosity Shop
+    "Curiosity Shop Night 3 Thief Stolen Item": SHOP_ID_CURIOSITY_SHOP_BOMB_BAG,
+    "Curiosity Shop Night 3 (Stop Thief)": SHOP_ID_CURIOSITY_SHOP_MASK,
+    # Magic Hags' Potion Shop
+    "Southern Swamp Witch Shop Item 1": SHOP_ID_WITCH_POTION_1,
+    "Southern Swamp Witch Shop Item 2": SHOP_ID_WITCH_POTION_2,
+    "Southern Swamp Witch Shop Item 3": SHOP_ID_WITCH_POTION_3,
+    # Goron Village Shop
+    "Goron Village Shop Item 1": SHOP_ID_GORON_SHOP_1,
+    "Goron Village Shop Item 2": SHOP_ID_GORON_SHOP_2,
+    "Goron Village Shop Item 3": SHOP_ID_GORON_SHOP_3,
+    # Goron Village Shop (Spring)
+    "Goron Village Shop (Spring) Item 1": SHOP_ID_GORON_SHOP_SPRING_1,
+    "Goron Village Shop (Spring) Item 2": SHOP_ID_GORON_SHOP_SPRING_2,
+    "Goron Village Shop (Spring) Item 3": SHOP_ID_GORON_SHOP_SPRING_3,
+	# Zora Hall Shop
+	"Zora Hall Shop Item 1": SHOP_ID_ZORA_SHOP_1,
+	"Zora Hall Shop Item 2": SHOP_ID_ZORA_SHOP_2,
+	"Zora Hall Shop Item 3": SHOP_ID_ZORA_SHOP_3,
+}

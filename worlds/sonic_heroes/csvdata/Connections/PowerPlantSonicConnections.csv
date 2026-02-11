@@ -1,0 +1,224 @@
+Team,Level,Source,Target,Rule,Notes
+Sonic,Power Plant,Start,First Green Dome,,
+Sonic,Power Plant,First Green Dome,Start,,
+Sonic,Power Plant,First Green Dome,First Loop Road,DashRingSonicPP,Dash Panel not req (Dome Here) Dashring not needed
+Sonic,Power Plant,First Loop Road,First Green Dome,,
+Sonic,Power Plant,First Loop Road,Start,,Not Hard
+Sonic,Power Plant,First Loop Road,First Room,SingleSpringSonicPP,
+Sonic,Power Plant,First Room,First Loop Road,FlyingAnyorGlideSonicPP,Should not need anything but camera is annoying
+Sonic,Power Plant,First Room,First Upward Path,KillFlyingEnemyRedNothingandPPUpwardPathSonicPP,Upward Path 2 Red Flappers
+Sonic,Power Plant,First Upward Path,First Room,,
+Sonic,Power Plant,First Upward Path,Second Floor with 3 Energy Columns,,
+Sonic,Power Plant,Second Floor with 3 Energy Columns,First Upward Path,,
+Sonic,Power Plant,Second Floor with 3 Energy Columns,3 Energy Columns,KillFlyingEnemyGreenLightningNothingHomingFireDunkandEnergyColumnSonicPP,Green Flapper with lightning
+Sonic,Power Plant,3 Energy Columns,Second Floor with 3 Energy Columns,,
+Sonic,Power Plant,Second Floor with 3 Energy Columns,Third Floor With Second Upward Path,FlyingAnySonicPP,Needs Cap or Column for Extra Height
+Sonic,Power Plant,Third Floor With Second Upward Path,Second Floor with 3 Energy Columns,,
+Sonic,Power Plant,3 Energy Columns,Third Floor With Second Upward Path,,Does not need flying
+Sonic,Power Plant,Third Floor With Second Upward Path,3 Energy Columns,,
+Sonic,Power Plant,Third Floor With Second Upward Path,Second Upward Path,KillFlyingEnemyGreenLightningNothingHomingFireDunkandPPUpwardPathSonicPP,Green Flapper with lightning
+Sonic,Power Plant,Second Upward Path,Third Floor With Second Upward Path,,
+Sonic,Power Plant,Second Upward Path,Floor With First Accel Road,,
+Sonic,Power Plant,Floor With First Accel Road,Second Upward Path,,
+Sonic,Power Plant,Floor With First Accel Road,First Accel Road,AccelRoadandKillFlyingEnemyGreenLightningNothingHomingFireDunkSonicPP,Green Flapper with lightning (use stage collision instead of obj)
+Sonic,Power Plant,First Accel Road,Floor With First Accel Road,NOTPOSSIBLE,
+Sonic,Power Plant,First Accel Road,Third Upward Path,PPUpwardPathSonicPP,
+Sonic,Power Plant,Third Upward Path,First Accel Road,,
+Sonic,Power Plant,Third Upward Path,Flying PowerUp Room,PPUpwardPathSonicPP,
+Sonic,Power Plant,Flying PowerUp Room,Third Upward Path,NOTPOSSIBLE,Has Egg Cap
+Sonic,Power Plant,Flying PowerUp Room,Flying PowerUp Room Pulley,FlyingAnyandPulleySonicPP,Can be made with rocket accel on ramp (can go past pulley even)
+Sonic,Power Plant,Flying PowerUp Room Pulley,Flying PowerUp Room,,
+Sonic,Power Plant,Flying PowerUp Room,Flying PowerUp Room Columns,EnergyColumnandKillFlyingEnemyGreenLightningSonicPP,Green Flapper with lightning
+Sonic,Power Plant,Flying PowerUp Room Columns,Flying PowerUp Room,,
+Sonic,Power Plant,Flying PowerUp Room Pulley,Five Columns Room,,
+Sonic,Power Plant,Five Columns Room,Flying PowerUp Room Pulley,,
+Sonic,Power Plant,Flying PowerUp Room Columns,Five Columns Room,FlyingAnySonicPP,
+Sonic,Power Plant,Five Columns Room,Flying PowerUp Room Columns,,
+Sonic,Power Plant,Five Columns Room,Five Columns,EnergyColumnandKillFlyingEnemyGreenLightningSonicPP,Green Flapper with lightning
+Sonic,Power Plant,Five Columns,Five Columns Room,,
+Sonic,Power Plant,Five Columns,Fourth Upward Path,FlyingAnyandPPUpwardPathSonicPP,
+Sonic,Power Plant,Fourth Upward Path,Five Columns,,
+Sonic,Power Plant,Fourth Upward Path,Checkpoint 1,,
+Sonic,Power Plant,Checkpoint 1,Fourth Upward Path,,
+Sonic,Power Plant,Checkpoint 1,Checkpoint 1 Green Dome,,Dash Panel not req
+Sonic,Power Plant,Checkpoint 1,Checkpoint 1 Pulley,FlyingAnyandPulleySonicPP,
+Sonic,Power Plant,Checkpoint 1 Pulley,First Roof by Checkpoint 1,,
+Sonic,Power Plant,First Roof by Checkpoint 1,Checkpoint 1,,
+Sonic,Power Plant,First Roof by Checkpoint 1,Balloon Flying Route,FlyingAnySonicPP,Item Balloons have fly refill
+Sonic,Power Plant,Balloon Flying Route,Third Roof by Checkpoint 1,DashRingSonicPP,
+Sonic,Power Plant,Checkpoint 1 Green Dome,Lower Roof by Checkpoint 1,DashRingSonicPP,Dash Panel not req
+Sonic,Power Plant,Lower Roof by Checkpoint 1,Checkpoint 1 Green Dome,FlyingAnyorHomingorGlideSonicPP,
+Sonic,Power Plant,Lower Roof by Checkpoint 1,Lower Roof by Checkpoint 1 Pole,KillFlyingEnemyRedandPoleandSwitch,Red Flapper Thunder only (too high)
+Sonic,Power Plant,Lower Roof by Checkpoint 1 Pole,Second Roof by Checkpoint 1,,
+Sonic,Power Plant,Second Roof by Checkpoint 1,Lower Roof by Checkpoint 1,,
+Sonic,Power Plant,Second Roof by Checkpoint 1,Third Roof by Checkpoint 1,,
+Sonic,Power Plant,Lower Roof by Checkpoint 1,Third Roof by Checkpoint 1,FlyingAnyorHomingorPPUpwardPathSonicPP,Red Flappers
+Sonic,Power Plant,Third Roof by Checkpoint 1,Lower Roof by Checkpoint 1,,
+Sonic,Power Plant,Third Roof by Checkpoint 1,Fifth Upward Path,PPUpwardPathSonicPP,
+Sonic,Power Plant,Fifth Upward Path,Third Roof by Checkpoint 1,,
+Sonic,Power Plant,Fifth Upward Path,Pole Room,,
+Sonic,Power Plant,Pole Room,Fifth Upward Path,,
+Sonic,Power Plant,Pole Room,Pole Room Pole,KillFlyingEnemyGreenLightningandPoleandSwitch,Red and Green Flapper (lightning)
+Sonic,Power Plant,Pole Room Pole,First Big Hallway Entrance,KillGroundEnemyCameronSonicPP,Egg Cap
+Sonic,Power Plant,First Big Hallway Entrance,Pole Room,,
+Sonic,Power Plant,First Big Hallway Entrance,First Hallway Energy Columns Upper,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway Energy Columns Upper,First Big Hallway Entrance,NOTPOSSIBLE,possible with team blast
+Sonic,Power Plant,First Hallway Energy Columns Upper,First Hallway Upper Pulley,PulleySonicPP,
+Sonic,Power Plant,First Hallway Upper Pulley,First Hallway Energy Columns Upper,,
+Sonic,Power Plant,First Hallway Upper Pulley,First Hallway Upper Rail,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway Upper Rail,First Hallway Upper Pulley,NOTPOSSIBLE,
+Sonic,Power Plant,First Hallway Upper Rail,First Hallway Upper Energy Columns 2,EnergyColumnandFlyingAnyandKillFlyingEnemyRedSonicPP,Red Flappers
+Sonic,Power Plant,First Hallway Upper Rail,First Hallway End,,
+Sonic,Power Plant,First Hallway End,First Hallway Upper Rail,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway Upper Rail,First Hallway Lower First,,
+Sonic,Power Plant,First Big Hallway Entrance,First Hallway Lower First,,
+Sonic,Power Plant,First Hallway Lower First,First Big Hallway Entrance,NOTPOSSIBLE,triplespring teamblast (through cap wall)
+Sonic,Power Plant,First Hallway Lower First,First Hallway Lower Energy Column,EnergyColumnandFlyingAnyandKillGroundEnemyCameronSonicPP,
+Sonic,Power Plant,First Hallway Lower Energy Column,First Hallway Lower First,,
+Sonic,Power Plant,First Hallway Lower First,First Hallway Lower Platform,NOTPOSSIBLE,is possible with flying on rails (not very difficult)
+Sonic,Power Plant,First Hallway Lower Platform,First Hallway Lower First,,
+Sonic,Power Plant,First Hallway Lower Energy Column,First Hallway Lower Platform,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway Lower Platform,First Hallway Lower Energy Column,,
+Sonic,Power Plant,First Hallway Lower Platform,First Hallway Lower Pit,,
+Sonic,Power Plant,First Hallway Lower Pit,First Hallway Lower Platform,NOTPOSSIBLE,
+Sonic,Power Plant,First Hallway Lower Pit,First Hallway Lower Pit Energy Column,EnergyColumnandFlyingOneCharandKillFlyingEnemyRedSonicPP,Red Flapper
+Sonic,Power Plant,First Hallway Lower Pit Energy Column,First Hallway Lower Pit,,
+Sonic,Power Plant,First Hallway Lower Pit Energy Column,First Hallway Lower Platform,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway Lower Pit Energy Column,First Hallway Lower Second,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway Lower Second,First Hallway Lower Pit,,
+Sonic,Power Plant,First Hallway Lower Platform,First Hallway Lower Second,FlyingAnyorLightDashSonicPP,is possible with homing attack (not too hard)
+Sonic,Power Plant,First Hallway Lower Second,First Hallway Lower Platform,FlyingAnyorLightDashSonicPP,
+Sonic,Power Plant,First Hallway Lower Second,First Hallway Lower Second Side Energy Column,EnergyColumnandFlyingAnyandKillFlyingEnemyGreenLightningSonicPP,Green Flapper with lightning
+Sonic,Power Plant,First Hallway Lower Second Side Energy Column,First Hallway Lower Second,,
+Sonic,Power Plant,First Hallway Lower Second Side Energy Column,First Hallway Lower Second Middle Energy Column,EnergyColumnandFlyingAnyandKillGroundEnemyCameronSonicPP,cameron
+Sonic,Power Plant,First Hallway Lower Second Middle Energy Column,First Hallway Lower Second,,
+Sonic,Power Plant,First Hallway Lower Second,First Hallway Lower Second Middle Energy Column,NOTPOSSIBLE,is possible with flying any
+Sonic,Power Plant,First Hallway Lower Second Middle Energy Column,First Hallway End,FlyingAnySonicPP,
+Sonic,Power Plant,First Hallway End,First Hallway Lower Second,,
+Sonic,Power Plant,First Hallway End,Platform Before First Elevator,FlyingAnyorTripleSpringSonicPP,
+Sonic,Power Plant,Platform Before First Elevator,First Hallway End,,
+Sonic,Power Plant,Platform Before First Elevator,First Elevator,(DashRamporFlyingAny)andElevatorSonicPP,might be possible with homing/glide (is possible with nothing)
+Sonic,Power Plant,First Elevator,Platform Before First Elevator,FlyingAnyandShutterSonicPP,shutter
+Sonic,Power Plant,First Elevator,First Elevator Cap 1,KillFlyingEnemyGreenShotNothingSonicPP,green flapper with gun
+Sonic,Power Plant,First Elevator Cap 1,First Elevator End,,
+Sonic,Power Plant,First Elevator End,First Elevator,ElevatorandFlyingAnySonicPP,backwards is possible
+Sonic,Power Plant,First Elevator End,Road After First Elevator,KillGroundEnemyCameronSonicPP,cameron
+Sonic,Power Plant,Road After First Elevator,First Elevator End,NOTPOSSIBLE,team blast through cap wall
+Sonic,Power Plant,Road After First Elevator,Green Dome after First Elevator,,
+Sonic,Power Plant,Green Dome after First Elevator,Road After First Elevator,,
+Sonic,Power Plant,Green Dome after First Elevator,Second Loop Road,DashRingSonicPP,Dash Panel not req (Dome Here) Dashring not needed
+Sonic,Power Plant,Second Loop Road,Green Dome after First Elevator,,
+Sonic,Power Plant,Second Loop Road,Checkpoint 2,SingleSpringSonicPP,
+Sonic,Power Plant,Checkpoint 2,Second Loop Road,FlyingAnyorGlideorHomingSonicPP,glide or flying or homing
+Sonic,Power Plant,Checkpoint 2,First Roof after Checkpoint 2,DashPanelorFlyingAnyorLightDashorSpeedCharSonicPP,turbo glide ramp here
+Sonic,Power Plant,First Roof after Checkpoint 2,Checkpoint 2,,
+Sonic,Power Plant,First Roof after Checkpoint 2,Upward Path after Checkpoint 2,PPUpwardPathSonicPP,
+Sonic,Power Plant,Upward Path after Checkpoint 2,First Roof after Checkpoint 2,,
+Sonic,Power Plant,Upward Path after Checkpoint 2,Roof with Springs and Pulleys,,
+Sonic,Power Plant,Roof with Springs and Pulleys,Upward Path after Checkpoint 2,,
+Sonic,Power Plant,Roof with Springs and Pulleys,Bonus Key 1,,
+Sonic,Power Plant,Bonus Key 1,Roof with Springs and Pulleys,,
+Sonic,Power Plant,Roof with Springs and Pulleys,Path with 2 Weights,FlyingFullorPulleySonicPP,
+Sonic,Power Plant,Path with 2 Weights,Roof with Springs and Pulleys,,
+Sonic,Power Plant,Path with 2 Weights,Fireball Start,FlyingAnyorTripleSpringSonicPP,
+Sonic,Power Plant,Fireball Start,Path with 2 Weights,,
+Sonic,Power Plant,Fireball Start,First Fireball Room,DashPanelorFlyingAnyorLightDashorSpeedCharSonicPP,turbo glide ramp here
+Sonic,Power Plant,First Fireball Room,Fireball Start,,
+Sonic,Power Plant,First Fireball Room,First Fireball Upward Path,KillFlyingEnemyGreenLightningNothingHomingFireDunkandPPUpwardPathSonicPP,
+Sonic,Power Plant,First Fireball Upward Path,First Fireball Room,,
+Sonic,Power Plant,First Fireball Upward Path,Second Fireball Room,,
+Sonic,Power Plant,Second Fireball Room,First Fireball Upward Path,,
+Sonic,Power Plant,Second Fireball Room,Second Fireball Upward Path,FlyingAnySonicPP,Fly off of cap
+Sonic,Power Plant,Second Fireball Upward Path,Second Fireball Room,,
+Sonic,Power Plant,Second Fireball Room,Second Fireball Room Energy Column,EnergyColumnandFlyingAnyandKillGroundEnemyCameronSonicPP,
+Sonic,Power Plant,Second Fireball Room Energy Column,Second Fireball Room,,
+Sonic,Power Plant,Second Fireball Room Energy Column,Second Fireball Upward Path,FlyingAnyandPPUpwardPathSonicPP,
+Sonic,Power Plant,Second Fireball Upward Path,Third Turbo Glide Ramp,,
+Sonic,Power Plant,Third Turbo Glide Ramp,Second Fireball Upward Path,,
+Sonic,Power Plant,Third Turbo Glide Ramp,Room After Third Turbo Glide Ramp,DashPanelorFlyingAnyorSpeedCharSonicPP,turbo glide ramp here
+Sonic,Power Plant,Room After Third Turbo Glide Ramp,Third Turbo Glide Ramp,,
+Sonic,Power Plant,Room After Third Turbo Glide Ramp,Room After Third Turbo Glide Ramp Energy Column,EnergyColumnandFlyingAnyandKillFlyingEnemyRedNothingSonicPP,red flapper
+Sonic,Power Plant,Room After Third Turbo Glide Ramp Energy Column,Room After Third Turbo Glide Ramp,,
+Sonic,Power Plant,Room After Third Turbo Glide Ramp Energy Column,Second Big Hallway Entrance,FlyingAnySonicPP,
+Sonic,Power Plant,Second Big Hallway Entrance,Room After Third Turbo Glide Ramp,,
+Sonic,Power Plant,Second Big Hallway Entrance,Second Hallway Upper Energy Column 1,EnergyColumnand(FlyingAnyorHoming)andKillFlyingEnemyRedHomingSonicPP,red flapper
+Sonic,Power Plant,Second Hallway Upper Energy Column 1,Second Hallway Lower First,,
+Sonic,Power Plant,Second Hallway Upper Energy Column 1,Second Hallway Upper Energy Column 2,EnergyColumnand(FlyingAnyorHoming)andKillFlyingEnemyRedHomingSonicPP,red flapper
+Sonic,Power Plant,Second Hallway Upper Energy Column 2,Second Hallway Lower First,,
+Sonic,Power Plant,Second Hallway Upper Energy Column 2,Second Hallway Upper Energy Column 3,EnergyColumnandFlyingAnyandKillFlyingEnemyGreenShotSonicPP,Red and Green Flapper (gun)
+Sonic,Power Plant,Second Hallway Upper Energy Column 3,Second Hallway Lower First,,
+Sonic,Power Plant,Second Hallway Upper Energy Column 3,Second Hallway Upper Energy Column 4,EnergyColumnandFlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Upper Energy Column 4,Second Hallway Lower Platform,,
+Sonic,Power Plant,Second Hallway Upper Energy Column 4,Second Hallway Upper Energy Column 4 Spring,KillFlyingEnemyGreenShotNothingandSingleSpringSonicPP,green Flapper with gun
+Sonic,Power Plant,Second Hallway Upper Energy Column 4,Second Hallway Upper Rail 1,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Upper Energy Column 4 Spring,Second Hallway Upper Rail 1,,
+Sonic,Power Plant,Second Hallway Upper Rail 1,Second Hallway Upper Energy Column 4,EnergyColumnSonicPP,
+Sonic,Power Plant,Second Hallway Upper Rail 1,Second Hallway Lower Platform,,
+Sonic,Power Plant,Second Hallway Upper Rail 1,Second Hallway Upper Energy Column Above Rail 1,EnergyColumnandFlyingAnyandKillFlyingEnemyRedSonicPP,red flapper
+Sonic,Power Plant,Second Hallway Upper Energy Column Above Rail 1,Second Hallway Upper Energy Column Above Rail 2,EnergyColumnSonicPP,
+Sonic,Power Plant,Second Hallway Upper Rail 1,Second Hallway Upper Energy Column Above Rail 2,EnergyColumnandFlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Upper Energy Column Above Rail 2,Bonus Key 2,,
+Sonic,Power Plant,Second Hallway Upper Energy Column Above Rail 1,Second Hallway Upper Rail 2,,
+Sonic,Power Plant,Second Hallway Upper Energy Column Above Rail 2,Second Hallway Upper Rail 2,,
+Sonic,Power Plant,Second Hallway Upper Rail 1,Second Hallway Upper Rail 2,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Upper Rail 2,Second Hallway Lower Second,,
+Sonic,Power Plant,Second Hallway Upper Rail 2,Second Hallway Upper Rail 1,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Upper Rail 2,Second Hallway End,,
+Sonic,Power Plant,Second Hallway End,Second Hallway Upper Rail 2,,
+Sonic,Power Plant,Second Big Hallway Entrance,Second Hallway Lower First,,
+Sonic,Power Plant,Second Hallway Lower First,Second Big Hallway Entrance,FlyingAnyorTripleSpringSonicPP,
+Sonic,Power Plant,Second Hallway Lower First,Second Hallway Lower First Energy Column,EnergyColumnandFlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Lower First Energy Column,Second Hallway Lower First,,
+Sonic,Power Plant,Second Hallway Lower First Energy Column,Second Hallway Lower Platform,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Lower First,Second Hallway Lower First Spring,KillGroundEnemyCameronandSingleSpringSonicPP,cameron
+Sonic,Power Plant,Second Hallway Lower First Spring,Second Hallway Lower Platform,,
+Sonic,Power Plant,Second Hallway Lower Platform,Second Hallway Lower First,,
+Sonic,Power Plant,Second Hallway Lower Platform,Second Hallway Lower Pit Energy Column Wall,KillGroundEnemyCameronSonicPP,cameron
+Sonic,Power Plant,Second Hallway Lower Pit Energy Column Wall,Second Hallway Lower Pit,,
+Sonic,Power Plant,Second Hallway Lower Pit Energy Column Wall,Second Hallway Lower Second,,
+Sonic,Power Plant,Second Hallway Lower Pit,Second Hallway Lower Second,FlyingAnySonicPP,off of cap
+Sonic,Power Plant,Second Hallway Lower Pit,Second Hallway Lower Pit Energy Column Ground,EnergyColumnandFlyingAnyandKillGroundEnemyCameronSonicPP,cameron
+Sonic,Power Plant,Second Hallway Lower Pit Energy Column Ground,Second Hallway Lower Second,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Lower Second,Second Hallway Lower Platform,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway Lower Second,Second Hallway Lower Second Energy Column 1,EnergyColumnandKillGroundEnemyCameronSonicPP,cameron
+Sonic,Power Plant,Second Hallway Lower Second Energy Column 1,Second Hallway Lower Second Energy Column 2,EnergyColumnandFlyingAnyandKillFlyingEnemyRedSonicPP,red flapper
+Sonic,Power Plant,Second Hallway Lower Second Energy Column 2,Second Hallway Lower Second Energy Column 3,EnergyColumnandFlyingAnyandKillFlyingEnemyRedSonicPP,red flapper
+Sonic,Power Plant,Second Hallway Lower Second Energy Column 3,Second Hallway End,FlyingAnySonicPP,
+Sonic,Power Plant,Second Hallway End,Second Hallway End Pole,PoleSonicPP,
+Sonic,Power Plant,Second Hallway End Pole,Checkpoint 3,,
+Sonic,Power Plant,Second Hallway End,Checkpoint 3,FlyingAnySonicPP,
+Sonic,Power Plant,Checkpoint 3,Second Hallway End,,
+Sonic,Power Plant,Checkpoint 3,Second Elevator,ElevatorSonicPP,
+Sonic,Power Plant,Second Elevator,Checkpoint 3,,
+Sonic,Power Plant,Second Elevator,Second Elevator Cap 1,KillFlyingEnemyRedNothingSonicPP,red flapper
+Sonic,Power Plant,Second Elevator Cap 1,Second Elevator Cap 2,KillFlyingEnemyGreenShotNothingSonicPP,green Flapper with guns
+Sonic,Power Plant,Second Elevator Cap 2,Second Elevator End,,
+Sonic,Power Plant,Second Elevator End,Green Dome after Second Elevator,KillFlyingEnemyGreenLightningSonicPP,Green Flapper with lightning
+Sonic,Power Plant,Green Dome after Second Elevator,Second Elevator End,NOTPOSSIBLE,team blast through cap wall
+Sonic,Power Plant,Second Elevator End,Second Elevator,ElevatorSonicPP,
+Sonic,Power Plant,Green Dome after Second Elevator,Room Before Checkpoint 4,DashRingSonicPP,needs dashring here
+Sonic,Power Plant,Room Before Checkpoint 4,Green Dome after Second Elevator,NOTPOSSIBLE,Sad noises here
+Sonic,Power Plant,Room Before Checkpoint 4,Room Before Checkpoint 4 Upward Path,KillGroundEnemyCameronandPPUpwardPathSonicPP,
+Sonic,Power Plant,Room Before Checkpoint 4 Upward Path,Checkpoint 4,,
+Sonic,Power Plant,Checkpoint 4,Bonus Key 3,,
+Sonic,Power Plant,Checkpoint 4,Room Before Checkpoint 4,,
+Sonic,Power Plant,Checkpoint 4,Lava Platform Start,DashRamporFlyingAnySonicPP,
+Sonic,Power Plant,Lava Platform Start,Lava Platform 1,DashRingorFlyingAnySonicPP,
+Sonic,Power Plant,Lava Platform 1,Lava Platform 2 Lower,FlyingAnyorHomingSonicPP,red flapper
+Sonic,Power Plant,Lava Platform 2 Lower,Lava Platform 2 Upper,DashRingandFlyingAnySonicPP,can be done with tornado hover and dash ring
+Sonic,Power Plant,Lava Platform 1,Lava Platform 2 Upper,HomingandLightDashSonicPP,might be able to do without homing (difficult) red flapper
+Sonic,Power Plant,Lava Platform 2 Upper,Lava Platform 3,(FlyingAnyorHoming)andDashRingSonicPP,red flapper
+Sonic,Power Plant,Lava Platform 3,Lava Platform 3 Pulley,PulleySonicPP,
+Sonic,Power Plant,Lava Platform 3 Pulley,Lava Platform Below Cap,,
+Sonic,Power Plant,Lava Platform Below Cap,Lava Platform Above Cap,KillFlyingEnemyRedSonicPP,red flapper
+Sonic,Power Plant,Lava Platform Above Cap,Lava Platform Pulley after Cap,(FlyingAnyorHoming)andPulleySonicPP,homing boost here
+Sonic,Power Plant,Lava Platform Pulley after Cap,Lava Platform 4,,
+Sonic,Power Plant,Lava Platform 4,Lava Platform 5,DashRingorFlyingAnySonicPP,
+Sonic,Power Plant,Lava Platform 5,Lava Platform 5 Pulley,PulleySonicPP,
+Sonic,Power Plant,Lava Platform 5 Pulley,Lava Platform Before Spring,,
+Sonic,Power Plant,Lava Platform Pulley after Cap,Lava Platform Before Spring,,
+Sonic,Power Plant,Lava Platform Before Spring,Lava Platform Last,FlyingAnyandSingleSpringSonicPP,
+Sonic,Power Plant,Lava Platform Last,Lava Platform Last Pulley,(FlyingAnyorHoming)andPulleySonicPP,
+Sonic,Power Plant,Lava Platform Last Pulley,Lava Middle Platform,,
+Sonic,Power Plant,Lava Middle Platform,Lava Middle Platform Spring,KillFlyingEnemyGreenLightningHomingFireDunkSonicPP,Green Flapper with lightning
+Sonic,Power Plant,Lava Middle Platform Spring,Goal,,

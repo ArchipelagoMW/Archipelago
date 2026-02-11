@@ -1,6 +1,7 @@
 {
   "game": "OpenRCT2",
   "server_version": "1.2.0",
+  "display_name": "RollerCoaster Tycoon 2",
   "discord_channel": "https://discord.com/channels/731205301247803413/1095746758774108240",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/openrct2.apworld"
 }

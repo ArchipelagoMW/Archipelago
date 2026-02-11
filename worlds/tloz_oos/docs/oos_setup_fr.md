@@ -6,15 +6,18 @@
 - [Bizhawk 2.10 (x64)](https://tasvideos.org/BizHawk/ReleaseHistory)
 - Votre ROM Oracle of Seasons US obtenue légalement
 
+## Autre guides importants
+- [Guide d'installation d'Archipelago (en)](../../generic/docs/setup_en.md#installing-the-archipelago-software), requis pour installer l'apworld
+- [FAQ pour Oracle of Seasons](fr_The%20Legend%20of%20Zelda%20-%20Oracle%20of%20Seasons.md#foire-aux-questions)
+
 ## Instructions d'installation
 
-1. Mettez votre **ROM US d'Oracle of Seasons** dans le dossier où Archipelago est installé (nommée "Legend of Zelda, The - Oracle of Seasons (USA).gbc")
-2. Téléchargez le  **fichier .apworld pour Oracle of Seasons** et double-cliquez dessus afin de l'installer dans le répertoire "custom_worlds/" de votre installation Archipelago 
-3. Générez une seed en utilisant vos fichiers d'options au format .yaml (voir ci-dessous si vous ne savez pas comment obtenir le fichier modèle)
-4. Téléchargez le fichier de patch au format .apoos qui a été généré en même temps que la seed par le serveur. Celui-ci vous permettra de générer votre ROM modifiée.
-5. Ouvrez ce fichier avec l'Archipelago Launcher
-6. Si tout s'est bien passé, la ROM patchée a été générée dans le même répertoire que le fichier .apoos, et Bizhawk ainsi que le client se sont automatiquement lancés
-7. Connectez-vous au serveur Archipelago de votre choix, et vous pouvez commencer à jouer!
+1. Téléchargez le **fichier .apworld pour Oracle of Seasons** et double-cliquez dessus afin de l'installer dans le répertoire "custom_worlds/" de votre installation Archipelago 
+2. Générez une seed en utilisant vos fichiers d'options au format .yaml (voir ci-dessous si vous ne savez pas comment obtenir le fichier modèle)
+3. Téléchargez le fichier de patch au format .apoos qui a été généré en même temps que la seed par le serveur. Celui-ci vous permettra de générer votre ROM modifiée.
+4. Ouvrez ce fichier avec l'Archipelago Launcher
+5. Si tout s'est bien passé, la ROM patchée a été générée dans le même répertoire que le fichier .apoos, et Bizhawk ainsi que le client se sont automatiquement lancés
+6. Connectez-vous au serveur Archipelago de votre choix, et vous pouvez commencer à jouer!
 
 ## Créer un fichier d'options (.yaml)
 

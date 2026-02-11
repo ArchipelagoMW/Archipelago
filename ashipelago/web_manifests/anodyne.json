@@ -1,6 +1,6 @@
 {
   "game": "Anodyne",
-  "server_version": "0.5.0",
+  "server_version": "0.5.1",
   "discord_channel": "https://discord.com/channels/731205301247803413/1121290232688545792",
   "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/anodyne_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/anodyne.apworld"

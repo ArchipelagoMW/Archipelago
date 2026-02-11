@@ -1,6 +1,7 @@
 {
   "game": "Kingdom Hearts RE Chain of Memories",
   "server_version": "1.4.3",
+  "display_name": "Kingdom Hearts Re:Chain of Memories",
   "discord_channel": "https://discord.com/channels/731205301247803413/1074710550384234587",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/khrecom.apworld"
 }

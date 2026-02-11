@@ -513,7 +513,7 @@ class MindustryLocations:
         "AP-S-05-40": MINDUSTRY_BASE_ID + 163,
     }
     serpulo_exponential_reconstructor = {
-        "AP-S-06-41": MINDUSTRY_BASE_ID + 164,
+        "AP-S-05-41": MINDUSTRY_BASE_ID + 164,
     }
     serpulo_tetrative_reconstructor = {
         "AP-S-05-42": MINDUSTRY_BASE_ID + 165,

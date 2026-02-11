@@ -38,7 +38,7 @@ HINT_DATA = {
 
     # Eddo
     "Cannon Island": {
-        "locations": ["Cannon Island Cannon", "Cannon Island Salvage Arm"],
+        "locations": ["Eddo's Cannon", "Eddo's Salvage Arm"],
         "slot_data": ["shop_hints"],
         "scenes": [0x130B],
     },
@@ -50,9 +50,9 @@ HINT_DATA = {
         "slot_data": [("spirit_island_hints", 0)]
     },
     "Spirit Island 2": {
-        "locations": ["Spirit Island Power Upgrade Level 2",
-                      "Spirit Island Wisdom Upgrade Level 2",
-                      "Spirit Island Courage Upgrade Level 2"],
+        "locations": ["Spirit Shrine Power Upgrade Level 2",
+                      "Spirit Shrine Wisdom Upgrade Level 2",
+                      "Spirit Shrine Courage Upgrade Level 2"],
         "scenes": [0x1701],
         "slot_data": [("spirit_island_hints", 1)]
     },
@@ -70,16 +70,16 @@ HINT_DATA = {
     },
 
     # Minigame Hints
-    "Bannan Island Cannon Game": {
+    "Bannan Island East Cannon Game": {
         "scenes": [0x1400],
         "has_items": ["Bombs (Progressive)"],
         "slot_data": [("randomize_minigames", 1)],
     },
-    "Molida Archery 1700": {
+    "Archery Minigame 1700": {
         "scenes": [0xC0B],
         "slot_data": [("randomize_minigames", 1)],
     },
-    "Molida Archery 2000": {
+    "Archery Minigame 2000": {
         "scenes": [0xC0B],
         "slot_data": [("randomize_minigames", 1), ("logic", [1, 2])],
     },
@@ -97,7 +97,7 @@ HINT_DATA = {
         "slot_data": [("randomize_minigames", 1)],
         "locations": ["Maze Island Beginner", "Maze Island Normal", "Maze Island Expert", "Maze Island Bonus Reward"]
     },
-    "Ocean NW Prince of Red Lion Combat Reward": {
+    "Prince of Red Lions Combat Reward": {
         "scenes": [0x700],
         "slot_data": [("randomize_minigames", 1)],
     },

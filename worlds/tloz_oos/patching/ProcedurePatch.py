@@ -6,7 +6,7 @@ import yaml
 from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
 from .Functions import *
 from .RomData import RomData
-from .data_manager.text import get_text_data
+from .data_manager.text import get_seasons_text_data, apply_ages_edits
 from .text.encoding import write_text_data
 from .z80asm.Assembler import Z80Assembler, Z80Block
 
@@ -45,7 +45,23 @@ class OoSPatchExtensions(APPatchExtension):
         random.seed(patch_data["seed"] + caller.player)
 
         assembler = Z80Assembler(CAVE_DATA, DEFINES, rom, ages_rom)
-        dictionary, texts = get_text_data(rom_data, True)
+        dictionary, texts = get_seasons_text_data(rom_data)
+        if patch_data["options"]["cross_items"]:
+            if texts["TX_0053"] == "":  # Check if cane text exists
+                # If not, add the Ages texts
+                apply_ages_edits(texts, RomData(ages_rom))
+
+        # Generate dungeon entrance/exit data
+        dungeon_entrances = dict(DUNGEON_ENTRANCES)
+        dungeon_exits = dict(DUNGEON_EXITS)
+        if patch_data["options"]["linked_heros_cave"] & OracleOfSeasonsLinkedHerosCave.samasa:
+            dungeon_entrances["d11"] = {
+                "map_tile": 0xcf,
+                "room": 0xcf,
+                "group": 0x00,
+                "position": 0x55
+            }
+            dungeon_exits["d11"] = GameboyAddress(0x04, 0x7b35).address_in_rom()
 
         # Define assembly constants & floating chunks
         define_location_constants(assembler, patch_data)
@@ -57,11 +73,13 @@ class OoSPatchExtensions(APPatchExtension):
         define_additional_tile_replacements(assembler, patch_data)
         define_samasa_combination(assembler, patch_data)
         define_dungeon_items_text_constants(texts, patch_data)
-        define_essence_sparkle_constants(assembler, patch_data)
+        define_essence_sparkle_constants(assembler, patch_data, dungeon_entrances)
         define_lost_woods_sequences(assembler, texts, patch_data)
         define_tree_sprites(assembler, patch_data)
         set_file_select_text(assembler, caller.player_name)
         set_player_start_inventory(assembler, patch_data)
+        if not hasattr(get_settings().tloz_oos_options, "beat_tutorial"):
+            set_faq_trap(assembler)
 
         # Parse assembler files, compile them and write the result in the ROM
         print("Compiling ASM files...")
@@ -74,11 +92,14 @@ class OoSPatchExtensions(APPatchExtension):
         for block in assembler.blocks:
             rom_data.write_bytes(block.addr.address_in_rom(), block.byte_array)
 
+        if patch_data["options"]["linked_heros_cave"] & OracleOfSeasonsLinkedHerosCave.samasa:
+            dungeon_entrances["d11"]["addr"] = assembler.global_labels["warpSourceDesert"].address_in_rom() + 2
+
         # Perform direct edits on the ROM
         alter_treasure_types(rom_data)
         write_chest_contents(rom_data, patch_data)
         set_old_men_rupee_values(rom_data, patch_data)
-        set_dungeon_warps(rom_data, patch_data)
+        set_dungeon_warps(rom_data, patch_data, dungeon_entrances, dungeon_exits)
         set_portal_warps(rom_data, patch_data)
         apply_miscellaneous_options(rom_data, patch_data)
         set_fixed_subrosia_seaside_location(rom_data, patch_data)

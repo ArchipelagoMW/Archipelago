@@ -2,7 +2,7 @@ import collections
 import re
 from typing import List
 
-from worlds.tloz_oos.patching.z80asm.Errors import ArgumentOverflowError
+from ...patching.z80asm.Errors import ArgumentOverflowError
 
 
 def strip_line(line: str) -> str:
@@ -85,7 +85,7 @@ def parse_hex_word(string: str):
     return value_to_byte_array(value, 2)
 
 
-def parse_argument(arg: str, mnemonic_subtree: collections.abc.Mapping) -> (str, List[int]):
+def parse_argument(arg: str, mnemonic_subtree: collections.abc.Mapping) -> tuple[str, list[int]]:
     """
     Parse an argument to extract a generic form and potential extra bytes
         "$1a"     => ("$8",     [0x1a])

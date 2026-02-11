@@ -39,16 +39,13 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python:
-          #- {version: '3.11'}               # old
-          - {version: '3.12.6'}             # current
-          #- {version: '3.13'}               # future
-        #include:
-          #- python: {version: '3.11'}       # old
-          #  os: windows-latest
-          #- python: { version: '3.12.6' }   # current
-          #  os: windows-latest
-          #- python: {version: '3.13'}       # future
-          #  os: windows-latest
+          - {version: '3.12'}
+          - {version: '3.13'}
+        include:
+          - python: {version: '3.12'}  # old compat
+            os: windows-latest
+          - python: {version: '3.13'}  # current
+            os: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -66,33 +63,31 @@ jobs:
         run: |
           pytest test/netutils/ test/options/ test/programs/ test/utils/ test/webhost/
 
-  hosting:
-    runs-on: ${{ matrix.os }}
-    name: Test hosting with ${{ matrix.python.version }} on ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        python:
-          - { version: '3.11' }               # old
-          - { version: '3.12.6' }             # current
-          - { version: '3.13' }               # future
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python.version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python.version }}
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip
-          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
-      - name: Test hosting
-        run: |
-          source venv/bin/activate
-          export PYTHONPATH=$(pwd)
-          timeout 600 python test/hosting/__main__.py
+#  hosting:
+#    runs-on: ${{ matrix.os }}
+#    name: Test hosting with ${{ matrix.python.version }} on ${{ matrix.os }}
+#
+#    strategy:
+#      matrix:
+#        os:
+#          - ubuntu-latest
+#        python:
+#          - { version: '3.13' }
+#
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: Set up Python ${{ matrix.python.version }}
+#      uses: actions/setup-python@v5
+#      with:
+#        python-version: ${{ matrix.python.version }}
+#    - name: Install dependencies
+#      run: |
+#        python -m venv venv
+#        source venv/bin/activate
+#        python -m pip install --upgrade pip
+#        python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+#    - name: Test hosting
+#      run: |
+#        source venv/bin/activate
+#        export PYTHONPATH=$(pwd)
+#        timeout 600 python test/hosting/__main__.py

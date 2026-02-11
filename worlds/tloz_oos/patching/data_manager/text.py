@@ -4,13 +4,13 @@ from pathlib import Path
 from typing_extensions import Any
 
 import Utils
-from worlds.tloz_oos.patching.RomData import RomData
-from worlds.tloz_oos.patching.text import normalize_text
-from worlds.tloz_oos.patching.text.decoding import parse_dict_seasons, parse_all_texts
+from ...patching.RomData import RomData
+from ...patching.text import normalize_text
+from ...patching.text.decoding import parse_text_dict, parse_all_texts
 
 
 def load_modded_seasons_text_data() -> None | tuple[dict[str, str], dict[str, str]]:
-    from worlds.tloz_oos import OracleOfSeasonsWorld
+    from ...World import OracleOfSeasonsWorld
     text_dir = Path(Utils.cache_path("oos_ooa/text"))
     dict_file = text_dir.joinpath(f"seasons_dict.json")
     if not dict_file.is_file():
@@ -28,8 +28,16 @@ def load_modded_seasons_text_data() -> None | tuple[dict[str, str], dict[str, st
         return None
     texts = json.load(open(vanilla_text_file, encoding="utf-8"))
     apply_text_edits(texts)
-    save_edited_text_data(texts)
+    save_seasons_edited_text_data(texts)
     return json.load(open(dict_file, encoding="utf-8")), texts
+
+
+def load_vanilla_ages_text_data() -> None | dict[str, str]:
+    text_dir = Path(Utils.cache_path("oos_ooa/text"))
+    vanilla_text_file = text_dir.joinpath(f"ages_texts_vanilla.json")
+    if not vanilla_text_file.is_file():
+        return None
+    return json.load(open(vanilla_text_file, encoding="utf-8"))
 
 
 def save_vanilla_text_data(dictionary: dict[str, str],
@@ -49,8 +57,8 @@ def save_vanilla_text_data(dictionary: dict[str, str],
         json.dump(texts, f, ensure_ascii=False)
 
 
-def save_edited_text_data(texts: dict[str, str]) -> None:
-    from worlds.tloz_oos import OracleOfSeasonsWorld
+def save_seasons_edited_text_data(texts: dict[str, str]) -> None:
+    from ...World import OracleOfSeasonsWorld
     texts["version"] = OracleOfSeasonsWorld.version()
 
     text_dir = Path(Utils.cache_path("oos_ooa/text"))
@@ -125,37 +133,15 @@ def apply_text_edits(texts: dict[str, str]) -> None:
 
     # Cross items
     # Obtain text
-    texts["TX_003b"] = ("You got the\n"
-                        "🟥Switch Hook⬜!\n"
-                        "Shoot at an\n"
-                        "object to switch\n"
-                        "places with it.\n")  # Strange flute
-    texts["TX_0051"] = ("You got the 🟥Long\n"
-                        "Switch⬜! Switch\n"
-                        "places with\n"
-                        "objects from a\n"
-                        "distance.")  # Warrior child heart
-    texts["TX_0053"] = ("You got the\n"
-                        "🟥Cane of Somaria⬜!\n"
-                        "Use it to create\n"
-                        "blocks.")  # Warrior child heart refill
-    texts["TX_0054"] = ("You got the\n"
-                        "🟥Seed Shooter⬜!\n"
-                        "Pick your 🟥seeds⬜,\n"
-                        "fire, then watch\n"
-                        "them ricochet.")  # Unappraised ring
-    texts["TX_091d"] = ("Cane of Somaria\n"
-                        "Used to create\n"
-                        "blocks.")  # Replaces ring box 1
-    texts["TX_091e"] = ("Switch Hook\n"
-                        "User and target\n"
-                        "trade places.")  # Replaces ring box 2
-    texts["TX_0917"] = ("Long Hook\n"
-                        "Switches places\n"
-                        "from a distance.")  # Replaces unappraised ring
-    texts["TX_092e"] = ("Seed Shooter\n"
-                        "Used to bounce\n"
-                        "seeds around.")  # Replaces strange flute
+    texts["TX_003b"] = ""  # Strange flute
+    texts["TX_0051"] = ""  # Warrior child heart
+    texts["TX_0053"] = ""  # Warrior child heart refill
+    texts["TX_0054"] = ""  # Unappraised ring
+    # Inventory text
+    texts["TX_091d"] = ""  # Replaces ring box 1
+    texts["TX_091e"] = ""  # Replaces ring box 2
+    texts["TX_0917"] = ""  # Replaces unappraised ring
+    texts["TX_092e"] = ""  # Replaces strange flute
     # Note: 3 other seemingly unused seeds follow
 
     # Map stuff, replaces the group 05 since it's all linked game dialogues
@@ -203,17 +189,82 @@ def apply_text_edits(texts: dict[str, str]) -> None:
     # Now unused text from Maku talking
     texts["TX_1700"] = texts["TX_1701"] = ""
 
+    texts["TX_020b"] = "Linked\nHero's Cave"
     texts["TX_0602"] = "Unknown Dungeon"
 
+    # FAQ room
+    texts["TX_5300"] = ("Welcome to the\n"
+                        "OoS randomizer\n"
+                        "for Archipelago!\n"
+                        "Did you read\n"
+                        "the FAQ?\n"
+                        "  \\optYes \\optNo")
+    texts["TX_5301"] = ("Reading the FAQ\n"
+                        "is important, as\n"
+                        "rando mechanics\n"
+                        "are in it.\n"
+                        "Please read it\n"
+                        "\\optYes \\optWhere?")
+    texts["TX_5302"] = ("It is linked\n"
+                        "in the setup.\n"
+                        "If you don't\n"
+                        "have it, check\n"
+                        "tinyurl.com\n"
+                        "/2cb35snu\n")
+    texts["TX_5303"] = ("How do you\n"
+                        "refill your\n"
+                        "satchel and\n"
+                        "shield?\n"
+                        "\\optShop \\optImpa")
+    texts["TX_5304"] = ("Wrong. Please\n"
+                        "check the FAQ,\n"
+                        "you will get\n"
+                        "stuck otherwise.")
+    texts["TX_5305"] = ("Right! You can\n"
+                        "get out of\n"
+                        "here by warping\n"
+                        "to the start")
+    texts["TX_5306"] = ("Just warp to\n"
+                        "start, you\n"
+                        "can do it\n"
+                        "everywhere")
 
-def get_text_data(rom_data: RomData, seasons: bool = True) -> tuple[dict[str, str], dict[str, str]]:
+
+def apply_ages_edits(seasons_texts: dict[str, str], ages_rom: RomData) -> None:
+    ages_texts = get_ages_text_data(ages_rom)
+    # Cross items
+    # Obtain text
+    seasons_texts["TX_0053"] = ages_texts["TX_0073"]  # Cane
+    seasons_texts["TX_003b"] = ages_texts["TX_0030"]  # Hook 1
+    seasons_texts["TX_0051"] = ages_texts["TX_0028"]  # Hook 2
+    seasons_texts["TX_0054"] = ages_texts["TX_002e"]  # Shooter
+    # Inventory text
+    seasons_texts["TX_091d"] = ages_texts["TX_093c"]  # Cane
+    seasons_texts["TX_091e"] = ages_texts["TX_093d"]  # Hook 1
+    seasons_texts["TX_0917"] = ages_texts["TX_093e"]  # Hook 2
+    seasons_texts["TX_092e"] = ages_texts["TX_0940"]  # Shooter
+    save_seasons_edited_text_data(seasons_texts)
+
+
+def get_seasons_text_data(rom_data: RomData) -> tuple[dict[str, str], dict[str, str]]:
     result = load_modded_seasons_text_data()
     if result is not None:
         return result
 
-    dictionary = parse_dict_seasons(rom_data, seasons)
-    texts = parse_all_texts(rom_data, dictionary, seasons)
-    save_vanilla_text_data(dictionary, texts, texts)
+    dictionary = parse_text_dict(rom_data, True)
+    texts = parse_all_texts(rom_data, dictionary, True)
+    save_vanilla_text_data(dictionary, texts, True)
     apply_text_edits(texts)
-    save_edited_text_data(texts)
+    save_seasons_edited_text_data(texts)
     return dictionary, texts
+
+
+def get_ages_text_data(rom_data: RomData) -> tuple[dict[str, str], dict[str, str]]:
+    result = load_vanilla_ages_text_data()
+    if result is not None:
+        return result
+
+    dictionary = parse_text_dict(rom_data, False)
+    texts = parse_all_texts(rom_data, dictionary, False)
+    save_vanilla_text_data(dictionary, texts, False)
+    return texts

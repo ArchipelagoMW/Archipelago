@@ -1,0 +1,423 @@
+Name,Category,Level Sync,Ilvl Sync,Location,Req Size,Difficulty,Req Spells
+ARR,,,,,,,
+Sastasha,Dungeon (ARR),18,18,Western La Noscea,Light Party,Normal,
+The Tam-Tara Deepcroft,Dungeon (ARR),19,19,Central Shroud,Light Party,Normal,
+Copperbell Mines,Dungeon (ARR),20,20,Western Thanalan,Light Party,Normal,
+Halatali,Dungeon (ARR),23,23,Eastern Thanalan,Light Party,Normal,
+The Thousand Maws of Toto-Rak,Dungeon (ARR),27,27,South Shroud,Light Party,Normal,
+Haukke Manor,Dungeon (ARR),31,31,Central Shroud,Light Party,Normal,
+Brayflox's Longstop,Dungeon (ARR),34,34,Eastern La Noscea,Light Party,Normal,
+The Sunken Temple of Qarn,Dungeon (ARR),37,37,Southern Thanalan,Light Party,Normal,
+Cutter's Cry,Dungeon (ARR),40,40,Central Thanalan,Light Party,Normal,
+The Stone Vigil,Dungeon (ARR),43,43,Coerthas Central Highlands,Light Party,Normal,
+Dzemael Darkhold,Dungeon (ARR),46,46,Coerthas Central Highlands,Light Party,Normal,
+The Aurum Vale,Dungeon (ARR),49,49,Coerthas Central Highlands,Light Party,Normal,
+Castrum Meridianum,Dungeon (ARR),50,60,Northern Thanalan,Light Party,Normal,
+The Praetorium,Dungeon (ARR),50,60,Northern Thanalan,Light Party,Normal,
+The Wanderer's Palace,Dungeon (ARR),50,110,Upper La Noscea,Light Party,Normal,
+Amdapor Keep,Dungeon (ARR),50,110,South Shroud,Light Party,Normal,
+Pharos Sirius,Dungeon (ARR),50,110,Western La Noscea,Light Party,Normal,
+Copperbell Mines (Hard),Dungeon (ARR),50,110,Western Thanalan,Light Party,Normal,
+Haukke Manor (Hard),Dungeon (ARR),50,110,Central Shroud,Light Party,Normal,
+The Lost City of Amdapor,Dungeon (ARR),50,110,South Shroud,Light Party,Normal,
+Halatali (Hard),Dungeon (ARR),50,110,Eastern Thanalan,Light Party,Normal,
+Brayflox's Longstop (Hard),Dungeon (ARR),50,110,Eastern La Noscea,Light Party,Normal,
+Hullbreaker Isle,Dungeon (ARR),50,110,Lower La Noscea,Light Party,Normal,
+The Tam-Tara Deepcroft (Hard),Dungeon (ARR),50,110,Central Shroud,Light Party,Normal,
+The Stone Vigil (Hard),Dungeon (ARR),50,110,Coerthas Central Highlands,Light Party,Normal,
+Snowcloak,Dungeon (ARR),50,130,Coerthas Central Highlands,Light Party,Normal,
+Sastasha (Hard),Dungeon (ARR),50,130,Western La Noscea,Light Party,Normal,
+The Sunken Temple of Qarn (Hard),Dungeon (ARR),50,130,Southern Thanalan,Light Party,Normal,
+The Keeper of the Lake,Dungeon (ARR),50,130,Mor Dhona,Light Party,Normal,
+The Wanderer's Palace (Hard),Dungeon (ARR),50,130,Upper La Noscea,Light Party,Normal,
+Amdapor Keep (Hard),Dungeon (ARR),50,130,South Shroud,Light Party,Normal,
+,,,,,,,
+The Bowl of Embers,Trial (ARR),22,22,Southern Thanalan,Light Party,Normal,
+The Navel,Trial (ARR),36,36,Upper La Noscea,Light Party,Normal,
+The Howling Eye,Trial (ARR),46,46,Gridania,Light Party,Normal,
+The Porta Decumana,Trial (ARR),50,60,Northern Thanalan,Full Party,Normal,
+The Bowl of Embers (Hard),Trial (ARR),50,130,Southern Thanalan,Full Party,Normal,
+The Howling Eye (Hard),Trial (ARR),50,130,Gridania,Full Party,Normal,
+The Navel (Hard),Trial (ARR),50,130,Upper La Noscea,Full Party,Normal,
+Thornmarch (Hard),Trial (ARR),50,130,East Shroud,Full Party,Normal,
+A Relic Reborn: the Chimera,Trial (ARR),50,130,Coerthas Central Highlands,Full Party,Normal,
+A Relic Reborn: the Hydra,Trial (ARR),50,130,Eastern Thanalan,Full Party,Normal,
+The Whorleater (Hard),Trial (ARR),50,130,Lower La Noscea,Full Party,Normal,
+Battle on the Big Bridge,Trial (ARR),50,130,Coerthas Central Highlands,Full Party,Normal,
+The Striking Tree (Hard),Trial (ARR),50,130,East Shroud,Full Party,Normal,
+The Akh Afah Amphitheatre (Hard),Trial (ARR),50,130,Coerthas Central Highlands,Full Party,Normal,
+The Dragon's Neck,Trial (ARR),50,130,Eastern Thanalan,Full Party,Normal,
+The Chrysalis,Trial (ARR),50,130,Mor Dhona,Full Party,Normal,
+Battle in the Big Keep,Trial (ARR),50,130,South Shroud,Full Party,Normal,
+Urth's Fount,Trial (ARR),50,130,South Shroud,Full Party,Extreme,
+,Trial (ARR),,,,,,
+The Minstrel's Ballad: Ultima's Bane,Trial (ARR),50,130,Northern Thanalan,Full Party,Extreme,
+The Howling Eye (Extreme),Trial (ARR),50,130,Gridania,Full Party,Extreme,
+The Navel (Extreme),Trial (ARR),50,130,Upper La Noscea,Full Party,Extreme,
+The Bowl of Embers (Extreme),Trial (ARR),50,130,Southern Thanalan,Full Party,Extreme,
+Thornmarch (Extreme),Trial (ARR),50,130,East Shroud,Full Party,Extreme,
+The Whorleater (Extreme),Trial (ARR),50,130,Lower La Noscea,Full Party,Extreme,
+The Striking Tree (Extreme),Trial (ARR),50,130,East Shroud,Full Party,Extreme,
+The Akh Afah Amphitheatre (Extreme),Trial (ARR),50,130,Coerthas Central Highlands,Full Party,Extreme,
+,,,,,,,
+The Binding Coil of Bahamut - Turn 1,Normal Raid (ARR),50,130,Eastern La Noscea,Full Party,Savage,Bahamut Key
+The Binding Coil of Bahamut - Turn 2,Normal Raid (ARR),50,130,Eastern La Noscea,Full Party,Savage,Bahamut Key
+The Binding Coil of Bahamut - Turn 3,Normal Raid (ARR),50,130,Eastern La Noscea,Full Party,Savage,Bahamut Key
+The Binding Coil of Bahamut - Turn 4,Normal Raid (ARR),50,130,Eastern La Noscea,Full Party,Savage,Bahamut Key
+The Binding Coil of Bahamut - Turn 5,Normal Raid (ARR),50,130,Eastern La Noscea,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut - Turn 1,Normal Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut - Turn 2,Normal Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut - Turn 3,Normal Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut - Turn 4,Normal Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut (Savage) - Turn 1,Savage Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut (Savage) - Turn 2,Savage Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut (Savage) - Turn 3,Savage Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Second Coil of Bahamut (Savage) - Turn 4,Savage Raid (ARR),50,130,North Shroud,Full Party,Savage,Bahamut Key
+The Final Coil of Bahamut - Turn 1,Normal Raid (ARR),50,130,Northern Thanalan,Full Party,Savage,Bahamut Key
+The Final Coil of Bahamut - Turn 2,Normal Raid (ARR),50,130,Northern Thanalan,Full Party,Savage,Bahamut Key
+The Final Coil of Bahamut - Turn 3,Normal Raid (ARR),50,130,Northern Thanalan,Full Party,Savage,Bahamut Key
+The Final Coil of Bahamut - Turn 4,Normal Raid (ARR),50,130,Northern Thanalan,Full Party,Savage,Bahamut Key
+,,,,,,,
+The Labyrinth of the Ancients,Alliance Raid (ARR),50,130,Mor Dhona,Alliance,Normal,
+Syrcus Tower,Alliance Raid (ARR),50,130,Mor Dhona,Alliance,Normal,
+The World of Darkness,Alliance Raid (ARR),50,130,Mor Dhona,Alliance,Normal,
+,,,,,,,
+Basic Training: Enemy Parties,Guildhest (ARR),10,10,Middle La Noscea,Light Party,Normal,
+Under the Armor,Guildhest (ARR),10,10,Central Shroud,Light Party,Normal,
+Basic Training: Enemy Strongholds,Guildhest (ARR),15,15,Western Thanalan,Light Party,Normal,
+Hero on the Half Shell,Guildhest (ARR),15,15,Central Thanalan,Light Party,Normal,
+Pulling Poison Posies,Guildhest (ARR),20,20,East Shroud,Light Party,Normal,
+Stinging Back,Guildhest (ARR),20,20,South Shroud,Light Party,Normal,
+All's Well that Ends in the Well,Guildhest (ARR),25,25,South Shroud,Light Party,Normal,
+Flicking Sticks and Taking Names,Guildhest (ARR),25,25,Central Shroud,Light Party,Normal,
+More than a Feeler,Guildhest (ARR),30,30,Upper La Noscea,Light Party,Normal,
+Annoy the Void,Guildhest (ARR),30,30,Lower La Noscea,Light Party,Normal,
+Shadow and Claw,Guildhest (ARR),35,35,Coerthas Central Highlands,Light Party,Normal,
+Long Live the Queen,Guildhest (ARR),35,35,Coerthas Central Highlands,Light Party,Normal,
+Ward Up,Guildhest (ARR),40,40,Mor Dhona,Light Party,Normal,
+Solemn Trinity,Guildhest (ARR),40,40,Mor Dhona,Full Party,Normal,
+,,,,,,,
+The Palaistra,PvP,30,30,Wolves' Den Pier,Solo,Normal,
+The Volcanic Heart,PvP,30,30,Wolves' Den Pier,Solo,Normal,
+Cloud Nine,PvP,30,30,Wolves' Den Pier,Solo,Normal,
+The Clockwork Castletown,PvP,30,30,Wolves' Den Pier,Solo,Normal,
+The Red Sands,PvP,30,30,Wolves' Den Pier,Solo,Normal,
+The Bayside Battleground,PvP,30,30,Wolves' Den Pier,Solo,Normal,
+,,,,,,,
+HW,,,,,,,
+The Dusk Vigil,Dungeon (HW),52,130,Coerthas Western Highlands,Light Party,Normal,
+Sohm Al,Dungeon (HW),54,130,The Dravanian Forelands,Light Party,Normal,
+The Aery,Dungeon (HW),56,139,Ishgard,Light Party,Normal,
+The Vault,Dungeon (HW),58,145,Ishgard,Light Party,Normal,
+The Great Gubal Library,Dungeon (HW),60,150,The Dravanian Hinterlands,Light Party,Normal,
+The Aetherochemical Research Facility,Dungeon (HW),60,180,Azys Lla,Light Party,Normal,
+Neverreap,Dungeon (HW),60,210,The Sea of Clouds,Light Party,Normal,
+The Fractal Continuum,Dungeon (HW),60,210,Azys Lla,Light Party,Normal,
+Saint Mocianne's Arboretum,Dungeon (HW),60,240,The Dravanian Hinterlands,Light Party,Normal,
+Pharos Sirius (Hard),Dungeon (HW),60,240,Middle La Noscea,Light Party,Normal,
+The Antitower,Dungeon (HW),60,270,The Dravanian Hinterlands,Light Party,Normal,
+The Lost City of Amdapor (Hard),Dungeon (HW),60,270,South Shroud,Light Party,Normal,
+Sohr Khai,Dungeon (HW),60,270,The Churning Mists,Light Party,Normal,
+Hullbreaker Isle (Hard),Dungeon (HW),60,270,Lower La Noscea,Light Party,Normal,
+Xelphatol,Dungeon (HW),60,270,Coerthas Central Highlands,Light Party,Normal,
+The Great Gubal Library (Hard),Dungeon (HW),60,270,The Dravanian Hinterlands,Light Party,Normal,
+Baelsar's Wall,Dungeon (HW),60,270,East Shroud,Light Party,Normal,
+Sohm Al (Hard),Dungeon (HW),60,270,The Churning Mists,Light Party,Normal,
+,,,,,,,
+Thok ast Thok (Hard),Trial (HW),54,135,The Dravanian Forelands,Full Party,Normal,
+The Limitless Blue (Hard),Trial (HW),58,145,The Sea of Clouds,Full Party,Normal,
+The Singularity Reactor,Trial (HW),60,270,Azys Lla,Full Party,Normal,
+Containment Bay S1T7,Trial (HW),60,270,Azys Lla,Full Party,Normal,
+The Final Steps of Faith,Trial (HW),60,270,Ishgard,Full Party,Normal,
+Containment Bay P1T6,Trial (HW),60,270,Azys Lla,Full Party,Normal,
+Containment Bay Z1T9,Trial (HW),60,270,Azys Lla,Full Party,Normal,
+,,,,,,,
+The Limitless Blue (Extreme),Trial (HW),60,270,The Sea of Clouds,Full Party,Extreme,
+Thok ast Thok (Extreme),Trial (HW),60,270,The Dravanian Forelands,Full Party,Extreme,
+The Minstrel's Ballad: Thordan's Reign,Trial (HW),60,270,Azys Lla,Full Party,Extreme,
+Containment Bay S1T7 (Extreme),Trial (HW),60,270,Azys Lla,Full Party,Extreme,
+The Minstrel's Ballad: Nidhogg's Rage,Trial (HW),60,270,Ishgard,Full Party,Extreme,
+Containment Bay P1T6 (Extreme),Trial (HW),60,270,Azys Lla,Full Party,Extreme,
+Containment Bay Z1T9 (Extreme),Trial (HW),60,270,Azys Lla,Full Party,Extreme,
+,,,,,,,
+Alexander - The Fist of the Father,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Cuff of the Father,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Arm of the Father,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Burden of the Father,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Fist of the Son,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Cuff of the Son,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Arm of the Son,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Burden of the Son,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Eyes of the Creator,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Breath of the Creator,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Heart of the Creator,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Soul of the Creator,Normal Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Normal,Alexander Key
+Alexander - The Fist of the Father (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Cuff of the Father (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Arm of the Father (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Burden of the Father (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Fist of the Son (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Cuff of the Son (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Arm of the Son (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Burden of the Son (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Eyes of the Creator (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Breath of the Creator (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Heart of the Creator (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+Alexander - The Soul of the Creator (Savage),Savage Raid (HW),60,270,The Dravanian Hinterlands,Full Party,Savage,Alexander Key
+,,,,,,,
+The Void Ark,Alliance Raid (HW),60,270,The Sea of Clouds,Alliance,Normal,
+The Weeping City of Mhach,Alliance Raid (HW),60,270,The Sea of Clouds,Alliance,Normal,
+Dun Scaith,Alliance Raid (HW),60,270,The Sea of Clouds,Alliance,Normal,
+,,,,,,,
+STB,,,,,,,
+The Sirensong Sea,Dungeon (StB),61,,Limsa Lominsa,Light Party,Normal,
+Shisui of the Violet Tides,Dungeon (StB),63,,The Ruby Sea,Light Party,Normal,
+Bardam's Mettle,Dungeon (StB),65,,The Azim Steppe,Light Party,Normal,
+Doma Castle,Dungeon (StB),67,,Yanxia,Light Party,Normal,
+Castrum Abania,Dungeon (StB),69,,The Peaks,Light Party,Normal,
+Ala Mhigo,Dungeon (StB),70,,The Lochs,Light Party,Normal,
+Kugane Castle,Dungeon (StB),70,,Kugane,Light Party,Normal,
+The Temple of the Fist,Dungeon (StB),70,,Rhalgr's Reach,Light Party,Normal,
+The Drowned City of Skalla,Dungeon (StB),70,,The Lochs,Light Party,Normal,
+Hells' Lid,Dungeon (StB),70,,The Ruby Sea,Light Party,Normal,
+The Fractal Continuum (Hard),Dungeon (StB),70,,Azys Lla,Light Party,Normal,
+The Swallow's Compass,Dungeon (StB),70,,Yanxia,Light Party,Normal,
+The Burn,Dungeon (StB),70,,Yanxia,Light Party,Normal,
+Saint Mocianne's Arboretum (Hard),Dungeon (StB),70,,The Dravanian Hinterlands,Light Party,Normal,
+The Ghimlyt Dark,Dungeon (StB),70,,The Lochs,Light Party,Normal,
+,,,,,,,
+The Pool of Tribute,Trial (StB),63,,The Ruby Sea,Full Party,Normal,
+Emanation,Trial (StB),67,,The Fringes,Full Party,Normal,
+The Royal Menagerie,Trial (StB),70,,The Lochs,Full Party,Normal,
+The Jade Stoa,Trial (StB),70,,Yanxia,Full Party,Normal,
+Castrum Fluminis,Trial (StB),70,,Yanxia,Full Party,Normal,
+The Great Hunt,Trial (StB),70,,The Azim Steppe,Full Party,Normal,
+Hells' Kier,Trial (StB),70,,The Ruby Sea,Full Party,Normal,
+The Wreath of Snakes,Trial (StB),70,,The Ruby Sea,Full Party,Normal,
+Kugane Ohashi,Trial (StB),70,,Kugane,Full Party,Normal,
+,,,,,,,
+The Pool of Tribute (Extreme),Trial (StB),70,,The Ruby Sea,Full Party,Extreme,
+Emanation (Extreme),Trial (StB),70,,The Fringes,Full Party,Extreme,
+The Minstrel's Ballad: Shinryu's Domain,Trial (StB),70,,The Lochs,Full Party,Extreme,
+The Jade Stoa (Extreme),Trial (StB),70,,Yanxia,Full Party,Extreme,
+The Minstrel's Ballad: Tsukuyomi's Pain,Trial (StB),70,,Yanxia,Full Party,Extreme,
+The Great Hunt (Extreme),Trial (StB),70,,The Azim Steppe,Full Party,Extreme,
+Hells' Kier (Extreme),Trial (StB),70,,The Ruby Sea,Full Party,Extreme,
+The Wreath of Snakes (Extreme),Trial (StB),70,,The Ruby Sea,Full Party,Extreme,
+,,,,,,,
+Deltascape V1.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Deltascape V2.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Deltascape V3.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Deltascape V4.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Sigmascape V1.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Sigmascape V2.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Sigmascape V3.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Sigmascape V4.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Alphascape V1.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Alphascape V2.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Alphascape V3.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Alphascape V4.0,Normal Raid (StB),70,,The Fringes,Full Party,Normal,Omega Key
+Deltascape V1.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Deltascape V2.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Deltascape V3.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Deltascape V4.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Sigmascape V1.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Sigmascape V2.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Sigmascape V3.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Sigmascape V4.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Alphascape V1.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Alphascape V2.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Alphascape V3.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+Alphascape V4.0 (Savage),Savage Raid (StB),70,,The Fringes,Full Party,Savage,Omega Key
+,,,,,,,
+The Royal City of Rabanastre,Alliance Raid (StB),70,,Kugane,Alliance,Normal,
+The Ridorana Lighthouse,Alliance Raid (StB),70,,Kugane,Alliance,Normal,
+The Orbonne Monastery,Alliance Raid (StB),70,,Kugane,Alliance,Normal,
+,,,,,,,
+SHB,,,,,,,
+Holminster Switch,Dungeon (ShB),71,,Lakeland,Light Party,Normal,
+Dohn Mheg,Dungeon (ShB),73,,Il Mheg,Light Party,Normal,
+The Qitana Ravel,Dungeon (ShB),75,,The Rak'tika Greatwood,Light Party,Normal,
+Malikah's Well,Dungeon (ShB),77,,Amh Araeng,Light Party,Normal,
+Mt. Gulg,Dungeon (ShB),79,,Kholusia,Light Party,Normal,
+Amaurot,Dungeon (ShB),80,,The Tempest,Light Party,Normal,
+The Twinning,Dungeon (ShB),80,,The Crystarium,Light Party,Normal,
+Akadaemia Anyder,Dungeon (ShB),80,,The Tempest,Light Party,Normal,
+The Grand Cosmos,Dungeon (ShB),80,,Lakeland,Light Party,Normal,
+Anamnesis Anyder,Dungeon (ShB),80,,Kholusia,Light Party,Normal,
+The Heroes' Gauntlet,Dungeon (ShB),80,,Eulmore,Light Party,Normal,
+Matoya's Relict,Dungeon (ShB),80,,The Dravanian Hinterlands,Light Party,Normal,
+Paglth'an,Dungeon (ShB),80,,Ul'dah,Light Party,Normal,
+,,,,,,,
+The Dancing Plague,Trial (ShB),73,,Il Mheg,Full Party,Normal,
+The Crown of the Immaculate,Trial (ShB),79,,Kholusia,Full Party,Normal,
+The Dying Gasp,Trial (ShB),80,,The Tempest,Full Party,Normal,
+Cinder Drift,Trial (ShB),80,,The Lochs,Full Party,Normal,
+The Seat of Sacrifice,Trial (ShB),80,,The Crystarium,Full Party,Normal,
+Castrum Marinum,Trial (ShB),80,,Western Thanalan,Full Party,Normal,
+The Cloud Deck,Trial (ShB),80,,The Lochs,Full Party,Normal,
+,,,,,,,
+The Dancing Plague (Extreme),Trial (ShB),80,,Il Mheg,Full Party,Extreme,
+The Crown of the Immaculate (Extreme),Trial (ShB),80,,Kholusia,Full Party,Extreme,
+The Minstrel's Ballad: Hades's Elegy,Trial (ShB),80,,The Tempest,Full Party,Extreme,
+Cinder Drift (Extreme),Trial (ShB),80,,The Lochs,Full Party,Extreme,
+Memoria Misera (Extreme),Trial (ShB),80,,Yanxia,Full Party,Extreme,
+The Seat of Sacrifice (Extreme),Trial (ShB),80,,The Crystarium,Full Party,Extreme,
+Castrum Marinum (Extreme),Trial (ShB),80,,Western Thanalan,Full Party,Extreme,
+The Cloud Deck (Extreme),Trial (ShB),80,,The Lochs,Full Party,Extreme,
+,,,,,,,
+Eden's Gate: Resurrection,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Gate: Descent,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Gate: Inundation,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Gate: Sepulture,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Verse: Fulmination,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Verse: Furor,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Verse: Iconoclasm,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Verse: Refulgence,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Promise: Umbra,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Promise: Litany,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Promise: Anamorphosis,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Promise: Eternity,Normal Raid (ShB),80,,Amh Araeng,Full Party,Normal,Eden Key
+Eden's Gate: Resurrection (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Gate: Descent (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Gate: Inundation (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Gate: Sepulture (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Verse: Fulmination (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Verse: Furor (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Verse: Iconoclasm (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Verse: Refulgence (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Promise: Umbra (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Promise: Litany (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Promise: Anamorphosis (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+Eden's Promise: Eternity (Savage),Savage Raid (ShB),80,,Amh Araeng,Full Party,Savage,Eden Key
+,,,,,,,
+The Copied Factory,Alliance Raid (Shb),80,,Kholusia,Alliance,Normal,
+The Puppets' Bunker,Alliance Raid (Shb),80,,Kholusia,Alliance,Normal,
+The Tower at Paradigm's Breach,Alliance Raid (Shb),80,,Kholusia,Alliance,Normal,
+,,,,,,,
+Castrum Lacus Litore,Alliance Raid (Shb),80,,Gangos,Alliance,Normal,
+Delubrum Reginae,Alliance Raid (Shb),80,,Gangos,Alliance,Normal,
+The Dalriada,Alliance Raid (Shb),80,,Gangos,Alliance,Normal,
+EW,,,,,,,
+The Tower of Zot,Dungeon (EW),81,,Thavnair,Light Party,Normal,
+The Tower of Babil,Dungeon (EW),83,,Garlemald,Light Party,Normal,
+Vanaspati,Dungeon (EW),85,,Thavnair,Light Party,Normal,
+Ktisis Hyperboreia,Dungeon (EW),87,,Elpis,Light Party,Normal,
+The Aitiascope,Dungeon (EW),89,,Labyrinthos,Light Party,Normal,
+The Dead Ends,Dungeon (EW),90,,Ultima Thule,Light Party,Normal,
+Smileton,Dungeon (EW),90,,Mare Lamentorum,Light Party,Normal,
+The Stigma Dreamscape,Dungeon (EW),90,,Ultima Thule,Light Party,Normal,
+Alzadaal's Legacy,Dungeon (EW),90,,Thavnair,Light Party,Normal,
+The Fell Court of Troia,Dungeon (EW),90,,Thavnair,Light Party,Normal,
+Lapis Manalis,Dungeon (EW),90,,Garlemald,Light Party,Normal,
+The Aetherfont,Dungeon (EW),90,,Old Sharlayan,Light Party,Normal,
+The Lunar Subterrane,Dungeon (EW),90,,Mare Lamentorum,Light Party,Normal,
+,,,,,,,
+The Dark Inside,Trial (EW),83,,Mare Lamentorum,Full Party,Normal,
+The Mothercrystal,Trial (EW),89,,Labyrinthos,Full Party,Normal,
+The Final Day,Trial (EW),90,,Ultima Thule,Full Party,Normal,
+Storm's Crown,Trial (EW),90,,Thavnair,Full Party,Normal,
+Mount Ordeals,Trial (EW),90,,Thavnair,Full Party,Normal,
+The Voidcast Dais,Trial (EW),90,,Mare Lamentorum,Full Party,Normal,
+The Abyssal Fracture,Trial (EW),90,,Mare Lamentorum,Full Party,Normal,
+The Gilded Araya,Trial (EW),90,,Radz-at-Han,Full Party,Normal,
+,,,,,,,
+The Minstrel's Ballad: Zodiark's Fall,Trial (EW),90,,Mare Lamentorum,Full Party,Extreme,
+The Minstrel's Ballad: Hydaelyn's Call,Trial (EW),90,,Labyrinthos,Full Party,Extreme,
+The Minstrel's Ballad: Endsinger's Aria,Trial (EW),90,,Ultima Thule,Full Party,Extreme,
+Storm's Crown (Extreme),Trial (EW),90,,Thavnair,Full Party,Extreme,
+Mount Ordeals (Extreme),Trial (EW),90,,Thavnair,Full Party,Extreme,
+The Voidcast Dais (Extreme),Trial (EW),90,,Mare Lamentorum,Full Party,Extreme,
+The Abyssal Fracture (Extreme),Trial (EW),90,,Mare Lamentorum,Full Party,Extreme,
+,,,,,,,
+The Sil'dihn Subterrane,Variant Dungeon (EW),90,,Central Thanalan,Full Party,Normal,
+Mount Rokkon,Variant Dungeon (EW),90,,Kugane,Full Party,Normal,
+Aloalo Island,Variant Dungeon (EW),90,,Thavnair,Full Party,Normal,
+,,,,,,,
+Asphodelos: The First Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Asphodelos: The Second Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Asphodelos: The Third Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Asphodelos: The Fourth Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Abyssos: The Fifth Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Abyssos: The Sixth Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Abyssos: The Seventh Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Abyssos: The Eighth Circle,Normal Raid (EW),90,,Elpis,Full Party,Normal,Pandaemonium Key
+Anabaseios: The Ninth Circle,Normal Raid (EW),90,,Labyrinthos,Full Party,Normal,Pandaemonium Key
+Anabaseios: The Tenth Circle,Normal Raid (EW),90,,Labyrinthos,Full Party,Normal,Pandaemonium Key
+Anabaseios: The Eleventh Circle,Normal Raid (EW),90,,Labyrinthos,Full Party,Normal,Pandaemonium Key
+Anabaseios: The Twelfth Circle,Normal Raid (EW),90,,Labyrinthos,Full Party,Normal,Pandaemonium Key
+,,,,,,,
+Asphodelos: The First Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Asphodelos: The Second Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Asphodelos: The Third Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Asphodelos: The Fourth Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Abyssos: The Fifth Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Abyssos: The Sixth Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Abyssos: The Seventh Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Abyssos: The Eighth Circle (Savage),Savage Raid (EW),90,,Elpis,Full Party,Savage,Pandaemonium Key
+Anabaseios: The Ninth Circle (Savage),Savage Raid (EW),90,,Labyrinthos,Full Party,Savage,Pandaemonium Key
+Anabaseios: The Tenth Circle (Savage),Savage Raid (EW),90,,Labyrinthos,Full Party,Savage,Pandaemonium Key
+Anabaseios: The Eleventh Circle (Savage),Savage Raid (EW),90,,Labyrinthos,Full Party,Savage,Pandaemonium Key
+Anabaseios: The Twelfth Circle (Savage),Savage Raid (EW),90,,Labyrinthos,Full Party,Savage,Pandaemonium Key
+,,,,,,,
+Aglaia,Alliance Raid (EW),90,,Mor Dhona,Alliance,Normal,
+Euphrosyne,Alliance Raid (EW),90,,Mor Dhona,Alliance,Normal,
+Thaleia,Alliance Raid (EW),90,,Mor Dhona,Alliance,Normal,
+,,,,,,
+Ihuykatumu,Dungeon (DT),91,,Tuliyollal,Light Party,Normal,
+Worqor Zormor,Dungeon (DT),93,,Urqopacha,Light Party,Normal,
+The Skydeep Cenote,Dungeon (DT),95,,Yak T'el,Light Party,Normal,
+Vanguard,Dungeon (DT),97,,Shaaloani,Light Party,Normal,
+Origenics,Dungeon (DT),99,,Heritage Found,Light Party,Normal,
+Alexandria,Dungeon (DT),100,,Living Memory,Light Party,Normal,
+Tender Valley,Dungeon (DT),100,,Shaaloani,Light Party,Normal,
+The Strayborough Deadwalk,Dungeon (DT),100,,Living Memory,Light Party,Normal,
+Yuweyawata Field Station,Dungeon (DT),100,,Heritage Found,Light Party,Normal,
+The Underkeep,Dungeon (DT),100,,Solution Nine,Light Party,Normal,
+The Meso Terminal,Dungeon (DT),100,,Living Memory,Light Party,Normal,
+Mistwake,Dungeon (DT),100,,Mist Continent,Light Party,Normal,
+,,,,,,,
+Worqor Lar Dor,Trial (DT),93,,Urqopacha,Full Party,Normal,
+Everkeep,Trial (DT),99,,Heritage Found,Full Party,Normal,
+The Interphos,Trial (DT),100,,Living Memory,Full Party,Normal,
+Recollection,Trial (DT),100,,Solution Nine,Full Party,Normal,
+The Ageless Necropolis,Trial (DT),100,,Living Memory,Full Party,Normal,
+The Windward Wilds,Trial (DT),100,,Shaaloani,Full Party,Normal,
+Hell on Rails,Trial (DT),100,,Heritage Found,Full Party,Normal,
+,,,,,,,
+Worqor Lar Dor (Extreme),Trial (DT),100,,Urqopacha,Full Party,Endgame,
+Everkeep (Extreme),Trial (DT),100,,Heritage Found,Full Party,Endgame,
+The Minstrel's Ballad: Sphene's Burden,Trial (DT),100,,Living Memory,Full Party,Endgame,
+Recollection (Extreme),Trial (DT),100,,Solution Nine,Full Party,Endgame,
+The Minstrel's Ballad: Necron's Embrace,Trial (DT),100,,Living Memory,Full Party,Endgame,
+The Windward Wilds (Extreme),Trial (DT),100,,Shaaloani,Full Party,Endgame,
+Hell on Rails (Extreme),Trial (DT),100,,Heritage Found,Full Party,Endgame,
+,,,,,,,
+AAC Light-heavyweight M1,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Light-heavyweight M2,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Light-heavyweight M3,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Light-heavyweight M4,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Cruiserweight M1,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Cruiserweight M2,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Cruiserweight M3,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Cruiserweight M4,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Heavyweight M1,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Heavyweight M2,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Heavyweight M3,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+AAC Heavyweight M4,Normal Raid (DT),100,,The Arcadion,Full Party,Normal,
+,,,,,,,
+AAC Light-heavyweight M1 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Light-heavyweight M2 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Light-heavyweight M3 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Light-heavyweight M4 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Cruiserweight M1 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Cruiserweight M2 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Cruiserweight M3 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Cruiserweight M4 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Heavyweight M1 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Heavyweight M2 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Heavyweight M3 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+AAC Heavyweight M4 (Savage),Savage Raid (DT),100,,The Arcadion,Full Party,Endgame,
+,,,,,,,
+Jeuno: The First Walk,Alliance Raid (DT),100,,Yak T'el,Alliance,Normal,
+San d'Oria: The Second Walk,Alliance Raid (DT),100,,Yak T'el,Alliance,Normal,

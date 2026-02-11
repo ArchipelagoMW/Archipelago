@@ -1,0 +1,290 @@
+{
+  "Goldsmith Crab": {
+    "name": "Goldsmith Crab",
+    "region": "The Diadem",
+    "requires": "|5 FSH Levels:14| and |Bladed Steel Jig|"
+  },
+  "Crown Trout": {
+    "name": "Crown Trout",
+    "region": "The Diadem",
+    "requires": "|5 FSH Levels:14| and |Stonefly Nymph|"
+  },
+  "Retribution Staff": {
+    "name": "Retribution Staff",
+    "region": "The Diadem",
+    "requires": "|5 FSH Levels:14| and |Purse Web Spider|"
+  },
+  "Eurhinosaur": {
+    "name": "Eurhinosaur",
+    "region": "The Diadem",
+    "requires": "|5 FSH Levels:16| and |Giant Crane Fly|"
+  },
+  "Gem Marimo": {
+    "name": "Gem Marimo",
+    "region": "The Diadem",
+    "requires": "|5 FSH Levels:16| and |Giant Crane Fly|"
+  },
+  "Pterodactyl": {
+    "name": "Pterodactyl",
+    "region": "The Diadem",
+    "requires": "|5 FSH Levels:16| and |Giant Crane Fly|"
+  },
+  "Sprig Cleaning (FATE)": {
+    "name": "Sprig Cleaning (FATE)",
+    "region": "Central Shroud",
+    "level": "30"
+  },
+  "Spandy Balidet (FATE)": {
+    "name": "Spandy Balidet (FATE)",
+    "region": "Outer La Noscea",
+    "level": "40"
+  },
+  "Deep Velodyna Carp": {
+    "name": "Deep Velodyna Carp",
+    "region": "The Fringes",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Gigas Catfish": {
+    "name": "Gigas Catfish",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|",
+    "id": 12776942637
+  },
+  "Greasy Strangler": {
+    "name": "Greasy Strangler",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|",
+    "id": 12776942638
+  },
+  "Spikefish": {
+    "name": "Spikefish",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|",
+    "id": 12776942639
+  },
+  "Fish Offering": {
+    "name": "Fish Offering",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|",
+    "id": 12776942644
+  },
+  "Zagas A'khaal": {
+    "name": "Zagas A'khaal",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|",
+    "id": 12776942645
+  },
+  "Steppe Sweetfish": {
+    "name": "Steppe Sweetfish",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|",
+    "id": 12776942646
+  },
+  "Fatty Eel": {
+    "name": "Fatty Eel",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Moon Oyster": {
+    "name": "Moon Oyster",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Crimson Copperfish": {
+    "name": "Crimson Copperfish",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Dusk Scallop": {
+    "name": "Dusk Scallop",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Granite Hardscale": {
+    "name": "Granite Hardscale",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Harutsuge Sprag": {
+    "name": "Harutsuge Sprag",
+    "region": "The Ruby Sea",
+    "requires": "|5 FSH Levels:12| and |Live Shrimp|"
+  },
+  "Giant Plesiosaur": {
+    "name": "Giant Plesiosaur",
+    "region": "The Ruby Sea",
+    "requires": "|5 FSH Levels:12| and |Live Shrimp|"
+  },
+  "Sunshell": {
+    "name": "Sunshell",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Midge Larva|"
+  },
+  "Leatherscale": {
+    "name": "Leatherscale",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Appleseed": {
+    "name": "Appleseed",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Water Fan": {
+    "name": "Water Fan",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Fishy Fish": {
+    "name": "Fishy Fish",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Steppe Barramundi": {
+    "name": "Steppe Barramundi",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Arrowhead Snail": {
+    "name": "Arrowhead Snail",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Plump Trout": {
+    "name": "Plump Trout",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Crawling Cog": {
+    "name": "Crawling Cog",
+    "region": "The Azim Steppe",
+    "requires": "|5 FSH Levels:12| and |Salmon Roe|"
+  },
+  "Timeworn Kumbhiraskin Map": {
+    "name": "Timeworn Kumbhiraskin Map",
+    "region": "Ultima Thule",
+    "requires": "|5 FSH Levels:17| and |Panic Jig|"
+  },
+  "Poor Maid's Misadventure (FATE)": {
+    "name": "Poor Maid's Misadventure (FATE)",
+    "region": "Upper La Noscea",
+    "level": "20",
+    "id": 10074
+  },
+  "Bad Breath in Paradise (FATE)": {
+    "name": "Bad Breath in Paradise (FATE)",
+    "region": "Elpis",
+    "level": "82",
+    "id": 10862
+  },
+  "Return of the King (FATE)": {
+    "name": "Return of the King (FATE)",
+    "region": "Eastern La Noscea",
+    "level": "32"
+  },
+  "Petal Shell": {
+    "name": "Petal Shell",
+    "region": "Yanxia",
+    "requires": "|5 FSH Levels:16| and |Signature Skyball|",
+    "id": 21016,
+    "level": 80
+  },
+  "Allagan Hunter": {
+    "name": "Allagan Hunter",
+    "region": "Azys Lla",
+    "requires": "|5 FSH Levels:16| and |Signature Skyball|",
+    "id": 21017,
+    "level": 80
+  },
+  "Flintstrike": {
+    "name": "Flintstrike",
+    "region": "Azys Lla",
+    "requires": "|5 FSH Levels:16| and |Signature Skyball|",
+    "id": 21044,
+    "level": 80
+  },
+  "Pickled Pom": {
+    "name": "Pickled Pom",
+    "region": "Azys Lla",
+    "requires": "|5 FSH Levels:16| and |Signature Skyball|",
+    "id": 21045,
+    "level": 80
+  },
+  "Platinum Seahorse": {
+    "name": "Platinum Seahorse",
+    "region": "Lakeland",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21327,
+    "level": 90
+  },
+  "Clavekeeper": {
+    "name": "Clavekeeper",
+    "region": "Kholusia",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21328,
+    "level": 90
+  },
+  "Mirror Image": {
+    "name": "Mirror Image",
+    "region": "Il Mheg",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21329,
+    "level": 90
+  },
+  "Spangled Pirarucu": {
+    "name": "Spangled Pirarucu",
+    "region": "The Rak'tika Greatwood",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21330,
+    "level": 90
+  },
+  "Gold Dustfish": {
+    "name": "Gold Dustfish",
+    "region": "Amh Araeng",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21344,
+    "level": 90
+  },
+  "Oil Slick": {
+    "name": "Oil Slick",
+    "region": "Kholusia",
+    "requires": "|5 FSH Levels:18| and |Plump Worm|",
+    "id": 21346,
+    "level": 90
+  },
+  "Gonzalo's Grace": {
+    "name": "Gonzalo's Grace",
+    "region": "The Tempest",
+    "requires": "|5 FSH Levels:18| and |Plump Worm|",
+    "id": 21347,
+    "level": 90
+  },
+  "Deadwood Shadow": {
+    "name": "Deadwood Shadow",
+    "region": "The Rak'tika Greatwood",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21437,
+    "level": 90
+  },
+  "Little Bounty": {
+    "name": "Little Bounty",
+    "region": "Il Mheg",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21439,
+    "level": 90
+  },
+  "Saint Fathric's Face": {
+    "name": "Saint Fathric's Face",
+    "region": "Il Mheg",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21440,
+    "level": 90
+  },
+  "Golding": {
+    "name": "Golding",
+    "region": "The Rak'tika Greatwood",
+    "requires": "|5 FSH Levels:18| and |Select Bait Ball|",
+    "id": 21441,
+    "level": 90
+  }
+}

@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 class EventLocations(StrEnum):
     DODONGOS_CAVERN_GOSSIP_STONE_SONG_FAIRY = "Dodongos Cavern Gossip Stone Song Fairy"
-    DODONGOS_CAVERN_LOBBY_SWITCH = "Dodongos Cavern Lobby Switch",
+    DODONGOS_CAVERN_LOBBY_SWITCH = "Dodongos Cavern Lobby Switch"
     DODONGOS_CAVERN_LOWER_LIZALFOS_FIGHT = "Dodongos Cavern Lower Lizalfos Fight"
     DODONGOS_CAVERN_LIFT_SWITCH = "Dodongos Cavern Lift Switch"
     DODONGOS_CAVERN_EYES = "Dodongos Cavern Eyes"

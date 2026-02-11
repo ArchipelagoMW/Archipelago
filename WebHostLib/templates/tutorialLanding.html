@@ -11,8 +11,8 @@
     <div id="tutorial-landing" class="markdown">
     <h1>Archipelago Guides</h1>
     {% for world_name, world_type in worlds.items() %}
-        {% if not world_type.hidden %}
-            <h2 id="{{ world_type.game | urlencode }}">{{ world_type.game }}</h2>
+        {% if not world_type.hidden or world_name == "Archipelago" %}
+            <h2 id="{{ world_type.game | urlencode }}">{{ world_type.web.display_name | default(world_type.game)}}</h2>
             {% for tutorial_name, tutorial_data in tutorials[world_name].items() %}
                 <h3>{{ tutorial_name }}</h3>
                 <p>{{ tutorial_data.description }}</p>

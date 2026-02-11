@@ -29,13 +29,19 @@ from .Client import SMMRSNIClient
 from .ItemMatching import match_item_metroid, match_item_generic
 from importlib.metadata import version, PackageNotFoundError
 
-required_pysmmaprando_version = "0.119.2+experimental2"
+required_pysmmaprando_version = "0.119.2-beta.3"
+required_pysmmaprando_version_short = "0.119.2b3"
 
 class WrongVersionError(Exception):
     pass
 
+class MapRepositoryError(Exception):
+    """
+    Used when the upstream Map Rando map repository is unreachable for whatever reason
+    """
+
 try:
-    if version("pysmmaprando") != required_pysmmaprando_version:
+    if version("pysmmaprando") != required_pysmmaprando_version_short:
         raise WrongVersionError
     from pysmmaprando import build_app_data, validate_settings_ap, randomize_ap, customize_seed_ap, randomization_to_json, CustomizeRequest, Item as MapRandoItem
 
@@ -53,7 +59,7 @@ except (ImportError, WrongVersionError, PackageNotFoundError) as e:
     elif sys.platform.startswith('darwin'):
         mac_ver = platform.mac_ver()[0].split('.')
         abi_version = f"{python_version}-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2"
-    map_rando_lib_file = f'https://github.com/snowflav-goob/MapRandomizer/releases/download/v{required_pysmmaprando_version}/pysmmaprando-{required_pysmmaprando_version}-{python_version}-{abi_version}.whl'
+    map_rando_lib_file = f'https://github.com/snowflav-goob/MapRandomizer/releases/download/v{required_pysmmaprando_version}/pysmmaprando-{required_pysmmaprando_version_short}-{python_version}-{abi_version}.whl'
     import Utils
     if not Utils.is_frozen():
         import subprocess
@@ -147,6 +153,8 @@ class SMMapRandoWorld(World):
 
     def generate_early(self):
         self.map_rando_settings = validate_settings_ap(json.dumps(self.options.map_rando_options.value), map_rando_app_data)
+        if map_rando_app_data.map_repositories[self.map_rando_settings.map_layout] is None:
+            raise MapRepositoryError(f"Unable to fetch the {self.map_rando_settings.map_layout} map repository from upstream Map Rando")
         self.randomizer_ap = randomize_ap(self.map_rando_settings, 
                                             self.random.randrange(9999999999),
                                             (self.multiworld.seed & 0xFFFFFFFF) if self.options.common_map.value else None,

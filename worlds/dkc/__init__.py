@@ -6,6 +6,8 @@ import pkgutil
 
 from BaseClasses import MultiWorld, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import launch as launch_component, components, Component, Type
+
 from .Items import DKCItem, item_table, misc_table, item_groups, STARTING_ID, option_name_to_world_name, items_that_open_checks
 from .Locations import setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
@@ -17,6 +19,12 @@ from .Rules import DKCStrictRules, DKCLooseRules, DKCExpertRules
 from .Rom import patch_rom, DKCProcedurePatch, HASH_US
 
 from typing import Dict, Set, List, ClassVar
+
+def launch_manager(*args):
+    from .Manager import launch
+    launch_component(launch, "DKC Manager")
+
+components.append(Component(display_name="DKC Manager", component_type=Type.ADJUSTER, func=launch_manager))
 
 class DKCSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -56,7 +64,7 @@ class DKCWeb(WebWorld):
 
 class DKCWorld(World):
     """
-    monke
+    Join DK and Diddy on a quest to recover their stolen banana hoard. Traverse more than 30 challenging levels, take a ride on animal buddies and survive the madcap mine cart sequences. You'd be bananas not to play Donkey Kong Country!
     """
     game = "Donkey Kong Country"
     web = DKCWeb()
@@ -66,7 +74,7 @@ class DKCWorld(World):
     options_dataclass = DKCOptions
     options: DKCOptions
     
-    required_client_version = (0, 6, 3)
+    required_client_version = (0, 6, 5)
     
     using_ut: bool
     ut_can_gen_without_yaml = True
@@ -96,8 +104,6 @@ class DKCWorld(World):
         
         connect_regions(self)
        
-
-    def set_rules(self):
         logic = self.options.logic
         if logic == Logic.option_loose:
             DKCLooseRules(self).set_dkc_rules()
@@ -122,11 +128,9 @@ class DKCWorld(World):
                     available_items.append(ItemName.kongo_jungle)
                 selected_item = available_items.pop()
                 item = self.create_item(selected_item)
-                state.collect(item, True)
+                state.collect(item)
                 loc_count = self.test_starting_world(state)
                 self.multiworld.push_precollected(item)
-            
-            self.create_item_late()
 
         # Universal Tracker: If we're using UT, scan the rules again to build "glitched logic" during the regen
         else:
@@ -149,10 +153,6 @@ class DKCWorld(World):
     
  
     def create_items(self) -> None:
-        return 
-    
-
-    def create_item_late(self) -> None:
         itempool: List[DKCItem] = []
 
         self.total_required_locations = 106
@@ -177,14 +177,15 @@ class DKCWorld(World):
             self.multiworld.push_precollected(self.create_item(ItemName.diddy))
 
         # Submit item pool
-        for world_ in item_groups["Worlds"]:
-            if world_ in self.multiworld.precollected_items[self.player]:
+        precollected_items_by_name = [item.name for item in self.multiworld.precollected_items[self.player]]
+        for item in item_groups["Worlds"]:
+            if item in precollected_items_by_name:
                 continue
             else:
-                itempool.append(self.create_item(world_))
+                itempool.append(self.create_item(item))
                 
         for item in item_groups["Abilities"]:
-            if item in self.multiworld.precollected_items[self.player]:
+            if item in precollected_items_by_name:
                 continue
             elif item in self.options.shuffle_abilities.value:
                 classification = False
@@ -195,13 +196,17 @@ class DKCWorld(World):
                 self.multiworld.push_precollected(self.create_item(item))
 
         for item in item_groups["Animals"]:
-            if item in self.options.shuffle_animals.value:
+            if item in precollected_items_by_name:
+                continue
+            elif item in self.options.shuffle_animals.value:
                 itempool += [self.create_item(item)]
             else:
                 self.multiworld.push_precollected(self.create_item(item))
                 
         for item in item_groups["Objects"]:
-            if item in self.options.shuffle_objects.value:
+            if item in precollected_items_by_name:
+                continue
+            elif item in self.options.shuffle_objects.value:
                 itempool += [self.create_item(item)]
             else:
                 self.multiworld.push_precollected(self.create_item(item))

@@ -23,7 +23,7 @@ class PokemonCrystalLogic:
     available_pokemon: set[str]
     all_pokemon: set[str]
     evolution: dict[str, list[tuple[EvolutionData, LogicalAccess]]]
-    breeding: dict[str, list[tuple[str, LogicalAccess]]]
+    breeding: dict[str, list[tuple[str, LogicalAccess, bool]]]
     wild_regions: dict[EncounterKey, LogicalAccess]
     guaranteed_hm_access: bool
 
@@ -1191,6 +1191,14 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
 
     set_rule(get_entrance("REGION_ROUTE_42:CENTER -> REGION_ROUTE_42:CENTERFRUIT"), can_cut)
 
+    west_to_headbutt = get_entrance("REGION_ROUTE_42:WEST -> REGION_ROUTE_42:HEADBUTT")
+    set_rule(west_to_headbutt, lambda state: state.can_reach_region("REGION_ROUTE_42:CENTERFRUIT", world.player))
+    world.multiworld.register_indirect_condition(world.get_region("REGION_ROUTE_42:CENTERFRUIT"), west_to_headbutt)
+
+    center_to_headbutt = get_entrance("REGION_ROUTE_42:CENTERFRUIT -> REGION_ROUTE_42:HEADBUTT")
+    set_rule(center_to_headbutt, lambda state: state.can_reach_region("REGION_ROUTE_42:WEST", world.player))
+    world.multiworld.register_indirect_condition(world.get_region("REGION_ROUTE_42:WEST"), center_to_headbutt)
+
     set_rule(get_location("EVENT_SAW_SUICUNE_ON_ROUTE_42"),
              lambda state: state.has("EVENT_RELEASED_THE_BEASTS", world.player))
 
@@ -1789,14 +1797,6 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
         if world.options.lock_kanto_gyms:
             set_rule(get_entrance("REGION_ROUTE_20 -> REGION_SEAFOAM_GYM"), kanto_gyms_access)
 
-        if world.options.goal == Goal.option_unown_hunt:
-            for location, unown in world.generated_unown_signs.items():
-                chamber_event = get_chamber_event_for_unown(unown)
-                set_rule(get_location(location),
-                         lambda state, event=chamber_event: state.has(event, world.player))
-                set_rule(get_location(f"{location}_Encounter"),
-                         lambda state, event=chamber_event: state.has(event, world.player))
-
         if world.options.randomize_pokemon_requests:
             bills_grandpa_locations = (
                 "Bill's House - Everstone from Bill's Grandpa",
@@ -1811,15 +1811,23 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
                 set_rule(get_location(location),
                          lambda state, pokemon=required_pokemon: state.has_all(pokemon, world.player))
 
-        for trade_id, trade in world.generated_trades.items():
-            if world.options.trades_required and world.is_universal_tracker:
-                rule = lambda state, request=trade.requested_pokemon: state.has(request, world.player) or state.has(
-                    PokemonCrystalGlitchedToken.TOKEN_NAME, world.player)
-            elif world.is_universal_tracker:
-                rule = lambda state: state.has(PokemonCrystalGlitchedToken.TOKEN_NAME, world.player)
-            else:
-                rule = lambda state, request=trade.requested_pokemon: state.has(request, world.player)
-            safe_set_location_rule(trade_id, rule)
+    if world.options.goal == Goal.option_unown_hunt:
+        for location, unown in world.generated_unown_signs.items():
+            chamber_event = get_chamber_event_for_unown(unown)
+            set_rule(get_location(location),
+                     lambda state, event=chamber_event: state.has(event, world.player))
+            set_rule(get_location(f"{location}_Encounter"),
+                     lambda state, event=chamber_event: state.has(event, world.player))
+
+    for trade_id, trade in world.generated_trades.items():
+        if world.options.trades_required and world.is_universal_tracker:
+            rule = lambda state, request=trade.requested_pokemon: state.has(request, world.player) or state.has(
+                PokemonCrystalGlitchedToken.TOKEN_NAME, world.player)
+        elif world.is_universal_tracker:
+            rule = lambda state: state.has(PokemonCrystalGlitchedToken.TOKEN_NAME, world.player)
+        else:
+            rule = lambda state, request=trade.requested_pokemon: state.has(request, world.player)
+        safe_set_location_rule(trade_id, rule)
 
     if world.options.require_itemfinder:
         if world.options.require_itemfinder == RequireItemfinder.option_logically_required and world.is_universal_tracker:
@@ -1951,10 +1959,10 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
                 combine="or"
             )
 
-    def breeding_logic(state: CollectionState, breeders_access: set[tuple[str, LogicalAccess]]) -> bool:
+    def breeding_logic(state: CollectionState, breeders_access: set[tuple[str, LogicalAccess, bool]]) -> bool:
         for breeder_access in breeders_access:
-            breeder, access = breeder_access
-            if state.has(breeder, world.player):
+            breeder, access, requires_ditto = breeder_access
+            if state.has(breeder, world.player) and ((not requires_ditto) or state.has("DITTO", world.player)):
                 if access is LogicalAccess.InLogic:
                     return True
                 elif (access is LogicalAccess.OutOfLogic
@@ -1971,7 +1979,7 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
                                                                                  world.player))
 
     for base_form_id, breeders in world.logic.breeding.items():
-        logical_access = [access for _, access in breeders]
+        logical_access = [access for _, access, _ in breeders]
         if not world.is_universal_tracker and (LogicalAccess.InLogic not in logical_access): continue
         set_rule(
             get_location(f"Hatch {world.generated_pokemon[base_form_id].friendly_name}"),

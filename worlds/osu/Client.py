@@ -50,6 +50,11 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
         """Sets the Client Secret, generated in the "OAuth" Section of Account Settings"""
         os.environ['API_KEY'] = key
         self.output(f"Set to ##################")
+    
+    def _cmd_set_client_secret(self, key=""):
+        """Sets the Client Secret, generated in the "OAuth" Section of Account Settings"""
+        os.environ['API_KEY'] = key
+        self.output(f"Set to ##################")
 
     def _cmd_set_client_id(self, client_id=""):
         """Sets the Client ID, generated in the "OAuth" Section of Account Settings"""
@@ -167,7 +172,12 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
 
     def _cmd_update(self, mode=''):
         """Gets the player's last score, in a given gamemode or their set default"""
-        asyncio.create_task(get_last_scores(self, mode))
+        if mode:
+            if mode.lower() in self.mode_names.keys():
+                request += f"&mode={self.mode_names[mode.lower()]}"
+            else:
+                self.output('Please input a valid mode. Valid modes are Standard, Catch, Taiko, and Mania.')
+        asyncio.create_task(get_last_scores(self.ctx, mode, self.output))
 
     def _cmd_download(self, number=''):
         """Downloads the given song number in '/songs'. Also Accepts "Next" and "Victory"."""
@@ -178,7 +188,7 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
             else:
                 self.output("You have no songs to download")
                 return
-        if number.lower() == 'victory':
+        elif number.lower() == 'victory':
             number = 0
         try:
             song_number = int(number) - 1
@@ -212,6 +222,8 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
         except KeyError:
             self.output('Please set your Client ID, Client Secret, and Player ID')
             return
+        if not self.ctx.token:
+            asyncio.create_task(get_token(self.ctx, self.output))
         if mode.lower() == 'all':
             self.ctx.auto_modes = ['osu', 'fruits', 'taiko', 'mania']
             self.output('Auto Tracking Enabled for all modes')
@@ -228,11 +240,8 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
 
     def _cmd_auto_download(self):
         """Toggles Auto Downloads when Auto Tracking"""
-        try:
-            [os.environ['API_KEY'], os.environ['CLIENT_ID']]
-        except KeyError:
-            self.output('Please set your Client ID, and Client Secret')
-            return
+        if not self.ctx.token:
+            asyncio.create_task(get_token(self.ctx, self.output))
         self.ctx.auto_download = not self.ctx.auto_download
         if self.ctx.auto_download:
             self.output('Toggled Auto Downloading On')
@@ -285,7 +294,7 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
 
     async def get_diff_name(self, song):
         if not self.ctx.token:
-            await get_token(self.ctx)
+            await get_token(self.ctx, self.output)
         url = f"https://osu.ppy.sh/api/v2/beatmapsets/{song['id']}"
         headers = {"Accept": "application/json", "Content-Type": "application/json",
                    "Authorization": f"Bearer {self.ctx.token}"}
@@ -294,64 +303,6 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
         for i in beatmapset['beatmaps']:
             if i['id'] in song['diffs']:
                 self.output(f'{i["version"]} - {i["difficulty_rating"]}*')
-
-    def check_location(self, score):
-        self.output(score['beatmapset']['title'] + " " + score['beatmap']['version'] + f' Passed: {score["passed"]}')
-        # Check if the score is a pass, then check if it's in the AP
-        if not score['passed']:
-            # self.output("You cannot check a location without passing the song")
-            return
-        if self.ctx.disable_difficulty_reduction and any(
-                mod['acronym'] in ['NF', 'EZ', 'HT', 'DC'] for mod in score['mods']):
-            self.output("Your current settings do not allow difficulty reduction mods.")
-            return
-        if self.ctx.minimum_grade:
-            grade = calculate_grade(score)
-            grades = ['X', 'S', 'A', 'B', 'C', 'D']
-            if grades.index(grade) >= self.ctx.minimum_grade:
-                required_grade = 'SS' if grades[self.ctx.minimum_grade - 1] == 'X' else grades[
-                    self.ctx.minimum_grade - 1]
-                self.output(f"You did not get a high enough grade. You need atleast a"
-                            f"{'n' if required_grade == 'A' else ''} {required_grade} Rank")
-                return
-        for song in self.ctx.pairs:
-            if self.ctx.pairs[song]['id'] == score['beatmapset']['id']:
-                self.output(f'Play Matches {song}')
-                # check for the correct diff
-                if self.ctx.difficulty_sync and score['beatmap_id'] not in self.ctx.pairs[song]['diffs']:
-                    self.output('The incorrect difficulty was played')
-                    self.output(f'The correct difficulty(ies) is: {self.ctx.pairs[song]["diffs"]}')
-                    return
-                # check for converts
-                if self.ctx.disallow_converts:
-                    # Find the diff that was played
-                    for beatmap in self.ctx.pairs[song]['beatmaps']:
-                        if beatmap['id'] == score['beatmap_id']:
-                            # Only Standard maps can be converted
-                            if score['ruleset_id'] != 0 and beatmap['mode'] == 'osu':
-                                self.output('Your settings do not allow converts')
-                                return
-                if song == "Victory":
-                    if count_item(self.ctx, osu_base_id - 1) >= self.ctx.preformance_points_needed:
-                        message = [{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]
-                        asyncio.create_task(self.ctx.send_msgs(message))
-                        return
-                    self.output("You don't have enough preformance points")
-                    return
-                if not count_item(self.ctx, osu_base_id + list(self.ctx.pairs.keys()).index(song)):
-                    self.output("You don't have this song unlocked")
-                    return
-                locations = []
-                for i in range(2):
-                    location_id = osu_base_id + (2 * list(self.ctx.pairs.keys()).index(song)) + i
-                    if location_id in self.ctx.missing_locations:
-                        if location_id in self.ctx.missing_locations:
-                            locations.append(int(location_id))
-                if locations:
-                    message = [{"cmd": 'LocationChecks', "locations": locations}]
-                    task = asyncio.create_task(self.ctx.send_msgs(message))
-                    if self.ctx.auto_download:
-                        asyncio.create_task(download_next_beatmapset(self, task))
 
     async def download_beatmapset(self, beatmapset):
         print(f'Downloading {beatmapset["artist"]} - {beatmapset["title"]} ({beatmapset["id"]})')
@@ -550,7 +501,7 @@ def get_available_ids(ctx):
     return incomplete_items
 
 
-async def get_token(ctx):
+async def get_token(ctx, output_function=print):
     try:
         async with aiohttp.request("POST", "https://osu.ppy.sh/oauth/token",
                                    headers={"Accept": "application/json",
@@ -560,17 +511,17 @@ async def get_token(ctx):
             tokenjson = await authreq.json()
             print(tokenjson)
             ctx.token = tokenjson['access_token']
+            return tokenjson['access_token']
     except KeyError:
-        print('nokey')
-        return
+        output_function("Error accessing osu! servers. Check your Client id, Client Secret, and Player id.")
 
 
-async def open_set_in_direct(ctx, diff_id: int, fallback: bool = False) -> None:
+async def open_set_in_direct(ctx, diff_id: int, fallback: bool = False, output_function = print):
     # If the beatmapset has no difficulty ID, we have to fall back to the beatmap ID as done in previous versions
     if fallback:
         set_id = diff_id
         if not ctx.token:
-            await get_token(ctx)
+            await get_token(ctx, output_function)
         url = f"https://osu.ppy.sh/api/v2/beatmapsets/{set_id}"
         headers = {"Accept": "application/json", "Content-Type": "application/json",
                    "Authorization": f"Bearer {ctx.token}"}
@@ -583,26 +534,27 @@ async def open_set_in_direct(ctx, diff_id: int, fallback: bool = False) -> None:
     webbrowser.open(f"osu://b/{diff_id}")
 
 
-# This is the silent version of the function below where this one is used in game watcher
-async def download_next_beatmapset_silent(ctx, task):
+async def download_next_beatmapset(ctx, task, output_function=print):
     await task
     await asyncio.sleep(1)  # Delay to get the reply
     if len(get_available_ids(ctx)) <= 0:
         return
     beatmapset = ctx.pairs[list(ctx.pairs.keys())[get_available_ids(ctx)[0]]]
     if ctx.download_type == 'direct':
+        output_function(f'Opening {beatmapset["artist"]} - {beatmapset["title"]} ({beatmapset["id"]}) in osu!Direct')
         try:
-            asyncio.create_task(open_set_in_direct(ctx, beatmapset['diffs'][0]))
+            asyncio.create_task(open_set_in_direct(ctx, beatmapset['diffs'][0], False, output_function))
         except KeyError:
-            asyncio.create_task(open_set_in_direct(ctx, beatmapset['id'], True))
+            output_function('No Difficulty ID found, attempting fallback')
+            asyncio.create_task(open_set_in_direct(ctx, beatmapset['id'], True, output_function))
         return
-    print(f'Downloading {beatmapset["artist"]} - {beatmapset["title"]} ({beatmapset["id"]})')
+    output_function(f'Downloading {beatmapset["artist"]} - {beatmapset["title"]} ({beatmapset["id"]})')
     try:
         async with aiohttp.request("GET", f"https://beatconnect.io/b/{beatmapset['id']}") as req:
             content = await req.read()
             req_status = req.status
         if req_status != 200:
-            print(f'Download Failed, Status Code: {req_status}')
+            output_function(f'Download Failed, Status Code: {req_status}')
             return
         f = f'{beatmapset["id"]} {beatmapset["artist"]} - {beatmapset["title"]}.osz'
         filename = "".join(i for i in f if i not in "\/:*?<>|\"")
@@ -617,61 +569,23 @@ async def download_next_beatmapset_silent(ctx, task):
 
         webbrowser.open(file_path)
     except Exception as e:
-        print(f"An error occurred: {e}")
+        output_function(f"An error occurred: {e}")
 
 
-# This is the non-silent version of the function above where this one is used in the update command
-async def download_next_beatmapset(self, task):
-    await task
-    await asyncio.sleep(0.2)  # Delay to get the reply
-    if len(get_available_ids(self.ctx)) <= 0:
-        return
-    beatmapset = self.ctx.pairs[list(self.ctx.pairs.keys())[get_available_ids(self.ctx)[0]]]
-    if self.ctx.download_type == 'direct':
-        self.output(f'Opening {beatmapset["artist"]} - {beatmapset["title"]} ({beatmapset["id"]}) in osu!Direct')
-        try:
-            asyncio.create_task(open_set_in_direct(self.ctx, beatmapset['diffs'][0]))
-        except KeyError:
-            self.output("No Difficulty ID found, attempting fallback")
-            asyncio.create_task(open_set_in_direct(self.ctx, beatmapset['id'], True))
-        return
-    self.output(f'Downloading {beatmapset["artist"]} - {beatmapset["title"]} ({beatmapset["id"]})')
-    try:
-        async with aiohttp.request("GET", f"https://beatconnect.io/b/{beatmapset['id']}") as req:
-            content = await req.read()
-            req_status = req.status
-        if req_status != 200:
-            self.output(f'Download Failed, Status Code: {req_status}')
-            return
-        f = f'{beatmapset["id"]} {beatmapset["artist"]} - {beatmapset["title"]}.osz'
-        filename = "".join(i for i in f if i not in "\/:*?<>|\"")
-        path = os.path.join(self.ctx.game_communication_path, 'config')
-
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        file_path = os.path.join(path, filename)
-        with open(file_path, 'wb') as f:
-            f.write(content)
-
-        webbrowser.open(file_path)
-    except Exception as e:
-        self.output(f"An error occurred: {e}")
-
-
-# This is the silent version of the function below where this one is used in game watcher
-async def auto_get_last_scores(ctx, mode=''):
+async def get_last_scores(ctx, mode='', output_function=print):
     # Make URl for the request
     try:
         request = f"https://osu.ppy.sh/api/v2/users/{os.environ['PLAYER_ID']}/scores/recent?include_fails=1&limit=10"
     except KeyError:
-        print('No Player ID')
+        output_function('Set a Player ID')
         return
     # Add Mode to request, otherwise it will use the user's default
     if mode:
         request += f"&mode={mode}"
     if not ctx.token:
-        await get_token(ctx)
+        await get_token(ctx, output_function)
+        if not ctx.token:
+            return
     headers = {"Accept": "application/json", "Content-Type": "application/json", "Authorization": f"Bearer {ctx.token}",
                "x-api-version": "20240529"}
     async with aiohttp.request("GET", request, headers=headers) as scores:
@@ -680,62 +594,23 @@ async def auto_get_last_scores(ctx, mode=''):
             print(score_list, "a")
             print(scores)
         except (KeyError, IndexError):
-            await get_token(ctx)
-            print("Error Retrieving plays, Check your API Key.")
+            await get_token(ctx, output_function)
+            output_function("Error Retrieving plays, Check your Client id, Client Secret, and player id.")
             return
     if not score_list:
-        print("No Plays Found. Check the Gamemode")
+        output_function("No Plays Found. Check the Gamemode")
         return
     found = False
     for score in score_list:
         if score['ended_at'] in ctx.last_scores:
             if not found:
-                print("No New Plays Found.")
+                output_function("No New Plays Found.")
             return
         found = True
         ctx.last_scores.append(score['ended_at'])
         if len(ctx.last_scores) > 100:
             ctx.last_scores.pop(0)
-        check_location(ctx, score)
-
-
-# This is the non-silent version of the function above where this one is used in the update command
-async def get_last_scores(self, mode=''):
-    # Make URl for the request
-    try:
-        request = f"https://osu.ppy.sh/api/v2/users/{os.environ['PLAYER_ID']}/scores/recent?include_fails=1&limit=100"
-    except KeyError:
-        self.output('Set a Player ID')
-        return
-    # Add Mode to request, otherwise it will use the user's default
-    if mode and mode.lower() in self.mode_names.keys():
-        request += f"&mode={self.mode_names[mode.lower()]}"
-    if not self.ctx.token:
-        await get_token(self.ctx)
-    headers = {"Accept": "application/json", "Content-Type": "application/json",
-               "Authorization": f"Bearer {self.ctx.token}", "x-api-version": "20240529"}
-    async with aiohttp.request("GET", request, headers=headers) as scores:
-        try:
-            score_list = await scores.json()
-        except (KeyError, IndexError):
-            await get_token(self.ctx)
-            self.output("Error Retrieving plays, Check your API Key.")
-            return
-    if not score_list:
-        self.output("No Plays Found. Check the Gamemode")
-        return
-    found = False
-    for score in score_list:
-        if score['ended_at'] in self.ctx.last_scores:
-            if not found:
-                self.output("No New Plays Found.")
-            return
-        found = True
-        self.ctx.last_scores.append(score['ended_at'])
-        if len(self.ctx.last_scores) > 100:
-            self.ctx.last_scores.pop(0)
-        self.check_location(score)
-
+        check_location(ctx, score, output_function)
 
 # calculates the grade of a score with the ability to differentiate between stable and lazer scores
 def calculate_grade(score):
@@ -817,38 +692,50 @@ def get_played_songs(ctx):
     return played_songs
 
 
-def check_location(ctx, score):
+def check_location(ctx, score, output_function):
+    output_function(score['beatmapset']['title'] + " " + score['beatmap']['version'] + f' Passed: {score["passed"]}')
+    # Check if the score is a pass, then check if it's in the AP
     if not score['passed']:
         return
-    if ctx.disable_difficulty_reduction and any(mod['acronym'] in ['NF', 'EZ', 'HT', 'DC'] for mod in score['mods']):
+    if ctx.disable_difficulty_reduction and any(
+            mod['acronym'] in ['NF', 'EZ', 'HT', 'DC'] for mod in score['mods']):
+        output_function("Your current settings do not allow difficulty reduction mods.")
         return
     if ctx.minimum_grade:
         grade = calculate_grade(score)
-        if ['X', 'S', 'A', 'B', 'C', 'D'].index(grade) >= ctx.minimum_grade:
+        grades = ['X', 'S', 'A', 'B', 'C', 'D']
+        if grades.index(grade) >= ctx.minimum_grade:
+            required_grade = 'SS' if grades[ctx.minimum_grade - 1] == 'X' else grades[
+                ctx.minimum_grade - 1]
+            output_function(f"You did not get a high enough grade. You need atleast a"
+                        f"{'n' if required_grade == 'A' else ''} {required_grade} Rank")
             return
     for song in ctx.pairs:
         if ctx.pairs[song]['id'] == score['beatmapset']['id']:
-            print(f'Play Matches {song}')
+            output_function(f'Play Matches {song}')
             # check for the correct diff
             if ctx.difficulty_sync and score['beatmap_id'] not in ctx.pairs[song]['diffs']:
-                print('The incorrect difficulty was played')
+                output_function('The incorrect difficulty was played')
+                output_function(f'The correct difficulty(ies) is: {ctx.pairs[song]["diffs"]}')
                 return
             # check for converts
             if ctx.disallow_converts:
                 # Find the diff that was played
                 for beatmap in ctx.pairs[song]['beatmaps']:
                     if beatmap['id'] == score['beatmap_id']:
+                        # Only Standard maps can be converted
                         if score['ruleset_id'] != 0 and beatmap['mode'] == 'osu':
-                            print('Your settings do not allow converts')
+                            output_function('Your settings do not allow converts')
                             return
             if song == "Victory":
-                if count_item(ctx, 726999999) >= ctx.preformance_points_needed:
-                    asyncio.create_task(ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
+                if count_item(ctx, osu_base_id - 1) >= ctx.preformance_points_needed:
+                    message = [{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]
+                    asyncio.create_task(ctx.send_msgs(message))
                     return
-                print("You don't have enough performance points")
+                output_function("You don't have enough preformance points")
                 return
             if not count_item(ctx, osu_base_id + list(ctx.pairs.keys()).index(song)):
-                print("You don't have this song unlocked")
+                output_function("You don't have this song unlocked")
                 return
             locations = []
             for i in range(2):
@@ -860,7 +747,7 @@ def check_location(ctx, score):
                 message = [{"cmd": 'LocationChecks', "locations": locations}]
                 task = asyncio.create_task(ctx.send_msgs(message))
                 if ctx.auto_download:
-                    asyncio.create_task(download_next_beatmapset_silent(ctx, task))
+                    asyncio.create_task(download_next_beatmapset(ctx, task, output_function))
 
 
 async def game_watcher(ctx: APosuContext):
@@ -868,7 +755,7 @@ async def game_watcher(ctx: APosuContext):
     while not ctx.exit_event.is_set():
         if count >= 30:
             for mode in ctx.auto_modes:
-                await auto_get_last_scores(ctx, mode)
+                await get_last_scores(ctx, mode, print)
                 await asyncio.sleep(1)
             count = 0
         count += 1

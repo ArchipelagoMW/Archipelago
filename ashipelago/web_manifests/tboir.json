@@ -1,6 +1,7 @@
 {
   "game": "The Binding of Isaac Repentance",
-  "server_version": "0.2.3",
+  "server_version": "0.3.0",
+  "display_name": "The Binding of Isaac - Repentance",
   "discord_channel": "https://discord.com/channels/731205301247803413/1454262765047775326",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/tboir.apworld"
 }

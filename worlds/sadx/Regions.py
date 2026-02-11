@@ -25,15 +25,15 @@ class AreaConnection:
     item: str
 
 
-MISSABLE_CAPSULES = (list(range(12501, 12547))  # Sonic Casinopolis Sewers
-                     + list(range(21501, 21542))  # Tails Casinopolis Sewers
-                     + list(range(14501, 14519))  # Sonic Twinkle Park Karting
-                     + list(range(15524, 15532))  # Sonic Speed Highway Going down
-                     + list(range(18512, 18514)))  # Sonic Lost Would Boulder
+MISSABLE_CAPSULES = (list(range(12501, 12547 + 1))  # Sonic Casinopolis Sewers
+                     + list(range(21501, 21542 + 1))  # Tails Casinopolis Sewers
+                     + list(range(14501, 14519 + 1))  # Sonic Twinkle Park Karting
+                     + list(range(15524, 15532 + 1))  # Sonic Speed Highway Going down
+                     + list(range(18512, 18514 + 1)))  # Sonic Lost Would Boulder
 
-MISSABLE_ENEMIES = (list(range(12001, 12010))  # Sonic Casinopolis Sewers
-                    + list(range(21001, 21003))  # Tails Casinopolis Sewers
-                    + list(range(14001, 14008)))  # Sonic Twinkle Park karting
+MISSABLE_ENEMIES = (list(range(12001, 12010 + 1))  # Sonic Casinopolis Sewers
+                    + list(range(21001, 21003 + 1))  # Tails Casinopolis Sewers
+                    + list(range(14001, 14008 + 1)))  # Sonic Twinkle Park karting
 
 
 def get_region_name(character: Character, area: Area) -> str:
@@ -89,9 +89,9 @@ def add_locations_to_region(region: Region, area: Area, character: Character, pl
 
 def get_location_ids_for_area(area: Area, character: Character, options: SonicAdventureDXOptions):
     location_ids = []
-    if area == Area.TPLobby and options.twinkle_circuit_checks.value == 2:
+    if options.twinkle_circuit_checks.value == 2:
         for sub_level in sub_level_location_table:
-            if sub_level.subLevel == SubLevel.TwinkleCircuit:
+            if sub_level.subLevel == SubLevel.TwinkleCircuit and sub_level.area == area:
                 if is_any_character_playable(sub_level.get_logic_characters(options), options):
                     if character in sub_level.get_logic_characters(options):
                         if sub_level.subLevelMission != SubLevelMission.B:

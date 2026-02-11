@@ -46,7 +46,7 @@ class SMRPGWeb(WebWorld):
 
 class SMRPGWorld(World):
     """
-    Croakacola
+    Enter a world of whimsy with Mario on a quest to repair Star Road and defeat the troublemaking Smithy Gang. Team up with a party of unlikely allies, like the monstrous Bowser and a mysterious doll named Geno, in a story-rich RPG packed with laughs and quirky characters.
     """
     options_dataclass = SMRPGOptions
     options: SMRPGOptions

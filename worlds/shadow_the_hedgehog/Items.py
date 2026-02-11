@@ -9,12 +9,12 @@ from typing import List, Optional
 from BaseClasses import Item, ItemClassification
 from Options import OptionError
 from worlds.AutoWorld import World
-from . import Weapons, Vehicle, Utils as ShadowUtils, Options, Levels, Objects, ObjectTypes
+from . import Weapons, Vehicle, Utils as ShadowUtils, Options, Levels, Objects, ObjectTypes, Locations
 from .Levels import LEVEL_ID_TO_LEVEL, ALL_STAGES, MISSION_ALIGNMENT_DARK, \
     MISSION_ALIGNMENT_HERO, MISSION_ALIGNMENT_NEUTRAL, ITEM_TOKEN_TYPE_STANDARD, ITEM_TOKEN_TYPE_FINAL, \
     ITEM_TOKEN_TYPE_OBJECTIVE, ITEM_TOKEN_TYPE_ALIGNMENT, ITEM_TOKEN_TYPE_BOSS, \
     ITEM_TOKEN_TYPE_FINAL_BOSS
-from .Locations import MissionClearLocations, GetAlignmentsForStage, count_locations, count_last_way_locations
+from .Locations import MissionClearLocations, GetAlignmentsForStage, count_locations, count_last_way_locations, CheckpointLocations
 
 BASE_ID = 1743800000
 ITEM_ID_START_AT_WEAPONS = 2000
@@ -22,6 +22,9 @@ ITEM_ID_START_AT_VEHICLES = 2500
 ITEM_ID_START_AT_RIFLE = 2600
 ITEM_ID_START_AT_OBJECTS = 2700
 ITEM_ID_START_AT_JUNK = 3000
+ITEM_ID_START_AT_AMMO_BOOST = 3050
+ITEM_ID_START_AT_CHECKPOINTS = 3150
+
 ITEM_ID_START_AT_MISSION = 1000
 ITEM_ID_START_AT_IMPORTANT = 10
 ITEM_ID_START_AT_LEVEL = 100
@@ -147,7 +150,7 @@ def PopulateLevelUnlockItems():
         #if stageId in BOSS_STAGES or stageId in LAST_STORY_STAGES:
         #    continue
 
-        if stageId in Levels.LAST_STORY_STAGES:
+        if stageId in [Levels.BOSS_DEVIL_DOOM]:
             continue
 
         item = ItemInfo(count, GetStageUnlockItem(stageId), ItemClassification.progression, stageId=stageId,
@@ -216,7 +219,7 @@ def GetStageAlignmentObject(stageId, alignmentId):
         return None
 
     item = i[0]
-    if item.mission_object_name is None:
+    if item.mission_object_name is None or item.mission_object_name in ["Goal Ring", "Computer Room", "Core"]:
         return None
 
     return LEVEL_ID_TO_LEVEL[stageId] + " " + item.mission_object_name
@@ -486,10 +489,11 @@ def GetAllItemInfo():
 
     rifle_components = GetRifleComponents()
     object_items = GetObjectItems()
+    checkpoint_items = GetCheckpointItems()
 
     return (emerald_items, required_items, level_unlock_items, stage_objective_items, junk_items,
             token_items, weapon_items, vehicle_items, level_warp_items, rifle_components,
-            weapon_group_items, object_items, key_items, trap_items)
+            weapon_group_items, object_items, key_items, trap_items, checkpoint_items)
 
 
 
@@ -640,7 +644,7 @@ def AddItemsToStartInventory(world, count):
 def CountItems(world: World):
     (emerald_items, required_items, level_unlock_items, stage_objective_items_x,
      junk_items, token_items, weapon_items, vehicle_items, warp_items, rifle_components,
-     weapon_group_items, object_items, key_items, trap_items) = GetAllItemInfo()
+     weapon_group_items, object_items, key_items, trap_items, checkpoint_items) = GetAllItemInfo()
 
     if (not world.options.objective_sanity or
             world.options.objective_sanity_behaviour == Options.ObjectiveSanityBehaviour.option_base_clear):
@@ -750,19 +754,26 @@ def CountItems(world: World):
         if world.options.object_warp_holes and ObjectTypes.ObjectType.WARP_HOLE in available_objects:
             item_count = increment_item_count(item_count, 1)
 
+    if world.options.checkpoint_shuffle != Options.CheckpointShuffle.option_off:
+        relevant_checkpoint_items = [c for c in checkpoint_items if c.stageId in world.available_levels and
+                                     (world.options.checkpoint_shuffle == Options.CheckpointShuffle.option_start_and_unlock or c.value != 0)]
+        item_count = increment_item_count(item_count, len(relevant_checkpoint_items))
+
     return item_count
 
 
-def GetStageItems(world, stage_objective_items=None):
+def GetStageItems(world, stage_objective_items=None, set=True):
     override_settings = world.options.percent_overrides
     mw_temp_stage_objective_items = []
 
-    world.objective_requirements = {}
+    if set:
+        world.objective_requirements = {}
+        world.objective_extras = {}
 
     if stage_objective_items is None:
         (emerald_items, required_items, level_unlock_items, stage_objective_items,
          junk_items, token_items, weapon_items, vehicle_items, warp_items, rifle_components,
-         weapon_group_items, object_items, key_items, trap_items) = GetAllItemInfo()
+         weapon_group_items, object_items, key_items, trap_items,checkpoint_items) = GetAllItemInfo()
 
     if (not world.options.objective_sanity or
             world.options.objective_sanity_behaviour == Options.ObjectiveSanityBehaviour.option_base_clear):
@@ -790,8 +801,8 @@ def GetStageItems(world, stage_objective_items=None):
                                                                        world.options.percent_overrides), lookup.requirement_count, item.stageId, item.alignmentId,
             override_settings)
 
-        world.objective_requirements[item.name] = relevant_objective_complete
-
+        if set:
+            world.objective_requirements[item.name] = relevant_objective_complete
 
         relevant_objective = ShadowUtils.getObjectiveTypeAndPercentage(ShadowUtils.TYPE_ID_OBJECTIVE_AVAILABLE,
                                                   lookup.mission_object_name, world.options,
@@ -809,59 +820,62 @@ def GetStageItems(world, stage_objective_items=None):
 
         assert relevant_objective_complete <=  required_available
 
+        if set:
+            world.objective_extras[item.name] = (required_available - relevant_objective_complete)
+
         mw_temp_stage_objective_items.extend([item] * required_available)
 
     mw_stage_items = [ShadowTheHedgehogItem(s, world.player) for s in mw_temp_stage_objective_items]
     return mw_stage_items
 
 
-def GetPotentialDowngradeItems(world, mw_stage_items=None):
-    potential_downgrade = []
-    to_remove = []
-
-    if mw_stage_items is None:
-        mw_stage_items = GetStageItems(world)
-
-    override_settings = world.options.percent_overrides
-    itemdict = GetItemLookupDict()
-
-    indexer = {}
-    for item in mw_stage_items:
-        item_lookup = itemdict[item.code]
-        lookup = [x for x in MissionClearLocations
-                  if x.stageId == item_lookup.stageId and x.alignmentId == item_lookup.alignmentId][0]
-        if item_lookup.name not in indexer:
-            indexer[item_lookup.name] = 0
-
-        indexer[item_lookup.name] += 1
-
-        max_required_complete = ShadowUtils.getMaxRequired(
-            ShadowUtils.getObjectiveTypeAndPercentage(ShadowUtils.TYPE_ID_COMPLETION, lookup.mission_object_name,
-                                                      world.options, lookup.stageId, lookup.alignmentId,world.options.percent_overrides),
-            lookup.requirement_count, lookup.stageId, lookup.alignmentId,
-            override_settings)
-
-        max_available = ShadowUtils.getMaxRequired(
-            ShadowUtils.getObjectiveTypeAndPercentage(ShadowUtils.TYPE_ID_OBJECTIVE_AVAILABLE,
-                                                      lookup.mission_object_name,
-                                                      world.options, lookup.stageId, lookup.alignmentId,
-                                                      world.options.percent_overrides),
-            lookup.requirement_count, lookup.stageId, lookup.alignmentId,
-            override_settings)
-
-        if indexer[item_lookup.name] > max_available:
-            to_remove.append(item)
-        elif indexer[item_lookup.name] > max_required_complete:
-            potential_downgrade.append(item)
-
-
-    return potential_downgrade, to_remove
+# def GetPotentialDowngradeItems(world, mw_stage_items=None):
+#     potential_downgrade = []
+#     to_remove = []
+#
+#     if mw_stage_items is None:
+#         mw_stage_items = GetStageItems(world, set=False)
+#
+#     override_settings = world.options.percent_overrides
+#     itemdict = GetItemLookupDict()
+#
+#     indexer = {}
+#     for item in mw_stage_items:
+#         item_lookup = itemdict[item.code]
+#         lookup = [x for x in MissionClearLocations
+#                   if x.stageId == item_lookup.stageId and x.alignmentId == item_lookup.alignmentId][0]
+#         if item_lookup.name not in indexer:
+#             indexer[item_lookup.name] = 0
+#
+#         indexer[item_lookup.name] += 1
+#
+#         max_required_complete = ShadowUtils.getMaxRequired(
+#             ShadowUtils.getObjectiveTypeAndPercentage(ShadowUtils.TYPE_ID_COMPLETION, lookup.mission_object_name,
+#                                                       world.options, lookup.stageId, lookup.alignmentId,world.options.percent_overrides),
+#             lookup.requirement_count, lookup.stageId, lookup.alignmentId,
+#             override_settings)
+#
+#         max_available = ShadowUtils.getMaxRequired(
+#             ShadowUtils.getObjectiveTypeAndPercentage(ShadowUtils.TYPE_ID_OBJECTIVE_AVAILABLE,
+#                                                       lookup.mission_object_name,
+#                                                       world.options, lookup.stageId, lookup.alignmentId,
+#                                                       world.options.percent_overrides),
+#             lookup.requirement_count, lookup.stageId, lookup.alignmentId,
+#             override_settings)
+#
+#         if indexer[item_lookup.name] > max_available:
+#             to_remove.append(item)
+#         elif indexer[item_lookup.name] > max_required_complete:
+#             potential_downgrade.append(item)
+#
+#
+#     return potential_downgrade, to_remove
 
 
 def GetShadowRifle():
     (emerald_items, required_items, level_unlock_items, stage_objective_items,
      junk_items, token_items, weapon_items, vehicle_items, warp_items, rifle_components,
-     weapon_group_items, object_items, key_items, trap_items) = GetAllItemInfo()
+     weapon_group_items, object_items, key_items, trap_items,checkpoint_items) = GetAllItemInfo()
 
     return [w for w in weapon_items if w.name == 'Shadow Rifle' or w.name == 'Weapon:Shadow Rifle'][0]
 
@@ -925,6 +939,28 @@ def increment_item_count(count, items):
 
     return count + plus
 
+def GetCheckpointItemName(stageId, index):
+    return f"{Levels.LEVEL_ID_TO_LEVEL[stageId]} Checkpoint {index}"
+
+def GetCheckpointItems():
+    id_c = ITEM_ID_START_AT_CHECKPOINTS
+    items = []
+    for checkpoint in CheckpointLocations:
+        for check_count in range(0, checkpoint.total_count+1):
+
+            if check_count == 0:
+                if not Locations.HasCheckpointZero(checkpoint.stageId):
+                    continue
+
+            # TODO Link Check 1 to Check 0 somewhere
+
+            item = ItemInfo(id_c, GetCheckpointItemName(checkpoint.stageId, check_count),
+                            ItemClassification.progression, checkpoint.stageId, None, "checkpoint", check_count)
+            items.append(item)
+            id_c += 1
+
+    return items
+
 
 def GetObjectItems():
     id_s = ITEM_ID_START_AT_OBJECTS
@@ -946,7 +982,9 @@ def GetObjectItems():
 def PopulateItemPool(world: World):
     (emerald_items, required_items, level_unlock_items, stage_objective_items,
      junk_items, token_items, weapon_items, vehicle_items, warp_items, rifle_components,
-     weapon_group_items, object_items, key_items, trap_items) = GetAllItemInfo()
+     weapon_group_items, object_items, key_items, trap_items,checkpoint_items) = GetAllItemInfo()
+
+    shadow_item_pool = []
 
     use_level_unlock_items = []
     if world.options.level_progression != Options.LevelProgression.option_story and \
@@ -954,7 +992,7 @@ def PopulateItemPool(world: World):
             use_level_unlock_items = [l for l in level_unlock_items if l.stageId not in world.first_regions and
                                       l.stageId in world.available_levels
                                       # and (l.stageId not in Levels.FINAL_BOSSES
-                                      and l.stageId not in Levels.LAST_STORY_STAGES
+                                      and (l.stageId not in Levels.LAST_STORY_STAGES or world.options.include_last_way_shuffle)
                                       and (l.stageId not in Levels.BOSS_STAGES or world.options.select_bosses)
                                       ]
 
@@ -969,28 +1007,28 @@ def PopulateItemPool(world: World):
 
     mw_stage_items = GetStageItems(world, stage_objective_items)
 
-    potential_downgrade, to_remove = GetPotentialDowngradeItems(world, mw_stage_items)
-    if world.excess_item_count > 0 and len(potential_downgrade) > 0:
-        t_size = len(to_remove)
-        size = world.excess_item_count - t_size
-        size = min(size, len(potential_downgrade))
-        new_remove = world.random.sample(potential_downgrade, k=size)
-        potential_downgrade = [ p for p in potential_downgrade if p not in new_remove]
-        to_remove.extend(new_remove)
+    # potential_downgrade, to_remove = GetPotentialDowngradeItems(world, mw_stage_items)
+    # if world.excess_item_count > 0 and len(potential_downgrade) > 0:
+    #     t_size = len(to_remove)
+    #     size = world.excess_item_count - t_size
+    #     size = min(size, len(potential_downgrade))
+    #     new_remove = world.random.sample(potential_downgrade, k=size)
+    #     potential_downgrade = [ p for p in potential_downgrade if p not in new_remove]
+    #     to_remove.extend(new_remove)
 
-    if world.options.exceeding_items_filler == Options.ExceedingItemsFiller.option_always:
-        for downgrade in potential_downgrade:
-            downgrade.classification = ItemClassification.useful
-
-    elif world.options.exceeding_items_filler == Options.ExceedingItemsFiller.option_chance:
-        chance = world.options.exceeding_items_filler_random
-        sample = [item for item in potential_downgrade if world.random.randrange(0, 100) < chance]
-        for downgrade in sample:
-            downgrade.classification = ItemClassification.useful
-
-    for remove in to_remove:
-        logging.debug("Remove excess item: %s", remove)
-        mw_stage_items.remove(remove)
+    # if world.options.exceeding_items_filler == Options.ExceedingItemsFiller.option_always:
+    #     for downgrade in potential_downgrade:
+    #         downgrade.classification = ItemClassification.useful
+    #
+    # elif world.options.exceeding_items_filler == Options.ExceedingItemsFiller.option_chance:
+    #     chance = world.options.exceeding_items_filler_random
+    #     sample = [item for item in potential_downgrade if world.random.randrange(0, 100) < chance]
+    #     for downgrade in sample:
+    #         downgrade.classification = ItemClassification.useful
+    #
+    # for remove in to_remove:
+    #     logging.debug("Remove excess item: %s", remove)
+    #     mw_stage_items.remove(remove)
 
     weapon_dict = Weapons.GetWeaponDict()
     special_weapons_weaponsanity_extras = [copy.copy(w) for w in weapon_items if
@@ -1107,28 +1145,28 @@ def PopulateItemPool(world: World):
                 [ShadowTheHedgehogItem(item, world.player) for _ in range(0, useful_to_count[item.name])])
 
     if world.options.goal_chaos_emeralds or world.options.gate_unlock_requirement == Options.GateUnlockRequirement.option_chaos_emeralds:
-        world.multiworld.itempool += mw_em_items
+        shadow_item_pool += mw_em_items
 
-    world.multiworld.itempool += mw_level_unlock_items
-    world.multiworld.itempool += mw_stage_items
-    world.multiworld.itempool += mw_useful_items
+    shadow_item_pool += mw_level_unlock_items
+    shadow_item_pool += mw_stage_items
+    shadow_item_pool += mw_useful_items
 
     if world.options.weapon_sanity_unlock:
-        world.multiworld.itempool += mw_weapon_items
+        shadow_item_pool += mw_weapon_items
     else:
-        world.multiworld.itempool += mw_weapon_special_only
+        shadow_item_pool += mw_weapon_special_only
 
     if world.options.vehicle_logic:
-        world.multiworld.itempool += mw_vehicle_items
+        shadow_item_pool += mw_vehicle_items
 
     if world.options.object_unlocks:
-        world.multiworld.itempool += mw_object_items
+        shadow_item_pool += mw_object_items
 
     if world.options.key_collection_method in [Options.KeyCollectionMethod.option_arch, Options.KeyCollectionMethod.option_both]:
         choice_key_items = [ x for x in key_items if x.stageId is not None and x.stageId in world.available_levels]
         choice_key_items *= world.options.keys_required_for_doors
         mw_key_items = [ShadowTheHedgehogItem(i, world.player) for i in choice_key_items]
-        world.multiworld.itempool += mw_key_items
+        shadow_item_pool += mw_key_items
 
         item_count = increment_item_count(item_count, mw_key_items)
 
@@ -1138,40 +1176,81 @@ def PopulateItemPool(world: World):
         mw_prep_items = [ gate_key_item ] * gate_count
         mw_gate_keys = [ ShadowTheHedgehogItem(i, world.player) for i in mw_prep_items ]
         item_count = increment_item_count(item_count, mw_gate_keys)
-        world.multiworld.itempool += mw_gate_keys
+        shadow_item_pool += mw_gate_keys
+
+
+    if world.options.checkpoint_shuffle != Options.CheckpointShuffle.option_off:
+        relevant_checkpoint_items = [ c for c in checkpoint_items if c.stageId in world.available_levels and
+                                      (world.options.checkpoint_shuffle == Options.CheckpointShuffle.option_start_and_unlock or c.value != 0)
+                                      and (c.stageId not in world.first_checkpoints or world.first_checkpoints[c.stageId] != c.value)]
+        mw_checkpoint_items = [ ShadowTheHedgehogItem(i, world.player) for i in relevant_checkpoint_items ]
+        item_count = increment_item_count(item_count, mw_checkpoint_items)
+        shadow_item_pool += mw_checkpoint_items
 
     # Add checks here for checks locked by The Last Way when this is the final part
     # If required, replace all TLW checks with junk items in the pool, start inventory will get amended
 
     junk_count = (location_count - item_count - len(mw_useful_items))
-    #print("Junk count is", location_count, junk_count)
+    print("Junk count is", location_count, junk_count)
+    #print("Itempool=",  shadow_item_pool)
     reverse_count = 0
 
     if junk_count < 0:
+        alters = RemoveExcessAvailableFromFullPool(world, (-junk_count)-1, shadow_item_pool)
+        junk_count = junk_count + alters
+
+    if junk_count <= 0:
         reverse_count = -junk_count
         junk_count = 0
 
-    if not world.options.include_last_way_shuffle:
-        if not world.options.exclude_go_mode_items:
-            tlw_locations = count_last_way_locations(world)
-        else:
-            tlw_locations = 1
-        if junk_count < tlw_locations:
-            reverse_count += tlw_locations
-            junk_count += tlw_locations
+        if not world.options.include_last_way_shuffle:
+            if not world.options.exclude_go_mode_items:
+                tlw_locations = count_last_way_locations(world)
+            else:
+                tlw_locations = 1
+
+            if junk_count < tlw_locations:
+                reverse_count += tlw_locations
+                junk_count += tlw_locations
 
     if junk_count > 0:
         mw_junk_items = [ShadowTheHedgehogItem(i, world.player) for i in
                          ChooseJunkItems(world.random, junk_items, trap_items, world.options, junk_count, world.available_weapons)]
-        world.multiworld.itempool += mw_junk_items
+        shadow_item_pool += mw_junk_items
+
+    world.multiworld.itempool += shadow_item_pool
 
     if reverse_count > 0:
         AddItemsToStartInventory(world, reverse_count)
 
+def RemoveExcessAvailableFromFullPool(world, to_remove, pool):
+    found_extras = [ (x[0], x[1]) for x in world.objective_extras.items() ]
+    potential_items = []
+    for item in found_extras:
+        potential_items.extend([item[0]] * item[1])
+
+    sample_size = to_remove
+    if sample_size > len(potential_items):
+        sample_size = len(potential_items)
+
+    to_remove_completely_random = world.random.sample(potential_items, sample_size)
+    #print("Remove::", to_remove_completely_random)
+
+    for x in to_remove_completely_random:
+        found = [ i for i in pool if i.name == x]
+        if len(found) > 0:
+            pool.remove(found[0])
+        else:
+            print("ERROR IN REMOVAL for", x)
+
+    return sample_size
+
+
+
 def get_item_groups():
     (emerald_items, required_items, level_unlock_items, stage_objective_items,
      junk_items, token_items, weapon_items, vehicle_items, warp_items, rifle_components,
-     weapon_group_items, object_items, key_items, trap_items) = GetAllItemInfo()
+     weapon_group_items, object_items, key_items, trap_items, checkpoint_items) = GetAllItemInfo()
 
     item_groups: typing.Dict[str, list] = {
         "Chaos Emeralds": [e.name for e in emerald_items],

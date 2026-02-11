@@ -37,7 +37,7 @@ class IsaacContext(CommonContext):
 
     save_data_path: str = ""
     mod_viable: bool = False
-    client_version = Utils.Version(1,0,0)
+    client_version = Utils.Version(2,0,0)
 
     class State(Enum):
         DISCONNECTED = 1
@@ -141,8 +141,31 @@ class IsaacContext(CommonContext):
         if cmd in {"Connected"}:
             self.current_state = self.State.GATHERING_DATA
             self.options = args['slot_data']['options']
-            if "deathlink" in self.options:
-                self.options["death_link"] = self.options["deathlink"]
+            if "goal_amount" not in self.options:
+                self.options["goal_amount"] = 0
+            if "rng_rooms" not in self.options:
+                self.options["rng_rooms"] = 1
+            if "ultra_secret_room" not in self.options:
+                self.options["ultra_secret_room"] = 3
+            if "error_room" not in self.options:
+                self.options["error_room"] = 3
+            if "crawl_space" not in self.options:
+                self.options["crawl_space"] = 3
+            if "planetarium" not in self.options:
+                self.options["planetarium"] = 3
+            if "floor_variations" not in self.options:
+                self.options["floor_variations"] = True
+            if "death_link_severity" not in self.options:
+                self.options["death_link_severity"] = 1
+            if "progressive_mapping_upgrades" not in self.options:
+                self.options["progressive_mapping_upgrades"] = False
+            if "permanent_stat_upgrades" not in self.options:
+                self.options["permanent_stat_upgrades"] = 0
+            if "start_out_nerfed" not in self.options:
+                self.options["start_out_nerfed"] = 0
+
+            if self.options["goal_amount"] == 0 or self.options["goal_amount"] > len(self.options["goals"]):
+                self.options["goal_amount"] = len(self.options["goals"])
             if self.options["death_link"]:
                 Utils.async_start(self.update_death_link(True))
             Utils.async_start(self.send_msgs([
@@ -185,7 +208,8 @@ class IsaacContext(CommonContext):
                 self.ui.tracker_tab.on_item_update(args['items'])
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
-                self.ui.tracker_tab.on_location_update(self.checked_locations)
+                if self.ui.tracker_tab:
+                    self.ui.tracker_tab.on_location_update(self.checked_locations)
                 self.update_hints()
         if cmd in {"LocationInfo"}:
             if "locations" in args:
@@ -260,7 +284,7 @@ class IsaacContext(CommonContext):
             )
             self.commands_to_be_sent.put(resp)
         elif c.type == "Set":
-            self.set_data(f"isaac_{self.slot}_{c.payload["key"]}", c.payload["data"])
+            self.set_data(f"isaac_{self.slot}_{c.payload['key']}", c.payload['data'])
             self.ui.tracker_tab.on_runinfo_update(self.stored_data[f"isaac_{self.slot}_run_info"])
             self.ui.tracker_tab.on_goals_update(self.stored_data[f"isaac_{self.slot}_goals"])
         elif c.type == "SendLocations":
@@ -311,9 +335,15 @@ class IsaacContext(CommonContext):
                 dump = json.dumps(asdict(new_save_data))
                 f.write(dump)
 
-            if all(self.stored_data[f"isaac_{self.slot}_goals"].values()) and not self.finished_game:
-                self.finished_game = True
-                Utils.async_start(self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
+            if self.current_state == self.State.CONNECTED:
+                completed_goals = 0
+                for completed in self.stored_data[f"isaac_{self.slot}_goals"].values():
+                    if completed:
+                        completed_goals += 1
+
+                if completed_goals >= self.options["goal_amount"] and not self.finished_game:
+                    self.finished_game = True
+                    Utils.async_start(self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
         except:
             if self.save_corruption_timer > 10:
                 self.save_corruption_timer = 0
@@ -354,7 +384,7 @@ async def game_watcher(ctx: IsaacContext):
                     except:
                         pass
                 logger.info(f'Connecting to save slot {ctx.stored_data[f"isaac_{ctx.slot}_saveslot"]}')
-                ctx.save_data_path = os.path.join(ctx.settings.game_folder, "data", "the archipelago of isaac", f"save{ctx.stored_data[f"isaac_{ctx.slot}_saveslot"]}.dat")
+                ctx.save_data_path = os.path.join(ctx.settings.game_folder, "data", "the archipelago of isaac", f"save{ctx.stored_data[f'isaac_{ctx.slot}_saveslot']}.dat")
                 ctx.current_state = ctx.State.CONNECTED
                 
                 from worlds.tboir.tracker import TrackerLayout

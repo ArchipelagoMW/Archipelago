@@ -1,4 +1,4 @@
-from worlds.tloz_oos.Options import OracleOfSeasonsOptions
+from ...Options import OracleOfSeasonsOptions, OracleOfSeasonsLinkedHerosCave
 from .LogicPredicates import *
 
 
@@ -74,9 +74,9 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         ["horon village", "horon village tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
 
         ["horon village", "horon shop", False, lambda state:
-            oos_has_rupees_for_shop(state, player, "horonShop")],
+        oos_has_rupees_for_shop(state, player, "horonShop")],
         ["horon village", "advance shop", False, lambda state:
-            oos_has_rupees_for_shop(state, player, "advanceShop")],
+        oos_has_rupees_for_shop(state, player, "advanceShop")],
         ["horon village", "member's shop", False, lambda state: all([
             state.has("Member's Card", player),
             oos_has_rupees_for_shop(state, player, "memberShop")
@@ -132,40 +132,31 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         ["western coast after ship", "old man near western coast house", False, lambda state: \
             oos_can_use_ember_seeds(state, player, False)],
 
-        ["western coast after ship", "graveyard (winter)", False, lambda state: all([
+        ["western coast after ship", "d7 entrance", False, lambda state: all([
+            any([
+                oos_can_jump_3_wide_pit(state, player),
+                oos_season_in_western_coast(state, player, SEASON_SUMMER)
+            ]),
+            any([
+                oos_has_shovel(state, player),
+                not oos_is_default_season(state, player, "WESTERN_COAST", SEASON_WINTER),
+                all([
+                    state.has("_reached_coast_stump", player),
+                    oos_can_remove_season(state, player, SEASON_WINTER)
+                ])
+            ])
+        ])],
+        ["western coast after ship", "graveyard heart piece", False, lambda state: all([
+            oos_season_in_western_coast(state, player, SEASON_AUTUMN),
             oos_can_jump_3_wide_pit(state, player),
-            oos_season_in_western_coast(state, player, SEASON_WINTER)
+            oos_can_break_mushroom(state, player, False)
         ])],
-        ["graveyard (winter)", "western coast after ship", False, None],
-
-        ["western coast after ship", "graveyard (autumn)", False, lambda state: all([
-            oos_can_jump_3_wide_pit(state, player),
-            oos_season_in_western_coast(state, player, SEASON_AUTUMN)
+        ["d7 entrance", "graveyard heart piece", False, lambda state: all([
+            oos_is_default_season(state, player, "WESTERN_COAST", SEASON_AUTUMN),
+            oos_can_break_mushroom(state, player, False)
         ])],
-        ["graveyard (autumn)", "western coast after ship", False, None],
-
-        ["western coast after ship", "graveyard (summer or spring)", False, lambda state: any([
-            oos_can_jump_3_wide_pit(state, player),
-            oos_season_in_western_coast(state, player, SEASON_SUMMER)
-        ])],
-        ["graveyard (summer or spring)", "western coast after ship", False, None],
-
-        ["graveyard (winter)", "d7 entrance", False, lambda state: oos_can_remove_snow(state, player, False)],
-        ["graveyard (autumn)", "d7 entrance", False, None],
-        ["graveyard (summer or spring)", "d7 entrance", False, None],
-
-        ["d7 entrance", "graveyard (winter)", False, lambda state: \
-            oos_is_default_season(state, player, "WESTERN_COAST", SEASON_WINTER)],
-        ["d7 entrance", "graveyard (autumn)", False, lambda state: \
-            oos_is_default_season(state, player, "WESTERN_COAST", SEASON_AUTUMN)],
-        ["d7 entrance", "graveyard (summer or spring)", False, lambda state: any([
-            oos_is_default_season(state, player, "WESTERN_COAST", SEASON_SUMMER),
-            oos_is_default_season(state, player, "WESTERN_COAST", SEASON_SPRING)
-        ])],
-
-        ["graveyard (autumn)", "graveyard heart piece", False, lambda state: oos_can_break_mushroom(state, player, False)],
-
         ["d7 entrance", "graveyard secret", False, lambda state: oos_has_shovel(state, player)],
+        ["d7 entrance", "western coast after ship", False, None],
 
         # EASTERN SUBURBS #############################################################################################
 
@@ -562,9 +553,13 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         ["floodgate keeper's house", "floodgate keyhole", False, lambda state: all([
             any([
                 oos_can_use_pegasus_seeds(state, player),
+                oos_has_cape(state, player),
                 oos_has_flippers(state, player),
-                oos_has_feather(state, player),
-                oos_has_cane(state, player)
+                oos_has_cane(state, player),
+                all([
+                    oos_option_medium_logic(state, player),
+                    oos_has_feather(state, player),
+                ])
             ]),
             oos_has_bracelet(state, player)
         ])],
@@ -573,6 +568,10 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         ["floodgate keyhole", "spool stump", False, lambda state: state.has("Floodgate Key", player)],
 
         ["spool stump", "d3 entrance", False, lambda state: oos_season_in_spool_swamp(state, player, SEASON_SUMMER)],
+        ["d3 entrance", "spool swamp north", False, lambda state: \
+            # Coming from alt d0/d2
+            oos_can_swim(state, player, False)
+         ],
 
         ["spool stump", "spool swamp middle", False, lambda state: any([
             not oos_is_default_season(state, player, "SPOOL_SWAMP", SEASON_SPRING),
@@ -793,7 +792,11 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         ["sunken city", "diver secret", False, lambda state: all([
             oos_has_flippers(state, player),
             any([
-                oos_option_medium_logic(state, player),
+                all([
+                    state.has("Swimmer's Ring", player),
+                    oos_option_medium_logic(state, player),
+                ]),
+                oos_option_hard_logic(state, player),
                 oos_has_sword(state, player),
                 oos_has_fools_ore(state, player),
             ])
@@ -904,7 +907,7 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
                 oos_has_bombs(state, player),
                 all([  # Bombchu can only destroy the second block, so we need to use cape to jump around the first
                     oos_option_medium_logic(state, player),
-                    oos_has_bombchus(state, player, 5),
+                    oos_has_bombchus(state, player, 4),
                     oos_can_use_pegasus_seeds(state, player)
                 ]),
             ])
@@ -1076,6 +1079,7 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         ["samasa desert", "samasa desert chest", False, lambda state: oos_has_flippers(state, player)],
         ["samasa desert", "samasa desert scrub", False, lambda state: \
             oos_has_rupees_for_shop(state, player, "samasaCaveScrub")],
+        ["samasa desert", "subrosia pirates sector", False, None],
 
         # TEMPLE REMAINS ####################################################################################
 
@@ -1513,3 +1517,16 @@ def make_holodrum_logic(player: int, origin_name: str, options: OracleOfSeasonsO
         holodrum_logic.append(gasha_connections[i])
 
     return holodrum_logic
+
+
+def make_samasa_d11_logic(player: int, options: OracleOfSeasonsOptions):
+    if not (options.linked_heros_cave.value & OracleOfSeasonsLinkedHerosCave.samasa):
+        return []
+    logic = [
+        ["samasa desert", "d11 entrance", True, None]
+    ]
+    if not (options.linked_heros_cave.value & OracleOfSeasonsLinkedHerosCave.no_alt_entrance):
+        logic.append(
+            ["samasa desert", "d11 alt entrance", False, lambda state: oos_can_break_bush(state, player)]
+        )
+    return logic

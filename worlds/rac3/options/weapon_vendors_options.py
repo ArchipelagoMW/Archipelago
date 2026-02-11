@@ -1,11 +1,11 @@
 from Options import Choice
-from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class WeaponVendors(Choice):
     """
-    Warning: Receiving weapons currently send out their associated vendor checks as well, it is recommended to keep
-    this option disabled until it is fixed.
+    Warning: Receiving weapons send out their associated vendor checks as well, it is recommended to keep
+    this option disabled until it is fixed. Weapons are still randomized even with this option disabled.
 
     Determines whether weapon vendors are locations in the world.
     Disabled: No weapon vendors are locations.

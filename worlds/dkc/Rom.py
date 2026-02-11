@@ -124,6 +124,28 @@ class DKCPatchExtension(APPatchExtension):
     game = "Donkey Kong Country"
 
     @staticmethod
+    def apply_adjuster_settings(caller: APProcedurePatch, rom: bytes) -> bytes:
+        rom = bytearray(rom)
+        json_data = json.loads(caller.get_file("data.json").decode("UTF-8"))
+        
+        rom[0x35FAAB] = json_data["master_necky_hp"]
+        rom[0x3BF7B5] = json_data["master_necky_double"]
+        rom[0x3BF7B6] = json_data["very_gnawty_army"]
+        rom[0x3BF7B7] = json_data["very_gnawty_hp"]
+        rom[0x3BF7B8] = json_data["really_gnawty_army"]
+        rom[0x3BF7B9] = json_data["really_gnawty_hp"]
+        rom[0x3BF7BA] = json_data["dumb_drum_stun"]
+        rom[0x3BF7BB] = json_data["dumb_drum_enemy_drop"]
+        rom[0x35FAF9] = json_data["master_necky_snr_hp"]
+        rom[0x35FA15] = json_data["queen_b_hp"]
+
+        rom[0x3BF7A8] = json_data["energy_link"]
+        rom[0x3BF7A9] = json_data["trap_link"]
+        rom[0x3BF7AA] = json_data["death_link"]
+
+        return bytes(rom)
+
+    @staticmethod
     def swap_kong_letters(caller: APProcedurePatch, rom: bytes) -> bytes:
         rom = bytearray(rom)
         json_data = json.loads(caller.get_file("data.json").decode("UTF-8"))
@@ -154,6 +176,7 @@ class DKCProcedurePatch(APProcedurePatch, APTokenMixin):
     procedure = [
         ("apply_tokens", ["token_patch.bin"]),
         ("apply_bsdiff4", ["dkc_basepatch.bsdiff4"]),
+        ("apply_adjuster_settings", []),
         ("swap_kong_letters", []),
     ]
 
@@ -172,6 +195,19 @@ def patch_rom(world: "DKCWorld", patch: DKCProcedurePatch):
     data_dict = {
         "seed": world.random.getrandbits(64),
         "kong": world.options.kong_letters.value[:4].upper(),
+        "very_gnawty_hp": world.options.boss_very_gnawty_hp.value,
+        "very_gnawty_army": world.options.boss_very_gnawty_army.value,
+        "master_necky_hp": world.options.boss_master_necky_hp.value,
+        "master_necky_double": world.options.boss_master_necky_double.value,
+        "queen_b_hp": world.options.boss_queen_b_hp.value,
+        "really_gnawty_hp": world.options.boss_really_gnawty_hp.value,
+        "really_gnawty_army": world.options.boss_really_gnawty_army.value,
+        "dumb_drum_stun": world.options.boss_dumb_drum_stun.value,
+        "dumb_drum_enemy_drop": world.options.boss_dumb_drum_enemy_drop.value,
+        "master_necky_snr_hp": world.options.boss_master_necky_snr_hp.value,
+        "energy_link": world.options.energy_link.value,
+        "trap_link": world.options.trap_link.value,
+        "death_link": world.options.death_link.value,
     }
     patch.write_file("data.json", json.dumps(data_dict).encode("UTF-8"))
 
@@ -207,10 +243,6 @@ def patch_rom(world: "DKCWorld", patch: DKCProcedurePatch):
             patch.write_byte(addr, 0x01)
 
     adjust_palettes(world, patch)
-
-    patch.write_byte(0x3BF7A8, world.options.energy_link.value)
-    patch.write_byte(0x3BF7A9, world.options.trap_link.value)
-    #patch.write_byte(0x3BF7AA, world.options.death_link.value)
     
     patch.write_byte(0x3BF7AB, world.options.required_jungle_levels.value)
     patch.write_byte(0x3BF7AC, world.options.required_mines_levels.value)
@@ -218,6 +250,11 @@ def patch_rom(world: "DKCWorld", patch: DKCProcedurePatch):
     patch.write_byte(0x3BF7AE, world.options.required_glacier_levels.value)
     patch.write_byte(0x3BF7AF, world.options.required_industries_levels.value)
     patch.write_byte(0x3BF7B0, world.options.required_caverns_levels.value)
+    
+    patch.write_byte(0x3BF7B1, world.options.kong_checks.value)
+    patch.write_byte(0x3BF7B2, world.options.token_checks.value)
+    patch.write_byte(0x3BF7B3, world.options.balloon_checks.value)
+    patch.write_byte(0x3BF7B4, world.options.banana_checks.value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

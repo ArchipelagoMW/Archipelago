@@ -1,0 +1,4857 @@
+[
+    {
+        "name": "GHZ1",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Can't miss it (Green Hill 1 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 73,
+                        "y": 106
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Can't miss it (Green Hill 1 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "In a tree (Green Hill 1 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 186,
+                        "y": 100
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "In a tree (Green Hill 1 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in a row (Green Hill 1 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 600,
+                        "y": 102
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in a row (Green Hill 1 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in a row (Green Hill 1 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 604,
+                        "y": 102
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in a row (Green Hill 1 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in a row (Green Hill 1 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 608,
+                        "y": 102
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in a row (Green Hill 1 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Up high (Green Hill 1 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 609,
+                        "y": 46
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Up high (Green Hill 1 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in a row (Green Hill 1 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 612,
+                        "y": 102
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in a row (Green Hill 1 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Over loop (Green Hill 1 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 688,
+                        "y": 62
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Over loop (Green Hill 1 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Almost at the end (Green Hill 1 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 1097,
+                        "y": 106
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Almost at the end (Green Hill 1 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Hiding in a cliff tree (Green Hill 1 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "GHZ1",
+                        "x": 1126,
+                        "y": 100
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 12
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Hiding in a cliff tree (Green Hill 1 Monitor #10)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "GHZ2",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Three below start (Green Hill 2 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 30,
+                        "y": 86
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three below start (Green Hill 2 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Three below start (Green Hill 2 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 34,
+                        "y": 86
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three below start (Green Hill 2 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Three below start (Green Hill 2 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 38,
+                        "y": 86
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three below start (Green Hill 2 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Used to be early shoes (Green Hill 2 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 103,
+                        "y": 86
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Used to be early shoes (Green Hill 2 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Before swing (Green Hill 2 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 262,
+                        "y": 36
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Before swing (Green Hill 2 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Over loop (Green Hill 2 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 432,
+                        "y": 62
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Over loop (Green Hill 2 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Tree after loop (Green Hill 2 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 494,
+                        "y": 67
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tree after loop (Green Hill 2 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Up high (Green Hill 2 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 714,
+                        "y": 42
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Up high (Green Hill 2 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Second waterfall (Green Hill 2 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 738,
+                        "y": 128
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Second waterfall (Green Hill 2 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Why the spring (Green Hill 2 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "GHZ2",
+                        "x": 948,
+                        "y": 128
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 36
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Why the spring (Green Hill 2 Monitor #10)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "GHZ3",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Right at start (Green Hill 3 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 16,
+                        "y": 104
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Right at start (Green Hill 3 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Two ledges up (Green Hill 3 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 106,
+                        "y": 65
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two ledges up (Green Hill 3 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Next to a lamppost (Green Hill 3 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 356,
+                        "y": 68
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Next to a lamppost (Green Hill 3 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Way up high (Green Hill 3 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 386,
+                        "y": 32
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Way up high (Green Hill 3 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Tree by high lamppost (Green Hill 3 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 464,
+                        "y": 8
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tree by high lamppost (Green Hill 3 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Tree by loop (Green Hill 3 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 502,
+                        "y": 106
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tree by loop (Green Hill 3 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Over loop (Green Hill 3 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 528,
+                        "y": 94
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Over loop (Green Hill 3 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Tree before brambles (Green Hill 3 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 656,
+                        "y": 73
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tree before brambles (Green Hill 3 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Six below a waterfall (Green Hill 3 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 708,
+                        "y": 150
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Six below a waterfall (Green Hill 3 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Six below a waterfall (Green Hill 3 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 713,
+                        "y": 150
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Six below a waterfall (Green Hill 3 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Six below a waterfall (Green Hill 3 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 718,
+                        "y": 150
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Six below a waterfall (Green Hill 3 Monitor #11)"
+                    }
+                ]
+            },
+            {
+                "name": "Six below a waterfall (Green Hill 3 Monitor #12)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 723,
+                        "y": 150
+                    },
+                    {
+                        "map": "menu",
+                        "x": 612,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Six below a waterfall (Green Hill 3 Monitor #12)"
+                    }
+                ]
+            },
+            {
+                "name": "Six below a waterfall (Green Hill 3 Monitor #13)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 728,
+                        "y": 150
+                    },
+                    {
+                        "map": "menu",
+                        "x": 636,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Six below a waterfall (Green Hill 3 Monitor #13)"
+                    }
+                ]
+            },
+            {
+                "name": "Six below a waterfall (Green Hill 3 Monitor #14)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 733,
+                        "y": 150
+                    },
+                    {
+                        "map": "menu",
+                        "x": 660,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Six below a waterfall (Green Hill 3 Monitor #14)"
+                    }
+                ]
+            },
+            {
+                "name": "More brambles?! (Green Hill 3 Monitor #15)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 783,
+                        "y": 64
+                    },
+                    {
+                        "map": "menu",
+                        "x": 684,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "More brambles?! (Green Hill 3 Monitor #15)"
+                    }
+                ]
+            },
+            {
+                "name": "Tree after brambles (Green Hill 3 Monitor #16)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 878,
+                        "y": 68
+                    },
+                    {
+                        "map": "menu",
+                        "x": 708,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tree after brambles (Green Hill 3 Monitor #16)"
+                    }
+                ]
+            },
+            {
+                "name": "Tree after brambles (Green Hill 3 Monitor #17)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 890,
+                        "y": 67
+                    },
+                    {
+                        "map": "menu",
+                        "x": 732,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tree after brambles (Green Hill 3 Monitor #17)"
+                    }
+                ]
+            },
+            {
+                "name": "Up high, nearing end (Green Hill 3 Monitor #18)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 936,
+                        "y": 64
+                    },
+                    {
+                        "map": "menu",
+                        "x": 756,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Up high, nearing end (Green Hill 3 Monitor #18)"
+                    }
+                ]
+            },
+            {
+                "name": "Late curve to tree (Green Hill 3 Monitor #19)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 1134,
+                        "y": 100
+                    },
+                    {
+                        "map": "menu",
+                        "x": 780,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Late curve to tree (Green Hill 3 Monitor #19)"
+                    }
+                ]
+            },
+            {
+                "name": "Tall tree, last bridge (Green Hill 3 Monitor #20)",
+                "map_locations": [
+                    {
+                        "map": "GHZ3",
+                        "x": 1190,
+                        "y": 100
+                    },
+                    {
+                        "map": "menu",
+                        "x": 804,
+                        "y": 60
+                    }
+                ],
+                "access_rules": [
+                    "Green Hill Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Tall tree, last bridge (Green Hill 3 Monitor #20)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "MZ1",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Three in a cave (Marble Zone 1 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 524,
+                        "y": 180
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in a cave (Marble Zone 1 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in a cave (Marble Zone 1 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 532,
+                        "y": 180
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in a cave (Marble Zone 1 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in a cave (Marble Zone 1 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 540,
+                        "y": 180
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in a cave (Marble Zone 1 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Next to lamppost (Marble Zone 1 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 644,
+                        "y": 340
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Next to lamppost (Marble Zone 1 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in a secret room (Marble Zone 1 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 916,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in a secret room (Marble Zone 1 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in a secret room (Marble Zone 1 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 924,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in a secret room (Marble Zone 1 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in a secret room (Marble Zone 1 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 932,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in a secret room (Marble Zone 1 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in a secret room (Marble Zone 1 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 940,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in a secret room (Marble Zone 1 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in a secret room (Marble Zone 1 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 948,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in a secret room (Marble Zone 1 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Before you go below (Marble Zone 1 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "MZ1",
+                        "x": 988,
+                        "y": 215
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 84
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Before you go below (Marble Zone 1 Monitor #10)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "MZ2",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Twin in sneaky cave (Marble Zone 2 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 292,
+                        "y": 244
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Twin in sneaky cave (Marble Zone 2 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Twin in sneaky cave (Marble Zone 2 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 300,
+                        "y": 244
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Twin in sneaky cave (Marble Zone 2 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "By a lamppost (Marble Zone 2 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 452,
+                        "y": 172
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "By a lamppost (Marble Zone 2 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in a secret room (Marble Zone 2 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 604,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in a secret room (Marble Zone 2 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in a secret room (Marble Zone 2 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 612,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in a secret room (Marble Zone 2 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in a secret room (Marble Zone 2 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 620,
+                        "y": 300
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in a secret room (Marble Zone 2 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Above a cylinder (Marble Zone 2 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 956,
+                        "y": 260
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "^$mzSequenceBreakCheck"
+                ],
+                "sections": [
+                    {
+                        "name": "Above a cylinder (Marble Zone 2 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in a cave (Marble Zone 2 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 972,
+                        "y": 180
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in a cave (Marble Zone 2 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in a cave (Marble Zone 2 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 980,
+                        "y": 180
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in a cave (Marble Zone 2 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Chillin over lava (Marble Zone 2 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 1028,
+                        "y": 344
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Chillin over lava (Marble Zone 2 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Hard to miss (Marble Zone 2 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "MZ2",
+                        "x": 1148,
+                        "y": 292
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 108
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Hard to miss (Marble Zone 2 Monitor #11)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "MZ3",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Left of two cylinders (Marble Zone 3 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 68,
+                        "y": 316
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Left of two cylinders (Marble Zone 3 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "First find (Marble Zone 3 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 68,
+                        "y": 436
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "First find (Marble Zone 3 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "On the way in (Marble Zone 3 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 508,
+                        "y": 172
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "On the way in (Marble Zone 3 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Another hidden room (Marble Zone 3 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 740,
+                        "y": 364
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Another hidden room (Marble Zone 3 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "By lamppost (Marble Zone 3 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 836,
+                        "y": 444
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "By lamppost (Marble Zone 3 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "On the way out (Marble Zone 3 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 908,
+                        "y": 268
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "On the way out (Marble Zone 3 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Chillin over lava (Marble Zone 3 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "MZ3",
+                        "x": 1212,
+                        "y": 444
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 132
+                    }
+                ],
+                "access_rules": [
+                    "Marble Zone Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Chillin over lava (Marble Zone 3 Monitor #7)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SYZ1",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Two above start (Spring Yard 1 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SYZ1",
+                        "x": 46,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 156
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two above start (Spring Yard 1 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Two above start (Spring Yard 1 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SYZ1",
+                        "x": 50,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 156
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two above start (Spring Yard 1 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Two up middle top (Spring Yard 1 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SYZ1",
+                        "x": 294,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 156
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two up middle top (Spring Yard 1 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Two up middle top (Spring Yard 1 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SYZ1",
+                        "x": 298,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 156
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two up middle top (Spring Yard 1 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "First spring pit (Spring Yard 1 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SYZ1",
+                        "x": 688,
+                        "y": 120
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 156
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "First spring pit (Spring Yard 1 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Last spring pit (Spring Yard 1 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SYZ1",
+                        "x": 1007,
+                        "y": 88
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 156
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Last spring pit (Spring Yard 1 Monitor #6)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SYZ2",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Way up high (Spring Yard 2 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SYZ2",
+                        "x": 240,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 180
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Way up high (Spring Yard 2 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Secret room (Spring Yard 2 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SYZ2",
+                        "x": 641,
+                        "y": 182
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 180
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Secret room (Spring Yard 2 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "In the spring pit (Spring Yard 2 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SYZ2",
+                        "x": 654,
+                        "y": 158
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 180
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "In the spring pit (Spring Yard 2 Monitor #3)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SYZ3",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "First spring pit (Spring Yard 3 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 240,
+                        "y": 170
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "First spring pit (Spring Yard 3 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Next to spring pit (Spring Yard 3 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 269,
+                        "y": 120
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Next to spring pit (Spring Yard 3 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Up before underground (Spring Yard 3 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 338,
+                        "y": 88
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Up before underground (Spring Yard 3 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Two next to ring whoosh (Spring Yard 3 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 820,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two next to ring whoosh (Spring Yard 3 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Two next to ring whoosh (Spring Yard 3 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 825,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two next to ring whoosh (Spring Yard 3 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Three underground (Spring Yard 3 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 1026,
+                        "y": 178
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three underground (Spring Yard 3 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Three underground (Spring Yard 3 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 1030,
+                        "y": 178
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three underground (Spring Yard 3 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Three underground (Spring Yard 3 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 1035,
+                        "y": 178
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three underground (Spring Yard 3 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Final spring pit (Spring Yard 3 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 1232,
+                        "y": 216
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Final spring pit (Spring Yard 3 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Two up high before boss (Spring Yard 3 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 1364,
+                        "y": 86
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two up high before boss (Spring Yard 3 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Two up high before boss (Spring Yard 3 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "SYZ3",
+                        "x": 1369,
+                        "y": 86
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 204
+                    }
+                ],
+                "access_rules": [
+                    "Spring Yard Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two up high before boss (Spring Yard 3 Monitor #11)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "LZ1",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Before first button (Labyrinth 1 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "LZ1",
+                        "x": 324,
+                        "y": 124
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 228
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Before first button (Labyrinth 1 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Past first spike ball (Labyrinth 1 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "LZ1",
+                        "x": 380,
+                        "y": 60
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 228
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Past first spike ball (Labyrinth 1 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Good luck missing this (Labyrinth 1 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "LZ1",
+                        "x": 468,
+                        "y": 60
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 228
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Good luck missing this (Labyrinth 1 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Side room with a door (Labyrinth 1 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "LZ1",
+                        "x": 580,
+                        "y": 188
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 228
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Side room with a door (Labyrinth 1 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "End of the bottom route (Labyrinth 1 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "LZ1",
+                        "x": 1532,
+                        "y": 124
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 228
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "End of the bottom route (Labyrinth 1 Monitor #5)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "LZ2",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Two in a turn (Labyrinth 2 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 20,
+                        "y": 260
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in a turn (Labyrinth 2 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in a turn (Labyrinth 2 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 36,
+                        "y": 276
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in a turn (Labyrinth 2 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Below waterfall (Labyrinth 2 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 252,
+                        "y": 228
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Below waterfall (Labyrinth 2 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in the climb room (Labyrinth 2 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 412,
+                        "y": 140
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in the climb room (Labyrinth 2 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in the climb room (Labyrinth 2 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 424,
+                        "y": 164
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in the climb room (Labyrinth 2 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in the climb room (Labyrinth 2 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 500,
+                        "y": 168
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in the climb room (Labyrinth 2 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in the climb room (Labyrinth 2 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 500,
+                        "y": 272
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in the climb room (Labyrinth 2 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in the climb room (Labyrinth 2 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 572,
+                        "y": 228
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in the climb room (Labyrinth 2 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Near lamppost (Labyrinth 2 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "LZ2",
+                        "x": 700,
+                        "y": 124
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 252
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Near lamppost (Labyrinth 2 Monitor #9)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "LZ3",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Can't miss this (Labyrinth 3 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 138,
+                        "y": 94
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Can't miss this (Labyrinth 3 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Secret waterslide room (Labyrinth 3 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 198,
+                        "y": 56
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Secret waterslide room (Labyrinth 3 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Switch back (Labyrinth 3 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 258,
+                        "y": 114
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Switch back (Labyrinth 3 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Above spikey floor (Labyrinth 3 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 326,
+                        "y": 74
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Above spikey floor (Labyrinth 3 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in side room (Labyrinth 3 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 362,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in side room (Labyrinth 3 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in side room (Labyrinth 3 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 366,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in side room (Labyrinth 3 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in side room (Labyrinth 3 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 370,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in side room (Labyrinth 3 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in side room (Labyrinth 3 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 374,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in side room (Labyrinth 3 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Five in side room (Labyrinth 3 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 378,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five in side room (Labyrinth 3 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Past a bunch of spikes (Labyrinth 3 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 466,
+                        "y": 116
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Past a bunch of spikes (Labyrinth 3 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Past two upper spikes (Labyrinth 3 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 478,
+                        "y": 78
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Past two upper spikes (Labyrinth 3 Monitor #11)"
+                    }
+                ]
+            },
+            {
+                "name": "Before first lamppost (Labyrinth 3 Monitor #12)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 570,
+                        "y": 132
+                    },
+                    {
+                        "map": "menu",
+                        "x": 612,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Before first lamppost (Labyrinth 3 Monitor #12)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in parkour pit (Labyrinth 3 Monitor #13)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 670,
+                        "y": 190
+                    },
+                    {
+                        "map": "menu",
+                        "x": 636,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in parkour pit (Labyrinth 3 Monitor #13)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in parkour pit (Labyrinth 3 Monitor #14)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 686,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 660,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in parkour pit (Labyrinth 3 Monitor #14)"
+                    }
+                ]
+            },
+            {
+                "name": "Can't miss this either (Labyrinth 3 Monitor #15)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 690,
+                        "y": 118
+                    },
+                    {
+                        "map": "menu",
+                        "x": 684,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Can't miss this either (Labyrinth 3 Monitor #15)"
+                    }
+                ]
+            },
+            {
+                "name": "Don't take the spring (Labyrinth 3 Monitor #16)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 734,
+                        "y": 142
+                    },
+                    {
+                        "map": "menu",
+                        "x": 708,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Don't take the spring (Labyrinth 3 Monitor #16)"
+                    }
+                ]
+            },
+            {
+                "name": "Next to final climb (Labyrinth 3 Monitor #17)",
+                "map_locations": [
+                    {
+                        "map": "LZ3",
+                        "x": 898,
+                        "y": 190
+                    },
+                    {
+                        "map": "menu",
+                        "x": 732,
+                        "y": 276
+                    }
+                ],
+                "access_rules": [
+                    "Labyrinth Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Next to final climb (Labyrinth 3 Monitor #17)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SLZ1",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Four in the spring pit (Starlight 1 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 82,
+                        "y": 126
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in the spring pit (Starlight 1 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in the spring pit (Starlight 1 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 86,
+                        "y": 126
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in the spring pit (Starlight 1 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in the spring pit (Starlight 1 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 90,
+                        "y": 126
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in the spring pit (Starlight 1 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Four in the spring pit (Starlight 1 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 94,
+                        "y": 126
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four in the spring pit (Starlight 1 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Can't miss this (Starlight 1 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 130,
+                        "y": 78
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Can't miss this (Starlight 1 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Middle route split (Starlight 1 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 478,
+                        "y": 90
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Middle route split (Starlight 1 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Five bombs top route (Starlight 1 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 546,
+                        "y": 90
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five bombs top route (Starlight 1 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Below five top bombs (Starlight 1 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 578,
+                        "y": 106
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Below five top bombs (Starlight 1 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Two chilling mid route (Starlight 1 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 730,
+                        "y": 90
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two chilling mid route (Starlight 1 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Two chilling mid route (Starlight 1 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 734,
+                        "y": 90
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two chilling mid route (Starlight 1 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in a ditch (Starlight 1 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 882,
+                        "y": 78
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in a ditch (Starlight 1 Monitor #11)"
+                    }
+                ]
+            },
+            {
+                "name": "Awkward bottom climb (Starlight 1 Monitor #12)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 898,
+                        "y": 122
+                    },
+                    {
+                        "map": "menu",
+                        "x": 612,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Awkward bottom climb (Starlight 1 Monitor #12)"
+                    }
+                ]
+            },
+            {
+                "name": "Really far down (Starlight 1 Monitor #13)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 898,
+                        "y": 202
+                    },
+                    {
+                        "map": "menu",
+                        "x": 636,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Really far down (Starlight 1 Monitor #13)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in a ditch (Starlight 1 Monitor #14)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 910,
+                        "y": 78
+                    },
+                    {
+                        "map": "menu",
+                        "x": 660,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in a ditch (Starlight 1 Monitor #14)"
+                    }
+                ]
+            },
+            {
+                "name": "End of top route (Starlight 1 Monitor #15)",
+                "map_locations": [
+                    {
+                        "map": "SLZ1",
+                        "x": 926,
+                        "y": 42
+                    },
+                    {
+                        "map": "menu",
+                        "x": 684,
+                        "y": 300
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "End of top route (Starlight 1 Monitor #15)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SLZ2",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Three in pit over loop (Starlight 2 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 706,
+                        "y": 154
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in pit over loop (Starlight 2 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in pit over loop (Starlight 2 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 730,
+                        "y": 154
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in pit over loop (Starlight 2 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in pit over loop (Starlight 2 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 734,
+                        "y": 154
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in pit over loop (Starlight 2 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Five high next to end (Starlight 2 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 910,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five high next to end (Starlight 2 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Five high next to end (Starlight 2 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 914,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five high next to end (Starlight 2 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Five high next to end (Starlight 2 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 918,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five high next to end (Starlight 2 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Five high next to end (Starlight 2 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 922,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five high next to end (Starlight 2 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Five high next to end (Starlight 2 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "SLZ2",
+                        "x": 926,
+                        "y": 26
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 324
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five high next to end (Starlight 2 Monitor #8)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SLZ3",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Beware falling bombs (Starlight 3 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 187,
+                        "y": 42
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Beware falling bombs (Starlight 3 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Three needs seesaw (Starlight 3 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 290,
+                        "y": 154
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three needs seesaw (Starlight 3 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Three needs seesaw (Starlight 3 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 294,
+                        "y": 154
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three needs seesaw (Starlight 3 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Three needs seesaw (Starlight 3 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 298,
+                        "y": 154
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three needs seesaw (Starlight 3 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "By three springs (Starlight 3 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 514,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "By three springs (Starlight 3 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Top after triple loop (Starlight 3 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 546,
+                        "y": 42
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Top after triple loop (Starlight 3 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Four by bottom swing (Starlight 3 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 738,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four by bottom swing (Starlight 3 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Four by bottom swing (Starlight 3 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 742,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four by bottom swing (Starlight 3 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Two above four (Starlight 3 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 746,
+                        "y": 142
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two above four (Starlight 3 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Four by bottom swing (Starlight 3 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 746,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four by bottom swing (Starlight 3 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Two above four (Starlight 3 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 750,
+                        "y": 142
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two above four (Starlight 3 Monitor #11)"
+                    }
+                ]
+            },
+            {
+                "name": "Four by bottom swing (Starlight 3 Monitor #12)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 750,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 612,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four by bottom swing (Starlight 3 Monitor #12)"
+                    }
+                ]
+            },
+            {
+                "name": "Four for beating fan (Starlight 3 Monitor #13)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 802,
+                        "y": 138
+                    },
+                    {
+                        "map": "menu",
+                        "x": 636,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four for beating fan (Starlight 3 Monitor #13)"
+                    }
+                ]
+            },
+            {
+                "name": "Four for beating fan (Starlight 3 Monitor #14)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 806,
+                        "y": 138
+                    },
+                    {
+                        "map": "menu",
+                        "x": 660,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four for beating fan (Starlight 3 Monitor #14)"
+                    }
+                ]
+            },
+            {
+                "name": "Four for beating fan (Starlight 3 Monitor #15)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 810,
+                        "y": 138
+                    },
+                    {
+                        "map": "menu",
+                        "x": 684,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four for beating fan (Starlight 3 Monitor #15)"
+                    }
+                ]
+            },
+            {
+                "name": "Four for beating fan (Starlight 3 Monitor #16)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 814,
+                        "y": 138
+                    },
+                    {
+                        "map": "menu",
+                        "x": 708,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Four for beating fan (Starlight 3 Monitor #16)"
+                    }
+                ]
+            },
+            {
+                "name": "Guarded by orbinaut (Starlight 3 Monitor #17)",
+                "map_locations": [
+                    {
+                        "map": "SLZ3",
+                        "x": 926,
+                        "y": 186
+                    },
+                    {
+                        "map": "menu",
+                        "x": 732,
+                        "y": 348
+                    }
+                ],
+                "access_rules": [
+                    "Starlight Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Guarded by orbinaut (Starlight 3 Monitor #17)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SBZ1",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Start of top route (Scrap Brain 1 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 174,
+                        "y": 114
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Start of top route (Scrap Brain 1 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in top route pit (Scrap Brain 1 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 294,
+                        "y": 126
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in top route pit (Scrap Brain 1 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in top route pit (Scrap Brain 1 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 298,
+                        "y": 126
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in top route pit (Scrap Brain 1 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Left of first lamppost (Scrap Brain 1 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 354,
+                        "y": 158
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Left of first lamppost (Scrap Brain 1 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Two rewarding parkour (Scrap Brain 1 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 450,
+                        "y": 76
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two rewarding parkour (Scrap Brain 1 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Two rewarding parkour (Scrap Brain 1 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 454,
+                        "y": 76
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two rewarding parkour (Scrap Brain 1 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in middle pit (Scrap Brain 1 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 578,
+                        "y": 190
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in middle pit (Scrap Brain 1 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in middle pit (Scrap Brain 1 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 590,
+                        "y": 190
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in middle pit (Scrap Brain 1 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Three really high up (Scrap Brain 1 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 654,
+                        "y": 18
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three really high up (Scrap Brain 1 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Three really high up (Scrap Brain 1 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 658,
+                        "y": 18
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three really high up (Scrap Brain 1 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Three really high up (Scrap Brain 1 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 662,
+                        "y": 18
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three really high up (Scrap Brain 1 Monitor #11)"
+                    }
+                ]
+            },
+            {
+                "name": "Top parkour pit (Scrap Brain 1 Monitor #12)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 726,
+                        "y": 62
+                    },
+                    {
+                        "map": "menu",
+                        "x": 612,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Top parkour pit (Scrap Brain 1 Monitor #12)"
+                    }
+                ]
+            },
+            {
+                "name": "Three ends bottom route (Scrap Brain 1 Monitor #13)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 1014,
+                        "y": 162
+                    },
+                    {
+                        "map": "menu",
+                        "x": 636,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three ends bottom route (Scrap Brain 1 Monitor #13)"
+                    }
+                ]
+            },
+            {
+                "name": "Three ends bottom route (Scrap Brain 1 Monitor #14)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 1018,
+                        "y": 162
+                    },
+                    {
+                        "map": "menu",
+                        "x": 660,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three ends bottom route (Scrap Brain 1 Monitor #14)"
+                    }
+                ]
+            },
+            {
+                "name": "Three ends bottom route (Scrap Brain 1 Monitor #15)",
+                "map_locations": [
+                    {
+                        "map": "SBZ1",
+                        "x": 1022,
+                        "y": 162
+                    },
+                    {
+                        "map": "menu",
+                        "x": 684,
+                        "y": 372
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three ends bottom route (Scrap Brain 1 Monitor #15)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SBZ2",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Top route pylon pit (Scrap Brain 2 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 222,
+                        "y": 62
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Top route pylon pit (Scrap Brain 2 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in spinner pit (Scrap Brain 2 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 322,
+                        "y": 82
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in spinner pit (Scrap Brain 2 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Below three grav wheels (Scrap Brain 2 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 322,
+                        "y": 158
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Below three grav wheels (Scrap Brain 2 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Two in spinner pit (Scrap Brain 2 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 326,
+                        "y": 82
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Two in spinner pit (Scrap Brain 2 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in parkour pit (Scrap Brain 2 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 372,
+                        "y": 254
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in parkour pit (Scrap Brain 2 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "Above three grav wheels (Scrap Brain 2 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 376,
+                        "y": 96
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Above three grav wheels (Scrap Brain 2 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in parkour pit (Scrap Brain 2 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 396,
+                        "y": 254
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in parkour pit (Scrap Brain 2 Monitor #7)"
+                    }
+                ]
+            },
+            {
+                "name": "Three in parkour pit (Scrap Brain 2 Monitor #8)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 400,
+                        "y": 254
+                    },
+                    {
+                        "map": "menu",
+                        "x": 516,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Three in parkour pit (Scrap Brain 2 Monitor #8)"
+                    }
+                ]
+            },
+            {
+                "name": "Five below conveyor (Scrap Brain 2 Monitor #9)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 546,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 540,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five below conveyor (Scrap Brain 2 Monitor #9)"
+                    }
+                ]
+            },
+            {
+                "name": "Five below conveyor (Scrap Brain 2 Monitor #10)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 550,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 564,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five below conveyor (Scrap Brain 2 Monitor #10)"
+                    }
+                ]
+            },
+            {
+                "name": "Five below conveyor (Scrap Brain 2 Monitor #11)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 554,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 588,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five below conveyor (Scrap Brain 2 Monitor #11)"
+                    }
+                ]
+            },
+            {
+                "name": "Five below conveyor (Scrap Brain 2 Monitor #12)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 558,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 612,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five below conveyor (Scrap Brain 2 Monitor #12)"
+                    }
+                ]
+            },
+            {
+                "name": "Five below conveyor (Scrap Brain 2 Monitor #13)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 562,
+                        "y": 30
+                    },
+                    {
+                        "map": "menu",
+                        "x": 636,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Five below conveyor (Scrap Brain 2 Monitor #13)"
+                    }
+                ]
+            },
+            {
+                "name": "Before creepy comb (Scrap Brain 2 Monitor #14)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 654,
+                        "y": 94
+                    },
+                    {
+                        "map": "menu",
+                        "x": 660,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Before creepy comb (Scrap Brain 2 Monitor #14)"
+                    }
+                ]
+            },
+            {
+                "name": "Top of creepy comb (Scrap Brain 2 Monitor #15)",
+                "map_locations": [
+                    {
+                        "map": "SBZ2",
+                        "x": 766,
+                        "y": 34
+                    },
+                    {
+                        "map": "menu",
+                        "x": 684,
+                        "y": 396
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Top of creepy comb (Scrap Brain 2 Monitor #15)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "SBZ3",
+        "chest_unopened_img": "images/monitor_o.png",
+        "chest_opened_img": "images/monitor_x.png",
+        "children": [
+            {
+                "name": "Furthest left (Scrap Brain 3 Monitor #1)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 20,
+                        "y": 380
+                    },
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Furthest left (Scrap Brain 3 Monitor #1)"
+                    }
+                ]
+            },
+            {
+                "name": "Left after first exit (Scrap Brain 3 Monitor #2)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 108,
+                        "y": 188
+                    },
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Left after first exit (Scrap Brain 3 Monitor #2)"
+                    }
+                ]
+            },
+            {
+                "name": "Taking first exit (Scrap Brain 3 Monitor #3)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 324,
+                        "y": 60
+                    },
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Taking first exit (Scrap Brain 3 Monitor #3)"
+                    }
+                ]
+            },
+            {
+                "name": "Kept after slope (Scrap Brain 3 Monitor #4)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 580,
+                        "y": 316
+                    },
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Kept after slope (Scrap Brain 3 Monitor #4)"
+                    }
+                ]
+            },
+            {
+                "name": "Detour down (Scrap Brain 3 Monitor #5)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 772,
+                        "y": 252
+                    },
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Detour down (Scrap Brain 3 Monitor #5)"
+                    }
+                ]
+            },
+            {
+                "name": "End the long way round (Scrap Brain 3 Monitor #6)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 900,
+                        "y": 280
+                    },
+                    {
+                        "map": "menu",
+                        "x": 468,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "End the long way round (Scrap Brain 3 Monitor #6)"
+                    }
+                ]
+            },
+            {
+                "name": "Half the long way round (Scrap Brain 3 Monitor #7)",
+                "map_locations": [
+                    {
+                        "map": "SBZ3",
+                        "x": 1348,
+                        "y": 316
+                    },
+                    {
+                        "map": "menu",
+                        "x": 492,
+                        "y": 420
+                    }
+                ],
+                "access_rules": [
+                    "Scrap Brain Key"
+                ],
+                "sections": [
+                    {
+                        "name": "Half the long way round (Scrap Brain 3 Monitor #7)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Bosses",
+        "children": [
+            {
+                "name": "Green Hill 3 Boss",
+                "map_locations": [
+                    {
+                        "map": "menu",
+                        "x": 324,
+                        "y": 540
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Green Hill 3 Boss",
+                        "access_rules": [
+                            "Green Hill Key"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Marble Zone 3 Boss",
+                "map_locations": [
+                    {
+                        "map": "menu",
+                        "x": 348,
+                        "y": 540
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Marble Zone 3 Boss",
+                        "access_rules": [
+                            "Marble Zone Key"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Spring Yard 3 Boss",
+                "map_locations": [
+                    {
+                        "map": "menu",
+                        "x": 372,
+                        "y": 540
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Spring Yard 3 Boss",
+                        "access_rules": [
+                            "Spring Yard Key"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Labyrinth 3 Boss",
+                "map_locations": [
+                    {
+                        "map": "menu",
+                        "x": 396,
+                        "y": 540
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Labyrinth 3 Boss",
+                        "access_rules": [
+                            "Labyrinth Key"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Starlight 3 Boss",
+                "map_locations": [
+                    {
+                        "map": "menu",
+                        "x": 420,
+                        "y": 540
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Starlight 3 Boss",
+                        "access_rules": [
+                            "Starlight Key"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Final Zone Boss",
+                "map_locations": [
+                    {
+                        "map": "menu",
+                        "x": 444,
+                        "y": 540
+                    }
+                ],
+                "sections": [
+                    {
+                        "name": "Final Zone Boss",
+                        "access_rules": [
+                            "$fzOpenCheck"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Special Stage 1",
+        "access_rules": [
+            "$ssKeyCheck|1"
+        ],
+        "map_locations": [
+            {
+                "map": "menu",
+                "x": 372,
+                "y": 468
+            }
+        ],
+        "sections": [
+            {
+                "name": "Special Stage 1"
+            }
+        ]
+    },
+    {
+        "name": "Special Stage 2",
+        "access_rules": [
+            "$ssKeyCheck|2"
+        ],
+        "map_locations": [
+            {
+                "map": "menu",
+                "x": 420,
+                "y": 468
+            }
+        ],
+        "sections": [
+            {
+                "name": "Special Stage 2"
+            }
+        ]
+    },
+    {
+        "name": "Special Stage 3",
+        "access_rules": [
+            "$ssKeyCheck|3"
+        ],
+        "map_locations": [
+            {
+                "map": "menu",
+                "x": 468,
+                "y": 468
+            }
+        ],
+        "sections": [
+            {
+                "name": "Special Stage 3"
+            }
+        ]
+    },
+    {
+        "name": "Special Stage 4",
+        "access_rules": [
+            "$ssKeyCheck|4"
+        ],
+        "map_locations": [
+            {
+                "map": "menu",
+                "x": 516,
+                "y": 468
+            }
+        ],
+        "sections": [
+            {
+                "name": "Special Stage 4"
+            }
+        ]
+    },
+    {
+        "name": "Special Stage 5",
+        "access_rules": [
+            "$ssKeyCheck|5"
+        ],
+        "map_locations": [
+            {
+                "map": "menu",
+                "x": 564,
+                "y": 468
+            }
+        ],
+        "sections": [
+            {
+                "name": "Special Stage 5"
+            }
+        ]
+    },
+    {
+        "name": "Special Stage 6",
+        "access_rules": [
+            "$ssKeyCheck|6"
+        ],
+        "map_locations": [
+            {
+                "map": "menu",
+                "x": 612,
+                "y": 468
+            }
+        ],
+        "sections": [
+            {
+                "name": "Special Stage 6"
+            }
+        ]
+    }
+]

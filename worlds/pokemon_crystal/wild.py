@@ -95,8 +95,7 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
                 get_random_pokemon(world, blocklist=global_blocklist, exclude_unown=exclude_unown) for _ in
                 range(required_logical_pokemon - len(logical_pokemon_pool)))
 
-        if (world.options.breeding_methods_required.value == BreedingMethodsRequired.option_with_ditto
-                and "DITTO" not in logical_pokemon_pool):
+        if world.options.breeding_methods_required and "DITTO" not in logical_pokemon_pool:
             accessible_pokemon_pool.append(logical_pokemon_pool.pop())
             logical_pokemon_pool.append("DITTO")
 
@@ -197,7 +196,7 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
     if world.options.randomize_pokemon_requests == RandomizePokemonRequests.option_items:
         ensure_placed.extend(world.generated_request_pokemon)
 
-    if world.options.breeding_methods_required == BreedingMethodsRequired.option_with_ditto:
+    if world.options.breeding_methods_required:
         ensure_placed.append("DITTO")
 
     if world.options.trades_required and world.options.randomize_trades.value in (RandomizeTrades.option_received,

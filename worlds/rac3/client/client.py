@@ -1,19 +1,16 @@
-# Common import
+"""This module provides a launchable client for connecting RAC3 running on PCSX2 Emulation to a Multiworld"""
 from asyncio import create_task, run, sleep, Task
 from multiprocessing import freeze_support
 from time import time
-from traceback import format_exc
 from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus
 from Utils import Any, async_start, init_logging
-from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
-from worlds.rac3.client.callbacks import handle_respawn, init, update
-from worlds.rac3.client.interface import Rac3Interface
+from worlds.rac3.client.callbacks import handle_respawn, pcsx2_sync_task, update
 from worlds.rac3.client.message import ClientMessage
-from worlds.rac3.constants.data.item import ITEM_FROM_AP_CODE
-from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE
+from worlds.rac3.client.rac3_interface import Rac3Interface
+from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE
+from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import ONE_HP_CHALLENGE_CHARACTERS
@@ -67,7 +64,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     # This is not mandatory for the game. Just a client command implementation.
     def _cmd_kill(self):
-        """Kill the game."""
+        """Kill the player."""
         if isinstance(self.ctx, Rac3Context):
             self.ctx.on_deathlink({"time": time(), "cause": "Amondo got gaslit"})
 
@@ -94,7 +91,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_weapon_exp_test(self):
         """Give weapon exp for testing purposes."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
@@ -106,7 +103,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_bolt_test(self):
         """Give bolts for testing purposes."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
@@ -115,14 +112,14 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_rac3_info(self):
         """Dump Rac3 info for debugging purposes."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.dump_info(self.ctx.slot_data)
 
     def _cmd_force_update(self):
         """Force an update to the game state by running all update cycle methods."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             update(self.ctx)
@@ -143,17 +140,23 @@ class CommandProcessor(ClientCommandProcessor):
     def _cmd_respawn(self):
         """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead.
         You can also pause the game and hold Square on the pause menu to run this command from in-game."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
-            if create_task(handle_respawn(self.ctx, True)):
-                self.output(f'Player respawned on {self.ctx.current_planet}')
-            else:
-                self.output(f'Player cannot respawn right now')
+            create_task(handle_respawn(self.ctx, True))
+
+    def _cmd_homewarp(self):
+        """Loads Ratchet back on the Phoenix. Does nothing if used during the intro before reaching the Phoenix.
+        Also activated with the following button combo: L2 + R2 + L1 + R1 + SELECT"""
+        if not self.verify():
+            return
+        if isinstance(self.ctx, Rac3Context):
+            self.output(f'Attempting to homewarp to the Phoenix...')
+            create_task(handle_respawn(self.ctx, force_load=True))
 
     def _cmd_ryno(self):
         """Toggles the maximum upgrade level for the RYNO between lv5 and lv4"""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
@@ -164,7 +167,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             message = " ".join(args)
@@ -172,18 +175,18 @@ class CommandProcessor(ClientCommandProcessor):
             if len(message) > 225:
                 self.output(f'Message longer than 225 characters, truncated to fit in message box.')
             self.output(f'Message box displayed with message: {message[:225:]}')
-    
+
     def _cmd_one_hp(self, *args):
         """Toggles One HP Challenge for the specified character."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             character = " ".join(args).lower()
             valid_characters = {name.lower(): name for name in ONE_HP_CHALLENGE_CHARACTERS}
             if character in valid_characters:
                 char_name = valid_characters[character]
-                current_state = self.ctx.game_interface.one_hp_challenge.get(char_name, False)
-                new_state = not current_state
+                current_state = self.ctx.game_interface.one_hp_challenge.get(char_name, 0)
+                new_state = 0 if current_state else 1
                 self.ctx.game_interface.one_hp_challenge[char_name] = new_state
                 self.output(f'One HP Challenge for {char_name} set to {new_state}')
             else:
@@ -191,6 +194,7 @@ class CommandProcessor(ClientCommandProcessor):
 
 
 class Rac3Context(CommonContext):
+    """Class for handling server connection with the game client"""
     # Client variables
     command_processor = CommandProcessor
     current_planet: str = RAC3REGION.GALAXY
@@ -238,6 +242,7 @@ class Rac3Context(CommonContext):
         return ui
 
     async def server_auth(self, password_requested: bool = False) -> None:
+        """Authenticate with the Multiworld server."""
         if password_requested and not self.password:
             await super(Rac3Context, self).server_auth(password_requested)
         await self.get_username()
@@ -269,153 +274,12 @@ class Rac3Context(CommonContext):
                 async_start(self.send_msgs([{'cmd': 'Sync'}]))
 
 
-async def pcsx2_sync_task(ctx: Rac3Context):
-    logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
-    connected_to_game: bool = False
-    connection_retry_attempts: int = 0
-    while not ctx.exit_event.is_set():
-        try:
-            connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
-            if connected_to_server and not ctx.is_connected_to_server:
-                logger.info("Connected to server")
-                ctx.is_connected_to_server = connected_to_server
-                if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
-                    await ctx.disconnect(False)
-                    logger.warning(
-                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
-                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
-                    await sleep(10)
-                    continue
-                if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
-                    await ctx.disconnect(False)
-                    logger.warning(
-                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
-                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
-                    await sleep(10)
-                    continue
-                if connected_to_game:
-                    await init(ctx)
-                else:
-                    logger.info("Waiting for game connection...")
-
-            connected_to_game = ctx.game_interface.get_connection_state()
-            if connected_to_game and not ctx.is_connected_to_game:
-                logger.info(f"Connected to {RAC3OPTION.GAME_TITLE_FULL}")
-                ctx.last_pine_message = None
-                ctx.is_connected_to_game = connected_to_game
-                if connected_to_server:
-                    await init(ctx)
-                else:
-                    logger.info("Waiting for server connection...")
-
-            if not connected_to_game and not ctx.game_interface.is_connecting:
-                if ctx.is_connected_to_game:
-                    ctx.game_interface.disconnect_from_game()
-                    logger.info("Connection to game lost")
-                elif ctx.last_pine_message is None:
-                    message = "Not connected to the PCSX2 instance"
-                    logger.info(message)
-                    ctx.last_pine_message = message
-                ctx.game_interface.connect_to_game()
-                if not ctx.game_interface.get_connection_state():
-                    if connection_retry_attempts < 3:
-                        connection_retry_attempts += 1
-
-                    retry_wait = connection_retry_attempts * 10
-                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...')
-                    await sleep(retry_wait)
-                else:
-                    connection_retry_attempts = 0
-
-            if not connected_to_server:
-                if ctx.server:
-                    ctx.last_server_message = None
-                elif ctx.last_server_message is None:
-                    message = "Waiting for player to connect to server"
-                    logger.info(message)
-                    ctx.last_server_message = message
-
-            if connected_to_game and connected_to_server:
-                await _handle_game_ready(ctx)
-
-        except ConnectionError:
-            logger.info(f"ConnectionError")
-            ctx.game_interface.disconnect_from_game()
-        except Exception as e:
-            logger.info(f"ExceptionError")
-            if isinstance(e, RuntimeError):
-                logger.error(str(e))
-            else:
-                logger.error(format_exc())
-            # await sleep(3)
-
-        await sleep(0.5)
-    logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
-
-
-async def _handle_game_ready(ctx: Rac3Context) -> None:
-    # Quite a lot of stuff ended up in this function, even though it might
-    # have fit better in init(). It just didn't work when I put it there,
-    # probably because of when the game loads stuff.
-
-    if ctx.slot_data is not None:
-        # Check if exit to main menu
-        menu = ctx.main_menu
-        ctx.main_menu = ctx.game_interface.check_main_menu()
-
-        if ctx.main_menu:
-            if menu:
-                ctx.game_interface.main_menu = True
-            if ctx.last_game_message is None:
-                message = "Currently on Main Menu, please load a file..."
-                logger.info(message)
-                ctx.last_game_message = message
-            await sleep(5)
-
-        if menu is True and ctx.main_menu is False:
-            await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_PLAYING)])
-            logger.info("Starting game...")
-            ctx.game_interface.reset_file()
-            logger.info("Old state removed!")
-            logger.info("Checking for items...")
-            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
-            logger.info(f"Items Received: {len(ctx.items_received)}")
-            items_to_process = ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, len(ctx.items_received))
-            counter = 0
-            for count, item in enumerate(ctx.items_received):
-                counter += 1
-                logger.debug(f"Processing item {count}: {ITEM_FROM_AP_CODE[item.item]}")
-                if count > items_to_process:
-                    logger.debug(f"Handle Later")
-                    continue
-                ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], ctx.player_names[
-                    item.player], item.location)
-            ctx.processed_item_count = min(counter, items_to_process)
-            await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
-            logger.info(f"Items Processed: {ctx.processed_item_count}")
-            logger.info("Checking locations...")
-            counter = 0
-            for loc in ctx.checked_locations:
-                logger.debug(f"Collecting location: {LOCATION_FROM_AP_CODE[loc]}")
-                ctx.game_interface.collect_location(loc)
-                counter += 1
-            logger.info(f"Locations collected: {counter}")
-            ctx.game_interface.fix_health()
-            ctx.game_interface.reset_death_count()
-            logger.info("Checking cosmetics...")
-            ctx.game_interface.add_cosmetics()
-            logger.info("Load the latest autosave to apply cosmetics")
-            logger.info("Game READY!")
-
-        if not ctx.main_menu:
-            await update(ctx)
-            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
-
-
 def launch_client():
+    """Launch an instance of the Ratchet and Clank 3 client"""
     init_logging(f"{RAC3OPTION.GAME_TITLE}_Client")
 
     async def main():
+        """The main client process"""
         freeze_support()
         logger.info("main")
         parser = get_base_parser()

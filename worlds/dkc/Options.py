@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from .Items import item_groups
 from .Aesthetics import player_palette_set_offsets
 
-from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, PerGameCommonOptions, StartInventoryPool, FreeText
+from Options import OptionGroup, Choice, Range, Toggle, DeathLink, OptionSet, OptionDict, PerGameCommonOptions, StartInventoryPool, FreeText
 from schema import Schema, Optional
 
 class StartingLifeCount(Range):
@@ -376,6 +376,101 @@ class SetPalettes(OptionDict):
     default = {}
 
 
+class BossVeryGnawtyHP(Range):
+    """
+    How many hit points Very Gnawty will have.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Very Gnawty HP"
+    range_start = 1
+    range_end = 9
+    default = 5
+
+
+class BossVeryGnawtyArmy(Toggle):
+    """
+    Enables Very Gnawty spawning Army enemies when getting hurt.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Very Gnawty Army Spawn"
+
+
+class BossMasterNeckyHP(Range):
+    """
+    How much hit points Master Necky will have.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Master Necky HP"
+    range_start = 1
+    range_end = 9
+    default = 5
+
+
+class BossMasterNeckyDouble(Toggle):
+    """
+    Enables fighting two Master Necky boss enemies at the same time. May lag the game.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Master Necky Double Fight"
+
+
+class BossQueenBHP(Range):
+    """
+    How much hit points Queen B will have
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Queen B HP"
+    range_start = 1
+    range_end = 9
+    default = 5
+
+
+class BossReallyGnawtyHP(Range):
+    """
+    How much hit points Really Gnawty will have.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Really Gnawty HP"
+    range_start = 1
+    range_end = 9
+    default = 5
+
+
+class BossReallyGnawtyArmy(Toggle):
+    """
+    Enables Really Gnawty spawning Army enemies when getting hurt.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Really Gnawty Army Spawn"
+
+
+class BossDumbDrumStun(Toggle):
+    """
+    Enables Dumb Drum to stun Kongs when landing on the floor. A bit jank.
+    Can be changed with the included Adjuster program
+    """
+    display_name = "Dumb Drum Kong Stun"
+
+
+class BossDumbDrumSpawn(Toggle):
+    """
+    Enables Dumb Drum to spawn additional enemies when landing on the floor.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Dumb Drum Extra Enemies"
+
+
+class BossMasterNeckySnrHP(Range):
+    """
+    How much hit points Master Necky Snr will have.
+    Can be changed with the included Adjuster program.
+    """
+    display_name = "Master Necky Snr HP"
+    range_start = 1
+    range_end = 9
+    default = 5
+
+
 dkc_option_groups = [
     OptionGroup("Goal", [
         GangplankTokens,
@@ -411,6 +506,18 @@ dkc_option_groups = [
         BonusTrapWeight,
         StickyFloorTrapWeight,
     ]),
+    OptionGroup("Boss Settings", [
+        BossVeryGnawtyHP,
+        BossVeryGnawtyArmy,
+        BossMasterNeckyHP,
+        BossMasterNeckyDouble,
+        BossQueenBHP,
+        BossReallyGnawtyHP,
+        BossReallyGnawtyArmy,
+        BossDumbDrumStun,
+        BossDumbDrumSpawn,
+        BossMasterNeckySnrHP,
+    ]),
     OptionGroup("Aesthetics", [
         SetPalettes,
         PaletteFilter,
@@ -425,7 +532,7 @@ dkc_option_groups = [
 @dataclass
 class DKCOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
-    #death_link: DeathLink
+    death_link: DeathLink
     energy_link: EnergyLink
     trap_link: TrapLink
     starting_life_count: StartingLifeCount
@@ -462,3 +569,13 @@ class DKCOptions(PerGameCommonOptions):
     palette_diddy_active: DiddyActive
     palette_diddy_inactive: DiddyInactive
     kong_letters: KONGLetters
+    boss_very_gnawty_hp: BossVeryGnawtyHP
+    boss_very_gnawty_army: BossVeryGnawtyArmy
+    boss_master_necky_hp: BossMasterNeckyHP
+    boss_master_necky_double: BossMasterNeckyDouble
+    boss_queen_b_hp: BossQueenBHP
+    boss_really_gnawty_hp: BossReallyGnawtyHP
+    boss_really_gnawty_army: BossReallyGnawtyArmy
+    boss_dumb_drum_stun: BossDumbDrumStun
+    boss_dumb_drum_enemy_drop: BossDumbDrumSpawn
+    boss_master_necky_snr_hp: BossMasterNeckySnrHP

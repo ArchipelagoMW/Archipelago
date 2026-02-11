@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+
+from BaseClasses import PlandoOptions
 from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, DeathLink, ItemSet
-from .enums import ItemName
-from .Items import item_options, locked_items, powerup_options, equip_options, quest_items, character_options
+from .enums import ItemName, Spelunky2Goal, Spelunky2ShortcutMode
+from .Items import (item_options, locked_items, powerup_options, equip_options, quest_items, character_options,
+                    hard_locations)
 
 
 def format_options(options, row_length=10):
@@ -17,9 +20,19 @@ def format_options(options, row_length=10):
     return "\n".join(lines)
 
 
+def list_to_string(options, row_length=3):
+    lines = []
+    options_list = list(options)
+    for i in range(0, len(options_list), row_length):
+        row = " | ".join(options_list[i:i + row_length])
+        lines.append(f"{row}")
+    return "\n".join(lines)
+
+
 item_options_text = format_options(sorted(item_options))
 locked_items_text = format_options(sorted(locked_items))
 character_options_text = format_options(sorted(character_options))
+hard_locations_text = list_to_string(sorted(hard_locations))
 
 
 class Goal(Choice):
@@ -28,10 +41,10 @@ class Goal(Choice):
     Hard: Requires completing the "hard" ending by reaching 7-4 and defeating Hundun
     CO: Requires reaching a specified level in Cosmic Ocean"""
     display_name = "Goal"
-    option_easy = 0
-    option_hard = 1
-    option_co = 2
-    default = 0
+    option_easy = Spelunky2Goal.EASY
+    option_hard = Spelunky2Goal.HARD
+    option_co = Spelunky2Goal.CO
+    default = Spelunky2Goal.EASY
 
 
 class GoalLevel(Range):
@@ -43,23 +56,40 @@ class GoalLevel(Range):
     default = 30
 
 
+class GoalIronmanMode(Toggle):
+    """Cannot enter goal level unless you started your run from the world start (Not using a shortcut)"""
+    display_name = "Ironman Goal mode"
+
+class DeathLinkBypassesAnkh(Toggle):
+    """Sets whether deaths sent through Death Link will trigger the Ankh, or ignore it."""
+    display_name = "Death Link Ankh Handling"
+
+
+class DeathLinkAmnesty(Range):
+    """A \"grace\" count of how many deaths you are allowed before you send a Deathlink out to the multiworld."""
+    display_name = "Death Link Amnesty"
+    range_start = 0
+    range_end = 10
+    default = 2
+
+
+class DeathLinkGrace(Range):
+    """How many deaths you receive before you fall victim to a Deathlink from the multiworld."""
+    display_name = "Death Link Grace"
+    range_start = 0
+    range_end = 10
+    default = 2
+
+
 class IncludeHardLocations(Toggle):
-    """Include the following more problematic journal entries as locations in the AP world:
-    Magmar, Lavamander, MechSuit, Scorpion + True Crown"""
+    __doc__ = f"""Include the following more problematic journal entries as locations in the AP world:
+{hard_locations_text}"""
     display_name = "Include harder journal entries"
 
 
-class ProgressiveWorlds(DefaultOnToggle):
-    """Whether new worlds should be unlocked individually or progressively."""
-    display_name = "Progressive Worlds"
-
-
-"""
-# Not implemented yet
-class ProgressiveShortcuts(DefaultOnToggle):
-    \"""Whether new shortcuts should be unlocked individually or progressively.\"""
-    display_name = "Progressive Shortcuts"
-"""
+class JournalEntryRequired(DefaultOnToggle):
+    """Should the Journal Entry of an item be required for its Item/Waddler upgrade to take effect?"""
+    display_name = "Journal Entry Required"
 
 
 class IncreaseStartingWallet(Toggle):
@@ -67,10 +97,6 @@ class IncreaseStartingWallet(Toggle):
     increase the amount of gold you begin with after death."""
     display_name = "Increase Starting Wallet"
 
-
-class JournalEntryRequired(DefaultOnToggle):
-    """Should the Journal Entry of an item be required for its Item/Waddler upgrade to take effect?"""
-    display_name = "Journal Entry Required"
 
 class StartingCharacters(ItemSet):
     __doc__ = f"""Characters that are immediately selectable. Adding more or less to this will adjust how many character locations you need to visit.
@@ -80,7 +106,25 @@ Options:
 {character_options_text}"""  # noqa: E128
     display_name = "Starting Characters"
     valid_keys = character_options
-    default = {ItemName.ANA_SPELUNKY.value, ItemName.MARGARET_TUNNEL.value, ItemName.COLIN_NORTHWARD.value, ItemName.ROFFY_D_SLOTH.value}
+    default = {ItemName.ANA_SPELUNKY.value, ItemName.MARGARET_TUNNEL.value, ItemName.COLIN_NORTHWARD.value,
+               ItemName.ROFFY_D_SLOTH.value}
+
+
+class ProgressiveWorlds(DefaultOnToggle):
+    """Progressive worlds are unlocked in order:
+    Volcana, Jungle, Olmec's Lair, Tide Pool, Temple, Ice Caves, Neo Babylon, Sunken City, Cosmic Ocean.
+    Set this to 'false' to unlock worlds individually."""
+    display_name = "Progressive Worlds"
+
+
+class ShortcutsMode(Choice):
+    """Should shortcuts unlock as you gain worlds, or instead receive them from the multiworld
+    (You still the associated world for the shortcut to be open when you receive it from the multiworld)"""
+    display_name = "Shortcut Mode"
+    option_off = Spelunky2ShortcutMode.OFF
+    option_progressive = Spelunky2ShortcutMode.PROGRESSIVE
+    option_individual = Spelunky2ShortcutMode.INDIVIDUAL
+    default = Spelunky2ShortcutMode.OFF
 
 
 class StartingHealth(Range):
@@ -132,12 +176,19 @@ class RopeUpgrades(Range):
 
 
 class RestrictedItems(ItemSet):
-    __doc__ = f"""Items that are added to the multi-world as progressive and must be found in the multi-world before they can be obtained in the game
-Options: 
+    __doc__ = f"""Items that must be unlocked in the multi-world before they appear in the game.
+(Quest items like Hou Yi's Bow will be ignored if it's not suitable for your goal)
+Options ("ALL" can be used for everything): 
 {locked_items_text}"""  # noqa: E128
     display_name = "Restricted Items"
-    valid_keys = locked_items
+    valid_keys = locked_items + ["ALL"]
     default = quest_items
+
+    def verify(self, world: type["World"], player_name: str, plando_options: PlandoOptions):
+        lowered = [item.lower() for item in self.value]
+        if "all" in lowered:
+            return
+        super().verify(world, player_name, plando_options)
 
 
 class ItemUpgrades(ItemSet):
@@ -160,37 +211,24 @@ Options (any selected here override options in item_upgrades):
     default = equip_options - {ItemName.TRUE_CROWN.value, ItemName.EGGPLANT_CROWN.value, ItemName.PASTE.value}
 
 
-class DeathLinkBypassesAnkh(Toggle):
-    """Sets whether deaths sent through Death Link will trigger the Ankh, or ignore it."""
-    display_name = "Death Link Ankh Handling"
-
-
-class DeathLinkAmnesty(Range):
-    """A \"grace\" count of how many deaths you are allowed before you send a Deathlink out to the multiworld."""
-    display_name = "Death Link Amnesty"
-    range_start = 0
-    range_end = 10
-    default = 2
+class AnkhSkipLogic(Toggle):
+    """Sets if progression logic should assume you can perform Ankh skipping in Tidepool"""
 
 
 class UdjatSkipLogic(Toggle):
     """Sets if progression logic should assume you can perform Udjat skipping to get into Black Market/Vlad's Castle"""
 
 
-class AnkhSkipLogic(Toggle):
-    """Sets if progression logic should assume you can perform Ankh skipping in Tidepool"""
-
-
 class QilinSkipLogic(Toggle):
     """Sets if progression logic should assume you can perform Qilin skip"""
 
 
-class AlienCompassSkipLogic(Toggle):
-    """Sets if progression should assume you know how to find the Mothership without Alien Compass"""
-
-
 class KinguExcaliburSkipLogic(Toggle):
     """Sets if progression should assume you can kill Kingu without needing Excalibur to break the shell"""
+
+
+class AlienCompassSkipLogic(Toggle):
+    """Sets if progression should assume you know how to find the Mothership without Alien Compass"""
 
 
 class RopePileWeight(Range):
@@ -354,15 +392,17 @@ class PunishBallTrapChance(Range):
 class Spelunky2Options(PerGameCommonOptions):
     goal: Goal
     goal_level: GoalLevel
+    goal_ironman: GoalIronmanMode
     death_link: DeathLink
     bypass_ankh: DeathLinkBypassesAnkh
     death_link_amnesty_count: DeathLinkAmnesty
+    death_link_grace_count: DeathLinkGrace
     include_hard_locations: IncludeHardLocations
     journal_entry_required: JournalEntryRequired
     starting_wallet: IncreaseStartingWallet
     starting_characters: StartingCharacters
     progressive_worlds: ProgressiveWorlds
-    # progressive_shortcuts: ProgressiveShortcuts - Not implemented yet
+    shortcut_mode: ShortcutsMode
     starting_health: StartingHealth
     health_upgrades: HealthUpgrades
     starting_bombs: StartingBombs

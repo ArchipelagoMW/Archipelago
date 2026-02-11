@@ -120,7 +120,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.GC_DARUNIAS_CHAMBER, world, [
         (EventLocations.GC_DARUNIAS_CHAMBER_TORCH, LocalEvents.GC_CHILD_FIRE_LIT,
-         lambda bundle: is_child(bundle) or can_use(Items.STICKS, bundle))
+         lambda bundle: is_child(bundle) and can_use(Items.STICKS, bundle))
     ])
     # Locations
     add_locations(Regions.GC_DARUNIAS_CHAMBER, world, [

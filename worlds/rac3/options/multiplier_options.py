@@ -1,5 +1,5 @@
 from Options import Choice
-from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class BoltAndXPMultiplier(Choice):

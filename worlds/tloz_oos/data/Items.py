@@ -12,11 +12,11 @@ ITEMS_DATA = {
         "id": 0x01
     },
     "Bombs (10)": {
-        "classification": ItemClassification.progression_deprioritized,
+        "classification": ItemClassification.progression,
         "id": 0x03
     },
     "Bombs (20)": {
-        "classification": ItemClassification.progression_deprioritized,
+        "classification": ItemClassification.progression,
         "id": 0x03,
         "subid": 0x03  # Just to make sure we're not erasing anything important, this goes over a 30 bombs drop
     },
@@ -263,6 +263,11 @@ ITEMS_DATA = {
         "id": 0x30,
         "subid": 0x08
     },
+    "Small Key (Linked Hero's Cave)": {
+        "classification": ItemClassification.progression_deprioritized,
+        "id": 0x30,
+        "subid": 0x0b
+    },
     "Master Key (Hero's Cave)": {
         "classification": ItemClassification.progression_deprioritized,
         "id": 0x30,
@@ -307,6 +312,11 @@ ITEMS_DATA = {
         "classification": ItemClassification.progression,
         "id": 0x30,
         "subid": 0x88
+    },
+    "Master Key (Linked Hero's Cave)": {
+        "classification": ItemClassification.progression,
+        "id": 0x30,
+        "subid": 0x8b
     },
     "Boss Key (Gnarled Root Dungeon)": {
         "classification": ItemClassification.progression,

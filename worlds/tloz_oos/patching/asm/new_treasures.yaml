@@ -53,41 +53,44 @@
     db $00,$06,$79,option.smallKeySprite    ; D6
     db $00,$07,$7a,option.smallKeySprite    ; D7
     db $00,$08,$7b,option.smallKeySprite    ; D8
+    db $00,$09,$00,option.smallKeySprite    ; D9 (doesn't exist)
+    db $00,$0a,$00,option.smallKeySprite    ; D10 (doesn't exist)
+    db $00,$0b,$7c,option.smallKeySprite    ; D11 (Linked Hero's Cave)
 15/51ea/: dw smallKeyObjectsTable
 
 15//bossKeyObjectsTable: |
-    db $00,$01,$7c,$43    ; D1
-    db $00,$02,$7d,$43    ; D2
-    db $00,$03,$7e,$43    ; D3
-    db $00,$04,$7f,$43    ; D4
-    db $00,$05,$80,$43    ; D5
-    db $00,$06,$81,$43    ; D6
-    db $00,$07,$82,$43    ; D7
-    db $00,$08,$83,$43    ; D8
+    db $00,$01,$7d,$43    ; D1
+    db $00,$02,$7e,$43    ; D2
+    db $00,$03,$7f,$43    ; D3
+    db $00,$04,$80,$43    ; D4
+    db $00,$05,$81,$43    ; D5
+    db $00,$06,$82,$43    ; D6
+    db $00,$07,$83,$43    ; D7
+    db $00,$08,$84,$43    ; D8
 15/51ee/: dw bossKeyObjectsTable
 
 15//dungeonMapObjectsTable: |
     db $00,$00,$18,$40    ; D0 (Hero's Cave, doesn't exist)
-    db $00,$01,$84,$40    ; D1
-    db $00,$02,$85,$40    ; D2
-    db $00,$03,$86,$40    ; D3
-    db $00,$04,$87,$40    ; D4
-    db $00,$05,$88,$40    ; D5
-    db $00,$06,$89,$40    ; D6
-    db $00,$07,$8a,$40    ; D7
-    db $00,$08,$8b,$40    ; D8
+    db $00,$01,$85,$40    ; D1
+    db $00,$02,$86,$40    ; D2
+    db $00,$03,$87,$40    ; D3
+    db $00,$04,$88,$40    ; D4
+    db $00,$05,$89,$40    ; D5
+    db $00,$06,$8a,$40    ; D6
+    db $00,$07,$8b,$40    ; D7
+    db $00,$08,$8c,$40    ; D8
 15/51f6/: dw dungeonMapObjectsTable
 
 15//compassObjectsTable: |
     db $00,$00,$19,$41    ; D0 (Hero's Cave, doesn't exist)
-    db $00,$01,$8c,$41    ; D1
-    db $00,$02,$8d,$41    ; D2
-    db $00,$03,$8e,$41    ; D3
-    db $00,$04,$8f,$41    ; D4
-    db $00,$05,$90,$41    ; D5
-    db $00,$06,$91,$41    ; D6
-    db $00,$07,$92,$41    ; D7
-    db $00,$08,$93,$41    ; D8
+    db $00,$01,$8d,$41    ; D1
+    db $00,$02,$8e,$41    ; D2
+    db $00,$03,$8f,$41    ; D3
+    db $00,$04,$90,$41    ; D4
+    db $00,$05,$91,$41    ; D5
+    db $00,$06,$92,$41    ; D6
+    db $00,$07,$93,$41    ; D7
+    db $00,$08,$94,$41    ; D8
 15/51f2/: dw compassObjectsTable
 
 # Change @mode6 (compasses, maps & boss keys) to make it set the bit related
@@ -123,6 +126,7 @@
 3f/6f4c/: db $3d,$d4,$03,$d5,$03,$ff,$12  # Wooden Bird (#3D)
 3f/6f53/: db $3e,$d6,$01,$d7,$01,$ff,$13  # Engine Grease (#3E)
 3f/6f5a/: db $3f,$d8,$00,$d9,$00,$ff,$14  # Phonograph (#3F)
+3f/6fa7/: /copy s,$3f,$7113,$07           # Rusty Bell (#4a)
 3f/6ea4/: db $25,$ee,$01,$ef,$01,$ff,$49  # Pirate's Bell (#25)
 
 ############################################################
@@ -163,3 +167,8 @@
     ld e,$7b
     ld (de),a
     ret
+
+# Rusty Pirate Bell edits
+
+3f/6d0a/: db $00 # Remove Rusty Bell setting wPirateBellState in treasureCollectionBehaviourTable
+3f/6d7e/: db TREASURE_PUNCH # Change the rusty bell's sprite to not be affected by wPirateBellState

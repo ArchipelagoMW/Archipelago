@@ -386,7 +386,7 @@ class MMXSNIClient(SNIClient):
         # Send Current Room for Tracker
         current_level = game_progress_data[0x6A]
 
-        if game_state_data[0] == 0x00 or game_state_data[0:2] == b'\x02\x04':
+        if game_state_data[0] == 0x00 or (game_state_data[0] == 0x02 and game_state_data[1] != 0x04):
             current_level = -1
 
         if self.current_level_value != (current_level + 1):
@@ -949,7 +949,7 @@ class MMXSNIClient(SNIClient):
             arsenal["unlocked_air_dash"] = game_data[0x22]
             arsenal["weapons"] = list(game_progress_data[0x78:0x88])
             arsenal["hadouken"] = game_progress_data[0x6E]
-            arsenal["enhancements"] = list(game_data[0x2A:0x2D])
+            arsenal["enhancements"] = list(game_data[0x2A:0x31])
             arsenal["levels"] = list(game_data[0x40:0x60])
             arsenal["sigma_access"] = game_data[0x02]
             
@@ -964,7 +964,7 @@ class MMXSNIClient(SNIClient):
                     arsenal["max_hp"] = saved_arsenal["max_hp"]
                 for i in range(0x10):
                     arsenal["weapons"][i] |= saved_arsenal["weapons"][i] & 0x40
-                for i in range(0x03):
+                for i in range(0x07):
                     arsenal["enhancements"][i] |= saved_arsenal["enhancements"][i] & 0x80
                 for level in range(0x20):
                     arsenal["levels"][level] |= saved_arsenal["levels"][level]

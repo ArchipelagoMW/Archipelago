@@ -1,45 +1,33 @@
-from Options import OptionCounter
-from worlds.rac3 import RAC3OPTION
-from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT, SKILLPOINT_LOCATION_TO_NAME
+from Options import Choice
+from worlds.rac3.constants.options import RAC3OPTION
 
 
-class SkillPoints(OptionCounter):
+class SkillPoints(Choice):
     """
     Determines which skill points are locations in the world.
     Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled
+    Simple locations are the following:
+    - Aridia: Skillpoint: Go for hang time
+    - Phoenix: Skillpoint: Beat Helga's best time
+    - Phoenix: Skillpoint: Turn Up The Heat
+    - Phoenix: Skillpoint: Monkeying around
+    - Marcadia: Skillpoint: Reflect on how to score
+    - Daxx: Skillpoint: Bugs to Birds
+    - Annihilation Nation: Skillpoint: Lights, camera action!
+    - Aquatos: Skillpoint: Search for sunken treasure
+    - Tyhrranosis: Skillpoint: Be a Sharpshooter
+    - Obani Gemini: Skillpoint: Get to the belt
+    - Blackwater City: Skillpoint: Bash the party
+    - Koros: Skillpoint: You break it, you win it
+    - Metropolis: Skillpoint: 2002 was a good year in the city
+    - Crash Site: Skillpoint: Suck it up!
+    - Crash Site: Skillpoint: Aim High
+    - Aridia: Skillpoint: Zap back at ya'
+    - Hideout: Skillpoint: Break the Dan
+    - Command Center: Skillpoint: Spread your germs
     """
     display_name = RAC3OPTION.SKILL_POINTS
-    min = 0
-    default = {
-        RAC3SKILLPOINT.ARIDIA_HANG_TIME_SHORT: 1,
-        RAC3SKILLPOINT.FLORANA_PATH_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_ARCADE_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_VR_TRAINING_SHORT: 1,
-        RAC3SKILLPOINT.PHOENIX_ARMOR_SHORT: 1,
-        RAC3SKILLPOINT.PHOENIX_MONKEY_SHORT: 1,
-        RAC3SKILLPOINT.MARCADIA_REFLECT_SHORT: 1,
-        RAC3SKILLPOINT.DAXX_BUGS_SHORT: 1,
-        RAC3SKILLPOINT.NATION_BASH_SHORT: 0,
-        RAC3SKILLPOINT.NATION_EIGHT_SHORT: 0,
-        RAC3SKILLPOINT.NATION_FLEE_SHORT: 0,
-        RAC3SKILLPOINT.NATION_CAMERA_SHORT: 1,
-        RAC3SKILLPOINT.AQUATOS_SUNKEN_SHORT: 1,
-        RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER_SHORT: 1,
-        RAC3SKILLPOINT.GEMINI_BELT_SHORT: 1,
-        RAC3SKILLPOINT.BLACKWATER_BASH_SHORT: 1,
-        RAC3SKILLPOINT.HOLOSTAR_LUCKY_SHORT: 0,
-        RAC3SKILLPOINT.KOROS_BREAK_SHORT: 1,
-        RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR_SHORT: 1,
-        RAC3SKILLPOINT.CRASH_SITE_SUCK_SHORT: 1,
-        RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH_SHORT: 1,
-        RAC3SKILLPOINT.ARIDIA_ZAP_SHORT: 1,
-        RAC3SKILLPOINT.HIDEOUT_DAN_SHORT: 1,
-        RAC3SKILLPOINT.COMMAND_CENTER_GERMS_SHORT: 1,
-        RAC3SKILLPOINT.SEWER_MOTHERLOAD_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_COMIC_1_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_COMIC_4_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_COMIC_2_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_COMIC_3_SHORT: 0,
-        RAC3SKILLPOINT.PHOENIX_COMIC_5_SHORT: 0,
-    }
-    valid_keys = SKILLPOINT_LOCATION_TO_NAME.values()
+    option_none = 0
+    option_simple = 1
+    option_all = 2
+    default = 1

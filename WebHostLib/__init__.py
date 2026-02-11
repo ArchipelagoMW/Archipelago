@@ -10,7 +10,7 @@ from flask_compress import Compress
 from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
-from Utils import title_sorted, get_file_safe_name
+from Utils import get_file_safe_name, world_sorted, title_sorted, site_map_title_sorted
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -45,9 +45,11 @@ app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
 # at what amount of worlds should scheduling be used, instead of rolling in the web-thread
 app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
-app.config["JOB_TIME"] = 1200
+app.config["JOB_TIME"] = 3600
 app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
 app.config['SESSION_PERMANENT'] = True
+# 2 MB, needed for large option pages such as SC2
+app.config['MAX_FORM_MEMORY_SIZE'] = 2 * 1024 * 1024
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent
 # archipelago.gg uses gunicorn + nginx; ignoring this option
@@ -90,7 +92,8 @@ class B64UUIDConverter(BaseConverter):
 # short UUID
 app.url_map.converters["suuid"] = B64UUIDConverter
 app.jinja_env.filters["suuid"] = to_url
-app.jinja_env.filters["title_sorted"] = title_sorted
+app.jinja_env.filters["sorted_worlds"] = world_sorted
+app.jinja_env.filters["title_sorted"] = site_map_title_sorted
 
 
 def register() -> None:

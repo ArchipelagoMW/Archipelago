@@ -5,8 +5,6 @@ from ..roomEditor import RoomEditor, Object, ObjectWarp, ObjectHorizontal
 from ..backgroundEditor import BackgroundEditor
 from .. import utils
 
-from ...Options import BootsControls
-
 def bugfixWrittingWrongRoomStatus(rom):
     # The normal rom contains a pretty nasty bug where door closing triggers in D7/D8 can effect doors in
     # dungeons D1-D6. This fix should prevent this.
@@ -552,8 +550,8 @@ def fixD7exit(rom):
     re.objects.append(Object(5, 3, 0x4A))
     re.store(rom)
 
-def addBootsControls(rom, boots_controls: int):
-    if boots_controls == BootsControls.option_vanilla:
+def addBootsControls(rom, bootscontrols):
+    if bootscontrols == 'vanilla':
         return
     consts = {
           "INVENTORY_PEGASUS_BOOTS": 0x8,
@@ -571,25 +569,25 @@ def addBootsControls(rom, boots_controls: int):
 
     BOOTS_START_ADDR = 0x11E8
     condition = {
-        BootsControls.option_bracelet: """
+        'bracelet': """
         ld   a, [hl]
         ; Check if we are using the bracelet
         cp   INVENTORY_POWER_BRACELET
         jr   z, .yesBoots
         """,
-        BootsControls.option_press_a: """
+        'pressa': """
         ; Check if we are using the A slot
         cp  J_A
         jr  z, .yesBoots
         ld   a, [hl]
         """,
-        BootsControls.option_press_b: """
+        'pressb': """
         ; Check if we are using the B slot
         cp  J_B
         jr  z, .yesBoots
         ld   a, [hl]
         """
-    }[boots_controls]
+    }[bootscontrols]
     
     # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
     boots_code = assembler.ASM("""

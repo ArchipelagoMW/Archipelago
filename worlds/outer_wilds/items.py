@@ -87,6 +87,7 @@ item_name_groups = {
         "Translator (Giant's Deep)",
         "Translator (Dark Bramble)",
         "Translator (Other)",
+        "Translator (Deep Bramble)",
     },
     "Tools": {
         "Translator",
@@ -96,6 +97,7 @@ item_name_groups = {
         "Translator (Giant's Deep)",
         "Translator (Dark Bramble)",
         "Translator (Other)",
+        "Translator (Deep Bramble)",
         "Signalscope",
         "Scout",
         "Ghost Matter Wavelength",

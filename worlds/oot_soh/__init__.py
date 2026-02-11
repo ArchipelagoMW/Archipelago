@@ -1,23 +1,27 @@
 import orjson
 import pkgutil
 
-from typing import Any, List, ClassVar
+from typing import Any, ClassVar
 
-from BaseClasses import CollectionState, Item, Tutorial
+from BaseClasses import CollectionState, Item, Tutorial, ItemClassification, Location
 from worlds.AutoWorld import WebWorld, World
+from .location_access.overworld.castle_grounds import LocalEvents
 from .Items import SohItem, item_data_table, item_table, item_name_groups, progressive_items
-from .Locations import location_table, location_name_groups
+from .Locations import location_table, location_name_groups, token_amounts, SohLocData, location_data_table
 from .Options import SohOptions, soh_option_groups
-from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
+from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item
 from . import RegionAgeAccess
-from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
-from Fill import fill_restrictive
+from .DungeonRewardShuffle import pre_fill_dungeon, get_pre_fill_rewards
+from .KeyShuffle import pre_fill_keys, get_pre_fill_keys
+from .SongShuffle import pre_fill_songs, get_prefill_songs
+from .ShopItems import fill_shop_items, generate_shop_prices, generate_scrub_prices, generate_merchant_prices, set_price_rules
 from .Presets import oot_soh_options_presets
 from .UniversalTracker import setup_options_from_slot_data
 from settings import Group, Bool
 from Options import OptionError
+from .LogicHelpers import wallet_capacities
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -53,7 +57,7 @@ class SohSettings(Group):
 
 
 class SohWorld(World):
-    """A PC Port of Ocarina of Time"""
+    """A PC Port of Ocarina of Time. The Legend of Zelda: Ocarina of Time is a 3D action/adventure game. Travel through Hyrule in two time periods, learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities to rescue the Seven Sages, and then confront Ganondorf to save Hyrule! """
 
     game = "Ship of Harkinian"
     web = SohWebWorld()
@@ -66,6 +70,7 @@ class SohWorld(World):
     location_name_groups = location_name_groups
 
     # Universal Tracker stuff, does not do anything in normal gen
+    glitches_item_name = Items.GLITCHED
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: dict[str, Any]  # slot data that got passed through
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
@@ -73,11 +78,15 @@ class SohWorld(World):
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.item_pool = list[SohItem]()
-        self.included_locations = dict[str, int]()
+        self.included_locations = dict[str, SohLocData]()
         self.shop_prices = dict[str, int]()
         self.shop_vanilla_items = dict[str, str]()
         self.scrub_prices = dict[str, int]()
+        self.merchant_prices = dict[str, int]()
         self.triforce_pieces_required: int = 0
+        self.vanilla_progressive_skulltula_count: int = 0
+        self.randomized_progressive_skulltula_count: int = 0
+        self.pre_fill_pool = list[Items]()
 
         apworld_manifest = orjson.loads(pkgutil.get_data(
             __name__, "archipelago.json").decode("utf-8"))
@@ -94,9 +103,20 @@ class SohWorld(World):
                               "setting has not been enabled. Either have them disable that option, or enable it in "
                               "your host.yaml settings.")
 
-        # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
-        if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
+        # If door of time is set to closed and dungeon rewards aren't shuffled or ocarinas aren't shuffled, force child spawn
+        if self.options.door_of_time.value == 0 and (
+                self.options.shuffle_dungeon_rewards.value == 0 or self.options.shuffle_ocarinas == 0 or self.options.shuffle_songs == "off"):
             self.options.starting_age.value = 0
+
+        # If the door of time is set to song only, and the songs aren't shuffled, force child spawn
+        if self.options.door_of_time == 1 and (self.options.shuffle_songs == "off"):
+            self.options.starting_age.value = 0
+
+        # Check if Tycoon Wallet is shuffled and if price settings are above what Giants Wallet can hold. Max/Min Prices need to be adjusted to fit in Giants Wallet.
+        if not self.options.shuffle_tycoon_wallet.value:
+            for option in (self.options.shuffle_shops_minimum_price, self.options.shuffle_shops_maximum_price, self.options.shuffle_scrubs_minimum_price, self.options.shuffle_scrubs_maximum_price, self.options.shuffle_merchants_minimum_price, self.options.shuffle_merchants_maximum_price):
+                if option.value > wallet_capacities[Items.GIANT_WALLET]:
+                    option.value = wallet_capacities[Items.GIANT_WALLET]
 
         # If maximum price is below minimum, set max to minimum.
         if self.options.shuffle_shops_minimum_price.value > self.options.shuffle_shops_maximum_price.value:
@@ -105,28 +125,149 @@ class SohWorld(World):
         if self.options.shuffle_scrubs_minimum_price.value > self.options.shuffle_scrubs_maximum_price.value:
             self.options.shuffle_scrubs_maximum_price.value = self.options.shuffle_scrubs_minimum_price.value
 
+        if self.options.shuffle_merchants_minimum_price.value > self.options.shuffle_merchants_maximum_price.value:
+            self.options.shuffle_merchants_maximum_price.value = self.options.shuffle_merchants_minimum_price.value
+
+        # Figure out how many Skulltula tokens need to be progressive
+        # Max amount from KAK turn ins
+        turn_in_amount: int = 0
+
+        if self.options.shuffle_100_gs_reward:
+            turn_in_amount = 100
+        elif self.options.accessibility == "full":
+            turn_in_amount = 50
+        else:
+            for location, amount in token_amounts.items():
+                if str(location) not in self.options.exclude_locations:
+                    turn_in_amount = amount
+                    break
+
+        progressive_skulltula_count: int = max(self.options.rainbow_bridge_skull_tokens_required.value if self.options.rainbow_bridge.value == 6 else 0,
+                                               self.options.ganons_castle_boss_key_skull_tokens_required.value if self.options.ganons_castle_boss_key.value == 7 else 0, turn_in_amount)
+
+        if self.options.shuffle_skull_tokens:
+            self.randomized_progressive_skulltula_count = progressive_skulltula_count
+
+            if self.options.shuffle_skull_tokens == "dungeon":
+                self.vanilla_progressive_skulltula_count = max(
+                    self.randomized_progressive_skulltula_count - TokenCounts.OVERWORLD.value, 0)
+
+            if self.options.shuffle_skull_tokens == "overworld":
+                self.vanilla_progressive_skulltula_count = max(
+                    self.randomized_progressive_skulltula_count - TokenCounts.DUNGEON.value, 0)
+        else:
+            self.vanilla_progressive_skulltula_count = progressive_skulltula_count
+
+        # Figure out Keyring Situation
+        key_ring_options: list = [self.options.gerudo_fortress_key_ring, self.options.forest_temple_key_ring, self.options.fire_temple_key_ring, self.options.water_temple_key_ring,
+                                  self.options.spirit_temple_key_ring, self.options.shadow_temple_key_ring, self.options.bottom_of_the_well_key_ring, self.options.gerudo_training_ground_key_ring, self.options.ganons_castle_key_ring]
+
+        if self.options.key_rings != "selection":
+            for option in key_ring_options:
+                option.value = False
+
+        if self.options.key_rings == "count":
+            # Fix count if Gerudo Fortress Keys aren't allowed
+            if self.options.fortress_carpenters == "normal" and self.options.gerudo_fortress_key_shuffle == "vanilla":
+                if self.options.key_rings_count.value > 8:
+                    self.options.key_rings_count.value = 8
+                key_ring_options.remove(self.options.gerudo_fortress_key_ring)
+
+            self.random.shuffle(key_ring_options)
+
+            # Set only the chosen
+            for index in range(self.options.key_rings_count.value):
+                key_ring_options[index].value = True
+        elif self.options.key_rings == "selection" and self.options.fortress_carpenters == "normal" and self.options.gerudo_fortress_key_shuffle == "vanilla":
+            self.options.gerudo_fortress_key_ring.value = False
+
+        # generate the prefill pool
+        self.pre_fill_pool += get_pre_fill_rewards(self)
+        self.pre_fill_pool += get_prefill_songs(self)
+        for key_shuffle in get_pre_fill_keys(self).values():
+            self.pre_fill_pool += key_shuffle
+        self.pre_fill_pool += ShopItems.get_vanilla_shop_pool(self)
+
+        if self.using_ut:   # can't this get moved to 'UniversalTracker.py' ?
+            self.options.gerudo_fortress_key_ring.value = self.passthrough[
+                "gerudo_fortress_key_ring"]
+            self.options.forest_temple_key_ring.value = self.passthrough["forest_temple_key_ring"]
+            self.options.fire_temple_key_ring.value = self.passthrough["fire_temple_key_ring"]
+            self.options.water_temple_key_ring.value = self.passthrough["water_temple_key_ring"]
+            self.options.spirit_temple_key_ring.value = self.passthrough["spirit_temple_key_ring"]
+            self.options.shadow_temple_key_ring.value = self.passthrough["shadow_temple_key_ring"]
+            self.options.bottom_of_the_well_key_ring.value = self.passthrough[
+                "bottom_of_the_well_key_ring"]
+            self.options.gerudo_training_ground_key_ring.value = self.passthrough[
+                "gerudo_training_ground_key_ring"]
+            self.options.ganons_castle_key_ring.value = self.passthrough["ganons_castle_key_ring"]
+
     def create_regions(self) -> None:
         create_regions_and_locations(self)
         place_locked_items(self)
-        generate_scrub_prices(self)
+        self.reserve_prefill_locations()
         for location in self.get_locations():
             location.name = str(location.name)
         for region in self.get_regions():
             region.name = str(region.name)
 
+    def reserve_prefill_locations(self) -> None:
+        DungeonRewardShuffle.reserve_dungeon_reward_locations(self)
+        SongShuffle.reserve_song_locations(self)
+        # Currently no reservations for key shuffle, 
+        # we can't know for sure what locations will get used and reserving everything is too restrictive
+        ShopItems.reserve_vanilla_shop_locations(self)
+
+    def create_item(self, name: str, create_as_event: bool = False, classification: ItemClassification = None) -> SohItem:
+        item_entry = Items(name)
+        return SohItem(str(name), item_data_table[item_entry].classification if classification == None else classification,
+                       None if create_as_event else item_data_table[item_entry].item_id, self.player)
+
+    def get_pre_fill_items(self) -> list[Item]:
+        return [self.create_item(item) for item in self.pre_fill_pool]
+
+    def get_filler_item_name(self) -> str:
+        return get_filler_item(self)
+
+    def set_completion_rule(self) -> None:
+        if not self.options.true_no_logic:
+            # Actual completion condition.
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(
+                Events.GAME_COMPLETED.value, self.player)
+
+    def get_empty_locations_from_list_shuffled(self, location_list: list[Locations]) -> list[Location]:
+        locations = []
+        for location in location_list:
+            loc = self.get_location(str(location))
+            if loc.item != None or loc.locked:
+                continue
+            locations.append(loc)
+        self.random.shuffle(locations)
+
+        return locations
+
+    def get_pre_fill_state(self) -> CollectionState:
+        prefill_state = CollectionState(self.multiworld)
+        for item in self.item_pool:
+            prefill_state.collect(item, True)
+        for item in self.pre_fill_pool:
+            prefill_state.collect(self.create_item(item), True)
+        prefill_state.sweep_for_advancements()
+        return prefill_state
+    
+    def set_rules(self) -> None:
+        # Set price rules in advance
+        generate_shop_prices(self)
+        generate_scrub_prices(self)
+        generate_merchant_prices(self)
+        set_price_rules(self)
+
+        # disregard all rules if no logic is in effect
         if self.options.true_no_logic:
             for entrance in self.get_entrances():
                 entrance.access_rule = lambda state: True
             for location in self.get_locations():
                 location.access_rule = lambda state: True
-
-    def create_item(self, name: str, create_as_event: bool = False) -> SohItem:
-        item_entry = Items(name)
-        return SohItem(str(name), item_data_table[item_entry].classification,
-                       None if create_as_event else item_data_table[item_entry].item_id, self.player)
-
-    def get_filler_item_name(self) -> str:
-        return get_filler_item(self)
 
     def create_items(self) -> None:
         # these are for making the progressive items collect/remove work properly
@@ -143,6 +284,11 @@ class SohWorld(World):
             self.push_precollected(self.create_item(
                 Items.PROGRESSIVE_WALLET, create_as_event=True))
 
+        # Pre-Collect Extra Fire Temple Small Key
+        if self.options.small_key_shuffle in ("vanilla", "own_dungeon"):
+            self.multiworld.push_precollected(
+                self.create_item(str(Items.FIRE_TEMPLE_SMALL_KEY), True))
+
         create_item_pool(self)
 
         if self.options.triforce_hunt:
@@ -150,63 +296,17 @@ class SohWorld(World):
 
         create_filler_item_pool(self)
 
-    def set_rules(self) -> None:
-        if self.options.true_no_logic:
-            return
+        self.set_completion_rule()
 
-        # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(
-            Events.GAME_COMPLETED.value, self.player)
+    def pre_fill(self) -> None:
+        original_completion_goal = self.multiworld.completion_condition[self.player]
 
-        # UT doesn't run pre_fill, so we're doing this here instead
-        if self.using_ut:
-            self.shop_prices = self.passthrough["shop_prices"]
-            self.shop_vanilla_items = self.passthrough["shop_vanilla_items"]
-            set_price_rules(self)
-
-    def get_pre_fill_items(self) -> List["Item"]:
-        pre_fill_items = []
-
-        if self.options.shuffle_dungeon_rewards == "dungeons":
-            dungeon_reward_items = [self.create_item(
-                item.value) for item in dungeon_reward_item_mapping.values()]
-            pre_fill_items.extend(dungeon_reward_items)
-
-        for region, shop in all_shop_locations:
-            for slot, item in shop.items():
-                pre_fill_items.append(self.create_item(item))
-
-        return pre_fill_items
-
-    def pre_fill(self):
-        # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
-        if self.options.shuffle_dungeon_rewards == "dungeons":
-            # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
-            prefill_state = CollectionState(self.multiworld)
-            for item in self.item_pool:
-                prefill_state.collect(item, True)
-            for region, shop in all_shop_locations:
-                for slot, item in shop.items():
-                    prefill_state.collect(self.create_item(item), True)
-            prefill_state.sweep_for_advancements()
-
-            dungeon_reward_locations = [self.get_location(location.value)
-                                        for location in dungeon_reward_item_mapping.keys()]
-            dungeon_reward_items = [self.create_item(
-                item.value) for item in dungeon_reward_item_mapping.values()]
-            self.multiworld.random.shuffle(dungeon_reward_items)
-
-            # Place dungeon rewards
-            fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations,
-                             dungeon_reward_items, single_player_placement=True, lock=True)
-
+        pre_fill_dungeon(self)
+        pre_fill_songs(self)
+        pre_fill_keys(self)
         fill_shop_items(self)
 
-        # if UT ever does start running pre_fill, this will stop it from overwriting the shop price rules
-        if self.using_ut or self.options.true_no_logic:
-            return
-
-        set_price_rules(self)
+        self.multiworld.completion_condition[self.player] = original_completion_goal
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         changed = super().collect(state, item)
@@ -225,7 +325,8 @@ class SohWorld(World):
 
         if item.name in (Items.PIECE_OF_HEART, Items.PIECE_OF_HEART_WINNER):
             state.soh_piece_of_heart_count[self.player] += 1  # type: ignore
-            if state.soh_piece_of_heart_count[self.player] == 4:  # type: ignore
+            # type: ignore
+            if state.soh_piece_of_heart_count[self.player] == 4:
                 state.soh_piece_of_heart_count[self.player] = 0  # type: ignore
                 state.soh_heart_count[self.player] += 1  # type: ignore
 
@@ -247,7 +348,8 @@ class SohWorld(World):
 
         if item.name in (Items.PIECE_OF_HEART, Items.PIECE_OF_HEART_WINNER):
             state.soh_piece_of_heart_count[self.player] -= 1  # type: ignore
-            if state.soh_piece_of_heart_count[self.player] == -1:  # type: ignore
+            # type: ignore
+            if state.soh_piece_of_heart_count[self.player] == -1:
                 state.soh_piece_of_heart_count[self.player] = 3  # type: ignore
                 state.soh_heart_count[self.player] -= 1  # type: ignore
 
@@ -281,12 +383,17 @@ class SohWorld(World):
             "triforce_hunt": self.options.triforce_hunt.value,
             "triforce_hunt_pieces_total": self.options.triforce_hunt_pieces_total.value,
             "triforce_hunt_pieces_required": self.triforce_pieces_required,
+            "shuffle_songs": self.options.shuffle_songs.value,
             "shuffle_skull_tokens": self.options.shuffle_skull_tokens.value,
             "skulls_sun_song": self.options.skulls_sun_song.value,
+            "shuffle_kokiri_sword": self.options.shuffle_kokiri_sword.value,
             "shuffle_master_sword": self.options.shuffle_master_sword.value,
             "shuffle_childs_wallet": self.options.shuffle_childs_wallet.value,
+            "shuffle_tycoon_wallet": self.options.shuffle_tycoon_wallet.value,
+            "shuffle_ocarinas": self.options.shuffle_ocarina_buttons.value,
             "shuffle_ocarina_buttons": self.options.shuffle_ocarina_buttons.value,
             "shuffle_swim": self.options.shuffle_swim.value,
+            "shuffle_gerudo_membership_card": self.options.shuffle_gerudo_membership_card.value,
             "shuffle_weird_egg": self.options.shuffle_weird_egg.value,
             "shuffle_fishing_pole": self.options.shuffle_fishing_pole.value,
             "shuffle_deku_stick_bag": self.options.shuffle_deku_stick_bag.value,
@@ -299,6 +406,7 @@ class SohWorld(World):
             "shuffle_fish": self.options.shuffle_fish.value,
             "shuffle_scrubs": self.options.shuffle_scrubs.value,
             "scrub_prices": self.scrub_prices,
+            "merchant_prices": self.merchant_prices,
             "shuffle_beehives": self.options.shuffle_beehives.value,
             "shuffle_cows": self.options.shuffle_cows.value,
             "shuffle_pots": self.options.shuffle_pots.value,
@@ -322,7 +430,20 @@ class SohWorld(World):
             "ganons_castle_boss_key_dungeon_rewards_required": self.options.ganons_castle_boss_key_dungeon_rewards_required.value,
             "ganons_castle_boss_key_dungeons_required": self.options.ganons_castle_boss_key_dungeons_required.value,
             "ganons_castle_boss_key_skull_tokens_required": self.options.ganons_castle_boss_key_skull_tokens_required.value,
+            "small_key_shuffle": self.options.small_key_shuffle.value,
+            "gerudo_fortress_key_shuffle": self.options.gerudo_fortress_key_shuffle.value,
+            "boss_key_shuffle": self.options.boss_key_shuffle.value,
             "key_rings": self.options.key_rings.value,
+            "key_rings_count": self.options.key_rings_count.value,
+            "gerudo_fortress_key_ring": self.options.gerudo_fortress_key_ring.value,
+            "forest_temple_key_ring": self.options.forest_temple_key_ring.value,
+            "fire_temple_key_ring": self.options.fire_temple_key_ring.value,
+            "water_temple_key_ring": self.options.water_temple_key_ring.value,
+            "spirit_temple_key_ring": self.options.spirit_temple_key_ring.value,
+            "shadow_temple_key_ring": self.options.shadow_temple_key_ring.value,
+            "bottom_of_the_well_key_ring": self.options.bottom_of_the_well_key_ring.value,
+            "gerudo_training_ground_key_ring": self.options.gerudo_training_ground_key_ring.value,
+            "ganons_castle_key_ring": self.options.ganons_castle_key_ring.value,
             "big_poe_target_count": self.options.big_poe_target_count.value,
             "skip_child_zelda": self.options.skip_child_zelda.value,
             "skip_epona_race": self.options.skip_epona_race.value,
@@ -333,6 +454,7 @@ class SohWorld(World):
             "bombchu_drops": self.options.bombchu_drops.value,
             "blue_fire_arrows": self.options.blue_fire_arrows.value,
             "sunlight_arrows": self.options.sunlight_arrows.value,
+            "rocs_feather": self.options.rocs_feather.value,
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
             "slingbow_break_beehives": self.options.slingbow_break_beehives.value,
@@ -342,4 +464,6 @@ class SohWorld(World):
             "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
             "no_logic": self.options.true_no_logic.value,
             "apworld_version": self.apworld_version,
+            "enable_all_tricks": self.options.enable_all_tricks.value,
+            "tricks_in_logic": self.options.tricks_in_logic.value
         }

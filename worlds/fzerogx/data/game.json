@@ -1,0 +1,38 @@
+{
+  "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.game.schema.json",
+  "game": "FZeroGX",
+  "creator": "CaucasianCrustacean",
+  "filler_item_name": "Filler",
+  "starting_items": [
+    {
+      "item_categories": [
+        "Racers"
+      ],
+      "random":  1
+    },
+    {
+      "item_categories": [
+        "Cups"
+      ],
+      "random":  1
+    },
+    {
+      "item_categories": [
+        "Body"
+      ],
+      "random":  1
+    },
+    {
+      "item_categories": [
+        "Cockpit"
+      ],
+      "random":  1
+    },
+    {
+      "item_categories": [
+        "Booster"
+      ],
+      "random":  1
+    }
+  ]
+}

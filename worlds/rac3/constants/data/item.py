@@ -101,7 +101,7 @@ class RAC3ITEMDATA:
         if tags is not None:
             all_tags.extend(tags)
         amount: int = 32 * xp
-        return RAC3ITEMDATA(idx, power=power, ammo=ammo, xp=amount, level=idx - base,
+        return RAC3ITEMDATA(idx, power=power, ammo=ammo, xp=amount, level=list(entry.values())[0].index(idx) + 1,
                             level_address=base + RAC3STATUS.LEVEL_TABLE, ap_classification=ItemClassification.useful,
                             tags=all_tags)
 
@@ -126,8 +126,12 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_infobot(idx: int,
-                          ap_classification: ItemClassification):
-        return RAC3ITEMDATA(idx, ap_classification=ap_classification, tags=[RAC3ITEMTAG.INFOBOT])
+                          ap_classification: ItemClassification,
+                          tags: Optional[list[str]] = None):
+        all_tags: list[str] = [RAC3ITEMTAG.INFOBOT]
+        if tags is not None:
+            all_tags.extend(tags)
+        return RAC3ITEMDATA(idx, ap_classification=ap_classification, tags=all_tags)
 
     @staticmethod
     def construct_armor(idx: int,
@@ -168,12 +172,21 @@ class RAC3ITEMDATA:
     def construct_goal(idx: int):
         return RAC3ITEMDATA(idx, ap_classification=ItemClassification.progression, tags=[RAC3ITEMTAG.GOAL])
 
+    @staticmethod
+    def construct_clank(idx: int,
+                        tag: Optional[list[str]] = None):
+        if tag:
+            tags: list[str] = tag + [RAC3ITEMTAG.CLANK]
+        else:
+            tags: list[str] = [RAC3ITEMTAG.CLANK]
+        return RAC3ITEMDATA(idx, ap_classification=ItemClassification.progression, tags=tags)
+
 
 RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     # Items
     # 0x01
-    RAC3ITEM.HELI_PACK: RAC3ITEMDATA.construct_gadget(0x02, ItemClassification.useful),
-    RAC3ITEM.THRUSTER_PACK: RAC3ITEMDATA.construct_gadget(0x03, ItemClassification.useful),
+    RAC3ITEM.HELI_PACK: RAC3ITEMDATA.construct_gadget(0x02, ItemClassification.progression, [RAC3ITEMTAG.CLANK]),
+    RAC3ITEM.THRUSTER_PACK: RAC3ITEMDATA.construct_gadget(0x03, ItemClassification.progression, [RAC3ITEMTAG.CLANK]),
     RAC3ITEM.HYDRO_PACK: RAC3ITEMDATA.construct_unused(0x04),  # Unused
     RAC3ITEM.MAP_O_MATIC: RAC3ITEMDATA.construct_gadget(0x05, ItemClassification.progression_deprioritized),
     RAC3ITEM.COMMANDO_SUIT: RAC3ITEMDATA.construct_unused(0x06),  # Unused
@@ -210,7 +223,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.THIRD_PERSON: RAC3ITEMDATA.construct_unused(0x24),
     RAC3ITEM.FIRST_PERSON: RAC3ITEMDATA.construct_unused(0x25),
     RAC3ITEM.LOCK_STRAFE: RAC3ITEMDATA.construct_unused(0x26),
-    RAC3ITEM.SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon(0x27, 40, 30, ItemClassification.useful),
+    RAC3ITEM.SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon(0x27, 40, 30, ItemClassification.progression),
     RAC3ITEM.SHOCK_BLASTER_V2: RAC3ITEMDATA.construct_weapon_level(0x28, 50, 35, 150),
     RAC3ITEM.SHOCK_BLASTER_V3: RAC3ITEMDATA.construct_weapon_level(0x29, 60, 40, 400),
     RAC3ITEM.SHOCK_BLASTER_V4: RAC3ITEMDATA.construct_weapon_level(0x2A, 80, 40, 700),
@@ -375,7 +388,8 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_BOUNCER: RAC3ITEMDATA.construct_rac2_prog(0xCD, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_MINI_TURRET: RAC3ITEMDATA.construct_rac2_prog(0xCE, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_SHIELD_CHARGER: RAC3ITEMDATA.construct_rac2_prog(0xCF, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER:
+        RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_N60_STORM: RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_INFECTOR:
         RAC3ITEMDATA.construct_weapon_prog(0xD2, ItemClassification.progression_skip_balancing),
@@ -420,7 +434,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.QWARKS_HIDEOUT: RAC3ITEMDATA.construct_infobot(0xF1, ItemClassification.progression),
     RAC3ITEM.KOROS: RAC3ITEMDATA.construct_infobot(0xF2, ItemClassification.progression),
     RAC3ITEM.COMMAND_CENTER: RAC3ITEMDATA.construct_infobot(0xF3, ItemClassification.progression),
-    RAC3ITEM.MUSEUM: RAC3ITEMDATA.construct_infobot(0xF4, ItemClassification.progression),
+    RAC3ITEM.MUSEUM: RAC3ITEMDATA.construct_infobot(0xF4, ItemClassification.progression, [RAC3ITEMTAG.UNUSED]),
     # Armor
     RAC3ITEM.PROGRESSIVE_ARMOR:
         RAC3ITEMDATA.construct_armor(0xF5, ItemClassification.progression, 0, [RAC3ITEMTAG.PROGRESSIVE]),
@@ -436,22 +450,28 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.VIDCOMIC3: RAC3ITEMDATA.construct_vidcomic(0xFD, [RAC3ITEMTAG.UNUSED]),
     RAC3ITEM.VIDCOMIC4: RAC3ITEMDATA.construct_vidcomic(0xFE, [RAC3ITEMTAG.UNUSED]),
     RAC3ITEM.VIDCOMIC5: RAC3ITEMDATA.construct_vidcomic(0xFF, [RAC3ITEMTAG.UNUSED]),
+    # Clank
+    RAC3ITEM.CLANK: RAC3ITEMDATA.construct_clank(0x100),
+    RAC3ITEM.PROGRESSIVE_PACK: RAC3ITEMDATA.construct_clank(0x101, [RAC3ITEMTAG.PROGRESSIVE]),
     # Filler
-    RAC3ITEM.TITANIUM_BOLT: RAC3ITEMDATA.construct_other(0x100),
-    RAC3ITEM.WEAPON_XP: RAC3ITEMDATA.construct_other(0x101),
-    RAC3ITEM.PLAYER_XP: RAC3ITEMDATA.construct_other(0x102),
-    RAC3ITEM.BOLTS: RAC3ITEMDATA.construct_other(0x103, RAC3STATUS.BOLTS),
-    RAC3ITEM.JACKPOT: RAC3ITEMDATA.construct_other(0x104),
+    RAC3ITEM.TITANIUM_BOLT: RAC3ITEMDATA.construct_other(0x102),
+    RAC3ITEM.WEAPON_XP: RAC3ITEMDATA.construct_other(0x103),
+    RAC3ITEM.PLAYER_XP: RAC3ITEMDATA.construct_other(0x104),
+    RAC3ITEM.BOLTS: RAC3ITEMDATA.construct_other(0x105, RAC3STATUS.BOLTS),
+    RAC3ITEM.JACKPOT: RAC3ITEMDATA.construct_other(0x106),
     # Traps
-    RAC3ITEM.INFERNO_MODE: RAC3ITEMDATA.construct_trap(0x105),
-    RAC3ITEM.OHKO_TRAP: RAC3ITEMDATA.construct_trap(0x106),
-    RAC3ITEM.NO_AMMO_TRAP: RAC3ITEMDATA.construct_trap(0x107),
-    RAC3ITEM.LOCK_TRAP: RAC3ITEMDATA.construct_trap(0x108),
-    RAC3ITEM.MIRROR_TRAP: RAC3ITEMDATA.construct_trap(0x109),
-    RAC3ITEM.BLACK_SCREEN_TRAP: RAC3ITEMDATA.construct_trap(0x10A),
-    RAC3ITEM.NO_CLANK_TRAP: RAC3ITEMDATA.construct_trap(0x10B),
+    RAC3ITEM.INFERNO_MODE: RAC3ITEMDATA.construct_unused(0x107),
+    RAC3ITEM.OHKO_TRAP: RAC3ITEMDATA.construct_trap(0x108),
+    RAC3ITEM.NO_AMMO_TRAP: RAC3ITEMDATA.construct_trap(0x109),
+    RAC3ITEM.LOCK_TRAP: RAC3ITEMDATA.construct_trap(0x10A),
+    RAC3ITEM.MIRROR_TRAP: RAC3ITEMDATA.construct_unused(0x10B),
+    RAC3ITEM.BLACK_SCREEN_TRAP: RAC3ITEMDATA.construct_unused(0x10C),
+    RAC3ITEM.NO_CLANK_TRAP: RAC3ITEMDATA.construct_trap(0x10D),
+    RAC3ITEM.INVISIBLE_TRAP: RAC3ITEMDATA.construct_trap(0x10E),
+    RAC3ITEM.DISARM_TRAP: RAC3ITEMDATA.construct_unused(0x10F),
+    RAC3ITEM.WRENCH_ONLY_TRAP: RAC3ITEMDATA.construct_trap(0x110),
     # Goal
-    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x200),
+    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x201),
 }
 
 
@@ -483,6 +503,7 @@ unused_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.UNUSED)
 vidcomic_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.VIDCOMIC)
 weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.WEAPON)
 weapon_upgrade_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.WEAPON_UPGRADE)
+clank_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.CLANK)
 
 PROG_TO_NAME_DICT: dict[str, str] = dict(zip(prog_weapon_data.keys(), non_prog_weapon_data.keys()))
 NAME_TO_PROG_DICT: dict[str, str] = dict(zip(non_prog_weapon_data.keys(), prog_weapon_data.keys()))
@@ -491,8 +512,10 @@ item_counts: dict[str, int] = {
     **dict.fromkeys(non_prog_weapon_data.keys(), 1),
     **dict.fromkeys(prog_weapon_data.keys(), 5),
     **dict.fromkeys(gadget_data.keys(), 1),
+    RAC3ITEM.CLANK: 1,
     RAC3ITEM.PROGRESSIVE_ARMOR: 4,
     RAC3ITEM.PROGRESSIVE_VIDCOMIC: 5,
+    RAC3ITEM.PROGRESSIVE_PACK: 2,
     **dict.fromkeys(infobot_data.keys(), 1),
     RAC3ITEM.VICTORY: 0,
 }
@@ -506,7 +529,8 @@ item_table: dict[str, RAC3ITEMDATA] = {
     **filler_data,
     **trap_data,
     **unused_data,
-    **weapon_upgrade_data
+    **weapon_upgrade_data,
+    **clank_data
 }
 default_starting_weapons: dict[str, int] = {name: 1 for name in non_prog_weapon_data.keys()}
 timer_to_status: dict[str, int] = {
@@ -514,6 +538,9 @@ timer_to_status: dict[str, int] = {
     RAC3ITEM.MIRROR_TRAP: RAC3STATUS.MIRROR_UNIVERSE,
     RAC3ITEM.BLACK_SCREEN_TRAP: RAC3STATUS.BLACK_SCREEN,
     RAC3ITEM.NO_CLANK_TRAP: RAC3STATUS.NO_CLANK,
+    RAC3ITEM.INVISIBLE_TRAP: RAC3STATUS.INVISIBLE,
+    RAC3ITEM.DISARM_TRAP: RAC3STATUS.DISARM,
+    RAC3ITEM.WRENCH_ONLY_TRAP: RAC3STATUS.WRENCH_ONLY,
 }
 
 item_groups: dict[str, set[str]] = {
@@ -532,4 +559,5 @@ item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.VIDCOMIC: set(vidcomic_data.keys()),
     RAC3ITEMTAG.WEAPON: set(weapon_data.keys()),
     RAC3ITEMTAG.WEAPON_UPGRADE: set(weapon_upgrade_data.keys()),
+    RAC3ITEMTAG.CLANK: set(clank_data.keys()),
 }

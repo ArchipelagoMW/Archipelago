@@ -1,6 +1,5 @@
 from typing import Dict
 
-from .Constants import *
 from ..data import ITEMS_DATA
 
 

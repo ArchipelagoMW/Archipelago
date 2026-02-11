@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification
-from .options import DHCAccess, DungeonItem, Goal, ShuffleElements
+from .options import DHCAccess, DungeonItem, Goal, ShuffleElements, DungeonWarp, PedReward, DungeonCompasses, DungeonMaps
 from .constants import TMCItem, TMCLocation, MinishCapItem
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ DEPRIORITIZED_FALLBACK = 0
 """backwards-compatible fallback for AP v0.6.2 and prior"""
 try:
     DEPRIORITIZED_FALLBACK = ItemClassification.progression_deprioritized_skip_balancing
-except AttributeError as e:
+except AttributeError:
     DEPRIORITIZED_FALLBACK = ItemClassification.progression_skip_balancing
 
 
@@ -60,10 +60,6 @@ def pool_bottles() -> list[str]:
 
 def pool_baseitems() -> list[str]:
     return [
-        *[TMCItem.PROGRESSIVE_SWORD] * 5,
-        *[TMCItem.PROGRESSIVE_SHIELD] * 2,
-        *[TMCItem.PROGRESSIVE_BOW] * 2,
-        *[TMCItem.PROGRESSIVE_BOOMERANG] * 2,
         *[TMCItem.BOMB_BAG] * 4,
         TMCItem.REMOTE_BOMB,
         *[TMCItem.QUIVER] * 3,
@@ -84,38 +80,16 @@ def pool_baseitems() -> list[str]:
 
         TMCItem.DOG_FOOD,
 
-        *[TMCItem.HEART_PIECE] * 44,
-        *[TMCItem.HEART_CONTAINER] * 6,
-
-        TMCItem.RUPEES_1,
-        TMCItem.RUPEES_5,
-        TMCItem.RUPEES_20,
-        TMCItem.RUPEES_50,
-        TMCItem.RUPEES_100,
-        TMCItem.RUPEES_200,
         TMCItem.BIG_WALLET,
         TMCItem.BIG_WALLET,
         TMCItem.BIG_WALLET,
 
-        TMCItem.HEART_REFILL,
-        TMCItem.BOMB_REFILL_5,
-        TMCItem.BOMB_REFILL_10,
-        TMCItem.BOMB_REFILL_30,
-        TMCItem.ARROW_REFILL_5,
-        TMCItem.ARROW_REFILL_10,
-        TMCItem.ARROW_REFILL_30,
-
-        TMCItem.SPIN_ATTACK,
         TMCItem.ROLL_ATTACK,
         TMCItem.DASH_ATTACK,
         TMCItem.ROCK_BREAKER,
         TMCItem.SWORD_BEAM,
-        TMCItem.GREATSPIN,
         TMCItem.DOWNTHRUST,
         TMCItem.PERIL_BEAM,
-        TMCItem.FAST_SPIN_SCROLL,
-        TMCItem.FAST_SPLIT_SCROLL,
-        TMCItem.LONG_SPIN,
 
         TMCItem.TINGLE_TROPHY,
         TMCItem.CARLOV_MEDAL,
@@ -141,24 +115,68 @@ def pool_traps() -> list[str]:
 def pool_dungeonmaps(world: "MinishCapWorld") -> list[str]:
     maps = [TMCItem.DUNGEON_MAP_DWS, TMCItem.DUNGEON_MAP_COF, TMCItem.DUNGEON_MAP_FOW, TMCItem.DUNGEON_MAP_TOD,
             TMCItem.DUNGEON_MAP_POW]
-    if world.options.dhc_access != DHCAccess.option_closed:
+    if world.options.dhc_access.value != DHCAccess.option_closed:
         maps.append(TMCItem.DUNGEON_MAP_DHC)
+    if world.options.dungeon_maps.value == DungeonMaps.option_start_with:
+        for map in maps:
+            world.push_precollected(world.create_item(map))
+        return []
     return maps
 
 
 def pool_compass(world: "MinishCapWorld") -> list[str]:
     compasses = [TMCItem.DUNGEON_COMPASS_DWS, TMCItem.DUNGEON_COMPASS_COF, TMCItem.DUNGEON_COMPASS_FOW,
                  TMCItem.DUNGEON_COMPASS_TOD, TMCItem.DUNGEON_COMPASS_POW]
-    if world.options.dhc_access != DHCAccess.option_closed:
+    if world.options.dhc_access.value != DHCAccess.option_closed:
         compasses.append(TMCItem.DUNGEON_COMPASS_DHC)
+    if world.options.dungeon_compasses.value == DungeonCompasses.option_start_with:
+        for compass in compasses:
+            world.push_precollected(world.create_item(compass))
+        return []
     return compasses
 
 
 def pool_bigkeys(world: "MinishCapWorld") -> list[str]:
     keys = [TMCItem.BIG_KEY_DWS, TMCItem.BIG_KEY_COF, TMCItem.BIG_KEY_FOW, TMCItem.BIG_KEY_POW]
-    if world.options.dhc_access != DHCAccess.option_closed and world.options.goal == Goal.option_vaati:
+    if world.options.dhc_access != DHCAccess.option_closed and world.options.goal == Goal.option_vaati and \
+        world.options.ped_reward.value != PedReward.option_dhc_big_key:
         keys.append(TMCItem.BIG_KEY_DHC)
     return keys
+
+
+def pool_swords(world: "MinishCapWorld") -> list[str]:
+    if world.options.progressive_sword.value:
+        return [TMCItem.PROGRESSIVE_SWORD] * 5
+    return [TMCItem.SMITHS_SWORD, TMCItem.WHITE_SWORD_GREEN, TMCItem.WHITE_SWORD_RED, TMCItem.WHITE_SWORD_BLUE, TMCItem.FOUR_SWORD]
+
+
+def pool_bow(world: "MinishCapWorld") -> list[str]:
+    if world.options.progressive_bow.value:
+        return [TMCItem.PROGRESSIVE_BOW] * 2
+    return [TMCItem.BOW, TMCItem.LIGHT_ARROW]
+
+
+def pool_boomerang(world: "MinishCapWorld") -> list[str]:
+    if world.options.progressive_boomerang.value:
+        return [TMCItem.PROGRESSIVE_BOOMERANG] * 2
+    return [TMCItem.BOOMERANG, TMCItem.MAGIC_BOOMERANG]
+
+
+def pool_shield(world: "MinishCapWorld") -> list[str]:
+    if world.options.progressive_shield.value:
+        return [TMCItem.PROGRESSIVE_SHIELD] * 2
+    return [TMCItem.SHIELD, TMCItem.MIRROR_SHIELD]
+
+
+def pool_scroll(world: "MinishCapWorld") -> list[str]:
+    if world.options.progressive_scroll.value:
+        return [TMCItem.PROGRESSIVE_SCROLL] * 5
+    return [TMCItem.SPIN_ATTACK, TMCItem.GREATSPIN, TMCItem.FAST_SPIN_SCROLL, TMCItem.FAST_SPLIT_SCROLL, TMCItem.LONG_SPIN]
+
+
+def pool_health(world: "MinishCapWorld") -> list[str]:
+    return ([TMCItem.HEART_CONTAINER] * world.options.heart_containers.value +
+            [TMCItem.HEART_PIECE] * (world.options.piece_of_hearts.value * 4))
 
 
 def pool_smallkeys(world: "MinishCapWorld") -> list[str]:
@@ -197,13 +215,20 @@ def get_item_pool(world: "MinishCapWorld") -> list[MinishCapItem]:
     item_pool = pool_baseitems()
 
     if world.options.early_weapon.value:
-        weapon_pool = [TMCItem.PROGRESSIVE_SWORD]
+        weapon_pool = [TMCItem.PROGRESSIVE_SWORD, TMCItem.SMITHS_SWORD]
         if world.options.weapon_bomb.value in {1, 2}:
             weapon_pool.extend([TMCItem.BOMB_BAG])
         if world.options.weapon_bow.value:
-            weapon_pool.extend([TMCItem.PROGRESSIVE_BOW])
+            weapon_pool.extend([TMCItem.PROGRESSIVE_BOW, TMCItem.BOW])
         weapon_choice = world.random.choice(weapon_pool)
         multiworld.local_early_items[player][weapon_choice] = 1
+
+    item_pool.extend(pool_swords(world))
+    item_pool.extend(pool_bow(world))
+    item_pool.extend(pool_boomerang(world))
+    item_pool.extend(pool_shield(world))
+    item_pool.extend(pool_scroll(world))
+    item_pool.extend(pool_health(world))
 
     if world.options.dungeon_big_keys.value == DungeonItem.option_anywhere:
         item_pool.extend(pool_bigkeys(world))
@@ -215,9 +240,16 @@ def get_item_pool(world: "MinishCapWorld") -> list[MinishCapItem]:
     if world.options.dungeon_maps.value == DungeonItem.option_anywhere:
         item_pool.extend(pool_dungeonmaps(world))
 
+    if world.options.figurine_amount > 0:
+        item_pool.extend([TMCItem.FIGURINE] * world.options.figurine_amount.value)
+
+    if world.options.ped_reward == PedReward.option_dhc_big_key:
+        world.get_location(TMCLocation.PEDESTAL_REQUIREMENT_REWARD).place_locked_item(world.create_item(TMCItem.BIG_KEY_DHC))
+
     # ToD is stupid, need to place the big key manually
     if world.options.dungeon_big_keys.value == DungeonItem.option_own_dungeon and \
-       TMCItem.BIG_KEY_TOD not in world.options.start_inventory_from_pool.value.keys():
+       TMCItem.BIG_KEY_TOD not in world.options.start_inventory_from_pool.value.keys() and \
+        world.options.dungeon_warp_tod.value == DungeonWarp.option_none:
         location = world.random.choice([TMCLocation.DROPLETS_ENTRANCE_B2_EAST_ICEBLOCK,
                                         TMCLocation.DROPLETS_ENTRANCE_B2_WEST_ICEBLOCK])
         world.get_location(location).place_locked_item(world.create_item(TMCItem.BIG_KEY_TOD))
@@ -229,8 +261,7 @@ def get_item_pool(world: "MinishCapWorld") -> list[MinishCapItem]:
         random_bottles = pool_random_bottle_contents()
         world.random.shuffle(random_bottles)
 
-        for i in range(0, 4):
-            selected_bottles.append(random_bottles[i])
+        selected_bottles.extend(random_bottles[i] for i in range(0, 4))
 
         item_pool.extend(selected_bottles)
 
@@ -242,16 +273,18 @@ def get_item_pool(world: "MinishCapWorld") -> list[MinishCapItem]:
 
 def get_pre_fill_pool(world: "MinishCapWorld") -> list[MinishCapItem]:
     start_inv = world.options.start_inventory_from_pool.value
+    options = world.options
     pre_fill_pool = []
 
-    if not world.options.dungeon_big_keys.value == DungeonItem.option_anywhere:
+    if not options.dungeon_big_keys.value == DungeonItem.option_anywhere:
         pre_fill_pool.extend(pool_bigkeys(world))
-        # ToD big key never added to pre_fill pool, always placed by get_item_pool
-    if not world.options.dungeon_small_keys.value == DungeonItem.option_anywhere:
+        if options.dungeon_warp_tod.value != DungeonWarp.option_none:
+            pre_fill_pool.append(TMCItem.BIG_KEY_TOD)
+    if not options.dungeon_small_keys.value == DungeonItem.option_anywhere:
         pre_fill_pool.extend(pool_smallkeys(world))
-    if not world.options.dungeon_compasses.value == DungeonItem.option_anywhere:
+    if not options.dungeon_compasses.value == DungeonItem.option_anywhere:
         pre_fill_pool.extend(pool_compass(world))
-    if not world.options.dungeon_maps.value == DungeonItem.option_anywhere:
+    if not options.dungeon_maps.value == DungeonItem.option_anywhere:
         pre_fill_pool.extend(pool_dungeonmaps(world))
 
     # Keep track of items that need to be removed due to start_inv
@@ -265,23 +298,24 @@ def get_pre_fill_pool(world: "MinishCapWorld") -> list[MinishCapItem]:
 
 
 item_table: dict[str, ItemData] = {
-    # TMCItem.SMITHS_SWORD: ItemData(ItemClassification.progression, (0x01, 0x00)),
-    # TMCItem.WHITE_SWORD_GREEN: ItemData(ItemClassification.progression, (0x02, 0x00)),
-    # TMCItem.WHITE_SWORD_RED: ItemData(ItemClassification.progression, (0x03, 0x00)),
-    # TMCItem.WHITE_SWORD_BLUE: ItemData(ItemClassification.progression, (0x04, 0x00)),
-    # TMCItem.FOUR_SWORD: ItemData(ItemClassification.progression, (0x06, 0x00)),
-    TMCItem.PROGRESSIVE_SWORD: ItemData(ItemClassification.progression, (0x01, 0x00)),
+    TMCItem.PROGRESSIVE_SCROLL: ItemData(ItemClassification.progression, (0x05, 0x04)),
+    TMCItem.SMITHS_SWORD: ItemData(ItemClassification.progression, (0x01, 0x00)),
+    TMCItem.WHITE_SWORD_GREEN: ItemData(ItemClassification.progression, (0x02, 0x00)),
+    TMCItem.WHITE_SWORD_RED: ItemData(ItemClassification.progression, (0x03, 0x00)),
+    TMCItem.WHITE_SWORD_BLUE: ItemData(ItemClassification.progression, (0x04, 0x00)),
+    TMCItem.FOUR_SWORD: ItemData(ItemClassification.progression, (0x06, 0x00)),
+    TMCItem.PROGRESSIVE_SWORD: ItemData(ItemClassification.progression, (0x05, 0x00)),
     TMCItem.BOMB: ItemData(ItemClassification.progression, (0x07, 0x00)),
     TMCItem.REMOTE_BOMB: ItemData(ItemClassification.useful, (0x08, 0x00)),
-    # TMCItem.BOW: ItemData(ItemClassification.progression, (0x09, 0x00)),
-    # TMCItem.LIGHT_ARROW: ItemData(ItemClassification.progression, (0x0A, 0x00)),
-    TMCItem.PROGRESSIVE_BOW: ItemData(ItemClassification.progression, (0x09, 0x00)),
-    # TMCItem.BOOMERANG: ItemData(ItemClassification.progression, (0x0B, 0x00)),
-    # TMCItem.MAGIC_BOOMERANG: ItemData(ItemClassification.progression, (0x0C, 0x00)),
-    TMCItem.PROGRESSIVE_BOOMERANG: ItemData(ItemClassification.progression, (0x0B, 0x00)),
-    # TMCItem.SHIELD: ItemData(ItemClassification.progression, (0x0D, 0x00)),
-    # TMCItem.MIRROR_SHIELD: ItemData(ItemClassification.progression, (0x0E, 0x00)),
-    TMCItem.PROGRESSIVE_SHIELD: ItemData(ItemClassification.progression, (0x0D, 0x00)),
+    TMCItem.BOW: ItemData(ItemClassification.progression, (0x09, 0x00)),
+    TMCItem.LIGHT_ARROW: ItemData(ItemClassification.progression, (0x0A, 0x00)),
+    TMCItem.PROGRESSIVE_BOW: ItemData(ItemClassification.progression, (0x05, 0x01)),
+    TMCItem.BOOMERANG: ItemData(ItemClassification.progression, (0x0B, 0x00)),
+    TMCItem.MAGIC_BOOMERANG: ItemData(ItemClassification.progression, (0x0C, 0x00)),
+    TMCItem.PROGRESSIVE_BOOMERANG: ItemData(ItemClassification.progression, (0x05, 0x02)),
+    TMCItem.SHIELD: ItemData(ItemClassification.progression, (0x0D, 0x00)),
+    TMCItem.MIRROR_SHIELD: ItemData(ItemClassification.progression, (0x0E, 0x00)),
+    TMCItem.PROGRESSIVE_SHIELD: ItemData(ItemClassification.progression, (0x05, 0x03)),
     TMCItem.LANTERN: ItemData(ItemClassification.progression, (0x0F, 0x00)),
     # TMCItem.LANTERN_OFF: ItemData(ItemClassification.progression, (0x10, 0x00)),
     TMCItem.GUST_JAR: ItemData(ItemClassification.progression, (0x11, 0x00)),
@@ -330,7 +364,7 @@ item_table: dict[str, ItemData] = {
     TMCItem.GRAVEYARD_KEY: ItemData(ItemClassification.progression, (0x3C, 0x00)),
     TMCItem.TINGLE_TROPHY: ItemData(ItemClassification.progression, (0x3D, 0x00)),
     TMCItem.CARLOV_MEDAL: ItemData(ItemClassification.progression, (0x3E, 0x00)),
-    TMCItem.SHELLS: ItemData(ItemClassification.progression, (0x3F, 0x00)),
+    TMCItem.SHELLS: ItemData(ItemClassification.filler, (0x3F, 0x00)),
     TMCItem.EARTH_ELEMENT: ItemData(ItemClassification.progression_skip_balancing, (0x40, 0x00)),
     TMCItem.FIRE_ELEMENT: ItemData(ItemClassification.progression_skip_balancing, (0x41, 0x00)),
     TMCItem.WATER_ELEMENT: ItemData(ItemClassification.progression_skip_balancing, (0x42, 0x00)),
@@ -355,7 +389,6 @@ item_table: dict[str, ItemData] = {
     TMCItem.RUPEES_200: ItemData(ItemClassification.filler, (0x59, 0x00)),
     # TMCItem.UNUSED: ItemData(ItemClassification.progression, (0x5A, 0x00)),
     TMCItem.JABBER_NUT: ItemData(ItemClassification.progression, (0x5B, 0x00)),
-    TMCItem.KINSTONE: ItemData(ItemClassification.progression, (0x5C, 0x00)),
     TMCItem.KINSTONE_GOLD_CLOUD: ItemData(ItemClassification.progression, (0x5C, 0x65)),
     TMCItem.KINSTONE_GOLD_SWAMP: ItemData(ItemClassification.progression, (0x5C, 0x6A)),
     TMCItem.KINSTONE_GOLD_FALLS: ItemData(ItemClassification.progression, (0x5C, 0x6D)),
@@ -371,13 +404,13 @@ item_table: dict[str, ItemData] = {
     TMCItem.ARROW_REFILL_5: ItemData(ItemClassification.filler, (0x5E, 0x00)),
     TMCItem.HEART_REFILL: ItemData(ItemClassification.filler, (0x5F, 0x00)),
     TMCItem.FAIRY_REFILL: ItemData(ItemClassification.filler, (0x60, 0x00)),
-    TMCItem.SHELLS_30: ItemData(ItemClassification.progression, (0x61, 0x00)),
+    TMCItem.SHELLS_30: ItemData(ItemClassification.filler, (0x61, 0x00)),
     TMCItem.HEART_CONTAINER: ItemData(DEPRIORITIZED_FALLBACK, (0x62, 0x00)),
     TMCItem.HEART_PIECE: ItemData(DEPRIORITIZED_FALLBACK, (0x63, 0x00)),
     TMCItem.BIG_WALLET: ItemData(ItemClassification.progression, (0x64, 0x00)),
     TMCItem.BOMB_BAG: ItemData(ItemClassification.progression, (0x65, 0x00)),
     TMCItem.QUIVER: ItemData(ItemClassification.useful, (0x66, 0x00)),
-    TMCItem.KINSTONE_BAG: ItemData(ItemClassification.progression, (0x67, 0x00)),
+    TMCItem.FIGURINE: ItemData(DEPRIORITIZED_FALLBACK, (0x67, 0x00)),
     TMCItem.BRIOCHE: ItemData(ItemClassification.filler, (0x68, 0x00)),
     TMCItem.CROISSANT: ItemData(ItemClassification.filler, (0x69, 0x00)),
     TMCItem.PIE: ItemData(ItemClassification.filler, (0x6A, 0x00)),
@@ -467,11 +500,11 @@ def get_filler_item_selection(world: "MinishCapWorld"):
 
 
 item_groups: dict[str, set[str]] = {
-    "Spin Scrolls": {TMCItem.SPIN_ATTACK, TMCItem.GREATSPIN, TMCItem.FAST_SPIN_SCROLL, TMCItem.FAST_SPLIT_SCROLL,
-                     TMCItem.LONG_SPIN},
-    "Scrolls": {TMCItem.SPIN_ATTACK, TMCItem.ROLL_ATTACK, TMCItem.DASH_ATTACK, TMCItem.ROCK_BREAKER, TMCItem.SWORD_BEAM,
-                TMCItem.GREATSPIN, TMCItem.DOWNTHRUST, TMCItem.PERIL_BEAM, TMCItem.FAST_SPIN_SCROLL,
-                TMCItem.FAST_SPLIT_SCROLL, TMCItem.LONG_SPIN},
+    "Spin Scrolls": {TMCItem.PROGRESSIVE_SCROLL, TMCItem.SPIN_ATTACK, TMCItem.GREATSPIN, TMCItem.FAST_SPIN_SCROLL,
+                     TMCItem.FAST_SPLIT_SCROLL, TMCItem.LONG_SPIN},
+    "Scrolls": {TMCItem.PROGRESSIVE_SCROLL, TMCItem.SPIN_ATTACK, TMCItem.ROLL_ATTACK, TMCItem.DASH_ATTACK,
+                TMCItem.ROCK_BREAKER, TMCItem.SWORD_BEAM, TMCItem.GREATSPIN, TMCItem.DOWNTHRUST, TMCItem.PERIL_BEAM,
+                TMCItem.FAST_SPIN_SCROLL, TMCItem.FAST_SPLIT_SCROLL, TMCItem.LONG_SPIN},
     "Elements": {TMCItem.EARTH_ELEMENT, TMCItem.FIRE_ELEMENT, TMCItem.WATER_ELEMENT, TMCItem.WIND_ELEMENT},
     "Health": {TMCItem.HEART_CONTAINER, TMCItem.HEART_PIECE},
     "Bottle": {TMCItem.EMPTY_BOTTLE, TMCItem.LON_LON_BUTTER, TMCItem.LON_LON_MILK, TMCItem.LON_LON_MILK_HALF,
@@ -479,22 +512,62 @@ item_groups: dict[str, set[str]] = {
                TMCItem.RED_PICOLYTE, TMCItem.ORANGE_PICOLYTE, TMCItem.YELLOW_PICOLYTE, TMCItem.GREEN_PICOLYTE,
                TMCItem.BLUE_PICOLYTE, TMCItem.WHITE_PICOLYTE, TMCItem.NAYRU_CHARM, TMCItem.FARORE_CHARM,
                TMCItem.DINS_CHARM},
-    "Sword": {TMCItem.PROGRESSIVE_SWORD},
-    # "Sword": {TMCItem.PROGRESSIVE_SWORD, TMCItem.SMITHS_SWORD, TMCItem.WHITE_SWORD_GREEN, TMCItem.WHITE_SWORD_RED,
-    #           TMCItem.WHITE_SWORD_BLUE, TMCItem.FOUR_SWORD},
-    "Bow": {TMCItem.PROGRESSIVE_BOW},
-    # "Bow": {TMCItem.PROGRESSIVE_BOW, TMCItem.BOW, TMCItem.LIGHT_ARROW},
-    "Boomerang": {TMCItem.PROGRESSIVE_BOOMERANG},
-    # "Boomerang": {TMCItem.PROGRESSIVE_BOOMERANG, TMCItem.BOOMERANG, TMCItem.MAGIC_BOOMERANG},
-    "Shield": {TMCItem.PROGRESSIVE_SHIELD},
-    # "Shield": {TMCItem.PROGRESSIVE_SHIELD, TMCItem.SHIELD, TMCItem.MIRROR_SHIELD},
+    "Swords": {TMCItem.PROGRESSIVE_SWORD, TMCItem.SMITHS_SWORD, TMCItem.WHITE_SWORD_GREEN, TMCItem.WHITE_SWORD_RED,
+              TMCItem.WHITE_SWORD_BLUE, TMCItem.FOUR_SWORD},
+    "Bows": {TMCItem.PROGRESSIVE_BOW, TMCItem.BOW, TMCItem.LIGHT_ARROW},
+    "Boomerangs": {TMCItem.PROGRESSIVE_BOOMERANG, TMCItem.BOOMERANG, TMCItem.MAGIC_BOOMERANG},
+    "Shields": {TMCItem.PROGRESSIVE_SHIELD, TMCItem.SHIELD, TMCItem.MIRROR_SHIELD},
     "Cape": {TMCItem.ROCS_CAPE},
     "Cane": {TMCItem.CANE_OF_PACCI},
     "Boots": {TMCItem.PEGASUS_BOOTS},
+    "Mitts": {TMCItem.MOLE_MITTS},
+    "Green Sword": {TMCItem.WHITE_SWORD_GREEN},
+    "Red Sword": {TMCItem.WHITE_SWORD_RED},
+    "Blue Sword": {TMCItem.WHITE_SWORD_BLUE},
+    "Heart Piece": {TMCItem.HEART_PIECE},
+    "Active Equipment": {
+        # Swords
+        TMCItem.PROGRESSIVE_SWORD, TMCItem.SMITHS_SWORD, TMCItem.WHITE_SWORD_GREEN, TMCItem.WHITE_SWORD_RED,
+        TMCItem.WHITE_SWORD_BLUE, TMCItem.FOUR_SWORD,
+        # Bows
+        TMCItem.PROGRESSIVE_BOW, TMCItem.BOW, TMCItem.LIGHT_ARROW,
+        # Boomerangs
+        TMCItem.PROGRESSIVE_BOOMERANG, TMCItem.BOOMERANG, TMCItem.MAGIC_BOOMERANG,
+        # Shields
+        TMCItem.PROGRESSIVE_SHIELD, TMCItem.SHIELD, TMCItem.MIRROR_SHIELD,
+        # Misc
+        TMCItem.GUST_JAR, TMCItem.CANE_OF_PACCI, TMCItem.MOLE_MITTS, TMCItem.LANTERN, TMCItem.BOMB_BAG,
+        TMCItem.REMOTE_BOMB, TMCItem.PEGASUS_BOOTS, TMCItem.ROCS_CAPE, TMCItem.OCARINA,
+    },
+    "Passive Equipment": {TMCItem.QUIVER, TMCItem.GRIP_RING, TMCItem.POWER_BRACELETS, TMCItem.FLIPPERS,
+                          TMCItem.BOW_BUTTERFLY, TMCItem.DIG_BUTTERFLY, TMCItem.SWIM_BUTTERFLY},
+    "Equipment": {
+        # Swords
+        TMCItem.PROGRESSIVE_SWORD, TMCItem.SMITHS_SWORD, TMCItem.WHITE_SWORD_GREEN, TMCItem.WHITE_SWORD_RED,
+        TMCItem.WHITE_SWORD_BLUE, TMCItem.FOUR_SWORD,
+        # Bows
+        TMCItem.PROGRESSIVE_BOW, TMCItem.BOW, TMCItem.LIGHT_ARROW,
+        # Boomerangs
+        TMCItem.PROGRESSIVE_BOOMERANG, TMCItem.BOOMERANG, TMCItem.MAGIC_BOOMERANG,
+        # Shields
+        TMCItem.PROGRESSIVE_SHIELD, TMCItem.SHIELD, TMCItem.MIRROR_SHIELD,
+        # Misc
+        TMCItem.GUST_JAR, TMCItem.CANE_OF_PACCI, TMCItem.MOLE_MITTS, TMCItem.LANTERN, TMCItem.BOMB_BAG,
+        TMCItem.REMOTE_BOMB, TMCItem.PEGASUS_BOOTS, TMCItem.ROCS_CAPE, TMCItem.OCARINA,
+        # Passive
+        TMCItem.QUIVER, TMCItem.GRIP_RING, TMCItem.POWER_BRACELETS, TMCItem.FLIPPERS, TMCItem.BOW_BUTTERFLY,
+        TMCItem.DIG_BUTTERFLY, TMCItem.SWIM_BUTTERFLY
+    },
+    "Butterflies": {TMCItem.BOW_BUTTERFLY, TMCItem.DIG_BUTTERFLY, TMCItem.SWIM_BUTTERFLY},
+    "Books": {TMCItem.RED_BOOK, TMCItem.BLUE_BOOK, TMCItem.GREEN_BOOK},
+    "Red Book": {TMCItem.RED_BOOK},
+    "Blue Book": {TMCItem.BLUE_BOOK},
+    "Green Book": {TMCItem.GREEN_BOOK},
+    "Quest": {TMCItem.JABBER_NUT, TMCItem.LONLON_KEY, TMCItem.GRAVEYARD_KEY, TMCItem.WAKEUP_MUSHROOM,
+              TMCItem.DOG_FOOD, TMCItem.CARLOV_MEDAL, TMCItem.TINGLE_TROPHY, TMCItem.RED_BOOK, TMCItem.BLUE_BOOK,
+              TMCItem.GREEN_BOOK},
     "Rupees": {TMCItem.RUPEES_1, TMCItem.RUPEES_5, TMCItem.RUPEES_20, TMCItem.RUPEES_50, TMCItem.RUPEES_100,
                TMCItem.RUPEES_200},
-    "Traps": {TMCItem.TRAP_ICE, TMCItem.TRAP_FIRE, TMCItem.TRAP_ZAP, TMCItem.TRAP_BOMB, TMCItem.TRAP_MONEY,
-              TMCItem.TRAP_STINK, TMCItem.TRAP_ROPE, TMCItem.TRAP_BAT, TMCItem.TRAP_LIKE, TMCItem.TRAP_CURSE},
     "Kinstones": {TMCItem.KINSTONE_GOLD_CLOUD, TMCItem.KINSTONE_GOLD_SWAMP, TMCItem.KINSTONE_GOLD_FALLS,
                   TMCItem.KINSTONE_RED_W, TMCItem.KINSTONE_RED_ANGLE, TMCItem.KINSTONE_RED_E,
                   TMCItem.KINSTONE_BLUE_L, TMCItem.KINSTONE_BLUE_6,
@@ -535,4 +608,8 @@ item_groups: dict[str, set[str]] = {
     "PoW Keys": {TMCItem.BIG_KEY_POW, TMCItem.SMALL_KEY_POW},
     "DHC Items": {TMCItem.DUNGEON_MAP_DHC, TMCItem.DUNGEON_COMPASS_DHC, TMCItem.BIG_KEY_DHC, TMCItem.SMALL_KEY_DHC},
     "DHC Keys": {TMCItem.BIG_KEY_DHC, TMCItem.SMALL_KEY_DHC},
+    "Progression": {name for name, data in item_table.items() if data.classification == ItemClassification.progression},
+    "Useful": {name for name, data in item_table.items() if data.classification == ItemClassification.useful},
+    "Filler": {name for name, data in item_table.items() if data.classification == ItemClassification.filler},
+    "Traps": {name for name, data in item_table.items() if data.classification == ItemClassification.trap},
 }

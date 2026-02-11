@@ -1,0 +1,8 @@
+00/3d2e/: dw interactionDelete ; Remove the lone zora as it serves no purpose
+
+15/6a02/table_6a02: /include dungeonsInOrderForD11Puzzle
+
+15/6f41/table_6f41: /include dungeonsForD11Puzzle
+
+15/68d2/: db locations.d11BoomerangDrop.id
+15/68d5/: db locations.d11BoomerangDrop.subid

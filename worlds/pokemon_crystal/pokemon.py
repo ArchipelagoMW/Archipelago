@@ -180,7 +180,7 @@ def get_logically_available_trade_pokemon(world: "PokemonCrystalWorld") -> set[s
 def randomize_trade_requested_pokemon(world: "PokemonCrystalWorld"):
     if world.is_universal_tracker: return
 
-    randomize_requested = world.options.randomize_trades.value not in (RandomizeTrades.option_requested,
+    randomize_requested = world.options.randomize_trades.value in (RandomizeTrades.option_requested,
                                                                        RandomizeTrades.option_both)
 
     logically_available_pokemon = sorted(world.logic.available_pokemon)

@@ -1,0 +1,241 @@
+{
+  "Story (Chapter 1 - Captain Falcon Trains)": {
+    
+		"starting": false,
+    
+		"connects_to": [
+      "Story (Chapter 2 - Goroh: The Vengeful Samurai)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:1| AND |07 - Blue Falcon|"
+  },
+  "Story (Chapter 2 - Goroh: The Vengeful Samurai)": {
+    
+		"connects_to": [
+      "Story (Chapter 3 - High Stakes in Mute City)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:2|"
+  },
+  "Story (Chapter 3 - High Stakes in Mute City)": {
+    
+		"connects_to": [
+      "Story (Chapter 4 - Challenge of the Bloody Chain)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:3|"
+  },
+  "Story (Chapter 4 - Challenge of the Bloody Chain)": {
+    
+		"connects_to": [
+      "Story (Chapter 5 - Save Jody Summer!)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:4|"
+  },
+  "Story (Chapter 5 - Save Jody Summer!)": {
+    
+		"connects_to": [
+      "Story (Chapter 6 - Black Shadow's Trap)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:5|"
+  },
+  "Story (Chapter 6 - Black Shadow's Trap)": {
+    
+		"connects_to": [
+      "Story (Chapter 7 - The F-Zero Grand Prix)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:6|"
+  },
+  "Story (Chapter 7 - The F-Zero Grand Prix)": {
+    
+		"connects_to": [
+      "Story (Chapter 8 - Secrets of the Champion Belt)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:7|"
+  },
+  "Story (Chapter 8 - Secrets of the Champion Belt)": {
+    
+		"connects_to": [
+      "Story (Finale - Enter The Creators)"
+    ],
+    
+		"requires": "|Progressive Story Chapter:8|"
+  },
+  "Story (Finale - Enter The Creators)": {
+    
+		"connects_to": [],
+    
+		"requires": "|Progressive Story Chapter:9|"
+  },
+  "Ruby Cup (Novice)": {
+    
+		"connects_to": [
+      "Ruby Cup (Standard)"
+    ],
+    
+		"requires": "|Progressive Ruby Cup:1|",
+    
+		"starting": false
+  },
+  "Sapphire Cup (Novice)": {
+    
+		"connects_to": [
+      "Sapphire Cup (Standard)"
+    ],
+    
+		"requires": "|Progressive Sapphire Cup:1|"
+  },
+  "Emerald Cup (Novice)": {
+    
+		"connects_to": [
+      "Emerald Cup (Standard)"
+    ],
+    
+		"requires": "|Progressive Emerald Cup:1|"
+  },
+  "Diamond Cup (Novice)": {
+    
+		"connects_to": [
+      "Diamond Cup (Standard)"
+    ],
+    
+		"requires": "|Progressive Diamond Cup:1|"
+  },
+  "AX Cup (Novice)": {
+    
+		"connects_to": [
+      "AX Cup (Standard)"
+    ],
+    
+		"requires": "|Progressive AX Cup:1|"
+  },
+  "Ruby Cup (Standard)": {
+    
+		"connects_to": [
+      "Ruby Cup (Expert)"
+    ],
+    
+		"requires": "|Progressive Ruby Cup:2|"
+  },
+  "Ruby Cup (Expert)": {
+    
+		"connects_to": [
+      "Ruby Cup (Master)"
+    ],
+    
+		"requires": "|Progressive Ruby Cup:3|"
+  },
+  "Ruby Cup (Master)": {
+    
+		"connects_to": [],
+    
+		"requires": "|Progressive Ruby Cup:4|"
+  },
+  "Sapphire Cup (Standard)": {
+    
+		"connects_to": [
+      "Sapphire Cup (Expert)"
+    ],
+    
+		"requires": "|Progressive Sapphire Cup:2|"
+  },
+  "Sapphire Cup (Expert)": {
+    
+		"connects_to": [
+      "Sapphire Cup (Master)"
+    ],
+    
+		"requires": "|Progressive Sapphire Cup:3|"
+  },
+  "Sapphire Cup (Master)": {
+    
+		"connects_to": [],
+    
+		"requires": "|Progressive Sapphire Cup:4|"
+  },
+  "Emerald Cup (Standard)": {
+    
+		"connects_to": [
+      "Emerald Cup (Expert)"
+    ],
+    
+		"requires": "|Progressive Emerald Cup:2|"
+  },
+  "Emerald Cup (Expert)": {
+    
+		"connects_to": [
+      "Emerald Cup (Master)"
+    ],
+    
+		"requires": "|Progressive Emerald Cup:3|"
+  },
+  "Emerald Cup (Master)": {
+    
+		"connects_to": [],
+    
+		"requires": "|Progressive Emerald Cup:4|"
+  },
+  "Diamond Cup (Standard)": {
+    
+		"connects_to": [
+      "Diamond Cup (Expert)"
+    ],
+    
+		"requires": "|Progressive Diamond Cup:2|"
+  },
+  "Diamond Cup (Expert)": {
+    
+		"connects_to": [
+      "Diamond Cup (Master)"
+    ],
+    
+		"requires": "|Progressive Diamond Cup:3|"
+  },
+  "Diamond Cup (Master)": {
+    
+		"connects_to": [],
+    
+		"requires": "|Progressive Diamond Cup:4|"
+  },
+  "AX Cup (Standard)": {
+    
+		"connects_to": [
+          "AX Cup (Expert)"
+        ],
+    
+		"requires": "|Progressive AX Cup:2|"
+  },
+  "AX Cup (Expert)": {
+    
+		"connects_to": [
+      "AX Cup (Master)"
+    ],
+    
+		"requires": "|Progressive AX Cup:3|"
+  },
+  "AX Cup (Master)": {
+    
+		"connects_to": [],
+    
+		"requires": "|Progressive AX Cup:4|"
+  },
+  "Chapter 0 (Start)": {
+    
+		"connects_to": [
+      "Story (Chapter 1 - Captain Falcon Trains)",
+      "Ruby Cup (Novice)",
+      "Sapphire Cup (Novice)",
+      "Emerald Cup (Novice)",
+      "Diamond Cup (Novice)",
+      "AX Cup (Novice)"
+    ],
+    
+		"starting": true,
+    
+		"requires": []
+  }
+}

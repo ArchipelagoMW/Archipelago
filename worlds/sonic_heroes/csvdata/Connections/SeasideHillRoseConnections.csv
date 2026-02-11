@@ -1,0 +1,12 @@
+Team,Level,Source,Target,Rule,Notes
+Rose,Seaside Hill,Start,ObjSanity,,
+Rose,Seaside Hill,ObjSanity,Start,,
+Rose,Seaside Hill,Start,Bonus Key 1,,
+Rose,Seaside Hill,Bonus Key 1,Start,,
+Rose,Seaside Hill,Start,Bonus Key 2,,
+Rose,Seaside Hill,Bonus Key 2,Start,,
+Rose,Seaside Hill,Start,Checkpoint 1,,
+Rose,Seaside Hill,Checkpoint 1,Start,,
+Rose,Seaside Hill,Start,Checkpoint 2,,
+Rose,Seaside Hill,Checkpoint 2,Start,,
+Rose,Seaside Hill,Start,Goal,,

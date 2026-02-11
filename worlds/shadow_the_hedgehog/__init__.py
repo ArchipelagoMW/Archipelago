@@ -65,7 +65,6 @@ class ShtHWorld(World):
     item_name_to_id: ClassVar[typing.Dict[str, int]] = Items.GetItemDict()
     location_name_to_id: ClassVar[typing.Dict[str, int]] = Locations.GetLocationDict()
 
-    required_client_version: Tuple[int, int, int] = (0, 5, 1)
     web = ShtHWebWorld()
 
     options_dataclass = Options.ShadowTheHedgehogOptions
@@ -92,6 +91,7 @@ class ShtHWorld(World):
         self.random_value = None
         self.starting_items = []
         self.gates = {}
+        self.first_checkpoints = {}
 
         for token in Items.TOKENS:
             self.required_tokens[token] = 0
@@ -101,9 +101,7 @@ class ShtHWorld(World):
 
         super(ShtHWorld, self).__init__(*args, **kwargs)
 
-    def set_rules(self):
-        Rules.set_rules(self.multiworld, self, self.player)
-
+    def emergency_sphere_one_handler(self):
         sphere_one_useful = []
         if not hasattr(self.multiworld, "re_gen_passthrough"):
             while len(sphere_one_useful) == 0:
@@ -113,11 +111,11 @@ class ShtHWorld(World):
                 if len(sphere_one_useful) > 0:
                     break
 
-                locked_items = [ c for c in sphere_one_locs if c.locked and c not in self.starting_items]
+                locked_items = [c for c in sphere_one_locs if c.locked and c not in self.starting_items]
                 for item in locked_items:
                     print("Locked item given:", item.item.name)
                     self.starting_items.append(item)
-                    item = Item(item.item.name,ItemClassification.progression, None, self.player)
+                    item = Item(item.item.name, ItemClassification.progression, None, self.player)
                     self.multiworld.push_precollected(item)
 
                 if len(locked_items) != 0:
@@ -132,22 +130,28 @@ class ShtHWorld(World):
         # Test here
 
         locs = self.get_locations()
-        l_count = len([ l for l in locs if not l.locked ])
+        l_count = len([l for l in locs if not l.locked])
         l_x = Locations.count_locations(self)
 
         if l_count != l_x:
             print("Invalid location counting")
 
-        player_items = [ a for a in self.multiworld.itempool if a.player == self.player ]
+        player_items = [a for a in self.multiworld.itempool if a.player == self.player]
         if len(player_items) not in [l_count, l_x]:
             print("Invalid item pool vs locations")
 
+    def set_rules(self):
+        Rules.set_rules(self.multiworld, self, self.player)
+        #self.emergency_sphere_one_handler()
 
     def check_invalid_configurations(self):
 
         not_excluded_stages = [x for x in Levels.ALL_STAGES if
-                                   x not in Levels.BOSS_STAGES and x not in Levels.LAST_STORY_STAGES and
-                                   Names.LEVEL_ID_TO_LEVEL[x] not in self.options.excluded_stages]
+                                   x not in Levels.BOSS_STAGES and \
+                               (self.options.include_last_way_shuffle or x not in Levels.LAST_STORY_STAGES) and \
+                                   Names.LEVEL_ID_TO_LEVEL[x] not in self.options.excluded_stages
+                               ]
+
         if len(not_excluded_stages) == 0:
             raise OptionError("You cannot exclude all stages")
 
@@ -171,21 +175,24 @@ class ShtHWorld(World):
             self.options.character_sanity:
             raise OptionError("Unable to play charactersanity outside of vanilla")
 
+        if self.options.shadow_mod.value != Options.ShadowMod.option_vanilla:
+            raise OptionError("Not currently supported. Will be worked on with additional demand")
+
         if self.options.shadow_mod.value == Options.ShadowMod.option_reloaded and \
             self.options.key_sanity:
             raise OptionError("Key/RSR sanity not supported in Reloaded at this time.")
 
-        if self.options.story_shuffle == Options.StoryShuffle.option_off and \
-            self.options.include_last_way_shuffle:
+        #if self.options.story_shuffle == Options.StoryShuffle.option_off and \
+        #    self.options.include_last_way_shuffle:
 
             # If story is off, last way cannot be shuffled
-            self.options.include_last_way_shuffle = Options.IncludeLastStoryShuffle(False)
+        #    self.options.include_last_way_shuffle = Options.IncludeLastStoryShuffle(False)
 
-        if self.options.level_progression == Options.LevelProgression.option_select and \
-            self.options.include_last_way_shuffle:
+        #if self.options.level_progression == Options.LevelProgression.option_select and \
+        #    self.options.include_last_way_shuffle:
 
-            # If story is off, last way cannot be shuffled
-            self.options.include_last_way_shuffle = Options.IncludeLastStoryShuffle(False)
+        #    # If story is off, last way cannot be shuffled
+        #    self.options.include_last_way_shuffle = Options.IncludeLastStoryShuffle(False)
 
         if self.options.level_progression == Options.LevelProgression.option_select and \
             self.options.story_shuffle:
@@ -205,18 +212,18 @@ class ShtHWorld(World):
             self.options.select_percentage != 100:
             self.options.select_percentage = Options.SelectPercentage(100)
 
-        if self.options.level_progression != Options.LevelProgression.option_select and not self.options.story_shuffle\
-            and "Westopolis" in self.options.excluded_stages:
+        if (self.options.level_progression != Options.LevelProgression.option_select and
+                self.options.story_shuffle == Options.StoryShuffle.option_off and "Westopolis" in self.options.excluded_stages):
             raise OptionError("Westopolis stage cannot be excluded on story without shuffle enabled.")
 
-        if self.options.level_progression == Options.LevelProgression.option_select or \
-            not self.options.include_last_way_shuffle:
+        if (self.options.level_progression == Options.LevelProgression.option_select or \
+            not self.options.include_last_way_shuffle or self.options.story_shuffle == Options.StoryShuffle.option_off):
             if "The Last Way" in self.options.excluded_stages.value:
+                print("You cannot exclude The Last Way when it's required to reach the goal")
                 self.options.excluded_stages.value.remove("The Last Way")
 
-        if self.options.chaos_control_logic_level != Options.ChaosControlLogicLevel.option_off and \
+        if self.options.chaos_control_logic_level in [ Options.ChaosControlLogicLevel.option_hard, Options.ChaosControlLogicLevel.option_intermediate] and\
             self.options.logic_level != Options.LogicLevel.option_hard:
-                # TODO Handle expert? here in future:
             self.options.chaos_control_logic_level = Options.ChaosControlLogicLevel(Options.ChaosControlLogicLevel.option_off)
 
         if not self.options.enemy_objective_sanity and self.options.enemy_sanity:
@@ -228,6 +235,13 @@ class ShtHWorld(World):
 
         if self.options.level_progression == Options.LevelProgression.option_story:
             self.options.select_gates = Options.SelectGates(Options.SelectGates.option_off)
+
+            if not self.options.story_shuffle:
+                self.options.include_last_way_shuffle = Options.IncludeLastStoryShuffle(False)
+
+        if (self.options.gate_unlock_requirement == Options.GateUnlockRequirement.option_chaos_emeralds and
+                self.options.select_gates_count != 7):
+            self.options.select_gates_count = Options.SelectGatesCount(7)
 
     def calculate_non_objective_sanity_maximums(self):
         relevant_mission_clears =  [m for m in Locations.MissionClearLocations if
@@ -613,6 +627,20 @@ class ShtHWorld(World):
                 if "item_sanity" in passthrough:
                     self.options.item_sanity = passthrough["item_sanity"]
 
+                if "checkpoint_shuffle" in passthrough:
+                    self.options.checkpoint_shuffle = passthrough["checkpoint_shuffle"]
+
+                if "first_checkpoints" in passthrough:
+                    #print("Read first checkpoints for UT")
+                    first_checkpoints = passthrough["first_checkpoints"]
+                    self.first_checkpoints = {}
+                    for stage_str, index in first_checkpoints.items():
+                        self.first_checkpoints[int(stage_str)] = index
+                    #print(self.first_checkpoints)
+
+                if "last_way_enemysanity" in passthrough:
+                    self.options.last_way_enemysanity = passthrough["last_way_enemysanity"]
+
         # Set maximum of levels required
         # Exclude missions listed in exclude_locations
         maximum_force_missions = self.options.force_objective_sanity_max.value
@@ -628,33 +656,36 @@ class ShtHWorld(World):
             self.gates = Regions.DetermineGates(self)
             self.gate_requirements = {}
 
-        if not hasattr(self.multiworld, "re_gen_passthrough") and self.options.starting_level_method == Options.StartingLevelMethod.option_stage_and_item:
-            extra_items = Regions.FindStartingItems(self, required=False)
-            for item in extra_items:
-                self.starting_items.append(item)
-                self.multiworld.push_precollected(self.create_item(item))
+            if self.options.starting_level_method == Options.StartingLevelMethod.option_stage_and_item:
+                extra_items = Regions.FindStartingItems(self, required=False)
+                for item in extra_items:
+                    self.starting_items.append(item)
+                    self.multiworld.push_precollected(self.create_item(item))
 
-        if self.options.level_progression != Options.LevelProgression.option_select and \
-            self.options.story_progression_balancing_passes > 0 and not hasattr(self.multiworld, "re_gen_passthrough"):
+            if self.options.checkpoint_shuffle == Options.CheckpointShuffle.option_start_and_unlock:
+                self.first_checkpoints = Regions.GenerateFirstCheckpoints(self)
 
-            balancing_overrides = {}
-            for i in range(0, self.options.story_progression_balancing_passes):
-                story_spheres = Story.DecideStoryPath(self, self.shuffled_story_mode)
-                new_overrides, new_available_overrides = Story.AlterOverridesForStoryPath(story_spheres,self.options)
+            if self.options.level_progression != Options.LevelProgression.option_select and \
+                self.options.story_progression_balancing_passes > 0:
 
-                for override in new_overrides.items():
-                    if override[0] in balancing_overrides and balancing_overrides[override[0]] <= override[1]:
-                        continue
-                    balancing_overrides[override[0]] = override[1]
+                balancing_overrides = {}
+                for i in range(0, self.options.story_progression_balancing_passes):
+                    story_spheres = Story.DecideStoryPath(self, self.shuffled_story_mode)
+                    new_overrides, new_available_overrides = Story.AlterOverridesForStoryPath(story_spheres,self.options)
 
-                for override in new_available_overrides.items():
-                    if override[0] in balancing_overrides and balancing_overrides[override[0]] >= override[1]:
-                        continue
+                    for override in new_overrides.items():
+                        if override[0] in balancing_overrides and balancing_overrides[override[0]] <= override[1]:
+                            continue
+                        balancing_overrides[override[0]] = override[1]
 
-                    balancing_overrides[override[0]] = override[1]
+                    for override in new_available_overrides.items():
+                        if override[0] in balancing_overrides and balancing_overrides[override[0]] >= override[1]:
+                            continue
 
-            for override in balancing_overrides.items():
-                self.options.percent_overrides.value[override[0]] = override[1]
+                        balancing_overrides[override[0]] = override[1]
+
+                for override in balancing_overrides.items():
+                    self.options.percent_overrides.value[override[0]] = override[1]
 
         if not self.options.objective_sanity:
             self.calculate_non_objective_sanity_maximums()
@@ -663,17 +694,17 @@ class ShtHWorld(World):
         location_count = Locations.count_locations(self)
 
         if self.options.exceeding_items_filler != Options.ExceedingItemsFiller.option_off:
-            if item_count > location_count:
-                #print("item_count=", item_count, "location_count=", location_count)
-                potential_downgrades, removals = Items.GetPotentialDowngradeItems(self)
-                if len(potential_downgrades) < item_count - location_count - len(removals):
-                    c = item_count - location_count - len(potential_downgrades)
-                    print("Issue with counts", item_count, location_count, len(potential_downgrades),
-                          len(removals), c)
-
-                    # Throw random items into start inventory, if disabled, throw an error
-                    if not self.options.start_inventory_excess_items:
-                        raise OptionError("Not enough locations to fill even with downgrades::"+str(c))
+            # if item_count > location_count:
+            #     #print("item_count=", item_count, "location_count=", location_count)
+            #     potential_downgrades, removals = Items.GetPotentialDowngradeItems(self)
+            #     if len(potential_downgrades) < item_count - location_count - len(removals):
+            #         c = item_count - location_count - len(potential_downgrades)
+            #         print("Issue with counts", item_count, location_count, len(potential_downgrades),
+            #               len(removals), c)
+            #
+            #         # Throw random items into start inventory, if disabled, throw an error
+            #         if not self.options.start_inventory_excess_items:
+            #             raise OptionError("Not enough locations to fill even with downgrades::"+str(c))
 
                 self.excess_item_count = item_count - location_count
 
@@ -900,10 +931,23 @@ class ShtHWorld(World):
             "difficult_enemy_sanity": self.options.difficult_enemy_sanity.value,
             "exclude_go_mode_items": self.options.exclude_go_mode_items.value,
             "boss_enemy_sanity": self.options.boss_enemy_sanity.value,
-            "item_sanity": self.options.item_sanity.value
+            "item_sanity": self.options.item_sanity.value,
+            "checkpoint_shuffle": self.options.checkpoint_shuffle.value,
+            "first_checkpoints": self.first_checkpoints,
+            "checkpoint_convenience": self.options.checkpoint_convenience.value,
+            "music_shuffle": self.options.music_shuffle.value,
+            "last_way_enemysanity": self.options.last_way_enemysanity.value
         }
 
         return slot_data
+
+    def PrintFirstCheckpoints(self, spoiler_handle, first_checkpoints):
+        if spoiler_handle is not None:
+            spoiler_handle.write(f"{self.multiworld.get_player_name(self.player)}'s First Checkpoints\n")
+            for stage, checkpoint in first_checkpoints.items():
+                spoiler_handle.write(f"Stage {Levels.LEVEL_ID_TO_LEVEL[stage]} = {checkpoint}\n")
+
+            spoiler_handle.write("\n")
 
     def PrintGates(self, spoiler_handle, gates, gate_requirements):
         if spoiler_handle is not None:
@@ -920,12 +964,14 @@ class ShtHWorld(World):
             spoiler_handle.write("\n")
 
 
-
     def write_spoiler(self, spoiler_handle: typing.TextIO):
         if self.options.story_shuffle != Options.StoryShuffle.option_off:
             Story.PrintStoryMode(self, spoiler_handle)
 
         if self.options.select_gates != Options.SelectGates.option_off:
             self.PrintGates(spoiler_handle, self.gates, self.gate_requirements)
+
+        if self.options.checkpoint_shuffle == Options.CheckpointShuffle.option_start_and_unlock:
+            self.PrintFirstCheckpoints(spoiler_handle, self.first_checkpoints)
 
 

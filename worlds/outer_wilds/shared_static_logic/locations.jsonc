@@ -231,11 +231,7 @@
     },
     {
         "category": "base", "address": 1085038277, "name": "GD: Complete the Tower (Text Wall)",
-        "region": "Space", "requires": [
-            { "item": "Translator (Giant's Deep)" },
-            { "item": "Imaging Rule" },
-            { "item": "Spacesuit" }
-        ]
+        "region": "GD Tower End", "requires": []
     },
     {
         "category": "base", "address": 1085038278, "name": "GD: Enter the Ocean Depths",
@@ -876,11 +872,11 @@
     },
     {
         "category": "base", "logsanity": true, "address": 1085039118, "name": "GD Ship Log: Tower 3 - Rule of Imaging",
-        "region": "Space", "requires": [ { "item": "Translator (Giant's Deep)" }, { "item": "Imaging Rule" }, { "item": "Spacesuit" } ]
+        "region": "GD Tower End", "requires": []
     },
     {
         "category": "base", "logsanity": true, "address": 1085039119, "name": "GD Ship Log: Tower 4 - Other Shards",
-        "region": "Space", "requires": [ { "item": "Translator (Giant's Deep)" }, { "item": "Imaging Rule" }, { "item": "Spacesuit" } ]
+        "region": "GD Tower End", "requires": []
     },
     {
         "category": "base", "logsanity": true, "address": 1085039120, "name": "GD Ship Log: OPC 1 - Entered",
@@ -3107,5 +3103,775 @@
     { // READ_BANJO_SCROLL
         "category": "fq", "logsanity": true, "address": 1085046087, "name": "FQ Ship Log: Corrupted Scroll",
         "region": "Banjo Galaxy", "requires": [ { "item": "Translator (Other)" } ]
-    }
+    },
+
+// Forgotten Castaways Story Mod Default Locations
+// These location ids start at 1085047000 (i.e. rounding up to the next thousand),
+// to make it slightly easier to change locations in the future.
+
+    {
+        "category": "fc", "address": 1085047000, "name": "DB: Vessel Bridge (Text Wheel)",
+        "region": "The Vessel", "requires": [ { "item": "Translator (Dark Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047001, "name": "DB: Lower Bridge Device",
+        "region": "The Vessel", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047002, "name": "FC: Enter the Deep Bramble",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047003, "name": "FC: Bramble's Doorstep (Text Wheel)",
+        "region": "Deep Bramble", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047004, "name": "FC: Visit Titan's Tears",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047005, "name": "FC: Titan's Tears Shelter (Text Wall)",
+        "region": "Deep Bramble", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047006, "name": "FC: View the Hole",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047007, "name": "FC: Hole Overlook (Text Wall)",
+        "region": "Deep Bramble", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047008, "name": "FC: Recursive Node",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047009, "name": "FC: Visit the Northern Campsite",
+        "region": "Lover's Rock", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047010, "name": "FC: Northern Campsite (Text Wall)",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047011, "name": "FC: Soil Lab (Text Wall)",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047012, "name": "FC: Quarry (Text Wall)",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047013, "name": "FC: Eye Shrine (Text Wall)",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047014, "name": "FC: Alien Study (Text Wall)",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047015, "name": "FC: Core Lab (Upper Text)",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" }, { "region":  "Folly's Core" } ]
+    },
+    {
+        "category": "fc", "address": 1085047016, "name": "FC: Break Crystal",
+        "region": "Folly's Core", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047017, "name": "FC: Concert Hall (Text Wheel)",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047018, "name": "FC: Concert Hall (Alien Text)",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "address": 1085047019, "name": "FC: Crystal Repair",
+        "region": "Shattered Hearth", "requires": [ { "region":  "Lover's Rock" }, { "item":  "Crystal Repair Manual" } ]
+    },
+    {
+        // spoiler-free name, as opposed to e.g. "Amylax's House"
+        "category": "fc", "address": 1085047020, "name": "FC: Small House (Alien Text)",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "address": 1085047021, "name": "FC: Alien Park (Text Wheel)",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047022, "name": "FC: Observation Platform (Text Wall)",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "address": 1085047023, "name": "FC: Enter the Nursery",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047024, "name": "FC: Hearth's Core (Text Wheel)",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "address": 1085047025, "name": "FC: Translation Lab (Text Wall)",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "address": 1085047026, "name": "FC: Enter Translation Lab",
+        "region": "Translation Lab", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047027, "name": "FC: Locate Scroll Wall",
+        "region": "Enzyme Lab", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047028, "name": "FC: Enzyme Lab (Text Wall)",
+        "region": "Enzyme Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047029, "name": "FC: Unblocked Scroll",
+        "region": "Enzyme Lab", "requires": [ { "region": "Magma's Recursion" }, { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        // spoiler-free name, as opposed to e.g. "Find the Syringe"
+        "category": "fc", "address": 1085047030, "name": "FC: Dangerous Object",
+        "region": "Venomous Reject", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047031, "name": "FC: Landing Zone (Text Wall)",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047032, "name": "FC: Abandoned Settlement (Text Wall)",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047033, "name": "FC: Enter the Quantum Cave",
+        "region": "Magma's Recursion", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047034, "name": "FC: Gas Cave (Text Wall)",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "address": 1085047035, "name": "FC: Eye Signal Lab (Text Wall)",
+        "region": "Eye Signal Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "address": 1085047036, "name": "FC: Enter Bramble's Heart",
+        "region": "Bramble's Heart", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047037, "name": "FC: Enter the DNP",
+        "region": "Bramble's Heart", "requires": []
+    },
+    {
+        "category": "fc", "address": 1085047038, "name": "FC: DNP (Text Wall)",
+        "region": "Bramble's Heart", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "address": 1085047039, "name": "FC: DNP (Text Wheel)",
+        "region": "Bramble's Heart", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        // spoiler-free name, as opposed to e.g. "Free Ditylum"
+        "category": "fc", "address": 1085047040, "name": "FC: Ejection",
+        "region": "Dangerous Node", "requires": [ { "region": "Venomous Reject" } ]
+    },
+    {
+        // spoiler-free name, as opposed to e.g. "Sit with Ditylum"
+        "category": "fc", "address": 1085047041, "name": "FC: Conclusion",
+        "region": "Bramble's Finale", "requires": []
+    },
+
+    {
+        "category": "fc", "address": 1085047042, "name": "FC: Scan First Marker Signal",
+        "region": "Deep Bramble", "requires": [ { "item": "Signalscope" }, { "item": "Nomai Trailmarkers Frequency" } ]
+    },
+    {
+        "category": "fc", "address": 1085047043, "name": "FC: Scan Camp Marker Signal",
+        "region": "Lover's Rock", "requires": [] // Signalscope & Frequency are already required to reach Lover's Rock
+    },
+    {
+        "category": "fc", "address": 1085047044, "name": "FC: Scan Amplified Ambience Signal",
+        "region": "Deep Bramble", "requires": [ { "item": "Signalscope" } ]
+    },
+    {
+        "category": "fc", "address": 1085047045, "name": "FC: Scan Gravitational Anomaly Signal",
+        "region": "Folly's Exterior", "requires": [ { "item": "Signalscope" } ]
+    },
+    {
+        "category": "fc", "address": 1085047046, "name": "FC: Scan Geothermal Activity Signal",
+        "region": "Magma's Recursion", "requires": [ { "item": "Signalscope" } ]
+    },
+    {
+        "category": "fc", "address": 1085047047, "name": "FC: Scan Hot Shard Signal",
+        "region": "Magma's Recursion", "requires": [ { "item": "Signalscope" }, { "item": "Quantum Fluctuations Frequency" } ]
+    },
+    {
+        "category": "fc", "address": 1085047048, "name": "FC: Scan Alien Echolocation Signal",
+        "region": "Eye Signal Lab", "requires": [ { "item": "Signalscope" }, { "item": "Echolocation Tones Frequency" } ]
+    },
+    {
+        "category": "fc", "address": 1085047049, "name": "FC: Scan Warped Echolocation Signal",
+        "region": "Dangerous Node", "requires": [] // Signalscope & Frequency are already required to reach Dangerous Node
+    },
+    {
+        // spoiler-free name, as opposed to e.g. "Scan Ditylum Echolocation Signal"
+        "category": "fc", "address": 1085047050, "name": "FC: Scan Final Echolocation Signal",
+        "region": "Bramble's Heart", "requires": [
+            { "region": "Venomous Reject" },
+            { "region": "Dangerous Node"}
+            // Signalscope & Frequency are already required to reach Dangerous Node
+        ]
+    },
+
+    {
+        "category": "fc", "address": 1085047051, "name": "FC: Landing Zone Fuel Tank",
+        "region": "Magma's Recursion", "requires": [ { "item": "Spacesuit"} ]
+    },
+    {
+        "category": "fc", "address": 1085047052, "name": "FC: Abandoned Settlement Fuel Tank",
+        "region": "Magma's Recursion", "requires": [ { "item": "Spacesuit"} ]
+    },
+    {
+        "category": "fc", "address": 1085047053, "name": "FC: Venomous Reject Fuel Tank",
+        "region": "Venomous Reject", "requires": [ { "item": "Spacesuit"} ]
+    },
+
+// Forgotten Castaways Story Mod Logsanity Locations
+
+    {
+        "category": "fc", "logsanity": true, "address": 1085047100, "name": "DB Ship Log: Stranded Nomai 1 - Regroup",
+        "region": "The Vessel", "requires": [ { "item": "Translator (Dark Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047101, "name": "DB Ship Log: Stranded Nomai 2 - Plan",
+        "region": "The Vessel", "requires": [ { "item": "Translator (Dark Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047102, "name": "DB Ship Log: Stranded Nomai 3 - Escape",
+        "region": "The Vessel", "requires": [ { "item": "Translator (Dark Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047103, "name": "DB Ship Log: Stranded Nomai 4 - Device",
+        "region": "The Vessel", "requires": [ { "item": "Translator (Dark Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047104, "name": "DB Ship Log: Stranded Nomai 5 - Warp",
+        "region": "Menu", "requires": [ { "item": "Deep Bramble Coordinates" } ] // Regulated by DpB Coords to control your ability to warp into the Deep Bramble
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047105, "name": "FC Ship Log: Bramble's Doorstep 1 - Visit",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047106, "name": "FC Ship Log: Bramble's Doorstep 2 - Nomai",
+        "region": "Menu", "requires": [ { "item": "Deep Bramble Coordinates" } ] // Regulated by DpB Coords to control your ability to warp out of the Deep Bramble
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047107, "name": "FC Ship Log: Bramble's Doorstep 3 - Split",
+        "region": "Deep Bramble", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047108, "name": "FC Ship Log: Bramble's Doorstep 4 - Beacon",
+        "region": "Deep Bramble", "requires": [ { "item": "Signalscope" }, { "item": "Nomai Trailmarkers Frequency" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047109, "name": "FC Ship Log: Titan's Tears 1 - Visit",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047110, "name": "FC Ship Log: Titan's Tears 2 - Shelter",
+        "region": "Deep Bramble", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047111, "name": "FC Ship Log: Hole Overlook 1 - Visit",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047112, "name": "FC Ship Log: Hole Overlook 2 - Escape",
+        "region": "Deep Bramble", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047113, "name": "FC Ship Log: Dangerous Node 1 - Ejection",
+        "region": "Dangerous Node", "requires": [ { "region": "Venomous Reject" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047114, "name": "FC Ship Log: Dangerous Node 2 - Creature",
+        "region": "Dangerous Node", "requires": [
+          { "region": "Venomous Reject" },
+          { "region": "Bramble's Heart" },
+          { "item": "Translator (Deep Bramble)" },
+          { "item": "Expanded Dictionary" }
+        ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047115, "name": "FC Ship Log: Enclosed Space 1 - Visit",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047116, "name": "FC Ship Log: Recursive Node 1 - Visit",
+        "region": "Deep Bramble", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047117, "name": "FC Ship Log: Recursive Node 2 - Signal",
+        "region": "Deep Bramble", "requires": [ { "item": "Signalscope" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047118, "name": "FC Ship Log: Northern Campsite 1 - Visit",
+        "region": "Lover's Rock", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047119, "name": "FC Ship Log: Northern Campsite 2 - Sighting",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047120, "name": "FC Ship Log: Northern Campsite 3 - Meeting",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047121, "name": "FC Ship Log: Northern Campsite 4 - Watching",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047122, "name": "FC Ship Log: Northern Campsite 5 - Following",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047123, "name": "FC Ship Log: Soil Lab 1 - Visit",
+        "region": "Lover's Rock", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047124, "name": "FC Ship Log: Soil Lab 2 - Crystal",
+        "region": "Lover's Rock", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047125, "name": "FC Ship Log: Soil Lab 3 - Repair",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047126, "name": "FC Ship Log: Soil Lab 4 - Soil",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047127, "name": "FC Ship Log: Treehouse 1 - Visit",
+        "region": "Lover's Rock", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047128, "name": "FC Ship Log: Treehouse 2 - Names",
+        "region": "Lover's Rock", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047129, "name": "FC Ship Log: Graviton's Folly 1 - Visit",
+        "region": "Folly's Exterior", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047130, "name": "FC Ship Log: Graviton's Folly 2 - Signal",
+        "region": "Folly's Exterior", "requires": [ { "item": "Signalscope" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047131, "name": "FC Ship Log: Pillar Town 1 - Visit",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047132, "name": "FC Ship Log: Pillar Town 2 - Gift",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047133, "name": "FC Ship Log: Alien Study 1 - Identify",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047134, "name": "FC Ship Log: Alien Study 2 - Eyes",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047135, "name": "FC Ship Log: Alien Study 3 - Influence",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047136, "name": "FC Ship Log: Alien Study 4 - Stagnant",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047137, "name": "FC Ship Log: Eye Shrine 1 - Visit",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047138, "name": "FC Ship Log: Eye Shrine 2 - Signal",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047139, "name": "FC Ship Log: Eye Shrine 3 - Purpose",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047140, "name": "FC Ship Log: Eye Shrine 4 - Old",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047141, "name": "FC Ship Log: Third Pod Memorial 1 - Visit",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047142, "name": "FC Ship Log: Third Pod Memorial 2 - Breakdown",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047143, "name": "FC Ship Log: Third Pod Memorial 3 - Revitalized",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047144, "name": "FC Ship Log: Folly's Core 1 - See",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047145, "name": "FC Ship Log: Folly's Core 2 - Gravity",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047146, "name": "FC Ship Log: Folly's Core 3 - Tunnels",
+        "region": "Graviton's Folly", "requires": [ { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047147, "name": "FC Ship Log: Folly's Core 4 - Crystal",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047148, "name": "FC Ship Log: Folly's Core 5 - Switches",
+        "region": "Folly's Core", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047149, "name": "FC Ship Log: Folly's Core 6 - Enter",
+        "region": "Folly's Core", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047150, "name": "FC Ship Log: Folly's Core 7 - Interact",
+        "region": "Folly's Core", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047151, "name": "FC Ship Log: Core Lab 1 - Visit",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047152, "name": "FC Ship Log: Core Lab 2 - Purpose",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047153, "name": "FC Ship Log: Core Lab 3 - Stranded",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047154, "name": "FC Ship Log: Core Lab 4 - Plans",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047155, "name": "FC Ship Log: Core Lab 5 - Stairs",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047156, "name": "FC Ship Log: Quarry 1 - Visit",
+        "region": "Graviton's Folly", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047157, "name": "FC Ship Log: Quarry 2 - Material",
+        "region": "Graviton's Folly", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047158, "name": "FC Ship Log: Concert Hall 1 - Singing",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047159, "name": "FC Ship Log: Concert Hall 2 - Missed",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047160, "name": "FC Ship Log: Concert Hall 3 - Bells",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047161, "name": "FC Ship Log: Concert Hall 4 - Text",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047162, "name": "FC Ship Log: Concert Hall 5 - Ringing",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item":  "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047163, "name": "FC Ship Log: Concert Hall 6 - Repair",
+        "region": "Shattered Hearth", "requires": [ { "region":  "Lover's Rock" }, { "item":  "Crystal Repair Manual" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047164, "name": "FC Ship Log: Alien Park 1 - Home",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047165, "name": "FC Ship Log: Storytelling Area 1 - Visit",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047166, "name": "FC Ship Log: Storytelling Area 2 - Stories",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047167, "name": "FC Ship Log: Storytelling Area 3 - Helmet",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047168, "name": "FC Ship Log: Hearth's Core 1 - Visit",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047169, "name": "FC Ship Log: Hearth's Core 2 - Warning",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047170, "name": "FC Ship Log: Karenia's House 1 - Recording",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047171, "name": "FC Ship Log: Amylax's House 1 - Signal",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047172, "name": "FC Ship Log: Amylax's House 2 - Partners",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item":  "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047173, "name": "FC Ship Log: Landing Zone 1 - Signal",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047174, "name": "FC Ship Log: Landing Zone 2 - Rescue",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047175, "name": "FC Ship Log: Landing Zone 3 - Story",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047176, "name": "FC Ship Log: Abandoned Settlement 1 - Visit",
+        "region": "Magma's Recursion", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047177, "name": "FC Ship Log: Abandoned Settlement 2 - Labs",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047178, "name": "FC Ship Log: Abandoned Settlement 3 - Road",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047179, "name": "FC Ship Log: Abandoned Settlement 4 - Seeds",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047180, "name": "FC Ship Log: Abandoned Settlement 5 - Gift",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047181, "name": "FC Ship Log: Gas Cave 1 - Visit",
+        "region": "Magma's Recursion", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047182, "name": "FC Ship Log: Gas Cave 2 - Crystals",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047183, "name": "FC Ship Log: Gas Cave 3 - Advice",
+        "region": "Eye Signal Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047184, "name": "FC Ship Log: Eye Signal Lab 1 - Signal",
+        "region": "Eye Signal Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047185, "name": "FC Ship Log: Eye Signal Lab 2 - Tones",
+        "region": "Eye Signal Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047186, "name": "FC Ship Log: Eye Signal Lab 3 - Frequency",
+        "region": "Eye Signal Lab", "requires": [ { "item": "Signalscope" }, { "item": "Echolocation Tones Frequency" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047187, "name": "FC Ship Log: Quantum Cave 1 - Visit",
+        "region": "Magma's Recursion", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047188, "name": "FC Ship Log: Quantum Cave 2 - Obstructed",
+        "region": "Magma's Recursion", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047189, "name": "FC Ship Log: Quantum Cave 3 - Third",
+        "region": "Magma's Recursion", "requires": [ { "item": "Probability Rule" }, { "item": "Entanglement Rule" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047190, "name": "FC Ship Log: Observation Platform 1 - Visit",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047191, "name": "FC Ship Log: Observation Platform 2 - Tooth",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047192, "name": "FC Ship Log: Observation Platform 3 - Eggs",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047193, "name": "FC Ship Log: Observation Platform 4 - Reluctant",
+        "region": "Shattered Hearth", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047194, "name": "FC Ship Log: Enzyme Lab 1 - Kevin",
+        "region": "Enzyme Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047195, "name": "FC Ship Log: Enzyme Lab 2 - Stomach",
+        "region": "Enzyme Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047196, "name": "FC Ship Log: Enzyme Lab 3 - Scrolls",
+        "region": "Enzyme Lab", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047197, "name": "FC Ship Log: Enzyme Lab 4 - Blocked",
+        "region": "Enzyme Lab", "requires": [ { "region": "Magma's Recursion" }, { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047198, "name": "FC Ship Log: Enzyme Lab 5 - Probability",
+        "region": "Enzyme Lab", "requires": [ { "region": "Magma's Recursion" }, { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047199, "name": "FC Ship Log: Translation Lab 1 - Visit",
+        "region": "Translation Lab", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047200, "name": "FC Ship Log: Translation Lab 2 - Fish",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047201, "name": "FC Ship Log: Translations 1 - Aliens",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047202, "name": "FC Ship Log: Translations 2 - Name",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047203, "name": "FC Ship Log: Translations 3 - Bramble",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047204, "name": "FC Ship Log: Translations 4 - Influence",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047205, "name": "FC Ship Log: Translations 5 - Dictionary",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047206, "name": "FC Ship Log: Translations 6 - Escape",
+        "region": "Translation Lab", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item": "Spacesuit" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047207, "name": "FC Ship Log: Nursery 1 - Visit",
+        "region": "Shattered Hearth", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047208, "name": "FC Ship Log: Venomous Reject 1 - Toxin",
+        "region": "Venomous Reject", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047209, "name": "FC Ship Log: Venomous Reject 2 - Collapse",
+        "region": "Venomous Reject", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047210, "name": "FC Ship Log: Venomous Reject 3 - Syringe",
+        "region": "Venomous Reject", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047211, "name": "FC Ship Log: DNP 1 - Visit",
+        "region": "Bramble's Heart", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047212, "name": "FC Ship Log: DNP 2 - Heart",
+        "region": "Bramble's Heart", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item":  "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047213, "name": "FC Ship Log: DNP 3 - Purpose",
+        "region": "Bramble's Heart", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item":  "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047214, "name": "FC Ship Log: DNP 4 - Everyone",
+        "region": "Bramble's Heart", "requires": [ { "item": "Translator (Deep Bramble)" }, { "item":  "Expanded Dictionary" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047215, "name": "FC Ship Log: DNP 5 - Aliens",
+        "region": "Bramble's Heart", "requires": []
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047216, "name": "FC Ship Log: DNP 6 - Missing",
+        "region": "Bramble's Heart", "requires": [ { "item": "Translator (Deep Bramble)" } ]
+    },
+    {
+        "category": "fc", "logsanity": true, "address": 1085047217, "name": "FC Ship Log: DNP 7 - Friend",
+        "region": "Bramble's Finale", "requires": []
+    },
+
+// Echo Hike Story Mod Default Locations
+// These location ids start at 1085048000 (i.e. rounding up to the next thousand),
+// to make it slightly easier to change locations in the future.
+    { // EH_ENTER
+        "category": "eh", "address": 1085048000, "name": "EH: Enter The Structure",
+        "region": "Echo Hike", "requires": [ ]
+    },
+
+    { // EH_ENTER
+        "category": "eh", "address": 1085048001, "name": "EH: Light a Beacon",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+
+    { // EH_PHOSPHORS
+        "category": "eh", "address": 1085048002, "name": "EH: Meet The Phosphors",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+
+    { // SLF__EH_ENTRANCE_X1
+        "category": "eh", "logsanity": true, "address": 1085048100, "name": "EH Ship Log: Sunken Entrance 1 - Chasm",
+        "region": "Echo Hike", "requires": [ ]
+    },
+
+    { // SLF__EH_ENTRANCE_X2
+        "category": "eh", "logsanity": true, "address": 1085048101, "name": "EH Ship Log: Sunken Entrance 2 - Device",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+    
+    { // SLF__EH_CAVERN_X1
+        "category": "eh", "logsanity": true, "address": 1085048102, "name": "EH Ship Log: Frozen Cavern 1 - Entrance",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+    
+    { // SLF__EH_CAVERN_X2
+        "category": "eh", "logsanity": true, "address": 1085048103, "name": "EH Ship Log: Frozen Cavern 2 - Inactive Beacons",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+    
+    { // SLF__EH_CAVERN_X3
+        "category": "eh", "logsanity": true, "address": 1085048104, "name": "EH Ship Log: Frozen Cavern 3 - Activating Beacons",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+    
+    { // SLF__EH_PHOSPHORS_X1
+        "category": "eh", "logsanity": true, "address": 1085048105, "name": "EH Ship Log: Phosphor Shoal 1 - Phosphors",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+    
+    { // SLF__EH_PHOSPHORS_X2
+        "category": "eh", "logsanity": true, "address": 1085048106, "name": "EH Ship Log: Phosphor Shoal 2 - Planet",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    },
+    
+    { // SLF__EH_PHOSPHORS_X3
+        "category": "eh", "logsanity": true, "address": 1085048107, "name": "EH Ship Log: Phosphor Shoal 3 - Thanks",
+        "region": "Echo Hike", "requires": [ { "item": "Threader" } ]
+    }   
 ]

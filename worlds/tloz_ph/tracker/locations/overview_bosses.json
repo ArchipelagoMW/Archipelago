@@ -1,0 +1,9 @@
+[
+{ "name": "Bosses - Ghost Ship B1", "sections": [{ "name": "Cubus Sisters Ghost Key" }, { "name": "Cubus Sisters Heart Container" }], "map_locations": [{ "map": "Ghost Ship B1", "x": 38, "y": 86 }] },
+{ "name": "Bosses - Goron Temple B3", "sections": [{ "name": "Dongorongo Boss Reward" }, { "name": "Dongorongo Heart Container" }, { "name": "Dongorongo Sand of Hours" }], "map_locations": [{ "map": "Goron Temple B3", "x": 176, "y": 116 }] },
+{ "name": "Bosses - Mutoh's Temple B2", "sections": [{ "name": "Eox Boss Reward" }, { "name": "Eox Heart Container" }, { "name": "Eox Sand of Hours" }], "map_locations": [{ "map": "Mutoh's Temple B2", "x": 128, "y": 56 }] },
+{ "name": "Bosses - Temple of Courage 2F", "sections": [{ "name": "Crayk Boss Reward" }, { "name": "Crayk Heart Container" }, { "name": "Crayk Sand of Hours" }], "map_locations": [{ "map": "Temple of Courage 2F", "x": 108, "y": 88 }] },
+{ "name": "Bosses - Temple of Fire 3F", "sections": [{ "name": "Blaaz Boss Reward" }, { "name": "Blaaz Heart Container" }], "map_locations": [{ "map": "Temple of Fire 3F", "x": 128, "y": 132 }] },
+{ "name": "Bosses - Temple of Ice B1", "sections": [{ "name": "Gleeok Boss Reward" }, { "name": "Gleeok Heart Container" }, { "name": "Gleeok Sand of Hours" }], "map_locations": [{ "map": "Temple of Ice B1", "x": 132, "y": 20 }] },
+{ "name": "Bosses - Temple of Wind 1F", "sections": [{ "name": "Cyclok Boss Reward" }, { "name": "Cyclok Heart Container" }, { "name": "Cyclok Sand of Hours" }], "map_locations": [{ "map": "Temple of Wind 1F", "x": 144, "y": 44 }] }
+]

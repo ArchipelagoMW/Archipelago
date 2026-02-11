@@ -14,6 +14,7 @@ from io import BytesIO
 
 from .aesthetics import write_aesthetics
 from .regions import default_levels
+from .calculate_crc import recalculate_6103_crcs
 
 if typing.TYPE_CHECKING:
     from . import K64World
@@ -215,6 +216,10 @@ class K64PatchExtension(APPatchExtension):
     def apply_basepatch(_: APProcedurePatch, rom: bytes):
         return bsdiff4.patch(rom, pkgutil.get_data(__name__, os.path.join("data", "k64_basepatch.bsdiff4")))
 
+    @staticmethod
+    def calc_6103_crc(_: APProcedurePatch, rom: bytes):
+        return recalculate_6103_crcs(rom)
+
 
 class K64ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [K64UHASH]
@@ -223,7 +228,8 @@ class K64ProcedurePatch(APProcedurePatch, APTokenMixin):
     result_file_ending = ".z64"
     procedure = [
         ("apply_basepatch", []),
-        ("apply_tokens", ["token_data.bin"])
+        ("apply_tokens", ["token_data.bin"]),
+        ("calc_6103_crc", []),
     ]
     name: bytearray | None= None
 

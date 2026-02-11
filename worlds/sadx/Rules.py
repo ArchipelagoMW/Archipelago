@@ -464,22 +464,20 @@ def connect_regions(self, needed_emblems: int, area_map=None):
                 if all(isinstance(item, str) for item in key_items):
                     if "ECSwitchAccess" in key_items:
                         key_items.remove("ECSwitchAccess")
-                        region_from.connect(region_to, entrance_name,
-                                            lambda state, charac=character, items=key_items: all(
-                                                state.has(item, self.player) for item in
-                                                items) and state.can_reach_region(
-                                                get_region_name(charac, Area.CaptainRoom), self.player))
+                        region_from.connect(
+                            region_to, entrance_name, lambda state, charac=character, items=key_items:
+                            all(state.has(item, self.player) for item in items) and
+                            state.can_reach_region(get_region_name(charac, Area.CaptainRoom), self.player))
 
                     else:
                         region_from.connect(region_to, entrance_name,
                                             lambda state, items=key_items: all(
                                                 state.has(item, self.player) for item in items))
                 else:
-                    region_from.connect(region_to, entrance_name,
-                                        lambda state, items=key_items: any(
-                                            all(state.has(item, self.player) for item in requirement_group)
-                                            for
-                                            requirement_group in items))
+                    region_from.connect(
+                        region_to, entrance_name, lambda state, items=key_items:
+                        any(all(state.has(item, self.player) for item in requirement_group)
+                            for requirement_group in items))
             # Emblem gating
             elif self.options.gating_mode.value == 0:
                 if "ONLY_RANDO" in key_items:
@@ -491,6 +489,9 @@ def connect_regions(self, needed_emblems: int, area_map=None):
                 if not key_items:
                     region_from.connect(region_to, name=entrance_name)
                     continue
+
+                if all(item in key_items for item in ['Egglift', 'Monorail', 'ECSwitchAccess']):
+                    key_items.append("MONORAIL_EGGLIFT_SWITCH_ACCESS")
 
                 # Replace any key items with EMBLEM_BLOCKED
                 if any(item in vars(ItemName.KeyItem).values() for item in key_items):
@@ -505,30 +506,33 @@ def connect_regions(self, needed_emblems: int, area_map=None):
                                             lambda state, emblems=emblem_requirement:
                                             state.has("Emblem", self.player, emblems))
                     else:
-                        if "ECSwitchAccess" in key_items:
+                        if "MONORAIL_EGGLIFT_SWITCH_ACCESS" in key_items:
+                            key_items.remove("MONORAIL_EGGLIFT_SWITCH_ACCESS")
                             key_items.remove("ECSwitchAccess")
-                            region_from.connect(region_to, entrance_name,
-                                                lambda state, items=key_items, emblems=emblem_requirement,
-                                                       charac=character: all(
-                                                    state.has(item, self.player) for item in items) and
-                                                                         state.has(
-                                                                             "Emblem",
-                                                                             self.player,
-                                                                             emblems) and
-                                                                         state.can_reach_region(
-                                                                             get_region_name(
-                                                                                 charac,
-                                                                                 Area.CaptainRoom),
-                                                                             self.player))
+                            emblem_requirement = max(
+                                area_map.get(AreaConnection.EcInside_to_EcOutsideEggLift, emblem_requirement),
+                                area_map.get(AreaConnection.EcInside_to_EcOutsideMonorail, emblem_requirement))
+                            region_from.connect(
+                                region_to, entrance_name,
+                                lambda state, emblems=emblem_requirement, charac=character:
+                                state.has("Emblem", self.player, emblems) and
+                                state.can_reach_region(get_region_name(charac, Area.CaptainRoom), self.player))
+
+                        elif "ECSwitchAccess" in key_items:
+                            key_items.remove("ECSwitchAccess")
+                            region_from.connect(
+                                region_to, entrance_name,
+                                lambda state, items=key_items, emblems=emblem_requirement, charac=character:
+                                all(state.has(item, self.player) for item in items) and
+                                state.has("Emblem", self.player, emblems) and
+                                state.can_reach_region(get_region_name(charac, Area.CaptainRoom), self.player))
                         else:
 
-                            region_from.connect(region_to, entrance_name,
-                                                lambda state, items=key_items, emblems=emblem_requirement: all(
-                                                    state.has(item, self.player) for item in items) and
-                                                                                                           state.has(
-                                                                                                               "Emblem",
-                                                                                                               self.player,
-                                                                                                               emblems))
+                            region_from.connect(
+                                region_to, entrance_name,
+                                lambda state, items=key_items, emblems=emblem_requirement:
+                                all(state.has(item, self.player) for item in items) and
+                                state.has("Emblem", self.player, emblems))
                 else:
                     region_from.connect(region_to, entrance_name,
                                         lambda state, items=key_items: all(

@@ -1,4 +1,6 @@
-from . import Levels
+
+from . import Levels, Weapons, Names
+from .Names import *
 from .ObjectTypes import ObjectType
 from .Objects_BlackComet import DESIRABLE_OBJECTS_BLACK_COMET
 from .Objects_CentralCity import DESIRABLE_OBJECTS_CENTRAL_CITY
@@ -29,6 +31,8 @@ from .Objects_Bosses import DESIRABLE_OBJECTS_BOSSES
 ENEMY_CLASS_ALIEN = 0
 ENEMY_CLASS_GUN = 1
 ENEMY_CLASS_EGG = 2
+
+
 
 LOCATION_ID_PLUS = 100068
 
@@ -83,7 +87,14 @@ def GetPlayableObjectTypes():
             ObjectType.ITEM_CAPSULE,
             ObjectType.BALLOON_ITEM,
             ObjectType.ITEM_IN_METAL_BOX,
-            ObjectType.ITEM_IN_BOX
+            ObjectType.ITEM_IN_BOX,
+            ObjectType.PARTNER,
+            ObjectType.CHECKPOINT,
+            ObjectType.WEAPON_BOX,
+            ObjectType.WEAPON_METAL_BOX,
+            ObjectType.WEAPON_WOODEN_BOX,
+            ObjectType.ENVIRONMENT_WEAPON,
+            ObjectType.FLOOR_WEAPON
     ]
 
 def GetObjectChecks():
@@ -140,6 +151,25 @@ def GetStandardEnemyTypes():
 
     return types
 
+def GetDistributionInStageByBaseType(level, types):
+    if type(types) != list:
+        types = [types]
+
+    objects = [d for d in DESIRABLE_OBJECTS if d.stage == level and
+               d.object_type in types]
+
+    result = {}
+    for o in objects:
+        if o.region is None:
+            print("Error with enemy region:", o.stage, o.name, o.object_type)
+            continue
+
+        if o.region not in result:
+            result[o.region] = 0
+
+        result[o.region] += o.count
+
+    return result
 
 def GetEnemyDistributionInStageByBaseType(level, enemyType):
     types = []
@@ -156,21 +186,7 @@ def GetEnemyDistributionInStageByBaseType(level, enemyType):
     elif enemyType == ENEMY_CLASS_EGG:
         types = [ObjectType.EGG_CLOWN, ObjectType.EGG_PAWN, ObjectType.SHADOW_ANDROID ]
 
-    objects = [ d for d in DESIRABLE_OBJECTS if d.stage == level and
-      d.object_type in types]
-
-    result = {}
-    for o in objects:
-        if o.region is None:
-            print("Error with enemy region:", o.stage, o.name, o.object_type)
-            continue
-
-        if o.region not in result:
-            result[o.region] = 0
-
-        result[o.region]  += o.count
-
-    return result
+    return GetDistributionInStageByBaseType(level, types)
 
 
 def GetTypeId(objectType):
@@ -354,8 +370,8 @@ def GetTypeId(objectType):
     if objectType == ObjectType.FINAL_HAUNT_SHIELD:
         return 0x1900
 
-    #if objectType == ObjectType.PARTNER:
-    #    return 0x190
+    if objectType == ObjectType.PARTNER:
+        return 0x190
 
     if objectType == ObjectType.KEY:
         return 0x1D
@@ -381,8 +397,8 @@ def GetTypeId(objectType):
     #if objectType == ObjectType.POISON_GAS:
     #    return 0x35
 
-    if objectType == ObjectType.DARK_SPIN_ENTRY:
-        return 0x61
+    #if objectType == ObjectType.DARK_SPIN_ENTRY:
+    #    return 0x61
 
     if objectType == ObjectType.DEFENSE_PROGRAM:
         return 0x7D4
@@ -396,9 +412,27 @@ def GetTypeId(objectType):
     if objectType == ObjectType.CLEAR_TRIGGER:
         return 0x2595
 
+    if objectType == ObjectType.CHECKPOINT:
+        return 0x05
+
+    if objectType == ObjectType.ENVIRONMENT_WEAPON:
+        return 0x12C
+
+    if objectType == ObjectType.FLOOR_WEAPON:
+        return 0x20
+
+    if objectType == ObjectType.WEAPON_BOX:
+        return 0x0C
+
+    if objectType == ObjectType.WEAPON_METAL_BOX:
+        return 0xA
+
+    if objectType == ObjectType.WEAPON_WOODEN_BOX:
+        return 0x9
+
     return None
 
-def CheckVehicleAttributes(objectType, extra_bytes, index, link_id):
+def CheckVehicleAttributes(objectType, extra_bytes, index, link_id, address):
 
     if objectType == "Server":
         byte = extra_bytes[3]
@@ -462,13 +496,15 @@ def CheckVehicleAttributes(objectType, extra_bytes, index, link_id):
         group_count = extra_bytes[(7*4)+3]
         return f"Black Larvae ({group_count})"
 
+
     if objectType in ("Wood Box", "Metal Box"):
 
         box_type = extra_bytes[0:4]
         box_item_bytes = extra_bytes[4:8]
-        capsule_type = extra_bytes[8:12]
-        weapon_type = extra_bytes[12:16]
-        core_type = extra_bytes[16:20]
+        base_item_type = extra_bytes[8:12]
+        #capsule_type = extra_bytes[12:16]
+        #weapon_type = extra_bytes[16:20]
+        #core_type = extra_bytes[20:24]
 
         box_item = int.from_bytes(box_item_bytes, byteorder='big')
 
@@ -478,7 +514,13 @@ def CheckVehicleAttributes(objectType, extra_bytes, index, link_id):
         elif box_item == 0x01:
             type_name = "Item In "+objectType
         elif box_item == 0x02:
-            type_name = "Weapon In "+objectType
+            box_weapon = int.from_bytes(base_item_type, byteorder='big')
+            w_name = Names.WEAPONS(box_weapon).name
+            if len(w_name) == 0:
+                return "Unknown Weapon Wood/Metal Box:" + str(box_weapon) + str(address)
+            else:
+                return "Weapon " + objectType + " : " + w_name[0]
+
         elif box_item == 0x03:
             type_name = "Rings In "+objectType
         elif box_item == 0x04:
@@ -493,11 +535,50 @@ def CheckVehicleAttributes(objectType, extra_bytes, index, link_id):
     elif objectType == "Weapon Box":
         box_type = extra_bytes[0:4]
         box_weapon_bytes = extra_bytes[4:8]
+
+        box_item = int.from_bytes(box_weapon_bytes, byteorder='big')
+        try:
+            if box_item == 6:
+                return "Unused Egg Weapon 6 In Weapon Box"
+            w_name = Names.WEAPONS(box_item).name
+            if len(w_name) == 0:
+                return "Unknown Weapon Box:" + str(box_item)
+            else:
+                return "Weapon Box: " + w_name
+        except Exception as e:
+            print("Weapon exception:", e, box_item)
+            return "Unused weapon box:"+ str(box_item)
+
         return "Weapon Box"
+
+    elif objectType == "Weapon":
+        weapon_bytes = extra_bytes[0:4]
+        box_item = int.from_bytes(weapon_bytes, byteorder='big')
+        try:
+            if box_item == 6:
+                return "Unused Egg Weapon 6 Raw"
+            w_name = Names.WEAPONS(box_item).name
+            if len(w_name) == 0:
+                return "Unknown Weapon Raw:" + str(box_item)
+            else:
+                return "Weapon Raw: " + w_name
+        except Exception as e:
+            print("Weapon exception:", e, box_item)
+            return "Unused weapon raw:" + str(box_item)
 
     if objectType == "Key":
         return "Key " + str(hex(link_id))
 
+    if objectType == "Partner":
+        character_bytes = extra_bytes[0:4]
+        character_id = int.from_bytes(character_bytes, byteorder='big')
+
+        try:
+            character_name = Characters(character_id)
+            return "Character: " + str(character_name)
+        except:
+            print("Error with bytes:", extra_bytes)
+            return "Character:" + str(character_id)
 
     return objectType
 
@@ -529,8 +610,16 @@ DESIRABLE_OBJECTS.extend(DESIRABLE_OBJECTS_FINAL_HAUNT)
 DESIRABLE_OBJECTS.extend(DESIRABLE_OBJECTS_THE_LAST_WAY)
 DESIRABLE_OBJECTS.extend(DESIRABLE_OBJECTS_BOSSES)
 
+DesirableCache = {}
+
 def GetDesirableObjectsForStage(stage):
-    return [ o for o in DESIRABLE_OBJECTS if o.stage == stage]
+
+    if stage in DesirableCache:
+        return DesirableCache[stage]
+
+    items = [ o for o in DESIRABLE_OBJECTS if o.stage == stage]
+    DesirableCache[stage] = items
+    return items
 
 
 def TypeToString(type):
@@ -790,7 +879,7 @@ def PrintSETChange(address, index, type, previous, new, additional_bytes, link_i
     #    return
 
     typeString = TypeToString(type)
-    typeString = CheckVehicleAttributes(typeString, additional_bytes, index, link_id)
+    typeString = CheckVehicleAttributes(typeString, additional_bytes, index, link_id, address)
 
     found = False
     for v in ObjectType.__dict__.items():
@@ -806,9 +895,12 @@ def PrintSETChange(address, index, type, previous, new, additional_bytes, link_i
     handle_types = []
     unhandled_types = ["Destructible",
                        "City Laser", "Rings", "Box", "Empty Wood Box", "Empty Metal Box",
-                       "Weapon In Wood Box", "Weapon In Metal Box", "Rings In Wood Box", "Rings In Metal Box",
-                       "Black Wing", "Gun Beetle",
-                       "Heal Unit In Metal Box", "Heal Unit In Wooden Box", "Weapon Box"]
+                       #"Weapon In Wood Box",
+                       #"Weapon In Metal Box", #"Weapon Box",
+
+                       "Rings In Wood Box", "Rings In Metal Box",
+                       #"Black Wing", "Gun Beetle",
+                       "Heal Unit In Metal Box", "Heal Unit In Wooden Box" ]
 
     if len(handle_types) > 0 and typeString not in handle_types:
         return []
@@ -1000,3 +1092,37 @@ def GetShadowBonusWeapons(stageId):
     box_weapons = [ m.weapon for m in GetDesirableObjectsForStage(stageId) if m.object_type == ObjectType.SHADOW_BOX
                     and m.weapon is not None ]
     return list(set(box_weapons))
+
+def GetAllKeyLocations():
+    all_locations = []
+    for stage in Levels.ALL_STAGES:
+        key_locations = GetKeyLocations(stage)
+        all_locations.extend(key_locations)
+
+    return all_locations
+
+def GetKeyLocations(stageId):
+    keys = []
+    key_objects = [ k for k in DESIRABLE_OBJECTS if k.stage == stageId and k.object_type == ObjectType.KEY ]
+    for o_key in key_objects:
+        from worlds.shadow_the_hedgehog.Locations import NewKeyLocation
+        k = NewKeyLocation(stageId, o_key.region, o_key.count)
+        keys.append(k)
+
+
+    return keys
+
+
+def GetCharacterSanityLocations():
+    partner_objects = [k for k in DESIRABLE_OBJECTS if k.object_type == ObjectType.PARTNER]
+
+    results = {}
+
+    for s in Characters:
+        results[s.name] = []
+        for o in [ p for p in partner_objects if p.character == s ]:
+            results[s.name].append((o.stage, o.region))
+
+    return results
+
+CharacterToLevel = GetCharacterSanityLocations()

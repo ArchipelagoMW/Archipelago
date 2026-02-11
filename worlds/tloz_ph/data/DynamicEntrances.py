@@ -1,5 +1,6 @@
 from .Entrances import ENTRANCES
 from .Constants import LOCATION_GROUPS
+from .Addresses import *
 
 def create_scene_id(entrance):
     e_stage, e_room, e_entrance = entrance
@@ -11,11 +12,11 @@ DYNAMIC_ENTRANCES = {
         "entrance": "Mercay SE Tuzi's House",
         "destination": "TotOK Lobby Exit",
         "has_slot_data": [("dungeon_shortcuts", 1)],
-        "any_has_locations": ["TotOK Phantom Hourglass",
+        "any_has_locations": ["TotOK Lobby Phantom Hourglass",
                           "TotOK 1F Linebeck Key"],
     },
     "Shortcut to Temple of Fire": {
-        "entrance": "Ember Port House",
+        "entrance": "Ember West Port House",
         "destination": "ToF Exit",
         "has_slot_data": [("dungeon_shortcuts", 1)],
         "any_has_locations": ["Temple of Fire 1F Keese Chest",
@@ -32,15 +33,15 @@ DYNAMIC_ENTRANCES = {
         "destination": "ToW Exit",
         "has_slot_data": [("dungeon_shortcuts", 1), ("randomize_digs", 0)],
         "has_locations": [
-            "Isle of Gust Hideout Chest",
-            "Isle of Gust Miblin Cave North Chest",
-            "Isle of Gust Miblin Cave South Chest",
-            "Isle of Gust West Cliff Chest",
-            "Isle of Gust Sandworm Chest",
+            "Tiled Hideout Chest",
+            "Miniblin Cave North Chest",
+            "Miniblin Cave South Chest",
+            "Isle of Gust South NW Chest",
+            "Isle of Gust North Sandworm Chest"
         ],
     },
     "Shortcut to Temple of Courage": {
-        "entrance": "Molida Port House",
+        "entrance": "Molida South Ocara's House",
         "destination": "ToC Exit",
         "has_slot_data": [("dungeon_shortcuts", 1)],
         "any_has_locations": ["Temple of Courage 1F Bomb Alcove Chest",
@@ -77,7 +78,7 @@ DYNAMIC_ENTRANCES = {
     "Blaaz warp": {
         "entrance": "ToF Blaaz Warp",
         "destination": "ToF Exit",
-        "has_slot_data": [("shuffle_dungeon_entrances", 1), ("shuffle_bosses", 0)],
+        "has_slot_data": [("shuffle_dungeon_entrances", [1, 2]), ("shuffle_bosses", 0)],
     },
     "Blaaz warp Boss Shuffle": {
         "entrance": "ToF Blaaz Warp",
@@ -87,7 +88,7 @@ DYNAMIC_ENTRANCES = {
     "Cyclok warp": {
         "entrance": "ToW Cyclok Warp",
         "destination": "ToW Exit",
-        "has_slot_data": [("shuffle_dungeon_entrances", 1), ("shuffle_bosses", 0)],
+        "has_slot_data": [("shuffle_dungeon_entrances", [1, 2]), ("shuffle_bosses", 0)],
     },
     "Cyclok warp Boss Shuffle": {
         "entrance": "ToW Cyclok Warp",
@@ -97,7 +98,7 @@ DYNAMIC_ENTRANCES = {
     "Crayk warp": {
         "entrance": "ToC Crayk Warp",
         "destination": "ToC Exit",
-        "has_slot_data": [("shuffle_dungeon_entrances", 1), ("shuffle_bosses", 0)],
+        "has_slot_data": [("shuffle_dungeon_entrances", [1, 2]), ("shuffle_bosses", 0)],
     },
     "Crayk warp Boss Shuffle": {
         "entrance": "ToC Crayk Warp",
@@ -107,7 +108,7 @@ DYNAMIC_ENTRANCES = {
     "Dongo warp": {
         "entrance": "GT Dongo Warp",
         "destination": "GT Exit",
-        "has_slot_data": [("shuffle_dungeon_entrances", 1), ("shuffle_bosses", 0)],
+        "has_slot_data": [("shuffle_dungeon_entrances", [1, 2]), ("shuffle_bosses", 0)],
     },
     "Dongo warp Boss Shuffle": {
         "entrance": "GT Dongo Warp",
@@ -117,7 +118,7 @@ DYNAMIC_ENTRANCES = {
     "Gleeok warp": {
         "entrance": "ToI Gleeok Warp",
         "destination": "ToI Exit",
-        "has_slot_data": [("shuffle_dungeon_entrances", 1), ("shuffle_bosses", 0)],
+        "has_slot_data": [("shuffle_dungeon_entrances", [1, 2]), ("shuffle_bosses", 0)],
     },
     "Gleeok warp Boss Shuffle": {
         "entrance": "ToI Gleeok Warp",
@@ -127,7 +128,7 @@ DYNAMIC_ENTRANCES = {
     "Eox warp": {
         "entrance": "MT Eox Warp",
         "destination": "MT Exit",
-        "has_slot_data": [("shuffle_dungeon_entrances", 1), ("shuffle_bosses", 0)],
+        "has_slot_data": [("shuffle_dungeon_entrances", [1, 2]), ("shuffle_bosses", 0)],
     },
     "Eox warp Boss Shuffle": {
         "entrance": "MT Eox Warp",
@@ -136,7 +137,7 @@ DYNAMIC_ENTRANCES = {
     },
     "GS warp": {
         "entrance": "Finish Ghost Ship",
-        "destination": "Ghost Ship B1 Ascend",
+        "destination": "Ghost Ship 1F Descend",
         "has_slot_data": [("shuffle_dungeon_entrances", [1, 2])],
     },
     "Cubus warp Boss Shuffle": {
@@ -153,7 +154,7 @@ DYNAMIC_ENTRANCES = {
     "TotOK b10 shortcut warp": {
         "entrance": "TotOK Lobby Yellow Warp",
         "destination": "TotOK B10 Cave",
-        "has_locations": ["TotOK B9.5 SE Sea Chart Chest"],
+        "has_locations": ["TotOK B9.5 Sea Chart Chest"],
         "has_slot_data": [("totok_checkpoints", 1)]
     },
     "TotOK b9.5 warp up": {
@@ -169,9 +170,9 @@ DYNAMIC_ENTRANCES = {
     "TotOK b3 shortcut warp": {
         "entrance": "TotOK Lobby Yellow Warp",
         "destination": "TotOK B3.5 Blue Warp",
-        "has_locations": ["TotOK B3 NW Sea Chart Chest"],
+        "has_locations": ["TotOK B3.5 Sea Chart Chest"],
         "has_slot_data": [("totok_checkpoints", 1)],
-        "check_bits": [(0x1BA661, 0x40, "not")]
+        "check_bits": [(PHAddr.custom_storage, 0x2, "not")]
     },
     "TotOK cc room backup": {
         "entrance": "TotOK CC Room Warp",

@@ -1,0 +1,532 @@
+
+{
+	"Limsa Lominsa": {
+		"requires": "",
+		"connects_to": [
+			"Lower La Noscea",
+			"Middle La Noscea",
+			"Western La Noscea",
+			"Eastern La Noscea",
+			"Ishgard",
+			"Kugane",
+            "Old Sharlayan",
+            "Ocean Fishing"
+		],
+		"starting": true
+	},
+	"Middle La Noscea":
+	{
+		"requires": "",
+		"connects_to": [
+			"Limsa Lominsa",
+			"Lower La Noscea",
+			"Western La Noscea",
+			"Eastern La Noscea"
+		]
+	},
+	"Lower La Noscea":
+	{
+		"requires": "|Lower La Noscea Access:1|",
+		"connects_to": [
+			"Limsa Lominsa",
+			"Middle La Noscea",
+			"Eastern La Noscea",
+			"Western La Noscea",
+            "Wolves' Den Pier",
+            "Mist"
+		]
+	},
+	"Eastern La Noscea":
+	{
+		"requires": "|Eastern La Noscea Access:1|",
+		"connects_to": [
+			"Lower La Noscea",
+			"Limsa Lominsa",
+			"Middle La Noscea",
+			"Upper La Noscea"
+		]
+	},
+	"Western La Noscea":
+	{
+		"requires": "|Western La Noscea Access:1|",
+		"connects_to": [
+			"Middle La Noscea",
+			"Upper La Noscea",
+			"Limsa Lominsa",
+			"Lower La Noscea"
+		]
+	},
+	"Upper La Noscea":
+	{
+		"requires": "|Upper La Noscea Access:1|",
+		"connects_to": [
+			"Outer La Noscea",
+			"Eastern La Noscea",
+			"Western La Noscea"
+		]
+
+	},
+	"Outer La Noscea":
+	{
+		"requires": "|Outer La Noscea Access:1|",
+		"connects_to": ["Upper La Noscea"]
+	},
+    "Wolves' Den Pier":
+    {
+        "requires": "|Wolves' Den Pier Access:1|",
+        "connects_to": ["Lower La Noscea"]
+    },
+	"Gridania": {
+		"requires": "",
+		"connects_to": [
+			"Central Shroud",
+			"North Shroud",
+			"East Shroud",
+			"Ishgard"
+		],
+		"starting": true
+	},
+	"Central Shroud":
+	{
+		"requires": "",
+		"connects_to": [
+			"Gridania",
+			"North Shroud",
+			"East Shroud",
+			"South Shroud",
+            "The Lavender Beds"
+		]
+	},
+	"East Shroud":
+	{
+		"requires": "|East Shroud Access:1|",
+		"connects_to": [
+			"South Shroud",
+			"Central Shroud",
+			"Gridania",
+			"The Fringes"
+		]
+	},
+	"South Shroud":
+	{
+		"requires": "|South Shroud Access:1|",
+		"connects_to": [
+			"Central Shroud",
+			"East Shroud",
+			"Eastern Thanalan"
+		]
+	},
+	"North Shroud":
+	{
+		"requires": "|North Shroud Access:1|",
+		"connects_to": [
+			"Gridania",
+			"Central Shroud",
+			"Coerthas Central Highlands"
+		]
+	},
+	"Ul'dah": {
+		"requires": "",
+		"connects_to": [
+			"Central Thanalan",
+			"Western Thanalan",
+			"Masked Carnivale",
+			"Ishgard"
+		],
+		"starting": true
+	},
+	"Central Thanalan":
+	{
+		"requires": "",
+		"connects_to": [
+			"Northern Thanalan",
+			"Eastern Thanalan",
+			"Southern Thanalan",
+			"Western Thanalan",
+			"Ul'dah"
+		]
+	},
+	"Masked Carnivale":
+	{
+		"requires": "|5 BLU Levels:10|",
+		"connects_to": ["Ul'dah"]
+	},
+	"Western Thanalan":
+	{
+		"requires": "|Western Thanalan Access:1|",
+		"connects_to": [
+			"Ul'dah",
+			"Central Thanalan",
+			"Limsa Lominsa",
+            "The Goblet"
+		]
+	},
+	"Eastern Thanalan":
+	{
+		"requires": "|Eastern Thanalan Access:1|",
+		"connects_to": [
+			"Central Thanalan",
+			"Southern Thanalan",
+			"South Shroud"
+		]
+	},
+	"Southern Thanalan":
+	{
+		"requires": "|Southern Thanalan Access:1|",
+		"connects_to": [
+			"Eastern Thanalan",
+			"Central Thanalan"
+		]
+	},
+	"Northern Thanalan":
+	{
+		"requires": "|Northern Thanalan Access:1|",
+		"connects_to": [
+			"Central Thanalan",
+			"Mor Dhona"
+		]
+	},
+	"Coerthas Central Highlands":
+	{
+		"requires": "|Coerthas Central Highlands Access:1|",
+		"connects_to": [
+			"Mor Dhona",
+			"North Shroud",
+			"Ishgard"
+		]
+	},
+	"Mor Dhona":
+	{
+		"requires": "|Mor Dhona Access:1|",
+		"connects_to": [
+			"Northern Thanalan",
+			"Coerthas Central Highlands",
+			"The Crystarium"
+		]
+	},
+
+	"Ishgard":
+	{
+		"requires": "|Ishgard Access:1|",
+		"connects_to": [
+			"Limsa Lominsa",
+			"Gridania",
+			"Ul'dah",
+			"Coerthas Central Highlands",
+			"Coerthas Western Highlands",
+			"The Sea of Clouds",
+			"Azys Lla",
+            "The Firmament",
+            "The Diadem"
+		]
+	},
+	"Coerthas Western Highlands":
+	{
+		"requires": "|Coerthas Western Highlands Access:1|",
+		"connects_to": [
+			"The Sea of Clouds",
+			"The Dravanian Forelands",
+			"The Dravanian Hinterlands",
+			"Ishgard"
+		]
+	},
+	"The Sea of Clouds":
+	{
+		"requires": "|The Sea of Clouds Access:1|",
+		"connects_to": [
+			"Ishgard",
+			"Coerthas Western Highlands"
+		]
+	},
+	"The Dravanian Forelands":
+	{
+		"requires": "|The Dravanian Forelands Access:1|",
+		"connects_to": [
+			"The Churning Mists",
+			"The Dravanian Hinterlands",
+			"Coerthas Western Highlands"
+		]
+	},
+	"The Churning Mists":
+	{
+		"requires": "|The Churning Mists Access:1|",
+		"connects_to": [
+			"The Dravanian Forelands",
+			"The Dravanian Hinterlands"
+		]
+	},
+	"The Dravanian Hinterlands":
+	{
+		"requires": "|The Dravanian Hinterlands and Idyllshire Access:1|",
+		"connects_to": [
+			"The Dravanian Forelands",
+			"Coerthas Western Highlands"
+		]
+	},
+	"Azys Lla":
+	{
+		"requires": "|Azys Lla Access:1|",
+		"connects_to": [
+			"Ishgard"
+		]
+	},
+	"Rhalgr's Reach":
+	{
+		"requires": "|Rhalgr's Reach Access: 1|",
+		"connects_to":[
+			"The Fringes",
+			"The Peaks"
+		]
+	},
+	"The Fringes":
+	{
+		"requires": "|The Fringes Access: 1|",
+		"connects_to": [
+			"East Shroud",
+			"Rhalgr's Reach",
+			"The Peaks"
+		]
+	},
+	"The Peaks":
+	{
+		"requires": "|The Peaks Access: 1|",
+		"connects_to": [
+			"Rhalgr's Reach",
+			"The Fringes",
+			"The Lochs"
+		]
+	},
+	"The Lochs":
+	{
+		"requires": "|The Lochs Access: 1|",
+		"connects_to": [
+			"The Peaks",
+            "Garlemald"
+		]
+	},
+	"Kugane":
+	{
+		"requires": "|Kugane Access: 1|",
+		"connects_to": [
+			"Limsa Lominsa",
+			"The Ruby Sea",
+            "Shirogane"
+		]
+	},
+	"The Ruby Sea":
+	{
+		"requires": "|The Ruby Sea Access: 1|",
+		"connects_to": [
+			"Kugane",
+			"Yanxia",
+			"The Azim Steppe"
+		]
+	},
+	"Yanxia":
+	{
+		"requires": "|Yanxia Access: 1|",
+		"connects_to": [
+			"The Ruby Sea",
+			"The Azim Steppe",
+            "Gangos"
+		]
+	},
+    "Gangos": {
+        "requires": "|Gangos Access: 1|",
+        "connects_to": []
+    },
+	"The Azim Steppe":
+	{
+		"requires": "|The Azim Steppe Access: 1|",
+		"connects_to": [
+			"The Ruby Sea",
+			"Yanxia"
+		]
+	},
+	"The Crystarium":
+	{
+		"requires": "|The Crystarium Access: 1|",
+		"connects_to": [
+			"Mor Dhona",
+			"Lakeland",
+			"Amh Araeng",
+			"Kholusia",
+			"Eulmore",
+            "Elpis"
+		]
+	},
+	"Lakeland":
+	{
+		"requires": "|Lakeland Access: 1|",
+		"connects_to": [
+			"Il Mheg",
+			"Amh Araeng",
+			"The Crystarium",
+			"The Rak'tika Greatwood"
+		]
+	},
+	"Kholusia":
+	{
+		"requires": "|Kholusia Access: 1|",
+		"connects_to": [
+			"The Tempest",
+			"Eulmore",
+			"The Crystarium"
+		]
+	},
+	"Amh Araeng":
+	{
+		"requires": "|Amh Araeng Access: 1|",
+		"connects_to": [
+			"Lakeland",
+			"The Crystarium"
+		]
+	},
+	"Il Mheg":
+	{
+		"requires": "|Il Mheg Access: 1|",
+		"connects_to": [
+			"Lakeland"
+		]
+	},
+	"The Rak'tika Greatwood":
+	{
+		"requires": "|The Rak'tika Greatwood Access: 1|",
+		"connects_to": [
+			"Lakeland"
+		]
+	},
+	"Eulmore":
+	{
+		"requires": "|Eulmore Access: 1|",
+		"connects_to": [
+			"Kholusia",
+			"The Crystarium"
+		]
+	},
+	"The Tempest":
+	{
+		"requires": "|The Tempest Access: 1|",
+		"connects_to": [
+			"Kholusia"
+		]
+	},
+    "Old Sharlayan": {
+        "requires": "|Old Sharlayan Access: 1|",
+        "connects_to": [
+            "Labyrinthos",
+            "Thavnair",
+            "Tuliyollal"
+        ]
+    },
+    "Labyrinthos": {
+        "requires": "|Labyrinthos Access: 1|",
+        "connects_to": [
+            "Ultima Thule"
+        ]
+    },
+    "Ultima Thule": {
+        "requires": "|Ultima Thule Access: 1|",
+        "connects_to": [
+            "Old Sharlayan"
+        ]
+    },
+    "Thavnair": {
+        "requires": "|Thavnair Access: 1|",
+        "connects_to": [
+            "Radz-at-Han"
+        ]
+    },
+    "Radz-at-Han": {
+        "requires": "|Radz-at-Han Access: 1|",
+        "connects_to": [
+            "Thavnair"
+        ]
+    },
+    "Garlemald": {
+        "requires": "|Garlemald Access: 1|",
+        "connects_to": [
+            "Mare Lamentorum"
+        ]
+    },
+    "Mare Lamentorum": {
+        "requires": "|Mare Lamentorum Access: 1|",
+        "connects_to": [
+            "Garlemald"
+        ]
+    },
+    "Elpis": {
+        "requires": "|Elpis Access: 1|",
+        "connects_to": [
+        ]
+    },
+    "Ocean Fishing": {
+        "connects_to": []
+    },
+    "The Firmament": {
+        "connects_to": []
+    },
+    "Mist": {
+        "connects_to": []
+    },
+    "The Lavender Beds": {
+        "connects_to": []
+    },
+    "The Goblet": {
+        "connects_to": []
+    },
+    "The Diadem": {
+        "connects_to": []
+    },
+    "Shirogane": {
+        "connects_to": []
+    },
+    "Tuliyollal": {
+        "requires": "|Tuliyollal Access: 1|",
+        "connects_to": [
+            "Urqopacha",
+            "Kozama'uka",
+            "Yak T'el",
+            "Shaaloani"
+        ]
+    },
+    "Urqopacha": {
+        "requires": "|Urqopacha Access: 1|",
+        "connects_to": []
+    },
+    "Kozama'uka": {
+        "requires": "|Kozama'uka Access: 1|",
+        "connects_to": []
+    },
+    "Yak T'el": {
+        "requires": "|Yak T'el Access: 1|",
+        "connects_to": ["Living Memory"]
+    },
+    "Shaaloani": {
+        "requires": "|Shaaloani Access: 1|",
+        "connects_to": [
+            "Heritage Found"
+        ]
+    },
+    "Heritage Found": {
+        "requires": "|Heritage Found Access: 1|",
+        "connects_to": ["Solution Nine"]
+    },
+    "Solution Nine": {
+        "requires": "|Solution Nine Access: 1|",
+        "connects_to": ["The Arcadion"]
+    },
+    "The Arcadion": {
+        "requires": "|Arcadion Key: 1|",
+        "connects_to": []
+    },
+    "Living Memory": {
+        "requires": "|Living Memory Access: 1|",
+        "connects_to": ["Mist Continent"]
+    },
+    "Mist Continent": {
+        "requires": "",
+        "connects_to": []
+    }
+
+}

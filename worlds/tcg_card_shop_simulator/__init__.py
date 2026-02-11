@@ -40,7 +40,9 @@ class TCGSimulatorSettings(settings.Group):
 
 
 class TCGSimulatorWorld(World):
-
+    """
+    Open your own local game store. Stock shelves with the latest booster packs, or crack them and collect the cards for yourself. Set your own prices, hire staff, host events, and expand your card shop.
+    """
     game = "TCG Card Shop Simulator"
     web = TCGSimulatorWeb()
     options_dataclass = TCGSimulatorOptions

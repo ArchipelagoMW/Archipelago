@@ -1,15 +1,8 @@
 from dataclasses import dataclass
 
-from Options import DeathLink, DefaultOnToggle, OptionCounter, OptionSet, Range, PerGameCommonOptions
+from Options import Choice, DeathLink, DefaultOnToggle, OptionCounter, OptionSet, Range, PerGameCommonOptions, NamedRange
 
 
-class BadRNGProtection(DefaultOnToggle):
-    """
-    By enabling this, successfully winning a run unlocks all the room location checks per stage which didn't spawn on all the stages you went through during that run.
-    That means, even if a Mini Boss room didn't spawn in the Flooded Caves, you'll still get the unlock if you have been to the Flooded Caves during that run upon finishing the run successfully.
-    (Room Types that can be checked this way: Arcade, Challenge Room, Curse Room and Sacrifice Room)
-    """
-    display_name = "Bad RNG Protection"
 
 class FortuneMachineHintPercentage(Range):
     """
@@ -89,6 +82,19 @@ class Goals(OptionSet):
     })
     default = frozenset({"Mega Satan", "Beast", "Mother", "Delirium"})
 
+class GoalAmount(NamedRange):
+    """
+    How many of the Goals defined above you need to win the game. (0 == All)
+    """
+    display_name = "Goal Amount"
+    range_start = 0
+    range_end = 12
+    default = 0
+    special_range_names = {
+        "all": 0,
+        "single": 1
+    }
+
 class ExcludedAreas(OptionSet):
     """
     Entire areas to exclude from the game. By excluding an area, none of the entrance methods to the area will be able to spawn and no location checks will be placed in those areas.
@@ -98,6 +104,95 @@ class ExcludedAreas(OptionSet):
 
     valid_keys = frozenset({"The Void", "Ascend", "Alt Path", "Timed Areas"})
     default = frozenset({})
+
+class BadRNGProtection(DefaultOnToggle):
+    """
+    By enabling this, successfully winning a run unlocks all the room location checks per stage which didn't spawn on all the stages you went through during that run.
+    That means, even if a Mini Boss room didn't spawn in the Flooded Caves, you'll still get the unlock if you have been to the Flooded Caves during that run upon finishing the run successfully.
+    (Room Types that can be checked this way: Miniboss, Arcade, Challenge Room, Curse Room and Sacrifice Room)
+    """
+    display_name = "Bad RNG Protection"
+
+class RNGRooms(Choice):
+    """
+    Define how RNG heavy rooms should be handled. These include: Libraries, Bedrooms, Vaults and Dice Rooms.
+    none: These rooms have no items
+    no_progression: These rooms can contain anything except progression items
+    any: These rooms can containy any sort of item
+    """
+    display_name = "Heavy RNG rooms"
+    option_none = 0
+    option_no_progression = 1
+    option_any = 2
+    default = 1
+
+class UltraSecretRoom(Choice):
+    """
+    Define how the Ultra Secret room should be handled.
+    none: This room has no items
+    no_progression: This room can contain anything except progression items
+    any: This room can containy any sort of item
+    any_red_key_logic: This room can containy any sort of item but is only put into logic after unlocking Red Key as a starting item
+    """
+    display_name = "Ultra Secret room"
+    option_none = 0
+    option_no_progression = 1
+    option_any = 2
+    option_any_red_key_logic = 3
+    default = 3
+
+class ErrorRoom(Choice):
+    """
+    Define how the Error room should be handled.
+    none: This room has no items
+    no_progression: This room can contain anything except progression items
+    any: This room can containy any sort of item
+    any_undefined_logic: This room can containy any sort of item but is only put into logic after unlocking Undefined as a starting item
+    """
+    display_name = "Error room"
+    option_none = 0
+    option_no_progression = 1
+    option_any = 2
+    option_any_undefined_logic = 3
+    default = 3
+
+class CrawlSpace(Choice):
+    """
+    Define how the Crawl Space should be handled.
+    none: This room has no items
+    no_progression: This room can contain anything except progression items
+    any: This room can containy any sort of item
+    any_shovel_logic: This room can containy any sort of item but is only put into logic after unlocking We Need To Go Deeper! as a starting item
+    """
+    display_name = "Crawl Space"
+    option_none = 0
+    option_no_progression = 1
+    option_any = 2
+    option_any_shovel_logic = 3
+    default = 3
+
+class Planetarium(Choice):
+    """
+    Define how the Planetarium should be handled.
+    none: This room has no items
+    no_progression: This room can contain anything except progression items
+    any: This room can containy any sort of item
+    any_telescope_lense_logic: This room can containy any sort of item but is only put into logic after unlocking Telescope Lens as a starting trinket
+    """
+    display_name = "Planetarium"
+    option_none = 0
+    option_no_progression = 1
+    option_any = 2
+    option_any_telescope_lense_logic = 3
+    default = 3
+
+class FloorVariations(DefaultOnToggle):
+    """
+    Whether or not locations and unlocks should exist for each variation of a floor.
+    If set to true: Floor variations like Womb, Utero and Scarred Womb will be treated as different floors, which all have their own locations and need to be unlocked individually
+    If set to false: Floor variations like Womb, Utero and Scarred Womb will be treated as a single floor with one set of locations and be unlocked all together with a single unlock
+    """
+    display_name = "Floor Variations"
 
 class AdditionalItemLocationsPerStage(OptionCounter):
     """
@@ -169,8 +264,8 @@ class AdditionalItemLocationsPerStage(OptionCounter):
 
 class ItemLocationPercentage(Range):
     """
-    Chance for an item to be replaced with an AP item (if there are still AP Item checks available for the current Stage)
-    Fixed item drops are not replaced, only those that roll a random item from an item pool.
+    Chance for an item to be replaced with an AP item (if there are still AP Item checks available for the current stage)
+    Story and quest items are not replaced.
     """
     display_name = "Item Location Percentage"
     range_start = 0
@@ -357,11 +452,54 @@ class ExcludeItemsAsRewards(OptionSet):
     })
     default = frozenset({"Missing No", "TMTrainer"})
 
+class ProgressiveMappingUpgrades(DefaultOnToggle):
+    """
+    Adds three permanent mapping upgrades to the pool of items to be able to receive: Map -> Compass -> Blue Map
+    """
+    display_name = "Progressive Mapping Upgrades"
+
+class PermanentStatUpgrades(Range):
+    """
+    Adds x amount of upgrades for each stat to the pool of items to be able to receive. Amount of each stat up is equivalent to what a pill would increase.
+    These upgrades are permanent and will be retained when starting a new run.
+    """
+    range_start = 0
+    range_end = 5
+    default = 3
+
+class StartOutNerfed(Range):
+    """
+    Amount of stat downs to start a run with, setting this to 1 means your base stats are lowerd by what one pill would decrease in each stat.
+    """
+    range_start = 0
+    range_end = 5
+    default = 0
+
+class DeathLinkSeverity(Choice):
+    """
+    If death link is enabled, this defines how punishing the death link is for you.
+    mild: When death link is triggered, you'll receive 4 hits of damage (= 2 full hearts, or 4 full hearts on Womb+).
+    normal: When death link is triggered it tries to kill you but invincibility or revives will keep the run alive.
+    severe: When death link is triggered it kills you and ends your run regardless of invincibility or how many revives you had stocked up.
+    """
+    display_name = "Death Link Severity"
+    option_mild = 0
+    option_normal = 1
+    option_severe = 2
+    default = 1
+
 @dataclass
 class TboiOptions(PerGameCommonOptions):
     goals: Goals
+    goal_amount: GoalAmount
     excluded_areas: ExcludedAreas
     bad_rng_protection: BadRNGProtection
+    rng_rooms: RNGRooms
+    ultra_secret_room: UltraSecretRoom
+    error_room: ErrorRoom
+    crawl_space: CrawlSpace
+    planetarium: Planetarium
+    floor_variations: FloorVariations
     additional_item_locations_per_stage: AdditionalItemLocationsPerStage
     item_location_percentage: ItemLocationPercentage
     additional_boss_rewards: AdditionalBossRewards
@@ -376,8 +514,12 @@ class TboiOptions(PerGameCommonOptions):
     one_ups: OneUps
     retain_one_ups_percentage: RetainOneUpsPercentage
     exclude_items_as_rewards: ExcludeItemsAsRewards
+    progressive_mapping_upgrades: ProgressiveMappingUpgrades
+    permanent_stat_upgrades: PermanentStatUpgrades
+    start_out_nerfed: StartOutNerfed
     fortune_machine_hint_percentage: FortuneMachineHintPercentage
     crystal_ball_hint_percentage: CrystalBallHintPercentage
     fortune_cookie_hint_percentage: FortuneCookieHintPercentage
     hint_types_from_fortunes: HintTypesFromFortunes
     death_link: DeathLink
+    death_link_severity: DeathLinkSeverity

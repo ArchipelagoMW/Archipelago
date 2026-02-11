@@ -193,13 +193,15 @@ def can_obtain_qilin(world: "Spelunky2World", state: CollectionState, player: in
 
 def can_access_sunken_city(world: "Spelunky2World", state: CollectionState, player: int) -> bool:
     return (
-            (can_obtain_qilin(world, state, player)
-            and
             (
                     state.has(WorldName.SUNKEN_CITY, player)
                     or state.has(WorldName.PROGRESSIVE, player, 6)
-            ))
-            or world.options.can_qilin_skip
+            )
+            and
+            (
+                    can_obtain_qilin(world, state, player)
+                    or world.options.can_qilin_skip
+            )
     )
 
 

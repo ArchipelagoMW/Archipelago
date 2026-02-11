@@ -1,0 +1,13 @@
+{
+  "name": "Sonic 1 (1991)",
+  "game_name": "Sonic the Hedgehog 1",
+  "package_version": "0.0.2",
+  "package_uid": "ap_sonic1",
+  "author": "Kaithar",
+  "variants": {
+      "standard": {
+          "display_name": "Map Tracker",
+          "flags": ["ap"]
+      }
+  }
+}

@@ -10,7 +10,7 @@ from ..Util import hex_str
 class GameboyAddress:
     def __init__(self, bank: int, offset: int):
         self.bank = bank
-        self.offset = offset - 0x4000 if 0x8000 > offset > 0x4000 else offset
+        self.offset = offset - 0x4000 if 0x8000 > offset >= 0x4000 else offset
 
     def address_in_rom(self):
         return (self.bank * 0x4000) + self.offset
@@ -77,18 +77,19 @@ class Z80Assembler:
         self.blocks = []
         self.seasons_rom = seasons_rom
         self.ages_rom = ages_rom
+        self.active = True
 
-    def define(self, key: str, replacement_string: str):
-        if key in self.defines:
-            raise Exception(f"Attempting to re-define a value for key '{key}'.")
+    def define(self, key: str, replacement_string: str, is_redefine: bool = False):
+        assert not is_redefine or key in self.defines, f"Attempting to re-define a value for key '{key}' but it didn't exist."
+        assert is_redefine or key not in self.defines, f"Attempting to define a value for key '{key}' which is already defined."
         self.defines[key] = replacement_string
 
-    def define_byte(self, key: str, byte: int):
+    def define_byte(self, key: str, byte: int, is_redefine: bool = False):
         while byte < 0:
             byte += 0x100
         while byte >= 0x100:
             byte -= 0x100
-        self.define(key, f"${hex_str(byte)}")
+        self.define(key, f"${hex_str(byte)}", is_redefine)
 
     def define_word(self, key: str, word: int):
         while word < 0:
@@ -203,6 +204,7 @@ class Z80Assembler:
         for line in block.content_lines:
             addr = GameboyAddress(block.addr.bank, block.addr.offset + current_offset)
             current_offset += self._evaluate_line_size(line, addr, block)
+        assert self.active
         block.precompiled_size = current_offset
 
     def _compile_block(self, block: Z80Block):
@@ -226,6 +228,20 @@ class Z80Assembler:
         args = line[len(opcode) + 1:].split(",")
         if len(args) == 0:
             args = [""]
+
+        # Switch between modes with /ifdef, /else, /endif
+        if opcode == "/ifdef":
+            if args[0] not in self.defines:
+                self.active = False
+            return 0
+        elif opcode == "/else":
+            self.active = not self.active
+            return 0
+        elif opcode == "/endif":
+            self.active = True
+            return 0
+        elif not self.active:
+            return 0
 
         if opcode == "/include":
             if args[0] not in self.floating_chunks:
@@ -283,6 +299,20 @@ class Z80Assembler:
         args = [""]
         if len(split) > 1:
             args = " ".join(split[1:]).split(",")
+
+        # Switch between modes with /ifdef, /else, /endif
+        if opcode == "/ifdef":
+            if args[0] not in self.defines:
+                self.active = False
+            return []
+        elif opcode == "/else":
+            self.active = not self.active
+            return []
+        elif opcode == "/endif":
+            self.active = True
+            return []
+        elif not self.active:
+            return []
 
         # Perform includes before resolving names
         if opcode == "/include":

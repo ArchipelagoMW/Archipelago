@@ -78,6 +78,7 @@ calculating logic at all! Good luck!
 
 ## Temple of Ice
 - 1F [Color Switch early](https://www.youtube.com/watch?v=na6olZJgE3M) (Hard Logic)
+  - Can be done with just boomerang!
 - 3F Hit entrance switch with bomb held over head (All Settings)
 - 3F hit boomerang switches with bow (Hard Logic)
 - 1F shortcut hammer clip (Glitched Logic)

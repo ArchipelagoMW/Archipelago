@@ -1,0 +1,34 @@
+{
+    "Starting": {
+        "hidden": true
+    },
+    "Ocean Fishing": {
+        "yaml_option": ["include_ocean_fishing"]
+    },
+    "Guildhest (ARR)": {
+        "yaml_option": ["include_guildhests"]
+    },
+    "FATEs": {
+        "hidden": true
+    },
+    "FATEsanity": {
+        "hidden": true
+    },
+    "PvP": {
+        "yaml_option": ["include_pvp"]
+    },
+    "Bozja": {
+        "yaml_option": ["include_bozja"],
+        "hidden": true
+    },
+    "fishsanity": {
+        "yaml_option": [],
+        "hidden": true
+    },
+    "Big Fishing": {
+        "yaml_option": []
+    },
+    "Timed Fish": {
+        "yaml_option": []
+    }
+}

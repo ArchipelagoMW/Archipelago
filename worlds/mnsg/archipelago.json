@@ -1,0 +1,8 @@
+{
+    "minimum_ap_version": "0.6.5",
+    "world_version": "1.0.0",
+    "authors": ["Killklli", "littlecube_hax", "klorfmorf", "abyssonym", "Umed"],
+    "version": 5,
+    "compatible_version": 5,
+    "game": "Mystical Ninja Starring Goemon"
+}

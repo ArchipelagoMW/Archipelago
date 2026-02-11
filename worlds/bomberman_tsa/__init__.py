@@ -53,7 +53,11 @@ class BombTSAWebWorld(WebWorld):
     option_groups = bomberman_tsa_option_groups
 
 class BombTSAWorld(World):
-    """The greatest game of all time."""
+    """
+    Bomberman and his new companion Pommy are back in a new explosive action-adventure for the Nintendo 64. Returning from a vacation at luxurious Hot Springs Planet Ksa2 after his first adventure, Bomberman finds Planet Bomber in disarray. Naturally, it's up to our hero to catch the culprit and save the universe (ah, the life of a game hero). It seems that the conniving Rukifellth has somehow managed to build himself a black hole, the perfect tool for capturing planets and enslaving the peaceful inhabitants. Bomberman and Pommy must destroy the gravity generators on each planet and capture the seven powerful stones that provide Rukifellth with the power to do wrong.
+
+    The team is stocked with plenty of bombs to get through this adventure. Bomberman's firebomb is his staple weapon that explodes in four different directions. The ice bomb freezes water, objects, and enemies. A hurricane bomb blows the hero over impassible terrain. A lightning bomb fries circuitry in equipment and robots, and a Navarm bomb packs a powerhouse of a punch towards foes. In addition to the single-player adventure, a multiplayer mode for up to four bombers provides plenty of action after Bomberman sets off for his next vacation.
+    """
 
     game = "Bomberman The Second Attack"
     data_version = 1
@@ -307,4 +311,3 @@ class BombTSAWorld(World):
         write_tokens(self, patch, self.startbomb)
         out_file_name = self.multiworld.get_out_file_name_base(self.player)
         patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
-        

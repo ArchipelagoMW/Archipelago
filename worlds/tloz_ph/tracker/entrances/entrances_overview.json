@@ -1,0 +1,534 @@
+[
+  {
+    "name": "Bannan Island",
+    "sections": [
+      {"name": "Ocean NW Bannan"},
+{"name": "Bannan West Hut"},
+{"name": "Wayfarer's Exit"},
+{"name": "Bannan East Cave"},
+{"name": "Bannan West Cave"},
+{"name": "Keese Passage East Exit"},
+{"name": "Keese Passage West Exit"},
+{"name": "Bannan West Board Ship"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 374,
+        "y": 64
+      }
+    ]
+  },
+  {
+    "name": "Cannon Island",
+    "sections": [
+      {"name": "Ocean SW Cannon"},
+{"name": "Cannon Workshop East"},
+{"name": "Cannon Workshop West"},
+{"name": "Fuzo's Interior Door"},
+{"name": "Eddo's Exit"},
+{"name": "Eddo's Interior Door"},
+{"name": "Fuzo's Exit"},
+{"name": "Cannon Bee Cave"},
+{"name": "Bomb Flower Cave Exit"},
+{"name": "Cannon Board Ship"},
+{"name": "Bomb Flower Cave Staircase"},
+{"name": "Cannon Bomb Garden Cave"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 327,
+        "y": 652
+      }
+    ]
+  },
+  {
+    "name": "Dee Ess",
+    "sections": [
+      {
+        "name": "Ocean SE Dee Ess"
+      },
+      {
+        "name": "Dee Ess Board Ship"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 842,
+        "y": 711
+      }
+    ]
+  },
+  {
+    "name": "Ghost Ship",
+    "sections": [
+{"name": "Ocean NW Board Ghost Ship"},
+{"name": "GS Exit"},
+{"name": "Ghost Ship Cubus Sisters Reunion"},
+{"name": "Cubus Sisters Blue Warp"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 77,
+        "y": 198
+      }
+    ]
+  },
+  {
+    "name": "Goron Island",
+    "sections": [
+      {"name": "Ocean SE Goron"},
+{"name": "Goron SE Chief House"},
+{"name": "Goron SE Coast House"},
+{"name": "Goron SE Mountain House"},
+{"name": "Goron SW Chu House"},
+{"name": "Goron SW Port House"},
+{"name": "Goron SW Rock House"},
+{"name": "Goron SW Shop"},
+{"name": "Goron Chief House Exit"},
+{"name": "Goron Chu House Exit"},
+{"name": "Goron Coast House Exit"},
+{"name": "Goron Mountain House Exit"},
+{"name": "Goron Port House Exit"},
+{"name": "Goron Rock House Exit"},
+{"name": "Goron Shop Exit"},
+{"name": "Goron SW Board Ship"},
+{"name": "Goron NE Coast West"},
+{"name": "Goron NE Middle West"},
+{"name": "Goron NE Mountain West"},
+{"name": "Goron SE Coast West"},
+{"name": "Goron SE Mountains West"},
+{"name": "Goron Spikes Dead End"},
+{"name": "Goron NW Coast East"},
+{"name": "Goron NW Middle East"},
+{"name": "Goron North Dead End"},
+{"name": "Goron SW Coast East"},
+{"name": "Goron SW Mountains East"},
+{"name": "Goron South Dead End"},
+{"name": "Goron SE North"},
+{"name": "Goron SW North"},
+{"name": "Goron NE South"},
+{"name": "Goron NW South"},
+{"name": "Goron Enter Temple"},
+{"name": "GT Exit"},
+{"name": "GT Enter Boss"},
+{"name": "Dongo Exit"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 685,
+        "y": 670
+      }
+    ]
+  },
+  {
+    "name": "Harrow Island",
+    "sections": [
+      {
+        "name": "Ocean SE Harrow"
+      },
+      {
+        "name": "Harrow Board Ship"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 694,
+        "y": 470
+      }
+    ]
+  },
+  {
+    "name": "Isle of Ember",
+    "sections": [
+      {"name": "Ocean SW Ember"},
+{"name": "Ember West Astrid's House"},
+{"name": "Ember West Kayo's House"},
+{"name": "Ember West Port House"},
+{"name": "Abandoned House Exit"},
+{"name": "Astrid's Exit"},
+{"name": "Kayo's Exit"},
+{"name": "Ember West Board Ship"},
+{"name": "Ember East Climb North"},
+{"name": "Ember East Climb South"},
+{"name": "Ember East Coast North"},
+{"name": "Ember East Coast South"},
+{"name": "Ember East Heights North"},
+{"name": "Ember East Heights South"},
+{"name": "Ember East Summit North"},
+{"name": "Ember East Summit South"},
+{"name": "Ember West Climb North"},
+{"name": "Ember West Climb South"},
+{"name": "Ember West Coast North"},
+{"name": "Ember West Coast South"},
+{"name": "Ember West Heights North"},
+{"name": "Ember West Heights South"},
+{"name": "Ember West Summit North"},
+{"name": "Ember West Summit South"},
+{"name": "Ember Enter Temple"},
+{"name": "ToF Exit"},
+{"name": "ToF Enter Boss"},
+{"name": "Blaaz Exit"},
+{"name": "Astrid's Basement Stairs"},
+{"name": "Astrid's Stairs"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 424,
+        "y": 722
+      }
+    ]
+  },
+  {
+    "name": "Isle of Frost",
+    "sections": [
+      {"name": "Ocean SE Frost"},
+{"name": "Frost NW Aroo's House (North)"},
+{"name": "Frost NW Dobo's House (SW)"},
+{"name": "Frost NW Fofo's House (SE)"},
+{"name": "Frost NW Gumo's House (NW)"},
+{"name": "Frost NW Kumu's House (South)"},
+{"name": "Frost NW Mazo's House (NE)"},
+{"name": "Frost SW Chief House"},
+{"name": "Frost SW Sensitive House"},
+{"name": "Frost SW Smart House"},
+{"name": "Anouki Chief's Exit"},
+{"name": "Aroo's Exit"},
+{"name": "Dobo's Exit"},
+{"name": "Fofo's Exit"},
+{"name": "Gumo's Exit"},
+{"name": "Kumu's Exit"},
+{"name": "Mazo's Exit"},
+{"name": "Sensitive Anouki's Exit"},
+{"name": "Smart Anouki's Exit"},
+{"name": "Frost SE Cave"},
+{"name": "Frost SW Cave"},
+{"name": "Frozen Cave East Exit"},
+{"name": "Frozen Cave West Exit"},
+{"name": "Frost SW Board Ship"},
+{"name": "Frost SE Lower North"},
+{"name": "Frost SE Upper NE"},
+{"name": "Frost SE Upper NW"},
+{"name": "Frost SW North"},
+{"name": "Frost NE Above Temple SE"},
+{"name": "Frost NE Above Temple SW"},
+{"name": "Frost NE Lower South"},
+{"name": "Frost NW South"},
+{"name": "Frost NE Enter Temple"},
+{"name": "ToI Exit"},
+{"name": "ToI Enter Boss"},
+{"name": "Gleeok Exit"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 930,
+        "y": 501
+      }
+    ]
+  },
+  {
+    "name": "Isle of Gust",
+    "sections": [
+      {"name": "Ocean NW Gust"},
+{"name": "Gust Cave East"},
+{"name": "Gust Cave West"},
+{"name": "Gust Secret Cave"},
+{"name": "Miniblin Cave East"},
+{"name": "Miniblin Cave West"},
+{"name": "Tiled Hideout Exit"},
+{"name": "Gust South Board Ship"},
+{"name": "Gust SW Coast North"},
+{"name": "Gust SW Inland North"},
+{"name": "Gust South Above Temple North"},
+{"name": "Gust South Temple Road North"},
+{"name": "Gust NW Coast South"},
+{"name": "Gust NW Inland South"},
+{"name": "Gust North Above Temple South"},
+{"name": "Gust North Temple Road South"},
+{"name": "Gust Enter Temple"},
+{"name": "ToW Exit"},
+{"name": "ToW Enter Boss"},
+{"name": "Cyclok Exit"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 290,
+        "y": 253
+      }
+    ]
+  },
+  {
+    "name": "Isle of Ruins",
+    "sections": [
+      {"name": "Ocean NE Ruins"},
+{"name": "Doylan's Staircase"},
+{"name": "Ruins NE Small Pyramid"},
+{"name": "Ruins NW Pyramid"},
+{"name": "Ruins SE Pyramid"},
+{"name": "Bremeur's Exit"},
+{"name": "Doylan's Chamber Exit"},
+{"name": "Doylan's Exit"},
+{"name": "Max's Exit"},
+{"name": "Ruins NW Cave"},
+{"name": "Ruins SW Cliff Cave"},
+{"name": "Ruins SW Port Cave"},
+{"name": "Grassy Rupee Cave Exit"},
+{"name": "Sandy Geozard Cave East"},
+{"name": "Sandy Geozard Cave West"},
+{"name": "Ruins SW Board Ship"},
+{"name": "Ruins NE Doylan Bridge One-Way West"},
+{"name": "Ruins NE Doylan's Bridge NW"},
+{"name": "Ruins NE Lower Bay West"},
+{"name": "Ruins NE Lower Boulders West"},
+{"name": "Ruins SE West"},
+{"name": "Ruins NW Across Bridge East"},
+{"name": "Ruins NW Alcove East"},
+{"name": "Ruins NW Lower East"},
+{"name": "Ruins NW Upper One-Way East"},
+{"name": "Ruins SW East"},
+{"name": "Ruins SE Bay North"},
+{"name": "Ruins SE Boulder North"},
+{"name": "Ruins SE Coast North"},
+{"name": "Ruins SE King's Road North"},
+{"name": "Ruins SW Lower Maze Exit North"},
+{"name": "Ruins SW Maze Lower North"},
+{"name": "Ruins SW Port Cliff North"},
+{"name": "Ruins SW Upper Maze North"},
+{"name": "Ruins NE Coast South"},
+{"name": "Ruins NE King's Road South"},
+{"name": "Ruins NE Secret Chest South"},
+{"name": "Ruins NE South"},
+{"name": "Ruins NW Lower Maze Chest South"},
+{"name": "Ruins NW One-Way Ledge SW"},
+{"name": "Ruins NW One-Way Ledge South"},
+{"name": "Ruins NW Port Cliff South"},
+{"name": "Ruins Enter Temple"},
+{"name": "MT Exit"},
+{"name": "MT Enter Boss"},
+{"name": "Eox Exit"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 701,
+        "y": 198
+      }
+    ]
+  },
+  {
+    "name": "Isle of the Dead",
+    "sections": [
+      {"name": "Ocean NE IotD"},
+{"name": "Brant's Maze 1"},
+{"name": "Brant's Maze Exit"},
+{"name": "IotD Pyramid"},
+{"name": "Brant's Exit"},
+{"name": "Boulder Tunnel Cave"},
+{"name": "IotD Like Like Cave"},
+{"name": "IotD Port Cave"},
+{"name": "McNey's Cave Secret Cave"},
+{"name": "McNey's Cave East Exit"},
+{"name": "McNey's Cave West"},
+{"name": "Rupoor Cave Exit"},
+{"name": "Stone Treasure Cave Exit"},
+{"name": "IotD Board Ship"},
+{"name": "Boulder Tunnel Staircase"},
+{"name": "Brant's Chamber Staircase"},
+{"name": "IotD Crown Staircase"},
+{"name": "IotD Face Staircase"},
+{"name": "Boulder Tunnel Drop"},
+{"name": "IotD Dig Hole"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 894,
+        "y": 114
+      }
+    ]
+  },
+  {
+    "name": "Maze Island",
+    "sections": [
+{"name": "Ocean NE Maze"},
+{"name": "Maze Board Ship"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 770,
+        "y": 48
+      }
+    ]
+  },
+  {
+    "name": "Mercay Island",
+    "sections": [
+      {"name": "Ocean SW Mercay"},
+{"name": "Mercay SE Milk Bar"},
+{"name": "Mercay SE Shipyard"},
+{"name": "Mercay SE Shop"},
+{"name": "Mercay SE Treasure Teller"},
+{"name": "Mercay SE Tuzi's House"},
+{"name": "Mercay SW Apricot's House"},
+{"name": "Mercay SW Oshus' House"},
+{"name": "Apricot's Exit"},
+{"name": "Mercay Shop Exit"},
+{"name": "Milk Bar Exit"},
+{"name": "Oshus' Exit"},
+{"name": "Shipyard Exit"},
+{"name": "Treasure Teller's Exit"},
+{"name": "Tuzi's Exit"},
+{"name": "Mercay NE Freedle Island Cave"},
+{"name": "Mercay NE Hidden Cave"},
+{"name": "Mercay NE Ledge Cave"},
+{"name": "Mercay NW Bamboo Cave"},
+{"name": "Mercay NW Temple Cave"},
+{"name": "Mercay SE Cave"},
+{"name": "Mercay SW Barrel Cave"},
+{"name": "Eye Bridge Cave North Exit"},
+{"name": "Eye Bridge Cave South Exit"},
+{"name": "Long Bridge Cave East"},
+{"name": "Long Bridge Cave West"},
+{"name": "Mountain Passage 1F Exit"},
+{"name": "Mountain Passage 2F Exit"},
+{"name": "Sword Cave Exit"},
+{"name": "Mercay SE Board Ship"},
+{"name": "Mercay NE OOB West"},
+{"name": "Mercay NE West"},
+{"name": "Mercay SE OOB West"},
+{"name": "Mercay SE West"},
+{"name": "Mercay NW East"},
+{"name": "Mercay NW OOB East"},
+{"name": "Mercay SW East"},
+{"name": "Mercay SW OOB East"},
+{"name": "Mercay SE Ledge North"},
+{"name": "Mercay SE North"},
+{"name": "Mercay SE OOB North"},
+{"name": "Mercay SW North"},
+{"name": "Mercay SW OOB North Lower"},
+{"name": "Mercay SW OOB North Upper"},
+{"name": "Mercay SW OOB North Waterfall"},
+{"name": "Mercay NE Ledge South"},
+{"name": "Mercay NE OOB South"},
+{"name": "Mercay NE South"},
+{"name": "Mercay NW OOB South Lower"},
+{"name": "Mercay NW OOB South Upper"},
+{"name": "Mercay NW OOB South Waterfall"},
+{"name": "Mercay NW South"},
+{"name": "Mercay NW Enter Temple"},
+{"name": "TotOK Lobby Exit"},
+{"name": "Mountain Passage 1F Staircase"},
+{"name": "Mountain Passage 2F Staircase"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 379,
+        "y": 494
+      }
+    ]
+  },
+  {
+    "name": "Molida Island",
+    "sections": [
+      {"name": "Ocean SW Molida"},
+{"name": "Molida South Ocara's House"},
+{"name": "Molida South Potato's House"},
+{"name": "Molida South Romanos' House"},
+{"name": "Molida South Shop"},
+{"name": "Molida Shop Exit"},
+{"name": "Ocara's House Exit"},
+{"name": "Potato's Exit"},
+{"name": "Romanos' Exit"},
+{"name": "Molida South Cave"},
+{"name": "Sun Lake Cave Back Cave"},
+{"name": "Sun Lake Cave Bomb Cave"},
+{"name": "Sun Lake Cave Geozard Cave"},
+{"name": "Octorok Cave East"},
+{"name": "Octorok Cave West"},
+{"name": "Shovel Hideout Exit"},
+{"name": "Sun Lake Cave Exit"},
+{"name": "Molida South Board Ship"},
+{"name": "Molida South Cliff North"},
+{"name": "Molida North Cliff South"},
+{"name": "Molida North Enter Temple"},
+{"name": "ToC Exit"},
+{"name": "ToC Enter Boss"},
+{"name": "Crayk Exit"},
+{"name": "Sun Lake Cave Staircase"},
+{"name": "Sun Lake Cave Sun Staircase"},
+{"name": "Molida North Cliff Staircase"},
+{"name": "Molida North Staircase"},
+{"name": "Molida North Dig Hole"},
+{"name": "Molida South Dig Hole"},
+{"name": "Sun Lake Cave Chest Drop"},
+{"name": "Sun Lake Cave South Drop"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 128,
+        "y": 607
+      }
+    ]
+  },
+  {
+    "name": "Spirit Island",
+    "sections": [
+{"name": "Ocean SW Spirit"},
+{"name": "Spirit Island Cave"},
+{"name": "Spirit Shrine Exit"},
+{"name": "Spirit Board Ship"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 128,
+        "y": 706
+      }
+    ]
+  },
+  {
+    "name": "Uncharted Island",
+    "sections": [
+{"name": "Ocean NW Uncharted"},
+{"name": "Descending Cave Lower Cave"},
+{"name": "Uncharted Cave"},
+{"name": "Descending Cave Exit"},
+{"name": "Golden Chief Exit"},
+{"name": "Uncharted Board Ship"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 406,
+        "y": 184
+      }
+    ]
+  },
+  {
+    "name": "Zauz's Island",
+    "sections": [
+{"name": "Ocean NW Zauz"},
+{"name": "Zauz' House"},
+{"name": "Zauz' Exit"},
+{"name": "Zauz Board Ship"}
+    ],
+    "map_locations": [
+      {
+        "map": "Entrance Overview",
+        "x": 258,
+        "y": 44
+      }
+    ]
+  }
+]

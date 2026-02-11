@@ -43,6 +43,9 @@ class PokemonPlatinumWebWorld(WebWorld):
     tutorials = [setup_en]
 
 class PokemonPlatinumWorld(World):
+    """
+    Pokémon Platinum is the enhanced definitive edition of the Generation 4 games, set in the Sinnoh region, where players explore a vibrant world, collect Pokémon, and challenge Gym Leaders to become Champion. The story centers on the legendary Pokémon Giratina and its emergence into the chaotic new realm known as the Distortion World, which the player must navigate to stop the villainous Team Galactic.
+    """
     game = "Pokemon Platinum"
     web = PokemonPlatinumWebWorld()
     topology_present = True

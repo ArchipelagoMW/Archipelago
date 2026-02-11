@@ -20,7 +20,7 @@ control_sequence_pattern = re.compile(r"""
 dict_pattern = re.compile(r"DICT(\d+)_([0-9a-f]+)")
 
 
-def add_to_tree(tree: dict[str, list[int]], char: str, keys: [int]):
+def add_to_tree(tree: dict[str, list[int]], char: str, keys: list[int]):
     tree[char] = keys
 
 
@@ -279,6 +279,13 @@ def write_text_data(rom: RomData, dictionary: dict[str, str], texts: dict[str, s
             rom.write_word(text_table_current_address, 0)
         text_table_current_address += 2
 
+    if __debug__ and False:
+        sorted_dict = sorted(list(encoded_dict1.items()) + list(encoded_dict2.items()), key=lambda kv: -len(kv[1]))
+        for entry in sorted_dict:
+            if entry[0] in dict1:
+                print(entry[0], dict1[entry[0]], len(entry[1]))
+            elif entry[0] in dict2:
+                print(entry[0], dict2[entry[0]], len(entry[1]))
     text_offset_2_offset = max(0, text_offset_1_address + text_offset_1_offset + len(compact_table1) - text_offset_2_address)
     compact_table2, compact_offsets2 = build_compact_table(encoded_dict2)
     assert text_offset_2_address + text_offset_2_offset + len(compact_table2) < text_addresses_limit, \

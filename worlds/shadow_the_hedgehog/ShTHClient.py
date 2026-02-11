@@ -13,8 +13,9 @@ import Utils
 from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
+from worlds.shadow_the_hedgehog.ObjectTypes import ObjectTypeVehicles
 from .Options import WeaponsanityHold
-from . import Levels, Items, Locations, Utils as ShadowUtils, Weapons, Story, Objects, Names
+from . import Levels, Items, Locations, Utils as ShadowUtils, Weapons, Story, Objects, Names, Checkpoints
 from .Levels import *
 from .Locations import GetStageInformation, GetAlignmentsForStage, \
     GetStageEnemysanityInformation, MissionClearLocations
@@ -42,7 +43,8 @@ valid_game_bytes = [
     bytes(SHADOW_THE_HEDGEHOG_GAME_ID_SX, "utf-8")
 ]
 
-SAVE_VALUE_CHECK = False
+SAVE_VALUE_CHECK = True
+SHOW_SET_CHANGES = False
 
 @dataclass
 class CharacterAddress:
@@ -60,6 +62,7 @@ def GetGameAddress(ctx, base_address):
 
     return base_address
 
+OBJECT_SIZE = 0x2C
 
 class GAME_ADDRESSES:
     STORY_MODE_COUNTER = 0x80576988
@@ -98,6 +101,7 @@ class GAME_ADDRESSES:
     ADDRESS_LOADING_MAYBE = 0x80570B26
 
     ADDRESS_LEVEL_STATUS = 0x80575F80
+    INPUT_DETECTOR = 0x8056ED4E
     button_menu_address = 0x8056ED4F
     CHECKPOINT_FLAGS = [0x80575FFC, 0x80576018, 0x80576034, 0x80576050,
                         0x8057606C, 0x80576088, 0x805760A4, 0x805760C0]
@@ -120,6 +124,10 @@ class GAME_ADDRESSES:
     SUBTITLE_INFO = 0x8057FA6C
     LAST_SUBTITLE_TEXT = 0x80573340
 
+    LEVEL_SPAWN_BASE = 0x8057AC64
+    CHECKPOINT_ENABLE_DATA = 0x80575FE4
+
+    # TODO: Update this code to use the same baseline!
     CharacterAddresses = [
         CharacterAddress("Sonic", 0x8057D77B),
         CharacterAddress("Tails", 0x8057D77F),
@@ -163,10 +171,42 @@ class MenuOptions:
     Select = 0x06
 
 
+def GetSpawnAddresses():
+    spawn_addresses = {}
+    stage_index = 0
+
+    for stage in Levels.ALL_STAGES:
+        if stage not in Levels.BOSS_STAGES:
+            spawn_addresses[stage] = GAME_ADDRESSES.LEVEL_SPAWN_BASE + (stage_index * 0xC0)
+            stage_index += 1
+
+    return spawn_addresses
+
+
+class CheckpointEnableData:
+    index = None
+    spawn_address = None
+    flag_address = None
+
+    def __init__(self, index, spawn_address, flag_address):
+        self.index = index
+        self.spawn_address = spawn_address
+        self.flag_address = flag_address
+
+
+def GetCheckpointEnableAddresses():
+    checkpoint_addresses = {}
+
+    for i in range(0, 8):
+        checkpoint_addresses[i+1] = CheckpointEnableData(i+1,
+                                     GAME_ADDRESSES.CHECKPOINT_ENABLE_DATA + (i * 0x1C),
+                                     GAME_ADDRESSES.CHECKPOINT_ENABLE_DATA + (i * 0x1C) + 0x18)
+
+    return checkpoint_addresses
 
 last_level = None
 memory_data = {}
-def ShowSETChanges(current_level):
+async def ShowSETChanges(current_level, ctx):
     global memory_data
     global last_level
 
@@ -174,7 +214,9 @@ def ShowSETChanges(current_level):
         memory_data = {}
         return
 
+    weapon_check = False
     if last_level != current_level:
+        weapon_check = True
         last_level = current_level
         memory_data = {}
 
@@ -190,10 +232,35 @@ def ShowSETChanges(current_level):
     show_known = False
     known_objects = [ s.index for s in Objects.GetDesirableObjectsForStage(current_level) ]
 
+    force_full_check = False
+
+    bytes_size = (OBJECT_SIZE * (set_item_count + 1))
+    full_loaded_bytes = dolphin_memory_engine.read_bytes(start_address, (0x2C * (set_item_count + 1)))
+
+    if ctx.last_object_bytes is not None and not force_full_check:
+        previous_bytes = ctx.last_object_bytes
+        mask = [1 if (previous_bytes[i] ^ full_loaded_bytes[i]) else 0 for i in range(bytes_size)]
+        obj_mask = {}
+
+        for obj_idx in range(set_item_count + 1):
+            start = obj_idx * OBJECT_SIZE
+            end = start + OBJECT_SIZE
+            obj_mask[obj_idx] = True if any(mask[start:end]) else False
+
+        changed_indexes = [c for c in range(0, set_item_count) if obj_mask[c]]
+    else:
+        changed_indexes = range(0, set_item_count)
+
     new_outputs = []
+
+    full_object_change_data = []
+
     for i in range(0, set_item_count):
 
-        if not show_known and i in known_objects:
+        if not weapon_check and not show_known and i in known_objects:
+            continue
+
+        if i not in changed_indexes:
             continue
 
         spawn_data = start_address  + (0x2C * i) + 0x20
@@ -226,7 +293,10 @@ def ShowSETChanges(current_level):
 
         loaded_from_extra_pointer_bytes = dolphin_memory_engine.read_bytes(loaded_extra_pointer, 100)
 
-        if last_known_spawn != loaded_spawn_data:
+        full_object_change_data.append((spawn_data, i, loaded_object_type, last_known_spawn, loaded_spawn_data,
+                                   loaded_from_extra_pointer_bytes, link_id))
+
+        if last_known_spawn != loaded_spawn_data and i not in known_objects:
             outputs = Objects.PrintSETChange(spawn_data, i, loaded_object_type, last_known_spawn, loaded_spawn_data,
                                    loaded_from_extra_pointer_bytes, link_id)
             memory_data[spawn_data] = [loaded_spawn_data, loaded_object_type]
@@ -242,6 +312,9 @@ def ShowSETChanges(current_level):
 
         for line in new_outputs:
             logger.info(line)
+
+    if weapon_check:
+        await handle_missing_set_weapons(current_level, ctx, full_object_change_data)
 
 
 def f1():
@@ -277,14 +350,16 @@ class ShTHCommandProcessor(ClientCommandProcessor):
     #    arguments = self.parse_args(args)
     #    self.reports.append((arguments["i"], self.region))
 
+    def arg_finish(self, build, type, results, value):
+        to_use = " ".join(build)
 
-    #def arg_finish(self, build, type, results, value):
-    ##    to_use = " ".join(build)
+    def arg_finish(self, build, type, results, value):
+        to_use = " ".join(build)
 
-    #   if value:
-    #        results[type] = to_use
-    #    else:
-    #        results[type+to_use] = True
+        if value:
+            results[type] = to_use
+        else:
+            results[type+to_use] = True
 
     def parse_args(self, args, value=True):
         arguments = {}
@@ -426,7 +501,7 @@ class ShTHCommandProcessor(ClientCommandProcessor):
          enemysanity_locations, checkpointsanity_locations,
          charactersanity_locations, token_locations, keysanity_locations,
          weaponsanity_locations, boss_locations, warp_locations,
-         object_locations) = Locations.GetAllLocationInfo()
+         object_locations) = Locations.GetActiveLocationInfo()
 
         info = Items.GetItemLookupDict()
 
@@ -861,7 +936,8 @@ class ShTHCommandProcessor(ClientCommandProcessor):
         """Prints the current sanities to the client."""
         if isinstance(self.ctx, ShTHContext):
             arguments = self.parse_args(args)
-            #print(arguments)
+
+            #print("CMDS-", arguments)
 
             stage = None
             if "s" in arguments:
@@ -885,43 +961,46 @@ class ShTHCommandProcessor(ClientCommandProcessor):
                                 stageId = level_by_name[stage]
                 stages = [stageId]
 
-                stages = []
-                for stageId in stages:
-                    if stageId is not None:
-                        valid_types = ['dark', 'hero', 'gun', 'egg', 'alien', 'darkclear', 'heroclear']
-                        enemy_sanities = ['gun', 'alien', 'egg']
-                        objective_sanities = ['dark', 'hero']
-                        for valid_type in valid_types:
-                            if (valid_type in arguments.keys() or
-                                    len(arguments) == 0 or
-                                    (len(arguments) == 1 and stageId != self.ctx.last_level) ):
-                                if valid_type in enemy_sanities and not self.ctx.enemy_sanity:
-                                    break
-                                if valid_type in objective_sanities and not self.ctx.objective_sanity:
-                                    break
-                                details = self.get_required_and_active_count(self.ctx, stageId, valid_type)
-                                if details is None:
-                                    continue
-                                location_total_required = details[0]
-                                location_reached_total = details[1]
-                                current_count = details[2]
-                                freq_or_avail = details[3]
-                                complete = details[4]
-                                if location_total_required > 0:
-                                    if "clear" in valid_type and current_count is not None:
-                                        logger.info("%s sanity is %d/%d %s(%d available)", valid_type.capitalize(),
-                                                    current_count, location_total_required,
-                                                    "(Complete) " if complete else "",
-                                                    freq_or_avail)
-                                    elif current_count is not None:
-                                        logger.info("%s sanity is %d/%d (Current: %d) (Frequency %d)", valid_type.capitalize(),
-                                                    location_reached_total, location_total_required, current_count,freq_or_avail)
-                                    elif "clear" in valid_type:
-                                        pass
-                                    else:
-                                        pass
-                    else:
-                        logger.error("Invalid level provided")
+            for stageId in stages:
+                if stageId is not None:
+                    valid_types = ['dark', 'hero', 'gun', 'egg', 'alien', 'darkclear', 'heroclear']
+                    enemy_sanities = ['gun', 'alien', 'egg']
+                    objective_sanities = ['dark', 'hero']
+                    for valid_type in valid_types:
+                        if (valid_type in arguments.keys() or
+                                len(arguments) == 0 or
+                                (len(arguments) == 1 and stageId != self.ctx.last_level) ):
+                            if valid_type in enemy_sanities and not self.ctx.enemy_sanity:
+                                break
+                            if valid_type in objective_sanities and not self.ctx.objective_sanity:
+                                break
+                            details = self.get_required_and_active_count(self.ctx, stageId, valid_type)
+                            if details is None:
+                                continue
+                            location_total_required = details[0]
+                            location_reached_total = details[1]
+                            current_count = details[2]
+                            freq_or_avail = details[3]
+                            complete = details[4]
+                            #print("CMDS-", details)
+                            if location_total_required > 0:
+                                if "clear" in valid_type and current_count is not None:
+                                    logger.info("%s sanity for %s is %d/%d %s(%d available)",
+                                                Levels.LEVEL_ID_TO_LEVEL[stageId],
+                                                valid_type.capitalize(),
+                                                current_count, location_total_required,
+                                                "(Complete) " if complete else "",
+                                                freq_or_avail)
+                                elif current_count is not None:
+                                    logger.info("%s sanity for %s is %d/%d (Current: %d) (Frequency %d)",
+                                                Levels.LEVEL_ID_TO_LEVEL[stageId], valid_type.capitalize(),
+                                                location_reached_total, location_total_required, current_count,freq_or_avail)
+                                elif "clear" in valid_type:
+                                    pass
+                                else:
+                                    pass
+                else:
+                    logger.error("Invalid level provided")
 
 
 @dataclass
@@ -1263,6 +1342,7 @@ class ShTHContext(CommonContext):
         self.key_restore_complete = False
         self.shuffled_story_mode = Story.DefaultStoryMode
         self.successful_shuffle = False
+        self.successful_spawn_write = False
         self.include_last_way_shuffle = False
         self.dead = False
         self.initialised = False
@@ -1296,6 +1376,11 @@ class ShTHContext(CommonContext):
         self.last_save_index = None
         self.last_save_index_message = None
         self.last_subtitle_message_base_pointer = None
+        self.first_checkpoints = {}
+        self.checkpoint_convenience = False
+        self.checkpoint_shuffle = None
+        self.last_object_bytes = None
+        self.music_shuffle = True
 
 
     async def disconnect(self, allow_autoreconnect: bool = False):
@@ -1383,7 +1468,7 @@ class ShTHContext(CommonContext):
         (mission_clear_locations, mission_locations, end_location, enemy_locations,
             checkpointsanity_locations, charactersanity_locations,
          token_locations, keysanity_locations, weaponsanity_locations, boss_locations,
-         warp_locations, object_locations) = Locations.GetAllLocationInfo()
+         warp_locations, object_locations) = Locations.GetActiveLocationInfo()
 
         if self.character_sanity:
             characters = []
@@ -1638,6 +1723,18 @@ class ShTHContext(CommonContext):
             if "difficult_enemy_sanity" in slot_data:
                 self.difficult_enemy_sanity = slot_data["difficult_enemy_sanity"]
 
+            if "checkpoint_shuffle" in slot_data:
+                self.checkpoint_shuffle = slot_data["checkpoint_shuffle"]
+
+            if "first_checkpoints" in slot_data:
+                self.first_checkpoints = slot_data["first_checkpoints"]
+
+            if "checkpoint_convenience" in slot_data:
+                self.checkpoint_convenience = slot_data["checkpoint_convenience"]
+
+            if "music_shuffle" in slot_data:
+                self.music_shuffle = slot_data["music_shuffle"]
+
             self.restoreState()
             self.awaiting_server = False
 
@@ -1846,7 +1943,7 @@ async def check_save_loaded(ctx):
     mission_clear_locations, mission_locations, end_location, enemy_locations,\
         checkpointsanity_locations, charactersanity_locations,\
         token_locations, keysanity_locations, weaponsanity_locations, boss_locations,\
-        warp_locations, object_locations = Locations.GetAllLocationInfo()
+        warp_locations, object_locations = Locations.GetActiveLocationInfo()
 
     random_bytes = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.EXTRA_SAVE_DATA, 8)
     loaded_bytes = int.from_bytes(random_bytes, byteorder='big')
@@ -1953,12 +2050,11 @@ async def check_save_loaded(ctx):
 
         # decide settings for goal
 
-        set_last_way = IsEndGameEnabled(ctx)
+        enable_last_story = IsLastWayEnabled(ctx)
 
         last_way_available_bytes = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.ADDRESS_LAST_STORY_OPTION, 1)
         is_last_way_available = int.from_bytes(last_way_available_bytes, byteorder='big')
-        if (set_last_way and
-                (not ctx.include_last_way_shuffle or not ctx.story_mode_available)):
+        if (enable_last_story):
             if is_last_way_available != 1:
                 set_to = 1
                 set_last_way_bytes = set_to.to_bytes(1, byteorder='big')
@@ -2013,7 +2109,11 @@ async def check_save_loaded(ctx):
         if (not ctx.expected_version_check and
                 ctx.required_client_version is not None and
                 expected_version != ctx.required_client_version):
-            logger.error("Unexpected version from generation and runtime. Client errors on older versions are likely to occur.")
+            logger.error("Unexpected version from generation and runtime. "
+                         " Generated version: %s"
+                         " Player version: %s "
+                         " Client errors on older versions are likely to occur.",
+                         ctx.required_client_version, expected_version)
             ctx.expected_version_check = True
 
         # Check for mission completes
@@ -2023,6 +2123,15 @@ async def check_save_loaded(ctx):
         writeBytes(GAME_ADDRESSES.EXTRA_SAVE_DATA, new_bytes)
 
     return loaded
+
+def IsLastWayEnabled(ctx):
+    if IsEndGameEnabled(ctx):
+        return True
+
+    if Levels.STAGE_THE_LAST_WAY in ctx.available_levels:
+        return True
+
+    return False
 
 
 def IsEndGameEnabled(ctx):
@@ -2100,7 +2209,7 @@ def HandleLocationAutoclears():
 def is_level_accessible(ctx, stageId, story=False):
     info = Items.GetItemLookupDict()
 
-    if stageId in ctx.available_levels:
+    if not story and stageId in ctx.available_levels:
         return True
 
     if ctx.select_mode_available and not story:
@@ -2316,7 +2425,64 @@ def complete_completable_levels(ctx):
     return new_clears
 
 
+def check_level_spawns(ctx):
+    spawn_checkpoints = ctx.first_checkpoints
+    if ctx.successful_spawn_write or ctx.checkpoint_shuffle != Options.CheckpointShuffle.option_start_and_unlock:
+        return
 
+    spawn_address_data = GetSpawnAddresses()
+    for item_s, checkpoint_index in spawn_checkpoints.items():
+        item = int(item_s)
+        address = spawn_address_data[item]
+        location_bytes = Checkpoints.GetBytesForCheckpointSpawn(item, checkpoint_index)
+        if location_bytes is not None:
+            writeBytes(address, location_bytes)
+
+    ctx.successful_spawn_write = True
+
+def setCheckpointZero(ctx, current_level):
+    spawn_address_data = GetSpawnAddresses()
+    current_address = spawn_address_data[current_level]
+    location_bytes = Checkpoints.GetBytesForCheckpointSpawn(current_level, 0)
+    if location_bytes is not None:
+        writeBytes(current_address, location_bytes)
+
+def enable_checkpoints(ctx, stage):
+
+    # Check mission clears and keys and clear checks from those not known to the server
+    info = Items.GetItemLookupDict()
+    received_checkpoints = [
+        info[unlock[0]] for unlock in ctx.items_received if info[unlock[0]].stageId == stage
+                                                    and info[unlock[0]].type == "checkpoint"
+    ]
+
+    received_check_inds = [ check.value for check in received_checkpoints ]
+
+    if ctx.checkpoint_convenience:
+        loc_dict = Locations.GetLocationInfoDict()
+
+        completed_checks = [loc_dict[c].count for c in ctx.checked_locations
+                            if loc_dict[c].location_type == Locations.LOCATION_TYPE_CHECKPOINT and
+                            loc_dict[c].stageId == stage]
+
+        for c in completed_checks:
+            if c not in received_check_inds:
+                received_check_inds.append(c)
+
+    checkpoint_data = GetCheckpointEnableAddresses()
+
+    print("Checkpoint INDS", received_check_inds)
+    for check in received_check_inds:
+        if check == 0:
+            ctx.level_state["checkpoint_zero_available"] = True
+            continue
+        set_addresses = checkpoint_data[check]
+        bytes_to_write = Checkpoints.GetBytesForCheckpointSpawn(stage, check)
+        if bytes_to_write is not None:
+            writeBytes(set_addresses.spawn_address, bytes_to_write)
+            enabled = 1
+            enabled_bytes = enabled.to_bytes(1, byteorder='big')
+            writeBytes(set_addresses.flag_address, enabled_bytes)
 
 
 def check_story(ctx):
@@ -2434,7 +2600,7 @@ def CheckAutoWarps(ctx):
     (clear_locations, mission_locations, end_location,
      enemysanity_locations, checkpointsanity_locations, charactersanity_locations,
      token_locations, keysanity_locations, weaponsanity_locations, boss_locations,
-     warp_locations, object_locations) = Locations.GetAllLocationInfo()
+     warp_locations, object_locations) = Locations.GetActiveLocationInfo()
 
     story = ctx.shuffled_story_mode
     for path in story:
@@ -2490,7 +2656,7 @@ async def check_level_status(ctx):
     (clear_locations, mission_locations, end_location,
      enemysanity_locations, checkpointsanity_locations, charactersanity_locations,
      token_locations, keysanity_locations, weaponsanity_locations, boss_locations,
-     warp_locations, object_locations) = Locations.GetAllLocationInfo()
+     warp_locations, object_locations) = Locations.GetActiveLocationInfo()
 
     # Check mission clears and keys and clear checks from those not known to the server
     info = Items.GetItemLookupDict()
@@ -2611,6 +2777,7 @@ async def check_level_status(ctx):
             ctx.level_state = {}
             ctx.level_keys = []
             ctx.music = None
+            ctx.last_object_bytes = None
             print("Set music to None")
             ctx.key_restore_complete = False
             if ctx.auto_clear_missions:
@@ -2870,7 +3037,7 @@ async def check_weapons(ctx, current_level):
     mission_clear_locations, mission_locations, end_location, enemysanity_locations, \
         checkpointsanity_locations, charactersanity_locations, \
         token_locations, keysanity_locations, weaponsanity_locations, boss_locations,\
-        warp_locations, object_locations = Locations.GetAllLocationInfo()
+        warp_locations, object_locations = Locations.GetActiveLocationInfo()
 
     messages = []
 
@@ -3208,17 +3375,14 @@ async def check_junk(ctx, current_level, death):
     newly_handled.extend([f[0] for f in filler_nothing])
 
     if len(ammo_traps) > 0:
-        print("add ammo traps")
         ctx.ammo_traps += len(ammo_traps)
         newly_handled.extend([u[0] for u in ammo_traps])
 
     if len(poison_traps) > 0:
-        print("add poison traps")
         ctx.poison_traps += len(poison_traps)
         newly_handled.extend([u[0] for u in poison_traps])
 
     if len(checkpoint_traps) > 0:
-        print("add check traps")
         ctx.checkpoint_traps += len(checkpoint_traps)
         newly_handled.extend([u[0] for u in checkpoint_traps])
 
@@ -3360,13 +3524,10 @@ async def check_junk(ctx, current_level, death):
 
     if ctx.checkpoint_traps > 0:
         current_check_choice = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.CHECKPOINT_RESPAWN_ID, 4)
-        print("current check choice is", current_check_choice)
         if current_check_choice not in [0, 1]:
             checkpoint_data_for_stage = [c for c in Locations.CheckpointLocations if c.stageId == current_level]
-            print("checks", checkpoint_data_for_stage)
             active = None
             if len(checkpoint_data_for_stage) > 0:
-                print("available level checks")
                 total_count = checkpoint_data_for_stage[0].total_count
 
                 check_zero_addr = GAME_ADDRESSES.CHECKPOINT_FLAGS[0]
@@ -3378,17 +3539,14 @@ async def check_junk(ctx, current_level, death):
 
                 if checkpoint_zero_status:
                     for i in range(1, total_count):
-                        print("count=", i)
                         addr = GAME_ADDRESSES.CHECKPOINT_FLAGS[i]
                         checkpoint_status_bytes = dolphin_memory_engine.read_bytes(addr, 1)
                         checkpoint_status = int.from_bytes(checkpoint_status_bytes, byteorder='big') == 1
-                        print("check status=", checkpoint_status)
                         if checkpoint_status:
-                            print("Yes check status", i)
                             mission_clear_locations, mission_locations, end_location, enemysanity_locations, \
                                 checkpointsanity_locations, charactersanity_locations, \
                                 token_locations, keysanity_locations, weaponsanity_locations, boss_locations, \
-                                warp_locations, object_locations = Locations.GetAllLocationInfo()
+                                warp_locations, object_locations = Locations.GetActiveLocationInfo()
 
                             # Check the check has been completed beforeadding to active
                             if ctx.checkpoint_sanity:
@@ -3397,17 +3555,15 @@ async def check_junk(ctx, current_level, death):
                                              c.count == (i+1)]
 
                                 checked_locations = [ c for c in ctx.checked_locations if c in locations ]
-                                print("locs=", locations, checked_locations, ctx.checked_locations)
 
                                 if len(checked_locations) > 0:
-                                    print("active enabled")
                                     active = addr
                             else:
                                 print("force active enabled")
                                 active = addr
 
             if active is not None:
-                print("Activate checkpoint trap")
+                #print("Activate checkpoint trap")
                 ctx.checkpoint_trap_active = True
                 new_respawn_id = 0
                 new_bytes = new_respawn_id.to_bytes(4, byteorder='big')
@@ -3417,37 +3573,36 @@ async def check_junk(ctx, current_level, death):
 
             pass
     if ctx.poison_traps > 0:
-        print("Poison Traps ==", ctx.poison_traps)
+        #print("Poison Traps ==", ctx.poison_traps)
         current_rings_bytes = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.RINGS_ADDRESS, 4)
         current_rings = int.from_bytes(current_rings_bytes, byteorder="big")
 
         if current_rings > 0:
-            print("Poisons, rings > 0")
+            #print("Poisons, rings > 0")
             new_rings = current_rings - math.floor(pow(current_rings, 0.3))
             new_bytes = new_rings.to_bytes(4, byteorder='big')
             writeBytes(GAME_ADDRESSES.RINGS_ADDRESS, new_bytes)
             r = random.random()
             if r < (1 / current_rings):
-                print("Poison reduce", r)
+                #print("Poison reduce", r)
                 ctx.poison_traps -= 1
         elif current_rings == 1:
-            print("Poisons, rings == 1")
+            #print("Poisons, rings == 1")
             new_rings = current_rings - 1
             new_bytes = new_rings.to_bytes(4, byteorder='big')
             writeBytes(GAME_ADDRESSES.RINGS_ADDRESS, new_bytes)
             ctx.poison_traps -= 1
-        else:
-            print("Not doing anything ith poison trap")
+        #else:
+        #    print("Not doing anything ith poison trap")
 
     if ctx.ammo_traps > 0:
-        print("Ammo Traps ==", ctx.ammo_traps)
+        #print("Ammo Traps ==", ctx.ammo_traps)
         current_ammo_bytes = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.CURRENT_AMMO_ADDRESS, 4)
         current_ammo = int.from_bytes(current_ammo_bytes, byteorder="big")
 
         # TODO: Consider numbers based on the weapon held
 
         if current_ammo % 10 > 1:
-            print("Activate ammo trap")
             if current_ammo > 50:
                 new_ammo = 41
             elif current_ammo > 30:
@@ -3457,8 +3612,6 @@ async def check_junk(ctx, current_level, death):
             new_bytes = new_ammo.to_bytes(4, byteorder='big')
             writeBytes(GAME_ADDRESSES.CURRENT_AMMO_ADDRESS, new_bytes)
             ctx.ammo_traps -= 1
-        else:
-            print("Not doing anything ith ammo trap")
 
     remove = []
     for r in newly_handled:
@@ -3630,11 +3783,283 @@ async def clearout_individual_enemies_by_percentage(ctx, stageId):
         await ctx.send_msgs(message)
 
 
+async def handle_missing_set_weapons(current_level, ctx, new_outputs):
+
+    print("Call HMSW")
+    objects = Objects.GetDesirableObjectsForStage(current_level)
+    enemy_types = Objects.GetStandardEnemyTypes()
+
+    enemy_objects_for_stage = [ o for o in objects if o.object_type in enemy_types ]
+
+    #for x in new_outputs:
+    #    print("Output data", x[1], x)
+
+    #spawn_data, i, loaded_object_type, last_known_spawn, loaded_spawn_data,
+                                   #loaded_from_extra_pointer_bytes, link_id
+
+    NO_WEAPONS = [ObjectType.BLACK_LARVAE, ObjectType.BLACK_HAWK, ObjectType.BLACK_VOLT,
+                  ObjectType.BLACK_WING, ObjectType.ARTIFICIAL_CHAOS, ObjectType.SHADOW_ANDROID,
+                  ObjectType.EGG_CLOWN]
+
+    new_enemies = []
+
+    PRINT_ENEMY_WITH_WEAPON_INFO = False
+
+    for enemy in enemy_objects_for_stage:
+
+        loaded_info = [ s for s in new_outputs if s[1] == enemy.index ]
+        if len(loaded_info) == 0:
+            print("Could not find info:", enemy.index, new_outputs)
+            return
+        else:
+            byte_info = loaded_info[0]
+            weapon_reference_bytes = byte_info[5]
+
+            reference = "None"
+            type = None
+            weapon_id = None
+
+            if enemy.object_type == ObjectType.GUN_BEETLE:
+                type = "GUN BEETLE"
+                reference = int.from_bytes(weapon_reference_bytes[60:64], byteorder='big')
+                if reference == 0:
+                    reference = "RIFLE"
+                    weapon_id = WEAPONS.SEMI_AUTOMATIC_RIFLE
+                elif reference == 1:
+                    reference = "ROCKET 4"
+                    weapon_id = WEAPONS.FOUR_SHOT_RPG
+                elif reference == 2:
+                    reference = "BOMB"
+                    #weapon_id = WEAPONS.
+                elif reference == 3:
+                    reference = "MACHINEGUN"
+                    weapon_id = WEAPONS.SUB_MACHINE_GUN
+                elif reference == 4:
+                    reference = "NONE"
+
+            if enemy.object_type == ObjectType.GUN_ROBOT:
+                type = "GUN ROBOT"
+                reference = int.from_bytes(weapon_reference_bytes[32:36], byteorder='big')
+                if reference == 0:
+                    reference = "AUTORIFLE"
+                    weapon_id = WEAPONS.SEMI_AUTOMATIC_RIFLE
+                elif reference == 1:
+                    reference = "AIRCRAFTRIFLE"
+                    weapon_id = WEAPONS.HEAVY_MACHINE_GUN
+                elif reference == 2:
+                    reference = "BAZOOKA"
+                    weapon_id = WEAPONS.BAZOOKA
+                elif reference == 3:
+                    reference = "ROCKET4"
+                    weapon_id = WEAPONS.FOUR_SHOT_RPG
+                elif reference == 4:
+                    reference = "ROCKET8"
+                    weapon_id = WEAPONS.EIGHT_SHOT_RPG
+                elif reference == 5:
+                    reference = "LASERRIFLE"
+                    weapon_id = WEAPONS.LASER_RIFLE
+
+
+            if enemy.object_type == ObjectType.BLACK_WARRIOR:
+                type = "BLACK WARRIOR"
+                reference = int.from_bytes(weapon_reference_bytes[32:36], byteorder='big')
+                if reference == 0:
+                    reference = "NONE"
+                elif reference == 1:
+                    reference = "BLACKSWORD"
+                    weapon_id = WEAPONS.BLACK_SWORD
+                elif reference == 2:
+                    reference = "LIGHTSHOT"
+                    weapon_id = WEAPONS.LIGHT_SHOT
+                elif reference == 3:
+                    reference = "FLASHSHOT"
+                    weapon_id = WEAPONS.FLASH_SHOT
+                elif reference == 4:
+                    reference = "BLACKBARREL"
+                    weapon_id = WEAPONS.BLACK_BARREL
+                elif reference == 5:
+                    reference = "SPLITTER"
+                    weapon_id = WEAPONS.SPLITTER
+                elif reference == 6:
+                    reference = "VACUUMPOD"
+                    weapon_id = WEAPONS.VACUUM_POD
+                elif reference == 7:
+                    reference = "HEAVYSHOT"
+                    weapon_id = WEAPONS.HEAVY_SHOT
+                elif reference == 8:
+                    reference = "RINGSHOT"
+                    weapon_id = WEAPONS.RING_SHOT
+
+
+            if enemy.object_type == ObjectType.BLACK_WORM:
+                type = "BLACK WORM"
+                reference = int.from_bytes(weapon_reference_bytes[28:32], byteorder='big')
+                if reference == 0:
+                    reference = "BLACK"
+                    weapon_id = WEAPONS.WORM_SHOOTER
+                elif reference == 1:
+                    reference = "BLUE"
+                    weapon_id = WEAPONS.BIG_WORM_SHOOTER
+                elif reference == 2:
+                    reference = "GOLD"
+                    weapon_id = WEAPONS.WIDE_WORM_SHOOTER
+
+            if enemy.object_type == ObjectType.GUN_SOLDIER:
+                type = "GUN SOLDER"
+                reference = int.from_bytes(weapon_reference_bytes[32:36], byteorder='big')
+                if reference == 0:
+                    reference = "NONE"
+                elif reference == 1:
+                    reference = "KNIFE"
+                    weapon_id = WEAPONS.SURVIVAL_KNIFE
+                elif reference == 2:
+                    reference = "GUN"
+                    weapon_id = WEAPONS.PISTOL
+                elif reference == 3:
+                    reference = "MACHINEGUN"
+                    weapon_id = WEAPONS.SUB_MACHINE_GUN
+                elif reference == 4:
+                    reference = "RIFLE"
+                    weapon_id = WEAPONS.SEMI_AUTOMATIC_RIFLE
+                elif reference == 5:
+                    reference = "GRENADE"
+                    weapon_id = WEAPONS.GRENADE_LAUNCHER
+                elif reference == 6:
+                    reference = "MISSILE"
+                    weapon_id = WEAPONS.EIGHT_SHOT_RPG
+
+            if enemy.object_type == ObjectType.BIG_FOOT:
+                type = "BIG FOOT"
+                reference = int.from_bytes(weapon_reference_bytes[32:36], byteorder='big')
+                if reference == 0:
+                    reference = "VULCAN"
+                    weapon_id = WEAPONS.GATLING_GUN
+                elif reference == 1:
+                    reference = "MISSILE"
+                    weapon_id = WEAPONS.EIGHT_SHOT_RPG
+
+            if enemy.object_type == ObjectType.EGG_PAWN:
+                type = "EGG PAWN"
+                reference = int.from_bytes(weapon_reference_bytes[32:36], byteorder='big')
+                if reference == 0:
+                    reference = "NONE"
+                elif reference == 1:
+                    reference = "PISTOL"
+                    weapon_id = WEAPONS.EGG_GUN
+                elif reference == 2:
+                    reference = "BAZOOKA"
+                    weapon_id = WEAPONS.EGG_BAZOOKA
+                elif reference == 3:
+                    reference = "LANCE"
+                    weapon_id = WEAPONS.EGG_SPEAR
+
+            if enemy.object_type == ObjectType.BLACK_OAK:
+                type = "BLACK OAK"
+                reference = int.from_bytes(weapon_reference_bytes[32:36], byteorder='big')
+                if reference == 0:
+                    reference = "SWORD"
+                    weapon_id = WEAPONS.BLACK_SWORD
+                elif reference == 1:
+                    reference = "HAMMER"
+                    weapon_id = WEAPONS.DARK_HAMMER
+                elif reference == 2:
+                    reference = "BARREL"
+                    weapon_id = WEAPONS.BIG_BARREL
+
+            if enemy.object_type == ObjectType.BLACK_ASSASSIN:
+                type = "BLACK ASSASSIN"
+                reference = "REFRACTOR"
+                weapon_id = WEAPONS.REFRACTOR
+
+            if weapon_id is not None and enemy.weapon is not None:
+                if weapon_id != enemy.weapon:
+                    print("Weapon Error::", enemy.weapon, weapon_id, enemy.index)
+
+            #if type is not None:
+            #    print("Enemy weapon index is", type, enemy.index, enemy.name, reference)
+            if type is None and enemy.object_type not in NO_WEAPONS:
+                print("Unhandled type:", enemy.object_type)
+
+        new_enemy = SETObject(enemy.object_type, enemy.stage, enemy.index, enemy.name,
+                              region=enemy.region, weapon=weapon_id, is_hard=enemy.is_hard,
+                              vehicle=enemy.vehicle, count=enemy.count,
+                              restrictionType=enemy.restrictionType)
+        new_enemies.append(new_enemy)
+
+    if PRINT_ENEMY_WITH_WEAPON_INFO:
+        pathing_order = []
+        for enemy in new_enemies:
+            if enemy.region not in pathing_order:
+                pathing_order.append(enemy.region)
+
+        new_enemy_order = []
+
+        counting_index = 0
+        for path in pathing_order:
+            region_enemies = [ e for e in new_enemies if e.region == path ]
+
+            for i in region_enemies:
+                counting_index += 1
+                try:
+                    int_value = int(i.name)
+                    if str(int_value) == i.name:
+                        i.old_name = i.name
+                        i.name = str(counting_index)
+                except:
+                    pass
+
+                try:
+                    float_value = float(i.name)
+                    if str(float_value) == i.name:
+                        i.old_name = i.name
+                        i.name = str(counting_index)
+                except:
+                    pass
+
+
+                new_enemy_order.append(i)
+
+        for enemy in new_enemy_order:
+            out = EnemyToCodeString(enemy)
+            print(out)
+
+
+    pass
+
+def GetOldName(enemy):
+    if enemy.old_name is None:
+        return ''
+
+    return ', old_name=' + "\"" + enemy.old_name + "\""
+
+def EnemyToCodeString(enemy):
+    current_level = enemy.stage
+    output = (f"\tSETObject(ObjectType.{ObjectType(enemy.object_type).name}, "
+              f"Levels.STAGE_{Levels.LEVEL_ID_TO_LEVEL[current_level].upper().replace(' ', '_')}, {enemy.index}, \"{enemy.name}\", "
+              '\r\n\t\t'
+              f"region={('REGION_INDICES.' + GetStageRegionName(current_level, enemy.region)) if enemy.region is not None else 'None'}"
+              f"{(', weapon=WEAPONS.' + enemy.weapon.name) if enemy.weapon is not None else ''}"
+              f"{GetOldName(enemy)}"
+              f"{(', vehicle=ObjectTypeVehicles.' + ObjectTypeVehicles(enemy.vehicle).name) if enemy.vehicle is not None else ''}"
+              f"{', is_hard=True' if enemy.is_hard else ''}"
+              f"{(', restrictionType=' +  REGION_RESTRICTION_TYPES(enemy.restrictionType).name) if enemy.restrictionType is not None and enemy.restrictionType != REGION_RESTRICTION_TYPES.NoRestriction else ''}"
+              f"{(', count=' + str(enemy.count)) if enemy.count > 1 else ''}"
+              "),")
+
+    return output
+
+def GetStageRegionName(stage_id, region_id):
+    if region_id is None:
+        return None
+    stage_name = Names.LEVEL_ID_TO_LEVEL[stage_id].upper().replace(" ", "_")
+    result = [ l[0] for l in REGION_INDICES.__dict__.items() if l[0].startswith(stage_name) and l[1] == region_id]
+    if len(result) == 0:
+        return "Unknown"
+    return result[0]
+
 async def handle_objects(ctx, current_level):
-
-    time = datetime.now()
-
     if ctx.level_state is None or len(ctx.level_state.keys()) == 0:
+        ctx.client_cache = {}
         return
 
     if "object_status" not in ctx.level_state:
@@ -3652,7 +4077,7 @@ async def handle_objects(ctx, current_level):
     mission_clear_locations, mission_locations, end_location, enemysanity_locations, \
         checkpointsanity_locations, charactersanity_locations, \
         token_locations, keysanity_locations, weaponsanity_locations, boss_locations, \
-        warp_locations, object_locations = Locations.GetAllLocationInfo()
+        warp_locations, object_locations = Locations.GetActiveLocationInfo()
 
     force_despawn = 0x04
     spawn_inform = 0x01
@@ -3701,33 +4126,78 @@ async def handle_objects(ctx, current_level):
     allowed_vehicles = [info[unlock[0].item] for unlock in ctx.items_to_handle if unlock[0].item in info and \
                        info[unlock[0].item].type == "Vehicle"]
 
+    object_despawn_present = ( (1 if allowed_pulley else 0) +
+                               (1 if allowed_zipwire else 0) +
+                               (1 if allowed_heal_units else 0) +
+                               (1 if allowed_bombs else 0) +
+                               (1 if allowed_rockets else 0) +
+                               (1 if allowed_light_dashes else 0) +
+                               (1 if allowed_warp_holes else 0) +
+                               len(allowed_vehicles) )
+
+    force_full_check = False
+    if "Objects" in ctx.client_cache:
+        value = ctx.client_cache["Objects"]
+        if value != object_despawn_present:
+            ctx.client_cache["Objects"] = object_despawn_present
+            force_full_check = True
+    else:
+        ctx.client_cache["Objects"] = object_despawn_present
+
     messages = []
 
     states_to_add = {}
     states_to_remove = []
 
-    max_index = max([ o.index for o in relevant_objects])
+    if SHOW_SET_CHANGES:
+        max_index = length + 1
+    else:
+        max_index = max([o.index for o in relevant_objects])
 
-    full_loaded_bytes = dolphin_memory_engine.read_bytes(start_address, (0x2C * (max_index+1)))
+    bytes_size = (OBJECT_SIZE * (max_index+1))
 
-    # TODO: Load all object data here in one read rather than within the FOR loop
+    full_loaded_bytes = dolphin_memory_engine.read_bytes(start_address, bytes_size)
 
-    for object in relevant_objects:
+    if ctx.last_object_bytes is not None and not force_full_check:
+        previous_bytes = ctx.last_object_bytes
+        mask = [1 if (previous_bytes[i] ^ full_loaded_bytes[i]) else 0 for i in range(bytes_size)]
+        obj_mask = {}
+
+        for obj_idx in range(max_index + 1):
+            start = obj_idx * OBJECT_SIZE
+            end = start + OBJECT_SIZE
+            obj_mask[obj_idx] = True if any(mask[start:end]) else False
+
+        changed_objects = [c for c in relevant_objects if obj_mask[c.index]]
+    else:
+        changed_objects = relevant_objects
+
+    ctx.last_object_bytes = full_loaded_bytes
+
+    for object in changed_objects:
         object_index = object.index
 
         spawn_data = start_address + (0x2C * object_index) + 0x20
         base_index = (0x2C * object_index) + 0x20
-
         spawn_address = spawn_data + 0x03
+
+        check_save_byte = base_index + 0x01
         spawn_base_byte = base_index + 0x03
 
         object_type_index = base_index + 0x08
-
         extra_data_pointer = spawn_data + 0x10
 
+        if spawn_base_byte >= len(full_loaded_bytes):
+            print("Error, expected bytes", spawn_base_byte, object.index)
+            return
+
         loaded_bytes = [full_loaded_bytes[spawn_base_byte]]
+        loaded_check_bytes = [full_loaded_bytes[check_save_byte]]
         #loaded_bytes = dolphin_memory_engine.read_bytes(spawn_base_byte, 1)
         loaded_spawn_data = int.from_bytes(loaded_bytes, byteorder='big')
+        loaded_check_save_byte = int.from_bytes(loaded_check_bytes, byteorder='big')
+
+        use_spawn_for_completion = loaded_spawn_data
 
         loaded_bytes = full_loaded_bytes[object_type_index:object_type_index+2]
         #loaded_bytes = dolphin_memory_engine.read_bytes(object_type, 2)
@@ -3887,30 +4357,30 @@ async def handle_objects(ctx, current_level):
         elif vehicle_sanity and object.object_type == Objects.ObjectType.VEHICLE:
             spawn = False
             spawn_name = None
-            if object.vehicle == Objects.ObjectType.ObjectTypeVehicle.GUN_LIFT or \
-                object.vehicle == Objects.ObjectType.ObjectTypeVehicle.GUN_LIFT_FAST  :
+            if object.vehicle == ObjectTypeVehicles.GUN_LIFT or \
+                object.vehicle == ObjectTypeVehicles.GUN_LIFT_FAST  :
                 spawn_name = "Gun Lift"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.AIR_SAUCER:
+            elif object.vehicle == ObjectTypeVehicles.AIR_SAUCER:
                 spawn_name = "Air Saucer"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.ARMORED_CAR:
+            elif object.vehicle == ObjectTypeVehicles.ARMORED_CAR:
                 spawn_name = "Armored Car"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.BLACK_VOLT:
+            elif object.vehicle == ObjectTypeVehicles.BLACK_VOLT:
                 spawn_name = "Black Volt"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.BLACK_TURRET:
+            elif object.vehicle == ObjectTypeVehicles.BLACK_TURRET:
                 spawn_name = "Black Turret"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.BLACK_HAWK:
+            elif object.vehicle == ObjectTypeVehicles.BLACK_HAWK:
                 spawn_name = "Black Hawk"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.CONVERTIBLE:
+            elif object.vehicle == ObjectTypeVehicles.CONVERTIBLE:
                 spawn_name = "Convertible"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.GUN_CANNON:
+            elif object.vehicle == ObjectTypeVehicles.GUN_CANNON:
                 spawn_name = "Gun Cannon"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.GUN_JUMPER:
+            elif object.vehicle == ObjectTypeVehicles.GUN_JUMPER:
                 spawn_name = "Gun Jumper"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.GUN_MOTORCYCLE:
+            elif object.vehicle == ObjectTypeVehicles.GUN_MOTORCYCLE:
                 spawn_name = "Gun Motorcycle"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.GUN_TURRET:
+            elif object.vehicle == ObjectTypeVehicles.GUN_TURRET:
                 spawn_name = "Gun Turret"
-            elif object.vehicle == Objects.ObjectType.ObjectTypeVehicle.STANDARD_CAR:
+            elif object.vehicle == ObjectTypeVehicles.STANDARD_CAR:
                 spawn_name = "Standard Car"
 
             if spawn_name is None:
@@ -3927,7 +4397,7 @@ async def handle_objects(ctx, current_level):
                         states_to_remove.append(spawn_name)
 
         elif vehicle_sanity and object.object_type == Objects.ObjectType.BLACK_WARRIOR and \
-                object.vehicle == Objects.ObjectType.ObjectTypeVehicle.AIR_SAUCER:
+                object.vehicle == ObjectTypeVehicles.AIR_SAUCER:
             OnAirSaucerBytesDiff = 0x5C
             OnAirSaucerBytesAddress = loaded_extra_pointer + OnAirSaucerBytesDiff
 
@@ -3945,7 +4415,7 @@ async def handle_objects(ctx, current_level):
                     writeBytes(OnAirSaucerBytesAddress, on_air_saucer_bytes)
 
         elif vehicle_sanity and object.object_type == Objects.ObjectType.BLACK_VOLT and \
-                object.vehicle == Objects.ObjectType.ObjectTypeVehicle.BLACK_VOLT:
+                object.vehicle == ObjectTypeVehicles.BLACK_VOLT:
             OnAirSaucerBytesDiff = 0x38
             OnAirSaucerBytesAddress = loaded_extra_pointer + OnAirSaucerBytesDiff
 
@@ -3964,7 +4434,7 @@ async def handle_objects(ctx, current_level):
                     writeBytes(OnAirSaucerBytesAddress, spawn_on_kill_bytes)
 
         elif vehicle_sanity and object.object_type == Objects.ObjectType.BLACK_HAWK and \
-                object.vehicle == Objects.ObjectType.ObjectTypeVehicle.BLACK_HAWK:
+                object.vehicle == ObjectTypeVehicles.BLACK_HAWK:
 
             OnAirSaucerBytesDiff = 0x38
             OnAirSaucerBytesAddress = loaded_extra_pointer + OnAirSaucerBytesDiff
@@ -3984,7 +4454,7 @@ async def handle_objects(ctx, current_level):
                     writeBytes(OnAirSaucerBytesAddress, spawn_on_kill_bytes)
 
         elif vehicle_sanity and object.object_type == Objects.ObjectType.BLACK_ASSASSIN and \
-                object.vehicle == Objects.ObjectType.ObjectTypeVehicle.AIR_SAUCER:
+                object.vehicle == ObjectTypeVehicles.AIR_SAUCER:
             OnAirSaucerBytesDiff = 0x1C
             OnAirSaucerBytesAddress = loaded_extra_pointer + OnAirSaucerBytesDiff
 
@@ -4085,7 +4555,7 @@ async def handle_objects(ctx, current_level):
                     arch_location_complete = True
 
             if not arch_location_complete:
-                if loaded_spawn_data in object_values_complete:
+                if use_spawn_for_completion in object_values_complete:
                     ctx.level_state["object_status"][object.index] = 0x0B
                     messages.extend(related_locations)
 
@@ -4106,7 +4576,7 @@ async def handle_objects(ctx, current_level):
                     arch_location_complete = True
 
             if not arch_location_complete:
-                if loaded_spawn_data in (0x00, 0x08):
+                if use_spawn_for_completion in (0x00, 0x08):
                     ctx.level_state["object_status"][object.index] = 0x08
                     messages.extend(related_locations)
 
@@ -4121,16 +4591,7 @@ async def handle_objects(ctx, current_level):
                                            l not in ctx.handled
                                            and l not in ctx.checked_locations]) == 0
 
-            # TODO: Consider other options with the door, such as:
-            # Always open
-            # Open on N Key
-            # Open on Global Key
-            # Prevent opening animation
-            # etc.
-
-            door_status_address = spawn_data + 1
-            loaded_bytes = dolphin_memory_engine.read_bytes(door_status_address, 1)
-            current_door_status = int.from_bytes(loaded_bytes, byteorder='big')
+            use_spawn_for_completion = loaded_check_save_byte
 
             if object.index in ctx.level_state["object_status"]:
                 object_status = ctx.level_state["object_status"][object.index]
@@ -4138,9 +4599,18 @@ async def handle_objects(ctx, current_level):
                     arch_location_complete = True
 
             if not arch_location_complete:
-                if current_door_status == 0x40:
+                if use_spawn_for_completion == 0x40:
                     ctx.level_state["object_status"][object.index] = 0x00
                     messages.extend(related_locations)
+
+
+
+        if object.object_type == Objects.ObjectType.CHECKPOINT:
+            use_spawn_for_completion = loaded_check_save_byte
+
+            if use_spawn_for_completion == 0x40:
+                if object.count not in ctx.level_state["active_checkpoints"]:
+                    ctx.level_state["active_checkpoints"].append(object.count)
 
     if len(messages) > 0:
         message = [{"cmd": 'LocationChecks', "locations": messages}]
@@ -4298,11 +4768,14 @@ async def update_level_behaviour(ctx, current_level, death):
     # Set initial value (to level of value from server)
     # If higher than previous value, recognise as check and reduce by 1
 
+    if SHOW_SET_CHANGES:
+        await ShowSETChanges(current_level, ctx)
+
     await handle_objects(ctx, current_level)
 
     await clearout_individual_enemies_by_percentage(ctx, current_level)
 
-    #ShowSETChanges(current_level)
+
 
     #DisplayMessages(ctx)
 
@@ -4312,7 +4785,7 @@ async def update_level_behaviour(ctx, current_level, death):
     mission_clear_locations, mission_locations, end_location, enemysanity_locations,\
         checkpointsanity_locations, charactersanity_locations,\
         token_locations, keysanity_locations, weaponsanity_locations, boss_locations,\
-        warp_locations, object_locations = Locations.GetAllLocationInfo()
+        warp_locations, object_locations = Locations.GetActiveLocationInfo()
 
     handle_count = 0
 
@@ -4351,8 +4824,12 @@ async def update_level_behaviour(ctx, current_level, death):
         ctx.level_state["characters_set"] = False
         ctx.level_state["spawn_messages"] = []
         ctx.level_state["key_check_index"] = -1
+        ctx.level_state["checkpoint_check_index"] = -1
+        ctx.level_state["checkpoint_zero_available"] = False
+        ctx.level_state["checkpoint_zero_state"] = -1
         ctx.level_state["music_set"] = True
         ctx.checkpoint_trap_active = False
+        ctx.level_state["active_checkpoints"] = []
 
         ctx.checkpoint_snapshots = []
 
@@ -4916,46 +5393,10 @@ async def update_level_behaviour(ctx, current_level, death):
     # Check checkpoint flags and save the state when a new one is activated
     checkpoint_data_for_stage = [c for c in Locations.CheckpointLocations if c.stageId == current_level]
     if len(checkpoint_data_for_stage) > 0:
-        total_count = checkpoint_data_for_stage[0].total_count
-        max_checkpoint_bytes = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.CHECKPOINT_RESPAWN_ID, 1)
-        max_checkpoint = int.from_bytes(max_checkpoint_bytes, byteorder='big')
-
-        if (max_checkpoint == 0 and len(ctx.level_state.keys()) > 0 and
-                len(ctx.checkpoint_snapshots) > 1):
-            if not ctx.checkpoint_trap_active:
-                if ctx.debug_logging:
-                    logger.error("Detected a stage restart (CP)")
-                ctx.restart = True
-                ctx.level_state = {}
-                ctx.checkpoint_snapshots = []
-            else:
-                first_addr = GAME_ADDRESSES.CHECKPOINT_FLAGS[0]
-                checkpoint_status_bytes = dolphin_memory_engine.read_bytes(first_addr, 1)
-                checkpoint_status = int.from_bytes(checkpoint_status_bytes, byteorder='big') == 1
-                if not checkpoint_status:
-                    if ctx.debug_logging:
-                        logger.error("Detected a stage restart (CP) (with checktrap)")
-                    ctx.restart = True
-                    ctx.level_state = {}
-                    ctx.checkpoint_snapshots = []
-
-        active = []
-        new = []
-        for i in range(0, total_count):
-            addr = GAME_ADDRESSES.CHECKPOINT_FLAGS[i]
-            checkpoint_status_bytes = dolphin_memory_engine.read_bytes(addr, 1)
-            checkpoint_status = int.from_bytes(checkpoint_status_bytes, byteorder='big') == 1
-            if checkpoint_status:
-                active.append(i + 1)
-        max_active = max(active) if len(active) > 0 else 0
-        #if max_active != max_checkpoint:
-        #    if ctx.info_logging:
-        #        logger.error("Checkpoint data not valid %d %d", max_active, max_checkpoint)
-        #else:
+        active = ctx.level_state["active_checkpoints"]
         active_snapshots = [x[0] for x in ctx.checkpoint_snapshots]
         for a in active:
             if a not in active_snapshots:
-                new.append(a)
                 ctx.checkpoint_snapshots.append((a, deepcopy(ctx.level_state)))
                 if ctx.checkpoint_sanity:
                     locations = [c.locationId for c in checkpointsanity_locations if c.stageId == current_level and
@@ -5053,11 +5494,50 @@ async def update_level_behaviour(ctx, current_level, death):
 
                         ctx.level_state["key_check_index"] = ctx.last_rcvd_index
         else:
-            logger.error("Key index not present")
+            logger.error("Key index not present: %s", str(ctx.level_state))
 
     # If an objective is currently completable then check for pause state, etc
 
     is_back_button = 0x20
+    is_y_button = 0x10
+
+    # TODO: Resolve issues with setting states
+    ready_to_check_state = True
+    if ctx.checkpoint_shuffle or ctx.checkpoint_convenience:
+        if len(ctx.level_state.keys()) == 0:
+            ready_to_check_state = False
+
+        if "checkpoint_check_index" not in ctx.level_state:
+            ready_to_check_state = False
+            #ctx.level_state["checkpoint_check_index"] = -1
+
+        if "checkpoint_zero_state" not in ctx.level_state:
+            ready_to_check_state = False
+            #ctx.level_state["checkpoint_zero_state"] = False
+
+        if "checkpoint_zero_available" not in ctx.level_state:
+            ready_to_check_state = False
+            #ctx.level_state["checkpoint_zero_available"] = False
+
+    if ready_to_check_state and (ctx.checkpoint_shuffle or
+            (ctx.level_state["checkpoint_check_index"] == -1 and ctx.checkpoint_convenience)):
+        if ctx.level_state["checkpoint_check_index"] != ctx.last_rcvd_index:
+            enable_checkpoints(ctx, current_level)
+            ctx.level_state["checkpoint_check_index"] = ctx.last_rcvd_index
+
+    if ready_to_check_state and ctx.level_state["checkpoint_zero_available"]:
+        current_paused_data = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.is_paused_address, 1)
+        currently_paused = int.from_bytes(current_paused_data, byteorder='big') == 1
+
+        button_data = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.INPUT_DETECTOR+1, 1)
+        button_data_byte = int.from_bytes(button_data, byteorder='big')
+        if currently_paused and button_data_byte == is_y_button and ctx.level_state["checkpoint_zero_state"] == -1:
+            setCheckpointZero(ctx, current_level)
+            ctx.level_state["checkpoint_zero_state"] = 1
+        elif ctx.level_state["checkpoint_zero_state"] == 1 and not currently_paused:
+            ctx.level_state["checkpoint_zero_state"] = 2
+        elif currently_paused and button_data_byte == is_y_button and ctx.level_state["checkpoint_zero_state"] == 2:
+            ctx.successful_spawn_write = False
 
     if ctx.objective_sanity:
         if (dark_max_hit and current_alignment == MISSION_ALIGNMENT_DARK) or \
@@ -5065,7 +5545,7 @@ async def update_level_behaviour(ctx, current_level, death):
             current_paused_data = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.is_paused_address, 1)
             currently_paused = int.from_bytes(current_paused_data, byteorder='big') == 1
 
-            button_data = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.button_menu_address, 1)
+            button_data = dolphin_memory_engine.read_bytes(GAME_ADDRESSES.INPUT_DETECTOR+1, 1)
             button_data_byte = int.from_bytes(button_data, byteorder='big')
             if currently_paused and button_data_byte == is_back_button:
                 if current_alignment == MISSION_ALIGNMENT_DARK:
@@ -5094,7 +5574,8 @@ async def check_death(ctx: ShTHContext):
         ctx.dead = True
         return True
 
-    if level_status_value == LevelStatusOptions.Restarting:
+    if level_status_value == LevelStatusOptions.Restarting and not ctx.restart:
+        logger.info("Detected a stage restart")
         ctx.restart = True
 
     ctx.dead = False
@@ -5124,6 +5605,7 @@ def CheckGateConditions(ctx: ShTHContext):
     current_items = [ info[i.item].name for i in ctx.items_received ]
 
     max_gate = 0
+
     for item in required_items.items():
         gate_no = item[0]
         gate_reqs = item[1]
@@ -5151,17 +5633,18 @@ def CheckGateConditions(ctx: ShTHContext):
                     logger.info(f"Gate {gate[0]} is open!")
                     logger.info("")
                     opening = True
+
+                print("Stage is available by gate", stage)
                 ctx.available_levels.append(stage)
 
 def resetGameState(ctx):
     if ctx.initialised:
         ctx.successful_shuffle = False
+        ctx.successful_spawn_write = False
         ctx.initialised = False
         ctx.select_initialised = False
 
 music_files = [
-"sng_Battle1.adx",
-"sng_Battle2.adx",
 "sng_E1001.adx",
 "sng_E4101.adx",
 "sng_E4201.adx",
@@ -5223,6 +5706,12 @@ async def set_music(ctx, level):
     if level is None:
         return
 
+    if ctx.restart:
+        return
+
+    if not ctx.music_shuffle:
+        return
+
     set_state = False
     if ("music_set" not in ctx.level_state or not ctx.level_state["music_set"]) and ctx.music is None:
         set_state = True
@@ -5248,7 +5737,7 @@ async def check_charactersanity(ctx, level):
      enemysanity_locations, checkpointsanity_locations,
      charactersanity_locations, token_locations, keysanity_locations,
      weaponsanity_locations, boss_locations, warp_locations,
-     object_locations) = Locations.GetAllLocationInfo()
+     object_locations) = Locations.GetActiveLocationInfo()
 
     new_met_characters = []
 
@@ -5341,6 +5830,7 @@ async def dolphin_sync_task(ctx: ShTHContext):
                 if not ctx.initialised:
                     ctx.initialised = True
                 check_story(ctx)
+                check_level_spawns(ctx)
 
                 death = await check_death(ctx)
                 if death is None:

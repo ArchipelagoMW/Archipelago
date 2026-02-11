@@ -50,6 +50,9 @@ class ShahrazadItem(Item):
 
 
 class ShahrazadWorld(World):
+    """
+    A standalone game. All it does, is take a pre-existing AP game, and places a logic requirement to reach its Menu location on an item. This item is shuffled and the game cannot be played until you receive this item. When you make a YAML, you can add as many Scheherazade games as you wan
+    """
     game = "Shahrazad"
     topology_present = False
     item_name_to_id = {}  # will fill in stage_generate_basic()

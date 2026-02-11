@@ -349,6 +349,11 @@ if not is_frozen():
             if not worldtype:
                 logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
                 continue
+
+            if worldtype.hidden:
+                logging.info(f"Skipping build of \"{worldname}\" as it is marked as hidden.")
+                continue
+
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
@@ -361,7 +366,7 @@ if not is_frozen():
                 )
                 assert manifest["game"] == worldtype.game, (
                     f"World directory {world_directory} has an archipelago.json manifest file, but value of the "
-                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game}))."
                 )
             else:
                 manifest = {}
@@ -433,3 +438,130 @@ if not is_frozen():
 
     components.append(Component("Build Custom APWorlds", func=_build_custom_apworlds, cli=True,
                                 description="Build only Custom APWorlds from loose-file custom_world folders."))
+
+if not is_frozen():
+    def _build_local_custom_apworlds(*launch_args: str):
+        import json
+        import os
+        import zipfile
+
+        from worlds import AutoWorldRegister
+        from worlds.Files import APWorldContainer
+        from Launcher import open_folder
+
+        import argparse
+        parser = argparse.ArgumentParser("Build script for Custom APWorlds")
+        parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of Custom APWorlds to build.")
+        world_args = []
+        with open("custom_worlds.txt", "r") as f:
+            world_list = f.read()
+            custom_worlds = world_list.split("\n")
+            for world in custom_worlds:
+                current_world = world.replace("\"", "")
+                current_world = current_world.rstrip()
+                if current_world:
+                    world_args.append(current_world)
+
+        args = parser.parse_args(world_args)
+
+        if args.worlds:
+            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
+        else:
+            games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
+                     if not worldtype.zip_path]
+
+        apworlds_folder = os.path.join("build", "apworlds")
+        os.makedirs(apworlds_folder, exist_ok=True)
+        for worldname, worldtype in games:
+            if not worldtype:
+                logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
+                continue
+
+            if worldtype.hidden:
+                logging.info(f"Skipping build of \"{worldname}\" as it is marked as hidden.")
+                continue
+
+            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+            world_directory = os.path.join("worlds", file_name)
+            if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
+                with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
+                    manifest = json.load(manifest_file)
+
+                assert "game" in manifest, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but it "
+                    "does not define a \"game\"."
+                )
+                assert manifest["game"] == worldtype.game, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but value of the "
+                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game}))."
+                )
+            else:
+                manifest = {}
+
+            zip_path = os.path.join(apworlds_folder, file_name + ".apworld")
+            apworld = APWorldContainer(str(zip_path))
+            apworld.game = worldtype.game
+            manifest.update(apworld.get_manifest())
+            apworld.manifest_path = f"{file_name}/archipelago.json"
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
+                                 compresslevel=9) as zf:
+                for path in pathlib.Path(world_directory).rglob("*"):
+                    relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
+                    if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
+                        continue
+                    if not relative_path.endswith("archipelago.json"):
+                        zf.write(path, relative_path)
+                zf.writestr(apworld.manifest_path, json.dumps(manifest))
+
+        package_pop_trackers()
+
+
+    def package_pop_trackers():
+        import os
+        import zipfile
+        pop_tracker_directory = os.path.join("ashipelago", "pop_trackers")
+        pop_tracker_folders = [item for item in os.listdir(pop_tracker_directory) if os.path.isdir(os.path.join(pop_tracker_directory, item))]
+        pop_tracker_folder = os.path.join("build", "pop_trackers")
+        os.makedirs(pop_tracker_folder, exist_ok=True)
+
+        for world in pop_tracker_folders:
+            zip_path = os.path.join(pop_tracker_folder, world + "_pack.zip")
+            root_folder = None
+            source_folders = ["src",
+                              "donkey_kong_country_3_randomizer_porygone",
+                              "Dragon Warrior",
+                              "TheMessengerTrackPack",
+                              "sonic_adventure_2_battle_randomizer_porygone",
+                              "pack",
+                              "data",
+                              "super_mario_world_randomizer_porygone"]
+            for source in source_folders:
+                world_directory = os.path.join(pop_tracker_directory, world, source)
+                if pathlib.Path(world_directory).is_dir():
+                    root_folder = source
+                    break
+
+            if root_folder is None:
+                logging.error(f"No valid pop tracker source folder found, skipping {world}'s pop tracker")
+                continue
+
+            with (zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
+                                  compresslevel=9) as zf):
+                for path in pathlib.Path(world_directory).rglob("*"):
+                    relative_path = os.path.join(*path.parts[path.parts.index(root_folder) + 1:])
+                    exclusions = ["__MACOSX",
+                                  ".DS_STORE",
+                                  "__pycache__",
+                                  ".gitignore",
+                                  ".github",
+                                  "build.sh",
+                                  "buildfunctions.sh",
+                                  ".vscode",
+                                  ".idea"]
+                    if any(sub_string in relative_path for sub_string in exclusions):
+                        continue
+
+                    zf.write(path, relative_path)
+
+    components.append(Component("Build Local Custom APWorlds", func=_build_local_custom_apworlds, cli=True,
+                                description="Build only Local Custom APWorlds from loose-file custom_world folders."))

@@ -1,0 +1,7 @@
+{
+  "game": "Sonic the Hedgehog 1",
+  "server_version": "0.1.1",
+  "discord_channel": "https://discord.com/channels/731205301247803413/1212629606608408576",
+  "pop_tracker": "https://github.com/kaithar/Archipelago/releases/download/sonic_1-v0.1.1/sonic1.poptracker.zip",
+  "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/sonic1.apworld"
+}

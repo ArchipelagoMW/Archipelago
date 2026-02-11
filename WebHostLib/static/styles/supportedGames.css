@@ -18,7 +18,8 @@
     margin-bottom: 2px;
     text-transform: none;
 }
-#games h2, #games details summary.exp{
+
+#games h2, #games details summary.experimental{
     color: #f58505;
     margin-bottom: 2px;
     text-transform: none;
@@ -46,4 +47,79 @@
 
 #games .page-controls button{
     margin-left: 0.5rem;
+}
+
+/* Favorites Section Styles */
+#favorites-section {
+    margin-bottom: 0;
+}
+
+#favorites-section h2 {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+#favorites-list {
+    margin-bottom: 0;
+}
+
+.favorites-divider {
+    border: none;
+    border-top: 1px solid white;
+    margin: 1rem 0;
+    opacity: 0.7
+}
+
+/* Star Icon Styles */
+.star-icon {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin-left: 0.5rem;
+    color: transparent;
+    text-shadow: 0 0 0 #711173;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.star-icon:hover {
+    transform: scale(1.1);
+    color: #137311;
+    text-shadow: 0 0 0 #137311;
+}
+
+.star-icon.favorited {
+    color: #137311;
+    text-shadow: 0 0 0 #137311;
+}
+
+.star-icon.favorited:hover {
+    color: #711173;
+    text-shadow: 0 0 0 #711173;
+}
+
+/* Favorite Game Item Styles */
+.favorite-game-item {
+    transition: all 0.2s ease;
+}
+
+.favorite-game-item details {
+    margin: 0;
+}
+
+.favorite-game-item details summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #711173;
+    font-size: 0.9em;
+}
+
+.favorite-game-item .star-icon {
+    color: #137311;
+    text-shadow: 0 0 0 #137311;
+}
+
+.favorite-game-item .star-icon:hover {
+    color: #711173;
+    text-shadow: 0 0 0 #711173;
 }

@@ -163,7 +163,7 @@ bestiary_entries = {
 
     # Miscellaneous
     JournalName.SCORPION.value:      Spelunky2LocationData(117, WORLD_2_STRING),
-    JournalName.BEE.value:           Spelunky2LocationData(118, WorldName.JUNGLE),
+    JournalName.BEE.value:           Spelunky2LocationData(118, WorldName.TEMPLE),
     JournalName.QUEEN_BEE.value:     Spelunky2LocationData(119, WorldName.JUNGLE),
     JournalName.SCARAB.value:        Spelunky2LocationData(120, WorldName.DWELLING),
     JournalName.GOLDEN_MONKEY.value: Spelunky2LocationData(121, WORLD_2_STRING),

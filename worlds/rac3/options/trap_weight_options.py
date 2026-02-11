@@ -1,6 +1,6 @@
 from Options import ItemDict
-from worlds.rac3 import RAC3OPTION
 from worlds.rac3.constants.data.item import trap_data
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class TrapWeight(ItemDict):

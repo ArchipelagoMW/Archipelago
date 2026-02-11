@@ -157,6 +157,9 @@ def create_regions(world: "OuterWildsWorld") -> None:
         menu.add_exits(["Giant's Deep"])
     elif options.spawn == Spawn.option_stranger:
         menu.add_exits(["Stranger Sunside Hangar"])
+    elif options.spawn == Spawn.option_deep_bramble:
+        menu.add_exits(["Deep Bramble"])
+        mw.get_entrance("Menu -> Space", p).access_rule = lambda state: state.has_all(["Launch Codes", "Deep Bramble Coordinates"], p)
 
     if world.warps == 'vanilla':
         def has_codes(state): return state.has("Nomai Warp Codes", p)
@@ -213,7 +216,7 @@ def create_regions(world: "OuterWildsWorld") -> None:
             r2 = mw.get_region(region_name_2, p)
             r1.connect(r2, "%s->%s warp" % (region_name_1, region_name_2), rule)
             r2.connect(r1, "%s->%s warp" % (region_name_2, region_name_1), rule)
-        
+
         # To access the Black Hole Forge without the Launch Codes, there needs to be
         # a path from Brittle Hollow proper to the Hanging City Ceiling. This path
         # exists if the BHF warp is connected to one of the other two warps accessible
@@ -247,14 +250,14 @@ def eval_criterion(state: CollectionState, p: int, criterion: Any, split_transla
             return False
         key, value = next(iter(criterion.items()))
 
-        # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
-        # mean exactly what they sound like, and those are the only kinds of criteria.
         if key == "item" and isinstance(value, str):
             if not split_translator and value.startswith("Translator ("):
                 return state.has("Translator", p)
             return state.has(value, p)
         elif key == "anyOf" and isinstance(value, list):
             return any(eval_criterion(state, p, sub_criterion, split_translator) for sub_criterion in value)
+        elif key == "allOf" and isinstance(value, list):
+            return all(eval_criterion(state, p, sub_criterion, split_translator) for sub_criterion in value)
         elif key == "location" and isinstance(value, str):
             return state.can_reach(value, "Location", p)
         elif key == "region" and isinstance(value, str):
@@ -280,7 +283,7 @@ def regions_referenced_by_criterion(criterion: Any) -> list[str]:
         key, value = next(iter(criterion.items()))
         if key == "item":
             return []
-        elif key == "anyOf":
+        elif key == "anyOf" or key == "allOf":
             return [region for sub_criterion in value for region in regions_referenced_by_criterion(sub_criterion)]
         elif key == "location":
             return [location_data_table[value].region]

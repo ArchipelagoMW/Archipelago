@@ -82,15 +82,33 @@ class LogicDifficulty(Choice):
     normal: easier to get checks, but still restrictive in some ways.
     hard: bare minimum required to achive checks."""
     display_name = "Logic Difficulty"
-    option_easy = 0
-    option_normal = 1
-    option_hard = 2
-    default = 1
+    option_very_easy = 1
+    option_easy = 2
+    option_normal = 3
+    option_hard = 4
+    option_very_hard = 5
+    default = 3
+    
+    
+class PointShopLogicLevel(Choice):
+    """When logic expects you to be able to buy shop items.
+    one: Matches 1x green letter logic, point generation expected to be very low.
+    two: Matches 2x green letter logic.
+    three: Matches 3x green letter logic, default level, reasonable level of point generation.
+    four: Matches 4x green letter logic.
+    five: Matches 5x green letter logic, point generation expected to be much higher."""
+    display_name = "Point Shop Logic Level"
+    option_one = 1
+    option_two = 2
+    option_three = 3
+    option_four = 4
+    option_five = 5
+    default = 3
     
 class WordWeighting(Range): 
     """How likely new words fit with the letters you have unlocked."""
     display_name = "Word Weighting"
-    range_start = 0
+    range_start = 1
     default = 3
     range_end = 10
     
@@ -184,21 +202,21 @@ class ShopPointsItemSize(Range):
 class ShopPointsItemDefaultFiller(Toggle):
     """Whether the default filler item is point shop points, extra fillers are Suggestions otherwise."""
     display_name = "Shop Points as Default Filler"
-   
+
 class BadGuessTrapPercent(Range):
     """What percentage of filler items will be replaced with Bad Guess traps."""
     display_name = "Bad Guess Trap Reward Percent"
     range_start = 0
     range_end = 100
     default = 0
-    
+
 class RandomGuessTrapPercent(Range):
     """What percentage of filler items will be replaced with Random Guess traps."""
     display_name = "Random Guess Trap Reward Percent"
     range_start = 0
     range_end = 100
     default = 10
-    
+
 class ExtraCooldownTrapPercent(Range):
     """What percentage of filler items will be replaced with Extra Cooldown traps."""
     display_name = "Extra Cooldown Trap Percent"
@@ -226,6 +244,7 @@ class WordipelagoOptions(PerGameCommonOptions):
     
     # difficulty
     logic_difficulty: LogicDifficulty
+    point_shop_logic_level: PointShopLogicLevel
     word_weighting: WordWeighting
     
     # Win Conditions
@@ -273,6 +292,7 @@ option_groups = [
     ]),
     OptionGroup("Difficulty", [
         LogicDifficulty,
+        PointShopLogicLevel,
         WordWeighting
     ]),
     OptionGroup("Locations", [

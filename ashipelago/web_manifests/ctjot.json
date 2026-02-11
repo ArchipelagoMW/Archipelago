@@ -1,6 +1,7 @@
 {
   "game": "Chrono Trigger Jets of Time",
   "server_version": "0.0.3",
+  "display_name": "Chrono Trigger - Jets of Time",
   "discord_channel": "https://discord.com/channels/731205301247803413/1063559984148906035",
   "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ctjot_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ctjot.apworld"

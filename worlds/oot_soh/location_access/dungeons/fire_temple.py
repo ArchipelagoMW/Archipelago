@@ -9,13 +9,13 @@ class EventLocations(StrEnum):
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_ROOM_SWITCH = "Fire Temple Loop Hammer Switch Room Switch"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM = "Fire Temple Fire Maze Upper Platform"
     FIRE_TEMPLE_VOLVAGIA = "Fire Temple Volvagia"
-    FIRE_TEMPLE_SHORTCUT_SWITCH = "Fire Temple Shorcut Switch"
+    FIRE_TEMPLE_SHORTCUT_SWITCH = "Fire Temple Shortcut Switch"
 
 
 class LocalEvents(StrEnum):
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT = "Fire Temple Loop Hammer Switch Hit"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM_HIT = "Fire Temple Fire Maze Upper Platform Hit"
-    FIRE_TEMPLE_SHORTCUT_SWITCH_HIT = "Fire Temple Shorcut Switch Hit"
+    FIRE_TEMPLE_SHORTCUT_SWITCH_HIT = "Fire Temple Shortcut Switch Hit"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -62,7 +62,7 @@ def set_region_rules(world: "SohWorld") -> None:
              (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle)))),
     ])
     # Connections
-    connect_regions(Regions.FIRE_TEMPLE_FIRST_ROOM, world, [
+    connect_regions(Regions.FIRE_TEMPLE_NEAR_BOSS_ROOM, world, [
         (Regions.FIRE_TEMPLE_FIRST_ROOM, lambda bundle: True),
         (Regions.FIRE_TEMPLE_BOSS_ENTRYWAY, lambda bundle:
             (is_adult(bundle) and

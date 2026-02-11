@@ -1,3 +1,5 @@
+from itertools import count
+
 from BaseClasses import CollectionState
 from Options import Accessibility
 from ..Constants import *
@@ -309,6 +311,12 @@ def oos_can_beat_required_golden_beasts(state: CollectionState, player: int):
     return beast_count >= state.multiworld.worlds[player].options.golden_beasts_requirement.value
 
 
+def oos_can_complete_d11_puzzle(state: CollectionState, player: int) -> bool:
+    if not state.multiworld.worlds[player].options.shuffle_dungeons:
+        return True
+    return [state.can_reach(f"enter d{i}", player=player) for i in range(1, 9)].count(True) >= 7  # Can deduce the last one once 7 are known
+
+
 # Various item predicates ###########################################
 
 def oos_has_rupees(state: CollectionState, player: int, amount: int):
@@ -464,8 +472,7 @@ def oos_has_bombs(state: CollectionState, player: int, amount: int = 1):
             # from D2 moblin room even if they never had bombs before
             amount == 1,
             oos_option_medium_logic(state, player),
-            state.has("_reached_d2_bracelet_room", player),
-            oos_can_harvest_regrowing_bush(state, player, False)
+            state.has("_wild_bombs", player),
         ])
     ])
 
@@ -697,11 +704,15 @@ def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion
     ])
 
 
-def oos_can_harvest_regrowing_bush(state: CollectionState, player: int, allow_bombs: bool = True):
+def oos_can_harvest_regrowing_bush(state: CollectionState, player: int):
     return any([
         oos_has_sword(state, player),
         oos_has_fools_ore(state, player),
-        allow_bombs and oos_has_bombs(state, player)
+        oos_has_bombs(state, player),
+        all([
+            oos_option_medium_logic(state, player),
+            oos_has_bombchus(state, player, 4)
+        ])
     ])
 
 
@@ -752,7 +763,7 @@ def oos_can_break_flowers(state: CollectionState, player: int, can_summon_compan
                 ]),
                 all([
                     allow_bombchus,
-                    oos_has_bombchus(state, player, 5)
+                    oos_has_bombchus(state, player, 4)
                 ])
             ])
         ]),
@@ -770,7 +781,7 @@ def oos_can_break_crystal(state: CollectionState, player: int):
         ]),
         all([
             oos_option_medium_logic(state, player),
-            oos_has_bombchus(state, player, 5)
+            oos_has_bombchus(state, player, 4)
         ]),
     ])
 
@@ -1031,22 +1042,14 @@ def oos_can_kill_d2_hardhat(state: CollectionState, player: int):
                 oos_has_scent_seeds(state, player),
                 oos_has_gale_seeds(state, player),
                 oos_has_mystery_seeds(state, player)
-            ])
-        ]),
-        all([
-            oos_option_hard_logic(state, player),
-            oos_has_shovel(state, player)
+            ]),
+            oos_has_bombchus(state, player, 2)
         ])
     ])
 
 
 def oos_can_kill_d2_far_moblin(state: CollectionState, player: int):
     return any([
-        # Use the regrowable bombs that are there
-        oos_has_sword(state, player),
-        oos_has_fools_ore(state, player),
-        oos_has_bombs(state, player),
-
         oos_can_kill_normal_using_slingshot(state, player),
         all([
             any([
@@ -1132,7 +1135,7 @@ def oos_can_remove_rockslide(state: CollectionState, player: int, can_summon_com
         oos_has_bombs(state, player),
         all([
             oos_option_medium_logic(state, player),
-            oos_has_bombchus(state, player, 5)
+            oos_has_bombchus(state, player, 4)
         ]),
         all([
             can_summon_companion,
@@ -1302,6 +1305,7 @@ def oos_self_locking_small_key(state: CollectionState, player: int, region_name:
 
 
 # Rooster adventure logic  ######################################################
+
 def oos_roosters(state: CollectionState, player: int):
     if state.tloz_oos_available_cuccos[player] is None:
         # This computes cuccos for the whole game then caches it (total, top, bottom)

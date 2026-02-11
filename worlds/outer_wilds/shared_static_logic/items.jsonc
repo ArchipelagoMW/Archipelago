@@ -104,5 +104,23 @@
     { "category": "hn2", "code": 1734473758, "name": "Magistarium Dormitory Access Code", "type": "progression" },
     { "category": "hn2", "code": 1734473759, "name": "Magistarium Engine Access Code", "type": "progression" },
 
-    { "category": "fq", "code": 1734473760, "name": "Hearthian Radio Frequency", "type": "progression" }
+    { "category": "fq", "code": 1734473760, "name": "Hearthian Radio Frequency", "type": "progression" },
+
+    { "category": "fc", "split_translator": true, "code": 1734473766, "name": "Translator (Deep Bramble)", "type": "progression" },
+    { "category": "fc", "code": 1734473767, "name": "Expanded Dictionary", "type": "progression" },
+
+    { "category": "fc", "code": 1734473768, "name": "Deep Bramble Coordinates", "type": "progression" },
+    { "category": "fc", "code": 1734473769, "name": "Taming Techniques", "type": "progression" },
+    { "category": "fc", "code": 1734473770, "name": "Crystal Repair Manual", "type": "progression" },
+    { "category": "fc", "code": 1734473771, "name": "Thermal Insulation", "type": "progression" },
+    { "category": "fc", "code": 1734473772, "name": "Probability Rule", "type": "progression" },
+
+    { "category": "fc", "code": 1734473773, "name": "Nomai Trailmarkers Frequency", "type": "progression" },
+    { "category": "fc", "code": 1734473774, "name": "Amplified Ambience Signal", "type": "useful" },
+    { "category": "fc", "code": 1734473775, "name": "Gravitational Anomaly Signal", "type": "progression" },
+    { "category": "fc", "code": 1734473776, "name": "Geothermal Activity Signal", "type": "progression" },
+    { "category": "fc", "code": 1734473777, "name": "Echolocation Tones Frequency", "type": "progression" },
+    { "category": "fc", "code": 1734473778, "name": "Hot Shard Signal", "type": "progression" },
+
+    { "category": "eh", "code": 1734473779, "name": "Threader", "type": "progression" }
 ]

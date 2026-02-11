@@ -39,7 +39,7 @@ def add_locations(parent_region: Regions, world: "SohWorld",
         if len(location) > 1:
             locationRule = location[1]  # type: ignore # noqa
         if locationName in world.included_locations:
-            locationAddress = world.included_locations.pop(location[0])
+            locationAddress = world.included_locations.pop(location[0]).loc_id
             world.get_region(parent_region).add_locations(
                 {str(locationName): locationAddress}, SohLocation)
             set_rule(world.get_location(locationName),
@@ -94,7 +94,7 @@ def can_use(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
     if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
         return can_use(Items.FAIRY_BOW, bundle)
 
-    if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
+    if item in (Items.BOMBCHU_BAG, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
         return bombchu_refill(bundle)
 
     if item == Items.FISHING_POLE:
@@ -121,7 +121,7 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
     if item == Items.STICKS:
         return state.has_all((Events.CAN_FARM_STICKS, Items.DEKU_STICK_BAG), player)
 
-    if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
+    if item in (Items.BOMBCHU_BAG, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
         return bombchus_enabled(bundle)
 
     if item == Items.NUTS:
@@ -135,6 +135,12 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
 
     if item == Items.HYLIAN_SHIELD:
         return state.has(Items.BUY_HYLIAN_SHIELD, player)
+
+    if item == Items.GORON_TUNIC:
+        return state.has_any({Items.BUY_GORON_TUNIC, Items.GORON_TUNIC}, player)
+
+    if item == Items.ZORA_TUNIC:
+        return state.has_any({Items.BUY_ZORA_TUNIC, Items.ZORA_TUNIC}, player)
 
     if item == Items.SCARECROW:
         return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
@@ -151,9 +157,6 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
     if item in {Items.POCKET_EGG, Items.COJIRO, Items.ODD_MUSHROOM, Items.ODD_POTION, Items.POACHERS_SAW,
                 Items.BROKEN_GORONS_SWORD, Items.PRESCRIPTION, Items.EYEBALL_FROG, Items.WORLDS_FINEST_EYEDROPS}:
         return not world.options.shuffle_adult_trade_items or state.has(item, player)
-
-    if item == Items.BOTTLE_WITH_BIG_POE:
-        return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE, player)
 
     if item == Items.BOTTLE_WITH_BLUE_FIRE:
         return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BLUE_FIRE, player) or state.has(Items.BUY_BLUE_FIRE, player))
@@ -186,6 +189,9 @@ wallet_capacities: dict[Items, int] = {
     Items.TYCOON_WALLET: 999
 }
 
+def can_afford_slot(slot: str, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    slot_price = bundle[2].shop_prices[slot]
+    return can_afford(slot_price, bundle)
 
 def can_afford(price: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     for wallet, amount in wallet_capacities.items():
@@ -236,7 +242,7 @@ def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
     state = bundle[0]
     world = bundle[2]
     if world.options.bombchu_bag:
-        return state.has(Items.PROGRESSIVE_BOMBCHU, world.player)
+        return state.has(Items.BOMBCHU_BAG, world.player)
     return state.has(Items.BOMB_BAG, world.player)
 
 
@@ -269,7 +275,7 @@ def can_play_song(song: StrEnum, bundle: tuple[CollectionState, Regions, "SohWor
 
 def has_explosives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to explosives (bombs or bombchus)."""
-    return can_use_any([Items.BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundle)
+    return can_use_any([Items.BOMB_BAG, Items.BOMBCHU_BAG], bundle)
 
 
 def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -382,9 +388,8 @@ def take_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def can_do_trick(trick: Tricks, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    # TODO: Implement specific trick logic based on world settings
-    # For now, return False for safety (no tricks assumed)
-    return False
+    # check if we have the trick enabled, the GLITCHED item is for Universal Tracker purposes.
+    return (bundle[2].options.enable_all_tricks.value or trick.value in bundle[2].options.tricks_in_logic.value) or has_item(Items.GLITCHED, bundle)
 
 
 def can_get_nighttime_gs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -463,7 +468,7 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
     return (hookshot_or_boomerang(bundle) or
-            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or
+            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.BOMBCHU_BAG, bundle)) or
             (bool(world.options.slingbow_break_beehives) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))))
 
 
@@ -1013,9 +1018,8 @@ def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int
     return 2
 
 
-# TODO implement when shuffling keys within a dungeon is implemented
 def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return True
+    return bundle[2].options.small_key_shuffle == "anywhere" or bundle[2].options.small_key_shuffle == "overworld" or bundle[2].options.small_key_shuffle == "any_dungeon"
 
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:

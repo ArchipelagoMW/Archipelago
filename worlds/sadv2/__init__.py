@@ -26,6 +26,9 @@ class SADV2WebWorld(WebWorld):
     )]
 
 class SADV2World(World):
+    """
+    Dr. Eggman is up to his old tricks again, and the world's fastest hedgehog must put a stop to it. Your favorite characters are back in Sonic's fastest adventure ever. A new friend named Cream the Rabbit joins Sonic as they embark on a blazingly fast quest to collect Chaos Emeralds and thwart Dr. Eggman's nefarious machines. Evade the obstacles and enemies, unlock secret areas, and uncover the hidden Chaos Emeralds to transform into Super Sonic for the final battle. With all-new backgrounds and faster speed than ever before, all of the lightning action of Sonic is back.
+    """
     game = "Sonic Advance 2"
     web = SADV2WebWorld()
     options_dataclass = SADV2Options

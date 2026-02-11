@@ -147,9 +147,6 @@
 # treasureCollectionBehaviourTable
 3f/6c49/: db <wSwitchHookLevel,$08
 
-3f/6dca/: db text.hook1.treasure
-3f/6dd1/: db text.hook2.treasure
-
 # treasureObjectData
 15/5151/: |
   db $80
@@ -163,16 +160,17 @@
 3b/7f7c/sndSwitch2Channel2: /copy a,$3a,$7ada,17
 
 # replacing the standard dummy datas of sword and boomerang
-3f/6dc4/treasureDisplayData_switchHook: /copy a,$3f,$313e,$0e
+3f/6dc4/treasureDisplayData_switchHook: |
+  db TREASURE_SWITCH_HOOK,$a6,$04,$00,$00,$00,text.hook1.inventory
+  db TREASURE_SWITCH_HOOK,$a6,$04,$00,$00,$00,text.hook2.inventory
 # gfx
 1b/7ae0/: /copy a,$19,$03e0,$20
-# Apply the sprite to the inventory item by changing the treasureDisplayData
-3f/6dc5/: db $a6
 
 # Add the gfx entry to the interactionData
 3f/6814/: db $61,$0c,$40 ; GFX_68
 
 07/6010/: call getMimicData
+# TODO: In Moosh's screen hooking the flowers glitches visually, to be investigated
 07//getMimicData: |
   call $3a25 ; getTileMappingData
   ld a,c
@@ -184,7 +182,7 @@
   push de
   cp $26 ; normal flower
   ld a,$3b ; flower sprite
-  jr @end
+  jr z,@end
   inc a ; stone flower instead
   
   @end:

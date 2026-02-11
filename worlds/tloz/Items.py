@@ -7,7 +7,6 @@ filler = ItemClassification.filler
 useful = ItemClassification.useful
 trap = ItemClassification.trap
 
-
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     classification: ItemClassification
@@ -47,7 +46,6 @@ item_table: Dict[str, ItemData] = {
     "Rupee": ItemData(130, filler),
     "Clock": ItemData(131, filler),
     "Fairy": ItemData(132, filler)
-
 }
 
 item_game_ids = {
@@ -145,3 +143,8 @@ item_prices = {
     "Clock": 0,
     "Fairy": 10
 }
+
+item_names = [name for name in item_table.keys()]
+item_names.remove("Triforce Fragment")
+
+default_shop_items = ["Bomb", "Water of Life (Red)", "Arrow"]

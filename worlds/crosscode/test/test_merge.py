@@ -1,12 +1,12 @@
 from copy import copy, deepcopy
 import os
 
-from test.bases import TestBase
+from unittest import TestCase
 
 from ..codegen.util import get_json_object
 from ..codegen.merge import merge
 
-class TestMergeBasic(TestBase):
+class TestMergeBasic(TestCase):
     auto_construct = False
     list1 = list(range(1, 5))
     list2 = list(range(5, 9))
@@ -54,7 +54,7 @@ class TestMergeBasic(TestBase):
         self.assertRaises(RuntimeError, merge, original, "addon")
         self.assertRaises(RuntimeError, merge, original, 2)
 
-class TestMergeComplex(TestBase):
+class TestMergeComplex(TestCase):
     auto_construct = False
     test_pkg = '.'.join(__name__.split('.')[:-1])
     original = get_json_object(test_pkg, "data/merge/original.json")
@@ -80,7 +80,7 @@ addon_entry_template = {
     "list": [ "c", "d" ]
 }
 
-class TestPatch(TestBase):
+class TestPatch(TestCase):
     auto_construct = False
 
     original = { f"key{i}": deepcopy(base_entry_template) for i in range(20) }

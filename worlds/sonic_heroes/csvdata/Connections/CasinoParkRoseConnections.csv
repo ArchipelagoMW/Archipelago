@@ -1,0 +1,12 @@
+Team,Level,Source,Target,Rule,Notes
+Rose,Casino Park,Start,ObjSanity,,
+Rose,Casino Park,ObjSanity,Start,,
+Rose,Casino Park,Start,Bonus Key 1,,
+Rose,Casino Park,Bonus Key 1,Start,,
+Rose,Casino Park,Start,Bonus Key 2,,
+Rose,Casino Park,Bonus Key 2,Start,,
+Rose,Casino Park,Start,Bonus Key 3,,
+Rose,Casino Park,Bonus Key 3,Start,,
+Rose,Casino Park,Start,Checkpoint 1,,
+Rose,Casino Park,Checkpoint 1,Start,,
+Rose,Casino Park,Start,Goal,,

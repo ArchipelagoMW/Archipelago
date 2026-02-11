@@ -10,8 +10,8 @@
     ret
 
 # Refill all consumable / losable items in the inventory:
-#   - each seed type up to 20
-#   - all bombs
+#   - each seed type up to c (20 impa, 99 deku)
+#   - bombs and bombchus to c (20 impa, 99 deku)
 #   - shield (in case it was eaten by a Like Like)
 #   - health
 # No new item can be obtained from this, it can only refill what the player had and used/lost at some point.
@@ -49,15 +49,21 @@
     ld a,c
     @changeBombAmount:
     cp (hl)
-    jr c,@refillShield
+    jr c,@refillBombchus
     ld (hl),a
     
     @refillBombchus:
     ld a,TREASURE_BOMBCHUS
     call checkTreasureObtained_bodyProxy
     jr nc,@refillShield
-    ld hl,wNumBombchus
-    ld a,(wMaxBombchus)
+    ld hl,wMaxBombchus
+    ldd a,(hl)
+    cp c
+    jr c,@changeBombchuAmount
+    ld a,c
+    @changeBombchuAmount:
+    cp (hl)
+    jr c,@refillShield
     ld (hl),a
     
     @refillShield:

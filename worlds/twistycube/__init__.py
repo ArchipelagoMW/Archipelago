@@ -30,7 +30,9 @@ class TwistyCubeWeb(WebWorld):
 
 
 class TwistyCubeWorld(World):
-
+    """
+    A complete new way to solve (something like) a Rubik's Cube!
+    """
     game: str = "Twisty Cube"
     options_dataclass = TwistyCubeOptions
 

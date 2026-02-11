@@ -1,5 +1,5 @@
 from Options import Choice
-from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class RatchetSkin(Choice):
@@ -7,6 +7,7 @@ class RatchetSkin(Choice):
     Cosmetic:
     What Skin should Ratchet have?
     Remember to reload your save file after starting a new game to apply the skin!
+    Alternatively, go to the Armor Vendor to reload the skin.
     """
     display_name = RAC3OPTION.SKIN
     option_default = 0

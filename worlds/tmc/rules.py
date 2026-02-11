@@ -1,9 +1,11 @@
-from typing import Callable, TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, CollectionRule
-from .constants import TMCEvent, TMCItem, TMCLocation, TMCRegion, TMCTricks, TMCWarps
-from .options import DHCAccess, DungeonItem, Goal, MinishCapOptions
+from worlds.generic.Rules import CollectionRule, add_rule
+
+from .constants import TMCEvent, TMCItem, TMCLocation, TMCRegion, TMCTricks
+from .options import Biggoron, DHCAccess, DungeonItem, DungeonWarp, Goal, MinishCapOptions
 
 if TYPE_CHECKING:
     from . import MinishCapWorld
@@ -53,25 +55,13 @@ class MinishCapRules:
             (TMCRegion.NORTH_FIELD, TMCRegion.TRILBY_HIGHLANDS): self.has_any([TMCItem.FLIPPERS, TMCItem.ROCS_CAPE]),
             (TMCRegion.NORTH_FIELD, TMCRegion.FALLS_ENTRANCE): self.has(TMCItem.BOMB_BAG),
             (TMCRegion.NORTH_FIELD, TMCRegion.ROYAL_VALLEY):
-                self.logic_and([self.split_rule(3), self.logic_or([self.cape_extend(), self.has(TMCItem.BOMB_BAG)])]),
+                self.logic_and([self.split_rule(3, True), self.logic_or([self.cape_extend(), self.has(TMCItem.BOMB_BAG)])]),
 
             (TMCRegion.CASTLE_EXTERIOR, TMCRegion.NORTH_FIELD): None,  # redundant
             (TMCRegion.CASTLE_EXTERIOR, TMCRegion.SANCTUARY): None,
 
             (TMCRegion.SANCTUARY, TMCRegion.CASTLE_EXTERIOR): None,  # redundant
-            (TMCRegion.SANCTUARY, TMCRegion.STAINED_GLASS):
-                self.logic_and([
-                    self.has_group("Elements", self.world.options.ped_elements.value),
-                    self.has(TMCItem.PROGRESSIVE_SWORD, self.world.options.ped_swords.value),
-                    self.has_from_list([
-                        TMCEvent.CLEAR_DWS,
-                        TMCEvent.CLEAR_COF,
-                        TMCEvent.CLEAR_FOW,
-                        TMCEvent.CLEAR_TOD,
-                        TMCEvent.CLEAR_RC,
-                        TMCEvent.CLEAR_POW,
-                    ], self.world.options.ped_dungeons.value)
-                ]),
+            (TMCRegion.SANCTUARY, TMCRegion.STAINED_GLASS): self.pedestal_requirements(),
 
             (TMCRegion.LONLON, TMCRegion.HYRULE_TOWN): self.has(TMCItem.BOMB_BAG),  # redundant
             (TMCRegion.LONLON, TMCRegion.NORTH_FIELD): self.can_pass_trees(),  # redundant
@@ -108,7 +98,7 @@ class MinishCapRules:
             (TMCRegion.TRILBY_HIGHLANDS, TMCRegion.NORTH_FIELD):  # redundant
                 self.logic_or([self.has_any([TMCItem.ROCS_CAPE, TMCItem.FLIPPERS]),
                                self.logic_and([self.has(TMCItem.CANE_OF_PACCI), self.has_sword()])]),
-            (TMCRegion.TRILBY_HIGHLANDS, TMCRegion.WESTERN_WOODS): self.split_rule(2),
+            (TMCRegion.TRILBY_HIGHLANDS, TMCRegion.WESTERN_WOODS): self.split_rule(2, True),
             (TMCRegion.TRILBY_HIGHLANDS, TMCRegion.CRENEL_BASE): self.has_bottle(),
 
             (TMCRegion.CRENEL_BASE, TMCRegion.TRILBY_HIGHLANDS): None,
@@ -354,6 +344,7 @@ class MinishCapRules:
             TMCLocation.TOWN_SHOP_80_ITEM: self.cost(80),
             TMCLocation.TOWN_SHOP_300_ITEM: self.cost(300),
             TMCLocation.TOWN_SHOP_600_ITEM: self.cost(600),
+            TMCLocation.TOWN_SHOP_EXTRA_600_ITEM: self.cost(600),
             TMCLocation.TOWN_SHOP_BEHIND_COUNTER_ITEM: self.access_town_left(),
             TMCLocation.TOWN_SHOP_ATTIC_CHEST: self.access_town_left(),
             TMCLocation.TOWN_BAKERY_ATTIC_CHEST: self.access_town_left(),
@@ -365,15 +356,15 @@ class MinishCapRules:
             # Fusion 33
             TMCLocation.TOWN_GORON_MERCHANT_1_LEFT: self.cost(300 if self.options.goron_jp_prices.value else 200),
             TMCLocation.TOWN_GORON_MERCHANT_1_MIDDLE: self.cost(200 if self.options.goron_jp_prices.value else 100),
-            TMCLocation.TOWN_GORON_MERCHANT_1_RIGHT: self.cost(50 if self.options.goron_jp_prices.value else 50),
+            TMCLocation.TOWN_GORON_MERCHANT_1_RIGHT: self.cost(50),
             # Fusion 33
-            TMCLocation.TOWN_GORON_MERCHANT_2_LEFT: self.cost(300 if self.options.goron_jp_prices.value else 300),
+            TMCLocation.TOWN_GORON_MERCHANT_2_LEFT: self.cost(300),
             TMCLocation.TOWN_GORON_MERCHANT_2_MIDDLE: self.cost(300 if self.options.goron_jp_prices.value else 200),
             TMCLocation.TOWN_GORON_MERCHANT_2_RIGHT: self.cost(300 if self.options.goron_jp_prices.value else 200),
             # Fusion 33
             TMCLocation.TOWN_GORON_MERCHANT_3_LEFT: self.cost(300 if self.options.goron_jp_prices.value else 400),
-            TMCLocation.TOWN_GORON_MERCHANT_3_MIDDLE: self.cost(300 if self.options.goron_jp_prices.value else 300),
-            TMCLocation.TOWN_GORON_MERCHANT_3_RIGHT: self.cost(300 if self.options.goron_jp_prices.value else 300),
+            TMCLocation.TOWN_GORON_MERCHANT_3_MIDDLE: self.cost(300),
+            TMCLocation.TOWN_GORON_MERCHANT_3_RIGHT: self.cost(300),
             # Fusion 33
             TMCLocation.TOWN_GORON_MERCHANT_4_LEFT: self.cost(300 if self.options.goron_jp_prices.value else 500),
             TMCLocation.TOWN_GORON_MERCHANT_4_MIDDLE: self.cost(300 if self.options.goron_jp_prices.value else 400),
@@ -427,7 +418,7 @@ class MinishCapRules:
                 self.logic_and([
                     self.has(TMCItem.MOLE_MITTS),
                     self.has_any([TMCItem.ROCS_CAPE, TMCItem.FLIPPERS]),
-                    self.split_rule(3),
+                    self.split_rule(3, True),
                 ]),
             TMCLocation.TOWN_DR_LEFT_ATTIC_ITEM:
                 self.logic_and([
@@ -493,9 +484,9 @@ class MinishCapRules:
             # Can Pass Trees
             TMCLocation.LON_LON_RANCH_POT: None,
             TMCLocation.LON_LON_PUDDLE_FUSION_BIG_CHEST: self.access_lonlon_right(),  # Fusion 1E
-            TMCLocation.LON_LON_CAVE_CHEST: self.logic_and([self.access_lonlon_right(), self.split_rule(2)]),
+            TMCLocation.LON_LON_CAVE_CHEST: self.logic_and([self.access_lonlon_right(), self.split_rule(2, True)]),
             TMCLocation.LON_LON_CAVE_SECRET_CHEST:
-                self.logic_and([self.access_lonlon_right(), self.split_rule(2),
+                self.logic_and([self.access_lonlon_right(), self.split_rule(2, True),
                                 self.has_all([TMCItem.BOMB_BAG, TMCItem.LANTERN])]),
             TMCLocation.LON_LON_PATH_FUSION_CHEST:  # Fusion 50
                 self.logic_and([self.access_lonlon_right(), self.has(TMCItem.PEGASUS_BOOTS)]),
@@ -683,13 +674,13 @@ class MinishCapRules:
             TMCLocation.CRENEL_SCRUB_NPC:
                 self.logic_and([self.has(TMCItem.BOMB_BAG), self.can_shield(), self.cost(40), self.mushroom()]),
             TMCLocation.CRENEL_DOJO_LEFT_CHEST:
-                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2)]),
+                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2, True)]),
             TMCLocation.CRENEL_DOJO_RIGHT_CHEST:
-                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2)]),
+                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2, True)]),
             TMCLocation.CRENEL_DOJO_HP:
-                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2)]),
+                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2, True)]),
             TMCLocation.CRENEL_DOJO_NPC:
-                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2)]),
+                self.logic_and([self.has(TMCItem.GRIP_RING), self.split_rule(2, True)]),
             TMCLocation.CRENEL_GREAT_FAIRY_NPC: self.has_all([TMCItem.GRIP_RING, TMCItem.BOMB_BAG]),
             TMCLocation.CRENEL_CLIMB_FUSION_CHEST:  # Fusion 62
                 self.has_all([TMCItem.GRIP_RING, TMCItem.BOMB_BAG]),
@@ -798,7 +789,7 @@ class MinishCapRules:
             # Graveyard locations, require graveyard key and pegasus boots
             TMCLocation.VALLEY_GRAVEYARD_BUTTERFLY_FUSION_ITEM: None,  # Fusion 19
             TMCLocation.VALLEY_GRAVEYARD_LEFT_FUSION_CHEST: None,  # Fusion 5C
-            TMCLocation.VALLEY_GRAVEYARD_LEFT_GRAVE_HP: self.split_rule(3),
+            TMCLocation.VALLEY_GRAVEYARD_LEFT_GRAVE_HP: self.split_rule(3, True),
             TMCLocation.VALLEY_GRAVEYARD_RIGHT_FUSION_CHEST: None,  # Fusion 5D
             TMCLocation.VALLEY_GRAVEYARD_RIGHT_GRAVE_FUSION_CHEST: None,  # Fusion 30
             # endregion
@@ -819,7 +810,7 @@ class MinishCapRules:
                 self.logic_and([self.has(TMCItem.MOLE_MITTS), self.cape_extend()]),
             # Fusion 09
             # TMCLocation.FALLS_1ST_CAVE_CHEST: None,
-            TMCLocation.FALLS_CLIFF_CHEST: self.split_rule(3),
+            TMCLocation.FALLS_CLIFF_CHEST: self.split_rule(3, True),
             TMCLocation.FALLS_SOUTH_DIG_SPOT: self.has(TMCItem.MOLE_MITTS),
             TMCLocation.FALLS_GOLDEN_TEKTITE: self.has_sword(),  # Fusion 4A
             TMCLocation.FALLS_NORTH_DIG_SPOT: self.has(TMCItem.MOLE_MITTS),
@@ -845,6 +836,7 @@ class MinishCapRules:
             # endregion
 
             # region Cloud Tops
+            TMCLocation.FALLS_BIGGORON: self.can_shield(self.options.shuffle_biggoron.value == Biggoron.option_mirror_shield),
             TMCLocation.CLOUDS_FREE_CHEST: None,
             TMCLocation.CLOUDS_NORTH_EAST_DIG_SPOT: self.has(TMCItem.MOLE_MITTS),
             TMCLocation.CLOUDS_NORTH_KILL:
@@ -1158,6 +1150,7 @@ class MinishCapRules:
             # endregion
 
             # region Sanctuary
+            TMCLocation.PEDESTAL_REQUIREMENT_REWARD: self.pedestal_requirements(),
             TMCLocation.SANCTUARY_PEDESTAL_ITEM1: self.has_group("Elements", 2),
             TMCLocation.SANCTUARY_PEDESTAL_ITEM2: self.has_group("Elements", 3),
             TMCLocation.SANCTUARY_PEDESTAL_ITEM3: self.has_group("Elements", 4),
@@ -1376,21 +1369,21 @@ class MinishCapRules:
 
     def has_max_health(self, hearts=3) -> Callable[[CollectionState], bool]:
         def heart_count(state: CollectionState) -> bool:
+            starting_hearts = self.options.starting_hearts.value
             heart_containers = state.count(TMCItem.HEART_CONTAINER, self.player)
             heart_pieces = state.count(TMCItem.HEART_PIECE, self.player)
 
-            max_health = heart_containers + (heart_pieces // 4) + 3
+            max_health = starting_hearts + heart_containers + (heart_pieces // 4)
             return max_health >= hearts
 
         return heart_count
 
     def can_spin(self) -> CollectionRule:
         return self.logic_and([self.has_sword(),
-                               self.has_any([TMCItem.SPIN_ATTACK, TMCItem.FAST_SPIN_SCROLL,
-                                             TMCItem.FAST_SPLIT_SCROLL, TMCItem.GREATSPIN, TMCItem.LONG_SPIN]),
+                               self.has_any([TMCItem.PROGRESSIVE_SCROLL, TMCItem.SPIN_ATTACK]),
                                ])
 
-    def split_rule(self, link_count: int = 2) -> CollectionRule:
+    def split_rule(self, link_count: int, allow_max: bool = False) -> CollectionRule:
         ordered_swords = [
             TMCItem.SMITHS_SWORD,
             TMCItem.WHITE_SWORD_GREEN,
@@ -1398,11 +1391,12 @@ class MinishCapRules:
             TMCItem.WHITE_SWORD_BLUE,
             TMCItem.FOUR_SWORD,
         ]
+        swords = ordered_swords[link_count:] if allow_max else [ordered_swords[link_count]]
         return self.logic_and([
             self.can_spin(),
             self.logic_or([
                 self.has(TMCItem.PROGRESSIVE_SWORD, link_count + 1),
-                self.has(ordered_swords[link_count])
+                self.has_any(swords)
             ])
         ])
 
@@ -1427,8 +1421,29 @@ class MinishCapRules:
             self.has_all([TMCItem.ROCS_CAPE, TMCItem.DOWNTHRUST]),
         ])
 
-    def can_shield(self) -> CollectionRule:
-        return self.has_any([TMCItem.SHIELD, TMCItem.MIRROR_SHIELD, TMCItem.PROGRESSIVE_SHIELD])
+    def can_shield(self, mirror: bool = False) -> CollectionRule:
+        return self.logic_or([
+            self.has(TMCItem.PROGRESSIVE_SHIELD, 2 if mirror else 1),
+            self.has(TMCItem.MIRROR_SHIELD if mirror else TMCItem.SHIELD)
+        ])
+
+    def pedestal_requirements(self) -> CollectionRule:
+        return self.logic_and([
+            self.has_group("Elements", self.world.options.ped_elements.value),
+            self.logic_or([
+                self.has_prog_sword(self.world.options.ped_swords.value),
+                self.has_sword_level(self.world.options.ped_swords.value),
+            ]),
+            self.has_from_list([
+                TMCEvent.CLEAR_DWS,
+                TMCEvent.CLEAR_COF,
+                TMCEvent.CLEAR_FOW,
+                TMCEvent.CLEAR_TOD,
+                TMCEvent.CLEAR_RC,
+                TMCEvent.CLEAR_POW,
+            ], self.world.options.ped_dungeons.value),
+            self.has(TMCItem.FIGURINE, self.world.options.ped_figurines.value)
+        ])
 
     def has_sword(self) -> CollectionRule:
         return self.has_any([
@@ -1439,6 +1454,19 @@ class MinishCapRules:
             TMCItem.FOUR_SWORD,
             TMCItem.PROGRESSIVE_SWORD,
         ])
+
+    def has_prog_sword(self, count: int = 1):
+        return self.has(TMCItem.PROGRESSIVE_SWORD, count)
+
+    def has_sword_level(self, level: int = 1):
+        if level == 0:
+            return lambda state: True
+        swords = [TMCItem.SMITHS_SWORD,
+            TMCItem.WHITE_SWORD_GREEN,
+            TMCItem.WHITE_SWORD_RED,
+            TMCItem.WHITE_SWORD_BLUE,
+            TMCItem.FOUR_SWORD]
+        return self.has(swords[level - 1])
 
     def has_bow(self) -> CollectionRule:
         return self.has_any([TMCItem.BOW, TMCItem.LIGHT_ARROW, TMCItem.PROGRESSIVE_BOW])
@@ -1637,7 +1665,7 @@ class MinishCapRules:
         Item placement for this location only occurs in create_items stage.
         """
         west_item = self.world.get_location(TMCLocation.DROPLETS_ENTRANCE_B2_WEST_ICEBLOCK).item
-        if west_item is None or west_item.name is not TMCItem.BIG_KEY_TOD:
+        if west_item is None or west_item.name is not TMCItem.BIG_KEY_TOD or self.options.dungeon_warp_tod.value != DungeonWarp.option_none:
             return self.has(TMCItem.SMALL_KEY_TOD, 4)
         if (west_item.name is TMCItem.BIG_KEY_TOD and
                 self.world.options.dungeon_small_keys.value is DungeonItem.option_own_dungeon):

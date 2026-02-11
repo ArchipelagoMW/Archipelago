@@ -416,7 +416,11 @@ def set_food_rules(world: "K64World"):
                      LocationName.neo_star_4_f4, LocationName.neo_star_4_f5, LocationName.neo_star_4_f6,
                      LocationName.neo_star_4_f7, LocationName.neo_star_4_f8, LocationName.neo_star_4_f9,
                      LocationName.neo_star_4_f10, LocationName.neo_star_4_f11, LocationName.neo_star_4_f12,
-                     LocationName.neo_star_4_f13, LocationName.neo_star_4_f14, LocationName.ripple_star_2_f3,
+                     LocationName.neo_star_4_f13, LocationName.neo_star_4_f14, LocationName.shiver_star_4_f3,
+                     LocationName.shiver_star_4_f4, LocationName.shiver_star_4_f5, LocationName.shiver_star_4_f6,
+                     LocationName.shiver_star_4_f7, LocationName.shiver_star_4_f8, LocationName.shiver_star_4_f9,
+                     LocationName.shiver_star_4_f10, LocationName.shiver_star_4_f11, LocationName.shiver_star_4_f12,
+                     LocationName.shiver_star_4_f13, LocationName.shiver_star_4_f14, LocationName.ripple_star_2_f3,
                      LocationName.ripple_star_2_f4, LocationName.ripple_star_2_f5, LocationName.ripple_star_2_f6,
                      LocationName.ripple_star_2_f7, LocationName.ripple_star_2_f8, LocationName.ripple_star_2_f9,
                      LocationName.ripple_star_2_f10, LocationName.ripple_star_2_f11):
@@ -436,7 +440,7 @@ def set_star_rules(world: "K64World"):
         0x0010: 0x0653,
     }
     dedede_range_start = {
-        0x0007: 0x0480,
+        0x0005: 0x0480,
         0x000A: 0x054A,
         0x000F: 0x061F,
         0x0013: 0x06E3,

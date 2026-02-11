@@ -1,5 +1,5 @@
 from Options import Choice
-from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class EnableProgressiveWeapons(Choice):
@@ -11,4 +11,4 @@ class EnableProgressiveWeapons(Choice):
     display_name = RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS
     option_disable = 0
     option_enable = 1
-    default = 1
+    default = 0

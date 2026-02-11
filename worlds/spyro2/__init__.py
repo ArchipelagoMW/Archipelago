@@ -31,7 +31,7 @@ class Spyro2Web(WebWorld):
 
 class Spyro2World(World):
     """
-    Spyro 2 is a game about a purple dragon who wants to go on vacation.
+    Spyro 2: Ripto's Rage! is a 1999 platforming adventure game where the purple dragon Spyro travels to the realm of Avalar to stop the evil sorcerer Ripto. Players collect talismans and orbs by completing minigames and challenges to open new areas and progress the story, all while learning new abilities like swimming and climbing. The game features vibrant worlds, humorous characters, and a focus on exploration and problem-solving.
     """
 
     game: str = "Spyro 2"
@@ -44,7 +44,7 @@ class Spyro2World(World):
     enabled_location_categories: Set[Spyro2LocationCategory]
     required_client_version = (0, 5, 0)
     # TODO: Remember to update this!
-    ap_world_version = "1.0.0"
+    ap_world_version = "1.0.1"
     item_name_to_id = Spyro2Item.get_name_to_id()
     location_name_to_id = Spyro2Location.get_name_to_id()
     item_name_groups = {}
@@ -298,6 +298,8 @@ class Spyro2World(World):
     
     def set_rules(self) -> None:
         def is_boss_defeated(self, boss, state):
+            if self.options.enable_open_world and self.options.open_world_ability_and_warp_unlocks and boss in ["Crush", "Gulp"]:
+                return True
             return state.has(boss + " Defeated", self.player)
 
         def can_swim(self, state):
@@ -512,7 +514,7 @@ class Spyro2World(World):
                 if not is_boss_defeated(self, "Gulp", state):
                     return 0
                 if self.options.level_lock_options.value == LevelLockOptions.KEYS and not state.has("Cloud Temples Unlock", self.player) or \
-                        not state.has("Orb", self.player, 16):
+                        not state.has("Orb", self.player, 15):
                     return 0
                 gems = 375
                 if can_headbash(self, state):

@@ -1,0 +1,91 @@
+Team,Level,Source,Target,Rule,Notes
+Sonic,Hang Castle,Start,First Door Entrance,,
+Sonic,Hang Castle,First Door Entrance,First TP Switch,KillGroundEnemyNothingSonicHC,1 pawn 2 with spear (spears optional)
+Sonic,Hang Castle,First TP Switch,First Upside Down Start,TPSwitchSonicHC,
+Sonic,Hang Castle,First Upside Down Start,First Upside Down Path Above Start,FlyingAnyorTornadoSonicHC,tornado hover (not too bad)
+Sonic,Hang Castle,First Upside Down Path Above Start,First Upside Down Start,,
+Sonic,Hang Castle,First Upside Down Path Above Start,First Tower,LightDashSonicHC,is possible with flying3chars (and maybe platform) annoying camera
+Sonic,Hang Castle,First Tower,First Upside Down Path Above Start,FlyingAnySonicHC,
+Sonic,Hang Castle,First Tower,First Tower Case,BreakandSwitchSonicHC,wooden container
+Sonic,Hang Castle,First Tower Case,Second TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Second TP Switch,Second Rightside Start,,
+Sonic,Hang Castle,Second Rightside Start,Bonus Key 1,,
+Sonic,Hang Castle,Second Rightside Start,Second Door Entrance,TripleSpringSonicHC,
+Sonic,Hang Castle,Second Door Entrance,Second Rightside Start,,
+Sonic,Hang Castle,Second Door Entrance,Checkpoint 1,,
+Sonic,Hang Castle,Checkpoint 1,Second Door Entrance,,
+Sonic,Hang Castle,Second Door Entrance,Hole By Checkpoint 1,BreakInGroundWoodContainerSonicHC,wooden container
+Sonic,Hang Castle,Hole By Checkpoint 1,Third TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Third TP Switch,Second Upside Down Start,,
+Sonic,Hang Castle,Second Upside Down Start,Second Upside Down First Tower,TripleSpringSonicHC,
+Sonic,Hang Castle,Second Upside Down First Tower,Second Upside Down Start,,
+Sonic,Hang Castle,Second Upside Down First Tower,Second Upside Down Second Tower,FlyingAnySonicHC,is possible with tornado
+Sonic,Hang Castle,Second Upside Down Second Tower,Second Upside Down First Tower,,
+Sonic,Hang Castle,Second Upside Down Second Tower,Second Upside Down Invisible Path,FlameTorchSonicHC,is stage collision not obj
+Sonic,Hang Castle,Second Upside Down Invisible Path,Second Upside Down Second Tower,FlameTorchSonicHC,
+Sonic,Hang Castle,Second Upside Down Invisible Path,Second Upside Down Third Tower,FlameTorchSonicHC,
+Sonic,Hang Castle,Second Upside Down Third Tower,Second Upside Down Invisible Path,FlameTorchSonicHC,
+Sonic,Hang Castle,Second Upside Down Start,Second Upside Down Third Tower,NOTPOSSIBLE,is possible with flyingAny (skips some good logic)
+Sonic,Hang Castle,Second Upside Down Third Tower,Second Upside Down Start,NOTPOSSIBLE,is possible with flyingAny (skips some good logic)
+Sonic,Hang Castle,Second Upside Down Third Tower,Second Upside Down Third Tower Case,KillFlyingEnemySilverArmorSonicHC,silver armor with lightning
+Sonic,Hang Castle,Second Upside Down Third Tower Case,Second Upside Down Third Tower Ring Trail,LightDashandSwitchSonicHC,
+Sonic,Hang Castle,Second Upside Down Third Tower Ring Trail,Second Upside Down Fourth Tower,LightDashSonicHC,
+Sonic,Hang Castle,Second Upside Down Fourth Tower,Second Upside Down Fifth Tower,CastleFloatingPlatformSonicHC,
+Sonic,Hang Castle,Second Upside Down Fifth Tower,Second Upside Down Fourth Tower,CastleFloatingPlatformSonicHC,
+Sonic,Hang Castle,Second Upside Down Fifth Tower,Fourth TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Fourth TP Switch,Second Door Entrance Looped Back,TPSwitchSonicHC,
+Sonic,Hang Castle,Second Door Entrance Looped Back,First Courtyard,,
+Sonic,Hang Castle,First Courtyard,First Courtyard Wall Crack Alcove,BreakSonicHC,
+Sonic,Hang Castle,First Courtyard Wall Crack Alcove,Bonus Key 2,,
+Sonic,Hang Castle,First Courtyard,Spiral Tower Above First Courtyard,GongandSingleSpringSonicHC,
+Sonic,Hang Castle,Spiral Tower Above First Courtyard,Top of Walls of First Courtyard,,
+Sonic,Hang Castle,Top of Walls of First Courtyard,First Courtyard,,
+Sonic,Hang Castle,Spiral Tower Above First Courtyard,Path At Checkpoint 2,,
+Sonic,Hang Castle,Path At Checkpoint 2,Spiral Tower Above First Courtyard,,
+Sonic,Hang Castle,Top of Walls of First Courtyard,Path At Checkpoint 2,,
+Sonic,Hang Castle,Path At Checkpoint 2,Top of Walls of First Courtyard,,
+Sonic,Hang Castle,Path At Checkpoint 2,Checkpoint 2,,
+Sonic,Hang Castle,Checkpoint 2,Path At Checkpoint 2,,
+Sonic,Hang Castle,Path At Checkpoint 2,Fifth TP Switch,DashRampandTPSwitchSonicHC,
+Sonic,Hang Castle,Fifth TP Switch,Third Upside Down Start,DashRampandTPSwitchSonicHC,
+Sonic,Hang Castle,Third Upside Down Start,Third Upside Down First Tower,,
+Sonic,Hang Castle,Third Upside Down First Tower,Third Upside Down Second Tower,CastleFloatingPlatformorFlyingAnySonicHC,
+Sonic,Hang Castle,Third Upside Down Second Tower,Third Upside Down First Tower,,
+Sonic,Hang Castle,Third Upside Down Second Tower,Third Upside Down Third Tower,CastleFloatingPlatformandFlyingAnySonicHC,can be done with tornado (somewhat precise)
+Sonic,Hang Castle,Third Upside Down Third Tower,Third Upside Down Second Tower,CastleFloatingPlatformandFlyingAnySonicHC,can be done with tornado (somewhat precise)
+Sonic,Hang Castle,Third Upside Down Third Tower,Third Upside Down End,,
+Sonic,Hang Castle,Third Upside Down End,Third Upside Down Third Tower,,
+Sonic,Hang Castle,Third Upside Down End,Third Upside Down End Case,KillGroundEnemySpearConcreteShieldBishopSonicHC,Bishop 2 concrete shield with gun 2 spear
+Sonic,Hang Castle,Third Upside Down End Case,Sixth TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Sixth TP Switch,Pool Section,TPSwitchSonicHC,
+Sonic,Hang Castle,Pool Section,Second Invis Path,FlameTorchSonicHC,
+Sonic,Hang Castle,Second Invis Path,Pool Section,FlameTorchSonicHC,
+Sonic,Hang Castle,Second Invis Path,Third Door Entrance,FlameTorchSonicHC,
+Sonic,Hang Castle,Third Door Entrance,Second Invis Path,FlameTorchSonicHC,
+Sonic,Hang Castle,Third Door Entrance,Third Door Entrance Alcove,BreakSonicHC,
+Sonic,Hang Castle,Third Door Entrance,Second Courtyard,FlyingOneCharandPushPullSwitchSonicHC,
+Sonic,Hang Castle,Second Courtyard,Second Courtyard Alcove,BreakSonicHC,
+Sonic,Hang Castle,Second Courtyard Alcove,Second Courtyard Alcove Case,KillGroundEnemyBishopSonicHC,
+Sonic,Hang Castle,Second Courtyard,Fourth Door Entrance,FlyingAnySonicHC,can be done with tornado
+Sonic,Hang Castle,Fourth Door Entrance,Second Courtyard,,
+Sonic,Hang Castle,Fourth Door Entrance,Tower Base At Checkpoint 3,KillGroundEnemyBishopSonicHC,
+Sonic,Hang Castle,Tower Base At Checkpoint 3,Checkpoint 3,,
+Sonic,Hang Castle,Checkpoint 3,Tower Base At Checkpoint 3,,
+Sonic,Hang Castle,Tower Base At Checkpoint 3,Tower Base At Checkpoint 3 Case,KillFlyingEnemySilverArmorSonicHC,silver armor with guns
+Sonic,Hang Castle,Tower Base At Checkpoint 3 Case,Seventh TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Seventh TP Switch,Fourth Upside Down Start,TPSwitchSonicHC,
+Sonic,Hang Castle,Fourth Upside Down Start,Fourth Upside Down Tower Interior,,
+Sonic,Hang Castle,Fourth Upside Down Tower Interior,Fourth Upside Down Start,,
+Sonic,Hang Castle,Fourth Upside Down Tower Interior,Bonus Key 3,,
+Sonic,Hang Castle,Fourth Upside Down Tower Interior,Fourth Upside Down Tower Interior Case,KillGroundEnemySpearSonicHC,1 spear 1 nothing pawn (nothing else needed)
+Sonic,Hang Castle,Fourth Upside Down Tower Interior Case,Eight TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Eight TP Switch,Rightside Tower Interior With Push Pull Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Rightside Tower Interior With Push Pull Switch,Fifth Door Entrance,FlyingOneCharandLightDashandPushPullSwitchSonicHC,
+Sonic,Hang Castle,Fifth Door Entrance,Eggman Statue Platform,KillGroundEnemyBishopSonicHC,
+Sonic,Hang Castle,Eggman Statue Platform,Eggman Statue Platform Case,TargetSwitchandThundershootSonicHC,
+Sonic,Hang Castle,Eggman Statue Platform Case,Ninth TP Switch,TPSwitchSonicHC,
+Sonic,Hang Castle,Ninth TP Switch,Metal Sonic Statue Platform,TPSwitchSonicHC,
+Sonic,Hang Castle,Metal Sonic Statue Platform,Metal Sonic Statue Cracked Wall,PoleandTargetSwitchandThundershootSonicHC,
+Sonic,Hang Castle,Metal Sonic Statue Cracked Wall,Sixth Door Entrance,BreakSonicHC,
+Sonic,Hang Castle,Sixth Door Entrance,Long Tower Vertical Section,KillGroundEnemySpearSonicHC,
+Sonic,Hang Castle,Long Tower Vertical Section,Goal,DashRampSonicHC,

@@ -11,7 +11,7 @@ nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
 EXPECTED_ROM_NAME = "DWAPV"
-EXPECTED_VERSION = "102"
+EXPECTED_VERSION = "103"
 EQUIPMENT_BYTES = [0x1, 0x2, 0x3, 0x4, 0x8, 0xC, 0x10, 0x14, 0x18, 0x1C, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, 0xE0]
 ENEMY_NAMES = ['Slime', 'Red Slime', 'Drakee', 'Ghost', 'Magician', 'Magidrakee', 'Scorpion', 'Druin', 'Poltergeist',
                'Droll', 'Drakeema', 'Skeleton', 'Warlock', 'Metal Scorpion', 'Wolf', 'Wraith', 'Metal Slime', 'Specter',
@@ -45,11 +45,12 @@ class DragonWarriorClient(BizHawkClient):
                 return False
             
             if version_bytes[:3].decode("ascii") != EXPECTED_VERSION:
+                version = version_bytes[:3].decode("ascii")
                 logger.info(
                     "WARNING: Version mismatch, this was generated on an earlier version of the apworld and may not function as expected."
                 )
                 logger.info(
-                    "World Version: " + version_bytes[0].decode("ascii") + '.' + version_bytes[1].decode("ascii") + '.' + version_bytes[2].decode("ascii")
+                    "World Version: " + version[0] + '.' + version[1] + '.' + version[2]
                 )
                 logger.info("Client Version: " + EXPECTED_VERSION[0] + '.' + EXPECTED_VERSION[1] + '.' + EXPECTED_VERSION[2])
         except UnicodeDecodeError:

@@ -103,6 +103,10 @@ class CrystalProjectWorld(World):
         item_name_to_id[modded_home_point.name] = modded_home_point.code + home_point_item_index_offset
         item_name_groups.setdefault(MOD, set()).add(modded_home_point.name)
 
+    combined_modded_locations: List[ModLocationData] = modded_locations.copy()
+    combined_modded_locations.extend(modded_shops)
+    combined_modded_locations.extend(modded_bosses)
+
     removed_locations = get_removed_locations(mod_info)
     removed_home_points = get_removed_home_points(mod_info)
 
@@ -403,7 +407,10 @@ class CrystalProjectWorld(World):
     def create_item(self, name: str) -> Item:
         if name in item_table:
             data = item_table[name]
-            return Item(name, data.classification, data.code, self.player)
+            item = Item(name, data.classification, data.code, self.player)
+            update_item_classification(item, [location.rule_condition for location in self.combined_modded_locations], self)
+
+            return item
         else:
             matches_mod = [item for (index, item) in enumerate(self.modded_items) if item.name == name]
             matches_mod_home_point = [item for (index, item) in enumerate(self.modded_home_points) if item.name == name]
@@ -679,18 +686,15 @@ class CrystalProjectWorld(World):
                     pool.append(item)
 
         if self.options.use_mods:
-            combined_locations: List[ModLocationData] = self.modded_locations.copy()
-            combined_locations.extend(self.modded_shops)
-
             for modded_item in self.modded_items:
-                update_item_classification(modded_item, [location.rule_condition for location in combined_locations], self)
+                update_item_classification(modded_item, [location.rule_condition for location in self.combined_modded_locations], self)
                 item = self.create_item(modded_item.name)
                 pool.append(item)
 
             if self.options.home_point_hustle != self.options.home_point_hustle.option_disabled:
                 for modded_home_point in self.modded_home_points:
                     item = self.create_item(modded_home_point.name)
-                    update_item_classification(item, [location.rule_condition for location in combined_locations], self)
+                    update_item_classification(item, [location.rule_condition for location in self.combined_modded_locations], self)
                     pool.append(item)
 
         if not self.options.level_gating.value == self.options.level_gating.option_none:
@@ -795,9 +799,7 @@ class CrystalProjectWorld(World):
 
             for home_point in self.removed_home_points:
                 slot_data_removed_home_points.append({"Id": home_point.code,
-                                            "APRegion": location.ap_region})
-
-            #TODO removed home points
+                                            "APRegion": home_point.ap_region})
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
         return {

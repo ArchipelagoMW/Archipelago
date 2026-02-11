@@ -1,6 +1,7 @@
 {
   "game": "FF1 Pixel Remaster",
-  "server_version": "0.5.13",
+  "server_version": "0.5.14",
+  "display_name": "Final Fantasy I - Pixel Remaster",
   "discord_channel": "https://discord.com/channels/731205301247803413/1195372952166879262",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ff1pr.apworld"
 }

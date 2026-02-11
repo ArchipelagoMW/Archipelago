@@ -272,7 +272,10 @@ class Trap(ItemEnum):
 
     Person = auto()
     Gas = auto()
-
+    Chaos = auto()
+    Extreme_Chaos = auto()
+    Grayscale = auto()
+    Phone = auto()
 
 class RedCaveUnlock(ItemEnum):
     @staticmethod

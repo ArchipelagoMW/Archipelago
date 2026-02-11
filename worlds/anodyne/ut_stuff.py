@@ -28,7 +28,6 @@ class UTStuff:
         self.maps = (
         "Maps", [(area.area_name(), all_mapdata[area].get_variant_name(variant)) for area, variant in all_variants])
         self.tracker_world = {
-            "map_page_folder": "tracker",
             "map_page_maps": "maps.json",
             "map_page_locations": "locations.json",
             "map_page_setting_key": "Slot:{player}:MapLocation",
@@ -43,10 +42,9 @@ class UTStuff:
         self.last_map = Nexus
         self.variant = MapVariant(False, self.swap_level)
         if IsFrozen:
-            self.tracker_world.update({
-                "external_pack_key": "ut_tracker_path",
-                "ut_dialog_name": "Select Anodyne's Universal Tracker Pack"
-            })
+            self.tracker_world["external_pack_key"] = "ut_tracker_path"
+        else:
+            self.tracker_world["map_page_folder"] = "tracker"
         self.offsets = json.loads(pkgutil.get_data(__name__,"Data/offsets.json"))
 
     def ut_event_check(self, event: EventData):

@@ -217,7 +217,7 @@ class RotNWorld(World):
             self.multiworld.itempool.append(item)
 
         # Fill remaining filler
-        for _ in range(0, item_count):
+        for _ in range(0, items_left):
             self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
 
     def create_regions(self) -> None:

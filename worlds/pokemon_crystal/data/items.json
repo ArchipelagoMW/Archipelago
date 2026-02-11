@@ -726,7 +726,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "TINYMUSHROOM": {
@@ -753,7 +754,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "AMULET_COIN": {
@@ -768,7 +770,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "GRN_APRICORN": {
@@ -777,7 +780,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "CLEANSE_TAG": {
@@ -804,7 +808,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "BLACKBELT_I": {
@@ -819,7 +824,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "PNK_APRICORN": {
@@ -828,7 +834,8 @@
     "price": 200,
     "tags": [
       "Apricorn",
-      "Apricorns"
+      "Apricorns",
+      "Unique"
     ]
   },
   "BLACKGLASSES": {
@@ -1017,7 +1024,9 @@
     "tags": [
       "Key Items",
       "Tracker",
-      "KeyItem"
+      "KeyItem",
+      "Rod",
+      "Rods"
     ]
   },
   "LOST_ITEM": {

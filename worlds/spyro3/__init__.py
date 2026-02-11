@@ -29,7 +29,7 @@ class Spyro3Web(WebWorld):
 
 class Spyro3World(World):
     """
-    Spyro 3 is a game about a purple dragon who likes eggs.
+     Spyro is back for his third PlayStation adventure. Jump down the rabbithole to recover all the eggs stolen from Dragon World by the evil sorceressand her henchmen. The cartoonish look, the goofy sounds, and thescavenger-hunt gameplay will be familiar to anyone who has adventured withSpyro before. New to the series is the ability to play as Sheila, thekangaroo; Sergeant Byrd, the flying penguin; Bentley, the Yeti; and Agent 9,the space monkey. In Year of the Dragon, Spyro still has all of hissignature moves--as well as the special moves he learned in Spyro theDragon 2--and can control such vehicles as tanks, submarines, andspeedboats. There are over 30 levels in which to recover 150 eggs andseveral minigames that complement the standard gameplay, includingboxing and skateboarding.
     """
 
     game: str = "Spyro 3"

@@ -1,0 +1,464 @@
+[
+  {
+    "from": "Menu",
+    "to": "Spring Meadows",
+    "condition": {}
+  },
+  {
+    "from": "Spring Meadows",
+    "to": "WM: First Continent South",
+    "condition": {}
+  },
+  {
+    "from": "WM: First Continent South",
+    "to": "Abbest Cave",
+    "condition": {}
+  },
+  {
+    "from": "WM: First Continent South",
+    "to": "Flying Waters",
+    "condition": {
+      "Area - Flying Waters": 1
+    }
+  },
+  {
+    "from": "WM: First Continent South",
+    "to": "WM: South Sea",
+    "condition": {
+      "Progressive Rock": 2
+    }
+  },
+  {
+    "from": "Flying Waters",
+    "to": "WM: First Continent North",
+    "condition": {}
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "WM: First Continent North",
+    "condition": {}
+  },
+  {
+    "from": "WM: First Continent North",
+    "to": "Stone Wave Cliffs",
+    "condition": {
+      "Progressive Rock": 1,
+      "Area - Stone Wave Cliffs": 1
+    }
+  },
+  {
+    "from": "WM: First Continent North",
+    "to": "Yellow Harvest",
+    "condition": {
+      "Progressive Rock": 1,
+      "Area - Yellow Harvest": 1
+    }
+  },
+  {
+    "from": "Yellow Harvest",
+    "to": "Lost Woods",
+    "condition": {}
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "Forgotten Battlefield",
+    "condition": {
+      "Area - Forgotten Battlefield": 1
+    }
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "WM: Second Continent South",
+    "condition": {
+      "Progressive Rock": 3
+    }
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "WM: North Sea",
+    "condition": {
+      "Progressive Rock": 3
+    }
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "WM: Second Continent NW",
+    "condition": {
+      "Progressive Rock": 3
+    }
+  },
+  {
+    "from": "Forgotten Battlefield",
+    "to": "WM: Second Continent South",
+    "condition": {}
+  },
+  {
+    "from": "WM: Second Continent South",
+    "to": "Monoco's Station",
+    "condition": {
+      "Area - Monoco's Station": 1
+    }
+  },
+  {
+    "to": "WM: Second Continent NW",
+    "condition": {},
+    "from": "Monoco's Station"
+  },
+  {
+    "to": "WM: Second Continent NE",
+    "condition": {},
+    "from": "Monoco's Station"
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Lost Woods",
+    "condition": {}
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "The Monolith",
+    "condition": {
+      "Barrier Breaker": 1,
+      "Area - The Monolith": 1
+    }
+  },
+  {
+    "from": "The Monolith",
+    "to": "Lumiere",
+    "condition": {
+      "Progressive Rock": 4,
+      "Painted Power": 1,
+      "Area - Lumiere" : 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "WM: Underwater",
+    "condition": {
+      "Progressive Rock": 5
+    }
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "WM: Sky",
+    "condition": {
+      "Progressive Rock": 4
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "WM: Second Continent NE",
+    "condition": {}
+  },
+  {
+    "to": "Ancient Sanctuary",
+    "condition": {
+      "Area - Ancient Sanctuary": 1
+    },
+    "from": "WM: First Continent North"
+  },
+  {
+    "to": "WM: Outside Gestral Village",
+    "condition": {},
+    "from": "Ancient Sanctuary"
+  },
+  {
+    "to": "Gestral Village",
+    "condition": {
+      "Area - Gestral Village": 1
+    },
+    "from": "WM: Outside Gestral Village"
+  },
+  {
+    "to": "Esquie's Nest",
+    "condition": {
+      "Area - Esquie's Nest": 1
+    },
+    "from": "WM: First Continent North"
+  },
+  {
+    "to": "WM: Outside Gestral Village",
+    "condition": {},
+    "from": "WM: Sky"
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Crimson Forest",
+    "condition": {
+      "Area - Crimson Forest": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Dark Shores",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "Falling Leaves",
+    "condition": {
+      "Area - Falling Leaves": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Flying Manor",
+    "condition": {
+      "Painted Power": 1,
+      "Area - Flying Manor": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Frozen Hearts",
+    "condition": {
+      "Painted Power": 1,
+      "Area - Frozen Hearts": 1
+    }
+  },
+  {
+    "from": "WM: Second Continent NW",
+    "to": "Old Lumiere",
+    "condition": {
+      "Area - Old Lumiere": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "The Reacher",
+    "condition": {
+      "Painted Power": 1,
+      "Area - The Reacher": 1
+    }
+  },
+  {
+    "from": "WM: Underwater",
+    "to": "Renoir's Drafts",
+    "condition": {
+      "Painted Power": 1,
+      "Area - Renoir's Drafts": 1
+    }
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "Sirene",
+    "condition": {
+      "Area - Sirene": 1
+    }
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "Visages",
+    "condition": {
+      "Area - Visages": 1
+    }
+  },
+  {
+    "from": "WM: First Continent North",
+    "to": "The Small Bourgeon",
+    "condition": {},
+    "pictos_level": 1
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "Stone Wave Cliffs Cave",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "The Chosen Path",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Sky Island",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Isle of the Eyes",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "The Crows",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "The Fountain",
+    "condition": {}
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Floating Cemetery",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Second Continent South",
+    "to": "Coastal Cave",
+    "condition": {}
+  },
+  {
+    "from": "WM: South Sea",
+    "to": "Crushing Cavern",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Second Continent NW",
+    "to": "Esoteric Ruins",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: North Sea",
+    "to": "Sinister Cave",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Flying Casino",
+    "condition": {}
+  },
+  {
+    "from": "WM: Second Continent NE",
+    "to": "The Carousel",
+    "condition": {}
+  },
+  {
+    "from": "WM: Sky",
+    "to": "White Sands",
+    "condition": {}
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Sacred River",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Endless Night Sanctuary",
+    "condition": {
+      "Painted Power": 1,
+      "Area - Endless Night Sanctuary": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Painting Workshop",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Endless Tower",
+    "condition": {
+      "Painted Power": 1,
+      "Area - Endless Tower": 1
+    }
+  },
+  {
+    "from": "Endless Tower",
+    "to": "Endless Tower Stage 2",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 2",
+    "to": "Endless Tower Stage 3",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 3",
+    "to": "Endless Tower Stage 4",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 4",
+    "to": "Endless Tower Stage 5",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 5",
+    "to": "Endless Tower Stage 6",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 6",
+    "to": "Endless Tower Stage 7",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 7",
+    "to": "Endless Tower Stage 8",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 8",
+    "to": "Endless Tower Stage 9",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 9",
+    "to": "Endless Tower Stage 10",
+    "condition": {}
+  },
+  {
+    "from": "Endless Tower Stage 10",
+    "to": "Endless Tower Stage 11",
+    "condition": {}
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Dark Gestral Arena",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: First Continent North",
+    "to": "Hidden Gestral Arena",
+    "condition": {
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Sirene's Dress",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Sunless Cliffs",
+    "condition": {
+      "Painted Power": 1
+    }
+  },
+  {
+    "from": "WM: First Continent North",
+    "to": "Red Woods",
+    "condition": {}
+  },
+  {
+    "from": "WM: Underwater",
+    "to": "Verso's Drafts",
+    "condition": {
+      "Painted Power": 1,
+      "Area - Verso's Drafts": 1
+    }
+  }
+]

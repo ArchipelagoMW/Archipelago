@@ -1,5 +1,6 @@
 from typing import Dict
-from .data import LOCATIONS_DATA, ITEMS_DATA, DYNAMIC_FLAGS
+from .data import LOCATIONS_DATA, DYNAMIC_FLAGS
+from .data.Items import ITEMS
 from .data.Hints import HINT_DATA
 from .data.Entrances import ENTRANCES
 
@@ -53,15 +54,15 @@ def build_location_name_to_id_dict() -> Dict[str, int]:
 
 def build_item_name_to_id_dict() -> Dict[str, int]:
     item_name_to_id: Dict[str, int] = {}
-    for item_name, item in ITEMS_DATA.items():
-        item_name_to_id[item_name] = item["id"]
+    for item_name, item in ITEMS.items():
+        item_name_to_id[item_name] = item.id
     return item_name_to_id
 
 
 def build_item_id_to_name_dict() -> Dict[int, str]:
     item_id_to_name: Dict[int, str] = {}
-    for item_name, item in ITEMS_DATA.items():
-        index = item["id"]
+    for item_name, item in ITEMS.items():
+        index = item.id
         item_id_to_name[index] = item_name
     return item_id_to_name
 

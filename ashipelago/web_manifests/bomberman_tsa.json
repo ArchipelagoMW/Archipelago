@@ -1,6 +1,7 @@
 {
   "game": "Bomberman The Second Attack",
   "server_version": "0.1.3",
+  "display_name": "Bomberman 64 - The Second Attack",
   "discord_channel": "https://discord.com/channels/731205301247803413/1064213698861879459",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/bomberman_tsa.apworld"
 }

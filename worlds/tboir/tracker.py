@@ -20,13 +20,14 @@ from worlds.tboir.client import IsaacContext
 class TrackerLayout(Widget):
     ctx: IsaacContext
             
-    def load_image(self, filename):
+    def load_image(self, filename: str, ext_: str = 'png'):
+        filename = filename.replace('???', 'Hush')
         image_file_data = pkgutil.get_data(__name__, filename)
         if not image_file_data:
             raise FileNotFoundError(f"{__name__=} {filename=}")
         data = io.BytesIO(image_file_data)
         return Image(
-            texture=CoreImage(data, ext="png").texture,
+            texture=CoreImage(data, ext=ext_).texture,
             fit_mode="contain"
         )
 
@@ -63,7 +64,7 @@ class TrackerLayout(Widget):
         Window.bind(mouse_pos=self._update_tooltip)
         Window.bind(on_mouse_down=self._force_tooltip)
 
-        self.img = self.load_image('tracker/images/tracker.png')
+        self.img = self.load_image('tracker/images/tracker.jpg', 'jpg')
         self.add_widget(self.img)
         self._update_overlay()
 
@@ -109,8 +110,14 @@ class TrackerLayout(Widget):
             region = self.regions[region_name]
             rule = None
             if icon_name in self.data["rooms"]:
-                if "requires" in self.data["rooms"][icon_name]:
-                    rule = self.data["rooms"][icon_name]["requires"]
+                room = self.data["rooms"][icon_name]
+                if "requires" in room:
+                    if "type" in room and ( \
+                       (room["type"] == "shovel" and self.ctx.options["crawl_space"] == 3) or \
+                       (room["type"] == "telescope_lens" and self.ctx.options["planetarium"] == 3) or \
+                       (room["type"] == "red_key" and self.ctx.options["ultra_secret_room"] == 3) or \
+                       (room["type"] == "undefined" and self.ctx.options["error_room"] == 3)):
+                        rule = self.data["rooms"][icon_name]["requires"]
             location_box = Location(location_name, rule, self, region, height=26, size_hint=(1, None), spacing=5)
             icon = self.load_image(f'tracker/images/{icon_name}.png')
             icon.size = (24, 24)
@@ -174,20 +181,29 @@ class TrackerLayout(Widget):
         self.unlocks_box = StackLayout(size_hint=(1, None), spacing=4)
         self.box_layout.add_widget(self.unlocks_box)
 
-        for unlock in self.data["unlocks"].keys():
+        for unlock_name, unlock in self.data["unlocks"].items():
+            if "type" in unlock and "alt" in unlock["type"] and "Alt Path" in self.ctx.options["excluded_areas"]: continue
+            if "type" in unlock and "void" in unlock["type"] and "The Void" in self.ctx.options["excluded_areas"]: continue
+            if "type" in unlock and "ascend" in unlock["type"] and "Ascend" in self.ctx.options["excluded_areas"]: continue
+            if "type" in unlock and "timed" in unlock["type"] and "Timed Areas" in self.ctx.options["excluded_areas"]: continue
+            if "type" in unlock and "shovel" in unlock["type"] and self.ctx.options["crawl_space"] != 3: continue
+            if "type" in unlock and "telescope_lens" in unlock["type"] and self.ctx.options["planetarium"] != 3: continue
+            if "type" in unlock and "red_key" in unlock["type"] and self.ctx.options["ultra_secret_room"] != 3: continue
+            if "type" in unlock and "undefined" in unlock["type"] and self.ctx.options["error_room"] != 3: continue
+            if "type" in unlock and "variant" in unlock["type"] and not self.ctx.options["floor_variations"]: continue
             unlock_box = Unlock(size=(32,28), size_hint=(None, None))
-            icon = self.load_image(f'tracker/images/{unlock}.png')
+            icon = self.load_image(f'tracker/images/{unlock_name}.png')
             icon.size = (32, 28)
             icon.texture.min_filter = 'nearest'
             icon.texture.mag_filter = 'nearest'
             icon.size_hint=(None, None)
             icon.color = (0, 0, 0, 1)
             unlock_box.add_widget(icon)
-            self.unlocks[unlock] = unlock_box
+            self.unlocks[unlock_name] = unlock_box
             self.unlocks_box.add_widget(unlock_box)
             unlock_box.tooltip_anchor = 37
             tooltip = TrackerTooltip(padding=(8, 4), size_hint=(None, None))
-            tooltip_label = Label(text=unlock, size_hint=(None, None))
+            tooltip_label = Label(text=unlock_name, size_hint=(None, None))
             tooltip_label.texture_update() 
             tooltip_label.size = tooltip_label.texture_size
             tooltip.add_widget(tooltip_label)
@@ -204,12 +220,12 @@ class TrackerLayout(Widget):
         self.items_box = BoxLayout(size_hint=(1, None))
         self.box_layout.add_widget(self.items_box)
 
-        consumables_layout = BoxLayout(size_hint=(1, None), height=0, orientation='vertical')
-        self.items_box.add_widget(consumables_layout)
         items_layout = BoxLayout(size_hint=(1, None), height=0, orientation='vertical')
         self.items_box.add_widget(items_layout)
         items_layout_2 = BoxLayout(size_hint=(1, None), height=0, orientation='vertical')
         self.items_box.add_widget(items_layout_2)
+        consumables_layout = BoxLayout(size_hint=(1, None), height=0, orientation='vertical')
+        self.items_box.add_widget(consumables_layout)
 
         for item in self.data["items"]:
             if item.endswith('Trap'):
@@ -221,7 +237,19 @@ class TrackerLayout(Widget):
             icon.texture.mag_filter = 'nearest'
             icon.size_hint=(None, None)
             item_box.add_widget(icon)
-            self.items[item] = Label(text="0 (0)", valign="center", size_hint=(None, 1), markup = True)
+            if item.startswith('Progressive'):
+                self.items[item] = Label(text="0", valign="center", size_hint=(None, 1), markup = True)
+            elif item.startswith('Permanent'):
+                stats = {
+                    "Permanent Damage Up": 0.60,
+                    "Permanent Tears Up": 0.35,
+                    "Permanent Range Up": 1.25,
+                    "Permanent Speed Up": 0.15,
+                    "Permanent Luck Up": 1.00
+                }
+                self.items[item] = Label(text=f"{(-self.ctx.options['start_out_nerfed'] * stats[item]):+.2f}", valign="center", size_hint=(None, 1), markup = True)
+            else:
+                self.items[item] = Label(text="0 (0)", valign="center", size_hint=(None, 1), markup = True)
             self.items[item].texture_update() 
             self.items[item].size = self.items[item].texture_size
             item_box.add_widget(self.items[item])
@@ -239,16 +267,15 @@ class TrackerLayout(Widget):
                 consumables_layout.add_widget(item_box)
                 consumables_layout.height += 26
             else:
-                if len(items_layout.children) < 6:
+                if len(items_layout.children) < 9:
                     items_layout.add_widget(item_box)
                     items_layout.height += 26
                 else:
                     items_layout_2.add_widget(item_box)
                     items_layout_2.height += 26
-        items_layout.add_widget(Widget(height=(consumables_layout.height - items_layout.height)))
-        items_layout.height = consumables_layout.height
-        items_layout_2.add_widget(Widget(height=(consumables_layout.height - items_layout_2.height)))
-        items_layout_2.height = consumables_layout.height
+
+        consumables_layout.add_widget(Widget(height=(items_layout.height - consumables_layout.height)))
+        consumables_layout.height = items_layout.height
         self.items_box.height = consumables_layout.height
 
         self.run_info._update_graphics()
@@ -330,13 +357,26 @@ class TrackerLayout(Widget):
                 else:
                     items[received] = amount
 
+        stats = {
+            "Permanent Damage Up": 0.60,
+            "Permanent Tears Up": 0.35,
+            "Permanent Range Up": 1.25,
+            "Permanent Speed Up": 0.15,
+            "Permanent Luck Up": 1.00
+        }
+
         for item, amount in items.items():
             if "_" in item:
                 continue
             total = f"{item}"
             tbd = f"{item}_tbd"
             received = f"{item}_received"
-            if items[tbd] > 0:
+            if item.startswith('Progressive'):
+                self.items[item].text = f"{items[received]}"
+            elif item.startswith('Permanent'):
+                mult = items[received] - self.ctx.options["start_out_nerfed"]
+                self.items[item].text = f"{(mult * stats[item]):+.2f}"
+            elif items[tbd] > 0:
                 self.items[item].text = f"{items[received]}[color=ffffff88]+{items[tbd]}[/color] ({items[total]})"
             else:
                 self.items[item].text = f"{items[received]} ({items[total]})"
@@ -364,7 +404,7 @@ class TrackerLayout(Widget):
         if not rule:
             return True
         if "has" in rule:
-            return self.unlocks[rule["has"]].unlocked
+            return rule["has"] in self.unlocks and self.unlocks[rule["has"]].unlocked
         if "or" in rule:
             return any(self.evaluate_rule(x) for x in rule["or"])
         if "and" in rule:
@@ -447,7 +487,7 @@ class InfoView(ScrollView):
 
         tracker = self.parent.parent
 
-        total_unlocks = len(self.parent.parent.data["unlocks"].keys())
+        total_unlocks = len(self.parent.parent.unlocks.keys())
         unlocks_per_row = max(math.floor((self.width - 12) / 36), 1)
         unlock_rows = math.ceil(total_unlocks / unlocks_per_row)
         tracker.unlocks_box.height = unlock_rows * 32

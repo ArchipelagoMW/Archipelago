@@ -56,7 +56,7 @@ unlocks require the `clearSpyroGameState` command to be entered into the client.
 
 ## Unique Local Commands
 
-The following command (without a slash or exclamation point) is available when using the S3AP client to play with Archipelago.
+The following command (without a slash or exclamation point) is available when using the S2AP client to play with Archipelago.
 
 - `clearSpyroGameState` Resync your save file's received items with the server.  This may result in duplicate filler items.
 If playing on a new save file, you will still need to get to the end of each level and defeat the bosses to progress in the game.

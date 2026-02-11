@@ -1,0 +1,14 @@
+09/723c/: | # never delete the prow in the desert
+  db $00,$00,$00
+  
+09/6581/: | # Always delete the interaction that places a quicksand where the ship is
+  db $C3
+
+04/65aa/: | # Never replace top of sub ship
+  db $C9
+
+04/65b8/: | # Never replace bottom of sub ship
+  db $C9
+
+04/65c6/: | # Never replace ship in desert
+  db $C9

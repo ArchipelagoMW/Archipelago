@@ -229,7 +229,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.SUNS_SONG, bundle)),
     ])
     # Connections
-    connect_regions(Regions.LW_BEYOND_MIDO, world, [
+    connect_regions(Regions.LW_SCRUBS_GROTTO, world, [
         (Regions.LW_BEYOND_MIDO, lambda bundle: True),
     ])
 

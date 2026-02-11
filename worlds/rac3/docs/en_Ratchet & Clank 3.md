@@ -38,3 +38,13 @@ firepower. Receiving Jackpot Mode filler item acts like you just broke the corre
 When you receive a trap, you will get its effect for 10 seconds and then it expires.
 For 1-Hit KO Trap and No Ammo Trap, the effects are instant and will not revert after 10 seconds.
 Receiving the Inferno Mode trap will not change your armor, but you will still receive the full effect for a random amount of time rather than 10 seconds.
+
+## What does the randomizer change from the vanilla game?
+- **Ship teleport/respawn feature:** Teleports Ratchet back to the ship. If used in an unusual place,
+  forces a respawn instead. You can pause the game and hold Square on the pause menu to run this command from in-game
+  or use the `/respawn` command in the Ratchet & Clank 3 client.
+- **Homewarp feature:** Loads Ratchet back on the Phoenix. Does nothing if used during the intro before reaching the Phoenix.
+  It can be activated with the following button combo: `L2 + R2 + L1 + R1 + SELECT` or using the `/homewarp` command in the
+  Ratchet & Clank 3 client.
+- **RY3N0 level limit:** Toggles the maximum upgrade level for the RY3N0 between lv5 and lv4. Use the `/ryno` command
+  in the Ratchet & Clank 3 client to change between the two modes.

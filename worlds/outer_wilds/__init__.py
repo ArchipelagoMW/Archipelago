@@ -9,7 +9,7 @@ from .coordinates import coordinate_description, generate_random_coordinates
 from .db_layout import generate_random_db_layout
 from .items import OuterWildsItem, all_non_event_items_table, item_name_groups, create_item, create_items
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
-from .options import EarlyKeyItem, OuterWildsGameOptions, RandomizeDarkBrambleLayout, Spawn, Goal, EnableEchoesOfTheEyeDLC
+from .options import *
 from .orbits import generate_random_orbits, generate_random_rotations
 from .warp_platforms import generate_random_warp_platform_mapping
 
@@ -29,6 +29,9 @@ class OuterWildsWebWorld(WebWorld):
 
 
 class OuterWildsWorld(World):
+    """
+    Outer Wilds is an action-adventure video game set in a small planetary system in which the player character, an unnamed space explorer referred to as the Hatchling, explores and investigates its mysteries in a self-directed manner.
+    """
     game = "Outer Wilds"
     web = OuterWildsWebWorld()
 
@@ -53,6 +56,13 @@ class OuterWildsWorld(World):
             self.options.enable_eote_dlc = EnableEchoesOfTheEyeDLC(1)
             self.options.spawn = Spawn(Spawn.option_stranger)
             self.options.goal = Goal(Goal.option_echoes_of_the_eye)
+            self.options.enable_ac_mod = EnableAstralCodecMod(0)
+            self.options.enable_fq_mod = EnableFretsQuestMod(0)
+            self.options.enable_hn1_mod = EnableHearthsNeighborMod(0)
+            self.options.enable_hn2_mod = EnableHearthsNeighbor2MagistariumMod(0)
+            self.options.enable_outsider_mod = EnableTheOutsiderMod(0)
+            self.options.enable_fc_mod = EnableForgottenCastawaysMod(0)
+            self.options.enable_eh_mod = EnableEchoHikeMod(0)
 
         if self.options.spawn == Spawn.option_random_non_vanilla:
             max_spawn = Spawn.option_stranger if self.options.enable_eote_dlc else Spawn.option_giants_deep
@@ -73,12 +83,16 @@ class OuterWildsWorld(World):
         if self.options.shuffle_spacesuit and self.options.spawn != Spawn.option_vanilla:
             raise OptionError('Incompatible options: shuffle_spacesuit is true and spawn is non-vanilla (%s)', self.options.spawn)
 
+        if self.options.spawn == Spawn.option_deep_bramble and not self.options.enable_fc_mod:
+            raise OptionError('Incompatible options: deep bramble spawn requires enable_fc_mod to be true')
+
         # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Outer Wilds" in self.multiworld.re_gen_passthrough:
                     slot_data = self.multiworld.re_gen_passthrough["Outer Wilds"]
                     self.warps = slot_data["warps"]
+                    self.options.goal.value = slot_data["goal"]
                     self.options.spawn = slot_data["spawn"]
                     self.options.logsanity.value = slot_data["logsanity"]
                     self.options.enable_eote_dlc.value = slot_data["enable_eote_dlc"]
@@ -88,6 +102,8 @@ class OuterWildsWorld(World):
                     self.options.enable_outsider_mod.value = slot_data["enable_outsider_mod"]
                     self.options.enable_ac_mod.value = slot_data["enable_ac_mod"]
                     self.options.enable_fq_mod.value = slot_data["enable_fq_mod"]
+                    self.options.enable_fc_mod.value = slot_data["enable_fc_mod"]
+                    self.options.enable_eh_mod.value = slot_data["enable_eh_mod"]
                     self.options.split_translator.value = slot_data["split_translator"]
             return
 
@@ -116,12 +132,16 @@ class OuterWildsWorld(World):
                     relevant_translator = "Translator (Brittle Hollow)"
                 if self.options.spawn == Spawn.option_giants_deep:
                     relevant_translator = "Translator (Giant's Deep)"
+                if self.options.spawn == Spawn.option_deep_bramble:
+                    relevant_translator = "Translator (Deep Bramble)"
                 # ignore stranger spawn since it won't offer a Translator at all
 
             key_item = None
             if self.options.early_key_item == EarlyKeyItem.option_any:
                 if self.options.spawn == Spawn.option_stranger:
                     key_item = self.random.choice(["Launch Codes", "Stranger Light Modulator"])
+                if self.options.spawn == Spawn.option_deep_bramble:
+                    key_item = self.random.choice([relevant_translator, "Signalscope", "Launch Codes"])
                 else:
                     key_item = self.random.choice([relevant_translator, "Nomai Warp Codes", "Launch Codes"])
             elif self.options.early_key_item == EarlyKeyItem.option_translator:
@@ -188,7 +208,7 @@ class OuterWildsWorld(World):
             "goal", "spawn",                             # affects tons of stuff, but also a client/mod faeture
             "logsanity", "enable_eote_dlc", "dlc_only",  # changes AP locations, needed by in-game tracker
             "enable_hn1_mod", "enable_hn2_mod",
-            "enable_outsider_mod", "enable_ac_mod", "enable_fq_mod",
+            "enable_outsider_mod", "enable_ac_mod", "enable_fq_mod", "enable_fc_mod", "enable_eh_mod",
             "split_translator"                           # changes AP items, and how client/mod implements Translator
         )
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time

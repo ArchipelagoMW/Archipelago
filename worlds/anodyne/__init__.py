@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from BaseClasses import Region, Location, Item, ItemClassification, CollectionState, Tutorial
 from Fill import fill_restrictive, FillError
-from settings import Group, UserFilePath
+from settings import Group, FilePath
 from Options import Accessibility, OptionGroup
 from worlds.AutoWorld import WebWorld, World
 from typing import ClassVar, List, Callable, Dict, Any, Set, Iterable, Type, Tuple, Optional
@@ -34,10 +34,11 @@ class AnodyneItem(Item):
 
 
 class AnodyneSettings(Group):
-    class UTTrackerPath(UserFilePath):
+    class UTTrackerPath(FilePath):
         """Path to the user's Anodyne UT map pack."""
         description = "Anodyne's Universal Tracker zip file"
         required = False
+        ut_dialog_name = "Select Anodyne's Universal Tracker Pack"
 
     ut_tracker_path: UTTrackerPath | str = UTTrackerPath()
 
@@ -957,7 +958,7 @@ class AnodyneWorld(UTStuff, World):
             "shop_items": [dataclasses.asdict(item) for item in self.get_shop_items()],
             "randomize_color_puzzle": bool(self.options.randomize_color_puzzle),
             "mitra_hints": [dataclasses.asdict(hint) for hint in
-                            self.get_mitra_hints(0 if self.options.mitra_hints == MitraHints.option_none else 8 + 1)],
+                            self.get_mitra_hints(0 if self.options.mitra_hints == MitraHints.option_none else 8 + 2)],
             "mitra_hint_type": int(self.options.mitra_hints),
             "include_blue_happy": bool(self.options.include_blue_happy),
             "swap_areas": [area.swap_areas() for area in Regions.all_areas],

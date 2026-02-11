@@ -6,6 +6,7 @@ from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from Utils import async_start
+from settings import get_settings
 from .data.Locations import LOCATIONS_DATA
 from .Options import OracleOfSeasonsGoal
 from .Util import build_item_id_to_name_dict, build_location_name_to_id_dict
@@ -172,7 +173,7 @@ class OracleOfSeasonsClient(BizHawkClient):
     async def process_checked_locations(self, ctx: "BizHawkClientContext", flag_bytes):
         checked_locations = set()
         for name, location in LOCATIONS_DATA.items():
-            if "flag_byte" not in location:
+            if location["flag_byte"] is None:
                 continue
 
             byte_addr = location["flag_byte"]
@@ -260,6 +261,10 @@ class OracleOfSeasonsClient(BizHawkClient):
             game_clear = (current_room == ROOM_ZELDA_ENDING) and ganon_was_beaten
 
         if game_clear:
+            if not hasattr(get_settings().tloz_oos_options, "beat_tutorial"):
+                get_settings().tloz_oos_options.beat_tutorial = True
+                get_settings()._changed = True
+
             await ctx.send_msgs([{
                 "cmd": "StatusUpdate",
                 "status": ClientStatus.CLIENT_GOAL

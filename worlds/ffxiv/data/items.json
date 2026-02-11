@@ -1,0 +1,471 @@
+[
+    {
+        "name": "Memory of a Distant World",
+        "category": ["McGuffin"],
+        "count": 50,
+        "progression": true
+    },
+	{
+		"name": "Limsa Lominsa and Middle La Noscea Access",
+		"category": ["Starting", "Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Gridania and Central Shroud Access",
+		"category": ["Starting", "Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Ul'dah and Central Thanalan Access",
+		"category": ["Starting", "Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Lower La Noscea Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Eastern La Noscea Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Western La Noscea Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Upper La Noscea Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Outer La Noscea Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+    {
+        "name": "Wolves' Den Pier Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true
+    },
+	{
+		"name": "East Shroud Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "South Shroud Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "North Shroud Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Western Thanalan Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Eastern Thanalan Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Southern Thanalan Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Northern Thanalan Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Coerthas Central Highlands Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Mor Dhona Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Ishgard Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "Coerthas Western Highlands Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "The Sea of Clouds Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "The Dravanian Forelands Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "The Churning Mists Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "The Dravanian Hinterlands and Idyllshire Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "Azys Lla Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 51,
+        "expansion": "Heavensward"
+	},
+	{
+		"name": "Rhalgr's Reach Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 61,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "The Fringes Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 60,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "The Peaks Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 61,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "The Lochs Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 61,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "Kugane Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 63,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "The Ruby Sea Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 63,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "Yanxia Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 63,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "The Azim Steppe Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 63,
+        "expansion": "Stormblood"
+	},
+	{
+		"name": "The Crystarium Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 71,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "Lakeland Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 71,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "Kholusia Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 71,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "Eulmore Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 71,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "Amh Araeng Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 71,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "Il Mheg Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 73,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "The Rak'tika Greatwood Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 73,
+        "expansion": "Shadowbringers"
+	},
+	{
+		"name": "The Tempest Access",
+		"category": ["Location"],
+		"count":1,
+		"progression": true,
+        "level": 78,
+        "expansion": "Shadowbringers"
+	},
+    {
+        "name": "Old Sharlayan Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+    {
+        "name": "Labyrinthos Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+    {
+        "name": "Ultima Thule Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+    {
+        "name": "Thavnair Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+    {
+        "name": "Radz-at-Han Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+    {
+        "name": "Garlemald Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+
+    },
+    {
+        "name": "Mare Lamentorum Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+    {
+        "name": "Gangos Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 80,
+        "expansion": "Shadowbringers"
+    },
+    {
+        "name": "Elpis Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 81,
+        "expansion": "Endwalker"
+    },
+	{
+		"name": "Bahamut Key",
+		"category": ["Raid Key"],
+		"count":1,
+		"progression": true,
+        "level": 50
+	},
+	{
+		"name": "Alexander Key",
+		"category": ["Raid Key"],
+		"count":1,
+		"progression": true,
+        "level": 60
+	},
+	{
+		"name": "Omega Key",
+		"category": ["Raid Key"],
+		"count":1,
+		"progression": true,
+        "level": 70
+	},
+	{
+		"name": "Eden Key",
+		"category": ["Raid Key"],
+		"count":1,
+		"progression": true,
+        "level": 80
+	},
+    {
+        "name": "Pandaemonium Key",
+        "category": ["Raid Key"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Arcadion Key",
+        "category": ["Raid Key"],
+        "count": 1,
+        "progression": true,
+        "level": 100
+    },
+    {
+        "name": "Tuliyollal Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Urqopacha Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Kozama'uka Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Yak T'el Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Shaaloani Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Heritage Found Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Living Memory Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    },
+    {
+        "name": "Solution Nine Access",
+        "category": ["Location"],
+        "count": 1,
+        "progression": true,
+        "level": 90
+    }
+]

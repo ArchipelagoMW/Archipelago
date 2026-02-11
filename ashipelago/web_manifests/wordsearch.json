@@ -1,0 +1,8 @@
+{
+  "game": "WordSearch",
+  "server_version": "0.5.0",
+  "display_name": "Word Search",
+  "discord_channel": "https://discord.com/channels/731205301247803413/1377289543467667638",
+  "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/wordsearch.apworld",
+  "web_client": "https://apworlds.com/word-search"
+}

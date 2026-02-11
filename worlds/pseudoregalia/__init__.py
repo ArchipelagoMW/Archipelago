@@ -19,6 +19,9 @@ class PseudoregaliaWebWorld(WebWorld):
     
 
 class PseudoregaliaWorld(World):
+    """
+    In this metroidvania/platformer hybrid, you play as Sybil, who is pulled into a distorted castle while sleeping. The game emphasizes fluidity and responsiveness, with a focus on running and jumping. You can grow strong, unlock new abilities, build up a deep movement system, fight enemies, and find secrets.
+    """
     game = "Pseudoregalia"
     required_client_version = (0, 7, 0)
     apworld_version = (0, 10, 0)

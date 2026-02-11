@@ -42,14 +42,22 @@
                 <button id="collapse-all">Collapse All</button>
             </div>
         </div>
-        {% for game_name in worlds | title_sorted %}
+
+        <!-- Favorites Section -->
+        <div id="favorites-section" class="js-only" style="display: none;">
+            <h2>Favorite Games</h2>
+            <div id="favorites-list"></div>
+            <hr class="favorites-divider">
+        </div>
+    
+        {% for game_name in worlds | sorted_worlds(worlds=worlds) %}
         {% set world = worlds[game_name] %}
-        <details data-game="{{ game_name }}">
-            {% if world.is_experimental %}
-            <summary class="h2 exp">{{ game_name }} *Experimental*</summary>
-            {% else %}
-            <summary class="h2">{{ game_name }}</summary>
-            {% endif %}
+        <details data-game="{{ game_name }}" data-game-display="{{ world.web.display_name | default(game_name) }}">
+            <summary {% if world.is_experimental %} class="h2 experimental"  {% else %} class="h2" {% endif %}>
+                {{ world.web.display_name | default(game_name) }}
+                {% if world.is_experimental %} *Experimental*{% endif %}
+                <span class="star-icon" data-game="{{ game_name }}" title="Add to favorites">❤︎</span>
+            </summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}

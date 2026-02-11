@@ -57,11 +57,12 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     ladxr_name = "tradequest"
 
 
-class TextShuffle(DefaultOffToggle):
+class TextShuffle(DefaultOffToggle, LADXROption):
     """
     Shuffles all text in the game.
     """
     display_name = "Text Shuffle"
+    ladxr_name = "textshuffle"
 
 
 class Rooster(DefaultOnToggle, LADXROption):
@@ -148,11 +149,12 @@ class ShuffleWater(DefaultOffToggle, LADXROption):
     ladxr_name = "shufflewater"
 
 
-class APTitleScreen(DefaultOnToggle):
+class APTitleScreen(DefaultOnToggle, LADXROption):
     """
     Enables AP specific title screen and disables the intro cutscene.
     """
     display_name = "AP Title Screen"
+    ladxr_name = "aptitlescreen"
 
 
 class BossShuffle(Choice):
@@ -178,7 +180,7 @@ class DungeonItemShuffle(Choice):
     ladxr_item: str
 
 
-class ShuffleNightmareKeys(DungeonItemShuffle):
+class ShuffleNightmareKeys(DungeonItemShuffle, LADXROption):
     """
     **Original Dungeon:** The item will be within its original dungeon.
 
@@ -192,9 +194,10 @@ class ShuffleNightmareKeys(DungeonItemShuffle):
     """
     display_name = "Shuffle Nightmare Keys"
     ladxr_item = "NIGHTMARE_KEY"
+    ladxr_name = "shufflenightmarekeys"
 
 
-class ShuffleSmallKeys(DungeonItemShuffle):
+class ShuffleSmallKeys(DungeonItemShuffle, LADXROption):
     """
     **Original Dungeon:** The item will be within its original dungeon.
 
@@ -208,6 +211,7 @@ class ShuffleSmallKeys(DungeonItemShuffle):
     """
     display_name = "Shuffle Small Keys"
     ladxr_item = "KEY"
+    ladxr_name = "shufflesmallkeys"
 
 
 class ShuffleMaps(DungeonItemShuffle):
@@ -305,7 +309,7 @@ class Goal(Choice, LADXROption):
 
     def to_ladxr_option(self, all_options):
         if self.value == self.option_instruments:
-            return ("goal", all_options["instrument_count"])
+            return ("goal", int(all_options["instrument_count"]))
         else:
             return LADXROption.to_ladxr_option(self, all_options)
 
@@ -330,7 +334,7 @@ class NagMessages(DefaultOffToggle, LADXROption):
     ladxr_name = "nagmessages"
 
 
-class MusicChangeCondition(Choice):
+class MusicChangeCondition(Choice, LADXROption):
     """
     Controls how the music changes.
 
@@ -343,6 +347,7 @@ class MusicChangeCondition(Choice):
     option_sword = 0
     option_always = 1
     default = option_always
+    ladxr_name = "musicchange"
 
 
 class HardMode(Choice, LADXROption):
@@ -436,7 +441,7 @@ class NoFlash(DefaultOnToggle, LADXROption):
     ladxr_name = "noflash"
 
 
-class BootsControls(Choice):
+class BootsControls(Choice, LADXROption):
     """
     Adds an additional button to activate Pegasus Boots (does nothing if you
     haven't picked up your boots!)
@@ -458,6 +463,7 @@ class BootsControls(Choice):
     alias_a = 2
     option_press_b = 3
     alias_b = 3
+    ladxr_name = "bootscontrols"
 
 
 class LinkPalette(Choice, LADXROption):
@@ -484,7 +490,7 @@ class LinkPalette(Choice, LADXROption):
         return self.ladxr_name, str(self.value)
 
 
-class TrendyGame(Choice):
+class TrendyGame(Choice, LADXROption):
     """
     **Easy:** All of the items hold still for you.
 
@@ -508,16 +514,18 @@ class TrendyGame(Choice):
     option_hardest = 4
     option_impossible = 5
     default = option_normal
+    ladxr_name = "trendygame"
 
 
-class GfxMod(DefaultOffToggle):
+class GfxMod(DefaultOffToggle, LADXROption):
     """
     If enabled, the patcher will prompt the user for a modification file to change sprites in the game and optionally some text.
     """
     display_name = "GFX Modification"
+    ladxr_name = "gfxmod"
 
 
-class Palette(Choice):
+class Palette(Choice, LADXROption):
     """
     Sets the palette for the game.
 
@@ -544,6 +552,7 @@ class Palette(Choice):
     option_greyscale = 3
     option_pink = 4
     option_inverted = 5
+    ladxr_name = "palette"
 
 
 class Music(Choice, LADXROption):
@@ -570,7 +579,7 @@ class Music(Choice, LADXROption):
         return self.ladxr_name, s
 
 
-class Warps(Choice):
+class Warps(Choice, LADXROption):
     """
     **Improved:** Adds remake style warp screen to the game. Choose your warp
     destination on the map after jumping in a portal and press *B* to select.
@@ -584,6 +593,7 @@ class Warps(Choice):
     option_improved = 1
     option_improved_additional = 2
     default = option_vanilla
+    ladxr_name = 'warps'
 
 
 class InGameHintCount(Range):
@@ -651,7 +661,7 @@ class FillerPool(Choice):
     option_nothing = 5
 
 
-class ForeignItemIcons(Choice):
+class ForeignItemIcons(Choice, LADXROption):
     """
     Choose how to display foreign items.
 
@@ -665,6 +675,7 @@ class ForeignItemIcons(Choice):
     option_guess_by_name = 0
     option_indicate_progression = 1
     default = option_guess_by_name
+    ladxr_name = 'foreignitemicons'
 
 
 class Follower(Choice):

@@ -3,31 +3,31 @@ from typing import Optional
 from ..RomData import RomData
 from . import char_table, kanji_table, text_offset_1_table_address_seasons, text_offset_2_table_address_seasons, text_table_eng_address_seasons, \
     text_offset_split_index_seasons, text_offset_1_table_address_ages, text_offset_2_table_address_ages, text_table_eng_address_ages, \
-    text_offset_split_index_ages
+    text_offset_split_index_ages, text_colors
 from ..Util import simple_hex
 from ..z80asm.Assembler import GameboyAddress
 
 
-def parse_dict_seasons(rom: RomData, seasons: bool):
+def parse_text_dict(rom: RomData, seasons: bool):
     if seasons:
         base_address = text_table_eng_address_seasons
         text_offset_1 = GameboyAddress(rom.read_byte(text_offset_1_table_address_seasons), rom.read_word(text_offset_1_table_address_seasons + 1))
     else:
         base_address = text_table_eng_address_ages
-        text_offset_1 = GameboyAddress(rom.read_byte(text_offset_1_table_address_ages), rom.read_word(text_offset_1_table_address_seasons + 1))
+        text_offset_1 = GameboyAddress(rom.read_byte(text_offset_1_table_address_ages), rom.read_word(text_offset_1_table_address_ages + 1))
     dict_entries_offset = rom.read_word(base_address)
 
     base_address += dict_entries_offset
     text_offset_1_address = text_offset_1.address_in_rom()
 
-    dict_seasons = {}
+    text_dict = {}
     for i in range(0x400):
         entry_address = text_offset_1_address + rom.read_word(base_address)
         base_address += 2
 
-        dict_seasons[f"DICT{i // 0x100}_{simple_hex(i % 0x100)}"] = decode_text(rom, entry_address)
+        text_dict[f"DICT{i // 0x100}_{simple_hex(i % 0x100)}"] = decode_text(rom, entry_address)
 
-    return dict_seasons
+    return text_dict
 
 
 def parse_all_texts(rom: RomData, dictionary: dict[str, str], seasons: bool):
@@ -37,8 +37,8 @@ def parse_all_texts(rom: RomData, dictionary: dict[str, str], seasons: bool):
         base_address = text_table_eng_address_seasons
         text_offset_split_index = text_offset_split_index_seasons
     else:
-        text_offset_1 = GameboyAddress(rom.read_byte(text_offset_1_table_address_ages), rom.read_word(text_offset_1_table_address_seasons + 1))
-        text_offset_2 = GameboyAddress(rom.read_byte(text_offset_2_table_address_ages), rom.read_word(text_offset_2_table_address_seasons + 1))
+        text_offset_1 = GameboyAddress(rom.read_byte(text_offset_1_table_address_ages), rom.read_word(text_offset_1_table_address_ages + 1))
+        text_offset_2 = GameboyAddress(rom.read_byte(text_offset_2_table_address_ages), rom.read_word(text_offset_2_table_address_ages + 1))
         base_address = text_table_eng_address_ages
         text_offset_split_index = text_offset_split_index_ages
 

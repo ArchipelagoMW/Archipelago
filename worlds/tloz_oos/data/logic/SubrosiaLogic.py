@@ -1,4 +1,4 @@
-from worlds.tloz_oos.data.logic.LogicPredicates import *
+from .LogicPredicates import *
 
 
 def make_subrosia_logic(player: int):

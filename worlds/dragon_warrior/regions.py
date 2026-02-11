@@ -58,6 +58,7 @@ def create_regions(world: World, level_locations, high_level_locations) -> None:
     rimuldar_locations = {}
     cantlin_locations = {}
     swamp_cave_locations = {**locations.swamp_cave_locations}
+    garins_grave_locations = {**locations.garins_grave_locations}
     hauksness_locations = {}
     token_locations = {}
     charlock_locations = {**locations.charlock_locations}
@@ -78,6 +79,7 @@ def create_regions(world: World, level_locations, high_level_locations) -> None:
     if world.options.monstersanity:
         brecconary_locations = {**brecconary_locations, **locations.brecconary_monster_locations}
         garinham_locations = {**garinham_locations, **locations.garinham_monster_locations}
+        garins_grave_locations = {**garins_grave_locations, **locations.garins_grave_monster_locations}
         kol_locations = {**kol_locations, **locations.kol_monster_locations}
         mountain_cave_locations = {**mountain_cave_locations, **locations.mountain_cave_monster_locations}
         rimuldar_locations = {**rimuldar_locations, **locations.rimuldar_monster_locations}
@@ -118,7 +120,7 @@ def create_regions(world: World, level_locations, high_level_locations) -> None:
 
     swamp_cave_region = create_region(world, names.swamp_cave, swamp_cave_locations)
 
-    garins_grave_region = create_region(world, names.garins_grave, locations.garins_grave_locations)
+    garins_grave_region = create_region(world, names.garins_grave, garins_grave_locations)
 
     charlock_region = create_region(world, names.charlock_castle, charlock_locations)
 
@@ -188,7 +190,7 @@ def connect_regions(world: World) -> None:
     connect(world, world.player, region_names, names.garinham, names.mountain_cave,
         equipment_helper(world, 3, 3, 2, random_map))
     connect(world, world.player, region_names, names.overworld, names.swamp_cave,
-        equipment_helper(world, 4, 4, 2, random_map))
+        equipment_helper(world, 4, 4, 2, True))
 
 
     connect(world, world.player, region_names, names.rimuldar, names.rainbow_drop_shrine,
@@ -205,7 +207,7 @@ def connect_regions(world: World) -> None:
     connect(world, world.player, region_names, names.rimuldar, names.rimuldar_keys,
         lambda state: (state.has(names.magic_key, world.player)))
     connect(world, world.player, region_names, names.garinham_keys, names.garins_grave,
-        equipment_helper(world, 4, 3, 2))
+        equipment_helper(world, 4, 4, 2))
     connect(world, world.player, region_names, names.rimuldar, names.staff_of_rain_shrine, 
         lambda state: (state.has(names.silver_harp, world.player) and 
                        (not random_map or state.has(names.magic_key, world.player))))
@@ -213,8 +215,18 @@ def connect_regions(world: World) -> None:
         lambda state: (state.has(names.gwaelins_love, world.player)))
     connect(world, world.player, region_names, names.rainbow_drop_shrine, names.charlock_castle,
         equipment_helper(world, 6, 6, 2))
+    # Special logic for Dragonlord region for monstersanity between shopsanity on or off
+    # (Whether all progressive equipment are needed or just Erdr. Armor + Sword)
     connect(world, world.player, region_names, names.charlock_castle, names.charlock_dragonlord,
-        equipment_helper(world, 7, 7, 3))
+        lambda state: ((world.options.shopsanity and 
+                            state.has(names.progressive_weapon, world.player, 7) and
+                            state.has(names.progressive_armor, world.player, 7) and
+                            state.has(names.progressive_shield, world.player, 3)
+                        ) or
+                       (not world.options.shopsanity and
+                            state.has(names.erdricks_sword, world.player) and
+                            (not world.options.searchsanity or state.has(names.erdricks_armor, world.player))
+                        )))
 
 def create_region(world: World, name: str, location_checks=None):
     ret = DWRegion(name, world.player, world.multiworld)
@@ -247,7 +259,7 @@ def connect(world: World, player: int, used_names: Dict[str, int], source: str, 
 
 def equipment_helper(world, weapons: int, armors: int, shields: int, key: bool = False):
     if not world.options.shopsanity:
-        return lambda state: (True)
+        return lambda state: (not key or state.has(names.magic_key, world.player))
     return lambda state: (state.has(names.progressive_weapon, world.player, weapons) and 
                           state.has(names.progressive_armor, world.player, armors) and
                           state.has(names.progressive_shield, world.player, shields) and

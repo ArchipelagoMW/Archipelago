@@ -2,9 +2,7 @@
 
 ## Required Software
 
-- The Zelda1Client
-    - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-- The BizHawk emulator. Versions 2.3.1 and higher are supported.
+- The BizHawk emulator. Versions 2.10 and higher are supported.
     - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
 - Your legally acquired US v1.0 PRG0 ROM file, probably named `Legend of Zelda, The (U) (PRG0) [!].nes`
 
@@ -17,18 +15,13 @@
 
 1. Download and install the latest version of Archipelago.
     - On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it.
-2. Assign EmuHawk version 2.3.1 or higher as your default program for launching `.nes` files.
+2. Assign EmuHawk version 2.10 or higher as your default program for launching `.nes` files.
     - Extract your BizHawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
        for loading ROMs more conveniently.
         1. Right-click on a ROM file and select **Open with...**
         2. Check the box next to **Always use this app to open .nes files**.
         3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**.
         4. Browse for `EmuHawk.exe` located inside your BizHawk folder (from step 1) and click **Open**.
-3. (EmuHawk version ≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
-  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
-  **"NLua+KopiLua" until this step is done.**
 
 ## Create a Config (.yaml) File
 
@@ -74,7 +67,7 @@ client, and will also create your ROM in the same place as your patch file.
 
 Once the Archipelago server has been hosted:
 
-1. Navigate to your Archipelago install folder and run `ArchipelagoZelda1Client.exe`.
+1. Navigate to your Archipelago install folder and run `ArchipelagoBizhawkClient.exe`.
 2. Notice the `/connect command` on the server hosting page. (It should look like `/connect archipelago.gg:*****`
    where ***** are numbers)
 3. Type the connect command into the client OR add the port to the pre-populated address on the top bar (it should
@@ -82,12 +75,12 @@ Once the Archipelago server has been hosted:
 
 ### Running Your Game and Connecting to the Client Program
 
-1. Open EmuHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
+1. Open EmuHawk 2.10 or higher and load your ROM OR click your ROM file if it is already associated with the
    extension `*.nes`.
-2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_tloz.lua` script onto
+2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_bizhawk.lua` script onto
    the main EmuHawk window.
     1. You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
-       `connector_tloz.lua` with the file picker.
+       `connector_bizhawk.lua` with the file picker.
     2. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps.
     3. If it says `Must use a version of BizHawk 2.3.1 or higher`, double-check your BizHawk version by clicking **
@@ -95,8 +88,7 @@ Once the Archipelago server has been hosted:
 
 ## Play the game
 
-When the client shows both NES and server are connected, you are good to go. You can check the connection status of the
-NES at any time by running `/nes`.
+When the client shows both NES and server are connected, you are good to go.
 
 ### Other Client Commands
 

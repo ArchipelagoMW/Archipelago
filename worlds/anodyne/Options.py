@@ -431,7 +431,14 @@ class TrapWeights(OptionCounter):
     display_name = "Trap Weights"
     valid_keys = Items.Trap.names()
     min = 0
-    default = {full_name: 1 for full_name in Items.Trap.names()}
+    default = {
+        Items.Trap.Person.item.full_name: 1,
+        Items.Trap.Gas.item.full_name: 1,
+        Items.Trap.Chaos.item.full_name: 1,
+        Items.Trap.Extreme_Chaos.item.full_name: 0,
+        Items.Trap.Grayscale.item.full_name: 1,
+        Items.Trap.Phone.item.full_name: 1
+    }
 
 
 class CardAmount(NamedRange):

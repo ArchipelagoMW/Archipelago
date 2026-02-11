@@ -40,7 +40,7 @@ much smoother experience.
 checkpoint at the stage select screen. Switch between different checkpoints with `L` or `R`.
 - **Enhanced Helmet:** By getting the Helmet Upgrade item, the Checkpoint Selector will allow you to travel to any 
 checkpoint regardless if you have visited them or not.
-- **Sigma's Fortress Selector:** You can switch which Fortress level you will travel to by pressing `SELECT` at 
+- **Sigma's Fortress Selector:** You can switch which X-Hunter Base level you will travel to by pressing `SELECT` at 
 the stage select screen.
 
 ## What is EnergyLink?

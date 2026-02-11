@@ -1,0 +1,41 @@
+11/5e5b/: db $e3; Remove the linked game ghini from 388
+# Replace the object data pointer of 4ec
+11/6123/: dw $65de ; group1Map88ObjectData (repurposed)
+
+11/65e1/: db $28,$98
+
+0f/7b51/: |
+  ld h,d
+  ld l,$44 ; Interaction.state
+  inc (hl)
+  call $15e9 ; interactionInitGraphics
+  ld hl,$5779 ; mainScripts.linkedGameNpcScript
+  call interactionSetScript
+  jp $2686 ; interactionAnimateAsNpc
+
+0b/5779/: |
+  db initcollisions
+  @start:
+  db enableinput
+  db checkabutton
+  db disableinput
+  db showtext,$53,$00
+  db jumpiftextoptioneq,$00
+  dw @startQuestions
+  db showtext,$53,$01
+  db jumpiftextoptioneq,$00
+  dw @start
+  db showtext,$53,$02
+  dwbe @start
+  @startQuestions:
+  db showtext,$53,$03
+  db jumpiftextoptioneq,$01
+  dw @succeeded
+  db showtext,$53,$04
+  dwbe @start
+  @succeeded:
+  db showtext,$53,$05
+  db enableinput
+  db checkabutton
+  db showtext,$53,$06
+  dwbe @start

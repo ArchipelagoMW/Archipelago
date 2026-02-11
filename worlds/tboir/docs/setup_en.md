@@ -6,14 +6,20 @@
 - A save file where the paths to all the endgame bosses are unlocked
 - The Archipelago of Isaac mod
   - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3640861678)
+- The Isaac .apworld
+  - [Github](https://github.com/NaveTK/Archipelago/releases/latest)
 
 ## Optional Software
 - isaac-save-installer by Zamiell for a 100% completed save file
   - [Github](https://github.com/Zamiell/isaac-save-installer/)
 
 ## Installation Procedures
+(You'll need to have the Archipelago Launcher installed)
+
 1. Open the Steam Workshop page for the mod linked above
 2. Click **Subscribe**
+3. Download the tboir.apworld linked above
+4. Double click to install it
 
 ## Create a Config (.yaml) File
 

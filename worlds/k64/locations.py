@@ -588,7 +588,6 @@ star_locations = {
     0x0555: LocationName.aqua_star_3_t24,
     0x0556: LocationName.aqua_star_3_t25,
     0x0557: LocationName.aqua_star_3_t26,
-    0x0558: LocationName.aqua_star_3_t27,
     0x0559: LocationName.aqua_star_4_t1,
     0x055A: LocationName.aqua_star_4_t2,
     0x055B: LocationName.aqua_star_4_t3,

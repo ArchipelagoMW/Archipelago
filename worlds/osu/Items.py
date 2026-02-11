@@ -42,9 +42,8 @@ def find_beatmapset(id) -> dict:
             return beatmapset
     raise ValueError("Beatmap not in Song Data")
 
-
 osu_song_data = get_song_data()
-osu_song_max = len(osu_song_data)
+osu_song_max = 520
 osu_song_pool = []
 
 item_data_table: Dict[str, OsuItemData] = {

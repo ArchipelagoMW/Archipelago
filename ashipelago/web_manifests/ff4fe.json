@@ -1,6 +1,7 @@
 {
   "game": "Final Fantasy IV Free Enterprise",
   "server_version": "7",
+  "display_name": "Final Fantasy IV - Free Enterprise",
   "discord_channel": "https://discord.com/channels/731205301247803413/1170144930610557008",
   "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ff4fe_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ff4fe.apworld"

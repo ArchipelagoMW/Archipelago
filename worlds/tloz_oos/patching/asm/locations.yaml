@@ -171,6 +171,9 @@
 
 ##### BELL SMITHY ###############################################
 
+0a/641d/: db $00,$00,$00 ; nop instructions about wPirateBellState
+0a/6422/: db $38 ; and jr c, meaning we always reforge if we have the rusty bell
+
 # Remove the "post-endgame" discussion when no items are reforgeable (patch is changed by secret_locations.yaml)
 0b/7596/: dw $7598
 
@@ -325,10 +328,7 @@
 ##### HERO'S CAVE CHEST ############################################
 
 # stop hero's cave chest from giving a second sword that causes a spin slash.
-0a/7bb9/: |
-    db $00,$00,$00,$00,$00,$00,$00
-    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    db $00
+0a/7bb8/: jr $17
 
 
 ##### SUBROSIAN HIDE AND SEEK ############################################

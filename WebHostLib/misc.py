@@ -13,7 +13,8 @@ from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
-from Utils import title_sorted
+from Utils import title_sorted, world_sorted, tutorials_sorted
+
 
 class WebWorldTheme(StrEnum):
     DIRT = "dirt"
@@ -128,9 +129,15 @@ def tutorial_landing():
                 "authors": tutorial.authors,
                 "language": tutorial.language
             }
+
+    # Ashipelago customization
+    worlds = tutorials_sorted(worlds.items(), worlds)
+    sorted_worlds = {}
+    for world_name, world_type in worlds:
+        sorted_worlds[world_name] = world_type
     tutorials = {world_name: tutorials for world_name, tutorials in title_sorted(
-        tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else worlds[element[0]].game)}
-    return render_template("tutorialLanding.html", worlds=worlds, tutorials=tutorials)
+        tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else sorted_worlds[element[0]].game)}
+    return render_template("tutorialLanding.html", worlds=sorted_worlds, tutorials=tutorials)
 
 
 @app.route('/faq/<string:lang>/')
@@ -288,8 +295,12 @@ def get_datapackage():
 @cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
+    # Ashipelago customization
+    available_worlds: Dict[str, str] = {}
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
             has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
-            available_games.append({ 'title': game, 'has_settings': has_settings })
-    return render_template("siteMap.html", games=available_games)
+            world_name = getattr(world.web, "display_name", None) or game
+            available_games.append({ 'title': world_name, 'has_settings': has_settings })
+            available_worlds[world_name] = game
+    return render_template("siteMap.html", games=available_games, world_map=available_worlds)

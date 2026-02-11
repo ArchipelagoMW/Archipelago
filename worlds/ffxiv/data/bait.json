@@ -1,0 +1,807 @@
+{
+ "Lugworm": {
+  "name": "Lugworm",
+  "id": 2585,
+  "icon": 27004
+ },
+ "Pill Bug": {
+  "name": "Pill Bug",
+  "id": 2587,
+  "icon": 27005
+ },
+ "Floating Minnow": {
+  "name": "Floating Minnow",
+  "id": 2611,
+  "icon": 27051
+ },
+ "Merlthor Goby": {
+  "name": "Merlthor Goby",
+  "id": 4869,
+  "icon": 29003,
+  "mooch": 1
+ },
+ "Ocean Cloud": {
+  "name": "Ocean Cloud",
+  "id": 4872,
+  "icon": 29005,
+  "mooch": 1
+ },
+ "Harbor Herring": {
+  "name": "Harbor Herring",
+  "id": 4874,
+  "icon": 29044,
+  "mooch": 1
+ },
+ "Goby Ball": {
+  "name": "Goby Ball",
+  "id": 2589,
+  "icon": 27009
+ },
+ "Rat Tail": {
+  "name": "Rat Tail",
+  "id": 2591,
+  "icon": 27001
+ },
+ "Steel Jig": {
+  "name": "Steel Jig",
+  "id": 2616,
+  "icon": 27067
+ },
+ "Moth Pupa": {
+  "name": "Moth Pupa",
+  "id": 2586,
+  "icon": 27003
+ },
+ "Crayfish Ball": {
+  "name": "Crayfish Ball",
+  "id": 2588,
+  "icon": 27008
+ },
+ "Sinking Minnow": {
+  "name": "Sinking Minnow",
+  "id": 2617,
+  "icon": 27055
+ },
+ "Northern Krill": {
+  "name": "Northern Krill",
+  "id": 2606,
+  "icon": 27023
+ },
+ "Bloodworm": {
+  "name": "Bloodworm",
+  "id": 2590,
+  "icon": 27006
+ },
+ "Wildfowl Fly": {
+  "name": "Wildfowl Fly",
+  "id": 2623,
+  "icon": 27059
+ },
+ "Butterworm": {
+  "name": "Butterworm",
+  "id": 2594,
+  "icon": 27019
+ },
+ "Midge Basket": {
+  "name": "Midge Basket",
+  "id": 2592,
+  "icon": 27002
+ },
+ "Copperfish": {
+  "name": "Copperfish",
+  "id": 4948,
+  "icon": 29314,
+  "mooch": 1
+ },
+ "Striped Goby": {
+  "name": "Striped Goby",
+  "id": 4927,
+  "icon": 29230,
+  "mooch": 1
+ },
+ "Ala Mhigan Fighting Fish": {
+  "name": "Ala Mhigan Fighting Fish",
+  "id": 4942,
+  "icon": 29216,
+  "mooch": 1
+ },
+ "Chocobo Fly": {
+  "name": "Chocobo Fly",
+  "id": 2610,
+  "icon": 27056
+ },
+ "Yumizuno": {
+  "name": "Yumizuno",
+  "id": 2628,
+  "icon": 27068
+ },
+ "Spoon Worm": {
+  "name": "Spoon Worm",
+  "id": 2596,
+  "icon": 27015
+ },
+ "Crow Fly": {
+  "name": "Crow Fly",
+  "id": 2614,
+  "icon": 27057
+ },
+ "Spinnerbait": {
+  "name": "Spinnerbait",
+  "id": 2626,
+  "icon": 27063
+ },
+ "Shrimp Cage Feeder": {
+  "name": "Shrimp Cage Feeder",
+  "id": 2613,
+  "icon": 27053
+ },
+ "Herring Ball": {
+  "name": "Herring Ball",
+  "id": 2598,
+  "icon": 27007
+ },
+ "Syrphid Basket": {
+  "name": "Syrphid Basket",
+  "id": 2597,
+  "icon": 27002
+ },
+ "Glowworm": {
+  "name": "Glowworm",
+  "id": 2603,
+  "icon": 27021
+ },
+ "Stonefly Nymph": {
+  "name": "Stonefly Nymph",
+  "id": 12704,
+  "icon": 27028
+ },
+ "Heavy Steel Jig": {
+  "name": "Heavy Steel Jig",
+  "id": 2619,
+  "icon": 27065
+ },
+ "Fullmoon Sardine": {
+  "name": "Fullmoon Sardine",
+  "id": 4898,
+  "icon": 29055,
+  "mooch": 1
+ },
+ "Ogre Barracuda": {
+  "name": "Ogre Barracuda",
+  "id": 4888,
+  "icon": 29035,
+  "mooch": 1
+ },
+ "Wahoo": {
+  "name": "Wahoo",
+  "id": 4904,
+  "icon": 29025,
+  "mooch": 1
+ },
+ "Honey Worm": {
+  "name": "Honey Worm",
+  "id": 2599,
+  "icon": 27018
+ },
+ "Stem Borer": {
+  "name": "Stem Borer",
+  "id": 2601,
+  "icon": 27017
+ },
+ "Snurble Fly": {
+  "name": "Snurble Fly",
+  "id": 2618,
+  "icon": 27058
+ },
+ "Mythril Spoon Lure": {
+  "name": "Mythril Spoon Lure",
+  "id": 2622,
+  "icon": 27066
+ },
+ "Spinner": {
+  "name": "Spinner",
+  "id": 2620,
+  "icon": 27062
+ },
+ "Silverfish": {
+  "name": "Silverfish",
+  "id": 4978,
+  "icon": 29312,
+  "mooch": 1
+ },
+ "Goldfish": {
+  "name": "Goldfish",
+  "id": 5011,
+  "icon": 29311,
+  "mooch": 1
+ },
+ "Krill Cage Feeder": {
+  "name": "Krill Cage Feeder",
+  "id": 2621,
+  "icon": 27053
+ },
+ "Giant Squid": {
+  "name": "Giant Squid",
+  "id": 4919,
+  "icon": 29027,
+  "mooch": 1
+ },
+ "Common Sculpin": {
+  "name": "Common Sculpin",
+  "id": 4995,
+  "icon": 29250,
+  "mooch": 1
+ },
+ "Streamer": {
+  "name": "Streamer",
+  "id": 2627,
+  "icon": 27060
+ },
+ "Bass Ball": {
+  "name": "Bass Ball",
+  "id": 2595,
+  "icon": 27010
+ },
+ "Topwater Frog": {
+  "name": "Topwater Frog",
+  "id": 2624,
+  "icon": 27054
+ },
+ "Caddisfly Larva": {
+  "name": "Caddisfly Larva",
+  "id": 2607,
+  "icon": 27013
+ },
+ "Rainbow Spoon Lure": {
+  "name": "Rainbow Spoon Lure",
+  "id": 2625,
+  "icon": 27061
+ },
+ "Assassin Betta": {
+  "name": "Assassin Betta",
+  "id": 5002,
+  "icon": 29238,
+  "mooch": 1
+ },
+ "Silver Spoon Lure": {
+  "name": "Silver Spoon Lure",
+  "id": 2615,
+  "icon": 27052
+ },
+ "Freshwater Boilie": {
+  "name": "Freshwater Boilie",
+  "id": 27591,
+  "icon": 27042
+ },
+ "Rolling Stone": {
+  "name": "Rolling Stone",
+  "id": 2604,
+  "icon": 27024
+ },
+ "Saltwater Boilie": {
+  "name": "Saltwater Boilie",
+  "id": 27592,
+  "icon": 27043
+ },
+ "Sand Leech": {
+  "name": "Sand Leech",
+  "id": 2600,
+  "icon": 27014
+ },
+ "Sand Gecko": {
+  "name": "Sand Gecko",
+  "id": 2602,
+  "icon": 27012
+ },
+ "Storm Rider": {
+  "name": "Storm Rider",
+  "id": 5035,
+  "icon": 29606,
+  "mooch": 1
+ },
+ "Sandfish": {
+  "name": "Sandfish",
+  "id": 4977,
+  "icon": 29234,
+  "mooch": 1
+ },
+ "Abalathian Smelt": {
+  "name": "Abalathian Smelt",
+  "id": 4937,
+  "icon": 29310,
+  "mooch": 1
+ },
+ "Balloon Bug": {
+  "name": "Balloon Bug",
+  "id": 2609,
+  "icon": 27020
+ },
+ "Hoverworm": {
+  "name": "Hoverworm",
+  "id": 2605,
+  "icon": 27022
+ },
+ "Cloud Cutter": {
+  "name": "Cloud Cutter",
+  "id": 5040,
+  "icon": 29655,
+  "mooch": 1
+ },
+ "Saucerfish": {
+  "name": "Saucerfish",
+  "id": 5044,
+  "icon": 29656,
+  "mooch": 1
+ },
+ "Mahar": {
+  "name": "Mahar",
+  "id": 8771,
+  "icon": 29660,
+  "mooch": 1
+ },
+ "Metal Spinner": {
+  "name": "Metal Spinner",
+  "id": 28634,
+  "icon": 27062
+ },
+ "Purse Web Spider": {
+  "name": "Purse Web Spider",
+  "id": 12705,
+  "icon": 22619
+ },
+ "Brute Leech": {
+  "name": "Brute Leech",
+  "id": 12711,
+  "icon": 22635
+ },
+ "Giant Crane Fly": {
+  "name": "Giant Crane Fly",
+  "id": 12712,
+  "icon": 27002
+ },
+ "Red Balloon": {
+  "name": "Red Balloon",
+  "id": 12708,
+  "icon": 27025
+ },
+ "Skyworm": {
+  "name": "Skyworm",
+  "id": 12716,
+  "icon": 29722,
+  "mooch": 1
+ },
+ "Glacier Core": {
+  "name": "Glacier Core",
+  "id": 12724,
+  "icon": 29706,
+  "mooch": 1
+ },
+ "Goblin Jig": {
+  "name": "Goblin Jig",
+  "id": 12706,
+  "icon": 27069
+ },
+ "Ice Faerie": {
+  "name": "Ice Faerie",
+  "id": 12715,
+  "icon": 29803,
+  "mooch": 1
+ },
+ "Bladed Steel Jig": {
+  "name": "Bladed Steel Jig",
+  "id": 12707,
+  "icon": 27070
+ },
+ "Signature Skyball": {
+  "name": "Signature Skyball",
+  "id": 30136,
+  "icon": 27007
+ },
+ "Bullfrog": {
+  "name": "Bullfrog",
+  "id": 12730,
+  "icon": 29233,
+  "mooch": 1
+ },
+ "Blueclaw Shrimp": {
+  "name": "Blueclaw Shrimp",
+  "id": 12722,
+  "icon": 29404,
+  "mooch": 1
+ },
+ "Aether Eye": {
+  "name": "Aether Eye",
+  "id": 12777,
+  "icon": 29214,
+  "mooch": 1
+ },
+ "Sky Faerie": {
+  "name": "Sky Faerie",
+  "id": 12753,
+  "icon": 29716,
+  "mooch": 1
+ },
+ "Fiend Worm": {
+  "name": "Fiend Worm",
+  "id": 12710,
+  "icon": 27027
+ },
+ "Platinum Fish": {
+  "name": "Platinum Fish",
+  "id": 12776,
+  "icon": 29312,
+  "mooch": 1
+ },
+ "Rudderfish": {
+  "name": "Rudderfish",
+  "id": 12805,
+  "icon": 29717,
+  "mooch": 1
+ },
+ "Versatile Lure": {
+  "name": "Versatile Lure",
+  "id": 29717,
+  "icon": 27051
+ },
+ "Magma Worm": {
+  "name": "Magma Worm",
+  "id": 12709,
+  "icon": 27026
+ },
+ "Granite Crab": {
+  "name": "Granite Crab",
+  "id": 12754,
+  "icon": 29854,
+  "mooch": 1
+ },
+ "Hedgemole Cricket": {
+  "name": "Hedgemole Cricket",
+  "id": 12757,
+  "icon": 29801,
+  "mooch": 1
+ },
+ "Sweetfish": {
+  "name": "Sweetfish",
+  "id": 12780,
+  "icon": 29395,
+  "mooch": 1
+ },
+ "Nightcrawler": {
+  "name": "Nightcrawler",
+  "id": 20614,
+  "icon": 27032
+ },
+ "Salmon Roe": {
+  "name": "Salmon Roe",
+  "id": 20613,
+  "icon": 27031
+ },
+ "Midge Larva": {
+  "name": "Midge Larva",
+  "id": 20615,
+  "icon": 27033
+ },
+ "Gyr Abanian Trout": {
+  "name": "Gyr Abanian Trout",
+  "id": 20056,
+  "icon": 29204,
+  "mooch": 1
+ },
+ "Balloon Frog": {
+  "name": "Balloon Frog",
+  "id": 20064,
+  "icon": 29233,
+  "mooch": 1
+ },
+ "Stonefly Larva": {
+  "name": "Stonefly Larva",
+  "id": 20675,
+  "icon": 27013
+ },
+ "Suspending Minnow": {
+  "name": "Suspending Minnow",
+  "id": 20619,
+  "icon": 27072
+ },
+ "Hardhead Trout": {
+  "name": "Hardhead Trout",
+  "id": 24207,
+  "icon": 29535,
+  "mooch": 1
+ },
+ "Silkworm": {
+  "name": "Silkworm",
+  "id": 20616,
+  "icon": 27034
+ },
+ "Rock Saltfish": {
+  "name": "Rock Saltfish",
+  "id": 20025,
+  "icon": 29901,
+  "mooch": 1
+ },
+ "Live Shrimp": {
+  "name": "Live Shrimp",
+  "id": 20617,
+  "icon": 27035
+ },
+ "Bream Lure": {
+  "name": "Bream Lure",
+  "id": 20618,
+  "icon": 27071
+ },
+ "Blue Bobbit": {
+  "name": "Blue Bobbit",
+  "id": 20676,
+  "icon": 27004
+ },
+ "Ku'er": {
+  "name": "Ku'er",
+  "id": 24214,
+  "icon": 29159,
+  "mooch": 1
+ },
+ "Ruby Shrimp": {
+  "name": "Ruby Shrimp",
+  "id": 20112,
+  "icon": 29008,
+  "mooch": 1
+ },
+ "Red Prismfish": {
+  "name": "Red Prismfish",
+  "id": 22397,
+  "icon": 29521,
+  "mooch": 1
+ },
+ "Violet Prismfish": {
+  "name": "Violet Prismfish",
+  "id": 21177,
+  "icon": 29517,
+  "mooch": 1
+ },
+ "Zagas Khaal": {
+  "name": "Zagas Khaal",
+  "id": 20127,
+  "icon": 29310,
+  "mooch": 1
+ },
+ "Marble Nymph": {
+  "name": "Marble Nymph",
+  "id": 27585,
+  "icon": 27038
+ },
+ "Fruit Worm": {
+  "name": "Fruit Worm",
+  "id": 27582,
+  "icon": 27036
+ },
+ "Robber Ball": {
+  "name": "Robber Ball",
+  "id": 27587,
+  "icon": 27010
+ },
+ "Baitbugs": {
+  "name": "Baitbugs",
+  "id": 27589,
+  "icon": 27040
+ },
+ "Moyebi Shrimp": {
+  "name": "Moyebi Shrimp",
+  "id": 27583,
+  "icon": 27037
+ },
+ "Squid Strip": {
+  "name": "Squid Strip",
+  "id": 27590,
+  "icon": 27041
+ },
+ "The Jaws of Undeath": {
+  "name": "The Jaws of Undeath",
+  "id": 28925,
+  "icon": 28475,
+  "mooch": 1
+ },
+ "Short Bill Minnow": {
+  "name": "Short Bill Minnow",
+  "id": 27588,
+  "icon": 27074
+ },
+ "Spearhead Squid": {
+  "name": "Spearhead Squid",
+  "id": 27457,
+  "icon": 29177,
+  "mooch": 1
+ },
+ "Desert Dessert Frog": {
+  "name": "Desert Dessert Frog",
+  "id": 27584,
+  "icon": 27073
+ },
+ "Jerked Ovim": {
+  "name": "Jerked Ovim",
+  "id": 27586,
+  "icon": 27039
+ },
+ "Hornhelm": {
+  "name": "Hornhelm",
+  "id": 27460,
+  "icon": 29615,
+  "mooch": 1
+ },
+ "Desert Saw": {
+  "name": "Desert Saw",
+  "id": 27464,
+  "icon": 29618,
+  "mooch": 1
+ },
+ "Web-footed Sand Gecko": {
+  "name": "Web-footed Sand Gecko",
+  "id": 27461,
+  "icon": 29616,
+  "mooch": 1
+ },
+ "Clown Tetra": {
+  "name": "Clown Tetra",
+  "id": 27490,
+  "icon": 29592,
+  "mooch": 1
+ },
+ "Eryops": {
+  "name": "Eryops",
+  "id": 27491,
+  "icon": 29593,
+  "mooch": 1
+ },
+ "Priest of Yx'Lokwa": {
+  "name": "Priest of Yx'Lokwa",
+  "id": 28071,
+  "icon": 28474,
+  "mooch": 1
+ },
+ "Diamond Pipira": {
+  "name": "Diamond Pipira",
+  "id": 27492,
+  "icon": 29594,
+  "mooch": 1
+ },
+ "Ancient Shrimp": {
+  "name": "Ancient Shrimp",
+  "id": 27506,
+  "icon": 29186,
+  "mooch": 1
+ },
+ "Shrimp Ball": {
+  "name": "Shrimp Ball",
+  "id": 36592,
+  "icon": 27047
+ },
+ "Mackerel Strip": {
+  "name": "Mackerel Strip",
+  "id": 36593,
+  "icon": 27048
+ },
+ "Gold Salmon Roe": {
+  "name": "Gold Salmon Roe",
+  "id": 36588,
+  "icon": 27044
+ },
+ "Leech": {
+  "name": "Leech",
+  "id": 36589,
+  "icon": 27045
+ },
+ "Sky Spoon Lure": {
+  "name": "Sky Spoon Lure",
+  "id": 36590,
+  "icon": 27075
+ },
+ "Mayfly": {
+  "name": "Mayfly",
+  "id": 36591,
+  "icon": 27046
+ },
+ "Astacus Aetherius": {
+  "name": "Astacus Aetherius",
+  "id": 36412,
+  "icon": 28417,
+  "mooch": 1
+ },
+ "Shadowdart Sardine": {
+  "name": "Shadowdart Sardine",
+  "id": 36426,
+  "icon": 28046,
+  "mooch": 1
+ },
+ "Puff-paya": {
+  "name": "Puff-paya",
+  "id": 36451,
+  "icon": 29582,
+  "mooch": 1
+ },
+ "Grey Worm": {
+  "name": "Grey Worm",
+  "id": 36594,
+  "icon": 27049
+ },
+ "Chimera Worm": {
+  "name": "Chimera Worm",
+  "id": 36595,
+  "icon": 27100
+ },
+ "Calicia": {
+  "name": "Calicia",
+  "id": 36470,
+  "icon": 29763,
+  "mooch": 1
+ },
+ "Albino Loach": {
+  "name": "Albino Loach",
+  "id": 36478,
+  "icon": 28521,
+  "mooch": 1
+ },
+ "Panic Jig": {
+  "name": "Panic Jig",
+  "id": 36596,
+  "icon": 27076
+ },
+ "Stardust": {
+  "name": "Stardust",
+  "id": 36597,
+  "icon": 27101
+ },
+ "Horizon Event": {
+  "name": "Horizon Event",
+  "id": 36518,
+  "icon": 28962,
+  "mooch": 1
+ },
+ "Pot Of Stardust": {
+  "name": "Pot Of Stardust"
+ },
+ "Select Bait Ball": {
+  "name": "Select Bait Ball"
+ },
+ "Plump Worm": {
+  "name": "Plump Worm"
+ },
+ "Popper Lure": {
+  "name": "Popper Lure"
+ },
+ "Golden Stonefly Nymph": {
+  "name": "Golden Stonefly Nymph"
+ },
+ "Honeybee": {
+  "name": "Honeybee"
+ },
+ "Crimson Lugworm": {
+  "name": "Crimson Lugworm"
+ },
+ "Shucked Clam": {
+  "name": "Shucked Clam"
+ },
+ "Silkmoth Pupa": {
+  "name": "Silkmoth Pupa"
+ },
+ "White Worm": {
+  "name": "White Worm"
+ },
+ "Cloud-Eye Carp": {
+  "name": "Cloud-Eye Carp"
+ },
+ "Basket Of Red Maggots": {
+  "name": "Basket Of Red Maggots"
+ },
+ "Yak T'El Crab": {
+  "name": "Yak T'El Crab"
+ },
+ "Cactuar Jig": {
+  "name": "Cactuar Jig"
+ },
+ "Dragonfly": {
+  "name": "Dragonfly"
+ },
+ "Ghost Nipper": {
+  "name": "Ghost Nipper"
+ }
+}

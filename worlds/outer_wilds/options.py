@@ -148,7 +148,8 @@ class Spawn(Choice):
 
     'vanilla' is the same as the base game: you wake up in TH Village, talk to Hornfels to get the Launch Codes, then walk by the Nomai statue to start the time loop.
     All other options (including timber_hearth) will spawn you in your spacesuit, with the time loop already started, and the Launch Codes item placed randomly like any other AP item.
-    stranger of course requires enable_eotc_dlc to be true.
+    `stranger` of course requires `enable_eotc_dlc` to be true
+    `deep_bramble` requires `enable_fc_mod` to be true
 
     The idea is that non-vanilla spawns will require you to play "shipless" for a while, possibly using Nomai Warp Codes to visit other planets. The ship will still spawn nearby, so you can use the ship log/tracker right away.
     When playing with non-vanilla spawns, we recommend:
@@ -164,6 +165,7 @@ class Spawn(Choice):
     option_giants_deep = 4
     option_stranger = 5
     option_random_non_vanilla = 6
+    option_deep_bramble = 7
     default = 0
 
 
@@ -272,6 +274,27 @@ class EnableFretsQuestMod(Toggle):
     display_name = "Enable Fret's Quest Story Mod"
 
 
+class EnableForgottenCastawaysMod(Toggle):
+    """
+    Incorporates Forgotten Castaways story mod content into the randomizer with an additional 13 items and 54 locations.
+    If logsanity is enabled, that will add another 118 locations, for a total of 172 FC locations.
+    """
+    display_name = "Enable Forgotten Castaways Story Mod"
+
+
+class EnableEchoHikeMod(Toggle):
+    """
+    Incorporates Echo Hike story mod content into the randomizer with an additional 1 item and 3 locations.
+    If logsanity is enabled, that will add another 8 locations, for a total of 11 EH locations.
+    The main appeal of this mod is the unique "Threader" item, which is a grapple beam/hook that works on any
+    surface in the game.
+    When this is enabled, using the Threader will be in-logic for multiple base game, DLC and story mod
+    locations outside of Echo Hike itself, and receiving the "Threader" AP item will spawn Threaders
+    on all the base game, DLC and story mod planets/areas where you might need one.
+    """
+    display_name = "Enable Echo Hike Story Mod"
+
+
 @dataclass
 class OuterWildsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -297,6 +320,8 @@ class OuterWildsGameOptions(PerGameCommonOptions):
     enable_ac_mod: EnableAstralCodecMod
     enable_hn2_mod: EnableHearthsNeighbor2MagistariumMod
     enable_fq_mod: EnableFretsQuestMod
+    enable_fc_mod: EnableForgottenCastawaysMod
+    enable_eh_mod: EnableEchoHikeMod
 
 
 def get_creation_settings(options: OuterWildsGameOptions) -> set[str]:

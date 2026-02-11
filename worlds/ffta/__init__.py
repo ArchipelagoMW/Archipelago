@@ -65,7 +65,7 @@ class FFTASettings(settings.Group):
 
 class FFTAWorld(World):
     """
-    Final Fantasy Tactics Advance is a game
+    Final Fantasy Tactics Advance is an RPG with the emphasis firmly on fighting. Battles are turn-based, meaning each character in your party takes turns to move and attack with magic or weapons. But battles are not simply free-for-alls. Ivalice is governed by laws which must be adhered to or you will be banished to prison. Each battle is presided over by a judge, so there's little chance to 'get away with it'.
     """
     game = "Final Fantasy Tactics Advance"
     web = FFTAWebWorld()

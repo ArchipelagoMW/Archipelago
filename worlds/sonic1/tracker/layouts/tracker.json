@@ -1,0 +1,126 @@
+{
+  "tracker_default": {
+    "type": "container",
+    "background": "#877373",
+    "content": {
+      "type": "dock",
+      "dropshadow": true,
+      "content": [
+        {
+          "type": "dock",
+          "dock": "bottom",
+          "v_alignment": "stretch",
+          "content": [
+            {
+              "type": "group",
+              "header": "Items",
+              "dock": "left",
+              "content": { "type": "layout", "key": "tracker_items" },
+              "header_content": {
+                "type": "button_popup",
+                "style": "settings",
+                "popup_background": "#55212121",
+                "layout": "settings_popup"
+              }
+            },
+            {
+              "type": "group",
+              "header": "Pinned Locations",
+              "content": {
+                "type": "recentpins",
+                "style": "wrap",
+                "h_alignment": "stretch",
+                "v_alignment": "stretch",
+                "orientation": "horizontal",
+                "compact": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "array",
+          "v_alignment": "stretch",
+          "margin": "0, 0",
+          "content": [
+            {
+              "type": "tabbed",
+              "dock": "top",
+              "tabs": [
+                { "title": "Menu", "content": { "type": "map", "maps": ["menu"] }},
+                { "title": "Green Hill Zone",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Act 1", "content": {"type": "map", "maps": ["GHZ1"]} },
+                             { "title": "Act 2", "content": {"type": "map", "maps": ["GHZ2"]} },
+                             { "title": "Act 3", "content": {"type": "map", "maps": ["GHZ3"]} }]
+                  }
+                },
+                { "title": "Marble Zone",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Act 1", "content": {"type": "map", "maps": ["MZ1"]} },
+                             { "title": "Act 2", "content": {"type": "map", "maps": ["MZ2"]} },
+                             { "title": "Act 3", "content": {"type": "map", "maps": ["MZ3"]} }]
+                  }
+                },
+                { "title": "Spring Yard Zone",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Act 1", "content": {"type": "map", "maps": ["SYZ1"]} },
+                             { "title": "Act 2", "content": {"type": "map", "maps": ["SYZ2"]} },
+                             { "title": "Act 3", "content": {"type": "map", "maps": ["SYZ3"]} }]
+                  }
+                },
+                { "title": "Labyrinth Zone",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Act 1", "content": {"type": "map", "maps": ["LZ1"]} },
+                             { "title": "Act 2", "content": {"type": "map", "maps": ["LZ2"]} },
+                             { "title": "Act 3", "content": {"type": "map", "maps": ["LZ3"]} }]
+                  }
+                },
+                { "title": "Starlight Zone",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Act 1", "content": {"type": "map", "maps": ["SLZ1"]} },
+                             { "title": "Act 2", "content": {"type": "map", "maps": ["SLZ2"]} },
+                             { "title": "Act 3", "content": {"type": "map", "maps": ["SLZ3"]} }]
+                  }
+                },
+                { "title": "Scrap Brain Zone",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Act 1", "content": {"type": "map", "maps": ["SBZ1"]} },
+                             { "title": "Act 2", "content": {"type": "map", "maps": ["SBZ2"]} },
+                             { "title": "Act 3", "content": {"type": "map", "maps": ["SBZ3"]} }]
+                  }
+                },
+                { "title": "Final Zone", "content": {"type": "map", "maps": ["fz"]} },
+                { "title": "Special Stages",
+                  "content": { "type": "tabbed",
+                    "tabs": [{ "title": "Special Stage 1", "content": {"type": "map", "maps": ["special_stage_1"]} },
+                             { "title": "Special Stage 2", "content": {"type": "map", "maps": ["special_stage_2"]} },
+                             { "title": "Special Stage 3", "content": {"type": "map", "maps": ["special_stage_3"]} },
+                             { "title": "Special Stage 4", "content": {"type": "map", "maps": ["special_stage_4"]} },
+                             { "title": "Special Stage 5", "content": {"type": "map", "maps": ["special_stage_5"]} },
+                             { "title": "Special Stage 6", "content": {"type": "map", "maps": ["special_stage_6"]} }]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tracker_items": {"type": "itemgrid", "rows": [[
+    "Green Hill Key", "Marble Zone Key", "Spring Yard Key", "Labyrinth Key",      
+    "Starlight Key",  "Scrap Brain Key", "Final Zone Key","",
+    "Blue Emerald (#1)",  "Yellow Emerald (#2)", "Pink Emerald (#3)",
+    "Green Emerald (#4)", "Red Emerald (#5)",    "Grey Emerald (#6)",
+    "","Special Stage Key","Disable GOAL blocks","Disable R blocks"
+  ]]},
+  "tracker_broadcast": {"type": "container", "content": {
+    "type": "itemgrid", "rows": [
+      ["Green Hill Key", "Marble Zone Key", "Spring Yard Key", "Labyrinth Key",      
+       "Starlight Key",  "Scrap Brain Key", "Final Zone Key"],
+      ["Blue Emerald (#1)",  "Yellow Emerald (#2)", "Pink Emerald (#3)",
+       "Green Emerald (#4)", "Red Emerald (#5)",    "Grey Emerald (#6)"],
+      ["","Special Stage Key","Disable GOAL blocks","Disable R blocks",""]
+    ]
+  }}
+}

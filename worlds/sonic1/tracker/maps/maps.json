@@ -1,0 +1,158 @@
+[
+    {
+        "name": "menu",
+        "location_size": 22,
+        "location_border_thickness": 1,
+        "img": "images/menu.png"
+    },
+    {
+        "name": "GHZ1",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/GHZ1.png"
+    },
+    {
+        "name": "GHZ2",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/GHZ2.png"
+    },
+    {
+        "name": "GHZ3",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/GHZ3.png"
+    },
+    {
+        "name": "MZ1",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/MZ1.png"
+    },
+    {
+        "name": "MZ2",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/MZ2.png"
+    },
+    {
+        "name": "MZ3",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/MZ3.png"
+    },
+    {
+        "name": "SYZ1",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SYZ1.png"
+    },
+    {
+        "name": "SYZ2",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SYZ2.png"
+    },
+    {
+        "name": "SYZ3",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SYZ3.png"
+    },
+    {
+        "name": "LZ1",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/LZ1.png"
+    },
+    {
+        "name": "LZ2",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/LZ2.png"
+    },
+    {
+        "name": "LZ3",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/LZ3.png"
+    },
+    {
+        "name": "SLZ1",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SLZ1.png"
+    },
+    {
+        "name": "SLZ2",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SLZ2.png"
+    },
+    {
+        "name": "SLZ3",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SLZ3.png"
+    },
+    {
+        "name": "SBZ1",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SBZ1.png"
+    },
+    {
+        "name": "SBZ2",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SBZ2.png"
+    },
+    {
+        "name": "SBZ3",
+        "location_size": 12,
+        "location_border_thickness": 1,
+        "img": "images/SBZ3.png"
+    },
+    {
+        "name": "special_stage_1",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/SpecialStage_1.png"
+    },
+    {
+        "name": "special_stage_2",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/SpecialStage_2.png"
+    },
+    {
+        "name": "special_stage_3",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/SpecialStage_3.png"
+    },
+    {
+        "name": "special_stage_4",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/SpecialStage_4.png"
+    },
+    {
+        "name": "special_stage_5",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/SpecialStage_5.png"
+    },
+    {
+        "name": "special_stage_6",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/SpecialStage_6.png"
+    },
+    {
+        "name": "fz",
+        "location_size": 18,
+        "location_border_thickness": 2,
+        "img": "images/FZ.png"
+    }
+]

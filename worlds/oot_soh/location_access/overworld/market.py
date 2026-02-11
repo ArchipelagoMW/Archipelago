@@ -275,14 +275,14 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.MARKET_BOMBCHU_BOWLING, world, [
         (EventLocations.MARKET_BOMBCHU_BOWLING_GAME, Events.COULD_PLAY_BOWLING,
-         lambda bundle: (has_item(Items.CHILD_WALLET, bundle)))
+         lambda bundle: has_item(Items.CHILD_WALLET, bundle) and bombchus_enabled(bundle))
     ])
     # Locations
     add_locations(Regions.MARKET_BOMBCHU_BOWLING, world, [
         (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (
-            has_item(Events.COULD_PLAY_BOWLING, bundle) and bombchus_enabled(bundle))),
+            has_item(Events.COULD_PLAY_BOWLING, bundle))),
         (Locations.MARKET_BOMBCHU_BOWLING_SECOND_PRIZE, lambda bundle: (
-            has_item(Events.COULD_PLAY_BOWLING, bundle) and bombchus_enabled(bundle)))
+            has_item(Events.COULD_PLAY_BOWLING, bundle)))
     ])
     # Connections
     connect_regions(Regions.MARKET_BOMBCHU_BOWLING, world, [

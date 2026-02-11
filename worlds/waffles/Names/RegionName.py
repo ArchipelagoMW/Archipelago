@@ -1,0 +1,6 @@
+yi1 = "YI1"
+yi1_start = "YI1 - Start"
+yi1_pipe = "YI1 - Pipe"
+yi1_cave = "YI1 - Cave"
+yi1_cave_dc = "YI1 - Cave (DC)"
+yi1_moon = "YI1 - Moon"

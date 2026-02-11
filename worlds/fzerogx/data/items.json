@@ -1,0 +1,1323 @@
+[
+  {
+    
+		"count": "10",
+    
+		"name": "Progressive Story Chapter",
+    
+		"category": [
+      "Story"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count": "4",
+    
+		"name": "Progressive Ruby Cup",
+    
+		"category": [
+      "Cups"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count": "4",
+    
+		"name": "Progressive Sapphire Cup",
+    
+		"category": [
+      "Cups"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count": "4",
+    
+		"name": "Progressive Emerald Cup",
+    
+		"category": [
+      "Cups"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count": "4",
+    
+		"name": "Progressive Diamond Cup",
+    
+		"category": [
+      "Cups"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count": "4",
+    
+		"name": "Progressive AX Cup",
+    
+		"category": [
+      "Cups"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "01 - Red Gazelle",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "02 - White Cat",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "03 - Golden Fox",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "04 - Iron Tiger",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "05 - Fire Stingray",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "06 - Wild Goose",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "08 - Deepclaw",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "09 - Great Star",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "10 - Little Wyvern",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "11 - Mad Wolf",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "12 - Super Piranha",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "13 - Death Anchor",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "14 - Astro Robin",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "15 - Big Fang",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "16 - Sonic Phantom",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "17 - Green Panther",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "18 - Hyper Speeder",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "19 - Space Angler",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "20 - King Meteor",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "21 - Queen Meteor",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "22 - Twinnoritta",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "23 - Night Thunder",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "24 - Wild Boar",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "25 - Blood Hawk",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "26 - Wonder Wasp",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "27 - Mighty Typhoon",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "28 - Mighty Hurricane",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "29 - Crazy Bear",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "30 - Black Bull",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "31 - Fat Shark",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "32 - Cosmic Dolphin",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "33 - Pink Spider",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "34 - Magic Seagull",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "35 - Silver Rat",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "36 - Spark Moon",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "37 - Bunny Flash",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "38 - Groovy Taxi",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "39 - Rolling Turtle",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "40 - Rainbow Phoenix",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "00 - Dark Schneider",
+    
+		"category": [
+      "Racers"
+    ],
+    
+		"useful": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Valiant Jaguar (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Funny Swallow (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Big Tyrant (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Grand Base (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Fire Wolf (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Rapid Barrel (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Sky Horse (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Aqua Goose (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Speedy Dragon (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Liberty Manta (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Brave Eagle (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Giant Planet (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Megalo Cruiser (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Splash Whale (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Wild Chariot (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Holy Spider (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Optical Wing (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Dread Hammer (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Silver Sword (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Space Cancer (Body)",
+    
+		"category": [
+      "Body"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Muscle Gorilla (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Aerial Bullet (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Blast Camel (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Garnet Phantom (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Bright Spear (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Super Lynx (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Windy Shark (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Moon Snail (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Scud Viper (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Energy Crest (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Wonder Worm (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Combat Cannon (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Cyber Fox (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Heat Snake (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Rave Drifter (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Spark Bird (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Dark Chaser (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Crystal Egg (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Red Rex (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Sonic Soldier (Cockpit)",
+    
+		"category": [
+      "Cockpit"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Sunrise 140 (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Saturn -SG (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Titan -G4 (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Thunderbolt -V2 (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Boxer -2C (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Scorpion -R (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Raiden -88 (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Bazooka -YS (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Tiger -RZ (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Triple -Z (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Euros -01 (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Triangle -GT (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Bluster -X (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Devilfish -RX (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Extreme -ZZ (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Punisher -4X (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Impulse 220 (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Meteor -RR (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Jupiter -Q (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Comet -V (Booster)",
+    
+		"category": [
+      "Booster"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "07 - Blue Falcon",
+    
+		"category": [
+      "Racers",
+      "Story"
+    ],
+    
+		"progression": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Sounds Of Big Blue",
+    
+		"category": [
+      "Misc"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "Sounds Of Mute City",
+    
+		"category": [
+      "Misc"
+    ],
+    
+		"filler": true
+  },
+  {
+    
+		"count":  1,
+    
+		"name": "1 Ticket",
+    
+		"category": [
+      "Misc"
+    ],
+    
+		"filler": true
+  }
+]

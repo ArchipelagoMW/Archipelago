@@ -106,10 +106,13 @@ class WordipelagoWorld(World):
                 "point_shop_check_price",
                 "word_weighting"
             )
+            game_rule_logic = dict(rule_logic[self.options.logic_difficulty.value])
+            game_rule_logic["pointShop"] = rule_logic[self.options.logic_difficulty.value]["green"][str(self.options.point_shop_logic_level.value)]
+            
             return {
                 **wordipelago_options,
                 "world_version": "1.0.0",
-                "rule_logic": rule_logic[self.options.logic_difficulty.value],
+                "rule_logic": game_rule_logic,
                 "letter_scores" : letter_scores
             }
             

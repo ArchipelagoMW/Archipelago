@@ -19,6 +19,10 @@ POOL_ELEMENT = "element"
 POOL_SHOP = "shop"
 POOL_GORON = "goron:"  # Meant to be used as an fstring with the set number following it
 POOL_CUCCO = "cucco:"  # Meant to be used as an fstring with the round number following it
+POOL_GOLD_FUSE = "fuse_gold"
+POOL_RED_FUSE = "fuse_red"
+POOL_GREEN_FUSE = "fuse_green"
+POOL_BLUE_FUSE = "fuse_blue"
 
 OBSCURE_SET = frozenset({POOL_DIG, POOL_WATER, POOL_POT})
 SHOP_SET = frozenset({POOL_SHOP, POOL_SCRUB})
@@ -131,10 +135,10 @@ all_locations: list[LocationData] = [
     LocationData(
         6029025, TMCLocation.TOWN_SHOP_600_ITEM, TMCRegion.HYRULE_TOWN, TMCItem.QUIVER,
         (0xFF0093, None), (0x2EA7, 0x04), 0x0023, scoutable=True, pools={POOL_SHOP}),
-    # LocationData(
-    #    6029026, TMCLocation.TOWN_SHOP_EXTRA_600_ITEM, TMCRegion.HYRULE_TOWN,
-    #    TMCItem.BOMB_BAG, (0xFF00D3, None), (0x2EA7, 0x08), 0x0023, scoutable=True, pools={POOL_SHOP},
-    # ),  # EU version was missing this item, added back for rando
+    LocationData(
+       6029026, TMCLocation.TOWN_SHOP_EXTRA_600_ITEM, TMCRegion.HYRULE_TOWN,
+       TMCItem.BOMB_BAG, (0xFF00D3, None), (0x2EA8, 0x04), 0x0023, scoutable=True, pools={POOL_SHOP},
+    ),  # EU version was missing this item, added back for rando
     LocationData(
         6029027, TMCLocation.TOWN_SHOP_BEHIND_COUNTER_ITEM, TMCRegion.HYRULE_TOWN, TMCItem.DOG_FOOD,
         (0xFF00B3, None), (0x2CE6, 0x08), 0x0023, scoutable=True),
@@ -158,63 +162,63 @@ all_locations: list[LocationData] = [
         (0x0EFBDE, None), (0x2CFD, 0x01), 0x0041),
     LocationData(
         6029034, TMCLocation.TOWN_GORON_MERCHANT_1_LEFT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00D0, None), None, 0x0002, pools={f"{POOL_GORON}1"}
+        TMCItem.KINSTONE, (0xFF00F0, None), None, 0x0002, pools={f"{POOL_GORON}1"}
     ),  # Goron merchant stores the individual item *positions*
     LocationData(
         6029035, TMCLocation.TOWN_GORON_MERCHANT_1_MIDDLE, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00D2, None), None, 0x0002, pools={f"{POOL_GORON}1"}
+        TMCItem.KINSTONE, (0xFF00F2, None), None, 0x0002, pools={f"{POOL_GORON}1"}
     ),  # inside 0x2CA4 from left-right in bits 0x04-0x10
     LocationData(
         6029036, TMCLocation.TOWN_GORON_MERCHANT_1_RIGHT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00D4, None), None, 0x0002, pools={f"{POOL_GORON}1"}
+        TMCItem.KINSTONE, (0xFF00F4, None), None, 0x0002, pools={f"{POOL_GORON}1"}
     ),
     LocationData(
         6029037, TMCLocation.TOWN_GORON_MERCHANT_2_LEFT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00D8, None), None, 0x0002, pools={f"{POOL_GORON}2"}
+        TMCItem.KINSTONE, (0xFF00F8, None), None, 0x0002, pools={f"{POOL_GORON}2"}
     ),  # There is a separate bit that stores how many times
     LocationData(
         6029038, TMCLocation.TOWN_GORON_MERCHANT_2_MIDDLE, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00DA, None), None, 0x0002, pools={f"{POOL_GORON}2"}
+        TMCItem.KINSTONE, (0xFF00FA, None), None, 0x0002, pools={f"{POOL_GORON}2"}
     ),  # there's been a restock across 0x2CA3 0x40 - 0x2CA4 0x02
     LocationData(
         6029039, TMCLocation.TOWN_GORON_MERCHANT_2_RIGHT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00DC, None), None, 0x0002, pools={f"{POOL_GORON}2"}
+        TMCItem.KINSTONE, (0xFF00FC, None), None, 0x0002, pools={f"{POOL_GORON}2"}
     ),
     LocationData(
         6029040, TMCLocation.TOWN_GORON_MERCHANT_3_LEFT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00E0, None), None, 0x0002, pools={f"{POOL_GORON}3"}
+        TMCItem.KINSTONE, (0xFF0100, None), None, 0x0002, pools={f"{POOL_GORON}3"}
     ),
     LocationData(
         6029041, TMCLocation.TOWN_GORON_MERCHANT_3_MIDDLE, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00E2, None), None, 0x0002, pools={f"{POOL_GORON}3"}
+        TMCItem.KINSTONE, (0xFF0102, None), None, 0x0002, pools={f"{POOL_GORON}3"}
     ),
     LocationData(
         6029042, TMCLocation.TOWN_GORON_MERCHANT_3_RIGHT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00E4, None), None, 0x0002, pools={f"{POOL_GORON}3"}
+        TMCItem.KINSTONE, (0xFF0104, None), None, 0x0002, pools={f"{POOL_GORON}3"}
     ),
     LocationData(
         6029043, TMCLocation.TOWN_GORON_MERCHANT_4_LEFT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00E8, None), None, 0x0002, pools={f"{POOL_GORON}4"}
+        TMCItem.KINSTONE, (0xFF0108, None), None, 0x0002, pools={f"{POOL_GORON}4"}
     ),
     LocationData(
         6029044, TMCLocation.TOWN_GORON_MERCHANT_4_MIDDLE, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00EA, None), None, 0x0002, pools={f"{POOL_GORON}4"}
+        TMCItem.KINSTONE, (0xFF010A, None), None, 0x0002, pools={f"{POOL_GORON}4"}
     ),
     LocationData(
         6029045, TMCLocation.TOWN_GORON_MERCHANT_4_RIGHT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00EC, None), None, 0x0002, pools={f"{POOL_GORON}4"}
+        TMCItem.KINSTONE, (0xFF010C, None), None, 0x0002, pools={f"{POOL_GORON}4"}
     ),
     LocationData(
         6029046, TMCLocation.TOWN_GORON_MERCHANT_5_LEFT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00F0, None), None, 0x0002, pools={f"{POOL_GORON}5"}
+        TMCItem.KINSTONE, (0xFF0110, None), None, 0x0002, pools={f"{POOL_GORON}5"}
     ),
     LocationData(
         6029047, TMCLocation.TOWN_GORON_MERCHANT_5_MIDDLE, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00F2, None), None, 0x0002, pools={f"{POOL_GORON}5"}
+        TMCItem.KINSTONE, (0xFF0112, None), None, 0x0002, pools={f"{POOL_GORON}5"}
     ),
     LocationData(
         6029048, TMCLocation.TOWN_GORON_MERCHANT_5_RIGHT, TMCRegion.HYRULE_TOWN,
-        TMCItem.KINSTONE, (0xFF00F4, None), None, 0x0002, pools={f"{POOL_GORON}5"}
+        TMCItem.KINSTONE, (0xFF0114, None), None, 0x0002, pools={f"{POOL_GORON}5"}
     ),
     LocationData(
         6029049, TMCLocation.TOWN_DOJO_NPC_1, TMCRegion.HYRULE_TOWN,
@@ -442,7 +446,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029104, TMCLocation.CASTLE_GOLDEN_ROPE, TMCRegion.CASTLE_EXTERIOR,
-        TMCItem.RUPEES_100, (0xFF011A, None), (0x2CA2, 0x20), 0x0007, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF013A, None), (0x2CA2, 0x20), 0x0007, pools={POOL_ENEMY}
     ),
     LocationData(
         6029105, TMCLocation.CASTLE_RIGHT_FOUNTAIN_FUSION_HP, TMCRegion.CASTLE_EXTERIOR,
@@ -465,15 +469,15 @@ all_locations: list[LocationData] = [
         None, (0x0DBD8E, None), (0x2D28, 0x20), 0x0136
     ),
     # endregion
-    # LocationData(
-    #     6029110, TMCLocation.PEDESTAL_REQUIREMENT_REWARD, TMCRegion.SANCTUARY,
-    #     None, (0xFF002C, None), (0x2C9E, 0x01), None,
-    # ),
+    LocationData(
+        6029110, TMCLocation.PEDESTAL_REQUIREMENT_REWARD, TMCRegion.SANCTUARY,
+        None, (0xFF002C, None), (0x2C9E, 0x40), None,
+    ),
     # 6029111
     # region Eastern Hills
     LocationData(
         6029112, TMCLocation.HILLS_GOLDEN_ROPE, TMCRegion.EASTERN_HILLS,
-        TMCItem.RUPEES_100, (0xFF0114, None), (0x2CA2, 0x10), 0x0403, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF0134, None), (0x2CA2, 0x10), 0x0403, pools={POOL_ENEMY}
     ),
     LocationData(
         6029113, TMCLocation.HILLS_FUSION_CHEST, TMCRegion.EASTERN_HILLS,
@@ -678,7 +682,7 @@ all_locations: list[LocationData] = [
     # region Minish Woods
     LocationData(
         6029162, TMCLocation.MINISH_WOODS_GOLDEN_OCTO, TMCRegion.MINISH_WOODS,
-        TMCItem.RUPEES_100, (0xFF012C, None), (0x2CA3, 0x01), 0x0000, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF014C, None), (0x2CA3, 0x01), 0x0000, pools={POOL_ENEMY}
     ),
     LocationData(
         6029163, TMCLocation.MINISH_WOODS_WITCH_HUT_ITEM, TMCRegion.MINISH_WOODS,
@@ -909,7 +913,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029219, TMCLocation.WESTERN_WOODS_GOLDEN_OCTO, TMCRegion.WESTERN_WOODS,
-        TMCItem.RUPEES_100, (0xFF0132, None), (0x2CA3, 0x02), 0x0903, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF0152, None), (0x2CA3, 0x02), 0x0903, pools={POOL_ENEMY}
     ),
     LocationData(
         6029220, TMCLocation.WESTERN_WOODS_BEANSTALK_FUSION_CHEST, TMCRegion.WESTERN_WOODS,
@@ -1027,7 +1031,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029248, TMCLocation.CRENEL_VINE_TOP_GOLDEN_TEKTITE, TMCRegion.CRENEL,
-        TMCItem.RUPEES_100, (0xFF0108, None), (0x2CA2, 0x04), 0x0306, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF0128, None), (0x2CA2, 0x04), 0x0306, pools={POOL_ENEMY}
     ),
     LocationData(
         6029249, TMCLocation.CRENEL_BRIDGE_CAVE_CHEST, TMCRegion.CRENEL,
@@ -1039,7 +1043,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029251, TMCLocation.CRENEL_BELOW_COF_GOLDEN_TEKTITE, TMCRegion.CRENEL,
-        TMCItem.RUPEES_100, (0xFF0126, None), (0x2CA2, 0x80), 0x0206, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF0146, None), (0x2CA2, 0x80), 0x0206, pools={POOL_ENEMY}
     ),
     LocationData(
         6029252, TMCLocation.CRENEL_SCRUB_NPC, TMCRegion.CRENEL,
@@ -1170,7 +1174,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029284, TMCLocation.SWAMP_GOLDEN_ROPE, TMCRegion.CASTOR_WILDS,
-        TMCItem.RUPEES_100, (0xFF010E, None), (0x2CA2, 0x08), 0x0004, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF012E, None), (0x2CA2, 0x08), 0x0004, pools={POOL_ENEMY}
     ),
     LocationData(
         6029285, TMCLocation.SWAMP_NEAR_WATERFALL_CAVE_HP, TMCRegion.CASTOR_WILDS,
@@ -1284,7 +1288,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029312, TMCLocation.RUINS_GOLDEN_OCTO, TMCRegion.WIND_RUINS,
-        TMCItem.RUPEES_100, (0xFF0102, None), (0x2CA2, 0x02), 0x0505, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF0122, None), (0x2CA2, 0x02), 0x0505, pools={POOL_ENEMY}
     ),
     LocationData(
         6029313, TMCLocation.RUINS_NEAR_FOW_FUSION_CHEST, TMCRegion.WIND_RUINS,
@@ -1380,7 +1384,7 @@ all_locations: list[LocationData] = [
     ),
     LocationData(
         6029336, TMCLocation.FALLS_GOLDEN_TEKTITE, TMCRegion.UPPER_FALLS,
-        TMCItem.RUPEES_100, (0xFF0120, None), (0x2CA2, 0x40), 0x000A, pools={POOL_ENEMY}
+        TMCItem.RUPEES_100, (0xFF0140, None), (0x2CA2, 0x40), 0x000A, pools={POOL_ENEMY}
     ),
     LocationData(
         6029337, TMCLocation.FALLS_NORTH_DIG_SPOT, TMCRegion.UPPER_FALLS,
@@ -1462,10 +1466,10 @@ all_locations: list[LocationData] = [
         6029356, TMCLocation.FALLS_TOP_CAVE_CHEST, TMCRegion.UPPER_FALLS,
         TMCItem.RUPEES_100, (0x0F8ADE, None), (0x2D25, 0x01), 0x0033
     ),
-    # LocationData(
-    #    6029357, TMCLocation.FALLS_BIGGORON, TMCRegion.CLOUDS,
-    #    TMCItem.PROGRESSIVE_SHIELD, (None, None), (None, None), None,
-    # ),
+    LocationData(
+        6029357, TMCLocation.FALLS_BIGGORON, TMCRegion.CLOUDS,
+        TMCItem.PROGRESSIVE_SHIELD, (0x06D0A2, 0x06D0A4), (0x2CD1, 0x10), 0x001A,
+    ),
     # endregion
     # region Cloudtops
     LocationData(
@@ -2182,6 +2186,414 @@ all_locations: list[LocationData] = [
         TMCItem.BIG_KEY_DHC, (0x0EB556, None), (0x2DBC, 0x08), 0x0988
     ),
     # endregion
+    # 6029553-6029600
+    # region Gold Fusions
+    LocationData(
+        6029601, TMCLocation.FUSION_01, TMCRegion.FUSIONS,
+        TMCItem.FUSION_01, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029602, TMCLocation.FUSION_02, TMCRegion.FUSIONS,
+        TMCItem.FUSION_02, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029603, TMCLocation.FUSION_03, TMCRegion.FUSIONS,
+        TMCItem.FUSION_03, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029604, TMCLocation.FUSION_04, TMCRegion.FUSIONS,
+        TMCItem.FUSION_04, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029605, TMCLocation.FUSION_05, TMCRegion.FUSIONS,
+        TMCItem.FUSION_05, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029606, TMCLocation.FUSION_06, TMCRegion.FUSIONS,
+        TMCItem.FUSION_06, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029607, TMCLocation.FUSION_07, TMCRegion.FUSIONS,
+        TMCItem.FUSION_07, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029608, TMCLocation.FUSION_08, TMCRegion.FUSIONS,
+        TMCItem.FUSION_08, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    LocationData(
+        6029609, TMCLocation.FUSION_09, TMCRegion.FUSIONS,
+        TMCItem.FUSION_09, None, None, None, pools={POOL_GOLD_FUSE}
+    ),
+    # endregion
+    # region Red Fusions
+    LocationData(
+        6029610, TMCLocation.FUSION_0A, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_0A, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029611, TMCLocation.FUSION_0B, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_0B, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029612, TMCLocation.FUSION_0C, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_0C, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029613, TMCLocation.FUSION_0D, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_0D, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029614, TMCLocation.FUSION_0E, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_0E, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029615, TMCLocation.FUSION_0F, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_0F, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029616, TMCLocation.FUSION_10, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_10, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029617, TMCLocation.FUSION_11, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_11, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029618, TMCLocation.FUSION_12, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_12, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029619, TMCLocation.FUSION_13, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_13, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029620, TMCLocation.FUSION_14, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_14, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029621, TMCLocation.FUSION_15, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_15, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029622, TMCLocation.FUSION_16, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_16, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029623, TMCLocation.FUSION_17, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_17, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029624, TMCLocation.FUSION_18, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_18, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029625, TMCLocation.FUSION_19, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_19, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029626, TMCLocation.FUSION_1A, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_1A, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029627, TMCLocation.FUSION_1B, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_1B, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029628, TMCLocation.FUSION_1C, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_1C, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029629, TMCLocation.FUSION_1D, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_1D, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029630, TMCLocation.FUSION_1E, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_1E, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029631, TMCLocation.FUSION_1F, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_1F, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029632, TMCLocation.FUSION_20, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_20, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    LocationData(
+        6029633, TMCLocation.FUSION_21, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_21, None, None, None, pools={POOL_RED_FUSE}
+    ),
+    # endregion
+    # region Blue Fusions
+    LocationData(
+        6029634, TMCLocation.FUSION_22, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_22, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029635, TMCLocation.FUSION_23, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_23, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029636, TMCLocation.FUSION_24, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_24, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029637, TMCLocation.FUSION_25, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_25, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029638, TMCLocation.FUSION_26, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_26, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029639, TMCLocation.FUSION_27, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_27, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029640, TMCLocation.FUSION_28, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_28, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029641, TMCLocation.FUSION_29, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_29, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029642, TMCLocation.FUSION_2A, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_2A, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029643, TMCLocation.FUSION_2B, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_2B, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029644, TMCLocation.FUSION_2C, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_2C, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029645, TMCLocation.FUSION_2D, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_2D, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029646, TMCLocation.FUSION_2E, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_2E, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029647, TMCLocation.FUSION_2F, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_2F, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029648, TMCLocation.FUSION_30, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_30, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029649, TMCLocation.FUSION_31, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_31, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029650, TMCLocation.FUSION_32, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_32, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    LocationData(
+        6029651, TMCLocation.FUSION_33, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_33, None, None, None, pools={POOL_BLUE_FUSE}
+    ),
+    # endregion
+    # region Green Fusions
+    LocationData(
+        6029652, TMCLocation.FUSION_34, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_34, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029653, TMCLocation.FUSION_35, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_35, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029654, TMCLocation.FUSION_36, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_36, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029655, TMCLocation.FUSION_37, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_37, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029656, TMCLocation.FUSION_38, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_38, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029657, TMCLocation.FUSION_39, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_39, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029658, TMCLocation.FUSION_3A, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_3A, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029659, TMCLocation.FUSION_3B, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_3B, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029660, TMCLocation.FUSION_3C, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_3C, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029661, TMCLocation.FUSION_3D, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_3D, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029662, TMCLocation.FUSION_3E, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_3E, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029663, TMCLocation.FUSION_3F, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_3F, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029664, TMCLocation.FUSION_40, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_40, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029665, TMCLocation.FUSION_41, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_41, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029666, TMCLocation.FUSION_42, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_42, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029667, TMCLocation.FUSION_43, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_43, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029668, TMCLocation.FUSION_44, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_44, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029669, TMCLocation.FUSION_45, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_45, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029670, TMCLocation.FUSION_46, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_46, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029671, TMCLocation.FUSION_47, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_47, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029672, TMCLocation.FUSION_48, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_48, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029673, TMCLocation.FUSION_49, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_49, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029674, TMCLocation.FUSION_4A, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_4A, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029675, TMCLocation.FUSION_4B, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_4B, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029676, TMCLocation.FUSION_4C, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_4C, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029677, TMCLocation.FUSION_4D, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_4D, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029678, TMCLocation.FUSION_4E, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_4E, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029679, TMCLocation.FUSION_4F, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_4F, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029680, TMCLocation.FUSION_50, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_50, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029681, TMCLocation.FUSION_51, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_51, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029682, TMCLocation.FUSION_52, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_52, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029683, TMCLocation.FUSION_53, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_53, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029684, TMCLocation.FUSION_54, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_54, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029685, TMCLocation.FUSION_55, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_55, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029686, TMCLocation.FUSION_56, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_56, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029687, TMCLocation.FUSION_57, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_57, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029688, TMCLocation.FUSION_58, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_58, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029689, TMCLocation.FUSION_59, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_59, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029690, TMCLocation.FUSION_5A, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_5A, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029691, TMCLocation.FUSION_5B, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_5B, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029692, TMCLocation.FUSION_5C, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_5C, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029693, TMCLocation.FUSION_5D, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_5D, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029694, TMCLocation.FUSION_5E, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_5E, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029695, TMCLocation.FUSION_5F, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_5F, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029696, TMCLocation.FUSION_60, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_60, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029697, TMCLocation.FUSION_61, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_61, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029698, TMCLocation.FUSION_62, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_62, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029699, TMCLocation.FUSION_63, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_63, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
+    LocationData(
+        6029700, TMCLocation.FUSION_64, TMCRegion.FUSIONS,
+        TMCLocation.FUSION_64, None, None, None, pools={POOL_GREEN_FUSE}
+    ),
 ]
 
 GOAL_PED = LocationData(None, TMCEvent.CLEAR_PED, TMCRegion.STAINED_GLASS, None, None, (0x2D0B, 0x01), 0x0178)

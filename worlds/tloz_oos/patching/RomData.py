@@ -1,7 +1,7 @@
 from collections.abc import Collection
 from typing import Optional
 
-from worlds.tloz_oos.patching.Util import hex_str
+from ..patching.Util import hex_str
 
 
 class RomData:

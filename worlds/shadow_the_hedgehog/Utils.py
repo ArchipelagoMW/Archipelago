@@ -3,7 +3,9 @@ from typing import Tuple
 
 from . import Levels, Locations
 
-VERSION: Tuple[int, int, int] = (0, 3, 3)
+VERSION: Tuple[int, int, int] = (0, 4, 2)
+
+DEBUG_OPTION = True
 
 TYPE_ID_ENEMY = 0
 TYPE_ID_OBJECTIVE = 1

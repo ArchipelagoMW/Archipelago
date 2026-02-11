@@ -1,18 +1,15 @@
 import json
 import pkgutil
-import random
 from typing import Any
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region, Tutorial
 from Options import Option
-from Utils import visualize_regions
 import settings
 from worlds.LauncherComponents import Component, Type, launch_subprocess, icon_paths, components
-from worlds.generic.Rules import add_item_rule, add_rule, forbid_item
+from worlds.generic.Rules import add_item_rule, add_rule
 from .locations import location_list
 from .items import item_list
 from .options import TboiOptions
-from worlds.AutoWorld import World, WebWorld
-
+from worlds.AutoWorld import WebWorld, World
 
 def launch_client():
     from . import client
@@ -24,6 +21,16 @@ components.append(Component("Isaac Client",
                             icon="isaac"))
 
 icon_paths["isaac"] = f"ap:{__name__}/icons/isaac.png"
+
+class TboiWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing The Binding of Isaac Repentance.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["NaveTK"]
+    )]
 
 class TboiLocation(Location):
     game = "The Binding of Isaac Repentance"
@@ -38,22 +45,6 @@ class TboiSettings(settings.Group):
 
     game_folder: GameFolder = GameFolder("The Binding of Isaac Rebirth")
 
-class TboiWebWorld(WebWorld):
-    """
-    This class handles the web interface.
-
-    The web interface includes the setup guide and the options page for generating YAMLs.
-    """
-    tutorials = [Tutorial(
-        "The Binding of Isaac Setup Guide",
-        "A guide to setting up The Binding of Isaac for Archipelago on your computer.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["bcats"]
-    )]
-    theme = "ice"
-
 class TboiWorld(World):
     """
     Experience the modern classic, The Binding of Isaac, like you've never seen it before. 
@@ -65,7 +56,7 @@ class TboiWorld(World):
     nightmares!
     """
     game = "The Binding of Isaac Repentance"
-    web = TboiWebWorld()
+    web = TboiWeb()
     options_dataclass = TboiOptions
     options: TboiOptions
     topology_present = True
@@ -92,7 +83,7 @@ class TboiWorld(World):
     def create_item(self, item: str) -> TboiItem:
         classification = \
                 ItemClassification.progression if item.endswith('Unlock') else \
-                ItemClassification.useful if item.startswith('1-UP') or item.startswith('Angel Deal') or item.startswith('Devil Deal') or item.startswith('Planetarium') else \
+                ItemClassification.useful if item.startswith('1-UP') or item.startswith('Progressive') or item.startswith('Permanent') or item.startswith('Angel Deal') or item.startswith('Devil Deal') or item.startswith('Planetarium') else \
                 ItemClassification.trap if item.endswith('Trap') else \
                 ItemClassification.filler
         return TboiItem(item, classification, self.item_name_to_id[item], self.player)
@@ -116,19 +107,34 @@ class TboiWorld(World):
             if "type" in floor and floor["type"] == "void" and "The Void" in self.options.excluded_areas.value: continue
             if "type" in floor and floor["type"] == "ascend" and "Ascend" in self.options.excluded_areas.value: continue
             if "type" in floor and floor["type"] == "timed" and "Timed Areas" in self.options.excluded_areas.value: continue
+            if "variant_of" in floor and not self.options.floor_variations: continue
             region = Region(name, self.player, self.multiworld)
             if "rooms" in floor:
-                for room in floor["rooms"]:
-                    location_name = f'{name} - {room}'
+                for room_name in floor["rooms"]:
+                    room = self.data["rooms"][room_name]
+                    if "type" in room and room["type"] == "rng" and self.options.rng_rooms.value == 0: continue
+                    if "type" in room and room["type"] == "shovel" and self.options.crawl_space.value == 0: continue
+                    if "type" in room and room["type"] == "telescope_lens" and self.options.planetarium.value == 0: continue
+                    if "type" in room and room["type"] == "red_key" and self.options.ultra_secret_room.value == 0: continue
+                    if "type" in room and room["type"] == "undefined" and self.options.error_room.value == 0: continue
+                    location_name = f'{name} - {room_name}'
                     region.add_locations(self.create_location(location_name), TboiLocation)
-                    if self.data["rooms"][room]["rng"]:
+                    if "type" in room and ( \
+                       (room["type"] == "rng" and self.options.rng_rooms.value == 1) or \
+                       (room["type"] == "shovel" and self.options.crawl_space.value == 1) or \
+                       (room["type"] == "telescope_lens" and self.options.planetarium.value == 1) or \
+                       (room["type"] == "red_key" and self.options.ultra_secret_room.value == 1) or \
+                       (room["type"] == "undefined" and self.options.error_room.value == 1)):
                         add_item_rule(self.get_location(location_name),
                                 lambda item: (item.classification & ItemClassification.progression) == 0)
-                    if "requires" in self.data["rooms"][room]:
-                        add_rule(self.get_location(location_name),
-                                lambda state, rule=self.data["rooms"][room]["requires"]: self.rule_from_data(state, rule))
-                        #add_item_rule(self.get_location(location_name),
-                        #        lambda item: item.classification == ItemClassification.progression or item.classification == ItemClassification.useful)
+                    if "requires" in room:
+                        if "type" in room and ( \
+                           (room["type"] == "shovel" and self.options.crawl_space.value == 3) or \
+                           (room["type"] == "telescope_lens" and self.options.planetarium.value == 3) or \
+                           (room["type"] == "red_key" and self.options.ultra_secret_room.value == 3) or \
+                           (room["type"] == "undefined" and self.options.error_room.value == 3)):
+                            add_rule(self.get_location(location_name),
+                                    lambda state, rule=room["requires"]: self.rule_from_data(state, rule))
             if name in self.options.additional_item_locations_per_stage.keys():
                 for i in range(self.options.additional_item_locations_per_stage[name]):
                     region.add_locations(self.create_location(f'{name} - Item #{i+1}'))
@@ -168,6 +174,8 @@ class TboiWorld(World):
         total_weights = 0
         for weight in items.values():
             total_weights += weight
+        if total_weights == 0:
+            return 0
         item_factor = 1.0 / total_weights * amount
 
         for item, weight in items.items():
@@ -180,16 +188,34 @@ class TboiWorld(World):
     def create_items(self):
         own_items = len(self.goals)
         for name, unlock in self.data['unlocks'].items():
-            if "type" in unlock and unlock["type"] == "alt" and "Alt Path" in self.options.excluded_areas.value: continue
-            if "type" in unlock and unlock["type"] == "void" and "The Void" in self.options.excluded_areas.value: continue
-            if "type" in unlock and unlock["type"] == "ascend" and "Ascend" in self.options.excluded_areas.value: continue
-            if "type" in unlock and unlock["type"] == "timed" and "Timed Areas" in self.options.excluded_areas.value: continue
+            if "type" in unlock and "alt" in unlock["type"] and "Alt Path" in self.options.excluded_areas.value: continue
+            if "type" in unlock and "void" in unlock["type"] and "The Void" in self.options.excluded_areas.value: continue
+            if "type" in unlock and "ascend" in unlock["type"] and "Ascend" in self.options.excluded_areas.value: continue
+            if "type" in unlock and "timed" in unlock["type"] and "Timed Areas" in self.options.excluded_areas.value: continue
+            if "type" in unlock and "shovel" in unlock["type"] and self.options.crawl_space.value != 3: continue
+            if "type" in unlock and "telescope_lens" in unlock["type"] and self.options.planetarium.value != 3: continue
+            if "type" in unlock and "red_key" in unlock["type"] and self.options.ultra_secret_room.value != 3: continue
+            if "type" in unlock and "undefined" in unlock["type"] and self.options.error_room.value != 3: continue
+            if "type" in unlock and "variant" in unlock["type"] and not self.options.floor_variations.value: continue
             self.multiworld.itempool.append(self.create_item(f'{name} Unlock'))
             own_items += 1
         
         for _ in range(self.options.one_ups.value):
             self.multiworld.itempool.append(self.create_item('1-UP'))
             own_items += 1
+
+        for _ in range(self.options.permanent_stat_upgrades.value):
+            self.multiworld.itempool.append(self.create_item('Permanent Damage Up'))
+            self.multiworld.itempool.append(self.create_item('Permanent Tears Up'))
+            self.multiworld.itempool.append(self.create_item('Permanent Speed Up'))
+            self.multiworld.itempool.append(self.create_item('Permanent Luck Up'))
+            self.multiworld.itempool.append(self.create_item('Permanent Range Up'))
+            own_items += 5
+        
+        if self.options.progressive_mapping_upgrades:
+            for _ in range(3):
+                self.multiworld.itempool.append(self.create_item('Progressive Map Upgrade'))
+                own_items += 1
 
         total_locations = len(self.multiworld.get_locations(self.player))
         filler_amount = total_locations - own_items
@@ -210,14 +236,13 @@ class TboiWorld(World):
                 self.multiworld.itempool.append(self.create_item("Random Coin"))
 
     def set_rules(self) -> None:
-        goal_amount = 0
+        goals = 0
         for goal in self.goals:
-            if goal == "Mother" and "Alt Path" in self.options.excluded_areas.value: continue
-            if goal == "Delirium" and "The Void" in self.options.excluded_areas.value: continue
-            if goal == "Beast" and "Ascend" in self.options.excluded_areas.value: continue
-            if (goal == "Boss Rush" or goal == "Hush") and "Timed Areas" in self.options.excluded_areas.value: continue
             self.multiworld.get_location(f'Defeat {goal}', self.player).place_locked_item(self.create_event("Victory Condition"))
-            goal_amount += 1
+            goals += 1
+        goal_amount = self.options.goal_amount.value
+        if goal_amount == 0 or goal_amount > goals:
+            goal_amount = goals
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory Condition", self.player, goal_amount)
         #self.multiworld.completion_condition[self.player] = self.has_location_lambda("Mega Satan - Boss Room")
@@ -248,6 +273,17 @@ class TboiWorld(World):
                 "retain_one_ups_percentage",
                 "exclude_items_as_rewards",
                 "death_link",
+                "goal_amount",
+                "rng_rooms",
+                "ultra_secret_room",
+                "error_room",
+                "crawl_space",
+                "planetarium",
+                "floor_variations",
+                "death_link_severity",
+                "progressive_mapping_upgrades",
+                "permanent_stat_upgrades",
+                "start_out_nerfed",
                 toggles_as_bools=True) 
                 |
                 { "goals": self.goals }
@@ -265,12 +301,26 @@ class TboiWorld(World):
                     self.goals.append(goal)
                     available_bosses.remove(goal)
 
-            random.shuffle(available_bosses)
+            self.random.shuffle(available_bosses)
             for goal in self.options.goals.value:
                 if goal.startswith("Random"):
                     amount = int(goal.split('-')[1])
                     for _ in range(amount):
-                        self.goals.append(available_bosses.pop())
+                        if len(available_bosses):
+                            self.goals.append(available_bosses.pop())
+
+        for excluded_area in self.options.excluded_areas.value:
+            for _, region in self.data["regions"].items():
+                if "type" in region and "boss" in region:
+                    if region["type"] == "alt" and excluded_area == "Alt Path" or \
+                        region["type"] == "void" and excluded_area == "The Void" or \
+                        region["type"] == "timed" and excluded_area == "Timed Areas" or \
+                        region["type"] == "ascend" and excluded_area == "Ascend":
+                        if region["boss"] in self.goals:
+                            self.goals.remove(region["boss"])
+        
+        if len(self.goals) == 0:
+            self.goals = ['Mom']
 
         re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if re_gen_passthrough and self.game in re_gen_passthrough:
@@ -288,3 +338,4 @@ class TboiWorld(World):
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         return slot_data
+    

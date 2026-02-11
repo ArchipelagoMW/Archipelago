@@ -192,6 +192,8 @@ class OsuWorld(World):
             return False  # Included Songs are handled elsewhere, and we don't want duplicates
         if beatmapset["length"] > self.options.maximum_length:
             return False
+        if beatmapset["length"] < self.options.minimum_length:
+            return False
         if (not self.options.explicit_lyrics) and beatmapset["nsfw"]:
             return False
         if beatmapset["status"] == 'loved' and (not self.options.enable_loved):

@@ -1,5 +1,8 @@
+from .z80asm.Assembler import GameboyAddress
 from ..data.Constants import *
 
+# [x, y] = everything between x and y (included) is free
+# int = end of bank
 CAVE_DATA = [
     0x3ec8,  # 00
     0x3e89,  # 01
@@ -14,13 +17,19 @@ CAVE_DATA = [
     ],
     0x3e2d,  # 05
     0x3864,  # 06 - 128 bytes reserved for sprite expansion w/ web patcher
-    0x3900,  # 07
+    0x3910,  # 07
     [  # 08
         [0x2395, 0x26fd],  # Bipin & Blossom child mechanic
         0x3fc0  # End of bank
     ],
-    0x3f4e,  # 09
-    0x3bf9,  # 0a
+    [
+        [0x2e6d, 0x2eae],  # Ricky giving his flute
+        0x3f4e,  # 09
+    ],
+    [  # 0a
+        [0x3bba, 0x3bd0],  # Blank from removing the spin upon obtaining the sword in d0
+        0x3be9,
+    ],
     [  # 0b
         [0x34ac, 0x34ee],  # Impa intro script
         [0x39b4, 0x39e9],  # Twinrova cutscene 1
@@ -140,6 +149,7 @@ DEFINES = {
     "<wInventoryB": "$e8",
     "<wInventoryA": "$e9",
     "<wInventoryStorage": "$ea",
+    "wOverworldRoomFlags": "$c700",
     "wTextIndexL": "$cba2",
     "wTextIndexH": "$cba3",
     "wTextNumberSubstitution": "$cba8",
@@ -368,6 +378,7 @@ DEFINES = {
     "enableinput": "$be",
     "callscript": "$c0",
     "retscript": "$c1",
+    "jumpiftextoptioneq": "$c3",
     "jumpalways": "$c4",
     "jumpifmemoryset": "$c7",
     "jumpifmemoryeq": "$cb",
@@ -414,81 +425,82 @@ RUPEE_VALUES = {
 }
 
 DUNGEON_ENTRANCES = {
+    # "addr": Address of the pointer to the warp dest aka start of the line + 2
     "d0": {
-        "addr": 0x13651,
+        "addr": GameboyAddress(0x04, 0x7651).address_in_rom(),
         "map_tile": 0xd4,
         "room": 0xd4,
         "group": 0x00,
         "position": 0x54
     },
     "d1": {
-        "addr": 0x1346d,
+        "addr": GameboyAddress(0x04, 0x746d).address_in_rom(),
         "map_tile": 0x96,
         "room": 0x96,
         "group": 0x00,
         "position": 0x44
     },
     "d2": {
-        "addr": 0x13659,
+        "addr": GameboyAddress(0x04, 0x7659).address_in_rom(),
         "map_tile": 0x8d,
         "room": 0x8d,
         "group": 0x00,
         "position": 0x24
     },
     "d3": {
-        "addr": 0x13671,
+        "addr": GameboyAddress(0x04, 0x7671).address_in_rom(),
         "map_tile": 0x60,
         "room": 0x60,
         "group": 0x00,
         "position": 0x25
     },
     "d4": {
-        "addr": 0x13479,
+        "addr": GameboyAddress(0x04, 0x7479).address_in_rom(),
         "map_tile": 0x1d,
         "room": 0x1d,
         "group": 0x00,
         "position": 0x13
     },
     "d5": {
-        "addr": 0x1347d,
+        "addr": GameboyAddress(0x04, 0x747d).address_in_rom(),
         "map_tile": 0x8a,
         "room": 0x8a,
         "group": 0x00,
         "position": 0x25
     },
     "d6": {
-        "addr": 0x13481,
+        "addr": GameboyAddress(0x04, 0x7481).address_in_rom(),
         "map_tile": 0x00,
         "room": 0x00,
         "group": 0x00,
         "position": 0x34
     },
     "d7": {
-        "addr": 0x13485,
+        "addr": GameboyAddress(0x04, 0x7485).address_in_rom(),
         "map_tile": 0xd0,
         "room": 0xd0,
         "group": 0x00,
         "position": 0x34
     },
     "d8": {
-        "addr": 0x1369d,
+        "addr": GameboyAddress(0x04, 0x769d).address_in_rom(),
         "map_tile": 0x04,
         "room": 0x00,
         "group": 0x01,
         "position": 0x23
-    },
+    }
 }
 
 DUNGEON_EXITS = {
-    "d0": 0x13909,
-    "d1": 0x1390d,
-    "d2": 0x13911,
-    "d3": 0x13915,
-    "d4": 0x13919,
-    "d5": 0x1391d,
-    "d6": 0x13921,
-    "d7": 0x13a89,
-    "d8": 0x13a8d,
+    "d0": GameboyAddress(0x04, 0x7909).address_in_rom(),
+    "d1": GameboyAddress(0x04, 0x790d).address_in_rom(),
+    "d2": GameboyAddress(0x04, 0x7911).address_in_rom(),
+    "d3": GameboyAddress(0x04, 0x7915).address_in_rom(),
+    "d4": GameboyAddress(0x04, 0x7919).address_in_rom(),
+    "d5": GameboyAddress(0x04, 0x791d).address_in_rom(),
+    "d6": GameboyAddress(0x04, 0x7921).address_in_rom(),
+    "d7": GameboyAddress(0x04, 0x7a89).address_in_rom(),
+    "d8": GameboyAddress(0x04, 0x7a8d).address_in_rom(),
 }
 
 PORTAL_WARPS = {

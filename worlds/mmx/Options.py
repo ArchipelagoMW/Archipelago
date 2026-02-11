@@ -145,6 +145,46 @@ class SuperRecoverInPool(DefaultOnToggle):
     """
     display_name = "Super Recover In Pool"
 
+class RapidFiveInPool(DefaultOnToggle):
+    """
+    Adds Rapid Five Chip from Mega Man X5 into the item pool.
+
+    Increases the amount of buster shots on screen to 5.
+    """
+    display_name = "Rapid Five In Pool"
+
+class SpeedShotInPool(DefaultOnToggle):
+    """
+    Adds Speed Shot Chip from Mega Man X5 into the item pool.
+
+    Increases X's buster shots (lemons) horizontal speed by 50%.
+    """
+    display_name = "Speed Shot In Pool"
+
+class BusterPlusInPool(DefaultOnToggle):
+    """
+    Adds Buster Plus Chip from Mega Man X5 into the item pool.
+
+    Increases Buster (lemon) damage by 1.
+    """
+    display_name = "Buster Plus In Pool"
+
+class WeaponPlusInPool(DefaultOnToggle):
+    """
+    Adds Weapon Plus Chip from Mega Man X6 into the item pool.
+
+    Increases Weapon damage by 1.
+    """
+    display_name = "Weapon Plus In Pool"
+
+#class ItemPlusInPool(DefaultOnToggle):
+#    """
+#    Adds Item Plus Chip from Mega Man X7 into the item pool.
+#
+#    Increases item drop rates by roughly 33%.
+#    """
+#    display_name = "Item Plus In Pool"
+
 class PickupSanity(Toggle):
     """
     Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
@@ -471,6 +511,11 @@ mmx_option_groups = [
         QuickChargeInPool,
         SpeedsterInPool,
         SuperRecoverInPool,
+        RapidFiveInPool,
+        SpeedShotInPool,
+        BusterPlusInPool,
+        WeaponPlusInPool,
+        #ItemPlusInPool,
         LogicChargedShotgunIce,
     ]),
     OptionGroup("Sigma Fortress Options", [
@@ -530,6 +575,11 @@ class MMXOptions(PerGameCommonOptions):
     quick_charge_in_pool: QuickChargeInPool
     speedster_in_pool: SpeedsterInPool
     super_recover_in_pool: SuperRecoverInPool
+    rapid_five_in_pool: RapidFiveInPool
+    speed_shot_in_pool: SpeedShotInPool
+    buster_plus_in_pool: BusterPlusInPool
+    weapon_plus_in_pool: WeaponPlusInPool
+    #item_plus_in_pool: ItemPlusInPool
     pickupsanity: PickupSanity
     early_legs: EarlyLegs
     logic_boss_weakness: LogicBossWeakness

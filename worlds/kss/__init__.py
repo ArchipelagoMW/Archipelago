@@ -50,6 +50,13 @@ class KSSWebWorld(WebWorld):
 
 
 class KSSWorld(World):
+    """
+    Kirby Super Star features not one, not two, but six games in one – plus extra modes and minigames – all starring the powerful pink hero with the ability to copy his enemies' abilities.
+
+    Each adventure has its own storyline, featuring Kirby battling against classic foes like Meta Knight and King Dedede, and unique gameplay: platforming, treasure-hunting, and even a space shoot 'em up!
+
+    A friend can also join in as Kirby's helper, using their own copy abilities to attack enemies and come to Kirby's aid.
+    """
     game = "Kirby Super Star"
     item_name_to_id = lookup_item_to_id
     location_name_to_id = {location: data.code

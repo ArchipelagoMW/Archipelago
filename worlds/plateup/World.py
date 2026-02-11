@@ -16,6 +16,9 @@ from .Rules import (
 
 
 class PlateUpWorld(World):
+    """
+    PlateUp! combines chaotic kitchen and restaurant management with strategic planning and development to create a delightful roguelite dish unlike any other.
+    """
     game = "plateup"
     web = Web_World.PlateUpWebWorld()
     options_dataclass = PlateUpOptions

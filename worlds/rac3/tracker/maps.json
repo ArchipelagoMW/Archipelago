@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Galaxy",
+    "location_size": 40,
+    "location_border_thickness": 5,
+    "img": "tracker/maps/Galaxy.png"
+  },
+  {
+    "name": "Veldin",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Veldin.png"
+  },
+  {
+    "name": "Florana",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Florana.png"
+  },
+  {
+    "name": "Starship Phoenix",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Phoenix1.png"
+  },
+  {
+    "name": "Marcadia",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Marcadia.png"
+  },
+  {
+    "name": "Daxx",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Daxx.png"
+  },
+  {
+    "name": "Phoenix Assault",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Phoenix2.png"
+  },
+  {
+    "name": "Annihilation Nation",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Annihilation.png"
+  },
+  {
+    "name": "Aquatos",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Aquatos1.png"
+  },
+  {
+    "name": "Tyhrranosis",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Tyhrranosis1.png"
+  },
+  {
+    "name": "Zeldrin Starport",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/ZeldrinStarport.png"
+  },
+  {
+    "name": "Obani Gemini",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Obani_Gemini.png"
+  },
+  {
+    "name": "Blackwater City",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Blackwater.png"
+  },
+  {
+    "name": "Holostar Studios",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Holostar1.png"
+  },
+  {
+    "name": "Koros",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Koros.png"
+  },
+  {
+    "name": "Unused",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Gemini.png"
+  },
+  {
+    "name": "Metropolis",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Metropolis1.png"
+  },
+  {
+    "name": "Crash Site",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/CrashSite.png"
+  },
+  {
+    "name": "Aridia",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Aridia.png"
+  },
+  {
+    "name": "Qwarks Hideout",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/QwarksHideout.png"
+  },
+  {
+    "name": "Command Center 2",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/CommandCenter2.png"
+  },
+  {
+    "name": "Obani Draco",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/ObaniDraco.png"
+  },
+  {
+    "name": "Command Center",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/CommandCenter1.png"
+  },
+  {
+    "name": "Holostar Studios Clank",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Holostar2.png"
+  },
+  {
+    "name": "Museum",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Gemini.png"
+  },
+  {
+    "name": "Unused2",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Gemini.png"
+  },
+  {
+    "name": "Metropolis: Mission",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Metropolis2.png"
+  },
+  {
+    "name": "Aquatos Base",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Aquatos2.png"
+  },
+  {
+    "name": "Aquatos Sewers",
+    "location_size": 10,
+    "location_border_thickness": 2,
+    "img": "tracker/maps/Aquatos3.png"
+  },
+  {
+    "name": "Tyhrranosis: Mission",
+    "location_size": 20,
+    "location_border_thickness": 3,
+    "img": "tracker/maps/Tyhrranosis2.png"
+  }
+]

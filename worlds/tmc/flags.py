@@ -1041,6 +1041,14 @@ DHC_FLAGS: dict[str, ROMData] = {
     # 0x2DBC
     # 0x2DBD
     # 0x2DBE
+    # TMCEvent.DHC_BLEW_UP_LEFT_BLOCK: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x01),
+    # TMCEvent.DHC_BLEW_UP_MIDDLE_BLOCK: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x02),
+    # TMCEvent.DHC_BLEW_UP_RIGHT_BLOCK: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x04),
+    # TMCEvent.DHC_DOOR_OPEN_CAMERA_MOVES: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x08),
+    # TMCEvent.DHC_DEFEATED_BALL_AND_CHAIN_SOLDIERS: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x10),
+    TMCEvent.DHC_BOSS_DOOR_OPEN: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x20),
+    # TMCEvent.DHC_DOOR_OPEN_CAMERA_MOVES: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x40),
+    # TMCEvent.DHC_DOOR_OPEN: ROMData(flag_group_by_name[TMCFlagGroup.DHC_FLAGS] + 0x0A, 0x80),
     # 0x2DBF
     # 0x2DC0
     # 0x2DC1

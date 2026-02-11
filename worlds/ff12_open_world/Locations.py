@@ -6694,7 +6694,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         classification=LocationProgressType.DEFAULT,
         type="treasure",
         str_id="mic_d01",
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Terminus No. 7 Treasure 2": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6703,7 +6703,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_d01",
         secondary_index=1,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - East-West Bypass Treasure 1": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6711,7 +6711,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         classification=LocationProgressType.DEFAULT,
         type="treasure",
         str_id="mic_e01",
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - East-West Bypass Treasure 2": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6720,7 +6720,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e01",
         secondary_index=1,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - East-West Bypass Treasure 3": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6729,7 +6729,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e01",
         secondary_index=2,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - East-West Bypass Treasure 4": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6738,7 +6738,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e01",
         secondary_index=3,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - East-West Bypass Treasure 5": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6747,7 +6747,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e01",
         secondary_index=4,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 1": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6755,7 +6755,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         classification=LocationProgressType.DEFAULT,
         type="treasure",
         str_id="mic_e02",
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 2": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6764,7 +6764,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=1,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 3": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6773,7 +6773,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=2,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 4": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6782,7 +6782,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=3,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 5": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6791,7 +6791,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=4,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 6": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6800,7 +6800,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=5,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 7": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6809,7 +6809,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=6,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 8": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6818,7 +6818,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=7,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 9": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6827,7 +6827,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=8,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 10": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6836,7 +6836,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=9,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 11": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6845,7 +6845,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=10,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - The Zeviah Span Treasure 12": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6854,7 +6854,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e02",
         secondary_index=11,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 1": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6862,7 +6862,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         classification=LocationProgressType.DEFAULT,
         type="treasure",
         str_id="mic_e03",
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 2": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6871,7 +6871,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=1,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 3": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6880,7 +6880,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=2,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 4": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6889,7 +6889,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=3,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 5": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6898,7 +6898,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=4,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 6": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6907,7 +6907,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=5,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 7": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6916,7 +6916,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=6,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 8": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6925,7 +6925,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=7,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 9": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6934,7 +6934,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=8,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 10": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6943,7 +6943,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=9,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 11": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6952,7 +6952,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=10,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 12": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6961,7 +6961,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=11,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - West Annex Treasure 13": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6970,7 +6970,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e03",
         secondary_index=12,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Terminus No. 7 Adjunct Treasure 1": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6978,7 +6978,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         classification=LocationProgressType.DEFAULT,
         type="treasure",
         str_id="mic_e04",
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 1": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6986,7 +6986,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         classification=LocationProgressType.DEFAULT,
         type="treasure",
         str_id="mic_e05",
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 2": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -6995,7 +6995,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=1,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 3": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -7004,7 +7004,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=2,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 4": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -7013,7 +7013,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=3,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 5": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -7022,7 +7022,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=4,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 6": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -7031,7 +7031,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=5,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 7": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -7040,7 +7040,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=6,
-        difficulty=5
+        difficulty=4
     ),
     "Barheim Passage - Special Op Sector 5 Treasure 8": FF12OpenWorldLocationData(
         region="Barheim Passage",
@@ -7049,7 +7049,7 @@ location_data_table: Dict[str, FF12OpenWorldLocationData] = {
         type="treasure",
         str_id="mic_e05",
         secondary_index=7,
-        difficulty=5
+        difficulty=4
     ),
     "Mosphoran Highwaste - Southern Skirts Treasure 1": FF12OpenWorldLocationData(
         region="Mosphoran Highwaste",

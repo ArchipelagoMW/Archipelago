@@ -2,7 +2,7 @@ from collections import Counter
 
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
-from .Options import TriforceLocations, StartingPosition
+from .Options import TriforceLocations, StartingPosition, is_open_cave_shuffled, EntranceShuffle
 
 # Swords are in starting_weapons
 overworld_items = {
@@ -12,15 +12,17 @@ overworld_items = {
     "Sword": 1
 }
 
-# Bomb, Arrow, 1 Small Key and Red Water of Life are in guaranteed_shop_items
 shop_items = {
     "Magical Shield": 3,
     "Food": 2,
-    "Small Key": 1,
+    "Small Key": 2,
     "Candle": 1,
     "Recovery Heart": 1,
     "Blue Ring": 1,
-    "Water of Life (Blue)": 1
+    "Water of Life (Blue)": 1,
+    "Water of Life (Red)": 1,
+    "Bomb": 1,
+    "Arrow": 1
 }
 
 # Magical Rod and Red Candle are in starting_weapons, Triforce Fragments are added in its section of get_pool_core
@@ -40,7 +42,7 @@ major_dungeon_items = {
 
 minor_dungeon_items = {
     "Bomb": 23,
-    "Small Key": 45,
+    "Small Key": 44,
     "Five Rupees": 17
 }
 
@@ -67,7 +69,6 @@ basic_pool.update(major_dungeon_items)
 basic_pool.update(map_compass_replacements)
 
 starting_weapons = ["Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"]
-guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
 starting_weapon_locations = ["Starting Sword Cave", "Letter Cave", "Armos Knights"]
 dangerous_weapon_locations = [
     "Level 1 Compass", "Level 2 Bomb Drop (Keese)", "Level 3 Key Drop (Zols Entrance)", "Level 3 Compass"]
@@ -89,18 +90,25 @@ def get_pool_core(world):
     minor_items = dict(minor_dungeon_items)
 
     # Guaranteed Shop Items
-    reserved_store_slots = random.sample(shop_locations[0:9], 4)
+    guaranteed_shop_items = world.options.ShopItems.value
+    open_slots = [location for location in shop_locations if location != "Blue Ring Shop Item Middle"]
+    if len(guaranteed_shop_items) > len(open_slots):
+        guaranteed_shop_items = random.sample(sorted(guaranteed_shop_items), len(open_slots))
+
+    reserved_store_slots = random.sample(open_slots, len(guaranteed_shop_items))
     for location, item in zip(reserved_store_slots, guaranteed_shop_items):
         placed_items[location] = item
+    placed_items["Blue Ring Shop Item Middle"] = "Small Key"
 
     # Starting Weapon
     start_weapon_locations = starting_weapon_locations.copy()
     final_starting_weapons = [weapon for weapon in starting_weapons
-                              if weapon not in world.options.non_local_items]
+                              if weapon not in world.options.non_local_items and weapon not in guaranteed_shop_items]
     if not final_starting_weapons:
-        final_starting_weapons = starting_weapons
+        final_starting_weapons = ["Sword"]
     starting_weapon = random.choice(final_starting_weapons)
-    if world.options.StartingPosition == StartingPosition.option_safe:
+    if (world.options.StartingPosition == StartingPosition.option_safe
+            or is_open_cave_shuffled(world.options.EntranceShuffle.value)): # Major, Major Open, and All
         placed_items[start_weapon_locations[0]] = starting_weapon
     elif world.options.StartingPosition in \
             [StartingPosition.option_unsafe, StartingPosition.option_dangerous]:
@@ -111,7 +119,7 @@ def get_pool_core(world):
         placed_items[random.choice(start_weapon_locations)] = starting_weapon
     else:
         pool.append(starting_weapon)
-    for other_weapons in starting_weapons:
+    for other_weapons in final_starting_weapons:
         if other_weapons != starting_weapon:
             pool.append(other_weapons)
 
@@ -142,8 +150,10 @@ def get_pool_core(world):
         final_pool.update(minor_items)
         final_pool.update(take_any_items)
         final_pool["Five Rupees"] -= 1
-    for item in final_pool.keys():
-        for i in range(0, final_pool[item]):
-            pool.append(item)
+    # Starting weapon possibilities have already been bounced out of the pool if they're in a shop.
+    guaranteed_shop_items_dict = {item: 1 for item in guaranteed_shop_items if item not in starting_weapons}
+    final_pool.subtract(guaranteed_shop_items_dict)
+    for item in final_pool.elements():
+        pool.append(item)
 
     return pool, placed_items

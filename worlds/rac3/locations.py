@@ -5,7 +5,7 @@ from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.region import RAC3REGION
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World
+    from worlds.rac3.world import RaC3World
 
 
 def get_total_locations(world: "RaC3World") -> int:

@@ -1,6 +1,7 @@
 {
   "game": "Links Awakening DX Beta",
-  "server_version": "13.2.10",
+  "server_version": "13.3.0",
+  "display_name": "The Legend of Zelda - Link's Awakening DX (Beta)",
   "discord_channel": "https://discord.com/channels/731205301247803413/1090819435893362768",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ladx_beta.apworld"
 }

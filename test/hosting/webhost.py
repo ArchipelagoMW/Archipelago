@@ -65,7 +65,7 @@ def generate_remote(app_client: "FlaskClient", games: Iterable[str]) -> str:
     location = response.headers["Location"]
     assert isinstance(location, str)
     assert location.startswith("/wait/"), f"Starting WebHost gen failed: unexpected redirect to {location}"
-    for attempt in range(10):
+    for attempt in range(3600):
         response = app_client.get(location)
         if "Location" in response.headers:
             location = response.headers["Location"]

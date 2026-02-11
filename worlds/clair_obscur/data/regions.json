@@ -1,0 +1,1216 @@
+[
+    {
+        "region_name": "Ancient Sanctuary",
+        "level": 4,
+        "locations": [
+            "Ancient Sanctuary: Entrance - Past climbing handholds",
+            "Ancient Sanctuary: Sanctuary Maze - In dark cave before shortcut to flag 1",
+            "Ancient Sanctuary: Giant Bell Alley - Up ramp after boss",
+            "Ancient Sanctuary: Giant Bell Alley - Before Expedition Flag near dismantled Gestral",
+            "Ancient Sanctuary: Gestral Totem - Base of the totem",
+            "Ancient Sanctuary: Entrance - Across bridge",
+            "Ancient Sanctuary: Sanctuary Maze - On path to flag 1 shortcut",
+            "Ancient Sanctuary: Sanctuary Maze - On cliff after Mime",
+            "Ancient Sanctuary: Sanctuary Maze - In hut near Mime",
+            "Ancient Sanctuary: Sanctuary Maze - In boxes",
+            "Ancient Sanctuary: Gestral Totem - Ink bottles on the cliff",
+            "Ancient Sanctuary: Giant Bell Alley - After boss",
+            "Ancient Sanctuary: Gestral Totem - In shallow river",
+            "Ancient Sanctuary: Gestral Totem - Jump the gaps",
+            "Ancient Sanctuary: Sanctuary Maze - On Expeditioner corpse on path to flag 1 shortcut",
+            "Ancient Sanctuary: Giant Bell Alley - In crawlspace after boss",
+            "Ancient Sanctuary: Giant Bell Alley - Paint Cage before Expedition Flag",
+            "Ancient Sanctuary: Sanctuary Maze - At shortcut to flag 1",
+            "Ancient Sanctuary: Mime",
+            "Ancient Sanctuary: Petank",
+            "Ancient Sanctuary: Ultimate Sakapatate"
+        ]
+    },
+    {
+        "region_name": "Crimson Forest",
+        "level": 24,
+        "locations": [
+            "Crimson Forest: Crimson Perch - Bottom floor near cave",
+            "Crimson Forest: Crimson Perch - Under Expedition Flag",
+            "Crimson Forest: Crimson Perch - Near Expeditioner corpse before Expedition Flag",
+            "Crimson Forest: The Three Blades - After left path Sword Statue",
+            "Crimson Forest: The Three Blades - Upper path after floating rock platforms",
+            "Crimson Forest: The Three Blades - In boxes after floating rock platforms",
+            "Crimson Forest: The Three Blades - In soup (complete dungeon)",
+            "Crimson Forest: The Three Blades - Right path Sword Statue 2",
+            "Crimson Forest: Crimson Perch - Above Expedition Flag",
+            "Crimson Forest: Chromatic Gold Chevaliere"
+        ]
+    },
+    {
+        "region_name": "Dark Shores",
+        "level": 23,
+        "locations": [
+            "Dark Shores: In barrel behind two Nevrons",
+            "Dark Shores: Right side item 1",
+            "Dark Shores: In boxes 2",
+            "Dark Shores: Right side item 2",
+            "Dark Shores: Behind two Nevrons",
+            "Dark Shores: Near boat",
+            "Dark Shores: Near lantern",
+            "Dark Shores: Between two Nevrons",
+            "Dark Shores: In boxes 1"
+        ]
+    },
+    {
+        "region_name": "Esquie's Nest",
+        "level": 5,
+        "locations": [
+            "Esquies Nest: Take shortcut out from Esquie's room. Wheeeeee",
+            "Esquies Nest: Francois - I hid this item - find it before Fran Fran",
+            "Esquies Nest: Esquie's Room - Did you get my rock from Fran Fran?",
+            "Esquies Nest: Esquie's Room - New friends!",
+            "Esquies Nest: Get Outta My Way! - Don't be mean to Sunniso",
+            "Esquies Nest: Get Outta My Way! - Go right from Sunniso",
+            "Esquies Nest: Francois - Bye bye Fran Fran!",
+            "Esquies Nest: Francois - Make another new friend after Fran Fran!",
+            "Esquie’s Nest: Mime",
+            "Esquie’s Nest: Petank",
+            "Esquie’s Nest: Francois"
+        ]
+    },
+    {
+        "region_name": "Falling Leaves",
+        "level": 14,
+        "locations": [
+            "Manor: From Falling Leaves - On the desk",
+            "Falling Leaves: Left path past Persik near fossilized expeditioners",
+            "Falling Leaves: Near Glaise on path to Chromatic Ballet",
+            "Falling Leaves: Between Expedition Flag and Young Boy",
+            "Falling Leaves: Chromatic Ballet",
+            "Falling Leaves: Scavenger"
+        ]
+    },
+    {
+        "region_name": "Flying Manor",
+        "level": 28,
+        "locations": [
+            "Flying Manor: Central Platform - Near easels",
+            "Flying Manor: Dualliste Wing - Near Stalact",
+            "Flying Manor: Central Platform - Left of path to area boss",
+            "Flying Manor: Dualliste Wing - Behind double Gold Chevaliere",
+            "Flying Manor: Dualliste Wing - Behind Grosse Tete",
+            "Flying Manor: Dualliste Wing - Paint Cage",
+            "Flying Manor: Dualliste Wing - Right of Dualliste room entrance",
+            "Flying Manor: Dualliste Wing - Behind Bourgeon",
+            "Flying Manor: Dualliste Wing - Behind Hexga near Hexga corpse",
+            "Flying Manor: Dualliste Wing - Left of Bourgeon",
+            "Flying Manor: Lampmaster Wing - Floating island with easels",
+            "Flying Manor: Lampmaster Wing - Easels near patrolling Jar",
+            "Flying Manor: Lampmaster Wing - Near dead Stalact",
+            "Flying Manor: Lampmaster Wing - Behind Greatsword Cultist",
+            "Flying Manor: Lampmaster Wing - Near Gargant",
+            "Flying Manor: Lampmaster Wing - Above Gargant",
+            "Flying Manor: Lampmaster Wing - Behind Lampmaster",
+            "Flying Manor: Eveque Wing - Inside library",
+            "Flying Manor: Eveque Wing - Easels near Petank start",
+            "Flying Manor: Eveque Wing - Ground floor behind Cruler",
+            "Flying Manor: Eveque Wing - On bridge above Cruler",
+            "Flying Manor: Eveque Wing - Near Portier by exit",
+            "Flying Manor: Eveque Wing - Ground floor by window in Eveque room",
+            "Flying Manor: Goblu Wing - above handholds near patrolling Glaise",
+            "Flying Manor: Eveque Wing - On fallen bridge segment",
+            "Flying Manor: Lampmaster Wing (Honestly idk) - Near single Steel Chevaliere on broken platform",
+            "Flying Manor: Goblu Wing - Left of entrance",
+            "Flying Manor: Goblu Wing - Under main platform",
+            "Flying Manor: Central Platform - Right of entrance",
+            "Flying Manor: Central Platform - Path to Eveque Wing on giant frame",
+            "Flying Manor: Goblu Wing - Next to Goblu",
+            "Flying Manor: Goblu Wing - On path to Goblu",
+            "Flying Manor: Goblu Wing - Behind Fusoka",
+            "Flying Manor: Goblu Wing - Side path near Mime",
+            "Flying Manor: Goblu Wing - Center of Bourgeon and Glaise patrol",
+            "Flying Manor: Eveque Wing - Paint Cage",
+            "Flying Manor: Clea",
+            "Flying Manor: Dualliste",
+            "Flying Manor: Eveques",
+            "Flying Manor: Goblu",
+            "Flying Manor: Lampmaster",
+            "Flying Manor: Mime",
+            "Flying Manor: Petank"
+        ]
+    },
+    {
+        "region_name": "Forgotten Battlefield",
+        "level": 8,
+        "locations": [
+            "Forgotten Battlefield: Main Gate - Left side wooden deck",
+            "Forgotten Battlefield: Main Gate - Right side near outer wall",
+            "Forgotten Battlefield: Fort Ruins - In left ruins near dead end",
+            "Forgotten Battlefield: Battlefield - On wooden platform near Petank end",
+            "Forgotten Battlefield: Main Gate - Near Chalier sword",
+            "Forgotten Battlefield: Main Gate - Left side dead end",
+            "Forgotten Battlefield: Main Gate - On platform after Expedition Flag",
+            "Forgotten Battlefield: Main Gate - Other side of left entrance corpse pile",
+            "Forgotten Battlefield: Battlefield - Near Expedition Flag",
+            "Forgotten Battlefield: Vanguard Point - In maze",
+            "Forgotten Battlefield: Vanguard Point - In front of Chromatic miniboss",
+            "Forgotten Battlefield: Fort Ruins - On ledge overlooking battlefield",
+            "Forgotten Battlefield: Vanguard Point - Below Expedition Flag",
+            "Forgotten Battlefield: Vanguard Point - Above Chromatic miniboss",
+            "Forgotten Battlefield: Battlefield - In box",
+            "Forgotten Battlefield: Main Gate - Near Grandis corpses",
+            "Forgotten Battlefield: Ancient Bridge - After bridge",
+            "Forgotten Battlefield: Ancient Bridge - Before grave",
+            "Forgotten Battlefield: Fort Ruins - Chest",
+            "Forgotten Battlefield: Main Gate - Near burning tree",
+            "Forgotten Battlefield: Main Gate - Left side in a box",
+            "Forgotten Battlefield: Main Gate - Near Grandis and Chalier corpses",
+            "Forgotten Battlefield: Fort Ruins - Dead end",
+            "Forgotten Battlefield: Fort Ruins - Behind Paint Spike",
+            "Forgotten Battlefield: Battlefield - Paint Cage",
+            "Forgotten Battlefield: Ancient Bridge - In crawlspace below bridge",
+            "Forgotten Battlefield: Chromatic Luster",
+            "Forgotten Battlefield: Dualliste",
+            "Forgotten Battlefield: Petank"
+        ]
+    },
+    {
+        "region_name": "Frozen Hearts",
+        "level": 21,
+        "locations": [
+            "Manor: From Frozen Hearts - At the harp",
+            "Frozen Hearts: Glacial Falls - Chromatic Veilleur Ice Cave item 1",
+            "Frozen Hearts: Icebound Train Station - On broken train tracks",
+            "Frozen Hearts: Icebound Train Station - Platform to left of entrance to first room",
+            "Frozen Hearts: Icebound Train Station - Chromatic Veilleur Ice Cave item 2",
+            "Frozen Hearts: Icebound Train Station - Past Paint Cage",
+            "Frozen Hearts: Glacial Falls - Right of station entrance near Danseuse corpse",
+            "Frozen Hearts: Glacial Falls - Paint Cage 1",
+            "Frozen Hearts: Glacial Falls - Chromatic Veilleur Ice Cave item 4",
+            "Frozen Hearts: Glacial Falls - Paint Cage 2",
+            "Frozen Hearts: Glacial Falls - Between Expedition Flag and tracks to Danseuse Teacher",
+            "Frozen Hearts: Icebound Train Station - Behind train near entrance",
+            "Frozen Hearts: Icebound Train Station - Red ice nook in first area",
+            "Frozen Hearts: Glacial Falls - Above Expedition Flag item 1",
+            "Frozen Hearts: Icebound Train Station - Ledge overlooking entrance",
+            "Frozen Hearts: Glacial Falls - Above giant pit item 1",
+            "Frozen Hearts: Glacial Falls - Behind double Braseleur near giant pit",
+            "Frozen Hearts: Glacial Falls - Near handholds leading to shortcut back to Expedition Flag",
+            "Frozen Hearts: Glacial Falls - On train tracks above handholds",
+            "Frozen Hearts: Icebound Train Station - First room right path on cliffside",
+            "Frozen Hearts: Glacial Falls - above giant pit item 2",
+            "Frozen Hearts: Glacial Falls - Above Expedition Flag item 2",
+            "Frozen Hearts: Glacial Falls - Chromatic Veilleur Ice Cave item 3",
+            "Frozen Hearts: Icebound Terminal - Behind zone boss",
+            "Frozen Hearts: Iced Heart - Near Expedition Flag",
+            "Frozen Hearts: Iced Heart - Under dead Grandis",
+            "Frozen Hearts: Iced Heart - Near Mime after floating trains item 1",
+            "Frozen Hearts: Iced Heart - Near Mime after floating trains item 2",
+            "Frozen Hearts: Glacial Falls - Above Danseuse Teacher",
+            "Frozen Hearts: Iced Heart - Near Mime after floating trains item 3",
+            "Frozen Hearts: Glacial Falls - Behind Stalact near station entrance",
+            "Frozen Hearts: Mime",
+            "Frozen Hearts: Petank",
+            "Frozen Hearts: Chromatic Veilleur",
+            "Frozen Hearts: Gargant"
+        ]
+    },
+    {
+        "region_name": "Gestral Village",
+        "level": 4,
+        "locations": [
+            "Manor: From First Continent Sea - After library platforms",
+            "Manor: From Gestral Village - In crawlspace",
+            "Gestral Village: Steal from Victorifo",
+            "Gestral Village: Behind the stage",
+            "Gestral Village: On scaffolding by the stage",
+            "Gestral Village: In the arena",
+            "Gestral Village: Above the Bazar",
+            "Gestral Village: Barrels near Chef’s House",
+            "Gestral Village: In paint spike room 1",
+            "Gestral Village: In paint spike room 2",
+            "Gestral Village: Near casino"
+        ]
+    },
+    {
+        "region_name": "Flying Waters",
+        "level": 3,
+        "locations": [
+            "Manor: Dining Hall Puzzle",
+            "Manor: Through fake painting",
+            "Manor: Renoir's Atelier",
+            "Flying Waters: Coral Cave - On raised platform",
+            "Flying Waters: Entrance - Minefield item 2",
+            "Flying Waters: Noco's Hut - Behind Manor door",
+            "Flying Waters: Noco's Hut - On top of stone tower",
+            "Flying Waters: Noco's Hut - Next to Goblu anvil",
+            "Flying Waters: Entrance - Near anchored Expedition",
+            "Flying Waters: Coral Cave - Right of Expedition Flag",
+            "Flying Waters: Coral Cave - Near dead expeditioner",
+            "Flying Waters: Lumerian Streets - Behind Chromatic miniboss",
+            "Flying Waters: Coral Cave - Near lantern coral",
+            "Flying Waters: Noco's Hut - After Expedition Flag",
+            "Flying Waters: Flower Fields - Near Expedition Flag",
+            "Flying Waters: Lumerian Streets - In Paint Spike",
+            "Flying Waters: Entrance - In inlet in first room",
+            "Flying Waters: Noco's Hut - On broken pillar",
+            "Flying Waters: Coral Cave - Past long seaweed",
+            "Flying Waters: Lumerian Streets - Near shopping stand",
+            "Flying Waters: Lumerian Streets - By floating house",
+            "Flying Waters: Entrance - In minefield",
+            "Flying Waters: Noco's Hut - After platforming near friendly Nevron",
+            "Flying Waters: Entrance - Second room up ramp",
+            "Flying Waters: Entrance - In inlet in second room",
+            "Flying Waters: Lumerian Streets - On a rock with boxes",
+            "Flying Waters: Entrance - On main path",
+            "Flying Waters: Coral Cave - Past platforming pillars",
+            "Flying Waters: Coral Cave - Paint Cage",
+            "Flying Waters: Coral Cave - Behind Mime",
+            "Flying Waters: Bourgeon",
+            "Flying Waters: Chromatic Troubador",
+            "Flying Waters: Goblu",
+            "Flying Waters: Mime"
+        ]
+    },
+    {
+        "region_name": "Monoco's Station",
+        "level": 1,
+        "locations": [
+            "Grandis Station: Monoco's Station - Back of station",
+            "Grandis Station: Monoco's Station - Near Grandis Merchant"
+        ]
+    },
+    {
+        "region_name": "Lumiere",
+        "level": 16,
+        "locations": [
+            "Lumiere (Act 3): Opera House - On building railing in Paint Spike",
+            "Lumiere (Act 3): Entrance - Left of stairs after docks",
+            "Lumiere (Act 3): Entrance - Start of the game",
+            "Lumiere (Act 3): Entrance - In boxes",
+            "Lumiere (Act 3): Entrance - In Paint Spike",
+            "Lumiere (Act 3): Entrance - Right side after docks",
+            "Lumiere (Act 3): Entrance - Right side up stairs",
+            "Lumiere (Act 3): Entrance - Left side near trash can",
+            "Lumiere (Act 3): Central Plaza - Near fountain",
+            "Lumiere (Act 3): Central Plaza - Next to fountain",
+            "Lumiere (Act 3): Central Plaza - Hallway after fountain",
+            "Lumiere (Act 3): Central Plaza - Near boxes",
+            "Lumiere (Act 3): Shattered Alley - Inside gramophone",
+            "Lumiere (Act 3): Shattered Alley - Under the tree",
+            "Lumiere (Act 3): Shattered Alley - Left path after Expedition Flag",
+            "Lumiere (Act 3): Shattered Alley - Under impaled building",
+            "Lumiere (Act 3): Lumina 5",
+            "Lumiere (Act 3): Shattered Alley - Behind Chromatic miniboss",
+            "Lumiere (Act 3): Shattered Alley - Next to Chromatic miniboss",
+            "Lumiere (Act 3): Shattered Alley - Near boat before Opera House",
+            "Lumiere (Act 3): Shattered Alley - Before Opera House",
+            "Lumiere (Act 3): Lumiere's Garden - First right up stairs",
+            "Lumiere (Act 3): Opera House - Top of stairs",
+            "Lumiere (Act 3): Opera House - Under festival decorations",
+            "Lumiere (Act 3): Opera House - In between buildings",
+            "Lumiere (Act 3): Upgrade 6",
+            "Lumiere (Act 3): Opera House - Cliffside overlooking ruined Lumiere",
+            "Lumiere (Act 3): Opera House - Near Cribappa",
+            "Lumiere (Act 3): Opera House - Near Young Boy",
+            "Lumiere (Act 3): Opera House - Under broken buidling before Cribappa",
+            "Lumiere (Act 3): Lumiere's Garden - Inside ruined statue item 3",
+            "Lumiere (Act 3): Lumiere's Garden - By dead giant Obscur",
+            "Lumiere (Act 3): Lumiere's Garden - Near ruined statue",
+            "Lumiere (Act 3): Lumiere's Garden - Inside ruined statue item 2",
+            "Lumiere (Act 3): Crooked Tower Walkway - Before final boss",
+            "Lumiere (Act 3): Lumiere's Garden - Behind hedge",
+            "Lumiere (Act 3): Lumiere's Garden - On bench",
+            "Lumiere (Act 3): Lumiere's Garden - Left side up stairs",
+            "Lumiere (Act 3): Entrance - On the docks",
+            "Lumiere (Act 3): Shattered Alley - Near Chromatic miniboss",
+            "Lumiere (Act 3): Entrance - Left side near building",
+            "Lumiere (Act 3): Lumiere's Garden - Left before Chromatic Miniboss",
+            "Lumiere (Act 3): Lumiere's Garden - Inside ruined statue item 1",
+            "Lumiere (Act 3): Opera House - Near piano",
+            "Lumiere (Act 3): Chromatic Echassier",
+            "Lumiere (Act 3): Creation",
+            "Lumiere (Act 3): The Curator"
+        ]
+    },
+    {
+        "region_name": "The Monolith",
+        "level": 15,
+        "locations": [
+            "Manor: From Inside the Monolith - Near the vase on a table",
+            "Monolith: Tainted Meadows - Detour near Eveque",
+            "Monolith: Tainted Cliffs - In front of bastard Mime room zipline",
+            "Monolith: Tainted Meadows - Paint Cage",
+            "Monolith: Tainted Meadows - After Aline memory",
+            "Monolith: Tainted Meadows - Near Eveque",
+            "Monolith: Tainted Waters - Behind Chromatic Bourgeon",
+            "Monolith: Tainted Waters - Right path in coral reef",
+            "Monolith: Tainted Waters - In broken ship frame under barrels",
+            "Monolith: Tainted Waters - Near giant anchor",
+            "Monolith: Tainted Lumiere - Zipline across fractured ground",
+            "Monolith: Tainted Sanctuary - After Expedition Flag",
+            "Monolith: Tainted Sanctuary - In roundabout near giant Sakapatate statue",
+            "Monolith: Tainted Sanctuary - Paint Cage",
+            "Monolith: Tainted Sanctuary - Next to giant Sakapatate statue",
+            "Monolith: Tainted Sanctuary - Before giant Sakapatate Statue",
+            "Monolith: Tainted Cliffs - Top of spiral staircase",
+            "Monolith: Tainted Cliffs - Path to lighthouse",
+            "Monolith: Tainted Cliffs - Near Petank end platform",
+            "Monolith: Tainted Cliffs - Behind Lighthouse near Petank",
+            "Monolith: Tainted Cliffs - Room before exit item 1",
+            "Monolith: Tainted Cliffs - Room before exit item 2",
+            "Monolith: Tainted Battlefield - Next to Expedition Flag",
+            "Monolith: Tainted Battlefield - Past Sakapatate corpses",
+            "Monolith: Tainted Battlefield - Left path after vertical zipline",
+            "Monolith: Tainted Battlefield - Near broken -down cannon",
+            "Monolith: Tainted Battlefield - Near exit",
+            "Monolith: Tainted Hearts - Near Young Boy at station",
+            "Monolith: Tainted Hearts - On train car hanging off cliff",
+            "Monolith: Tainted Hearts - On cliffside near crane",
+            "Monolith: Tainted Hearts - Near Melosh",
+            "Monolith: Tainted Hearts - Paint Cage",
+            "Monolith: Tainted Hearts - Left of station entrance",
+            "Monolith: Tainted Lumiere - Before crossing fractured land",
+            "Monolith: Tainted Lumiere - Next to large fountain",
+            "Monolith: Tainted Lumiere - Deadend near crooked archway",
+            "Monolith: Tainted Lumiere - Side path near next Expedition Flag",
+            "Monolith: Tainted Lumiere - Near harp",
+            "Monolith: Tainted Lumiere - Near dead Grandis",
+            "Monolith: Tainted Cliffs - Behind Petank starting position",
+            "Monolith: Tainted Lumiere - Next to festival stands",
+            "Monolith: Tainted Battlefield - After Expedition Flag",
+            "Monolith: Tainted Lumiere - Left before Expedition Flag",
+            "The Monolith: Chromatic Bourgeon",
+            "The Monolith: Chromatic Clair Obscur",
+            "The Monolith: Clair Obscur",
+            "The Monolith: Eveque",
+            "The Monolith: Gargant",
+            "The Monolith: Mime",
+            "The Monolith: Petank",
+            "The Monolith: Renoir",
+            "The Monolith: Ultimate Sakapatate",
+            "The Monolith: The Paintress"
+        ]
+    },
+    {
+        "region_name": "Old Lumiere",
+        "level": 10,
+        "locations": [
+            "Manor: From Old Lumiere - In the sink",
+            "Old Lumiere: Left Street - In barrels after grapple",
+            "Old Lumiere: Left Street - On top of broken pipe",
+            "Old Lumiere: Right Street - On ledge overlooking rubble",
+            "Old Lumiere: Right Street - In crawl space",
+            "Old Lumiere: Left Street - Past ruined doorway",
+            "Old Lumiere: Left Street - Before Manor Gardens",
+            "Old Lumiere: Manor Gardens - Near Paint Cage",
+            "Old Lumiere: Manor Gardens - Near Sword of Lumiere",
+            "Old Lumiere: Right Street - Boxes near apartment building",
+            "Old Lumiere: Right Street - After Expedition Flag",
+            "Old Lumiere: Right Street - After Expedition Flag on buried building",
+            "Old Lumiere: Manor Gardens - In pit between building grapples",
+            "Old Lumiere: Manor Gardens - Above Train Station Ruins Expedition Flag",
+            "Old Lumiere: Manor Gardens - Behind gate near hedge maze",
+            "Old Lumiere: Left Street - Before Expedition Flag in ruins",
+            "Old Lumiere: Manor Gardens - Above Chromatic boss",
+            "Old Lumiere: Left Street - On Chevaliere corpse",
+            "Old Lumiere: Train Station Ruins - Behind Chromatic boss",
+            "Old Lumiere: Right Street - Overlooking carousel",
+            "Old Lumiere: Manor Gardens - Paint Cage",
+            "Old Lumiere: Chromatic Danseuse",
+            "Old Lumiere: Mime",
+            "Old Lumiere: Renoir"
+        ]
+    },
+    {
+        "region_name": "The Reacher",
+        "level": 20,
+        "locations": [
+            "The Reacher: Entrance - early handholds",
+            "The Reacher: Mountain - boxes by cliffside",
+            "The Reacher: Mountain - Above First Echassier 2",
+            "The Reacher: Foggy Area - Foggy Area flag",
+            "The Reacher: Mountain - on cliffside",
+            "The Reacher: Mountain - after wooden plank platforms",
+            "The Reacher: Entrance - in nook near double Orphelin",
+            "The Reacher: Foggy Area - Above Veilleur by cliffside",
+            "The Reacher: Foggy Area - Veilleur",
+            "The Reacher: Foggy Bank - Platform above Merchant",
+            "The Reacher: Ladder Area - Sandbag Fort",
+            "The Reacher: Entrance - after Orphelin builders",
+            "The Reacher: Entrance - on Orphelin builder platform",
+            "The Reacher: Ladder Area - Near Expedition Flag",
+            "The Reacher: Peak - Dead Orphelin",
+            "The Reacher: Entrance - After Paint Spike",
+            "The Reacher: Foggy Bank - After triple Orphelin platform",
+            "The Reacher: Foggy Area - above patrolling Veilleur",
+            "The Reacher: Ladder Area - Mime",
+            "The Reacher: Ladder Area - Nailed Orphelin near Petank platform",
+            "The Reacher: Mountain - before wooden plank platforming",
+            "The Reacher: Ladder Area - behind Manor door",
+            "The Reacher: Ladder Area - Past Green Orphelin",
+            "The Reacher: Entrance - under Orphelin builder platform",
+            "The Reacher: Entrance - hot air balloon",
+            "The Reacher: Foggy Bank - Triple Orphelin platform",
+            "The Reacher: Chromatic Braseleur",
+            "The Reacher: Mime",
+            "The Reacher: Petank",
+            "The Reacher: Alicia"
+        ]
+    },
+    {
+        "region_name": "Renoir's Drafts",
+        "level": 31,
+        "locations": [
+            "Renoir' Draft: Entrance - triple Contortionniste",
+            "Renoir' Draft: Entrance - Moissonneuse",
+            "Renoir' Draft: Golden Tree - above The Abyss entrance",
+            "Renoir' Draft: Entrance - giant bronze ball",
+            "Renoir' Draft: Entrance - next to Merchant",
+            "Renoir' Draft: Entrance - after platforms near Merchant",
+            "Renoir' Draft: Entrance - in tunnel under room with red lights",
+            "Renoir' Draft: Entrance - buried building and double Creation",
+            "Renoir' Draft: Entrance - under toppled fuzzy pillar",
+            "Renoir' Draft: Entrance - Boucheclier",
+            "Renoir' Draft: Entrance - on bridge behind Merchant",
+            "Renoir' Draft: Entrance - Music near Triple Contortionniste",
+            "Renoir’s Drafts: Chromatic Creation",
+            "The Abyss: Simon"
+        ]
+    },
+    {
+        "region_name": "Stone Wave Cliffs",
+        "level": 7,
+        "locations": [
+            "Manor: From Stone Wave Cliffs - In the wardrobe",
+            "Sea Cliff: Chroma 1",
+            "Stone Wave Cliffs: Old Farm - Near Chromatic Gault 2",
+            "Stone Wave Cliffs: Entrance - Ledge next to the tunnel",
+            "Stone Wave Cliffs: Flooded Buildings - Indoor climbing wall",
+            "Stone Wave Cliffs: Entrance - Paint cage",
+            "Stone Wave Cliffs: Paintress Shrine - Ledge with climbing holds",
+            "Stone Wave Cliffs: Flooded Buildings - In barrels overlooking Monolith",
+            "Stone Wave Cliffs: Paintress Shrine - Ruined building near flag",
+            "Stone Wave Cliffs: Entrance - Overturned tube thing",
+            "Stone Wave Cliffs: Flooded Buildings - Up a small ledge",
+            "Stone Wave Cliffs: Flooded Buildings - Near Expeditioner impaled with greatsword",
+            "Stone Wave Cliffs: Old Farm - Paint cage",
+            "Stone Wave Cliffs: Tide Caverns - Next to the rope down to manor door",
+            "Stone Wave Cliffs: Back entrance",
+            "Stone Wave Cliffs: Old Farm - In front of the first hut",
+            "Stone Wave Cliffs: Entrance - In front of monument",
+            "Stone Wave Cliffs: Tide Caverns - Across from the manor door",
+            "Stone Wave Cliffs: Paintress Shrine - Ledge in the open cave 1",
+            "Stone Wave Cliffs: Paintress Shrine - Grapple platform",
+            "Stone Wave Cliffs: Paintress Shrine - In front of the shrine",
+            "Stone Wave Cliffs: Old Farm - Before the rope up to the flag",
+            "Stone Wave Cliffs: Old Farm - Ledge in the tunnel",
+            "Stone Wave Cliffs: Entrance - Near the flag",
+            "Stone Wave Cliffs: Paintress Shrine - Near Young Boy",
+            "Stone Wave Cliffs: Paintress Shrine - Upper maze near Expeditioner corpse",
+            "Stone Wave Cliffs: Old Farm - By the ramp",
+            "Stone Wave Cliffs: Old Farm - Towards the merchant",
+            "Stone Wave Cliffs: Basalt Waves - Below vertical zipline before Expedition Flag",
+            "Stone Wave Cliffs: Flooded Buildings - Under the climbing holds",
+            "Stone Wave Cliffs: Tide Caverns - Jump across the pillars",
+            "Stone Wave Cliffs: Tide Caverns - In the rock crystal room",
+            "Stone Wave Cliffs: Tide Caverns - Next to the manor door",
+            "Stone Wave Cliffs: Flooded Buildings - Dead hexga",
+            "Stone Wave Cliffs: Tide Caverns - Ruined building",
+            "Stone Wave Cliffs: Entrance - Tiny gazebo",
+            "Stone Wave Cliffs: Entrance - By the first grapple point",
+            "Stone Wave Cliffs: Rock Crystal",
+            "Stone Wave Cliffs: White Hexga reward",
+            "Stone Wave Cliffs: Basalt Waves - Return to the boss arena",
+            "Stone Wave Cliffs: Chromatic Gault",
+            "Stone Wave Cliffs: Petank",
+            "Stone Wave Cliffs: Lampmaster"
+        ]
+    },
+    {
+        "region_name": "Sirene",
+        "level": 13,
+        "locations": [
+            "Manor: From Sirene - Break the bathroom mirror",
+            "Sirene: Dancing Classes - Down verical zipline in first room",
+            "Sirene: Dancing Classes - Under Paint Spike",
+            "Sirene: Dancing Classes - Paint Cage",
+            "Sirene: Crumbling Path - Near Petank",
+            "Sirene: Sewing Atelier - Near Young Boy and Manor Door",
+            "Sirene: Sewing Atelier - After Young Boy before Grapple",
+            "Sirene: Dancing Classes - In bowl near Petank start",
+            "Sirene: Dancing Classes - Near large room before Petank",
+            "Sirene: Dancing Classes - On foggy platform",
+            "Sirene: Sewing Atelier - Near brazier and fabric -wrapped pillar",
+            "Sirene: Dancing Classes - Before next Expedition Flag on ledge",
+            "Sirene: Sewing Atelier - Near mini -boss",
+            "Sirene: Sewing Atelier - Upper path near mini -boss",
+            "Sirene: Dancing Classes - Railing overlooking giant Ballet",
+            "Sirene: Dancing Classes - Before elevator",
+            "Sirene: Dancing Classes - Behind Chromatic enemy",
+            "Sirene: Dancing Classes - Below handholds",
+            "Sirene: Sewing Atelier - Paint Cage",
+            "Sirene: Dancing Classes - Bottom of winding fabric room",
+            "Sirene: Dancing Classes - Middle of winding fabric room",
+            "Sirene: Dancing Classes - Near corpse overlooking Glissando corpse",
+            "Sirene: Dancing Classes - Top of winding fabric room",
+            "Sirene: Dancing Classes - Before end of detour leading back to Expedition Flag",
+            "Sirene: Sewing Atelier - Before Zipline to next Expedition Flag",
+            "Sirene: Dancing Classes - Before Expedition Flag",
+            "Sirene: Crumbling Path - Left of mini -boss",
+            "Sirene: Crumbling Path - Before mini -boss",
+            "Sirene: Dancing Arena - Near Expedition Flag",
+            "Sirene: Crumbling Path - Detour left of mini -boss",
+            "Sirene: Blue Petank",
+            "Sirene: Red Petank",
+            "Sirene: Chromatic Greatsword Cultist",
+            "Sirene: Glissando",
+            "Sirene: Mime",
+            "Sirene: Tisseur",
+            "Sirene: Sirene"
+        ]
+    },
+    {
+        "region_name": "Red Woods",
+        "level": 1,
+        "locations": [
+            "Red Woods: Lumina 1"
+        ]
+    },
+    {
+        "region_name": "The Small Bourgeon",
+        "level": 1,
+        "locations": [
+            "Small Bourgeon: Feed the White Nevron and loot his vomit"
+        ]
+    },
+    {
+        "region_name": "Stone Wave Cliffs Cave",
+        "level": 8,
+        "locations": [
+            "Stone Wave Cliffs Cave: Behind Chromatic Hexga",
+            "Stone Wave Cliffs Cave: Through ruined archway",
+            "Stone Wave Cliffs Cave: Near rocks before Chromatic Hexga",
+            "Stone Wave Cliffs Cave: Paint Cage",
+            "Stone Wave Cliffs Cave: Chromatic Hexga"
+        ]
+    },
+    {
+        "region_name": "The Chosen Path",
+        "level": 20,
+        "locations": [
+            "Chosen Path: Complete all Canvases",
+            "The Chosen Path: Benisseur",
+            "The Chosen Path: Contorsionniste",
+            "The Chosen Path: Glaise",
+            "The Chosen Path: Jar",
+            "The Chosen Path: Stalact"
+        ]
+    },
+    {
+        "region_name": "Sky Island",
+        "level": 20,
+        "locations": [
+            "Floating Island: At end of area",
+            "Sky Island: Chromatic Glaise"
+        ],
+        "parent_map": "World Map: Fly",
+        "condition": {
+            "Painted Power": 1
+        },
+        "exits": []
+    },
+    {
+        "region_name": "Isle of the Eyes",
+        "level": 22,
+        "locations": [
+            "Visages: Item 1",
+            "Visages: Item 2",
+            "Isle of the Eyes: Chromatic Boucheclier",
+            "Isle of the Eyes: Petank"
+        ]
+    },
+    {
+        "region_name": "The Crows",
+        "level": 1,
+        "locations": [
+            "The Crows: Item",
+            "The Crows: Chromatic Chapelier"
+        ]
+    },
+    {
+        "region_name": "Floating Cemetery",
+        "level": 1,
+        "locations": [
+            "Cemetery: Upper level overlooking entrance",
+            "Cemetery: Near barrels",
+            "Cemetery: Defeat the Nevron",
+            "Cemetery: Next to Gramophone"
+        ]
+    },
+    {
+        "region_name": "Coastal Cave",
+        "level": 1,
+        "locations": [
+            "Coastal Cave: Left side"
+        ]
+    },
+    {
+        "region_name": "Crushing Cavern",
+        "level": 9,
+        "locations": [
+            "Crushing Cavern: After boss",
+            "Crushing Cavern: Giant Sapling"
+        ]
+    },
+    {
+        "region_name": "Esoteric Ruins",
+        "level": 1,
+        "locations": [
+            "Esoteric Ruins: Side path near statue",
+            "Esoteric Ruins: Paint Cage",
+            "Esoteric Ruins: Item after maze 1",
+            "Esoteric Ruins: Item after maze 2",
+            "Esoteric Ruins: Item after maze 3"
+        ]
+    },
+    {
+        "region_name": "Sinister Cave",
+        "level": 13,
+        "locations": [
+            "Sinister Cave: Near glowing nevron",
+            "Sinister Cave: After long fall",
+            "Sinister Cave: Beside dead Gestral Merchant",
+            "Sinister Cave: Chromatic Chalier"
+        ]
+    },
+    {
+        "region_name": "The Fountain",
+        "level": 1,
+        "locations": [
+            "The Fountain: In front of Blanche"
+        ]
+    },
+    {
+        "region_name": "Abbest Cave",
+        "level": 1,
+        "locations": [
+            "Abbest Cave: Chromatic Abbest"
+        ]
+    },
+    {
+        "region_name": "Flying Casino",
+        "level": 1,
+        "locations": [
+            "Flying Casino: Item"
+        ]
+    },
+    {
+        "region_name": "The Carousel",
+        "level": 1,
+        "locations": [
+            "Carousel: In boxes",
+            "Carousel: Left of Expedition Flag"
+        ]
+    },
+    {
+        "region_name": "White Sands",
+        "level": 1,
+        "locations": [
+            "White Sands: Next to Expedition Flag",
+            "White Sands: In front of boat overlooking Manor"
+        ]
+    },
+    {
+        "region_name": "Sacred River",
+        "level": 1,
+        "locations": [
+            "Sacred River: Item",
+            "Sacred River: Golgra"
+        ]
+    },
+    {
+        "region_name": "Spring Meadows",
+        "level": 1,
+        "locations": [
+            "Spring Meadows: Meadows Corridor - On the path",
+            "Spring Meadows: Meadows Corridor - Small cave",
+            "Spring Meadows: Meadows Corridor - Near boxes",
+            "Spring Meadows: Meadows Corridor - In the house 1",
+            "Spring Meadows: Meadows Corridor - On ledge beside house",
+            "Spring Meadows: Meadows Corridor - In the house 2",
+            "Spring Meadows: Grand Meadow - Behind Chromatic Lancelier",
+            "Spring Meadows: Grand Meadow - Right path after grapple",
+            "Spring Meadows: Abandoned Expeditioner Camp - On cliff behind paint spike 2",
+            "Spring Meadows: Abandoned Expeditioner Camp - On cliff behind paint spike 1",
+            "Spring Meadows: The Indigo Tree - On the roots",
+            "Spring Meadows: Abandoned Expeditioner Camp - Small alcove",
+            "Spring Meadows: Abandoned Expeditioner Camp - Ledge above bridge",
+            "Spring Meadows: Abandoned Expeditioner Camp - Boxes near bridge",
+            "Spring Meadows: Abandoned Expeditioner Camp - Between paint spikes",
+            "Spring Meadows: Abandoned Expeditioner Camp - Barrels by wall",
+            "Spring Meadows: Abandoned Expeditioner Camp - Under the bridge",
+            "Spring Meadows: Abandoned Expeditioner Camp - On cliff near upper paint spike",
+            "Spring Meadows: The Indigo Tree - On a branch",
+            "Spring Meadows: Grand Meadow - Left path near flag 2",
+            "Spring Meadows: Grand Meadow - Right path near flag 1",
+            "Spring Meadows: Grand Meadow - Before grapple spot to mime",
+            "Spring Meadows: Grand Meadow - Left path near flag 1",
+            "Spring Meadows: Grand Meadow - Right path near flag 2",
+            "Spring Meadows: Grand Meadow - Lower cliff before grapple",
+            "Spring Meadows: Abandoned Expeditioner Camp - Near lower paint spike",
+            "Spring Meadows: Entrance - In the waterfall behind start",
+            "Spring Meadows: Chromatic Lancelier",
+            "Spring Meadows: Mime",
+            "Spring Meadows: Eveque"
+        ]
+    },
+    {
+        "region_name": "Endless Night Sanctuary",
+        "level": 21,
+        "locations": [
+            "Endless Night Sanctuary: Warrior' Route - Near expeditioner corpse",
+            "Endless Night Sanctuary: Entrance - Near Contortionniste corpses",
+            "Endless Night Sanctuary: Entrance - Right path before Warrior' Route flag",
+            "Endless Night Sanctuary: Left path before second flag 2",
+            "Endless Night Sanctuary: Warrior' Route - After Petank 2",
+            "Endless Night Sanctuary: Night Totem - after Merchant",
+            "Endless Night Sanctuary: Night Totem - Near bags and fallen giant vases",
+            "Endless Night Sanctuary: Night Totem - Before shortcut back to flag",
+            "Endless Night Sanctuary: Entrance - Left path before second flag 1",
+            "Endless Night Sanctuary: Entrance - Before Warrior' Route flag",
+            "Endless Night Sanctuary: Warrior' Route - After Petank 3",
+            "Endless Night Sanctuary: Warrior' Route - After Petank 1",
+            "Endless Night Sanctuary: Night Totem - Near Merchant",
+            "Endless Night Sanctuary: Entrance - Near Robust Sakapatate",
+            "Endless Night Sanctuary: Night Totem - Paint Cage above flag",
+            "Endless Night Sanctuary: Entrance - Right path inside small rock tunnel",
+            "Endless Night Sanctuary: Chromatic Cruler",
+            "Endless Night Sanctuary: Petank"
+        ]
+    },
+    {
+        "region_name": "Visages",
+        "level": 11,
+        "locations": [
+            "Manor: From Visages - Next to piano",
+            "Visages: Plazza - On cliffside overlooking ocean",
+            "Visages: Plazza - Near entrance to Anger Vale under boxes",
+            "Visages: Anger Vale - Near chroma-less Expeditioner",
+            "Visages: Anger Vale - Left of boss",
+            "Visages: Anger Vale - Overlooking tower of masks",
+            "Visages: Anger Vale - On ledge surrounded by enemies",
+            "Visages: Anger Vale - Under Contortionniste corpse",
+            "Visages: Joy Vale - Near floral mannequin",
+            "Visages: Joy Vale - To the right after Expedition Flag",
+            "Visages: Joy Vale - Left of Expedition Flag near big tree",
+            "Visages: Joy Vale - Right of boss near tree",
+            "Visages: Joy Vale - Left of boss",
+            "Visages: Sadness Vale - On ledge to the right of massive Contortionnistes",
+            "Visages: Sadness Vale - Behind Chromatic Miniboss",
+            "Visages: Sadness Vale - Right of boss right path",
+            "Visages: Sadness Vale - Right of boss on cliffside",
+            "Visages: Sadness Vale - Left of massive Contortionnistes",
+            "Visages: Sadness Vale - Before Chromatic miniboss",
+            "Visages: Anger Vale - Right of boss near boxes",
+            "Visages: Mime",
+            "Visages: Visages/Mask Keeper",
+            "Visages: Chromatic Ramasseur"
+        ]
+    },
+    {
+        "region_name": "Yellow Harvest",
+        "level": 7,
+        "locations": [
+            "Yellow Harvest: Entrance - Near broken fountain",
+            "Yellow Harvest: Entrance - Path to sunken building",
+            "Yellow Harvest: Harvester's Hollow - Exit of crimson cave",
+            "Yellow Harvest: Harvester's Hollow - Peninsula facing sunken building",
+            "Yellow Harvest: Harvester's Hollow - On balcony of sunken building",
+            "Yellow Harvest: Harvester's Hollow - Near tent by sunken building",
+            "Yellow Harvest: Chromatic Orphelin",
+            "Yellow Harvest: Mime",
+            "Yellow Harvest: Glaise"
+        ]
+    },
+    {
+        "region_name": "WM: First Continent South",
+        "level": 1,
+        "locations": [
+            "World Map: First Continent - Outside Abbest Cave",
+            "World Map: First Continent - Just outside Spring Meadows",
+            "World Map: First Continent - Outside Ancient Gestral City",
+            "Ancient Gestral City item",
+            "Camp: Gestrals - Break Paint Spike"
+        ]
+    },
+    {
+        "region_name": "WM: First Continent North",
+        "level": 1,
+        "locations": [
+            "World Map: First Continent - Paint spike west of Flying Waters exit",
+            "World Map: First Continent - Ruins between Gestral Village and Stone Wave Cliffs",
+            "World Map: First Continent - Near Chromatic Bruler",
+            "World Map: First Continent - Paint spike outside Gestral Village rock wall",
+            "World Map: First Continent - Outside first Gestral Beach",
+            "World Map: First Continent - Just outside The Small Bourgeon",
+            "World Map: First Continent - Past bourgeon outside Stone Wave Cliffs",
+            "World Map: First Continent - Past blue spikes leading to Stone Wave Cliffs",
+            "World Map: First Continent - Arc de Triomphe on the north beach",
+            "World Map: First Continent - Paint spike outside Yellow Harvest",
+            "Twilight Quarry item",
+            "World Map: First Continent - Outside Twilight Quarry 1",
+            "World Map: First Continent - Outside Twilight Quarry 2",
+            "World Map: Chromatic Bruler",
+            "Lost Gestral reward 1",
+            "Lost Gestral reward 2",
+            "Lost Gestral reward 3",
+            "Lost Gestral reward 4",
+            "Lost Gestral reward 5",
+            "Lost Gestral reward 6",
+            "Lost Gestral reward 7",
+            "Lost Gestral reward 8",
+            "Lost Gestral reward 9",
+            "Lost Gestral near Esquie's Nest",
+            "Lost Gestral near Stone Wave Cliffs"
+        ]
+    },
+    {
+        "region_name": "WM: South Sea",
+        "level": 1,
+        "locations": [
+            "World Map: First Continent - Beach outside The Meadows",
+            "World Map: On the island with White Tree",
+            "World Map: Island southwest of White Tree island",
+            "World Map: Beach at the base of Endless Tower",
+            "World Map: Bottom of the cliff next to Endless Tower",
+            "World Map: First Continent Sea - Next to merchant on island near Sprong",
+            "World Map: First Continent Sea - On the beach near Sprong",
+            "World Map: First Continent Sea - Paint spike outside Stone Wave Cliffs Cave",
+            "World Map: First Continent - Near Dark Shores",
+            "World Map: Second Continent - Outside Boat Graveyard",
+            "World Map: Second Continent - Crashed ships next to Forgotten Battlefield",
+            "World Map: First Continent Sea - Island southeast of Forgotten Battlefield",
+            "Manor: From Gestral Village - In boxes",
+            "Manor: From First Continent Sea - Behind fake bookshelf",
+            "The Meadows item",
+            "White Tree item",
+            "Blades Graveyard item",
+            "World Map: Chromatic Jar",
+            "Lost Gestral near White Tree"
+        ]
+    },
+    {
+        "region_name": "WM: Second Continent South",
+        "level": 1,
+        "locations": [
+            "World Map: Second Continent - Ruined wall near Coastal Cave",
+            "World Map: Second Continent - On the hill north of Stone Quarry",
+            "World Map: West of Forgotten Battlefield exit",
+            "World Map: Second Continent - Paint spike far north of Forgotten Battlefield exit",
+            "World Map: Second Continent - North of the ruined bridge",
+            "World Map: Second Continent - Old camp northwest of Forgotten Battlefield exit",
+            "World Map: Frost Eveque",
+            "World Map: Grosse Tete",
+            "Lost Gestral near Monoco's Station"
+        ]
+    },
+    {
+        "region_name": "WM: Second Continent NE",
+        "level": 1,
+        "locations": [
+            "World Map: Second Continent - Outside The Carousel",
+            "World Map: Second Continent - Southwest of The Carousel"
+        ]
+    },
+    {
+        "region_name": "WM: Second Continent NW",
+        "level": 1,
+        "locations": [
+            "World Map: Second Continent - Ruins far south of Old Lumiere entrance",
+            "World Map: Second Continent - Outside Old Lumiere",
+            "World Map: Second Continent - Ruins near bent lighthouse",
+            "World Map: Second Continent - Behind western bourgeon",
+            "World Map: Second Continent - Southeast of the very tall Gestral Beach"
+        ]
+    },
+    {
+        "region_name": "WM: North Sea",
+        "level": 1,
+        "locations": [
+            "World Map: Second Continent - Beach east of Old Lumiere north exit",
+            "Boat Graveyard item",
+            "World Map: Second Continent - East each along western river",
+            "World Map: West beach along western river",
+            "World Map: North Sea - Paint spike on beach east of Sirene island",
+            "World Map: North Sea - Small island south of Sirene",
+            "World Map: Second Continent Sea - Beach along east river",
+            "World Map: North Sea - West beach of southernmost red island",
+            "World Map: North Sea - Paint spike on yellow beach",
+            "World Map: North Sea - Beach on island northeast of Sirene",
+            "World Map: Chromatic Moissoneuse",
+            "World Map: Chromatic Reaper Cultist",
+            "World Map: Mime",
+            "Lost Gestral near Coastal Cave",
+            "Lost Gestral on red island near the mimes"
+        ]
+    },
+    {
+        "region_name": "WM: Outside Gestral Village",
+        "level": 1,
+        "locations": [
+            "World Map: First Continent - Outside Gestral Village"
+        ]
+    },
+    {
+        "region_name": "WM: Sky",
+        "level": 1,
+        "locations": [
+            "Manor: From World Map Sky Near Giant Petank - In closet",
+            "World Map: First Continent - Northeast of Dark Shores beach",
+            "World Map: Unknown 2",
+            "World Map: Unknown 1",
+            "World Map: Sky - Cliff near Endless Tower",
+            "World Map: Bourgeon plateau southeast of Forgotten Battlefield",
+            "World Map: Second Continent - Plateau west of Forgotten Battlefield exit",
+            "World Map: Second Continent - Paint spike on western plateau",
+            "World Map: North Sea - Northeast plateau",
+            "World Map: East underwater plateau with Chromatic Goblu",
+            "World Map: Yellow plateau northeast of Frozen Hearts",
+            "World Map: Eastern red forest near Endless Night Sanctuary",
+            "World Map: Second Continent - Snow plateau",
+            "World Map: First Continent - Plateau with paint spikes",
+            "World Map: Southeast valley - In the northern field",
+            "World Map: Southeast valley - Near the ferris wheel",
+            "World Map: Southeast valley - Paint spike",
+            "World Map: Second Continent - Outside Sacred River",
+            "World Map: Second Continent - On broken bridge near Chromatic Demineur",
+            "World Map: Chromatic Aberration",
+            "World Map: Chromatic Benisseur",
+            "World Map: Chromatic Demineur",
+            "World Map: Chromatic Goblu",
+            "World Map: Chromatic Petank",
+            "World Map: Chromatic Portier",
+            "World Map: Serpenphare",
+            "World Map: Sprong",
+            "World Map: Thunder Eveque",
+            "Lost Gestral near The Reacher",
+            "Lost Gestral near Endless Night Sanctuary",
+            "Lost Gestral on flying island"
+        ]
+    },
+    {
+        "region_name": "WM: Underwater",
+        "level": 1,
+        "locations": [
+            "World Map: Dive - East of Lumiere",
+            "World Map: Dive - Near The Meadows",
+            "World Map: Dive - Near Gestral Beach Tower",
+            "World Map: Dive - Under Serpenphare",
+            "World Map: Dive - NE of White Sands",
+            "World Map: Dive - Below The Chosen Path",
+            "World Map: Dive - N of Sirene",
+            "World Map: Dive - Near SE Manor Door",
+            "World Map: Dive - Below Endless Tower",
+            "World Map: Dive - Below Floating Cemetery",
+            "World Map: Dive - S of Sinister Cave",
+            "World Map: Dive - Near The Crows"
+        ]
+    },
+    {
+        "region_name": "Lost Woods",
+        "level": 1,
+        "locations": [
+            "Lost Woods item"
+        ]
+    },
+    {
+        "region_name": "Painting Workshop",
+        "level": 1,
+        "locations": [
+            "Painting Workshop: Lampmaster"
+        ]
+    },
+    {
+        "region_name": "Endless Tower",
+        "level": 21,
+        "locations": [
+            "Endless Tower: Stage 1-1",
+            "Endless Tower: Stage 1-2",
+            "Endless Tower: Stage 1-3",
+            "Endless Tower: Duollistes",
+            "Endless Tower: Chromatic Lampmaster",
+            "Endless Tower: Clea Unleashed",
+            "Endless Tower: Simon, the Divergent Star"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 2",
+        "level": 22,
+        "locations": [
+            "Endless Tower: Stage 2-1",
+            "Endless Tower: Stage 2-2",
+            "Endless Tower: Stage 2-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 3",
+        "level": 23,
+        "locations": [
+            "Endless Tower: Stage 3-1",
+            "Endless Tower: Stage 3-2",
+            "Endless Tower: Stage 3-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 4",
+        "level": 24,
+        "locations": [
+            "Endless Tower: Stage 4-1",
+            "Endless Tower: Stage 4-2",
+            "Endless Tower: Stage 4-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 5",
+        "level": 25,
+        "locations": [
+            "Endless Tower: Stage 5-1",
+            "Endless Tower: Stage 5-2",
+            "Endless Tower: Stage 5-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 6",
+        "level": 26,
+        "locations": [
+            "Endless Tower: Stage 6-1",
+            "Endless Tower: Stage 6-2",
+            "Endless Tower: Stage 6-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 7",
+        "level": 27,
+        "locations": [
+            "Endless Tower: Stage 7-1",
+            "Endless Tower: Stage 7-2",
+            "Endless Tower: Stage 7-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 8",
+        "level": 28,
+        "locations": [
+            "Endless Tower: Stage 8-1",
+            "Endless Tower: Stage 8-2",
+            "Endless Tower: Stage 8-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 9",
+        "level": 29,
+        "locations": [
+            "Endless Tower: Stage 9-1",
+            "Endless Tower: Stage 9-2",
+            "Endless Tower: Stage 9-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 10",
+        "level": 30,
+        "locations": [
+            "Endless Tower: Stage 10-1",
+            "Endless Tower: Stage 10-2",
+            "Endless Tower: Stage 10-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 11",
+        "level": 31,
+        "locations": [
+
+            "Endless Tower: Stage 11-1",
+            "Endless Tower: Stage 11-2",
+            "Endless Tower: Stage 11-3"
+        ]
+    },
+    {
+        "region_name": "Dark Gestral Arena",
+        "level": 25,
+        "locations": [
+            "Dark Gestral Arena: Round 1",
+            "Dark Gestral Arena: Round 2",
+            "Dark Gestral Arena: Round 3",
+            "Dark Gestral Arena: Golgra"
+        ]
+    },
+    {
+        "region_name": "Hidden Gestral Arena",
+        "level": 6,
+        "locations": [
+            "Hidden Gestral Arena: Bertrand Big Hands",
+            "Hidden Gestral Arena: Dominique Giant Feet",
+            "Hidden Gestral Arena: Julien Tiny Head",
+            "Hidden Gestral Arena: Matthieu the Colossus"
+        ]
+    },
+    {
+        "region_name": "Sirene's Dress",
+        "level": 20,
+        "locations": [
+            "Sirene’s Dress: Chromatic Glissando"
+        ]
+    },
+    {
+        "region_name": "Sunless Cliffs",
+        "level": 31,
+        "locations": [
+            "Sunless Cliffs: Bald Mime"
+        ]
+    },
+    {
+        "region_name": "Verso's Drafts",
+        "level": 29,
+        "locations": [
+            "Verso's Drafts: Reverie Path - Behind the waterfall",
+            "Verso's Drafts: Gestral Baths - Esquie statue in the forest",
+            "Verso's Drafts: Gestral Baths - In hut near the flag",
+            "Verso's Drafts: Gestral Baths - Waterfall near 2 Esquies",
+            "Verso's Drafts: Reverie Path - On the edge of the cliff near the merchant",
+            "Verso's Drafts: Gestral Baths - Next to the treehouse piano",
+            "Verso's Drafts: Gestral Baths - On the treehouse roof",
+            "Verso's Drafts: Candy land - In candy jars at the carnival",
+            "Verso's Drafts: Gestral Baths - Paint cage in the forest",
+            "Verso's Drafts: Open Playground - By the blue Licornes in the bath",
+            "Verso's Drafts: Gestral Baths - Across the Esquie platforms in the forest",
+            "Verso's Drafts: In candy jar across from the cake door",
+            "Verso's Drafts: Gestral Baths - On the diving board",
+            "Verso's Drafts: Gestral Baths - Behind the crowded slide",
+            "Verso's Drafts: Open Playground - Paint cage",
+            "Verso's Drafts: On the train tracks through the door",
+            "Verso's Drafts: On a box through the door",
+            "Verso's Drafts: Candy land - Through the blue tunnel by the Open Playground entrance",
+            "Verso's Drafts: Candy land - Guarded by Barbasucettes near the flag",
+            "Verso's Drafts: Candy land - In jar near carnival exit",
+            "Verso's Drafts: Candy land - Behind Very Very Cool Gestral",
+            "Verso's Drafts: Reverie Path - Behind Chromatic Franctale",
+            "Verso's Drafts: Reverie Path - Edge of the water before the carnival",
+            "Verso's Drafts: Reverie Path - Cross the beams",
+            "Verso's Drafts: Gestral Baths - Beside balloon gestral",
+            "Verso's Drafts: Reverie Path - In candy jar before carnival entrance",
+            "Verso's Drafts: Candy land - Up the climbing holds",
+            "Verso's Drafts: Reverie Path - Behind giant blocks near xylophone bridge",
+            "Verso's Drafts: Candy land - In a jar by the Open Playground entrance",
+            "Verso's Drafts: Candy land - In a jar by the blue tunnel",
+            "Verso's Drafts: Gestral Baths - Hopscotch by the flag",
+            "Verso's Drafts: Gestral Baths - Hopscotch in the seesaw bath",
+            "Verso's Drafts: Candy land - Hopscotch in the cave",
+            "Verso's Drafts: Gestral Baths - Hopscotch in the forest",
+            "Verso's Drafts: Reverie Path - In train car with a Licorne",
+            "Verso's Drafts: Chromatic Licorne",
+            "Verso's Drafts: Chromatic Machinapieds",
+            "Verso's Drafts: Chromatic Franctale",
+            "Verso's Drafts: Chromatic Barbasucette",
+            "Verso's Drafts: Half-baked Gestral",
+            "Verso's Drafts: Licornapieds",
+            "Root of All Evil: Osquio"
+        ]
+    }
+]

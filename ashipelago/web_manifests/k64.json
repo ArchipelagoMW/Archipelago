@@ -1,6 +1,6 @@
 {
   "game": "Kirby 64 - The Crystal Shards",
-  "server_version": "0.3.0",
+  "server_version": "0.3.1",
   "discord_channel": "https://discord.com/channels/731205301247803413/1175344681928904806",
   "pop_tracker": "https://github.com/RunInAWeek/Kirby-64-Archipelago-Tracker/releases/download/v1.1/Kirby64_AP_v1.1.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/k64.apworld"

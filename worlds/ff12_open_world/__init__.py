@@ -61,7 +61,7 @@ class FF12OpenWorldWebWorld(WebWorld):
 
 
 class FF12OpenWorldWorld(World):
-    """TODO"""
+    """Two years have passed since the war in which the vast and militaristic Arcadian Empire annihilated the kingdom of Dalmasca... Vaan, a young man who lost his family to the fires of war, lives a stoic existence in the occupied city of Rabanastre, while dreaming of a life of freedom, soaring the skies as a Sky Pirate. Princess Ashe, the last remaining member of the Dalmascan royal family, vows revenge on the empire, and secretly leads a resistance in the hopes of restoring her homeland. Brought together in a chaotic age, the hopes and dreams of these two heroes will unite the fates of the people and change the destiny of nations."""
 
     game = "Final Fantasy 12 Open World"
     data_version = 3
@@ -242,6 +242,9 @@ class FF12OpenWorldWorld(World):
             region = self.multiworld.get_region(data.region, self.player)
             region.locations.append(FF12OpenWorldLocation(self.player, event_name, None, region))
 
+        # from Utils import visualize_regions
+        # visualize_regions(self.get_region("Initial"), "ff12_open_world_regions.puml")
+
     def get_loc_classification(self, location_name: str) -> LocationProgressType:
         location_data = location_data_table[location_name]
 
@@ -379,26 +382,6 @@ class FF12OpenWorldWorld(World):
         elif self.options.bahamut_unlock == "collect_espers":
             self.multiworld.get_location("Clan Hall - Clan Esper: Control 13 Reward (1)", self.player).place_locked_item(
                 self.create_item("Writ of Transit"))
-
-        # TODO: Disabled for now. May add back in later if needed.
-        '''
-        # Fill excluded locations with local locked items
-        excluded = [location for location in self.multiworld.get_locations(self.player)
-                    if location.progress_type == LocationProgressType.EXCLUDED and location.item is None]
-        Shuffle the excluded locations
-        self.multiworld.random.shuffle(excluded)
-
-        # Place filler trophies in excluded locations
-        trophy_fillers = [name for name, data in item_data_table.items()
-                          if data.classification == ItemClassification.filler and name.endswith(" Trophy")]
-
-        for location in excluded:
-            # If there are still trophy fillers to place, place one
-            if trophy_fillers:
-                location.place_locked_item(self.create_item(trophy_fillers.pop()))
-            else:
-                location.place_locked_item(self.create_item(self.get_filler_item_name()))
-        '''
 
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

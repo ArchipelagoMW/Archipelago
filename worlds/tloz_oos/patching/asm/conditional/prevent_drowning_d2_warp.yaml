@@ -1,0 +1,23 @@
+09/4b39/: call loadDrowningWarpVariables
+09//loadDrowningWarpVariables: |
+  ld hl,$4b59
+  cp $02 ; D2
+  ret nz
+
+  ld b,a
+
+  ; Check if floodgate is open
+  ld a,(wOverworldRoomFlags+$81)
+  rlca
+  ld a,b
+  ret c
+  
+  ld a,TREASURE_FLIPPERS
+  call checkTreasureObtained
+  ld a,b
+  ret c
+
+  ld hl,@d2EntranceWarp-4
+  ret
+  @d2EntranceWarp:
+  db $84,$39,$97,$01

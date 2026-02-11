@@ -1,26 +1,26 @@
 {
 	"rooms": {
-		"Treasure Room": {"rng": false},
-		"Shop": {"rng": false},
-		"Secret Room": {"rng": false},
-		"Super Secret Room": {"rng": false},
-		"Boss Room": {"rng": false},
-		"Closet": {"rng": false},
-		"Arcade": {"rng": false},
-		"Challenge Room": {"rng": false},
-		"Curse Room": {"rng": false},
-		"Sacrifice Room": {"rng": false},
-		"Miniboss Room": {"rng": false},
-		"Deal Room": {"rng": false},
-		"Vault": {"rng": true},
-		"Dice Room": {"rng": true},
-		"Bedroom": {"rng": true},
-		"Library": {"rng": true},
-		"Knife Piece": {"rng": false},
-		"Crawl Space": {"rng": false, "requires": {"has": "We Need To Go Deeper!"}},
-		"I AM ERROR": {"rng": false, "requires": {"has": "Undefined"}},
-		"Planetarium": {"rng": false, "requires": {"has": "Telescope Lens"}},
-		"Ultra Secret Room": {"rng": false, "requires": {"has": "Red Key"}}
+		"Treasure Room": {},
+		"Shop": {},
+		"Secret Room": {},
+		"Super Secret Room": {},
+		"Boss Room": {},
+		"Closet": {},
+		"Arcade": {},
+		"Challenge Room": {},
+		"Curse Room": {},
+		"Sacrifice Room": {},
+		"Miniboss Room": {},
+		"Deal Room": {},
+		"Vault": {"type": "rng"},
+		"Dice Room": {"type": "rng"},
+		"Bedroom": {"type": "rng"},
+		"Library": {"type": "rng"},
+		"Knife Piece": {},
+		"Crawl Space": {"type": "shovel", "requires": {"has": "We Need To Go Deeper!"}},
+		"I AM ERROR": {"type": "undefined", "requires": {"has": "Undefined"}},
+		"Planetarium": {"type": "telescope_lens", "requires": {"has": "Telescope Lens"}},
+		"Ultra Secret Room": {"type": "red_key", "requires": {"has": "Red Key"}}
 	},
 	"items": [
 		"Angel Deal Item",
@@ -48,38 +48,44 @@
 		"Retro Vision Trap",
 		"Teleport Trap",
 		"Troll Bomb Trap",
-		"Wavy Cap Trap"
+		"Wavy Cap Trap",
+		"Progressive Map Upgrade",
+		"Permanent Damage Up",
+		"Permanent Tears Up",
+		"Permanent Range Up",
+		"Permanent Speed Up",
+		"Permanent Luck Up"
 	],
 	"unlocks": {
-		"Cellar": {},
-		"Burning Basement": {},
-		"Catacombs": {},
-		"Flooded Caves": {},
-		"Necropolis": {},
-		"Dank Depths": {},
-		"Boss Rush": {"type": "timed"},
+		"Cellar": {"type": ["variant"]},
+		"Burning Basement": {"type": ["variant"]},
+		"Catacombs": {"type": ["variant"]},
+		"Flooded Caves": {"type": ["variant"]},
+		"Necropolis": {"type": ["variant"]},
+		"Dank Depths": {"type": ["variant"]},
+		"Boss Rush": {"type": ["timed"]},
 		"Womb": {},
-		"Utero": {},
-		"Scarred Womb": {},
-		"???": {"type": "timed"},
+		"Utero": {"type": ["variant"]},
+		"Scarred Womb": {"type": ["variant"]},
+		"???": {"type": ["timed"]},
 		"Cathedral": {},
 		"Sheol": {},
 		"The Polaroid": {},
 		"The Negative": {},
-		"Downpour": {"type": "alt"},
-		"Dross": {"type": "alt"},
-		"Mines": {"type": "alt"},
-		"Ashpit": {"type": "alt"},
-		"Mausoleum": {"type": "alt"},
-		"Gehenna": {"type": "alt"},
-		"Key Pieces": {"type": "mega_satan"},
-		"Void Portal": {"type": "void"},
-		"Strange Door": {"type": "ascend"},
-		"Knife Pieces": {"type": "alt"},
-		"We Need To Go Deeper!": {},
-		"Undefined": {},
-		"Telescope Lens": {},
-		"Red Key": {}
+		"Downpour": {"type": ["alt"]},
+		"Dross": {"type": ["alt","variant"]},
+		"Mines": {"type": ["alt"]},
+		"Ashpit": {"type": ["alt","variant"]},
+		"Mausoleum": {"type": ["alt"]},
+		"Gehenna": {"type": ["alt","variant"]},
+		"Key Pieces": {"type": ["mega_satan"]},
+		"Void Portal": {"type": ["void"]},
+		"Strange Door": {"type": ["ascend"]},
+		"Knife Pieces": {"type": ["alt"]},
+		"We Need To Go Deeper!": {"type": ["shovel"]},
+		"Undefined": {"type": ["undefined"]},
+		"Telescope Lens": {"type": ["telescope_lens"]},
+		"Red Key": {"type": ["red_key"]}
 	},
 	"regions": {
 		"Menu": {
@@ -132,6 +138,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Caves", "Catacombs", "Flooded Caves", "Downpour", "Dross", "Chapter 1"],
 			"requires": {"has": "Cellar"},
+			"variant_of": "Basement",
 			"tracker_location": {
                 "x": 95,
                 "y": 345
@@ -141,6 +148,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Caves", "Catacombs", "Flooded Caves", "Downpour", "Dross", "Chapter 1"],
 			"requires": {"has": "Burning Basement"},
+			"variant_of": "Basement",
 			"tracker_location": {
                 "x": 125,
                 "y": 345
@@ -158,6 +166,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Depths", "Necropolis", "Dank Depths", "Mines", "Ashpit", "Chapter 2"],
 			"requires": {"has": "Catacombs"},
+			"variant_of": "Caves",
 			"tracker_location": {
                 "x": 385,
                 "y": 345
@@ -167,6 +176,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Depths", "Necropolis", "Dank Depths", "Mines", "Ashpit", "Chapter 2"],
 			"requires": {"has": "Flooded Caves"},
+			"variant_of": "Caves",
 			"tracker_location": {
                 "x": 415,
                 "y": 345
@@ -186,6 +196,7 @@
 			"connects_to": ["Womb", "Utero", "Scarred Womb", "Mausoleum", "Gehenna", "Boss Rush", "Home", "Chapter 3"],
 			"boss": "Mom",
 			"requires": {"has": "Necropolis"},
+			"variant_of": "Depths",
 			"tracker_location": {
                 "x": 675,
                 "y": 345
@@ -196,6 +207,7 @@
 			"connects_to": ["Womb", "Utero", "Scarred Womb", "Mausoleum", "Gehenna", "Boss Rush", "Home", "Chapter 3"],
 			"boss": "Mom",
 			"requires": {"has": "Dank Depths"},
+			"variant_of": "Depths",
 			"tracker_location": {
                 "x": 705,
                 "y": 345
@@ -230,6 +242,7 @@
 			"connects_to": ["Cathedral", "Sheol", "???", "Chapter 4"],
 			"boss": "Mom's Heart",
 			"requires": {"has": "Utero"},
+			"variant_of": "Womb",
 			"tracker_location": {
                 "x": 965,
                 "y": 345
@@ -240,6 +253,7 @@
 			"connects_to": ["Cathedral", "Sheol", "???", "Chapter 4"],
 			"boss": "Mom's Heart",
 			"requires": {"has": "Scarred Womb"},
+			"variant_of": "Womb",
 			"tracker_location": {
                 "x": 995,
                 "y": 345
@@ -353,6 +367,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Caves", "Catacombs", "Flooded Caves", "Mines", "Ashpit", "Mirrorworld", "Chapter 1"],
 			"requires": {"has": "Dross"},
+			"variant_of": "Downpour",
 			"tracker_location": {
                 "x": 175,
                 "y": 545
@@ -381,6 +396,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Depths", "Necropolis", "Dank Depths", "Mausoleum", "Gehenna", "The Escape", "Chapter 2"],
 			"requires": {"has": "Ashpit"},
+			"variant_of": "Mines",
 			"tracker_location": {
                 "x": 465,
                 "y": 545
@@ -410,6 +426,7 @@
 			"rooms": ["Treasure Room", "Shop", "Secret Room", "Super Secret Room", "Boss Room", "Arcade", "Challenge Room", "Curse Room", "Sacrifice Room", "Miniboss Room", "Deal Room"],
 			"connects_to": ["Womb", "Utero", "Scarred Womb", "Corpse", "Boss Rush", "Home", "Chapter 3"],
 			"requires": {"has": "Gehenna"},
+			"variant_of": "Mausoleum",
 			"tracker_location": {
                 "x": 755,
                 "y": 545

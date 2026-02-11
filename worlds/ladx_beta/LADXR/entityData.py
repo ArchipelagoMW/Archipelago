@@ -338,7 +338,7 @@ SPRITE_DATA = {
     0x48: None,      # MOVING_BLOCK_BOTTOM_LEFT
     0x49: None,      # MOVING_BLOCK_BOTTOM_RIGHT
     0x4A: (1, 0xd5), # COLOR_DUNGEON_BOOK
-    0x4C: None,      # Used by apbingo board, otherwise unused.
+    0x4C: None,      # Used by Bingo board, otherwise unused.
     0x4D: (2, 0x88, 3, 0xC7), # SHOP_OWNER
     0x4F: (2, 0x84, 3, 0x89), # TRENDY_GAME_OWNER
     0x50: (2, 0x97), # BOO_BUDDY

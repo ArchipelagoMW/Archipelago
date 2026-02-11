@@ -1,0 +1,64 @@
+Team,Level,Source,Target,Rule,Notes
+Sonic,Bingo Highway,Start,First Pinball,PinballSonicBH,
+Sonic,Bingo Highway,First Pinball,Optional Second Pinball,PinballSonicBH,
+Sonic,Bingo Highway,First Pinball,First Red Carpet,PinballSonicBH,
+Sonic,Bingo Highway,First Pinball,First Door,PinballSonicBH,
+Sonic,Bingo Highway,First Red Carpet,First Door,(FlyingAnyorKillFlyingEnemyGreenLightning)andSingleSpringSonicBH,Green Flapper with lightning
+Sonic,Bingo Highway,First Door,First Fan Hallway,KillFlyingEnemyYellowLightHomingFireDunkSonicBH,Yellow Flapper searchlight spawns pawns (not in logic)
+Sonic,Bingo Highway,First Fan Hallway,First Door,TeamBlastSonicBH,can team blast through door
+Sonic,Bingo Highway,First Fan Hallway,First Glass Floor,FanandGlideSonicBH,
+Sonic,Bingo Highway,First Glass Floor,First Fan Hallway,FlyingAnySonicBH,
+Sonic,Bingo Highway,First Glass Floor,Bonus Key 1,,
+Sonic,Bingo Highway,First Glass Floor,Ball Slide with Spring,BreakGlassFloorSonicBH,
+Sonic,Bingo Highway,Ball Slide with Spring,Roulette Floor with Floating Dice,SingleSpringSonicBH,
+Sonic,Bingo Highway,Roulette Floor with Floating Dice,Roulette Floor with Floating Dice Case,KillFlyingEnemySilverArmorFireDunkSonicBH,silver armor with searchlight spawns pawns (need power anyway)
+Sonic,Bingo Highway,Roulette Floor with Floating Dice Case,Floating Dice Before Checkpoint 1,FloatingDiceandSwitchSonicBH,
+Sonic,Bingo Highway,Floating Dice Before Checkpoint 1,Checkpoint 1,,
+Sonic,Bingo Highway,Checkpoint 1,Platform Below Checkpoint 2,,
+Sonic,Bingo Highway,Checkpoint 1,Checkpoint 2,FlyingAnySonicBH,can glide or rocket accel here
+Sonic,Bingo Highway,Checkpoint 1,First Bingo Pinball,GongandPinballandSingleSpringSonicBH,
+Sonic,Bingo Highway,Roulette Floor with Floating Dice,Optional Third Pinball,,
+Sonic,Bingo Highway,Optional Third Pinball,Platform Below Checkpoint 2,DashRingSonicBH,
+Sonic,Bingo Highway,Platform Below Checkpoint 2,Floating Dice Below Checkpoint 2,FloatingDiceandFlyingAnyandKillFlyingEnemySilverArmorFireDunkandSwitchSonicBH,
+Sonic,Bingo Highway,Floating Dice Below Checkpoint 2,Checkpoint 2,FlyingAnyandPulleySonicBH,
+Sonic,Bingo Highway,Checkpoint 2,Platform Below Checkpoint 2,,
+Sonic,Bingo Highway,Checkpoint 2,First Bingo Pinball,GreenBumperSpringandPinballandSingleSpringSonicBH,
+Sonic,Bingo Highway,First Bingo Pinball,Red Carpet with Sideways Roulette,,
+Sonic,Bingo Highway,Red Carpet with Sideways Roulette,Floating Dice By Sideways Roulette,FloatingDiceand(FlyingAnyorGreenBumperSpring)andKillGroundEnemyKlagenSonicBH,2 reg klagen 1 gold klagen
+Sonic,Bingo Highway,Floating Dice By Sideways Roulette,Hallway Before Checkpoint 3,,
+Sonic,Bingo Highway,Hallway Before Checkpoint 3,Red Carpet with Sideways Roulette,,
+Sonic,Bingo Highway,Hallway Before Checkpoint 3,Optional Pinball Below Bonus Key 2,,
+Sonic,Bingo Highway,Optional Pinball Below Bonus Key 2,Bonus Key 2,PinballSonicBH,
+Sonic,Bingo Highway,Bonus Key 2,Checkpoint 3,GreenBumperSpringSonicBH,
+Sonic,Bingo Highway,Checkpoint 3,Bonus Key 2,,
+Sonic,Bingo Highway,Hallway Before Checkpoint 3,Checkpoint 3,FloatingDiceorFlyingAnySonicBH,
+Sonic,Bingo Highway,Checkpoint 3,Hallway Before Checkpoint 3,FloatingDiceorFlyingAnySonicBH,
+Sonic,Bingo Highway,Checkpoint 3,Ball Slide After Checkpoint 3,TripleSpringSonicBH,
+Sonic,Bingo Highway,Ball Slide After Checkpoint 3,Second Door,SingleSpringSonicBH,
+Sonic,Bingo Highway,Second Door,Second Fan Hallway,KillFlyingEnemySilverArmorFireDunkandSwitchSonicBH,1 silver flapper lightning 2 pawns
+Sonic,Bingo Highway,Second Fan Hallway,Second Door,NOTPOSSIBLE,team blast through door (needs switch sadly)
+Sonic,Bingo Highway,Second Fan Hallway,Third Door,FanandGlideSonicBH,
+Sonic,Bingo Highway,Third Door,Second Fan Hallway,FlyingAnySonicBH,
+Sonic,Bingo Highway,Third Door,Second Glass Floor,KillGroundEnemyPlainShieldKlagenandSwitchSonicBH,2 plain shield 1 machine gun 1 klagen
+Sonic,Bingo Highway,Second Glass Floor,Second Bingo Pinball,BreakGlassFloorandPinballSonicBH,
+Sonic,Bingo Highway,Second Bingo Pinball,Hallway with Many Springs,PinballSonicBH,
+Sonic,Bingo Highway,Hallway with Many Springs,Vault Door,FlyingAnyorStarPanelSonicBH,
+Sonic,Bingo Highway,Vault Door,Hallway with Many Springs,FlyingAnyorStarPanelSonicBH,
+Sonic,Bingo Highway,Hallway with Many Springs,Floating Dice Before Vault Door Switch,FloatingDiceSonicBH,
+Sonic,Bingo Highway,Floating Dice Before Vault Door Switch,Red Carpet with Vault Door Switch,,
+Sonic,Bingo Highway,Red Carpet with Vault Door Switch,Vault,((FloatingDiceandSwitch)orWeight)andFlyingAnyandPushPullSwitchSonicBH,is possible without flying
+Sonic,Bingo Highway,Vault,Bonus Key 3,,
+Sonic,Bingo Highway,Vault,Vault Door,,
+Sonic,Bingo Highway,Vault,Triple Spring Before Many Glass Floors,GongSonicBH,
+Sonic,Bingo Highway,Red Carpet with Vault Door Switch,Vault Door,((FloatingDiceandSwitch)orWeight)andFlyingAnySonicBH,
+Sonic,Bingo Highway,Vault Door,Checkpoint 4,GreenBumperSpringSonicBH,
+Sonic,Bingo Highway,Checkpoint 4,Vault Door,,
+Sonic,Bingo Highway,Checkpoint 4,Triple Spring Before Many Glass Floors,GongSonicBH,
+Sonic,Bingo Highway,Triple Spring Before Many Glass Floors,Checkpoint 4,NOTPOSSIBLE,is possible with accel into flying
+Sonic,Bingo Highway,Triple Spring Before Many Glass Floors,Many Glass Floors,FlyingFullorTripleSpringSonicBH,
+Sonic,Bingo Highway,Many Glass Floors,Triple Spring Before Many Glass Floors,,
+Sonic,Bingo Highway,Many Glass Floors,Slide Before Final Bingo Pinball,BreakGlassFloorandFloatingDiceand(FlyingAnyor(GreenBumperSpringandSingleSpring))andSwitchSonicBH,
+Sonic,Bingo Highway,Slide Before Final Bingo Pinball,Many Glass Floors,,
+Sonic,Bingo Highway,Slide Before Final Bingo Pinball,Final Bingo Pinball,PinballSonicBH,
+Sonic,Bingo Highway,Final Bingo Pinball,Air Bingo,DashRingandSingleSpringSonicBH,
+Sonic,Bingo Highway,Final Bingo Pinball,Goal,DashRingandPinballandSingleSpringSonicBH,

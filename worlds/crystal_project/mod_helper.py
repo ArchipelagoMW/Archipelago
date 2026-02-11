@@ -361,7 +361,7 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[LocationData]:
             npc_id = location_id + npc_index_offset
             crystal_id = location_id + crystal_index_offset
             boss_id = location_id + boss_index_offset
-            shop_id = location_id + shop_index_offset
+            shop_id = location_id + 100000 + shop_index_offset
 
             removed_this_location: bool = False
             should_be_removed_because_no_npc_info: bool = False
@@ -408,7 +408,18 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[LocationData]:
                         # If the item's entity type is definitely not an npc, then remove the vanilla location, because it's type was changed by the mod
                         or entity_type != NPC_ENTITY_TYPE)):
                         removed_locations.append(LocationData(shop.ap_region, shop.name, location_id))
-                        removed_this_location = True
+
+                        # Remove all shop items for the one shop
+                        next_id = shop_id
+                        vanilla_shop_ids = [shop.code for shop in vanilla_shops]
+                        while True:
+                            next_id = next_id + 100000
+                            if next_id in vanilla_shop_ids:
+                                next_shop_item = next(shop for shop in vanilla_shops if shop.code == next_id)
+                                removed_locations.append(LocationData(next_shop_item.ap_region, next_shop_item.name, next_id))
+                            else:
+                                break
+
                         break
 
     return removed_locations
@@ -551,7 +562,7 @@ def build_shop_locations(location, shifted_entity_ids: List[ModIncrementedIdData
             # 5 is Shop, only add if shopsanity is on
             if action['ActionType'] == 5:
                 stock = action['Data']['Stock']
-                id_offset = 10000
+                id_offset = 100000
 
                 for shop_item in stock:
                     shop_item_id = new_id + id_offset
@@ -572,7 +583,7 @@ def build_shop_locations(location, shifted_entity_ids: List[ModIncrementedIdData
                             locations.append(location)
                             location_codes.append(location.code)
 
-                    id_offset += 10000
+                    id_offset += 100000
 
     return locations
 

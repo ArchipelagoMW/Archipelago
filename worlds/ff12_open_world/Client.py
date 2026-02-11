@@ -337,7 +337,7 @@ class FF12OpenWorldContext(CommonContext):
             inventory_by_code: Dict[int, int] = {}
             inventory_by_name: Dict[str, int] = {}
             for name, item in item_data_table.items():
-                code = item.code
+                code = item.code - 1
                 count = 0
                 if code < 0x1000:
                     count = read_short_from(normal_items, code * 2)

@@ -1,7 +1,7 @@
 import os
 
-from worlds.tloz_oos.patching.Util import simple_hex
-from worlds.tloz_oos.patching.z80asm.Assembler import Z80Assembler, GameboyAddress
+from ..patching.Util import simple_hex
+from ..patching.z80asm.Assembler import Z80Assembler, GameboyAddress
 
 
 def make_sym(assembler: Z80Assembler):

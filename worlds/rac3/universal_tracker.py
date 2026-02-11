@@ -1,3 +1,5 @@
+"""This module contains functionality for universal tracker"""
+
 from typing import Any, TYPE_CHECKING
 
 from worlds.rac3.constants.data.location import UT_MAPPING
@@ -6,10 +8,11 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World
+    from worlds.rac3.world import RaC3World
 
 
 def setup_options_from_slot_data(world: "RaC3World") -> None:
+    """Set the option values to the values already generated"""
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if world.game in world.multiworld.re_gen_passthrough:
             world.using_ut = True
@@ -41,6 +44,9 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.weapon_vendors.value = world.passthrough[RAC3OPTION.WEAPON_VENDORS]
             world.options.filler_weight.value = world.passthrough[RAC3OPTION.FILLER_WEIGHT]
             world.options.one_hp_challenge.value = world.passthrough[RAC3OPTION.ONE_HP_CHALLENGE]
+            world.options.intro_skip.value = world.passthrough[RAC3OPTION.INTRO_SKIP]
+            world.options.holostar_skip = world.passthrough[RAC3OPTION.HOLOSTAR_SKIP]
+            world.options.clank_options.value = world.passthrough[RAC3OPTION.CLANK_OPTIONS]
         else:
             world.using_ut = False
     else:
@@ -48,6 +54,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
 
 
 def map_page_index(data: str) -> int:
+    """Lookup the ID of the current map page"""
     if data:
         return RAC3_REGION_DATA_TABLE[data].ID
     else:
@@ -55,8 +62,8 @@ def map_page_index(data: str) -> int:
 
 
 tracker_world: dict[str, Any] = {
-    "map_page_maps": "maps/maps.json",
-    "map_page_locations": "locations/locations.json",
+    "map_page_maps": "tracker/maps.json",
+    "map_page_locations": "tracker/locations.json",
     "map_page_setting_key": r'rac3_current_planet_{player}_{team}',
     "map_page_index": map_page_index,
     "poptracker_name_mapping": UT_MAPPING,

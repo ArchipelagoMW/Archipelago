@@ -1,0 +1,5785 @@
+[
+  {
+    "name": "0",
+    "children": [
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 78,
+            "y": 442
+          }
+        ],
+        "sections": [
+          {
+            "name": "0",
+            "item_count": 1
+          },
+          {
+            "name": "1",
+            "item_count": 1
+          },
+          {
+            "name": "2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 704,
+            "y": 516
+          }
+        ],
+        "sections": [
+          {
+            "name": "104",
+            "item_count": 1
+          },
+          {
+            "name": "105",
+            "item_count": 1
+          },
+          {
+            "name": "125",
+            "item_count": 1
+          },
+          {
+            "name": "165",
+            "item_count": 1
+          },
+          {
+            "name": "126",
+            "item_count": 1
+          },
+          {
+            "name": "179",
+            "item_count": 1
+          },
+          {
+            "name": "3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 312,
+            "y": 508
+          }
+        ],
+        "sections": [
+          {
+            "name": "106",
+            "item_count": 1
+          },
+          {
+            "name": "107",
+            "item_count": 1
+          },
+          {
+            "name": "127",
+            "item_count": 1
+          },
+          {
+            "name": "181",
+            "item_count": 1
+          },
+          {
+            "name": "10",
+            "item_count": 1
+          },
+          {
+            "name": "8",
+            "item_count": 1
+          },
+          {
+            "name": "9",
+            "item_count": 1
+          },
+          {
+            "name": "11",
+            "item_count": 1
+          },
+          {
+            "name": "12",
+            "item_count": 1
+          },
+          {
+            "name": "13",
+            "item_count": 1
+          },
+          {
+            "name": "14",
+            "item_count": 1
+          },
+          {
+            "name": "15",
+            "item_count": 1
+          },
+          {
+            "name": "16",
+            "item_count": 1
+          },
+          {
+            "name": "17",
+            "item_count": 1
+          },
+          {
+            "name": "18",
+            "item_count": 1
+          },
+          {
+            "name": "128",
+            "item_count": 1
+          },
+          {
+            "name": "108",
+            "item_count": 1
+          },
+          {
+            "name": "109",
+            "item_count": 1
+          },
+          {
+            "name": "110",
+            "item_count": 1
+          },
+          {
+            "name": "111",
+            "item_count": 1
+          },
+          {
+            "name": "182",
+            "item_count": 1
+          },
+          {
+            "name": "4",
+            "item_count": 1
+          },
+          {
+            "name": "6",
+            "item_count": 1
+          },
+          {
+            "name": "7",
+            "item_count": 1
+          },
+          {
+            "name": "19",
+            "item_count": 1
+          },
+          {
+            "name": "20",
+            "item_count": 1
+          },
+          {
+            "name": "203",
+            "item_count": 1
+          },
+          {
+            "name": "129",
+            "item_count": 1
+          },
+          {
+            "name": "21",
+            "item_count": 1
+          },
+          {
+            "name": "205",
+            "item_count": 1
+          },
+          {
+            "name": "130",
+            "item_count": 1
+          },
+          {
+            "name": "22",
+            "item_count": 1
+          },
+          {
+            "name": "206",
+            "item_count": 1
+          },
+          {
+            "name": "131",
+            "item_count": 1
+          },
+          {
+            "name": "23",
+            "item_count": 1
+          },
+          {
+            "name": "204",
+            "item_count": 1
+          },
+          {
+            "name": "132",
+            "item_count": 1
+          },
+          {
+            "name": "24",
+            "item_count": 1
+          },
+          {
+            "name": "207",
+            "item_count": 1
+          },
+          {
+            "name": "133",
+            "item_count": 1
+          },
+          {
+            "name": "180",
+            "item_count": 1
+          },
+          {
+            "name": "183",
+            "item_count": 1
+          },
+          {
+            "name": "5",
+            "item_count": 1
+          },
+          {
+            "name": "174",
+            "item_count": 1
+          },
+          {
+            "name": "175",
+            "item_count": 1
+          },
+          {
+            "name": "176",
+            "item_count": 1
+          },
+          {
+            "name": "177",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 210,
+            "y": 460
+          }
+        ],
+        "sections": [
+          {
+            "name": "112",
+            "item_count": 1
+          },
+          {
+            "name": "134",
+            "item_count": 1
+          },
+          {
+            "name": "30",
+            "item_count": 1
+          },
+          {
+            "name": "31",
+            "item_count": 1
+          },
+          {
+            "name": "184",
+            "item_count": 1
+          },
+          {
+            "name": "135",
+            "item_count": 1
+          },
+          {
+            "name": "136",
+            "item_count": 1
+          },
+          {
+            "name": "25",
+            "item_count": 1
+          },
+          {
+            "name": "26",
+            "item_count": 1
+          },
+          {
+            "name": "27",
+            "item_count": 1
+          },
+          {
+            "name": "28",
+            "item_count": 1
+          },
+          {
+            "name": "29",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "7",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 586,
+            "y": 328
+          }
+        ],
+        "sections": [
+          {
+            "name": "113",
+            "item_count": 1
+          },
+          {
+            "name": "32",
+            "item_count": 1
+          },
+          {
+            "name": "137",
+            "item_count": 1
+          },
+          {
+            "name": "138",
+            "item_count": 1
+          },
+          {
+            "name": "57",
+            "item_count": 1
+          },
+          {
+            "name": "58",
+            "item_count": 1
+          },
+          {
+            "name": "59",
+            "item_count": 1
+          },
+          {
+            "name": "60",
+            "item_count": 1
+          },
+          {
+            "name": "61",
+            "item_count": 1
+          },
+          {
+            "name": "62",
+            "item_count": 1
+          },
+          {
+            "name": "63",
+            "item_count": 1
+          },
+          {
+            "name": "64",
+            "item_count": 1
+          },
+          {
+            "name": "33",
+            "item_count": 1
+          },
+          {
+            "name": "34",
+            "item_count": 1
+          },
+          {
+            "name": "35",
+            "item_count": 1
+          },
+          {
+            "name": "36",
+            "item_count": 1
+          },
+          {
+            "name": "37",
+            "item_count": 1
+          },
+          {
+            "name": "38",
+            "item_count": 1
+          },
+          {
+            "name": "39",
+            "item_count": 1
+          },
+          {
+            "name": "40",
+            "item_count": 1
+          },
+          {
+            "name": "41",
+            "item_count": 1
+          },
+          {
+            "name": "42",
+            "item_count": 1
+          },
+          {
+            "name": "43",
+            "item_count": 1
+          },
+          {
+            "name": "44",
+            "item_count": 1
+          },
+          {
+            "name": "45",
+            "item_count": 1
+          },
+          {
+            "name": "46",
+            "item_count": 1
+          },
+          {
+            "name": "47",
+            "item_count": 1
+          },
+          {
+            "name": "48",
+            "item_count": 1
+          },
+          {
+            "name": "49",
+            "item_count": 1
+          },
+          {
+            "name": "50",
+            "item_count": 1
+          },
+          {
+            "name": "51",
+            "item_count": 1
+          },
+          {
+            "name": "52",
+            "item_count": 1
+          },
+          {
+            "name": "53",
+            "item_count": 1
+          },
+          {
+            "name": "54",
+            "item_count": 1
+          },
+          {
+            "name": "55",
+            "item_count": 1
+          },
+          {
+            "name": "56",
+            "item_count": 1
+          },
+          {
+            "name": "186",
+            "item_count": 1
+          },
+          {
+            "name": "187",
+            "item_count": 1
+          },
+          {
+            "name": "188",
+            "item_count": 1
+          },
+          {
+            "name": "189",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "8",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 380,
+            "y": 242
+          }
+        ],
+        "sections": [
+          {
+            "name": "114",
+            "item_count": 1
+          },
+          {
+            "name": "139",
+            "item_count": 1
+          },
+          {
+            "name": "140",
+            "item_count": 1
+          },
+          {
+            "name": "190",
+            "item_count": 1
+          },
+          {
+            "name": "141",
+            "item_count": 1
+          },
+          {
+            "name": "142",
+            "item_count": 1
+          },
+          {
+            "name": "143",
+            "item_count": 1
+          },
+          {
+            "name": "298",
+            "item_count": 1
+          },
+          {
+            "name": "302",
+            "item_count": 1
+          },
+          {
+            "name": "307",
+            "item_count": 1
+          },
+          {
+            "name": "317",
+            "item_count": 1
+          },
+          {
+            "name": "202",
+            "item_count": 1
+          },
+          {
+            "name": "115",
+            "item_count": 1
+          },
+          {
+            "name": "116",
+            "item_count": 1
+          },
+          {
+            "name": "118",
+            "item_count": 1
+          },
+          {
+            "name": "119",
+            "item_count": 1
+          },
+          {
+            "name": "117",
+            "item_count": 1
+          },
+          {
+            "name": "397",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "9",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 308,
+            "y": 266
+          }
+        ],
+        "sections": [
+          {
+            "name": "120",
+            "item_count": 1
+          },
+          {
+            "name": "121",
+            "item_count": 1
+          },
+          {
+            "name": "191",
+            "item_count": 1
+          },
+          {
+            "name": "144",
+            "item_count": 1
+          },
+          {
+            "name": "145",
+            "item_count": 1
+          },
+          {
+            "name": "166",
+            "item_count": 1
+          },
+          {
+            "name": "65",
+            "item_count": 1
+          },
+          {
+            "name": "66",
+            "item_count": 1
+          },
+          {
+            "name": "67",
+            "item_count": 1
+          },
+          {
+            "name": "68",
+            "item_count": 1
+          },
+          {
+            "name": "69",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 425,
+            "y": 322
+          }
+        ],
+        "sections": [
+          {
+            "name": "70",
+            "item_count": 1
+          },
+          {
+            "name": "167",
+            "item_count": 1
+          },
+          {
+            "name": "146",
+            "item_count": 1
+          },
+          {
+            "name": "147",
+            "item_count": 1
+          },
+          {
+            "name": "72",
+            "item_count": 1
+          },
+          {
+            "name": "71",
+            "item_count": 1
+          },
+          {
+            "name": "185",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "11",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 545,
+            "y": 190
+          }
+        ],
+        "sections": [
+          {
+            "name": "122",
+            "item_count": 1
+          },
+          {
+            "name": "148",
+            "item_count": 1
+          },
+          {
+            "name": "192",
+            "item_count": 1
+          },
+          {
+            "name": "149",
+            "item_count": 1
+          },
+          {
+            "name": "73",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "12",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 190,
+            "y": 745
+          }
+        ],
+        "sections": [
+          {
+            "name": "193",
+            "item_count": 1
+          },
+          {
+            "name": "74",
+            "item_count": 1
+          },
+          {
+            "name": "75",
+            "item_count": 1
+          },
+          {
+            "name": "76",
+            "item_count": 1
+          },
+          {
+            "name": "77",
+            "item_count": 1
+          },
+          {
+            "name": "78",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "13",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 722,
+            "y": 350
+          }
+        ],
+        "sections": [
+          {
+            "name": "194",
+            "item_count": 1
+          },
+          {
+            "name": "123",
+            "item_count": 1
+          },
+          {
+            "name": "168",
+            "item_count": 1
+          },
+          {
+            "name": "150",
+            "item_count": 1
+          },
+          {
+            "name": "151",
+            "item_count": 1
+          },
+          {
+            "name": "152",
+            "item_count": 1
+          },
+          {
+            "name": "78",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "21",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 680,
+            "y": 110
+          }
+        ],
+        "sections": [
+          {
+            "name": "79",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "10",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 442,
+            "y": 702
+          }
+        ],
+        "sections": [
+          {
+            "name": "80",
+            "item_count": 1
+          },
+          {
+            "name": "398",
+            "item_count": 1
+          },
+          {
+            "name": "153",
+            "item_count": 1
+          },
+          {
+            "name": "154",
+            "item_count": 1
+          },
+          {
+            "name": "81",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "16",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 795,
+            "y": 395
+          }
+        ],
+        "sections": [
+          {
+            "name": "196",
+            "item_count": 1
+          },
+          {
+            "name": "155",
+            "item_count": 1
+          },
+          {
+            "name": "169",
+            "item_count": 1
+          },
+          {
+            "name": "82",
+            "item_count": 1
+          },
+          {
+            "name": "156",
+            "item_count": 1
+          },
+          {
+            "name": "83",
+            "item_count": 1
+          },
+          {
+            "name": "157",
+            "item_count": 1
+          },
+          {
+            "name": "84",
+            "item_count": 1
+          },
+          {
+            "name": "85",
+            "item_count": 1
+          },
+          {
+            "name": "86",
+            "item_count": 1
+          },
+          {
+            "name": "87",
+            "item_count": 1
+          },
+          {
+            "name": "88",
+            "item_count": 1
+          },
+          {
+            "name": "89",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "17",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 505,
+            "y": 645
+          }
+        ],
+        "sections": [
+          {
+            "name": "158",
+            "item_count": 1
+          },
+          {
+            "name": "170",
+            "item_count": 1
+          },
+          {
+            "name": "90",
+            "item_count": 1
+          },
+          {
+            "name": "91",
+            "item_count": 1
+          },
+          {
+            "name": "92",
+            "item_count": 1
+          },
+          {
+            "name": "198",
+            "item_count": 1
+          },
+          {
+            "name": "197",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "18",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 625,
+            "y": 570
+          }
+        ],
+        "sections": [
+          {
+            "name": "124",
+            "item_count": 1
+          },
+          {
+            "name": "94",
+            "item_count": 1
+          },
+          {
+            "name": "95",
+            "item_count": 1
+          },
+          {
+            "name": "96",
+            "item_count": 1
+          },
+          {
+            "name": "97",
+            "item_count": 1
+          },
+          {
+            "name": "98",
+            "item_count": 1
+          },
+          {
+            "name": "93",
+            "item_count": 1
+          },
+          {
+            "name": "159",
+            "item_count": 1
+          },
+          {
+            "name": "160",
+            "item_count": 1
+          },
+          {
+            "name": "178",
+            "item_count": 1
+          },
+          {
+            "name": "199",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "19",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 442,
+            "y": 124
+          }
+        ],
+        "sections": [
+          {
+            "name": "99",
+            "item_count": 1
+          },
+          {
+            "name": "161",
+            "item_count": 1
+          },
+          {
+            "name": "200",
+            "item_count": 1
+          },
+          {
+            "name": "171",
+            "item_count": 1
+          },
+          {
+            "name": "100",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "14",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 160,
+            "y": 660
+          }
+        ],
+        "sections": [
+          {
+            "name": "172",
+            "item_count": 1
+          },
+          {
+            "name": "162",
+            "item_count": 1
+          },
+          {
+            "name": "163",
+            "item_count": 1
+          },
+          {
+            "name": "195",
+            "item_count": 1
+          },
+          {
+            "name": "101",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "22",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 452,
+            "y": 575
+          }
+        ],
+        "sections": [
+          {
+            "name": "164",
+            "item_count": 1
+          },
+          {
+            "name": "173",
+            "item_count": 1
+          },
+          {
+            "name": "201",
+            "item_count": 1
+          },
+          {
+            "name": "102",
+            "item_count": 1
+          },
+          {
+            "name": "103",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "100",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 50,
+            "y": 50
+          }
+        ],
+        "sections": [
+          {
+            "name": "208",
+            "item_count": 1
+          },
+          {
+            "name": "209",
+            "item_count": 1
+          },
+          {
+            "name": "210",
+            "item_count": 1
+          },
+          {
+            "name": "211",
+            "item_count": 1
+          },
+          {
+            "name": "212",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "101",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 100,
+            "y": 50
+          }
+        ],
+        "sections": [
+          {
+            "name": "213",
+            "item_count": 1
+          },
+          {
+            "name": "214",
+            "item_count": 1
+          },
+          {
+            "name": "215",
+            "item_count": 1
+          },
+          {
+            "name": "216",
+            "item_count": 1
+          },
+          {
+            "name": "217",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "102",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 150,
+            "y": 50
+          }
+        ],
+        "sections": [
+          {
+            "name": "218",
+            "item_count": 1
+          },
+          {
+            "name": "219",
+            "item_count": 1
+          },
+          {
+            "name": "220",
+            "item_count": 1
+          },
+          {
+            "name": "221",
+            "item_count": 1
+          },
+          {
+            "name": "222",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "103",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 200,
+            "y": 50
+          }
+        ],
+        "sections": [
+          {
+            "name": "223",
+            "item_count": 1
+          },
+          {
+            "name": "224",
+            "item_count": 1
+          },
+          {
+            "name": "225",
+            "item_count": 1
+          },
+          {
+            "name": "226",
+            "item_count": 1
+          },
+          {
+            "name": "227",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "104",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 250,
+            "y": 50
+          }
+        ],
+        "sections": [
+          {
+            "name": "228",
+            "item_count": 1
+          },
+          {
+            "name": "229",
+            "item_count": 1
+          },
+          {
+            "name": "230",
+            "item_count": 1
+          },
+          {
+            "name": "231",
+            "item_count": 1
+          },
+          {
+            "name": "232",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "105",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 300,
+            "y": 50
+          }
+        ],
+        "sections": [
+          {
+            "name": "233",
+            "item_count": 1
+          },
+          {
+            "name": "234",
+            "item_count": 1
+          },
+          {
+            "name": "235",
+            "item_count": 1
+          },
+          {
+            "name": "236",
+            "item_count": 1
+          },
+          {
+            "name": "237",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "106",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 50,
+            "y": 100
+          }
+        ],
+        "sections": [
+          {
+            "name": "238",
+            "item_count": 1
+          },
+          {
+            "name": "239",
+            "item_count": 1
+          },
+          {
+            "name": "240",
+            "item_count": 1
+          },
+          {
+            "name": "241",
+            "item_count": 1
+          },
+          {
+            "name": "242",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "107",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 100,
+            "y": 100
+          }
+        ],
+        "sections": [
+          {
+            "name": "243",
+            "item_count": 1
+          },
+          {
+            "name": "244",
+            "item_count": 1
+          },
+          {
+            "name": "245",
+            "item_count": 1
+          },
+          {
+            "name": "246",
+            "item_count": 1
+          },
+          {
+            "name": "247",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "108",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 150,
+            "y": 100
+          }
+        ],
+        "sections": [
+          {
+            "name": "248",
+            "item_count": 1
+          },
+          {
+            "name": "249",
+            "item_count": 1
+          },
+          {
+            "name": "250",
+            "item_count": 1
+          },
+          {
+            "name": "251",
+            "item_count": 1
+          },
+          {
+            "name": "252",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "109",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 200,
+            "y": 100
+          }
+        ],
+        "sections": [
+          {
+            "name": "253",
+            "item_count": 1
+          },
+          {
+            "name": "254",
+            "item_count": 1
+          },
+          {
+            "name": "255",
+            "item_count": 1
+          },
+          {
+            "name": "256",
+            "item_count": 1
+          },
+          {
+            "name": "257",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "110",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 250,
+            "y": 100
+          }
+        ],
+        "sections": [
+          {
+            "name": "258",
+            "item_count": 1
+          },
+          {
+            "name": "259",
+            "item_count": 1
+          },
+          {
+            "name": "260",
+            "item_count": 1
+          },
+          {
+            "name": "261",
+            "item_count": 1
+          },
+          {
+            "name": "262",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "111",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 300,
+            "y": 100
+          }
+        ],
+        "sections": [
+          {
+            "name": "263",
+            "item_count": 1
+          },
+          {
+            "name": "264",
+            "item_count": 1
+          },
+          {
+            "name": "265",
+            "item_count": 1
+          },
+          {
+            "name": "266",
+            "item_count": 1
+          },
+          {
+            "name": "267",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "112",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 50,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "268",
+            "item_count": 1
+          },
+          {
+            "name": "269",
+            "item_count": 1
+          },
+          {
+            "name": "270",
+            "item_count": 1
+          },
+          {
+            "name": "271",
+            "item_count": 1
+          },
+          {
+            "name": "272",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "113",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 100,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "273",
+            "item_count": 1
+          },
+          {
+            "name": "274",
+            "item_count": 1
+          },
+          {
+            "name": "275",
+            "item_count": 1
+          },
+          {
+            "name": "276",
+            "item_count": 1
+          },
+          {
+            "name": "277",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "114",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 150,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "278",
+            "item_count": 1
+          },
+          {
+            "name": "279",
+            "item_count": 1
+          },
+          {
+            "name": "280",
+            "item_count": 1
+          },
+          {
+            "name": "281",
+            "item_count": 1
+          },
+          {
+            "name": "282",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "115",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 200,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "283",
+            "item_count": 1
+          },
+          {
+            "name": "284",
+            "item_count": 1
+          },
+          {
+            "name": "285",
+            "item_count": 1
+          },
+          {
+            "name": "286",
+            "item_count": 1
+          },
+          {
+            "name": "287",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "116",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 250,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "288",
+            "item_count": 1
+          },
+          {
+            "name": "289",
+            "item_count": 1
+          },
+          {
+            "name": "290",
+            "item_count": 1
+          },
+          {
+            "name": "291",
+            "item_count": 1
+          },
+          {
+            "name": "292",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "117",
+        "map_locations": [
+          {
+            "map": "Galaxy",
+            "x": 300,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "293",
+            "item_count": 1
+          },
+          {
+            "name": "294",
+            "item_count": 1
+          },
+          {
+            "name": "295",
+            "item_count": 1
+          },
+          {
+            "name": "296",
+            "item_count": 1
+          },
+          {
+            "name": "297"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "1",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Veldin",
+            "x": 365,
+            "y": 425
+          }
+        ],
+        "sections": [
+          {
+            "name": "0",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Veldin",
+            "x": 364,
+            "y": 358
+          }
+        ],
+        "sections": [
+          {
+            "name": "1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Veldin",
+            "x": 178,
+            "y": 102
+          }
+        ],
+        "sections": [
+          {
+            "name": "2",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "2",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Florana",
+            "x": 137,
+            "y": 77
+          }
+        ],
+        "sections": [
+          {
+            "name": "104",
+            "item_count": 1
+          },
+          {
+            "name": "105",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Florana",
+            "x": 228,
+            "y": 197
+          }
+        ],
+        "sections": [
+          {
+            "name": "125",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Florana",
+            "x": 185,
+            "y": 230
+          }
+        ],
+        "sections": [
+          {
+            "name": "165",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Florana",
+            "x": 335,
+            "y": 299
+          }
+        ],
+        "sections": [
+          {
+            "name": "126",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Florana",
+            "x": 424,
+            "y": 425
+          }
+        ],
+        "sections": [
+          {
+            "name": "179",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Florana",
+            "x": 392,
+            "y": 460
+          }
+        ],
+        "sections": [
+          {
+            "name": "3",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "3",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 429,
+            "y": 400
+          }
+        ],
+        "sections": [
+          {
+            "name": "106",
+            "item_count": 1
+          },
+          {
+            "name": "107",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 429,
+            "y": 361
+          }
+        ],
+        "sections": [
+          {
+            "name": "108",
+            "item_count": 1
+          },
+          {
+            "name": "109",
+            "item_count": 1
+          },
+          {
+            "name": "110",
+            "item_count": 1
+          },
+          {
+            "name": "111",
+            "item_count": 1
+          },
+          {
+            "name": "182",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 382,
+            "y": 40
+          }
+        ],
+        "sections": [
+          {
+            "name": "4",
+            "item_count": 1
+          },
+          {
+            "name": "183",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Phoenix Assault",
+            "x": 382,
+            "y": 40
+          }
+        ],
+        "sections": [
+          {
+            "name": "5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 382,
+            "y": 494
+          }
+        ],
+        "sections": [
+          {
+            "name": "6",
+            "item_count": 1
+          },
+          {
+            "name": "7",
+            "item_count": 1
+          },
+          {
+            "name": "19",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 310,
+            "y": 336
+          }
+        ],
+        "sections": [
+          {
+            "name": "11",
+            "item_count": 1
+          },
+          {
+            "name": "12",
+            "item_count": 1
+          },
+          {
+            "name": "13",
+            "item_count": 1
+          },
+          {
+            "name": "14",
+            "item_count": 1
+          },
+          {
+            "name": "15",
+            "item_count": 1
+          },
+          {
+            "name": "16",
+            "item_count": 1
+          },
+          {
+            "name": "17",
+            "item_count": 1
+          },
+          {
+            "name": "128",
+            "item_count": 1
+          },
+          {
+            "name": "18",
+            "item_count": 1
+          },
+          {
+            "name": "8",
+            "item_count": 1
+          },
+          {
+            "name": "9",
+            "item_count": 1
+          },
+          {
+            "name": "127",
+            "item_count": 1
+          },
+          {
+            "name": "10",
+            "item_count": 1
+          },
+          {
+            "name": "181",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 241,
+            "y": 362
+          }
+        ],
+        "sections": [
+          {
+            "name": "20",
+            "item_count": 1
+          },
+          {
+            "name": "203",
+            "item_count": 1
+          },
+          {
+            "name": "129",
+            "item_count": 1
+          },
+          {
+            "name": "21",
+            "item_count": 1
+          },
+          {
+            "name": "205",
+            "item_count": 1
+          },
+          {
+            "name": "130",
+            "item_count": 1
+          },
+          {
+            "name": "22",
+            "item_count": 1
+          },
+          {
+            "name": "206",
+            "item_count": 1
+          },
+          {
+            "name": "131",
+            "item_count": 1
+          },
+          {
+            "name": "23",
+            "item_count": 1
+          },
+          {
+            "name": "204",
+            "item_count": 1
+          },
+          {
+            "name": "132",
+            "item_count": 1
+          },
+          {
+            "name": "24",
+            "item_count": 1
+          },
+          {
+            "name": "207",
+            "item_count": 1
+          },
+          {
+            "name": "133",
+            "item_count": 1
+          },
+          {
+            "name": "180",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "7",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 309,
+            "y": 416
+          }
+        ],
+        "sections": [
+          {
+            "name": "174",
+            "item_count": 1
+          },
+          {
+            "name": "175",
+            "item_count": 1
+          },
+          {
+            "name": "176",
+            "item_count": 1
+          },
+          {
+            "name": "177",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "4",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 107,
+            "y": 386
+          }
+        ],
+        "sections": [
+          {
+            "name": "112",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 443,
+            "y": 351
+          }
+        ],
+        "sections": [
+          {
+            "name": "134",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 403,
+            "y": 48
+          }
+        ],
+        "sections": [
+          {
+            "name": "25",
+            "item_count": 1
+          },
+          {
+            "name": "26",
+            "item_count": 1
+          },
+          {
+            "name": "27",
+            "item_count": 1
+          },
+          {
+            "name": "28",
+            "item_count": 1
+          },
+          {
+            "name": "29",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 33,
+            "y": 30
+          }
+        ],
+        "sections": [
+          {
+            "name": "30",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 279,
+            "y": 158
+          }
+        ],
+        "sections": [
+          {
+            "name": "184",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 228,
+            "y": 180
+          }
+        ],
+        "sections": [
+          {
+            "name": "135",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 189,
+            "y": 94
+          }
+        ],
+        "sections": [
+          {
+            "name": "136",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "7",
+        "map_locations": [
+          {
+            "map": "Marcadia",
+            "x": 232,
+            "y": 74
+          }
+        ],
+        "sections": [
+          {
+            "name": "31",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "7",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 395,
+            "y": 459
+          }
+        ],
+        "sections": [
+          {
+            "name": "113",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 104,
+            "y": 242
+          }
+        ],
+        "sections": [
+          {
+            "name": "137",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 281,
+            "y": 133
+          }
+        ],
+        "sections": [
+          {
+            "name": "189",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 281,
+            "y": 83
+          }
+        ],
+        "sections": [
+          {
+            "name": "188",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 395,
+            "y": 368
+          }
+        ],
+        "sections": [
+          {
+            "name": "32",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 345,
+            "y": 195
+          }
+        ],
+        "sections": [
+          {
+            "name": "33",
+            "item_count": 1
+          },
+          {
+            "name": "34",
+            "item_count": 1
+          },
+          {
+            "name": "35",
+            "item_count": 1
+          },
+          {
+            "name": "36",
+            "item_count": 1
+          },
+          {
+            "name": "37",
+            "item_count": 1
+          },
+          {
+            "name": "38",
+            "item_count": 1
+          },
+          {
+            "name": "39",
+            "item_count": 1
+          },
+          {
+            "name": "40",
+            "item_count": 1
+          },
+          {
+            "name": "41",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 392,
+            "y": 108
+          }
+        ],
+        "sections": [
+          {
+            "name": "186",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "7",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 440,
+            "y": 195
+          }
+        ],
+        "sections": [
+          {
+            "name": "42",
+            "item_count": 1
+          },
+          {
+            "name": "43",
+            "item_count": 1
+          },
+          {
+            "name": "44",
+            "item_count": 1
+          },
+          {
+            "name": "45",
+            "item_count": 1
+          },
+          {
+            "name": "46",
+            "item_count": 1
+          },
+          {
+            "name": "47",
+            "item_count": 1
+          },
+          {
+            "name": "48",
+            "item_count": 1
+          },
+          {
+            "name": "49",
+            "item_count": 1
+          },
+          {
+            "name": "50",
+            "item_count": 1
+          },
+          {
+            "name": "51",
+            "item_count": 1
+          },
+          {
+            "name": "52",
+            "item_count": 1
+          },
+          {
+            "name": "53",
+            "item_count": 1
+          },
+          {
+            "name": "54",
+            "item_count": 1
+          },
+          {
+            "name": "55",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "8",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 392,
+            "y": 164
+          }
+        ],
+        "sections": [
+          {
+            "name": "56",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "9",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 129,
+            "y": 24
+          }
+        ],
+        "sections": [
+          {
+            "name": "57",
+            "item_count": 1
+          },
+          {
+            "name": "58",
+            "item_count": 1
+          },
+          {
+            "name": "59",
+            "item_count": 1
+          },
+          {
+            "name": "60",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "10",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 193,
+            "y": 29
+          }
+        ],
+        "sections": [
+          {
+            "name": "61",
+            "item_count": 1
+          },
+          {
+            "name": "62",
+            "item_count": 1
+          },
+          {
+            "name": "63",
+            "item_count": 1
+          },
+          {
+            "name": "64",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "11",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 162,
+            "y": 130
+          }
+        ],
+        "sections": [
+          {
+            "name": "138",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "12",
+        "map_locations": [
+          {
+            "map": "Annihilation Nation",
+            "x": 281,
+            "y": 33
+          }
+        ],
+        "sections": [
+          {
+            "name": "187",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "8",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Aquatos",
+            "x": 45,
+            "y": 371
+          }
+        ],
+        "sections": [
+          {
+            "name": "114",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Aquatos",
+            "x": 414,
+            "y": 316
+          }
+        ],
+        "sections": [
+          {
+            "name": "139",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Aquatos",
+            "x": 477,
+            "y": 279
+          }
+        ],
+        "sections": [
+          {
+            "name": "140",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Aquatos",
+            "x": 446,
+            "y": 210
+          }
+        ],
+        "sections": [
+          {
+            "name": "190",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Aquatos",
+            "x": 222,
+            "y": 196
+          }
+        ],
+        "sections": [
+          {
+            "name": "141",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Aquatos",
+            "x": 347,
+            "y": 70
+          }
+        ],
+        "sections": [
+          {
+            "name": "115",
+            "item_count": 1
+          },
+          {
+            "name": "116",
+            "item_count": 1
+          },
+          {
+            "name": "118",
+            "item_count": 1
+          },
+          {
+            "name": "119",
+            "item_count": 1
+          },
+          {
+            "name": "117",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 276,
+            "y": 64
+          }
+        ],
+        "sections": [
+          {
+            "name": "142",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "7",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 358,
+            "y": 255
+          }
+        ],
+        "sections": [
+          {
+            "name": "143",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "8",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 39,
+            "y": 295
+          },
+          {
+            "map": "Galaxy",
+            "x": 400,
+            "y": 242
+          }
+        ],
+        "sections": [
+          {
+            "name": "298",
+            "item_count": 1
+          },
+          {
+            "name": "299",
+            "item_count": 1
+          },
+          {
+            "name": "300",
+            "item_count": 1
+          },
+          {
+            "name": "301",
+            "item_count": 1
+          },
+          {
+            "name": "302",
+            "item_count": 1
+          },
+          {
+            "name": "303",
+            "item_count": 1
+          },
+          {
+            "name": "304",
+            "item_count": 1
+          },
+          {
+            "name": "305",
+            "item_count": 1
+          },
+          {
+            "name": "306",
+            "item_count": 1
+          },
+          {
+            "name": "307",
+            "item_count": 1
+          },
+          {
+            "name": "308",
+            "item_count": 1
+          },
+          {
+            "name": "309",
+            "item_count": 1
+          },
+          {
+            "name": "310",
+            "item_count": 1
+          },
+          {
+            "name": "311",
+            "item_count": 1
+          },
+          {
+            "name": "312",
+            "item_count": 1
+          },
+          {
+            "name": "313",
+            "item_count": 1
+          },
+          {
+            "name": "314",
+            "item_count": 1
+          },
+          {
+            "name": "315",
+            "item_count": 1
+          },
+          {
+            "name": "316",
+            "item_count": 1
+          },
+          {
+            "name": "317",
+            "item_count": 1
+          },
+          {
+            "name": "318",
+            "item_count": 1
+          },
+          {
+            "name": "319",
+            "item_count": 1
+          },
+          {
+            "name": "320",
+            "item_count": 1
+          },
+          {
+            "name": "321",
+            "item_count": 1
+          },
+          {
+            "name": "322",
+            "item_count": 1
+          },
+          {
+            "name": "323",
+            "item_count": 1
+          },
+          {
+            "name": "324",
+            "item_count": 1
+          },
+          {
+            "name": "325",
+            "item_count": 1
+          },
+          {
+            "name": "326",
+            "item_count": 1
+          },
+          {
+            "name": "327",
+            "item_count": 1
+          },
+          {
+            "name": "328",
+            "item_count": 1
+          },
+          {
+            "name": "329",
+            "item_count": 1
+          },
+          {
+            "name": "330",
+            "item_count": 1
+          },
+          {
+            "name": "331",
+            "item_count": 1
+          },
+          {
+            "name": "332",
+            "item_count": 1
+          },
+          {
+            "name": "333",
+            "item_count": 1
+          },
+          {
+            "name": "334",
+            "item_count": 1
+          },
+          {
+            "name": "335",
+            "item_count": 1
+          },
+          {
+            "name": "336",
+            "item_count": 1
+          },
+          {
+            "name": "337",
+            "item_count": 1
+          },
+          {
+            "name": "338",
+            "item_count": 1
+          },
+          {
+            "name": "339",
+            "item_count": 1
+          },
+          {
+            "name": "340",
+            "item_count": 1
+          },
+          {
+            "name": "341",
+            "item_count": 1
+          },
+          {
+            "name": "342",
+            "item_count": 1
+          },
+          {
+            "name": "343",
+            "item_count": 1
+          },
+          {
+            "name": "344",
+            "item_count": 1
+          },
+          {
+            "name": "345",
+            "item_count": 1
+          },
+          {
+            "name": "346",
+            "item_count": 1
+          },
+          {
+            "name": "347",
+            "item_count": 1
+          },
+          {
+            "name": "348",
+            "item_count": 1
+          },
+          {
+            "name": "349",
+            "item_count": 1
+          },
+          {
+            "name": "350",
+            "item_count": 1
+          },
+          {
+            "name": "351",
+            "item_count": 1
+          },
+          {
+            "name": "352",
+            "item_count": 1
+          },
+          {
+            "name": "353",
+            "item_count": 1
+          },
+          {
+            "name": "354",
+            "item_count": 1
+          },
+          {
+            "name": "355",
+            "item_count": 1
+          },
+          {
+            "name": "356",
+            "item_count": 1
+          },
+          {
+            "name": "357",
+            "item_count": 1
+          },
+          {
+            "name": "358",
+            "item_count": 1
+          },
+          {
+            "name": "359",
+            "item_count": 1
+          },
+          {
+            "name": "360",
+            "item_count": 1
+          },
+          {
+            "name": "361",
+            "item_count": 1
+          },
+          {
+            "name": "362",
+            "item_count": 1
+          },
+          {
+            "name": "363",
+            "item_count": 1
+          },
+          {
+            "name": "364",
+            "item_count": 1
+          },
+          {
+            "name": "365",
+            "item_count": 1
+          },
+          {
+            "name": "366",
+            "item_count": 1
+          },
+          {
+            "name": "367",
+            "item_count": 1
+          },
+          {
+            "name": "368",
+            "item_count": 1
+          },
+          {
+            "name": "369",
+            "item_count": 1
+          },
+          {
+            "name": "370",
+            "item_count": 1
+          },
+          {
+            "name": "371",
+            "item_count": 1
+          },
+          {
+            "name": "372",
+            "item_count": 1
+          },
+          {
+            "name": "373",
+            "item_count": 1
+          },
+          {
+            "name": "374",
+            "item_count": 1
+          },
+          {
+            "name": "375",
+            "item_count": 1
+          },
+          {
+            "name": "376",
+            "item_count": 1
+          },
+          {
+            "name": "377",
+            "item_count": 1
+          },
+          {
+            "name": "378",
+            "item_count": 1
+          },
+          {
+            "name": "379",
+            "item_count": 1
+          },
+          {
+            "name": "380",
+            "item_count": 1
+          },
+          {
+            "name": "381",
+            "item_count": 1
+          },
+          {
+            "name": "382",
+            "item_count": 1
+          },
+          {
+            "name": "383",
+            "item_count": 1
+          },
+          {
+            "name": "384",
+            "item_count": 1
+          },
+          {
+            "name": "385",
+            "item_count": 1
+          },
+          {
+            "name": "386",
+            "item_count": 1
+          },
+          {
+            "name": "387",
+            "item_count": 1
+          },
+          {
+            "name": "388",
+            "item_count": 1
+          },
+          {
+            "name": "389",
+            "item_count": 1
+          },
+          {
+            "name": "390",
+            "item_count": 1
+          },
+          {
+            "name": "391",
+            "item_count": 1
+          },
+          {
+            "name": "392",
+            "item_count": 1
+          },
+          {
+            "name": "393",
+            "item_count": 1
+          },
+          {
+            "name": "394",
+            "item_count": 1
+          },
+          {
+            "name": "395",
+            "item_count": 1
+          },
+          {
+            "name": "396",
+            "item_count": 1
+          },
+          {
+            "name": "399",
+            "item_count": 1
+          },
+          {
+            "name": "400",
+            "item_count": 1
+          },
+          {
+            "name": "202",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "9",
+        "map_locations": [
+          {
+            "map": "Aquatos Base",
+            "x": 455,
+            "y": 310
+          }
+        ],
+        "sections": [
+          {
+            "name": "397",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Aquatos Crystals ",
+    "children": [
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 75,
+            "y": 309
+          }
+        ],
+        "sections": [
+          {
+            "name": "Rock 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 44,
+            "y": 322
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 90,
+            "y": 322
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 107,
+            "y": 309
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 107,
+            "y": 335
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 118,
+            "y": 361
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 131,
+            "y": 401
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 196,
+            "y": 404
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 152,
+            "y": 368
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 169,
+            "y": 363
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 156,
+            "y": 336
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 131,
+            "y": 312
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 178,
+            "y": 311
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 171,
+            "y": 295
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 250,
+            "y": 213
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 277,
+            "y": 187
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 257,
+            "y": 173
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 223,
+            "y": 177
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 250,
+            "y": 151
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 265,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          },
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 210,
+            "y": 193
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 210,
+            "y": 149
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 224,
+            "y": 124
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 250,
+            "y": 122
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 277,
+            "y": 102
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 234,
+            "y": 92
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 304,
+            "y": 152
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 317,
+            "y": 357
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 319,
+            "y": 322
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 333,
+            "y": 373
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 358,
+            "y": 376
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 356,
+            "y": 401
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 357,
+            "y": 338
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 347,
+            "y": 417
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 327,
+            "y": 410
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 372,
+            "y": 356
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 381,
+            "y": 335
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 400,
+            "y": 371
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 413,
+            "y": 376
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 440,
+            "y": 346
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 363,
+            "y": 294
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 399,
+            "y": 294
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 440,
+            "y": 295
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Aquatos Crystal Grav",
+    "children": [
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 118,
+            "y": 214
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 128,
+            "y": 181
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 134,
+            "y": 146
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 114,
+            "y": 113
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 156,
+            "y": 98
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 156,
+            "y": 151
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 169,
+            "y": 109
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 182,
+            "y": 187
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 260,
+            "y": 64
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 317,
+            "y": 94
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 333,
+            "y": 95
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 434,
+            "y": 145
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 437,
+            "y": 213
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 413,
+            "y": 176
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 386,
+            "y": 208
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 345,
+            "y": 214
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 337,
+            "y": 172
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 399,
+            "y": 94
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 372,
+            "y": 138
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 317,
+            "y": 115
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 277,
+            "y": 368
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 209,
+            "y": 315
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 251,
+            "y": 348
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 251,
+            "y": 369
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 251,
+            "y": 390
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 303,
+            "y": 401
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 210,
+            "y": 396
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          },
+          {
+            "name": "Another King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 210,
+            "y": 396
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          },
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          },
+          {
+            "name": "Another King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 210,
+            "y": 396
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 277,
+            "y": 336
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 223,
+            "y": 335
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 217,
+            "y": 295
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 251,
+            "y": 323
+          }
+        ],
+        "sections": [
+          {
+            "name": "In Rock",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 304,
+            "y": 305
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Sewer Crystal",
+        "map_locations": [
+          {
+            "map": "Aquatos Sewers",
+            "x": 283,
+            "y": 295
+          }
+        ],
+        "sections": [
+          {
+            "name": "King Amoeboid",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "9",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis",
+            "x": 264,
+            "y": 326
+          }
+        ],
+        "sections": [
+          {
+            "name": "120",
+            "item_count": 1
+          },
+          {
+            "name": "121",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis",
+            "x": 234,
+            "y": 172
+          }
+        ],
+        "sections": [
+          {
+            "name": "191",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis",
+            "x": 465,
+            "y": 339
+          }
+        ],
+        "sections": [
+          {
+            "name": "144",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis",
+            "x": 395,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "166",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis",
+            "x": 55,
+            "y": 110
+          }
+        ],
+        "sections": [
+          {
+            "name": "145",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis",
+            "x": 210,
+            "y": 83
+          }
+        ],
+        "sections": [
+          {
+            "name": "65",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Tyhrranosis: Rangers",
+            "x": 250,
+            "y": 179
+          }
+        ],
+        "sections": [
+          {
+            "name": "66",
+            "item_count": 1
+          },
+          {
+            "name": "67",
+            "item_count": 1
+          },
+          {
+            "name": "68",
+            "item_count": 1
+          },
+          {
+            "name": "69",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "5",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Daxx",
+            "x": 467,
+            "y": 395
+          }
+        ],
+        "sections": [
+          {
+            "name": "185",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Daxx",
+            "x": 399,
+            "y": 389
+          }
+        ],
+        "sections": [
+          {
+            "name": "70",
+            "item_count": 1
+          },
+          {
+            "name": "167",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Daxx",
+            "x": 360,
+            "y": 31
+          }
+        ],
+        "sections": [
+          {
+            "name": "72",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Daxx",
+            "x": 377,
+            "y": 157
+          }
+        ],
+        "sections": [
+          {
+            "name": "146",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Daxx",
+            "x": 167,
+            "y": 349
+          }
+        ],
+        "sections": [
+          {
+            "name": "147",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Daxx",
+            "x": 49,
+            "y": 298
+          }
+        ],
+        "sections": [
+          {
+            "name": "71",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "11",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Obani Gemini",
+            "x": 383,
+            "y": 280
+          }
+        ],
+        "sections": [
+          {
+            "name": "122",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Obani Gemini",
+            "x": 365,
+            "y": 411
+          }
+        ],
+        "sections": [
+          {
+            "name": "148",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Obani Gemini",
+            "x": 35,
+            "y": 110
+          }
+        ],
+        "sections": [
+          {
+            "name": "192",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Obani Gemini",
+            "x": 984,
+            "y": 224
+          }
+        ],
+        "sections": [
+          {
+            "name": "149",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Obani Gemini",
+            "x": 738,
+            "y": 471
+          }
+        ],
+        "sections": [
+          {
+            "name": "73",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "12",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Blackwater City",
+            "x": 256,
+            "y": 430
+          }
+        ],
+        "sections": [
+          {
+            "name": "193",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Blackwater City",
+            "x": 256,
+            "y": 60
+          }
+        ],
+        "sections": [
+          {
+            "name": "74",
+            "item_count": 1
+          },
+          {
+            "name": "75",
+            "item_count": 1
+          },
+          {
+            "name": "76",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Blackwater City",
+            "x": 256,
+            "y": 203
+          }
+        ],
+        "sections": [
+          {
+            "name": "77",
+            "item_count": 1
+          },
+          {
+            "name": "78",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "13",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Holostar Studios",
+            "x": 154,
+            "y": 156
+          }
+        ],
+        "sections": [
+          {
+            "name": "123",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Holostar Studios",
+            "x": 280,
+            "y": 215
+          }
+        ],
+        "sections": [
+          {
+            "name": "168",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Holostar Studios",
+            "x": 298,
+            "y": 239
+          }
+        ],
+        "sections": [
+          {
+            "name": "150",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Holostar Studios Clank",
+            "x": 22,
+            "y": 242
+          },
+          {
+            "map": "Holostar Studios",
+            "x": 334,
+            "y": 234
+          }
+        ],
+        "sections": [
+          {
+            "name": "194",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Holostar Studios",
+            "x": 56,
+            "y": 186
+          }
+        ],
+        "sections": [
+          {
+            "name": "151",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Holostar Studios",
+            "x": 117,
+            "y": 162
+          }
+        ],
+        "sections": [
+          {
+            "name": "152",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Holostar Studios",
+            "x": 122,
+            "y": 297
+          }
+        ],
+        "sections": [
+          {
+            "name": "78",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "21",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Obani Draco",
+            "x": 401,
+            "y": 191
+          }
+        ],
+        "sections": [
+          {
+            "name": "79",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "10",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Zeldrin Starport",
+            "x": 92,
+            "y": 165
+          }
+        ],
+        "sections": [
+          {
+            "name": "153",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Zeldrin Starport",
+            "x": 19,
+            "y": 339
+          }
+        ],
+        "sections": [
+          {
+            "name": "154",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Zeldrin Starport",
+            "x": 334,
+            "y": 352
+          }
+        ],
+        "sections": [
+          {
+            "name": "80",
+            "item_count": 1
+          },
+          {
+            "name": "398",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Zeldrin Starport",
+            "x": 330,
+            "y": 180
+          }
+        ],
+        "sections": [
+          {
+            "name": "81",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "16",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Metropolis",
+            "x": 279,
+            "y": 484
+          }
+        ],
+        "sections": [
+          {
+            "name": "196",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Metropolis",
+            "x": 84,
+            "y": 395
+          }
+        ],
+        "sections": [
+          {
+            "name": "155",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Metropolis",
+            "x": 302,
+            "y": 350
+          }
+        ],
+        "sections": [
+          {
+            "name": "169",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Metropolis",
+            "x": 302,
+            "y": 280
+          }
+        ],
+        "sections": [
+          {
+            "name": "82",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Metropolis",
+            "x": 439,
+            "y": 205
+          }
+        ],
+        "sections": [
+          {
+            "name": "156",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Metropolis",
+            "x": 250,
+            "y": 20
+          }
+        ],
+        "sections": [
+          {
+            "name": "83",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Metropolis: Rangers",
+            "x": 443,
+            "y": 368
+          }
+        ],
+        "sections": [
+          {
+            "name": "157",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "7",
+        "map_locations": [
+          {
+            "map": "Metropolis: Rangers",
+            "x": 182,
+            "y": 182
+          }
+        ],
+        "sections": [
+          {
+            "name": "84",
+            "item_count": 1
+          },
+          {
+            "name": "85",
+            "item_count": 1
+          },
+          {
+            "name": "86",
+            "item_count": 1
+          },
+          {
+            "name": "87",
+            "item_count": 1
+          },
+          {
+            "name": "88",
+            "item_count": 1
+          },
+          {
+            "name": "89",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "17",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 465,
+            "y": 332
+          }
+        ],
+        "sections": [
+          {
+            "name": "158",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 480,
+            "y": 150
+          }
+        ],
+        "sections": [
+          {
+            "name": "170",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 340,
+            "y": 194
+          }
+        ],
+        "sections": [
+          {
+            "name": "197",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 425,
+            "y": 323
+          }
+        ],
+        "sections": [
+          {
+            "name": "198",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 268,
+            "y": 52
+          }
+        ],
+        "sections": [
+          {
+            "name": "90",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 169,
+            "y": 280
+          }
+        ],
+        "sections": [
+          {
+            "name": "91",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "6",
+        "map_locations": [
+          {
+            "map": "Crash Site",
+            "x": 45,
+            "y": 484
+          }
+        ],
+        "sections": [
+          {
+            "name": "92",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "18",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Aridia",
+            "x": 460,
+            "y": 255
+          }
+        ],
+        "sections": [
+          {
+            "name": "124",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Aridia",
+            "x": 195,
+            "y": 207
+          }
+        ],
+        "sections": [
+          {
+            "name": "199",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Aridia",
+            "x": 252,
+            "y": 278
+          }
+        ],
+        "sections": [
+          {
+            "name": "159",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Aridia",
+            "x": 265,
+            "y": 213
+          }
+        ],
+        "sections": [
+          {
+            "name": "178",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Aridia",
+            "x": 14,
+            "y": 246
+          }
+        ],
+        "sections": [
+          {
+            "name": "160",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "5",
+        "map_locations": [
+          {
+            "map": "Aridia",
+            "x": 53,
+            "y": 243
+          }
+        ],
+        "sections": [
+          {
+            "name": "94",
+            "item_count": 1
+          },
+          {
+            "name": "95",
+            "item_count": 1
+          },
+          {
+            "name": "96",
+            "item_count": 1
+          },
+          {
+            "name": "97",
+            "item_count": 1
+          },
+          {
+            "name": "98",
+            "item_count": 1
+          },
+          {
+            "name": "93",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "19",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Qwarks Hideout",
+            "x": 415,
+            "y": 399
+          }
+        ],
+        "sections": [
+          {
+            "name": "161",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Qwarks Hideout",
+            "x": 332,
+            "y": 321
+          }
+        ],
+        "sections": [
+          {
+            "name": "99",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Qwarks Hideout",
+            "x": 48,
+            "y": 143
+          }
+        ],
+        "sections": [
+          {
+            "name": "200",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Qwarks Hideout",
+            "x": 110,
+            "y": 230
+          }
+        ],
+        "sections": [
+          {
+            "name": "171",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Qwarks Hideout",
+            "x": 150,
+            "y": 250
+          }
+        ],
+        "sections": [
+          {
+            "name": "100",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "14",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Koros",
+            "x": 110,
+            "y": 210
+          }
+        ],
+        "sections": [
+          {
+            "name": "172",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Koros",
+            "x": 52,
+            "y": 224
+          }
+        ],
+        "sections": [
+          {
+            "name": "162",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Koros",
+            "x": 180,
+            "y": 143
+          }
+        ],
+        "sections": [
+          {
+            "name": "163",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Koros",
+            "x": 165,
+            "y": 194
+          }
+        ],
+        "sections": [
+          {
+            "name": "195",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Koros",
+            "x": 362,
+            "y": 63
+          }
+        ],
+        "sections": [
+          {
+            "name": "101",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "22",
+    "children": [
+      {
+        "name": "0",
+        "map_locations": [
+          {
+            "map": "Command Center",
+            "x": 195,
+            "y": 153
+          }
+        ],
+        "sections": [
+          {
+            "name": "164",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "1",
+        "map_locations": [
+          {
+            "map": "Command Center",
+            "x": 90,
+            "y": 250
+          }
+        ],
+        "sections": [
+          {
+            "name": "173",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "2",
+        "map_locations": [
+          {
+            "map": "Command Center",
+            "x": 72,
+            "y": 300
+          }
+        ],
+        "sections": [
+          {
+            "name": "201",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "3",
+        "map_locations": [
+          {
+            "map": "Command Center 2",
+            "x": 337,
+            "y": 192
+          }
+        ],
+        "sections": [
+          {
+            "name": "102",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "4",
+        "map_locations": [
+          {
+            "map": "Command Center 2",
+            "x": 299,
+            "y": 307
+          }
+        ],
+        "sections": [
+          {
+            "name": "103",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

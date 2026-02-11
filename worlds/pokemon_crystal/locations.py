@@ -224,7 +224,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
     if world.options.breeding_methods_required or world.is_universal_tracker:
         breeding_region = regions["Breeding"]
         for pokemon_id, children_access in sorted(world.logic.breeding.items(), key=lambda x: x[0]):
-            accesses = [access for _, access in children_access]
+            accesses = [access for _, access, _ in children_access]
             if LogicalAccess.InLogic not in accesses and not world.is_universal_tracker: continue
             new_location = PokemonCrystalLocation(
                 world.player,

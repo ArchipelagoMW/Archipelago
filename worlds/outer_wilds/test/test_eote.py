@@ -183,3 +183,20 @@ class TestDLCOnlyLogsanity(OuterWildsTestBase):
 
     def test_dlc_only_logsanity(self):
         self.assertEqual(self.getLocationCount(), 107)  # 34(+1V) DLC default locations + 72 DLC logsanity locations
+
+
+# dlc_only should turn the story mod options into no-ops
+class TestDLCOnlyWithStoryMods(OuterWildsTestBase):
+    options = {
+        "dlc_only": 1,
+        "enable_hn1_mod": 1,
+        "enable_outsider_mod": 1,
+        "enable_ac_mod": 1,
+        "enable_hn2_mod": 1,
+        "enable_fq_mod": 1,
+        "enable_fc_mod": 1,
+        "enable_eh_mod": 1,
+    }
+
+    def test_default(self):
+        self.assertEqual(self.getLocationCount(), 35)  # 34(+1V) DLC default locations

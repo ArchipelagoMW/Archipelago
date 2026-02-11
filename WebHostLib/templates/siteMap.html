@@ -42,7 +42,7 @@
         <h2>Game Info Pages</h2>
         <ul>
             {% for game in games | title_sorted %}
-                <li><a href="{{ url_for('game_info', game=game['title'], lang='en') }}">{{ game['title'] }}</a></li>
+                <li><a href="{{ url_for('game_info', game=world_map[game['title']], lang='en') }}">{{ game['title'] }}</a></li>
             {% endfor %}
         </ul>
 
@@ -52,8 +52,8 @@
                 {% if game['has_settings'] %}
                     <li>{{ game['title'] }}</li>
                     <ul>
-                        <li><a href="{{ url_for('player_options', game=game['title']) }}">Player Options</a></li>
-                        <li><a href="{{ url_for('weighted_options', game=game['title']) }}">Weighted Options</a></li>
+                        <li><a href="{{ url_for('player_options', game=world_map[game['title']]) }}">Player Options</a></li>
+                        <li><a href="{{ url_for('weighted_options', game=world_map[game['title']]) }}">Weighted Options</a></li>
                     </ul>
                 {% endif %}
             {% endfor %}

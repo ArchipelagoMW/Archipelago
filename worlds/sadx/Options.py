@@ -133,11 +133,10 @@ class StartingLocationOption(Choice):
 
 class EntranceRandomizer(Choice):
     """
-    Randomizes the entrances to action stages.
-    This means that the entrance to an action stage could be different from the original game.
-    If a given entrance is closed (e.g., doors not opening), it indicates that the level behind that entrance is not accessible.
-    For example, if Hot Shelter is inside the Emerald Coast entrance, the beach entrance will appear closed for Sonic but open for Amy.
-    Depending on the character, the entrance may be Sonic's or Knuckles'. Big, for example, can't use the Speed Highway elevator.
+    Randomizes the entrances to action stages, bosses, sublevels and Chao Gardens.
+    Disabled (0): No entrance randomization.
+    Stages (1): Only action stages entrances are randomized.
+    Stages and Bosses (2): Action stages, bosses, sublevels and Chao Gardens entrances are randomized.
     """
     display_name = "Entrance Randomizer"
     option_disabled = 0

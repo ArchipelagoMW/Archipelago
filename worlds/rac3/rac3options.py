@@ -1,3 +1,4 @@
+"""This module contains the RAC3 Option class, containing all adjustable YAML options"""
 from dataclasses import dataclass
 
 from Options import Accessibility, OptionGroup, ProgressionBalancing, StartInventoryPool
@@ -5,9 +6,12 @@ from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
 from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
+from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
+from worlds.rac3.options.holostar_skip_options import HolostarSkip
+from worlds.rac3.options.intro_skip_options import IntroSkip
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
@@ -32,8 +36,9 @@ from worlds.rac3.options.weapon_vendors_options import WeaponVendors
 
 
 def create_option_groups() -> list[OptionGroup]:
+    """Return the list of option groups for this world"""
     option_group_list: list[OptionGroup] = []
-    for name, options in rac3_option_groups.items():
+    for name, options in rac3_option_groups:
         option_group_list.append(OptionGroup(name=name, options=options))
 
     return option_group_list
@@ -41,6 +46,7 @@ def create_option_groups() -> list[OptionGroup]:
 
 @dataclass
 class RaC3Options(PerGameCommonOptions):
+    """YAML Options for RAC3"""
     deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool
     starting_weapons: StartingWeapons
@@ -48,7 +54,6 @@ class RaC3Options(PerGameCommonOptions):
     enable_progressive_weapons: EnableProgressiveWeapons
     armor_upgrade: ArmorUpgrade
     filler_weight: FillerWeight
-    sewer_limitation: SewerLimitation
     traps_enabled: EnableTraps
     trap_weight: TrapWeight
     weapon_vendors: WeaponVendors
@@ -69,6 +74,9 @@ class RaC3Options(PerGameCommonOptions):
     ship_skin: ShipSkin
     skin: RatchetSkin
     one_hp_challenge: OneHpChallenge
+    intro_skip: IntroSkip
+    holostar_skip: HolostarSkip
+    clank_options: ClankOptions
 
 
 rac3_option_groups = [
@@ -76,9 +84,10 @@ rac3_option_groups = [
         ProgressionBalancing,
         Accessibility,
         Deathlink,
-        RAC3ExcludeLocations,
     ]),
     OptionGroup("RAC3 Game Options", [
+        IntroSkip,
+        HolostarSkip,
         BoltAndXPMultiplier,
         OneHpChallenge,
     ]),
@@ -86,6 +95,7 @@ rac3_option_groups = [
         StartingWeapons,
         EnableProgressiveWeapons,
         ArmorUpgrade,
+        ClankOptions,
         EnableTraps,
         TrapWeight,
         FillerWeight,
@@ -109,6 +119,9 @@ rac3_option_groups = [
         ShipWings,
         ShipSkin,
         RatchetSkin,
+    ]),
+    OptionGroup("Item & Location Options", [
+        RAC3ExcludeLocations,
     ]),
 ]
 
@@ -140,4 +153,6 @@ slot_data_options: list[str] = [
     RAC3OPTION.WEAPON_VENDORS,
     RAC3OPTION.FILLER_WEIGHT,
     RAC3OPTION.ONE_HP_CHALLENGE,
+    RAC3OPTION.INTRO_SKIP,
+    RAC3OPTION.CLANK_OPTIONS,
 ]

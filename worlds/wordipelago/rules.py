@@ -18,16 +18,18 @@ def end_game_event_check(state, world):
 def all_needed_locations_checked(state, player):
     return state.has("Word Master", player)
 
-alpahbet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-def needed_for_words(state, player, vowels, score, guesses = 1, yellow = False):
+def needed_for_words(state, player, vowels, score, guesses = 1, yellow = False, min_letters = 1):
     possible_score = 0
     vowels_items = ["Letter A", "Letter E", "Letter I", "Letter O", "Letter U", "Letter Y"]
-    for key in alpahbet:
+    letter_count = 0
+    for key in alphabet:
         if(state.has("Letter " + key, player)):
+            letter_count += 1
             possible_score += letter_scores["Letter " + key]
 
-    return state.has_from_list_unique(vowels_items, player, vowels) and possible_score >= score and (not yellow or state.has('Yellow Letters', player)) and state.has('Guess', player, guesses)
+    return state.has_from_list_unique(vowels_items, player, vowels) and possible_score >= score and (not yellow or state.has('Yellow Letters', player)) and state.has('Guess', player, guesses) and min_letters <= letter_count
 
 def needed_for_letter(state, player, letter):
     return state.has("Letter " + letter, player)
@@ -40,7 +42,7 @@ def create_rules(world: "WordipelagoWorld"):
     multiworld.get_region("Menu", player).add_exits(['Letters'])
     multiworld.get_region("Letters", player).add_exits(
         [ "Word Best", "Green Checks", "Yellow Checks", 'Point Shop'],
-        {"Point Shop": lambda state: needed_for_words(state, world.player, *(rules_for_difficulty["pointShop"]))}
+        {"Point Shop": lambda state: needed_for_words(state, world.player, *(rules_for_difficulty["green"][str(world.options.point_shop_logic_level.value)]))}
     )
     
     multiworld.get_region("Green Checks", player).add_exits(
@@ -106,7 +108,7 @@ def create_rules(world: "WordipelagoWorld"):
 
     multiworld.get_region("Yellow Checks", player).add_exits(
         ['Yellow Checks 1'],
-        {"Yellow Checks 1": lambda state: needed_for_words(state, world.player, *(rules_for_difficulty["yellow"]["1"]))}
+        {"Yellow Checks 1": lambda state: needed_for_words(state, world.player, *(rules_for_difficulty["yellow"]["1"]), 2)}
     )
     multiworld.get_region("Yellow Checks 1", player).add_exits(
         ['Yellow Checks 2'],
@@ -138,10 +140,10 @@ def create_rules(world: "WordipelagoWorld"):
         world.get_location("Used " + key).item_rule = lambda item, key=key: item.name != "Letter " + key
         
     for shop_check in range(world.options.minimum_point_shop_checks):
-        if(shop_check % 2 == 0):
-            world.get_location("Point Shop Purchase " + str(shop_check + 1)).progress_type = LocationProgressType.PRIORITY
-        else:
-            world.get_location("Point Shop Purchase " + str(shop_check + 1)).item_rule =  lambda item: item.name != 'Shop Points'
+        # if(shop_check % 2 == 0 and shop_check <= 10):
+        #     world.get_location("Point Shop Purchase " + str(shop_check + 1)).progress_type = LocationProgressType.PRIORITY
+        # else:
+        world.get_location("Point Shop Purchase " + str(shop_check + 1)).item_rule =  lambda item: item.name != 'Shop Points'
 
     if(world.options.yellow_checks.value == 1):
         

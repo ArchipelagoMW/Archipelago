@@ -1,3 +1,11 @@
+## New collisions
+07/78f0/ENEMYCOLLISION_SWITCHHOOK_DAMAGE_ENEMY_0x73: |
+  db $02,$10,$0f,$0f,$08,$09,$09,$0a,$0a,$08,$08,$0a,$0d,$0d,$08,$25
+  db $00,$00,$00,$2f,$09,$22,$22,$0a,$09,$09,$1c,$27,$08,$28,$29,$00
+3f/5e5a/ENEMY_TEKTITE_0x3a_collision: db $f3
+# Piranha jumping out of water
+0c/5b05/: db $73
+
 ## edit somaria block
 # objectCollisionTable
 # copy ENEMYCOLLISION_PROJECTILE 0x06 (seasons) from ENEMYCOLLISION_PROJECTILE 0x06 (ages)
@@ -222,8 +230,9 @@
 07/733e/: /copy a,$07,$75d7,$01
 # copy ENEMYCOLLISION_SPIKED_BEETLE_FLIPPED 0x4e (seasons) from ENEMYCOLLISION_SPIKED_BEETLE_FLIPPED 0x51 (ages)
 07/745e/: /copy a,$07,$7737,$01
+# Disabled that copy, don't know why Ages has a hook collision on rock
 # copy ENEMYCOLLISION_ROCK 0x4f (seasons) from ENEMYCOLLISION_ROCK 0x52 (ages)
-07/747e/: /copy a,$07,$7757,$01
+# 07/747e/: /copy a,$07,$7757,$01
 # copy ENEMYCOLLISION_UNMASKED_IRON_MASK 0x50 (seasons) from ENEMYCOLLISION_UNMASKED_IRON_MASK 0x53 (ages)
 07/749e/: /copy a,$07,$7777,$01
 # copy ENEMYCOLLISION_ACTIVE_BLUE_ARMOS 0x51 (seasons) from ENEMYCOLLISION_ACTIVE_BLUE_ARMOS 0x54 (ages)

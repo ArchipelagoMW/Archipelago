@@ -1,6 +1,7 @@
 {
   "game": "Kingdom Hearts Birth by Sleep",
   "server_version": "0.1.7",
+  "display_name": "Kingdom Hearts Birth by Sleep",
   "discord_channel": "https://discord.com/channels/731205301247803413/1158149027385319434",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/khbbs.apworld"
 }

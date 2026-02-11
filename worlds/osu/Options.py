@@ -5,7 +5,7 @@ from .Items import get_song_data
 
 class StartingSongs(Range):
     """The number of songs that will be automatically unlocked at the start of a run."""
-    range_start = 3
+    range_start = 1
     range_end = 10
     default = 5
     display_name = "Starting Song Count"
@@ -29,6 +29,14 @@ class MaximumLength(Range):
     range_end = 2200
     default = 300
     display_name = "Maximum Length"
+
+class MinimumLength(Range):
+    """Minimum Length a Song can be, in seconds.
+    """
+    range_start = 0
+    range_end = 2200
+    default = 30
+    display_name = "Minimum Length"
 
 
 class MinimumAge(Range):
@@ -287,6 +295,7 @@ class OsuOptions(PerGameCommonOptions):
     difficulty_sync: DifficultySync
     disallow_converts: DisallowConverts
     maximum_length: MaximumLength
+    minimum_length: MinimumLength
     minimum_age: MinimumAge
     maximum_age: MaximumAge
     exclude_standard: DisableStandard

@@ -3,6 +3,8 @@ import os
 import threading
 from typing import ClassVar, Dict, Optional
 
+from Utils import visualize_regions
+
 from . import names
 from .items import DWItem, item_table, filler_table, lookup_name_to_id, item_names
 from .locations import create_locations, all_locations, location_names
@@ -143,16 +145,20 @@ class DragonWarriorWorld(World):
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has(names.ball_of_light, self.player)
+        
+        # visualize_regions(self.get_region("Menu"), "dragon_warrior.puml")
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
+        classification = ItemClassification.filler
 
         if force_non_progression:
-            classification = ItemClassification.filler
+            pass
         elif data.progression:
             classification = ItemClassification.progression
-        else:
-            classification = ItemClassification.filler
+
+        if data.useful:
+            classification = classification | ItemClassification.useful
 
         created_item = DWItem(name, classification, data.code, self.player)
 

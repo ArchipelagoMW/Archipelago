@@ -51,7 +51,7 @@ class FFVCDWebWorld(WebWorld):
 
 
 class FFVCDWorld(World):
-    """Final Fantasy V: Career Day"""
+    """The King of Tycoon has sensed a disturbance in the wind. When the crystals that balance the powers of the world are threatened, the king hastens to the rescue...only to go missing. Somewhere a young man and his Chocobo find themselves drawn toward friends that will change their destiny."""
 
     game = "Final Fantasy V Career Day"
     

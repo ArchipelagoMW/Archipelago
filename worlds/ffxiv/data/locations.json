@@ -1,0 +1,18 @@
+[
+	{
+        "name": "Collect Memories",
+        "requires": "{EnoughMemories()}",
+        "victory": true
+    },
+    {
+        "name": "Return to the Waking Sands",
+        "region": "Western Thanalan",
+        "category": ["Western Thanalan"]
+    },
+    {
+        "name": "Defeat Shinryu",
+        "region": "The Lochs",
+        "level": 70,
+        "victory": true
+    }
+]

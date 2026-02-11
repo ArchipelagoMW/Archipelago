@@ -163,7 +163,7 @@ erdricks_token_locations = {
 # Buying a piece of equipment will send the associated check instead rather than actually obtaining it,
 # instead equipment is gained through new Progressive Weapon/Armor/Shield items placed in the itempool.
 # Region connection rules are also updated to account for equipment as progression items.
-#
+# 
 # NOTE: Some equipment appears in multiple shops, region placement is simply the earliest opportunity.
 
 brecconary_locations = {
@@ -242,9 +242,6 @@ rimuldar_monster_locations = {
 
 cantlin_monster_locations = {
     names.metal_slime: 0xDEF20,
-    names.specter: 0xDEF22,
-    names.druinlord: 0xDEF26,
-    names.drollmagi: 0xDEF28,
     names.wyvern: 0xDEF2A,
     names.rogue_scorpion: 0xDEF2C,
     names.wraith_knight: 0xDEF2E,
@@ -254,6 +251,12 @@ cantlin_monster_locations = {
     names.werewolf: 0xDEF3A,
     names.starwyvern: 0xDEF3E,
     names.wizard: 0xDEF40
+}
+
+garins_grave_monster_locations = {  # Requires Magic Key
+    names.specter: 0xDEF22,
+    names.druinlord: 0xDEF26,
+    names.drollmagi: 0xDEF28,
 }
 
 swamp_cave_monster_locations = {  # Requires Magic Key
@@ -302,6 +305,7 @@ all_locations = {
     **high_level_locations,
     **brecconary_monster_locations,
     **garinham_monster_locations,
+    **garins_grave_monster_locations,
     **kol_monster_locations,
     **mountain_cave_monster_locations,
     **rimuldar_monster_locations,
@@ -321,7 +325,7 @@ location_names: Dict[str, Set[str]] = {
     "Cantlin": set(name for name in list(cantlin_locations.keys()) + list(cantlin_monster_locations.keys())),
     "Mountain Cave": set(name for name in list(mountain_cave_locations.keys()) + list(mountain_cave_monster_locations.keys())),
     "Swamp Cave": set(name for name in list(swamp_cave_locations.keys()) + list(swamp_cave_monster_locations.keys())),
-    "Garin's Grave": set(name for name in garins_grave_locations.keys()),
+    "Garin's Grave": set(name for name in list(garins_grave_locations.keys()) + list(garins_grave_monster_locations.keys())),
     "Charlock": set(name for name in list(charlock_locations.keys()) + list(charlock_monster_locations.keys()) + list(charlock_dragonlord_locations.keys())),
     "Hauksness": set(name for name in list(hauksness_locations.keys()) + list(hauksness_monster_locations.keys())),
     "Erdrick's Grave": set([names.erdrick_tablet]),

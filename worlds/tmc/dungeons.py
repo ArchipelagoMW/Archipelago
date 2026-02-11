@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from Fill import fill_restrictive, FillError
+from Fill import FillError, fill_restrictive
+
 from .constants import TMCItem, TMCLocation
 from .locations import location_groups
 from .options import DHCAccess
@@ -28,7 +29,7 @@ same location for vanilla placement
 KEYS = frozenset({TMCItem.BIG_KEY_DWS, TMCItem.SMALL_KEY_DWS,
                   TMCItem.BIG_KEY_COF, TMCItem.SMALL_KEY_COF,
                   TMCItem.BIG_KEY_FOW, TMCItem.SMALL_KEY_FOW,
-                  TMCItem.SMALL_KEY_TOD,
+                  TMCItem.SMALL_KEY_TOD, TMCItem.BIG_KEY_TOD,
                   TMCItem.SMALL_KEY_RC,
                   TMCItem.BIG_KEY_POW, TMCItem.SMALL_KEY_POW,
                   TMCItem.BIG_KEY_DHC, TMCItem.SMALL_KEY_DHC})

@@ -1,6 +1,7 @@
 {
   "game": "Final Fantasy 6 Worlds Collide",
   "server_version": "Latest",
+  "display_name": "Final Fantasy VI - Worlds Collide",
   "discord_channel": "https://discord.com/channels/731205301247803413/1022545979146252288",
   "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ff6wc_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/ff6wc.apworld"

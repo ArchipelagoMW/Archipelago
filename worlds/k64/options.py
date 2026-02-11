@@ -101,7 +101,7 @@ class BossRequirementRandom(Toggle):
 class Consumables(OptionSet):
     """
     Which type of pickups should become checks.
-    Options are 1-Up, Food, and Stars.
+    Options are 1-Ups, Food, and Stars.
 
     All of Adeleine's gifts are considered food.
     The large stars that replace Crystals are not considered checks.

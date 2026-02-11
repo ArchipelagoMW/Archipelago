@@ -98,3 +98,5 @@ class RAC3SEWER:
     TRADE_97 = "Aquatos: 97 Sewer Crystal Traded"
     TRADE_98 = "Aquatos: 98 Sewer Crystal Traded"
     TRADE_99 = "Aquatos: 99 Sewer Crystal Traded"
+    TRADE_100 = "Aquatos: 100 Sewer Crystal Traded"
+    TRADE_101 = "Aquatos: 101 Sewer Crystal Traded"

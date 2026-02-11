@@ -1,9 +1,11 @@
-import copy
 from dataclasses import dataclass
 
 from BaseClasses import ItemClassification
-from . import Levels, Options
-from .Names import REGION_INDICIES
+from . import Levels, Options, Objects, Names
+from .Levels import LevelRegion
+from .Names import REGION_INDICES, WEAPONS
+from .ObjectTypes import ObjectType
+
 
 @dataclass
 class WeaponInfo:
@@ -19,8 +21,22 @@ class WeaponInfo:
         self.power = power
         self.base_ammo = base_ammo
         self.name = "Weapon:"+name
-        self.available_stages = stages
         self.attributes = attributes
+
+        self.available_stages = []
+
+        # Temporary code before rewriting weapon accessibility overhaul
+        # TODO Change full weapon accessibility
+        for stage in stages:
+            if type(stage) is tuple:
+                self.available_stages.append(stage)
+            elif stage in Levels.BOSS_STAGES:
+                self.available_stages.append(stage)
+            elif not Levels.HasCheckpointZero(stage):
+                self.available_stages.append((stage, 1))
+            else:
+                self.available_stages.append(stage)
+
         
     
 class WeaponAttributes:
@@ -36,65 +52,40 @@ class WeaponAttributes:
     LOCKON = 512
 
 
-def GetAnyShadowBoxRegions():
+def GetRuleByWeaponRequirement(player, req, regionInfo: LevelRegion):
 
-    return [
-        Levels.STAGE_WESTOPOLIS, Levels.STAGE_DIGITAL_CIRCUIT, Levels.STAGE_GLYPHIC_CANYON,
-        Levels.STAGE_LETHAL_HIGHWAY,
-        (Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICIES.CRYPTIC_CASTLE_TORCH),
-        (Levels.STAGE_PRISON_ISLAND, REGION_INDICIES.PRISON_ISLAND_AIR_SAUCER),
-        (Levels.STAGE_CIRCUS_PARK, REGION_INDICIES.CIRCUS_PARK_ZIP_WIRE), Levels.STAGE_CENTRAL_CITY, Levels.STAGE_THE_DOOM,
-        Levels.STAGE_SKY_TROOPS, (Levels.STAGE_MAD_MATRIX, REGION_INDICIES.MAD_MATRIX_GUN), Levels.STAGE_DEATH_RUINS,
-        (Levels.STAGE_THE_ARK,REGION_INDICIES.THE_ARK_BLACK_VOLT),
-        (Levels.STAGE_AIR_FLEET, REGION_INDICIES.AIR_FLEET_PULLEY), Levels.STAGE_IRON_JUNGLE,
-        Levels.STAGE_SPACE_GADGET, Levels.STAGE_LOST_IMPACT, Levels.STAGE_GUN_FORTRESS,
-        (Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_AIR_SAUCER), Levels.STAGE_LAVA_SHELTER,
-        (Levels.STAGE_COSMIC_FALL, REGION_INDICIES.COSMIC_FALL_ZIPWIRE),
-        Levels.STAGE_FINAL_HAUNT, Levels.STAGE_THE_LAST_WAY
-    ]
+    if req is None or req == Names.REGION_RESTRICTION_TYPES.NoRestriction:
+        return lambda state: True
 
-def GetRuleByWeaponRequirement(player, req, stage, regions):
-    regions_use = []
+    if regionInfo is None:
+        region_to_use = None
+    else:
+        region_to_use = regionInfo.regionIndex
 
-    # Technicality not handled for weapons not carriable between regions
-    # e.g. Melee weapons through some vehicles
-    # Currently this never comes up
+    if region_to_use is None:
+        region_to_use = 0
 
-    if regions is not None:
-        regions_use = copy.copy(regions)
-        for region in regions_use:
-            if region == 0:
-                if 0 not in regions_use:
-                    regions_use.append(0)
-                continue
-            p_regions = [l.fromRegions for l in Levels.INDIVIDUAL_LEVEL_REGIONS if l.stageId == stage
-                         and l.regionIndex == region]
+    if regionInfo is not None:
+        matches_items = [ item for item in WEAPON_INFO if (regionInfo.stageId, region_to_use) in item.available_stages
+                          and (req in item.attributes or req is None) ]
+    else:
+        matches_items = [ item for item in WEAPON_INFO if item.name == req ]
 
-            if len(p_regions) != 1:
-                #print("Unknown find", stage, region)
-                continue
+    accessibility_rule = None
 
-            if len(p_regions[0]) == 1:
-                regions_use.extend([ p for p in p_regions[0] if p not in regions_use])
+    if len(matches_items) == 0:
+        matches_items = [item for item in WEAPON_INFO if regionInfo.stageId in
+                         [ stage[0] for stage in item.available_stages if req in item.attributes ]]
 
-    elif stage is not None:
-        p_regions = [ l.regionIndex for l in Levels.INDIVIDUAL_LEVEL_REGIONS if l.stageId == stage]
-        if len(p_regions) == 0:
-            regions_use = []
-        else:
-            regions_use = p_regions
+        if len(matches_items) != 0:
+            built_rule = lambda state: True
+            for item in matches_items:
+                possibilities = [ c[1] for c in item.available_stages if c[0] == regionInfo.stageId]
+                for p in possibilities:
+                    built_rule = lambda state, br=built_rule: (br(state) or
+                                                               state.can_reach_region(Levels.stage_id_to_region(p[0], p[1])))
 
-    matches_items = [ w for w in WEAPON_INFO if (
-            (req is None and len(w.attributes) > 0)
-            or req in w.attributes or req == w.name) and
-                len([ a for a in w.available_stages
-                  if (stage is not None and type(a) is tuple and a[0] == stage and a[1] in regions_use)
-                  or
-                      (stage is None)
-                  or
-                      (stage is not None and type(a) is not tuple and a == stage)
-                ]) > 0
-                ]
+            accessibility_rule = built_rule
 
     matches_groups = [ group[0] for group in WeaponGroups.items() if len([ x for x in group[1] if x in
                                                                            [m.game_id for m in matches_items]]) > 0]
@@ -105,79 +96,25 @@ def GetRuleByWeaponRequirement(player, req, stage, regions):
     #print(stage, regions_use, matches)
 
     if len(matches) == 0:
+        print("Unable to find weapon match", regionInfo.stageId, req, regionInfo.regionIndex)
+        #raise Exception("Invalid accessibility")
         return None
+        return lambda state: False
 
-    return lambda state, reqs=matches: state.has_any([m for m in reqs],player)
+    weapon_rule = lambda state, reqs=matches: state.has_any([m for m in reqs],player)
+    if accessibility_rule is not None:
+        weapon_rule = lambda state, a_rule=accessibility_rule, w_rule=weapon_rule: a_rule(state) and w_rule(state)
 
+    return weapon_rule
 
-class WEAPONS:
-    PISTOL = 0x1
-    SUB_MACHINE_GUN = 0x2
-    SEMI_AUTOMATIC_RIFLE = 0x3
-    HEAVY_MACHINE_GUN = 0x4
-    GATLING_GUN = 0x5
-    EGG_GUN = 0x7
-    LIGHT_SHOT = 0x8
-    FLASH_SHOT = 0x9
-    RING_SHOT = 0xA
-    HEAVY_SHOT = 0xB
-    GRENADE_LAUNCHER = 0xC
-    BAZOOKA = 0xD
-    TANK_CANNON = 0xE
-    BLACK_BARREL = 0xF
-    BIG_BARREL = 0x10
-    EGG_BAZOOKA = 0x11
-    RPG = 0x12
-    FOUR_SHOT_RPG = 0x13
-    EIGHT_SHOT_RPG = 0x14
-    WORM_SHOOTER = 0x15
-    WIDE_WORM_SHOOTER = 0x16
-    BIG_WORM_SHOOTER = 0x17
-    VACUUM_POD = 0x18
-    LASER_RIFLE = 0x19
-    SPLITTER = 0x1A
-    REFRACTOR = 0x1B
-    SURVIVAL_KNIFE = 0x1E
-    BLACK_SWORD = 0x1F
-    DARK_HAMMER = 0x20
-    EGG_SPEAR = 0x21
-    SPEED_LIMIT_SIGN = 0x22
-    DIGITAL_POLE = 0x23
-    CANYON_POLE = 0x24
-    LETHAL_POLE = 0x25
-    CRYPTIC_TORCH = 0x26
-    PRISON_BRANCH = 0x27
-    CIRCUS_POLE = 0x28
-    STOP_SIGN = 0x29
-    DOOM_POLE = 0x2A
-    SKY_POLE = 0x2B
-    MATRIX_POLE = 0x2C
-    RUINS_BRANCH = 0x2D
-    FLEET_POLE = 0x2F
-    IRON_POLE = 0x30
-    GADGET_POLE = 0x31
-    IMPACT_POLE = 0x32
-    FORTRESS_POLE = 0x33
-    LAVA_SHOVEL = 0x35
-    COSMIC_POLE = 0x36
-    HAUNT_POLE = 0x37
-    LAST_POLE = 0x38
-    SAMURAI_BLADE = 0x3A
-    SATELLITE_GUN = 0x3C
-    EGG_VACUUM = 0x3E
-    OMOCHAO_GUN = 0x40
-    HEAL_CANNON = 0x42
-    SHADOW_RIFLE = 0x43
-
-
-WEAPON_INFO = [
-    WeaponInfo(0x1, "Pistol", 2, 10,
+BASE_WEAPON_INFO = [
+    WeaponInfo(WEAPONS.PISTOL, "Pistol", 2, 10,
                [Levels.STAGE_WESTOPOLIS,Levels.STAGE_LETHAL_HIGHWAY, Levels.STAGE_PRISON_ISLAND,
                 Levels.STAGE_CENTRAL_CITY, Levels.STAGE_THE_DOOM,
-                (Levels.STAGE_DEATH_RUINS, REGION_INDICIES.DEATH_RUINS_PULLEY),
+                (Levels.STAGE_DEATH_RUINS, REGION_INDICES.DEATH_RUINS_PULLEY),
                 Levels.STAGE_LOST_IMPACT, Levels.BOSS_BLACK_BULL_DR, Levels.BOSS_DIABLON_GF],
                [WeaponAttributes.SHOT]),
-    WeaponInfo(0x2, "Sub Machine Gun", 2, 20,
+    WeaponInfo(WEAPONS.SUB_MACHINE_GUN, "Sub Machine Gun", 2, 20,
                [Levels.STAGE_WESTOPOLIS,
                 Levels.STAGE_DIGITAL_CIRCUIT,Levels.STAGE_GLYPHIC_CANYON,Levels.STAGE_LETHAL_HIGHWAY,
                 Levels.STAGE_PRISON_ISLAND,
@@ -188,170 +125,176 @@ WEAPON_INFO = [
                 Levels.BOSS_BLUE_FALCON,
                 Levels.BOSS_BLACK_DOOM_GF, Levels.BOSS_BLACK_DOOM_CF],
                [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x3, "Semi Automatic Rifle", 4, 20,
+    WeaponInfo(WEAPONS.SEMI_AUTOMATIC_RIFLE, "Semi Automatic Rifle", 4, 20,
                [Levels.STAGE_LETHAL_HIGHWAY,
-                    Levels.STAGE_PRISON_ISLAND, (Levels.STAGE_CIRCUS_PARK,REGION_INDICIES.CIRCUS_PARK_ROCKET_EASY),
+                    Levels.STAGE_PRISON_ISLAND, (Levels.STAGE_CIRCUS_PARK,REGION_INDICES.CIRCUS_PARK_CHECKPOINT_THREE),
                 Levels.STAGE_CENTRAL_CITY,
                     Levels.STAGE_THE_DOOM,
-                (Levels.STAGE_DEATH_RUINS, REGION_INDICIES.DEATH_RUINS_PULLEY),
+                (Levels.STAGE_DEATH_RUINS, REGION_INDICES.DEATH_RUINS_PULLEY),
                     Levels.STAGE_THE_ARK, Levels.STAGE_AIR_FLEET,
-                (Levels.STAGE_IRON_JUNGLE, REGION_INDICIES.IRON_JUNGLE_GOLD_BEETLE),
+                (Levels.STAGE_IRON_JUNGLE, REGION_INDICES.IRON_JUNGLE_GOLD_BEETLE),
                 Levels.STAGE_SPACE_GADGET, Levels.STAGE_LOST_IMPACT,
-                Levels.STAGE_GUN_FORTRESS, (Levels.STAGE_COSMIC_FALL, REGION_INDICIES.COSMIC_FALL_ZIPWIRE),
+                Levels.STAGE_GUN_FORTRESS, (Levels.STAGE_COSMIC_FALL, REGION_INDICES.COSMIC_FALL_ZIPWIRE),
                 Levels.BOSS_BLACK_DOOM_CF],
                [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x4, "Heavy Machine Gun", 6, 30,
-               [(Levels.STAGE_CIRCUS_PARK, REGION_INDICIES.CIRCUS_PARK_GUN_TURRET),
-                (Levels.STAGE_CENTRAL_CITY,REGION_INDICIES.CENTRAL_CITY_GUN_TURRET),
+    WeaponInfo(WEAPONS.HEAVY_MACHINE_GUN, "Heavy Machine Gun", 6, 30,
+               [(Levels.STAGE_CIRCUS_PARK, REGION_INDICES.CIRCUS_PARK_GUN_TURRET),
+                (Levels.STAGE_CENTRAL_CITY,REGION_INDICES.CENTRAL_CITY_GUN_TURRET),
                 Levels.STAGE_THE_DOOM,
-                (Levels.STAGE_IRON_JUNGLE, REGION_INDICIES.IRON_JUNGLE_GUN_TURRET),
-                (Levels.STAGE_THE_ARK,REGION_INDICIES.THE_ARK_BLACK_VOLT),
-                (Levels.STAGE_AIR_FLEET, REGION_INDICIES.AIR_FLEET_PULLEY),
+                (Levels.STAGE_IRON_JUNGLE, REGION_INDICES.IRON_JUNGLE_GUN_TURRET),
+                (Levels.STAGE_THE_ARK,REGION_INDICES.THE_ARK_BLACK_VOLT),
+                (Levels.STAGE_AIR_FLEET, REGION_INDICES.AIR_FLEET_PULLEY),
                 Levels.STAGE_SPACE_GADGET,
-                (Levels.STAGE_GUN_FORTRESS,REGION_INDICIES.GUN_FORTRESS_GUN_TURRET),
-                (Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_WARP_HOLE),
-                (Levels.STAGE_COSMIC_FALL, REGION_INDICIES.COSMIC_FALL_PULLEY_NORMAL),
+                (Levels.STAGE_GUN_FORTRESS,REGION_INDICES.GUN_FORTRESS_GUN_TURRET),
+                (Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_WARP_HOLE),
+                (Levels.STAGE_COSMIC_FALL, REGION_INDICES.COSMIC_FALL_PULLEY_NORMAL),
                 Levels.BOSS_EGG_BREAKER_IJ],
                [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x5, "Gatling Gun", 6, 40,
-               [(Levels.STAGE_LETHAL_HIGHWAY, REGION_INDICIES.LETHAL_HIGHWAY_KEY_DOOR),
-                   (Levels.STAGE_THE_ARK,REGION_INDICIES.THE_ARK_BLACK_VOLT),
-                (Levels.STAGE_IRON_JUNGLE, REGION_INDICIES.IRON_JUNGLE_ROCKET), Levels.STAGE_GUN_FORTRESS,
-                (Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_AIR_SAUCER)],
+    WeaponInfo(WEAPONS.GATLING_GUN, "Gatling Gun", 6, 40,
+               [(Levels.STAGE_LETHAL_HIGHWAY, REGION_INDICES.LETHAL_HIGHWAY_KEY_DOOR),
+                   (Levels.STAGE_THE_ARK,REGION_INDICES.THE_ARK_BLACK_VOLT),
+                (Levels.STAGE_IRON_JUNGLE, REGION_INDICES.IRON_JUNGLE_ROCKET), Levels.STAGE_GUN_FORTRESS,
+                (Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_AIR_SAUCER)],
                [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x7, "Egg Gun", 2, 20,
-               [(Levels.STAGE_CRYPTIC_CASTLE,1), Levels.STAGE_CIRCUS_PARK, Levels.STAGE_SKY_TROOPS,
+    WeaponInfo(WEAPONS.EGG_GUN, "Egg Gun", 2, 20,
+               [(Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_BALLOON), Levels.STAGE_CIRCUS_PARK, Levels.STAGE_SKY_TROOPS,
                 Levels.STAGE_MAD_MATRIX, Levels.STAGE_IRON_JUNGLE, Levels.STAGE_LAVA_SHELTER,
                 Levels.BOSS_EGG_BREAKER_CC, Levels.BOSS_EGG_BREAKER_MM,
                 Levels.BOSS_EGG_BREAKER_IJ, Levels.BOSS_EGG_DEALER_BC,
                 Levels.BOSS_EGG_DEALER_LS, Levels.BOSS_EGG_DEALER_CF],
         [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x8, "Light Shot", 2, 20,
+    WeaponInfo(WEAPONS.LIGHT_SHOT, "Light Shot", 2, 20,
                 [Levels.STAGE_WESTOPOLIS,
                 Levels.STAGE_DIGITAL_CIRCUIT,Levels.STAGE_LETHAL_HIGHWAY,
-                 (Levels.STAGE_CRYPTIC_CASTLE,REGION_INDICIES.CRYPTIC_CASTLE_HAWK), Levels.STAGE_PRISON_ISLAND,
+                 (Levels.STAGE_CRYPTIC_CASTLE,REGION_INDICES.CRYPTIC_CASTLE_HAWK), Levels.STAGE_PRISON_ISLAND,
                 Levels.STAGE_CENTRAL_CITY, Levels.STAGE_DEATH_RUINS,
-                 (Levels.STAGE_SPACE_GADGET, REGION_INDICIES.SPACE_GADGET_ZIPWIRE),
+                 (Levels.STAGE_SPACE_GADGET, REGION_INDICES.SPACE_GADGET_ZIPWIRE),
                  Levels.BOSS_BLACK_BULL_LH, Levels.BOSS_BLACK_BULL_DR, Levels.BOSS_DIABLON_BC],
             [WeaponAttributes.SHOT]),
-    WeaponInfo(0x9, "Flash Shot", 2, 20,
+    WeaponInfo(WEAPONS.FLASH_SHOT, "Flash Shot", 2, 20,
                [Levels.STAGE_WESTOPOLIS, Levels.STAGE_GLYPHIC_CANYON,
-                Levels.STAGE_LETHAL_HIGHWAY, (Levels.STAGE_CRYPTIC_CASTLE,REGION_INDICIES.CRYPTIC_CASTLE_HAWK),
+                Levels.STAGE_LETHAL_HIGHWAY, (Levels.STAGE_CRYPTIC_CASTLE,REGION_INDICES.CRYPTIC_CASTLE_HAWK),
                 Levels.STAGE_PRISON_ISLAND, Levels.STAGE_CENTRAL_CITY,
                 Levels.STAGE_DEATH_RUINS, Levels.STAGE_SPACE_GADGET,
                 Levels.STAGE_BLACK_COMET, Levels.BOSS_DIABLON_BC, Levels.BOSS_BLACK_BULL_LH,
                Levels.BOSS_DIABLON_FH, Levels.BOSS_BLACK_DOOM_FH],
                [WeaponAttributes.SHOT]),
-    WeaponInfo(0xA, "Ring Shot", 4, 20,
+    WeaponInfo(WEAPONS.RING_SHOT, "Ring Shot", 4, 20,
            [Levels.STAGE_SKY_TROOPS, Levels.STAGE_SPACE_GADGET,
                 Levels.STAGE_FINAL_HAUNT, Levels.BOSS_DIABLON_BC,
             Levels.BOSS_DIABLON_FH, Levels.BOSS_BLACK_DOOM_FH,
             Levels.STAGE_THE_LAST_WAY],
 [WeaponAttributes.SHOT]),
-    WeaponInfo(0xB, "Heavy Shot", 5, 20,
-               [(Levels.STAGE_FINAL_HAUNT,REGION_INDICIES.FINAL_HAUNT_ROCKET_NORMAL),
-                (Levels.STAGE_THE_LAST_WAY,REGION_INDICIES.THE_LAST_WAY_BLACK_VOLT)],
+    WeaponInfo(WEAPONS.HEAVY_SHOT, "Heavy Shot", 5, 20,
+               [(Levels.STAGE_FINAL_HAUNT,REGION_INDICES.FINAL_HAUNT_ROCKET_NORMAL),
+                (Levels.STAGE_THE_LAST_WAY,REGION_INDICES.THE_LAST_WAY_BLACK_VOLT)],
                [WeaponAttributes.SHOT]),
-    WeaponInfo(0xC, "Grenade Launcher", 4, 10,
-               [Levels.STAGE_GLYPHIC_CANYON, (Levels.STAGE_THE_DOOM, REGION_INDICIES.THE_DOOM_BOMBS),
-                (Levels.STAGE_DEATH_RUINS, REGION_INDICIES.DEATH_RUINS_WALLS),
-                (Levels.STAGE_SPACE_GADGET,REGION_INDICIES.SPACE_GADGET_AIR_SAUCER),
+    WeaponInfo(WEAPONS.GRENADE_LAUNCHER, "Grenade Launcher", 4, 10,
+               [Levels.STAGE_GLYPHIC_CANYON, (Levels.STAGE_THE_DOOM, REGION_INDICES.THE_DOOM_BOMBS),
+                (Levels.STAGE_DEATH_RUINS, REGION_INDICES.DEATH_RUINS_SIX_WALLS),
+                (Levels.STAGE_SPACE_GADGET,REGION_INDICES.SPACE_GADGET_AIR_SAUCER_HERO),
                 Levels.STAGE_LOST_IMPACT, Levels.BOSS_BLACK_DOOM_GF],
     [WeaponAttributes.NOT_AIMABLE, WeaponAttributes.EXPLOSION]),
-    WeaponInfo(0xD, "Bazooka", 8, 5,
-               [Levels.STAGE_CENTRAL_CITY, (Levels.STAGE_DEATH_RUINS, REGION_INDICIES.DEATH_RUINS_PULLEY),
-                (Levels.STAGE_BLACK_COMET, REGION_INDICIES.BLACK_COMET_AIR_SAUCER), #
-                (Levels.STAGE_COSMIC_FALL, REGION_INDICIES.COSMIC_FALL_PULLEY_NORMAL),
+    WeaponInfo(WEAPONS.BAZOOKA, "Bazooka", 8, 5,
+               [Levels.STAGE_CENTRAL_CITY, (Levels.STAGE_DEATH_RUINS, REGION_INDICES.DEATH_RUINS_PULLEY),
+                (Levels.STAGE_BLACK_COMET, REGION_INDICES.BLACK_COMET_AIR_SAUCER), #
+                (Levels.STAGE_COSMIC_FALL, REGION_INDICES.COSMIC_FALL_PULLEY_NORMAL),
                 Levels.BOSS_BLACK_DOOM_CF],
 [WeaponAttributes.NOT_AIMABLE, WeaponAttributes.EXPLOSION]),
-    WeaponInfo(0xE, "Tank Cannon", 16, 5,
-               [(Levels.STAGE_PRISON_ISLAND, REGION_INDICIES.PRISON_ISLAND_KEY_DOOR),
-                (Levels.STAGE_IRON_JUNGLE,REGION_INDICIES.IRON_JUNGLE_KEY_DOOR),
-                (Levels.STAGE_BLACK_COMET, REGION_INDICIES.BLACK_COMET_BEHIND_KEY_DOOR)],
+    WeaponInfo(WEAPONS.TANK_CANNON, "Tank Cannon", 16, 5,
+               [(Levels.STAGE_PRISON_ISLAND, REGION_INDICES.PRISON_ISLAND_KEY_DOOR),
+                (Levels.STAGE_IRON_JUNGLE,REGION_INDICES.IRON_JUNGLE_KEY_DOOR),
+                (Levels.STAGE_BLACK_COMET, REGION_INDICES.BLACK_COMET_BEHIND_KEY_DOOR)],
 [WeaponAttributes.NOT_AIMABLE, WeaponAttributes.EXPLOSION]),
-    WeaponInfo(0xF, "Black Barrel", 4, 5,
-               [(Levels.STAGE_SKY_TROOPS, REGION_INDICIES.SKY_TROOPS_ROCKET_NORMAL),
-                (Levels.STAGE_SPACE_GADGET, REGION_INDICIES.SPACE_GADGET_AIR_SAUCER),
-    (Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_BLACK_TURRET),
+    WeaponInfo(WEAPONS.BLACK_BARREL, "Black Barrel", 4, 5,
+               [(Levels.STAGE_SKY_TROOPS, REGION_INDICES.SKY_TROOPS_ROCKET_NORMAL),
+                (Levels.STAGE_SPACE_GADGET, REGION_INDICES.SPACE_GADGET_AIR_SAUCER_HERO),
+    (Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_BLACK_TURRET),
                 Levels.STAGE_FINAL_HAUNT,Levels.STAGE_THE_LAST_WAY],
 [WeaponAttributes.NOT_AIMABLE, WeaponAttributes.EXPLOSION]),
-    WeaponInfo(0x10, "Big Barrel", 8, 5,
-               [(Levels.STAGE_COSMIC_FALL, REGION_INDICIES.COSMIC_FALL_PULLEY_NORMAL),
+    WeaponInfo(WEAPONS.BIG_BARREL, "Big Barrel", 8, 5,
+               [(Levels.STAGE_COSMIC_FALL, REGION_INDICES.COSMIC_FALL_PULLEY_NORMAL),
                 Levels.STAGE_FINAL_HAUNT,
                 Levels.BOSS_BLACK_DOOM_FH,Levels.STAGE_THE_LAST_WAY],
 [WeaponAttributes.NOT_AIMABLE, WeaponAttributes.EXPLOSION]),
-    WeaponInfo(0x11, "Egg Bazooka", 8, 5,
-               [(Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICIES.CRYPTIC_CASTLE_TORCH),
-                (Levels.STAGE_CIRCUS_PARK, REGION_INDICIES.CIRCUS_PARK_ROCKET_EASY),
+    WeaponInfo(WEAPONS.EGG_BAZOOKA, "Egg Bazooka", 8, 5,
+               [(Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_TORCH),
+                (Levels.STAGE_CIRCUS_PARK, REGION_INDICES.CIRCUS_PARK_CHECKPOINT_THREE),
                 Levels.STAGE_SKY_TROOPS,
-                (Levels.STAGE_MAD_MATRIX,REGION_INDICIES.MAD_MATRIX_GUN),
+                (Levels.STAGE_MAD_MATRIX,REGION_INDICES.MAD_MATRIX_GUN),
                 Levels.STAGE_IRON_JUNGLE, Levels.STAGE_LAVA_SHELTER,
                 Levels.BOSS_EGG_BREAKER_MM, Levels.BOSS_EGG_BREAKER_IJ,
                 Levels.BOSS_EGG_DEALER_BC, Levels.BOSS_EGG_DEALER_LS, Levels.BOSS_EGG_DEALER_CF],
 [WeaponAttributes.NOT_AIMABLE, WeaponAttributes.EXPLOSION]),
-    WeaponInfo(0x12, "RPG", 6, 10,
-               [(Levels.STAGE_THE_DOOM, REGION_INDICIES.THE_DOOM_BOMBS),
+    WeaponInfo(WEAPONS.RPG, "RPG", 6, 10,
+               [(Levels.STAGE_THE_DOOM, REGION_INDICES.THE_DOOM_BOMBS),
                 Levels.STAGE_THE_ARK,
                 Levels.STAGE_GUN_FORTRESS],
 [WeaponAttributes.NOT_AIMABLE]),
-    WeaponInfo(0x13, "4-Shot RPG", 8, 10,
-               [(Levels.STAGE_THE_ARK,REGION_INDICIES.THE_ARK_BLACK_VOLT),
+    WeaponInfo(WEAPONS.FOUR_SHOT_RPG, "4-Shot RPG", 8, 10,
+               [(Levels.STAGE_THE_ARK,REGION_INDICES.THE_ARK_BLACK_VOLT),
                 Levels.STAGE_IRON_JUNGLE, Levels.STAGE_SPACE_GADGET,
                 Levels.BOSS_HEAVY_DOG, Levels.BOSS_BLUE_FALCON,
                 Levels.BOSS_BLACK_DOOM_GF, Levels.BOSS_BLACK_DOOM_CF],
 [WeaponAttributes.NOT_AIMABLE]),
-    WeaponInfo(0x14, "8-Shot RPG", 8, 10,
-               [Levels.STAGE_GUN_FORTRESS, (Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_AIR_SAUCER)],
+    WeaponInfo(WEAPONS.EIGHT_SHOT_RPG, "8-Shot RPG", 8, 10,
+               [Levels.STAGE_GUN_FORTRESS, (Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_AIR_SAUCER)],
 [WeaponAttributes.NOT_AIMABLE]),
-    WeaponInfo(0x15, "Worm Shooter", 6, 5,
+    WeaponInfo(WEAPONS.WORM_SHOOTER, "Worm Shooter", 6, 5,
                [Levels.STAGE_DIGITAL_CIRCUIT,Levels.STAGE_GLYPHIC_CANYON,
-                (Levels.STAGE_PRISON_ISLAND,REGION_INDICIES.PRISON_ISLAND_AIR_SAUCER),
-                (Levels.STAGE_MAD_MATRIX, REGION_INDICIES.MAD_MATRIX_GUN),
-                (Levels.STAGE_DEATH_RUINS, REGION_INDICIES.DEATH_RUINS_WALLS),
-                (Levels.STAGE_SPACE_GADGET, REGION_INDICIES.SPACE_GADGET_AIR_SAUCER)],
+                (Levels.STAGE_PRISON_ISLAND,REGION_INDICES.PRISON_ISLAND_AIR_SAUCER),
+                (Levels.STAGE_MAD_MATRIX, REGION_INDICES.MAD_MATRIX_GUN),
+                (Levels.STAGE_DEATH_RUINS, REGION_INDICES.DEATH_RUINS_SIX_WALLS),
+                (Levels.STAGE_SPACE_GADGET, REGION_INDICES.SPACE_GADGET_AIR_SAUCER_HERO)],
 [WeaponAttributes.NOT_AIMABLE]),
-    WeaponInfo(0x16, "Wide Worm Shooter", 8, 5,
-               [(Levels.STAGE_MAD_MATRIX, REGION_INDICIES.MAD_MATRIX_YELLOW_ENTRY),
-                (Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_FLOATERS),
+    WeaponInfo(WEAPONS.WIDE_WORM_SHOOTER, "Wide Worm Shooter", 8, 5,
+               [(Levels.STAGE_MAD_MATRIX, REGION_INDICES.MAD_MATRIX_YELLOW_ENTRY),
+                (Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_TWO_WORMS),
                 Levels.STAGE_THE_LAST_WAY],
 [WeaponAttributes.NOT_AIMABLE]),
-    WeaponInfo(0x17, "Big Worm Shooter", 16, 5,
-               [(Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_FLOATERS),
-                (Levels.STAGE_THE_LAST_WAY,REGION_INDICIES.THE_LAST_WAY_VOLT_OR_WARP)],
+    WeaponInfo(WEAPONS.BIG_WORM_SHOOTER, "Big Worm Shooter", 16, 5,
+               [(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_THREE_FLOATERS),
+                (Levels.STAGE_THE_LAST_WAY,REGION_INDICES.THE_LAST_WAY_VOLT_OR_WARP)],
 [WeaponAttributes.NOT_AIMABLE]),
-    WeaponInfo(0x18, "Vacuum Pod", None, 20,
+    WeaponInfo(WEAPONS.VACUUM_POD, "Vacuum Pod", None, 20,
                [Levels.STAGE_CENTRAL_CITY,
-                (Levels.STAGE_SPACE_GADGET,REGION_INDICIES.SPACE_GADGET_AIR_SAUCER),
+                (Levels.STAGE_SPACE_GADGET,REGION_INDICES.SPACE_GADGET_AIR_SAUCER_HERO),
                 Levels.STAGE_FINAL_HAUNT],
 [WeaponAttributes.VACUUM]),
-    WeaponInfo(0x19, "Laser Rifle", 3, 20,
-               [(Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_AIR_SAUCER)],
+    WeaponInfo(WEAPONS.LASER_RIFLE, "Laser Rifle", 3, 20,
+               [(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_AIR_SAUCER)],
 [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x1A, "Splitter", 4, 20,
-               [(Levels.STAGE_DEATH_RUINS,REGION_INDICIES.DEATH_RUINS_PULLEY), Levels.STAGE_AIR_FLEET,
-                (Levels.STAGE_SPACE_GADGET, REGION_INDICIES.SPACE_GADGET_AIR_SAUCER), Levels.STAGE_GUN_FORTRESS],
+    WeaponInfo(WEAPONS.SPLITTER, "Splitter", 4, 20,
+               [(Levels.STAGE_DEATH_RUINS,REGION_INDICES.DEATH_RUINS_PULLEY), Levels.STAGE_AIR_FLEET,
+                (Levels.STAGE_SPACE_GADGET, REGION_INDICES.SPACE_GADGET_AIR_SAUCER_HERO), Levels.STAGE_GUN_FORTRESS],
 [WeaponAttributes.SHOT]),
-    WeaponInfo(0x1B, "Refractor", 5, 20,
-               [(Levels.STAGE_BLACK_COMET,REGION_INDICIES.BLACK_COMET_AIR_SAUCER),Levels.STAGE_FINAL_HAUNT,
+    WeaponInfo(WEAPONS.REFRACTOR, "Refractor", 5, 20,
+               [(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_AIR_SAUCER),
+                #(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_END_WORMS),
+                #(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_LATER_WORMS),
+                #(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_SIX_WORMS),
+                #(Levels.STAGE_BLACK_COMET,REGION_INDICES.BLACK_COMET_SEVEN_WORMS),
+
+                Levels.STAGE_FINAL_HAUNT,
                 Levels.BOSS_BLACK_DOOM_FH, Levels.STAGE_THE_LAST_WAY],
 [WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
-    WeaponInfo(0x1E, "Survival Knife", 2, 5,
+    WeaponInfo(WEAPONS.SURVIVAL_KNIFE, "Survival Knife", 2, 5,
                [Levels.STAGE_THE_DOOM],
 []),
     WeaponInfo(0x1F, "Black Sword", 4, 5,
                [Levels.STAGE_DIGITAL_CIRCUIT,Levels.STAGE_GLYPHIC_CANYON,
-                (Levels.STAGE_CRYPTIC_CASTLE,REGION_INDICIES.CRYPTIC_CASTLE_TORCH),
-                (Levels.STAGE_PRISON_ISLAND,REGION_INDICIES.PRISON_ISLAND_AIR_SAUCER), Levels.STAGE_CENTRAL_CITY,
+                (Levels.STAGE_CRYPTIC_CASTLE,REGION_INDICES.CRYPTIC_CASTLE_TORCH),
+                (Levels.STAGE_PRISON_ISLAND,REGION_INDICES.PRISON_ISLAND_AIR_SAUCER), Levels.STAGE_CENTRAL_CITY,
                 Levels.STAGE_SKY_TROOPS, Levels.STAGE_AIR_FLEET,
                 Levels.STAGE_FINAL_HAUNT, Levels.STAGE_THE_LAST_WAY],
 []),
     WeaponInfo(0x20, "Dark Hammer", 6, 5,
                [Levels.STAGE_FINAL_HAUNT,
-                (Levels.STAGE_THE_LAST_WAY,REGION_INDICIES.THE_LAST_WAY_LIGHT_DASH_EASY)],
+                (Levels.STAGE_THE_LAST_WAY,REGION_INDICES.THE_LAST_WAY_LIGHT_DASH_EASY)],
 []),
     WeaponInfo(0x21, "Egg Spear", 2, 4,
                [Levels.STAGE_CRYPTIC_CASTLE, Levels.STAGE_CIRCUS_PARK,
-                (Levels.STAGE_SKY_TROOPS,REGION_INDICIES.SKY_TROOPS_ROCKET_NORMAL),
+                (Levels.STAGE_SKY_TROOPS,REGION_INDICES.SKY_TROOPS_ROCKET_NORMAL),
                 Levels.STAGE_MAD_MATRIX, Levels.STAGE_IRON_JUNGLE, Levels.STAGE_LAVA_SHELTER,
                 Levels.BOSS_EGG_DEALER_BC, Levels.BOSS_EGG_DEALER_LS,
                 Levels.BOSS_EGG_DEALER_CF],
@@ -369,11 +312,18 @@ WEAPON_INFO = [
 []),
 
     WeaponInfo(0x25, "Lethal Pole",2, 4,
-               [(Levels.STAGE_LETHAL_HIGHWAY, REGION_INDICIES.LETHAL_HIGHWAY_ROCKET)],
+               [(Levels.STAGE_LETHAL_HIGHWAY, REGION_INDICES.LETHAL_HIGHWAY_ROCKET)],
 []),
 
     WeaponInfo(0x26, "Cryptic Torch",2, 4,
-               [(Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICIES.CRYPTIC_CASTLE_BALLOON)],
+               [(Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_BALLOON),
+                    (Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_TWO_BALLOON),
+                    (Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_FIVE_BALLOON),
+                    (Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_BOMB_EASY_2),
+                    (Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_CHECKPOINT_SIX),
+                    (Levels.STAGE_CRYPTIC_CASTLE, REGION_INDICES.CRYPTIC_CASTLE_CHECKPOINT_SEVEN)
+
+                ],
             [WeaponAttributes.TORCH]),
     WeaponInfo(0x27, "Prison Branch",2, 4,
                [Levels.STAGE_PRISON_ISLAND],
@@ -395,13 +345,13 @@ WEAPON_INFO = [
 []),
 
     WeaponInfo(0x2C, "Matrix Pole",2, 4,
-               [(Levels.STAGE_MAD_MATRIX, REGION_INDICIES.MAD_MATRIX_GUN)], []),
+               [(Levels.STAGE_MAD_MATRIX, REGION_INDICES.MAD_MATRIX_GUN)], []),
 
     WeaponInfo(0x2D, "Ruins Branch",2, 4,
                [Levels.STAGE_DEATH_RUINS],
 []),
     WeaponInfo(0x2F, "Fleet Pole",2, 4,
-               [(Levels.STAGE_AIR_FLEET, REGION_INDICIES.AIR_FLEET_PULLEY)],
+               [(Levels.STAGE_AIR_FLEET, REGION_INDICES.AIR_FLEET_PULLEY)],
 []),
     WeaponInfo(0x30, "Iron Pole",2, 4,
                [Levels.STAGE_IRON_JUNGLE],
@@ -420,7 +370,7 @@ WEAPON_INFO = [
                [Levels.STAGE_LAVA_SHELTER],
 []),
     WeaponInfo(0x36, "Cosmic Pole",2, 4,
-               [(Levels.STAGE_COSMIC_FALL, REGION_INDICIES.COSMIC_FALL_ZIPWIRE)],
+               [(Levels.STAGE_COSMIC_FALL, REGION_INDICES.COSMIC_FALL_ZIPWIRE)],
 []),
     WeaponInfo(0x37, "Haunt Pole",2, 4,
                [Levels.STAGE_FINAL_HAUNT],
@@ -430,24 +380,215 @@ WEAPON_INFO = [
 []),
 
     WeaponInfo(0x3A, "Samurai Blade", 8, 6,
-               GetAnyShadowBoxRegions(),
-[WeaponAttributes.SPECIAL]),
+               [],[WeaponAttributes.SPECIAL]),
     WeaponInfo(0x3C, "Satellite Gun", 18, 6,
-               GetAnyShadowBoxRegions(),
+               [],
 [WeaponAttributes.SPECIAL, WeaponAttributes.NOT_AIMABLE,WeaponAttributes.LOCKON]),
     WeaponInfo(0x3E, "Egg Vacuum", None, 20,
-               GetAnyShadowBoxRegions(),
+               [],
 [WeaponAttributes.SPECIAL, WeaponAttributes.VACUUM]),
     WeaponInfo(0x40, "Omochao Gun", 10, 10,
-               GetAnyShadowBoxRegions(),
+               [],
 [WeaponAttributes.SPECIAL, WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE]),
     WeaponInfo(0x42, "Heal Cannon", None, 10,
-               GetAnyShadowBoxRegions(),
+               [],
 [WeaponAttributes.SPECIAL, WeaponAttributes.HEAL]),
     WeaponInfo(0x43, "Shadow Rifle", 32, 20,
-               GetAnyShadowBoxRegions(),
+               [],
 [WeaponAttributes.SPECIAL, WeaponAttributes.SHOT, WeaponAttributes.LONG_RANGE, WeaponAttributes.SHADOW_RIFLE])
 ]
+
+
+NON_OBJECT_WEAPONS = [
+    (Names.BOSS_HEAVY_DOG, WEAPONS.FOUR_SHOT_RPG, 0),
+    (Names.BOSS_BLUE_FALCON, WEAPONS.FOUR_SHOT_RPG, 0),
+
+    (Names.STAGE_WESTOPOLIS, WEAPONS.SPEED_LIMIT_SIGN, REGION_INDICES.WESTOPOLIS_CHECKPOINT_ONE),
+    (Names.STAGE_WESTOPOLIS, WEAPONS.SPEED_LIMIT_SIGN, REGION_INDICES.WESTOPOLIS_CHECKPOINT_THREE),
+    (Names.STAGE_WESTOPOLIS, WEAPONS.SPEED_LIMIT_SIGN, REGION_INDICES.WESTOPOLIS_BEHIND_THREE),
+    (Names.STAGE_WESTOPOLIS, WEAPONS.SPEED_LIMIT_SIGN, REGION_INDICES.WESTOPOLIS_CHECKPOINT_FOUR),
+
+    (Names.STAGE_DIGITAL_CIRCUIT, WEAPONS.DIGITAL_POLE, REGION_INDICES.DIGITAL_CIRCUIT_BEHIND_ONE),
+    (Names.STAGE_DIGITAL_CIRCUIT, WEAPONS.DIGITAL_POLE, REGION_INDICES.DIGITAL_CIRCUIT_CHECKPOINT_ONE),
+    (Names.STAGE_DIGITAL_CIRCUIT, WEAPONS.DIGITAL_POLE, REGION_INDICES.DIGITAL_CIRCUIT_CHECKPOINT_FOUR),
+
+    (Names.STAGE_GLYPHIC_CANYON, WEAPONS.CANYON_POLE, REGION_INDICES.GLYPHIC_CANYON_CHECKPOINT_ONE),
+    (Names.STAGE_GLYPHIC_CANYON, WEAPONS.CANYON_POLE, REGION_INDICES.GLYPHIC_CANYON_CHECKPOINT_TWO),
+    (Names.STAGE_GLYPHIC_CANYON, WEAPONS.CANYON_POLE, REGION_INDICES.GLYPHIC_CANYON_CHECKPOINT_THREE),
+    (Names.STAGE_GLYPHIC_CANYON, WEAPONS.CANYON_POLE, REGION_INDICES.GLYPHIC_CANYON_CHECKPOINT_FIVE),
+    (Names.STAGE_GLYPHIC_CANYON, WEAPONS.CANYON_POLE, REGION_INDICES.GLYPHIC_CANYON_CHECKPOINT_SIX),
+    (Names.STAGE_GLYPHIC_CANYON, WEAPONS.CANYON_POLE, REGION_INDICES.GLYPHIC_CANYON_CHECKPOINT_EIGHT),
+
+    (Names.STAGE_LETHAL_HIGHWAY, WEAPONS.LETHAL_POLE, REGION_INDICES.LETHAL_HIGHWAY_THREE_FALL),
+    (Names.STAGE_LETHAL_HIGHWAY, WEAPONS.LETHAL_POLE, REGION_INDICES.LETHAL_HIGHWAY_FIVE_ROCKET),
+
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_CHECKPOINT_ONE),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_CHECKPOINT_TWO),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_AIR_SAUCER),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_CHECKPOINT_THREE),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_CHECKPOINT_FOUR),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_FOUR_AIR_SAUCER),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_CHECKPOINT_SIX),
+    (Names.STAGE_PRISON_ISLAND, WEAPONS.PRISON_BRANCH, REGION_INDICES.PRISON_ISLAND_CHECKPOINT_SEVEN),
+
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_CHECKPOINT_ZERO),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_CHECKPOINT_ONE),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_CHECKPOINT_TWO),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_THREE_LOWER),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_CHECKPOINT_FOUR),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_FOUR_LOWER),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_ROCKET),
+    (Names.STAGE_CIRCUS_PARK, WEAPONS.CIRCUS_POLE, REGION_INDICES.CIRCUS_PARK_CHECKPOINT_SIX),
+
+    (Names.STAGE_CENTRAL_CITY, WEAPONS.STOP_SIGN, REGION_INDICES.CENTRAL_CITY_CHECKPOINT_ZERO),
+    (Names.STAGE_CENTRAL_CITY, WEAPONS.STOP_SIGN, REGION_INDICES.CENTRAL_CITY_CHECKPOINT_THREE),
+    (Names.STAGE_CENTRAL_CITY, WEAPONS.STOP_SIGN, REGION_INDICES.CENTRAL_CITY_CHECKPOINT_FIVE),
+    (Names.STAGE_CENTRAL_CITY, WEAPONS.STOP_SIGN, REGION_INDICES.CENTRAL_CITY_CHECKPOINT_SIX),
+
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_CHECKPOINT_ONE),
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_BOMBS),
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_CHECKPOINT_TWO),
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_CHECKPOINT_THREE),
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_CHECKPOINT_FOUR),
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_CHECKPOINT_FIVE),
+    (Names.STAGE_THE_DOOM, WEAPONS.DOOM_POLE, REGION_INDICES.THE_DOOM_CHECKPOINT_SIX),
+
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_ONE),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_TWO),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_GUN_JUMPER),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_ROCKET_NORMAL),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_THREE),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_FOUR),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_FIVE),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_SIX),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_HAWK_OR_VOLT),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_SEVEN),
+    (Names.STAGE_SKY_TROOPS, WEAPONS.SKY_POLE, REGION_INDICES.SKY_TROOPS_CHECKPOINT_EIGHT),
+
+    (Names.STAGE_MAD_MATRIX, WEAPONS.MATRIX_POLE, REGION_INDICES.MAD_MATRIX_CIRCUIT_ROOM),
+
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_CHECKPOINT_ONE),
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_PULLEY),
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_CHECKPOINT_TWO),
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_CHECKPOINT_THREE),
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_RAIL_SECTION),
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_CHECKPOINT_FIVE),
+    (Names.STAGE_DEATH_RUINS, WEAPONS.RUINS_BRANCH, REGION_INDICES.DEATH_RUINS_CHECKPOINT_SIX),
+
+    (Names.STAGE_AIR_FLEET, WEAPONS.FLEET_POLE, REGION_INDICES.AIR_FLEET_CHECKPOINT_ONE),
+    (Names.STAGE_AIR_FLEET, WEAPONS.FLEET_POLE, REGION_INDICES.AIR_FLEET_CHECKPOINT_FOUR),
+
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_ZERO),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_ZERO_BACKTRACK),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_ONE),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_TWO),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_ANDROID_HOLE_ONE),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_ROCKET_LANDING),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_THREE),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_FOUR),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_LIGHT_DASH_DARK),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_SEVEN),
+    (Names.STAGE_IRON_JUNGLE, WEAPONS.IRON_POLE, REGION_INDICES.IRON_JUNGLE_CHECKPOINT_EIGHT),
+
+    (Names.STAGE_SPACE_GADGET, WEAPONS.GADGET_POLE, REGION_INDICES.SPACE_GADGET_CHECKPOINT_ONE),
+    (Names.STAGE_SPACE_GADGET, WEAPONS.GADGET_POLE, REGION_INDICES.SPACE_GADGET_TWO_LOWER),
+    (Names.STAGE_SPACE_GADGET, WEAPONS.GADGET_POLE, REGION_INDICES.SPACE_GADGET_CHECKPOINT_FIVE),
+
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_ONE),
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_TWO),
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_THREE),
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_FOUR),
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_FIVE),
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_SIX),
+    (Names.STAGE_LOST_IMPACT, WEAPONS.IMPACT_POLE, REGION_INDICES.LOST_IMPACT_CHECKPOINT_EIGHT),
+
+    (Names.STAGE_GUN_FORTRESS, WEAPONS.FORTRESS_POLE, REGION_INDICES.GUN_FORTRESS_CHECKPOINT_ONE),
+    (Names.STAGE_GUN_FORTRESS, WEAPONS.FORTRESS_POLE, REGION_INDICES.GUN_FORTRESS_CHECKPOINT_TWO),
+    (Names.STAGE_GUN_FORTRESS, WEAPONS.FORTRESS_POLE, REGION_INDICES.GUN_FORTRESS_ZIPWIRE),
+
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_CHECKPOINT_ZERO),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_LOWER_ZERO),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_CHECKPOINT_ONE),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_CHECKPOINT_TWO),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_PULLEY),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_PULLEY_OR_LAVA),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_CHECKPOINT_THREE),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_CHECKPOINT_FOUR),
+    (Names.STAGE_LAVA_SHELTER, WEAPONS.LAVA_SHOVEL, REGION_INDICES.LAVA_SHELTER_CHECKPOINT_SEVEN),
+
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_CHECKPOINT_ONE),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_PULLEY_NORMAL),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_CHECKPOINT_THREE),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_CHECKPOINT_FOUR),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_CHECKPOINT_SIX),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_LIGHT_DASH),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_GUN_JUMPER),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_GUN_JUMPER_PULLEY_HARD),
+    (Names.STAGE_COSMIC_FALL, WEAPONS.COSMIC_POLE, REGION_INDICES.COSMIC_FALL_LD_OR_JUMPER),
+
+    (Names.STAGE_FINAL_HAUNT, WEAPONS.HAUNT_POLE, REGION_INDICES.FINAL_HAUNT_CHECKPOINT_ONE),
+    (Names.STAGE_FINAL_HAUNT, WEAPONS.HAUNT_POLE, REGION_INDICES.FINAL_HAUNT_CHECKPOINT_TWO),
+    (Names.STAGE_FINAL_HAUNT, WEAPONS.HAUNT_POLE, REGION_INDICES.FINAL_HAUNT_VACUUM),
+    (Names.STAGE_FINAL_HAUNT, WEAPONS.HAUNT_POLE, REGION_INDICES.FINAL_HAUNT_CHECKPOINT_FOUR),
+
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_KEY_DOOR_ROOM),
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_CHECKPOINT_ONE),
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_CHECKPOINT_TWO),
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_CHECKPOINT_THREE),
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_POST_CHAOS_CONTROL_1),
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_ABOVE_4),
+    (Names.STAGE_THE_LAST_WAY, WEAPONS.LAST_POLE, REGION_INDICES.THE_LAST_WAY_CHAOS_CONTROL_3)
+
+]
+
+def GenerateWeaponInfo():
+    weapon_info = []
+
+    shadow_box_info = [w for w in Objects.DESIRABLE_OBJECTS if w.object_type == ObjectType.SHADOW_BOX]
+    stage_info = [ w for w in Objects.DESIRABLE_OBJECTS if w.weapon is not None and w.object_type !=  ObjectType.SHADOW_BOX
+                   and w.object_type in Objects.GetPlayableObjectTypes()]
+
+    for weapon_id in Names.WEAPONS:
+        found_weapon = [ i for i in BASE_WEAPON_INFO if i.game_id == weapon_id ][0]
+
+        if WeaponAttributes.SPECIAL in found_weapon.attributes:
+            found_weapon.available_stages = []
+            weapon_usage = [x for x in shadow_box_info ]
+            unique_regions = []
+            for i in weapon_usage:
+                if (i.stage, i.region) not in unique_regions:
+                    unique_regions.append((i.stage, i.region))
+
+            for use in unique_regions:
+                if use[1] is None:
+                    found_weapon.available_stages.append((use[0], 0))
+                else:
+                    found_weapon.available_stages.append(use)
+
+        else:
+            found_weapon.available_stages = []
+            weapon_usage = [ x for x in stage_info if x.weapon == found_weapon.game_id ]
+            unique_regions = []
+            for i in weapon_usage:
+                if (i.stage, i.region) not in unique_regions:
+                    unique_regions.append((i.stage, i.region))
+
+            for use in unique_regions:
+                if use[1] is None:
+                    found_weapon.available_stages.append(use[0])
+                else:
+                    found_weapon.available_stages.append(use)
+
+        special_cases = [ s for s in NON_OBJECT_WEAPONS if s[1] == weapon_id ]
+        for case in special_cases:
+            if (case[0], case[2]) not in found_weapon.available_stages:
+                found_weapon.available_stages.append((case[0], case[2]))
+
+        weapon_info.append(found_weapon)
+
+    return weapon_info
+
+WEAPON_INFO = GenerateWeaponInfo()
 
 def GetWeaponDict():
     weapon_dict = {}

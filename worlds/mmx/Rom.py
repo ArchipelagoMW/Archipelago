@@ -65,6 +65,10 @@ chip_rom_data = {
     STARTING_ID + 0x0040: [0x2A],       # Quick Charge
     STARTING_ID + 0x0041: [0x2B],       # Speedster
     STARTING_ID + 0x0042: [0x2C],       # Super Recover
+    STARTING_ID + 0x0043: [0x2F],       # Rapid Five
+    STARTING_ID + 0x0044: [0x30],       # Speed Shot
+    STARTING_ID + 0x0046: [0x2D],       # Buster Plus
+    STARTING_ID + 0x0045: [0x2E],       # Weapon Plus
 }
 
 x_palette_set_offsets = {

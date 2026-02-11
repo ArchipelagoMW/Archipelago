@@ -29,4 +29,8 @@ def should_generate(category: str | None, options: OuterWildsGameOptions) -> boo
         return options.enable_hn2_mod.value == 1
     elif category == 'fq':
         return options.enable_fq_mod.value == 1
+    elif category == 'fc':
+        return options.enable_fc_mod.value == 1
+    elif category == 'eh':
+        return options.enable_eh_mod.value == 1
     raise ValueError(f'Invalid category: {category}')

@@ -265,3 +265,15 @@
 [submodule "ashipelago/pop_trackers/smz3"]
 	path = ashipelago/pop_trackers/smz3
 	url = https://github.com/Dessyreqt/smz3-ap-tracker.git
+[submodule "ashipelago/pop_trackers/clair_obscur/src"]
+	path = ashipelago/pop_trackers/clair_obscur/src
+	url = https://github.com/Demorck/ClairObscur-Archipelago-Poptracker.git
+[submodule "ashipelago/pop_trackers/celeste_open_world/src"]
+	path = ashipelago/pop_trackers/celeste_open_world/src
+	url = https://github.com/matthewjaykoster/Celeste-OW-Archipelago-Tracker.git
+[submodule "ashipelago/pop_trackers/gatoroboto/src"]
+	path = ashipelago/pop_trackers/gatoroboto/src
+	url = https://github.com/Ravenmist-Games/Gato-Roboto-AP-Tracker.git
+[submodule "ashipelago/pop_trackers/twilight_princess/src"]
+	path = ashipelago/pop_trackers/twilight_princess/src
+	url = https://github.com/Kizugaya/TPRAP_poptracker.git

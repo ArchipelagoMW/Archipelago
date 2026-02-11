@@ -10,18 +10,40 @@ from typing import ClassVar, TextIO
 
 import settings
 from BaseClasses import Item, ItemClassification, Tutorial
-from worlds.AutoWorld import WebWorld, World
 from Fill import FillError
 from Options import OptionError
-from .client import MinishCapClient
+from worlds.AutoWorld import WebWorld, World
+
+from .client import MinishCapClient  # noqa: F401
 from .constants import MinishCapEvent, MinishCapItem, MinishCapLocation, TMCEvent, TMCItem, TMCLocation, TMCRegion
 from .dungeons import fill_dungeons
-from .items import (get_filler_item_selection, get_item_pool, get_pre_fill_pool, item_frequencies, item_groups,
-                    item_table, ItemData)
-from .locations import (all_locations, DEFAULT_SET, GOAL_PED, GOAL_VAATI, location_groups, OBSCURE_SET, POOL_DIG,
-                        POOL_ENEMY, POOL_POT, POOL_RUPEE, POOL_WATER)
-from .options import (DHCAccess, DungeonItem, get_option_data, Goal, MinishCapOptions, NonElementDungeons,
-                      OPTION_GROUPS, ShuffleElements, SLOT_DATA_OPTIONS)
+from .items import get_filler_item_selection, get_item_pool, get_pre_fill_pool, item_groups, item_table
+from .locations import (
+    DEFAULT_SET,
+    GOAL_PED,
+    GOAL_VAATI,
+    POOL_DIG,
+    POOL_ENEMY,
+    POOL_POT,
+    POOL_RUPEE,
+    POOL_WATER,
+    all_locations,
+    location_groups,
+)
+from .options import (
+    OPTION_GROUPS,
+    PRESETS,
+    SLOT_DATA_OPTIONS,
+    Biggoron,
+    DHCAccess,
+    FillerItemsDistribution,
+    Goal,
+    MinishCapOptions,
+    NonElementDungeons,
+    PedReward,
+    ShuffleElements,
+    get_option_data,
+)
 from .regions import create_regions
 from .rom import MinishCapProcedurePatch, write_tokens
 from .rules import MinishCapRules
@@ -35,6 +57,7 @@ class MinishCapWebWorld(WebWorld):
     theme = "grassFlowers"
     bug_report_page = "https://github.com/eternalcode0/Archipelago/issues"
     option_groups = OPTION_GROUPS
+    options_presets = PRESETS
     tutorials = [
         Tutorial(tutorial_name="Setup Guide",
                  description="A guide to setting up The Legend of Zelda: The Minish Cap for Archipelago.",
@@ -66,7 +89,9 @@ class MinishCapSettings(settings.Group):
 
 
 class MinishCapWorld(World):
-    """ Randomizer methods/data for generation """
+    """
+    Link returns in the adventure The Legend of Zelda: The Minish Cap! Using the power of a mystical hat called The Minish Cap, the Hylian hero will shrink down for a massive quest... on a microscopic scale!
+    """
 
     game = "The Minish Cap"
     web = MinishCapWebWorld()
@@ -82,54 +107,74 @@ class MinishCapWorld(World):
     filler_items = []
     disabled_locations: set[str]
     disabled_dungeons: set[str]
+    figurines_placed = 0
+    filler_items_distribution = None
 
     # region APWorld Generation
     # sorted in execution order
 
     def generate_early(self) -> None:
+        options = self.options
+
         enabled_pools = set(DEFAULT_SET)
-        if self.options.rupeesanity.value:
+        if options.rupeesanity.value:
             enabled_pools.add(POOL_RUPEE)
-        if self.options.shuffle_pots.value:
+        if options.shuffle_pots.value:
             enabled_pools.add(POOL_POT)
-        if self.options.shuffle_digging.value:
+        if options.shuffle_digging.value:
             enabled_pools.add(POOL_DIG)
-        if self.options.shuffle_underwater.value:
+        if options.shuffle_underwater.value:
             enabled_pools.add(POOL_WATER)
-        if self.options.shuffle_gold_enemies.value:
+        if options.shuffle_gold_enemies.value:
             enabled_pools.add(POOL_ENEMY)
 
+        if options.figurine_amount < options.ped_figurines:
+            options.figurine_amount = options.ped_figurines
+
         enabled_pools.update([f"cucco:{round_num}" for round_num in range(
-            10, 10 - self.options.cucco_rounds.value, -1)])
-        enabled_pools.update([f"goron:{round_num}" for round_num in range(1, self.options.goron_sets.value + 1)])
+            10, 10 - options.cucco_rounds.value, -1)])
+        enabled_pools.update([f"goron:{round_num}" for round_num in range(1, options.goron_sets.value + 1)])
 
         # Default dhc_access to closed when it's been set to ped with goal vaati disabled.
         # There's too many flags to manage to allow DHC to open after ped completes and vaati is slain.
-        if self.options.goal.value == Goal.option_pedestal and self.options.dhc_access.value == DHCAccess.option_pedestal:
-            self.options.dhc_access.value = DHCAccess.option_closed
+        if options.goal.value == Goal.option_pedestal and options.dhc_access.value == DHCAccess.option_pedestal:
+            options.dhc_access.value = DHCAccess.option_closed
 
         self.filler_items = get_filler_item_selection(self)
+        self.init_filler_items_distribution()
 
-        if self.options.shuffle_elements.value == ShuffleElements.option_dungeon_prize:
-            self.options.start_hints.value.add(TMCItem.EARTH_ELEMENT)
-            self.options.start_hints.value.add(TMCItem.FIRE_ELEMENT)
-            self.options.start_hints.value.add(TMCItem.WATER_ELEMENT)
-            self.options.start_hints.value.add(TMCItem.WIND_ELEMENT)
+        if options.shuffle_elements.value == ShuffleElements.option_dungeon_prize:
+            options.start_hints.value.add(TMCItem.EARTH_ELEMENT)
+            options.start_hints.value.add(TMCItem.FIRE_ELEMENT)
+            options.start_hints.value.add(TMCItem.WATER_ELEMENT)
+            options.start_hints.value.add(TMCItem.WIND_ELEMENT)
 
         self.disabled_locations = set(loc.name for loc in all_locations if not loc.pools.issubset(enabled_pools))
 
-        if self.options.dhc_access.value == DHCAccess.option_closed:
+        if options.dhc_access.value == DHCAccess.option_closed:
             self.disabled_locations.update(loc for loc in location_groups["DHC"])
+
+        if options.ped_reward.value == PedReward.option_none:
+            self.disabled_locations.add(TMCLocation.PEDESTAL_REQUIREMENT_REWARD)
+
+        if not options.extra_shop_item.value:
+            self.disabled_locations.add(TMCLocation.TOWN_SHOP_EXTRA_600_ITEM)
+
+        if options.shuffle_biggoron.value == Biggoron.option_disabled:
+            self.disabled_locations.add(TMCLocation.FALLS_BIGGORON)
+
+        if options.starting_hearts.value + options.heart_containers.value + options.piece_of_hearts.value < 10:
+            self.disabled_locations.add(TMCLocation.HYLIA_DOJO_NPC)
 
         # Check if the settings require more dungeons than are included
         self.disabled_dungeons = set(dungeon for dungeon in ["DWS", "CoF", "FoW", "ToD", "RC", "PoW"]
-                                     if location_groups[dungeon].issubset(self.options.exclude_locations.value))
+                                     if location_groups[dungeon].issubset(options.exclude_locations.value))
 
-        if self.options.ped_dungeons > 6 - len(self.disabled_dungeons):
+        if options.ped_dungeons > 6 - len(self.disabled_dungeons):
             error_message = "Slot '%s' has required %d/6 dungeons to goal but found %d excluded. "
             raise OptionError(error_message % (
                 self.player_name,
-                self.options.ped_dungeons,
+                options.ped_dungeons,
                 len(self.disabled_dungeons)))
 
     # push start_inventory and start_inventory_from_pool into precollected_items
@@ -200,6 +245,14 @@ class MinishCapWorld(World):
 
         self.multiworld.itempool.extend(self.item_pool)
         filler = [self.create_filler() for _ in range(total_locations - len(self.item_pool) - len(self.pre_fill_pool))]
+        # Check for restrictive settings (usually caused by non_element_dungeons: excluded)
+        if self.multiworld.players == 1 and len(self.options.exclude_locations.value) > len(filler):
+            error_message = ("Restrictive settings for slot '%s'! Not enough filler for excluded locations. "
+            "Geneartion *may* work with more attempts but for better odds try adding more locations to shuffle, "
+            "removing extra items such as figurines & heart containers/pieces, "
+            "or setting non_element_dungeons to standard. "
+            "This error won't show for multiworlds with more than one slot but may still cause rare generation issues.")
+            raise OptionError(error_message % self.player_name)
         self.multiworld.itempool.extend(filler)
 
     # local_items overrides non_local_items
@@ -257,7 +310,7 @@ class MinishCapWorld(World):
                 "GoalVaati": int(self.options.goal.value == Goal.option_vaati)}
 
         data |= self.options.as_dict(*SLOT_DATA_OPTIONS, casing="snake")
-        data |= get_option_data(self.options)
+        data |= get_option_data(self)
 
         # Setup prize location data for tracker to show element hints
         prizes = {TMCLocation.COF_PRIZE: "prize_cof", TMCLocation.CRYPT_PRIZE: "prize_rc",
@@ -293,15 +346,29 @@ class MinishCapWorld(World):
 
     def create_item(self, name: str) -> MinishCapItem:
         item = item_table[name]
-        return MinishCapItem(name, item.classification, self.item_name_to_id[name], self.player)
+        classification = item.classification
+        if name == TMCItem.HEART_CONTAINER and self.options.starting_hearts >= 10:
+            classification = ItemClassification.useful
+        if name == TMCItem.HEART_PIECE and (self.options.starting_hearts + self.options.heart_containers) >= 10:
+            classification = ItemClassification.useful
+        return MinishCapItem(name, classification, self.item_name_to_id[name], self.player)
 
     def create_event(self, name: str) -> MinishCapEvent:
         return MinishCapEvent(name, ItemClassification.progression, None, self.player)
 
     def get_filler_item_name(self) -> str:
-        if len(self.filler_items) == 0:
-            self.filler_items = get_filler_item_selection(self)
-        return self.random.choice(self.filler_items)
+        if self.filler_items_distribution == None:
+            self.init_filler_items_distribution()
+        return self.random.choices(tuple(self.filler_items_distribution), weights=self.filler_items_distribution.values())[0]
 
     def get_pre_fill_items(self) -> list[Item]:
         return self.pre_fill_pool
+
+    def init_filler_items_distribution(self) -> None:
+        self.filler_items_distribution = self.options.filler_items_distribution.value
+        if all(val <= 0 for val in self.filler_items_distribution.values()):
+            self.filler_items_distribution = FillerItemsDistribution.default
+        if not self.options.traps_enabled:
+            traps = self.item_name_groups["Traps"]
+            for trap in traps:
+                self.filler_items_distribution.pop(trap)

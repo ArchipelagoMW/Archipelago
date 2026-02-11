@@ -29,6 +29,9 @@ MAGIC_DUEL_BYTE_OFFSET: typing.Final[int] = 0x09B238
 AI_LIFE_POINTS_SHORT_OFFSET: typing.Final[int] = 0x0EA024
 PLAYER_LIFE_POINTS_SHORT_OFFSET: typing.Final[int] = 0x0EA004
 AI_DUELIST_ID_OFFSET: typing.Final[int] = 0x09B361
+SCREEN_ID_OFFSET: typing.Final[int] = 0x09B26C
+FREE_DUEL_SCREEN_ID: typing.Final[int] = 0x6c6
+FREE_DUEL_SCREEN_ID_BYTES: typing.Final[bytes] = FREE_DUEL_SCREEN_ID.to_bytes(2, "little")
 
 SILLY_DEATH_STRINGS: typing.Tuple[str, ...] = (
     "{o} NEEDED precisely those two cards to win against {p}.",
@@ -289,38 +292,26 @@ class FMClient(BizHawkClient):
                 )
                 item_count: int = len(ctx.items_received)
                 if last_awarded_item_index < item_count:
-                    from CommonClient import logger
-                    logger.debug("Item count exceeds previous index: %s > %s", item_count, last_awarded_item_index)
+                    writes: typing.List[typing.Tuple[int, typing.Iterable[int], str]] = [(
+                        LAST_ITEM_AWARDED_INDEX_BYTE_OFFSET,
+                        item_count.to_bytes(4, "little"),
+                        MAIN_RAM
+                    )]
                     new_item_ids: typing.List[int] = [
                         item.item for item in ctx.items_received[last_awarded_item_index:]
                     ]
-                    logger.debug("New item ids: %s", new_item_ids)
                     new_card_item_ids: typing.List[int] = [id for id in new_item_ids if is_card_item(id)]
                     if new_card_item_ids:
-                        logger.debug("Granting cards")
                         card_ids: typing.List[int] = [convert_item_id_to_card_id(i) for i in new_card_item_ids]
-                        from .cards import id_to_card
-                        for id in card_ids:
-                            card_name: str = id_to_card[id].name if id in id_to_card else "Not a valid card id"
-                            logger.debug("New card: %s = %s", id, card_name)
                         new_card_counter = Counter(card_ids)
-                        logger.debug("Totals: %s", new_card_counter)
                         chest_memory = await self.read_chest_memory(ctx)
-                        logger.debug("Chest memory: %s", chest_memory)
-                        writes: typing.List[typing.Tuple[int, typing.Iterable[int], str]] = [(
+                        writes += [(
                             CARDS_IN_CHESTS_OFFSET + card_id - 1,
                             (chest_memory[card_id-1] + new_count).to_bytes(1, "little"),
                             MAIN_RAM
                         ) for card_id, new_count in new_card_counter.items()]
-                        logger.debug("Impending writes: %s", writes)
-                        # Technically there's a race condition if they win the new card at the same time,
-                        # but why bother since they get the card anyway
-                        await bizhawk.write(ctx.bizhawk_ctx, writes)
-                        logger.debug("Finished writes")
-                    await bizhawk.write(ctx.bizhawk_ctx, [(
-                        LAST_ITEM_AWARDED_INDEX_BYTE_OFFSET,
-                        item_count.to_bytes(4, "little"),
-                        MAIN_RAM
-                    )])
+                    await bizhawk.guarded_write(ctx.bizhawk_ctx, writes, [
+                        (SCREEN_ID_OFFSET, FREE_DUEL_SCREEN_ID_BYTES, MAIN_RAM)
+                    ])
             except bizhawk.RequestFailedError:
                 pass

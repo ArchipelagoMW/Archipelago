@@ -1250,7 +1250,7 @@ def generate_output(world: "PokemonCrystalWorld", output_directory: str, patch: 
         write_bytes([world.options.randomize_phone_call_items.value - 1],
                     data.rom_addresses["AP_Setting_PhoneCallMode"] + 1)
 
-    write_bytes([world.options.require_pokegear_for_phone_numbers.value],
+    write_bytes([not world.options.require_pokegear_for_phone_numbers.value],
                 data.rom_addresses["AP_Setting_PhoneRequiresGear_1"] + 1)
     write_bytes([world.options.require_pokegear_for_phone_numbers.value],
                 data.rom_addresses["AP_Setting_PhoneRequiresGear_2"] + 1)

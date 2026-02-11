@@ -151,6 +151,8 @@ for world_source in world_sources:
 
         game = ashipelago_manifest.get("game")
         if game in AutoWorldRegister.world_types:
+            if "display_name" in ashipelago_manifest:
+                AutoWorldRegister.world_types[game].web.display_name = ashipelago_manifest.get("display_name", None)
             if "server_version" in ashipelago_manifest:
                 AutoWorldRegister.world_types[game].web.server_version = ashipelago_manifest.get("server_version", None)
             if "discord_channel" in ashipelago_manifest:

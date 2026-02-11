@@ -266,6 +266,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_NEAR_CHEST, lambda bundle: can_use(Items.LONGSHOT, bundle)),
         (Regions.GF_BELOW_CHEST, lambda bundle: take_damage(bundle)),
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
+        (Regions.THIEVES_HIDEOUT_BREAK_ROOM_CORRIDOR, lambda bundle: True)
     ])
 
     # GF Jail Window

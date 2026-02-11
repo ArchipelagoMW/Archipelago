@@ -1215,7 +1215,7 @@ class TMPlando(OptionDict):
       ...
     """
     display_name = "TM Plando"
-    valid_keys = set(range(1, 51)) - {2, 8}
+    valid_keys = {str(i) for i in range(1, 51)} - {"2", "8"}
     valid_values = set(sorted(move.name.title() for id, move in data.moves.items() if id not in ("NO_MOVE", "STRUGGLE",
                                                                                                  "HEADBUTT",
                                                                                                  "ROCK_SMASH", "CUT",
@@ -1224,13 +1224,21 @@ class TMPlando(OptionDict):
                                                                                                  "WHIRLPOOL",
                                                                                                  "WATERFALL")))
 
+    def __init__(self, value):
+        normalized = {int(k): v for k, v in value.items()}
+        super().__init__(normalized)
+
     def verify_keys(self) -> None:
-        super(OptionDict, self).verify_keys()
-        data = set(self.value.values())
-        extra = data - self.valid_values
-        if extra:
+        extra_keys = {str(k) for k in self.value.keys()} - self._valid_keys
+        if extra_keys:
             raise OptionError(
-                f"Found unexpected value {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                f"Found unexpected key {', '.join(extra_keys)} in {self.display_name}. "
+                f"Allowed keys: {self._valid_keys}."
+            )
+        extra_values = set(self.value.values()) - self.valid_values
+        if extra_values:
+            raise OptionError(
+                f"Found unexpected value {', '.join(extra_values)} in {self.display_name}. "
                 f"Allowed values: {self.valid_values}."
             )
 

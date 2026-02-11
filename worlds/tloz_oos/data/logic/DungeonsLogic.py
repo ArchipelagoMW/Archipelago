@@ -1,4 +1,5 @@
-from worlds.tloz_oos.data.logic.LogicPredicates import *
+from .LogicPredicates import *
+from ...Options import OracleOfSeasonsOptions, OracleOfSeasonsLinkedHerosCave
 
 
 def make_d0_logic(player: int):
@@ -120,7 +121,7 @@ def make_d2_logic(player: int):
                     # It's tight but doable
                     oos_option_medium_logic(state, player),
                     oos_can_use_pegasus_seeds(state, player),
-                    oos_has_bombchus(state, player, 5)
+                    oos_has_bombchus(state, player, 4)
                 ])
             ])
         ])],
@@ -149,12 +150,15 @@ def make_d2_logic(player: int):
         # 3 keys
         ["d2 arrow room", "d2 hardhat room", False, lambda state: oos_has_small_keys(state, player, 2, 3)],
         ["d2 hardhat room", "d2 pot chest", False, lambda state: oos_can_break_pot(state, player)],
-        ["d2 hardhat room", "d2 moblin chest", False, lambda state: any([
-            all([
-                oos_can_kill_d2_hardhat(state, player),
-                oos_can_kill_d2_far_moblin(state, player)
-            ])
+        ["d2 hardhat room", "d2 moblin chest", False, lambda state: all([
+            oos_can_kill_d2_hardhat(state, player),
+            oos_can_kill_d2_far_moblin(state, player)
         ])],
+        ["d2 hardhat room", "d2 wild bombs", False, lambda state: all([
+            oos_can_kill_d2_hardhat(state, player),
+            oos_can_harvest_regrowing_bush(state, player)
+        ])],
+        ["d2 wild bombs", "d2 moblin chest", False, None],
         ["d2 spinner", "d2 terrace chest", False, lambda state: oos_has_small_keys(state, player, 2, 3)],
     ]
 
@@ -165,6 +169,12 @@ def make_d3_logic(player: int):
         ["enter d3", "spiked beetles owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
         ["enter d3", "d3 center", False, lambda state: any([
             oos_can_kill_spiked_beetle(state, player),
+            all([
+                # Break pots to refill mysteries, and use them on the beetles to gale them away
+                oos_option_medium_logic(state, player),
+                oos_can_use_mystery_seeds(state, player),
+                oos_can_break_pot(state, player)
+            ]),
             all([
                 oos_option_medium_logic(state, player),
                 oos_can_flip_spiked_beetle(state, player),
@@ -271,7 +281,7 @@ def make_d4_logic(player: int):
                     oos_has_bracelet(state, player),
                 ]),
                 all([  # pushing enemies in the water
-                    oos_has_rod(state, player),
+                    oos_can_push_enemy(state, player),
                     any([
                         oos_has_boomerang(state, player),
                         oos_has_switch_hook(state, player)
@@ -304,6 +314,10 @@ def make_d4_logic(player: int):
                 all([
                     oos_option_medium_logic(state, player),
                     oos_has_bracelet(state, player)
+                ]),
+                all([
+                    oos_can_push_enemy(state, player),
+                    oos_has_switch_hook(state, player)
                 ])
             ]),
             any([
@@ -671,6 +685,8 @@ def make_d6_logic(player: int):
                     # then manipulate the position to clip into the bottom right of the opening for the second one
                     oos_option_hell_logic(state, player),
                     oos_has_shooter(state, player),
+                    oos_has_sword(state, player, False),
+                    oos_can_use_pegasus_seeds(state, player)
                 ]),
                 all([
                     # Just do the first one in hard, then use bombchus to kill the keese then hit the orb
@@ -952,7 +968,7 @@ def make_d7_logic(player: int):
                     oos_has_fools_ore(state, player),
                     oos_has_rod(state, player),
                     oos_has_bombs(state, player),
-                    oos_has_bombchus(state, player, 5)
+                    oos_has_bombchus(state, player, 4)
                 ]),
                 # Reach trampolines using the magnet gloves
                 oos_has_feather(state, player),
@@ -990,7 +1006,8 @@ def make_d7_logic(player: int):
                 all([
                     # Switch hook from above with the pot next to the button then jump in the hole
                     oos_option_medium_logic(state, player),
-                    oos_has_switch_hook(state, player)
+                    oos_has_switch_hook(state, player),
+                    oos_can_jump_3_wide_pit(state, player)  # To pass the flying tiles room
                 ])
                 # Casual could switch 2 from the left, but they'd have to jump in the hole to move out
                 # which is against casual logic's spirit
@@ -1275,3 +1292,109 @@ def make_d8_logic(player: int):
             ])
         ])],
     ]
+
+
+def make_d11_logic(player: int, options: OracleOfSeasonsOptions):
+    if not options.linked_heros_cave.value:
+        return []
+    logic = [
+        ["enter d11", "d11 floor 1 chest", False, lambda state: oos_has_bracelet(state, player)],
+        ["d11 floor 1 chest", "d11 floor 2 keydrop", False, lambda state: oos_can_jump_2_wide_pit(state, player)],
+        ["d11 floor 2 keydrop", "d11 floor 2 chest", False, lambda state: oos_has_small_keys(state, player, 11)],
+        ["d11 floor 2 chest", "d11 floor 3 torch keydrop", False, lambda state: all([
+            any([
+                oos_can_swim(state, player, False),
+                all([
+                    # Jump and break the pot
+                    oos_option_hell_logic(state, player),
+                    oos_can_jump_5_wide_liquid(state, player),
+                    any([
+                        oos_has_noble_sword(state, player),
+                        state.has("Biggoron's Sword", player),
+                    ])
+                ])
+            ]),
+            oos_can_use_ember_seeds(state, player, True),
+        ])],
+        ["d11 floor 2 chest", "d11 floor 3 flooded room", False, lambda state: all([
+            oos_can_swim(state, player, False),
+            oos_has_small_keys(state, player, 11, 2),
+            oos_can_use_ember_seeds(state, player, True),
+            oos_has_seed_thrower(state, player)
+        ])],
+        ["d11 floor 3 flooded room", "d11 floor 3 flooded keydrop", False, lambda state: any([
+            oos_can_kill_normal_enemy(state, player),
+            oos_has_switch_hook(state, player)
+        ])],
+        ["d11 floor 3 flooded room", "d11 floor 3 chest", False, lambda state: all([
+            oos_can_remove_rockslide(state, player, False),
+            oos_has_small_keys(state, player, 11, 3)
+        ])],
+        ["d11 floor 3 chest", "d11 floor 4 chest", False, lambda state: oos_has_magnet_gloves(state, player)],
+        ["d11 floor 4 chest", "d11 floor 5 gauntlet", False, lambda state: all([
+            oos_can_jump_3_wide_pit(state, player),
+            any([
+                all([
+                    any([
+                        oos_has_flute(state, player),
+                        oos_has_bombs(state, player, 4),
+                        oos_has_bombchus(state, player, 2)
+                    ]),
+                    oos_can_kill_magunesu(state, player),
+                    oos_can_kill_spiked_beetle(state, player)
+                ]),
+                all([
+                    # Use the cane press a button at the same time Link is on the button to skip the lowest wave
+                    # Counting starts at the top and goes clockwise, waves are:
+                    # 0- Spiked Beetle
+                    # 1- Gibdo
+                    # 2- Arrow Darknut
+                    # 3- Magunesu
+                    # 4- Lynel
+                    # 5- Iron Mask
+                    # 6- Pol's Voice
+                    # 7- Stalfos
+
+                    # We need to fight at least 5 of these 8 waves, minimal requirement is oos_can_kill_normal_enemy_no_cane
+                    # Waves 1, 5 and 7 can be beaten by it
+                    # oos_can_kill_armored_enemy can clear waves 2 and 4, skipping 0, 3 and 6
+                    # Otherwise, since we know we have embers already, we can also beat 4, but we need more seeds
+                    # (only the seeds aren't in oos_can_kill_armored_enemy)
+                    # Skip waves 0, 3 and 6 while finishing the waves 1, 5 and 7 with embers
+                    # Now there are two waves left, 4 and 2, which can be beaten by cane
+                    # A route can be wave 4 -> wave 5 (skip 3) -> wave 7 (skip 6) -> wave 1 (skip 0) -> wave 2
+                    # (With enough bombs left, it's probably easier to switch wave 6 and wave 4 as lynels hurt a lot)
+
+                    oos_option_hard_logic(state, player),
+                    oos_has_cane(state, player),
+                    any([
+                        oos_can_kill_armored_enemy(state, player, False, True),
+                        oos_has_satchel(state, player, 2)
+                    ])
+                ])
+            ])
+        ])],
+        ["d11 floor 4 chest", "d11 floor 5 boomerang maze", False, lambda state: all([
+            oos_can_jump_3_wide_pit(state, player),
+            oos_has_small_keys(state, player, 11, 4),
+            any([
+                oos_has_magic_boomerang(state, player),
+                oos_has_bombchus(state, player, 2),
+                all([
+                    oos_option_medium_logic(state, player),
+                    oos_has_sword(state, player, True),
+                ])
+            ])
+        ])],
+        ["d11 floor 4 chest", "d11 final chest", False, lambda state: all([
+            oos_can_jump_3_wide_pit(state, player),
+            oos_has_small_keys(state, player, 11, 5),
+            # oos_has_rupees(state, player, 80),
+            oos_can_complete_d11_puzzle(state, player)
+        ])]
+    ]
+    if options.linked_heros_cave.value & OracleOfSeasonsLinkedHerosCave.no_alt_entrance:
+        logic.append(["enter d11", "d11 alt entrance", False, None])
+    else:
+        logic.append(["d11 alt entrance", "enter d11", False, None])
+    return logic

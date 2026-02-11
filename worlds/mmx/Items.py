@@ -28,7 +28,7 @@ access_codes_table = {
     ItemName.stage_spark_mandrill:      ItemData(STARTING_ID + 0x0007, ItemClassification.progression | ItemClassification.useful),
     ItemName.stage_sting_chameleon:     ItemData(STARTING_ID + 0x0008, ItemClassification.progression | ItemClassification.useful),
     ItemName.stage_storm_eagle:         ItemData(STARTING_ID + 0x0009, ItemClassification.progression | ItemClassification.useful),
-    ItemName.stage_sigma_fortress:      ItemData(STARTING_ID + 0x000A, ItemClassification.progression | ItemClassification.useful),
+    ItemName.stage_sigma_fortress:      ItemData(STARTING_ID + 0x000A, ItemClassification.progression_skip_balancing | ItemClassification.useful),
 }
 
 weapons = {
@@ -73,6 +73,10 @@ enhancements_table = {
     ItemName.chip_quick_charge:        ItemData(STARTING_ID + 0x40, ItemClassification.useful),
     ItemName.chip_speedster:           ItemData(STARTING_ID + 0x41, ItemClassification.useful),
     ItemName.chip_super_recover:       ItemData(STARTING_ID + 0x42, ItemClassification.useful),
+    ItemName.chip_rapid_five:          ItemData(STARTING_ID + 0x43, ItemClassification.useful),
+    ItemName.chip_speed_shot:          ItemData(STARTING_ID + 0x44, ItemClassification.useful),
+    ItemName.chip_weapon_plus:         ItemData(STARTING_ID + 0x45, ItemClassification.useful),
+    ItemName.chip_buster_plus:         ItemData(STARTING_ID + 0x46, ItemClassification.useful),
 }
 
 item_groups = {

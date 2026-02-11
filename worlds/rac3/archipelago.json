@@ -2,12 +2,13 @@
   "compatible_version": 7,
   "version": 7,
   "game": "Ratchet & Clank 3",
-  "world_version": "0.3.2",
+  "world_version": "0.4.1",
   "minimum_ap_version": "0.5.0",
   "authors": [
     "AmondoVagyok",
     "Myth197",
     "Taoshi",
+    "Yuxia228",
     "1theory"
   ]
 }

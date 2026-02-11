@@ -62,6 +62,9 @@ def generate_early_sadx(world: World, options: SonicAdventureDXOptions) -> Start
 
 
 def validate_settings(options):
+    # Temporal blacklist
+    options.mission_blacklist.value.add("1")
+
     if not get_playable_characters(options):
         logging.warning(" -- SADX warning: Zero playable characters in settings. enabling Sonic as a failsafe.")
         options.playable_sonic.value = True

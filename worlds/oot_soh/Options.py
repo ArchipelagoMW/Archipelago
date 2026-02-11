@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup
+from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup, OptionSet
+from .Enums import Tricks
 
 
 class ClosedForest(Choice):
@@ -55,11 +56,10 @@ class ZorasFountain(Choice):
 class SleepingWaterfall(Choice):
     """
     Closed:
-    Sleeping Waterfall obstructs the entrance to Zora's Domain. Zelda's Lullaby must be played in order to open
-    it (but only once; then it stays open in both time periods).
+    Sleeping Waterfall obstructs the entrance to Zora's Domain. Zelda's Lullaby must be played in order to open it.
 
     Open: 
-    Sleeping Waterfall is always open. Link may always enter Zora's Domain.
+    Sleeping Waterfall is always open. Link may always enter Zora's Domain and Zelda's Lullaby is not required to enter Zora's Domain.
     """
     display_name = "Sleeping Waterfall"
     option_closed = 0
@@ -90,8 +90,8 @@ class FortressCarpenters(Choice):
     Sets the state of the carpenters captured by Gerudo in Gerudo Fortress, and with it the number of guards that spawn.
     Normal - All 4 carpenters are required to be saved.
     Fast - Only the bottom left carpenter requires rescuing.
-    Free - The bridge is repaired from the start, and Nabooru cannot spawn. If the Gerudo Membership Card isn't shuffled, you start with it.
-    Only Normal is compatible with Gerudo Fortress Key Rings.
+    Free - The bridge is repaired from the start, and Nabooru cannot spawn.
+    Only Normal is compatible with the Gerudo Fortress Key Ring.
     """
     display_name = "Fortress Carpenters"
     option_normal = 0
@@ -135,7 +135,7 @@ class RainbowBridgeGregModifier(Choice):
     option_off = 0
     option_reward = 1
     option_wildcard = 2
-
+    default = 0
 
 class RainbowBridgeStonesRequired(Range):
     """
@@ -186,7 +186,7 @@ class RainbowBridgeSkullTokensRequired(Range):
     range_end = 100
     default = 50
 
-
+# TODO This isn't a toggle in ship. It lets them choose to do a specific/random amount of trials also. There is also a toggle for preventing trials from being done until the player has the matching medallion
 class SkipGanonsTrials(DefaultOnToggle):
     """
     Choose wether or not Ganon's Trials are completed from the start.
@@ -224,6 +224,27 @@ class TriforceHuntPiecesRequiredPercentage(Range):
     default = 60
 
 
+class ShuffleSongs(Choice):
+    """
+    Shuffles songs into the item pool.
+    Off - Songs will appear at their vanilla locations.
+    Song Locations - Songs will only appear at locations that normally teach songs.
+    Dungeon rewards - Songs appear after beating a major dungeon boss.
+        The 4 remaining songs are located at:
+        - Zelda's lullaby location
+        - Ice Cavern's Serenade of Water location
+        - Bottom of the Well Lens of Truth location
+        - Gerudo Training Ground's Ice Arrows Location
+    Anywhere - Songs can appear at any location.
+    """
+    display_name = "Shuffle Songs"
+    option_off = 0
+    option_song_locations = 1
+    option_dungeon_rewards = 2
+    option_anywhere = 3
+    default = 1
+
+
 class ShuffleTokens(Choice):
     """
     Shuffles Golden Skulltula Tokens into the item pool. This means Golden Skulltulas can contain other items as well.
@@ -247,6 +268,14 @@ class SkullsSunSong(Toggle):
     display_name = "Night Skulltulas Expect Sun's Song"
 
 
+class ShuffleKokiriSword(Toggle):
+    """
+    Shuffles the Kokiri Sword into the item pool.
+    This will require the use of sticks until the Kokiri Sword is found.
+    """
+    display_name = "Shuffle Kokiri Sword"
+
+
 class ShuffleMasterSword(Toggle):
     """
     Shuffles the Master Sword into the item pool.
@@ -261,6 +290,14 @@ class ShuffleChildsWallet(Toggle):
     You will not be able to carry any rupees until you find a wallet.
     """
     display_name = "Shuffle Child's Wallet"
+
+
+class ShuffleOcarinas(Toggle):
+    """
+    Enabling this shuffles the Fairy Ocarina and the Ocarina of Time into the item pool.
+    This will require finding an Ocarina before being able to play songs.
+    """
+    display_name = "Shuffle Ocarinas"
 
 
 class ShuffleOcarinaButtons(Toggle):
@@ -292,6 +329,14 @@ class ShuffleWeirdEgg(Toggle):
       - Happy Mask Shop sidequest
     """
     display_name = "Shuffle Weird Egg"
+
+
+class ShuffleGerudoMembershipCard(Toggle):
+    """
+    Shuffles the Gerudo Membership Card into the item pool.
+    The gerudo Card is required to enter the Gerudo Training Ground, opening the gate to Haunted Wasteland and the Horseback Archery minigame.
+    """
+    display_name = "Shuffle Gerudo Membership Card"
 
 
 class ShuffleFishingPole(Toggle):
@@ -383,11 +428,18 @@ class ShuffleFish(Choice):
     default = 0
 
 
-class ShuffleScrubs(Toggle):
+class ShuffleScrubs(Choice):
     """
-    Shuffles all Deku Scrub merchants in the game.
+    Shuffles Deku Scrub merchants in the game.
+    Off - Scrubs will not be shuffled. The 3 Scrubs that give one-time items in the vanilla game (POH, Deku Nut capacity, and Deku Stick capacity) will not spawn.
+    One-Time Only - Only the 3 Scrubs that give one-time items in the vanilla game are shuffled.
+    All- All Scrubs are shuffled.
     """
     display_name = "Shuffle Scrubs"
+    option_off = 0
+    option_one_time_only = 1
+    option_all = 2
+    default = 0
 
 
 class ShuffleScrubsMinimumPrice(Range):
@@ -484,6 +536,27 @@ class ShuffleMerchants(Choice):
     default = 0
 
 
+class ShuffleMerchantsMinimumPrice(Range):
+    """
+    If Shuffle Merchants is on, set their minimum price. Final price will be rounded down to multiples of 5.
+    """
+    display_name = "Shuffle Merchants Minimum Price"
+    range_start = 0
+    range_end = 999
+    default = 10
+
+
+class ShuffleMerchantsMaximumPrice(Range):
+    """
+    If Shuffle Merchants is on, set their maximum price. Final price will be rounded down to multiples of 5.
+    If this is set below the minimum, this option will be set to whatever the minimum is set to.
+    """
+    display_name = "Shuffle Merchants Maximum Price"
+    range_start = 0
+    range_end = 999
+    default = 90
+
+
 class ShuffleFrogSongRupees(Toggle):
     """
     Shuffle the purple rupee rewards from the frogs in Zora's River. If this is turned off, only the Song of Storms and Frog Minigame rewards are shuffled.
@@ -574,12 +647,21 @@ class ShuffleDungeonRewards(Choice):
 class MapsAndCompasses(Choice):
     """
     Start with - You will start with Maps & Compasses from all dungeons.
-    Shuffle - Maps & Compasses can appear anywhere.
+    Vanilla - Maps & Compasses will appear in their vanilla locations.
+    Own dungeon - Maps & Compasses can only appear in their respective dungeon.
+    Any dungeon - Maps & Compasses can only appear inside of any dungeon.
+    Overworld - Maps & Compasses can only appear outside of dungeons.
+    Anywhere - Maps & Compasses can appear anywhere in the world.
     """
     display_name = "Maps and Compasses"
     option_start_with = 0
-    option_shuffle = 1
+    option_vanilla = 1
+    option_own_dungeon = 2
+    option_any_dungeon = 3
+    option_overworld = 4
+    option_anywhere = 5
     default = 0
+    alias_shuffle = 5
 
 
 class GanonsCastleBossKey(Choice):
@@ -617,6 +699,7 @@ class GanonsCastleBossKeyGregModifier(Choice):
     option_off = 0
     option_reward = 1
     option_wildcard = 2
+    default = 0
 
 
 class GanonsCastleBossKeyStonesRequired(Range):
@@ -640,7 +723,7 @@ class GanonsCastleBossKeyMedallionsRequired(Range):
     range_end = 6
     default = 6
 
-
+# TODO This can be 10 if greg is a reward 
 class GanonsCastleBossKeyDungeonRewardsRequired(Range):
     """
     If Ganon's Boss Key is set to dungeon rewards, this is how many dungeon rewards are required to open it.
@@ -674,11 +757,147 @@ class GanonsCastleBossKeySkullTokensRequired(Range):
     default = 50
 
 
-class KeyRings(Toggle):
+class SmallKeyShuffle(Choice):
+    """
+    Vanilla - Small Keys will appear in their vanilla locations. You start with 3 keys in Spirit Temple MQ because the vanilla key layout is not beatable in logic.
+    Own dungeon - Small Keys can only appear in their respective dungeon. If Fire Temple is not a Master Quest dungeon, the door to the Boss Key chest will be unlocked.
+    Any dungeon - Small Keys can only appear inside of any dungeon.
+    Overworld - Small Keys can only appear outside of dungeons.
+    Anywhere - Small Keys can appear anywhere in the world.
+    """
+    display_name = "Small Key Shuffle"
+    option_vanilla = 0
+    option_own_dungeon = 1
+    option_any_dungeon = 2
+    option_overworld = 3
+    option_anywhere = 4
+    default = 1
+
+
+class GerudoFortressKeyShuffle(Choice):
+    """
+    Vanilla - Thieves' Hideout Keys will appear in their vanilla locations.
+    Any dungeon - Thieves' Hideout Keys can only appear inside of any dungon.
+    Overworld - Thieves' Hideout Keys can only appear outside of dungeons.
+    Anywhere - Thieves' Hideout Keys can appear anywhere in the world.
+    """
+    display_name = "Gerudo Fortress Key Shuffle"
+    option_vanilla = 0
+    option_any_dungeon = 1
+    option_overworld = 2
+    option_anywhere = 3
+    default = 0
+
+
+class BossKeyShuffle(Choice):
+    """
+    Vanilla - Boss Keys will appear in their vanilla locations.
+    Own dungeon - Boss Keys can only appear in their respective dungeon.
+    Any dungeon - Boss Keys can only appear inside of any dungeon.
+    Overworld - Boss Keys can only appear outside of dungeons.
+    Anywhere - Boss Keys can appear anywhere in the world.
+    """
+    display_name = "Boss Key Shuffle"
+    option_vanilla = 0
+    option_own_dungeon = 1
+    option_any_dungeon = 2
+    option_overworld = 3
+    option_anywhere = 4
+    default = 1
+
+
+class KeyRings(Choice):
     """
     Keyrings will replace all small keys from a particular dungeon with a single keyring that awards all keys for its associated dungeon.
+
+    Off - No dungeons will have their keys replaced with keyrings.
+
+    Count - A specified amount of randomly selected dungeons will have their keys replaced with keyrings.
+    
+    Selection - Hand select which dungeons will have their keys replaced with keyrings.
+    
+    Selecting key ring for dungeons will have no effect if Small Keys are set to Vanilla.
+    
+    If Gerudo Fortress Carpenters is set to Normal, and Gerudo Fortress Keys is set to anything other than Vanilla, then the maximum amount of Key Rings that can be selected by Count will be 9. Otherwise, the maximum amount of Key Rings will be 8.
     """
     display_name = "Key Rings"
+    option_off = 0
+    option_count = 1
+    option_selection = 2
+    default = 0
+
+
+class KeyRingsCount(Range):
+    """
+    If "Count" is selected for the Key Rings option, this is the count that will be used. If 9 is selected and Gerudo Fortress Keys don't meet the specified requirements, this option will be set to 8.
+    """
+    display_name = "Key Rings Count"
+    range_start = 0
+    range_end = 9
+    default = 0
+
+
+class GerudoFortressKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection". Will only work if Gerudo Fortress Keys meet the specified requirements.
+    """
+    display_name = "Gerudo Fortress Keyring"
+
+
+class ForestTempleKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Forest Temple Keyring"
+
+
+class FireTempleKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Fire Temple Keyring"
+
+
+class WaterTempleKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Water Temple Keyring"
+
+
+class SpiritTempleKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Spirit Temple Keyring"
+
+
+class ShadowTempleKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Shadow Temple Keyring"
+
+
+class BottomOfTheWellKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Bottom of the Well Keyring"
+
+
+class GerudoTrainingGroundKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Gerudo Training Ground Keyring"
+
+
+class GanonsCastleKeyring(Toggle):
+    """
+    Only used if Key Rings option is set to "Selection"
+    """
+    display_name = "Ganon's Castle Keyring"
 
 
 class BigPoeTargetCount(Range):
@@ -727,14 +946,21 @@ class FullWallets(DefaultOnToggle):
     display_name = "Full Wallets"
 
 
-class BombchuBag(DefaultOnToggle):
+class BombchuBag(Choice):
     """
-    Bombchus require their own bag to be found before use. Without this setting, any Bombchu requirement is filled by Bomb Bag + a renewable source of Bombchus.
-    The first Bombchu you find be a Bag containing 20 chus, and subsequent packs will have 10.
-    Once found, they can be replenished at shops selling refills, Bombchu Bowling and the carpet merchant.
-    Bombchu Bowling is opened by obtaining the Bombchu Bag.
+    None - Bombchus have vanilla behavior, any Bombchu requirement is filled by Bomb Bag + a renewable source of Bombchus.
+
+    Single Bag - Bombchus require their own bag to be found before use. 5 of them are added to the pool (6 if the Carpet Merchant is shuffled). The first Bombchu Bag you find will be a Bag containing 20 chus, and subsequent bags will be replaced with Bombchu Ammo refills. Once found, they can be replenished at shops selling refills, Bombchu Bowling and the carpet merchant. Bombchu Bowling is opened by obtaining the Bombchu Bag.
+
+    Progressive Bags - 3 Bombchu Bags are added to the pool, the first one will unlock Bombchus with a capacity of 20. The second one will upgrade this capacity to 30, and the final one will upgrade the capacity to the usual 50.
+
+    Bombchu Bowling is opened by obtaining the first Bombchu bag.
     """
     display_name = "Bombchu Bag"
+    option_none = 0
+    option_single_bag = 1
+    option_progressive_bags = 2
+    default = 0
 
 
 class BombchuDrops(DefaultOnToggle):
@@ -757,6 +983,14 @@ class SunlightArrows(DefaultOnToggle):
     Light Arrows can be used to light up the sun switches instead of using the Mirror Shield.
     """
     display_name = "Sunlight Arrows"
+
+
+class RocsFeather(Toggle):
+    """
+    Adds Roc's Feather to the item pool. Roc's Feather is a custom item granting the player a jump on demand. 
+    The jump can also be used when already in mid-air. Roc's Feather is not considered by logic.
+    """
+    display_name = "Roc's Feather"
 
 
 class InfiniteUpgrades(Choice):
@@ -807,6 +1041,7 @@ class Shuffle100GSReward(Toggle):
     display_name = "Shuffle 100 GS Reward"
 
 
+# TODO Ice Trap settings in ship were changed recently. Needs its own PR to figure out
 class IceTrapCount(Range):
     """
     Specify an exact number of Ice Traps to add to the item pool. If the item pool is out of space, no more will be added.
@@ -836,6 +1071,46 @@ class TrueNoLogic(Toggle):
     visibility = Visibility.spoiler
 
 
+class EnableAllTricks(Toggle):
+    """
+    Bypass the individual trick or glitch selections below and enable all of them.
+    """
+    display_name = "Enable All Tricks and Glitches"
+
+
+class TricksInLogic(OptionSet):
+    display_name = "Tricks in Logic"
+    valid_keys = [str(trick) for trick in Tricks]
+    __doc__ = ("Define what tricks or glitches are considered in logic. "
+               "For more information on what each trick does, check the Ship of Harkinian "
+               "Randomizer -> Tricks/Glitches settings.\n"
+               "Trick names: "
+               f"{', '.join(valid_keys)}")
+
+
+class ShuffleTycoonWallet(Toggle):
+    """
+    Enabling this adds an extra Progressive Wallet to the pool and adds a new 999 capacity tier after Giants Wallet.
+    """
+    display_name = "Shuffle Tycoon Wallet"
+
+
+class ItemPool(Choice):
+    """
+    Sets how many major items appear in the item pool.
+    Balanced - Original item pool.
+    Plentiful - Extra major items are added to the pool.
+    Scarce - Some excess items are removed, including health upgrades.
+    Minimal - Most excess items are removed.
+    """
+    display_name = "Item Pool"
+    option_balanced = 0
+    option_plentiful = 1
+    option_scarce = 2
+    option_minimal = 3
+    default = 0
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -857,13 +1132,17 @@ class SohOptions(PerGameCommonOptions):
     triforce_hunt: TriforceHunt
     triforce_hunt_pieces_total: TriforceHuntPiecesTotal
     triforce_hunt_pieces_required_percentage: TriforceHuntPiecesRequiredPercentage
+    shuffle_songs: ShuffleSongs
     shuffle_skull_tokens: ShuffleTokens
     skulls_sun_song: SkullsSunSong
+    shuffle_kokiri_sword: ShuffleKokiriSword
     shuffle_master_sword: ShuffleMasterSword
     shuffle_childs_wallet: ShuffleChildsWallet
+    shuffle_ocarinas: ShuffleOcarinas
     shuffle_ocarina_buttons: ShuffleOcarinaButtons
     shuffle_swim: ShuffleSwim
     shuffle_weird_egg: ShuffleWeirdEgg
+    shuffle_gerudo_membership_card: ShuffleGerudoMembershipCard
     shuffle_fishing_pole: ShuffleFishingPole
     shuffle_deku_stick_bag: ShuffleDekuStickBag
     shuffle_deku_nut_bag: ShuffleDekuNutBag
@@ -882,6 +1161,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_crates: ShuffleCrates
     shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
+    shuffle_merchants_minimum_price: ShuffleMerchantsMinimumPrice
+    shuffle_merchants_maximum_price: ShuffleMerchantsMaximumPrice
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
@@ -899,7 +1180,20 @@ class SohOptions(PerGameCommonOptions):
     ganons_castle_boss_key_dungeons_required: GanonsCastleBossKeyDungeonsRequired
     ganons_castle_boss_key_skull_tokens_required: GanonsCastleBossKeySkullTokensRequired
     ganons_castle_boss_key_greg_modifier: GanonsCastleBossKeyGregModifier
+    small_key_shuffle: SmallKeyShuffle
+    gerudo_fortress_key_shuffle: GerudoFortressKeyShuffle
+    boss_key_shuffle: BossKeyShuffle
     key_rings: KeyRings
+    key_rings_count: KeyRingsCount
+    gerudo_fortress_key_ring: GerudoFortressKeyring
+    forest_temple_key_ring: ForestTempleKeyring
+    fire_temple_key_ring: FireTempleKeyring
+    water_temple_key_ring: WaterTempleKeyring
+    spirit_temple_key_ring: SpiritTempleKeyring
+    shadow_temple_key_ring: ShadowTempleKeyring
+    bottom_of_the_well_key_ring: BottomOfTheWellKeyring
+    gerudo_training_ground_key_ring: GerudoTrainingGroundKeyring
+    ganons_castle_key_ring: GanonsCastleKeyring
     big_poe_target_count: BigPoeTargetCount
     skip_child_zelda: SkipChildZelda
     skip_epona_race: SkipEponaRace
@@ -911,6 +1205,7 @@ class SohOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     blue_fire_arrows: BlueFireArrows
     sunlight_arrows: SunlightArrows
+    rocs_feather: RocsFeather
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
     slingbow_break_beehives: SlingbowBreakBeehives
@@ -919,6 +1214,10 @@ class SohOptions(PerGameCommonOptions):
     ice_trap_count: IceTrapCount
     ice_trap_filler_replacement: IceTrapFillerReplacement
     true_no_logic: TrueNoLogic
+    shuffle_tycoon_wallet: ShuffleTycoonWallet
+    tricks_in_logic: TricksInLogic
+    enable_all_tricks: EnableAllTricks
+    item_pool: ItemPool
 
 
 soh_option_groups = [
@@ -930,6 +1229,8 @@ soh_option_groups = [
         SleepingWaterfall,
         JabuJabu,
         LockOverworldDoors,
+        EnableAllTricks,
+        TricksInLogic
     ]),
     OptionGroup("World Settings", [
         StartingAge,
@@ -958,22 +1259,23 @@ soh_option_groups = [
     #     # Decouple Entrances
     # ]),
     OptionGroup("Shuffle Items", [
-        # Shuffle Songs -- idk if this or the other ones here will be an actual option here, delete if not
+        ShuffleSongs,
         ShuffleTokens,
         SkullsSunSong,
-        # Shuffle Kokiri Sword
+        ShuffleFreestandingItems,
+        ShuffleKokiriSword,
         ShuffleMasterSword,
         ShuffleChildsWallet,
-        # Include Tycoon Wallet
-        # Shuffle Ocarinas
+        ShuffleTycoonWallet,
+        ShuffleOcarinas,
         ShuffleOcarinaButtons,
         ShuffleSwim,
         ShuffleWeirdEgg,
-        # Shuffle Gerudu Membership Card
+        ShuffleGerudoMembershipCard,
         ShuffleFishingPole,
         ShuffleDekuStickBag,
         ShuffleDekuNutBag,
-        ShuffleFreestandingItems,
+        RocsFeather
     ]),
     OptionGroup("Shuffle NPCs & Merchants", [
         ShuffleShops,
@@ -991,7 +1293,8 @@ soh_option_groups = [
         ShuffleCrates,
         ShuffleTrees,
         ShuffleMerchants,
-        # Merchant prices
+        ShuffleMerchantsMinimumPrice,
+        ShuffleMerchantsMaximumPrice,
         ShuffleFrogSongRupees,
         ShuffleAdultTradeItems,
         Shuffle100GSReward,
@@ -1005,9 +1308,9 @@ soh_option_groups = [
     OptionGroup("Shuffle Dungeon Items", [
         ShuffleDungeonRewards,
         MapsAndCompasses,
-        # Small Key Shuffle
-        # Gerudo Fortress Keys
-        # Boss Key Shuffle
+        SmallKeyShuffle,
+        GerudoFortressKeyShuffle,
+        BossKeyShuffle,
         GanonsCastleBossKey,
         GanonsCastleBossKeyStonesRequired,
         GanonsCastleBossKeyMedallionsRequired,
@@ -1016,7 +1319,16 @@ soh_option_groups = [
         GanonsCastleBossKeySkullTokensRequired,
         GanonsCastleBossKeyGregModifier,
         KeyRings,
-        # Key Ring Dungeon Count
+        KeyRingsCount,
+        GerudoFortressKeyring,
+        ForestTempleKeyring,
+        FireTempleKeyring,
+        WaterTempleKeyring,
+        SpiritTempleKeyring,
+        ShadowTempleKeyring,
+        BottomOfTheWellKeyring,
+        GerudoTrainingGroundKeyring,
+        GanonsCastleKeyring
     ]),
     # todo: decide whether these should be in the yaml or just let you change them locally on the fly
     OptionGroup("Timesavers", [
@@ -1026,9 +1338,11 @@ soh_option_groups = [
         CompleteMaskQuest,
         SkipScarecrowsSong,
     ]),
-    # OptionGroup("Item Pool & Hints", [
-    # none of these are implemented, so just leaving this placeholder
-    # ]),
+    OptionGroup("Item Pool & Hints", [
+        ItemPool,
+        IceTrapCount,
+        IceTrapFillerReplacement
+    ]),
     OptionGroup("Additional Features", [
         FullWallets,  # another one that should maybe just be a locally changeable setting instead of in the yaml
         BombchuBag,
@@ -1037,8 +1351,6 @@ soh_option_groups = [
         SunlightArrows,
         InfiniteUpgrades,
         SkeletonKey,
-        SlingbowBreakBeehives,
-        IceTrapCount,
-        IceTrapFillerReplacement
+        SlingbowBreakBeehives
     ])
 ]
