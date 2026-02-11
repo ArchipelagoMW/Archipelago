@@ -11,8 +11,9 @@
 --      if you are playing with two forces (for whatever reason) only one needs to know where the tech is for the hint to be send.
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
---to do:
---hints inbound: AP side
+-- TODO:
+-- Blind hints that are out bound. The spam is way too high.
+-- fix the tech tree shape.
 
 local function send_hint(technologies, force)
     --technologies => tech_name = true
@@ -301,7 +302,7 @@ local function on_tick(event)
         local science_packs_num = storage.forces[force_name].science_packs_num
         if science_packs_num[science_check+1].crafted == false then
             if get_item_count(science_packs_num[science_check+1].name, force) > 0 then --if this science_pack is made then update the tree
-                game.print("you crafted a: "..science_packs_num[science_check+1].name)
+                --game.print("you crafted a: "..science_packs_num[science_check+1].name)
                 science_packs_num[science_check+1].crafted = true --ensure one update per pack extra crafted
                 storage.forces[force_name].science_packs_name[science_packs_num[science_check+1].name].crafted  = true
                 update_science_tech_tree(force)
@@ -363,6 +364,10 @@ commands.add_command("ap-resend-all-hints", "Used by the Archipelago client to m
         update_science_tech_tree(force)
         update_trigger_tech_tree(force, false)
     end
+end)
+
+commands.add_command("toggle-silence-rebounce", "Toggle sending rebouncing hinted locations from factorio back to itself. To reduce useless spam. The silence only works for the game, not the client.", function(call)
+    log("Player command toggle-silence-rebounce") -- notifies client
 end)
 
 local lib = {}
