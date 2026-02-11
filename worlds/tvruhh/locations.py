@@ -2,18 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from BaseClasses import ItemClassification, Location
-
-from . import items
+from . import logic_handling
 
 if TYPE_CHECKING:
     from .world import TVRUHHWorld
 
 
 
-
-class TVRUHHLocation(Location):
-    game = "TVRUHH"
 
 def get_location_names_with_ids(location_names: list[str], chosen_list) -> dict[str, int | None]:
     return {location_name: chosen_list[location_name][0] for location_name in location_names}
@@ -44,20 +39,13 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
     quickplay_dreams = world.get_region("Unlocked Quickplay")
     
     #locations in start region
-    start_dreams.add_locations(load_all_lists(world,dream_list),TVRUHHLocation)
+    logic_handling.logic_placer(world,load_location_list(world,dream_list),"dreams")
+    logic_handling.logic_placer(world,load_location_list(world,qp_copper),"qp_medal")
 
 
 def create_extra_locations(world: TVRUHHWorld, amount: int) -> None:
     bonus_locations = world.get_region("Start")
     bonus_locations.add_locations(get_location_names_with_ids(load_extra_locations(amount),extra_location_list))
-
-
-def load_all_lists(world: TVRUHHWorld,chosenlist) -> dict[str, int | None]:
-    x = {}
-
-    x.update(load_location_list(world,chosenlist))
-    
-    return x
 
 def load_location_list(world,parentlist: dict,min_id = -1, max_id = -1) -> dict[str, int | None]:
     names = []
@@ -69,6 +57,7 @@ def load_location_list(world,parentlist: dict,min_id = -1, max_id = -1) -> dict[
         else:
             if not world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                 names.append(x)
+    names = logic_handling.logic_remover(world, names)
     locations = get_location_names_with_ids(names,parentlist)
     return locations
 
@@ -87,6 +76,7 @@ def create_events(world: TVRUHHWorld) -> None:
 def requestbbl() -> dict[str:int]: 
     # normal locations
     updatebbl(dream_list)
+    updatebbl(qp_copper)
     
     # bonus locations
     a: int = 1
@@ -163,6 +153,165 @@ dream_list = {
     "Dream: Teramonstrophile" : [1000005, ["grind"]],
     "Dream: Weapon of Mass Affection" : [1000006, ["very_grind"]],
     "Dream: Lovepocalypse" : [1000007, ["very_grind"]],
+
+    #for testing:
+    "Dream: Something Something Quick" : [1000069, ["quickplay"]]
+}
+
+story_medals = {
+
+}
+
+qp_copper = {
+    "QP Copper: Scrambla" : [1020000, []]
+}
+
+qp_bronze = {
+
+}
+
+qp_silver = {
+
+}
+
+qp_gold = {
+
+}
+
+qp_radiant = {
+
+}
+
+uqp_rad1 = {
+
+}
+
+uqp_rad2 = {
+
+}
+
+uqp_rad3 = {
+
+}
+
+altstory_copper = {
+
+}
+
+altstory_bronze = {
+
+}
+
+altstory_silver = {
+
+}
+
+altstory_gold = {
+
+}
+
+altstory_radiant = {
+
+}
+
+altstory_rose = {
+
+}
+
+altstory_crimson = {
+
+}
+
+towers_copper = {
+
+}
+
+towers_bronze = {
+
+}
+
+towers_silver = {
+
+}
+
+towers_gold = {
+
+}
+
+towers_radiant = {
+
+}
+
+endl_str_copper = {
+
+}
+
+endl_str_bronze = {
+
+}
+
+endl_str_silver = {
+
+}
+
+endl_str_gold = {
+
+}
+
+endl_str_radiant = {
+
+}
+
+endl_ter_copper = {
+
+}
+
+endl_ter_bronze = {
+
+}
+
+endl_ter_silver = {
+
+}
+
+endl_ter_gold = {
+
+}
+
+endl_ter_radiant = {
+
+}
+
+sublime_uqp = {
+
+}
+
+sublime_altstory = {
+
+}
+
+sublime_tower = {
+
+}
+
+sublime_endless = {
+
+}
+
+qp_upgrades = {
+
+}
+
+altstory_upgr = {
+
+}
+
+endless_upgr = {
+
+}
+
+event_upgrades = {
+
 }
 
 other_locations_list = {
