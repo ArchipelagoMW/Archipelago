@@ -501,8 +501,6 @@ upgrade_gift_list = {
     "Foreign Axon": [107003, ItemClassification.progression], #3 copies, only 1 is pogression?
     "Sentinel Claw": [107004, ItemClassification.progression], #2 copies
     "Dream Petal": [107005, ItemClassification.progression], #16 copies
-    "Rose Medal": [107006, ItemClassification.progression], # Num enemies * Num characters, at least 650
-    "Crimson Medal": [107007, ItemClassification.progression] #Num thorned enemis * Num characters
 }
 
 dreamscape_list = {
@@ -613,16 +611,28 @@ filler_item_list = {
     "Extra Radiant Tetrids": [1130006, ItemClassification.filler]
 }
 
+#"Rose Medal": [107006, ItemClassification.progression], # Num enemies * Num characters, at least 650
+#"Crimson Medal": [107007, ItemClassification.progression] #Num thorned enemis * Num characters
 qp_upgrade_list = {
 
 }
 
 altstory_upgrade_list = {
-
+    "Alter Your Fate – Max Power": [115000, ItemClassification.progression], #20 levels
+    "Alter Your Fate – Quick Gifts": [115001, ItemClassification.useful], #5 levels
+    "Alter Your Fate – Bonus Gifts": [115002, ItemClassification.useful], #7 levels
+    "Alter Your Fate – Tetrid Gifts": [115003, ItemClassification.useful], #3 levels
 }
 
 endless_upgrade_list = {
-
+    "Solara's Gift Shop – Power Gifts": [116000, ItemClassification.progression], #7 levels
+    "Solara's Gift Shop – Duplicate Stock": [116001, ItemClassification.useful], #2 levels
+    "Solara's Gift Shop – Duplicate Limit": [116002, ItemClassification.useful], #4 levels
+    "Solara's Gift Shop – Bonus Gifts": [116003, ItemClassification.progression], #5 levels
+    "Solara's Gift Shop – Quick Gifts": [116004, ItemClassification.progression], #4 levels
+    "Solara's Gift Shop – Blessings": [116005, ItemClassification.progression], #3 levels
+    "Solara's Gift Shop – Burdens": [116006, ItemClassification.progression], #3 levels
+    "Solara's Gift Shop – Remove Gifts": [116007, ItemClassification.useful], #1 level
 }
 
 event_upgrade_list = {
@@ -640,21 +650,9 @@ event_upgrade_list = {
     "Vitrea's Observatory – Telescope B": [117010, ItemClassification.progression], #5 levels
     "Vitrea's Observatory – Telescope C": [117011, ItemClassification.progression], #5 levels
     "Vitrea's Observatory – Backroom Size": [117012, ItemClassification.progression], #4 levels
-    "Alter Your Fate – Max Power": [117013, ItemClassification.progression], #20 levels
-    "Alter Your Fate – Quick Gifts": [117014, ItemClassification.useful], #5 levels
-    "Alter Your Fate – Bonus Gifts": [117015, ItemClassification.useful], #7 levels
-    "Alter Your Fate – Tetrid Gifts": [117016, ItemClassification.useful], #3 levels
-    "Solara's Gift Shop – Power Gifts": [117017, ItemClassification.progression], #7 levels
-    "Solara's Gift Shop – Duplicate Stock": [117018, ItemClassification.useful], #2 levels
-    "Solara's Gift Shop – Duplicate Limit": [117019, ItemClassification.useful], #4 levels
-    "Solara's Gift Shop – Bonus Gifts": [117020, ItemClassification.progression], #5 levels
-    "Solara's Gift Shop – Quick Gifts": [117021, ItemClassification.progression], #4 levels
-    "Solara's Gift Shop – Blessings": [117022, ItemClassification.progression], #3 levels
-    "Solara's Gift Shop – Burdens": [117023, ItemClassification.progression], #3 levels
-    "Solara's Gift Shop – Remove Gifts": [117024, ItemClassification.useful], #1 level
-    "The Junk Vault – Vault A": [117025, ItemClassification.progression], #4 levels
-    "The Junk Vault – Vault B": [117026, ItemClassification.progression], #5 levels
-    "The Junk Vault – Vault C": [117027, ItemClassification.progression], #5 levels  
+    "The Junk Vault – Vault A": [117013, ItemClassification.progression], #4 levels
+    "The Junk Vault – Vault B": [117014, ItemClassification.progression], #5 levels
+    "The Junk Vault – Vault C": [117015, ItemClassification.progression], #5 levels  
 }
 
 other_items_list = {
