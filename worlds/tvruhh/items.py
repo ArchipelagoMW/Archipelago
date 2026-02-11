@@ -501,6 +501,8 @@ upgrade_gift_list = {
     "Foreign Axon": [107003, ItemClassification.progression], #3 copies, only 1 is pogression?
     "Sentinel Claw": [107004, ItemClassification.progression], #2 copies
     "Dream Petal": [107005, ItemClassification.progression], #16 copies
+    "Rose Medal": [107006, ItemClassification.progression], # Num enemies * Num characters, at least 650
+    "Crimson Medal": [107007, ItemClassification.progression] #Num thorned enemis * Num characters
 }
 
 dreamscape_list = {
@@ -627,33 +629,32 @@ event_upgrade_list = {
     "Radiant Garden – Radiate Rate": [117000, ItemClassification.useful], #10 levels
     "Radiant Garden – Extract Rate": [117001, ItemClassification.useful], #10 levels
     "Radiant Garden – Garden Gifts": [117002, ItemClassification.useful], #4 levels
-    "Radiant Garden – Overfeeding": [117003, ItemClassification.useful],
+    "Radiant Garden – Overfeeding": [117003, ItemClassification.useful], #1 level
     #There is a dream where you have to put a 3-star in a synapse. So technically either 2 Scrambla or Boiler levels are progression (can't be one of each), and the rest is useful.
-    "Scrambla's Gift – Gift Storage": [117004, ItemClassification.progression], #5 levels
-    "Boiler's Gift – Gift Storage": [117005, ItemClassification.progression], #5 levels
-    "Blot's Art Gallery – Gallery Size": [117006, ItemClassification.progression],
-    "Blot's Art Gallery – Trade Limit": [117007, ItemClassification.progression],
-    "Blot's Art Gallery – Backroom Size": [117008, ItemClassification.progression],
-    "Vitrea's Observatory – Telescope A": [117009, ItemClassification.progression],
-    "Vitrea's Observatory – Telescope B": [117010, ItemClassification.progression],
-    "Vitrea's Observatory – Telescope C": [117011, ItemClassification.progression],
-    "Vitrea's Observatory – Backroom Size": [117012, ItemClassification.progression],
-    "Alter Your Fate – Max Power": [117013, ItemClassification.progression],
-    "Alter Your Fate – Quick Gifts": [117014, ItemClassification.useful],
-    "Alter Your Fate – Bonus Gifts": [117015, ItemClassification.useful],
-    "Alter Your Fate – Tetrid Gifts": [117016, ItemClassification.useful],
-    "Solara's Gift Shop – Power Gifts": [117017, ItemClassification.progression],
-    "Solara's Gift Shop – Duplicate Stock": [117018, ItemClassification.useful],
-    "Solara's Gift Shop – Duplicate Limit": [117019, ItemClassification.useful],
-    "Solara's Gift Shop – Bonus Gifts": [117020, ItemClassification.progression],
-    "Solara's Gift Shop – Quick Gifts": [117021, ItemClassification.progression],
-    "Solara's Gift Shop – Blessings": [117022, ItemClassification.progression],
-    "Solara's Gift Shop – Burdens": [117023, ItemClassification.progression],
-    "Solara's Gift Shop – Remove Gifts": [117024, ItemClassification.useful],
-    "The Junk Vault – Vault A": [117025, ItemClassification.progression],
-    "The Junk Vault – Vault B": [117026, ItemClassification.progression],
-    "The Junk Vault – Vault C": [117027, ItemClassification.progression],
-    
+    "Scrambla's Gift – Synapse Capacity": [117004, ItemClassification.progression], #5 levels
+    "Boiler's Gift – Synapse Capacity": [117005, ItemClassification.progression], #5 levels
+    "Blot's Art Gallery – Gallery Size": [117006, ItemClassification.progression], #8 levels
+    "Blot's Art Gallery – Trade Limit": [117007, ItemClassification.progression], #2 levels
+    "Blot's Art Gallery – Backroom Size": [117008, ItemClassification.progression], #5 levels
+    "Vitrea's Observatory – Telescope A": [117009, ItemClassification.progression], #3 levels
+    "Vitrea's Observatory – Telescope B": [117010, ItemClassification.progression], #5 levels
+    "Vitrea's Observatory – Telescope C": [117011, ItemClassification.progression], #5 levels
+    "Vitrea's Observatory – Backroom Size": [117012, ItemClassification.progression], #4 levels
+    "Alter Your Fate – Max Power": [117013, ItemClassification.progression], #20 levels
+    "Alter Your Fate – Quick Gifts": [117014, ItemClassification.useful], #5 levels
+    "Alter Your Fate – Bonus Gifts": [117015, ItemClassification.useful], #7 levels
+    "Alter Your Fate – Tetrid Gifts": [117016, ItemClassification.useful], #3 levels
+    "Solara's Gift Shop – Power Gifts": [117017, ItemClassification.progression], #7 levels
+    "Solara's Gift Shop – Duplicate Stock": [117018, ItemClassification.useful], #2 levels
+    "Solara's Gift Shop – Duplicate Limit": [117019, ItemClassification.useful], #4 levels
+    "Solara's Gift Shop – Bonus Gifts": [117020, ItemClassification.progression], #5 levels
+    "Solara's Gift Shop – Quick Gifts": [117021, ItemClassification.progression], #4 levels
+    "Solara's Gift Shop – Blessings": [117022, ItemClassification.progression], #3 levels
+    "Solara's Gift Shop – Burdens": [117023, ItemClassification.progression], #3 levels
+    "Solara's Gift Shop – Remove Gifts": [117024, ItemClassification.useful], #1 level
+    "The Junk Vault – Vault A": [117025, ItemClassification.progression], #4 levels
+    "The Junk Vault – Vault B": [117026, ItemClassification.progression], #5 levels
+    "The Junk Vault – Vault C": [117027, ItemClassification.progression], #5 levels  
 }
 
 other_items_list = {
