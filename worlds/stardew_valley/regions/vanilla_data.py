@@ -16,6 +16,8 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.downstairs_to_cellar,
             LogicEntrance.farmhouse_cooking,
             LogicEntrance.watch_queen_of_sauce,
+            LogicEntrance.fishing,
+            LogicEntrance.find_secret_notes,
         ),
     ),
     RegionData(RegionName.cellar, (Entrance.cellar_to_downstairs,)),
@@ -37,8 +39,6 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.grow_fall_crops,
             LogicEntrance.grow_winter_crops,
             LogicEntrance.shipping,
-            LogicEntrance.fishing,
-            LogicEntrance.find_secret_notes,
         ),
     ),
     RegionData(
