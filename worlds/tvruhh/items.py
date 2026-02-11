@@ -501,6 +501,22 @@ upgrade_gift_list = {
     "Foreign Axon": [107003, ItemClassification.progression], #3 copies, only 1 is pogression?
     "Sentinel Claw": [107004, ItemClassification.progression], #2 copies
     "Dream Petal": [107005, ItemClassification.progression], #16 copies
+    "Pale Box": [107006, ItemClassification.useful], #9 copies
+    "Heart Core": [107007, ItemClassification.useful], #4 copies
+    "Painted Box": [107008, ItemClassification.useful], #7 copies
+    "Altered Core": [107009, ItemClassification.useful], #4 copies
+    "Dark Box": [107010, ItemClassification.useful], #7 copies
+    "Defect Core": [107011, ItemClassification.useful], #3 copies
+    "Blue Box": [107012, ItemClassification.useful], #7 copies
+    "Flawless Core": [107013, ItemClassification.useful], #3 copies
+    "Shiny Box": [107014, ItemClassification.useful], #7 copies
+    "Twin Core": [107015, ItemClassification.useful], #3 copies
+    "Luminous Box": [107016, ItemClassification.useful], #7 copies
+    "Cross Core": [107017, ItemClassification.useful], #3 copies
+    "Faustian Box": [107018, ItemClassification.useful], #7 copies
+    "Devil Core": [107019, ItemClassification.useful], #3 copies
+    "Scorched Box": [107020, ItemClassification.useful], #7 copies
+    "Demon Core": [107021, ItemClassification.useful], #3 copies
 }
 
 dreamscape_list = {
