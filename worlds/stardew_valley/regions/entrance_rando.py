@@ -1,14 +1,18 @@
 from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
-from .model import ConnectionData, RandomizationFlag, reverse_connection_name, RegionData
+
 from ..content import StardewContent
 from ..options import EntranceRandomization
-from ..strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName
+from ..strings.ap_names.ap_option_names import \
+    EntranceRandomizerBehaviourOptionName
+from .model import (ConnectionData, RandomizationFlag, RegionData,
+                    reverse_connection_name)
 
 
 def create_player_randomization_flag(
     entrance_randomization_choice: EntranceRandomization,
     entrance_behavour_choice: set[EntranceRandomizerBehaviourOptionName],
+    include_endgame: bool,
     content: StardewContent,
 ):
     """Return the flag that a connection is expected to have to be randomized. Only the bit corresponding to the player randomization choice will be enabled.
@@ -35,13 +39,18 @@ def create_player_randomization_flag(
         flag |= RandomizationFlag.FARMHOUSE
     if content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.MASTERY_CAVE
-
-    flag |= RandomizationFlag.ENDGAME
+    if include_endgame:
+        flag |= RandomizationFlag.ENDGAME
+    print(f"flag is {flag:b}")
     return flag
 
 
-def connect_regions(region_data_by_name: dict[str, RegionData], connection_data_by_name: dict[str, ConnectionData], regions_by_name: dict[str, Region],
-                    player_randomization_flag: RandomizationFlag) -> None:
+def connect_regions(
+    region_data_by_name: dict[str, RegionData],
+    connection_data_by_name: dict[str, ConnectionData],
+    regions_by_name: dict[str, Region],
+    player_randomization_flag: RandomizationFlag,
+) -> None:
     for region_name, region_data in region_data_by_name.items():
         origin_region = regions_by_name[region_name]
 

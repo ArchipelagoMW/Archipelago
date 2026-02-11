@@ -26,7 +26,7 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
     }
 
     randomization_flag = create_player_randomization_flag(
-        world_options.entrance_randomization, world_options.entrance_randomization_behaviour.value, content
+        world_options.entrance_randomization, world_options.entrance_randomization_behaviour.value, world_options.include_endgame_locations.value, content
     )
     connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, randomization_flag)
 
