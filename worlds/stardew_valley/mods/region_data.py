@@ -428,10 +428,14 @@ alecto_entrances = [
     ),
 ]
 
-lacey_regions = [RegionData(Region.forest, (LaceyEntrance.forest_to_hat_house,)), RegionData(LaceyRegion.hat_house)]
+lacey_regions = [
+    RegionData(Region.forest, (LaceyEntrance.forest_to_hat_house,)),
+    RegionData(LaceyRegion.hat_house, (LaceyEntrance.hat_house_to_forest,)),
+]
 
 lacey_entrances = [
-    ConnectionData(LaceyEntrance.forest_to_hat_house, LaceyRegion.hat_house, flag=RandomizationFlag.BUILDINGS)
+    ConnectionData(LaceyEntrance.forest_to_hat_house, LaceyRegion.hat_house, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(LaceyEntrance.hat_house_to_forest, Region.forest, flag=RandomizationFlag.BUILDINGS),
 ]
 
 boarding_house_regions = [

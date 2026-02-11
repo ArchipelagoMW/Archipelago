@@ -552,6 +552,7 @@ class AlectoEntrance:
 @final
 class LaceyEntrance:
     forest_to_hat_house = "Forest to Mouse House"
+    hat_house_to_forest = "Mouse House to Forest"
 
 
 @final
