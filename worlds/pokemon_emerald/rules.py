@@ -3,11 +3,13 @@ Logic rule definitions for Pokemon Emerald
 """
 from typing import TYPE_CHECKING, Literal
 
-from rule_builder.rules import Rule, Has, HasAll, HasAny, HasGroupUnique, True_, CanReachEntrance, HasFromListUnique, OptionFilter
+from rule_builder.rules import (Rule, CanReachEntrance, Has, HasAll, HasAny, HasFromListUnique, HasGroupUnique,
+                                OptionFilter, True_)
 
 from .data import LocationCategory, NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
 from .locations import PokemonEmeraldLocation
-from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal, ModifyRoute118, ExtraBoulders, ExtraBumpySlope, RemoveRoadblocks
+from .options import (DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal, ModifyRoute118,
+                      ExtraBoulders, ExtraBumpySlope, RemoveRoadblocks)
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
@@ -131,12 +133,24 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/SOUTH_POND"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND"] = hm_rules["HM03 Surf"]
     entrance_rules["MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3"] = (
-        (OptionFilter(NormanRequirement, NormanRequirement.option_badges) & HasGroupUnique("Badge", world.options.norman_count.value)) |
-        (OptionFilter(NormanRequirement, NormanRequirement.option_gyms) & create_defeated_n_gym_leaders_rule(world.options.norman_count.value))
+        (
+            OptionFilter(NormanRequirement, NormanRequirement.option_badges) &
+            HasGroupUnique("Badge", world.options.norman_count.value)
+        ) |
+        (
+            OptionFilter(NormanRequirement, NormanRequirement.option_gyms) &
+            create_defeated_n_gym_leaders_rule(world.options.norman_count.value)
+        )
     )
     entrance_rules["MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6"] = (
-        (OptionFilter(NormanRequirement, NormanRequirement.option_badges) & HasGroupUnique("Badge", world.options.norman_count.value)) |
-        (OptionFilter(NormanRequirement, NormanRequirement.option_gyms) & create_defeated_n_gym_leaders_rule(world.options.norman_count.value))
+        (
+            OptionFilter(NormanRequirement, NormanRequirement.option_badges) &
+            HasGroupUnique("Badge", world.options.norman_count.value)
+        ) |
+        (
+            OptionFilter(NormanRequirement, NormanRequirement.option_gyms) &
+            create_defeated_n_gym_leaders_rule(world.options.norman_count.value)
+        )
     )
 
     # Route 104
@@ -158,8 +172,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Route 116
     entrance_rules["REGION_ROUTE116/WEST -> REGION_ROUTE116/WEST_ABOVE_LEDGE"] = hm_rules["HM01 Cut"]
-    entrance_rules["REGION_ROUTE116/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_116_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_ROUTE116/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_116_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_ROUTE116/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_116_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_ROUTE116/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_116_2", "EVENT_DEFEAT_SHELLY")
+    )
 
     # Rusturf Tunnel
     location_rules["NPC_GIFT_RECEIVED_HM_STRENGTH"] = hm_rules["HM06 Rock Smash"]
@@ -174,8 +192,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SOUTH_BEHIND_ROCK"] = hm_rules["HM06 Rock Smash"]
     entrance_rules["REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/SEA"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE"] = Has("Mach Bike")
-    entrance_rules["REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_115_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_ROUTE115/NORTH_ABOVE_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_115_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_115_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_ROUTE115/NORTH_ABOVE_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_115_2", "EVENT_DEFEAT_SHELLY")
+    )
     entrance_rules["REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"] = (
         (OptionFilter(ExtraBoulders, ExtraBoulders.option_true) & hm_rules["HM04 Strength"]) |
         (OptionFilter(ExtraBoulders, ExtraBoulders.option_false))
@@ -184,11 +206,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         (OptionFilter(ExtraBoulders, ExtraBoulders.option_true) & hm_rules["HM04 Strength"]) |
         (OptionFilter(ExtraBoulders, ExtraBoulders.option_false))
     )
-    entrance_rules["REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"] = OptionFilter(ExtraBumpySlope, ExtraBumpySlope.option_true) & Has("Acro Bike")
+    entrance_rules["REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"] = (
+        OptionFilter(ExtraBumpySlope, ExtraBumpySlope.option_true) & Has("Acro Bike")
+    )
 
     # Route 105
-    entrance_rules["REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_105_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_105_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_105_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_105_2", "EVENT_DEFEAT_SHELLY")
+    )
     entrance_rules["MAP_ROUTE105:0/MAP_ISLAND_CAVE:0"] = Has("EVENT_UNDO_REGI_SEAL")
 
     # Route 106
@@ -196,8 +224,14 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_ROUTE106/WEST -> REGION_ROUTE106/SEA"] = hm_rules["HM03 Surf"]
 
     # Dewford Town
-    entrance_rules["REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH"] = CanReachEntrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN") & HasAll("EVENT_TALK_TO_MR_STONE", "EVENT_DELIVER_LETTER")
-    entrance_rules["REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN"] = CanReachEntrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN") & Has("EVENT_TALK_TO_MR_STONE")
+    entrance_rules["REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH"] = (
+        CanReachEntrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN") &
+        HasAll("EVENT_TALK_TO_MR_STONE", "EVENT_DELIVER_LETTER")
+    )
+    entrance_rules["REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN"] = (
+        CanReachEntrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN") &
+        Has("EVENT_TALK_TO_MR_STONE")
+    )
     entrance_rules["REGION_DEWFORD_TOWN/MAIN -> REGION_DEWFORD_TOWN/WATER"] = hm_rules["HM03 Surf"]
 
     # Granite Cave
@@ -208,7 +242,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE107/MAIN"] = hm_rules["HM03 Surf"]
 
     # Route 109
-    entrance_rules["REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN"] = CanReachEntrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN") & CanReachEntrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH") & HasAll("EVENT_TALK_TO_MR_STONE", "EVENT_DELIVER_LETTER")
+    entrance_rules["REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN"] = (
+        CanReachEntrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN") &
+        CanReachEntrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH") &
+        HasAll("EVENT_TALK_TO_MR_STONE", "EVENT_DELIVER_LETTER")
+    )
     entrance_rules["REGION_ROUTE109/BEACH -> REGION_ROUTE109/SEA"] = hm_rules["HM03 Surf"]
 
     # Slateport City
@@ -224,8 +262,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_ROUTE110/MAIN -> REGION_ROUTE110/NORTH_WATER"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/EAST"] = HasAny("Acro Bike", "Mach Bike")
     entrance_rules["REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST"] = HasAny("Acro Bike", "Mach Bike")
-    entrance_rules["REGION_ROUTE110/SOUTH -> REGION_ROUTE110/MAIN"] = OptionFilter(RemoveRoadblocks, "Route 110 Aqua Grunts", "contains") | Has("EVENT_RESCUE_CAPT_STERN")
-    entrance_rules["REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH"] = OptionFilter(RemoveRoadblocks, "Route 110 Aqua Grunts", "contains") | Has("EVENT_RESCUE_CAPT_STERN")
+    entrance_rules["REGION_ROUTE110/SOUTH -> REGION_ROUTE110/MAIN"] = (
+        OptionFilter(RemoveRoadblocks, "Route 110 Aqua Grunts", "contains") | Has("EVENT_RESCUE_CAPT_STERN")
+    )
+    entrance_rules["REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH"] = (
+        OptionFilter(RemoveRoadblocks, "Route 110 Aqua Grunts", "contains") | Has("EVENT_RESCUE_CAPT_STERN")
+    )
 
     # Trick House
     entrance_rules["REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS"] = hm_rules["HM01 Cut"]
@@ -260,8 +302,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["MAP_DESERT_RUINS:0/MAP_ROUTE111:1"] = hm_rules["HM06 Rock Smash"]
 
     # Route 112
-    entrance_rules["REGION_ROUTE112/SOUTH_EAST -> REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE"] = OptionFilter(RemoveRoadblocks, "Route 112 Magma Grunts", "contains") | Has("EVENT_MAGMA_STEALS_METEORITE")
-    entrance_rules["REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE -> REGION_ROUTE112/SOUTH_EAST"] = OptionFilter(RemoveRoadblocks, "Route 112 Magma Grunts", "contains") | Has("EVENT_MAGMA_STEALS_METEORITE")
+    entrance_rules["REGION_ROUTE112/SOUTH_EAST -> REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE"] = (
+        OptionFilter(RemoveRoadblocks, "Route 112 Magma Grunts", "contains") | Has("EVENT_MAGMA_STEALS_METEORITE")
+    )
+    entrance_rules["REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE -> REGION_ROUTE112/SOUTH_EAST"] = (
+        OptionFilter(RemoveRoadblocks, "Route 112 Magma Grunts", "contains") | Has("EVENT_MAGMA_STEALS_METEORITE")
+    )
 
     # Fiery Path
     entrance_rules["REGION_FIERY_PATH/MAIN -> REGION_FIERY_PATH/BEHIND_BOULDER"] = hm_rules["HM04 Strength"]
@@ -270,8 +316,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_ROUTE114/MAIN -> REGION_ROUTE114/WATER"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_ROUTE114/WATER -> REGION_ROUTE114/ABOVE_WATERFALL"] = hm_rules["HM07 Waterfall"]
     entrance_rules["MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0"] = Has("EVENT_DEFEAT_CHAMPION")
-    entrance_rules["REGION_ROUTE114/ABOVE_WATERFALL -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_114_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_ROUTE114/MAIN -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_114_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_ROUTE114/ABOVE_WATERFALL -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_114_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_ROUTE114/MAIN -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_114_2", "EVENT_DEFEAT_SHELLY")
+    )
 
     # Meteor Falls
     entrance_rules["REGION_METEOR_FALLS_1F_1R/MAIN -> REGION_METEOR_FALLS_1F_1R/WATER"] = hm_rules["HM03 Surf"]
@@ -313,14 +363,26 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["MAP_NEW_MAUVILLE_ENTRANCE:1/MAP_NEW_MAUVILLE_INSIDE:0"] = Has("Basement Key")
 
     # Route 118
-    entrance_rules["REGION_ROUTE118/WEST -> REGION_ROUTE118/EAST"] = OptionFilter(ModifyRoute118, ModifyRoute118.option_true) & Has("Acro Bike")
-    entrance_rules["REGION_ROUTE118/EAST -> REGION_ROUTE118/WEST"] = OptionFilter(ModifyRoute118, ModifyRoute118.option_true) & Has("Acro Bike")
-    entrance_rules["REGION_ROUTE118/WEST_WATER -> REGION_ROUTE118/EAST_WATER"] = OptionFilter(ModifyRoute118, ModifyRoute118.option_false) & True_()
-    entrance_rules["REGION_ROUTE118/EAST_WATER -> REGION_ROUTE118/WEST_WATER"] = OptionFilter(ModifyRoute118, ModifyRoute118.option_false) & True_()
+    entrance_rules["REGION_ROUTE118/WEST -> REGION_ROUTE118/EAST"] = (
+        OptionFilter(ModifyRoute118, ModifyRoute118.option_true) & Has("Acro Bike")
+    )
+    entrance_rules["REGION_ROUTE118/EAST -> REGION_ROUTE118/WEST"] = (
+        OptionFilter(ModifyRoute118, ModifyRoute118.option_true) & Has("Acro Bike")
+    )
+    entrance_rules["REGION_ROUTE118/WEST_WATER -> REGION_ROUTE118/EAST_WATER"] = (
+        OptionFilter(ModifyRoute118, ModifyRoute118.option_false) & True_()
+    )
+    entrance_rules["REGION_ROUTE118/EAST_WATER -> REGION_ROUTE118/WEST_WATER"] = (
+        OptionFilter(ModifyRoute118, ModifyRoute118.option_false) & True_()
+    )
     entrance_rules["REGION_ROUTE118/WEST -> REGION_ROUTE118/WEST_WATER"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_ROUTE118/EAST -> REGION_ROUTE118/EAST_WATER"] = hm_rules["HM03 Surf"]
-    entrance_rules["REGION_ROUTE118/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_118_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_ROUTE118/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_118_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_ROUTE118/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_118_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_ROUTE118/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"] = (
+        HasAll("EVENT_DEFEAT_CHAMPION", "TERRA_CAVE_ROUTE_118_2", "EVENT_DEFEAT_SHELLY")
+    )
 
     # Route 119
     entrance_rules["REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_WATER"] = hm_rules["HM03 Surf"]
@@ -330,8 +392,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_ROUTE119/MIDDLE_RIVER -> REGION_ROUTE119/ABOVE_WATERFALL"] = hm_rules["HM07 Waterfall"]
     entrance_rules["REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/MIDDLE_RIVER"] = hm_rules["HM07 Waterfall"]
     entrance_rules["REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS"] = Has("Acro Bike")
-    entrance_rules["REGION_ROUTE119/MIDDLE -> REGION_ROUTE119/UPPER"] = OptionFilter(RemoveRoadblocks, "Route 119 Aqua Grunts", "contains") | Has("EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE"] = OptionFilter(RemoveRoadblocks, "Route 119 Aqua Grunts", "contains") | Has("EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_ROUTE119/MIDDLE -> REGION_ROUTE119/UPPER"] = (
+        OptionFilter(RemoveRoadblocks, "Route 119 Aqua Grunts", "contains") | Has("EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE"] = (
+        OptionFilter(RemoveRoadblocks, "Route 119 Aqua Grunts", "contains") | Has("EVENT_DEFEAT_SHELLY")
+    )
 
     # Fortree City
     entrance_rules["REGION_FORTREE_CITY/MAIN -> REGION_FORTREE_CITY/BEFORE_GYM"] = Has("Devon Scope")
@@ -358,7 +424,9 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/MAIN"] = Has("Mach Bike")
     entrance_rules["REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_SOUTHWEST/POND"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_SAFARI_ZONE_SOUTHEAST/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/WATER"] = hm_rules["HM03 Surf"]
-    entrance_rules["REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/MAIN"] = OptionFilter(RemoveRoadblocks, "Safari Zone Construction Workers", "contains") | Has("EVENT_DEFEAT_CHAMPION")
+    entrance_rules["REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/MAIN"] = (
+        OptionFilter(RemoveRoadblocks, "Safari Zone Construction Workers", "contains") | Has("EVENT_DEFEAT_CHAMPION")
+    )
 
     # Route 122
     entrance_rules["REGION_ROUTE122/MT_PYRE_ENTRANCE -> REGION_ROUTE122/SEA"] = hm_rules["HM03 Surf"]
@@ -375,16 +443,25 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_FARAWAY_ISLAND_ENTRANCE/MAIN"] = Has("Old Sea Map")
     entrance_rules["REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_BIRTH_ISLAND_HARBOR/MAIN"] = Has("Aurora Ticket")
     entrance_rules["REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_NAVEL_ROCK_HARBOR/MAIN"] = Has("Mystic Ticket")
-    entrance_rules["REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN"] = OptionFilter(RemoveRoadblocks, "Lilycove City Wailmer", "contains") | Has("EVENT_CLEAR_AQUA_HIDEOUT")
-    entrance_rules["REGION_ROUTE124/MAIN -> REGION_LILYCOVE_CITY/SEA"] = OptionFilter(RemoveRoadblocks, "Lilycove City Wailmer", "contains") | Has("EVENT_CLEAR_AQUA_HIDEOUT")
+    entrance_rules["REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN"] = (
+        OptionFilter(RemoveRoadblocks, "Lilycove City Wailmer", "contains") | Has("EVENT_CLEAR_AQUA_HIDEOUT")
+    )
+    entrance_rules["REGION_ROUTE124/MAIN -> REGION_LILYCOVE_CITY/SEA"] = (
+        OptionFilter(RemoveRoadblocks, "Lilycove City Wailmer", "contains") | Has("EVENT_CLEAR_AQUA_HIDEOUT")
+    )
 
     # Magma Hideout
     entrance_rules["REGION_MAGMA_HIDEOUT_1F/ENTRANCE -> REGION_MAGMA_HIDEOUT_1F/MAIN"] = hm_rules["HM04 Strength"]
     entrance_rules["REGION_MAGMA_HIDEOUT_1F/MAIN -> REGION_MAGMA_HIDEOUT_1F/ENTRANCE"] = hm_rules["HM04 Strength"]
 
     # Aqua Hideout
-    entrance_rules["REGION_AQUA_HIDEOUT_1F/WATER -> REGION_AQUA_HIDEOUT_1F/MAIN"] = OptionFilter(RemoveRoadblocks, "Aqua Hideout Grunts", "contains") | Has("EVENT_AQUA_STEALS_SUBMARINE")
-    entrance_rules["REGION_AQUA_HIDEOUT_1F/MAIN -> REGION_AQUA_HIDEOUT_1F/WATER"] = OptionFilter(RemoveRoadblocks, "Aqua Hideout Grunts", "contains") | (hm_rules["HM03 Surf"] & Has("EVENT_AQUA_STEALS_SUBMARINE"))
+    entrance_rules["REGION_AQUA_HIDEOUT_1F/WATER -> REGION_AQUA_HIDEOUT_1F/MAIN"] = (
+        OptionFilter(RemoveRoadblocks, "Aqua Hideout Grunts", "contains") | Has("EVENT_AQUA_STEALS_SUBMARINE")
+    )
+    entrance_rules["REGION_AQUA_HIDEOUT_1F/MAIN -> REGION_AQUA_HIDEOUT_1F/WATER"] = (
+        OptionFilter(RemoveRoadblocks, "Aqua Hideout Grunts", "contains") |
+        (hm_rules["HM03 Surf"] & Has("EVENT_AQUA_STEALS_SUBMARINE"))
+    )
 
     # Route 124
     entrance_rules["REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/BIG_AREA"] = hm_rules["HM08 Dive"]
@@ -413,8 +490,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_MOSSDEEP_CITY/MAIN -> REGION_ROUTE127/MAIN"] = hm_rules["HM03 Surf"]
 
     # Route 125
-    entrance_rules["REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_125_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_125_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_125_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_125_2", "EVENT_DEFEAT_SHELLY")
+    )
 
     # Shoal Cave
     entrance_rules["REGION_SHOAL_CAVE_ENTRANCE_ROOM/SOUTH -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER"] = hm_rules["HM03 Surf"]
@@ -454,8 +535,12 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/AREA_2"] = hm_rules["HM08 Dive"]
     entrance_rules["REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/AREA_3"] = hm_rules["HM08 Dive"]
     entrance_rules["REGION_ROUTE127/ENCLOSED_AREA -> REGION_UNDERWATER_ROUTE127/TUNNEL"] = hm_rules["HM08 Dive"]
-    entrance_rules["REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_127_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_127_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_127_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_127_2", "EVENT_DEFEAT_SHELLY")
+    )
 
     # Route 128
     entrance_rules["REGION_ROUTE128/MAIN -> REGION_UNDERWATER_ROUTE128/MAIN"] = hm_rules["HM08 Dive"]
@@ -483,11 +568,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_SEAFLOOR_CAVERN_ROOM7/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM7/WATER"] = hm_rules["HM03 Surf"]
     entrance_rules["REGION_SEAFLOOR_CAVERN_ROOM8/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH"] = hm_rules["HM04 Strength"]
     entrance_rules["REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM8/NORTH"] = hm_rules["HM04 Strength"]
-    entrance_rules["MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0"] = OptionFilter(RemoveRoadblocks, "Seafloor Cavern Aqua Grunt", "contains") | Has("EVENT_STEVEN_GIVES_DIVE")
+    entrance_rules["MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0"] = (
+        OptionFilter(RemoveRoadblocks, "Seafloor Cavern Aqua Grunt", "contains") | Has("EVENT_STEVEN_GIVES_DIVE")
+    )
 
     # Route 129
-    entrance_rules["REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_129_1", "EVENT_DEFEAT_SHELLY")
-    entrance_rules["REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_129_2", "EVENT_DEFEAT_SHELLY")
+    entrance_rules["REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_129_1", "EVENT_DEFEAT_SHELLY")
+    )
+    entrance_rules["REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"] = (
+        hm_rules["HM08 Dive"] & HasAll("EVENT_DEFEAT_CHAMPION", "MARINE_CAVE_ROUTE_129_2", "EVENT_DEFEAT_SHELLY")
+    )
 
     # Pacifidlog Town
     entrance_rules["REGION_PACIFIDLOG_TOWN/MAIN -> REGION_PACIFIDLOG_TOWN/WATER"] = hm_rules["HM03 Surf"]
@@ -529,8 +620,14 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Pokemon League
     entrance_rules["REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS"] = (
-        (OptionFilter(EliteFourRequirement, EliteFourRequirement.option_badges) & HasGroupUnique("Badge", world.options.elite_four_count.value)) |
-        (OptionFilter(EliteFourRequirement, EliteFourRequirement.option_gyms) & create_defeated_n_gym_leaders_rule(world.options.elite_four_count.value))
+        (
+            OptionFilter(EliteFourRequirement, EliteFourRequirement.option_badges) &
+            HasGroupUnique("Badge", world.options.elite_four_count.value)
+        ) |
+        (
+            OptionFilter(EliteFourRequirement, EliteFourRequirement.option_gyms) &
+            create_defeated_n_gym_leaders_rule(world.options.elite_four_count.value)
+        )
     )
 
     # Battle Frontier
@@ -593,11 +690,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         location_rules["NPC_GIFT_RECEIVED_TM_SLUDGE_BOMB"] = Has("EVENT_DEFEAT_NORMAN")
 
         # Slateport City
-        location_rules["NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH"] = HasAll("EVENT_AQUA_STEALS_SUBMARINE", "Scanner", "Mind Badge")
-        location_rules["NPC_GIFT_RECEIVED_DEEP_SEA_SCALE"] = HasAll("EVENT_AQUA_STEALS_SUBMARINE", "Scanner", "Mind Badge")
+        location_rules["NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH"] = (
+            HasAll("EVENT_AQUA_STEALS_SUBMARINE", "Scanner", "Mind Badge")
+        )
+        location_rules["NPC_GIFT_RECEIVED_DEEP_SEA_SCALE"] = (
+            HasAll("EVENT_AQUA_STEALS_SUBMARINE", "Scanner", "Mind Badge")
+        )
 
         # Mauville City
-        location_rules["NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"] = HasAll("EVENT_DEFEAT_NORMAN", "EVENT_TURN_OFF_GENERATOR")
+        location_rules["NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"] = (
+            HasAll("EVENT_DEFEAT_NORMAN", "EVENT_TURN_OFF_GENERATOR")
+        )
 
         # Fallarbor Town
         location_rules["NPC_GIFT_RECEIVED_TM_RETURN"] = HasAll("EVENT_RECOVER_METEORITE", "Meteorite")
