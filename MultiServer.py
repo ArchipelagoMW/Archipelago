@@ -228,6 +228,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
+    team_trackers: typing.Dict[int, typing.List[Client]]
     endpoints: list[Client]
     locations: LocationStore  # typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     location_checks: typing.Dict[typing.Tuple[int, int], typing.Set[int]]
@@ -261,6 +262,7 @@ class Context:
         self.log_network = log_network
         self.endpoints = []
         self.clients = {}
+        self.team_trackers = {}
         self.compatibility: int = compatibility
         self.shutdown_task = None
         self.data_filename = None
@@ -451,6 +453,8 @@ class Context:
             self.endpoints.remove(endpoint)
         if endpoint.slot and endpoint in self.clients[endpoint.team][endpoint.slot]:
             self.clients[endpoint.team][endpoint.slot].remove(endpoint)
+        if endpoint in self.team_trackers[endpoint.team]:
+            self.team_trackers[endpoint.team].remove(endpoint)
         await on_client_disconnected(self, endpoint)
 
     def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
@@ -517,6 +521,7 @@ class Context:
                        if slot_info.type == SlotType.group}
 
         self.clients = {0: {}}
+        self.team_trackers = {0: []}
         slot_info: NetworkSlot
         slot_id: int
 
@@ -807,10 +812,13 @@ class Context:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
         if not hints:
             return
+        all_hint_messages: list[dict] = []
         new_hint_events: typing.Set[int] = set()
         concerns = collections.defaultdict(list)
         for hint in sorted(hints, key=operator.attrgetter('found'), reverse=True):
-            data = (hint, hint.as_network_message())
+            hint_message = hint.as_network_message()
+            all_hint_messages.append(hint_message)
+            data = (hint, hint_message)
             for player in self.slot_set(hint.receiving_player):
                 concerns[player].append(data)
             if not hint.local and data not in concerns[hint.finding_player]:
@@ -833,12 +841,19 @@ class Context:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
             if recipients is None or slot in recipients:
-                clients = filter(lambda c: not c.no_text, self.clients[team].get(slot, []))
+                # Filter out clients that shouldn't receive the hint.
+                # TeamTrackers are handled later, so filter them out as well so they don't receive the hint twice.
+                clients = filter(lambda c: not (c.no_text or c in self.team_trackers[team]), self.clients[team].get(slot, []))
                 if not clients:
                     continue
                 client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
                 for client in clients:
                     async_start(self.send_msgs(client, client_hints))
+        # Inform the TeamTrackers.
+        # These are not sorted by whoever found them (unlike above),
+        # but this shouldn't matter as these are intended to be viewed by the entire team.
+        for client in self.team_trackers[team]:
+            async_start(self.send_msgs(client, all_hint_messages))
 
     def get_hint(self, team: int, finding_player: int, seeked_location: int) -> typing.Optional[Hint]:
         for hint in self.hints[team, finding_player]:
@@ -1896,6 +1911,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             team, slot = ctx.connect_names[args['name']]
             if client.auth and client.team is not None and client.slot in ctx.clients[client.team]:
                 ctx.clients[team][slot].remove(client)  # re-auth, remove old entry
+                if client in ctx.team_trackers[team]:
+                    ctx.team_trackers[team].remove(client)
                 if client.team != team or client.slot != slot:
                     client.auth = False  # swapping Team/Slot
             client.team = team
@@ -1908,6 +1925,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.no_locations = bool(client.tags & _non_game_messages.keys())
             # set NoText for old PopTracker clients that predate the tag to save traffic
             client.no_text = "NoText" in client.tags or ("PopTracker" in client.tags and client.version < (0, 5, 1))
+            if "TeamTracker" in client.tags:
+                ctx.team_trackers[team].append(client)
             connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1983,6 +2002,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     client.no_text = "NoText" in client.tags or (
                         "PopTracker" in client.tags and client.version < (0, 5, 1)
                     )
+                    if "TeamTracker" in client.tags and client not in ctx.team_trackers[team]:
+                        ctx.team_trackers[team].append(client)
+                    if "TeamTracker" not in client.tags and client in ctx.team_trackers[team]:
+                        ctx.team_trackers[team].remove(client)
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.",

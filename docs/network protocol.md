@@ -769,14 +769,15 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 ### Tags
 Tags are represented as a list of strings, the common client tags follow:
 
-| Name      | Notes                                                                                                                                |
-|-----------|--------------------------------------------------------------------------------------------------------------------------------------|
-| AP        | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.    |
-| DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets.                             |
-| HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
-| Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
-| TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
-| NoText    | Indicates the client does not want to receive text messages, improving performance if not needed.                                    |
+| Name        | Notes                                                                                                                                |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| AP          | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.    |
+| DeathLink   | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets.                             |
+| HintGame    | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
+| Tracker     | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
+| TextOnly    | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+| NoText      | Indicates the client does not want to receive text messages, improving performance if not needed.                                    |
+| TeamTracker | Indicates the client is tracking information for the entire team, and should therefore receive all hints intended for the team.      |
 
 ¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
 ²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
