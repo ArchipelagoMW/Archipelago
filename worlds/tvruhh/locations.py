@@ -21,14 +21,17 @@ def get_location_names_with_ids(location_names: list[str], chosen_list) -> dict[
 def create_all_locations(world: TVRUHHWorld) -> None:
     create_regular_locations(world)
     create_events(world)
+    # world.location_name_to_id.update(big_bad_list_of_all_locations_with_IDs)
+
 
 
 
 big_bad_list_of_all_locations_with_IDs = {
+    "Dream: Love at First Shot": 1000000
+}
+extra_location_list = {
 
 }
-
-
 
 def create_regular_locations(world: TVRUHHWorld) -> None:
     #get regions
@@ -38,6 +41,11 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
     #locations in start region
     start_dreams.add_locations(load_all_lists(world,"starting_dreams"),TVRUHHLocation)
     quickplay_dreams.add_locations(load_all_lists(world,"quickplay_start"),TVRUHHLocation)
+
+
+def create_extra_locations(world: TVRUHHWorld, amount: int) -> None:
+    bonus_locations = world.get_region("Start")
+    bonus_locations.add_locations(get_location_names_with_ids(load_extra_locations(amount),big_bad_list_of_all_locations_with_IDs))
 
 
 def load_all_lists(world: TVRUHHWorld, chosenlist: str = "") -> dict[str, int | None]:
@@ -66,9 +74,6 @@ def load_all_lists(world: TVRUHHWorld, chosenlist: str = "") -> dict[str, int | 
     
     return x
 
-
-
-
 def load_location_list(parentlist: dict,childlist: str,world,min_id = -1, max_id = -1) -> dict[str, int | None]:
     names = []
     for x in parentlist[childlist]:
@@ -79,17 +84,14 @@ def load_location_list(parentlist: dict,childlist: str,world,min_id = -1, max_id
                 else:
                     print("TVRUHH:", x, "not disabled, adding as location...")
                     names.append(x)
-                    big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
         else:
             if world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                 print("TVRUHH:", x, "was disabled, is not added as location.")
             else:
                 print("TVRUHH:", x, "not disabled, adding as location...")
                 names.append(x)
-                big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
     locations = get_location_names_with_ids(names,parentlist[childlist])
     print(names)
-    print(big_bad_list_of_all_locations_with_IDs)
     return locations
 
 def load_remaining_locations(whichlist: dict,world: TVRUHHWorld,min_id = -1, max_id = -1) -> dict[str, int | None]:
@@ -101,19 +103,46 @@ def load_remaining_locations(whichlist: dict,world: TVRUHHWorld,min_id = -1, max
                     if not world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                         print("TVRUHH:", x, "not disabled, adding as location...")
                         names.append(x)
-                        big_bad_list_of_all_locations_with_IDs.update({x: whichlist[x]})
             else:
                 if not world.options.disabled_dreams.__contains__(x.replace("Dream: ","")):
                     print("TVRUHH:", x, "not disabled, adding as location...")
                     names.append(x)
-                    big_bad_list_of_all_locations_with_IDs.update({x: whichlist[x]})
     locations = get_location_names_with_ids(names,whichlist)
     return locations
+
+def load_extra_locations(amount: int) -> dict[str, int | None]:
+    a: int = 1
+    l = []
+    while a <= amount: 
+        x = "Bonus Gift " + ((a).__str__())
+        l.append(x)
+        a += 1
+    return l
 
 def create_events(world: TVRUHHWorld) -> None:
     pass
 
+def requestbbl() -> dict[str:int]: 
+    # normal locations
+    updatebbl(dream_list, "starting_dreams")
+    
+    # bonus locations
+    a: int = 1
+    while a <= 1000: 
+        x = "Bonus Gift " + ((a).__str__())
+        big_bad_list_of_all_locations_with_IDs.update({str(x): int(1440000 + a+1999)})
+        a += 1
+    
+    return big_bad_list_of_all_locations_with_IDs
 
+def updatebbl(parentlist, childlist = {}) -> None:
+    if childlist == {}:
+        for x in parentlist:
+            if not x is dict:
+                big_bad_list_of_all_locations_with_IDs.update({x: parentlist[x]})
+    else:
+        for x in parentlist[childlist]:
+            big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
 
 
 
@@ -269,7 +298,5 @@ extremely_tedious_dream_list = {
 }
 
 other_locations_list = {
-    "Bonus Gift (Filler)" : 1440000, # may be repeated
-    "Bonus Gift (Useful)" : 1441000, # may be repeated
-    "Bonus Gift (Progression)" : 1442000 # may be repeated
+    "Bonus Gift" : 1442000 # may be repeated. DO NOT CONTINUE FROM THIS LOCATION, intead add locations before this location (with ID's lower than 1442000).
 }

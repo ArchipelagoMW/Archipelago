@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 
+from . import locations
+
 if TYPE_CHECKING:
     from .world import TVRUHHWorld
 
@@ -20,7 +22,7 @@ def get_random_filler_item_name(world: TVRUHHWorld) -> str:
     random_number = world.random.randint(0,99)
     if random_number >= 0 and random_number < 100: #TO DO: Add options to add junk filler weights
         random_tetrid = world.random.randint(1,19)
-        if random_tetrid > 1 and random_tetrid <= 3:
+        if random_tetrid > 0 and random_tetrid <= 3:
             return "Extra Green Tetrids"
         if random_tetrid > 3 and random_tetrid <= 6:
             return "Extra Red Tetrids"
@@ -53,8 +55,12 @@ big_bad_list_of_all_items_with_IDs = { #only holds the items from the filler ite
     "Extra Radiant Tetrids": 1130006
 }
 
+
+
 def create_all_items(world: TVRUHHWorld) -> None:
     itempool: list[Item] = []
+    offset: int = 0
+
     itempool.extend(get_items(world, monster_list))
     itempool.extend(get_items(world, power_gift_list))
     itempool.extend(get_items(world, bonus_gift_list))
@@ -68,13 +74,35 @@ def create_all_items(world: TVRUHHWorld) -> None:
     #filling remaining empty locations
     item_amount = len(itempool)
     missing_items = len(world.multiworld.get_unfilled_locations(world.player))
-    needed_filler_amount = missing_items - item_amount
+    needed_filler_amount = missing_items - offset - item_amount + world.options.bonus_gift_amount.value
 
-    print("TVRUHH: Filling ", needed_filler_amount, " empty locations with filler...")
-
-    itempool += [world.create_filler() for _ in range(needed_filler_amount)]
+    if needed_filler_amount < 0:
+        print("TVRUHH: Adding", -needed_filler_amount, "bonus gift locations...")
+        world.bonus_gift_locations -= needed_filler_amount
+    elif needed_filler_amount == 0:
+        print("TVRUHH: No filler needed, not generating any filler.")
+    else:
+        print("TVRUHH: Adding", needed_filler_amount, "filler items...")
+        itempool += [world.create_filler() for _ in range(needed_filler_amount)]
 
     world.multiworld.itempool += itempool
+
+
+def requestbbl() -> dict[str:int]:
+    updatebbl(monster_list)
+    updatebbl(power_gift_list)
+    updatebbl(bonus_gift_list)
+    updatebbl(quick_gift_list)
+    updatebbl(dreamscape_list)
+    updatebbl(music_list)
+    updatebbl(other_items_list)
+    return big_bad_list_of_all_items_with_IDs
+
+
+def updatebbl(whichlist: dict) -> None:
+    for x in whichlist:
+        big_bad_list_of_all_items_with_IDs.update({x: whichlist[x][0]})
+
 
 
 # function responsible for all items
@@ -84,10 +112,8 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
         if not min_id == -1:
             if whichlist[x][0] >= min_id and whichlist[x][0] <= max_id:
                 items.append(world.create_item(x,whichlist))
-                big_bad_list_of_all_items_with_IDs.update({x: whichlist[x]})
         else:
             items.append(world.create_item(x,whichlist))
-            big_bad_list_of_all_items_with_IDs.update({x: whichlist[x]})
     return items
 
 
@@ -499,7 +525,7 @@ dreamscape_list = {
     "The Garden's Blessing": [1080018, ItemClassification.progression],
     "The Heart of a Monster": [1080019, ItemClassification.progression],
     "Nowhere": [1080020, ItemClassification.progression],
-    "Altered Dream": [1080021, ItemClassification.progression]
+    "Altered Dream": [1080021, ItemClassification.progression],
 }
 
 event_list = {
@@ -511,64 +537,64 @@ scenes_list = {
 }
 
 music_list = {
-    "Subterranean Pulse": [1110000, ItemClassification.filler],
-    "Shambled Paradox": [1110001, ItemClassification.filler],
-    "Her Adamant Will": [1110002, ItemClassification.filler],
-    "Mutual Exclusion": [1110003, ItemClassification.filler],
-    "Defense Mechanism": [1110004, ItemClassification.filler],
-    "My Heart Is See Through": [1110005, ItemClassification.filler],
-    "The Void Rains Down Upon You": [1110006, ItemClassification.filler],
-    "Distant Observer": [1110007, ItemClassification.filler],
-    "Warning Signs": [1110008, ItemClassification.filler],
-    "Nihility": [1110009, ItemClassification.filler],
-    "Spread Your Wings": [1110010, ItemClassification.filler],
-    "How Far We've Come": [1110011, ItemClassification.filler],
-    "Trypophobia": [1110012, ItemClassification.filler],
-    "Guardian Angel": [1110013, ItemClassification.filler],
-    "Theoretically Beautiful": [1110014, ItemClassification.filler],
-    "Towering Anxiety": [1110015, ItemClassification.filler],
-    "Stained Glass Battle Dance": [1110016, ItemClassification.filler],
-    "Alone in the Dark": [1110017, ItemClassification.filler],
-    "Willpower": [1110018, ItemClassification.filler],
-    "Anxious Protocol": [1110019, ItemClassification.filler],
-    "A Strange Place": [1110020, ItemClassification.filler],
-    "Fever Dream": [1110021, ItemClassification.filler],
-    "Monster Birthday": [1110022, ItemClassification.filler],
-    "Uneasy Feeling": [1110023, ItemClassification.filler],
-    "Impending Doom": [1110024, ItemClassification.filler],
-    "Lonely Respite": [1110025, ItemClassification.filler],
-    "Long Distance": [1110026, ItemClassification.filler],
-    "Light Years Apart": [1110027, ItemClassification.filler],
-    "Lucid Dissonance": [1110028, ItemClassification.filler],
-    "Scattered Across Time and Space": [1110029, ItemClassification.filler],
-    "Rapture My Heart": [1110030, ItemClassification.filler],
-    "Sticks and Stones": [111031, ItemClassification.filler],
-    "Marked For Deletion": [1110032, ItemClassification.filler],
-    "Unbreakable Starlight Bloom": [1110033, ItemClassification.filler],
-    "Together As None": [1110034, ItemClassification.filler],
-    "Shambled Dream Medley": [1110035, ItemClassification.filler],
-    "Guardian Dream Medley": [1110036, ItemClassification.filler],
-    "Symbolic Dream Medley": [1110037, ItemClassification.filler],
-    "Mechanical Dream Medley": [1110038, ItemClassification.filler],
-    "Fragile Dream Medley": [1110039, ItemClassification.filler],
-    "Void Dream Medley": [1110040, ItemClassification.filler],
-    "Lucid Dream Medley": [1110041, ItemClassification.filler],
-    "The World Between Six Points": [1110042, ItemClassification.filler],
-    "Transdimensional Sibling": [1110043, ItemClassification.filler],
-    "Touched Her Soul": [1110044, ItemClassification.filler],
-    "Happy Place": [1110045, ItemClassification.filler],
-    "Arrhythmia": [1110046, ItemClassification.filler],
-    "Handle With Care": [1110047, ItemClassification.filler],
-    "Alone Together": [1110048, ItemClassification.filler],
-    "Pop Quiz, But You're Naked": [1110049, ItemClassification.filler],
-    "Forest of Denial": [1110050, ItemClassification.filler],
-    "Dungeon of Glass": [1110051, ItemClassification.filler],
-    "Little Imperfection": [1110052, ItemClassification.filler],
-    "Absolute Zero": [1110053, ItemClassification.filler],
-    "Less Than Zero": [1110054, ItemClassification.filler],
-    "Negative Matter": [1110055, ItemClassification.filler],
-    "An End": [1110056, ItemClassification.filler],
-    "Me, Myself, and Eye": [1110057, ItemClassification.filler]
+    "Subterranean Pulse": [1110000, ItemClassification.skip_balancing],
+    "Shambled Paradox": [1110001, ItemClassification.skip_balancing],
+    "Her Adamant Will": [1110002, ItemClassification.skip_balancing],
+    "Mutual Exclusion": [1110003, ItemClassification.skip_balancing],
+    "Defense Mechanism": [1110004, ItemClassification.skip_balancing],
+    "My Heart Is See Through": [1110005, ItemClassification.skip_balancing],
+    "The Void Rains Down Upon You": [1110006, ItemClassification.skip_balancing],
+    "Distant Observer": [1110007, ItemClassification.skip_balancing],
+    "Warning Signs": [1110008, ItemClassification.skip_balancing],
+    "Nihility": [1110009, ItemClassification.skip_balancing],
+    "Spread Your Wings": [1110010, ItemClassification.skip_balancing],
+    "How Far We've Come": [1110011, ItemClassification.skip_balancing],
+    "Trypophobia": [1110012, ItemClassification.skip_balancing],
+    "Guardian Angel": [1110013, ItemClassification.skip_balancing],
+    "Theoretically Beautiful": [1110014, ItemClassification.skip_balancing],
+    "Towering Anxiety": [1110015, ItemClassification.skip_balancing],
+    "Stained Glass Battle Dance": [1110016, ItemClassification.skip_balancing],
+    "Alone in the Dark": [1110017, ItemClassification.skip_balancing],
+    "Willpower": [1110018, ItemClassification.skip_balancing],
+    "Anxious Protocol": [1110019, ItemClassification.skip_balancing],
+    "A Strange Place": [1110020, ItemClassification.skip_balancing],
+    "Fever Dream": [1110021, ItemClassification.skip_balancing],
+    "Monster Birthday": [1110022, ItemClassification.skip_balancing],
+    "Uneasy Feeling": [1110023, ItemClassification.skip_balancing],
+    "Impending Doom": [1110024, ItemClassification.skip_balancing],
+    "Lonely Respite": [1110025, ItemClassification.skip_balancing],
+    "Long Distance": [1110026, ItemClassification.skip_balancing],
+    "Light Years Apart": [1110027, ItemClassification.skip_balancing],
+    "Lucid Dissonance": [1110028, ItemClassification.skip_balancing],
+    "Scattered Across Time and Space": [1110029, ItemClassification.skip_balancing],
+    "Rapture My Heart": [1110030, ItemClassification.skip_balancing],
+    "Sticks and Stones": [111031, ItemClassification.skip_balancing],
+    "Marked For Deletion": [1110032, ItemClassification.skip_balancing],
+    "Unbreakable Starlight Bloom": [1110033, ItemClassification.skip_balancing],
+    "Together As None": [1110034, ItemClassification.skip_balancing],
+    "Shambled Dream Medley": [1110035, ItemClassification.skip_balancing],
+    "Guardian Dream Medley": [1110036, ItemClassification.skip_balancing],
+    "Symbolic Dream Medley": [1110037, ItemClassification.skip_balancing],
+    "Mechanical Dream Medley": [1110038, ItemClassification.skip_balancing],
+    "Fragile Dream Medley": [1110039, ItemClassification.skip_balancing],
+    "Void Dream Medley": [1110040, ItemClassification.skip_balancing],
+    "Lucid Dream Medley": [1110041, ItemClassification.skip_balancing],
+    "The World Between Six Points": [1110042, ItemClassification.skip_balancing],
+    "Transdimensional Sibling": [1110043, ItemClassification.skip_balancing],
+    "Touched Her Soul": [1110044, ItemClassification.skip_balancing],
+    "Happy Place": [1110045, ItemClassification.skip_balancing],
+    "Arrhythmia": [1110046, ItemClassification.skip_balancing],
+    "Handle With Care": [1110047, ItemClassification.skip_balancing],
+    "Alone Together": [1110048, ItemClassification.skip_balancing],
+    "Pop Quiz, But You're Naked": [1110049, ItemClassification.skip_balancing],
+    "Forest of Denial": [1110050, ItemClassification.skip_balancing],
+    "Dungeon of Glass": [1110051, ItemClassification.skip_balancing],
+    "Little Imperfection": [1110052, ItemClassification.skip_balancing],
+    "Absolute Zero": [1110053, ItemClassification.skip_balancing],
+    "Less Than Zero": [1110054, ItemClassification.skip_balancing],
+    "Negative Matter": [1110055, ItemClassification.skip_balancing],
+    "An End": [1110056, ItemClassification.skip_balancing],
+    "Me, Myself, and Eye": [1110057, ItemClassification.skip_balancing]
 }
 
 useful_item_list = {

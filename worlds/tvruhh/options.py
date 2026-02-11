@@ -8,9 +8,9 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle, Op
 class BonusGiftLocations(Range):
     """Amount of extra Archipelago Bonus Gifts.
     
-    The amount of gifts always equals: 
-    Number of overflow items in itempool (when compared with locations) +
-    Bonus gift locations (this option)
+    If there is any item overflow due to too few locations...
+    and the overflow amount is higher than the value set here,
+    then this option will do nothing.
 
     Bonus Gifts are unlocked quite early on in this game."""
 
@@ -24,7 +24,7 @@ class BonusGiftChance(Range):
     Archipelago Bonus Gifts will also act as any other bonus gift, regardless of setting.
     This means you can disable this setting (by setting it to 0).
 
-    Keep in mind primairy healing is through Bonus Gifts."""
+    Keep in mind healing is also through Bonus Gifts."""
 
     range_start = 0
     range_end = 100
@@ -109,7 +109,9 @@ option_groups = [
             TediousDreams, 
             ExtremelyTediousDreams,
             DisabledDreams
-        ],
+        ]
+    ),
+    OptionGroup(
         "Location Options",
         [
             BonusGiftLocations,
