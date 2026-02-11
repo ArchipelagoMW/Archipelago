@@ -398,7 +398,7 @@ def set_skull_cavern_floor_entrance_rules(logic, rule_collector: StardewRuleColl
             elevator_difference = 50
         elif CustomLogicOptionName.deep_mining in world_options.custom_logic:
             elevator_difference = 100
-        rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - elevator_difference)
+        rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(max(0, floor - elevator_difference))
         if floor == 25 or floor == 75 or floor == 125:
             rule = rule & logic.mine.can_progress_in_the_skull_cavern_from_floor(floor)
         rule_collector.set_entrance_rule(dig_to_skull_floor(floor), rule)

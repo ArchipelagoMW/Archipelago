@@ -116,7 +116,7 @@ class MineLogic(BaseLogic):
         elif CustomLogicOptionName.easy_mining in self.options.custom_logic:
             mining_tier += 1
         tool_tier = mining_tier + 2
-        tool_tier = min(4, max(0, tool_tier))
+        tool_tier = min(5, max(1, tool_tier))
         mining_tier = max(0, mining_tier)
 
         rules.append(weapon_rule)

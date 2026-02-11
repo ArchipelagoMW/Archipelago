@@ -71,7 +71,7 @@ class FishingLogic(BaseLogic):
             skill_required -= 4
         elif CustomLogicOptionName.hard_fishing in self.options.custom_logic:
             skill_required -= 2
-        elif CustomLogicOptionName.easy_fishing in self.options.custom_logic:
+        elif CustomLogicOptionName.easy_fishing in self.options.custom_logic and difficulty > 20:
             skill_required += 2
 
         skill_required = min(10, max(minimum_level, skill_required))
