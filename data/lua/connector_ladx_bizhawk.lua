@@ -44,7 +44,15 @@
 
 local socket = require("socket")
 udp = socket.socket.udp()
+max_memory_address = 65536 -- Update if not running on GB(C)
 require('common')
+
+print("Listening for connections on port 55355")
+print("")
+print("Please connect with the LADX Archipelago client. LADX does NOT use the BizHawk client")
+print("")
+print("This script makes BizHawk pretend to be RetroArch for the purposes of connecting to the client, it's normal for the client to say that it's connecting to RetorArch")
+print("")
 
 udp:setsockname('127.0.0.1', 55355)
 udp:settimeout(0)
@@ -107,33 +115,41 @@ function on_vblank()
             --       Using memory.read_bytes_as_array() and explicitly using the System Bus
             --       as the active memory domain solves this incompatibility, allowing us
             --       to hopefully use whatever GB(C) emulator we want.
-            local mem = memory.read_bytes_as_array(address, length, "System Bus")
-            local hex_string = ""
-            for _, v in ipairs(mem) do
-                hex_string = hex_string .. string.format("%02X ", v)
-            end
+            if address <= max_memory_address then
+                local mem = memory.read_bytes_as_array(address, length, "System Bus")
+                local hex_string = ""
+                for _, v in ipairs(mem) do
+                    hex_string = hex_string .. string.format("%02X ", v)
+                end
 
-            hex_string = hex_string:sub(1, -2) -- Hang head in shame, remove last " "
-            local reply = string.format("%s %02x %s\n", command, address, hex_string)
-            udp:sendto(reply, msg_or_ip, port_or_nil)
+                hex_string = hex_string:sub(1, -2) -- Hang head in shame, remove last " "
+                local reply = string.format("%s %02x %s\n", command, address, hex_string)
+                udp:sendto(reply, msg_or_ip, port_or_nil)
+            else
+                print("Please close SNI to avoid slowdowns - invalid memory read blocked")
+            end
         elseif command == "WRITE_CORE_MEMORY" then
             local _, address = string.match(data, "(%S+) (%S+)")
             address = stripPrefix(address, "0x")
             address = tonumber(address, 16)
 
-            local to_write = {}
-            local i = 1
-            for byte_str in string.gmatch(data, "%S+") do
-                if i > 2 then
-                    byte_str = stripPrefix(byte_str, "0x")
-                    table.insert(to_write, tonumber(byte_str, 16))
+            if address <= max_memory_address then
+                local to_write = {}
+                local i = 1
+                for byte_str in string.gmatch(data, "%S+") do
+                    if i > 2 then
+                        byte_str = stripPrefix(byte_str, "0x")
+                        table.insert(to_write, tonumber(byte_str, 16))
+                    end
+                    i = i + 1
                 end
-                i = i + 1
-            end
 
-            memory.write_bytes_as_array(address, to_write, "System Bus")
-            local reply = string.format("%s %02x %d\n", command, address, i - 3)
-            udp:sendto(reply, msg_or_ip, port_or_nil)
+                memory.write_bytes_as_array(address, to_write, "System Bus")
+                local reply = string.format("%s %02x %d\n", command, address, i - 3)
+                udp:sendto(reply, msg_or_ip, port_or_nil)
+            else
+                print("Please close SNI to avoid slowdowns - invalid memory write blocked")
+            end
         end
     end
 end
