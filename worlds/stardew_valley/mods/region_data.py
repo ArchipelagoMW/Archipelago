@@ -145,7 +145,7 @@ juna_entrances = [
 
 ayeisha_regions = [
     RegionData(Region.bus_stop, (AyeishaEntrance.bus_stop_to_mail_van,)),
-    RegionData(AyeishaRegion.mail_van),
+    RegionData(AyeishaRegion.mail_van, (AyeishaEntrance.mail_van_to_bus_stop,)),
 ]
 
 ayeisha_entrances = [
@@ -154,7 +154,13 @@ ayeisha_entrances = [
         AyeishaRegion.mail_van,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN,
-    )
+    ),
+    ConnectionData(
+        AyeishaEntrance.mail_van_to_bus_stop,
+        Region.bus_stop,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT,
+    ),
 ]
 
 riley_regions = [RegionData(Region.town, (RileyEntrance.town_to_riley,)), RegionData(RileyRegion.riley_house)]

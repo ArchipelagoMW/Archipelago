@@ -459,6 +459,7 @@ class JunaEntrance:
 @final
 class AyeishaEntrance:
     bus_stop_to_mail_van = "Bus Stop to Ayeisha's Mail Van"
+    mail_van_to_bus_stop = "Ayeisha's Mail Van to Bus Stop"
 
 
 @final
