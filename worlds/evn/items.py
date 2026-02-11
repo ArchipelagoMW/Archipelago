@@ -73,6 +73,14 @@ def get_items() -> Dict[int, EVNItemData]:
         code=STRING_COMPLETE_BIT,
     )
 
+    # Wait, we do need the credits... d'oh
+    for credAmount in CREDIT_IDS.keys():
+        ret_bank[CREDIT_IDS[credAmount]] = EVNItemData(
+            name=credAmount,
+            classification=ItemClassification.filler,
+            code=CREDIT_IDS[credAmount],
+        )
+
     # ships
     # turns out, the ship names are not unique due to the various models. We could add the subname, but just cat ID.
     for ship in ships.ship_table.keys():
@@ -158,7 +166,7 @@ def create_item_with_correct_classification(world: EVNWorld, name: str) -> EVNIt
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: EVNWorld) -> None:
     itempool = []
-    for item_id in ev_item_bank:
+    for item_id in ev_item_bank: #NOTE: could probably now change to "if item.origin not blank, append"
         if ((item_id < 9900 or item_id >= 9906) and item_id != STRING_COMPLETE_BIT): # don't add credits to regular itempool, since they're just filler. We'll add them as needed in the filler section later.
             if (not world.options.include_outfits and ev_item_bank[item_id]["origin"] == "outf"):
                 continue

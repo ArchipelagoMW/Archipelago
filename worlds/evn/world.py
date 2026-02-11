@@ -214,10 +214,7 @@ class EVNWorld(World):
                         #associated_item = items.ev_item_bank[target_id]
                         new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                         if (new_id is not None):
-                            if (current_val is not None) and (current_val != ""):
-                                output_file_string += f'"b{new_id} & ({current_val})"\t'  # !Logic needed for this one!
-                            else:
-                                output_file_string += f'"b{new_id}"\t'
+                            output_file_string += f'"b{new_id}"\t'
                         else:
                             logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
                             output_file_string += default_val
@@ -255,10 +252,7 @@ class EVNWorld(World):
                             #associated_item = items.ev_item_bank[target_id]
                             new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                             if (new_id is not None):
-                                if (current_val is not None) and (current_val != ""):
-                                    output_file_string += f'"b{new_id} & ({current_val})"\t'  # !Logic needed for this one!
-                                else:
-                                    output_file_string += f'"b{new_id}"\t'
+                                output_file_string += f'"b{new_id}"\t'
                             else:
                                 logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
                                 output_file_string += default_val
