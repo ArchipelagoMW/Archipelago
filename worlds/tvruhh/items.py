@@ -126,17 +126,17 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
 # 104 = bounty gifts (status: WIP)
 # 105 = blessing gifts (status: WIP)
 # 106 = burden gifts (status: WIP)
-# 107 = upgrade gifts (status: WIP)
+# 107 = upgrade gifts (status: finished for init release)
 # 108 = dreamscapes (status: finished for init release)
 # 109 = events (status: WIP)
 # 110 = scenes (status: WIP)
 # 111 = music (status: finished for init release)
 # 112 = useful items (status: WIP, wait until after init release)
 # 113 = filler items (status: finished for init release)
-# 114 = qp upgrades (status: WIP)
-# 115 = altstory upgrades (status: WIP)
-# 116 = endless upgrades (status: WIP)
-# 117 = event upgrades (status: WIP)
+# 114 = qp upgrades (status: finished for init release)
+# 115 = altstory upgrades (status: finished for init release)
+# 116 = endless upgrades (status: finished for init release)
+# 117 = event upgrades (status: finished for init release)
 # 118 = other items (status: unknown, has any misc. item)
 # 119 = default unlocks (status: WIP)
 
@@ -495,7 +495,28 @@ burden_gift_list = {
 }
 
 upgrade_gift_list = {
-
+    "Rainbow Petal": [107000, ItemClassification.useful], #8 copies
+    "Clock": [107001, ItemClassification.progression], #5 copies
+    "Vault Key": [107002, ItemClassification.progression], #5 copies
+    "Foreign Axon": [107003, ItemClassification.progression], #3 copies, only 1 is pogression?
+    "Sentinel Claw": [107004, ItemClassification.progression], #2 copies
+    "Dream Petal": [107005, ItemClassification.progression], #16 copies
+    "Pale Box": [107006, ItemClassification.useful], #9 copies
+    "Heart Core": [107007, ItemClassification.useful], #4 copies
+    "Painted Box": [107008, ItemClassification.useful], #7 copies
+    "Altered Core": [107009, ItemClassification.useful], #4 copies
+    "Dark Box": [107010, ItemClassification.useful], #7 copies
+    "Defect Core": [107011, ItemClassification.useful], #3 copies
+    "Blue Box": [107012, ItemClassification.useful], #7 copies
+    "Flawless Core": [107013, ItemClassification.useful], #3 copies
+    "Shiny Box": [107014, ItemClassification.useful], #7 copies
+    "Twin Core": [107015, ItemClassification.useful], #3 copies
+    "Luminous Box": [107016, ItemClassification.useful], #7 copies
+    "Cross Core": [107017, ItemClassification.useful], #3 copies
+    "Faustian Box": [107018, ItemClassification.useful], #7 copies
+    "Devil Core": [107019, ItemClassification.useful], #3 copies
+    "Scorched Box": [107020, ItemClassification.useful], #7 copies
+    "Demon Core": [107021, ItemClassification.useful], #3 copies
 }
 
 dreamscape_list = {
@@ -606,20 +627,55 @@ filler_item_list = {
     "Extra Radiant Tetrids": [1130006, ItemClassification.filler]
 }
 
+#"Rose Medal": [107006, ItemClassification.progression], # Num enemies * Num characters, at least 650
+#"Crimson Medal": [107007, ItemClassification.progression] #Num thorned enemis * Num characters
 qp_upgrade_list = {
-
+    "Quickplay – Battle Level": [114000, ItemClassification.progression], #10 levels
+    "Quickplay – Ultra Level": [114001, ItemClassification.progression], #30 levels
+    "Quickplay – Gift Rank": [114002, ItemClassification.progression], #3 levels
+    "Quickplay – Power Stars": [114003, ItemClassification.progression], #15 levels
+    "Quickplay – Loadout Slots": [114004, ItemClassification.filler], #7 levels
+    "Quickplay – Duplicate Gifts": [114005, ItemClassification.useful], #2 levels
+    "Quickplay – Panic Limit": [114006, ItemClassification.useful], #2 levels
+    "Quickplay – Power Limit": [114007, ItemClassification.progression], #5 levels
 }
 
 altstory_upgrade_list = {
-
+    "Alter Your Fate – Max Power": [115000, ItemClassification.progression], #20 levels
+    "Alter Your Fate – Quick Gifts": [115001, ItemClassification.useful], #5 levels
+    "Alter Your Fate – Bonus Gifts": [115002, ItemClassification.useful], #7 levels
+    "Alter Your Fate – Tetrid Gifts": [115003, ItemClassification.useful], #3 levels
 }
 
 endless_upgrade_list = {
-
+    "Solara's Gift Shop – Power Gifts": [116000, ItemClassification.progression], #7 levels
+    "Solara's Gift Shop – Duplicate Stock": [116001, ItemClassification.useful], #2 levels
+    "Solara's Gift Shop – Duplicate Limit": [116002, ItemClassification.useful], #4 levels
+    "Solara's Gift Shop – Bonus Gifts": [116003, ItemClassification.progression], #5 levels
+    "Solara's Gift Shop – Quick Gifts": [116004, ItemClassification.progression], #4 levels
+    "Solara's Gift Shop – Blessings": [116005, ItemClassification.progression], #3 levels
+    "Solara's Gift Shop – Burdens": [116006, ItemClassification.progression], #3 levels
+    "Solara's Gift Shop – Remove Gifts": [116007, ItemClassification.useful], #1 level
 }
 
 event_upgrade_list = {
-
+    "Radiant Garden – Radiate Rate": [117000, ItemClassification.useful], #10 levels
+    "Radiant Garden – Extract Rate": [117001, ItemClassification.useful], #10 levels
+    "Radiant Garden – Garden Gifts": [117002, ItemClassification.useful], #4 levels
+    "Radiant Garden – Overfeeding": [117003, ItemClassification.useful], #1 level
+    #There is a dream where you have to put a 3-star in a synapse. So technically either 2 Scrambla or Boiler levels are progression (can't be one of each), and the rest is useful.
+    "Scrambla's Gift – Synapse Capacity": [117004, ItemClassification.progression], #5 levels
+    "Boiler's Gift – Synapse Capacity": [117005, ItemClassification.progression], #5 levels
+    "Blot's Art Gallery – Gallery Size": [117006, ItemClassification.progression], #8 levels
+    "Blot's Art Gallery – Trade Limit": [117007, ItemClassification.progression], #2 levels
+    "Blot's Art Gallery – Backroom Size": [117008, ItemClassification.progression], #5 levels
+    "Vitrea's Observatory – Telescope A": [117009, ItemClassification.progression], #3 levels
+    "Vitrea's Observatory – Telescope B": [117010, ItemClassification.progression], #5 levels
+    "Vitrea's Observatory – Telescope C": [117011, ItemClassification.progression], #5 levels
+    "Vitrea's Observatory – Backroom Size": [117012, ItemClassification.progression], #4 levels
+    "The Junk Vault – Vault A": [117013, ItemClassification.progression], #4 levels
+    "The Junk Vault – Vault B": [117014, ItemClassification.progression], #5 levels
+    "The Junk Vault – Vault C": [117015, ItemClassification.progression], #5 levels  
 }
 
 other_items_list = {
