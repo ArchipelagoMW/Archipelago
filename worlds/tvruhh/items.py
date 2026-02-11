@@ -614,7 +614,14 @@ filler_item_list = {
 #"Rose Medal": [107006, ItemClassification.progression], # Num enemies * Num characters, at least 650
 #"Crimson Medal": [107007, ItemClassification.progression] #Num thorned enemis * Num characters
 qp_upgrade_list = {
-
+    "Quickplay – Battle Level": [114000, ItemClassification.progression], #10 levels
+    "Quickplay – Ultra Level": [114001, ItemClassification.progression], #30 levels
+    "Quickplay – Gift Rank": [114002, ItemClassification.progression], #3 levels
+    "Quickplay – Power Stars": [114003, ItemClassification.progression], #15 levels
+    "Quickplay – Loadout Slots": [114004, ItemClassification.filler], #7 levels
+    "Quickplay – Duplicate Gifts": [114005, ItemClassification.useful], #2 levels
+    "Quickplay – Panic Limit": [114006, ItemClassification.useful], #2 levels
+    "Quickplay – Power Limit": [114007, ItemClassification.progression], #5 levels
 }
 
 altstory_upgrade_list = {
