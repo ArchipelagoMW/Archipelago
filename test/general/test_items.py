@@ -1,5 +1,6 @@
 import unittest
 from argparse import Namespace
+from collections import ChainMap
 from typing import Type
 
 from BaseClasses import CollectionState, MultiWorld
@@ -82,12 +83,13 @@ class TestBase(unittest.TestCase):
 
     def test_items_in_datapackage(self):
         """Test that any created items in the itempool are in the datapackage"""
+        archipelago = AutoWorldRegister.world_types["Archipelago"]
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 for item in multiworld.itempool:
-                    self.assertIn(item.name, world_type.item_name_to_id)
-    
+                    self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+
     def test_item_links(self) -> None:
         """
         Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
