@@ -210,7 +210,7 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
     }
 
     def test_pyramid_decal_requires_level_1(self):
-        pyramid_decal_location = "Pyramid Decal"
+        pyramid_decal_location = "Fishing Secret: Pyramid Decal"
         items_required = ["Progressive Fishing Rod", "Shipping Bin"] * 5
         for item in items_required:
             self.collect(item)
@@ -225,7 +225,7 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
                 self.assert_can_reach_location(pyramid_decal_location)
 
     def test_foliage_print_requires_level_4(self):
-        foliage_print_location = "Foliage Print"
+        foliage_print_location = "Fishing Secret: Foliage Print"
         items_required = ["Progressive Fishing Rod", "Shipping Bin"] * 5
         items_required.extend(["Fishing Level"] * 3)
         for item in items_required:
@@ -241,7 +241,7 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
                 self.assert_can_reach_location(foliage_print_location)
 
     def test_iridium_krobus_requires_level_15(self):
-        iridium_krobus_location = "Iridium Krobus"
+        iridium_krobus_location = "Fishing Secret: Iridium Krobus"
         items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Footwear", "Combat Level", "Progressive House", "Landslide Removed", "Progressive Mine Elevator",
                           "Mining Level", "Progressive Watering Can", "Progressive Hoe", "Progressive Fishing Rod", "50 Qi Gems", "Shipping Bin"] * 10
         self.remove_one_by_name("Spring")

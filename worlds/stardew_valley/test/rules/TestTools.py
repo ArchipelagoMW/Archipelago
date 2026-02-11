@@ -59,7 +59,7 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.collect("Summer")
         self.collect_lots_of_money()
 
-        location = "Old Master Cannoli"
+        location = "Secret: Old Master Cannoli"
         self.assert_cannot_reach_location(location)
 
         fall = self.create_item("Fall")

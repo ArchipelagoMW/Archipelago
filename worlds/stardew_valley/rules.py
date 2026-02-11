@@ -990,65 +990,65 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
         return
 
     if SecretsanityOptionName.easy in world_options.secretsanity:
-        rule_collector.set_location_rule("Old Master Cannoli", logic.has(Fruit.sweet_gem_berry))
-        rule_collector.set_location_rule("Pot Of Gold", logic.season.has(Season.spring))
-        rule_collector.set_location_rule("Poison The Governor", logic.has(SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Grange Display Bribe", logic.has(SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Purple Lettuce", logic.has(SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Make Marnie Laugh", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.marnie))
-        rule_collector.set_location_rule("Jumpscare Lewis", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.lewis))
-        rule_collector.set_location_rule("Confront Marnie", logic.gifts.can_gift_to(NPC.marnie, SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Lucky Purple Bobber", logic.fishing.can_use_tackle(SpecialItem.lucky_purple_shorts))
-        rule_collector.set_location_rule("Something For Santa", logic.season.has(Season.winter) & logic.has_any(AnimalProduct.any_milk, Meal.cookie))
+        rule_collector.set_location_rule("Secret: Old Master Cannoli", logic.has(Fruit.sweet_gem_berry))
+        rule_collector.set_location_rule("Secret: Pot Of Gold", logic.season.has(Season.spring))
+        rule_collector.set_location_rule("Secret: Poison The Governor", logic.has(SpecialItem.lucky_purple_shorts))
+        rule_collector.set_location_rule("Secret: Grange Display Bribe", logic.has(SpecialItem.lucky_purple_shorts))
+        rule_collector.set_location_rule("Secret: Purple Lettuce", logic.has(SpecialItem.lucky_purple_shorts))
+        rule_collector.set_location_rule("Secret: Make Marnie Laugh", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.marnie))
+        rule_collector.set_location_rule("Secret: Jumpscare Lewis", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.lewis))
+        rule_collector.set_location_rule("Secret: Confront Marnie", logic.gifts.can_gift_to(NPC.marnie, SpecialItem.lucky_purple_shorts))
+        rule_collector.set_location_rule("Secret: Lucky Purple Bobber", logic.fishing.can_use_tackle(SpecialItem.lucky_purple_shorts))
+        rule_collector.set_location_rule("Secret: Something For Santa", logic.season.has(Season.winter) & logic.has_any(AnimalProduct.any_milk, Meal.cookie))
         cc_rewards = ["Bridge Repair", "Greenhouse", "Glittering Boulder Removed", "Minecarts Repair", Transportation.bus_repair, "Friendship Bonus (2 <3)"]
-        rule_collector.set_location_rule("Jungle Junimo", logic.action.can_speak_junimo() & logic.and_(*[logic.received(reward) for reward in cc_rewards]))
-        rule_collector.set_location_rule("??HMTGF??", logic.has(Fish.super_cucumber))
-        rule_collector.set_location_rule("??Pinky Lemon??", logic.has(ArtisanGood.duck_mayonnaise))
-        rule_collector.set_location_rule("??Foroguemon??", logic.has(Meal.strange_bun) & logic.relationship.has_hearts(NPC.vincent, 2))
-        rule_collector.set_location_rule("Galaxies Will Heed Your Cry", logic.wallet.can_speak_dwarf())
-        rule_collector.set_location_rule("Summon Bone Serpent", logic.has(ArtifactName.ancient_doll))
-        rule_collector.set_location_rule("Meowmere", logic.has(SpecialItem.far_away_stone) & logic.region.can_reach(Region.wizard_basement))
-        rule_collector.set_location_rule("A Familiar Tune", logic.relationship.can_meet(NPC.elliott))
-        rule_collector.set_location_rule("Flubber Experiment",
+        rule_collector.set_location_rule("Secret: Jungle Junimo", logic.action.can_speak_junimo() & logic.and_(*[logic.received(reward) for reward in cc_rewards]))
+        rule_collector.set_location_rule("Secret: ??HMTGF??", logic.has(Fish.super_cucumber))
+        rule_collector.set_location_rule("Secret: ??Pinky Lemon??", logic.has(ArtisanGood.duck_mayonnaise))
+        rule_collector.set_location_rule("Secret: ??Foroguemon??", logic.has(Meal.strange_bun) & logic.relationship.has_hearts(NPC.vincent, 2))
+        rule_collector.set_location_rule("Secret: Galaxies Will Heed Your Cry", logic.wallet.can_speak_dwarf())
+        rule_collector.set_location_rule("Secret: Summon Bone Serpent", logic.has(ArtifactName.ancient_doll))
+        rule_collector.set_location_rule("Secret: Meowmere", logic.has(SpecialItem.far_away_stone) & logic.region.can_reach(Region.wizard_basement))
+        rule_collector.set_location_rule("Secret: A Familiar Tune", logic.relationship.can_meet(NPC.elliott))
+        rule_collector.set_location_rule("Secret: Flubber Experiment",
                                          logic.relationship.can_get_married() & logic.building.has_building(Building.slime_hutch)
                                          & logic.has_all(Machine.slime_incubator, AnimalProduct.slime_egg_green))
-        rule_collector.set_location_rule("Seems Fishy", logic.money.can_spend_at(Region.wizard_basement, 500))
-        rule_collector.set_location_rule("What kind of monster is this?", logic.gifts.can_gift_to(NPC.willy, Fish.mutant_carp))
-        rule_collector.set_location_rule("My mouth is watering already", logic.gifts.can_gift_to(NPC.abigail, Meal.magic_rock_candy))
-        rule_collector.set_location_rule("A gift of lovely perfume", logic.gifts.can_gift_to(NPC.krobus, Consumable.monster_musk))
-        rule_collector.set_location_rule("Where exactly does this juice come from?", logic.gifts.can_gift_to(NPC.dwarf, AnimalProduct.cow_milk))
-        rule_collector.set_location_rule("Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
+        rule_collector.set_location_rule("Secret: Seems Fishy", logic.money.can_spend_at(Region.wizard_basement, 500))
+        rule_collector.set_location_rule("Secret: What kind of monster is this?", logic.gifts.can_gift_to(NPC.willy, Fish.mutant_carp))
+        rule_collector.set_location_rule("Secret: My mouth is watering already", logic.gifts.can_gift_to(NPC.abigail, Meal.magic_rock_candy))
+        rule_collector.set_location_rule("Secret: A gift of lovely perfume", logic.gifts.can_gift_to(NPC.krobus, Consumable.monster_musk))
+        rule_collector.set_location_rule("Secret: Where exactly does this juice come from?", logic.gifts.can_gift_to(NPC.dwarf, AnimalProduct.cow_milk))
+        rule_collector.set_location_rule("Secret: Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
         if content.is_enabled(ginger_island_content_pack) and content.is_enabled(qi_board_content_pack):
-            rule_collector.set_location_rule("Obtain my precious fruit whenever you like",
+            rule_collector.set_location_rule("Secret: Obtain my precious fruit whenever you like",
                                              logic.special_order.can_complete_special_order(SpecialOrder.qis_crop) &
                                              logic.tool.has_tool(Tool.axe))
 
     if SecretsanityOptionName.fishing in world_options.secretsanity:
         if world_options.farm_type == FarmType.option_beach:
-            rule_collector.set_location_rule("'Boat'", logic.fishing.can_fish_at(Region.farm))
+            rule_collector.set_location_rule("Fishing Secret: 'Boat'", logic.fishing.can_fish_at(Region.farm))
         if content.is_enabled(ginger_island_content_pack):
-            rule_collector.set_location_rule("Foliage Print", logic.fishing.can_fish_with_cast_distance(Region.island_north, 5))
-            rule_collector.set_location_rule("Frog Hat", logic.fishing.can_fish_at(Region.gourmand_frog_cave))
-            rule_collector.set_location_rule("Gourmand Statue", logic.fishing.can_fish_at(Region.pirate_cove))
-            rule_collector.set_location_rule("'Physics 101'", logic.fishing.can_fish_at(Region.volcano_floor_10))
-            rule_collector.set_location_rule("Lifesaver", logic.fishing.can_fish_at(Region.boat_tunnel))
-            rule_collector.set_location_rule("Squirrel Figurine", logic.fishing.can_fish_at(Region.volcano_secret_beach))
-        rule_collector.set_location_rule("Decorative Trash Can", logic.fishing.can_fish_at(Region.town))
-        rule_collector.set_location_rule("Iridium Krobus", logic.fishing.can_fish_with_cast_distance(Region.forest, 7))
-        rule_collector.set_location_rule("Pyramid Decal", logic.fishing.can_fish_with_cast_distance(Region.desert, 4))
-        rule_collector.set_location_rule("'Vista'", logic.fishing.can_fish_at(Region.railroad) & logic.season.has_any_not_winter())
-        rule_collector.set_location_rule("Wall Basket", logic.fishing.can_fish_at(Region.secret_woods))
+            rule_collector.set_location_rule("Fishing Secret: Foliage Print", logic.fishing.can_fish_with_cast_distance(Region.island_north, 5))
+            rule_collector.set_location_rule("Fishing Secret: Frog Hat", logic.fishing.can_fish_at(Region.gourmand_frog_cave))
+            rule_collector.set_location_rule("Fishing Secret: Gourmand Statue", logic.fishing.can_fish_at(Region.pirate_cove))
+            rule_collector.set_location_rule("Fishing Secret: 'Physics 101'", logic.fishing.can_fish_at(Region.volcano_floor_10))
+            rule_collector.set_location_rule("Fishing Secret: Lifesaver", logic.fishing.can_fish_at(Region.boat_tunnel))
+            rule_collector.set_location_rule("Fishing Secret: Squirrel Figurine", logic.fishing.can_fish_at(Region.volcano_secret_beach))
+        rule_collector.set_location_rule("Fishing Secret: Decorative Trash Can", logic.fishing.can_fish_at(Region.town))
+        rule_collector.set_location_rule("Fishing Secret: Iridium Krobus", logic.fishing.can_fish_with_cast_distance(Region.forest, 7))
+        rule_collector.set_location_rule("Fishing Secret: Pyramid Decal", logic.fishing.can_fish_with_cast_distance(Region.desert, 4))
+        rule_collector.set_location_rule("Fishing Secret: 'Vista'", logic.fishing.can_fish_at(Region.railroad) & logic.season.has_any_not_winter())
+        rule_collector.set_location_rule("Fishing Secret: Wall Basket", logic.fishing.can_fish_at(Region.secret_woods))
 
     if SecretsanityOptionName.difficult in world_options.secretsanity:
-        rule_collector.set_location_rule("Free The Forsaken Souls", logic.action.can_watch(Channel.sinister_signal))
-        rule_collector.set_location_rule("Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
-        rule_collector.set_location_rule("Strange Sighting", logic.region.can_reach_all(Region.bus_stop, Region.town) & logic.time.has_lived_months(6))
-        rule_collector.set_location_rule("Sea Monster Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
-        rule_collector.set_location_rule("...Bigfoot?",
+        rule_collector.set_location_rule("Secret: Free The Forsaken Souls", logic.action.can_watch(Channel.sinister_signal))
+        rule_collector.set_location_rule("Secret: Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
+        rule_collector.set_location_rule("Secret: Strange Sighting", logic.region.can_reach_all(Region.bus_stop, Region.town) & logic.time.has_lived_months(6))
+        rule_collector.set_location_rule("Secret: Sea Monster Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
+        rule_collector.set_location_rule("Secret: ...Bigfoot?",
                                          logic.region.can_reach_all(Region.forest, Region.town, Region.secret_woods) & logic.time.has_lived_months(4))
-        rule_collector.set_location_rule("'Me me me me me me me me me me me me me me me me'",
+        rule_collector.set_location_rule("Secret: 'Me me me me me me me me me me me me me me me me'",
                                          logic.region.can_reach(Region.railroad) & logic.tool.has_scythe())
-        rule_collector.set_location_rule("Secret Iridium Stackmaster Trophy", logic.grind.can_grind_item(10000, Material.wood))
+        rule_collector.set_location_rule("Secret: Secret Iridium Stackmaster Trophy", logic.grind.can_grind_item(10000, Material.wood))
 
     if SecretsanityOptionName.secret_notes in world_options.secretsanity:
         set_secret_note_gift_rule(logic, rule_collector, SecretNote.note_1)
