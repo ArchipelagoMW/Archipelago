@@ -450,6 +450,7 @@ class AlecEntrance:
 @final
 class YobaEntrance:
     secret_woods_to_clearing = "Woods to Yoba's Clearing"
+    clearing_to_secret_woods = "Yoba's Clearing to Woods"
 
 
 @final

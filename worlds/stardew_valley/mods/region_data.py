@@ -120,11 +120,12 @@ alec_entrances = [
 
 yoba_regions = [
     RegionData(Region.secret_woods, (YobaEntrance.secret_woods_to_clearing,)),
-    RegionData(YobaRegion.yoba_clearing),
+    RegionData(YobaRegion.yoba_clearing, (YobaEntrance.clearing_to_secret_woods,)),
 ]
 
 yoba_entrances = [
-    ConnectionData(YobaEntrance.secret_woods_to_clearing, YobaRegion.yoba_clearing, flag=RandomizationFlag.BUILDINGS)
+    ConnectionData(YobaEntrance.secret_woods_to_clearing, YobaRegion.yoba_clearing, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(YobaEntrance.clearing_to_secret_woods, Region.secret_woods, flag=RandomizationFlag.BUILDINGS),
 ]
 
 juna_regions = [
