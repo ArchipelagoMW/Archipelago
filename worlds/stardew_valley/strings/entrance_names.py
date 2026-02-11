@@ -436,6 +436,7 @@ class MagicEntrance:
 @final
 class JasperEntrance:
     museum_to_bedroom = "Museum to Jasper's Bedroom"
+    bedroom_to_museum = "Jasper's Bedroom to Museum"
 
 
 @final

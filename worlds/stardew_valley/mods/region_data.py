@@ -91,11 +91,12 @@ magic_entrances = [
 
 jasper_regions = [
     RegionData(Region.museum, (JasperEntrance.museum_to_bedroom,)),
-    RegionData(JasperRegion.jasper_bedroom),
+    RegionData(JasperRegion.jasper_bedroom, (JasperEntrance.bedroom_to_museum,)),
 ]
 
 jasper_entrances = [
-    ConnectionData(JasperEntrance.museum_to_bedroom, JasperRegion.jasper_bedroom, flag=RandomizationFlag.BUILDINGS)
+    ConnectionData(JasperEntrance.museum_to_bedroom, JasperRegion.jasper_bedroom, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(JasperEntrance.bedroom_to_museum, Region.museum, flag=RandomizationFlag.BUILDINGS),
 ]
 alec_regions = [
     RegionData(Region.forest, (AlecEntrance.forest_to_petshop,)),
