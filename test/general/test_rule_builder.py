@@ -6,8 +6,9 @@ from typing_extensions import override
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart
-from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Toggle
+from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Range, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
+from rule_builder.field_resolvers import FromOption, FromWorldAttr
 from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
     And,
@@ -59,12 +60,20 @@ class SetOption(OptionSet):
     valid_keys: ClassVar[set[str]] = {"one", "two", "three"}  # pyright: ignore[reportIncompatibleVariableOverride]
 
 
+class RangeOption(Range):
+    auto_display_name = True
+    range_start = 1
+    range_end = 10
+    default = 5
+
+
 @dataclass
 class RuleBuilderOptions(PerGameCommonOptions):
     toggle_option: ToggleOption
     choice_option: ChoiceOption
     text_option: FreeTextOption
     set_option: SetOption
+    range_option: RangeOption
 
 
 GAME_NAME = "Rule Builder Test Game"
@@ -1334,3 +1343,27 @@ class TestExplain(RuleBuilderTestCase):
             "& False)",
         )
         assert str(self.resolved_rule) == " ".join(expected)
+
+
+@classvar_matrix(
+    rules=(
+        (
+            Has("A", FromOption(RangeOption)),
+            Has.Resolved("A", count=5, player=1),
+        ),
+        (
+            Has("B", FromWorldAttr("pre_calculated")),
+            Has.Resolved("B", count=3, player=1),
+        ),
+    )
+)
+class TestFieldResolvers(RuleBuilderTestCase):
+    rules: ClassVar[tuple[Rule[Any], Rule.Resolved]]
+
+    def test_simplify(self) -> None:
+        multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
+        world = multiworld.worlds[1]
+        world.pre_calculated = 3  # pyright: ignore[reportAttributeAccessIssue]
+        rule, expected = self.rules
+        resolved_rule = rule.resolve(world)
+        self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")

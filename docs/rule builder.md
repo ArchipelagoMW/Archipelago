@@ -129,6 +129,25 @@ common_rule_only_on_easy = common_rule & easy_filter
 common_rule_skipped_on_easy = common_rule | easy_filter
 ```
 
+### Field resolvers
+
+When creating rules you may sometimes need to set a field to a value that depends on the world instance. You can use a `FieldResolver` to define how to populate that field when the rule is being resolved.
+
+There are two build-in field resolvers:
+
+- `FromOption`: Resolves to the value of the given option
+- `FromWorldAttr`: Resolves to the value of the given world instance attribute
+
+```python
+world.options.mcguffin_count = 5
+world.precalculated_value = 99
+rule = (
+    Has("A", count=FromOption(McguffinCount))
+    | HasGroup("Important items", count=FromWorldAttr("precalculated_value"))
+)
+# Results in Has("A", count=5) | HasGroup("Important items", count=99)
+```
+
 ## Enabling caching
 
 The rule builder provides a `CachedRuleBuilderWorld` base class for your `World` class that enables caching on your rules.

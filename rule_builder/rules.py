@@ -7,6 +7,7 @@ from typing_extensions import TypeVar, dataclass_transform, override
 from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
 
+from .field_resolvers import FieldResolver
 from .options import OptionFilter
 
 if TYPE_CHECKING:
@@ -108,11 +109,14 @@ class Rule(Generic[TWorld]):
 
     def to_dict(self) -> dict[str, Any]:
         """Returns a JSON compatible dict representation of this rule"""
-        args = {
-            field.name: getattr(self, field.name, None)
-            for field in dataclasses.fields(self)
-            if field.name not in ("options", "filtered_resolution")
-        }
+        args = {}
+        for field in dataclasses.fields(self):
+            if field.name in ("options", "filtered_resolution"):
+                continue
+            value = getattr(self, field.name, None)
+            if isinstance(value, FieldResolver):
+                value = value.to_dict()
+            args[field.name] = value
         return {
             "rule": self.__class__.__qualname__,
             "options": [o.to_dict() for o in self.options],
@@ -123,6 +127,7 @@ class Rule(Generic[TWorld]):
     @classmethod
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         """Returns a new instance of this rule from a serialized dict representation"""
+        # TODO: deserialize (oh no do I need to register these like rules)
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(**data.get("args", {}), options=options, filtered_resolution=data.get("filtered_resolution", False))
 
@@ -682,21 +687,21 @@ class Has(Rule[TWorld], game="Archipelago"):
     item_name: str
     """The item to check for"""
 
-    count: int = 1
+    count: int | FieldResolver = 1
     """The count the player is required to have"""
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         return self.Resolved(
             self.item_name,
-            self.count,
+            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
     def __str__(self) -> str:
-        count = f", count={self.count}" if self.count > 1 else ""
+        count = f", count={self.count}" if isinstance(self.count, FieldResolver) or self.count > 1 else ""
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.item_name}{count}{options})"
 
@@ -1185,7 +1190,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     item_names: tuple[str, ...]
     """A tuple of item names to check for"""
 
-    count: int = 1
+    count: int | FieldResolver = 1
     """The number of items the player needs to have"""
 
     def __init__(self, *item_names: str, count: int = 1, options: Iterable[OptionFilter] = ()) -> None:
@@ -1202,7 +1207,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             return Has(self.item_names[0], self.count).resolve(world)
         return self.Resolved(
             self.item_names,
-            self.count,
+            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1313,7 +1318,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
     item_names: tuple[str, ...]
     """A tuple of item names to check for"""
 
-    count: int = 1
+    count: int | FieldResolver = 1
     """The number of items the player needs to have"""
 
     def __init__(self, *item_names: str, count: int = 1, options: Iterable[OptionFilter] = ()) -> None:
@@ -1323,14 +1328,15 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        if len(self.item_names) == 0 or len(self.item_names) < self.count:
+        count = self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count
+        if len(self.item_names) == 0 or len(self.item_names) < count:
             # match state.has_from_list_unique
             return False_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(
             self.item_names,
-            self.count,
+            count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1437,7 +1443,7 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
     item_name_group: str
     """The name of the item group containing the items"""
 
-    count: int = 1
+    count: int | FieldResolver = 1
     """The number of items the player needs to have"""
 
     @override
@@ -1446,14 +1452,14 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             self.item_name_group,
             item_names,
-            self.count,
+            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
     def __str__(self) -> str:
-        count = f", count={self.count}" if self.count > 1 else ""
+        count = f", count={self.count}" if isinstance(self.count, FieldResolver) or self.count > 1 else ""
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.item_name_group}{count}{options})"
 
@@ -1511,7 +1517,7 @@ class HasGroupUnique(Rule[TWorld], game="Archipelago"):
     item_name_group: str
     """The name of the item group containing the items"""
 
-    count: int = 1
+    count: int | FieldResolver = 1
     """The number of items the player needs to have"""
 
     @override
@@ -1520,14 +1526,14 @@ class HasGroupUnique(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             self.item_name_group,
             item_names,
-            self.count,
+            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
     def __str__(self) -> str:
-        count = f", count={self.count}" if self.count > 1 else ""
+        count = f", count={self.count}" if isinstance(self.count, FieldResolver) or self.count > 1 else ""
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.item_name_group}{count}{options})"
 
