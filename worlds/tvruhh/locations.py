@@ -165,6 +165,19 @@ dream_list = {
     "Dream: Pour Your Misery Down on Me" : [1000017, ["very_grind"]],
     "Dream: Clearing Out the Fear" : [1000018, []],
     "Dream: Sweating Bullets" : [1000019, ["grind"]],
+    "Dream: Shambled Paradox" : [1000020, []],
+    "Dream: Trypophobia" : [1000021, ["grind"]],
+    "Dream: Her Adamant Will" : [1000022, []],
+    "Dream: Guardian Angel" : [1000023, ["grind"]],
+    "Dream: Mutual Exclusion" : [1000024, []],
+    "Dream: Theoretically Beautiful" : [1000025, ["grind"]],
+    "Dream: Defense Mechanism" : [1000026, []],
+    "Dream: Towering Anxiety" : [1000027, ["grind"]],
+    "Dream: My Heart Is See Through" : [1000028, []],
+    "Dream: Stained Glass Battle Dance" : [1000029, ["grind"]],
+    "Dream: The Void Rains Down Upon You" : [1000030, []],
+    "Dream: Alone in the Dark" : [1000031, ["grind"]],
+    "Dream: Fever Dream" : [1000032, ["grind"]],
    
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
