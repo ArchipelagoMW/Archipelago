@@ -51,7 +51,7 @@ print("Listening for connections on port 55355")
 print("")
 print("Please connect with the LADX Archipelago client. LADX does NOT use the BizHawk client")
 print("")
-print("This script makes BizHawk pretend to be RetroArch for the purposes of connecting to the client, it's normal for the client to say that it's connecting to RetorArch")
+print("This script makes BizHawk pretend to be RetroArch for the purposes of connecting to the client, it's normal for the client to say that it's connecting to RetroArch")
 print("")
 
 udp:setsockname('127.0.0.1', 55355)
