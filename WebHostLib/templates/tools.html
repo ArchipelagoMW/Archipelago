@@ -32,6 +32,10 @@
     <div id="games" class="markdown">
         <h1>Tools</h1>
         <p>This is a list of tools that may be useful when using Archipelago.</p>
+        {% if not worlds %}
+
+        <p>There are currently no tools to list on this page.</p>
+        {% else %}
         <div class="js-only">
             <label for="game-search">Search for your tool below!</label><br />
             <div class="page-controls">
@@ -60,5 +64,6 @@
             {% endif %}
         </details>
         {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
