@@ -200,6 +200,11 @@ dream_list = {
     "Dream: Lovely Score" : [1000052, []],
     "Dream: Wonderful Score" : [1000053, ["tedious"]],
     "Dream: Radiant Score" : [1000054, ["tedious"]],
+    "Dream: BFF" : [1000055, []], #Easy if quickplay is available, overwise very_grind
+    "Dream: Panic Attack!" : [1000056, []],
+    "Dream: No Need to Panic" : [1000057, ["tedious"]],
+    "Dream: Indestructible Master of Love" : [1000058, ["very_tedious"]], #Items like Self-Portrait and Denial are absolutely needed to survive this
+    "Dream: Tsundere" : [1000059, ["tedious"]],
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
