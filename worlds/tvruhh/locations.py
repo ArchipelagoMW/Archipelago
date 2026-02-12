@@ -195,6 +195,11 @@ dream_list = {
     "Dream: Heart Shaped Box" : [1000047, ["tedious"]],
     "Dream: The Mighty Ninety-Nine" : [1000048, ["tedious"]],
     "Dream: Expert Level Affection" : [1000049, []],
+    "Dream: Good Score" : [1000050, []],
+    "Dream: Great Score" : [1000051, []],
+    "Dream: Lovely Score" : [1000052, []],
+    "Dream: Wonderful Score" : [1000053, ["tedious"]],
+    "Dream: Radiant Score" : [1000054, ["tedious"]],
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
