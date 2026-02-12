@@ -55,3 +55,6 @@ if you pick one up and then decide to do something else, add research notes here
 # infinite research
 - already (mostly) extracted (extract max level instead?)
 - how options?
+
+# ability to remove recipes/items
+- automatically remove all other science recipes?

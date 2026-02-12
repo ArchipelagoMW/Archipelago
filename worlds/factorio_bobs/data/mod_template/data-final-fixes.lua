@@ -74,6 +74,24 @@ function add_normal_custom_recipe(name, category, energy, ingredients, products,
     end
 end
 
+function add_custom_tooltip_field(item, localised_name, localised_string, show_in_tooltip, order)
+    if item.custom_tooltip_fields == nil then
+        item.custom_tooltip_fields = { {
+            name = localised_name,
+            value = localised_string,
+            show_in_tooltip = show_in_tooltip,
+            order = order,
+        } }
+    else
+        table.insert(item.custom_tooltip_fields, {
+            name = localised_name,
+            value = localised_string,
+            show_in_tooltip = show_in_tooltip,
+            order = order,
+        })
+    end
+end
+
 {%- for recipe_name, recipe in recipes.items() %}
 {#- todo add check for non-standard recipe categories #}
 {#- getting source types here would be too difficult 2 is custom #}
@@ -84,6 +102,9 @@ add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category.name}}", {{recipe
 data.raw["recipe"]["{{recipe_name}}"].allow_productivity = true
 {%- endif %}
 {%- endif %}
+{%- for techCat in recipe.technologies %}
+if data.raw["recipe"]["{{recipe_name}}"] then add_custom_tooltip_field(data.raw["recipe"]["{{recipe_name}}"], {"","recipe_unlock"}, {"","{{techCat.tech.name}}"}, false, 200) end
+{%- endfor %}
 {%- endfor %}
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
