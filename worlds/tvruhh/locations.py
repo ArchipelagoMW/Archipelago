@@ -188,6 +188,13 @@ dream_list = {
     "Dream: Star Allies in the Void" : [1000040, []],
     "Dream: The Friends We Made Along the Way" : [1000041, []],
     "Dream: Gotta Love Em All!" : [1000042, []],
+    "Dream: Full Combo!" : [1000043, []],
+    "Dream: Affection Sevenfold" : [1000044, []],
+    "Dream: The Ace of Hearts" : [1000045, []],
+    "Dream: Love Is The Answer" : [1000046, []],
+    "Dream: Heart Shaped Box" : [1000047, ["tedious"]],
+    "Dream: The Mighty Ninety-Nine" : [1000048, ["tedious"]],
+    "Dream: Expert Level Affection" : [1000049, []],
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
