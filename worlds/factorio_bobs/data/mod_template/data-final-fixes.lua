@@ -48,24 +48,46 @@ data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
 }
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes_off_when_no_fluid_recipe = true
 
-{%- for recipe_name, recipe in custom_recipes.items() %}
-if data.raw["recipe"]["{{recipe_name}}"] then
-    data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
-    data.raw["recipe"]["{{recipe_name}}"].energy_required = {{recipe.energy}}
-    data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients, liquids) }}
-    data.raw["recipe"]["{{recipe_name}}"].results = {{ dict_to_recipe(recipe.products, liquids) }}
-    data.raw["recipe"]["{{recipe_name}}"].allow_productivity = {{recipe.productivity}}
-else
-    data.raw["recipe"]["{{recipe_name}}"] = {
-        type = "recipe",
-        name = "{{recipe_name}}",
-        category = "{{recipe.category}}",
-        energy_required = {{recipe.energy}},
-        ingredients = {{ dict_to_recipe(recipe.ingredients, liquids) }},
-        results = {{ dict_to_recipe(recipe.products, liquids) }},
-        allow_productivity = {{recipe.productivity}}
-    }
+function add_normal_custom_recipe(name, category, energy, ingredients, products, productivity)
+    if data.raw["recipe"][name] then
+        recipe = data.raw["recipe"][name]
+        recipe.category = category
+        recipe.energy_required = energy
+        recipe.ingredients = ingredients
+        recipe.results = products
+        if productivity then
+            recipe.allow_productivity = productivity
+        end
+    else
+        if productivity == nil then
+            productivity = true -- enable productivity if new recipe and unspecified
+        end
+        data.raw["recipe"][name] = {
+            type = "recipe",
+            name = name,
+            category = category,
+            energy_required = energy,
+            ingredients = ingredients,
+            results = products,
+            allow_productivity = {{recipe.productivity}}
+        }
+    end
 end
+
+{%- for recipe_name, recipe in recipes.items() %}
+{# todo add check for non-standard recipe categories #}
+{%- if recipe.source == 2 %}
+add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category}}", {{recipe.energy}}, {{dict_to_recipe(recipe.ingredients)}}, {{dict_to_recipe(recipe.products)}}, {{recipe.productivity}})
+{%- else %}
+{%- if recipe.productivity != None %}
+data.raw["recipe"]["{{recipe_name}}"].allow_productivity = true
+{%- endif %}
+{%- endif %}
+{%- endfor %}
+
+{%- for recipe_name, recipe in custom_recipes.items() %}
+{# todo add check for non-standard recipe categories #}
+add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category}}", {{recipe.energy}}, {{dict_to_recipe(recipe.ingredients)}}, {{dict_to_recipe(recipe.products)}}, {{recipe.productivity}})
 {%- endfor %}
 
 local technologies = data.raw["technology"]
@@ -221,8 +243,8 @@ set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {% endif %}
 
 {% for itemTM in all_ingredients.values() %}
-{%- if itemTM.best_recipe is not none %}
-{%- set logic_recipe = itemTM.best_recipe %}
+{%- if itemTM.best_recipes is not none %}
+{%- set logic_recipes = itemTM.best_recipes %}
 {%- if itemTM.is_fluid%}
 itemTM = data.raw["fluid"]["{{ itemTM.name }}"]
 {%- else %}
@@ -231,20 +253,20 @@ itemTM = data.raw["item"]["{{ itemTM.name }}"] or data.raw["item-with-entity-dat
 {%- endif %}
 if itemTM.custom_tooltip_fields == nil then
     itemTM.custom_tooltip_fields = { {
-        name = {"", "Logic recipe"},
-        value = {"", "{{logic_recipe.name}}"},
+        name = {"", "Logic recipes"},
+        value = {"", "{{",".join(recipe.name for recipe in logic_recipes)}}"},
         show_in_tooltip = false,
         order = 200,
     } }
 else
     table.insert(itemTM.custom_tooltip_fields, {
-        name = {"", "Logic recipe"},
-        value = {"", "{{logic_recipe.name}}"},
+        name = {"", "Logic recipes"},
+        value = {"", "{{",".join(recipe.name for recipe in logic_recipes)}}"},
         show_in_tooltip = false,
         order = 200,
     })
 end
-{%- for tech in logic_recipe.unlocking_technologies %}
+{# this is commented out {%- for tech in logic_recipe.unlocking_technologies %}
 {%- set progressive_item_name = tech_to_progressive_lookup.get(tech.name, tech.name) %}
 {%- set want_progressive = want_progressives[progressive_item_name] %}
 {%- if want_progressive %}
@@ -262,7 +284,13 @@ table.insert(itemTM.custom_tooltip_fields, {
     order = 210,
 })
 {%- endif %}
-{%- endfor %}
+{%- endfor %} this is end of comment #}
+table.insert(itemTM.custom_tooltip_fields, {
+    name = {"", "Logic unlock"},
+        value = {"", "{{",".join(tech.name for tech in item.get_req_techs()}}"},
+    show_in_tooltip = false,
+    order = 210,
+})
 {%- endif %}
 {% endfor -%}
 

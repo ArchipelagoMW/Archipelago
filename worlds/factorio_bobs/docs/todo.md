@@ -32,8 +32,16 @@ if you pick one up and then decide to do something else, add research notes here
 - pull request by CosmicWolf
 - small improvements from the pull request to base needs to be added
 
-# boiler
+# boiler recipes
 - needs to be added to extractor
+
+# reactor recipes
+- needs to be added to extractor
+- energy being burn time?
+
+# spoilage recipes
+- needs to be added to extractor
+- energy being spoil time (this might be too high and might need a modifier?)
 
 # fluid temperature
 - needs to be added to extractor

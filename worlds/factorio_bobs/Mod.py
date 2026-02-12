@@ -157,9 +157,8 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          world.modpack.progressive_technology_table.values()},
         "custom_recipes": custom_recipes,
-        "liquids": world.modpack.recipe_engine.fluids,
         "removed_technologies": world.removed_technologies,
-        "all_ingredients": world.modpack.recipe_engine.all_ingredients,
+        "all_ingredients": {name: item for name, item in world.modpack.recipe_engine.game_items if item.is_valid},
         "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
         "mod_settings": world.modpack.mod_settings,
