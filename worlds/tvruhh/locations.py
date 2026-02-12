@@ -178,7 +178,16 @@ dream_list = {
     "Dream: The Void Rains Down Upon You" : [1000030, []],
     "Dream: Alone in the Dark" : [1000031, ["grind"]],
     "Dream: Fever Dream" : [1000032, ["grind"]],
-   
+    "Dream: Gathering Hearts" : [1000033, []],
+    "Dream: Making Friends" : [1000034, []],
+    "Dream: Monster Party" : [1000035, []],
+    "Dream: Monster Ball" : [1000036, []],
+    "Dream: Monster Festival" : [1000037, []],
+    "Dream: Friendship Army" : [1000038, []],
+    "Dream: Legion of Love" : [1000039, []],
+    "Dream: Star Allies in the Void" : [1000040, []],
+    "Dream: The Friends We Made Along the Way" : [1000041, []],
+    "Dream: Gotta Love Em All!" : [1000042, []],
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
