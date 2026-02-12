@@ -384,6 +384,8 @@ class Rac3Interface(GameInterface):
         items_to_sell: list[str] = []
         already_sold = set()
         for location, item in WEAPON_VENDOR_LOCATION_TO_ITEM.items():
+            if item == RAC3ITEM.HOLO_SHIELD and RAC3LOCATION.TYHRRANOSIS_BOSS not in self.checked_locations:
+                continue
             if WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
                 if location in self.checked_locations:
                     already_sold.add(item)
