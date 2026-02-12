@@ -473,7 +473,7 @@ class GameItem(RecipeEngineType):
     def get_req_techs(self) -> set[Technology]:
         techs = set()
         for recipe in self.best_recipes:
-            if recipe in self.ctx.modpack.start_unlocked_recipes:
+            if recipe.name in self.ctx.modpack.start_unlocked_recipes:
                 continue
             for tech_cat in recipe.technologies:
                 techs.add(tech_cat.tech)
@@ -546,6 +546,18 @@ class GameRecipe(RecipeEngineType):
                 ingredient.used_in.remove(self)
         if self.name in self.ctx.recipes:
             del self.ctx.recipes[self.name]
+
+    def get_req_techs(self) -> set[Technology]:
+        techs = set()
+        for item in self.ingredients.keys():
+            techs.update(item.get_req_techs())
+        for cat in self.needed_items:
+            techs.update(cat.item.get_req_techs())
+        if self.name not in self.ctx.modpack.start_unlocked_recipes:
+            for tech in self.technologies:
+                techs.add(tech.tech)
+        return techs
+
 
 
 

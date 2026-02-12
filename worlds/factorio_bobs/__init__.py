@@ -386,7 +386,7 @@ class FactorioBobs(World):
         for catalyst in recipe.technologies:
             req.add(catalyst.tech)
 
-        ordered_machines = sorted(recipe.category.machines, key=lambda m: m.cost)
+        ordered_machines = sorted(recipe.category.machines, key=lambda m: m.score)
         for machine in ordered_machines:
             if machine.is_valid:
                 req |= machine.get_req_techs()
@@ -480,7 +480,7 @@ class FactorioBobs(World):
                              allow_liquids: int = 2, ingredients_offset: int = 0) -> GameRecipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
-        target_energy = int(sum((count.score for ingredient, count in original.ingredients.keys())) * factor)
+        target_energy = int(sum(ingredient.score * count for ingredient, count in original.ingredients.items()) * factor)
         target_num_ingredients = len(original.ingredients) + ingredients_offset
         remaining_energy = target_energy
         remaining_num_ingredients = target_num_ingredients
@@ -631,7 +631,7 @@ class FactorioBobs(World):
             needed_items.add(self.get_internal_item("satellite"))
 
         for item in needed_items:
-            self.progression_technologies |= item.get_req_techs()
+            self.progression_technologies |= self.get_item_tech_req(item.name)
 
 
     def create_item(self, name: str) -> FactorioItem:

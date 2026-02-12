@@ -5,9 +5,10 @@ from typing import TYPE_CHECKING
 from worlds.AutoWorld import World
 
 from . import Technologies, FactorioModpack
+from .RecipeEngine import GameItem, GameRecipe
 
 if TYPE_CHECKING:
-    from . import FactorioBobs, InternalItem, Recipe
+    from . import FactorioBobs
     from BaseClasses import CollectionState
 
 
@@ -95,14 +96,15 @@ class TechRule(FactorioRule):
         return {self.tech_name,}
 
 class InternalItemRule(AndRule, FactorioRule):
-    def __init__(self, internal_item: InternalItem):
+    def __init__(self, internal_item: GameItem):
         self.internalItem = internal_item
-        super().__init__(*(TechRule(tech) for tech in self.internalItem.all_unlocking_technologies()))
+        super().__init__(*(TechRule(tech) for tech in self.internalItem.get_req_techs()))
 
 class RecipeRule(AndRule, FactorioRule):
-    def __init__(self, recipe: Recipe):
+    def __init__(self, recipe: GameRecipe):
         self.recipe = recipe
-        super().__init__(*(TechRule(tech) for tech in self.recipe.all_unlocking_technologies()))
+
+        super().__init__(*(TechRule(tech) for tech in self.recipe.get_req_techs()))
 
 
 def process_yaml_rule(rule_pair: dict[str, str | list], modpack: FactorioModpack) -> Rule:
