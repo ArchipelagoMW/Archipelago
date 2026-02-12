@@ -16,7 +16,7 @@ class RandomGameItems:
 
     @property
     def recipe_engine(self) -> RecipeEngine:
-        return self.world.recipe_engine
+        return self.world.modpack.recipe_engine
 
     @property
     def num_of_items(self) -> int:
@@ -34,7 +34,7 @@ class RandomGameItems:
         first_pool = self.pools[0]
         items_with_req_tech: list[GameItem] = []
 
-        for item in self.recipe_engine.get_pool_items()[:self.num_of_items]:
+        for item in self.recipe_engine.get_pool_items():
             req_recipes = item.get_best_recipes()
             req_tech = set()
             for recipe in req_recipes:
@@ -46,10 +46,15 @@ class RandomGameItems:
             else:
                 bisect.insort(first_pool, item, key=lambda itm: itm.score)
 
+        items_with_req_tech = items_with_req_tech[:self.num_of_items-len(first_pool)]
+
         items_per_pool = len(items_with_req_tech) / (self.num_of_pools - 1)
 
-        for i in range(1, self.num_of_pools):
-            self.pools[i] = items_with_req_tech[int(i*items_per_pool):int((i+1)*items_per_pool)]
+        for i in range(0, self.num_of_pools-1):
+            self.pools[i+1] = items_with_req_tech[int(i*items_per_pool):int((i+1)*items_per_pool)]
+
+        assert all(len(pool) > 0 for pool in self.pools)
+        assert self.pools[-1][-1] == items_with_req_tech[-1]
 
         for pool in self.pools:
             self.random.shuffle(pool)
@@ -65,9 +70,17 @@ class RandomGameItems:
         if end_index is None:
             end_index = start_index
 
-        num_to_pick = sum(len(pool) for pool in self.pools[start_index:end_index])
-        random_num = self.random.randint(1, num_to_pick)
-        for index, pool in enumerate(self.pools[start_index:end_index], start_index):
+        if start_index < 0:
+            start_index = len(self.pools) + start_index
+
+        if end_index < 0:
+            end_index = len(self.pools) + end_index
+
+        num_to_pick = sum(len(pool) for pool in self.pools[start_index:end_index+1])
+        if num_to_pick == 0:
+            raise IndexError("Ran out of items to pick, increase number of items or decrease number of packs")
+        random_num = self.random.randint(0, num_to_pick)
+        for index, pool in enumerate(self.pools[start_index:end_index+1], start_index):
             if random_num <= len(pool):
                 return self.__pop_pool(index)
             random_num -= len(pool)
