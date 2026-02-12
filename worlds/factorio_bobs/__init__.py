@@ -359,11 +359,16 @@ class FactorioBobs(World):
 
     def get_science_pack_rule(self, complexity: int) -> FactorioRules.Rule:
         science_pack = self.modpack.ordered_science_packs[complexity-1]
-        science_pack_item: GameItem = self.get_internal_item(science_pack)
+        # science_pack_item: GameItem = self.get_internal_item(science_pack)
+        # if complexity in self.additional_logic:
+        #     rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
+        # else:
+        #     rule = InternalItemRule(science_pack_item)
+        req_tech = self.get_item_tech_req(science_pack)
         if complexity in self.additional_logic:
-            rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
+            rule = AndRule(*(TechRule(tech) for tech in req_tech), self.additional_logic[complexity])
         else:
-            rule = InternalItemRule(science_pack_item)
+            rule = AndRule(*(TechRule(tech) for tech in req_tech))
         return rule.optimize()
 
     def get_internal_item(self, name: str) -> GameItem:
