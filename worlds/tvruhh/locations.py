@@ -163,7 +163,9 @@ dream_list = {
     "Dream: The Rain Will Love Us All" : [1000015, []],   
     "Dream: Love Is a Battlefield" : [1000016, ["grind"]],
     "Dream: Pour Your Misery Down on Me" : [1000017, ["very_grind"]],
-    
+    "Dream: Clearing Out the Fear" : [1000018, []],
+    "Dream: Sweating Bullets" : [1000019, ["grind"]],
+   
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
