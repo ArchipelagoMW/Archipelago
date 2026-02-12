@@ -49,7 +49,7 @@ require('common')
 
 print("Listening for connections on port 55355")
 print("")
-print("Please connect with the LADX Archipelago client. LADX does NOT use the BizHawk client")
+print("Please connect with the Link's Awakening DX client, NOT the BizHawk client")
 print("")
 print("This script makes BizHawk pretend to be RetroArch for the purposes of connecting to the client, it's normal for the client to say that it's connecting to RetroArch")
 print("")
