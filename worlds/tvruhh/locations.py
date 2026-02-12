@@ -205,8 +205,24 @@ dream_list = {
     "Dream: No Need to Panic" : [1000057, ["tedious"]],
     "Dream: Indestructible Master of Love" : [1000058, ["very_tedious"]], #Items like Self-Portrait and Denial are absolutely needed to survive this
     "Dream: Tsundere" : [1000059, ["tedious"]],
+    "Dream: Tetrahedron of Shame" : [1000060, ["grind"]],
+    "Dream: Tetrahedron of Frustration" : [1000061, ["grind"]],
+    "Dream: Tetrahedron of Denial" : [1000062, ["grind"]],
+    "Dream: Tetrahedron of Anxiety" : [1000063, ["grind"]],
+    "Dream: Tetrahedron of Insecurity" : [1000064, ["grind"]],
+    "Dream: Tetrahedron of Loneliness" : [1000065, ["grind"]],
+    "Dream: Tetrahedron of Power" : [1000066, ["grind"]],
+    "Dream: Collection of Triangles" : [1000067, []],
+    "Dream: 200 Tetrahedrons!" : [1000068, ["grind"]],
+    "Dream: 400 Tetrahedrons!" : [1000069, ["grind"]],
+    "Dream: 600 Tetrahedrons!" : [1000070, ["grind"]],
+    "Dream: 900 Tetrahedrons!" : [1000071, ["very_grind"]],
+    "Dream: 1,200 Tetrahedrons!" : [1000072, ["very_grind"]],
+    "Dream: Crystallized Dyophobia" : [1000073, ["very_grind"]],
+    "Dream: Crystallized Triskaphobia" : [1000074, ["very_grind"]],
+    "Dream: Crystallized Tetraphobia" : [1000075, ["very_grind"]],
     #for testing:
-    "Dream: Something Something Quick" : [1000069, ["quickplay"]]
+    "Dream: Something Something Quick" : [1000420, ["quickplay"]]
 }
 
 story_medals = {
