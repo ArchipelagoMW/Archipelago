@@ -466,7 +466,11 @@ boarding_house_regions = [
         ),
     ),
     RegionData(
-        BoardingHouseRegion.boarding_house_first, (BoardingHouseEntrance.boarding_house_first_to_boarding_house_second,)
+        BoardingHouseRegion.boarding_house_first,
+        (
+            BoardingHouseEntrance.boarding_house_first_to_boarding_house_second,
+            BoardingHouseEntrance.boarding_house_first_to_boarding_house_plateau,
+        ),
     ),
     RegionData(BoardingHouseRegion.boarding_house_second),
     RegionData(BoardingHouseRegion.buffalo_ranch),
@@ -522,6 +526,12 @@ boarding_house_entrances = [
         BoardingHouseRegion.boarding_house_first,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN,
+    ),
+    ConnectionData(
+        BoardingHouseEntrance.boarding_house_first_to_boarding_house_plateau,
+        BoardingHouseRegion.boarding_house_plateau,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         BoardingHouseEntrance.boarding_house_first_to_boarding_house_second,
@@ -1099,10 +1109,10 @@ region_data_by_content_pack = {
     ModNames.magic: ModRegionsData(ModNames.magic, magic_regions, magic_entrances),
     ModNames.ayeisha: ModRegionsData(ModNames.ayeisha, ayeisha_regions, ayeisha_entrances),
     ModNames.riley: ModRegionsData(ModNames.riley, riley_regions, riley_entrances),
-    ModNames.sve: ModRegionsData(ModNames.sve, sve_main_land_regions, sve_main_land_connections),
-    SVE_GINGER_ISLAND_PACK: ModRegionsData(
-        SVE_GINGER_ISLAND_PACK, sve_ginger_island_regions, sve_ginger_island_connections
-    ),
+    # ModNames.sve: ModRegionsData(ModNames.sve, sve_main_land_regions, sve_main_land_connections),
+    # SVE_GINGER_ISLAND_PACK: ModRegionsData(
+    #     SVE_GINGER_ISLAND_PACK, sve_ginger_island_regions, sve_ginger_island_connections
+    # ),
     ModNames.alecto: ModRegionsData(ModNames.alecto, alecto_regions, alecto_entrances),
     ModNames.lacey: ModRegionsData(ModNames.lacey, lacey_regions, lacey_entrances),
     ModNames.boarding_house: ModRegionsData(ModNames.boarding_house, boarding_house_regions, boarding_house_entrances),

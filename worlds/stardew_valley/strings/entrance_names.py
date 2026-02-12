@@ -561,8 +561,11 @@ class LaceyEntrance:
 class BoardingHouseEntrance:
     bus_stop_to_boarding_house_plateau = "Bus Stop to Boarding House Outside"
     boarding_house_plateau_to_boarding_house_first = "Boarding House Outside to Boarding House - First Floor"
+    boarding_house_first_to_boarding_house_plateau = "Boarding House - First Floor to Boarding House Outside"
     boarding_house_first_to_boarding_house_second = "Boarding House - First Floor to Boarding House - Second Floor"
+    boarding_house_second_to_boarding_house_first = "Boarding House - Second Floor to Boarding House - First Floor"
     boarding_house_plateau_to_abandoned_mines_entrance = "Boarding House Outside to Abandoned Mines Entrance"
+    abandoned_mines_entrance_to_boarding_house_plateau = "Abandoned Mines Entrance to Boarding House Outside"
     abandoned_mines_entrance_to_abandoned_mines_1a = "Abandoned Mines Entrance to Abandoned Mines - 1A"
     abandoned_mines_1a_to_abandoned_mines_1b = "Abandoned Mines - 1A to Abandoned Mines - 1B"
     abandoned_mines_1b_to_abandoned_mines_2a = "Abandoned Mines - 1B to Abandoned Mines - 2A"
@@ -578,3 +581,4 @@ class BoardingHouseEntrance:
     lost_valley_ruins_to_lost_valley_house_1 = "Lost Valley Ruins to Lost Valley Ruins - First House"
     lost_valley_ruins_to_lost_valley_house_2 = "Lost Valley Ruins to Lost Valley Ruins - Second House"
     boarding_house_plateau_to_buffalo_ranch = "Boarding House Outside to Buffalo's Ranch"
+    buffalo_ranch_to_boarding_house_plateau = "Buffalo's Ranch to Boarding House Outside"
