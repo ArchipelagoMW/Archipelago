@@ -153,7 +153,12 @@ dream_list = {
     "Dream: Teramonstrophile" : [1000005, ["grind"]],
     "Dream: Weapon of Mass Affection" : [1000006, ["very_grind"]],
     "Dream: Lovepocalypse" : [1000007, ["very_grind"]],
-
+    "Dream: Let Me Love You!" : [1000008, []],
+    "Dream: Let Yourself Be Loved!" : [1000009, []],
+    "Dream: Violence in the Name of Love!" : [1000010, ["grind"]],
+    "Dream: To Shreds, You Say?" : [1000011, ["grind"]],
+    "Dream: Love You to Pieces!" : [1000012, ["very_grind"]],
+    "Dream: Monster Fear Genophiler" : [1000013, ["very_grind"]],
     #for testing:
     "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
