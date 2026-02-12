@@ -69,15 +69,16 @@ function add_normal_custom_recipe(name, category, energy, ingredients, products,
             energy_required = energy,
             ingredients = ingredients,
             results = products,
-            allow_productivity = {{recipe.productivity}}
+            allow_productivity = productivity
         }
     end
 end
 
 {%- for recipe_name, recipe in recipes.items() %}
-{# todo add check for non-standard recipe categories #}
-{%- if recipe.source == 2 %}
-add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category}}", {{recipe.energy}}, {{dict_to_recipe(recipe.ingredients)}}, {{dict_to_recipe(recipe.products)}}, {{recipe.productivity}})
+{#- todo add check for non-standard recipe categories #}
+{#- getting source types here would be too difficult 2 is custom #}
+{%- if recipe.source.value == 2 %}
+add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category.name}}", {{recipe.energy}}, {{dict_to_recipe(recipe.ingredients)}}, {{dict_to_recipe(recipe.products)}}, {{recipe.productivity}})
 {%- else %}
 {%- if recipe.productivity != None %}
 data.raw["recipe"]["{{recipe_name}}"].allow_productivity = true
@@ -87,7 +88,7 @@ data.raw["recipe"]["{{recipe_name}}"].allow_productivity = true
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
 {# todo add check for non-standard recipe categories #}
-add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category}}", {{recipe.energy}}, {{dict_to_recipe(recipe.ingredients)}}, {{dict_to_recipe(recipe.products)}}, {{recipe.productivity}})
+add_normal_custom_recipe("{{recipe_name}}", "{{recipe.category.name}}", {{recipe.energy}}, {{dict_to_recipe(recipe.ingredients)}}, {{dict_to_recipe(recipe.products)}}, {{recipe.productivity}})
 {%- endfor %}
 
 local technologies = data.raw["technology"]
@@ -243,7 +244,7 @@ set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {% endif %}
 
 {% for itemTM in all_ingredients.values() %}
-{%- if itemTM.best_recipes is not none %}
+{%- if itemTM.best_recipes %}
 {%- set logic_recipes = itemTM.best_recipes %}
 {%- if itemTM.is_fluid%}
 itemTM = data.raw["fluid"]["{{ itemTM.name }}"]
@@ -251,21 +252,23 @@ itemTM = data.raw["fluid"]["{{ itemTM.name }}"]
 {#- why are all items not in data.raw["item"] #}
 itemTM = data.raw["item"]["{{ itemTM.name }}"] or data.raw["item-with-entity-data"]["{{ itemTM.name }}"] or data.raw["tool"]["{{ itemTM.name }}"] or data.raw["repair-tool"]["{{ itemTM.name }}"] or data.raw["gun"]["{{ itemTM.name }}"] or data.raw["ammo"]["{{ itemTM.name }}"] or data.raw["armor"]["{{ itemTM.name }}"] or data.raw["module"]["{{ itemTM.name }}"] or data.raw["capsule"]["{{ itemTM.name }}"] or data.raw["rail-planner"]["{{ itemTM.name }}"]
 {%- endif %}
+{#
 if itemTM.custom_tooltip_fields == nil then
     itemTM.custom_tooltip_fields = { {
         name = {"", "Logic recipes"},
-        value = {"", "{{",".join(recipe.name for recipe in logic_recipes)}}"},
+        value = {"", "{%- for recipe in logic_recipes -%}{{recipe.name}}{% if not loop.last %},{% endif %}{%- endfor -%}"},
         show_in_tooltip = false,
         order = 200,
     } }
 else
     table.insert(itemTM.custom_tooltip_fields, {
         name = {"", "Logic recipes"},
-        value = {"", "{{",".join(recipe.name for recipe in logic_recipes)}}"},
+        value = {"", "{%- for recipe in logic_recipes -%}{{recipe.name}}{% if not loop.last %},{% endif %}{%- endfor -%}"},
         show_in_tooltip = false,
         order = 200,
     })
 end
+#}
 {# this is commented out {%- for tech in logic_recipe.unlocking_technologies %}
 {%- set progressive_item_name = tech_to_progressive_lookup.get(tech.name, tech.name) %}
 {%- set want_progressive = want_progressives[progressive_item_name] %}
@@ -285,12 +288,14 @@ table.insert(itemTM.custom_tooltip_fields, {
 })
 {%- endif %}
 {%- endfor %} this is end of comment #}
+{#
 table.insert(itemTM.custom_tooltip_fields, {
     name = {"", "Logic unlock"},
-        value = {"", "{{",".join(tech.name for tech in item.get_req_techs()}}"},
+    value = {"", "{%- for tech in itemTM.get_req_techs() -%}{{tech.name}}{% if not loop.last %},{% endif %}{%- endfor -%}"},
     show_in_tooltip = false,
     order = 210,
 })
+#}
 {%- endif %}
 {% endfor -%}
 

@@ -112,7 +112,6 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     versioned_mod_name = mod_name + "_" + Utils.__version__
     custom_recipes = world.custom_recipes.copy()
-    custom_recipes.update(world.modpack.recipe_engine.pack_custom_recipes)
 
     def flop_random(low, high, base=None):
         """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
@@ -158,7 +157,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                                          world.modpack.progressive_technology_table.values()},
         "custom_recipes": custom_recipes,
         "removed_technologies": world.removed_technologies,
-        "all_ingredients": {name: item for name, item in world.modpack.recipe_engine.game_items if item.is_valid},
+        "all_ingredients": {name: item for name, item in world.modpack.recipe_engine.game_items.items() if item.is_valid},
         "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
         "mod_settings": world.modpack.mod_settings,
