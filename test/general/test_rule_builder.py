@@ -8,7 +8,7 @@ from BaseClasses import CollectionState, Item, ItemClassification, Location, Mul
 from NetUtils import JSONMessagePart
 from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Range, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
-from rule_builder.field_resolvers import FromOption, FromWorldAttr
+from rule_builder.field_resolvers import FieldResolver, FromOption, FromWorldAttr, resolve_field
 from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
     And,
@@ -660,14 +660,15 @@ class TestRules(RuleBuilderTestCase):
         self.assertFalse(resolved_rule(self.state))
 
     def test_has_any_count(self) -> None:
-        item_counts = {"Item 1": 1, "Item 2": 2}
+        item_counts: dict[str, int | FieldResolver] = {"Item 1": 1, "Item 2": 2}
         rule = HasAnyCount(item_counts)
         resolved_rule = rule.resolve(self.world)
         self.world.register_rule_dependencies(resolved_rule)
 
         for item_name, count in item_counts.items():
             item = self.world.create_item(item_name)
-            for _ in range(count):
+            num_items = resolve_field(count, self.world, int)
+            for _ in range(num_items):
                 self.assertFalse(resolved_rule(self.state))
                 self.state.collect(item)
             self.assertTrue(resolved_rule(self.state))
@@ -1355,6 +1356,10 @@ class TestExplain(RuleBuilderTestCase):
             Has("B", FromWorldAttr("pre_calculated")),
             Has.Resolved("B", count=3, player=1),
         ),
+        (
+            Has("C", FromWorldAttr("instance_data.key")),
+            Has.Resolved("C", count=7, player=1),
+        ),
     )
 )
 class TestFieldResolvers(RuleBuilderTestCase):
@@ -1364,6 +1369,7 @@ class TestFieldResolvers(RuleBuilderTestCase):
         multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
         world.pre_calculated = 3  # pyright: ignore[reportAttributeAccessIssue]
+        world.instance_data = {"key": 7}  # pyright: ignore[reportAttributeAccessIssue]
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")

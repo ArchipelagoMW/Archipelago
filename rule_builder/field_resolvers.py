@@ -1,7 +1,8 @@
 import dataclasses
 import importlib
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Self, cast
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast, overload
 
 from typing_extensions import override
 
@@ -37,6 +38,7 @@ class FieldResolver(ABC):
 @dataclasses.dataclass()
 class FromOption(FieldResolver):
     option: type[Option[Any]]
+    field: str = "value"
 
     @override
     def resolve(self, world: "World") -> Any:
@@ -52,13 +54,14 @@ class FromOption(FieldResolver):
         opt = cast(Option[Any] | None, getattr(world.options, option_name, None))
         if opt is None:
             raise ValueError(f"Invalid option: {option_name}")
-        return opt.value
+        return getattr(opt, self.field)
 
     @override
     def to_dict(self) -> dict[str, Any]:
         return {
             "resolver": "FromOption",
             "option": f"{self.option.__module__}.{self.option.__name__}",
+            "field": self.field,
         }
 
     @override
@@ -77,11 +80,11 @@ class FromOption(FieldResolver):
         if option is None or not issubclass(option, Option):
             raise ValueError(f"Invalid option '{option_path}' returns type '{option}' instead of Option subclass")
 
-        return cls(cast(type[Option[Any]], option))
+        return cls(cast(type[Option[Any]], option), data.get("field", "value"))
 
     @override
     def __str__(self) -> str:
-        return f"(FromOption {self.option.__name__})"
+        return f"FromOption({self.option.__name__}.{self.field})"
 
 
 @dataclasses.dataclass()
@@ -90,8 +93,31 @@ class FromWorldAttr(FieldResolver):
 
     @override
     def resolve(self, world: "World") -> Any:
-        return getattr(world, self.name, None)
+        obj: Any = world
+        for field in self.name.split("."):
+            if obj is None:
+                return None
+            if isinstance(obj, Mapping):
+                obj = obj.get(field, None)  # pyright: ignore[reportUnknownMemberType]
+            else:
+                obj = getattr(obj, field, None)
+        return obj
 
     @override
     def __str__(self) -> str:
         return f"FromWorldAttr({self.name})"
+
+
+T = TypeVar("T")
+
+
+@overload
+def resolve_field(field: Any, world: "World", expected_type: type[T]) -> T: ...
+@overload
+def resolve_field(field: Any, world: "World", expected_type: None = None) -> Any: ...
+def resolve_field(field: Any, world: "World", expected_type: type[T] | None = None) -> T | Any:
+    if isinstance(field, FieldResolver):
+        field = field.resolve(world)
+    if expected_type:
+        assert isinstance(field, expected_type), f"Expected type {expected_type} but got {type(field)}"
+    return field

@@ -136,7 +136,7 @@ When creating rules you may sometimes need to set a field to a value that depend
 There are two build-in field resolvers:
 
 - `FromOption`: Resolves to the value of the given option
-- `FromWorldAttr`: Resolves to the value of the given world instance attribute
+- `FromWorldAttr`: Resolves to the value of the given world instance attribute, can specify a dotted path `a.b.c` to get a nested attribute or dict item
 
 ```python
 world.options.mcguffin_count = 5

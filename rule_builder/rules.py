@@ -7,7 +7,7 @@ from typing_extensions import TypeVar, dataclass_transform, override
 from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
 
-from .field_resolvers import FieldResolver
+from .field_resolvers import FieldResolver, resolve_field
 from .options import OptionFilter
 
 if TYPE_CHECKING:
@@ -457,7 +457,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
         elif items and all(count == 1 for count in items.values()):
             clauses.append(HasAll(*items).resolve(world))
         elif items:
-            clauses.append(HasAllCounts(items).resolve(world))
+            clauses.append(HasAllCounts(items).resolve(world))  # pyright: ignore[reportArgumentType] why dict gotta be invariant
 
         if len(clauses) == 1:
             return clauses[0]
@@ -541,7 +541,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         elif items and all(count == 1 for count in items.values()):
             clauses.append(HasAny(*items).resolve(world))
         elif items:
-            clauses.append(HasAnyCount(items).resolve(world))
+            clauses.append(HasAnyCount(items).resolve(world))  # pyright: ignore[reportArgumentType]
 
         if len(clauses) == 1:
             return clauses[0]
@@ -684,7 +684,7 @@ class Filtered(WrapperRule[TWorld], game="Archipelago"):
 class Has(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least `count` of a given item"""
 
-    item_name: str
+    item_name: str | FieldResolver
     """The item to check for"""
 
     count: int | FieldResolver = 1
@@ -693,8 +693,8 @@ class Has(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         return self.Resolved(
-            self.item_name,
-            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
+            resolve_field(self.item_name, world, str),
+            count=resolve_field(self.count, world, int),
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -977,7 +977,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
 class HasAllCounts(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has all of the specified counts of the given items"""
 
-    item_counts: dict[str, int]
+    item_counts: dict[str, int | FieldResolver]
     """A mapping of item name to count to check for"""
 
     @override
@@ -988,8 +988,9 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
+        item_counts = tuple((name, resolve_field(count, world, int)) for name, count in self.item_counts.items())
         return self.Resolved(
-            tuple(self.item_counts.items()),
+            item_counts,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1082,7 +1083,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 class HasAnyCount(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has any of the specified counts of the given items"""
 
-    item_counts: dict[str, int]
+    item_counts: dict[str, int | FieldResolver]
     """A mapping of item name to count to check for"""
 
     @override
@@ -1093,8 +1094,9 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
+        item_counts = tuple((name, resolve_field(count, world, int)) for name, count in self.item_counts.items())
         return self.Resolved(
-            tuple(self.item_counts.items()),
+            item_counts,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1207,7 +1209,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             return Has(self.item_names[0], self.count).resolve(world)
         return self.Resolved(
             self.item_names,
-            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
+            count=resolve_field(self.count, world, int),
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1328,7 +1330,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        count = self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count
+        count = resolve_field(self.count, world, int)
         if len(self.item_names) == 0 or len(self.item_names) < count:
             # match state.has_from_list_unique
             return False_().resolve(world)
@@ -1452,7 +1454,7 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             self.item_name_group,
             item_names,
-            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
+            count=resolve_field(self.count, world, int),
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
@@ -1526,7 +1528,7 @@ class HasGroupUnique(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             self.item_name_group,
             item_names,
-            self.count.resolve(world) if isinstance(self.count, FieldResolver) else self.count,
+            count=resolve_field(self.count, world, int),
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
