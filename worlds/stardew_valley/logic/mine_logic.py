@@ -61,7 +61,7 @@ class MineLogic(BaseLogic):
             mine_tier -= 2
         elif CustomLogicOptionName.hard_mining in self.options.custom_logic:
             mine_tier -= 1
-        elif CustomLogicOptionName.easy_mining in self.options.custom_logic:
+        elif self.options.tool_progression.is_progressive and CustomLogicOptionName.easy_mining in self.options.custom_logic:
             mine_tier += 1
         mine_tier = max(0, mine_tier)
 
@@ -113,7 +113,7 @@ class MineLogic(BaseLogic):
             mining_tier -= 2
         elif CustomLogicOptionName.hard_mining in self.options.custom_logic:
             mining_tier -= 1
-        elif CustomLogicOptionName.easy_mining in self.options.custom_logic:
+        elif self.options.tool_progression.is_progressive and CustomLogicOptionName.easy_mining in self.options.custom_logic:
             mining_tier += 1
         tool_tier = mining_tier + 2
         tool_tier = min(5, max(1, tool_tier))
