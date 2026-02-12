@@ -29,7 +29,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             case "AND":
                 rule_dict[name] &= rule
             case "OR":
-                rule_dict[name] &= rule
+                rule_dict[name] |= rule
             case _:
                 raise ValueError(f'Invalid operation. Must be "AND" or "OR": {operation}')
 
