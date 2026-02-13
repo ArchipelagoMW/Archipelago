@@ -132,9 +132,10 @@ class PeakRegion(POYRegion):
 
     def __init__(self, name: str, peak_id: int, entry_requirements=None, subregions=None, locations=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True,
-                 generate_time_attack: bool = True):
+                 generate_time_attack: bool = True, generate_free_solo: bool = False):
         self.peak_id = peak_id
         self.generate_time_attack = generate_time_attack
+        self.generate_free_solo = generate_free_solo
         super(PeakRegion, self).__init__(name, entry_requirements, subregions, locations, enable_requirements)
         self.prepare_peak_region()
         self.is_peak = True
@@ -143,9 +144,13 @@ class PeakRegion(POYRegion):
     def prepare_peak_region(self):
         self.entry_requirements.update({self.name: 1})
         self.locations.append(LocationData(self.name, POYItemLocationType.PEAK, self.peak_id))
-        if self.peak_id >= 30:
-            self.locations.append(LocationData(self.name + ": Free Solo", POYItemLocationType.FREESOLO,
-                                               self.peak_id))
+        if self.generate_free_solo:
+            self.subregions.append(POYRegion(
+                self.name + " Free Solo", locations=[
+                    LocationData(self.name + ": Free Solo", POYItemLocationType.FREESOLO, self.peak_id),
+                ], enable_requirements=lambda options: options.include_free_solo,
+            ))
+
         if self.generate_time_attack:
             self.subregions.append(POYRegion(
                 self.name + " Time Attack", entry_requirements={"Pocketwatch": 1, "Progressive Crampons": 1},
@@ -426,34 +431,36 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         PeakRegion("Walker's Pillar", 30, locations=[
             LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
             LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1),
-        ]),
+        ], generate_free_solo=True),
         PeakRegion("Eldenhorn", 31, locations=[
             LocationData("Eldenhorn: Chalk Box", POYItemLocationType.ARTEFACT, 10),
             LocationData("Eldenhorn: Rope", POYItemLocationType.ROPE, 7),
             LocationData("Eldenhorn: Bird Seed", POYItemLocationType.BIRDSEED, 3),
-        ]),
+        ], generate_free_solo=True),
         PeakRegion("Great Gaol", 32, locations=[
             LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18),
             LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
             LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
             LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
-        ]),
+        ], generate_free_solo=True),
         PeakRegion("St, Haelga", 33, locations=[
             LocationData("St Haelga: Rope (Encounter)", POYItemLocationType.ROPE, 3),
             LocationData("St. Haelga: Picture Piece #4", POYItemLocationType.ARTEFACT, 17),
-        ]),
+        ], generate_free_solo=True),
         PeakRegion("Ymir's Shadow", 34, locations=[
             LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12),
             LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
-        ]),
+        ], generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_advanced, is_book=True),
     POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Expert Book": 1}, subregions=[
         PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
-        ], generate_time_attack=False),
+        ], generate_time_attack=False,
+                   generate_free_solo=True),
         PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2},
-                   enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False),
+                   enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
+                   generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_expert, is_book=True),
 ])
 all_locations_to_ids: dict[str, int] = poy_regions.get_all_locations_dict()
