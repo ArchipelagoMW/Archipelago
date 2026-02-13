@@ -60,7 +60,7 @@ validator page: [YAML Validation page](/mysterycheck)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your `.apmq` patch file.
-5. Go to the [FFMQR website](https://ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest ROM
+5. Go to the [FFMQR website](https://ap.ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest ROM
 and the .apmq file you received, choose optional preferences, and click `Generate` to get your patched ROM.
 7. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
@@ -72,7 +72,7 @@ When you join a multiworld game, you will be asked to provide your config file t
 the host will provide you with either a link to download your patch file, or with a zip file containing
 everyone's patch files. Your patch file should have a `.apmq` extension.
 
-Go to the [FFMQR website](https://ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest ROM
+Go to the [FFMQR website](https://ap.ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest ROM
 and the .apmq file you received, choose optional preferences, and click `Generate` to get your patched ROM.
 
 Manually launch the SNI Client, and run the patched ROM in your chosen software or hardware.
@@ -115,9 +115,8 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 1. Enter the RetroArch main menu screen.
 2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
 3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
-   Network Command Port at 55355.
-
-![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   Network Command Port at 55355. \
+  ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
 4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
    Performance)".
 

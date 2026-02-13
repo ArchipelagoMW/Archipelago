@@ -656,11 +656,20 @@ class PokemonRedBlueWorld(World):
         if self.options.dexsanity:
             mon_locations = {mon: set() for mon in poke_data.pokemon_data.keys()}
             for loc in location_data:
-                if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon", "Missable Pokemon"]:
+                if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon"]:
                     mon = self.multiworld.get_location(loc.name, self.player).item.name
-                    if mon.startswith("Static ") or mon.startswith("Missable "):
+                    if mon.startswith("Static "):
                         mon = " ".join(mon.split(" ")[1:])
-                    mon_locations[mon].add(loc.name.split(" -")[0])
+                    if "Wild" in loc.name or "Fishing" in loc.name or "Prize" in loc.name:
+                        encounter_label = loc.name.split(" -")[0]
+                    elif "Surf" in loc.name:
+                        encounter_label = f"{loc.name.split(' -')[0]} (Surf)"
+                    elif "Fake" in loc.name:
+                        encounter_label = f"{loc.name.split(' -')[0]} (Fake Pokeball)"
+                    else:
+                        split_loc_name = loc.name.split(" - ")
+                        encounter_label = f"{split_loc_name[0]} ({split_loc_name[1]})"
+                    mon_locations[mon].add(encounter_label)
             for i, mon in enumerate(mon_locations):
                 if self.dexsanity_table[i] and mon_locations[mon]:
                     hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] =\
@@ -713,7 +722,8 @@ class PokemonRedBlueWorld(World):
             "require_pokedex": self.options.require_pokedex.value,
             "area_1_to_1_mapping": self.options.area_1_to_1_mapping.value,
             "blind_trainers": self.options.blind_trainers.value,
-            "v5_update": True,
+            "game_version": self.options.game_version.value,
+            "exp_all": self.options.exp_all.value,
 
         }
         if self.options.type_chart_seed == "random" or self.options.type_chart_seed.value.isdigit():

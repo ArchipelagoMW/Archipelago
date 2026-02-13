@@ -1,5 +1,6 @@
 import unittest
 from argparse import Namespace
+from collections import ChainMap
 from typing import Type
 
 from BaseClasses import CollectionState, MultiWorld
@@ -82,12 +83,13 @@ class TestBase(unittest.TestCase):
 
     def test_items_in_datapackage(self):
         """Test that any created items in the itempool are in the datapackage"""
+        archipelago = AutoWorldRegister.world_types["Archipelago"]
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 for item in multiworld.itempool:
-                    self.assertIn(item.name, world_type.item_name_to_id)
-    
+                    self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+
     def test_item_links(self) -> None:
         """
         Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
@@ -148,10 +150,9 @@ class TestBase(unittest.TestCase):
 
     def test_locality_not_modified(self):
         """Test that worlds don't modify the locality of items after duplicates are resolved"""
-        gen_steps = ("generate_early", "create_regions", "create_items")
-        additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
-        worlds_to_test = {game: world for game, world in AutoWorldRegister.world_types.items()}
-        for game_name, world_type in worlds_to_test.items():
+        gen_steps = ("generate_early",)
+        additional_steps = ("create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic", "pre_fill")
+        for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
                 local_items = multiworld.worlds[1].options.local_items.value.copy()

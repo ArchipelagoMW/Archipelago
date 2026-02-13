@@ -23,7 +23,7 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
-def mystery_argparse():
+def mystery_argparse(argv: list[str] | None = None) -> argparse.Namespace:
     from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
@@ -57,7 +57,7 @@ def mystery_argparse():
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.skip_output and args.spoiler_only:
         parser.error("Cannot mix --skip_output and --spoiler_only")
@@ -68,7 +68,7 @@ def mystery_argparse():
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
-    args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
+    args.plando = PlandoOptions.from_option_string(args.plando)
 
     return args
 
@@ -119,9 +119,9 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     else:
         meta_weights = None
 
-
-    player_id = 1
-    player_files = {}
+    player_id: int = 1
+    player_files: dict[int, str] = {}
+    player_errors: list[str] = []
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
@@ -135,9 +135,13 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     else:
                         weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
-                        
+
             except Exception as e:
-                raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
+                logging.exception(f"Exception reading weights in file {fname}")
+                player_errors.append(
+                    f"{len(player_errors) + 1}. "
+                    f"File {fname} is invalid. Please fix your yaml.\n{Utils.get_all_causes(e)}"
+                )
 
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items(), key=lambda k: k[0].casefold())}
@@ -152,6 +156,10 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     args.multi = max(player_id - 1, args.multi)
 
     if args.multi == 0:
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
         raise ValueError(
             "No individual player files found and number of players is 0. "
             "Provide individual player files or specify the number of players via host.yaml or --multi."
@@ -161,28 +169,19 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                  f"{seed_name} Seed {seed} with plando: {args.plando}")
 
     if not weights_cache:
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
         raise Exception(f"No weights found. "
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
 
     from worlds.AutoWorld import AutoWorldRegister
-    from worlds.alttp.EntranceRandomizer import parse_arguments
-    erargs = parse_arguments(['--multi', str(args.multi)])
-    erargs.seed = seed
-    erargs.plando_options = args.plando
-    erargs.spoiler = args.spoiler
-    erargs.race = args.race
-    erargs.outputname = seed_name
-    erargs.outputpath = args.outputpath
-    erargs.skip_prog_balancing = args.skip_prog_balancing
-    erargs.skip_output = args.skip_output
-    erargs.spoiler_only = args.spoiler_only
-    erargs.name = {}
-    erargs.csv_output = args.csv_output
-
-    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
-         for fname, yamls in weights_cache.items()}
+    args.outputname = seed_name
+    args.sprite = dict.fromkeys(range(1, args.multi+1), None)
+    args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
+    args.name = {}
 
     if meta_weights:
         for category_name, category_dict in meta_weights.items():
@@ -198,52 +197,95 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                            elif key == "triggers":
+                                if "triggers" not in yaml[category_name]:
+                                    yaml[category_name][key] = []
+                                for trigger in option:
+                                    yaml[category_name][key].append(trigger)
                             else:
                                 yaml[category_name][key] = option
 
-    player_path_cache = {}
+    settings_cache: dict[str, tuple[argparse.Namespace, ...] | None] = {fname: None for fname in weights_cache}
+    if args.sameoptions:
+        for fname, yamls in weights_cache.items():
+            try:
+                settings_cache[fname] = tuple(roll_settings(yaml, args.plando) for yaml in yamls)
+            except Exception as e:
+                logging.exception(f"Exception reading settings in file {fname}")
+                player_errors.append(
+                    f"{len(player_errors) + 1}. "
+                    f"File {fname} is invalid. Please fix your yaml.\n{Utils.get_all_causes(e)}"
+                )
+        # Exit early here to avoid throwing the same errors again later
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
+
+    player_path_cache: dict[int, str] = {}
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
-    name_counter = Counter()
-    erargs.player_options = {}
+    name_counter: Counter[str] = Counter()
+    args.player_options = {}
 
     player = 1
     while player <= args.multi:
         path = player_path_cache[player]
-        if path:
+        if not path:
+            player_errors.append(f'No weights specified for player {player}')
+            player += 1
+            continue
+
+        for doc_index, yaml in enumerate(weights_cache[path]):
+            name = yaml.get("name")
             try:
-                settings: tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
-                    tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
-                for settingsObject in settings:
-                    for k, v in vars(settingsObject).items():
-                        if v is not None:
-                            try:
-                                getattr(erargs, k)[player] = v
-                            except AttributeError:
-                                setattr(erargs, k, {player: v})
-                            except Exception as e:
-                                raise Exception(f"Error setting {k} to {v} for player {player}") from e
+                # Use the cached settings object if it exists, otherwise roll settings within the try-catch
+                # Invariant: settings_cache[path] and weights_cache[path] have the same length
+                cached = settings_cache[path]
+                settings_object: argparse.Namespace = (cached[doc_index] if cached else roll_settings(yaml, args.plando))
 
-                    # name was not specified
-                    if player not in erargs.name:
-                        if path == args.weights_file_path:
-                            # weights file, so we need to make the name unique
-                            erargs.name[player] = f"Player{player}"
-                        else:
-                            # use the filename
-                            erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-                    erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+                for k, v in vars(settings_object).items():
+                    if v is not None:
+                        try:
+                            getattr(args, k)[player] = v
+                        except AttributeError:
+                            setattr(args, k, {player: v})
+                        except Exception as e:
+                            raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
-                    player += 1
+                # name was not specified
+                if player not in args.name:
+                    if path == args.weights_file_path:
+                        # weights file, so we need to make the name unique
+                        args.name[player] = f"Player{player}"
+                    else:
+                        # use the filename
+                        args.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
+                args.name[player] = handle_name(args.name[player], player, name_counter)
+
             except Exception as e:
-                raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
-        else:
-            raise RuntimeError(f'No weights specified for player {player}')
+                logging.exception(f"Exception reading settings in file {path} document #{doc_index + 1} "
+                                  f"(name: {args.name.get(player, name)})")
+                player_errors.append(
+                    f"{len(player_errors) + 1}. "
+                    f"File {path} document #{doc_index + 1} (name: {args.name.get(player, name)}) is invalid. "
+                    f"Please fix your yaml.\n{Utils.get_all_causes(e)}")
 
-    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
+            # increment for each yaml document in the file
+            player += 1
 
-    return erargs, seed
+    if len(set(name.lower() for name in args.name.values())) != len(args.name):
+        player_errors.append(
+            f"{len(player_errors) + 1}. "
+            f"Names have to be unique. Names: {Counter(name.lower() for name in args.name.values())}"
+        )
+
+    if player_errors:
+        errors = "\n\n".join(player_errors)
+        raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                         f"See logs for full tracebacks.\n\n{errors}")
+
+    return args, seed
 
 
 def read_weights_yamls(path) -> tuple[Any, ...]:
@@ -320,7 +362,7 @@ class SafeFormatter(string.Formatter):
             return kwargs.get(key, "{" + key + "}")
 
 
-def handle_name(name: str, player: int, name_counter: Counter):
+def handle_name(name: str, player: int, name_counter: Counter[str]):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
@@ -351,7 +393,9 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
             elif isinstance(new_value, list):
                 cleaned_value.extend(new_value)
             elif isinstance(new_value, dict):
-                cleaned_value = dict(Counter(cleaned_value) + Counter(new_value))
+                counter_value = Counter(cleaned_value)
+                counter_value.update(new_value)
+                cleaned_value = dict(counter_value)
             else:
                 raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
@@ -365,13 +409,18 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
                 for element in new_value:
                     cleaned_value.remove(element)
             elif isinstance(new_value, dict):
-                cleaned_value = dict(Counter(cleaned_value) - Counter(new_value))
+                counter_value = Counter(cleaned_value)
+                counter_value.subtract(new_value)
+                cleaned_value = dict(counter_value)
             else:
                 raise Exception(f"Cannot apply remove to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
             cleaned_weights[option_name] = cleaned_value
         else:
-            cleaned_weights[option_name] = new_weights[option]
+            # Options starting with + and - may modify values in-place, and new_weights may be shared by multiple slots
+            # using the same .yaml, so ensure that the new value is a copy.
+            cleaned_value = copy.deepcopy(new_weights[option])
+            cleaned_weights[option_name] = cleaned_value
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
     if new_options:
@@ -393,6 +442,8 @@ def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
             return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
@@ -449,7 +500,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     return weights
 
 
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type[Options.Option], plando_options: PlandoOptions):
     try:
         if option_key in game_weights:
             if not option.supports_weighting:
@@ -495,7 +546,22 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             if required_plando_options:
                 raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
                                 f"which is not enabled.")
-
+        games = requirements.get("game", {})
+        for game, version in games.items():
+            if game not in AutoWorldRegister.world_types:
+                continue
+            if not version:
+                raise Exception(f"Invalid version for game {game}: {version}.")
+            if isinstance(version, str):
+                version = {"min": version}
+            if "min" in version and tuplize_version(version["min"]) > AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is at least {version['min']}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
+            if "max" in version and tuplize_version(version["max"]) < AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is no later than {version['max']}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
     ret = argparse.Namespace()
     for option_key in Options.PerGameCommonOptions.type_hints:
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:
