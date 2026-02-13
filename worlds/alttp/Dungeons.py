@@ -209,8 +209,8 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
     if localized:
         in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
         if in_dungeon_items:
-            restricted_players = {player for player, restricted in multiworld.restrict_dungeon_item_on_boss.items() if
-                                  restricted}
+            restricted_players = {world.player for world in multiworld.get_game_worlds("A Link to the Past") if
+                                  world.options.restrict_dungeon_item_on_boss}
             locations: typing.List["ALttPLocation"] = [
                 location for location in get_unfilled_dungeon_locations(multiworld)
                 # filter boss
@@ -239,7 +239,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 multiworld.worlds[item.player].collect(all_state_base, item)
             pre_fill_items = []
             for player in in_dungeon_player_ids:
-                pre_fill_items += multiworld.worlds[player].get_pre_fill_items()
+                pre_fill_items += [item for item in multiworld.worlds[player].get_pre_fill_items() if not item.crystal]
             for item in in_dungeon_items:
                 try:
                     pre_fill_items.remove(item)
@@ -255,8 +255,9 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 if all_state_base.has("Triforce", player):
                     all_state_base.remove(multiworld.worlds[player].create_item("Triforce"))
 
-            for (player, key_drop_shuffle) in multiworld.key_drop_shuffle.items():
-                if not key_drop_shuffle and player not in multiworld.groups:
+            for lttp_world in multiworld.get_game_worlds("A Link to the Past"):
+                if not lttp_world.options.key_drop_shuffle and lttp_world.player not in multiworld.groups:
+                    player = lttp_world.player
                     for key_loc in key_drop_data:
                         key_data = key_drop_data[key_loc]
                         all_state_base.remove(item_factory(key_data[3], multiworld.worlds[player]))

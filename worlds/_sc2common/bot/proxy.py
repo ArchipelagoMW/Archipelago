@@ -8,7 +8,7 @@ import traceback
 
 from aiohttp import WSMsgType, web
 from worlds._sc2common.bot import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
+from .proto import sc2api_pb2 as sc_pb
 
 from .controller import Controller
 from .data import Result, Status

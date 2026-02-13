@@ -116,6 +116,7 @@ This randomizer would not be possible without the help from:
 - Gamma / SageOfMirrors: (additional programming)
 - LagoLunatic: (base randomizer, additional assistance)
 - Lunix: (Linux support, additional programming)
+- mobby45: (French Translation of Guides)
 - Mysteryem: (tracker support, additional programming)
 - Necrofitz: (additional documentation)
 - Ouro: (tracker support)

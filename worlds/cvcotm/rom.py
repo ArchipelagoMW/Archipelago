@@ -586,7 +586,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5.update(base_rom_bytes)
         # if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]:
         if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]:
-            raise Exception("Supplied Base ROM does not match known MD5s for Castlevania: Circle of the Moon USA."
+            raise Exception("Supplied Base ROM does not match known MD5s for Castlevania: Circle of the Moon USA. "
                             "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes

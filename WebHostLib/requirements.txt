@@ -1,12 +1,13 @@
 flask>=3.1.1
 werkzeug>=3.1.3
-pony>=0.7.19
+pony>=0.7.19; python_version <= '3.12'
+pony @ git+https://github.com/black-sliver/pony@7feb1221953b7fa4a6735466bf21a8b4d35e33ba#0.7.19; python_version >= '3.13'
 waitress>=3.0.2
 Flask-Caching>=2.3.0
-Flask-Compress>=1.17
+Flask-Compress==1.18  # pkg_resources can't resolve the "backports.zstd" dependency of >1.18, breaking ModuleUpdate.py
 Flask-Limiter>=3.12
 bokeh>=3.6.3
 markupsafe>=3.0.2
-Markdown>=3.7
-mdx-breakless-lists>=1.0.1
 setproctitle>=1.3.5
+mistune>=3.1.3
+docutils>=0.22.2

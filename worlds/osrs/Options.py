@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, Toggle, Range, PerGameCommonOptions
 
-MAX_COMBAT_TASKS = 16
+MAX_COMBAT_TASKS = 17
 
 MAX_PRAYER_TASKS = 5
 MAX_MAGIC_TASKS = 7

@@ -77,7 +77,7 @@ Y los siguientes caracteres especiales (cada uno ocupa un carácter):
 ### Generar y parchar un juego
 
 1. Crea tu archivo de opciones (YAML).
-2. Sigue las instrucciones generales de Archipelago para [generar un juego](../../Archipelago/setup/en#generating-a-game).
+2. Sigue las instrucciones generales de Archipelago para [generar un juego](/tutorial/Archipelago/setup_en#generating-a-game).
 Haciendo esto se generará un archivo de salida. Tu parche tendrá la extensión de archivo `.apred` o `.apblue`.
 3. Abre `ArchipelagoLauncher.exe`
 4. Selecciona "Open Patch" en el lado izquierdo y selecciona tu parche.

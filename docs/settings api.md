@@ -28,7 +28,7 @@ if it does not exist.
 ## Global Settings
 
 All non-world-specific settings are defined directly in settings.py.
-Each value needs to have a default. If the default should be `None`, define it as `typing.Optional` and assign `None`.
+Each value needs to have a default. If the default should be `None`, annotate it using `T | None = None`.
 
 To access a "global" config value, with correct typing, use one of
 ```python
@@ -181,10 +181,3 @@ circular / partial imports. Instead, the code should fetch from settings on dema
 
 "Global" settings are populated immediately, while worlds settings are lazy loaded, so if really necessary,
 "global" settings could be used in global scope of worlds.
-
-
-### APWorld Backwards Compatibility
-
-APWorlds that want to be compatible with both stable and dev versions, have two options:
-1. use the old Utils.get_options() API until Archipelago 0.4.2 is out
-2. add some sort of compatibility code to your world that mimics the new API
