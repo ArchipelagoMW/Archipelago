@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Dict, Optional, TypedDict
 from venv import logger
 
 from BaseClasses import ItemClassification, Location, Region
+from worlds.evn.options import ChosenString
 from worlds.evn.regions import can_accept_location  # Is this an improper import?
 
 from .rezdata import misns
@@ -149,11 +150,28 @@ def create_regular_locations(world: EVNWorld) -> None:
         #     , EVNLocation
         # )
 
+    chosen_evregion = "Vellos"
+    # Default is vellos
+    match world.options.chosen_string.value:
+        case ChosenString.option_fed:
+            chosen_evregion = "Fed"
+        case ChosenString.option_rebel:
+            chosen_evregion = "Rebel"
+        case ChosenString.option_pirate:
+            chosen_evregion = "Pirate"
+        case ChosenString.option_auroran:
+            chosen_evregion = "Auroran"
+        case ChosenString.option_polaris:
+            chosen_evregion = "Polaris"
+        case _:
+            chosen_evregion = "Vellos"
 
     for key, loc in ev_location_bank.items():
         for evregion in world.get_regions():
             #if can_accept_location(evregion, loc.name):
             if can_accept_location(evregion, loc["name"]):
+                if not evregion.name == chosen_evregion:
+                    continue    #Do not add the locations where we cannot go. This will probably have breaking results for branches that share missions.
                 evregion.add_locations(
                     get_location_names_with_ids(world, [loc["name"]])
                     , EVNLocation
