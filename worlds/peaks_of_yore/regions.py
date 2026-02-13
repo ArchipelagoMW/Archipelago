@@ -62,7 +62,8 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
             # remove the last entry requirement, which is only useful in the other gamemode
             # i.e. the requirement to unlock a peak before being able to enter it's region should be removed if playing
             # book unlock mode
-            # WARNING: I'll probably want to change this as this assumes that any other "normal" requirements are placed before, which can easily lead to problems
+            # WARNING: I'll probably want to change this as this assumes that any other "normal" requirements are placed
+            #   before, which can easily lead to problems
             entry_requirements.popitem()
 
         parent_region.connect(region, region_data.name + " Connection", lambda state: state.has_all_counts(
