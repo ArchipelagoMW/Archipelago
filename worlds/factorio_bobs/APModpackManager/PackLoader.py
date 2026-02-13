@@ -21,21 +21,25 @@ def init_modpacks(modpackType: type[U]) -> None:
     """
     modpack_directories = modpackType.modpack_directories
     logger.debug("Initializing modpack manager")
-    for directory in modpack_directories:
-        logger.debug(f"Looking for modpacks in {directory.resolve()}")
+    for directory, filesystems in modpack_directories:
+        logger.debug(f"Looking for modpacks in {directory}")
         for modpack_header in directory.glob("*/header.json"):
             modpackPath: Path = modpack_header.parent
             logger.debug(f"Found modpack in: {modpackPath}")
-            modpack = modpackType(modpackPath, is_zip=False)
+            modpack = modpackType(modpackPath, filesystems=filesystems)
             if modpack.packName in modpacks:
                 raise Exception(f"Modpack already initialized: {modpack.packName}")
             modpacks[modpack.packName] = modpack
         for zip_path in directory.glob("*.zip"):
-            with ZipFile(zip_path) as zip_filesystem:
-                root = ZipPath(zip_filesystem)
-                if not (root / "header.json").exists():
-                    continue
-            modpack = modpackType(zip_path, is_zip=True)
+            zip_filesystem = ZipFile(zip_path)
+            filesystems_copy = filesystems.copy()
+            filesystems_copy.append(zip_filesystem)
+            root = ZipPath(zip_filesystem)
+            if not (root / "header.json").exists():
+                zip_filesystem.close()
+                continue
+            logger.debug(f"Found zip modpack in: {zip_path.resolve()}")
+            modpack = modpackType(root, filesystems=filesystems_copy)
             if modpack.packName in modpacks:
                 raise Exception(f"Modpack already initialized: {modpack.packName}")
             modpacks[modpack.packName] = modpack
