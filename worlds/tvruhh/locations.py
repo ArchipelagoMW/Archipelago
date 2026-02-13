@@ -317,7 +317,17 @@ dream_list = {
     "Dream: Alter Devil: High Score" : [1000169, ["alt_devil","quickplay"]],
     "Dream: Alter Devil: Escalating Stress" : [1000170, ["alt_devil","endless"]],
     "Dream: Alter Devil: Nightmare Combo" : [1000171, ["alt_devil","endless","tedious"]],
-
+    "Dream: She Will Repair It" : [1000172, []],
+    "Dream: Defective Heart" : [1000173, []],
+    "Dream: One Chapter Clear" : [1000174, []],
+    "Dream: Two Chapters Clear" : [1000175, []],
+    "Dream: Three Chapters Clear" : [1000176, []],
+    "Dream: Four Chapters Clear" : [1000177, []], #I think the final boss is a chapter?
+    "Dream: Five Chapters Clear" : [1000178, ["alter_story"]], #Possible in story mode with Polyps battle (or shiny but I forgot it it's possible in base story)
+    "Dream: Six Chapters Clear" : [1000179, ["alter_story"]],
+    "Dream: Seven Chapters Clear" : [1000180, ["alter_story"]], #Possible in alter if you buy extra battles
+    "Dream: Eight Chapters Clear" : [1000181, ["alter_story"]], #Need a shiny or a polyp fight
+    "Dream: Nine Chapters Clear" : [1000182, ["alter_story", "tedious"]], #Need both
     #for testing:
     "Dream: Something Something Quick" : [1000420, ["quickplay"]]
 }
