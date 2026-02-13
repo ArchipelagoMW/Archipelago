@@ -377,6 +377,9 @@ dream_list = {
     "Dream: Phobiasynthesis" : [1000229, ["grind"]],
     "Dream: What Plants Crave!" : [1000230, ["grind"]],
     "Dream: The Call of the Garden" : [1000231, []],
+    "Dream: Secret Admirer" : [1000232, []],
+    "Dream: Don't Forget to Breathe" : [1000233, []],
+    "Dream: Boss Rush in My Boss Rush" : [1000234, []],
     #for testing:
     "Dream: Something Something Quick" : [1000420, ["quickplay"]]
 }
