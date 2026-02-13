@@ -929,7 +929,7 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
 class OptionCounter(OptionDict):
     min: int | None = None
     max: int | None = None
-    schema = Schema({str: int})
+    schema = Schema({Optional(str): int})
 
     def __init__(self, value: dict[str, int]) -> None:
         super(OptionCounter, self).__init__(collections.Counter(value))
