@@ -1,6 +1,7 @@
 from typing import NamedTuple
 
 from BaseClasses import Region, Location
+from options import *
 from worlds.AutoWorld import World
 from .data import *
 
@@ -53,12 +54,19 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
             result.time_attack_in_pool.append(location)
 
     if parent_region is not None:
-        if ((region_data.is_peak and opts.game_mode == 0) or (region_data.is_book and opts.game_mode == 1))\
-                and len(region_data.entry_requirements) != 0:
-            region_data.entry_requirements.popitem()
+        entry_requirements = dict(region_data.entry_requirements)
+        if (((region_data.is_peak and opts.game_mode == GameMode.option_book_unlock) or
+            (region_data.is_book and opts.game_mode == GameMode.option_peak_unlock)) and
+            len(entry_requirements) != 0):
+            # if region is peak and unlock is book or region is book and unlock is peak,
+            # remove the last entry requirement, which is only useful in the other gamemode
+            # i.e. the requirement to unlock a peak before being able to enter it's region should be removed if playing
+            # book unlock mode
+            # WARNING: I'll probably want to change this as this assumes that any other "normal" requirements are placed before, which can easily lead to problems
+            entry_requirements.popitem()
 
         parent_region.connect(region, region_data.name + " Connection", lambda state: state.has_all_counts(
-            region_data.entry_requirements, world.player))
+            entry_requirements, world.player))
 
     for r in region_data.subregions:
         tempres = recursive_create_region(r, region, world, opts)
