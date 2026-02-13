@@ -1,7 +1,7 @@
 from typing import NamedTuple
 
 from BaseClasses import Region, Location
-from options import *
+from .options import *
 from worlds.AutoWorld import World
 from .data import *
 
