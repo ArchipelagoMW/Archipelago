@@ -27,7 +27,7 @@ class Goal(Choice):
 
     Minigame Madness: Win a certain amount of each Minigame Trap, then defeat Finalhazard
 
-    Biolizard Chao Emerald Hunt: Find the Seven Chaos Emeralds, finish Cannon's Core, and then defeat Biolizard and Finalhazard
+    Biolizard Chaos Emerald Hunt: Find the Seven Chaos Emeralds, finish Cannon's Core, and then defeat Biolizard and Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
