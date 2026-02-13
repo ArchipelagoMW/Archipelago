@@ -346,7 +346,37 @@ dream_list = {
     "Dream: Hacked Dice" : [1000198, ["heavy_rain"]], #At this point I wonder if alter story is just the better way for this
     "Dream: Excessively Superfluous Luck" : [1000199, ["heavy_rain","grind"]],
     "Dream: Lucky 13" : [1000200, []],
-
+    "Dream: A Wonderful Gift" : [1000201, []],
+    "Dream: They Really Love Me!" : [1000202, []],
+    "Dream: All the Right Moves" : [1000203, []],
+    "Dream: Playing Hard to Love" : [1000204, ["very_grind"]],
+    "Dream: Bottle It Up" : [1000205, []],
+    "Dream: Calm Under Pressure" : [1000206, ["grind","tedious"]],
+    "Dream: It's Almost Easy" : [1000207, []],
+    "Dream: She Will Not Give Up" : [1000208, []],
+    "Dream: Friend Train" : [1000209, []],
+    "Dream: Chain of Misfits" : [1000210, ["grind"]], #needs lot of helpers
+    "Dream: Sunglasses" : [1000211, []],
+    "Dream: Void Nullifier" : [1000212, []],
+    "Dream: Fire Wall" : [1000213, []],
+    "Dream: Lightning Rod" : [1000214, []],
+    "Dream: The Antidote" : [1000215, []],
+    "Dream: Heart Trick" : [1000216, []],
+    "Dream: Perfect Ten" : [1000217, ["tedious"]],
+    "Dream: God Run" : [1000218, ["very_tedious", "heavy_rain"]],
+    "Dream: Triple Deluxe" : [1000219, []],
+    "Dream: Super Septuplet" : [1000220, ["tedious"]],
+    "Dream: Torrential Triplet" : [1000221, ["tedious","torr_rain"]],
+    "Dream: Random Encounters" : [1000222, []],
+    "Dream: All The Pretty Faces" : [1000223, []],
+    "Dream: Scary Monsters and Lovely Creeps" : [1000224, ["grind"]],
+    "Dream: Lonely Gift" : [1000225, []],
+    "Dream: The Key to Love" : [1000226, []],
+    "Dream: Rest Assured" : [1000227, []],
+    "Dream: Sparkling Soil" : [1000228, []],
+    "Dream: Phobiasynthesis" : [1000229, ["grind"]],
+    "Dream: What Plants Crave!" : [1000230, ["grind"]],
+    "Dream: The Call of the Garden" : [1000231, []],
     #for testing:
     "Dream: Something Something Quick" : [1000420, ["quickplay"]]
 }
