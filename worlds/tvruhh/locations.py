@@ -312,11 +312,12 @@ dream_list = {
     "Dream: The Devil: Overlover" : [1000164, ["devil","endless"]],
     "Dream: The Devil: Nightmare Combo" : [1000165, ["devil","endless"]],
     "Dream: Alter Devil: Three Days" : [1000166, ["alt_devil","alter_story"]],
-    "Dream: Alter Devil: Bouquet" : [1000166, ["alt_devil","alter_story"]],
-    "Dream: Alter Devil: Overlover" : [1000166, ["alt_devil","alter_story"]],
-    "Dream: Alter Devil: High Score" : [1000166, ["alt_devil","quickplay"]],
-    "Dream: Alter Devil: Escalating Stress" : [1000166, ["alt_devil","endless"]],
-    "Dream: Alter Devil: Nightmare Combo" : [1000166, ["alt_devil","endless","tedious"]],
+    "Dream: Alter Devil: Bouquet" : [1000167, ["alt_devil","alter_story"]],
+    "Dream: Alter Devil: Overlover" : [1000168, ["alt_devil","alter_story"]],
+    "Dream: Alter Devil: High Score" : [1000169, ["alt_devil","quickplay"]],
+    "Dream: Alter Devil: Escalating Stress" : [1000170, ["alt_devil","endless"]],
+    "Dream: Alter Devil: Nightmare Combo" : [1000171, ["alt_devil","endless","tedious"]],
+
     #for testing:
     "Dream: Something Something Quick" : [1000420, ["quickplay"]]
 }
