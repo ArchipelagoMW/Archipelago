@@ -328,6 +328,25 @@ dream_list = {
     "Dream: Seven Chapters Clear" : [1000180, ["alter_story"]], #Possible in alter if you buy extra battles
     "Dream: Eight Chapters Clear" : [1000181, ["alter_story"]], #Need a shiny or a polyp fight
     "Dream: Nine Chapters Clear" : [1000182, ["alter_story", "tedious"]], #Need both
+    "Dream: Level 4 Drizzle" : [1000183, []],
+    "Dream: Level 8 Rainstorm" : [1000184, ["heavy_rain"]],
+    "Dream: Level 12 Monsoon" : [1000185, ["heavy_rain"]],
+    "Dream: Even Further Beyond" : [1000186, ["torr_rain"]], #I don't think (or it's hard) to have overlevels in heavy
+    "Dream: 20,000 Specks" : [1000187, []],
+    "Dream: 40,000 Flakes" : [1000188, []],
+    "Dream: 60,000 Bits" : [1000189, []],
+    "Dream: 80,000 Dots" : [1000190, []],
+    "Dream: Mountain of Motes" : [1000191, ["heavy_rain"]],
+    "Dream: Ocean of Motes" : [1000192, ["heavy_rain"]],
+    "Dream: Planet of Motes" : [1000193, ["heavy_rain","grind"]],
+    "Dream: Star of Motes" : [1000194, ["torr_rain","grind"]],
+    "Dream: Galaxy of Motes" : [1000195, ["torr_rain",'very_grind']],
+    "Dream: RNG Persuader" : [1000196, []],
+    "Dream: RNG Dominator?" : [1000197, []],
+    "Dream: Hacked Dice" : [1000198, ["heavy_rain"]], #At this point I wonder if alter story is just the better way for this
+    "Dream: Excessively Superfluous Luck" : [1000199, ["heavy_rain","grind"]],
+    "Dream: Lucky 13" : [1000200, []],
+
     #for testing:
     "Dream: Something Something Quick" : [1000420, ["quickplay"]]
 }
