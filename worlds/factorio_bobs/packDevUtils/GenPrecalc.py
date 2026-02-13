@@ -1,6 +1,7 @@
 import json
 import timeit
 import datetime
+from pathlib import Path
 
 from worlds.factorio_bobs.RecipeEngine import RecipeEngine
 
