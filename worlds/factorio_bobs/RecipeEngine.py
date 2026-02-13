@@ -5,7 +5,12 @@ import math
 from enum import Enum
 from typing import TYPE_CHECKING, TypeVar
 
-import pulp
+try:
+    import pulp
+except ImportError:
+    pulp_enabled = False
+else:
+    pulp_enabled = True
 
 if TYPE_CHECKING:
     from . import Technology, FactorioModpack
@@ -248,6 +253,12 @@ class RecipeEngine:
 
     def run_pulp_solver(self, goal: GameItem, remove_waste=False) \
             -> tuple[int, float, set[GameRecipe], set[GameRecipe], dict[GameItem, float]]:
+        if not pulp_enabled:
+            raise Exception("Pulp is not installed. \n"
+                            "This means that the pack has not been precalculated. This is currently required.\n"
+                            "If you are trying to precalculate then you need to install Pulp.\n"
+                            "If the pack has been precalculated and you get this error report it in the discord thread alongside the pack.")
+
         probBest = pulp.LpProblem("CraftingOptimization", pulp.LpMinimize)
 
         recipe_qty = {
