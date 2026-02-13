@@ -487,12 +487,22 @@ function add_samples(force, name, count)
         end
         t[name] = (t[name] or 0) + count
     end
-    -- Add to storage table of earned samples for future new players
-    add_to_table(storage.forcedata[force.name]['earned_samples'])
-    -- Add to existing players
-    for _, player in pairs(force.players) do
-        add_to_table(storage.playerdata[player.index]['pending_samples'])
-        update_player(player.index)
+    if prototypes.item[name] then
+        count = math.min(count, prototypes.item[name].stack_size)
+        -- check if been given before
+        if storage.forcedata[force.name]['earned_samples'][name] ~= nil then
+            count = count - storage.forcedata[force.name]['earned_samples'][name]
+            if count <= 0 then
+                return
+            end
+        end
+        -- Add to storage table of earned samples for future new players
+        add_to_table(storage.forcedata[force.name]['earned_samples'])
+        -- Add to existing players
+        for _, player in pairs(force.players) do
+            add_to_table(storage.playerdata[player.index]['pending_samples'])
+            update_player(player.index)
+        end
     end
 end
 
