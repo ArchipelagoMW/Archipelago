@@ -2,27 +2,34 @@ import json
 import logging
 from io import TextIOWrapper
 from pathlib import Path
-from zipfile import ZipFile, Path as ZipPath
+from zipfile import Path as ZipPath, ZipFile
 
 from .ItemLocations import add_item, add_location
 from .PackLoader import init_modpacks
 
+INTERNAL_PATH = Path(__file__).parent.parent / "InternalPacks"
+
 
 class BaseModpack:
-    modpack_directories: list[Path] = [(Path(__file__).parent.parent / "InternalPacks").resolve()]
+    modpack_directories: list[tuple[Path, list]] = []
     """
     all paths that should be checked for modpacks should be in modpack_directories
     relative paths should be relative to ap root but should not be within an ap world
     """
 
-    def __init__(self, packPath: Path, is_zip=False):
+    if INTERNAL_PATH.exists():
+        modpack_directories.append((INTERNAL_PATH, []))
+    else:
+        world_root = Path(__file__).parent
+        while not world_root.exists():
+            world_root = world_root.parent
+        filesystem = ZipFile(world_root)
+        path = next(ZipPath(filesystem).glob("*"))
+        modpack_directories.append((path / "InternalPacks", [filesystem]))
+
+    def __init__(self, packPath: Path | ZipPath, filesystem: list[ZipFile]=None):
         self.__packPath = packPath
-        if is_zip:
-            self.__zip = ZipFile(packPath)
-            self.__root: Path | ZipPath = ZipPath(self.__zip)
-        else:
-            self.__zip = None
-            self.__root: Path | ZipPath = packPath
+        self.__filesystem: list[ZipFile] | None = filesystem
 
         try:
             with self.open_file("header.json") as header:
@@ -54,6 +61,11 @@ class BaseModpack:
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.packName}>"
 
+    def __del__(self):
+        if self.__filesystem:
+            for f in reversed(self.__filesystem):
+                f.close()
+
     def _add_item(self, name: str, item_id: int | None = None, groups: set[str] | None = None) -> None:
         item_id = add_item(name, item_id=item_id, groups=groups)
         self.items_to_id[name] = item_id
@@ -73,7 +85,7 @@ class BaseModpack:
             pass
         ```
         """
-        path = self.__root / relative_path
+        path = self.__packPath / relative_path
 
         return path.open("r")
 

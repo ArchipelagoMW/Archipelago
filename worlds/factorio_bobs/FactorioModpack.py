@@ -13,11 +13,11 @@ MAX_LOCATIONS_PER_SCIENCE_PACK = 999
 external_directory_path = Path(Utils.user_path("factorio_mods", "packs"))
 if not external_directory_path.exists():
     external_directory_path.mkdir(parents=True)
-BaseModpack.modpack_directories.append(external_directory_path)
+BaseModpack.modpack_directories.append((external_directory_path,[]))
 
 class FactorioModpack(BaseModpack):
-    def __init__(self, packPath: Path, is_zip=False):
-        super().__init__(packPath, is_zip=is_zip)
+    def __init__(self, packPath: Path, filesystems=None):
+        super().__init__(packPath, filesystems)
 
         self.__technology_table: dict[str, Technology] | None = None
         self.__base_technology_table: dict[str, Technology] | None = None
