@@ -304,7 +304,11 @@
     ] },
 
     // Cortex Center
-    { "from": "CC - Right Exit", "to": "CC - Root Node", "requires": [ { "item": "Charged Strike" } ] },
+    {
+        "from": "CC - Right Exit", "to": "CC - Root Node",
+        "requires": [ { "item": "Charged Strike" } ],
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
+    },
     { "from": "CC - Root Node", "to": "CC - Root Node After Boss", "requires": [
         { "item": "Event - Lady Ethereal Soulscape Unlocked" },
         {
@@ -1354,7 +1358,7 @@
             { "item": "Ledge Grab" } // either LS vault on the left or wall slide up the right
         ]
     },
-    { "from": "FPA - Top Floor of Left Building", "to": "FPA - Hacked Statue in Left Building", "requires": [
+    { "from": "FPA - Top Floor of Left Building", "to": "FPA - Cleared Top Floor of Left Building", "requires": [
         { "anyOf": [ // reach the hack point to clear the enemies
             [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ],
             [
@@ -1362,9 +1366,13 @@
                 { "item": "Tai-Chi Kick" },
                 { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
             ] // this *could* be done with 2 T-dashes using the hackable statue for qi, but we're not requiring that lol
-        ] },
-        { "item": "Charged Strike" } // AND hacking to actually hack the statue
+        ] }
     ] },
+    {
+        "from": "FPA - Cleared Top Floor of Left Building", "to": "FPA - Hacked Statue in Left Building",
+        "requires": [ { "item": "Charged Strike" } ], // AND hacking to actually hack the statue
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
+    },
     {
         "from": "FPA - Upper Left Fire Zone & Pharmacy", "to": "FPA - Chest Platform Below Sniper Zone",
         "requires": [ { "anyOf": [
@@ -1413,6 +1421,7 @@
 
     // Shengwu Hall
     { "from": "SH - Root Node", "to": "SH - After Jiequan", "requires": [ { "item": "Charged Strike" } ] }, // TODO: (more) combat logic?
+    // "Trick - Break CS Barrier With Bow" doesn't apply here because Jiequan's shield recharges
 
     // Underground Cave + 95th Livestock Pen / Peach Blossom Village + Livestock Harvesting Platform
     {

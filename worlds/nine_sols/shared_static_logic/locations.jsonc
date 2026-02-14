@@ -563,8 +563,9 @@
         // ls_requires would be redundant since LS immediately gets you access to Upper Exit
     },
     {
-        "address": 1209, "name": "LYR: Statue Hack Room Near Root Node",
-        "region": "LYR - Root Node", "requires": [ { "item": "Charged Strike" } ] // AND hacking
+        "address": 1209, "name": "LYR: Statue Hack Room Near Root Node", "region": "LYR - Root Node",
+        "requires": [ { "item": "Charged Strike" } ], // AND hacking
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
     },
     {
         "address": 1210, "name": "LYR: Examine Stele",
@@ -614,7 +615,7 @@
     },
     {
         "address": 1309, "name": "Greenhouse: Defeat Celestial Spectre: Shuigui",
-        "region": "GH - Shuigui Arena", "requires": [{ "item": "Charged Strike" }]
+        "region": "GH - Shuigui Arena", "requires": [{ "item": "Charged Strike" }] // Cloud Piercer S/X does not work
     },
 
     // Water & Oxygen Synthesis
@@ -768,12 +769,16 @@
         "region": "FU - Main Intersection", "requires": []
     },
     {
-        "address": 1804, "name": "Factory (U): Hack 2 Statues",
-        "region": "FU - Main Intersection", "requires": [
+        "address": 1804, "name": "Factory (U): Hack 2 Statues", "region": "FU - Main Intersection",
+        "requires": [
             { "item": "Charged Strike" }, // to defeat the 1st statue
             { "region": "FU - Middle Right Exit" } // has the platform above the 2nd statue
             // actually getting onto the 2nd statue's ledge can be done with CL OR LG OR TCK OR AD OR CS-dash OR T-dash,
             // but we already needed CS for the 1st statue, so this part doesn't affect logic
+        ],
+        "medium_requires": [
+            { "item": "Trick - Break CS Barrier With Bow" }, // 1st statue
+            { "region": "FU - Middle Right Exit" } // and T-dash to reach the 2nd statue's ledge
         ]
     },
     {
