@@ -227,6 +227,8 @@ components: List[Component] = [
               description="Generate a multiworld with the YAMLs in the players folder."),
     Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
               description="Visual creator for Archipelago option files."),
+    Component("APWorld Info", "APWorldInfo", "ArchipelagoAPWorldInfo", component_type=Type.TOOL,
+              description="View item and location counts for installed APWorlds and player files."),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
