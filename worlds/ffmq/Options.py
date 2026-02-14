@@ -157,7 +157,14 @@ class EnemizerAttacks(Choice):
     Balanced Expert: Same as balanced, but enemies tends to have stronger attacks.
     Chaos: Randomize and include self-destruct and Dark King attacks.
     Self Destruct: Every enemy self-destructs.
-    Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left vanilla."""
+    Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left vanilla.
+    Elemental: Enemies are assigned an element. They get an appropriate Elemental attack, resist that element and become
+    weak to the opposite element.
+    Fire: Weak to Water.
+    Water: Weak to Earth.
+    Earth: Weak to Air.
+    Air: Weak to Fire.
+    Thunder: Weak to Fire & Earth."""
     display_name = "Enemizer Attacks"
     option_normal = 0
     option_balanced = 1
@@ -165,13 +172,8 @@ class EnemizerAttacks(Choice):
     option_chaos = 3
     option_self_destruct = 4
     option_simple_shuffle = 5
+    option_elemental = 6
     default = 0
-
-
-class ProgressiveEnemizer(Toggle):
-    """Enemies of the same type will share the same attack pool."""
-    default = 0
-    display_name = "Progressive Enemizer"
 
 
 class EnemizerGroups(Choice):
@@ -422,7 +424,6 @@ class FFMQOptions(PerGameCommonOptions):
     bosses_scaling_lower: BossesScalingLower
     bosses_scaling_upper: BossesScalingUpper
     enemizer_attacks: EnemizerAttacks
-    progressive_enemizer: ProgressiveEnemizer
     enemizer_groups: EnemizerGroups
     shuffle_res_weak_types: ShuffleResWeakType
     shuffle_enemies_position: ShuffleEnemiesPositions
