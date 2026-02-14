@@ -9,9 +9,9 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from NetUtils import ClientStatus, JSONMessagePart, NetworkItem
 from Utils import async_start, init_logging
 
-from ..mod_helpers.ItemHandling import handle_item, handle_trap
+from ..mod_helpers.ItemHandling import add_ratman_commands, handle_item, handle_map_start, handle_trap, portal_gun_upgrade_not_inplace, potatos_not_inplace
 from ..mod_helpers.MapMenu import Menu
-from ..Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
+from ..Locations import location_names_to_map_codes, map_codes_to_location_names, wheatley_maps_to_monitor_names, all_locations_table
 from .. import Portal2World
 
 if __name__ == "__main__":
@@ -206,21 +206,51 @@ class Portal2Context(CommonContext):
 
     async def handle_message(self, message: str):
         if message.startswith("map_name:"):
-            logger.info(f"Map Joined {message.split(':', 1)[1]}")
+            map_name = message.split(':', 1)[1]
             # append the whole command string
             command_string = self.create_level_begin_command()
             self.command_queue.append(command_string)
+            self.command_queue += handle_map_start(map_name, self.item_list)
 
+        # For map complete checks
         elif message.startswith("map_complete:"):
             done_map = message.split(':', 1)[1]
             if done_map == self.goal_map_code:
                 await self.handle_goal_completion()
-            logger.info("Check made: " + done_map)
+            
             map_id = self.map_code_to_location_id(done_map)
             if map_id:
                 await self.check_locations([map_id])
                 self.update_menu(map_id)
         
+        # All other checks
+        elif message.startswith("item_collected:"):
+            item_collected = message.split(":", 1)[1]
+            check_id = all_locations_table[item_collected].id
+            await self.check_locations([check_id])
+            
+        elif message.startswith("monitor_break:"):
+            check_message = message.split(":", 1)[1]
+            map_name = check_message.split(" ", 1)[0]
+            check_name = ""
+            if "sp_a4_tb_catch" in map_name:
+                if check_message[-1] == "1":
+                    check_name = "Wheatley Monitor 5"
+                else:
+                    check_name = "Wheatley Monitor 6"
+            else:
+                check_name = wheatley_maps_to_monitor_names[map_name][0]
+                
+            check_id = all_locations_table[check_name].id
+            await self.check_locations([check_id])
+        
+        # Custom buttons e.g. ratman dens
+        elif message.startswith("button_check:"):
+            check_name = message.split(":", 1)[1]
+            check_id = all_locations_table[check_name].id
+            await self.check_locations([check_id])
+        
+        # Deathlink
         elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
                 await self.send_death()
@@ -282,6 +312,18 @@ class Portal2Context(CommonContext):
         
         if "open_world" in slot_data:
             self.menu.is_open_world = slot_data["open_world"]
+            
+        if "ratman_dens" in slot_data:
+            if slot_data["ratman_dens"]:
+                add_ratman_commands()
+        
+        # Don't remove the portal gun upgrade after pickup
+        if "portal_gun_upgrade_inplace" not in slot_data:
+            portal_gun_upgrade_not_inplace()
+            
+        # Don't disable potatos in PotatOS level
+        if "potatos_inplace" not in slot_data:
+            potatos_not_inplace()
 
     def on_package(self, cmd, args):
         def update_item_list():

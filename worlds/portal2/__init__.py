@@ -3,18 +3,19 @@ import sys
 
 from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
+import Utils
 import settings
+from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule
 from .Options import CutsceneLevels, Portal2Options, portal2_option_groups, portal2_option_presets
 from .Items import Portal2Item, game_item_table, item_table, junk_items, trap_items
-from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
-from worlds.AutoWorld import WebWorld, World
+from .Locations import *
 from entrance_rando import *
 from .ItemNames import portal_gun_2
 
 from . import Components as components
 
-randomize_maps = True
+debug_mode = False
 
 class Portal2Settings(settings.Group):
     class Portal2ExtrasFilePath(settings.UserFilePath):
@@ -42,7 +43,7 @@ class Portal2WebWorld(WebWorld):
         language="English",
         file_name="setup_en.md",
         link="setup/en",
-        authors=["Dyroha"]
+        authors=["GlassToadstool"]
     )
 
     tutorials = [setup_en]
@@ -64,11 +65,12 @@ class Portal2World(World):
 
     item_name_to_id = {}
     location_name_to_id = {}
+    location_name_groups = location_groups
 
     location_count = 0
     item_count= 0
 
-    maps_in_use: set[str] = set()
+    maps_in_use: list[str] = []
     chapter_maps_dict = {}
     
     for key, value in item_table.items():
@@ -96,8 +98,13 @@ class Portal2World(World):
             for _ in range(number):
                 map_choice = map_pool.pop(0)
                 used_maps.append(map_choice)
-                chapter_maps[map_choice.split(":")[0]].append(map_choice)
-        
+                
+                if self.options.game_mode == 1:
+                    random_chapter = self.random.randint(1, 8)
+                    chapter_maps[f"Chapter {random_chapter}"].append(map_choice)
+                else:
+                    chapter_maps[map_choice.split(":")[0]].append(map_choice)
+
         chapter_maps: dict[str, list[str]] = {f"Chapter {i}": [] for i in range(1,9)}
 
         map_pool: list[str] = []
@@ -120,6 +127,13 @@ class Portal2World(World):
         pick_maps(len(map_pool))
 
         return chapter_maps
+    
+    def create_in_level_check(self, name: str, requirements: list[str], entrance_region: Region):
+        item_region = Region(f"{name} End", self.player, self.multiworld)
+        self.multiworld.regions.append(item_region)
+        item_region.add_locations({name: self.location_name_to_id[name]}, Portal2Location)
+        self.location_count += 1
+        entrance_region.connect(item_region, f"Get {name}", lambda state, _item_reqs=requirements: state.has_all(_item_reqs, self.player))
 
     def create_connected_maps(self, chapter_number: int, map_location_names: list[str] = None):
         chapter_name = f"Chapter {chapter_number}"
@@ -128,7 +142,10 @@ class Portal2World(World):
 
         # Get all map locations for that chapter
         if not map_location_names:
-            map_location_names = [name for name in all_locations_table.keys() if name.startswith(chapter_name)]
+            map_location_names = [name for name in self.maps_in_use if name.startswith(chapter_name)]
+            # Add them to chapter maps for menu gen and UT
+            self.chapter_maps_dict[chapter_name] = map_location_names
+            
         map_prefix = [name.removesuffix(" Completion") for name in map_location_names]
 
         last_region: Region = None
@@ -142,11 +159,31 @@ class Portal2World(World):
             item_reqs = all_locations_table[map_name].required_items
             region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
 
-            if last_region:
-                last_region.connect(region_start)
-            else:
+            # Additional locations
+            # Portal guns
+            map_code = location_names_to_map_codes[map_name]
+            if map_code in item_maps_to_item_location:
+                item_check_name = item_maps_to_item_location[map_code]
+                item_check_reqs = item_location_table[item_check_name].required_items
+                self.create_in_level_check(item_check_name, item_check_reqs, region_start)
+            # Wheatley monitors
+            if self.options.wheatley_monitors and map_code in wheatley_maps_to_monitor_names:
+                monitors = wheatley_maps_to_monitor_names[map_code]
+                for monitor in monitors:
+                    requirements = wheatley_monitor_table[monitor].required_items
+                    self.create_in_level_check(monitor, requirements, region_start)
+            # Ratman Dens
+            if self.options.ratman_dens and map_code in ratman_map_to_ratman_den:
+                den = ratman_map_to_ratman_den[map_code]
+                requirements = ratman_den_locations_table[den].required_items
+                self.create_in_level_check(den, requirements, region_start)
+            
+            # Connect to chapter region if there was no previous level or if open world
+            if self.options.game_mode == 2 or not last_region:
                 chapter_region.connect(region_start)
-
+            else:
+                last_region.connect(region_start)
+                
             last_region = region_end
 
         return chapter_region, last_region
@@ -163,29 +200,31 @@ class Portal2World(World):
 
             if "chapter_dict" in slot_data:
                 self.chapter_maps_dict = slot_data.get("chapter_dict", [])
-                print(self.chapter_maps_dict)
                 self.chapter_maps_dict = {f"Chapter {key}":value for key, value in self.chapter_maps_dict.items()}
                 return
         
-        self.maps_in_use = set(map_complete_table.keys())
+        self.maps_in_use = list(map_complete_table)
         # Cutscene levels option
-        if self.options.cutscenelevels:
-            self.maps_in_use.update(cutscene_completion_table.keys())
+        if self.options.cutscene_levels:
+            self.maps_in_use += list(cutscene_completion_table)
+        
+        # Remove maps that have been put in the Remove Locations option
+        for location in self.options.remove_locations:
+            self.maps_in_use.remove(location)
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        if not self.chapter_maps_dict:
+        if not (self.chapter_maps_dict or self.options.game_mode == 2):
             self.chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
-            if randomize_maps:
-                # chapter_region = self.create_disjointed_maps_for_er(i)
-                chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
-            else:
+            if self.options.game_mode == 2:
                 chapter_region, last_region = self.create_connected_maps(i)
-
+            else:
+                chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
+            
             menu_region.connect(chapter_region, f"Chapter {i} Entrance")
         
 
@@ -193,9 +232,12 @@ class Portal2World(World):
         self.chapter_maps_dict["Chapter 9"] = [name for name in all_locations_table.keys() if name.startswith("Chapter 9")]
         chapter_9_region, last_region = self.create_connected_maps(9)
         all_chapter_9_requirements = set()
-        for name, value in all_locations_table.items():
-            if name.startswith("Chapter 9"):
-                all_chapter_9_requirements.update(value.required_items)
+        # Don't add requirements to the chapter start if open world
+        if not self.options.game_mode == 2:
+            for name, value in all_locations_table.items():
+                if name.startswith("Chapter 9"):
+                    all_chapter_9_requirements.update(value.required_items)
+        
         menu_region.connect(chapter_9_region, f"Chapter 9 Entrance", rule=lambda state: state.has_all(all_chapter_9_requirements, self.player))
 
         # Add Goal Region and Event
@@ -236,6 +278,11 @@ class Portal2World(World):
                       lambda item: item.name not in game_item_table or item.player != self.player)
     
     def fill_slot_data(self):
+        if debug_mode:
+            state = self.multiworld.get_all_state(False)
+            state.update_reachable_regions(self.player)
+            Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), f"output/map_Player{self.player}.puml", show_entrance_names=True, regions_to_highlight=state.reachable_regions[self.player])
+        
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
         excluded_option_names = [CutsceneLevels]
@@ -248,6 +295,13 @@ class Portal2World(World):
             "location_name_to_id": self.location_name_to_id,
             "chapter_dict": {int(name[-1]): values for name, values in self.chapter_maps_dict.items()}
         })
+        # Check if portal gun items are in their locations
+        if self.multiworld.find_item(portal_gun_2, self.player).name == portal_gun_2:
+            slot_data["portal_gun_upgrade_inplace"] = True
+
+        if self.multiworld.find_item(potatos, self.player).name == potatos:
+            slot_data["potatos_inplace"] = True
+            
         return slot_data
     
     @staticmethod

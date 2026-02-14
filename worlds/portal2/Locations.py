@@ -12,6 +12,7 @@ class LocationType(Flag):
     ITEM = auto()
     ACHIEVEMENT = auto()
     WHEATLY_MONITOR = auto()
+    OTHER = auto()
 
 class Portal2LocationData:
     def __init__(self, map_name: str = None, location_type: LocationType = None, required_items: list[str] = []):
@@ -52,7 +53,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 3: Ricochet Completion": Portal2LocationData("sp_a2_ricochet", LocationType.MAP_COMPLETION, [portal_gun_2, faith_plate, weighted_cube, laser, laser_catcher, reflection_cube, floor_button, button]),
     "Chapter 3: Bridge Intro Completion": Portal2LocationData("sp_a2_bridge_intro", LocationType.MAP_COMPLETION, [portal_gun_2, bridge, floor_button, button, weighted_cube]),
     "Chapter 3: Bridge the Gap Completion": Portal2LocationData("sp_a2_bridge_the_gap", LocationType.MAP_COMPLETION, [portal_gun_2, bridge, floor_button, button, weighted_cube]),
-    "Chapter 3: Turret Intro Completion": Portal2LocationData("sp_a2_turret_intro", LocationType.MAP_COMPLETION, [portal_gun_2, weighted_cube, floor_button]),
+    "Chapter 3: Turret Intro Completion": Portal2LocationData("sp_a2_turret_intro", LocationType.MAP_COMPLETION, [portal_gun_2, weighted_cube, floor_button, turrets]),
     "Chapter 3: Laser Relays Completion": Portal2LocationData("sp_a2_laser_relays", LocationType.MAP_COMPLETION, [portal_gun_2, laser, reflection_cube, laser_relays]),
     "Chapter 3: Turret Blocker Completion": Portal2LocationData("sp_a2_turret_blocker", LocationType.MAP_COMPLETION, [portal_gun_2, bridge, faith_plate, floor_button, weighted_cube]),
     "Chapter 3: Laser Vs. Turret Completion": Portal2LocationData("sp_a2_laser_vs_turret", LocationType.MAP_COMPLETION, [portal_gun_2, laser, laser_catcher, weighted_cube, reflection_cube, floor_button]),
@@ -62,7 +63,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 4: Laser Chaining Completion": Portal2LocationData("sp_a2_laser_chaining", LocationType.MAP_COMPLETION, [portal_gun_2, laser, laser_catcher, laser_relays, reflection_cube, faith_plate]),
     "Chapter 4: Triple Laser Completion": Portal2LocationData("sp_a2_triple_laser", LocationType.MAP_COMPLETION, [portal_gun_2, laser, laser_catcher, reflection_cube]),
     "Chapter 4: Jailbreak Completion": Portal2LocationData("sp_a2_bts1", LocationType.MAP_COMPLETION, [portal_gun_2, bridge, button, weighted_cube]),
-    "Chapter 4: Escape Completion": Portal2LocationData("sp_a2_bts2", LocationType.MAP_COMPLETION, [portal_gun_2]),
+    "Chapter 4: Escape Completion": Portal2LocationData("sp_a2_bts2", LocationType.MAP_COMPLETION, [portal_gun_2, turrets]),
     # Chapter 5
     "Chapter 5: Turret Factory Completion": Portal2LocationData("sp_a2_bts3", LocationType.MAP_COMPLETION, [portal_gun_2]),
     "Chapter 5: Turret Sabotage Completion": Portal2LocationData("sp_a2_bts4", LocationType.MAP_COMPLETION, [portal_gun_2, turrets]),
@@ -74,7 +75,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 6: Repulsion Intro Completion": Portal2LocationData("sp_a3_jump_intro", LocationType.MAP_COMPLETION, [portal_gun_2, paint, old_button, old_floor_button, antique_cube]),
     "Chapter 6: Bomb Flings Completion": Portal2LocationData("sp_a3_bomb_flings", LocationType.MAP_COMPLETION, [portal_gun_2, old_button, paint]),
     "Chapter 6: Crazy Box Completion": Portal2LocationData("sp_a3_crazy_box", LocationType.MAP_COMPLETION, [portal_gun_2, old_button, paint, antique_cube, old_floor_button]),
-    "Chapter 6: PotatOS Completion": Portal2LocationData("sp_a3_transition01", LocationType.MAP_COMPLETION, [portal_gun_2]),
+    "Chapter 6: PotatOS Completion": Portal2LocationData("sp_a3_transition01", LocationType.MAP_COMPLETION, [portal_gun_2, potatos]),
     # Chapter 7
     "Chapter 7: Propulsion Intro Completion": Portal2LocationData("sp_a3_speed_ramp", LocationType.MAP_COMPLETION, [portal_gun_2, paint, antique_cube, old_floor_button, old_button]),
     "Chapter 7: Propulsion Flings Completion": Portal2LocationData("sp_a3_speed_flings", LocationType.MAP_COMPLETION, [portal_gun_2, paint, antique_cube, old_floor_button]),
@@ -94,9 +95,9 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 8: Repulsion Polarity Completion": Portal2LocationData("sp_a4_jump_polarity", LocationType.MAP_COMPLETION, [portal_gun_2, paint, funnel, floor_button, button]),
     # Chapter 9
     "Chapter 9: Finale 1 Completion": Portal2LocationData("sp_a4_finale1", LocationType.MAP_COMPLETION, [portal_gun_2, faith_plate, funnel, paint]),
-    "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, [portal_gun_2, funnel, paint, floor_button]),
+    "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, [portal_gun_2, funnel, paint, floor_button, turrets]),
     "Chapter 9: Finale 3 Completion": Portal2LocationData("sp_a4_finale3", LocationType.MAP_COMPLETION, [portal_gun_2, paint, funnel]),
-    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, [portal_gun_2, paint, adventure_core, space_core, fact_core]),
+    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, [portal_gun_2, potatos, paint, adventure_core, space_core, fact_core]),
 }
 
 # Optional Checks
@@ -106,6 +107,8 @@ cutscene_completion_table: dict[str, Portal2LocationData] = {
     "Chapter 6: Long Fall Completion": Portal2LocationData("sp_a3_00", LocationType.CUTSCENE_COMPLETION),
 }
 
+
+# Not implemented
 story_achievements_table: dict[str, Portal2LocationData] = {
     "Achievement: Wake Up Call": Portal2LocationData("sp_a1_intro1", LocationType.STORY_ACHIEVEMENT),
     "Achievement: You Monster": Portal2LocationData("sp_a1_wakeup", LocationType.STORY_ACHIEVEMENT),
@@ -122,24 +125,51 @@ story_achievements_table: dict[str, Portal2LocationData] = {
     "Achievement: Drop Box": Portal2LocationData(None, LocationType.STORY_ACHIEVEMENT),
 }
 
-wheatly_monitor_table: dict[str, Portal2LocationData] = {
-    "Wheatley Monitor 1": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 2": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 3": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 4": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 5": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 6": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 7": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 8": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 9": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 10": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 11": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 12": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
+# Not implementd
+achievements_table: dict[str, Portal2LocationData] = {}
+
+wheatley_monitor_table: dict[str, Portal2LocationData] = {
+    "Wheatley Monitor 1": Portal2LocationData("sp_a4_tb_intro", LocationType.WHEATLY_MONITOR, [portal_gun_2, funnel, frankenturret]),
+    "Wheatley Monitor 2": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.WHEATLY_MONITOR, [portal_gun_2, button, funnel, frankenturret]),
+    "Wheatley Monitor 3": Portal2LocationData("sp_a4_tb_wall_button", LocationType.WHEATLY_MONITOR, [portal_gun_2]),
+    "Wheatley Monitor 4": Portal2LocationData("sp_a4_tb_polarity", LocationType.WHEATLY_MONITOR, [turrets]),
+    "Wheatley Monitor 5": Portal2LocationData("sp_a4_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, funnel, faith_plate, button]), #monitor1
+    "Wheatley Monitor 6": Portal2LocationData("sp_a4_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, funnel, faith_plate, button]), #monitor2
+    "Wheatley Monitor 7": Portal2LocationData("sp_a4_stop_the_box", LocationType.WHEATLY_MONITOR, [faith_plate]),
+    "Wheatley Monitor 8": Portal2LocationData("sp_a4_laser_catapult", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, faith_plate, funnel, reflection_cube, laser, laser_catcher]),
+    "Wheatley Monitor 9": Portal2LocationData("sp_a4_laser_platform", LocationType.WHEATLY_MONITOR, [portal_gun_2, laser, laser_catcher, reflection_cube, button]),
+    "Wheatley Monitor 10": Portal2LocationData("sp_a4_speed_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2]),
+    "Wheatley Monitor 11": Portal2LocationData("sp_a4_jump_polarity", LocationType.WHEATLY_MONITOR, [portal_gun_2, paint, funnel, turrets, floor_button, button]),
+    "Wheatley Monitor 12": Portal2LocationData("sp_a4_finale3", LocationType.WHEATLY_MONITOR, [portal_gun_2, paint]),
 }
 
-item_location_table: dict[str, Portal2LocationData] = {}
+wheatley_maps_to_monitor_names: dict[str, list[str]] = {}
+for key, value in wheatley_monitor_table.items():
+    map_name = value.map_name
+    if map_name not in wheatley_maps_to_monitor_names:
+        wheatley_maps_to_monitor_names[map_name] = [key]
+    else:
+        wheatley_maps_to_monitor_names[map_name].append(key)
 
-achievements_table: dict[str, Portal2LocationData] = {}
+item_location_table: dict[str, Portal2LocationData] = {
+    portal_gun_1: Portal2LocationData("sp_a1_intro3", LocationType.ITEM),
+    portal_gun_2: Portal2LocationData("sp_a2_intro", LocationType.ITEM),
+    potatos: Portal2LocationData("sp_a3_transition01", LocationType.ITEM, [portal_gun_2]),
+}
+
+item_maps_to_item_location : dict[str, str] = {value.map_name:key for key, value in item_location_table.items()}
+
+ratman_den_locations_table: dict[str, Portal2LocationData] = {
+    "Ratman Den 1": Portal2LocationData("sp_a1_intro4", LocationType.OTHER, [weighted_cube, floor_button]),
+    "Ratman Den 2": Portal2LocationData("sp_a2_dual_lasers", LocationType.OTHER),
+    "Ratman Den 3": Portal2LocationData("sp_a2_trust_fling", LocationType.OTHER, [portal_gun_2, faith_plate]),
+    "Ratman Den 4": Portal2LocationData("sp_a2_bridge_intro", LocationType.OTHER),
+    "Ratman Den 5": Portal2LocationData("sp_a2_bridge_the_gap", LocationType.OTHER, [portal_gun_2]),
+    "Ratman Den 6": Portal2LocationData("sp_a2_laser_vs_turret", LocationType.OTHER, [portal_gun_2, laser, floor_button, reflection_cube]),
+    "Ratman Den 7": Portal2LocationData("sp_a2_pull_the_rug", LocationType.OTHER, [portal_gun_2, bridge])
+}
+
+ratman_map_to_ratman_den: dict[str, str] = {value.map_name: key for key, value in ratman_den_locations_table.items()}
 
 all_locations_table: dict[str, Portal2LocationData] = map_complete_table.copy()
 all_locations_table.update(cutscene_completion_table)
@@ -148,8 +178,15 @@ location_names_to_map_codes: dict[str, str] = {name: value.map_name for
                                                name, value in all_locations_table.items()}
 map_codes_to_location_names: dict[str, str] = {value: key for key, value in location_names_to_map_codes.items()}
 
-all_locations_table.update(story_achievements_table)
-all_locations_table.update(wheatly_monitor_table)
+# all_locations_table.update(story_achievements_table)
+all_locations_table.update(wheatley_monitor_table)
 all_locations_table.update(item_location_table)
-all_locations_table.update(achievements_table)
+all_locations_table.update(ratman_den_locations_table)
+# all_locations_table.update(achievements_table)
 
+location_groups: dict[str, set[str]] = {
+    "Chambers": {name for name in map_complete_table} | {name for name in cutscene_completion_table},
+    "Wheatley Monitors": {name for name in wheatley_monitor_table},
+    "Ratman Dens": {name for name in ratman_den_locations_table},
+    "Pickups": {name for name in item_location_table}
+}

@@ -1,21 +1,20 @@
 from dataclasses import dataclass
-from Options import Choice, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
+from Options import Choice, LocationSet, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
-class OpenWorld(Toggle):
+class GameMode(Choice):
     """
-    If all maps are accessible from the start.
-    Default is false, only 1 map from each chapter is accessible and maps are unlocked through completing previous ones.
-    If true all maps are accessible from the start. This makes it easier to play but does break intended level progression logic
+    What map generation and logic options are set:
+    normal -> Each chapter is randomised with it's own maps
+    chaotic -> Any map can be in any chapter
+    open_world -> maps appear in the correct order in the game and are all playable from the start
     """
-    display_name = "Open World"
-
-class CutsceneLevels(Toggle):
-    """
-    Determines whether cutscene maps are added to the map pool
-    """
-    display_name = "Cutscene Levels"
-
+    display_name = "Game Mode"
+    option_normal = 0
+    option_chaotic = 1
+    option_open_world = 2
+    default = 0
+    
 class EarlyPlayabilityPercentage(Range):
     """
     What percentage of starting maps are in the first round of map selection
@@ -25,7 +24,21 @@ class EarlyPlayabilityPercentage(Range):
     display_name = "Early Playability Percentage"
     range_start = 60
     range_end = 100
-    default = 75
+    default = 75  
+    
+class RemoveLocations(LocationSet):
+    """
+    Which maps will be removed entirly from the map pool.
+    Different from Excluded Locations as Removed Locations will not be playable
+    during the game. Excluded Locations are still in the map pool.
+    """
+    display_name = "Removed Locations"
+
+class CutsceneLevels(Toggle):
+    """
+    Determines whether cutscene maps are added to the map pool
+    """
+    display_name = "Cutscene Levels"
 
 class TrapFillPercentage(Range):
     """
@@ -82,17 +95,26 @@ class SlipperyFloorTrapWeight(BaseTrapWeight):
 #     """
 #     display_name = "StoryAchievementSanity"
 
-# class MonitorSanity(Toggle):
-#     """
-#     Determines whether breaking Wheatly monitors send location checks
-#     """
-#     display_name = "MonitorSanity"
+class WheatleyMonitors(Toggle):
+    """
+    Determines whether breaking Wheatly monitors will send location checks
+    """
+    display_name = "Wheatley Monitors"
+    
+class RatmanDens(Toggle):
+    """
+    Determines whether locating Ratman Dens will send location checks
+    """
+    display_name = "Ratman Dens"
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
-        OpenWorld,
+        GameMode,
+        EarlyPlayabilityPercentage,
+        RemoveLocations,
         CutsceneLevels,
-        EarlyPlayabilityPercentage
+        WheatleyMonitors,
+        RatmanDens,
     ]),
     OptionGroup("Trap Options", [
         TrapFillPercentage,
@@ -116,11 +138,13 @@ portal2_option_presets = {
 class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
-    open_world: OpenWorld
-    cutscenelevels: CutsceneLevels
+    game_mode: GameMode
+    cutscene_levels: CutsceneLevels
+    remove_locations: RemoveLocations
     early_playability_percentage: EarlyPlayabilityPercentage
     # storyachievementsanity: StoryAchievementSanity
-    # monitorsanity: MonitorSanity
+    wheatley_monitors: WheatleyMonitors
+    ratman_dens: RatmanDens
 
     trap_fill_percentage: TrapFillPercentage
     motion_blur_trap_weight: MotionBlurTrapWeight
