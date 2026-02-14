@@ -66,6 +66,7 @@ def create_all_items(world: TVRUHHWorld) -> None:
     itempool.extend(get_items(world, bonus_gift_list))
     itempool.extend(get_items(world, quick_gift_list))
     #TODO: add other unlocks
+    itempool.extend(get_upgrade_items(world))
     itempool.extend(get_items(world, dreamscape_list))
     itempool.extend(get_items(world, music_list))
     itempool.extend(get_items(world, other_items_list))
@@ -93,6 +94,7 @@ def requestbbl() -> dict[str:int]:
     updatebbl(power_gift_list)
     updatebbl(bonus_gift_list)
     updatebbl(quick_gift_list)
+    updatebbl(upgrade_gift_list)
     updatebbl(dreamscape_list)
     updatebbl(music_list)
     updatebbl(other_items_list)
@@ -114,6 +116,64 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
                 items.append(world.create_item(x,whichlist))
         else:
             items.append(world.create_item(x,whichlist))
+    return items
+
+def get_amount_items(world: TVRUHHWorld,whichlist: dict, item, amount = 1) -> list[Item]:
+    y = 1
+    l = list[Item]
+    while y != amount + 1:
+        l.append(world.create_item(item,whichlist))
+        y += 1
+    return l
+
+
+def get_upgrade_items(world: TVRUHHWorld) -> list[Item]:
+    items: list[Item] = []
+    for x in upgrade_gift_list:
+        if x == "Rainbow Petal":
+            items.append(get_amount_items(world,upgrade_gift_list,x,8))
+        if x == "Clock":
+            items.append(get_amount_items(world,upgrade_gift_list,x,5))
+        if x == "Vault Key":
+            items.append(get_amount_items(world,upgrade_gift_list,x,5))
+        if x == "Foreign Axon":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+        if x == "Sentinal Claw":
+            items.append(get_amount_items(world,upgrade_gift_list,x,2))
+        if x == "Dream Petal":
+            items.append(get_amount_items(world,upgrade_gift_list,x,16))
+        if x == "Pale Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,9))
+        if x == "Heart Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,4))
+        if x == "Painted Box": 
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Altered Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,4))
+        if x == "Dark Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Defect Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+        if x == "Blue Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Flawless Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+        if x == "Shiny Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Twin Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+        if x == "Luminous Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Cross Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+        if x == "Faustian Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Devil Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+        if x == "Scorched Box":
+            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+        if x == "Demon Core":
+            items.append(get_amount_items(world,upgrade_gift_list,x,3))
     return items
 
 

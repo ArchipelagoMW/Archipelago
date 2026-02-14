@@ -153,9 +153,6 @@ dream_list = {
     "Dream: Teramonstrophile" : [1000005, ["grind"]],
     "Dream: Weapon of Mass Affection" : [1000006, ["very_grind"]],
     "Dream: Lovepocalypse" : [1000007, ["very_grind"]],
-
-    #for testing:
-    "Dream: Something Something Quick" : [1000069, ["quickplay"]]
 }
 
 story_medals = {
@@ -163,7 +160,7 @@ story_medals = {
 }
 
 qp_copper = {
-    "QP Copper: Scrambla" : [1020000, []]
+    #"QP Copper: Scrambla" : [1020000, []],
 }
 
 qp_bronze = {

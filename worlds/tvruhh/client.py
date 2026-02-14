@@ -14,7 +14,7 @@ try:
 except:
     from CommonClient import CommonContext as SuperContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 
-DEBUG = True
+DEBUG = False
 
 # This code is based of the code in the Pizza Tower client, credits for this code goes to those developers.
 class TVRUHHCommandProcessor(ClientCommandProcessor):
