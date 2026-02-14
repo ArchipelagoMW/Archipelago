@@ -7,7 +7,7 @@ from typing_extensions import TypeVar, dataclass_transform, override
 from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
 
-from .field_resolvers import FieldResolver, resolve_field
+from .field_resolvers import FieldResolver, FieldResolverRegister, resolve_field
 from .options import OptionFilter
 
 if TYPE_CHECKING:
@@ -127,9 +127,20 @@ class Rule(Generic[TWorld]):
     @classmethod
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         """Returns a new instance of this rule from a serialized dict representation"""
-        # TODO: deserialize (oh no do I need to register these like rules)
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(**data.get("args", {}), options=options, filtered_resolution=data.get("filtered_resolution", False))
+        args = cls._parse_field_resolvers(data.get("args", {}), world_cls.game)
+        return cls(**args, options=options, filtered_resolution=data.get("filtered_resolution", False))
+
+    @classmethod
+    def _parse_field_resolvers(cls, data: Mapping[str, Any], game_name: str) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for name, value in data.items():
+            if isinstance(value, dict) and "resolver" in value:
+                resolver_cls = FieldResolverRegister.get_resolver_cls(game_name, value["resolver"])  # pyright: ignore[reportUnknownArgumentType]
+                result[name] = resolver_cls.from_dict(value)  # pyright: ignore[reportUnknownArgumentType]
+            else:
+                result[name] = value
+        return result
 
     def __and__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         """Combines two rules or a rule and an option filter into an And rule"""
@@ -457,7 +468,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
         elif items and all(count == 1 for count in items.values()):
             clauses.append(HasAll(*items).resolve(world))
         elif items:
-            clauses.append(HasAllCounts(items).resolve(world))  # pyright: ignore[reportArgumentType] why dict gotta be invariant
+            clauses.append(HasAllCounts(items).resolve(world))
 
         if len(clauses) == 1:
             return clauses[0]
@@ -541,7 +552,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         elif items and all(count == 1 for count in items.values()):
             clauses.append(HasAny(*items).resolve(world))
         elif items:
-            clauses.append(HasAnyCount(items).resolve(world))  # pyright: ignore[reportArgumentType]
+            clauses.append(HasAnyCount(items).resolve(world))
 
         if len(clauses) == 1:
             return clauses[0]
@@ -610,7 +621,11 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
         if child is None:
             raise ValueError("Child rule cannot be None")
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(world_cls.rule_from_dict(child), options=options)
+        return cls(
+            world_cls.rule_from_dict(child),
+            options=options,
+            filtered_resolution=data.get("filtered_resolution", False),
+        )
 
     @override
     def __str__(self) -> str:
@@ -977,7 +992,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
 class HasAllCounts(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has all of the specified counts of the given items"""
 
-    item_counts: dict[str, int | FieldResolver]
+    item_counts: Mapping[str, int | FieldResolver]
     """A mapping of item name to count to check for"""
 
     @override
@@ -994,6 +1009,23 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
+
+    @override
+    def to_dict(self) -> dict[str, Any]:
+        output = super().to_dict()
+        output["args"]["item_counts"] = {
+            key: value.to_dict() if isinstance(value, FieldResolver) else value
+            for key, value in output["args"]["item_counts"].items()
+        }
+        return output
+
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
+        args = data.get("args", {})
+        item_counts = cls._parse_field_resolvers(args.get("item_counts", {}), world_cls.game)
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(item_counts, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
@@ -1083,7 +1115,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 class HasAnyCount(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has any of the specified counts of the given items"""
 
-    item_counts: dict[str, int | FieldResolver]
+    item_counts: Mapping[str, int | FieldResolver]
     """A mapping of item name to count to check for"""
 
     @override
@@ -1100,6 +1132,23 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
+
+    @override
+    def to_dict(self) -> dict[str, Any]:
+        output = super().to_dict()
+        output["args"]["item_counts"] = {
+            key: value.to_dict() if isinstance(value, FieldResolver) else value
+            for key, value in output["args"]["item_counts"].items()
+        }
+        return output
+
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
+        args = data.get("args", {})
+        item_counts = cls._parse_field_resolvers(args.get("item_counts", {}), world_cls.game)
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(item_counts, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
@@ -1217,7 +1266,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     @override
     @classmethod
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
-        args = {**data.get("args", {})}
+        args = cls._parse_field_resolvers(data.get("args", {}), world_cls.game)
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(*item_names, **args, options=options)
@@ -1346,7 +1395,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
     @override
     @classmethod
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
-        args = {**data.get("args", {})}
+        args = cls._parse_field_resolvers(data.get("args", {}), world_cls.game)
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(*item_names, **args, options=options)

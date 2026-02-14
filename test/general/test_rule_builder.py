@@ -765,7 +765,7 @@ class TestSerialization(RuleBuilderTestCase):
 
     rule: ClassVar[Rule[Any]] = And(
         Or(
-            Has("i1", count=4),
+            Has("i1", count=FromOption(RangeOption)),
             HasFromList("i2", "i3", "i4", count=2),
             HasAnyCount({"i5": 2, "i6": 3}),
             options=[OptionFilter(ToggleOption, 0)],
@@ -773,7 +773,7 @@ class TestSerialization(RuleBuilderTestCase):
         Or(
             HasAll("i7", "i8"),
             HasAllCounts(
-                {"i9": 1, "i10": 5},
+                {"i9": 1, "i10": FromWorldAttr("instance_data.i10_count")},
                 options=[OptionFilter(ToggleOption, 1, operator="ne")],
                 filtered_resolution=True,
             ),
@@ -813,7 +813,14 @@ class TestSerialization(RuleBuilderTestCase):
                         "rule": "Has",
                         "options": [],
                         "filtered_resolution": False,
-                        "args": {"item_name": "i1", "count": 4},
+                        "args": {
+                            "item_name": "i1",
+                            "count": {
+                                "resolver": "FromOption",
+                                "option": "test.general.test_rule_builder.RangeOption",
+                                "field": "value",
+                            },
+                        },
                     },
                     {
                         "rule": "HasFromList",
@@ -850,7 +857,12 @@ class TestSerialization(RuleBuilderTestCase):
                             },
                         ],
                         "filtered_resolution": True,
-                        "args": {"item_counts": {"i9": 1, "i10": 5}},
+                        "args": {
+                            "item_counts": {
+                                "i9": 1,
+                                "i10": {"resolver": "FromWorldAttr", "name": "instance_data.i10_count"},
+                            }
+                        },
                     },
                     {
                         "rule": "CanReachRegion",
@@ -925,7 +937,7 @@ class TestSerialization(RuleBuilderTestCase):
         multiworld = setup_solo_multiworld(self.world_cls, steps=(), seed=0)
         world = multiworld.worlds[1]
         deserialized_rule = world.rule_from_dict(self.rule_dict)
-        self.assertEqual(deserialized_rule, self.rule, str(deserialized_rule))
+        self.assertEqual(deserialized_rule, self.rule, f"\n{deserialized_rule}\n{self.rule}")
 
 
 class TestExplain(RuleBuilderTestCase):
