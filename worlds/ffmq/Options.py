@@ -78,18 +78,12 @@ class SeedVendors(Choice):
     option_random_bosses = 3
 
 
-class WorldSeedSupply(Choice):
+class WorldSeedSupply(Range):
     """Set the number of locations containing Seeds. Regardless of the option selected, the Hero Chest before the
     Dark King will always contain Seeds and isn't included in the count."""
     display_name = "World Seed Supply"
-    option_zero = 0
-    option_one = 1
-    option_two = 2
-    option_five = 5
-    option_ten = 6
-    option_twenty_five = 7
-    option_random_two_to_ten = 8
-    option_random_zero_to_twenty_five = 9
+    range_start = 0
+    range_end = 25
 
 
 class BoxesDontReset(Toggle):

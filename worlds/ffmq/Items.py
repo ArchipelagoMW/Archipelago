@@ -291,18 +291,10 @@ def create_items(self) -> None:
         for item in sorted(self.item_name_groups[item_group]):
             add_item(item)
 
-    seed_option = self.options.world_seed_supply.current_key
-    if seed_option == "random_two_to_ten":
-        seed_quantity = self.random.randint(2, 10)
-    elif seed_option == "random_zero_to_twenty_five":
-        seed_quantity = self.random.randint(0, 25)
-    else:
-        seed_quantity = {"zero": 0, "one": 1, "two": 2, "five": 5, "ten": 10, "twenty_five": 25}[seed_option]
-
-    while filler_counts["Seed"] < seed_quantity:
+    while filler_counts["Seed"] < self.options.world_seed_supply.value:
         filler_counts["Seed"] += 1
         filler_counts[self.random.choice(["Cure Potion", "Heal Potion", "Bomb Refill", "Projectile Refill"])] -= 1
-    while filler_counts["Seed"] > seed_quantity:
+    while filler_counts["Seed"] > self.options.world_seed_supply.value:
         filler_counts["Seed"] -= 1
         filler_counts[self.random.choice(["Cure Potion", "Heal Potion", "Bomb Refill", "Projectile Refill"])] += 1
 

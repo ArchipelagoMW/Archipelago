@@ -100,7 +100,7 @@ def generate_output(self, output_directory):
         "kaelis_mom_fight_minotaur": tf(self.options.kaelis_mom_fight_minotaur),
         "hint_mode": cc(self.options.hint_mode),
         "disable_duping": tf(self.options.disable_duping),
-        "seed_quantity": cc(self.options.world_seed_supply),
+        "seed_quantity": "Five",
         "boxes_dont_reset": tf(self.options.boxes_dont_reset),
         "seed_vendors_setting": cc(self.options.seed_vendors),
         "doom_castle_access": cc(self.options.doom_castle_access),
