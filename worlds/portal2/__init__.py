@@ -65,6 +65,7 @@ class Portal2World(World):
 
     item_name_to_id = {}
     location_name_to_id = {}
+    location_name_groups = location_groups
 
     location_count = 0
     item_count= 0

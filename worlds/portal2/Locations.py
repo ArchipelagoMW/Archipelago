@@ -184,3 +184,9 @@ all_locations_table.update(item_location_table)
 all_locations_table.update(ratman_den_locations_table)
 # all_locations_table.update(achievements_table)
 
+location_groups: dict[str, set[str]] = {
+    "Chambers": {name for name in map_complete_table} | {name for name in cutscene_completion_table},
+    "Wheatley Monitors": {name for name in wheatley_monitor_table},
+    "Ratman Dens": {name for name in ratman_den_locations_table},
+    "Pickups": {name for name in item_location_table}
+}
