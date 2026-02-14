@@ -148,6 +148,23 @@ rule = (
 # Results in Has("A", count=5) | HasGroup("Important items", count=99)
 ```
 
+You can define your own resolvers by creating a class that inherits from `FieldResolver`, provides your game name, and implements a `resolve` function:
+
+```python
+@dataclasses.dataclass(frozen=True)
+class FromCustomResolution(FieldResolver, game="MyGame"):
+    modifier: str
+
+    @override
+    def resolve(self, world: "World") -> Any:
+        return some_math_calculation(world, self.modifier)
+
+
+rule = Has("Combat Level", count=FromCustomResolution("combat"))
+```
+
+If you want to support rule serialization and your resolver contains non-serializable properties you may need to override `to_dict` or `from_dict`.
+
 ## Enabling caching
 
 The rule builder provides a `CachedRuleBuilderWorld` base class for your `World` class that enables caching on your rules.
