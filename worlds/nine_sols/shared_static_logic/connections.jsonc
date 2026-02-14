@@ -577,10 +577,7 @@
                 { "anyOf": [ // with WC and without TCK, the hard jump is from the right green wall to the upper long platform
                     [
                         { "item": "Cloud Leap" }, // is its own horizontal aid, so only 1 more horizontal boost needed
-                        { "anyOf": [
-                            { "item": "Tai-Chi Kick" }, // either using one or both TCK targets
-                            { "item": "Air Dash" } // or the one other horizontal movement we have on vanilla
-                        ] }
+                        { "item": "Air Dash" } // is the only other horizontal movement we have (TCK would be redundant)
                     ],
                     [
                         { "item": "Grapple" }, // doesn't help in the big room, so 2 horizontal boosts needed
