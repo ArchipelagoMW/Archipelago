@@ -31,6 +31,7 @@ if typing.TYPE_CHECKING:
     from NetUtils import ServerConnection
 
 import colorama
+import orjson
 import websockets
 from websockets.extensions.permessage_deflate import PerMessageDeflate, ServerPerMessageDeflateFactory
 try:
@@ -41,9 +42,9 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
+from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text, __version__
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
-    SlotType, LocationStore, MultiData, Hint, HintStatus
+    SlotType, LocationStore, MultiData, Hint, HintStatus, encode_to_bytes
 from BaseClasses import ItemClassification
 
 
@@ -213,7 +214,7 @@ team_slot = typing.Tuple[int, int]
 
 
 class Context:
-    dumper = staticmethod(encode)
+    dumper = staticmethod(encode_to_bytes)
     loader = staticmethod(decode)
 
     simple_options = {"hint_cost": int,
@@ -536,6 +537,10 @@ class Context:
         self.locations = LocationStore(decoded_obj.pop("locations"))  # pre-emptively free memory
         self.slot_data = decoded_obj['slot_data']
         for slot, data in self.slot_data.items():
+            if not isinstance(data, bytes):
+                data = encode_to_bytes(data)
+            data = orjson.Fragment(data)
+            self.slot_data[slot] = data
             self.read_data[f"slot_data_{slot}"] = lambda data=data: data
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
@@ -1859,11 +1864,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
     if cmd == 'Connect':
         if not args or 'password' not in args or type(args['password']) not in [str, type(None)] or \
-                'game' not in args:
+                'game' not in args or "version" not in args:
             await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect',
                                           "original_cmd": cmd}])
             return
-
+        args["version"] = Version.from_network_dict(args["version"])
         errors = set()
         if ctx.password and args['password'] != ctx.password:
             errors.add('InvalidPassword')
@@ -1879,7 +1884,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
-            if minver > args['version']:
+            if minver > args["version"]:
                 errors.add('IncompatibleVersion')
             try:
                 client.items_handling = args['items_handling']
@@ -1887,7 +1892,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 errors.add('InvalidItemsHandling')
 
         # only exact version match allowed
-        if ctx.compatibility == 0 and args['version'] != version_tuple:
+        if ctx.compatibility == 0 and args['version'] != Version(__version__):
             errors.add('IncompatibleVersion')
         if errors:
             ctx.logger.info(f"A client connection was refused due to: {errors}, the sent connect information was {args}.")
