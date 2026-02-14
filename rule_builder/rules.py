@@ -346,7 +346,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         children = [world_cls.rule_from_dict(c) for c in data.get("children", ())]
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(*children, options=options)
+        return cls(*children, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
@@ -610,7 +610,11 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
         if child is None:
             raise ValueError("Child rule cannot be None")
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(world_cls.rule_from_dict(child), options=options)
+        return cls(
+            world_cls.rule_from_dict(child),
+            options=options,
+            filtered_resolution=data.get("filtered_resolution", False),
+        )
 
     @override
     def __str__(self) -> str:
@@ -782,7 +786,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(*item_names, **args, options=options)
+        return cls(*item_names, **args, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
@@ -900,7 +904,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(*item_names, **args, options=options)
+        return cls(*item_names, **args, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
@@ -1234,7 +1238,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(*item_names, **args, options=options)
+        return cls(*item_names, **args, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
@@ -1368,7 +1372,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(*item_names, **args, options=options)
+        return cls(*item_names, **args, options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     @override
     def __str__(self) -> str:
