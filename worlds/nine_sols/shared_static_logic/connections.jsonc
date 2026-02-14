@@ -663,8 +663,14 @@
             { "item": "Mystic Nymph: Scout Mode" } // or hack the rope to climb out
         ] } ],
         "medium_requires": [] // just T-dash
-    }, // LS is redundant
-    // then a one-way dragon boat ride; bow/parry hover can be used here as long as you start it above the flying enemies
+        // then a one-way dragon boat ride, which requires no items
+        // bow/parry hover works here (but is redundant) as long as you start it above the flying enemies
+    },
+    { // in the other direction, bow/parry hover are the only options
+        "from": "LYR - Right Exit", "to": "LYR - Root Node",
+        "medium_requires": [{ "item": "Trick - Bow Hover" }],
+        "ls_requires": [{ "item": "Ledge Grab" }] // parry hover after T-dash setup
+    },
     { "from": "LYR - Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
 
     { "from": "LYR - Root Node", "to": "YC - Upper Exit", "requires": [] },
