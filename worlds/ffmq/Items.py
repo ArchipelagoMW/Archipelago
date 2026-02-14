@@ -260,7 +260,7 @@ def create_items(self) -> None:
             if item_name in precollected_item_names:
                 if skipped_one_filler_item:
                     if item_name == "Steel Armor":
-                        items.append("Projectile Refill")
+                        items.append(self.create_item("Projectile Refill"))
                     items.append(self.create_filler())
                 else:
                     skipped_one_filler_item = True

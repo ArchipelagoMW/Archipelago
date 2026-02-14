@@ -82,6 +82,7 @@ class WorldSeedSupply(Range):
     """Set the number of locations containing Seeds. Regardless of the option selected, the Hero Chest before the
     Dark King will always contain Seeds and isn't included in the count."""
     display_name = "World Seed Supply"
+    default = 2
     range_start = 0
     range_end = 25
 
