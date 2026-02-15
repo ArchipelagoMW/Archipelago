@@ -22,7 +22,11 @@
                 { "item": "Air Dash" }, // CS-Dash is too short, and no enemy for T-dash
                 { "item": "Ledge Grab" }
             ]
-        ] } ]
+        ] } ],
+        "medium_requires": [
+            { "item": "Air Dash" }, // and Swift Runner onto the roof above the root node
+            { "item": "Trick - Bow Hover" }
+        ]
     },
     { "from": "AFE - Leave Tutorial Arena", "to": "AFE - Upper Root Node", "requires": [] }, // from this side, single jump is enough
     {
