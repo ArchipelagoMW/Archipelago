@@ -2,10 +2,10 @@ from random import Random
 from .options import NineSolsGameOptions
 
 
-# these are the in-game GameFlagDescriptable.Title values, *not* user-facing display values, so don't change them
+# This is a list of all the English GameFlagDescriptable.Title values (except for the unused "Qi Thief Jade" and "Killing Blow Jade").
+# The only stable ids for jades I could find was the save flag id, but we'd like the slot data to be more human-readable than that,
+# so the mod code will be in charge of mapping English Titles to save flag ids.
 jade_titles = [
-    "Qi Thief Jade",
-    "Killing Blow Jade",
     "Immovable Jade",
     "Harness Force Jade",
     "Focus Jade",
