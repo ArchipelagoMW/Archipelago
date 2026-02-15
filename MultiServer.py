@@ -1048,6 +1048,7 @@ def get_status_string(ctx: Context, team: int, tag: str):
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
         tag_text = f" {tagged} of which are tagged {tag}" if connected and tag else ""
         status_text = (
+            " and has released." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_RELEASED else
             " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else
             " and is ready." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_READY else
             "."
@@ -1095,6 +1096,17 @@ def release_player(ctx: Context, team: int, slot: int):
                            {"type": "Release", "team": team, "slot": slot})
     register_location_checks(ctx, team, slot, all_locations)
     update_checked_locations(ctx, team, slot)
+
+
+def set_player_released(ctx: Context, team: int, slot: int):
+    if ctx.client_game_state[team, slot] < ClientStatus.CLIENT_RELEASED:
+        ctx.client_game_state[team, slot] = ClientStatus.CLIENT_RELEASED
+        ctx.on_client_status_change(team, slot)
+        ctx.save()
+
+
+def is_goal_or_released_status(status: ClientStatus) -> bool:
+    return status in (ClientStatus.CLIENT_GOAL, ClientStatus.CLIENT_RELEASED)
 
 
 def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
@@ -1501,17 +1513,20 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Sends remaining items in your world to their recipients."""
         if self.ctx.allow_releases.get((self.client.team, self.client.slot), False):
             release_player(self.ctx, self.client.team, self.client.slot)
+            set_player_released(self.ctx, self.client.team, self.client.slot)
             return True
         if "enabled" in self.ctx.release_mode:
             release_player(self.ctx, self.client.team, self.client.slot)
+            set_player_released(self.ctx, self.client.team, self.client.slot)
             return True
         elif "disabled" in self.ctx.release_mode:
             self.output("Sorry, client item releasing has been disabled on this server. "
                         "You can ask the server admin for a /release")
             return False
         else:  # is auto or goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
+            if is_goal_or_released_status(self.ctx.client_game_state[self.client.team, self.client.slot]):
                 release_player(self.ctx, self.client.team, self.client.slot)
+                set_player_released(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
                 self.output(
@@ -1529,7 +1544,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "Sorry, client collecting has been disabled on this server. You can ask the server admin for a /collect")
             return False
         else:  # is auto or goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
+            if is_goal_or_released_status(self.ctx.client_game_state[self.client.team, self.client.slot]):
                 collect_player(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
@@ -1570,7 +1585,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "Sorry, !remaining has been disabled on this server.")
             return False
         else:  # is goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
+            if is_goal_or_released_status(self.ctx.client_game_state[self.client.team, self.client.slot]):
                 rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if rest_locations:
                     self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
@@ -2196,11 +2211,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
 def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):
     current = ctx.client_game_state[client.team, client.slot]
-    if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
-        if new_status == ClientStatus.CLIENT_GOAL:
+    if not is_goal_or_released_status(current):  # can't undo goal completion/release
+        if is_goal_or_released_status(new_status):
             ctx.on_goal_achieved(client)
             # if player has yet to ever connect to the server, they will not be in client_game_state
-            if all(player in ctx.client_game_state and ctx.client_game_state[player] == ClientStatus.CLIENT_GOAL
+            if all(player in ctx.client_game_state and is_goal_or_released_status(ctx.client_game_state[player])
                    for player in ctx.player_names
                    if player[0] == client.team and player[1] != client.slot):
                 ctx.broadcast_text_all(f"Team #{client.team + 1} has completed all of their games! Congratulations!")
@@ -2330,6 +2345,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         if player:
             team, slot, _ = player
             release_player(self.ctx, team, slot)
+            set_player_released(self.ctx, team, slot)
             return True
 
         self.output(f"Could not find player {player_name} to release")

@@ -22,6 +22,7 @@ _player_trackers: Dict[str, Callable] = {}
 
 TeamPlayer = Tuple[int, int]
 ItemMetadata = Tuple[int, int, int]
+GOAL_OR_RELEASED_STATES = (ClientStatus.CLIENT_GOAL, ClientStatus.CLIENT_RELEASED)
 
 
 def _cache_results(func: Callable) -> Callable:
@@ -159,7 +160,7 @@ class TrackerData:
         """Retrieves a dictionary of number of completed worlds per team."""
         return {
             team: sum(
-                self.get_player_client_status(team, player) == ClientStatus.CLIENT_GOAL for player in players
+                self.get_player_client_status(team, player) in GOAL_OR_RELEASED_STATES for player in players
             ) for team, players in self.get_all_players().items()
         }
 
@@ -594,7 +595,7 @@ if "A Link to the Past" in network_data_package["games"]:
             inventory["Bombs"] = 1
 
         # Triforce item if we meet goal.
-        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+        if tracker_data.get_room_client_statuses()[team, player] in GOAL_OR_RELEASED_STATES:
             inventory["Triforce"] = 1
 
     def render_ALinkToThePast_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
@@ -897,7 +898,7 @@ if "Ocarina of Time" in network_data_package["games"]:
 
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
-        display_data["game_finished"] = game_state == 30
+        display_data["game_finished"] = game_state in GOAL_OR_RELEASED_STATES
 
         lookup_any_item_id_to_name = tracker_data.item_id_to_name["Ocarina of Time"]
         return render_template(
@@ -989,7 +990,7 @@ if "Timespinner" in network_data_package["games"]:
 
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
-        display_data["game_finished"] = game_state == 30
+        display_data["game_finished"] = game_state in GOAL_OR_RELEASED_STATES
 
         inventory = tracker_data.get_player_inventory_counts(team, player)
 
@@ -1101,7 +1102,7 @@ if "Super Metroid" in network_data_package["games"]:
 
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
-        display_data["game_finished"] = game_state == 30
+        display_data["game_finished"] = game_state in GOAL_OR_RELEASED_STATES
 
         # Turn location IDs into advancement tab counts
         checked_locations = tracker_data.get_player_checked_locations(team, player)
@@ -1205,7 +1206,7 @@ if "ChecksFinder" in network_data_package["games"]:
 
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
-        display_data["game_finished"] = game_state == 30
+        display_data["game_finished"] = game_state in GOAL_OR_RELEASED_STATES
 
         lookup_any_item_id_to_name = tracker_data.item_id_to_name["ChecksFinder"]
         return render_template(
@@ -1420,7 +1421,7 @@ if "Starcraft 2" in network_data_package["games"]:
 
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
-        display_data["game_finished"] = game_state == ClientStatus.CLIENT_GOAL
+        display_data["game_finished"] = game_state in GOAL_OR_RELEASED_STATES
 
         # Keys
         keys: dict[str, int] = {}

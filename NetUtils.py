@@ -39,6 +39,7 @@ class ClientStatus(ByValue, enum.IntEnum):
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30
+    CLIENT_RELEASED = 40
 
 
 class SlotType(ByValue, enum.IntFlag):
