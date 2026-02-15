@@ -1416,7 +1416,7 @@ class Region:
         :param name: name of the connection being created
         :param rule: callable to determine access of this connection to go from self to the exiting_region"""
         exit_ = self.create_exit(name if name else f"{self.name} -> {connecting_region.name}")
-        if rule:
+        if rule is not None:
             self.multiworld.worlds[self.player].set_rule(exit_, rule)
         exit_.connect(connecting_region)
         return exit_
