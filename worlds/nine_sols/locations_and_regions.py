@@ -5,9 +5,15 @@ from typing import Any, NamedTuple
 
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
-from worlds.generic.Rules import CollectionRule, set_rule
+from worlds.generic.Rules import set_rule
 from .options import FirstRootNode, LogicDifficulty, NineSolsGameOptions
 from .should_generate import should_generate
+
+# AP 0.6.7 moves CollectionRule to BaseClasses
+try:
+    from BaseClasses import CollectionRule
+except ImportError:
+    from worlds.generic.Rules import CollectionRule
 
 if typing.TYPE_CHECKING:
     from . import NineSolsWorld
