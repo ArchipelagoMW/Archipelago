@@ -4,6 +4,7 @@ from typing import Callable, Dict, Optional
 from typing_extensions import override
 
 from BaseClasses import CollectionState, MultiWorld, Region
+from test.general import TestWorld
 
 
 class TestHelpers(unittest.TestCase):
@@ -16,6 +17,7 @@ class TestHelpers(unittest.TestCase):
         self.multiworld.game[self.player] = "helper_test_game"
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed()
+        self.multiworld.worlds[self.player] = TestWorld(self.multiworld, self.player)
 
     def test_region_helpers(self) -> None:
         """Tests `Region.add_locations()` and `Region.add_exits()` have correct behavior"""
