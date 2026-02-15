@@ -44,97 +44,105 @@ random.shuffle(galaxy_names)
 random.shuffle(galaxy_names)
 random.shuffle(galaxy_names)
 
-count = 0
-
 name_offset = 120
 
-for layer in layers:
-    with open(file.format(layer), 'rb') as f:
-        rows = int.from_bytes(f.read(4))
-        cols = int.from_bytes(f.read(4))
-        offset = int.from_bytes(f.read(4))
-        size = int.from_bytes(f.read(4))
-        
-        f.read(12 * cols)
-        f.read(rows * size)
-        
-        string_start = offset + rows * size
-        
-        strings = f.read().split(b'\x00')
-        
-        lengths = [len(i) for i in strings]
-        old_offsets = [sum(lengths[:i]) + i for i in range(len(lengths))]
-        
-        for i, string in enumerate(strings):
-            if b'Mini' in string:
-                strings[i] = galaxy_names[count]
-                count += 1
-        
-        string_concat = b'\x00'.join(strings[:-1])+b'\x00'
-        
-        new_offsets = []
-        
-        for string in strings[:-1]:
-            new_offsets.append(string_concat.index(string+b'\x00'))
-        
-        write = b''
-        f.seek(0)
-        write += f.read(16 + 12 * cols + rows * size)
-        write += string_concat
-        
-        missing = math.ceil(len(write)/32) * 32 - len(write)
-        write += b'@' * missing
-        
-        with open(layer, 'wb') as fw:
-            fw.write(write)
-            
-            for row in range(rows):
-                f.seek(offset + row * size + name_offset)
-                old_offset = int.from_bytes(f.read(4))
-                index = old_offsets.index(old_offset)
-                new_offset = new_offsets[index]
-                
-                fw.seek(offset + row * size + name_offset)
-                fw.write(int.to_bytes(new_offset, 4))
-
-dol.hook()
-
-if dol.is_hooked(): 
-    
-    PC = 0x817e9000
-    
-    for i, layer in enumerate(layers):
-        with open(layer, 'rb') as f:
-            dol.write_word(0x80001800 + i*4, PC)
-            data = f.read()
-            dol.write_bytes(PC, data)
-            PC += len(data)
-    
-    PC = 0x80001820
-    
-    dol.write_bytes(PC, 'objinfo'.encode('utf-8'))
-    
-    PC = 0x80001830
-    
-    dol.write_bytes(PC, 'common'.encode('utf-8'))
-    
-    PC = 0x80001840
-    
+def create_new_files():
     for layer in layers:
-        dol.write_bytes(PC, 'layer{0}'.format(layer).encode('utf-8'))
-        PC += 0x20
-    
-    PC = 0x80001900
-    
-    dol.write_bytes(PC, function)
-    
-    PC = 0x80347a3c
-    
-    dol.write_bytes(PC, b'\x4b\xcb\x9e\xc5')
-    
-    print("Succesfully injected")
+        with open(file.format(layer), 'rb') as f:
+            random.shuffle(galaxy_names)
+            random.shuffle(galaxy_names)
+            random.shuffle(galaxy_names)
+            random.shuffle(galaxy_names)
+            random.shuffle(galaxy_names)
+            
+            rows = int.from_bytes(f.read(4))
+            cols = int.from_bytes(f.read(4))
+            offset = int.from_bytes(f.read(4))
+            size = int.from_bytes(f.read(4))
+        
+            f.read(12 * cols)
+            f.read(rows * size)
+        
+            string_start = offset + rows * size
+        
+            strings = f.read().split(b'\x00')
+        
+            lengths = [len(i) for i in strings]
+            old_offsets = [sum(lengths[:i]) + i for i in range(len(lengths))]
+            
+            count = 0
+            for i, string in enumerate(strings):
+                if b'Mini' in string:
+                    strings[i] = galaxy_names[count]
+                    count += 1
+        
+            string_concat = b'\x00'.join(strings[:-1])+b'\x00'
+        
+            new_offsets = []
+        
+            for string in strings[:-1]:
+                new_offsets.append(string_concat.index(string+b'\x00'))
+        
+            write = b''
+            f.seek(0)
+            write += f.read(16 + 12 * cols + rows * size)
+            write += string_concat
+        
+            missing = math.ceil(len(write)/32) * 32 - len(write)
+            write += b'@' * missing
+        
+            with open(layer, 'wb') as fw:
+                fw.write(write)
+            
+                for row in range(rows):
+                    f.seek(offset + row * size + name_offset)
+                    old_offset = int.from_bytes(f.read(4))
+                    index = old_offsets.index(old_offset)
+                    new_offset = new_offsets[index]
+                    
+                    fw.seek(offset + row * size + name_offset)
+                    fw.write(int.to_bytes(new_offset, 4))
+    return layers
 
-else:
-    print("Failed to hook")
+if __name__ == "__main__":
+    dol.hook()
 
-dol.un_hook()
+    if dol.is_hooked(): 
+    
+        PC = 0x817e9000
+    
+        for i, layer in enumerate(layers):
+            with open(layer, 'rb') as f:
+                dol.write_word(0x80001800 + i*4, PC)
+                data = f.read()
+                dol.write_bytes(PC, data)
+                PC += len(data)
+    
+        PC = 0x80001820
+    
+        dol.write_bytes(PC, 'objinfo'.encode('utf-8'))
+    
+        PC = 0x80001830
+    
+        dol.write_bytes(PC, 'common'.encode('utf-8'))
+    
+        PC = 0x80001840
+    
+        for layer in layers:
+            dol.write_bytes(PC, 'layer{0}'.format(layer).encode('utf-8'))
+            PC += 0x20
+    
+        PC = 0x80001900
+    
+        dol.write_bytes(PC, function)
+    
+        PC = 0x80347a3c
+    
+        dol.write_bytes(PC, b'\x4b\xcb\x9e\xc5')
+    
+        print("Succesfully injected")
+
+    else:
+        print("Failed to hook")
+
+    dol.un_hook()
