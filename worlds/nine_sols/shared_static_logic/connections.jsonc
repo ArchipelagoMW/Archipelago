@@ -13,22 +13,28 @@
     { "from": "AFE - Upper Root Node", "to": "AFM - Exit", "requires": [] },
 
     // Apeman Facility (Elevator)
-    { "from": "AFE - Upper Root Node", "to": "AFE - Between Root Nodes", "requires": [ { "anyOf": [
-        { "item": "Grapple" },
-        [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
-        { "item": "Cloud Leap" }
-        // T-Dash works, but there's no enemy on this side. CS-Dash is too short.
-        // Bow hover from the pagoda works, but you need AD or CL to get up there anyway.
-        // Then the arena happens to require exactly Grapple OR (AD OR T-Dash) OR CL, so no change there.
-    ] } ] },
-    // this assumes the elevator call button is enabled by the mod, since it's impassable otherwise
     {
-        "from": "AFE - Between Root Nodes", "to": "AFE - Upper Root Node",
+        "from": "AFE - Upper Root Node", "to": "AFE - Enter Tutorial Arena",
+        "requires": [ { "anyOf": [
+            { "item": "Grapple" },
+            { "item": "Cloud Leap" },
+            [
+                { "item": "Air Dash" }, // CS-Dash is too short, and no enemy for T-dash
+                { "item": "Ledge Grab" }
+            ]
+        ] } ]
+    },
+    { "from": "AFE - Leave Tutorial Arena", "to": "AFE - Upper Root Node", "requires": [] }, // from this side, single jump is enough
+    {
+        "from": "AFE - Enter Tutorial Arena", "to": "AFE - Leave Tutorial Arena",
         "requires": [ { "anyOf": [
             { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } // to reach the arena's upper enemy
         ] } ],
         "medium_requires": [] // T-dash
     },
+    { "from": "AFE - Leave Tutorial Arena", "to": "AFE - Between Root Nodes", "requires": [] },
+    // this assumes the elevator call button is enabled by the mod, since it's impassable otherwise
+    { "from": "AFE - Between Root Nodes", "to": "AFE - Enter Tutorial Arena", "requires": [] },
     {
         "from": "AFE - Between Root Nodes", "to": "AFE - Upper Right Pagoda",
         "requires": [ { "anyOf": [
