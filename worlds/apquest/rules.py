@@ -140,5 +140,5 @@ def set_completion_condition(world: APQuestWorld) -> None:
 #   class APQuestWorld(CachedRuleBuilderWorld): ...
 # This may speed up your world, or it may make it slower.
 # The exact factors are complex and not well understood, but there is no harm in trying it.
-# Generate a few seeds and see if there is a noticable difference!
+# Generate a few seeds and see if there is a noticeable difference!
 # If you're wondering, author has checked: APQuest is too simple to see any benefits, so we'll stick with "World".
