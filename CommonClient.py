@@ -65,6 +65,8 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Close connections and client"""
+        if self.ctx.ui:
+            self.ctx.ui.stop()
         self.ctx.exit_event.set()
         return True
 
