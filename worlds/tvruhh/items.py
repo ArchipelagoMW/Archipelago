@@ -288,8 +288,8 @@ monster_list = {
     "Chroma": [1000077, ItemClassification.progression],
     "Duality": [1000078, ItemClassification.progression],
     "Trinity": [1000079, ItemClassification.progression],
-    "Avoidant Stella": [1000085, ItemClassification.progression], #added in v8.31
-    "Rage Celestia": [1000086, ItemClassification.progression], #added in v8.31
+    "Avoidant Stella": [1000085, ItemClassification.progression], #added in Update #108
+    "Rage Celestia": [1000086, ItemClassification.progression], #added in Update #108
     "Ember Polyps": [1000080, ItemClassification.progression],
     "Volt Polyps": [1000081, ItemClassification.progression],
     "Tox Polyps": [1000082, ItemClassification.progression],
