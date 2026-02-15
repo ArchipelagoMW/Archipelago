@@ -1369,7 +1369,7 @@ class Region:
         self,
         location_name: str,
         item_name: str | None = None,
-        rule: CollectionRule | "Rule[Any]" | None = None,
+        rule: CollectionRule | Rule[Any] | None = None,
         location_type: type[Location] | None = None,
         item_type: type[Item] | None = None,
         show_in_spoiler: bool = True,
@@ -1408,7 +1408,7 @@ class Region:
         return event_item
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
-                rule: Optional[CollectionRule | "Rule[Any]"] = None) -> Entrance:
+                rule: Optional[CollectionRule | Rule[Any]] = None) -> Entrance:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
 
@@ -1442,7 +1442,7 @@ class Region:
         return entrance
 
     def add_exits(self, exits: Iterable[str] | Mapping[str, str | None],
-                  rules: Mapping[str, CollectionRule] | None = None) -> List[Entrance]:
+                  rules: Mapping[str, CollectionRule | Rule[Any]] | None = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
