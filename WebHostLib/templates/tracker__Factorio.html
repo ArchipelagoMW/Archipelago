@@ -2,17 +2,10 @@
 <html lang="en">
 
 <head>
-    <!-- <base href="https://archipelago.gg" /> -->
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet"
-          type="text/css"
-          href="{{ url_for('static', filename='styles/tracker__Factorio.css') }}">
-    <link rel="stylesheet"
-          type="text/css"
-          href="/static/styles/tracker.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker__Factorio.css') }}">
 </head>
 
 <body>
@@ -86,7 +79,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Iron_chest.png/48px-Iron_chest.png 1.5x, https://wiki.factorio.com/images/Iron_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "steel-chest" in inventory %}
+                        {% if "steel-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Steel chest">
                             <img alt="Steel chest"
@@ -98,7 +91,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Steel_chest.png/48px-Steel_chest.png 1.5x, https://wiki.factorio.com/images/Steel_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "storage-tank" in inventory %}
+                        {% if "fluid-handling" in inventory %}
                         <div class="factorio-icon"
                              title="Storage tank">
                             <img alt="Storage tank"
@@ -112,7 +105,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "transport-belt" in inventory %}
+                        {% if "logistics" in inventory %}
                         <div class="factorio-icon"
                              title="Transport belt">
                             <img alt="Transport belt"
@@ -124,7 +117,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Transport_belt.png/48px-Transport_belt.png 1.5x, https://wiki.factorio.com/images/Transport_belt.png 2x">
                         </div>
                         {% endif %}
-                        {% if "fast-transport-belt" in inventory %}
+                        {% if "logistics-2" in inventory %}
                         <div class="factorio-icon"
                              title="Fast transport belt">
                             <img alt="Fast transport belt"
@@ -136,7 +129,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Fast_transport_belt.png/48px-Fast_transport_belt.png 1.5x, https://wiki.factorio.com/images/Fast_transport_belt.png 2x">
                         </div>
                         {% endif %}
-                        {% if "express-transport-belt" in inventory %}
+                        {% if "logistics-3" in inventory %}
                         <div class="factorio-icon"
                              title="Express transport belt">
                             <img alt="Express transport belt"
@@ -148,7 +141,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Express_transport_belt.png/48px-Express_transport_belt.png 1.5x, https://wiki.factorio.com/images/Express_transport_belt.png 2x">
                         </div>
                         {% endif %}
-                        {% if "underground-belt" in inventory %}
+                        {% if "logistics" in inventory %}
                         <div class="factorio-icon"
                              title="Underground belt">
                             <img alt="Underground belt"
@@ -160,7 +153,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Underground_belt.png/48px-Underground_belt.png 1.5x, https://wiki.factorio.com/images/Underground_belt.png 2x">
                         </div>
                         {% endif %}
-                        {% if "fast-underground-belt" in inventory %}
+                        {% if "logistics-2" in inventory %}
                         <div class="factorio-icon"
                              title="Fast underground belt">
                             <img alt="Fast underground belt"
@@ -172,7 +165,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Fast_underground_belt.png/48px-Fast_underground_belt.png 1.5x, https://wiki.factorio.com/images/Fast_underground_belt.png 2x">
                         </div>
                         {% endif %}
-                        {% if "express-underground-belt" in inventory %}
+                        {% if "logistics-3" in inventory %}
                         <div class="factorio-icon"
                              title="Express underground belt">
                             <img alt="Express underground belt"
@@ -184,7 +177,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Express_underground_belt.png/48px-Express_underground_belt.png 1.5x, https://wiki.factorio.com/images/Express_underground_belt.png 2x">
                         </div>
                         {% endif %}
-                        {% if "splitter" in inventory %}
+                        {% if "logistics" in inventory %}
                         <div class="factorio-icon"
                              title="Splitter">
                             <img alt="Splitter"
@@ -196,7 +189,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Splitter.png/48px-Splitter.png 1.5x, https://wiki.factorio.com/images/Splitter.png 2x">
                         </div>
                         {% endif %}
-                        {% if "fast-splitter" in inventory %}
+                        {% if "logistics-2" in inventory %}
                         <div class="factorio-icon"
                              title="Fast splitter">
                             <img alt="Fast splitter"
@@ -208,7 +201,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Fast_splitter.png/48px-Fast_splitter.png 1.5x, https://wiki.factorio.com/images/Fast_splitter.png 2x">
                         </div>
                         {% endif %}
-                        {% if "express-splitter" in inventory %}
+                        {% if "logistics-3" in inventory %}
                         <div class="factorio-icon"
                              title="Express splitter">
                             <img alt="Express splitter"
@@ -246,7 +239,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Inserter.png/48px-Inserter.png 1.5x, https://wiki.factorio.com/images/Inserter.png 2x">
                         </div>
                         {% endif %}
-                        {% if "long-handed-inserter" in inventory %}
+                        {% if "automation" in inventory %}
                         <div class="factorio-icon"
                              title="Long-handed inserter">
                             <img alt="Long-handed inserter"
@@ -296,7 +289,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Small_electric_pole.png/48px-Small_electric_pole.png 1.5x, https://wiki.factorio.com/images/Small_electric_pole.png 2x">
                         </div>
                         {% endif %}
-                        {% if "medium-electric-pole" in inventory %}
+                        {% if "electric-energy-distribution-1" in inventory %}
                         <div class="factorio-icon"
                              title="Medium electric pole">
                             <img alt="Medium electric pole"
@@ -308,7 +301,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Medium_electric_pole.png/48px-Medium_electric_pole.png 1.5x, https://wiki.factorio.com/images/Medium_electric_pole.png 2x">
                         </div>
                         {% endif %}
-                        {% if "big-electric-pole" in inventory %}
+                        {% if "electric-energy-distribution-1" in inventory %}
                         <div class="factorio-icon"
                              title="Big electric pole">
                             <img alt="Big electric pole"
@@ -320,7 +313,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Big_electric_pole.png/48px-Big_electric_pole.png 1.5x, https://wiki.factorio.com/images/Big_electric_pole.png 2x">
                         </div>
                         {% endif %}
-                        {% if "substation" in inventory %}
+                        {% if "electric-energy-distribution-2" in inventory %}
                         <div class="factorio-icon"
                              title="Substation">
                             <img alt="Substation"
@@ -356,7 +349,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Pipe_to_ground.png/48px-Pipe_to_ground.png 1.5x, https://wiki.factorio.com/images/Pipe_to_ground.png 2x">
                         </div>
                         {% endif %}
-                        {% if "pump" in inventory %}
+                        {% if "fluid-handling" in inventory %}
                         <div class="factorio-icon"
                              title="Pump">
                             <img alt="Pump"
@@ -370,7 +363,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "rail" in inventory %}
+                        {% if "railway" in inventory %}
                         <div class="factorio-icon"
                              title="Rail">
                             <img alt="Rail"
@@ -382,7 +375,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Straight_rail.png/48px-Straight_rail.png 1.5x, https://wiki.factorio.com/images/Straight_rail.png 2x">
                         </div>
                         {% endif %}
-                        {% if "train-stop" in inventory %}
+                        {% if "automated-rail-transportation" in inventory %}
                         <div class="factorio-icon"
                              title="Train stop">
                             <img alt="Train stop"
@@ -394,7 +387,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Train_stop.png/48px-Train_stop.png 1.5x, https://wiki.factorio.com/images/Train_stop.png 2x">
                         </div>
                         {% endif %}
-                        {% if "rail-signal" in inventory %}
+                        {% if "automated-rail-transportation" in inventory %}
                         <div class="factorio-icon"
                              title="Rail signal">
                             <img alt="Rail signal"
@@ -406,7 +399,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Rail_signal.png/48px-Rail_signal.png 1.5x, https://wiki.factorio.com/images/Rail_signal.png 2x">
                         </div>
                         {% endif %}
-                        {% if "rail-chain-signal" in inventory %}
+                        {% if "automated-rail-transportation" in inventory %}
                         <div class="factorio-icon"
                              title="Rail chain signal">
                             <img alt="Rail chain signal"
@@ -418,7 +411,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Rail_chain_signal.png/48px-Rail_chain_signal.png 1.5x, https://wiki.factorio.com/images/Rail_chain_signal.png 2x">
                         </div>
                         {% endif %}
-                        {% if "locomotive" in inventory %}
+                        {% if "railway" in inventory %}
                         <div class="factorio-icon"
                              title="Locomotive">
                             <img alt="Locomotive"
@@ -430,7 +423,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Locomotive.png/48px-Locomotive.png 1.5x, https://wiki.factorio.com/images/Locomotive.png 2x">
                         </div>
                         {% endif %}
-                        {% if "cargo-wagon" in inventory %}
+                        {% if "railway" in inventory %}
                         <div class="factorio-icon"
                              title="Cargo wagon">
                             <img alt="Cargo wagon"
@@ -454,7 +447,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Fluid_wagon.png/48px-Fluid_wagon.png 1.5x, https://wiki.factorio.com/images/Fluid_wagon.png 2x">
                         </div>
                         {% endif %}
-                        {% if "artillery-wagon" in inventory %}
+                        {% if "artillery" in inventory %}
                         <div class="factorio-icon"
                              title="Artillery wagon">
                             <img alt="Artillery wagon"
@@ -468,7 +461,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "car" in inventory %}
+                        {% if "automobilism" in inventory %}
                         <div class="factorio-icon"
                              title="Car">
                             <img alt="Car"
@@ -506,7 +499,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "logistic-robot" in inventory %}
+                        {% if "logistic-robotics" in inventory %}
                         <div class="factorio-icon"
                              title="Logistic robot">
                             <img alt="Logistic robot"
@@ -518,7 +511,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Logistic_robot.png/48px-Logistic_robot.png 1.5x, https://wiki.factorio.com/images/Logistic_robot.png 2x">
                         </div>
                         {% endif %}
-                        {% if "construction-robot" in inventory %}
+                        {% if "construction-robotics" in inventory %}
                         <div class="factorio-icon"
                              title="Construction robot">
                             <img alt="Construction robot"
@@ -530,7 +523,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Construction_robot.png/48px-Construction_robot.png 1.5x, https://wiki.factorio.com/images/Construction_robot.png 2x">
                         </div>
                         {% endif %}
-                        {% if "active-provider-chest" in inventory %}
+                        {% if "logistic-system" in inventory %}
                         <div class="factorio-icon"
                              title="Active provider chest">
                             <img alt="Active provider chest"
@@ -542,7 +535,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Active_provider_chest.png/48px-Active_provider_chest.png 1.5x, https://wiki.factorio.com/images/Active_provider_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "passive-provider-chest" in inventory %}
+                        {% if "construction-robotics" in inventory or "logistic-robotics" in inventory %}
                         <div class="factorio-icon"
                              title="Passive provider chest">
                             <img alt="Passive provider chest"
@@ -554,7 +547,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Passive_provider_chest.png/48px-Passive_provider_chest.png 1.5x, https://wiki.factorio.com/images/Passive_provider_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "storage-chest" in inventory %}
+                        {% if "construction-robotics" in inventory or "logistic-robotics" in inventory %}
                         <div class="factorio-icon"
                              title="Storage chest">
                             <img alt="Storage chest"
@@ -566,7 +559,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Storage_chest.png/48px-Storage_chest.png 1.5x, https://wiki.factorio.com/images/Storage_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "buffer-chest" in inventory %}
+                        {% if "logistic-system" in inventory %}
                         <div class="factorio-icon"
                              title="Buffer chest">
                             <img alt="Buffer chest"
@@ -578,7 +571,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Buffer_chest.png/48px-Buffer_chest.png 1.5x, https://wiki.factorio.com/images/Buffer_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "requester-chest" in inventory %}
+                        {% if "logistic-system" in inventory %}
                         <div class="factorio-icon"
                              title="Requester chest">
                             <img alt="Requester chest"
@@ -590,7 +583,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Requester_chest.png/48px-Requester_chest.png 1.5x, https://wiki.factorio.com/images/Requester_chest.png 2x">
                         </div>
                         {% endif %}
-                        {% if "roboport" in inventory %}
+                        {% if "construction-robotics" in inventory or "logistic-robotics" in inventory %}
                         <div class="factorio-icon"
                              title="Roboport">
                             <img alt="Roboport"
@@ -604,7 +597,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "small-lamp" in inventory %}
+                        {% if "lamp" in inventory %}
                         <div class="factorio-icon"
                              title="Lamp">
                             <img alt="Lamp"
@@ -616,7 +609,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Lamp.png/48px-Lamp.png 1.5x, https://wiki.factorio.com/images/Lamp.png 2x">
                         </div>
                         {% endif %}
-                        {% if "arithmetic-combinator" in inventory %}
+                        {% if "circuit-network" in inventory %}
                         <div class="factorio-icon"
                              title="Arithmetic combinator">
                             <img alt="Arithmetic combinator"
@@ -628,7 +621,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Arithmetic_combinator.png/48px-Arithmetic_combinator.png 1.5x, https://wiki.factorio.com/images/Arithmetic_combinator.png 2x">
                         </div>
                         {% endif %}
-                        {% if "decider-combinator" in inventory %}
+                        {% if "circuit-network" in inventory %}
                         <div class="factorio-icon"
                              title="Decider combinator">
                             <img alt="Decider combinator"
@@ -640,7 +633,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Decider_combinator.png/48px-Decider_combinator.png 1.5x, https://wiki.factorio.com/images/Decider_combinator.png 2x">
                         </div>
                         {% endif %}
-                        {% if "selector-combinator" in inventory %}
+                        {% if "advanced-combinators" in inventory %}
                         <div class="factorio-icon"
                              title="Selector combinator">
                             <img alt="Selector combinator"
@@ -652,7 +645,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Selector_combinator.png/48px-Selector_combinator.png 1.5x, https://wiki.factorio.com/images/Selector_combinator.png 2x">
                         </div>
                         {% endif %}
-                        {% if "constant-combinator" in inventory %}
+                        {% if "circuit-network" in inventory %}
                         <div class="factorio-icon"
                              title="Constant combinator">
                             <img alt="Constant combinator"
@@ -664,7 +657,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Constant_combinator.png/48px-Constant_combinator.png 1.5x, https://wiki.factorio.com/images/Constant_combinator.png 2x">
                         </div>
                         {% endif %}
-                        {% if "power-switch" in inventory %}
+                        {% if "circuit-network" in inventory %}
                         <div class="factorio-icon"
                              title="Power switch">
                             <img alt="Power switch"
@@ -676,7 +669,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Power_switch.png/48px-Power_switch.png 1.5x, https://wiki.factorio.com/images/Power_switch.png 2x">
                         </div>
                         {% endif %}
-                        {% if "programmable-speaker" in inventory %}
+                        {% if "circuit-network" in inventory %}
                         <div class="factorio-icon"
                              title="Programmable speaker">
                             <img alt="Programmable speaker"
@@ -688,7 +681,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Programmable_speaker.png/48px-Programmable_speaker.png 1.5x, https://wiki.factorio.com/images/Programmable_speaker.png 2x">
                         </div>
                         {% endif %}
-                        {% if "display-panel" in inventory %}
+                        {% if "circuit-network" in inventory %}
                         <div class="factorio-icon"
                              title="Display panel">
                             <img alt="Display panel"
@@ -726,7 +719,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Concrete.png/48px-Concrete.png 1.5x, https://wiki.factorio.com/images/Concrete.png 2x">
                         </div>
                         {% endif %}
-                        {% if "hazard-concrete" in inventory %}
+                        {% if "concrete" in inventory %}
                         <div class="factorio-icon"
                              title="Hazard concrete">
                             <img alt="Hazard concrete"
@@ -738,7 +731,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Hazard_concrete.png/48px-Hazard_concrete.png 1.5x, https://wiki.factorio.com/images/Hazard_concrete.png 2x">
                         </div>
                         {% endif %}
-                        {% if "refined-concrete" in inventory %}
+                        {% if "concrete" in inventory %}
                         <div class="factorio-icon"
                              title="Refined concrete">
                             <img alt="Refined concrete"
@@ -750,7 +743,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Refined_concrete.png/48px-Refined_concrete.png 1.5x, https://wiki.factorio.com/images/Refined_concrete.png 2x">
                         </div>
                         {% endif %}
-                        {% if "refined-hazard-concrete" in inventory %}
+                        {% if "concrete" in inventory %}
                         <div class="factorio-icon"
                              title="Refined hazard concrete">
                             <img alt="Refined hazard concrete"
@@ -828,7 +821,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Steam_engine.png/48px-Steam_engine.png 1.5x, https://wiki.factorio.com/images/Steam_engine.png 2x">
                         </div>
                         {% endif %}
-                        {% if "solar-panel" in inventory %}
+                        {% if "solar-energy" in inventory %}
                         <div class="factorio-icon"
                              title="Solar panel">
                             <img alt="Solar panel"
@@ -840,7 +833,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Solar_panel.png/48px-Solar_panel.png 1.5x, https://wiki.factorio.com/images/Solar_panel.png 2x">
                         </div>
                         {% endif %}
-                        {% if "accumulator" in inventory %}
+                        {% if "electric-energy-accumulators" in inventory %}
                         <div class="factorio-icon"
                              title="Accumulator">
                             <img alt="Accumulator"
@@ -852,7 +845,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Accumulator.png/48px-Accumulator.png 1.5x, https://wiki.factorio.com/images/Accumulator.png 2x">
                         </div>
                         {% endif %}
-                        {% if "nuclear-reactor" in inventory %}
+                        {% if "nuclear-power" in inventory %}
                         <div class="factorio-icon"
                              title="Nuclear reactor">
                             <img alt="Nuclear reactor"
@@ -864,7 +857,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Nuclear_reactor.png/48px-Nuclear_reactor.png 1.5x, https://wiki.factorio.com/images/Nuclear_reactor.png 2x">
                         </div>
                         {% endif %}
-                        {% if "heat-pipe" in inventory %}
+                        {% if "nuclear-power" in inventory %}
                         <div class="factorio-icon"
                              title="Heat pipe">
                             <img alt="Heat pipe"
@@ -876,7 +869,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Heat_pipe.png/48px-Heat_pipe.png 1.5x, https://wiki.factorio.com/images/Heat_pipe.png 2x">
                         </div>
                         {% endif %}
-                        {% if "heat-exchanger" in inventory %}
+                        {% if "nuclear-power" in inventory %}
                         <div class="factorio-icon"
                              title="Heat exchanger">
                             <img alt="Heat exchanger"
@@ -888,7 +881,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Heat_exchanger.png/48px-Heat_exchanger.png 1.5x, https://wiki.factorio.com/images/Heat_exchanger.png 2x">
                         </div>
                         {% endif %}
-                        {% if "steam-turbine" in inventory %}
+                        {% if "nuclear-power" in inventory %}
                         <div class="factorio-icon"
                              title="Steam turbine">
                             <img alt="Steam turbine"
@@ -938,7 +931,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Offshore_pump.png/48px-Offshore_pump.png 1.5x, https://wiki.factorio.com/images/Offshore_pump.png 2x">
                         </div>
                         {% endif %}
-                        {% if "pumpjack" in inventory %}
+                        {% if "oil-gathering" in inventory %}
                         <div class="factorio-icon"
                              title="Pumpjack">
                             <img alt="Pumpjack"
@@ -964,7 +957,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Stone_furnace.png/48px-Stone_furnace.png 1.5x, https://wiki.factorio.com/images/Stone_furnace.png 2x">
                         </div>
                         {% endif %}
-                        {% if "steel-furnace" in inventory %}
+                        {% if "advanced-material-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Steel furnace">
                             <img alt="Steel furnace"
@@ -976,7 +969,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Steel_furnace.png/48px-Steel_furnace.png 1.5x, https://wiki.factorio.com/images/Steel_furnace.png 2x">
                         </div>
                         {% endif %}
-                        {% if "electric-furnace" in inventory %}
+                        {% if "advanced-material-processing-2" in inventory %}
                         <div class="factorio-icon"
                              title="Electric furnace">
                             <img alt="Electric furnace"
@@ -990,7 +983,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "assembling-machine-1" in inventory %}
+                        {% if "automation" in inventory %}
                         <div class="factorio-icon"
                              title="Assembling machine 1">
                             <img alt="Assembling machine 1"
@@ -1002,7 +995,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Assembling_machine_1.png/48px-Assembling_machine_1.png 1.5x, https://wiki.factorio.com/images/Assembling_machine_1.png 2x">
                         </div>
                         {% endif %}
-                        {% if "assembling-machine-2" in inventory %}
+                        {% if "automation-2" in inventory %}
                         <div class="factorio-icon"
                              title="Assembling machine 2">
                             <img alt="Assembling machine 2"
@@ -1014,7 +1007,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Assembling_machine_2.png/48px-Assembling_machine_2.png 1.5x, https://wiki.factorio.com/images/Assembling_machine_2.png 2x">
                         </div>
                         {% endif %}
-                        {% if "assembling-machine-3" in inventory %}
+                        {% if "automation-3" in inventory %}
                         <div class="factorio-icon"
                              title="Assembling machine 3">
                             <img alt="Assembling machine 3"
@@ -1026,7 +1019,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Assembling_machine_3.png/48px-Assembling_machine_3.png 1.5x, https://wiki.factorio.com/images/Assembling_machine_3.png 2x">
                         </div>
                         {% endif %}
-                        {% if "oil-refinery" in inventory %}
+                        {% if "oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Oil refinery">
                             <img alt="Oil refinery"
@@ -1038,7 +1031,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Oil_refinery.png/48px-Oil_refinery.png 1.5x, https://wiki.factorio.com/images/Oil_refinery.png 2x">
                         </div>
                         {% endif %}
-                        {% if "chemical-plant" in inventory %}
+                        {% if "oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Chemical plant">
                             <img alt="Chemical plant"
@@ -1050,7 +1043,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Chemical_plant.png/48px-Chemical_plant.png 1.5x, https://wiki.factorio.com/images/Chemical_plant.png 2x">
                         </div>
                         {% endif %}
-                        {% if "centrifuge" in inventory %}
+                        {% if "uranium-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Centrifuge">
                             <img alt="Centrifuge"
@@ -1076,7 +1069,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "beacon" in inventory %}
+                        {% if "effect-transmission" in inventory %}
                         <div class="factorio-icon"
                              title="Beacon">
                             <img alt="Beacon"
@@ -1210,7 +1203,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Rocket_silo.png/48px-Rocket_silo.png 1.5x, https://wiki.factorio.com/images/Rocket_silo.png 2x">
                         </div>
                         {% endif %}
-                        {% if "cargo-landing-pad" in inventory %}
+                        {% if "rocket-silo" in inventory %}
                         <div class="factorio-icon"
                              title="Cargo landing pad">
                             <img alt="Cargo landing pad"
@@ -1222,7 +1215,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Cargo_landing_pad.png/48px-Cargo_landing_pad.png 1.5x, https://wiki.factorio.com/images/Cargo_landing_pad.png 2x">
                         </div>
                         {% endif %}
-                        {% if "satellite" in inventory %}
+                        {% if "rocket-silo" in inventory %}
                         <div class="factorio-icon"
                              title="Satellite">
                             <img alt="Satellite"
@@ -1298,7 +1291,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Light_oil.png/48px-Light_oil.png 1.5x, /images/Light_oil.png 2x">
                         </div>
                         {% endif %}
-                        {% if "basic-oil-processing" in inventory %}
+                        {% if "oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Basic oil processing">
                             <img alt="Basic oil processing"
@@ -1334,7 +1327,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Coal_liquefaction.png/48px-Coal_liquefaction.png 1.5x, /images/Coal_liquefaction.png 2x">
                         </div>
                         {% endif %}
-                        {% if "heavy-oil-cracking" in inventory %}
+                        {% if "advanced-oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Heavy oil cracking">
                             <img alt="Heavy oil cracking"
@@ -1346,7 +1339,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Heavy_oil_cracking.png/48px-Heavy_oil_cracking.png 1.5x, /images/Heavy_oil_cracking.png 2x">
                         </div>
                         {% endif %}
-                        {% if "light-oil-cracking" in inventory %}
+                        {% if "advanced-oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Light oil cracking">
                             <img alt="Light oil cracking"
@@ -1358,7 +1351,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Light_oil_cracking.png/48px-Light_oil_cracking.png 1.5x, /images/Light_oil_cracking.png 2x">
                         </div>
                         {% endif %}
-                        {% if "solid-fuel-from-petroleum-gas" in inventory %}
+                        {% if "oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Solid fuel from petroleum gas">
                             <img alt="Solid fuel from petroleum gas"
@@ -1370,7 +1363,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Solid_fuel_from_petroleum_gas.png/48px-Solid_fuel_from_petroleum_gas.png 1.5x, /images/Solid_fuel_from_petroleum_gas.png 2x">
                         </div>
                         {% endif %}
-                        {% if "solid-fuel-from-light-oil" in inventory %}
+                        {% if "advanced-oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Solid fuel from light oil">
                             <img alt="Solid fuel from light oil"
@@ -1382,7 +1375,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Solid_fuel_from_light_oil.png/48px-Solid_fuel_from_light_oil.png 1.5x, /images/Solid_fuel_from_light_oil.png 2x">
                         </div>
                         {% endif %}
-                        {% if "solid-fuel-from-heavy-oil" in inventory %}
+                        {% if "advanced-oil-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Solid fuel from heavy-oil">
                             <img alt="Solid fuel from heavy-oil"
@@ -1406,19 +1399,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Lubricant.png/48px-Lubricant.png 1.5x, /images/Lubricant.png 2x">
                         </div>
                         {% endif %}
-                        {% if "petroleum-gas" in inventory %}
-                        <div class="factorio-icon"
-                             title="Petroleum gas">
-                            <img alt="Petroleum gas"
-                                 src="https://wiki.factorio.com/images/thumb/Petroleum_gas.png/32px-Petroleum_gas.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Petroleum_gas.png/48px-Petroleum_gas.png 1.5x, /images/Petroleum_gas.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "sulfuric-acid" in inventory %}
+                        {% if "sulfur-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Sulfuric acid">
                             <img alt="Sulfuric acid"
@@ -1456,7 +1437,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Copper_plate.png/48px-Copper_plate.png 1.5x, https://wiki.factorio.com/images/Copper_plate.png 2x">
                         </div>
                         {% endif %}
-                        {% if "steel-plate" in inventory %}
+                        {% if "steel-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Steel plate">
                             <img alt="Steel plate"
@@ -1480,7 +1461,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Solid_fuel.png/48px-Solid_fuel.png 1.5x, https://wiki.factorio.com/images/Solid_fuel.png 2x">
                         </div>
                         {% endif %}
-                        {% if "plastic-bar" in inventory %}
+                        {% if "plastics" in inventory %}
                         <div class="factorio-icon"
                              title="Plastic bar">
                             <img alt="Plastic bar"
@@ -1492,7 +1473,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Plastic_bar.png/48px-Plastic_bar.png 1.5x, https://wiki.factorio.com/images/Plastic_bar.png 2x">
                         </div>
                         {% endif %}
-                        {% if "sulfur" in inventory %}
+                        {% if "sulfur-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Sulfur">
                             <img alt="Sulfur"
@@ -1530,92 +1511,6 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "water-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Water barrel">
-                            <img alt="Water barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Water_barrel.png/32px-Water_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Water_barrel.png/48px-Water_barrel.png 1.5x, https://wiki.factorio.com/images/Water_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "crude-oil-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Crude oil barrel">
-                            <img alt="Crude oil barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Crude_oil_barrel.png/32px-Crude_oil_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Crude_oil_barrel.png/48px-Crude_oil_barrel.png 1.5x, https://wiki.factorio.com/images/Crude_oil_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "petroleum-gas-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Petroleum gas barrel">
-                            <img alt="Petroleum gas barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Petroleum_gas_barrel.png/32px-Petroleum_gas_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Petroleum_gas_barrel.png/48px-Petroleum_gas_barrel.png 1.5x, https://wiki.factorio.com/images/Petroleum_gas_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "light-oil-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Light oil barrel">
-                            <img alt="Light oil barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Light_oil_barrel.png/32px-Light_oil_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Light_oil_barrel.png/48px-Light_oil_barrel.png 1.5x, https://wiki.factorio.com/images/Light_oil_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "heavy-oil-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Heavy oil barrel">
-                            <img alt="Heavy oil barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Heavy_oil_barrel.png/32px-Heavy_oil_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Heavy_oil_barrel.png/48px-Heavy_oil_barrel.png 1.5x, https://wiki.factorio.com/images/Heavy_oil_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "lubricant-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Lubricant barrel">
-                            <img alt="Lubricant barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Lubricant_barrel.png/32px-Lubricant_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Lubricant_barrel.png/48px-Lubricant_barrel.png 1.5x, https://wiki.factorio.com/images/Lubricant_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                        {% if "sulfuric-acid-barrel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Sulfuric acid barrel">
-                            <img alt="Sulfuric acid barrel"
-                                 src="https://wiki.factorio.com/images/thumb/Sulfuric_acid_barrel.png/32px-Sulfuric_acid_barrel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Sulfuric_acid_barrel.png/48px-Sulfuric_acid_barrel.png 1.5x, https://wiki.factorio.com/images/Sulfuric_acid_barrel.png 2x">
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="item-row">
                         {% if "iron-gear-wheel" in inventory %}
                         <div class="factorio-icon"
                              title="Iron gear wheel">
@@ -1628,7 +1523,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Iron_gear_wheel.png/48px-Iron_gear_wheel.png 1.5x, https://wiki.factorio.com/images/Iron_gear_wheel.png 2x">
                         </div>
                         {% endif %}
-                        {% if "iron-stick" in inventory %}
+                        {% if "circuit-network" in inventory or "concrete" in inventory or "electric-energy-distribution-1" in inventory or "railway" in inventory %}
                         <div class="factorio-icon"
                              title="Iron stick">
                             <img alt="Iron stick"
@@ -1652,7 +1547,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Copper_cable.png/48px-Copper_cable.png 1.5x, https://wiki.factorio.com/images/Copper_cable.png 2x">
                         </div>
                         {% endif %}
-                        {% if "barrel" in inventory %}
+                        {% if "fluid-handling" in inventory %}
                         <div class="factorio-icon"
                              title="Barrel">
                             <img alt="Barrel"
@@ -1700,7 +1595,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Processing_unit.png/48px-Processing_unit.png 1.5x, https://wiki.factorio.com/images/Processing_unit.png 2x">
                         </div>
                         {% endif %}
-                        {% if "engine-unit" in inventory %}
+                        {% if "engine" in inventory %}
                         <div class="factorio-icon"
                              title="Engine unit">
                             <img alt="Engine unit"
@@ -1712,7 +1607,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Engine_unit.png/48px-Engine_unit.png 1.5x, https://wiki.factorio.com/images/Engine_unit.png 2x">
                         </div>
                         {% endif %}
-                        {% if "electric-engine-unit" in inventory %}
+                        {% if "electric-engine" in inventory %}
                         <div class="factorio-icon"
                              title="Electric engine unit">
                             <img alt="Electric engine unit"
@@ -1724,7 +1619,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Electric_engine_unit.png/48px-Electric_engine_unit.png 1.5x, https://wiki.factorio.com/images/Electric_engine_unit.png 2x">
                         </div>
                         {% endif %}
-                        {% if "flying-robot-frame" in inventory %}
+                        {% if "robotics" in inventory %}
                         <div class="factorio-icon"
                              title="Flying robot frame">
                             <img alt="Flying robot frame"
@@ -1736,8 +1631,6 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Flying_robot_frame.png/48px-Flying_robot_frame.png 1.5x, https://wiki.factorio.com/images/Flying_robot_frame.png 2x">
                         </div>
                         {% endif %}
-                    </div>
-                    <div class="item-row">
                         {% if "low-density-structure" in inventory %}
                         <div class="factorio-icon"
                              title="Low density structure">
@@ -1764,18 +1657,6 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "nuclear-fuel" in inventory %}
-                        <div class="factorio-icon"
-                             title="Nuclear fuel">
-                            <img alt="Nuclear fuel"
-                                 src="https://wiki.factorio.com/images/thumb/Nuclear_fuel.png/32px-Nuclear_fuel.png"
-                                 decoding="async"
-                                 width="32"
-                                 height="32"
-                                 class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Nuclear_fuel.png/48px-Nuclear_fuel.png 1.5x, https://wiki.factorio.com/images/Nuclear_fuel.png 2x">
-                        </div>
-                        {% endif %}
                         {% if "uranium-processing" in inventory %}
                         <div class="factorio-icon"
                              title="Uranium processing">
@@ -1786,6 +1667,18 @@
                                  height="32"
                                  class="mw-file-element"
                                  srcset="https://wiki.factorio.com/images/thumb/Uranium_processing.png/48px-Uranium_processing.png 1.5x, https://wiki.factorio.com/images/Uranium_processing.png 2x">
+                        </div>
+                        {% endif %}
+                        {% if "nuclear-power" in inventory %}
+                        <div class="factorio-icon"
+                             title="Uranium fuel cell">
+                            <img alt="Uranium fuel cell"
+                                 src="https://wiki.factorio.com/images/thumb/Uranium_fuel_cell.png/32px-Uranium_fuel_cell.png"
+                                 decoding="async"
+                                 width="32"
+                                 height="32"
+                                 class="mw-file-element"
+                                 srcset="https://wiki.factorio.com/images/thumb/Uranium_fuel_cell.png/48px-Uranium_fuel_cell.png 1.5x, https://wiki.factorio.com/images/Uranium_fuel_cell.png 2x">
                         </div>
                         {% endif %}
                         {% if "nuclear-fuel-reprocessing" in inventory %}
@@ -1812,16 +1705,16 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Kovarex_enrichment_process.png/48px-Kovarex_enrichment_process.png 1.5x, https://wiki.factorio.com/images/Kovarex_enrichment_process.png 2x">
                         </div>
                         {% endif %}
-                        {% if "uranium-fuel-cell" in inventory %}
+                        {% if "kovarex-enrichment-process" in inventory %}
                         <div class="factorio-icon"
-                             title="Uranium fuel cell">
-                            <img alt="Uranium fuel cell"
-                                 src="https://wiki.factorio.com/images/thumb/Uranium_fuel_cell.png/32px-Uranium_fuel_cell.png"
+                             title="Nuclear fuel">
+                            <img alt="Nuclear fuel"
+                                 src="https://wiki.factorio.com/images/thumb/Nuclear_fuel.png/32px-Nuclear_fuel.png"
                                  decoding="async"
                                  width="32"
                                  height="32"
                                  class="mw-file-element"
-                                 srcset="https://wiki.factorio.com/images/thumb/Uranium_fuel_cell.png/48px-Uranium_fuel_cell.png 1.5x, https://wiki.factorio.com/images/Uranium_fuel_cell.png 2x">
+                                 srcset="https://wiki.factorio.com/images/thumb/Nuclear_fuel.png/48px-Nuclear_fuel.png 1.5x, https://wiki.factorio.com/images/Nuclear_fuel.png 2x">
                         </div>
                         {% endif %}
                     </div>
@@ -1926,7 +1819,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Pistol.png/48px-Pistol.png 1.5x, https://wiki.factorio.com/images/Pistol.png 2x">
                         </div>
                         {% endif %}
-                        {% if "submachine-gun" in inventory %}
+                        {% if "military" in inventory %}
                         <div class="factorio-icon"
                              title="Submachine gun">
                             <img alt="Submachine gun"
@@ -1938,7 +1831,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Submachine_gun.png/48px-Submachine_gun.png 1.5x, https://wiki.factorio.com/images/Submachine_gun.png 2x">
                         </div>
                         {% endif %}
-                        {% if "shotgun" in inventory %}
+                        {% if "military" in inventory %}
                         <div class="factorio-icon"
                              title="Shotgun">
                             <img alt="Shotgun"
@@ -1950,7 +1843,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Shotgun.png/48px-Shotgun.png 1.5x, https://wiki.factorio.com/images/Shotgun.png 2x">
                         </div>
                         {% endif %}
-                        {% if "combat-shotgun" in inventory %}
+                        {% if "military-3" in inventory %}
                         <div class="factorio-icon"
                              title="Combat shotgun">
                             <img alt="Combat shotgun"
@@ -1962,7 +1855,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Combat_shotgun.png/48px-Combat_shotgun.png 1.5x, https://wiki.factorio.com/images/Combat_shotgun.png 2x">
                         </div>
                         {% endif %}
-                        {% if "rocket-launcher" in inventory %}
+                        {% if "rocketry" in inventory %}
                         <div class="factorio-icon"
                              title="Rocket launcher">
                             <img alt="Rocket launcher"
@@ -2000,7 +1893,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Firearm_magazine.png/48px-Firearm_magazine.png 1.5x, https://wiki.factorio.com/images/Firearm_magazine.png 2x">
                         </div>
                         {% endif %}
-                        {% if "piercing-rounds-magazine" in inventory %}
+                        {% if "military-2" in inventory %}
                         <div class="factorio-icon"
                              title="Piercing rounds magazine">
                             <img alt="Piercing rounds magazine"
@@ -2012,7 +1905,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Piercing_rounds_magazine.png/48px-Piercing_rounds_magazine.png 1.5x, https://wiki.factorio.com/images/Piercing_rounds_magazine.png 2x">
                         </div>
                         {% endif %}
-                        {% if "uranium-rounds-magazine" in inventory %}
+                        {% if "uranium-ammo" in inventory %}
                         <div class="factorio-icon"
                              title="Uranium rounds magazine">
                             <img alt="Uranium rounds magazine"
@@ -2024,7 +1917,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Uranium_rounds_magazine.png/48px-Uranium_rounds_magazine.png 1.5x, https://wiki.factorio.com/images/Uranium_rounds_magazine.png 2x">
                         </div>
                         {% endif %}
-                        {% if "shotgun-shell" in inventory %}
+                        {% if "military" in inventory %}
                         <div class="factorio-icon"
                              title="Shotgun shells">
                             <img alt="Shotgun shells"
@@ -2036,7 +1929,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Shotgun_shells.png/48px-Shotgun_shells.png 1.5x, https://wiki.factorio.com/images/Shotgun_shells.png 2x">
                         </div>
                         {% endif %}
-                        {% if "piercing-shotgun-shell" in inventory %}
+                        {% if "military-4" in inventory %}
                         <div class="factorio-icon"
                              title="Piercing shotgun shells">
                             <img alt="Piercing shotgun shells"
@@ -2048,7 +1941,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Piercing_shotgun_shells.png/48px-Piercing_shotgun_shells.png 1.5x, https://wiki.factorio.com/images/Piercing_shotgun_shells.png 2x">
                         </div>
                         {% endif %}
-                        {% if "cannon-shell" in inventory %}
+                        {% if "tank" in inventory %}
                         <div class="factorio-icon"
                              title="Cannon shell">
                             <img alt="Cannon shell"
@@ -2060,7 +1953,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Cannon_shell.png/48px-Cannon_shell.png 1.5x, https://wiki.factorio.com/images/Cannon_shell.png 2x">
                         </div>
                         {% endif %}
-                        {% if "explosive-cannon-shell" in inventory %}
+                        {% if "tank" in inventory %}
                         <div class="factorio-icon"
                              title="Explosive cannon shell">
                             <img alt="Explosive cannon shell"
@@ -2072,7 +1965,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Explosive_cannon_shell.png/48px-Explosive_cannon_shell.png 1.5x, https://wiki.factorio.com/images/Explosive_cannon_shell.png 2x">
                         </div>
                         {% endif %}
-                        {% if "uranium-cannon-shell" in inventory %}
+                        {% if "uranium-ammo" in inventory %}
                         <div class="factorio-icon"
                              title="Uranium cannon shell">
                             <img alt="Uranium cannon shell"
@@ -2084,7 +1977,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Uranium_cannon_shell.png/48px-Uranium_cannon_shell.png 1.5x, https://wiki.factorio.com/images/Uranium_cannon_shell.png 2x">
                         </div>
                         {% endif %}
-                        {% if "explosive-uranium-cannon-shell" in inventory %}
+                        {% if "uranium-ammo" in inventory %}
                         <div class="factorio-icon"
                              title="Explosive uranium cannon shell">
                             <img alt="Explosive uranium cannon shell"
@@ -2096,7 +1989,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Explosive_uranium_cannon_shell.png/48px-Explosive_uranium_cannon_shell.png 1.5x, https://wiki.factorio.com/images/Explosive_uranium_cannon_shell.png 2x">
                         </div>
                         {% endif %}
-                        {% if "artillery-shell" in inventory %}
+                        {% if "artillery" in inventory %}
                         <div class="factorio-icon"
                              title="Artillery shell">
                             <img alt="Artillery shell"
@@ -2108,9 +2001,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Artillery_shell.png/48px-Artillery_shell.png 1.5x, https://wiki.factorio.com/images/Artillery_shell.png 2x">
                         </div>
                         {% endif %}
-                    </div>
-                    <div class="item-row">
-                        {% if "rocket" in inventory %}
+                        {% if "rocketry" in inventory %}
                         <div class="factorio-icon"
                              title="Rocket">
                             <img alt="Rocket"
@@ -2122,7 +2013,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Rocket.png/48px-Rocket.png 1.5x, https://wiki.factorio.com/images/Rocket.png 2x">
                         </div>
                         {% endif %}
-                        {% if "explosive-rocket" in inventory %}
+                        {% if "explosive-rocketry" in inventory %}
                         <div class="factorio-icon"
                              title="Explosive rocket">
                             <img alt="Explosive rocket"
@@ -2146,7 +2037,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Atomic_bomb.png/48px-Atomic_bomb.png 1.5x, https://wiki.factorio.com/images/Atomic_bomb.png 2x">
                         </div>
                         {% endif %}
-                        {% if "flamethrower-ammo" in inventory %}
+                        {% if "flamethrower" in inventory %}
                         <div class="factorio-icon"
                              title="Flamethrower ammo">
                             <img alt="Flamethrower ammo"
@@ -2160,7 +2051,7 @@
                         {% endif %}
                     </div>
                     <div class="item-row">
-                        {% if "grenade" in inventory %}
+                        {% if "military-2" in inventory %}
                         <div class="factorio-icon"
                              title="Grenade">
                             <img alt="Grenade"
@@ -2172,7 +2063,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Grenade.png/48px-Grenade.png 1.5x, https://wiki.factorio.com/images/Grenade.png 2x">
                         </div>
                         {% endif %}
-                        {% if "cluster-grenade" in inventory %}
+                        {% if "military-4" in inventory %}
                         <div class="factorio-icon"
                              title="Cluster grenade">
                             <img alt="Cluster grenade"
@@ -2184,7 +2075,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Cluster_grenade.png/48px-Cluster_grenade.png 1.5x, https://wiki.factorio.com/images/Cluster_grenade.png 2x">
                         </div>
                         {% endif %}
-                        {% if "poison-capsule" in inventory %}
+                        {% if "military-3" in inventory %}
                         <div class="factorio-icon"
                              title="Poison capsule">
                             <img alt="Poison capsule"
@@ -2196,7 +2087,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Poison_capsule.png/48px-Poison_capsule.png 1.5x, https://wiki.factorio.com/images/Poison_capsule.png 2x">
                         </div>
                         {% endif %}
-                        {% if "slowdown-capsule" in inventory %}
+                        {% if "military-3" in inventory %}
                         <div class="factorio-icon"
                              title="Slowdown capsule">
                             <img alt="Slowdown capsule"
@@ -2208,7 +2099,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Slowdown_capsule.png/48px-Slowdown_capsule.png 1.5x, https://wiki.factorio.com/images/Slowdown_capsule.png 2x">
                         </div>
                         {% endif %}
-                        {% if "defender-capsule" in inventory %}
+                        {% if "defender" in inventory %}
                         <div class="factorio-icon"
                              title="Defender capsule">
                             <img alt="Defender capsule"
@@ -2220,7 +2111,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Defender_capsule.png/48px-Defender_capsule.png 1.5x, https://wiki.factorio.com/images/Defender_capsule.png 2x">
                         </div>
                         {% endif %}
-                        {% if "distractor-capsule" in inventory %}
+                        {% if "distractor" in inventory %}
                         <div class="factorio-icon"
                              title="Distractor capsule">
                             <img alt="Distractor capsule"
@@ -2232,7 +2123,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Distractor_capsule.png/48px-Distractor_capsule.png 1.5x, https://wiki.factorio.com/images/Distractor_capsule.png 2x">
                         </div>
                         {% endif %}
-                        {% if "destroyer-capsule" in inventory %}
+                        {% if "destroyer" in inventory %}
                         <div class="factorio-icon"
                              title="Destroyer capsule">
                             <img alt="Destroyer capsule"
@@ -2544,7 +2435,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Laser_turret.png/48px-Laser_turret.png 1.5x, https://wiki.factorio.com/images/Laser_turret.png 2x">
                         </div>
                         {% endif %}
-                        {% if "flamethrower-turret" in inventory %}
+                        {% if "flamethrower" in inventory %}
                         <div class="factorio-icon"
                              title="Flamethrower turret">
                             <img alt="Flamethrower turret"
@@ -2556,7 +2447,7 @@
                                  srcset="https://wiki.factorio.com/images/thumb/Flamethrower_turret.png/48px-Flamethrower_turret.png 1.5x, https://wiki.factorio.com/images/Flamethrower_turret.png 2x">
                         </div>
                         {% endif %}
-                        {% if "artillery-turret" in inventory %}
+                        {% if "artillery" in inventory %}
                         <div class="factorio-icon"
                              title="Artillery turret">
                             <img alt="Artillery turret"
