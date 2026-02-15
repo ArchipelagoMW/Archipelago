@@ -1,9 +1,9 @@
 import unittest
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict, Optional
 
 from typing_extensions import override
 
-from BaseClasses import CollectionRule, CollectionState, MultiWorld, Region
+from BaseClasses import CollectionRule, MultiWorld, Region
 from rule_builder.rules import Has, Rule
 from test.general import TestWorld
 
