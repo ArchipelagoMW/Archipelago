@@ -117,7 +117,10 @@ for world_source in world_sources:
                 break
         game = manifest.get("game")
         if game in AutoWorldRegister.world_types:
-            AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+            world = AutoWorldRegister.world_types[game]
+            world.world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+            if "minimum_ap_version" in manifest.keys():
+                world.minimum_ap_version = tuplize_version(manifest.get("minimum_ap_version"))
 
 if apworlds:
     # encapsulation for namespace / gc purposes
@@ -197,8 +200,11 @@ if apworlds:
                 apworld_source.load()
                 if apworld.game in AutoWorldRegister.world_types:
                     # world could fail to load at this point
+                    world = AutoWorldRegister.world_types[apworld.game]
                     if apworld.world_version:
-                        AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+                        world.world_version = apworld.world_version
+                    if apworld.minimum_ap_version:
+                        world.minimum_ap_version = apworld.minimum_ap_version
     load_apworlds()
     del load_apworlds
 
