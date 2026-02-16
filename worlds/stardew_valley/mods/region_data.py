@@ -705,7 +705,10 @@ ginger_island_regions = [
         (Entrance.volcano_to_island_north, Entrance.climb_to_volcano_5, Entrance.volcano_to_secret_beach),
     ),
     RegionData(Region.volcano_secret_beach, (Entrance.secret_beach_to_volcano,)),
-    RegionData(Region.volcano_floor_5, (Entrance.talk_to_volcano_dwarf, Entrance.climb_to_volcano_10)),
+    RegionData(
+        Region.volcano_floor_5,
+        (Entrance.talk_to_volcano_dwarf, Entrance.climb_to_volcano_10, Entrance.volcano_5_to_island_north),
+    ),
     RegionData(Region.volcano_dwarf_shop),
     RegionData(Region.volcano_floor_10),
     RegionData(Region.island_trader),
@@ -966,6 +969,11 @@ ginger_island_connections = [
     ConnectionData(Entrance.talk_to_island_trader, Region.island_trader),
     ConnectionData(Entrance.climb_to_volcano_5, Region.volcano_floor_5),
     ConnectionData(Entrance.talk_to_volcano_dwarf, Region.volcano_dwarf_shop),
+    ConnectionData(
+        Entrance.volcano_5_to_island_north,
+        Region.island_north,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+    ),
     ConnectionData(Entrance.climb_to_volcano_10, Region.volcano_floor_10),
     ConnectionData(
         Entrance.parrot_express_jungle_to_docks,

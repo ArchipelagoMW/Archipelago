@@ -263,6 +263,7 @@ class Entrance:
     talk_to_island_trader = "Talk to Island Trader"
     climb_to_volcano_5 = "Climb to Volcano Floor 5"
     talk_to_volcano_dwarf = "Talk to Volcano Dwarf"
+    volcano_5_to_island_north = "Volcano Floor 5 to Island North"
     climb_to_volcano_10 = "Climb to Volcano Floor 10"
     parrot_express_docks_to_volcano = "Parrot Express Docks to Parrot Express Volcano"
     parrot_express_jungle_to_volcano = "Parrot Express Jungle to Parrot Express Volcano"
