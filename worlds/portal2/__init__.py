@@ -251,7 +251,7 @@ class Portal2World(World):
         for item, _ in game_item_table.items():
             self.multiworld.itempool.append(self.create_item(item))
 
-        fill_count = self.location_count - self.item_count
+        fill_count = self.location_count - self.item_count + len(self.options.start_inventory)
         trap_percentage = self.options.trap_fill_percentage
         trap_fill_number = round(trap_percentage/100 * fill_count)
         trap_weights = [self.options.motion_blur_trap_weight, 
