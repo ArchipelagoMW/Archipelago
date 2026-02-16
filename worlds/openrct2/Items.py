@@ -86,7 +86,7 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
     # Adds some useful filler items. 15 is the absolute minimum to not break generation.
     count = 0
     while count < 15:
-        openRCT2_items.append(random.choice(item_info["useful_filler_items"]))
+        openRCT2_items.append(random.choice(item_info["filler_items"]))
         count += 1
 
     # Add extra traps if there's not enough for the negative awards.
