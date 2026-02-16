@@ -5,17 +5,18 @@ import logging
 import pathlib
 import sys
 import time
+from collections.abc import Callable, Iterable, Mapping
 from random import Random
-from dataclasses import make_dataclass
-from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
+from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Entrance
+from rule_builder.rules import CustomRuleRegister, Rule
 from Utils import Version
 
 if TYPE_CHECKING:
-    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
+    from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
     from NetUtils import GamesPackage, MultiData
     from settings import Group
 
@@ -47,27 +48,31 @@ class AutoWorldRegister(type):
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
-        # filter out any events
-        dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
-        dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
-        # build reverse lookups
-        dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
-        dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
 
-        # build rest
-        dct["item_names"] = frozenset(dct["item_name_to_id"])
-        dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
-                                   in dct.get("item_name_groups", {}).items()}
-        dct["item_name_groups"]["Everything"] = dct["item_names"]
-
-        dct["location_names"] = frozenset(dct["location_name_to_id"])
-        dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
-                                       in dct.get("location_name_groups", {}).items()}
-        dct["location_name_groups"]["Everywhere"] = dct["location_names"]
-        dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
-
-        # move away from get_required_client_version function
         if "game" in dct:
+            assert "item_name_to_id" in dct, f"{name}: item_name_to_id is required"
+            assert "location_name_to_id" in dct, f"{name}: location_name_to_id is required"
+
+            # filter out any events
+            dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
+            dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
+            # build reverse lookups
+            dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
+            dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
+
+            # build rest
+            dct["item_names"] = frozenset(dct["item_name_to_id"])
+            dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                    in dct.get("item_name_groups", {}).items()}
+            dct["item_name_groups"]["Everything"] = dct["item_names"]
+
+            dct["location_names"] = frozenset(dct["location_name_to_id"])
+            dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                        in dct.get("location_name_groups", {}).items()}
+            dct["location_name_groups"]["Everywhere"] = dct["location_names"]
+            dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
+
+            # move away from get_required_client_version function
             assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
         # set minimum required_client_version from bases
         if "required_client_version" in dct and bases:
@@ -173,7 +178,8 @@ def _timed_call(method: Callable[..., Any], *args: Any,
 
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
-    method = getattr(multiworld.worlds[player], method_name)
+    world = multiworld.worlds[player]
+    method = getattr(world, method_name)
     try:
         ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
@@ -184,6 +190,10 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
             logging.error(message)
         raise e
     else:
+        # Convenience for CachedRuleBuilderWorld users: Ensure that caching setup function is called
+        # Can be removed once dependency system is improved
+        if method_name == "set_rules" and hasattr(world, "register_rule_builder_dependencies"):
+            call_single(multiworld, "register_rule_builder_dependencies", player)
         return ret
 
 
@@ -484,7 +494,14 @@ class World(metaclass=AutoWorldRegister):
         raise NotImplementedError
 
     def get_filler_item_name(self) -> str:
-        """Called when the item pool needs to be filled with additional items to match location count."""
+        """
+        Called when the item pool needs to be filled with additional items to match location count.
+
+        Any returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
+        For most worlds this will be one or more of your filler items, but the classification of these items
+        does not need to be ItemClassification.filler.
+        The item name returned can be for a trap, useful, and/or progression item as long as it's repeatable.
+        """
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.random.choice(tuple(self.item_name_to_id.keys()))
 
@@ -538,6 +555,10 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
+    def reached_region(self, state: "CollectionState", region: "Region") -> None:
+        """Called when a region is newly reachable by the state."""
+        pass
+
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
@@ -585,6 +606,64 @@ class World(metaclass=AutoWorldRegister):
         }
         res["checksum"] = data_package_checksum(res)
         return res
+
+    @classmethod
+    def get_rule_cls(cls, name: str) -> type[Rule[Self]]:
+        """Returns the world-registered or default rule with the given name"""
+        return CustomRuleRegister.get_rule_cls(cls.game, name)
+
+    @classmethod
+    def rule_from_dict(cls, data: Mapping[str, Any]) -> Rule[Self]:
+        """Create a rule instance from a serialized dict representation"""
+        name = data.get("rule", "")
+        rule_class = cls.get_rule_cls(name)
+        return rule_class.from_dict(data, cls)
+
+    def set_rule(self, spot: Location | Entrance, rule: CollectionRule | Rule[Any]) -> None:
+        """Sets an access rule for a location or entrance"""
+        if isinstance(rule, Rule):
+            rule = rule.resolve(self)
+            self.register_rule_dependencies(rule)
+            if isinstance(spot, Entrance):
+                self._register_rule_indirects(rule, spot)
+        spot.access_rule = rule
+
+    def set_completion_rule(self, rule: CollectionRule | Rule[Any]) -> None:
+        """Set the completion rule for this world"""
+        if isinstance(rule, Rule):
+            rule = rule.resolve(self)
+            self.register_rule_dependencies(rule)
+        self.multiworld.completion_condition[self.player] = rule
+
+    def create_entrance(
+        self,
+        from_region: Region,
+        to_region: Region,
+        rule: CollectionRule | Rule[Any] | None = None,
+        name: str | None = None,
+        force_creation: bool = False,
+    ) -> Entrance | None:
+        """Try to create an entrance between regions with the given rule,
+        skipping it if the rule resolves to False (unless force_creation is True)"""
+        if rule is not None and isinstance(rule, Rule):
+            rule = rule.resolve(self)
+            if rule.always_false and not force_creation:
+                return None
+            self.register_rule_dependencies(rule)
+
+        entrance = from_region.connect(to_region, name, rule=rule)
+        if rule and isinstance(rule, Rule.Resolved):
+            self._register_rule_indirects(rule, entrance)
+        return entrance
+
+    def register_rule_dependencies(self, resolved_rule: Rule.Resolved) -> None:
+        """Hook for registering dependencies when a rule is assigned for this world"""
+        pass
+
+    def _register_rule_indirects(self, resolved_rule: Rule.Resolved, entrance: Entrance) -> None:
+        if self.explicit_indirect_conditions:
+            for indirect_region in resolved_rule.region_dependencies().keys():
+                self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
 
 # any methods attached to this can be used as part of CollectionState,
