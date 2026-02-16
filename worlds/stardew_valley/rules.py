@@ -248,6 +248,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_tide_pools, logic.received("Beach Bridge") | logic.mod.magic.can_blink())
     rule_collector.set_entrance_rule(Entrance.leave_tide_pools, logic.received("Beach Bridge") | logic.mod.magic.can_blink())
     rule_collector.set_entrance_rule(Entrance.mountain_to_outside_adventure_guild, logic.received("Landslide Removed"))
+    rule_collector.set_entrance_rule(Entrance.outside_adventure_guild_to_mountain, logic.received("Landslide Removed"))
     rule_collector.set_entrance_rule(Entrance.enter_quarry,
                                      (logic.received("Bridge Repair") | logic.mod.magic.can_blink()) & logic.tool.has_tool(Tool.pickaxe))
     rule_collector.set_entrance_rule(Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | logic.mod.magic.can_blink() | logic.ability.can_chair_skip())

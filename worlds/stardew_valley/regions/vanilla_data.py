@@ -114,6 +114,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_adventurer_guild,
             Entrance.mountain_jojamart_shortcut,
             Entrance.outside_adventure_guild_to_mountain_lake_shortcut,
+            Entrance.outside_adventure_guild_to_mountain,
         ),
     ),
     RegionData(RegionName.maru_room, (Entrance.maru_room_to_carpenter_shop, Entrance.maru_room_to_mountain)),
