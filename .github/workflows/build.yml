@@ -1,4 +1,5 @@
-# This workflow will build a release-like distribution when manually dispatched
+# This workflow will build a release-like distribution when manually dispatched:
+# a Windows x64 7zip, a Windows x64 Installer, a Linux AppImage and a Linux binary .tar.gz.
 
 name: Build
 
