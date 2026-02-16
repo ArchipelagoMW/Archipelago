@@ -211,6 +211,12 @@ class Portal2World(World):
         # Remove maps that have been put in the Remove Locations option
         for location in self.options.remove_locations:
             self.maps_in_use.remove(location)
+            
+        # Update logic for speedrun option
+        if self.options.logic_difficulty == 1:
+            for map_location in map_complete_table.keys():
+                if map_location in speedrun_logic_table:
+                    map_complete_table[map_location].required_items = speedrun_logic_table[map_location]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)

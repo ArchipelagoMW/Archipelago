@@ -1,4 +1,4 @@
-from ..Locations import all_locations_table
+from ..Locations import all_locations_table, speedrun_logic_table
 from ..ItemNames import *
 
 items_shortened = {
@@ -66,7 +66,7 @@ class MapMenuElement(MenuElement):
         self.parent_chapter = parent_chapter
         self.location_id = location_id
         self.required_items = required_items
-        subtitle = ", ".join(items_to_shortened(self.required_items))
+        subtitle = " ".join(items_to_shortened(self.required_items))
         super().__init__(f"chapter {chapter_number}.{map_number}", f"---{title}", subtitle, f"map {map_code}", pic)
 
     def __str__(self):
@@ -118,7 +118,11 @@ class ChapterMenuElement(MenuElement):
 class Menu:
     chapters: list[ChapterMenuElement] = []
 
-    def __init__(self, chapter_dict: dict[int, list[str]], client, is_open_world: bool = False):
+    def __init__(self, chapter_dict: dict[int, list[str]], client, is_open_world: bool = False, logic_difficulty: int = 0):
+        # Update all_locations table to speedrun logic
+        if logic_difficulty == 1:
+            for map_location in speedrun_logic_table:
+                all_locations_table[map_location].required_items = speedrun_logic_table[map_location]
         self.client = client
         self.is_open_world = is_open_world
         for chapter_number, map_names in chapter_dict.items():

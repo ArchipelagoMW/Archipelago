@@ -297,7 +297,10 @@ class Portal2Context(CommonContext):
             self.location_name_to_id = slot_data["location_name_to_id"]
 
         if "chapter_dict" in slot_data:
-            self.menu = Menu(slot_data["chapter_dict"], self)
+            if "logic_difficulty" in slot_data:
+                self.menu = Menu(slot_data["chapter_dict"], self, logic_difficulty=slot_data["logic_difficulty"])
+            else:
+                self.menu = Menu(slot_data["chapter_dict"], self)
             self.refresh_menu()
         else:
             raise Exception("chapter_dict not found in slot data")
