@@ -1,0 +1,8 @@
+# The rest of this folder's contents is only for building the .pickle file before release,
+# and being imported into other repos that need the same data.
+shared_static_logic/
+!shared_static_logic/static_logic.pickle
+
+# Tests that the .pickle file matches the data files in shared_static_logic/,
+# which are being ignored above, so this test won't work after release.
+test/test_pickle_file.py
