@@ -6,6 +6,8 @@ from BaseClasses import ItemClassification, Location
 
 from . import items
 
+from math import ceil
+
 if TYPE_CHECKING:
     from .world import Schedule1World
 
@@ -102,9 +104,15 @@ def create_regular_locations(world: Schedule1World, data) -> None:
     # Add to Overworld region
     cash_for_trash_count = world.options.cash_for_trash
     if cash_for_trash_count > 0:
-        overworld = world.get_region("Overworld")
+        regions = {
+            100 : regions_dict["Overworld"],
+            200 : regions_dict["Dodgy Dealing"],
+            300 : regions_dict["Mixing Mania"],
+            400 : regions_dict["We Need To Cook|2"],
+            500 : regions_dict["Finishing the Job"]
+        }
         cash_for_trash_locations = []
         for i in range(1, cash_for_trash_count + 1):
             cash_for_trash_locations.append(f"Cash for Trash {i}, Collect {i * 10} pieces of trash")
         cash_for_trash_locations_dict = get_location_names_with_ids(cash_for_trash_locations)
-        overworld.add_locations(cash_for_trash_locations_dict, Schedule1Location)
+        regions[ceil(201 / 100) * 100].add_locations(cash_for_trash_locations_dict, Schedule1Location)
