@@ -858,7 +858,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(Entrance.adventurer_guild_to_bedroom, RegionName.adventurer_guild_bedroom),
     ConnectionData(Entrance.enter_quarry, RegionName.quarry),
-    ConnectionData(Entrance.leave_quarry, RegionName.mountain),
+    ConnectionData(Entrance.leave_quarry, RegionName.outside_adventure_guild),
     ConnectionData(
         Entrance.enter_quarry_mine_entrance,
         RegionName.quarry_mine_entrance,
