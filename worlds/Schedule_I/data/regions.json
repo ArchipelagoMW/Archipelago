@@ -2,7 +2,6 @@
     "Overworld": {
         "connections": {
             "Welcome to Hyland Point": true,
-            "Rank Street Rat III": true,
             "Northtown" : true,
             "Weed Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
             "Meth Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]],
@@ -24,20 +23,20 @@
         }
     },
     "Northtown": {
-        "connections": {"Westville": {"randomize_level_unlocks" : {"has": "Westville Region Unlock"}}}
+        "connections": {"Westville": {"randomize_level_unlocks&!randomize_customers" : {"has": "Westville Region Unlock"}}}
     },
     "Westville": {
-        "connections": {}
+        "connections": {"Downtown": {"randomize_cartel_influence&!randomize_customers" : {"has_all_counts": {"Cartel Influence, Westville": 2}}}}
     },
     "Downtown": {
-        "connections": {"Docks": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Downtown": 7}},
+        "connections": {"Docks": {"randomize_cartel_influence&!randomize_customers" : {"has_all_counts": {"Cartel Influence, Downtown": 7}},
                                   "randomize_level_unlocks" : {"has": "Fertilizer Unlock"}}}
     },
     "Docks": {
-        "connections": {"Suburbia": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Docks": 7}}}}
+        "connections": {"Suburbia": {"randomize_cartel_influence&!randomize_customers" : {"has_all_counts": {"Cartel Influence, Docks": 7}}}}
     },
     "Suburbia": {
-        "connections": {"Uptown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Suburbia": 7}},
+        "connections": {"Uptown": {"randomize_cartel_influence&!randomize_customers" : {"has_all_counts": {"Cartel Influence, Suburbia": 7}},
                                   "randomize_level_unlocks" : {"has": "Drying Rack Unlock"}}}
     },
     "Uptown": {
@@ -54,102 +53,6 @@
     },
     "Cocaine Recipe Checks": {
         "connections": {}
-    },
-    "Rank Street Rat III": {
-        "connections": {
-            "Rank Street Rat IV": true
-        }
-    },
-    "Rank Street Rat IV": {
-    "connections": {
-        "Rank Street Rat V": true
-    }
-    },
-    "Rank Street Rat V": {
-    "connections": {
-        "Rank Hoodlum I": true
-    }
-    },
-    "Rank Hoodlum I": {
-    "connections": {
-        "Rank Hoodlum II": true
-    }
-    },
-    "Rank Hoodlum II": {
-    "connections": {
-        "Rank Hoodlum III": true
-    }
-    },
-    "Rank Hoodlum III": {
-    "connections": {
-        "Rank Hoodlum IV": true
-    }
-    },
-    "Rank Hoodlum IV": {
-    "connections": {
-        "Rank Hoodlum V": true
-    }
-    },
-    "Rank Hoodlum V": {
-    "connections": {
-        "Rank Peddler I": true
-    }
-    },
-    "Rank Peddler I": {
-    "connections": {
-        "Rank Peddler II": true
-    }
-    },
-    "Rank Peddler II": {
-    "connections": {
-        "Rank Peddler III": true
-    }
-    },
-    "Rank Peddler III": {
-    "connections": {
-        "Rank Peddler IV": true
-    }
-    },
-    "Rank Peddler IV": {
-    "connections": {
-        "Rank Peddler V": true
-    }
-    },
-    "Rank Peddler V": {
-    "connections": {
-        "Rank Hustler I": true
-    }
-    },
-    "Rank Hustler I": {
-    "connections": {
-        "Rank Hustler II": true
-    }
-    },
-    "Rank Hustler II": {
-    "connections": {
-        "Rank Hustler III": true
-    }
-    },
-    "Rank Hustler III": {
-    "connections": {
-        "Rank Bagman I": true
-    }
-    },
-    "Rank Bagman I": {
-    "connections": {
-        "Rank Bagman V": true
-    }
-    },
-    "Rank Bagman V": {
-    "connections": {
-        "Rank Enforcer I": true
-    }
-    },
-    "Rank Enforcer I": {
-    "connections": {"Rank Block Boss I": true}
-    },
-    "Rank Block Boss I": {
-    "connections": {}
     },
     "Welcome to Hyland Point": {
         "connections": {
@@ -312,24 +215,28 @@
             "Unfavourable Agreements": {"randomize_level_unlocks": {"has_all" :["Chemistry Station Unlock", 
                                                                                 "Lab Oven Unlock",
                                                                                 "Acid Unlock",
-                                                                                "Phosphorus Unlock"]}}
+                                                                                "Phosphorus Unlock"]},
+                                        "randomize_customers": {"has_from_list": {
+                                        "Charles Rowland Unlocked": 5,
+                                        "Dean Webster Unlocked": 5,
+                                        "Doris Lubbin Unlocked": 5,
+                                        "George Greene Unlocked": 5,
+                                        "Jerry Montero Unlocked": 5,
+                                        "Joyce Ball Unlocked": 5,
+                                        "Kim Delaney Unlocked": 5,
+                                        "Meg Cooley Unlocked": 5,
+                                        "Trent Sherman Unlocked": 5,
+                                        "Keith Wagner Unlocked": 5}}}
         }
     },
     "Unfavourable Agreements": {
         "connections": {
-            "Finishing the Job": {"randomize_customers": {"has_from_list": {
-                "Charles Rowland Unlocked": 5,
-                "Dean Webster Unlocked": 5,
-                "Doris Lubbin Unlocked": 5,
-                "George Greene Unlocked": 5,
-                "Jerry Montero Unlocked": 5,
-                "Joyce Ball Unlocked": 5,
-                "Kim Delaney Unlocked": 5,
-                "Meg Cooley Unlocked": 5,
-                "Trent Sherman Unlocked": 5,
-                "Keith Wagner Unlocked": 5}}},
-            "Downtown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Westville": 2}}}
+            "Finishing the Job": true,
+            "Cartel Influence": true
         }
+    },
+    "Cartel Influence": {
+        "connections": {}
     },
     "Finishing the Job": {
         "connections": {

@@ -914,308 +914,308 @@
         "modern_id": 129
     },
     "Rank Street Rat III": {
-        "region": "Rank Street Rat III",
+        "region": "Overworld",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 130
     },
     "Rank Street Rat IV": {
-        "region": "Rank Street Rat IV",
+        "region": "Overworld",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 131
     },
     "Rank Street Rat V": {
-        "region": "Rank Street Rat V",
+        "region": "Overworld",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 132
     },
     "Rank Hoodlum I": {
-        "region": "Rank Hoodlum I",
+        "region": "Overworld",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 133
     },
     "Rank Hoodlum II": {
-        "region": "Rank Hoodlum II",
+        "region": "Gearing Up|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 134
     },
     "Rank Hoodlum III": {
-        "region": "Rank Hoodlum III",
+        "region": "Gearing Up|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 135
     },
     "Rank Hoodlum IV": {
-        "region": "Rank Hoodlum IV",
+        "region": "Gearing Up|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 136
     },
     "Rank Hoodlum V": {
-        "region": "Rank Hoodlum V",
+        "region": "Gearing Up|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 137
     },
     "Rank Peddler I": {
-        "region": "Rank Peddler I",
+        "region": "Gearing Up|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 138
     },
     "Rank Peddler II": {
-        "region": "Rank Peddler II",
+        "region": "Gearing Up|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 139
     },
     "Rank Peddler III": {
-        "region": "Rank Peddler III",
+        "region": "Dodgy Dealing",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 140
     },
     "Rank Peddler IV": {
-        "region": "Rank Peddler IV",
+        "region": "Dodgy Dealing",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 141
     },
     "Rank Peddler V": {
-        "region": "Rank Peddler V",
+        "region": "Dodgy Dealing",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 142
     },
     "Rank Hustler I": {
-        "region": "Rank Hustler I",
+        "region": "Mixing Mania",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 143
     },
     "Rank Hustler II": {
-        "region": "Rank Hustler II",
+        "region": "Mixing Mania",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 144
     },
     "Rank Hustler III": {
-        "region": "Rank Hustler III",
+        "region": "Wretched Hive of Scum and Villainy",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 145
     },
     "Rank Bagman I": {
-        "region": "Rank Bagman I",
+        "region": "We Need To Cook|1",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 378
     },
     "Rank Bagman V": {
-        "region": "Rank Bagman V",
+        "region": "We Need To Cook|2",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 146
     },
     "Rank Enforcer I": {
-        "region": "Rank Enforcer I",
+        "region": "Unfavourable Agreements",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 147
     },
     "Rank Block Boss I": {
-        "region": "Rank Block Boss I",
+        "region": "Finishing the Job",
         "requirements": true,
         "tags": ["Level Up Reward"],
         "modern_id": 148
     },
     "Westville cartel influence 1": {
-        "region": "Westville",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 149
     },
     "Westville cartel influence 2": {
-        "region": "Westville",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 150
     },
     "Downtown cartel influence 1": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 156
     },
     "Downtown cartel influence 2": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 157
     },
     "Downtown cartel influence 3": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 158
     },
     "Downtown cartel influence 4": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 159
     },
     "Downtown cartel influence 5": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 160
     },
     "Downtown cartel influence 6": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 161
     },
     "Downtown cartel influence 7": {
-        "region": "Downtown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 162
     },
     "Docks cartel influence 1": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 163
     },
     "Docks cartel influence 2": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 164
     },
     "Docks cartel influence 3": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 165
     },
     "Docks cartel influence 4": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 166
     },
     "Docks cartel influence 5": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 167
     },
     "Docks cartel influence 6": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 168
     },
     "Docks cartel influence 7": {
-        "region": "Docks",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 169
     },
     "Suburbia cartel influence 1": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 170
     },
     "Suburbia cartel influence 2": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 171
     },
     "Suburbia cartel influence 3": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 172
     },
     "Suburbia cartel influence 4": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 173
     },
     "Suburbia cartel influence 5": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 174
     },
     "Suburbia cartel influence 6": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 175
     },
     "Suburbia cartel influence 7": {
-        "region": "Suburbia",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 176
     },
     "Uptown cartel influence 1": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 177
     },
     "Uptown cartel influence 2": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 178
     },
     "Uptown cartel influence 3": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 179
     },
     "Uptown cartel influence 4": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 180
     },
     "Uptown cartel influence 5": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 181
     },
     "Uptown cartel influence 6": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 182
     },
     "Uptown cartel influence 7": {
-        "region": "Uptown",
+        "region": "Cartel Influence",
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 183
     },
     "Realtor Purchase, Barn": {
-        "region": "Overworld",
-        "requirements": true,
+        "region": "We Need To Cook|2",
+        "requirements": {"randomize_business_properties" : {"has" : "Car Wash"}},
         "tags": ["Drug Making Property"],
         "modern_id": 184
     },
@@ -1226,8 +1226,8 @@
         "modern_id": 185
     },
     "Realtor Purchase, Docks Warehouse": {
-        "region": "Overworld",
-        "requirements": true,
+        "region": "Finishing the Job",
+        "requirements": {"randomize_business_properties" : {"has" : "Taco Ticklers"}},
         "tags": ["Drug Making Property"],
         "modern_id": 186
     },
@@ -1238,8 +1238,8 @@
         "modern_id": 189
     },
     "Realtor Purchase, Car Wash": {
-        "region": "Overworld",
-        "requirements": true,
+        "region": "Wretched Hive of Scum and Villainy",
+        "requirements": {"randomize_business_properties" : {"has" : "Car Wash"}},
         "tags": ["Business Property"],
         "modern_id": 191
     },
@@ -1250,14 +1250,14 @@
         "modern_id": 192
     },
     "Realtor Purchase, Post Office": {
-        "region": "Overworld",
-        "requirements": true,
+        "region": "Mixing Mania",
+        "requirements": {"randomize_business_properties" : {"has" : "Post Office"}},
         "tags": ["Business Property"],
         "modern_id": 193
     },
     "Realtor Purchase, Taco Ticklers": {
-        "region": "Overworld",
-        "requirements": true,
+        "region": "Finishing the Job",
+        "requirements": {"randomize_business_properties" : {"has" : "Taco Ticklers"}},
         "tags": ["Business Property"],
         "modern_id": 194
     },

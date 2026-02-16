@@ -126,23 +126,19 @@ class NetworthAmountRequired(Range):
     range_end = 10000000
     default = 100000
 
-
-class FillerItemPoolType(Choice):
+class BanBadFillerItems(DefaultOnToggle):
     """
-    Determines which non-progress items are included in the item pool.
-    - Random: Filler item pool consists of random non-progress items.
-    - Random: No Bad Items: Filler items consist of non-bad filler items.
-    - Random: Only Good Items: Filler items consist of only good filler items.
+    If enabled, bad filler items will not be included in the item pool.
     """
-    
-    display_name = "Filler Item Pool Type"
+    display_name = "Ban Bad Filler Items"
 
-    option_random_distribution = 0
-    option_random_no_bad_items = 1
-    option_random_only_good_items = 2
-    random = 3
 
-    default = option_random_distribution
+class BanProgressionSkipItems(DefaultOnToggle):
+    """
+    If enabled, filler items that allow for progression skips will not be included in the item pool.
+    This can add variety to the seed to allow for out of logic skips.
+    """
+    display_name = "Ban Progression Skip Filler Items"
 
 
 class RandomizeCartelInfluence(DefaultOnToggle):
@@ -236,7 +232,8 @@ class CashForTrash(Range):
 class Schedule1Options(PerGameCommonOptions):
     goal: Goal
     networth_amount_required: NetworthAmountRequired
-    filler_item_pool_type: FillerItemPoolType
+    ban_bad_filler_items: BanBadFillerItems
+    ban_progression_skip_items: BanProgressionSkipItems
     number_of_xp_bundles: NumberOfXpBundles
     amount_of_xp_per_bundle_min: AmountOfXpPerBundleMin
     amount_of_xp_per_bundle_max: AmountOfXpPerBundleMax
@@ -262,10 +259,11 @@ option_groups = [
     OptionGroup(
         "Gameplay Options",
         [Goal, NumberOfXpBundles, AmountOfXpPerBundleMin, AmountOfXpPerBundleMax, NumberOfCashBundles,
-         AmountOfCashPerBundleMin, AmountOfCashPerBundleMax, NetworthAmountRequired, FillerItemPoolType,
-         RandomizeCartelInfluence, RandomizeDrugMakingProperties, RandomizeLevelUnlocks,
-         RandomizeBusinessProperties, RandomizeDealers, RandomizeCustomers, RandomizeSuppliers,
-         RecipeChecks, CashForTrash, CartelInfluenceItemsPerRegion, DeathLink],
+         AmountOfCashPerBundleMin, AmountOfCashPerBundleMax, NetworthAmountRequired, BanBadFillerItems, 
+         BanProgressionSkipItems,RandomizeCartelInfluence, RandomizeDrugMakingProperties, 
+         RandomizeLevelUnlocks, RandomizeBusinessProperties, RandomizeDealers, 
+         RandomizeCustomers, RandomizeSuppliers, RecipeChecks, CashForTrash, 
+         CartelInfluenceItemsPerRegion, DeathLink],
     )
 ]
 
@@ -280,7 +278,8 @@ option_presets = {
         "amount_of_cash_per_bundle_min": AmountOfCashPerBundleMin.default,
         "amount_of_cash_per_bundle_max": AmountOfCashPerBundleMax.default,
         "networth_amount_required": NetworthAmountRequired.default,
-        "filler_item_pool_type": FillerItemPoolType.default,
+        "ban_bad_filler_items": BanBadFillerItems.default,
+        "ban_progression_skip_items": BanProgressionSkipItems.default,
         "randomize_cartel_influence": True,
         "randomize_drug_making_properties": True,
         "randomize_business_properties": True,

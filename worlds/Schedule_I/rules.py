@@ -34,6 +34,44 @@ def check_option_enabled(world: Schedule1World, option_name: str) -> bool:
     return bool(option_map.get(option_name, False))
 
 
+def check_option_condition(world: Schedule1World, condition_key: str) -> bool:
+    """
+    Parse and evaluate a compound option condition string.
+    
+    Supports:
+    - Simple: "randomize_level_unlocks" (option must be true)
+    - Negation: "!randomize_level_unlocks" (option must be false)
+    - Compound AND: "randomize_level_unlocks&!randomize_customers" 
+      (first must be true AND second must be false)
+    
+    Returns True if the condition is satisfied, False otherwise.
+    """
+    # Split by '&' to get individual conditions
+    parts = condition_key.split('&')
+    
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+        
+        # Check for negation prefix
+        if part.startswith('!'):
+            option_name = part[1:]
+            expected_value = False
+        else:
+            option_name = part
+            expected_value = True
+        
+        # Get the actual option value
+        actual_value = check_option_enabled(world, option_name)
+        
+        # If this part doesn't match expected, the whole condition fails
+        if actual_value != expected_value:
+            return False
+    
+    return True
+
+
 def build_requirement_check(world: Schedule1World, method_name: str, value: Any) -> Callable[[CollectionState], bool]:
     """Build a requirement check function based on the method name and value from JSON."""
     
@@ -118,10 +156,10 @@ def build_rule_from_requirements(world: Schedule1World, requirements: Union[bool
     def rule_function(state: CollectionState) -> bool:
         results = []
         
-        for option_name, check_functions in condition_checks:
-            if check_option_enabled(world, option_name):
-                # This option is enabled, so its checks matter
-                # All checks within this option must pass
+        for condition_key, check_functions in condition_checks:
+            if check_option_condition(world, condition_key):
+                # This option condition is satisfied, so its checks matter
+                # All checks within this condition must pass
                 option_result = all(check(state) for check in check_functions)
                 results.append(option_result)
         

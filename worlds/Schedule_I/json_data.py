@@ -11,8 +11,6 @@ from typing import Any, Dict, List, Union
 
 import orjson
 
-from BaseClasses import ItemClassification
-
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
     return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode("utf-8-sig"))
 
@@ -21,7 +19,7 @@ class ItemData:
     """Represents item data from items.json"""
     name: str
     modern_id: int
-    classification: ItemClassification
+    classification: Union[str, List[str], Dict[str, Union[str, List[str]]]]
     tags: List[str]
 
 
@@ -45,33 +43,15 @@ class Schedule1ItemData:
     
     def __init__(self):
         items_raw = load_json_data("items.json")
-            
-        # Mapping from JSON classification strings to ItemClassification flags
-        classification_map = {
-            "USEFUL": ItemClassification.useful,
-            "PROGRESSION": ItemClassification.progression,
-            "FILLER": ItemClassification.filler,
-            "PROGRESSION_SKIP_BALANCING": ItemClassification.progression_skip_balancing
-        }
         
         # Parse items into ItemData objects
+        # Classification is stored raw - resolution happens in items.py based on world options
         self.items: Dict[str, ItemData] = {}
         for item_name, item_info in items_raw.items():
-            # Convert classification from JSON to ItemClassification flags
-            classification_data = item_info["classification"]
-            if isinstance(classification_data, list):
-                # Multiple classifications - combine with bitwise OR
-                classification = classification_map[classification_data[0]]
-                for class_name in classification_data[1:]:
-                    classification |= classification_map[class_name]
-            else:
-                # Single classification
-                classification = classification_map[classification_data]
-            
             self.items[item_name] = ItemData(
                 name=item_name,
                 modern_id=item_info["modern_id"],
-                classification=classification,
+                classification=item_info["classification"],
                 tags=item_info["tags"]
             )
 
