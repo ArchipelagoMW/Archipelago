@@ -259,6 +259,7 @@ class OpenRCT2World(World):
 
         r.connect(s)
         s.connect(self.multiworld.get_region("OpenRCT2_Level_0", self.player))
+        total_rides = sum(1 for item in self.item_table if item in item_info["Rides"])
         count = 0
         while count < current_level:
             region = self.multiworld.get_region(f"OpenRCT2_Level_{count}", self.player)
@@ -289,7 +290,8 @@ class OpenRCT2World(World):
                     add_rule(region_entrance, lambda state: state.has("Cash Machine", self.player, 1))
                 if "First Aid" in self.item_table:
                     add_rule(region_entrance, lambda state: state.has("First Aid", self.player, 1))
-            add_rule(region_entrance, lambda state: state.has_group("Rides", self.player, num_rides))
+            num_rides = min(num_rides, total_rides)
+            add_rule(region_entrance, lambda state, num_rides=num_rides: state.has_group("Rides", self.player, num_rides))
             count += 1
         #print("Here's the total level of regions: " + str(current_level))
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
