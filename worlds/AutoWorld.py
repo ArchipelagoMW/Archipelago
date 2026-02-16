@@ -98,6 +98,7 @@ class AutoWorldRegister(type):
                     or dct["game"] == "APQuest"
                     or dct["game"] == "Archipelago"
                     or dct["game"] == "Test Game"
+                    or dct["game"] == "Rule Builder Test Game"
                     # this is only required by the CI-only hosting/__main__.py test
                     or dct["game"] == "Temp World"
                     # and finally, this one is only required by the CI-only "Build" jobs because build.yml
