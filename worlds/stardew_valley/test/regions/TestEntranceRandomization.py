@@ -105,7 +105,7 @@ class TestGingerIslandEntranceRando(SVTestCase):
 def explore_regions_up_to_blockers(blocked_entrances: Collection[str], multiworld: MultiWorld) -> set[str]:
     explored_regions: set[str] = set()
     regions_by_name = multiworld.regions.region_cache[1]
-    regions_to_explore = deque([regions_by_name["Menu"]])
+    regions_to_explore = deque([regions_by_name["Stardew Valley"]])
 
     while regions_to_explore:
         region = regions_to_explore.pop()

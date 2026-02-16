@@ -7,7 +7,6 @@ from ..strings.region_names import Region as RegionName
 from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData
 
 vanilla_regions: tuple[RegionData, ...] = (
-    RegionData(RegionName.menu, (Entrance.to_stardew_valley,)),
     RegionData(RegionName.stardew_valley, (Entrance.to_farmhouse,)),
     RegionData(
         RegionName.farm_house,

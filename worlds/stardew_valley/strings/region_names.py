@@ -2,7 +2,6 @@ from .tool_names import ToolMaterial
 
 
 class Region:
-    menu = "Menu"
     stardew_valley = "Stardew Valley"
     farm_house = "Farmhouse"
     cellar = "Cellar"

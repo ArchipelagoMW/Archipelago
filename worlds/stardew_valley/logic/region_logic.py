@@ -4,7 +4,7 @@ from ..options import EntranceRandomization
 from ..stardew_rule import StardewRule, Reach, false_, true_
 from ..strings.region_names import Region
 
-main_outside_area = {Region.menu, Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
+main_outside_area = {Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
                      Region.bus_stop, Region.backwoods, Region.tunnel_entrance}
 always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.hospital, Region.carpenter, Region.alex_house,
                                                      Region.ranch, Region.farm_cave, Region.tent,
