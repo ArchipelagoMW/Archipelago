@@ -230,16 +230,8 @@ class Portal2Context(CommonContext):
             await self.check_locations([check_id])
             
         elif message.startswith("monitor_break:"):
-            check_message = message.split(":", 1)[1]
-            map_name = check_message.split(" ", 1)[0]
-            check_name = ""
-            if "sp_a4_tb_catch" in map_name:
-                if check_message[-1] == "1":
-                    check_name = "Wheatley Monitor 5"
-                else:
-                    check_name = "Wheatley Monitor 6"
-            else:
-                check_name = wheatley_maps_to_monitor_names[map_name][0]
+            map_name = message.split(":", 1)[1]
+            check_name = wheatley_maps_to_monitor_names[map_name]
                 
             check_id = all_locations_table[check_name].id
             await self.check_locations([check_id])
@@ -310,8 +302,8 @@ class Portal2Context(CommonContext):
         else:
             raise Exception("chapter_dict not found in slot data")
         
-        if "open_world" in slot_data:
-            self.menu.is_open_world = slot_data["open_world"]
+        if "game_mode" in slot_data:
+            self.menu.is_open_world = slot_data["game_mode"] == 2
             
         if "ratman_dens" in slot_data:
             if slot_data["ratman_dens"]:
