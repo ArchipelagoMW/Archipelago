@@ -120,7 +120,7 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
 
 def get_amount_items(world: TVRUHHWorld,whichlist: dict, item, amount = 1) -> list[Item]:
     y = 1
-    l = list[Item]
+    l: list[Item] = []
     while y != amount + 1:
         l.append(world.create_item(item,whichlist))
         y += 1
@@ -131,49 +131,49 @@ def get_upgrade_items(world: TVRUHHWorld) -> list[Item]:
     items: list[Item] = []
     for x in upgrade_gift_list:
         if x == "Rainbow Petal":
-            items.append(get_amount_items(world,upgrade_gift_list,x,8))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,8))
         if x == "Clock":
-            items.append(get_amount_items(world,upgrade_gift_list,x,5))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,5))
         if x == "Vault Key":
-            items.append(get_amount_items(world,upgrade_gift_list,x,5))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,5))
         if x == "Foreign Axon":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
         if x == "Sentinal Claw":
-            items.append(get_amount_items(world,upgrade_gift_list,x,2))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,2))
         if x == "Dream Petal":
-            items.append(get_amount_items(world,upgrade_gift_list,x,16))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,16))
         if x == "Pale Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,9))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,9))
         if x == "Heart Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,4))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,4))
         if x == "Painted Box": 
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Altered Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,4))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,4))
         if x == "Dark Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Defect Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
         if x == "Blue Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Flawless Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
         if x == "Shiny Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Twin Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
         if x == "Luminous Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Cross Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
         if x == "Faustian Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Devil Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
         if x == "Scorched Box":
-            items.append(get_amount_items(world,upgrade_gift_list,x,7))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,7))
         if x == "Demon Core":
-            items.append(get_amount_items(world,upgrade_gift_list,x,3))
+            items.extend(get_amount_items(world,upgrade_gift_list,x,3))
     return items
 
 
@@ -741,32 +741,32 @@ event_upgrade_list = {
 }
 
 other_items_list = {
-    "Story Mode: Heavy Rain Unlock": [1180000, ItemClassification.progression],
-    "Story Mode: Torrent Rain Unlock": [1180001, ItemClassification.progression],
-    "Quickplay Unlock": [1180002, ItemClassification.progression],
-    "Ultra Quickplay Unlock": [1180003, ItemClassification.progression],
-    "Alt. Story Unlock": [1180004, ItemClassification.progression],
-    "Towers Unlock": [1180005, ItemClassification.progression],
-    "Tower: Shameful Spire Unlock": [1180006, ItemClassification.progression],
-    "Tower: Frustration Fortress Unlock": [1180007, ItemClassification.progression],
-    "Tower: Symbolic Skyscraper Unlock": [1180008, ItemClassification.progression],
-    "Tower: Anxious Ascent Unlock": [1180009, ItemClassification.progression],
-    "Tower: Blossoming Belfry Unlock": [1180010, ItemClassification.progression],
-    "Tower: Looming Loneliness Unlock": [1180011, ItemClassification.progression],
-    "Endless Nightmare Unlock": [1180012, ItemClassification.progression],
-    "Endless Stress Unlock": [1180013, ItemClassification.progression],
-    "Defect Heart Unlock": [1180014, ItemClassification.progression],
-    "Twin Heart Unlock": [1180015, ItemClassification.progression],
-    "Devil Heart Unlock": [1180016, ItemClassification.progression],
-    "Alt Her Heart Unlock": [1180017, ItemClassification.progression],
-    "Alt Defect Heart Unlock": [1180018, ItemClassification.progression],
-    "Alt Twin Heart Unlock": [1180019, ItemClassification.progression],
-    "Alt Devil Heart Unlock": [1180020, ItemClassification.progression],
-    "30 Absorbed Bullets Karma Unlock": [1180021, ItemClassification.useful],
-    "100 Absorbed Bullets Karma Unlock": [1180022, ItemClassification.useful],
-    "200 Absorbed Bullets Karma Unlock": [1180023, ItemClassification.useful],
-    "Story Mode: Overleveling Unlock": [1180024, ItemClassification.progression],
-    "Story Mode: Blessings and Burdens Unlock": [1180025, ItemClassification.progression]
+    "Story Mode: Heavy Rain": [1180000, ItemClassification.progression],
+    "Story Mode: Torrent Rain": [1180001, ItemClassification.progression],
+    "Quickplay": [1180002, ItemClassification.progression],
+    "Ultra Quickplay": [1180003, ItemClassification.progression],
+    "Alt. Story": [1180004, ItemClassification.progression],
+    "The Towers": [1180005, ItemClassification.progression],
+    "Tower: Shameful Spire": [1180006, ItemClassification.progression],
+    "Tower: Frustration Fortress": [1180007, ItemClassification.progression],
+    "Tower: Symbolic Skyscraper": [1180008, ItemClassification.progression],
+    "Tower: Anxious Ascent": [1180009, ItemClassification.progression],
+    "Tower: Blossoming Belfry": [1180010, ItemClassification.progression],
+    "Tower: Looming Loneliness": [1180011, ItemClassification.progression],
+    "Endless Nightmare": [1180012, ItemClassification.progression],
+    "Endless Stress": [1180013, ItemClassification.progression],
+    "Defect Heart": [1180014, ItemClassification.progression],
+    "Twin Heart": [1180015, ItemClassification.progression],
+    "Devil Heart": [1180016, ItemClassification.progression],
+    "Alt Her Heart": [1180017, ItemClassification.progression],
+    "Alt Defect Heart": [1180018, ItemClassification.progression],
+    "Alt Twin Heart": [1180019, ItemClassification.progression],
+    "Alt Devil Heart": [1180020, ItemClassification.progression],
+    "30 Absorbed Bullets Karma": [1180021, ItemClassification.useful],
+    "100 Absorbed Bullets Karma": [1180022, ItemClassification.useful],
+    "200 Absorbed Bullets Karma": [1180023, ItemClassification.useful],
+    "Story Mode: Overleveling": [1180024, ItemClassification.progression],
+    "Story Mode: Blessings and Burdens": [1180025, ItemClassification.progression]
 }
 
 default_items = {

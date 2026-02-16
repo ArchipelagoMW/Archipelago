@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from BaseClasses import Location
+from BaseClasses import Location, Entrance, Region
 
-from . import locations
+from . import locations, items
 
 if TYPE_CHECKING:
     from .world import TVRUHHWorld
@@ -33,6 +33,10 @@ class TVRUHHLocation(Location):
 # "towers" - indicates if the location requires The Towers
 # "endless" - indicates if the location requires Endless Stress
 # "endl_terror" - indicates if the location requires Endless Terror
+# "has_m_amount", {count} - indicates if the location requires more than a certain amount of monsters
+# "has_specif_m", "{monster}"  - indicates if the location requires a specific monster unlocked
+# "has_mf", "{monster family}", [count] - inidicates if the location requires all monsters or a given amount from a specific family
+# ""
 # =======================================================================================================
 #  keep in mind some locations will not need any tags, because they are handled individually in rules.py
 # =======================================================================================================
@@ -59,7 +63,25 @@ def logic_placer(world:TVRUHHWorld,location_list:dict,listtype:str):
             if locations.locations_to_tags[x].__contains__("quickplay"):
                 world.get_region("Unlocked Quickplay").add_locations({x: location_list[x]},TVRUHHLocation)
                 location_list.pop(x)
+            if locations.locations_to_tags[x].__contains__("alter_story"):
+                world.get_region("Unlocked Quickplay").add_locations({x: location_list[x]},TVRUHHLocation)
+                location_list.pop(x)
+            if locations.locations_to_tags[x].__contains__("has_specif_m") and locations.locations_to_tags[x].__contains__("quickplay"):
+                world.get_region("(QP) Monster Unlocked " + locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_specif_m"))+1]).add_locations({x: location_list[x]}, TVRUHHLocation)
+                location_list.pop(x)
+            elif locations.locations_to_tags[x].__contains__("has_specif_m"):
+                world.get_region("(start) Monster Unlocked " + locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_specif_m"))+1]).add_locations({x: location_list[x]}, TVRUHHLocation)
+                location_list.pop(x)
+            if locations.locations_to_tags[x].__contains__("has_m_amount"):
+                world.multiworld.regions.append(Region("Monsters Unlocked " + str(locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_m_amount"))+1]),world.player,world.multiworld))
+                world.get_region("Start").connect(world.get_region("Monsters Unlocked " + str(locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_m_amount"))+1])), "Start to " + str(locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_m_amount"))+1]) + " Monsters", lambda state: state.has_from_list(items.monster_list, world.player, locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_m_amount"))+1]))
+                world.get_region("Monsters Unlocked " + str(locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_m_amount"))+1])).add_locations({x: location_list[x]}, TVRUHHLocation)
+                location_list.pop(x)
         world.get_region("Start").add_locations(location_list,TVRUHHLocation)
     elif listtype == "qp_medal":
-        for x in location_list:
-            world.get_region("Unlocked Quickplay").add_locations({x: location_list[x]}, TVRUHHLocation)
+        y = location_list.copy()
+        for x in y:
+            if locations.locations_to_tags[x].__contains__("has_specif_m"):
+                world.get_region("(QP) Monster Unlocked " + locations.locations_to_tags[x][int(locations.locations_to_tags[x].index("has_specif_m"))+1]).add_locations({x: location_list[x]}, TVRUHHLocation)
+                location_list.pop(x)
+        world.get_region("Unlocked Quickplay").add_locations(location_list,TVRUHHLocation)

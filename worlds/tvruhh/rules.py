@@ -20,11 +20,13 @@ def set_all_rules(world: TVRUHHWorld) -> None:
 
 
 def set_all_entrance_rules(world: TVRUHHWorld) -> None:
-    start_to_50monsters = world.get_entrance("Start to having 50 Monsters unlocked")
-    start_to_quickplay = world.get_entrance("Start to Quickplay")
 
-    set_rule(start_to_50monsters,lambda state: state.has_from_list(items.monster_list, world.player, 50))
-    set_rule(start_to_quickplay,lambda state: state.has("Quickplay Unlock",world.player))
+    set_rule(world.get_entrance("Start to Quickplay"),lambda state: state.has("Quickplay",world.player))
+    set_rule(world.get_entrance("Start to Alt Story"),lambda state: state.has("Alt. Story",world.player))
+
+    for x in world.get_entrances():
+        if str(x).__contains__("(QP) Monster Unlocked"):
+            pass
 
 
 def set_all_location_rules(world: TVRUHHWorld) -> None:
