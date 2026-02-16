@@ -88,7 +88,7 @@ class MLSSClient(BizHawkClient):
                 if seed not in ctx.seed_name:
                     logger.info(
                         "ERROR: The ROM you loaded is for a different game of AP. "
-                        "Please make sure the host has sent you the correct patch file,"
+                        "Please make sure the host has sent you the correct patch file, "
                         "and that you have opened the correct ROM."
                     )
                     raise bizhawk.ConnectorError("Loaded ROM is for Incorrect lobby.")
