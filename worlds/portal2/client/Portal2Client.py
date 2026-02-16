@@ -5,9 +5,9 @@ import sys
 import time
 import typing
 
-from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
-from NetUtils import ClientStatus, JSONMessagePart, NetworkItem
-from Utils import async_start, init_logging
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, logger
+from NetUtils import ClientStatus, NetworkItem
+from Utils import async_start, init_logging, gui_enabled
 
 from ..mod_helpers.ItemHandling import add_ratman_commands, handle_item, handle_map_start, handle_trap, portal_gun_upgrade_not_inplace, potatos_not_inplace
 from ..mod_helpers.MapMenu import Menu
