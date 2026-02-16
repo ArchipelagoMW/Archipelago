@@ -42,7 +42,6 @@ def get_random_filler_item_name(world: Schedule1World, data) -> str:
         "Bad Filler" : world.options.ban_bad_filler_items, 
         "Ban Progression Skip" : world.options.ban_progression_skip_items}
     
-
     fillers = []
     # We iterate through all items, and if the item is a valid filler based on the options, add to fillers.
     for item in data.items.values():
@@ -55,9 +54,8 @@ def get_random_filler_item_name(world: Schedule1World, data) -> str:
                     break
             if is_valid:
                 fillers.append(item.name)
-
-    # Fallback to a default filler. SHOULD NEVER HAPPEN.
-    return "OG Kush Seed"
+    
+    return world.random.choice(fillers)
 
 
 def check_option_enabled(world: Schedule1World, option_name: str) -> bool:
