@@ -184,3 +184,62 @@ location_groups: dict[str, set[str]] = {
     "Ratman Dens": {name for name in ratman_den_locations_table},
     "Pickups": {name for name in item_location_table}
 }
+
+# Alternate logic for speedrunners
+speedrun_logic_table: dict[str, list[str]] = {
+    # Chapter 1
+    "Chapter 1: Portal Carousel Completion": [button, floor_button],
+    "Chapter 1: Smooth Jazz Completion": [floor_button],
+    "Chapter 1: Cube Momentum Completion": [floor_button],
+    "Chapter 1: Incinerator Completion": [],
+    # Chapter 2
+    "Chapter 2: Laser Intro Completion": [portal_gun_2],
+    "Chapter 2: Laser Stairs Completion": [portal_gun_2, floor_button],
+    "Chapter 2: Dual Lasers Completion": [portal_gun_2, laser, laser_catcher],
+    "Chapter 2: Laser Over Goo Completion": [portal_gun_2, floor_button],
+    "Chapter 2: Catapult Intro Completion": [portal_gun_2, floor_button],
+    "Chapter 2: Trust Fling Completion": [portal_gun_2, faith_plate, floor_button],
+    "Chapter 2: Pit Flings Completion": [portal_gun_2],
+    "Chapter 2: Fizzler Intro Completion": [portal_gun_2],
+    # Chapter 3
+    "Chapter 3: Ricochet Completion": [portal_gun_2, weighted_cube],
+    "Chapter 3: Bridge Intro Completion": [portal_gun_2, floor_button],
+    "Chapter 3: Bridge the Gap Completion": [weighted_cube, button, floor_button],
+    "Chapter 3: Turret Intro Completion": [floor_button],
+    "Chapter 3: Laser Relays Completion": [laser_relays, laser, reflection_cube],
+    "Chapter 3: Turret Blocker Completion": [floor_button],
+    "Chapter 3: Laser Vs. Turret Completion": [portal_gun_2, laser, laser_catcher],
+    "Chapter 3: Pull The Rug Completion": [floor_button, weighted_cube, bridge, portal_gun_2],
+    # Chapter 4
+    "Chapter 4: Column Blocker Completion": [portal_gun_2],
+    "Chapter 4: Laser Chaining Completion": [reflection_cube, laser, laser_relays],
+    "Chapter 4: Triple Laser Completion": [reflection_cube, portal_gun_2],
+    "Chapter 4: Jailbreak Completion": [portal_gun_2, button],
+    "Chapter 4: Escape Completion": [],
+    # Chapter 5
+    "Chapter 5: Turret Sabotage Completion": [portal_gun_2],
+    "Chapter 5: Neurotoxin Sabotage Completion": [portal_gun_2],
+    # Chapter 6
+    "Chapter 6: Repulsion Intro Completion": [paint, old_floor_button, portal_gun_2],
+    "Chapter 6: Bomb Flings Completion": [portal_gun_2, paint, old_button],
+    "Chapter 6: Crazy Box Completion": [portal_gun_2, old_floor_button],
+    # Chapter 7
+    "Chapter 7: Propulsion Intro Completion": [portal_gun_2],
+    "Chapter 7: Propulsion Flings Completion": [portal_gun_2, antique_cube],
+    "Chapter 7: Conversion Intro Completion": [portal_gun_2],
+    # Chapter 8
+    "Chapter 8: Funnel Intro Completion": [floor_button, funnel],
+    "Chapter 8: Ceiling Button Completion": [floor_button, frankenturret, button, portal_gun_2],
+    "Chapter 8: Wall Button Completion": [floor_button, frankenturret, button, portal_gun_2],
+    "Chapter 8: Polarity Completion": [funnel],
+    "Chapter 8: Funnel Catch Completion": [portal_gun_2],
+    "Chapter 8: Stop The Box Completion": [floor_button, portal_gun_2],
+    "Chapter 8: Laser Catapult Completion": [portal_gun_2],
+    "Chapter 8: Laser Platform Completion": [portal_gun_2, funnel],
+    "Chapter 8: Propulsion Catch Completion": [button, frankenturret],
+    "Chapter 8: Repulsion Polarity Completion": [turrets, button, paint],
+    # Chapter 9
+    "Chapter 9: Finale 1 Completion": [portal_gun_2, frankenturret, faith_plate],
+    "Chapter 9: Finale 2 Completion": [portal_gun_2],
+    "Chapter 9: Finale 3 Completion": [portal_gun_2, funnel],
+}

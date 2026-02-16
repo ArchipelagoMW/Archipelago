@@ -39,6 +39,19 @@ class CutsceneLevels(Toggle):
     Determines whether cutscene maps are added to the map pool
     """
     display_name = "Cutscene Levels"
+    
+
+class LogicDifficulty(Choice):
+    """
+    If logic should be for the average player or for an experienced glitch speedrunner
+    normal -> assumes you have everything required to beat the level
+    speedrunner -> assumes you know difficult speedrun techniques for the whole game including some sla tricks, experimental
+    (if you don't speedrun the game don't choose this option)
+    """
+    display_name = "Logic Difficulty"
+    option_normal = 0
+    option_speedrunner = 1
+    default = 0
 
 class TrapFillPercentage(Range):
     """
@@ -111,6 +124,7 @@ portal2_option_groups = [
     OptionGroup("Location Options", [
         GameMode,
         EarlyPlayabilityPercentage,
+        LogicDifficulty,
         RemoveLocations,
         CutsceneLevels,
         WheatleyMonitors,
@@ -142,6 +156,7 @@ class Portal2Options(PerGameCommonOptions):
     cutscene_levels: CutsceneLevels
     remove_locations: RemoveLocations
     early_playability_percentage: EarlyPlayabilityPercentage
+    logic_difficulty: LogicDifficulty
     # storyachievementsanity: StoryAchievementSanity
     wheatley_monitors: WheatleyMonitors
     ratman_dens: RatmanDens
