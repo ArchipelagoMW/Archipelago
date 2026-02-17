@@ -101,31 +101,31 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
     # Seed is hardcoded to make sure the ER is a valid roll that actually lock the blacksmith behind the Railroad Boulder Removed.
 
     def test_cannot_get_any_tool_without_blacksmith_access(self):
-        railroad_item = "Railroad Boulder Removed"
-        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith, Entrance.enter_bathhouse_entrance)
-        self.collect_all_except(railroad_item)
+        mens_locker_item = "Men's Locker Key"
+        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith, Entrance.enter_mens_locker_room)
+        self.collect_all_except(mens_locker_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_false(self.world.logic.tool.has_tool(tool, material))
 
-        self.collect(railroad_item)
+        _ = self.collect(mens_locker_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_true(self.world.logic.tool.has_tool(tool, material))
 
     def test_cannot_get_fishing_rod_without_willy_access(self):
-        railroad_item = "Railroad Boulder Removed"
-        place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
-        self.collect_all_except(railroad_item)
-        self.collect("Fishing Level", 10)
-        self.collect("Fishing Mastery")
+        mens_locker_item = "Men's Locker Key"
+        place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_mens_locker_room)
+        self.collect_all_except(mens_locker_item)
+        _ = self.collect("Fishing Level", 10)
+        _ = self.collect("Fishing Mastery")
 
         for fishing_rod in [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]:
             self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
-        self.collect(railroad_item)
+        _ = self.collect(mens_locker_item)
 
         for fishing_rod in [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]:
             self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod))

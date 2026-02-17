@@ -90,7 +90,7 @@ def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
      destination of "Hospital to Town" is to be replaced by the original destination of "Community Center to Town".
     """
 
-    swapped_connections = {}
+    swapped_connections: dict[str, str] = {}
 
     for entrance, exit_ in placements.pairings:
         swapped_connections[entrance] = reverse_connection_name(exit_) or exit_

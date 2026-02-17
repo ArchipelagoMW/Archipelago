@@ -70,16 +70,18 @@ class TestShipsanityEverything(SVTestBase):
 
     def test_all_shipsanity_locations_require_shipping_bin(self):
         bin_name = "Shipping Bin"
-        self.collect_all_except(bin_name)
+        island_bin_name = "Island Farmhouse"
+        self.collect_all_except(bin_name, island_bin_name)
         shipsanity_locations = [location
                                 for location in self.get_real_locations()
                                 if LocationTags.SHIPSANITY in location_table[location.name].tags]
         bin_item = self.create_item(bin_name)
 
+        # FIXME: Queen Of Sauce Cookbook can't be gotten due to not having the island Farmhouse
         for location in shipsanity_locations:
             with self.subTest(location.name):
                 self.assert_cannot_reach_location(location.name)
 
-                self.collect(bin_item)
+                _ = self.collect(bin_item)
                 self.assert_can_reach_location(location.name)
             self.remove(bin_item)

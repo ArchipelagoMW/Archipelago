@@ -11,7 +11,12 @@ class EntranceRandomizationAssertMixin:
         self.collect("Shipping Bin")
         self.collect_months(1)
         all_connections = create_all_connections(self.world.content.registered_packs)
-        non_progression_connections = [connection for connection in all_connections.values() if RandomizationFlag.BIT_NON_PROGRESSION in connection.flag]
+        non_progression_connections = [
+            connection
+            for connection in all_connections.values()
+            if connection.flag != RandomizationFlag.NOT_RANDOMIZED
+            and connection.flag in RandomizationFlag.SET_NON_PROGRESSION
+        ]
 
         for non_progression_connections in non_progression_connections:
             with self.subTest(connection=non_progression_connections.name):
