@@ -31,7 +31,8 @@ class TVRUHHLocation(Location):
 # "ult_quick" - indicates if the location requires Ultra Quickplay
 # "alt_story" - indicates if the location requires Alter Story
 # "towers" - indicates if the location requires The Towers
-# "endl_nightmare" - indicates if the location requires Endless Nightmare
+# "endl_nightmare" - indicates if the location requires Endless Nightmare (Stress or Terror)
+# "endl_stress" - indicates if the location requires Endless Stress
 # "endl_terror" - indicates if the location requires Endless Terror
 # "has_m_amount", {count} - indicates if the location requires more than a certain amount of monsters
 # "has_specif_m", "{monster}"  - indicates if the location requires a specific monster unlocked
