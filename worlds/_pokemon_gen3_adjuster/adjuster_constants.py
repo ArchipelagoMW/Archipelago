@@ -1164,7 +1164,7 @@ POKEMON_DATA_INFO: ObjectInfo = ObjectInfo(26, {
     "evs":            PointerInfo(10, 2),
     "item1":          PointerInfo(12, 2),
     "item2":          PointerInfo(14, 2),
-    "gender_ratio":   PointerInfo(16, 1),
+    "m_f_ratio":      PointerInfo(16, 1),
     "steps_to_hatch": PointerInfo(17, 1),
     "base_happiness": PointerInfo(18, 1),
     "growth_rate":    PointerInfo(19, 1),
@@ -1468,7 +1468,7 @@ class PokemonData():
     evs: int = -1
     item1: int = -1
     item2: int = -1
-    gender_ratio: int = -1
+    m_f_ratio: int = -1
     steps_to_hatch: int = -1
     base_happiness: int = -1
     growth_rate: int = -1
@@ -1480,7 +1480,7 @@ class PokemonData():
     dex: int = -1
     move_pool: list[PokemonMoveInfo] = []
     fields: list[str] = ["hp", "atk", "dfs", "spatk", "spdef", "spd", "type1", "type2", "catch_rate", "base_exp",
-                         "evs", "item1", "item2", "gender_ratio", "steps_to_hatch", "base_happiness", "growth_rate",
+                         "evs", "item1", "item2", "m_f_ratio", "steps_to_hatch", "base_happiness", "growth_rate",
                          "egg_group1", "egg_group2", "ability1", "ability2", "run_rate", "dex", "move_pool"]
 
     def get_stat(self, _field: str) -> int:
@@ -1497,7 +1497,7 @@ class PokemonData():
         if _field == "evs": return self.evs
         if _field == "item1": return self.item1
         if _field == "item2": return self.item2
-        if _field == "gender_ratio": return self.gender_ratio
+        if _field == "m_f_ratio": return self.m_f_ratio
         if _field == "steps_to_hatch": return self.steps_to_hatch
         if _field == "base_happiness": return self.base_happiness
         if _field == "growth_rate": return self.growth_rate
@@ -1531,7 +1531,7 @@ class PokemonData():
         if _field == "evs": self.evs = _value
         if _field == "item1": self.item1 = _value
         if _field == "item2": self.item2 = _value
-        if _field == "gender_ratio": self.gender_ratio = _value
+        if _field == "m_f_ratio": self.m_f_ratio = _value
         if _field == "steps_to_hatch": self.steps_to_hatch = _value
         if _field == "base_happiness": self.base_happiness = _value
         if _field == "growth_rate": self.growth_rate = _value
@@ -1558,7 +1558,7 @@ class SafePokemonData():
     evs: str = ""
     item1: str = ""
     item2: str = ""
-    gender_ratio: str = ""
+    m_f_ratio: str = ""
     steps_to_hatch: str = ""
     base_happiness: str = ""
     growth_rate: str = ""
@@ -1570,7 +1570,7 @@ class SafePokemonData():
     dex: str = ""
     move_pool: str = ""
     fields: list[str] = ["hp", "atk", "dfs", "spatk", "spdef", "spd", "type1", "type2", "catch_rate", "base_exp",
-                         "evs", "item1", "item2", "gender_ratio", "steps_to_hatch", "base_happiness", "growth_rate",
+                         "evs", "item1", "item2", "m_f_ratio", "steps_to_hatch", "base_happiness", "growth_rate",
                          "egg_group1", "egg_group2", "ability1", "ability2", "run_rate", "dex", "move_pool"]
 
     def get(self, _field: str) -> str:
@@ -1587,7 +1587,7 @@ class SafePokemonData():
         if _field == "evs": return self.evs
         if _field == "item1": return self.item1
         if _field == "item2": return self.item2
-        if _field == "gender_ratio": return self.gender_ratio
+        if _field == "m_f_ratio": return self.m_f_ratio
         if _field == "steps_to_hatch": return self.steps_to_hatch
         if _field == "base_happiness": return self.base_happiness
         if _field == "growth_rate": return self.growth_rate
@@ -1614,7 +1614,7 @@ class SafePokemonData():
         if _field == "evs": self.evs = _value
         if _field == "item1": self.item1 = _value
         if _field == "item2": self.item2 = _value
-        if _field == "gender_ratio": self.gender_ratio = _value
+        if _field == "m_f_ratio": self.m_f_ratio = _value
         if _field == "steps_to_hatch": self.steps_to_hatch = _value
         if _field == "base_happiness": self.base_happiness = _value
         if _field == "growth_rate": self.growth_rate = _value

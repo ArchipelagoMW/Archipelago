@@ -537,10 +537,10 @@ def run_kivy_gui() -> None:
         ability_1_label: TooltipMDLabel = ObjectProperty()
         ability_2_input: AutocompleteInput = ObjectProperty()
         ability_2_label: TooltipMDLabel = ObjectProperty()
-        gender_ratio_button: MDButton = ObjectProperty()
-        gender_ratio_input: MDButtonText = ObjectProperty()
-        gender_ratio_label: TooltipMDLabel = ObjectProperty()
-        gender_ratio_dropdown: MDDropdownMenu
+        m_f_ratio_button: MDButton = ObjectProperty()
+        m_f_ratio_input: MDButtonText = ObjectProperty()
+        m_f_ratio_label: TooltipMDLabel = ObjectProperty()
+        m_f_ratio_dropdown: MDDropdownMenu
         forbid_flip_input: MDCheckbox = ObjectProperty()
         forbid_flip_label: TooltipMDLabel = ObjectProperty()
         save_data: MDButton = ObjectProperty()
@@ -558,7 +558,7 @@ def run_kivy_gui() -> None:
         ability_1_tooltip = "This value changes the Pokemon's first ability."
         ability_2_tooltip = "This value changes the Pokemon's second ability.\n"\
                             + "Make it match the first ability if you want the Pokemon to only have one ability."
-        gender_ratio_tooltip = "This value changes the Pokemon's gender ratio."
+        m_f_ratio_tooltip = "This value changes the Pokemon's gender ratio."
         forbid_flip_tooltip = "This value dictates whether the Pokemon's sprite can be flipped or not.\n"\
                               + "The sprite is flipped when looking at a Pokemon's status screen in your team."
         move_pool_tooltip = "This value contains the Pokemon's levelup learnset.\nEach line must contain a move.\n"\
@@ -601,10 +601,10 @@ def run_kivy_gui() -> None:
                 self.type_2_dropdown.dismiss()
                 self.type_2_input.focus = True
 
-            def on_press_gender_ratio(text):
-                self.gender_ratio_input.text = text
-                self.gender_ratio_dropdown.dismiss()
-                self.gender_ratio_input.focus = True
+            def on_press_m_f_ratio(text):
+                self.m_f_ratio_input.text = text
+                self.m_f_ratio_dropdown.dismiss()
+                self.m_f_ratio_input.focus = True
 
             # Dropdowns for the Type 1 and Type 2 fields
             self.type_1_dropdown = MDDropdownMenu(caller=self.type_1_button, position="bottom", border_margin=8,
@@ -624,14 +624,14 @@ def run_kivy_gui() -> None:
             self.type_2_button.bind(on_press=lambda _: self.type_2_dropdown.open())
 
             # Dropdown for the Gender Ratio field
-            self.gender_ratio_dropdown = MDDropdownMenu(caller=self.gender_ratio_button, position="bottom",
-                                                        border_margin=8, width=self.gender_ratio_button.width)
-            for _, gender_ratio in POKEMON_M_OR_F_RATIOS.items():
-                self.gender_ratio_dropdown.items.append({
-                    "text": gender_ratio,
-                    "on_release": lambda txt=gender_ratio: on_press_gender_ratio(txt),
+            self.m_f_ratio_dropdown = MDDropdownMenu(caller=self.m_f_ratio_button, position="bottom",
+                                                        border_margin=8, width=self.m_f_ratio_button.width)
+            for _, m_f_ratio in POKEMON_M_OR_F_RATIOS.items():
+                self.m_f_ratio_dropdown.items.append({
+                    "text": m_f_ratio,
+                    "on_release": lambda txt=m_f_ratio: on_press_m_f_ratio(txt),
                 })
-            self.gender_ratio_button.bind(on_press=lambda _: self.gender_ratio_dropdown.open())
+            self.m_f_ratio_button.bind(on_press=lambda _: self.m_f_ratio_dropdown.open())
 
         def update_field_validity(self, _field_name: str, _value: bool):
             # Disables the Pokemon data saving button if any data is erroneous
@@ -724,7 +724,7 @@ def run_kivy_gui() -> None:
             self.ability_1_input.text = POKEMON_ABILITIES[pokemon_data.ability1].title()
             self.ability_2_input.text = POKEMON_ABILITIES[pokemon_data.ability2].title() \
                 if not pokemon_data.is_field_empty("ability2") else POKEMON_ABILITIES[pokemon_data.ability1].title()
-            self.gender_ratio_input.text = POKEMON_M_OR_F_RATIOS[pokemon_data.gender_ratio]
+            self.m_f_ratio_input.text = POKEMON_M_OR_F_RATIOS[pokemon_data.m_f_ratio]
             self.forbid_flip_input.active = (pokemon_data.dex >> 7) > 0
             self.move_pool_input.text = stringify_move_pool(pokemon_data.move_pool)
 
@@ -742,8 +742,7 @@ def run_kivy_gui() -> None:
             self.check_value(self.type_2_input, self.type_2_label, "type2", self.type_2_tooltip)
             self.check_value(self.ability_1_input, self.ability_1_label, "ability1", self.ability_1_tooltip)
             self.check_value(self.ability_2_input, self.ability_2_label, "ability2", self.ability_2_tooltip)
-            self.check_value(self.gender_ratio_input, self.gender_ratio_label, "gender_ratio",
-                             self.gender_ratio_tooltip)
+            self.check_value(self.m_f_ratio_input, self.m_f_ratio_label, "m_f_ratio", self.m_f_ratio_tooltip)
             self.check_value(self.forbid_flip_input, self.forbid_flip_label, "dex", self.forbid_flip_tooltip)
             self.check_value(self.move_pool_input, self.move_pool_label, "move_pool", self.move_pool_tooltip)
 
@@ -765,7 +764,7 @@ def run_kivy_gui() -> None:
             new_pokemon_data.ability1 = POKEMON_ABILITIES.index(self.ability_1_input.text.upper())
             new_pokemon_data.ability2 = POKEMON_ABILITIES.index(self.ability_2_input.text.upper()) \
                 or POKEMON_ABILITIES.index(self.ability_1_input.text.upper())
-            new_pokemon_data.gender_ratio = REVERSE_POKEMON_M_OR_F_RATIOS[self.gender_ratio_input.text]
+            new_pokemon_data.m_f_ratio = REVERSE_POKEMON_M_OR_F_RATIOS[self.m_f_ratio_input.text]
             new_pokemon_data.dex = ((1 if self.forbid_flip_input.active else 0) << 7) \
                 + int(self.pokemon_rom_data.dex) % 0x80
             new_pokemon_data.move_pool = destringify_move_pool(self.move_pool_input.text)
@@ -1055,7 +1054,7 @@ def run_kivy_gui() -> None:
                 sprite_pack_patch = self.build_sprite_pack_patch(args.sprite_pack)
             except Exception as e:
                 if hasattr(e, "message"):
-                    raise Exception(f"Error during patch creation: {getattr(e, "message")}")
+                    raise Exception(f"Error during patch creation: {getattr(e, 'message')}")
                 else:
                     raise Exception(f"Error during patch creation: {str(e)}")
 

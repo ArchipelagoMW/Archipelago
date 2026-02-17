@@ -302,9 +302,9 @@
     ability_1_label: ability_1_label.__self__
     ability_2_input: ability_2_input.__self__
     ability_2_label: ability_2_label.__self__
-    gender_ratio_input: gender_ratio_input.__self__
-    gender_ratio_button: gender_ratio_button.__self__
-    gender_ratio_label: gender_ratio_label.__self__
+    m_f_ratio_input: m_f_ratio_input.__self__
+    m_f_ratio_button: m_f_ratio_button.__self__
+    m_f_ratio_label: m_f_ratio_label.__self__
     forbid_flip_input: forbid_flip_input.__self__
     forbid_flip_label: forbid_flip_label.__self__
     save_data: save_data.__self__
@@ -489,18 +489,18 @@
                     spacing: 8
                     adaptive_height: True
                     TooltipMDLabel:
-                        id: gender_ratio_label
+                        id: m_f_ratio_label
                         text: "Gender Ratio"
                         pos_hint: {"center_x": 0.5}
                         adaptive_size: True
                     MDButton:
-                        id: gender_ratio_button
+                        id: m_f_ratio_button
                         style: "tonal"
                         pos_hint: {"center_x": 0.5}
                         MDButtonText:
-                            id: gender_ratio_input
+                            id: m_f_ratio_input
                             text: "Gender Ratio"
-                            on_text: root.check_value(root.gender_ratio_input, root.gender_ratio_label, "gender_ratio", root.gender_ratio_tooltip)
+                            on_text: root.check_value(root.m_f_ratio_input, root.m_f_ratio_label, "m_f_ratio", root.m_f_ratio_tooltip)
                 MDBoxLayout:
                     size_hint_y: None
                     height: 67

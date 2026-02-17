@@ -940,7 +940,7 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str) -> tuple[str, b
                             add_error(f"{_pokemon_name}'s {field} value is invalid: '{value}'.", True)
                 except Exception:
                     add_error(f"{_pokemon_name}'s {field} value is invalid: '{value}'.", True)
-            elif field == "gender_ratio":
+            elif field == "m_f_ratio":
                 # Data must be a number corresponding to a valid gender ratio
                 try:
                     if value not in list(POKEMON_M_OR_F_RATIOS.values()):
@@ -1324,7 +1324,7 @@ def stringify_pokemon_data(_data: PokemonData):
             new_field_value = POKEMON_TYPES[value]
         elif field in ["ability1", "ability2"]:
             new_field_value = POKEMON_ABILITIES[value].title()
-        elif field == "gender_ratio":
+        elif field == "m_f_ratio":
             new_field_value = POKEMON_M_OR_F_RATIOS[value]
         elif field == "dex":
             # The dex value is stored as a boolean named "forbid_flip" for clarity
@@ -1355,7 +1355,7 @@ def destringify_pokemon_data(_pokemon_name: str, _data_string: str):
             new_field_value = POKEMON_TYPES.index(field_value)
         elif field_name in ["ability1", "ability2"]:
             new_field_value = POKEMON_ABILITIES.index(field_value.upper())
-        elif field_name == "gender_ratio":
+        elif field_name == "m_f_ratio":
             new_field_value = REVERSE_POKEMON_M_OR_F_RATIOS[field_value]
         elif field_name in ["dex", "forbid_flip"]:
             # The dex value is stored as a boolean named "forbid_flip" for clarity
