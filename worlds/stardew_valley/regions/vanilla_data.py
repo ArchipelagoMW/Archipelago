@@ -7,7 +7,16 @@ from ..strings.region_names import Region as RegionName
 from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData
 
 vanilla_regions: tuple[RegionData, ...] = (
-    RegionData(RegionName.stardew_valley, (Entrance.to_farmhouse,)),
+    RegionData(
+        RegionName.stardew_valley,
+        (
+            Entrance.to_farmhouse,
+            LogicEntrance.fishing,
+            LogicEntrance.wearing_hats,
+            LogicEntrance.crafting,
+            LogicEntrance.eating,
+        ),
+    ),
     RegionData(
         RegionName.farm_house,
         (
@@ -15,7 +24,6 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.downstairs_to_cellar,
             LogicEntrance.farmhouse_cooking,
             LogicEntrance.watch_queen_of_sauce,
-            LogicEntrance.fishing,
             LogicEntrance.find_secret_notes,
         ),
     ),
@@ -360,6 +368,9 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.kitchen),
     RegionData(LogicRegion.queen_of_sauce),
     RegionData(LogicRegion.fishing),
+    RegionData(LogicRegion.crafting),
+    RegionData(LogicRegion.eating),
+    RegionData(LogicRegion.hats),
     RegionData(LogicRegion.spring_farming),
     RegionData(LogicRegion.summer_farming, (LogicEntrance.grow_summer_fall_crops_in_summer,)),
     RegionData(LogicRegion.fall_farming, (LogicEntrance.grow_summer_fall_crops_in_fall,)),
@@ -1407,6 +1418,9 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.blacksmith_gold, LogicRegion.blacksmith_gold),
     ConnectionData(LogicEntrance.blacksmith_iridium, LogicRegion.blacksmith_iridium),
     ConnectionData(LogicEntrance.fishing, LogicRegion.fishing),
+    ConnectionData(LogicEntrance.wearing_hats, LogicRegion.hats),
+    ConnectionData(LogicEntrance.crafting, LogicRegion.crafting),
+    ConnectionData(LogicEntrance.eating, LogicRegion.eating),
     ConnectionData(LogicEntrance.attend_egg_festival, LogicRegion.egg_festival),
     ConnectionData(LogicEntrance.attend_desert_festival, LogicRegion.desert_festival),
     ConnectionData(LogicEntrance.attend_flower_dance, LogicRegion.flower_dance),

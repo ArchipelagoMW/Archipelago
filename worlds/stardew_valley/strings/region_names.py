@@ -186,6 +186,9 @@ class LogicRegion:
     summer_or_fall_farming = "Summer or Fall Farming"
 
     fishing = "Fishing"
+    crafting = "Crafting"
+    eating = "Eating"
+    hats = "Hat Wearing"
     egg_festival = "Egg Festival"
     desert_festival = "Desert Festival"
     trout_derby = "Trout Derby"

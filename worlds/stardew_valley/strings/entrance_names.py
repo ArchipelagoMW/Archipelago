@@ -360,6 +360,9 @@ class LogicEntrance:
     grow_summer_fall_crops_in_fall = "Grow Summer Fall Crops in Fall"
 
     fishing = "Start Fishing"
+    wearing_hats = "Wearing Hats"
+    crafting = "Crafting"
+    eating = "Eating"
     attend_egg_festival = "Attend Egg Festival"
     attend_desert_festival = "Attend Desert Festival"
     attend_flower_dance = "Attend Flower Dance"
