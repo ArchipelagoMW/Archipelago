@@ -142,4 +142,4 @@ class PeaksOfWorld(World):
 
     def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps",
-                                    "game_mode", "disable_solemn_tempest", casing="camel")
+                                    "game_mode", "disable_solemn_tempest", "include_free_solo", "include_time_attack", casing="camel")
