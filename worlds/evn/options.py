@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, Range, Toggle
 
+from .logics import story_routes
+
 # In this file, we define the options the player can pick.
 # The most common types of options are Toggle, Range and Choice.
 
@@ -139,21 +141,43 @@ class IgnoreTechReq(Toggle):
 class ChosenString(Choice):
     """
     Pick which major story string the player will follow. Other story strings will be disabled.
-    NOTE: Rebels - only line 1 is implemented! Also, can only get to it through bounty hunters. Not recommended at this time.
-    NOTE2: Beware Wild Geese - branches not yet handled (ex: choose pirate, end up in auroran)
+    Surprise Me - this randomly picks a string. Find out what it is in game!
+    NOTE: The option name shows the path that has to be taken. Ex: vellos_polaris is the polaris story line coming from a refusal in the vellos string.
 
-    default: vellos
+    default: Surprise Me
     """
     display_name = "Major Story String"
 
-    option_vellos = 0
-    option_fed = 1
-    option_rebel = 2
-    option_pirate = 3
-    option_auroran = 4
-    option_polaris = 5
+    # dynamically add the options with setattr()
+    # def __init__(self, value: int):
+    #     super().__init__(value) # super's init expects a value
+    #     setattr(self, "option_test", 100)
+    #     for key, value in story_routes.items():
+    #         setattr(self, f"option_{value["option_name"]}", key) # TODO: extract option name from the key
+    # for key, value in story_routes.items():
+    #     locals().update(f"option_{value["option_name"]}", key)
+    locals().update({f"option_{value["option_name"]}": int(f"{key}")
+                     for key, value in story_routes.items()})
 
-    default = option_vellos
+    # TODO: Pretty up the option names
+    # @classmethod
+    # def get_option_name(cls, value:int) -> str:
+    #     # test value, get string and *return*
+    #     return super().get_option_name(value) # returns default if not found above
+    
+    # TODO: confirm random as an option. Choice already supports a random option somehow, how do I use that?
+    # I guess it is just the pattern option_random_[name]?
+
+    #option_surprise_me = 0
+    option_random_surprise_me = 0 # NOTE: Getting key errors. I don't think this is randomly rolling another option - so we'll manually handle in worlds
+    # option_vellos = 0
+    # option_fed = 1
+    # option_rebel = 2
+    # option_pirate = 3
+    # option_auroran = 4
+    # option_polaris = 5
+
+    default = option_random_surprise_me
 
 
 # We must now define a dataclass inheriting from PerGameCommonOptions that we put all our options in.

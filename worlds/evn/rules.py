@@ -5,21 +5,25 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import ChosenString
+#from .options import ChosenString
+#from .logics import story_routes
+#from .locations import ev_location_bank
+from .rezdata.misns import misn_table
+from .locations import loc_type_offset
 
 if TYPE_CHECKING:
     from .world import EVNWorld
 
 
-COMPLETION_LOCATIONS = {
-    "Take Polaris Home;Rebel I22 LAST-354": 354,
-    "Take Llyrell to Korell; Vellos31 LAST-417": 417,
-    "Take Krane to Earth;Fed43 LAST-474": 474,
-    "A Parting Gift;Fed26 (forced) LAST-596": 596,
-    "Return to Heraan;Auroran 029 LAST-686": 686,
-    "Destroy McGowan;Pirate 011 LAST-712": 712,
-    "Return to Ar'Za Iusia;Polaris 46-887": 887,
-}
+# COMPLETION_LOCATIONS = {
+#     "Take Polaris Home;Rebel I22 LAST-354": 354,
+#     "Take Llyrell to Korell; Vellos31 LAST-417": 417,
+#     "Take Krane to Earth;Fed43 LAST-474": 474,
+#     "A Parting Gift;Fed26 (forced) LAST-596": 596,
+#     "Return to Heraan;Auroran 029 LAST-686": 686,
+#     "Destroy McGowan;Pirate 011 LAST-712": 712,
+#     "Return to Ar'Za Iusia;Polaris 46-887": 887,
+# }
 
 def set_all_rules(world: EVNWorld) -> None:
     # In order for AP to generate an item layout that is actually possible for the player to complete,
@@ -33,6 +37,7 @@ def set_all_rules(world: EVNWorld) -> None:
 
 
 def set_all_entrance_rules(world: EVNWorld) -> None:
+    #return
     test = 1
     # # First, we need to actually grab our entrances. Luckily, there is a helper method for this.
     # overworld_to_bottom_right_room = world.get_entrance("Overworld to Bottom Right Room")
@@ -81,23 +86,13 @@ def set_all_location_rules(world: EVNWorld) -> None:
                 # if loc_name in COMPLETION_LOCATIONS:
                 #     evregion.add_event(loc_name, "Victory", location_type=EVNLocation, item_type=items.EVNItem)
     
-    # Default is vellos
-    match world.options.chosen_string.value:
-        case ChosenString.option_fed:
-            world.multiworld.get_location("Take Krane to Earth;Fed43 LAST-474", world.player).place_locked_item(world.create_item("Victory"))
-            # forced fed. Not sure how to handle that yet.
-            #world.multiworld.get_location("A Parting Gift;Fed26 (forced) LAST-596", world.player).place_locked_item(world.create_item("Victory"))
-        case ChosenString.option_rebel:
-            world.multiworld.get_location("Take Polaris Home;Rebel I22 LAST-354", world.player).place_locked_item(world.create_item("Victory"))
-        case ChosenString.option_pirate:
-            world.multiworld.get_location("Destroy McGowan;Pirate 011 LAST-712", world.player).place_locked_item(world.create_item("Victory"))
-        case ChosenString.option_auroran:
-            world.multiworld.get_location("Return to Heraan;Auroran 029 LAST-686", world.player).place_locked_item(world.create_item("Victory"))
-        case ChosenString.option_polaris:
-            world.multiworld.get_location("Return to Ar'Za Iusia;Polaris 46-887", world.player).place_locked_item(world.create_item("Victory"))
-        case _:
-            # default case - vellos
-            world.multiworld.get_location("Take Llyrell to Korell; Vellos31 LAST-417", world.player).place_locked_item(world.create_item("Victory"))
+    
+    # chosen_route = story_routes[world.options.chosen_string.value]
+    # world.multiworld.get_location(ev_location_bank[chosen_route["final_mission"]], world.player).place_locked_item(world.create_item("Victory"))
+    chosen_route = world.get_chosen_string()
+    misn_offset = loc_type_offset["misn"]
+    loc_name = world.location_id_to_name[chosen_route["final_mission"] + misn_offset] # Do we not have a helper function for this?
+    world.multiworld.get_location(loc_name, world.player).place_locked_item(world.create_item("Victory"))
 
     # Location rules work no differently from Entrance rules.
     # Most of our locations are chests that can simply be opened by walking up to them.

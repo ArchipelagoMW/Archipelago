@@ -3,8 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
+from venv import logger
 
-from .options import ChosenString
+
+#from .options import ChosenString
+from .logics import story_routes, possible_regions
 
 import re
 
@@ -22,53 +25,53 @@ if TYPE_CHECKING:
 
 # Should probably create a subclass that inherits from Region for EVN-specific behavior, similar to how we did for Location.
 # TODO: Add the other regions
-REGION_KEYS = {
-    "Universe" : [],
-    "Fed" : ["Fed"], # Fed story mission string
-    "Vellos" : ["Vellos", "Vell-os"],
-    "Polaris" : ["Polaris"],
-    "Auroran" : ["Auroran"],
-    "Rebel" : ["Rebel"],
-    "Pirate" : ["Pirate"],
-}
+# REGION_KEYS = {
+#     "Universe" : [],
+#     "Fed" : ["Fed"], # Fed story mission string
+#     "Vellos" : ["Vellos", "Vell-os"],
+#     "Polaris" : ["Polaris"],
+#     "Auroran" : ["Auroran"],
+#     "Rebel" : ["Rebel"],
+#     "Pirate" : ["Pirate"],
+# }
 
-### Region subclass helper functions ###
+# ### Region subclass helper functions ###
 
-# Let's make one more helper method before we begin actually creating locations.
-# Here's a function that extracts the value following a specific character in a given text.
-# Google AI
-def get_value_after_char(text, char):
-    # Pattern explanation:
-    # (?<={char}\s*) - Positive lookbehind: asserts the position is immediately 
-    #                   after the specified character and zero or more whitespaces.
-    # (.*?)          - Capturing group 1: lazily matches any character (except newline) 
-    #                   until the end of the line.
-    #pattern = re.compile(rf'(?<={re.escape(char)}\s*)(.*?)')
-    pattern = re.compile(rf'^(.*?)(?=\s+{re.escape(char)})(.*)$')
-    match = pattern.search(text)
-    if match:
-        # returns the captured group, with leading/trailing whitespace removed
-        #return match.group(1).strip() 
-        return match.group(3).strip() 
-    return None
+# # Let's make one more helper method before we begin actually creating locations.
+# # Here's a function that extracts the value following a specific character in a given text.
+# # Google AI
+# def get_value_after_char(text, char):
+#     # Pattern explanation:
+#     # (?<={char}\s*) - Positive lookbehind: asserts the position is immediately 
+#     #                   after the specified character and zero or more whitespaces.
+#     # (.*?)          - Capturing group 1: lazily matches any character (except newline) 
+#     #                   until the end of the line.
+#     #pattern = re.compile(rf'(?<={re.escape(char)}\s*)(.*?)')
+#     pattern = re.compile(rf'^(.*?)(?=\s+{re.escape(char)})(.*)$')
+#     match = pattern.search(text)
+#     if match:
+#         # returns the captured group, with leading/trailing whitespace removed
+#         #return match.group(1).strip() 
+#         return match.group(3).strip() 
+#     return None
 
-def string_has_value(text, substring):
-    return get_value_after_char(text.lower(), substring.lower()) is not None
+# def string_has_value(text, substring):
+#     return get_value_after_char(text.lower(), substring.lower()) is not None
 
-def string_has_value_after_char(text, char, substring):
-    value = get_value_after_char(text, char)
-    if value is None:
-        return False
-    return substring.lower() in value.lower()
+# def string_has_value_after_char(text, char, substring):
+#     value = get_value_after_char(text, char)
+#     if value is None:
+#         return False
+#     return substring.lower() in value.lower()
 
-def can_accept_location(evnregion: Region, location_name: str) -> bool:
-    """Helper function to determine if a region can accept a location based on keywords."""
-    keywords = REGION_KEYS.get(evnregion.name, [])
-    for keyword in keywords:
-        #if keyword in location_name:
-        if string_has_value_after_char(location_name, ";", keyword):
-            return True
-    return False
+# def can_accept_location(evnregion: Region, location_name: str) -> bool:
+#     """Helper function to determine if a region can accept a location based on keywords."""
+#     keywords = REGION_KEYS.get(evnregion.name, [])
+#     for keyword in keywords:
+#         #if keyword in location_name:
+#         if string_has_value_after_char(location_name, ";", keyword):
+#             return True
+#     return False
 
 ### End Region subclass helper functions ###
 
@@ -87,8 +90,15 @@ def create_all_regions(world: EVNWorld) -> None:
     #regions = [universe, fed_string]
     regions = []
 
-    for evregion in REGION_KEYS.keys():
-        regions.append(Region(evregion, world.player, world.multiworld))
+    # for evregion in REGION_KEYS.keys():
+    #     regions.append(Region(evregion, world.player, world.multiworld))
+
+    # TODO: replace this repeating line with a world function, then adjust associated imports
+    #regions.append(Region("Universe", world.player, world.multiworld)) # we readded to possible_regions bank
+    chosen_route = world.get_chosen_string()
+    for regionid in chosen_route["regions"]:
+        regions.append(Region(possible_regions[regionid]["name"], world.player, world.multiworld))
+        #logger.info(f"added region {possible_regions[regionid]["name"]}")
 
     # Some regions may only exist if the player enables certain options.
     # In our case, the Hammer locks the top middle chest in its own room if the hammer option is enabled.
@@ -105,7 +115,7 @@ def connect_regions(world: EVNWorld) -> None:
     # But wait, we no longer have access to the region variables we created in create_all_regions()!
     # Luckily, once you've submitted your regions to multiworld.regions,
     # you can get them at any time using world.get_region(...).
-    universe = world.get_region("Universe")
+    #universe = world.get_region("Universe")
     # fed_string = world.get_region("Fed String")
 
     # # universe.connect(fed_string, "Universe to Fed String")
@@ -113,26 +123,13 @@ def connect_regions(world: EVNWorld) -> None:
     #     if evregion != "Universe":
     #         universe.connect(world.get_region(evregion), f"Universe to {evregion}")
 
-    evregion = "Vellos"
-    # Default is vellos
-    match world.options.chosen_string.value:
-        case ChosenString.option_fed:
-            evregion = "Fed"
-            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
-        case ChosenString.option_rebel:
-            evregion = "Rebel"
-            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
-        case ChosenString.option_pirate:
-            evregion = "Pirate"
-            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
-        case ChosenString.option_auroran:
-            evregion = "Auroran"
-            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
-        case ChosenString.option_polaris:
-            evregion = "Polaris"
-            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
-        case _:
-            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+    chosen_route = world.get_chosen_string()
+    #logger.info(f"story routes: {chosen_route["region_connections"]}")
+    for fromid, targets in chosen_route["region_connections"].items():
+        from_region = world.get_region(possible_regions[fromid]["name"])
+        for toid in targets:
+            from_region.connect(world.get_region(possible_regions[toid]["name"]))
+            #logger.info(f"connected {possible_regions[fromid]["name"]} to {possible_regions[toid]["name"]}")
 
     # Okay, now we can get connecting. For this, we need to create Entrances.
     # Entrances are inherently one-way, but crucially, AP assumes you can always return to the origin region.

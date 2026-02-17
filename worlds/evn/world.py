@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 import os
-from typing import Any
+import random
+from typing import Any, Dict
 from venv import logger
 
 # Imports of base Archipelago modules must be absolute.
@@ -11,6 +12,7 @@ from worlds.evn.patchfile import EVNContainer
 from . import items, locations, regions, rules, web_world
 # from . import web_world
 from . import options as evn_options  # rename due to a name conflict with World.options
+from .logics import story_routes, possible_regions, EVNStoryRoute
 
 from .rezdata import misns, ships, outfits
 
@@ -42,6 +44,7 @@ class EVNWorld(World):
     #location_name_to_id = locations.LOCATION_NAME_TO_ID
     location_name_to_id = locations.loc_name_to_id
     #item_name_to_id = items.ITEM_NAME_TO_ID
+    location_id_to_name = locations.loc_id_to_name # dunno if this exists or we are declaring, but I need it.
 
     #TODO: consider this design style
     # are we sure this isn't empty at the time of world class definition? If so, we can just set item_name_to_id = items.item_name_to_id and avoid the redundant lookup in items.py.
@@ -55,6 +58,29 @@ class EVNWorld(World):
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
     origin_region_name = "Universe"
+
+    _chosen_string = -1
+
+    # NOTE: the options class may have a built in random feature - let's look at that first!
+    def get_chosen_string_id(self) -> int: 
+        if self._chosen_string > 0:
+            return self._chosen_string
+        
+        cur_string = self.options.chosen_string.value
+        logger.info(f"player's choice for story string was {cur_string}")
+
+        if cur_string > 0:
+            self._chosen_string = cur_string
+            return self._chosen_string
+        
+        # Other cases failed, so most likely this is the first call and options = 0 ("Surprise Me")
+        self._chosen_string = random.randint(1,len(story_routes)) # TODO: get max options avail
+        logger.info(f"rolled string {self._chosen_string}")
+        return self._chosen_string
+    
+    def get_chosen_string(self) -> EVNStoryRoute:
+        return story_routes[self.get_chosen_string_id()]
+        
 
     # Our world class must have certain functions ("steps") that get called during generation.
     # The main ones are: create_regions, set_rules, create_items.
@@ -127,16 +153,18 @@ class EVNWorld(World):
         # Missions
 
         # We've added the option for story string choice, so let's enforce that in the plugin by making the other strings not startable.
-        block_missions = {
-            evn_options.ChosenString.option_vellos: 128, #"Delivery to Earth; Vellos1"
-            evn_options.ChosenString.option_fed: 428, #"Federation Resupply;Fed1"
-            #evn_options.ChosenString.option_rebel: 3, #rebels can ONLY come from other lines, so don't I guess
-            evn_options.ChosenString.option_pirate: 693, #"Pick Up Cargo From Sol;Pirate 001"
-            evn_options.ChosenString.option_auroran: 653, #Take Supplies to Dominance
-            evn_options.ChosenString.option_polaris: 150, #Transport Mu'Randa
-        }
+        # block_missions = {
+        #     evn_options.ChosenString.option_vellos: 128, #"Delivery to Earth; Vellos1"
+        #     evn_options.ChosenString.option_fed: 428, #"Federation Resupply;Fed1"
+        #     #evn_options.ChosenString.option_rebel: 3, #rebels can ONLY come from other lines, so don't I guess
+        #     evn_options.ChosenString.option_pirate: 693, #"Pick Up Cargo From Sol;Pirate 001"
+        #     evn_options.ChosenString.option_auroran: 653, #Take Supplies to Dominance
+        #     evn_options.ChosenString.option_polaris: 150, #Transport Mu'Randa
+        # }
 
-        block_missions[self.options.chosen_string.value] = 0 #so we won't block the one that was chosen.
+        # block_missions[self.options.chosen_string.value] = 0 #so we won't block the one that was chosen.
+
+        chosen_route = story_routes[self.options.chosen_string.value]
 
         # first, the column headers
         for column in misns.misn_columns.keys():
@@ -144,9 +172,30 @@ class EVNWorld(World):
         output_file_string += "\r\n"
         # then, the mission data
         for mission in misns.misn_table.keys():
+            # check for mission edits
+            misn_edits = {} # dict[str,str]
+            for regionid in chosen_route["regions"]:
+                sregion = possible_regions[regionid]
+                if mission in sregion["misn_edits"]:
+                    misn_edits.update(sregion["misn_edits"][mission]) # will append all items to the var's set, overwriting existing
+                    break   # NOTE: We assume that a mission can only show up in one region of a story string
+
+            # Continue with replacement process
             temp_mission = misns.misn_table[mission]
+
+            check_target = "on_success"
+
             for column in misns.misn_columns.keys():
                 current_val = temp_mission[column]
+                
+                # Overwrite with our edit / replacement logic, but then continue the normal process
+                if column in misn_edits:
+                    # Sometimes, the "successful" option is a refuse (because it is a branching player choice), so we need to redirect where we put the check bit
+                    if misn_edits[column] == "CHECK_TARGET":
+                        check_target = column
+                    else:
+                        current_val = misn_edits[column]
+
                 default_val = current_val + "\t"
                 #if type(current_val) == str: #everything is a string because of how the data is filled.
                 #logger.info(f"current_val type: {type(current_val)}, value: {current_val} and misns.MisnDict[column] type: {misns.MisnDict.__annotations__[column]} for column {column}")
@@ -155,21 +204,15 @@ class EVNWorld(World):
                 #if col_anno == '<class \'str\'>':
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
+
                 # We need to inject our special bit, as that's how the client will be able to properly inform the server which mission was completed.
-                if column == "on_success":
+                #if column == "on_success":
+                if column == check_target:
                     # WARNING: if we ever change this format for location names, we need to change it in both the location creation code in locations.py and this export code here, to ensure the lookups work properly. We could consider making this more robust by storing the location name directly in the mission table, but that would require a lot of changes to the mission table and mission creation code, so for now we will just be careful to maintain this format.
                     # So, consider fetching this somehow instead of reconstructing it from the mission name and ID. That would be more robust and less error prone, but would require a lot of changes to the mission table and mission creation code, so for now we will just be careful to maintain this format.
-                    #target_name = temp_mission["name"].strip() + "-" + temp_mission["id"] # this is the format we used for location names. We want to export the location name corresponding to the mission's on_success location, so we can use it for item placement in the plugin.
-                    #target_name = self.location_name_to_id[mission]
                     target_id = locations.loc_type_offset["misn"] + mission
-                    #logger.info(f"self.location_id_to_name keys: {self.location_id_to_name.keys()}")
-                    #if target_id in self.location_id_to_name: # blank for some reason... maybe that's a bad sign?
-                        #target_name = self.location_id_to_name[target_id]
                     if target_id in locations.ev_location_bank:
-                        #associated_location = self.multiworld.get_location(target_name, self.player)
-                        #associated_location = self.get_location(target_name)
                         associated_location = locations.ev_location_bank[target_id]
-                        #new_id = self.location_id_to_name[target_id].address if target_id in self.location_id_to_name else None
                         new_id = associated_location["address"]
                         if (new_id is not None):
                             #TESTING
@@ -185,8 +228,8 @@ class EVNWorld(World):
                         #logger.info(f"Warning: on_success location {target_name} for mission {temp_mission['name']} not found in location_name_to_id. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the mission table and location creation code to debug this issue.")
                         logger.info(f"Warning: on_success location id {target_id} for mission {temp_mission['name']} not found in location_id_to_name. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the mission table and location creation code to debug this issue.")
                         output_file_string += default_val
-                elif column == "available_bits" and mission in block_missions.values():
-                    output_file_string += f'"b{locations.loc_type_offset['misn-block']} & ({current_val})"\t'   #we know it is a bit string, and we know these ones have bits, so don't need to protect as much
+                # elif column == "available_bits" and mission in block_missions.values():
+                #     output_file_string += f'"b{locations.loc_type_offset['misn-block']} & ({current_val})"\t'   #we know it is a bit string, and we know these ones have bits, so don't need to protect as much
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"
