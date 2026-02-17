@@ -26,11 +26,16 @@ class EntranceInfo(BaseModel):
     Example: 1, 2, 3, etc.
     """
 
-    door_identifier: str
-    """Unique identifier combining source and destination room identifiers.
+    door_identifier_nonunique: str
+    """Non-unique identifier combining source and destination room identifiers.
 
     Format: "{room_identifier}:{dest_room_identifier}"
     Example: "000:003" (door from room 000 to room 003)
+    """
+
+    door_identifier_unique: str
+    """Unique identifier for this door, combining door_identifier
+       and, if this is the nth nonunique door_identifier where n > 1, the last 5 hex digits of door_address.
     """
 
     room_identifier: str
@@ -110,7 +115,7 @@ class EntranceInfo(BaseModel):
 
     @property
     def key(self) -> str:
-        return self.door_identifier
+        return self.door_identifier_unique
 
     @property
     def door_hex(self) -> str:
@@ -130,12 +135,35 @@ def _load() -> tuple[EntranceInfo, ...]:
             for row in reader
             if any((v or "").strip() for v in row.values())
         ]
+
+    # Track how many times we've seen each door_identifier
+    # Only the 2nd+ occurrence gets the suffix
+    id_seen_count: dict[str, int] = {}
+
+    # Add door_identifier_nonunique and door_identifier_unique fields
+    for row in cleaned:
+        door_id = row["door_identifier"]
+        row["door_identifier_nonunique"] = door_id
+
+        # Track occurrence count for this door_id
+        id_seen_count[door_id] = id_seen_count.get(door_id, 0) + 1
+
+        if id_seen_count[door_id] > 1:
+            # 2nd+ occurrence: append last 5 hex chars of door_address for uniqueness
+            addr_suffix = row["door_address"][-5:]
+            row["door_identifier_unique"] = f"{door_id} ({addr_suffix})"
+        else:
+            # 1st occurrence: use the door_id as-is
+            row["door_identifier_unique"] = door_id
+
+        del row["door_identifier"]
+
     return tuple(TypeAdapter(list[EntranceInfo]).validate_python(cleaned))
 
 
 rows: tuple[EntranceInfo, ...] = _load()
 by_door_number: dict[int, EntranceInfo] = {row.door_number: row for row in rows}
-by_door_identifier: dict[str, EntranceInfo] = {row.door_identifier: row for row in rows}
+by_door_identifier_unique: dict[str, EntranceInfo] = {row.door_identifier_unique: row for row in rows}
 by_door_address: dict[int, EntranceInfo] = {row.door_address: row for row in rows}
 entrance_info_collection = list(rows)
 
@@ -145,4 +173,4 @@ def lookup(key: int | str) -> EntranceInfo:
         return by_door_number.get(key) or by_door_address[key]
     if isinstance(key, str) and key.startswith("0x"):
         return by_door_address[int(key, 16)]
-    return by_door_identifier[key]
+    return by_door_identifier_unique[key]
