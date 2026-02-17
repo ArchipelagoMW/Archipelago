@@ -5,7 +5,7 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups, \
-    poy_option_presets
+    poy_option_presets, GameMode
 from .data import *
 
 from .regions import create_poy_regions, RegionLocationInfo
@@ -72,6 +72,11 @@ class PeaksOfWorld(World):
         book_names: list[str] = list(starting_book_options)
         enabled_books: list[str] = [b for b, v in starting_book_options.items() if v]
         start_book: str = self.options.starting_book.get_selected_book()
+
+        if self.options.game_mode == GameMode.option_peak_unlock and\
+                self.options.rope_unlock_mode == RopeUnlockMode.option_early:
+            logging.warning("peak unlock with early ropes usually leads to issues, setting ropes to normal")
+            self.options.rope_unlock_mode.value = RopeUnlockMode.option_normal
 
         if not enabled_books:
             logging.error(f"Player {self.player_name} has not selected any books!")
