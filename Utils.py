@@ -489,6 +489,73 @@ class RestrictedUnpickler(pickle.Unpickler):
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
 
+class RestrictedPickler(pickle.Pickler):
+    """Pickler matching the restrictions of RestrictedUnpickler."""
+    # Classes, and their exact instances, that should be pickled normally.
+    pickle_normally: set[type]
+
+    def __init__(self, *args: Any, **kwargs: Any):
+        super().__init__(*args, **kwargs)
+        # Lazy imports because the modules may import the Utils module.
+        import Options
+        import NetUtils
+        from worlds.generic import PlandoItem
+        self.pickle_normally = {
+            # used by MultiServer -> savegame/multidata
+            NetUtils.ClientStatus,
+            NetUtils.SlotType,
+            NetUtils.HintStatus,
+            NetUtils.Hint,
+            NetUtils.NetworkSlot,
+            NetUtils.NetworkItem,
+
+            # Plando is unpickled by WebHost -> Generate
+            PlandoItem,
+
+            # Used by OptionCounter options
+            collections.Counter,
+
+            # Allowed builtin types that objects can use as their reconstructor or in their reconstructor arguments as
+            # returned by __reduce__ or __reduce_ex__. Also allows for the type objects to be pickled directly.
+            *[getattr(builtins, name) for name in safe_builtins]
+        }
+        # Options are unpickled by WebHost -> Generate
+        self.allowed_option_subclasses = (Options.Option, Options.PlandoConnection, Options.PlandoText)
+
+    def reducer_override(self, obj):
+        """
+        Override the reduction of objects to be pickled.
+
+        :param obj: The object to be pickled.
+        :return: A tuple to reconstruct `obj`, matching the __reduce__ interface, or `NotImplemented` to fall back to
+        `self.dispatch_table` or `obj.__reduce__()`/`obj.__reduce_ex__()` if `self.dispatch_table` does not have a
+        reduction function for `obj`.
+        """
+        # RestrictedUnpickler works by only allowing certain classes to be found, so RestrictedPickler needs to work
+        # by only allowing certain types to be pickled.
+        # Exact instances of builtin types, such as int, list and set are pickled specially, and will never be processed
+        # by reducer_override.
+        # The type objects of builtin types themselves may be processed by reducer_override if an object's __reduce__ or
+        # __reduce_ex__ returns one of the builtin type objects, or if the type objects are pickled directly.
+        if isinstance(obj, type):
+            obj_type = obj
+        else:
+            obj_type = type(obj)
+
+        if obj_type in self.pickle_normally:
+            # Use `.dispatch_table` or per-object serialization.
+            return NotImplemented
+
+        # Options are unpickled by WebHost -> Generate
+        if obj_type.__module__.lower().endswith("options") and issubclass(obj_type, self.allowed_option_subclasses):
+            # Use `.dispatch_table` or per-object serialization.
+            return NotImplemented
+
+        # Forbid everything else.
+        raise pickle.PicklingError(f"Type '{obj}' is forbidden" if obj_type is obj
+                                   else f"'{obj}' (type '{obj_type}') is forbidden.")
+
+
 def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
@@ -496,14 +563,9 @@ def restricted_loads(s: bytes) -> Any:
 
 def restricted_dumps(obj: Any) -> bytes:
     """Helper function analogous to pickle.dumps()."""
-    s = pickle.dumps(obj)
-    # Assert that the string can be successfully loaded by restricted_loads
-    try:
-        restricted_loads(s)
-    except pickle.UnpicklingError as e:
-        raise pickle.PicklingError(e) from e
-
-    return s
+    with io.BytesIO() as f:
+        RestrictedPickler(f).dump(obj)
+        return f.getvalue()
 
 
 class ByValue:
