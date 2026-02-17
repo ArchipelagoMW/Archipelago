@@ -76,7 +76,7 @@ class Schedule1World(World):
     # You must override this function and return this infinitely repeatable item's name.
     # In our case, we defined a function called get_random_filler_item_name for this purpose in our items.py.
     def get_filler_item_name(self) -> str:
-        return items.get_random_filler_item_name(self, json_data.schedule1_item_data)
+        return items.get_random_filler_item_name(self)
 
     # There may be data that the game client will need to modify the behavior of the game.
     # This is what slot_data exists for. Upon every client connection, the slot's slot_data is sent to the client.
@@ -94,6 +94,7 @@ class Schedule1World(World):
             "networth_amount_required",
             "ban_bad_filler_items",
             "ban_progression_skip_items",
+            "trap_chance",
             "randomize_cartel_influence",
             "randomize_drug_making_properties",
             "randomize_business_properties",

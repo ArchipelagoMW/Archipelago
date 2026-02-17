@@ -1220,14 +1220,44 @@
         "tags": ["Cartel Influence", "Uptown"],
         "modern_id": 404
     },
-    "XP Bundle" :{
+    "XP Bundle": {
         "classification": {"default" : ["PROGRESSION_SKIP_BALANCING"]},
         "tags": ["Bundle", "XP"],
         "modern_id": 500
     },
-    "Cash Bundle" :{
+    "Cash Bundle": {
         "classification": {"default" : ["PROGRESSION_SKIP_BALANCING"]},
         "tags": ["Bundle", "Cash"],
         "modern_id": 501
+    },
+    "Heat Trap": {
+        "classification": {"default" : ["TRAP"]},
+        "tags": ["Trap"],
+        "modern_id": 651
+    },
+    "Slippery Trap": {
+        "classification": {"default" : ["TRAP"]},
+        "tags": ["Trap"],
+        "modern_id": 652
+    },
+    "Trash Trap": {
+        "classification": {"default" : ["TRAP"]},
+        "tags": ["Trap"],
+        "modern_id": 653
+    },
+    "Pan Trap": {
+        "classification": {"default" : ["TRAP"]},
+        "tags": ["Trap"],
+        "modern_id": 654
+    },
+    "TimeScale Trap": {
+        "classification": {"default" : ["TRAP"]},
+        "tags": ["Trap"],
+        "modern_id": 655
+    },
+    "Sleep Trap": {
+        "classification": {"default" : ["TRAP"]},
+        "tags": ["Trap"],
+        "modern_id": 656
     }
 }

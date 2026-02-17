@@ -10,19 +10,25 @@ if TYPE_CHECKING:
 ITEM_NAME_TO_ID = {}
 RAW_ITEM_CLASSIFICATIONS = {}
 
+fillers = []
+traps = []
+
 # Mapping from JSON classification strings to ItemClassification flags
 CLASSIFICATION_MAP = {
     "USEFUL": ItemClassification.useful,
     "PROGRESSION": ItemClassification.progression,
     "FILLER": ItemClassification.filler,
-    "PROGRESSION_SKIP_BALANCING": ItemClassification.progression_skip_balancing
+    "PROGRESSION_SKIP_BALANCING": ItemClassification.progression_skip_balancing,
+    "TRAP": ItemClassification.trap
 }
 
 def load_items_data(data):
     """Load item data from JSON and populate ITEM_NAME_TO_ID and RAW_ITEM_CLASSIFICATIONS."""
     global ITEM_NAME_TO_ID, RAW_ITEM_CLASSIFICATIONS
+
     ITEM_NAME_TO_ID = {item.name: item.modern_id for item in data.items.values()}
     RAW_ITEM_CLASSIFICATIONS = {item.name: item.classification for item in data.items.values()}
+
 
 # Each Item instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
@@ -31,30 +37,18 @@ class Schedule1Item(Item):
 
 # To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
 # For now, let's make a function that returns the name of a random filler item here in items.py.
-def get_random_filler_item_name(world: Schedule1World, data) -> str:
+def get_random_filler_item_name(world: Schedule1World) -> str:
     # For this purpose, we need to use a random generator.
 
     # IMPORTANT: Whenever you need to use a random generator, you must use world.random.
     # This ensures that generating with the same generator seed twice yields the same output.
     # DO NOT use a bare random object from Python's built-in random module.
 
-    conditions = {
-        "Bad Filler" : world.options.ban_bad_filler_items, 
-        "Ban Progression Skip" : world.options.ban_progression_skip_items}
+    # Check if we should generate a trap item based on the trap_chance option.
+    if world.random.randint(0, 99) < world.options.trap_chance:
+        return world.random.choice(traps)
     
-    fillers = []
-    # We iterate through all items, and if the item is a valid filler based on the options, add to fillers.
-    for item in data.items.values():
-        resolved_classification = resolve_classification(world, item.classification)
-        if resolved_classification == ItemClassification.filler:
-            is_valid = True
-            for tag, should_ban in conditions.items():
-                if should_ban and tag in item.tags:
-                    is_valid = False
-                    break
-            if is_valid:
-                fillers.append(item.name)
-    
+    # Otherwise, return a random filler item.
     return world.random.choice(fillers)
 
 
@@ -212,23 +206,6 @@ def create_all_items(world: Schedule1World, data) -> None:
         itempool += [world.create_item(item.name) for item in data.items.values() 
                      if "Supplier" in item.tags and "Default" not in item.tags]
 
-    # The length of our itempool is easy to determine, since we have it as a list.
-    number_of_items = len(itempool)
-
-    # What we actually want is the number of *unfilled* locations. Luckily, there is a helper method for this:
-    number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
-
-    # Now, we just subtract the number of items from the number of locations to get the number of empty item slots.
-    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
-
-    # Finally, we create that many filler items and add them to the itempool.
-    itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
-
-    # This is how the generator actually knows about the existence of our items.
-    world.multiworld.itempool += itempool
-
-    # Give default starting items (includes customer unlocks)
-    #TODO make starting items (customers) configurable
     # Removed these from checks
     if world.options.randomize_customers:
         starting_kyle_cooley = world.create_item("Kyle Cooley Unlocked")
@@ -243,3 +220,42 @@ def create_all_items(world: Schedule1World, data) -> None:
         world.push_precollected(starting_sam_thompson)
         starting_mick_lubbin = world.create_item("Mick Lubbin Unlocked")
         world.push_precollected(starting_mick_lubbin)
+        
+    # Set up traps
+    for item in data.items.values():
+        resolved_classification = resolve_classification(world, item.classification)
+        if resolved_classification == ItemClassification.trap:
+            # Create list of traps
+            traps.append(item.name)
+
+    filler_conditions = {
+        "Bad Filler" : world.options.ban_bad_filler_items, 
+        "Ban Progression Skip" : world.options.ban_progression_skip_items}
+    
+    # set up fillers
+    for item in data.items.values():
+        resolved_classification = resolve_classification(world, item.classification)
+        if resolved_classification == ItemClassification.filler:
+            is_valid = True
+            for tag, should_ban in filler_conditions.items():
+                if should_ban and tag in item.tags:
+                    is_valid = False
+                    break
+            if is_valid:
+                fillers.append(item.name)
+
+    # The length of our itempool is easy to determine, since we have it as a list.
+    number_of_items = len(itempool)
+
+    # What we actually want is the number of *unfilled* locations. Luckily, there is a helper method for this:
+    number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
+
+    # Now, we just subtract the number of items from the number of locations to get the number of empty item slots.
+    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
+
+    # Finally, we create that many filler items and add them to the itempool.
+    itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
+
+    # This is how the generator actually knows about the existence of our items.
+    world.multiworld.itempool += itempool
+    

@@ -141,6 +141,18 @@ class BanProgressionSkipItems(DefaultOnToggle):
     display_name = "Ban Progression Skip Filler Items"
 
 
+class TrapChance(Range):
+    """
+    Percentage chance that a filler item will be a trap.
+    """
+
+    display_name = "Trap Chance"
+
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 class RandomizeCartelInfluence(DefaultOnToggle):
     """
     Determines if cartel influence will be randomized into the item pool.
@@ -234,6 +246,7 @@ class Schedule1Options(PerGameCommonOptions):
     networth_amount_required: NetworthAmountRequired
     ban_bad_filler_items: BanBadFillerItems
     ban_progression_skip_items: BanProgressionSkipItems
+    trap_chance: TrapChance
     number_of_xp_bundles: NumberOfXpBundles
     amount_of_xp_per_bundle_min: AmountOfXpPerBundleMin
     amount_of_xp_per_bundle_max: AmountOfXpPerBundleMax
@@ -258,12 +271,14 @@ class Schedule1Options(PerGameCommonOptions):
 option_groups = [
     OptionGroup(
         "Gameplay Options",
-        [Goal, NumberOfXpBundles, AmountOfXpPerBundleMin, AmountOfXpPerBundleMax, NumberOfCashBundles,
-         AmountOfCashPerBundleMin, AmountOfCashPerBundleMax, NetworthAmountRequired, BanBadFillerItems, 
-         BanProgressionSkipItems,RandomizeCartelInfluence, RandomizeDrugMakingProperties, 
-         RandomizeLevelUnlocks, RandomizeBusinessProperties, RandomizeDealers, 
-         RandomizeCustomers, RandomizeSuppliers, RecipeChecks, CashForTrash, 
-         CartelInfluenceItemsPerRegion, DeathLink],
+        [Goal, NetworthAmountRequired, NumberOfXpBundles, AmountOfXpPerBundleMin, AmountOfXpPerBundleMax, 
+         NumberOfCashBundles, AmountOfCashPerBundleMin, AmountOfCashPerBundleMax,  
+         BanBadFillerItems, BanProgressionSkipItems, TrapChance,  
+         RandomizeLevelUnlocks, RandomizeCartelInfluence, CartelInfluenceItemsPerRegion,   
+         RandomizeCustomers, RandomizeDealers, RandomizeSuppliers,
+         RandomizeDrugMakingProperties, RandomizeBusinessProperties,  
+         RecipeChecks, CashForTrash, 
+         DeathLink],
     )
 ]
 
@@ -280,6 +295,7 @@ option_presets = {
         "networth_amount_required": NetworthAmountRequired.default,
         "ban_bad_filler_items": BanBadFillerItems.default,
         "ban_progression_skip_items": BanProgressionSkipItems.default,
+        "trap_chance": TrapChance.default,
         "randomize_cartel_influence": True,
         "randomize_drug_making_properties": True,
         "randomize_business_properties": True,
