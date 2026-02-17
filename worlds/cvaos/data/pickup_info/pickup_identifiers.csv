@@ -101,9 +101,9 @@ pickup_number,ptr_address,simple_name,specifier,flag_offset (varA),item_offset (
 100,0x851f5f8,Black Cloak,,65,27,4,PICKUP,4
 101,0x851f8b0,Olrox's Suit,,54,7,4,PICKUP,4
 102,0x851f8d4,Silver Handgun,,49,56,5,HARD_PICKUP,3
-103,0x851f8e0,Olrox's Suit,,24,17,4,PICKUP,3
-104,0x851f904,Balmung,,72,39,4,PICKUP,4
-105,0x851f940,Rare Ring,,103,1,4,PICKUP,2
+103,0x851f8e0,Balmung,,24,17,4,PICKUP,3
+104,0x851f904,Rare Ring,,72,39,4,PICKUP,4
+105,0x851f940,High Potion,_e,103,1,4,PICKUP,2
 106,0x8520bac,Dracula's Tunic,,55,8,4,PICKUP,4
 107,0x8520bb8,Black Panther,,10,3,4,PICKUP,6
 108,0x8520bd0,Mana Prism,_c,116,7,4,PICKUP,2
