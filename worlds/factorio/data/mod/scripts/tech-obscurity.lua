@@ -12,7 +12,7 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 -- TODO:
--- fix free items.
+-- fix quality packs
 
 local function send_hint(technologies, force)
     --technologies => tech_name = true

@@ -227,7 +227,7 @@ class FactorioContext(CommonContext):
                     gained_text = format_SI_prefix(gained) + "J"
                     if gained:
                         logger.debug(f"EnergyLink: Received {gained_text}. "
-                                     f"{format_SI_prefix(value)}J remaining.")
+                                     f"{format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
     
     def update_hints(self):
