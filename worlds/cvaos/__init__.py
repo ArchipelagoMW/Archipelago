@@ -1,9 +1,15 @@
-import typing
+from typing import ClassVar
+
 from BaseClasses import MultiWorld, Tutorial
 from worlds.AutoWorld import WebWorld, World
 import settings
-from worlds.cvaos.options import CVAOSOptions
+
 from .constants import USA_ROM_HASH
+from .items import CVAOSItem, item_name_to_id, item_table, create_item, create_itempool
+from .locations import location_name_to_id
+from .options import CVAOSOptions
+from .regions import create_regions
+
 
 class CVAOSSettings(settings.Group):
     class RomFile(settings.UserFilePath):
@@ -29,24 +35,33 @@ class CVAOSWebWorld(WebWorld):
 
     tutorials = [setup_en]
 
-    # option_groups = OPTION_GROUPS
 
 class CVAOSWorld(World):
-    pass
+    """
+    Castlevania: Aria of Sorrow is a 2003 action-adventure game developed by Konami
+    for the Game Boy Advance. Play as Soma Cruz and explore Dracula's castle,
+    collecting souls from defeated enemies to gain their abilities.
+    """
 
-# class CVAOSWorld(World):
-#     options_dataclass = CVAOSOptions
-#     settings: typing.ClassVar[CVAOSSettings]
-#     game = "Castlevania: Aria of Sorrow"
-#     web = CVAOSWebWorld()
-#     topology_present = True
-#     all_item_and_group_names = frozenset()  # TODO
-#     item_name_to_id =  # TODO
-#     location_name_to_id =  # TODO
-#     item_name_groups = {} # TODO
-#     location_name_groups = {} # TODO
-#     origin_region_name = "Menu"
-#     web = CVAOSWebWorld()
+    game = "Castlevania - Aria of Sorrow"
+    web = CVAOSWebWorld()
 
-#     def __init__(self, multiworld: "MultiWorld", player: int):
-#         super().__init__(multiworld, player)
+    options_dataclass = CVAOSOptions
+    options: CVAOSOptions
+    settings: ClassVar[CVAOSSettings]
+
+    item_name_to_id = item_name_to_id
+    location_name_to_id = location_name_to_id
+
+    topology_present = True
+    origin_region_name = "Menu"
+
+    def create_regions(self) -> None:
+        create_regions(self)
+
+    def create_items(self) -> None:
+        itempool = create_itempool(self)
+        self.multiworld.itempool += itempool
+
+    def create_item(self, name: str) -> CVAOSItem:
+        return create_item(self, name)

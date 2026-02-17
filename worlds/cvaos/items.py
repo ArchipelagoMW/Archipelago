@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class CVAOSItem(Item):
     """Castlevania: Aria of Sorrow item instance."""
 
-    game = "Castlevania - Aria of Sorrow"
+    game: str = "Castlevania - Aria of Sorrow"
 
 
 class ItemData(NamedTuple):
