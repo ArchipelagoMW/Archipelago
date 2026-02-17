@@ -140,7 +140,7 @@ class TechDepthObscurity(Range):
        B   |
        |   |
     A  C   |
-    |\\ |  \\/
+    |\\ |  /
     D  E
     |
     F
