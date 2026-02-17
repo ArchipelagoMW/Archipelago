@@ -14,13 +14,13 @@ if TYPE_CHECKING:
     from . import KirbyAmWorld
 
 
-def create_regions(world: "KirbyAmWorld") -> Dict[str, Region]:
+def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
     """
     Create Regions from JSON, add event Locations, and connect Regions via exits and warps.
     Returns a name -> Region mapping for convenience.
     """
-    regions: Dict[str, Region] = {}
-    connections: List[Tuple[str, str, str]] = []
+    regions: dict[str, Region] = {}
+    connections: list[tuple[str, str, str]] = []
 
     # 1) Instantiate all regions, populate their real locations and event locations
     for region_name, region_data in data.regions.items():

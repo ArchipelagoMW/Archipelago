@@ -42,7 +42,7 @@ def _has_all_shards(state: CollectionState, player: int) -> bool:
     return state.has_from_list_unique(_SHARD_ITEM_LABELS, player, len(_SHARD_ITEM_LABELS))
 
 
-def set_rules(world: "KirbyAmWorld") -> None:
+def set_rules(world: KirbyAmWorld) -> None:
     # Completion condition
     if world.options.goal.value == Goal.option_debug:
         world.multiworld.completion_condition[world.player] = lambda _state: True

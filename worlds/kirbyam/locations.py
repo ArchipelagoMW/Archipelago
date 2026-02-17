@@ -23,27 +23,27 @@ class KirbyAmLocation(Location):
     game: str = "Kirby & The Amazing Mirror"
 
     # Convenience fields used by KirbyAmWorld.create_items()
-    key: Optional[str]
-    default_item_code: Optional[int]
+    key: str | None
+    default_item_code: int | None
 
     def __init__(
         self,
         player: int,
         name: str,
-        address: Optional[int],
-        parent: Optional[Region] = None,
+        address: int | None,
+        parent: Region | None = None,
         *,
-        key: Optional[str] = None,
-        default_item_code: Optional[int] = None,
+        key: str | None = None,
+        default_item_code: int | None = None,
     ) -> None:
         super().__init__(player, name, address, parent)
         self.key = key
         self.default_item_code = default_item_code
 
 
-def create_location_label_to_id_map() -> Dict[str, int]:
+def create_location_label_to_id_map() -> dict[str, int]:
     """Map human-readable location labels -> AP location id."""
-    label_to_id_map: Dict[str, int] = {}
+    label_to_id_map: dict[str, int] = {}
     for loc in data.locations.values():
         label_to_id_map[loc.label] = loc.location_id
     return label_to_id_map

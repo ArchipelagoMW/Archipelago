@@ -1,11 +1,11 @@
-import sys
-import os
-import subprocess
 import argparse
 import hashlib
 import importlib.util
-from pathlib import Path
+import os
+import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
 PAYLOAD_OFFSET = 0x0015E000
 HOOK_OFFSET    = 0x00152696
@@ -348,7 +348,7 @@ def main():
 
     in_path = args["in_path"]
     patch_path = args["patch_path"]
-    
+
     # Verify patch output directory exists
     patch_out_dir = Path(patch_path).resolve().parent
     if not patch_out_dir.exists():
@@ -358,7 +358,7 @@ def main():
         )
 
     print("Patch output (fixed):", Path(patch_path).resolve())
-    
+
     source_type = args["source_type"]
     legacy_ignored_out = args.get("legacy_ignored_out")
     hash_debug = bool(args.get("hash_debug"))
@@ -418,7 +418,7 @@ def main():
     # 6) Write the intermediary patched ROM
     with open(INTERMEDIARY_ROM, "wb") as f:
         f.write(rom)
-        
+
     # Optional: hash debug of intermediary patched ROM
     if hash_debug:
         try:

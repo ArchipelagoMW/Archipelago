@@ -6,16 +6,17 @@ import os
 import pkgutil
 from typing import TYPE_CHECKING, Any, ClassVar, Dict, List
 
+import settings
 from BaseClasses import ItemClassification, LocationProgressType, MultiWorld, Tutorial
 from worlds.AutoWorld import WebWorld, World
-import settings
 
 from .client import KirbyAmClient  # type: ignore  # Required to register BizHawk client
-from .data import LocationCategory, data as kirby_data
+from .data import LocationCategory
+from .data import data as kirby_data
 from .groups import ITEM_GROUPS, LOCATION_GROUPS
 from .items import KirbyAmItem, create_item_label_to_code_map, get_item_classification
 from .locations import KirbyAmLocation, create_location_label_to_id_map
-from .options import Goal, KirbyAmOptions, RandomizeShards, OPTION_GROUPS
+from .options import OPTION_GROUPS, Goal, KirbyAmOptions, RandomizeShards
 from .rom import KirbyAmProcedurePatch, write_tokens
 
 if TYPE_CHECKING:
@@ -46,7 +47,7 @@ class KirbyAmSettings(settings.Group):
         """File name of your USA Kirby & The Amazing Mirror ROM"""
         description = "Kirby & The Amazing Mirror ROM File"
         copy_to = "Kirby & The Amazing Mirror (USA).gba"
-        
+
         # Validate the ROM hash
         hash_obj = KirbyAmProcedurePatch.hash
         if hash_obj is None:
@@ -89,7 +90,7 @@ class KirbyAmWorld(World):
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         # If you don't have sanity_check.py yet, comment these out for now.
-        from .sanity_check import validate_regions, validate_group_maps
+        from .sanity_check import validate_group_maps, validate_regions
         assert validate_regions()
         assert validate_group_maps()
 
@@ -119,7 +120,7 @@ class KirbyAmWorld(World):
 
     def create_items(self) -> None:
         # Create items for all fillable locations (address != None).
-        fill_locations: List[KirbyAmLocation] = [
+        fill_locations: list[KirbyAmLocation] = [
             loc for loc in self.multiworld.get_locations(self.player)
             if isinstance(loc, KirbyAmLocation) and loc.address is not None
         ]
@@ -130,7 +131,7 @@ class KirbyAmWorld(World):
             filtered_categories.add(LocationCategory.SHARD)
 
         # Build the default item pool from each location's default item.
-        itempool: List[KirbyAmItem] = []
+        itempool: list[KirbyAmItem] = []
         for loc in fill_locations:
             if loc.key is None:
                 continue
@@ -185,7 +186,7 @@ class KirbyAmWorld(World):
         self.auth = self.random.randbytes(16)
 
     def generate_output(self, output_directory: str) -> None:
-        
+
         # Load base patch data from package resources
         patch_data = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
         if patch_data is None:
@@ -193,7 +194,7 @@ class KirbyAmWorld(World):
                 "Missing resource 'data/base_patch.bsdiff4' in the kirbyam package/apworld. "
                 "Ensure it is included when packaging."
             )
-        
+
         # Create procedure patch
         patch = KirbyAmProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file("base_patch.bsdiff4", patch_data)
@@ -203,7 +204,7 @@ class KirbyAmWorld(World):
         out_file_name = self.multiworld.get_out_file_name_base(self.player)
         patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+    def modify_multidata(self, multidata: dict[str, Any]) -> None:
         # Register auth token -> player name mapping for BizHawk
         key = base64.b64encode(self.auth).decode("ascii")
         connect_names = multidata.setdefault("connect_names", {})
@@ -212,7 +213,7 @@ class KirbyAmWorld(World):
         connect_names[key] = self.player_name
 
     # Helper method to fill slot data
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         # Slot data needed by client. Keep minimal while you iterate.
         return self.options.as_dict(
             "goal",

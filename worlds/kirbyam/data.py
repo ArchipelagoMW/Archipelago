@@ -6,14 +6,13 @@ It is tolerant of incomplete data while you iterate on JSON schemas.
 """
 from __future__ import annotations
 
+import pkgutil
 from dataclasses import dataclass
 from enum import IntEnum
+from importlib import resources
 from typing import Any, Dict, FrozenSet, List, NamedTuple, Optional, Set, Tuple, Union
 
 import orjson
-import pkgutil
-from importlib import resources
-
 
 from BaseClasses import ItemClassification
 
@@ -21,13 +20,13 @@ from BaseClasses import ItemClassification
 BASE_OFFSET = 3_860_000
 
 
-def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
+def load_json_data(data_name: str) -> list[Any] | dict[str, Any]:
     raw = pkgutil.get_data(__name__, "data/" + data_name)
     if raw is None:
         raise FileNotFoundError(f"Missing data file: worlds/kirbyam/data/{data_name}")
     return orjson.loads(raw.decode("utf-8-sig"))
 
-def _list_data_files(subdir: str) -> List[str]:
+def _list_data_files(subdir: str) -> list[str]:
     """
     Lists files under worlds/kirbyam/data/<subdir>/ in a way that works both:
       - from source checkout
@@ -45,7 +44,7 @@ def _list_data_files(subdir: str) -> List[str]:
         return []
 
 
-def _maybe_load_json_data(data_name: str) -> Optional[Union[List[Any], Dict[str, Any]]]:
+def _maybe_load_json_data(data_name: str) -> list[Any] | dict[str, Any] | None:
     try:
         raw = pkgutil.get_data(__name__, "data/" + data_name)
     except FileNotFoundError:
@@ -80,7 +79,7 @@ class ItemData(NamedTuple):
     label: str
     item_id: int
     classification: ItemClassification
-    tags: FrozenSet[str]
+    tags: frozenset[str]
 
 
 class LocationData(NamedTuple):
@@ -91,13 +90,13 @@ class LocationData(NamedTuple):
     name: str
     label: str
     parent_region: str
-    default_item: Optional[int]
+    default_item: int | None
     # Optional: when the game exposes a bitfield for location checks, this is the bit index within it.
     # For example, shard locations can map cleanly to bits 0..7.
-    bit_index: Optional[int]
+    bit_index: int | None
     location_id: int
     category: LocationCategory
-    tags: FrozenSet[str]
+    tags: frozenset[str]
 
 
 class EventData(NamedTuple):
@@ -108,10 +107,10 @@ class EventData(NamedTuple):
 @dataclass
 class RegionData:
     name: str
-    exits: List[str]
-    warps: List[str]
-    locations: List[str]
-    events: List[EventData]
+    exits: list[str]
+    warps: list[str]
+    locations: list[str]
+    events: list[EventData]
 
     def __init__(self, name: str) -> None:
         self.name = name
@@ -128,12 +127,12 @@ class Warp:
     """
     is_one_way: bool
     source_map: str
-    source_ids: List[int]
+    source_ids: list[int]
     dest_map: str
-    dest_ids: List[int]
-    parent_region: Optional[str]
+    dest_ids: list[int]
+    parent_region: str | None
 
-    def __init__(self, encoded_string: Optional[str] = None, parent_region: Optional[str] = None) -> None:
+    def __init__(self, encoded_string: str | None = None, parent_region: str | None = None) -> None:
         self.is_one_way = False
         self.source_map = ""
         self.source_ids = []
@@ -154,11 +153,11 @@ class Warp:
         dest_ids_string = ",".join(str(x) for x in self.dest_ids)
         return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{dest_ids_string}{'!' if self.is_one_way else ''}"
 
-    def connects_to(self, other: "Warp") -> bool:
+    def connects_to(self, other: Warp) -> bool:
         return self.dest_map == other.source_map and set(self.dest_ids) <= set(other.source_ids)
 
     @staticmethod
-    def decode(encoded_string: str) -> "Warp":
+    def decode(encoded_string: str) -> Warp:
         warp = Warp()
         warp.is_one_way = encoded_string.endswith("!")
         if warp.is_one_way:
@@ -180,15 +179,15 @@ class KirbyAmData:
     """
     Central loaded data container.
     """
-    ram_addresses: Dict[str, int]
-    rom_addresses: Dict[str, int]
+    ram_addresses: dict[str, int]
+    rom_addresses: dict[str, int]
 
-    regions: Dict[str, RegionData]
-    locations: Dict[str, LocationData]
-    items: Dict[int, ItemData]
+    regions: dict[str, RegionData]
+    locations: dict[str, LocationData]
+    items: dict[int, ItemData]
 
-    warps: Dict[str, Warp]
-    warp_map: Dict[str, Optional[str]]
+    warps: dict[str, Warp]
+    warp_map: dict[str, str | None]
 
     def __init__(self) -> None:
         self.ram_addresses = {}
@@ -237,7 +236,7 @@ def _init() -> None:
     next_item_id = BASE_OFFSET + 1
     # Build a helper mapping from item_key (string) -> item_id regardless of whether
     # the JSON specified an explicit item_id.
-    item_key_to_id: Dict[str, int] = {}
+    item_key_to_id: dict[str, int] = {}
 
     for item_key, attrs in items_json.items():
         if not isinstance(item_key, str) or not isinstance(attrs, dict):
@@ -291,7 +290,7 @@ def _init() -> None:
         #   - a string item key from items.json
         #   - missing/None
         default_item_raw = attrs.get("default_item")
-        default_item_id: Optional[int] = None
+        default_item_id: int | None = None
         if isinstance(default_item_raw, int) or isinstance(default_item_raw, str):
             if isinstance(default_item_raw, str) and default_item_raw in item_key_to_id:
                 default_item_id = item_key_to_id[default_item_raw]
@@ -303,7 +302,7 @@ def _init() -> None:
 
         # Optional bit index for RAM bitfield based location checks.
         bit_index_raw = attrs.get("bit_index")
-        bit_index: Optional[int] = None
+        bit_index: int | None = None
         if bit_index_raw not in (None, "", "null"):
             try:
                 bit_index = int(bit_index_raw)
@@ -332,7 +331,7 @@ def _init() -> None:
     # Load/merge region json files from data/regions/*.json
     # Expected minimal shape:
     #   { "REGION_NAME": { "exits":[...], "locations":[loc_key...], "events":[...], "warps":[...] } }
-    region_json_list: List[Dict[str, Any]] = []
+    region_json_list: list[dict[str, Any]] = []
     for file in _list_data_files("regions"):
         # Skip nested dirs / non-json content defensively
         if not isinstance(file, str) or not file.lower().endswith(".json"):
@@ -348,7 +347,7 @@ def _init() -> None:
 
 
 
-    merged_regions: Dict[str, Any] = {}
+    merged_regions: dict[str, Any] = {}
     for subset in region_json_list:
         for region_name, region_def in subset.items():
             if region_name in merged_regions:
@@ -356,8 +355,8 @@ def _init() -> None:
             merged_regions[region_name] = region_def
 
     # Create region objects, and claim locations
-    claimed_locations: Set[str] = set()
-    claimed_warps: Set[str] = set()
+    claimed_locations: set[str] = set()
+    claimed_warps: set[str] = set()
 
     for region_name, region_def in merged_regions.items():
         if not isinstance(region_def, dict):

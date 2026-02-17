@@ -38,11 +38,11 @@ def validate_regions() -> bool:
     regions/warps/locations. Meant to catch problems during development like
     forgetting to add a new location or incorrectly splitting a region.
     """
-    from .data import load_json_data, data
+    from .data import data, load_json_data
 
     locations = load_json_data("locations.json")
-    error_messages: List[str] = []
-    warn_messages: List[str] = []
+    error_messages: list[str] = []
+    warn_messages: list[str] = []
     failed = False
 
     def error(message: str) -> None:

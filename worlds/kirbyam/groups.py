@@ -2,9 +2,8 @@ from typing import Dict, Set
 
 from .data import LocationCategory, data
 
-
 # Item Groups
-ITEM_GROUPS: Dict[str, Set[str]] = {}
+ITEM_GROUPS: dict[str, set[str]] = {}
 
 for item in data.items.values():
     for tag in item.tags:
@@ -14,7 +13,7 @@ for item in data.items.values():
 # Location Groups
 # These map groups are based on location tags. Each group collects all location labels
 # that have at least one of the listed map tags.
-_LOCATION_GROUP_MAPS: Dict[str, Set[str]] = {
+_LOCATION_GROUP_MAPS: dict[str, set[str]] = {
     "0. Game Start": {"MAP_GAME_START"},
     "1. Rainbow Route": {"MAP_RAINBOW_ROUTE"},
     "2. Moonlight Mansion": {"MAP_MOONLIGHT_MANSION"},
@@ -34,12 +33,12 @@ _LOCATION_CATEGORY_TO_GROUP_NAME = {
 
 # Pre-create category groups and map/area groups so they are always present during build.
 # NOTE: We will prune empties at the end to satisfy AP unit tests.
-LOCATION_GROUPS: Dict[str, Set[str]] = {group_name: set() for group_name in _LOCATION_CATEGORY_TO_GROUP_NAME.values()}
+LOCATION_GROUPS: dict[str, set[str]] = {group_name: set() for group_name in _LOCATION_CATEGORY_TO_GROUP_NAME.values()}
 for group_name in _LOCATION_GROUP_MAPS.keys():
     LOCATION_GROUPS.setdefault(group_name, set())
 
 # Build reverse lookup: map tag -> area group(s)
-_map_tag_to_area: Dict[str, Set[str]] = {}
+_map_tag_to_area: dict[str, set[str]] = {}
 for area_name, tags in _LOCATION_GROUP_MAPS.items():
     for t in tags:
         _map_tag_to_area.setdefault(t, set()).add(area_name)
@@ -58,7 +57,7 @@ for location in data.locations.values():
             LOCATION_GROUPS[area_name].add(location.label)
 
 # Meta-groups: Areas is the union of all non-empty area groups
-areas_union: Set[str] = set()
+areas_union: set[str] = set()
 for area_name in _LOCATION_GROUP_MAPS.keys():
     areas_union.update(LOCATION_GROUPS.get(area_name, set()))
 if areas_union:

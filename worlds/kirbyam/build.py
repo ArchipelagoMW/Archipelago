@@ -22,7 +22,6 @@ import zipfile
 from pathlib import Path
 from typing import Any
 
-
 DEFAULT_WORLD_NAME = "kirbyam"
 DEFAULT_APCONTAINER_VERSION = 7
 

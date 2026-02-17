@@ -10,8 +10,8 @@ Kirby-specific.
 import os
 from typing import TYPE_CHECKING
 
-from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from settings import get_settings
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from .data import data
 

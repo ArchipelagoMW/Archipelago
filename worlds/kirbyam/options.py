@@ -3,7 +3,8 @@ Option definitions for Kirby & The Amazing Mirror
 """
 from dataclasses import dataclass
 
-from Options import (Choice, DeathLink, PerGameCommonOptions)
+from Options import Choice, DeathLink, PerGameCommonOptions
+
 
 class Goal(Choice):
     """
