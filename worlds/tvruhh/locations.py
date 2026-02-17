@@ -644,9 +644,7 @@ dream_list = {
     "Dream: Infinite Dreams" : [1000496, ["endl_nightmare","grind"]],
     "Dream: Karmic Hoarding" : [1000497, ["endl_stress"]],
     "Dream: Karmic Bounty" : [1000498, ["endl_nightmare","grind"]],
-    "Dream: Karmic Fortune" : [1000499, ["endl_nightmare","very_grind"]],
-    #for testing:
-    "Dream: Something Something Quick" : [1004242, ["quickplay"]]
+    "Dream: Karmic Fortune" : [1000499, ["endl_nightmare","very_grind"]]
 }
 
 story_medals = {
