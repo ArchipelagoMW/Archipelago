@@ -1,3 +1,5 @@
+from worlds._pokemon_gen3_adjuster.adjuster_constants import DataAddressInfo, FolderObjectInfo, OverworldSpriteSize, SpriteRequirement
+
 FR_LG_PATCH_EXTENSIONS = ""
 
 FR_LG_POKEMON_SPRITES = []
@@ -22,7 +24,7 @@ BLUE_TRAINER_PALETTES = {}
 
 FR_LG_SIMPLE_TRAINER_FOLDERS = []
 
-FR_LG_FOLDER_OBJECT_INFOS = []
+FR_LG_FOLDER_OBJECT_INFOS: list[FolderObjectInfo] = []
 
 FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS = {}
 
@@ -38,12 +40,11 @@ LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL = {}
 FR_LG_DATA_ADDRESS_BEGINNING = 0x00
 FR_LG_DATA_ADDRESS_END = 0x00
 
-FR_LG_DATA_ADDRESS_INFOS: dict[str, int | dict[str, int]] = {}
+FR_LG_DATA_ADDRESS_INFOS: dict[str, DataAddressInfo] = {}
 
-FR_LG_VALID_OVERWORLD_SPRITE_SIZES = []
+FR_LG_VALID_OVERWORLD_SPRITE_SIZES: list[OverworldSpriteSize] = []
 
 FR_LG_POINTER_REFERENCES = {}
 
-FR_LG_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {}
-
-FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = {}
+FR_LG_SPRITES_REQUIREMENTS: dict[str, SpriteRequirement] = {}
+FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, SpriteRequirement]] = {}

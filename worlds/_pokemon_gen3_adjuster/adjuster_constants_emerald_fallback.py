@@ -1,3 +1,5 @@
+from worlds._pokemon_gen3_adjuster.adjuster_constants import DataAddressInfo, FolderObjectInfo, OverworldSpriteSize, SpriteRequirement
+
 EMERALD_PATCH_EXTENSIONS = ""
 
 EMERALD_POKEMON_SPRITES = []
@@ -15,7 +17,7 @@ EMERALD_TRAINER_PALETTES = {}
 
 EMERALD_SIMPLE_TRAINER_FOLDERS: list[str] = []
 
-EMERALD_FOLDER_OBJECT_INFOS: list[dict[str, str | list[str] | dict[str, list[str]]]] = []
+EMERALD_FOLDER_OBJECT_INFOS: list[FolderObjectInfo] = []
 
 EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS = {}
 
@@ -30,10 +32,9 @@ EMERALD_DATA_ADDRESSES_ORIGINAL = {}
 EMERALD_DATA_ADDRESS_BEGINNING = 0x00
 EMERALD_DATA_ADDRESS_END = 0x00
 
-EMERALD_DATA_ADDRESS_INFOS: dict[str, int | dict[str, int]] = {}
+EMERALD_DATA_ADDRESS_INFOS: dict[str, DataAddressInfo] = {}
 
-EMERALD_VALID_OVERWORLD_SPRITE_SIZES: list[dict[str, int | str]] = []
+EMERALD_VALID_OVERWORLD_SPRITE_SIZES: list[OverworldSpriteSize] = []
 
-EMERALD_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {}
-
-EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = {}
+EMERALD_SPRITES_REQUIREMENTS: dict[str, SpriteRequirement] = {}
+EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, SpriteRequirement]] = {}

@@ -1,16 +1,49 @@
 import logging
 import os
 import typing
+import copy
 
-from Utils import local_path, persistent_store, get_adjuster_settings, \
-    data_to_bps_patch, open_image_secure, open_filename, open_directory
+
+class RomPatchSlice():
+    address: int = 0
+    length: int = 0
+    data: bytes = bytes()
+
+    def __init__(self, _address: int, _length: int, _data: bytes):
+        self.address = _address
+        self.length = _length
+        self.data = _data
+
+
+class RomPatch():
+    length: int = 0
+    data: list[RomPatchSlice] = []
+
+    def __init__(self, _length: int):
+        self.length = _length
+
+    def try_insert_data(self, _new_slice: RomPatchSlice):
+        index = 0
+        for slice in self.data:
+            if _new_slice.address >= slice.address + slice.length:
+                index = index + 1
+            elif _new_slice.address + _new_slice.length <= slice.address:
+                self.data.insert(index, _new_slice)
+                return
+            else:
+                # Do not duplicate values
+                return
+        self.data.append(_new_slice)
+
+
+from Utils import local_path, persistent_store, get_adjuster_settings, open_image_secure, open_filename, open_directory
 from .adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
-    validate_sprite_pack, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
+    validate_sprite_pack, get_all_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
     validate_pokemon_data_string, stringify_move_pool, destringify_move_pool, keep_different_pokemon_data, \
     handle_address_collection, find_folder_object_info, load_constants
 from .adjuster_patcher import extract_sprites as extract_sprites_internal
 from .adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, POKEMON_M_OR_F_RATIOS, \
-    REVERSE_POKEMON_M_OR_F_RATIOS
+    REVERSE_POKEMON_M_OR_F_RATIOS, PokemonData
 from argparse import Namespace
 
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
@@ -36,9 +69,24 @@ adjuster_name = "Gen 3" if frlg_support and emerald_support \
 
 GAME_GEN3_ADJUSTER = "Pokemon Gen 3 Adjuster"
 
-def run_kivy_gui() -> None:
-    from bps.apply import apply_to_bytearrays as apply_bps_patch
+async def main():
+    # Main function of the adjuster
+    logging.basicConfig(format="%(message)s", level=logging.INFO)
 
+    if not emerald_support and not frlg_support:
+        raise Exception("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or "
+                        + "Pokemon Firered/Leafgreen.")
+
+    run_kivy_gui()
+
+def launch():
+    import colorama
+    import asyncio
+    colorama.just_fix_windows_console()
+    asyncio.run(main())
+    colorama.deinit()
+
+def run_kivy_gui() -> None:
     from kvui import KivyJSONtoTextParser, ResizableTextField, ThemedApp
 
     from kivy.clock import Clock
@@ -97,8 +145,8 @@ def run_kivy_gui() -> None:
             self.bind(width=lambda _, x: setattr(self.dropdown, "width", x))
             self.bind(items=lambda s, _: self.on_text(s, self.text))
 
-        def on_focus(self, _, value):
-            if value:
+        def on_focus(self, instance, focus):
+            if focus:
                 self.on_text(None, self.text)
             else:
                 self.dropdown.dismiss()
@@ -245,7 +293,7 @@ def run_kivy_gui() -> None:
                 patch = _forced_patch
             else:
                 title = f"Select a Pokemon {adjuster_name} ROM or patch file."
-                old_patch_folder: str = os.path.dirname(opts.patch) if self.is_patch_valid else None
+                old_patch_folder: str = os.path.dirname(opts.patch) if self.is_patch_valid else ""
                 patch = open_filename(title, [("Rom & Patch Files", app.adjuster_extensions)], old_patch_folder) or ""
             self.entry.text = patch or ""
 
@@ -278,8 +326,8 @@ def run_kivy_gui() -> None:
                 trainer_folder_object_info = find_folder_object_info("trainer")
                 players_folder_object_info = find_folder_object_info("players")
                 pokemon_folder_object_info = find_folder_object_info("pokemon")
-                self.object_folders = trainer_folder_object_info["folders"] + players_folder_object_info["folders"] \
-                    + pokemon_folder_object_info["folders"]
+                self.object_folders = trainer_folder_object_info.folders + players_folder_object_info.folders \
+                    + pokemon_folder_object_info.folders
                 if app.top_frame.sprite_pack_frame.is_sprite_pack_valid:
                     app.sprite_preview.detect_existing_folders(opts.sprite_pack)
                 app.sprite_extractor.update_sprite_extraction(self, "")
@@ -343,7 +391,7 @@ def run_kivy_gui() -> None:
             if _forced_sprite_pack is not None:
                 sprite_pack = _forced_sprite_pack
             else:
-                old_sprite_pack_folder: str = opts.sprite_pack if self.is_sprite_pack_valid else None
+                old_sprite_pack_folder: str = opts.sprite_pack if self.is_sprite_pack_valid else ""
                 sprite_pack = open_directory("Choose a sprite pack.", old_sprite_pack_folder)
             self.entry.text = sprite_pack or ""
 
@@ -381,7 +429,7 @@ def run_kivy_gui() -> None:
             has_error = False
             if self.patch_frame.is_patch_valid:
                 app.ap_rom = app.ap_rom if not _patch_changed else app.build_ap_rom(opts.patch)
-                if not app.ap_rom:
+                if len(app.ap_rom) == 0:
                     app.sprite_preview.error_label.text = "Could not build the AP ROM."
                     return
                 is_rom_ap_state = handle_address_collection(app.ap_rom, app.top_frame.patch_frame.rom_version,
@@ -442,7 +490,7 @@ def run_kivy_gui() -> None:
         def extract_all_sprites(self):
             # Run when the Extract All button is pressed
             # Extract all the sprites from all Pokemons and Trainers into the given folder
-            base_folder_path: str | None = None
+            base_folder_path: str = ""
             if app.top_frame.sprite_pack_frame.is_sprite_pack_valid:
                 base_folder_path = opts.sprite_pack
             output_folder = open_directory("Select a folder to extract all sprites to.", base_folder_path)
@@ -464,37 +512,37 @@ def run_kivy_gui() -> None:
 
     class PokemonDataEditorFrame(MDBoxLayout):
         hp_input: Spinbox = ObjectProperty()
-        hp_label: MDLabel = ObjectProperty()
+        hp_label: TooltipMDLabel = ObjectProperty()
         spd_input: Spinbox = ObjectProperty()
-        spd_label: MDLabel = ObjectProperty()
+        spd_label: TooltipMDLabel = ObjectProperty()
         atk_input: Spinbox = ObjectProperty()
-        atk_label: MDLabel = ObjectProperty()
+        atk_label: TooltipMDLabel = ObjectProperty()
         def_input: Spinbox = ObjectProperty()
-        def_label: MDLabel = ObjectProperty()
+        def_label: TooltipMDLabel = ObjectProperty()
         spatk_input: Spinbox = ObjectProperty()
-        spatk_label: MDLabel = ObjectProperty()
+        spatk_label: TooltipMDLabel = ObjectProperty()
         spdef_input: Spinbox = ObjectProperty()
-        spdef_label: MDLabel = ObjectProperty()
+        spdef_label: TooltipMDLabel = ObjectProperty()
         move_pool_input: TextInput = ObjectProperty()
-        move_pool_label: MDLabel = ObjectProperty()
+        move_pool_label: TooltipMDLabel = ObjectProperty()
         type_1_button: MDButton = ObjectProperty()
         type_1_input: MDButtonText = ObjectProperty()
-        type_1_label: MDLabel = ObjectProperty()
+        type_1_label: TooltipMDLabel = ObjectProperty()
         type_1_dropdown: MDDropdownMenu
         type_2_button: MDButton = ObjectProperty()
         type_2_input: MDButtonText = ObjectProperty()
-        type_2_label: MDLabel = ObjectProperty()
+        type_2_label: TooltipMDLabel = ObjectProperty()
         type_2_dropdown: MDDropdownMenu
         ability_1_input: AutocompleteInput = ObjectProperty()
-        ability_1_label: MDLabel = ObjectProperty()
+        ability_1_label: TooltipMDLabel = ObjectProperty()
         ability_2_input: AutocompleteInput = ObjectProperty()
-        ability_2_label: MDLabel = ObjectProperty()
+        ability_2_label: TooltipMDLabel = ObjectProperty()
         gender_ratio_button: MDButton = ObjectProperty()
         gender_ratio_input: MDButtonText = ObjectProperty()
-        gender_ratio_label: MDLabel = ObjectProperty()
+        gender_ratio_label: TooltipMDLabel = ObjectProperty()
         gender_ratio_dropdown: MDDropdownMenu
         forbid_flip_input: MDCheckbox = ObjectProperty()
-        forbid_flip_label: MDLabel = ObjectProperty()
+        forbid_flip_label: TooltipMDLabel = ObjectProperty()
         save_data: MDButton = ObjectProperty()
         save_data_text: MDButtonText = ObjectProperty()
 
@@ -525,7 +573,7 @@ def run_kivy_gui() -> None:
             "hp": True,
             "spd": True,
             "atk": True,
-            "def": True,
+            "dfs": True,
             "spatk": True,
             "spdef": True,
             "ability1": True,
@@ -534,8 +582,8 @@ def run_kivy_gui() -> None:
         }
         changed_field_values = {k: False for k in valid_field_values.keys()}
 
-        pokemon_rom_data: dict[str, int | list[dict[str, str | int]]] = {}
-        pokemon_saved_data: dict[str, int | list[dict[str, str | int]]] | None = None
+        pokemon_rom_data: PokemonData = PokemonData()
+        pokemon_saved_data: PokemonData | None = None
 
         def late_init(self):
             self.md_bg_color = app.theme_cls.backgroundColor
@@ -606,22 +654,24 @@ def run_kivy_gui() -> None:
                 field_value = "1" if _field_object.active else "0"
             else:
                 field_value = _field_object.text
-            errors, has_error = validate_pokemon_data_string(app.sprite_preview.folder_input.text,
-                                                             {_field: field_value})
             temp_pokemon_data_string = f"{_field}: {field_value.replace(chr(10), ', ')}"
+            errors, has_error = validate_pokemon_data_string(app.sprite_preview.folder_input.text,
+                                                             temp_pokemon_data_string)
+            if field_value == "":
+                has_error = True
             is_different_from_rom = True
             is_different_from_data = False
             internal_field = "dex" if _field == "forbid_flip" else _field
             if not has_error:
                 temp_pokemon_data = destringify_pokemon_data(app.sprite_preview.sprite_input.text,
                                                              temp_pokemon_data_string)
-                if "dex" in list(temp_pokemon_data.keys()):
-                    temp_pokemon_data["dex"] = (temp_pokemon_data["dex"] << 7) + (self.pokemon_rom_data["dex"] % 0x80)
+                if temp_pokemon_data.dex > -1:
+                    temp_pokemon_data.dex = (temp_pokemon_data.dex << 7) + (self.pokemon_rom_data.dex % 0x80)
                 different_pokemon_data = keep_different_pokemon_data(self.pokemon_rom_data, temp_pokemon_data)
-                is_different_from_rom = internal_field in different_pokemon_data.keys()
-                if self.pokemon_saved_data and internal_field in list(self.pokemon_saved_data.keys()):
+                is_different_from_rom = not different_pokemon_data.is_field_empty(internal_field)
+                if self.pokemon_saved_data and not self.pokemon_saved_data.is_field_empty(internal_field):
                     different_pokemon_data = keep_different_pokemon_data(self.pokemon_saved_data, temp_pokemon_data)
-                    is_different_from_data = internal_field in list(different_pokemon_data.keys())
+                    is_different_from_data = not different_pokemon_data.is_field_empty(internal_field)
                 else:
                     is_different_from_data = is_different_from_rom
 
@@ -639,8 +689,8 @@ def run_kivy_gui() -> None:
             # Fills in the fields in the data editor and check their validity
             data_folder = "Unown A" if _folder.startswith("Unown ") else _folder
             # Fill in data editor fields
-            self.pokemon_rom_data = get_pokemon_data(data_folder)
-            pokemon_data = self.pokemon_rom_data.copy()
+            self.pokemon_rom_data = get_all_pokemon_data(data_folder)
+            pokemon_data = copy.deepcopy(self.pokemon_rom_data)
             self.pokemon_saved_data = None
             pokemon_saved_data_path = os.path.join(opts.sprite_pack, data_folder, "data.txt")
             if os.path.exists(pokemon_saved_data_path):
@@ -654,27 +704,29 @@ def run_kivy_gui() -> None:
                                             pokemon_saved_data_errors)
                 else:
                     self.pokemon_saved_data = destringify_pokemon_data(data_folder, pokemon_saved_data_string)
-                    for field in self.pokemon_saved_data:
-                        if field == "dex":
-                            pokemon_data[field] = self.pokemon_saved_data[field] = \
-                                (self.pokemon_saved_data[field] << 7) + (pokemon_data[field] % 0x80)
-                        else:
-                            pokemon_data[field] = self.pokemon_saved_data[field]
+                    for field in PokemonData.fields:
+                        if not self.pokemon_saved_data.is_field_empty(field):
+                            if field == "dex":
+                                pokemon_data.dex = self.pokemon_saved_data.dex = \
+                                    (self.pokemon_saved_data.dex << 7) + (pokemon_data.dex % 0x80)
+                            else:
+                                pokemon_data.set(field, self.pokemon_saved_data.get_stat(field),
+                                                 self.pokemon_saved_data.get_move_pool(field))
 
-            self.hp_input.text = str(pokemon_data["hp"])
-            self.spd_input.text = str(pokemon_data["spd"])
-            self.atk_input.text = str(pokemon_data["atk"])
-            self.def_input.text = str(pokemon_data["def"])
-            self.spatk_input.text = str(pokemon_data["spatk"])
-            self.spdef_input.text = str(pokemon_data["spdef"])
-            self.type_1_input.text = POKEMON_TYPES[pokemon_data["type1"]]
-            self.type_2_input.text = POKEMON_TYPES[pokemon_data["type2"]]
-            self.ability_1_input.text = POKEMON_ABILITIES[pokemon_data["ability1"]].title()
-            self.ability_2_input.text = POKEMON_ABILITIES[pokemon_data["ability2"]].title() \
-                if pokemon_data["ability2"] else POKEMON_ABILITIES[pokemon_data["ability1"]].title()
-            self.gender_ratio_input.text = POKEMON_M_OR_F_RATIOS[pokemon_data["gender_ratio"]]
-            self.forbid_flip_input.active = (pokemon_data["dex"] >> 7) > 0
-            self.move_pool_input.text = stringify_move_pool(pokemon_data["move_pool"])
+            self.hp_input.text = str(pokemon_data.hp)
+            self.spd_input.text = str(pokemon_data.spd)
+            self.atk_input.text = str(pokemon_data.atk)
+            self.def_input.text = str(pokemon_data.dfs)
+            self.spatk_input.text = str(pokemon_data.spatk)
+            self.spdef_input.text = str(pokemon_data.spdef)
+            self.type_1_input.text = POKEMON_TYPES[pokemon_data.type1]
+            self.type_2_input.text = POKEMON_TYPES[pokemon_data.type2]
+            self.ability_1_input.text = POKEMON_ABILITIES[pokemon_data.ability1].title()
+            self.ability_2_input.text = POKEMON_ABILITIES[pokemon_data.ability2].title() \
+                if not pokemon_data.is_field_empty("ability2") else POKEMON_ABILITIES[pokemon_data.ability1].title()
+            self.gender_ratio_input.text = POKEMON_M_OR_F_RATIOS[pokemon_data.gender_ratio]
+            self.forbid_flip_input.active = (pokemon_data.dex >> 7) > 0
+            self.move_pool_input.text = stringify_move_pool(pokemon_data.move_pool)
 
             self.check_all_fields()
 
@@ -683,7 +735,7 @@ def run_kivy_gui() -> None:
             self.check_value(self.hp_input, self.hp_label, "hp", self.hp_tooltip)
             self.check_value(self.spd_input, self.spd_label, "spd", self.spd_tooltip)
             self.check_value(self.atk_input, self.atk_label, "atk", self.atk_tooltip)
-            self.check_value(self.def_input, self.def_label, "def", self.def_tooltip)
+            self.check_value(self.def_input, self.def_label, "dfs", self.def_tooltip)
             self.check_value(self.spatk_input, self.spatk_label, "spatk", self.spatk_tooltip)
             self.check_value(self.spdef_input, self.spdef_label, "spdef", self.spdef_tooltip)
             self.check_value(self.type_1_input, self.type_1_label, "type1", self.type_1_tooltip)
@@ -701,22 +753,22 @@ def run_kivy_gui() -> None:
             if pokemon_name.startswith("Unown "):
                 pokemon_name = "Unown A"
             # Build an object with all the registered data
-            new_pokemon_data: dict[str, int | list[dict[str, str | int]]] = {
-                "hp": int(self.hp_input.text),
-                "atk": int(self.atk_input.text),
-                "def": int(self.def_input.text),
-                "spatk": int(self.spatk_input.text),
-                "spdef": int(self.spdef_input.text),
-                "spd": int(self.spd_input.text),
-                "type1": POKEMON_TYPES.index(self.type_1_input.text),
-                "type2": POKEMON_TYPES.index(self.type_2_input.text),
-                "ability1": POKEMON_ABILITIES.index(self.ability_1_input.text.upper()),
-                "ability2": POKEMON_ABILITIES.index(self.ability_2_input.text.upper())
-                    or POKEMON_ABILITIES.index(self.ability_1_input.text.upper()),
-                "gender_ratio": REVERSE_POKEMON_M_OR_F_RATIOS[self.gender_ratio_input.text],
-                "dex": ((1 if self.forbid_flip_input.active else 0) << 7) + int(self.pokemon_rom_data["dex"]) % 0x80,
-                "move_pool": destringify_move_pool(self.move_pool_input.text)
-            }
+            new_pokemon_data: PokemonData = PokemonData()
+            new_pokemon_data.hp = int(self.hp_input.text)
+            new_pokemon_data.atk = int(self.atk_input.text)
+            new_pokemon_data.dfs = int(self.def_input.text)
+            new_pokemon_data.spatk = int(self.spatk_input.text)
+            new_pokemon_data.spdef = int(self.spdef_input.text)
+            new_pokemon_data.spd = int(self.spd_input.text)
+            new_pokemon_data.type1 = POKEMON_TYPES.index(self.type_1_input.text)
+            new_pokemon_data.type2 = POKEMON_TYPES.index(self.type_2_input.text)
+            new_pokemon_data.ability1 = POKEMON_ABILITIES.index(self.ability_1_input.text.upper())
+            new_pokemon_data.ability2 = POKEMON_ABILITIES.index(self.ability_2_input.text.upper()) \
+                or POKEMON_ABILITIES.index(self.ability_1_input.text.upper())
+            new_pokemon_data.gender_ratio = REVERSE_POKEMON_M_OR_F_RATIOS[self.gender_ratio_input.text]
+            new_pokemon_data.dex = ((1 if self.forbid_flip_input.active else 0) << 7) \
+                + int(self.pokemon_rom_data.dex) % 0x80
+            new_pokemon_data.move_pool = destringify_move_pool(self.move_pool_input.text)
             # Trim the data that has not been changed
             self.pokemon_saved_data = keep_different_pokemon_data(self.pokemon_rom_data, new_pokemon_data)
             self.check_all_fields()
@@ -975,7 +1027,7 @@ def run_kivy_gui() -> None:
         sprite_preview: SpritePreviewFrame = ObjectProperty()
         bottom_frame: BottomFrame = ObjectProperty()
 
-        ap_rom: bytearray | None = None
+        ap_rom: bytearray = bytearray()
         adjuster_extensions = [".gba", *EMERALD_PATCH_EXTENSIONS.split("/"), *FR_LG_PATCH_EXTENSIONS.split("/")]
 
         def late_init(self):
@@ -989,8 +1041,8 @@ def run_kivy_gui() -> None:
         def adjust(self, args: Namespace):
             # Adjusts the ROM by applying the patch file of one was given,
             # Building a BPS patch from the given sprite pack, and applying it
-            self.ap_rom = self.ap_rom or self.build_ap_rom(args.patch)
-            if not self.ap_rom:
+            self.ap_rom = self.ap_rom if len(self.ap_rom) > 0 else self.build_ap_rom(args.patch)
+            if len(self.ap_rom) == 0:
                 raise Exception("Could not build the AP ROM.")
             handle_address_collection(self.ap_rom, app.top_frame.patch_frame.rom_version,
                                       app.top_frame.patch_frame.is_ap_checkbox.checkbox.active)
@@ -998,17 +1050,16 @@ def run_kivy_gui() -> None:
             if not args.sprite_pack:
                 raise Exception("Cannot adjust the ROM, a sprite pack is required!")
 
-            # Build sprite pack patch & apply patch
+            # Build sprite pack patch & apply
             try:
-                sprite_pack_bps_patch = self.build_sprite_pack_patch(args.sprite_pack)
+                sprite_pack_patch = self.build_sprite_pack_patch(args.sprite_pack)
             except Exception as e:
                 if hasattr(e, "message"):
-                    raise Exception(f"Error during patch creation: {e.message}")
+                    raise Exception(f"Error during patch creation: {getattr(e, "message")}")
                 else:
                     raise Exception(f"Error during patch creation: {str(e)}")
 
-            adjusted_ap_rom = bytearray(len(self.ap_rom))
-            apply_bps_patch(sprite_pack_bps_patch, app.ap_rom, adjusted_ap_rom)
+            adjusted_ap_rom = self.apply_patch(sprite_pack_patch, app.ap_rom)
 
             rom_path_with_no_extension: tuple[str, str] = os.path.splitext(args.patch)
             adjusted_rom_path = rom_path_with_no_extension[0] + "-adjusted.gba"
@@ -1016,14 +1067,21 @@ def run_kivy_gui() -> None:
                 output_file.write(adjusted_ap_rom)
             return adjusted_rom_path
 
-        def build_ap_rom(self, _patch: str):
+        def apply_patch(self, _sprite_pack_patch: RomPatch, _rom: bytearray):
+            output = _rom.copy()
+            for patch_slice in _sprite_pack_patch.data:
+                output[patch_slice.address:patch_slice.address+patch_slice.length] = patch_slice.data
+            return output
+
+
+        def build_ap_rom(self, _patch: str) -> bytearray:
             # Builds the AP ROM if a patch file was given or opens the AP ROM file that was given
             if not _patch:
                 Factory.InfoPopup().open("Failed ROM Build",
                                          "Cannot build the AP ROM: a patch file or a patched ROM is required!")
-                return
+                return bytearray()
 
-            rom_data: bytearray | None = None
+            rom_data: bytearray = bytearray()
             if os.path.splitext(_patch)[-1] == ".gba":
                 # Load up the ROM directly
                 with open(_patch, "rb") as stream:
@@ -1072,15 +1130,14 @@ def run_kivy_gui() -> None:
                 return "Unknown"
             return f"{version_name}{'_rev1' if internal_revision == 1 else ''}"
 
-        def build_sprite_pack_patch(self, _sprite_pack: str):
+        def build_sprite_pack_patch(self, _sprite_pack: str) -> RomPatch:
             # Builds the BPS patch including all of the sprite pack's data
             errors, has_error = validate_sprite_pack(_sprite_pack)
             if has_error:
                 raise Exception("Cannot adjust the ROM as the sprite pack contains errors:\n{}".format(errors))
 
             sprite_pack_data = get_patch_from_sprite_pack(_sprite_pack, app.top_frame.patch_frame.rom_version)
-            sprite_pack_bps_patch = data_to_bps_patch(sprite_pack_data)
-            return sprite_pack_bps_patch
+            return sprite_pack_data
 
 
     class Adjuster(ThemedApp):
@@ -1133,23 +1190,6 @@ def run_kivy_gui() -> None:
     opts.patch = ""
     opts.sprite_pack = ""
     Adjuster().run()
-
-async def main():
-    # Main function of the adjuster
-    logging.basicConfig(format="%(message)s", level=logging.INFO)
-
-    if not emerald_support and not frlg_support:
-        raise Exception("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or "
-                        + "Pokemon Firered/Leafgreen.")
-
-    run_kivy_gui()
-
-def launch():
-    import colorama
-    import asyncio
-    colorama.just_fix_windows_console()
-    asyncio.run(main())
-    colorama.deinit()
 
 if __name__ == "__main__":
     main()

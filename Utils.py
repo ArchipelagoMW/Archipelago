@@ -22,7 +22,6 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
-from bps.operations import Header, SourceRead, TargetRead
 from pathspec import PathSpec, GitIgnoreSpec
 
 try:
@@ -1276,35 +1275,6 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
-
-
-def data_to_bps_patch(data: dict[str, int | dict[str, int | bytes]]):
-    """
-    Accepts data following the archetype:
-    {
-        "length": int
-        "data": [
-            {
-                "address": int
-                "length": int
-                "data": bytes
-            }
-        ]
-    }"""
-
-    patch: list[Header | SourceRead | TargetRead] = [
-        Header(data["length"], data["length"], "")
-    ]
-    current_ptr = 0
-    for block in data["data"]:
-        if current_ptr < block["address"]:
-            patch.append(SourceRead(block["address"] - current_ptr))
-            current_ptr = block["address"]
-        patch.append(TargetRead(block["data"]))
-        current_ptr += len(block["data"])
-    if current_ptr < data["length"]:
-        patch.append(SourceRead(data["length"] - current_ptr))
-    return patch
 
 
 def open_image_secure(path: str):

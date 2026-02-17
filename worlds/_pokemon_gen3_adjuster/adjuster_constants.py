@@ -1,3 +1,24 @@
+import copy
+
+
+class PointerInfo:
+    shift: int = 0
+    size: int = 0
+
+    def __init__(self, _shift, _size):
+        self.shift = _shift
+        self.size = _size
+
+
+class ObjectInfo:
+    length: int = 0
+    pointers: dict[str, PointerInfo] = {}
+
+    def __init__(self, _length, _pointers):
+        self.length = _length
+        self.pointers = _pointers
+
+
 POKEMON_NAME_TO_ID = {
     "Bulbasaur": 1,
     "Ivysaur": 2,
@@ -1107,54 +1128,53 @@ COMPLEX_SPRITES_LIST = [
     "trainer_walking"
 ]
 
-OVERWORLD_PALETTE_INFO: dict[str, int | dict[str, int]] = {
-    "palette_ptr": {"shift": 0, "size": 4},
-    "id":          {"shift": 4, "size": 2},
-    "padding":     {"shift": 6, "size": 2},
-    "length":      8,
-}
+OVERWORLD_PALETTE_INFO: ObjectInfo = ObjectInfo(8, {
+    "palette_ptr": PointerInfo(0, 4),
+    "id":          PointerInfo(4, 2),
+    "padding":     PointerInfo(6, 2)
+})
 
-OVERWORLD_SPRITE_OBJECT_INFO = {
-    "starter_bytes":  {"shift": 0,  "size": 2},
-    "palette_id":     {"shift": 2,  "size": 2},
-    "second_pal_id":  {"shift": 4,  "size": 2},
-    "sprite_length":  {"shift": 6,  "size": 2},
-    "sprite_width":   {"shift": 8,  "size": 2},
-    "sprite_height":  {"shift": 10, "size": 2},
-    "sprite_info":    {"shift": 12, "size": 1},
-    "footprint_type": {"shift": 13, "size": 1},
-    "distrib_ptr":    {"shift": 16, "size": 3},
-    "size_draw_ptr":  {"shift": 20, "size": 3},
-    "animation_ptr":  {"shift": 24, "size": 3},
-    "sprites_ptr":    {"shift": 28, "size": 3},
-    "ram_store_ptr":  {"shift": 32, "size": 3}
-}
+OVERWORLD_SPRITE_OBJECT_INFO: ObjectInfo = ObjectInfo(36, {
+    "starter_bytes":  PointerInfo(0, 2),
+    "palette_id":     PointerInfo(2, 2),
+    "second_pal_id":  PointerInfo(4, 2),
+    "sprite_length":  PointerInfo(6, 2),
+    "sprite_width":   PointerInfo(8, 2),
+    "sprite_height":  PointerInfo(10, 2),
+    "sprite_info":    PointerInfo(12, 1),
+    "footprint_type": PointerInfo(13, 1),
+    "distrib_ptr":    PointerInfo(16, 3),
+    "size_draw_ptr":  PointerInfo(20, 3),
+    "animation_ptr":  PointerInfo(24, 3),
+    "sprites_ptr":    PointerInfo(28, 3),
+    "ram_store_ptr":  PointerInfo(32, 3)
+})
 
-POKEMON_DATA_INFO = {
-    "hp":             {"shift": 0,  "size": 1},
-    "atk":            {"shift": 1,  "size": 1},
-    "def":            {"shift": 2,  "size": 1},
-    "spatk":          {"shift": 3,  "size": 1},
-    "spdef":          {"shift": 4,  "size": 1},
-    "spd":            {"shift": 5,  "size": 1},
-    "type1":          {"shift": 6,  "size": 1},
-    "type2":          {"shift": 7,  "size": 1},
-    "catch_rate":     {"shift": 8,  "size": 1},
-    "base_exp":       {"shift": 9,  "size": 1},
-    "evs":            {"shift": 10, "size": 2},
-    "item1":          {"shift": 12, "size": 2},
-    "item2":          {"shift": 14, "size": 2},
-    "gender_ratio":   {"shift": 16, "size": 1},
-    "steps_to_hatch": {"shift": 17, "size": 1},
-    "base_happiness": {"shift": 18, "size": 1},
-    "growth_rate":    {"shift": 19, "size": 1},
-    "egg_group1":     {"shift": 20, "size": 1},
-    "egg_group2":     {"shift": 21, "size": 1},
-    "ability1":       {"shift": 22, "size": 1},
-    "ability2":       {"shift": 23, "size": 1},
-    "run_rate":       {"shift": 24, "size": 1},
-    "dex":            {"shift": 25, "size": 1},
-}
+POKEMON_DATA_INFO: ObjectInfo = ObjectInfo(26, {
+    "hp":             PointerInfo(0, 1),
+    "atk":            PointerInfo(1, 1),
+    "dfs":            PointerInfo(2, 1),
+    "spatk":          PointerInfo(3, 1),
+    "spdef":          PointerInfo(4, 1),
+    "spd":            PointerInfo(5, 1),
+    "type1":          PointerInfo(6, 1),
+    "type2":          PointerInfo(7, 1),
+    "catch_rate":     PointerInfo(8, 1),
+    "base_exp":       PointerInfo(9, 1),
+    "evs":            PointerInfo(10, 2),
+    "item1":          PointerInfo(12, 2),
+    "item2":          PointerInfo(14, 2),
+    "gender_ratio":   PointerInfo(16, 1),
+    "steps_to_hatch": PointerInfo(17, 1),
+    "base_happiness": PointerInfo(18, 1),
+    "growth_rate":    PointerInfo(19, 1),
+    "egg_group1":     PointerInfo(20, 1),
+    "egg_group2":     PointerInfo(21, 1),
+    "ability1":       PointerInfo(22, 1),
+    "ability2":       PointerInfo(23, 1),
+    "run_rate":       PointerInfo(24, 1),
+    "dex":            PointerInfo(25, 1),
+})
 
 VALID_ICON_PALETTES = {
     0: [
@@ -1250,6 +1270,24 @@ VALID_OVERWORLD_PALETTE = [
     0, 0, 0
 ]
 
+VALID_REFLECTION_PALETTE = [
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    255, 255, 255
+]
+
 VALID_WEAK_OVERWORLD_PALETTE = [
     -1, -1, -1,
     -1, -1, -1,
@@ -1294,3 +1332,296 @@ VALID_UNOWN_SHINY_PALETTE = [
     32,  65,  156,
     49,  57,  106
 ]
+
+
+class DataAddressInfo():
+    crc32: int = 0
+    original_addresses: dict[str, int] = {}
+    ap_addresses: dict[str, int] = {}
+    data_address_beginning: int = 0
+    data_address_end: int = 0
+
+    def __init__(self, _crc32, _original_addresses, _ap_addresses, _data_address_beginning, _data_address_end):
+        self.crc32 = _crc32
+        self.original_addresses = _original_addresses
+        self.ap_addresses = _ap_addresses
+        self.data_address_beginning = _data_address_beginning
+        self.data_address_end = _data_address_end
+
+
+class FolderObjectInfo():
+    name: str = ""
+    key: str = ""
+    folders: list[str] = []
+    sprites: list[str] = []
+    palettes: dict[str, list[str]] = {}
+
+    def __init__(self, _key, _folders, _sprites, _palettes, _name = ""):
+        self.key = _key
+        self.folders = _folders
+        self.sprites = _sprites
+        self.palettes = _palettes
+        self.name = _name
+
+
+class OverworldSpriteSize():
+    width: int = 0
+    height: int = 0
+    data: str = ""
+    distrib: str = ""
+
+    def __init__(self, _width, _height, _data, _distrib = ""):
+        self.width = _width
+        self.height = _height
+        self.data = _data
+        self.distrib = _distrib
+
+
+class SpriteRequirement():
+    frames: list[int] = []
+    width: int = 0
+    height: int = 0
+    palette: list[int] = []
+    palettes: dict[int, list[int]] = {}
+    palette_number: int = 1
+    palette_size: int = 0
+    internal_frames: int = 0
+    palette_per_frame: bool = False
+    fields = ["frames", "width", "height", "palette", "palettes", "palette_number", "palette_size", "internal_frames",
+              "palette_per_frame"]
+
+    def __init__(self, _frames = [], _width = 0, _height = 0, _palette = [], _palettes = {}, _palette_number = 1,
+                 _palette_size = 0,_internal_frames = 0, _palette_per_frame = False):
+        self.frames = _frames
+        self.width = _width
+        self.height = _height
+        self.palette = _palette
+        self.palettes = _palettes
+        self.palette_number = _palette_number
+        self.palette_size = _palette_size
+        self.internal_frames = _internal_frames
+        self.palette_per_frame = _palette_per_frame
+
+    def set(self, _field: str, _value):
+        if _field == "frames":            self.frames = _value
+        if _field == "width":             self.width = _value
+        if _field == "height":            self.height = _value
+        if _field == "palette":           self.palette = _value
+        if _field == "palettes":          self.palettes = _value
+        if _field == "palette_number":    self.palette_number = _value
+        if _field == "palette_size":      self.palette_size = _value
+        if _field == "internal_frames":   self.internal_frames = _value
+        if _field == "palette_per_frame": self.palette_per_frame = _value
+
+    def get(self, _field: str):
+        if _field == "frames":            return self.frames
+        if _field == "width":             return self.width
+        if _field == "height":            return self.height
+        if _field == "palette":           return self.palette
+        if _field == "palettes":          return self.palettes
+        if _field == "palette_number":    return self.palette_number
+        if _field == "palette_size":      return self.palette_size
+        if _field == "internal_frames":   return self.internal_frames
+        if _field == "palette_per_frame": return self.palette_per_frame
+        return 0
+
+    def is_field_empty(self, _field: str):
+        if _field == "frames":            return len(self.frames) == 0
+        if _field == "width":             return self.width == 0
+        if _field == "height":            return self.height == 0
+        if _field == "palette":           return len(self.palette) == 0
+        if _field == "palettes":          return len(self.palettes) == 0
+        if _field == "palette_number":    return self.palette_number == 1
+        if _field == "palette_size":      return self.palette_size == 0
+        if _field == "internal_frames":   return self.internal_frames == 0
+        if _field == "palette_per_frame": return self.palette_per_frame == False
+        return True
+
+    def __add__(self, _other):
+        output = copy.deepcopy(self)
+        for field in self.fields:
+            if not _other.is_field_empty(field):
+                output.set(field, _other.get(field))
+        return output
+
+
+class PokemonMoveInfo():
+    move: str = ""
+    level: int = 0
+
+    def __init__(self, _move, _level):
+        self.move = _move
+        self.level = _level
+
+
+class PokemonData():
+    hp: int = -1
+    atk: int = -1
+    dfs: int = -1
+    spatk: int = -1
+    spdef: int = -1
+    spd: int = -1
+    type1: int = -1
+    type2: int = -1
+    catch_rate: int = -1
+    base_exp: int = -1
+    evs: int = -1
+    item1: int = -1
+    item2: int = -1
+    gender_ratio: int = -1
+    steps_to_hatch: int = -1
+    base_happiness: int = -1
+    growth_rate: int = -1
+    egg_group1: int = -1
+    egg_group2: int = -1
+    ability1: int = -1
+    ability2: int = -1
+    run_rate: int = -1
+    dex: int = -1
+    move_pool: list[PokemonMoveInfo] = []
+    fields: list[str] = ["hp", "atk", "dfs", "spatk", "spdef", "spd", "type1", "type2", "catch_rate", "base_exp",
+                         "evs", "item1", "item2", "gender_ratio", "steps_to_hatch", "base_happiness", "growth_rate",
+                         "egg_group1", "egg_group2", "ability1", "ability2", "run_rate", "dex", "move_pool"]
+
+    def get_stat(self, _field: str) -> int:
+        if _field == "hp": return self.hp
+        if _field == "atk": return self.atk
+        if _field == "dfs": return self.dfs
+        if _field == "spatk": return self.spatk
+        if _field == "spdef": return self.spdef
+        if _field == "spd": return self.spd
+        if _field == "type1": return self.type1
+        if _field == "type2": return self.type2
+        if _field == "catch_rate": return self.catch_rate
+        if _field == "base_exp": return self.base_exp
+        if _field == "evs": return self.evs
+        if _field == "item1": return self.item1
+        if _field == "item2": return self.item2
+        if _field == "gender_ratio": return self.gender_ratio
+        if _field == "steps_to_hatch": return self.steps_to_hatch
+        if _field == "base_happiness": return self.base_happiness
+        if _field == "growth_rate": return self.growth_rate
+        if _field == "egg_group1": return self.egg_group1
+        if _field == "egg_group2": return self.egg_group2
+        if _field == "ability1": return self.ability1
+        if _field == "ability2": return self.ability2
+        if _field == "run_rate": return self.run_rate
+        if _field == "dex": return self.dex
+        return 0
+
+    def get_move_pool(self, _field: str) -> list[PokemonMoveInfo]:
+        if _field == "move_pool": return self.move_pool
+        return []
+
+    def is_field_empty(self, _field: str):
+        if _field == "move_pool": return len(self.get_move_pool(_field)) == 0
+        return self.get_stat(_field) == -1
+
+    def set(self, _field: str, _value: int = 0, _value_move_pool: list[PokemonMoveInfo] = []):
+        if _field == "hp": self.hp = _value
+        if _field == "atk": self.atk = _value
+        if _field == "dfs": self.dfs = _value
+        if _field == "spatk": self.spatk = _value
+        if _field == "spdef": self.spdef = _value
+        if _field == "spd": self.spd = _value
+        if _field == "type1": self.type1 = _value
+        if _field == "type2": self.type2 = _value
+        if _field == "catch_rate": self.catch_rate = _value
+        if _field == "base_exp": self.base_exp = _value
+        if _field == "evs": self.evs = _value
+        if _field == "item1": self.item1 = _value
+        if _field == "item2": self.item2 = _value
+        if _field == "gender_ratio": self.gender_ratio = _value
+        if _field == "steps_to_hatch": self.steps_to_hatch = _value
+        if _field == "base_happiness": self.base_happiness = _value
+        if _field == "growth_rate": self.growth_rate = _value
+        if _field == "egg_group1": self.egg_group1 = _value
+        if _field == "egg_group2": self.egg_group2 = _value
+        if _field == "ability1": self.ability1 = _value
+        if _field == "ability2": self.ability2 = _value
+        if _field == "run_rate": self.run_rate = _value
+        if _field == "dex": self.dex = _value
+        if _field == "move_pool": self.move_pool = _value_move_pool
+
+
+class SafePokemonData():
+    hp: str = ""
+    atk: str = ""
+    dfs: str = ""
+    spatk: str = ""
+    spdef: str = ""
+    spd: str = ""
+    type1: str = ""
+    type2: str = ""
+    catch_rate: str = ""
+    base_exp: str = ""
+    evs: str = ""
+    item1: str = ""
+    item2: str = ""
+    gender_ratio: str = ""
+    steps_to_hatch: str = ""
+    base_happiness: str = ""
+    growth_rate: str = ""
+    egg_group1: str = ""
+    egg_group2: str = ""
+    ability1: str = ""
+    ability2: str = ""
+    run_rate: str = ""
+    dex: str = ""
+    move_pool: str = ""
+    fields: list[str] = ["hp", "atk", "dfs", "spatk", "spdef", "spd", "type1", "type2", "catch_rate", "base_exp",
+                         "evs", "item1", "item2", "gender_ratio", "steps_to_hatch", "base_happiness", "growth_rate",
+                         "egg_group1", "egg_group2", "ability1", "ability2", "run_rate", "dex", "move_pool"]
+
+    def get(self, _field: str) -> str:
+        if _field == "hp": return self.hp
+        if _field == "atk": return self.atk
+        if _field == "dfs": return self.dfs
+        if _field == "spatk": return self.spatk
+        if _field == "spdef": return self.spdef
+        if _field == "spd": return self.spd
+        if _field == "type1": return self.type1
+        if _field == "type2": return self.type2
+        if _field == "catch_rate": return self.catch_rate
+        if _field == "base_exp": return self.base_exp
+        if _field == "evs": return self.evs
+        if _field == "item1": return self.item1
+        if _field == "item2": return self.item2
+        if _field == "gender_ratio": return self.gender_ratio
+        if _field == "steps_to_hatch": return self.steps_to_hatch
+        if _field == "base_happiness": return self.base_happiness
+        if _field == "growth_rate": return self.growth_rate
+        if _field == "egg_group1": return self.egg_group1
+        if _field == "egg_group2": return self.egg_group2
+        if _field == "ability1": return self.ability1
+        if _field == "ability2": return self.ability2
+        if _field == "run_rate": return self.run_rate
+        if _field == "dex": return self.dex
+        if _field == "move_pool": return self.move_pool
+        return ""
+
+    def set(self, _field: str, _value: str = ""):
+        if _field == "hp": self.hp = _value
+        if _field == "atk": self.atk = _value
+        if _field == "dfs": self.dfs = _value
+        if _field == "spatk": self.spatk = _value
+        if _field == "spdef": self.spdef = _value
+        if _field == "spd": self.spd = _value
+        if _field == "type1": self.type1 = _value
+        if _field == "type2": self.type2 = _value
+        if _field == "catch_rate": self.catch_rate = _value
+        if _field == "base_exp": self.base_exp = _value
+        if _field == "evs": self.evs = _value
+        if _field == "item1": self.item1 = _value
+        if _field == "item2": self.item2 = _value
+        if _field == "gender_ratio": self.gender_ratio = _value
+        if _field == "steps_to_hatch": self.steps_to_hatch = _value
+        if _field == "base_happiness": self.base_happiness = _value
+        if _field == "growth_rate": self.growth_rate = _value
+        if _field == "egg_group1": self.egg_group1 = _value
+        if _field == "egg_group2": self.egg_group2 = _value
+        if _field == "ability1": self.ability1 = _value
+        if _field == "ability2": self.ability2 = _value
+        if _field == "run_rate": self.run_rate = _value
+        if _field == "dex": self.dex = _value
+        if _field == "move_pool": self.move_pool = _value
