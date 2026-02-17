@@ -1,108 +1,55 @@
-# Kirby & The Amazing Mirror (GBA) — Archipelago Setup (Work-in-Progress)
+# Kirby & The Amazing Mirror Setup Guide
 
-This integration is currently implemented as a **BizHawk client + ROM patch memory contract**.
+## Required Software
 
-- The **Python world** is stable for seed generation.
-- The **ROM patch** is responsible for implementing the RAM protocol described below.
-- No seed-specific ROM patching is required yet; all randomization is mediated via RAM.
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+- An English Pokémon Emerald ROM. The Archipelago community cannot provide this.
+- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later
 
-This document describes the **minimum contract required for a playable game**.
+### Configuring BizHawk
 
----
+Once you have installed BizHawk, open `EmuHawk.exe` and change the following settings:
 
-## BizHawk requirements
+- If you're using BizHawk 2.7 or 2.8, go to `Config > Customize`. On the Advanced tab, switch the Lua Core from
+`NLua+KopiLua` to `Lua+LuaInterface`, then restart EmuHawk. (If you're using BizHawk 2.9+, you can skip this step.)
+- Under `Config > Customize`, check the "Run in background" option to prevent disconnecting from the client while you're
+tabbed out of EmuHawk.
+- Open a `.gba` file in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click
+`Controllers…`, load any `.gba` ROM first.
+- Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
+clear it.
 
-- BizHawk 2.x
-- `connector_bizhawk_generic.lua` (standard Archipelago BizHawk connector)
+## Generating and Patching a Game
 
-All memory access uses the **System Bus** domain.
+1. Create your options file (YAML).
+2. Follow the general Archipelago instructions for [generating a game](/tutorial/Archipelago/setup_en#generating-a-game).
+This will generate an output file for you. Your patch file will have the `.apemerald` file extension.
+3. Open `ArchipelagoLauncher.exe`
+4. Select "Open Patch" on the left side and select your patch file.
+5. If this is your first time patching, you will be prompted to locate your vanilla ROM.
+6. A patched `.gba` file will be created in the same place as the patch file.
+7. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
+BizHawk install.
 
----
+If you're playing a single-player seed and you don't care about autotracking or hints, you can stop here, close the
+client, and load the patched ROM in any emulator. However, for multiworlds and other Archipelago features, continue
+below using BizHawk as your emulator.
 
-## Memory contract (EWRAM, System Bus)
+## Connecting to a Server
 
-All Archipelago-related RAM is located in **EWRAM starting at `0x0202C000`**.
+By default, opening a patch file will do steps 1-5 below for you automatically. Even so, keep them in your memory just
+in case you have to close and reopen a window mid-game for some reason.
 
-Addresses are defined in: `worlds/kirbyam/data/addresses.json`
+1. Kirby & The Amazing Mirror uses Archipelago's BizHawk Client. If the client isn't still open from when you patched your game,
+you can re-open it from the launcher.
+2. Ensure EmuHawk is running the patched ROM.
+3. In EmuHawk, go to `Tools > Lua Console`. This window must stay open while playing.
+4. In the Lua Console window, go to `Script > Open Script…`.
+5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
+6. The emulator and client will eventually connect to each other. The BizHawk Client window should indicate that it
+connected and recognized Kirby & The Amazing Mirror.
+7. To connect the client to the server, enter your room's address and port (e.g. `archipelago.gg:38281`) into the
+top text field of the client and click Connect.
 
-The ROM patch must treat this region as **reserved and owned by Archipelago**.
-
-### AP EWRAM layout
-
-Base address: **`0x0202C000`**
-
-| Address | Size | Name | Description |
-|------|------|------|-------------|
-| `0x0202C000` | u32 | `shard_bitfield` | Location check bitfield |
-| `0x0202C004` | u32 | `incoming_item_flag` | Incoming item mailbox flag |
-| `0x0202C008` | u32 | `incoming_item_id` | Incoming AP item id |
-| `0x0202C00C` | u32 | `incoming_item_player` | Sender slot id |
-
-All values are **little-endian 32-bit integers**.
-
----
-
-## Location checks
-
-### `shard_bitfield` (u32)
-
-- Each bit represents whether a location has been checked.
-- Bits are **monotonic** (once set, never cleared).
-
-Current proof-of-concept mapping:
-
-- bit 0 → `SHARD_1` location checked
-- bit 1 → `SHARD_2` location checked
-- …
-- bit 7 → `SHARD_8` location checked
-
-**Client behavior:**
-- Polls `shard_bitfield` each tick.
-- When a new bit transitions from `0 → 1`, sends a `LocationChecks` message to the server.
-
-**ROM behavior:**
-- When the player completes a shard location, set the corresponding bit.
-- Bits should only ever be set, never cleared.
-
----
-
-## Incoming item mailbox
-
-This is a **single-slot mailbox** used to deliver AP items from the client to the ROM.
-
-### Fields
-
-- `incoming_item_flag` (u32)
-  - `0` = mailbox empty (client may write)
-  - `1` = mailbox full (ROM must consume)
-- `incoming_item_id` (u32)
-  - AP item id (world-defined; opaque to the ROM except for effect mapping)
-- `incoming_item_player` (u32)
-  - Slot id of the sending player (informational; optional to use)
-
-### Client behavior
-
-- Maintains a local queue of newly received AP items.
-- When `incoming_item_flag == 0`:
-  1. Writes `incoming_item_id`
-  2. Writes `incoming_item_player`
-  3. Sets `incoming_item_flag = 1`
-- Does not overwrite the mailbox while the flag is `1`.
-
-### ROM behavior (implemented in the base patch)
-
-- Poll `incoming_item_flag` periodically (e.g., once per frame).
-- When `incoming_item_flag == 1`:
-  1. Read `incoming_item_id` (and optionally `incoming_item_player`)
-  2. Grant the item’s in-game effect
-  3. Clear `incoming_item_flag` back to `0`
-
-For initial playability, item effects may be implemented in a minimal or placeholder manner (e.g., shard items directly advancing shard progress).
-
----
-
-## Notes
-
-- This RAM contract is intentionally minimal and designed for early playability.
-- Future revisions may replace the single-slot mailbox with a ring buffer or add save persistence.
-- All addresses may be relocated if conflicts with game memory are discovered, but must remain consistent between ROM patch and client.
+You should now be able to receive and send items. You'll need to do these steps every time you want to reconnect. It is
+perfectly safe to make progress offline; everything will re-sync when you reconnect.
