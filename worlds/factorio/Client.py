@@ -115,7 +115,7 @@ class FactorioContext(CommonContext):
         self.server_settings_path: str = server_settings_path
         self.additional_factorio_server_args = factorio_server_args
         self.silence_rebounce_hints = []
-        self.silence_rebounce_toggle = True
+        self.silence_rebounce_toggle = False
 
     @property
     def energylink_key(self) -> str:
