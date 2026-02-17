@@ -59,7 +59,7 @@ class PeaksOfWorld(World):
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_time_attack and not self.options.include_time_attack:
-            logging.warn("Goal is set to time attack but time attack is not enabled, enabling time attack")
+            logging.warning("Goal is set to time attack but time attack is not enabled, enabling time attack")
             self.options.include_time_attack.value = True
 
         starting_book_options: dict[str, Toggle] = {
