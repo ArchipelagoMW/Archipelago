@@ -643,7 +643,7 @@ class PokemonRedBlueWorld(World):
         if (combined_traps > 0 and
                 self.random.randint(1, 100) <= self.options.trap_percentage.value):
             return self.select_trap()
-        banned_items = item_groups["Unique"]
+        banned_items = item_groups["Unique"].copy()
         if (((not self.options.tea) or "Saffron City" not in [self.fly_map, self.town_map_fly_map])
                 and (not self.options.door_shuffle)):
             # under these conditions, you should never be able to reach the Copycat or Pokémon Tower without being
