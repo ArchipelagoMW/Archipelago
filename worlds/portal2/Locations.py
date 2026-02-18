@@ -219,6 +219,7 @@ speedrun_logic_table: dict[str, list[str]] = {
     # Chapter 5
     "Chapter 5: Turret Sabotage Completion": [portal_gun_2],
     "Chapter 5: Neurotoxin Sabotage Completion": [portal_gun_2],
+    "Chapter 5: Core Completion": [turrets],
     # Chapter 6
     "Chapter 6: Repulsion Intro Completion": [paint, old_floor_button, portal_gun_2],
     "Chapter 6: Bomb Flings Completion": [portal_gun_2, paint, old_button],
