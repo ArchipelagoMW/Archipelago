@@ -13,6 +13,7 @@
 
 -- TODO:
 -- fix quality packs
+-- only send logical advancement checks (a yaml setting)
 
 local function send_hint(technologies, force)
     --technologies => tech_name = true
