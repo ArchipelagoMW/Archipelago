@@ -73,10 +73,13 @@ class PeaksOfWorld(World):
         enabled_books: list[str] = [b for b, v in starting_book_options.items() if v]
         start_book: str = self.options.starting_book.get_selected_book()
 
-        if self.options.game_mode == GameMode.option_peak_unlock and\
-                self.options.rope_unlock_mode == RopeUnlockMode.option_early:
-            logging.warning("peak unlock with early ropes usually leads to issues, setting ropes to normal")
-            self.options.rope_unlock_mode.value = RopeUnlockMode.option_normal
+        if self.options.game_mode == GameMode.option_peak_unlock:
+            if self.options.early_hands:
+                if self.options.start_with_hands != StartingHands.option_both:
+                    raise OptionError("peak unlock with early hands is too restrictive of a start")
+
+            if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
+                raise OptionError("peak unlock with early ropes is too restrictive of a start")
 
         if not enabled_books:
             logging.error(f"Player {self.player_name} has not selected any books!")
@@ -104,6 +107,7 @@ class PeaksOfWorld(World):
                 else:
                     local_itempool.append(self.create_item(item.name))
                     if item.is_early(self.options):
+                        logging.debug(f"item {item.name} is early for player {self.player_name}")
                         self.multiworld.early_items[self.player][item.name] = 1
         if len(local_itempool) > remaining_items:
             self.random.shuffle(local_itempool)
