@@ -21,7 +21,7 @@ Utils.local_path.cached_path = os.path.dirname(__file__)
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
-    configpath = os.path.abspath(Utils.user_path('config.yaml'))
+    configpath = os.path.abspath(Utils.home_path('config.yaml'))
 
 
 def get_app() -> "Flask":
