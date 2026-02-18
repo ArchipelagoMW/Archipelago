@@ -474,14 +474,6 @@ class OptionsCreator(ThemedApp):
         dialog.scrollbox.layout.spacing = dp(5)
         dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
 
-        if name not in self.options:
-            # convert from non-mutable to mutable
-            # We use list syntax even for sets, set behavior is enforced through GUI
-            if issubclass(option, OptionCounter):
-                self.options[name] = deepcopy(option.default)
-            else:
-                self.options[name] = sorted(option.default)
-
         if issubclass(option, OptionCounter):
             for value in sorted(self.options[name]):
                 dialog.add_set_item(value, self.options[name].get(value, None))
@@ -495,6 +487,15 @@ class OptionsCreator(ThemedApp):
     def create_option_set_list_counter(self, option: typing.Type[OptionList] | typing.Type[OptionSet] |
                                        typing.Type[OptionCounter], name: str, world: typing.Type[World]):
         main_button = MDButton(MDButtonText(text="Edit"), on_release=lambda x: self.create_popup(option, name, world))
+
+        if name not in self.options:
+            # convert from non-mutable to mutable
+            # We use list syntax even for sets, set behavior is enforced through GUI
+            if issubclass(option, OptionCounter):
+                self.options[name] = deepcopy(option.default)
+            else:
+                self.options[name] = sorted(option.default)
+
         return main_button
 
     def create_option(self, option: typing.Type[Option], name: str, world: typing.Type[World]) -> Widget:
