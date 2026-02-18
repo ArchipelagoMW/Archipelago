@@ -98,7 +98,7 @@ class Portal2World(World):
                 map_choice = map_pool.pop(0)
                 used_maps.append(map_choice)
                 
-                if self.options.game_mode == 1:
+                if self.options.game_mode == GameModeOption.CHAOTIC:
                     random_chapter = self.random.randint(1, 8)
                     chapter_maps[f"Chapter {random_chapter}"].append(map_choice)
                 else:
@@ -178,7 +178,7 @@ class Portal2World(World):
                 self.create_in_level_check(den, ratman_requirements, region_start)
             
             # Connect to chapter region if there was no previous level or if open world
-            if self.options.game_mode == 2 or not last_region:
+            if self.options.game_mode == GameModeOption.OPEN_WORLD or not last_region:
                 chapter_region.connect(region_start)
             else:
                 last_region.connect(region_start)
@@ -213,7 +213,7 @@ class Portal2World(World):
             
         # Update logic for speedrun option
         self.location_logic: dict[str, list[str]] = {location:data.required_items for location, data in all_locations_table.items()}
-        if self.options.logic_difficulty == 1:
+        if self.options.logic_difficulty == LogicDifficultyOption.SPEEDRUNNER:
             for map_location in self.maps_in_use:
                 if map_location in speedrun_logic_table:
                     self.location_logic[map_location] = speedrun_logic_table[map_location]
@@ -222,11 +222,11 @@ class Portal2World(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        if not (self.chapter_maps_dict or self.options.game_mode == 2):
+        if not (self.chapter_maps_dict or self.options.game_mode == GameModeOption.OPEN_WORLD):
             self.chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
-            if self.options.game_mode == 2:
+            if self.options.game_mode == GameModeOption.OPEN_WORLD:
                 chapter_region, last_region = self.create_connected_maps(i)
             else:
                 chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])

@@ -2,6 +2,11 @@ from dataclasses import dataclass
 from Options import Choice, LocationSet, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
+class GameModeOption:
+    NORMAL = 0
+    CHAOTIC = 1
+    OPEN_WORLD = 2
+
 class GameMode(Choice):
     """
     What map generation and logic options are set:
@@ -10,10 +15,10 @@ class GameMode(Choice):
     open_world -> maps appear in the correct order in the game and are all playable from the start
     """
     display_name = "Game Mode"
-    option_normal = 0
-    option_chaotic = 1
-    option_open_world = 2
-    default = 0
+    option_normal = GameModeOption.NORMAL
+    option_chaotic = GameModeOption.CHAOTIC
+    option_open_world = GameModeOption.OPEN_WORLD
+    default = GameModeOption.NORMAL
     
 class EarlyPlayabilityPercentage(Range):
     """
@@ -39,7 +44,10 @@ class CutsceneLevels(Toggle):
     Determines whether cutscene maps are added to the map pool
     """
     display_name = "Cutscene Levels"
-    
+   
+class LogicDifficultyOption:
+    NORMAL = 0
+    SPEEDRUNNER = 1 
 
 class LogicDifficulty(Choice):
     """
@@ -49,9 +57,9 @@ class LogicDifficulty(Choice):
     (if you don't speedrun the game don't choose this option)
     """
     display_name = "Logic Difficulty"
-    option_normal = 0
-    option_speedrunner = 1
-    default = 0
+    option_normal = LogicDifficultyOption.NORMAL
+    option_speedrunner = LogicDifficultyOption.SPEEDRUNNER
+    default = LogicDifficultyOption.NORMAL
 
 class TrapFillPercentage(Range):
     """
