@@ -2,7 +2,8 @@ import typing
 from argparse import Namespace
 from BaseClasses import CollectionState, MultiWorld
 from Options import ItemLinks
-from worlds.AutoWorld import AutoWorldRegister, call_all
+import worlds
+from worlds.AutoWorld import call_all
 from .. import HKWorld
 
 
@@ -35,7 +36,7 @@ class linkedTestHK():
         self.multiworld.player_name = {1: "Linker 1", 2: "Linker 2"}
         self.multiworld.set_seed()
         args = Namespace()
-        options_dataclass = AutoWorldRegister.world_types[self.game].options_dataclass
+        options_dataclass = worlds.get_world_class(self.game).options_dataclass
         for name, option in options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, option.default)),

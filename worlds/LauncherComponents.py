@@ -1,4 +1,3 @@
-import bisect
 import logging
 import pathlib
 import weakref
@@ -168,21 +167,22 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     import shutil
     shutil.copyfile(apworld_path, target)
 
-    # If a module with this name is already loaded, then we can't load it now.
-    # TODO: We need to be able to unload a world module,
-    # so the user can update a world without restarting the application.
-    found_already_loaded = False
+    # If this world is already loaded, unload it so we can load the updated copy.
+    matching_source = None
     for loaded_world in worlds.world_sources:
-        loaded_name = pathlib.Path(loaded_world.path).stem
-        if module_name == loaded_name:
-            found_already_loaded = True
+        if pathlib.Path(loaded_world.path).stem == module_name:
+            matching_source = loaded_world
             break
-    if found_already_loaded and is_kivy_running():
-        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded, "
-                        "so a Launcher restart is required to use the new installation.")
-    world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
-    bisect.insort(worlds.world_sources, world_source)
-    world_source.load()
+    if matching_source is not None:
+        entry = worlds.get_entry_by_path(matching_source.path)
+        if entry and entry.get("game"):
+            worlds.unload_world(entry["game"])
+    if not worlds.add_world_to_cache(str(target)):
+        raise Exception("Failed to add the installed APWorld to the cache.")
+    for ws in worlds.world_sources:
+        if pathlib.Path(ws.path).resolve() == target.resolve():
+            ws.load(worlds.failed_world_loads)
+            break
 
     return apworld_path, target
 
@@ -207,11 +207,12 @@ def install_apworld(apworld_path: str = "") -> None:
 def export_datapackage() -> None:
     import json
 
-    from worlds import network_data_package
+    import worlds
 
+    worlds.ensure_all_worlds_loaded()
     path = user_path("datapackage_export.json")
     with open(path, "w") as f:
-        json.dump(network_data_package, f, indent=4)
+        json.dump({"games": dict(worlds.network_data_package["games"])}, f, indent=4)
 
     open_file(path)
 
@@ -264,7 +265,6 @@ if not is_frozen():
         import os
         import zipfile
 
-        from worlds import AutoWorldRegister
         from worlds.Files import APWorldContainer
         from Launcher import open_folder
 
@@ -273,10 +273,12 @@ if not is_frozen():
         parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
         args = parser.parse_args(launch_args)
 
+        import worlds
+        worlds.ensure_all_worlds_loaded()
         if args.worlds:
-            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
+            games = [(game, worlds.get_loaded_world(game)) for game in args.worlds]
         else:
-            games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
+            games = [(worldname, worldtype) for worldname, worldtype in worlds.get_all_worlds().items()
                      if not worldtype.zip_path]
 
         global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))

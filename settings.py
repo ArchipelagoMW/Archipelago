@@ -30,18 +30,25 @@ _lock = Lock()
 
 
 def _update_cache() -> None:
-    """Load all worlds and update world_settings_name_cache"""
+    """Populate world_settings_name_cache from world list cache."""
     global _world_settings_name_cache_updated
     if _world_settings_name_cache_updated:
         return
 
     try:
-        from worlds.AutoWorld import AutoWorldRegister
-        for world in AutoWorldRegister.world_types.values():
-            annotation = world.__annotations__.get("settings", None)
-            if annotation is None or annotation == "ClassVar[Optional['Group']]":
+        import worlds
+        for entry in worlds.get_world_list():
+            game = entry.get("game")
+            if not game:
                 continue
-            _world_settings_name_cache[world.settings_key] = f"{world.__module__}.{world.__name__}"
+            path = entry.get("path", "")
+            if entry.get("is_zip"):
+                from pathlib import Path as PathLib
+                stem = PathLib(path).stem
+            else:
+                stem = os.path.basename(path.rstrip(os.sep))
+            settings_key = stem.lower() + "_options"
+            _world_settings_name_cache[settings_key] = ("__lazy__", game)
     finally:
         _world_settings_name_cache_updated = True
 
@@ -764,6 +771,27 @@ class Settings(Group):
             if key not in _world_settings_name_cache:
                 # not a world group
                 return super().__getattribute__(key)
+            # resolve lazy placeholder if present (path-based key may differ from world.settings_key)
+            cache_val = _world_settings_name_cache[key]
+            if isinstance(cache_val, tuple) and len(cache_val) == 2 and cache_val[0] == "__lazy__":
+                import worlds
+                try:
+                    world = worlds.get_world_class(cache_val[1])
+                except KeyError:
+                    # World in settings cache but not loadable (e.g. custom world not present).
+                    # Only use empty Group when world is not already loaded (avoid re-entrancy from get_all_worlds()).
+                    if worlds.get_loaded_world(cache_val[1]) is not None:
+                        raise
+                    impl = cast(Group, Group())
+                    setattr(self, key, impl)
+                    return impl
+                resolved = f"{world.__module__}.{world.__name__}"
+                _world_settings_name_cache[world.settings_key] = resolved
+                if key != world.settings_key:
+                    del _world_settings_name_cache[key]
+                    key = world.settings_key
+                else:
+                    _world_settings_name_cache[key] = resolved
             # directly import world and grab settings class
             world_mod, world_cls_name = _world_settings_name_cache[key].rsplit(".", 1)
             try:
@@ -778,7 +806,9 @@ class Settings(Group):
             except KeyError:
                 import warnings
                 warnings.warn(f"World {world_cls_name} does not define settings. Please consider upgrading the world.")
-                return super().__getattribute__(key)
+                impl = cast(Group, Group())
+                setattr(self, key, impl)
+                return impl
             if isinstance(cls_or_name, str):
                 # Try to resolve type. Sadly we can't use get_type_hints, see https://bugs.python.org/issue43463
                 cls_name = cls_or_name
@@ -867,8 +897,14 @@ class Settings(Group):
     def dump(self, f: TextIO, level: int = 0) -> None:
         # load all world setting classes
         _update_cache()
-        for key in _world_settings_name_cache:
-            self.__getattribute__(key)  # load all worlds
+        for key in list(_world_settings_name_cache):
+            try:
+                self.__getattribute__(key)  # load all worlds
+            except (KeyError, Exception) as e:
+                # Only use empty Group for "world not found" (e.g. custom world not present), not for re-entrancy/other failures
+                if "not found in cache" not in str(e) and "failed to load" not in str(e):
+                    raise
+                setattr(self, key, Group())
         super().dump(f, level)
 
     @property

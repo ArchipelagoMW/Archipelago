@@ -20,9 +20,9 @@ class ImgUrlRewriteInlineParser(mistune.InlineParser):
 
     @staticmethod
     def _find_game_name_by_folder_name(name: str) -> str | None:
-        from worlds.AutoWorld import AutoWorldRegister
+        import worlds
 
-        for world_name, world_type in AutoWorldRegister.world_types.items():
+        for world_name, world_type in worlds.get_all_worlds().items():
             if world_type.__module__ == f"worlds.{name}":
                 return world_name
         return None

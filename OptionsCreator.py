@@ -28,7 +28,8 @@ import typing
 import webbrowser
 import re
 from urllib.parse import urlparse
-from worlds.AutoWorld import AutoWorldRegister, World
+import worlds
+from worlds.AutoWorld import World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, Removed,
                      OptionCounter, Visibility)
 
@@ -73,7 +74,8 @@ class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTraili
 
 
 class WorldButton(ToggleButton):
-    world_cls: typing.Type[World]
+    game_name: str = ""  # set from cache; used to load world on first click
+    world_cls: typing.Type[World] = None  # type: ignore[assignment]
 
 
 class VisualRange(MDBoxLayout):
@@ -644,19 +646,22 @@ class OptionsCreator(ThemedApp):
         self.scrollbox = self.container.ids.scrollbox
 
         def world_button_action(world_btn: WorldButton):
+            if not world_btn.world_cls:
+                world_btn.world_cls = worlds.get_world_class(world_btn.game_name)
             if self.current_game != world_btn.world_cls.game:
                 old_button = next((button for button in self.scrollbox.layout.children
-                                   if button.world_cls.game == self.current_game), None)
+                                   if getattr(button, "world_cls", None) and button.world_cls.game == self.current_game), None)
                 if old_button:
                     old_button.state = "normal"
             else:
                 world_btn.state = "down"
             self.create_options_panel(world_btn)
 
-        for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
-            if cls.hidden:
+        for entry in sorted(worlds.get_world_list(), key=lambda e: e.get("game", "")):
+            game = entry.get("game")
+            if not game:
                 continue
-            world_text = MDButtonText(text=world, size_hint_y=None, width=dp(150),
+            world_text = MDButtonText(text=game, size_hint_y=None, width=dp(150),
                                       pos_hint={"x": 0.03, "center_y": 0.5})
             world_text.text_size = (world_text.width, None)
             world_text.bind(width=lambda *x, text=world_text: text.setter('text_size')(text, (text.width, None)),
@@ -665,7 +670,7 @@ class OptionsCreator(ThemedApp):
             world_button = WorldButton(world_text, size_hint_x=None, width=dp(150), theme_width="Custom",
                                        radius=(dp(5), dp(5), dp(5), dp(5)))
             world_button.bind(on_release=world_button_action)
-            world_button.world_cls = cls
+            world_button.game_name = game
             self.scrollbox.layout.add_widget(world_button)
         self.main_panel = self.container.ids.player_layout
         self.player_options = self.container.ids.player_options

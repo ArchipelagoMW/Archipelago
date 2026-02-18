@@ -3,13 +3,13 @@ import unittest
 from BaseClasses import PlandoOptions
 from Options import Choice, ItemLinks, PlandoConnections, PlandoItems, PlandoTexts
 from Utils import restricted_dumps
-from worlds.AutoWorld import AutoWorldRegister
+import worlds
 
 
 class TestOptions(unittest.TestCase):
     def test_options_have_doc_string(self):
         """Test that submitted options have their own specified docstring"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
@@ -17,14 +17,14 @@ class TestOptions(unittest.TestCase):
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 self.assertFalse(hasattr(world_type, "options"),
                                  f"Unexpected assignment to {world_type.__name__}.options!")
 
     def test_duplicate_options(self) -> None:
         """Tests that a world doesn't reuse the same option class."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=game_name):
                 seen_options = set()
                 for option in world_type.options_dataclass.type_hints.values():
@@ -50,7 +50,7 @@ class TestOptions(unittest.TestCase):
             }]
         ]
         # we really need some sort of test world but generic doesn't have enough items for this
-        world = AutoWorldRegister.world_types["APQuest"]
+        world = worlds.get_world_class("APQuest")
         plando_options = PlandoOptions.from_option_string("bosses")
         item_links = [ItemLinks.from_any(item_link_groups[0]), ItemLinks.from_any(item_link_groups[1])]
         for link in item_links:
@@ -74,7 +74,7 @@ class TestOptions(unittest.TestCase):
 
     def test_pickle_dumps_default(self):
         """Test that default option values can be pickled into database for WebHost generation"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):

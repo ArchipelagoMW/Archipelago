@@ -4,6 +4,7 @@ from argparse import Namespace
 from BaseClasses import MultiWorld, PlandoOptions, CollectionState
 from test.bases import WorldTestBase
 from test.general import gen_steps
+import worlds
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
 # mypy: ignore-errors
@@ -27,7 +28,7 @@ class KDL3TestBase(WorldTestBase):
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(seed)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
+        for name, option in worlds.get_world_class(self.game).options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })

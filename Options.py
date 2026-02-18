@@ -1743,7 +1743,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     import yaml
     from jinja2 import Template
 
-    from worlds import AutoWorldRegister
+    import worlds
     from Utils import local_path, __version__
 
     full_path: str
@@ -1795,7 +1795,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         file_data = f.read()
     template = Template(file_data)
 
-    for game_name, world in AutoWorldRegister.world_types.items():
+    for game_name, world in worlds.get_all_worlds().items():
         if not world.hidden or generate_hidden:
             presets = world.web.options_presets.copy()
             presets.update({"": {}})

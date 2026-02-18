@@ -186,7 +186,7 @@ def get_static_server_data() -> dict:
     data = {
         "non_hintable_names": {
             world_name: world.hint_blacklist
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+            for world_name, world in worlds.get_all_worlds().items()
         },
         "gamespackage": {
             world_name: {
@@ -198,11 +198,11 @@ def get_static_server_data() -> dict:
         },
         "item_name_groups": {
             world_name: world.item_name_groups
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+            for world_name, world in worlds.get_all_worlds().items()
         },
         "location_name_groups": {
             world_name: world.location_name_groups
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
+            for world_name, world in worlds.get_all_worlds().items()
         },
     }
 

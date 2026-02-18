@@ -9,7 +9,8 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit, db_session
 from werkzeug.utils import secure_filename
 
-from worlds.AutoWorld import AutoWorldRegister, World
+import worlds
+from worlds.AutoWorld import World
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
@@ -26,9 +27,11 @@ class WebWorldTheme(StrEnum):
     STONE = "stone"
 
 def get_world_theme(game_name: str) -> str:
-    if game_name not in AutoWorldRegister.world_types:
+    try:
+        world_cls = worlds.get_world_class(game_name)
+    except KeyError:
         return "grass"
-    chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
+    chosen_theme = world_cls.web.theme
     available_themes = [theme.value for theme in WebWorldTheme]
     if chosen_theme not in available_themes:
         warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
@@ -37,11 +40,19 @@ def get_world_theme(game_name: str) -> str:
 
 
 def get_visible_worlds() -> dict[str, type(World)]:
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
+    visible = {}
+    for game, world in worlds.get_all_worlds().items():
         if not world.hidden:
-            worlds[game] = world
-    return worlds
+            visible[game] = world
+    return visible
+
+
+def get_webhost_worlds() -> dict[str, type(World)]:
+    """Return worlds valid for WebHost (have .web.tutorials). Use for tutorial pages and copy_tutorials."""
+    return {
+        k: v for k, v in worlds.get_all_worlds().items()
+        if hasattr(v.web, "tutorials")
+    }
 
 
 @app.errorhandler(404)
@@ -118,7 +129,7 @@ def tutorial_redirect(game: str, file: str, lang: str):
 @cache.cached()
 def tutorial_landing():
     tutorials = {}
-    worlds = AutoWorldRegister.world_types
+    worlds = get_webhost_worlds()
     for world_name, world_type in worlds.items():
         current_world = tutorials[world_name] = {}
         for tutorial in world_type.web.tutorials:
@@ -193,7 +204,8 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
     if room is None:
         return abort(404)
     if room.owner == session["_id"]:
-        file_path = os.path.join("logs", str(room.id) + ".txt")
+        from Utils import user_path
+        file_path = user_path("logs", str(room.id) + ".txt")
         try:
             log = open(file_path, "rb")
             range_header = request.headers.get("Range")
@@ -252,7 +264,8 @@ def host_room(room: UUID):
         if max_size == 0:
             return "…", 0
         try:
-            with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
+            from Utils import user_path
+            with open(user_path("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
                 fragments: List[str] = []
                 for block in _read_log(log):
@@ -285,7 +298,9 @@ def get_datapackage():
     """A pretty print version of /api/datapackage"""
     from worlds import network_data_package
     import json
-    return Response(json.dumps(network_data_package, indent=4), mimetype="text/plain")
+    # Materialize lazy package to a plain dict for JSON serialization
+    data = {"games": dict(network_data_package["games"].items())}
+    return Response(json.dumps(data, indent=4), mimetype="text/plain")
 
 
 @app.route('/index')
@@ -293,7 +308,7 @@ def get_datapackage():
 @cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
-    for game, world in AutoWorldRegister.world_types.items():
+    for game, world in worlds.get_all_worlds().items():
         if not world.hidden:
             has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })

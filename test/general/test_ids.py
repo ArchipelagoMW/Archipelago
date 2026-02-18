@@ -2,28 +2,29 @@ import unittest
 
 from Fill import distribute_items_restrictive
 from worlds import network_data_package
-from worlds.AutoWorld import AutoWorldRegister, call_all
+import worlds
+from worlds.AutoWorld import call_all
 from . import setup_solo_multiworld
 
 
 class TestIDs(unittest.TestCase):
     def test_range_items(self):
         """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 for item_id in world_type.item_id_to_name:
                     self.assertLess(item_id, 2**53)
 
     def test_range_locations(self):
         """There are Javascript clients, which are limited to Number.MAX_SAFE_INTEGER due to 64bit float precision."""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 for location_id in world_type.location_id_to_name:
                     self.assertLess(location_id, 2**53)
 
     def test_reserved_items(self):
         """negative item IDs are reserved to the special "Archipelago" world."""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 if gamename == "Archipelago":
                     for item_id in world_type.item_id_to_name:
@@ -34,7 +35,7 @@ class TestIDs(unittest.TestCase):
 
     def test_reserved_locations(self):
         """negative location IDs are reserved to the special "Archipelago" world."""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 if gamename == "Archipelago":
                     for location_id in world_type.location_id_to_name:
@@ -45,7 +46,7 @@ class TestIDs(unittest.TestCase):
 
     def test_duplicate_item_ids(self):
         """Test that a game doesn't have item id overlap within its own datapackage"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 len_item_id_to_name = len(world_type.item_id_to_name)
                 len_item_name_to_id = len(world_type.item_name_to_id)
@@ -64,7 +65,7 @@ class TestIDs(unittest.TestCase):
 
     def test_duplicate_location_ids(self):
         """Test that a game doesn't have location id overlap within its own datapackage"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 len_location_id_to_name = len(world_type.location_id_to_name)
                 len_location_name_to_id = len(world_type.location_name_to_id)
@@ -83,7 +84,7 @@ class TestIDs(unittest.TestCase):
 
     def test_postgen_datapackage(self):
         """Generates a solo multiworld and checks that the datapackage is still valid"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in worlds.get_all_worlds().items():
             with self.subTest(game=gamename):
                 multiworld = setup_solo_multiworld(world_type)
                 distribute_items_restrictive(multiworld)

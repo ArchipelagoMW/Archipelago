@@ -186,6 +186,7 @@ class MultiWorld():
     def add_group(self, name: str, game: str, players: AbstractSet[int] = frozenset()) -> Tuple[int, Group]:
         """Create a group with name and return the assigned player ID and group.
         If a group of this name already exists, the set of players is extended instead of creating a new one."""
+        import worlds
         from worlds import AutoWorld
 
         for group_id, group in self.groups.items():
@@ -197,7 +198,7 @@ class MultiWorld():
         self.regions.add_group(new_id)
         self.game[new_id] = game
         self.player_types[new_id] = NetUtils.SlotType.group
-        world_type = AutoWorld.AutoWorldRegister.world_types[game]
+        world_type = worlds.get_world_class(game)
         self.worlds[new_id] = world_type.create_group(self, new_id, players)
         self.worlds[new_id].collect_item = AutoWorld.World.collect_item.__get__(self.worlds[new_id])
         self.worlds[new_id].collect = AutoWorld.World.collect.__get__(self.worlds[new_id])
@@ -222,18 +223,15 @@ class MultiWorld():
         self.seed_name = name if name else str(self.seed)
 
     def set_options(self, args: Namespace) -> None:
-        from worlds import AutoWorld
-
+        import worlds
         for player in self.player_ids:
-            world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
+            world_type = worlds.get_world_class(self.game[player])
             self.worlds[player] = world_type(self, player)
             options_dataclass: type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
-        from worlds import AutoWorld
-
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
@@ -264,8 +262,9 @@ class MultiWorld():
                         "skip_if_solo": item_link.get("skip_if_solo", False),
                     }
 
+        import worlds
         for _name, item_link in item_links.items():
-            current_item_name_groups = AutoWorld.AutoWorldRegister.world_types[item_link["game"]].item_name_groups
+            current_item_name_groups = worlds.get_world_class(item_link["game"]).item_name_groups
             pool = set()
             local_items = set()
             non_local_items = set()

@@ -27,8 +27,18 @@ class InvalidItemError(KeyError):
     pass
 
 
+# Backing storage for world_types; registry and metaclass use this directly.
+_world_types_storage: Dict[str, Type[Any]] = {}
+
+
+def unregister_world(game: str) -> None:
+    """Remove the world for game from the registry. No-op if not loaded. Used when unloading a world."""
+    _world_types_storage.pop(game, None)
+
+
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: Dict[str, Type[World]] = _world_types_storage  # type: ignore[assignment]
+
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -89,11 +99,11 @@ class AutoWorldRegister(type):
         new_class = super().__new__(mcs, name, bases, dct)
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
-            if dct["game"] in AutoWorldRegister.world_types:
+            if dct["game"] in _world_types_storage:
                 raise RuntimeError(f"""Game {dct["game"]} already registered in 
-                {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
+                {_world_types_storage[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
-            AutoWorldRegister.world_types[dct["game"]] = new_class
+            _world_types_storage[dct["game"]] = new_class
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:

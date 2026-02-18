@@ -335,11 +335,12 @@ class Context:
         import worlds
         self.gamespackage = worlds.network_data_package["games"]
 
+        all_worlds = worlds.get_all_worlds()
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
-                                 worlds.AutoWorldRegister.world_types.items()}
+                                 all_worlds.items()}
         self.location_name_groups = {world_name: world.location_name_groups for world_name, world in
-                                     worlds.AutoWorldRegister.world_types.items()}
-        for world_name, world in worlds.AutoWorldRegister.world_types.items():
+                                     all_worlds.items()}
+        for world_name, world in all_worlds.items():
             self.non_hintable_names[world_name] = world.hint_blacklist
 
         for game_package in self.gamespackage.values():

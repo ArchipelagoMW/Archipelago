@@ -61,11 +61,11 @@ def copy_tutorials_files_to_static() -> None:
 
     zfile: zipfile.ZipInfo
 
-    from worlds.AutoWorld import AutoWorldRegister
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
-            worlds[game] = world
+    from WebHostLib.misc import get_webhost_worlds
+    worlds = {
+        game: world for game, world in get_webhost_worlds().items()
+        if not world.hidden or game == 'Archipelago'
+    }
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
     shutil.rmtree(base_target_path, ignore_errors=True)
@@ -99,6 +99,9 @@ if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
+    import worlds
+    worlds.ensure_all_worlds_loaded()
+
     from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
 
@@ -109,13 +112,13 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
-    from worlds import AutoWorldRegister
-    # Update to only valid WebHost worlds
-    invalid_worlds = {name for name, world in AutoWorldRegister.world_types.items()
-                      if not hasattr(world.web, "tutorials")}
+    from worlds import get_all_worlds
+    from WebHostLib.misc import get_webhost_worlds
+    webhost_worlds = get_webhost_worlds()
+    all_worlds = set(get_all_worlds())
+    invalid_worlds = all_worlds - set(webhost_worlds)
     if invalid_worlds:
         logging.error(f"Following worlds not loaded as they are invalid for WebHost: {invalid_worlds}")
-    AutoWorldRegister.world_types = {k: v for k, v in AutoWorldRegister.world_types.items() if k not in invalid_worlds}
     create_options_files()
     copy_tutorials_files_to_static()
     if app.config["SELFLAUNCH"]:

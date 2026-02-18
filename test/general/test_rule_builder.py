@@ -31,7 +31,8 @@ from rule_builder.rules import (
 )
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
-from worlds.AutoWorld import AutoWorldRegister, World
+from worlds.AutoWorld import AutoWorldRegister, World, _world_types_storage
+from worlds.registry import get_registry
 
 
 class CachedCollectionState(CollectionState):
@@ -71,6 +72,11 @@ GAME_NAME = "Rule Builder Test Game"
 LOC_COUNT = 20
 
 
+def _clear_world_class_cache_for_test() -> None:
+    """Clear any world/data cache for GAME_NAME so set_options (get_world_class) sees our test world."""
+    get_registry()._data_package_cache.pop(GAME_NAME, None)
+
+
 class RuleBuilderItem(Item):
     game = GAME_NAME
 
@@ -86,11 +92,15 @@ class RuleBuilderTestCase(unittest.TestCase):
     @override
     def setUp(self) -> None:
         self.old_world_types = AutoWorldRegister.world_types.copy()
+        _clear_world_class_cache_for_test()
         self._create_world_class()
 
     @override
     def tearDown(self) -> None:
-        AutoWorldRegister.world_types = self.old_world_types
+        _world_types_storage.clear()
+        _world_types_storage.update(self.old_world_types)
+        AutoWorldRegister.world_types = _world_types_storage
+        _clear_world_class_cache_for_test()
         assert GAME_NAME not in AutoWorldRegister.world_types
 
     def _create_world_class(self) -> None:
