@@ -26,32 +26,5 @@ data:extend({
         {% else %}
             default_value = false
         {% endif %}
-    },
-    {
-        type = "bool-setting",
-        name = "archipelago-tech-layer-obscurity",
-        setting_type = "runtime-global",
-        {% if tech_layer_obscurity %}
-            default_value = true
-        {% else %}
-            default_value = false
-        {% endif %}
-    },
-    {
-        type = "int-setting",
-        name = "archipelago-tech-depth-obscurity",
-        setting_type = "runtime-global",
-        minimum_value = 0,
-        default_value = {{ tech_depth_obscurity }}
-    },
-    {
-        type = "bool-setting",
-        name = "archipelago-tech-craft-obscurity",
-        setting_type = "runtime-global",
-        {% if tech_craft_obscurity %}
-            default_value = true
-        {% else %}
-            default_value = false
-        {% endif %}
     }
 })

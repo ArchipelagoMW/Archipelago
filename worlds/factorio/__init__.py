@@ -12,7 +12,7 @@ from worlds.generic import Rules
 from .Locations import location_pools, location_table, craftsanity_locations
 from .Mod import generate_mod
 from .Options import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
-                      TechLayerObscurity, TechDepthObscurity, TechCraftObscurity, TechCostDistribution, option_groups)
+                      TechCostDistribution, option_groups)
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_product_sources, required_technologies, get_rocket_requirements, \
@@ -216,12 +216,8 @@ class Factorio(World):
         loc: FactorioScienceLocation
         if self.options.tech_tree_information == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
-            if self.options.tech_craft_obscurity == TechCraftObscurity.disabled:
-                for loc in self.craftsanity_locations:
-                    loc.revealed = True
-            if self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.disabled:
-                for loc in self.science_locations:
-                    loc.revealed = True
+            for loc in self.science_locations + self.craftsanity_locations:
+                loc.revealed = True
         if self.skip_silo:
             self.removed_technologies |= {"rocket-silo"}
         for tech_name in base_tech_table:
@@ -240,8 +236,7 @@ class Factorio(World):
                         # as automation is not achievable yet and hand-crafting for hours is not fun gameplay
                         loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
-                    if self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.disabled:
-                        loc.revealed = True
+                    loc.revealed = True
 
     def get_filler_item_name(self) -> str:
         tech_name: str = self.random.choice(tuple(tech_table))
