@@ -7,7 +7,7 @@ import Utils
 import settings
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule
-from .Options import CutsceneLevels, Portal2Options, portal2_option_groups, portal2_option_presets
+from .Options import CutsceneLevels, Portal2Options, portal2_option_groups, portal2_option_presets, GameModeOption, LogicDifficultyOption
 from .Items import Portal2Item, game_item_table, item_table, junk_items, trap_items
 from .Locations import *
 from .ItemNames import portal_gun_2
@@ -65,18 +65,19 @@ class Portal2World(World):
     item_name_to_id = {}
     location_name_to_id = {}
     location_name_groups = location_groups
-
-    location_count = 0
-    item_count= 0
-
-    maps_in_use: list[str] = []
-    chapter_maps_dict = {}
     
     for key, value in item_table.items():
         item_name_to_id[key] = value.id
 
     for key, value in all_locations_table.items():
         location_name_to_id[key] = value.id
+    
+    def __init__(self, multiworld, player):
+        super().__init__(multiworld, player)
+        self.location_count = 0
+        self.item_count = 0
+        self.maps_in_use: list[str] = []
+        self.chapter_maps_dict: dict[str, list[str]] = {}
 
     # Helper Functions
 
@@ -119,6 +120,7 @@ class Portal2World(World):
         
         # Maps with just portal gun upgrade
         map_pool += [name for name in possible_maps if self.location_logic == [portal_gun_2]]
+        map_pool += [name for name in possible_maps if len(self.location_logic) <= 2]
         pick_maps(ceil(len(map_pool) * proportion_map_pick))
 
         # All other maps
