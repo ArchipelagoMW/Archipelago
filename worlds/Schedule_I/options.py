@@ -219,6 +219,14 @@ class RandomizeSuppliers(DefaultOnToggle):
     """
     display_name = "Randomize Suppliers"
 
+
+class RandomizeSewerKey(DefaultOnToggle):
+    """
+    Determines if the Sewer Key will be added into the item pool.
+    If enabled, Jen Herd will no longer sell sewer key.
+    """
+    display_name = "Randomize Sewer Key"
+
 class RecipeChecks(Range):
     """
     Number of recipe checks to include in the item pool.
@@ -261,6 +269,7 @@ class Schedule1Options(PerGameCommonOptions):
     randomize_dealers: RandomizeDealers
     randomize_customers: RandomizeCustomers
     randomize_suppliers: RandomizeSuppliers
+    randomize_sewer_key: RandomizeSewerKey
     recipe_checks: RecipeChecks
     cash_for_trash: CashForTrash
     death_link: DeathLink
@@ -275,7 +284,7 @@ option_groups = [
          NumberOfCashBundles, AmountOfCashPerBundleMin, AmountOfCashPerBundleMax,  
          BanBadFillerItems, BanProgressionSkipItems, TrapChance,  
          RandomizeLevelUnlocks, RandomizeCartelInfluence, CartelInfluenceItemsPerRegion,   
-         RandomizeCustomers, RandomizeDealers, RandomizeSuppliers,
+         RandomizeCustomers, RandomizeDealers, RandomizeSuppliers, RandomizeSewerKey,
          RandomizeDrugMakingProperties, RandomizeBusinessProperties,  
          RecipeChecks, CashForTrash, 
          DeathLink],
@@ -306,6 +315,7 @@ option_presets = {
         "cash_for_trash": CashForTrash.default,
         "randomize_level_unlocks": True,
         "randomize_suppliers": True,
+        "randomize_sewer_key": True,
         "death_link": DeathLink.default,
     }
 }

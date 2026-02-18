@@ -206,6 +206,10 @@ def create_all_items(world: Schedule1World, data) -> None:
         itempool += [world.create_item(item.name) for item in data.items.values() 
                      if "Supplier" in item.tags and "Default" not in item.tags]
 
+    if world.options.randomize_sewer_key:
+        itempool += [world.create_item(item.name) for item in data.items.values() 
+                     if "Sewer" in item.tags]
+
     # Removed these from checks
     if world.options.randomize_customers:
         starting_kyle_cooley = world.create_item("Kyle Cooley Unlocked")
