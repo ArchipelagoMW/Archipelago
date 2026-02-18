@@ -1117,10 +1117,10 @@ region_data_by_content_pack = {
     ModNames.magic: ModRegionsData(ModNames.magic, magic_regions, magic_entrances),
     ModNames.ayeisha: ModRegionsData(ModNames.ayeisha, ayeisha_regions, ayeisha_entrances),
     ModNames.riley: ModRegionsData(ModNames.riley, riley_regions, riley_entrances),
-    # ModNames.sve: ModRegionsData(ModNames.sve, sve_main_land_regions, sve_main_land_connections),
-    # SVE_GINGER_ISLAND_PACK: ModRegionsData(
-    #     SVE_GINGER_ISLAND_PACK, sve_ginger_island_regions, sve_ginger_island_connections
-    # ),
+    ModNames.sve: ModRegionsData(ModNames.sve, sve_main_land_regions, sve_main_land_connections),
+    SVE_GINGER_ISLAND_PACK: ModRegionsData(
+        SVE_GINGER_ISLAND_PACK, sve_ginger_island_regions, sve_ginger_island_connections
+    ),
     ModNames.alecto: ModRegionsData(ModNames.alecto, alecto_regions, alecto_entrances),
     ModNames.lacey: ModRegionsData(ModNames.lacey, lacey_regions, lacey_entrances),
     ModNames.boarding_house: ModRegionsData(ModNames.boarding_house, boarding_house_regions, boarding_house_entrances),

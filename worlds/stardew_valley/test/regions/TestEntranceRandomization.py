@@ -2,7 +2,7 @@ from collections import deque
 from collections.abc import Collection
 from unittest.mock import patch, Mock
 
-from BaseClasses import get_seed, MultiWorld, Entrance
+from BaseClasses import get_seed, MultiWorld, Entrance, Region
 from ..assertion import WorldAssertMixin
 from ..bases import SVTestCase, solo_multiworld, setup_solo_multiworld
 from ... import options
@@ -27,12 +27,12 @@ class TestEntranceRando(SVTestCase):
             "randomized_connection": ConnectionData("randomized_connection", "Region2", flag=RandomizationFlag.PELICAN_TOWN),
             "not_randomized": ConnectionData("not_randomized", "Region2", flag=RandomizationFlag.BUILDINGS),
         }
-        regions_by_name = {
+        regions_by_name: dict[str, Region] = {
             "Region1": Mock(),
             "Region2": Mock(),
             "Region3": Mock(),
         }
-        player_randomization_flag = RandomizationFlag.BIT_PELICAN_TOWN
+        player_randomization_flag = RandomizationFlag.SET_PELICAN_TOWN
 
         with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
             connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag)
@@ -52,7 +52,8 @@ class TestEntranceRando(SVTestCase):
         destination.create_er_target.assert_called_once_with("destination to origin")
 
     def test_when_prepare_mod_data_then_swapped_connections_contains_both_directions(self):
-        placements = Mock(pairings=[("A to B", "C to A"), ("C to D", "A to C")])
+        # all two-way warps are explicit to allow for detached.
+        placements = Mock(pairings=[("A to B", "C to A"), ("C to A", "B to A"), ("C to D", "A to C"), ("A to C", "C to D")])
 
         swapped_connections = prepare_mod_data(placements)
 
