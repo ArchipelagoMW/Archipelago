@@ -37,7 +37,7 @@ def _update_cache() -> None:
 
     try:
         import worlds
-        for entry in worlds.get_world_list():
+        for entry in worlds.AutoWorldRegister.get_world_list():
             game = entry.get("game")
             if not game:
                 continue
@@ -776,11 +776,11 @@ class Settings(Group):
             if isinstance(cache_val, tuple) and len(cache_val) == 2 and cache_val[0] == "__lazy__":
                 import worlds
                 try:
-                    world = worlds.get_world_class(cache_val[1])
+                    world = worlds.AutoWorldRegister.world_types[cache_val[1]]
                 except KeyError:
                     # World in settings cache but not loadable (e.g. custom world not present).
                     # Only use empty Group when world is not already loaded (avoid re-entrancy from get_all_worlds()).
-                    if worlds.get_loaded_world(cache_val[1]) is not None:
+                    if worlds.AutoWorldRegister.get_loaded_world(cache_val[1]) is not None:
                         raise
                     impl = cast(Group, Group())
                     setattr(self, key, impl)

@@ -100,7 +100,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
     import worlds
-    worlds.ensure_all_worlds_loaded()
+    worlds.AutoWorldRegister.ensure_all_worlds_loaded()
 
     from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
@@ -112,10 +112,9 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
-    from worlds import get_all_worlds
     from WebHostLib.misc import get_webhost_worlds
     webhost_worlds = get_webhost_worlds()
-    all_worlds = set(get_all_worlds())
+    all_worlds = set(worlds.AutoWorldRegister.world_types)
     invalid_worlds = all_worlds - set(webhost_worlds)
     if invalid_worlds:
         logging.error(f"Following worlds not loaded as they are invalid for WebHost: {invalid_worlds}")

@@ -4,7 +4,7 @@ import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore
+from Utils import local_path, open_filename, is_frozen, open_file, user_path, read_apignore
 
 
 class Type(Enum):
@@ -153,7 +153,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     import worlds
     if worlds.user_folder is None:
         raise Exception("Custom Worlds directory appears to not be writable.")
-    for world_source in worlds.world_sources:
+    for world_source in worlds.AutoWorldRegister.get_world_sources():
         if apworld_path.samefile(world_source.resolved_path):
             # Note that this doesn't check if the same world is already installed.
             # It only checks if the user is trying to install the apworld file
@@ -169,19 +169,19 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
 
     # If this world is already loaded, unload it so we can load the updated copy.
     matching_source = None
-    for loaded_world in worlds.world_sources:
+    for loaded_world in worlds.AutoWorldRegister.get_world_sources():
         if pathlib.Path(loaded_world.path).stem == module_name:
             matching_source = loaded_world
             break
     if matching_source is not None:
-        entry = worlds.get_entry_by_path(matching_source.path)
+        entry = worlds.AutoWorldRegister.get_entry_by_path(matching_source.path)
         if entry and entry.get("game"):
-            worlds.unload_world(entry["game"])
-    if not worlds.add_world_to_cache(str(target)):
+            worlds.AutoWorldRegister.unload_world(entry["game"])
+    if not worlds.AutoWorldRegister.add_world_to_cache(str(target)):
         raise Exception("Failed to add the installed APWorld to the cache.")
-    for ws in worlds.world_sources:
+    for ws in worlds.AutoWorldRegister.get_world_sources():
         if pathlib.Path(ws.path).resolve() == target.resolve():
-            ws.load(worlds.failed_world_loads)
+            ws.load(worlds.AutoWorldRegister.get_failed_world_loads())
             break
 
     return apworld_path, target
@@ -209,7 +209,7 @@ def export_datapackage() -> None:
 
     import worlds
 
-    worlds.ensure_all_worlds_loaded()
+    worlds.AutoWorldRegister.ensure_all_worlds_loaded()
     path = user_path("datapackage_export.json")
     with open(path, "w") as f:
         json.dump({"games": dict(worlds.network_data_package["games"])}, f, indent=4)
@@ -274,11 +274,11 @@ if not is_frozen():
         args = parser.parse_args(launch_args)
 
         import worlds
-        worlds.ensure_all_worlds_loaded()
+        worlds.AutoWorldRegister.ensure_all_worlds_loaded()
         if args.worlds:
-            games = [(game, worlds.get_loaded_world(game)) for game in args.worlds]
+            games = [(game, worlds.AutoWorldRegister.get_loaded_world(game)) for game in args.worlds]
         else:
-            games = [(worldname, worldtype) for worldname, worldtype in worlds.get_all_worlds().items()
+            games = [(worldname, worldtype) for worldname, worldtype in worlds.AutoWorldRegister.world_types.items()
                      if not worldtype.zip_path]
 
         global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))

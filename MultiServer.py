@@ -335,7 +335,7 @@ class Context:
         import worlds
         self.gamespackage = worlds.network_data_package["games"]
 
-        all_worlds = worlds.get_all_worlds()
+        all_worlds = worlds.AutoWorldRegister.world_types
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
                                  all_worlds.items()}
         self.location_name_groups = {world_name: world.location_name_groups for world_name, world in

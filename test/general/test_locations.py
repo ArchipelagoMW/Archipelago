@@ -8,7 +8,7 @@ from . import setup_solo_multiworld
 class TestBase(unittest.TestCase):
     def test_create_duplicate_locations(self):
         """Tests that no two Locations share a name or ID."""
-        for game_name, world_type in worlds.get_all_worlds().items():
+        for game_name, world_type in worlds.AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
             locations = Counter(location.name for location in multiworld.get_locations())
             if locations:
@@ -23,7 +23,7 @@ class TestBase(unittest.TestCase):
 
     def test_locations_in_datapackage(self):
         """Tests that created locations not filled before fill starts exist in the datapackage."""
-        for game_name, world_type in worlds.get_all_worlds().items():
+        for game_name, world_type in worlds.AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 locations = multiworld.get_unfilled_locations()  # do unfilled locations to avoid Events
@@ -36,7 +36,7 @@ class TestBase(unittest.TestCase):
         gen_steps = ("generate_early", "create_regions", "create_items")
         excluded_games = ("Ocarina of Time", "Pokemon Red and Blue")
         worlds_to_test = {game: world
-                          for game, world in worlds.get_all_worlds().items() if game not in excluded_games}
+                          for game, world in worlds.AutoWorldRegister.world_types.items() if game not in excluded_games}
         for game_name, world_type in worlds_to_test.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
@@ -69,7 +69,7 @@ class TestBase(unittest.TestCase):
     
     def test_location_group(self):
         """Test that all location name groups contain valid locations and don't share names."""
-        for game_name, world_type in worlds.get_all_worlds().items():
+        for game_name, world_type in worlds.AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
                 for group_name, locations in world_type.location_name_groups.items():
                     with self.subTest(group_name, group_name=group_name):

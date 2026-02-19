@@ -334,14 +334,15 @@ class TestLazyLoadIntegration(unittest.TestCase):
     """Integration tests for lazy world loading (require worlds package and cache)."""
 
     def test_world_sources_is_list(self) -> None:
-        self.assertIsInstance(worlds.world_sources, list)
-        self.assertEqual(len(worlds.world_sources), len(worlds.get_world_list()))
-        for ws in worlds.world_sources[:3]:
+        world_sources = worlds.AutoWorldRegister.get_world_sources()
+        self.assertIsInstance(world_sources, list)
+        self.assertEqual(len(world_sources), len(worlds.AutoWorldRegister.get_world_list()))
+        for ws in world_sources[:3]:
             self.assertIsNotNone(ws.path)
             self.assertIn(ws.is_zip, (True, False))
 
     def test_get_world_list_returns_entries(self) -> None:
-        entries = worlds.get_world_list()
+        entries = worlds.AutoWorldRegister.get_world_list()
         self.assertIsInstance(entries, list)
         for entry in entries[:3]:  # spot-check first few
             self.assertIn("game", entry)
@@ -349,30 +350,30 @@ class TestLazyLoadIntegration(unittest.TestCase):
             self.assertIn("is_zip", entry)
 
     def test_get_world_class_loads_on_demand(self) -> None:
-        entries = worlds.get_world_list()
+        entries = worlds.AutoWorldRegister.get_world_list()
         if not entries:
             self.skipTest("No worlds in cache")
         game = entries[0]["game"]
-        cls = worlds.get_world_class(game)
+        cls = worlds.AutoWorldRegister.get_world_class(game)
         self.assertIsNotNone(cls)
         self.assertEqual(cls.game, game)
-        self.assertIsNotNone(worlds.get_loaded_world(game))
+        self.assertIsNotNone(worlds.AutoWorldRegister.get_loaded_world(game))
 
     def test_network_data_package_games_after_get_world_class(self) -> None:
-        entries = worlds.get_world_list()
+        entries = worlds.AutoWorldRegister.get_world_list()
         if not entries:
             self.skipTest("No worlds in cache")
         game = entries[0]["game"]
-        worlds.get_world_class(game)
-        self.assertIsNotNone(worlds.get_loaded_world(game))
+        worlds.AutoWorldRegister.get_world_class(game)
+        self.assertIsNotNone(worlds.AutoWorldRegister.get_loaded_world(game))
         self.assertIn(game, worlds.network_data_package["games"])
 
     def test_ensure_all_worlds_loaded_populates_world_types(self) -> None:
-        entries = worlds.get_world_list()
+        entries = worlds.AutoWorldRegister.get_world_list()
         if not entries:
             self.skipTest("No worlds in cache")
-        worlds.ensure_all_worlds_loaded()
-        registered = set(worlds.get_all_worlds().keys())
+        worlds.AutoWorldRegister.ensure_all_worlds_loaded()
+        registered = set(worlds.AutoWorldRegister.world_types.keys())
         cache_games = {e["game"] for e in entries if e.get("game")}
         self.assertTrue(
             cache_games.issubset(registered) or registered,

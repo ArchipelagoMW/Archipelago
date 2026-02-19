@@ -2,7 +2,7 @@ import unittest
 from argparse import Namespace
 
 from BaseClasses import MultiWorld, CollectionState, ItemClassification
-import worlds
+from worlds.AutoWorld import AutoWorldRegister
 from ..Items import item_factory
 
 
@@ -103,7 +103,7 @@ class LTTPTestBase(unittest.TestCase):
         self.multiworld.game[1] = "A Link to the Past"
         self.multiworld.set_seed(None)
         args = Namespace()
-        for name, option in worlds.get_world_class("A Link to the Past").options_dataclass.type_hints.items():
+        for name, option in AutoWorldRegister.world_types["A Link to the Past"].options_dataclass.type_hints.items():
             setattr(args, name, {1: option.from_any(getattr(option, "default"))})
         self.multiworld.set_options(args)
         self.multiworld.state = CollectionState(self.multiworld)

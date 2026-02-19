@@ -28,8 +28,7 @@ import typing
 import webbrowser
 import re
 from urllib.parse import urlparse
-import worlds
-from worlds.AutoWorld import World
+from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, Removed,
                      OptionCounter, Visibility)
 
@@ -647,7 +646,7 @@ class OptionsCreator(ThemedApp):
 
         def world_button_action(world_btn: WorldButton):
             if not world_btn.world_cls:
-                world_btn.world_cls = worlds.get_world_class(world_btn.game_name)
+                world_btn.world_cls = AutoWorldRegister.world_types[world_btn.game_name]
             if self.current_game != world_btn.world_cls.game:
                 old_button = next((button for button in self.scrollbox.layout.children
                                    if getattr(button, "world_cls", None) and button.world_cls.game == self.current_game), None)
@@ -657,7 +656,7 @@ class OptionsCreator(ThemedApp):
                 world_btn.state = "down"
             self.create_options_panel(world_btn)
 
-        for entry in sorted(worlds.get_world_list(), key=lambda e: e.get("game", "")):
+        for entry in sorted(AutoWorldRegister.get_world_list(), key=lambda e: e.get("game", "")):
             game = entry.get("game")
             if not game:
                 continue

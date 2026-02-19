@@ -22,7 +22,7 @@ class ImgUrlRewriteInlineParser(mistune.InlineParser):
     def _find_game_name_by_folder_name(name: str) -> str | None:
         import worlds
 
-        for world_name, world_type in worlds.get_all_worlds().items():
+        for world_name, world_type in worlds.AutoWorldRegister.world_types.items():
             if world_type.__module__ == f"worlds.{name}":
                 return world_name
         return None

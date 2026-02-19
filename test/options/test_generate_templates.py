@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class TestGenerateYamlTemplates(unittest.TestCase):
     def test_name_with_colon(self) -> None:
         from Options import generate_yaml_templates
-        from worlds.AutoWorld import World, WebWorld
+        from worlds.AutoWorld import AutoWorldRegister, World, WebWorld
 
         class WebWorldWithColon(WebWorld):
             options_presets = {
@@ -31,7 +31,7 @@ class TestGenerateYamlTemplates(unittest.TestCase):
             web = WebWorldWithColon()
 
         test_worlds = {WorldWithColon.game: WorldWithColon}
-        with patch("worlds.get_all_worlds", return_value=test_worlds):
+        with patch.object(AutoWorldRegister, "world_types", test_worlds):
             with TemporaryDirectory(f"archipelago_{__name__}") as temp_dir:
                 generate_yaml_templates(temp_dir)
                 path: Path

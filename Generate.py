@@ -19,8 +19,8 @@ ModuleUpdate.update()
 
 import Utils
 import Options
-import worlds
 from BaseClasses import seeddigits, get_seed, PlandoOptions
+from worlds.AutoWorld import AutoWorldRegister
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
@@ -84,7 +84,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
         raise Exception("Worlds system should not be loaded before logging init.")
 
     import worlds
-    worlds.ensure_all_worlds_loaded()
+    worlds.AutoWorldRegister.ensure_all_worlds_loaded()
 
     if not args:
         args = mystery_argparse()
@@ -181,7 +181,6 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
 
-    from worlds.AutoWorld import AutoWorldRegister
     args.outputname = seed_name
     args.sprite = dict.fromkeys(range(1, args.multi+1), None)
     args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
@@ -196,7 +195,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                         for yaml in weights_cache[path]:
                             if category_name is None:
                                 for category in yaml:
-                                    if worlds.get_loaded_world(category) is not None and \
+                                    if worlds.AutoWorldRegister.get_loaded_world(category) is not None and \
                                             key in Options.CommonOptions.type_hints:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
@@ -439,7 +438,7 @@ def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
     if not game:
         return get_choice(option_key, category_dict)
     try:
-        game_world = worlds.get_world_class(game)
+        game_world = AutoWorldRegister.world_types[game]
     except KeyError:
         raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
     options = game_world.options_dataclass.type_hints
@@ -517,7 +516,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
     except Exception as e:
         raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
     else:
-        player_option.verify(worlds.get_world_class(ret.game), ret.name, plando_options)
+        player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
@@ -528,8 +527,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     The same weights dict is shared between all slots using the same yaml (e.g. generic weights file for filler slots).
     This means it should never be modified without making a deepcopy first.
     """
-
-    from worlds import ensure_all_worlds_loaded, failed_world_loads, get_all_worlds
 
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
@@ -552,7 +549,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         games = requirements.get("game", {})
         for game, version in games.items():
             try:
-                world_cls = worlds.get_world_class(game)
+                world_cls = AutoWorldRegister.world_types[game]
             except KeyError:
                 continue
             if not version:
@@ -578,10 +575,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception('"game" not specified')
         raise Exception(f"Invalid game: {ret.game}")
     try:
-        world_type = worlds.get_world_class(ret.game)
+        world_type = AutoWorldRegister.world_types[ret.game]
     except KeyError:
-        ensure_all_worlds_loaded()
-        picks = Utils.get_fuzzy_results(ret.game, list(get_all_worlds()) + failed_world_loads, limit=1)[0]
+        AutoWorldRegister.ensure_all_worlds_loaded()
+        failed_world_loads = AutoWorldRegister.get_failed_world_loads()
+        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
         if picks[0] in failed_world_loads:
             raise Exception(f"No functional world found to handle game {ret.game}. "
                             f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "

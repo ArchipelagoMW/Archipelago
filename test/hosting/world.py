@@ -17,7 +17,7 @@ def copy(src: str, dst: str) -> None:
     if '"' in dst or "\\" in dst:  # easier to reject than to escape
         raise ValueError(f"Unsupported symbols in {dst}")
     dst_folder_name = get_file_safe_name(dst.lower())
-    src_cls = worlds.get_world_class(src)
+    src_cls = worlds.AutoWorldRegister.world_types[src]
     src_folder = Path(src_cls.__file__).parent
     worlds_folder = src_folder.parent
     if (not src_cls.__file__.endswith(("__init__.py", "world.py")) or not src_folder.is_dir()

@@ -9,7 +9,7 @@ import yaml
 from flask import redirect, render_template, request, Response, abort
 
 import Options
-import worlds
+from worlds.AutoWorld import AutoWorldRegister
 from Utils import local_path
 from . import app, cache
 from .generate import get_meta
@@ -24,7 +24,7 @@ def create() -> None:
 
 
 def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:
-    world = worlds.get_world_class(world_name)
+    world = AutoWorldRegister.world_types[world_name]
     if world.hidden or world.web.options_page is False:
         return redirect("games")
     visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
@@ -86,7 +86,7 @@ def test_ordered(obj):
 @app.route("/games/<string:game>/option-presets", methods=["GET"])
 @cache.cached()
 def option_presets(game: str) -> Response:
-    world = worlds.get_world_class(game)
+    world = AutoWorldRegister.world_types[game]
 
     presets = {}
     for preset_name, preset in world.web.options_presets.items():

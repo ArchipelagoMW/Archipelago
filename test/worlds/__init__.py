@@ -35,7 +35,7 @@ def load_tests(loader: "TestLoader", standard_tests: "TestSuite", pattern: str):
 
 
     folders = [os.path.join(os.path.split(world.__file__)[0], "test")
-               for world in worlds.get_all_worlds().values()
+               for world in worlds.AutoWorldRegister.world_types.values()
                if fnmatch.fnmatch(world.__module__, world_glob)]
 
     all_tests = [

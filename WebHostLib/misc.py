@@ -6,11 +6,11 @@ from typing import Any, IO, Dict, Iterator, List, Tuple, Union
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
-from pony.orm import count, commit, db_session
+from pony.orm import count, commit
 from werkzeug.utils import secure_filename
 
 import worlds
-from worlds.AutoWorld import World
+from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
@@ -28,7 +28,7 @@ class WebWorldTheme(StrEnum):
 
 def get_world_theme(game_name: str) -> str:
     try:
-        world_cls = worlds.get_world_class(game_name)
+        world_cls = AutoWorldRegister.world_types[game_name]
     except KeyError:
         return "grass"
     chosen_theme = world_cls.web.theme
@@ -41,7 +41,7 @@ def get_world_theme(game_name: str) -> str:
 
 def get_visible_worlds() -> dict[str, type(World)]:
     visible = {}
-    for game, world in worlds.get_all_worlds().items():
+    for game, world in worlds.AutoWorldRegister.world_types.items():
         if not world.hidden:
             visible[game] = world
     return visible
@@ -50,7 +50,7 @@ def get_visible_worlds() -> dict[str, type(World)]:
 def get_webhost_worlds() -> dict[str, type(World)]:
     """Return worlds valid for WebHost (have .web.tutorials). Use for tutorial pages and copy_tutorials."""
     return {
-        k: v for k, v in worlds.get_all_worlds().items()
+        k: v for k, v in worlds.AutoWorldRegister.world_types.items()
         if hasattr(v.web, "tutorials")
     }
 
@@ -308,7 +308,7 @@ def get_datapackage():
 @cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
-    for game, world in worlds.get_all_worlds().items():
+    for game, world in worlds.AutoWorldRegister.world_types.items():
         if not world.hidden:
             has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })

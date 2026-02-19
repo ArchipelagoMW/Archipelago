@@ -6,7 +6,7 @@ from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
 import worlds
-from worlds.AutoWorld import call_all, call_single
+from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
 from ..general import gen_steps, setup_multiworld
 from ..param import classvar_matrix
 
@@ -54,7 +54,7 @@ class MultiworldTestBase(TestCase):
 class TestAllGamesMultiworld(MultiworldTestBase):
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
-        all_worlds = list(worlds.get_all_worlds().values())
+        all_worlds = list(worlds.AutoWorldRegister.world_types.values())
         self.multiworld = setup_multiworld(all_worlds, ())
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_full
@@ -65,13 +65,13 @@ class TestAllGamesMultiworld(MultiworldTestBase):
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
 
 
-@classvar_matrix(game=worlds.get_all_worlds().keys())
+@classvar_matrix(game=worlds.AutoWorldRegister.world_types.keys())
 class TestTwoPlayerMulti(MultiworldTestBase):
     game: ClassVar[str]
 
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
-        world_type = worlds.get_world_class(self.game)
+        world_type = AutoWorldRegister.world_types[self.game]
         self.multiworld = setup_multiworld([world_type, world_type], ())
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_full

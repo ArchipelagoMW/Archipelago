@@ -40,7 +40,7 @@ def _load_manifest_for_entry(entry: dict) -> dict[str, Any]:
         return json.load(f)
 
 
-_entries = worlds.get_world_list(force_rebuild=True)
+_entries = worlds.AutoWorldRegister.get_world_list(force_rebuild=True)
 _entries_under_test = [
     e
     for e in _entries

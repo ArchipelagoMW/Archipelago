@@ -97,7 +97,7 @@ def download_slot_file(room_id, player_id: int):
 def list_yaml_templates():
     files = []
     import worlds
-    for world_name, world in worlds.get_all_worlds().items():
+    for world_name, world in worlds.AutoWorldRegister.world_types.items():
         if not world.hidden:
             files.append(world_name)
     return render_template("templates.html", files=files)

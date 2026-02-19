@@ -5,7 +5,7 @@ import logging
 import pathlib
 import sys
 import time
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, MutableMapping
 from random import Random
 from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
@@ -14,6 +14,8 @@ from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGa
 from BaseClasses import CollectionState, Entrance
 from rule_builder.rules import CustomRuleRegister, Rule
 from Utils import Version
+
+from .registry import _world_types_mapping, _world_types_storage, get_registry
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
@@ -27,22 +29,21 @@ class InvalidItemError(KeyError):
     pass
 
 
-# Backing storage for world_types; registry and metaclass use this directly.
-_world_types_storage: Dict[str, Type[Any]] = {}
-
-
-def unregister_world(game: str) -> None:
-    """Remove the world for game from the registry. No-op if not loaded. Used when unloading a world."""
-    _world_types_storage.pop(game, None)
-
-
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = _world_types_storage  # type: ignore[assignment]
+    """Compatibility facade around the registry plus metaclass registration behavior."""
+    world_types: MutableMapping[str, Type["World"]] = _world_types_mapping
 
     __file__: str
     zip_path: Optional[str]
     settings_key: str
     __settings: Any
+
+    def __setattr__(cls, name: str, value: Any) -> None:
+        if name == "world_types" and isinstance(value, Mapping):
+            _world_types_storage.clear()
+            _world_types_storage.update(value)
+            value = _world_types_mapping
+        super().__setattr__(name, value)
 
     @property
     def settings(cls) -> Any:  # actual type is defined in World
@@ -54,6 +55,61 @@ class AutoWorldRegister(type):
             except AttributeError:
                 return None
         return cls.__settings
+
+    @classmethod
+    def get_world_list(mcs, force_rebuild: bool = False) -> list:
+        """Return world cache entries; optionally rebuild cache metadata first."""
+        return get_registry().list_entries(force_rebuild=force_rebuild)
+
+    @classmethod
+    def get_entry_by_path(mcs, path: str):
+        """Return cache entry for a world path, or None if absent."""
+        return get_registry().get_entry_by_path(path)
+
+    @classmethod
+    def add_world_to_cache(mcs, apworld_path: str) -> bool:
+        """Add one apworld to cache and refresh in-memory world sources."""
+        return get_registry().add_world_to_cache(apworld_path)
+
+    @classmethod
+    def get_world_class(mcs, game_name: str) -> Type["World"]:
+        """Return the World class for game_name, loading it on demand."""
+        return get_registry().get_world_class(game_name)
+
+    @classmethod
+    def get_loaded_world(mcs, game_name: str) -> Optional[Type["World"]]:
+        """Return loaded World class for game_name, or None without loading."""
+        return get_registry().get_loaded_world(game_name)
+
+    @classmethod
+    def get_all_worlds(mcs) -> Dict[str, Type["World"]]:
+        """Load all worlds and return game-to-World mapping."""
+        return get_registry().get_all_worlds()
+
+    @classmethod
+    def ensure_world_loaded(mcs, game_name: str) -> None:
+        """Ensure the world for game_name is loaded."""
+        mcs.get_world_class(game_name)
+
+    @classmethod
+    def ensure_all_worlds_loaded(mcs) -> None:
+        """Ensure all worlds in cache are loaded."""
+        get_registry().load_all()
+
+    @classmethod
+    def unload_world(mcs, game_name: str) -> None:
+        """Unload game_name world so it can be reloaded from disk."""
+        get_registry().unload_world(game_name)
+
+    @classmethod
+    def get_world_sources(mcs) -> List[Any]:
+        """Return the current world source list from the registry owner."""
+        return get_registry().world_sources
+
+    @classmethod
+    def get_failed_world_loads(mcs) -> List[str]:
+        """Return failed world load names tracked by the registry owner."""
+        return get_registry().failed_world_loads
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -99,11 +155,7 @@ class AutoWorldRegister(type):
         new_class = super().__new__(mcs, name, bases, dct)
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
-            if dct["game"] in _world_types_storage:
-                raise RuntimeError(f"""Game {dct["game"]} already registered in 
-                {_world_types_storage[dct["game"]].__file__} when attempting to register from
-                {new_class.__file__}.""")
-            _world_types_storage[dct["game"]] = new_class
+            get_registry().register_world_internal(new_class)
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
