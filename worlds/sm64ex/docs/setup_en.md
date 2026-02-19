@@ -21,16 +21,16 @@ First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT I
 It is extremely encouraged to use the default install directory!
 Then continue to `Using the Launcher`
 
-*Linux Preparations*
+*Linux / SteamOS Preparations*
 
-You will need to install some dependencies before using the launcher.
-The launcher itself needs `qt6`, `patch` and `git`, and building the game requires `sdl2 glew cmake python make` (If you install `jsoncpp` as well, it will be linked dynamically).
-Then continue to `Using the Launcher`
+The easiest installation method is using the Flatpak.
+If using Flatpak, no dependencies or other preparations are necessary.
+Otherwise, install `qt6`, `patch`, `git`, `sdl2`, `glew`, `cmake`, `python` and `make`.
 
 *Using the Launcher*
 
 1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry.
-2. Scroll down, and download the zip file for your OS.
+2. Scroll down, and download the zip file for Windows, or the Flatpak for Linux / SteamOS.
 3. Unpack the zip file in an empty folder.
 4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps.
     - Windows: If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
