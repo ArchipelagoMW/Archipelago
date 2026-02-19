@@ -237,6 +237,7 @@ class Context:
     stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
+    pending_set_replies: typing.Dict[Client, typing.List[dict]]
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
@@ -312,6 +313,8 @@ class Context:
         self.random = random.Random()
         self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
+        self.pending_set_replies = {}
+        self._pending_set_reply_flush_scheduled = False
         self.read_data = {}
         self.spheres = []
 
@@ -446,7 +449,31 @@ class Context:
         msgs = self.dumper(msgs)
         async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
+    def _schedule_flush_pending_set_replies(self):
+        """Schedule a single flush of pending SetReply buffers after a short delay (50ms)."""
+        if self._pending_set_reply_flush_scheduled:
+            return
+        self._pending_set_reply_flush_scheduled = True
+
+        async def do_flush():
+            await asyncio.sleep(0.05)
+            self._pending_set_reply_flush_scheduled = False
+            await self._flush_pending_set_replies()
+
+        asyncio.create_task(do_flush())
+
+    async def _flush_pending_set_replies(self):
+        """Send all buffered SetReply messages to their target clients (one message per client)."""
+        if not self.pending_set_replies:
+            return
+        clients_with_pending = list(self.pending_set_replies.keys())
+        for endpoint in clients_with_pending:
+            msgs = self.pending_set_replies.pop(endpoint, None)
+            if msgs:
+                await self.send_msgs(endpoint, msgs)
+
     async def disconnect(self, endpoint: Client):
+        self.pending_set_replies.pop(endpoint, None)
         if endpoint in self.endpoints:
             self.endpoints.remove(endpoint)
         if endpoint.slot and endpoint in self.clients[endpoint.team][endpoint.slot]:
@@ -2182,7 +2209,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if args.get("want_reply", False):
                 targets.add(client)
             if targets:
-                ctx.broadcast(targets, [args])
+                reply = copy.deepcopy(args)
+                for c in targets:
+                    ctx.pending_set_replies.setdefault(c, []).append(reply)
+                ctx._schedule_flush_pending_set_replies()
             ctx.save()
 
         elif cmd == "SetNotify":
