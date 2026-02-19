@@ -103,7 +103,7 @@ class PeaksOfWorld(World):
         for item in all_items:
             if item.is_enabled(self.options):
                 if item.is_starter_item(self.options):
-                    logging.debug(f"item {item.name} is starter item for player {self.player_name}")
+                    logging.debug(f"item {item.name} is starter for player {self.player_name}")
                     self.multiworld.push_precollected(self.create_item(item.name))
                 else:
                     local_itempool.append(self.create_item(item.name))
