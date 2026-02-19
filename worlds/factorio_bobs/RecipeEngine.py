@@ -423,7 +423,7 @@ class GameItem(RecipeEngineType):
 
         self.is_valid: bool = True
         self.__is_valid_first_pool: bool = True
-        self.__is_valid_pool: bool = True
+        self.__is_valid_pool: bool = source != DefinitionSource.IMPLIED
 
         self.used_in: set[GameRecipe] = set()
         self.crafted_by: set[GameRecipe] = set()
