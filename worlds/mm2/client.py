@@ -378,8 +378,10 @@ class MegaMan2Client(BizHawkClient):
                 color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names.lookup_in_slot(item.location, item.player), recv_amount, len(ctx.items_received)))
-
-            if item.item & 0x130 == 0:
+            if item.item < 0:
+                # Ignore any core-implemented items
+                pass
+            elif item.item & 0x130 == 0:
                 # Robot Master Weapon
                 new_weapons = weapons_unlocked[0] | (1 << ((item.item & 0xF) - 1))
                 writes.append((MM2_WEAPONS_UNLOCKED, new_weapons.to_bytes(1, 'little'), "RAM"))
