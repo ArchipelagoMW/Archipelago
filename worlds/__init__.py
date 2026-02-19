@@ -1,7 +1,6 @@
 import importlib
 import importlib.abc
 import importlib.machinery
-import importlib.util
 import logging
 import os
 import sys
@@ -12,9 +11,10 @@ import json
 from pathlib import Path
 from types import ModuleType
 from typing import List, Sequence
+from zipfile import BadZipFile
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path, Version, version_tuple, tuplize_version
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -23,14 +23,14 @@ try:
 except OSError:  # can't access/write?
     user_folder = None
 
-__all__ = {
+__all__ = [
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
     "failed_world_loads",
-}
+]
 
 
 failed_world_loads: List[str] = []
@@ -145,6 +145,15 @@ if apworlds:
                     logging.error(e)
                 else:
                     raise e
+            except BadZipFile as e:
+                err_message = (f"The world source {apworld_source.resolved_path} is not a valid zip. "
+                               "It is likely either corrupted, or was packaged incorrectly.")
+
+                if sys.stdout:
+                    raise RuntimeError(err_message) from e
+                else:
+                    messagebox("Couldn't load worlds", err_message, error=True)
+                    sys.exit(1)
 
             if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
                 fail_world(apworld.game,

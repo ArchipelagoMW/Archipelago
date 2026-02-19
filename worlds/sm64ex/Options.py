@@ -19,6 +19,19 @@ class EnableCoinStars(Choice):
     option_on = 1
     option_vanilla = 2
 
+class EnableLockedPaintings(Toggle):
+    """
+    Determine how paintings are treated.
+
+    Off - Paintings are not locked, as long as you can access them you can enter them (Vanilla behavior).
+
+    On - Paintings (other than BoB) start off locked and 11 stars are replaced in the pool with items to allow access to them.
+    Attempting to enter a locked painting will simply kick Mario out.
+    Does not affect secrets and levels that don't have a painting (BBH, HMC, RR).
+    This only affects the ability for Mario to enter a painting, the destination of the painting may change due to Entrance Randomization, if it is enabled.
+    """
+    display_name = "Enable Locked Paintings"
+
 
 class StrictCapRequirements(DefaultOnToggle):
     """If disabled, Stars that expect special caps may have to be acquired without the caps"""
@@ -145,6 +158,7 @@ sm64_options_groups = [
         ExclamationBoxes,
         ProgressiveKeys,
         EnableCoinStars,
+        EnableLockedPaintings,
         StrictCapRequirements,
         StrictCannonRequirements,
     ]),
@@ -171,6 +185,7 @@ class SM64Options(PerGameCommonOptions):
     exclamation_boxes: ExclamationBoxes
     progressive_keys: ProgressiveKeys
     enable_coin_stars: EnableCoinStars
+    enable_locked_paintings: EnableLockedPaintings
     enable_move_rando: EnableMoveRandomizer
     move_rando_actions: MoveRandomizerActions
     strict_cap_requirements: StrictCapRequirements
