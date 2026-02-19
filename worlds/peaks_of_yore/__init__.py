@@ -35,7 +35,8 @@ def get_error_item_count(item_pool: list[Item], location_info: RegionLocationInf
     msg = "Error: not enough locations to place progression items:\n"
     msg += f"Found {len(prog_list)} progression items:\n"
 
-    msg += f"{(" \n").join([i.name for i in prog_list if i.code >= 1000])}\n"
+    newline = " \n"
+    msg += f"{newline.join([i.name for i in prog_list if i.code >= 1000])}\n"
     peak_count = len([i for i in prog_list if i.code < 1000])
     if peak_count > 0:
         msg += f"+ {peak_count} peaks\n"
