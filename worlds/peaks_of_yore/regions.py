@@ -14,11 +14,16 @@ class RegionLocationInfo(NamedTuple):
     artefacts_in_pool: list[str]
     peaks_in_pool: list[str]
     time_attack_in_pool: list[str]
+    other_in_pool: list[str]
+
+    def get_total_location_count(self):
+        return (len(self.artefacts_in_pool) + len(self.peaks_in_pool)
+                + len(self.time_attack_in_pool) + len(self.other_in_pool))
 
 
 # IDE was yelling at me and not happy that I called a parameter "options", so have "opts"
 def create_poy_regions(world: World, opts: PeaksOfYoreOptions) -> RegionLocationInfo:
-    result = RegionLocationInfo([], [], [])
+    result = RegionLocationInfo([], [], [], [])
 
     cabin_region = Region("Cabin", world.player, world.multiworld)
     world.multiworld.regions.append(cabin_region)
@@ -28,6 +33,7 @@ def create_poy_regions(world: World, opts: PeaksOfYoreOptions) -> RegionLocation
         result.peaks_in_pool.extend(tempres.peaks_in_pool)
         result.artefacts_in_pool.extend(tempres.artefacts_in_pool)
         result.time_attack_in_pool.extend(tempres.time_attack_in_pool)
+        result.other_in_pool.extend(tempres.other_in_pool)
     return result
 
 
@@ -36,7 +42,7 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
     """
     Takes a POYRegion, and creates it and its subregions as a subregion of parent_region
     """
-    result = RegionLocationInfo([], [], [])
+    result = RegionLocationInfo([], [], [], [])
     if not region_data.enable_requirements(opts):
         return result
     region = Region(region_data.name, world.player, world.multiworld)
@@ -52,6 +58,8 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
             result.artefacts_in_pool.append(location)
         elif time_attack_time_offset < address:
             result.time_attack_in_pool.append(location)
+        else:
+            result.other_in_pool.append(location)
 
     if parent_region is not None:
         entry_requirements = dict(region_data.entry_requirements)
@@ -74,4 +82,5 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
         result.peaks_in_pool.extend(tempres.peaks_in_pool)
         result.artefacts_in_pool.extend(tempres.artefacts_in_pool)
         result.time_attack_in_pool.extend(tempres.time_attack_in_pool)
+        result.other_in_pool.extend(tempres.other_in_pool)
     return result
