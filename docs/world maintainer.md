@@ -21,6 +21,29 @@ Unless these are shared between multiple people, we expect the following from ea
   of development.
 * Let us know of long periods of unavailability.
 
+## Authority
+
+For a Pull Request into a world to be merged, one of the world maintainers of that world has to approve it.  
+This applies to all Pull Requests, no matter how small, with the sole exception of patching security vulnerabilities.
+
+World maintainers can partially opt out of this,
+allowing core maintainers to merge pull requests which they deem critical and "obvious" enough.
+There is no one singular definition of what Pull Requests fit this criteria - 
+You are trusting the core maintainers of Archipelago to be reasonable about their judgement.
+
+Some examples of Pull Requests like this include:
+- Fixing a broken link in documentation
+- Correcting a typo
+- Fixing a crash where the intent of the code is obvious (e.g. an indentation error due to typing 3 spaces instead of 4)
+
+To do this, they can add a comment in [CODEOWNERS](./CODEOWNERS) under their game:
+
+```
+# APQuest
+# Core is allowed to merge some types of PRs without my approval as described in "world maintainer.md"
+/worlds/apquest/ @NewSoupVi
+```
+
 ## Becoming a World Maintainer
 
 ### Adding a World
