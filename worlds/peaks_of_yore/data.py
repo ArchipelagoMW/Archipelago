@@ -283,7 +283,7 @@ all_items: list[ItemData] = [
              is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
     ItemData("Great Gaol", 32, ItemClassification.progression, POYItemLocationType.PEAK,
              is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
-    ItemData("St, Haelga", 33, ItemClassification.progression, POYItemLocationType.PEAK,
+    ItemData("St. Haelga", 33, ItemClassification.progression, POYItemLocationType.PEAK,
              is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
     ItemData("Ymir's Shadow", 34, ItemClassification.progression, POYItemLocationType.PEAK,
              is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
@@ -299,7 +299,7 @@ all_items: list[ItemData] = [
     ItemData("Walter's Crag: Rope (Co-Climb)", 0, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Walker's Pillar: Rope (Co-Climb)", 1, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Great Gaol: Rope (Encounter)", 2, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("St Haelga: Rope (Encounter)", 3, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemData("St. Haelga: Rope (Encounter)", 3, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Old Man Of Sjór: Rope", 4, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Hangman's Leap: Rope", 5, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Ugsome Storr: Rope", 6, ItemClassification.useful, POYItemLocationType.ROPE),
@@ -448,8 +448,8 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
             LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
         ], generate_free_solo=True),
-        PeakRegion("St, Haelga", 33, locations=[
-            LocationData("St Haelga: Rope (Encounter)", POYItemLocationType.ROPE, 3),
+        PeakRegion("St. Haelga", 33, locations=[
+            LocationData("St. Haelga: Rope (Encounter)", POYItemLocationType.ROPE, 3),
             LocationData("St. Haelga: Picture Piece #4", POYItemLocationType.ARTEFACT, 17),
         ], generate_free_solo=True),
         PeakRegion("Ymir's Shadow", 34, locations=[
@@ -458,12 +458,12 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
         ], generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_advanced, is_book=True),
-    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Expert Book": 1, "Ice Axes": 1}, subregions=[
-        PeakRegion("The Great Bulwark", 35, locations=[
+    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Expert Book": 1}, subregions=[
+        PeakRegion("The Great Bulwark", 35, entry_requirements={"Ice Axes": 1}, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
         ], generate_time_attack=False,
                    generate_free_solo=True),
-        PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2},
+        PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2, "Ice Axes": 1},
                    enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
                    generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_expert, is_book=True),
