@@ -1,9 +1,11 @@
 # Dark Souls III
 
-Game Page | [Items] | [Locations]
+Game Page | [Setup] | [Items] | [Locations] | [Enemy Randomization]
 
+[Setup]: /tutorial/Dark%20Souls%20III/setup/en
 [Items]: /tutorial/Dark%20Souls%20III/items/en
 [Locations]: /tutorial/Dark%20Souls%20III/locations/en
+[Enemy Randomization]: /tutorial/Dark%20Souls%20III/enemy-randomization/en
 
 ## What do I need to do to randomize DS3?
 
@@ -137,6 +139,14 @@ individual location.
 Check out the [item guide], which explains the named groups available for items.
 
 [item guide]: /tutorial/Dark%20Souls%20III/items/en
+
+## How can I change what enemies get randomized?
+
+The [enemy randomization guide] explains how to further customize enemy randomization
+for challenge runs or convenience. You can target specific enemies or entire
+categories and even remove annoying enemy types outright.
+
+[enemy randomization guide]: /tutorial/Dark%20Souls%20III/enemy-randomization/en
 
 ## What's new from 2.x.x?
 
