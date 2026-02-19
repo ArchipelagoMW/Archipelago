@@ -173,6 +173,37 @@ level_blocks_data = {
     ]
 }
 
+tile_types: dict[int, int] = {
+    0x56: 0x56, # Yoshi House
+    0x58: 0x58, # Fortress
+    0x5D: 0x5D, # Castle Bottom
+    0x6E: 0x66, # Yellow (0x66)
+    0x6F: 0x67, # Big Yellow (0x67)
+    0x70: 0x68, # Red (0x68)
+    0x71: 0x69, # Big Red (0x69)
+    0x72: 0x6A, # Yellow Swimming (0x6A)
+    0x73: 0x6B, # Big Yellow Swimming (0x6B)
+    0x74: 0x6C, # Red Swimming (0x6C)
+    0x75: 0x6D, # Big Red Swimming (0x6D)
+    0x76: 0x77, # Yellow/Green Switch Palace (0x77)
+    0x78: 0x79, # Red/Blue Switch Palace (0x79)
+    0x7A: 0x63, # Ghost House (0x63)
+    0x57: 0x5E, # Yellow Cave (0x5E)
+    0x7B: 0x7C, # Red Cave (0x7C)
+}
+
+offscreen_events: dict[int, int] = {
+    0x15: 0x00,
+    0x05: 0x08,
+    0x01: 0x10,
+    0x2F: 0x13,
+    0x0F: 0x14,
+    0x3B: 0x1D,
+    0x3A: 0x1F,
+    0x14: 0x20,
+    0x3E: 0x26,
+}
+
 class SMWPath():
     thisEndDirection: int
     otherLevelID: int
@@ -183,6 +214,17 @@ class SMWPath():
         self.otherLevelID      = otherLevelID
         self.otherEndDirection = otherEndDirection
 
+class OWTile():
+    coords: list[int]
+    original_tile: int
+    start_revealed: bool
+    forbid_castle_top: bool
+
+    def __init__(self, coords: list[int], original_tile: int, start_revealed: bool = False, forbid_castle_top: bool = False):
+        self.coords            = coords
+        self.original_tile     = original_tile
+        self.start_revealed    = start_revealed
+        self.forbid_castle_top = forbid_castle_top
 
 class SMWLevel():
     levelName: str
@@ -191,92 +233,93 @@ class SMWLevel():
     eventIDValue: int
     #progressByte: int
     #progressBit: int
+    tile_data: OWTile
     exit1Path: SMWPath
     exit2Path: SMWPath
 
-    def __init__(self, levelName: str, levelIDAddress: int, eventIDValue: int, exit1Path: SMWPath = None, exit2Path: SMWPath = None):
+    def __init__(self, levelName: str, levelIDAddress: int, eventIDValue: int, tile_data: OWTile = None, exit1Path: SMWPath = None, exit2Path: SMWPath = None):
         self.levelName      = levelName
         self.levelIDAddress = levelIDAddress
         #self.eventIDAddress = eventIDAddress # Inferred from: LevelIDValue (Dict Key): $2D608 + LevelIDValue
         self.eventIDValue   = eventIDValue
         #self.progressByte   = progressByte # Inferred from EventIDValue: (ID / 8) + $1F02
         #self.progressBit    = progressBit  # Inferred from EventIDValue: 1 << (7 - (ID % 8))
-        self.exit1Path   = exit1Path
-        self.exit2Path   = exit2Path
-
+        self.tile_data      = tile_data
+        self.exit1Path      = exit1Path
+        self.exit2Path      = exit2Path
 
 level_info_dict = {
-    0x28: SMWLevel(LocationName.yoshis_house, 0x37A76, 0x00),
-    0x29: SMWLevel(LocationName.yoshis_island_1_region, 0x37A83, 0x01, SMWPath(0x08, 0x14, 0x04)),
-    0x14: SMWLevel(LocationName.yellow_switch_palace, 0x37812, 0x02),
-    0x2A: SMWLevel(LocationName.yoshis_island_2_region, 0x37A89, 0x03, SMWPath(0x08, 0x27, 0x04)),
-    0x27: SMWLevel(LocationName.yoshis_island_3_region, 0x37A69, 0x04, SMWPath(0x01, 0x26, 0x04)),
-    0x26: SMWLevel(LocationName.yoshis_island_4_region, 0x37A4B, 0x05, SMWPath(0x08, 0x25, 0x01)),
-    0x25: SMWLevel(LocationName.yoshis_island_castle_region, 0x37A29, 0x06, SMWPath(0x08, 0x15, 0x04)),
+    0x28: SMWLevel(LocationName.yoshis_house, 0x37A76, 0x00, OWTile([0x07, 0x27], 0x56, True)),
+    0x29: SMWLevel(LocationName.yoshis_island_1_region, 0x37A83, 0x01, OWTile([0x04, 0x28], 0x6E, True, True), SMWPath(0x08, 0x14, 0x04)),
+    0x14: SMWLevel(LocationName.yellow_switch_palace_region, 0x37812, 0x02, OWTile([0x02, 0x11], 0x76)),
+    0x2A: SMWLevel(LocationName.yoshis_island_2_region, 0x37A89, 0x03, OWTile([0x0A, 0x28], 0x6E, True), SMWPath(0x08, 0x27, 0x04)),
+    0x27: SMWLevel(LocationName.yoshis_island_3_region, 0x37A69, 0x04, OWTile([0x0A, 0x26], 0x6E), SMWPath(0x01, 0x26, 0x04)),
+    0x26: SMWLevel(LocationName.yoshis_island_4_region, 0x37A4B, 0x05, OWTile([0x0C, 0x24], 0x72, False, True), SMWPath(0x08, 0x25, 0x01)),
+    0x25: SMWLevel(LocationName.yoshis_island_castle_region, 0x37A29, 0x06, OWTile([0x0A, 0x22], 0x5D, True), SMWPath(0x08, 0x15, 0x04)),
 
-    0x15: SMWLevel(LocationName.donut_plains_1_region, 0x37815, 0x07, SMWPath(0x02, 0x09, 0x04), SMWPath(0x08, 0x0A, 0x04)),
-    0x09: SMWLevel(LocationName.donut_plains_2_region, 0x376D3, 0x09, SMWPath(0x08, 0x04, 0x02), SMWPath(0x02, 0x08, 0x01)),
-    0x0A: SMWLevel(LocationName.donut_secret_1_region, 0x376E5, 0x10, SMWPath(0x08, 0x04, 0x04), SMWPath(0x01, 0x13, 0x08)),
-    0x08: SMWLevel(LocationName.green_switch_palace, 0x376D1, 0x28),
-    0x04: SMWLevel(LocationName.donut_ghost_house_region, 0x376A5, 0x0B, SMWPath(0x08, 0x03, 0x04), SMWPath(0x01, 0x05, 0x02)),
-    0x13: SMWLevel(LocationName.donut_secret_house_region, 0x37807, 0x12, SMWPath(0x01, 0x2F, 0x04), SMWPath(0x04, 0x16, 0x08)), # SMW_TODO: Check this wrt pipe behavior
-    0x05: SMWLevel(LocationName.donut_plains_3_region, 0x376A9, 0x0D, SMWPath(0x01, 0x06, 0x08)),
-    0x06: SMWLevel(LocationName.donut_plains_4_region, 0x376CB, 0x0E, SMWPath(0x01, 0x07, 0x02)),
-    0x2F: SMWLevel(LocationName.donut_secret_2_region, 0x37B10, 0x14, SMWPath(0x01, 0x05, 0x04)),
-    0x07: SMWLevel(LocationName.donut_plains_castle_region, 0x376CD, 0x0F, SMWPath(0x08, 0x3E, 0x04)),
-    0x03: SMWLevel(LocationName.donut_plains_top_secret, 0x37685, 0xFF),
+    0x15: SMWLevel(LocationName.donut_plains_1_region, 0x37815, 0x07, OWTile([0x05, 0x11], 0x70), SMWPath(0x02, 0x09, 0x04), SMWPath(0x08, 0x0A, 0x04)),
+    0x09: SMWLevel(LocationName.donut_plains_2_region, 0x376D3, 0x09, OWTile([0x03, 0x0D], 0x7B), SMWPath(0x08, 0x04, 0x02), SMWPath(0x02, 0x08, 0x01)),
+    0x0A: SMWLevel(LocationName.donut_secret_1_region, 0x376E5, 0x10, OWTile([0x05, 0x0E], 0x74), SMWPath(0x08, 0x04, 0x04), SMWPath(0x01, 0x13, 0x08)),
+    0x08: SMWLevel(LocationName.green_switch_palace_region, 0x376D1, 0x28, OWTile([0x01, 0x0D], 0x76)),
+    0x04: SMWLevel(LocationName.donut_ghost_house_region, 0x376A5, 0x0B, OWTile([0x05, 0x0A], 0x7A, False), SMWPath(0x08, 0x03, 0x04), SMWPath(0x01, 0x05, 0x02)),
+    0x13: SMWLevel(LocationName.donut_secret_house_region, 0x37807, 0x12, OWTile([0x07, 0x10], 0x7A, False, True), SMWPath(0x01, 0x2F, 0x04), SMWPath(0x04, 0x16, 0x08)), # SMW_TODO: Check this wrt pipe behavior
+    0x05: SMWLevel(LocationName.donut_plains_3_region, 0x376A9, 0x0D, OWTile([0x09, 0x0A], 0x6E), SMWPath(0x01, 0x06, 0x08)),
+    0x06: SMWLevel(LocationName.donut_plains_4_region, 0x376CB, 0x0E, OWTile([0x0B, 0x0C], 0x6E, False, True), SMWPath(0x01, 0x07, 0x02)),
+    0x2F: SMWLevel(LocationName.donut_secret_2_region, 0x37B10, 0x14, OWTile([0x11, 0x21], 0x6E), SMWPath(0x01, 0x05, 0x04)),
+    0x07: SMWLevel(LocationName.donut_plains_castle_region, 0x376CD, 0x0F, OWTile([0x0D, 0x0C], 0x5D, True), SMWPath(0x08, 0x3E, 0x04)),
+    0x03: SMWLevel(LocationName.donut_plains_top_secret, 0x37685, 0xFF, OWTile([0x05, 0x08], 0x6E)),
     0x16: SMWLevel(LocationName.donut_plains_star_road, 0x37827, 0xFF),
 
-    0x3E: SMWLevel(LocationName.vanilla_dome_1_region, 0x37C25, 0x15, SMWPath(0x01, 0x3C, 0x04), SMWPath(0x02, 0x2D, 0x04)),
-    0x3C: SMWLevel(LocationName.vanilla_dome_2_region, 0x37C08, 0x17, SMWPath(0x08, 0x2B, 0x04), SMWPath(0x01, 0x3F, 0x08)),
-    0x2D: SMWLevel(LocationName.vanilla_secret_1_region, 0x37AE3, 0x1D, SMWPath(0x08, 0x01, 0x02), SMWPath(0x02, 0x2C, 0x01)),
-    0x2B: SMWLevel(LocationName.vanilla_ghost_house_region, 0x37AC8, 0x19, SMWPath(0x01, 0x2E, 0x08)),
-    0x2E: SMWLevel(LocationName.vanilla_dome_3_region, 0x37AEC, 0x1A, SMWPath(0x04, 0x3D, 0x08)),
-    0x3D: SMWLevel(LocationName.vanilla_dome_4_region, 0x37C0C, 0x1B, SMWPath(0x04, 0x40, 0x08)),
-    0x3F: SMWLevel(LocationName.red_switch_palace, 0x37C2A, 0x29),
-    0x01: SMWLevel(LocationName.vanilla_secret_2_region, 0x3763C, 0x1F, SMWPath(0x01, 0x02, 0x02)),
-    0x02: SMWLevel(LocationName.vanilla_secret_3_region, 0x3763E, 0x20, SMWPath(0x01, 0x0B, 0x02)),
-    0x0B: SMWLevel(LocationName.vanilla_fortress_region, 0x37730, 0x21, SMWPath(0x01, 0x0C, 0x02)),
-    0x40: SMWLevel(LocationName.vanilla_dome_castle_region, 0x37C2C, 0x1C, SMWPath(0x04, 0x0F, 0x02)),
+    0x3E: SMWLevel(LocationName.vanilla_dome_1_region, 0x37C25, 0x15, OWTile([0x06, 0x32], 0x70), SMWPath(0x01, 0x3C, 0x04), SMWPath(0x02, 0x2D, 0x04)),
+    0x3C: SMWLevel(LocationName.vanilla_dome_2_region, 0x37C08, 0x17, OWTile([0x09, 0x30], 0x74), SMWPath(0x08, 0x2B, 0x04), SMWPath(0x01, 0x3F, 0x08)),
+    0x2D: SMWLevel(LocationName.vanilla_secret_1_region, 0x37AE3, 0x1D, OWTile([0x04, 0x2E], 0x70), SMWPath(0x08, 0x01, 0x02), SMWPath(0x02, 0x2C, 0x01)),
+    0x2B: SMWLevel(LocationName.vanilla_ghost_house_region, 0x37AC8, 0x19, OWTile([0x09, 0x2C], 0x7A, False), SMWPath(0x01, 0x2E, 0x08)),
+    0x2E: SMWLevel(LocationName.vanilla_dome_3_region, 0x37AEC, 0x1A, OWTile([0x0D, 0x2E], 0x6E, False, True), SMWPath(0x04, 0x3D, 0x08)),
+    0x3D: SMWLevel(LocationName.vanilla_dome_4_region, 0x37C0C, 0x1B, OWTile([0x0D, 0x30], 0x6E), SMWPath(0x04, 0x40, 0x08)),
+    0x3F: SMWLevel(LocationName.red_switch_palace_region, 0x37C2A, 0x29, OWTile([0x0B, 0x32], 0x78)),
+    0x01: SMWLevel(LocationName.vanilla_secret_2_region, 0x3763C, 0x1F, OWTile([0x0C, 0x03], 0x6E), SMWPath(0x01, 0x02, 0x02)),
+    0x02: SMWLevel(LocationName.vanilla_secret_3_region, 0x3763E, 0x20, OWTile([0x0E, 0x03], 0x6E), SMWPath(0x01, 0x0B, 0x02)),
+    0x0B: SMWLevel(LocationName.vanilla_fortress_region, 0x37730, 0x21, OWTile([0x10, 0x03], 0x58, False), SMWPath(0x01, 0x0C, 0x02)),
+    0x40: SMWLevel(LocationName.vanilla_dome_castle_region, 0x37C2C, 0x1C, OWTile([0x0D, 0x32], 0x5D, True), SMWPath(0x04, 0x0F, 0x02)),
     0x2C: SMWLevel(LocationName.vanilla_dome_star_road, 0x37AE0, 0xFF),
 
-    0x0C: SMWLevel(LocationName.butter_bridge_1_region, 0x37734, 0x22, SMWPath(0x01, 0x0D, 0x02)),
-    0x0D: SMWLevel(LocationName.butter_bridge_2_region, 0x37736, 0x23, SMWPath(0x01, 0x0E, 0x02)),
-    0x0F: SMWLevel(LocationName.cheese_bridge_region, 0x37754, 0x25, SMWPath(0x01, 0x10, 0x02), SMWPath(0x04, 0x11, 0x08)),
-    0x11: SMWLevel(LocationName.soda_lake_region, 0x37784, 0x60, SMWPath(0x04, 0x12, 0x04)),
-    0x10: SMWLevel(LocationName.cookie_mountain_region, 0x37757, 0x27, SMWPath(0x04, 0x0E, 0x04)),
-    0x0E: SMWLevel(LocationName.twin_bridges_castle_region, 0x3773A, 0x24, SMWPath(0x01, 0x42, 0x08)),
+    0x0C: SMWLevel(LocationName.butter_bridge_1_region, 0x37734, 0x22, OWTile([0x14, 0x03], 0x6E), SMWPath(0x01, 0x0D, 0x02)),
+    0x0D: SMWLevel(LocationName.butter_bridge_2_region, 0x37736, 0x23, OWTile([0x16, 0x03], 0x6E), SMWPath(0x01, 0x0E, 0x02)),
+    0x0F: SMWLevel(LocationName.cheese_bridge_region, 0x37754, 0x25, OWTile([0x14, 0x05], 0x70), SMWPath(0x01, 0x10, 0x02), SMWPath(0x04, 0x11, 0x08)),
+    0x11: SMWLevel(LocationName.soda_lake_region, 0x37784, 0x60, OWTile([0x14, 0x08], 0x72), SMWPath(0x04, 0x12, 0x04)),
+    0x10: SMWLevel(LocationName.cookie_mountain_region, 0x37757, 0x27, OWTile([0x17, 0x05], 0x6E), SMWPath(0x04, 0x0E, 0x04)),
+    0x0E: SMWLevel(LocationName.twin_bridges_castle_region, 0x3773A, 0x24, OWTile([0x1A, 0x03], 0x5D, True), SMWPath(0x01, 0x42, 0x08)),
     0x12: SMWLevel(LocationName.twin_bridges_star_road, 0x377F0, 0xFF),
 
-    0x42: SMWLevel(LocationName.forest_of_illusion_1_region, 0x37C78, 0x2A, SMWPath(0x01, 0x44, 0x08), SMWPath(0x02, 0x41, 0x01)),
-    0x44: SMWLevel(LocationName.forest_of_illusion_2_region, 0x37CAA, 0x2C, SMWPath(0x04, 0x47, 0x08), SMWPath(0x01, 0x45, 0x02)),
-    0x47: SMWLevel(LocationName.forest_of_illusion_3_region, 0x37CC8, 0x2E, SMWPath(0x02, 0x41, 0x04), SMWPath(0x04, 0x20, 0x01)),
-    0x43: SMWLevel(LocationName.forest_of_illusion_4_region, 0x37CA4, 0x32, SMWPath(0x01, 0x44, 0x02), SMWPath(0x04, 0x46, 0x08)),
-    0x41: SMWLevel(LocationName.forest_ghost_house_region, 0x37C76, 0x30, SMWPath(0x01, 0x42, 0x02), SMWPath(0x02, 0x43, 0x08)),
-    0x46: SMWLevel(LocationName.forest_secret_region, 0x37CC4, 0x34, SMWPath(0x04, 0x1F, 0x01)),
-    0x45: SMWLevel(LocationName.blue_switch_palace, 0x37CAC, 0x37),
-    0x1F: SMWLevel(LocationName.forest_fortress_region, 0x37906, 0x35, SMWPath(0x02, 0x1E, 0x01)),
-    0x20: SMWLevel(LocationName.forest_castle_region, 0x37928, 0x61, SMWPath(0x04, 0x22, 0x08)),
+    0x42: SMWLevel(LocationName.forest_of_illusion_1_region, 0x37C78, 0x2A, OWTile([0x09, 0x37], 0x71, True), SMWPath(0x01, 0x44, 0x08), SMWPath(0x02, 0x41, 0x01)),
+    0x44: SMWLevel(LocationName.forest_of_illusion_2_region, 0x37CAA, 0x2C, OWTile([0x0B, 0x3A], 0x74), SMWPath(0x04, 0x47, 0x08), SMWPath(0x01, 0x45, 0x02)),
+    0x47: SMWLevel(LocationName.forest_of_illusion_3_region, 0x37CC8, 0x2E, OWTile([0x09, 0x3C], 0x70), SMWPath(0x02, 0x41, 0x04), SMWPath(0x04, 0x20, 0x01)),
+    0x43: SMWLevel(LocationName.forest_of_illusion_4_region, 0x37CA4, 0x32, OWTile([0x05, 0x3A], 0x70), SMWPath(0x01, 0x44, 0x02), SMWPath(0x04, 0x46, 0x08)),
+    0x41: SMWLevel(LocationName.forest_ghost_house_region, 0x37C76, 0x30, OWTile([0x07, 0x37], 0x7A), SMWPath(0x01, 0x42, 0x02), SMWPath(0x02, 0x43, 0x08)),
+    0x46: SMWLevel(LocationName.forest_secret_region, 0x37CC4, 0x34, OWTile([0x05, 0x3C], 0x6E), SMWPath(0x04, 0x1F, 0x01)),
+    0x45: SMWLevel(LocationName.blue_switch_palace_region, 0x37CAC, 0x37, OWTile([0x0D, 0x3A], 0x78)),
+    0x1F: SMWLevel(LocationName.forest_fortress_region, 0x37906, 0x35, OWTile([0x16, 0x10], 0x58, True), SMWPath(0x02, 0x1E, 0x01)),
+    0x20: SMWLevel(LocationName.forest_castle_region, 0x37928, 0x61, OWTile([0x18, 0x12], 0x5D, True), SMWPath(0x04, 0x22, 0x08)),
     0x1E: SMWLevel(LocationName.forest_star_road, 0x37904, 0x36),
 
-    0x22: SMWLevel(LocationName.chocolate_island_1_region, 0x37968, 0x62, SMWPath(0x02, 0x21, 0x01)),
-    0x24: SMWLevel(LocationName.chocolate_island_2_region, 0x379B5, 0x46, SMWPath(0x02, 0x23, 0x01), SMWPath(0x04, 0x3B, 0x01)),
-    0x23: SMWLevel(LocationName.chocolate_island_3_region, 0x379B3, 0x48, SMWPath(0x04, 0x23, 0x08), SMWPath(0x02, 0x1B, 0x01)),
-    0x1D: SMWLevel(LocationName.chocolate_island_4_region, 0x378DF, 0x4B, SMWPath(0x02, 0x1C, 0x01)),
-    0x1C: SMWLevel(LocationName.chocolate_island_5_region, 0x378DC, 0x4C, SMWPath(0x08, 0x1A, 0x04)),
-    0x21: SMWLevel(LocationName.chocolate_ghost_house_region, 0x37965, 0x63, SMWPath(0x04, 0x24, 0x08)),
-    0x1B: SMWLevel(LocationName.chocolate_fortress_region, 0x378BF, 0x4A, SMWPath(0x04, 0x1D, 0x08)),
-    0x3B: SMWLevel(LocationName.chocolate_secret_region, 0x37B97, 0x4F, SMWPath(0x02, 0x1A, 0x02)),
-    0x1A: SMWLevel(LocationName.chocolate_castle_region, 0x378BC, 0x4D, SMWPath(0x08, 0x18, 0x02)),
+    0x22: SMWLevel(LocationName.chocolate_island_1_region, 0x37968, 0x62, OWTile([0x18, 0x16], 0x6E), SMWPath(0x02, 0x21, 0x01)),
+    0x24: SMWLevel(LocationName.chocolate_island_2_region, 0x379B5, 0x46, OWTile([0x15, 0x1B], 0x70), SMWPath(0x02, 0x23, 0x01), SMWPath(0x04, 0x3B, 0x01)),
+    0x23: SMWLevel(LocationName.chocolate_island_3_region, 0x379B3, 0x48, OWTile([0x13, 0x1B], 0x6E, False, True), SMWPath(0x04, 0x23, 0x08), SMWPath(0x02, 0x1B, 0x01)),
+    0x1D: SMWLevel(LocationName.chocolate_island_4_region, 0x378DF, 0x4B, OWTile([0x0F, 0x1D], 0x57), SMWPath(0x02, 0x1C, 0x01)),
+    0x1C: SMWLevel(LocationName.chocolate_island_5_region, 0x378DC, 0x4C, OWTile([0x0C, 0x1D], 0x6E), SMWPath(0x08, 0x1A, 0x04)),
+    0x21: SMWLevel(LocationName.chocolate_ghost_house_region, 0x37965, 0x63, OWTile([0x15, 0x16], 0x7A, False), SMWPath(0x04, 0x24, 0x08)),
+    0x1B: SMWLevel(LocationName.chocolate_fortress_region, 0x378BF, 0x4A, OWTile([0x0F, 0x1B], 0x58, True), SMWPath(0x04, 0x1D, 0x08)),
+    0x3B: SMWLevel(LocationName.chocolate_secret_region, 0x37B97, 0x4F, OWTile([0x18, 0x29], 0x6E), SMWPath(0x02, 0x1A, 0x02)),
+    0x1A: SMWLevel(LocationName.chocolate_castle_region, 0x378BC, 0x4D, OWTile([0x0C, 0x1B], 0x5D, True), SMWPath(0x08, 0x18, 0x02)),
 
-    0x18: SMWLevel(LocationName.sunken_ghost_ship_region, 0x3787E, 0x4E, SMWPath(0x08, 0x3A, 0x01)),
-    0x3A: SMWLevel(LocationName.valley_of_bowser_1_region, 0x37B7B, 0x38, SMWPath(0x02, 0x39, 0x01)),
-    0x39: SMWLevel(LocationName.valley_of_bowser_2_region, 0x37B79, 0x39, SMWPath(0x02, 0x38, 0x01), SMWPath(0x08, 0x35, 0x04)),
-    0x37: SMWLevel(LocationName.valley_of_bowser_3_region, 0x37B74, 0x3D, SMWPath(0x08, 0x33, 0x04)),
-    0x33: SMWLevel(LocationName.valley_of_bowser_4_region, 0x37B54, 0x3E, SMWPath(0x01, 0x34, 0x02), SMWPath(0x08, 0x30, 0x04)),
-    0x38: SMWLevel(LocationName.valley_ghost_house_region, 0x37B77, 0x3B, SMWPath(0x02, 0x37, 0x01), SMWPath(0x08, 0x34, 0x04)),
-    0x35: SMWLevel(LocationName.valley_fortress_region, 0x37B59, 0x41, SMWPath(0x08, 0x32, 0x04)),
-    0x34: SMWLevel(LocationName.valley_castle_region, 0x37B57, 0x40, SMWPath(0x08, 0x31, 0x04)),
+    0x18: SMWLevel(LocationName.sunken_ghost_ship_region, 0x3787E, 0x4E, OWTile([0x0E, 0x17], 0x72), SMWPath(0x08, 0x3A, 0x01)),
+    0x3A: SMWLevel(LocationName.valley_of_bowser_1_region, 0x37B7B, 0x38, OWTile([0x1C, 0x27], 0x6E), SMWPath(0x02, 0x39, 0x01)),
+    0x39: SMWLevel(LocationName.valley_of_bowser_2_region, 0x37B79, 0x39, OWTile([0x1A, 0x27], 0x71), SMWPath(0x02, 0x38, 0x01), SMWPath(0x08, 0x35, 0x04)),
+    0x37: SMWLevel(LocationName.valley_of_bowser_3_region, 0x37B74, 0x3D, OWTile([0x15, 0x27], 0x6E), SMWPath(0x08, 0x33, 0x04)),
+    0x33: SMWLevel(LocationName.valley_of_bowser_4_region, 0x37B54, 0x3E, OWTile([0x15, 0x25], 0x70), SMWPath(0x01, 0x34, 0x02), SMWPath(0x08, 0x30, 0x04)),
+    0x38: SMWLevel(LocationName.valley_ghost_house_region, 0x37B77, 0x3B, OWTile([0x18, 0x27], 0x7A), SMWPath(0x02, 0x37, 0x01), SMWPath(0x08, 0x34, 0x04)),
+    0x35: SMWLevel(LocationName.valley_fortress_region, 0x37B59, 0x41, OWTile([0x1A, 0x25], 0x58, False), SMWPath(0x08, 0x32, 0x04)),
+    0x34: SMWLevel(LocationName.valley_castle_region, 0x37B57, 0x40, OWTile([0x18, 0x25], 0x5D, True), SMWPath(0x08, 0x31, 0x04)),
     0x31: SMWLevel(LocationName.front_door, 0x37B37, 0x45),
     0x81: SMWLevel(LocationName.front_door, 0x37B37, 0x45), # Fake Extra Front Door
     0x32: SMWLevel(LocationName.back_door, 0x37B39, 0x42),
@@ -284,26 +327,26 @@ level_info_dict = {
     0x30: SMWLevel(LocationName.valley_star_road, 0x37B34, 0x44),
 
     0x5B: SMWLevel(LocationName.star_road_donut, 0x37DD3, 0x50),
-    0x58: SMWLevel(LocationName.star_road_1_region, 0x37DA4, 0x51, None, SMWPath(0x02, 0x53, 0x04)),
+    0x58: SMWLevel(LocationName.star_road_1_region, 0x37DA4, 0x51, OWTile([0x15, 0x3A], 0x70, True), None, SMWPath(0x02, 0x53, 0x04)),
     0x53: SMWLevel(LocationName.star_road_vanilla, 0x37D82, 0x53),
-    0x54: SMWLevel(LocationName.star_road_2_region, 0x37D85, 0x54, None, SMWPath(0x08, 0x52, 0x02)),
+    0x54: SMWLevel(LocationName.star_road_2_region, 0x37D85, 0x54, OWTile([0x16, 0x38], 0x70, True, True), None, SMWPath(0x08, 0x52, 0x02)),
     0x52: SMWLevel(LocationName.star_road_twin_bridges, 0x37D67, 0x56),
-    0x56: SMWLevel(LocationName.star_road_3_region, 0x37D89, 0x57, None, SMWPath(0x01, 0x57, 0x02)),
+    0x56: SMWLevel(LocationName.star_road_3_region, 0x37D89, 0x57, OWTile([0x1A, 0x38], 0x70, True, True), None, SMWPath(0x01, 0x57, 0x02)),
     0x57: SMWLevel(LocationName.star_road_forest, 0x37D8C, 0x59),
-    0x59: SMWLevel(LocationName.star_road_4_region, 0x37DAA, 0x5A, None, SMWPath(0x04, 0x5C, 0x08)),
+    0x59: SMWLevel(LocationName.star_road_4_region, 0x37DAA, 0x5A, OWTile([0x1B, 0x3A], 0x70, True), None, SMWPath(0x04, 0x5C, 0x08)),
     0x5C: SMWLevel(LocationName.star_road_valley, 0x37DDC, 0x5C),
-    0x5A: SMWLevel(LocationName.star_road_5_region, 0x37DB7, 0x5D, SMWPath(0x02, 0x5B, 0x01), SMWPath(0x08, 0x55, 0x04)),
+    0x5A: SMWLevel(LocationName.star_road_5_region, 0x37DB7, 0x5D, OWTile([0x18, 0x3B], 0x70, True), SMWPath(0x02, 0x5B, 0x01), SMWPath(0x08, 0x55, 0x04)),
     0x55: SMWLevel(LocationName.star_road_special, 0x37D87, 0x5F),
 
     0x4D: SMWLevel(LocationName.special_star_road, 0x37D31, 0x64),
-    0x4E: SMWLevel(LocationName.special_zone_1_region, 0x37D33, 0x65, SMWPath(0x01, 0x4F, 0x02)),
-    0x4F: SMWLevel(LocationName.special_zone_2_region, 0x37D36, 0x66, SMWPath(0x01, 0x50, 0x02)),
-    0x50: SMWLevel(LocationName.special_zone_3_region, 0x37D39, 0x67, SMWPath(0x01, 0x51, 0x02)),
-    0x51: SMWLevel(LocationName.special_zone_4_region, 0x37D3C, 0x68, SMWPath(0x01, 0x4C, 0x01)),
-    0x4C: SMWLevel(LocationName.special_zone_5_region, 0x37D1C, 0x69, SMWPath(0x02, 0x4B, 0x01)),
-    0x4B: SMWLevel(LocationName.special_zone_6_region, 0x37D19, 0x6A, SMWPath(0x02, 0x4A, 0x01)),
-    0x4A: SMWLevel(LocationName.special_zone_7_region, 0x37D16, 0x6B, SMWPath(0x02, 0x49, 0x01)),
-    0x49: SMWLevel(LocationName.special_zone_8_region, 0x37D13, 0x6C, SMWPath(0x02, 0x48, 0x01)),
+    0x4E: SMWLevel(LocationName.special_zone_1_region, 0x37D33, 0x65, OWTile([0x14, 0x33], 0x6E, True), SMWPath(0x01, 0x4F, 0x02)),
+    0x4F: SMWLevel(LocationName.special_zone_2_region, 0x37D36, 0x66, OWTile([0x17, 0x33], 0x6E), SMWPath(0x01, 0x50, 0x02)),
+    0x50: SMWLevel(LocationName.special_zone_3_region, 0x37D39, 0x67, OWTile([0x1A, 0x33], 0x6E), SMWPath(0x01, 0x51, 0x02)),
+    0x51: SMWLevel(LocationName.special_zone_4_region, 0x37D3C, 0x68, OWTile([0x1D, 0x33], 0x6E), SMWPath(0x01, 0x4C, 0x01)),
+    0x4C: SMWLevel(LocationName.special_zone_5_region, 0x37D1C, 0x69, OWTile([0x1D, 0x31], 0x6E), SMWPath(0x02, 0x4B, 0x01)),
+    0x4B: SMWLevel(LocationName.special_zone_6_region, 0x37D19, 0x6A, OWTile([0x1A, 0x31], 0x6E), SMWPath(0x02, 0x4A, 0x01)),
+    0x4A: SMWLevel(LocationName.special_zone_7_region, 0x37D16, 0x6B, OWTile([0x17, 0x31], 0x6E), SMWPath(0x02, 0x49, 0x01)),
+    0x49: SMWLevel(LocationName.special_zone_8_region, 0x37D13, 0x6C, OWTile([0x14, 0x31], 0x6E), SMWPath(0x02, 0x48, 0x01)),
     0x48: SMWLevel(LocationName.special_complete, 0x37D11, 0x6D),
 }
 
@@ -317,6 +360,15 @@ full_level_list = [
     0x18, 0x3A, 0x39, 0x37, 0x33, 0x38, 0x35, 0x34, 0x31, 0x32, 0x30,
     0x5B, 0x58, 0x53, 0x54, 0x52, 0x56, 0x57, 0x59, 0x5C, 0x5A, 0x55,
     0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x4C, 0x4B, 0x4A, 0x49, 0x48,
+]
+
+levels_by_logic_gate: list[list[int]] = [
+    [0x28, 0x29, 0x14, 0x2A, 0x27, 0x26, 0x25],
+    [0x15, 0x09, 0x0A, 0x08, 0x04, 0x13, 0x05, 0x06, 0x2F, 0x07, 0x03, 0x16],
+    [0x3E, 0x3C, 0x2D, 0x2B, 0x2E, 0x3D, 0x3F, 0x01, 0x02, 0x0B, 0x40, 0x2C, 0x0C, 0x0D, 0x0F, 0x11, 0x10, 0x0E, 0x12],
+    [0x42, 0x44, 0x47, 0x43, 0x41, 0x46, 0x45, 0x1F, 0x20, 0x1E],
+    [0x22, 0x24, 0x23, 0x1D, 0x1C, 0x21, 0x1B, 0x3B, 0x1A, 0x18],
+    [0x3A, 0x39, 0x37, 0x33, 0x38, 0x35, 0x34, 0x31, 0x32, 0x30, 0x5B, 0x58, 0x53, 0x54, 0x52, 0x56, 0x57, 0x59, 0x5C, 0x5A, 0x55, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x4C, 0x4B, 0x4A, 0x49, 0x48],
 ]
 
 submap_level_list = [
@@ -362,6 +414,11 @@ easy_single_levels = [
     0x0D,
     0x46,
     0x1D,
+
+    0x14,
+    0x08,
+    0x3F,
+    0x45,
 ]
 
 hard_single_levels = [
@@ -1220,40 +1277,57 @@ def generate_level_list(world: World):
     shuffled_level_list = []
     easy_castle_fortress_levels_copy = easy_castle_fortress_levels.copy()
     world.random.shuffle(easy_castle_fortress_levels_copy)
+
     hard_castle_fortress_levels_copy = hard_castle_fortress_levels.copy()
     world.random.shuffle(hard_castle_fortress_levels_copy)
+
     easy_single_levels_copy = easy_single_levels.copy()
+    if world.options.castles_anywhere:
+        easy_single_levels_copy.extend(easy_castle_fortress_levels_copy)
     world.random.shuffle(easy_single_levels_copy)
+
     hard_single_levels_copy = hard_single_levels.copy()
+    if world.options.castles_anywhere:
+        hard_single_levels_copy.extend(hard_castle_fortress_levels_copy)
     world.random.shuffle(hard_single_levels_copy)
+
     special_zone_levels_copy = special_zone_levels.copy()
+
     easy_double_levels_copy = easy_double_levels.copy()
     world.random.shuffle(easy_double_levels_copy)
+
     hard_double_levels_copy = hard_double_levels.copy()
     world.random.shuffle(hard_double_levels_copy)
+
     switch_palace_levels_copy = switch_palace_levels.copy()
     world.random.shuffle(switch_palace_levels_copy)
 
     # Yoshi's Island
     shuffled_level_list.append(0x03)
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
-    shuffled_level_list.append(0x14)
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
-    shuffled_level_list.append(easy_castle_fortress_levels_copy.pop(0))
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(easy_single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(easy_castle_fortress_levels_copy.pop(0))
 
     # Donut Plains
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
-    shuffled_level_list.append(0x08)
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
-    shuffled_level_list.append(easy_castle_fortress_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(easy_single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(easy_castle_fortress_levels_copy.pop(0))
     shuffled_level_list.append(0x28)
     shuffled_level_list.append(0x16)
 
@@ -1262,8 +1336,9 @@ def generate_level_list(world: World):
         single_levels_copy.extend(special_zone_levels_copy)
     world.random.shuffle(single_levels_copy)
 
-    castle_fortress_levels_copy = (easy_castle_fortress_levels_copy.copy() + hard_castle_fortress_levels_copy.copy())
-    world.random.shuffle(castle_fortress_levels_copy)
+    if not world.options.castles_anywhere:
+        castle_fortress_levels_copy = (easy_castle_fortress_levels_copy.copy() + hard_castle_fortress_levels_copy.copy())
+        world.random.shuffle(castle_fortress_levels_copy)
 
     double_levels_copy = (easy_double_levels_copy.copy() + hard_double_levels_copy.copy())
     world.random.shuffle(double_levels_copy)
@@ -1275,11 +1350,15 @@ def generate_level_list(world: World):
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(0x3F)
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    shuffled_level_list.append(single_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
     shuffled_level_list.append(0x2C)
 
     # Twin Bridges
@@ -1288,7 +1367,10 @@ def generate_level_list(world: World):
     shuffled_level_list.append(double_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
     shuffled_level_list.append(0x12)
 
     # Forest of Illusion
@@ -1298,9 +1380,13 @@ def generate_level_list(world: World):
     shuffled_level_list.append(double_levels_copy.pop(0))
     shuffled_level_list.append(double_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(0x45)
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    shuffled_level_list.append(single_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
     shuffled_level_list.append(0x1E)
 
     # Chocolate Island
@@ -1310,9 +1396,15 @@ def generate_level_list(world: World):
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
 
     # Valley of Bowser
     shuffled_level_list.append(0x18)
@@ -1321,8 +1413,12 @@ def generate_level_list(world: World):
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(double_levels_copy.pop(0))
     shuffled_level_list.append(double_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
-    shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+    if world.options.castles_anywhere:
+        shuffled_level_list.append(single_levels_copy.pop(0))
+        shuffled_level_list.append(single_levels_copy.pop(0))
+    else:
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
+        shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
 
     # Front/Back Door
     if world.options.bowser_castle_doors == "fast":
@@ -1366,3 +1462,74 @@ def generate_level_list(world: World):
     shuffled_level_list.append(0x48)
 
     return shuffled_level_list
+
+
+class SMWLevelName():
+    address: int
+    possible_names: list[str]
+
+    def __init__(self, address: int, possible_names: list[str]):
+        self.address        = address
+        self.possible_names = possible_names
+
+level_name_data: list[SMWLevelName] = [
+    SMWLevelName(0x21C90, [" " ]),
+    SMWLevelName(0x21AC5, ["YOSHI'S ", "MARIO'S ", "LUIGI'S ", "WARIO'S ", "BOSHI'S ", "PEACH'S ", "DAISY'S ", "YOBBY'S ", "ROY'S " ]),
+    SMWLevelName(0x21ACD, ["STAR ", "MOON ", "SUN ", "MARS ", "MILK ", "RICE ", "CORN "]),
+    SMWLevelName(0x21AD2, ["#1 IGGY'S ", "#1 JACK'S ", "#3 BACH'S ", "#2 ALEX'S ", "#7 KATY'S ", "#1 KOJI'S ", "#5 TOBY'S "]),
+    SMWLevelName(0x21ADC, ["#2 MORTON'S ", "#0118 ROY'S ", "#1 TAYLOR'S ", "#3 BILLIE'S ", "#3 JOHANN'S ", "#6 ARIANA'S ", "#64 GRANT'S "]),
+    SMWLevelName(0x21AE8, ["#3 LEMMY'S ", "#5 BRUNO'S ", "#8 SLASH'S ", "#4 PYOTR'S ", "#5 FELIX'S ", "#2 DAVID'S ", "#9 JASON'S "]),
+    SMWLevelName(0x21AF3, ["#4 LUDWIG'S ", "#2 MOZART'S ", "#5 GUSTAV'S ", "#7 DMITRI'S ", "#6 SERGEI'S ", "#4 RALPH'S ", "#1 JOSEPH'S ", "NOT ROY'S "]),
+    SMWLevelName(0x21AFF, ["#5 ROY'S ", "#2 SAM'S ", "#1 BIG'S ", "#5 BTS'S ", "#2 JUN'S ", "#3 GO'S ", "#5 BOB'S "]),
+    SMWLevelName(0x21B08, ["#6 WENDY'S ", "#7 CLARA'S ", "#4 ADELE'S ", "#1 LENA'S ", "#5 GAGA'S ", "#3 YOKO'S ", "#2 PINK'S "]),
+    SMWLevelName(0x21B13, ["#7 LARRY'S ", "#2 KEVIN'S ", "#7 NOBUO'S ", "#8 FRANZ'S ", "#6 KENJI'S ", "#2 LUIGI'S ", "#5 FRANK'S "]),
+    SMWLevelName(0x21B1E, ["DONUT ", "PIZZA ", "BAGEL ", "PASTA ", "PINNA ", "CREAM ", "LEMON ", "VINE "]),
+    SMWLevelName(0x21B24, ["GREEN ", "AZURE ", "BROWN ", "CREAM ", "IVORY ", "MAUVE ", "STRAW "]),
+    SMWLevelName(0x21B2A, ["TOP SECRET AREA ", "HUSH HUSH PLACE ", "THE QUIET PLACE ", "SOMEWHERE ", "NEXT TO NOWHERE ", "HERE ", "REFILL SPOT "]),
+    SMWLevelName(0x21B3A, ["VANILLA ", "CHERRY ", "GELATO ", "BIANCO ", "PIANTA ", "BROWNIE ", "BANANA ", "PUMPKIN ", "GLOOMY "]),
+    SMWLevelName(0x21B42, ["@38@39@3A@3B@3C ", "WHITE ", "SEPIA ", "LEMON ", "FLAME ", "KHAKI ", "LILAC "]),
+    SMWLevelName(0x21B48, ["RED ", "RGB ", "SKY ", "JET ", "CAR ", "TAN ", "LED "]),
+    SMWLevelName(0x21B4C, ["BLUE ", "PINK ", "ROSE ", "PAUA ", "PEAR ", "PLUM ", "LAVA "]),
+    SMWLevelName(0x21B51, ["BUTTER BRIDGE ", "MARGARINE WAY ", "MARIO CIRCUIT ", "KOOPA BEACH ", "RAINBOW ROAD ", "TOAD TURNPIKE ", "YOSHI FALLS "]),
+    SMWLevelName(0x21B5F, ["CHEESE BRIDGE ", "WATERMELON ", "CHEDDAR ROAD ", "YOGURT YARD ", "FISH CLIFF ", "BRIE BLUFF ", "FETA FOOTHILL "]),
+    SMWLevelName(0x21B6D, ["SODA LAKE ", "MINT POOL ", "POP OCEAN ", "PACIFICA ", "WATER SEA ", "DIRE DOCK ", "NOKI BAY "]),
+    SMWLevelName(0x21B77, ["COOKIE MOUNTAIN ", "BROWNIE CLIFF ", "CHEESECAKE HIKE ", "CANDY CLIFFSIDE ", "SUGAR SUMMIT ", "PANCAKE PEAK ", "ROCK CANDY RIDGE"]),
+    SMWLevelName(0x21B87, ["FOREST ", "WOODS ", "PLAINS ", "FIELDS ", "LAND ", "GALAXY ", "LAKE ", "CANYON ", "RAVINE ", "CHASM ", "PIT ", "PRISON ", "CAGE ", "CAVERN "]),
+    SMWLevelName(0x21B8E, ["CHOCOLATE ", "RASPBERRY ", "PEPPERONI ", "PISTACHIO ", "TALL TALL ", "SNOWMAN'S ", "ICE CREAM ", "MUSHROOM ", "CILANTRO "]),
+    SMWLevelName(0x21B98, ["CHOCO-GHOST HOUSE ", "MAYONNAISE MANOR ", "COCONUT MALL ", "LUIGI'S MANSION ", "BOLOGNA BUILDING ", "VIM FACTORY ", "BIG BOO'S HAUNT ", "CREEPY STEEPLE ", "HOTEL DELPHINO "]),
+    SMWLevelName(0x21BAA, ["SUNKEN GHOST SHIP ", "WRECKED SHIP ", "GANGPLANK GALLEON ", "DAISY CRUISER ", "SS CHUCKOLA ", "SS FLAVION ", "KING OF RED LIONS ", "THE BURNING BLADE ", "THE GREAT FOX "]),
+    SMWLevelName(0x21BBC, ["VALLEY ", "CANYON ", "RAVINE ", "CHASM ", "PIT ", "PRISON ", "CAGE ", "WOODS ", "PLAINS ", "FIELDS ", "LAND ", "GALAXY ", "LAKE ", "CAVERN "]),
+    SMWLevelName(0x21BC3, ["BACK DOOR "]),
+    SMWLevelName(0x21BCD, ["FRONT DOOR "]),
+    SMWLevelName(0x21BD8, ["GNARLY ", "BULLY ", "FETCH ", "BASED ", "FIRE ", "POPPIN ", "MONDO "]),
+    SMWLevelName(0x21BDF, ["TUBULAR ", "POGGERS ", "STELLAR ", "CAPITAL ", "GOATED ", "SKIBIDI ", "GROOVY "]),
+    SMWLevelName(0x21BE7, ["WAY COOL ", "SCHWIFTY ", "DRIPPIN ", "ALL THAT ", "ON FLEEK ", "DA BOMB ", "FAR OUT "]),
+    SMWLevelName(0x21C90, [" " ]),
+    SMWLevelName(0x21BF0, ["HOUSE ", "ROOM ", "ROOF ", "HOME ", "PLACE ", "ABODE ", "HOVEL ", "CABIN ", "BARN ", "VILLA ", "LAB ", "SHACK ", "HUT "]),
+    SMWLevelName(0x21BF6, ["ISLAND ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21BFD, ["SWITCH PALACE ", "ARCHIPELAGO ", "YUMP ATTEMPT ", "BLOCK UNLOCK ", "SKYSCRAPER ", "FACTORY ", "OBSERVATORY ", "BLOCKHOUSE ", "SHIPYARD ", "GARAGE "]),
+    SMWLevelName(0x21C0B, ["CASTLE ", "PARLOR ", "CASINO ", "HOTEL ", "CINEMA ", "SCHOOL ", "BANK ", "ARENA ", "FORT ", "PAGODA ", "VILLA ", "KEEP ", "TOWN ", "CITY ", "ENGINE "]),
+    SMWLevelName(0x21C12, ["PLAINS ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21C19, ["GHOST HOUSE ", "GAS STATION ", "OFFICE ", "FACTORY ", "STADIUM ", "MUSEUM ", "AQUARIUM ", "ORPHANAGE ", "BUNKER ", "LIGHTHOUSE "]),
+    SMWLevelName(0x21C25, ["SECRET ", "HIDDEN ", "LOST ", "BORING ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21C2C, ["DOME ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21C31, ["FORTRESS ", "CIRCUIT ", "FESTIVAL ", "DUNGEON ", "CITADEL ", "PARLOR ", "CASINO ", "HOTEL ", "CINEMA ", "SCHOOL ", "BANK ", "ARENA ", "FORT ", "PAGODA ", "VILLA ", "KEEP ", "TOWN ", "CITY ", "ENGINE "]),
+    SMWLevelName(0x21C3A, ["OF@32@33@34@35@36@37ON ", "OF KOOPERS ", "OF HEROES ", "OF SPIDERS ", "OF ROY ", "OF LUDWIG ", "OF DOOM ", "OF EGGMAN ", "OF MARIO ", "OF SPOOKS ", "OF TRIALS ", "OF REPOSE "]),
+    SMWLevelName(0x21C45, ["OF BOWSER ", "OF ROY ", "OF LUDWIG ", "OF DOOM ", "OF EGGMAN ", "OF MARIO ", "OF SPOOKS ", "OF TRIALS ", "OF REPOSE ", "OF HEROES "]),
+    SMWLevelName(0x21C4F, ["ROAD ", "LANE ", "WAY ", "CAR ", "PATH ", "PASS ", "LANE "]),
+    SMWLevelName(0x21C54, ["WORLD ", "ROAD ", "HILLS ", "SHIRE ", "RIDGE ", "GULCH ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK ", "ALLEY ", "TRAIN ", "ROUTE "]),
+    SMWLevelName(0x21C5A, ["AWESOME ", "RADICAL ", "VICIOUS ", "HUZZAH ", "SIGMA ", "COOL ", "AND HOW "]),
+    SMWLevelName(0x21C90, [" " ]),
+    SMWLevelName(0x21C62, ["1", "0", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C63, ["2", "0", "1", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C64, ["3", "0", "1", "2", "4", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C65, ["4", "0", "1", "2", "3", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C66, ["5", "0", "1", "2", "3", "4", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C67, ["PALACE"]),
+    SMWLevelName(0x21C6D, ["AREA", "ZONE", "LAIR", "LAND", "HILL", "HOLE", "WELL", "HALL", "MILL", "PARK"]),
+    SMWLevelName(0x21C71, ["GROOVY", "NEATO", "FUNKY", "ZOOLY", "WICKED", "BALLER", "GNARLY"]),
+    SMWLevelName(0x21C77, ["MONDO", "PHAT", "HOT", "HIP", "DOPE", "SWEET", "GUCCI"]),
+    SMWLevelName(0x21C7C, ["OUTRAGEOUS", "PRETTY FLY", "CAT'S MEOW", "SICK NASTY", "MARVELOUS", "FANTASTIC", "BEAUTIFUL", "RIGHTEOUS", "BODACIOUS"]),
+    SMWLevelName(0x21C86, ["FUNKY", "NIFTY", "LIT", "BOSS", "TIGHT", "DANK", "BAD"]),
+    SMWLevelName(0x21C8B, ["HOUSE", "LAB", "ROOM", "ROOF", "HOME", "PLACE", "ABODE", "HOVEL", "CABIN", "BARN", "VILLA", "SHACK", "HUT"]),
+]
