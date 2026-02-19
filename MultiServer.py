@@ -2721,7 +2721,12 @@ async def main(args: argparse.Namespace):
         ssl=ssl_context,
         extensions=[server_per_message_deflate_factory],
     )
-    ip = args.host if args.host else Utils.get_public_ipv4()
+    if args.host is None:
+        ip = "localhost"
+    elif args.host == "":
+        ip = Utils.get_public_ipv4()
+    else:
+        ip = args.host
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
 
