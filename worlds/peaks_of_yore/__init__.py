@@ -103,6 +103,7 @@ class PeaksOfWorld(World):
         for item in all_items:
             if item.is_enabled(self.options):
                 if item.is_starter_item(self.options):
+                    logging.debug(f"item {item.name} is starter for player {self.player_name}")
                     self.multiworld.push_precollected(self.create_item(item.name))
                 else:
                     local_itempool.append(self.create_item(item.name))
@@ -114,7 +115,6 @@ class PeaksOfWorld(World):
             i = 0
             while len(local_itempool) > remaining_items:
                 if i > remaining_items:
-                    logging.error("Error, not enough locations to place all progression items")
                     raise OptionError("Error, not enough locations to place progression items")
                 elif local_itempool[i].classification == ItemClassification.filler:
                     local_itempool.pop(i)  # removing random non-progression items until itempool isn't overflowing
