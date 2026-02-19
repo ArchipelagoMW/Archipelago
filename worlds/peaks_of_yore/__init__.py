@@ -30,6 +30,29 @@ class PeaksOfWeb(WebWorld):
     options_presets = poy_option_presets
 
 
+def get_error_item_count(item_pool: list[Item], location_info: RegionLocationInfo) -> str:
+    prog_list: list[Item] = [i for i in item_pool if i.classification == ItemClassification.progression]
+    msg = "Error: not enough locations to place progression items:\n"
+    msg += f"Found {len(prog_list)} progression items:\n"
+
+    msg += f"{" \n".join([i.name for i in prog_list if i.code >= 1000])}\n"
+    peak_count = len([i for i in prog_list if i.code < 1000])
+    if peak_count > 0:
+        msg += f"+ {peak_count} peaks\n"
+    msg += "\n"
+
+    loc_count = location_info.get_total_location_count()
+    msg += f"found {loc_count} locations: \n"
+    msg += f"({len(location_info.peaks_in_pool)}/{loc_count}) peaks \n"
+    msg += f"({len(location_info.time_attack_in_pool)}/{loc_count}) time attack locations \n"
+    msg += f"({len(location_info.artefacts_in_pool)}/{loc_count}) artefacts \n"
+    msg += f"({len(location_info.other_in_pool)}/{loc_count}) other collectables/free solo's \n"
+
+    if len(location_info.time_attack_in_pool) == 0:
+        msg += "Consider enabling time attack to add more locations"
+    return msg
+
+
 class PeaksOfWorld(World):
     """
     Peaks of Yore is a first-person physics-based "climb-em-up" adventure set in 1887.
@@ -98,6 +121,7 @@ class PeaksOfWorld(World):
 
     def create_items(self) -> None:
         remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
+        total_location_count = remaining_items
 
         local_itempool: list[Item] = []
         for item in all_items:
@@ -110,18 +134,20 @@ class PeaksOfWorld(World):
                     if item.is_early(self.options):
                         logging.debug(f"item {item.name} is early for player {self.player_name}")
                         self.multiworld.early_items[self.player][item.name] = 1
+        total_itempool: list[Item] = list(local_itempool)
         if len(local_itempool) > remaining_items:
-            self.random.shuffle(local_itempool)
+            self.random.shuffle(local_itempool)  #
             i = 0
-            while len(local_itempool) > remaining_items:
+            while len(local_itempool) > remaining_items:  # trim down local item pool to match unfilled locations
                 if i > remaining_items:
-                    raise OptionError("Error, not enough locations to place progression items")
-                elif local_itempool[i].classification == ItemClassification.filler:
+                    raise OptionError(get_error_item_count(total_itempool, self.checks_in_pool))
+
+                if local_itempool[i].classification == ItemClassification.filler:
                     local_itempool.pop(i)  # removing random non-progression items until itempool isn't overflowing
                 else:
                     i += 1
 
-        if len(local_itempool) < remaining_items:
+        if len(local_itempool) < remaining_items:  # fill up local item pool to match unfilled locations
             local_itempool += [self.create_filler() for _ in range(remaining_items - len(local_itempool))]
 
         self.multiworld.itempool += local_itempool[:remaining_items]
