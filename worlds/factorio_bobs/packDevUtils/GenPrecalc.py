@@ -33,7 +33,7 @@ def main():
         print(f"{done*100/amount:.2f}%, elapsed time: {datetime.timedelta(seconds=item_done_in)}, estimated time: {datetime.timedelta(seconds=mean_time*(amount-done))}")
         print(f"{item}: {output[item.name]}")
 
-    path: Path = modpack._BaseModpack__root / "Cache/precalc.json"
+    path: Path = modpack._BaseModpack__packPath / "Cache/precalc.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     json.dump(output, open(path, "w"), indent=4, sort_keys=True)
     print(f"Done in {datetime.timedelta(seconds=(timeit.default_timer() - start))} seconds")
