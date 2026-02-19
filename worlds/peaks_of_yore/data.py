@@ -458,12 +458,12 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
         ], generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_advanced, is_book=True),
-    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Expert Book": 1}, subregions=[
-        PeakRegion("The Great Bulwark", 35, entry_requirements={"Ice Axes": 1}, locations=[
+    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Ice Axes": 1, "Expert Book": 1}, subregions=[
+        PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
         ], generate_time_attack=False,
                    generate_free_solo=True),
-        PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2, "Ice Axes": 1},
+        PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2},
                    enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
                    generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_expert, is_book=True),
