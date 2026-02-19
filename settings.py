@@ -98,6 +98,8 @@ class Group:
                     self._changed = True
                     attr = new
             # resolve the path immediately when accessing it
+            if attr.exists():
+                attr.__class__.validate(attr.resolve())
             return attr.__class__(attr.resolve())
         return attr
 
