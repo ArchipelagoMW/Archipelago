@@ -60,6 +60,7 @@ class FactorioBobs(World):
     SLOT_RANDOM_RECIPES_KEY = "recipes"
     SLOT_LOCATION_COUNT_KEY = "location_count"
     SLOT_OPTIONS_KEY = "options"
+    SLOT_MODPACK_NAME_KEY = "modpack_name"
 
     logger: logging.Logger
 
@@ -133,7 +134,10 @@ class FactorioBobs(World):
     ut_can_gen_without_yaml = True
 
     def generate_early(self) -> None:
-        modpack_name = self.options.packname.current_key
+        if hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            modpack_name = self.multiworld.re_gen_passthrough[self.game][FactorioBobs.SLOT_MODPACK_NAME_KEY]
+        else:
+            modpack_name = self.options.packname.current_key
         if modpack_name not in modpacks:
             raise Exception(f"Modpack name '{modpack_name}' not found.")
         self.modpack = modpacks[modpack_name]
@@ -666,6 +670,7 @@ class FactorioBobs(World):
                                             self.options.tech_cost_mix.display_name: self.options.tech_cost_mix.value,
                                             self.options.number_of_science_packs.display_name: self.options.number_of_science_packs.value,
                                             },
+                                            FactorioBobs.SLOT_MODPACK_NAME_KEY: self.options.packname.current_key,
                                             FactorioBobs.SLOT_RANDOM_RECIPES_KEY: {}}
         for recipe in self.custom_recipes.values():
             ingredients = []
