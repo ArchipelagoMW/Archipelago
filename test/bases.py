@@ -6,7 +6,6 @@ from argparse import Namespace
 
 from Generate import get_seed_name
 from test.general import gen_steps
-from worlds import AutoWorld
 from worlds.AutoWorld import AutoWorldRegister, World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, Item
@@ -45,7 +44,7 @@ class WorldTestBase(unittest.TestCase):
         weak = weakref.ref(self.multiworld)
         for attr_name in dir(self):  # delete all direct references to MultiWorld and World
             attr: object = typing.cast(object, getattr(self, attr_name))
-            if type(attr) is MultiWorld or isinstance(attr, AutoWorld.World):
+            if type(attr) is MultiWorld or isinstance(attr, World):
                 delattr(self, attr_name)
         state_cache: typing.Optional[typing.Dict[typing.Any, typing.Any]] = getattr(self, "_state_cache", None)
         if state_cache is not None:  # in case of multiple inheritance with TestBase, we need to clear its cache

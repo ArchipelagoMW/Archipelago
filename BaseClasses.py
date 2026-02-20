@@ -223,6 +223,7 @@ class MultiWorld():
 
     def set_options(self, args: Namespace) -> None:
         from worlds import AutoWorld
+
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
@@ -231,6 +232,7 @@ class MultiWorld():
                                                                for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
+        from worlds import AutoWorld
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
@@ -261,7 +263,6 @@ class MultiWorld():
                         "skip_if_solo": item_link.get("skip_if_solo", False),
                     }
 
-        from worlds import AutoWorld
         for _name, item_link in item_links.items():
             current_item_name_groups = AutoWorld.AutoWorldRegister.world_types[item_link["game"]].item_name_groups
             pool = set()

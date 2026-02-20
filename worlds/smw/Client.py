@@ -3,7 +3,6 @@ import time
 from typing import Any
 
 from NetUtils import ClientStatus, NetworkItem, color
-from worlds.AutoWorld import AutoWorldRegister
 from worlds.AutoSNIClient import SNIClient
 from .Names.TextBox import generate_received_text, generate_received_trap_link_text
 from .Items import trap_value_to_name, trap_name_to_value
@@ -550,6 +549,7 @@ class SMWSNIClient(SNIClient):
         from .Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
         from .Levels import location_id_to_level_id, level_info_dict, level_blocks_data
         for loc_name, level_data in location_id_to_level_id.items():
+            from worlds import AutoWorldRegister
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
             if loc_id not in ctx.locations_checked:
 

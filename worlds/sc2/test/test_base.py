@@ -4,7 +4,7 @@ import random
 from argparse import Namespace
 from BaseClasses import MultiWorld, CollectionState, PlandoOptions
 from Generate import get_seed_name
-from worlds.AutoWorld import AutoWorldRegister
+from worlds import AutoWorld
 from test.general import gen_steps, call_all
 
 from test.bases import WorldTestBase
@@ -48,7 +48,7 @@ class Sc2SetupTestBase(unittest.TestCase):
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
-        for name, option in AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             new_option = option.from_any(options.get(name, option.default))
             new_option.verify(SC2World, "Tester", PlandoOptions.items|PlandoOptions.connections|PlandoOptions.texts|PlandoOptions.bosses)
             setattr(args, name, {

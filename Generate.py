@@ -435,19 +435,19 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
 
 
 def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
+    from worlds import AutoWorldRegister
+
     if not game:
         return get_choice(option_key, category_dict)
-    try:
+    if game in AutoWorldRegister.world_types:
         game_world = AutoWorldRegister.world_types[game]
-    except KeyError:
-        raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
-    options = game_world.options_dataclass.type_hints
-    if option_key in options:
-        if options[option_key].supports_weighting:
-            return get_choice(option_key, category_dict)
-        return category_dict[option_key]
-    if option_key == "triggers":
-        return category_dict[option_key]
+        options = game_world.options_dataclass.type_hints
+        if option_key in options:
+            if options[option_key].supports_weighting:
+                return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
+            return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
 
@@ -548,22 +548,20 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                                 f"which is not enabled.")
         games = requirements.get("game", {})
         for game, version in games.items():
-            try:
-                world_cls = AutoWorldRegister.world_types[game]
-            except KeyError:
+            if game not in AutoWorldRegister.world_types:
                 continue
             if not version:
                 raise Exception(f"Invalid version for game {game}: {version}.")
             if isinstance(version, str):
                 version = {"min": version}
-            if "min" in version and tuplize_version(version["min"]) > world_cls.world_version:
+            if "min" in version and tuplize_version(version["min"]) > AutoWorldRegister.world_types[game].world_version:
                 raise Exception(f"Settings reports required version of world \"{game}\" is at least {version['min']}, "
                                 f"however world is of version "
-                                f"{world_cls.world_version.as_simple_string()}.")
-            if "max" in version and tuplize_version(version["max"]) < world_cls.world_version:
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
+            if "max" in version and tuplize_version(version["max"]) < AutoWorldRegister.world_types[game].world_version:
                 raise Exception(f"Settings reports required version of world \"{game}\" is no later than {version['max']}, "
                                 f"however world is of version "
-                                f"{world_cls.world_version.as_simple_string()}.")
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
     ret = argparse.Namespace()
     for option_key in Options.PerGameCommonOptions.type_hints:
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:
@@ -574,9 +572,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         if ret.game is None:
             raise Exception('"game" not specified')
         raise Exception(f"Invalid game: {ret.game}")
-    try:
-        world_type = AutoWorldRegister.world_types[ret.game]
-    except KeyError:
+    if ret.game not in AutoWorldRegister.world_types:
         AutoWorldRegister.ensure_all_worlds_loaded()
         failed_world_loads = AutoWorldRegister.get_failed_world_loads()
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
@@ -589,6 +585,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+
+    world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
 
     for weight in chain(game_weights, weights):

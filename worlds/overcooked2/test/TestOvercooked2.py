@@ -197,6 +197,7 @@ class Overcooked2Test(unittest.TestCase):
         for region in overworld_region_logic:
             self.assertIn(region, regions_set)
 
+        self.assertIn("Overcooked! 2", AutoWorldRegister.world_types.keys())
         world_type = AutoWorldRegister.world_types["Overcooked! 2"]
         world = setup_solo_multiworld(world_type)
         state = world.get_all_state(False)

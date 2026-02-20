@@ -9,7 +9,6 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit
 from werkzeug.utils import secure_filename
 
-import worlds
 from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
@@ -27,11 +26,9 @@ class WebWorldTheme(StrEnum):
     STONE = "stone"
 
 def get_world_theme(game_name: str) -> str:
-    try:
-        world_cls = AutoWorldRegister.world_types[game_name]
-    except KeyError:
+    if game_name not in AutoWorldRegister.world_types:
         return "grass"
-    chosen_theme = world_cls.web.theme
+    chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
     available_themes = [theme.value for theme in WebWorldTheme]
     if chosen_theme not in available_themes:
         warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
@@ -40,17 +37,17 @@ def get_world_theme(game_name: str) -> str:
 
 
 def get_visible_worlds() -> dict[str, type(World)]:
-    visible = {}
-    for game, world in worlds.AutoWorldRegister.world_types.items():
+    worlds = {}
+    for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
-            visible[game] = world
-    return visible
+            worlds[game] = world
+    return worlds
 
 
 def get_webhost_worlds() -> dict[str, type(World)]:
     """Return worlds valid for WebHost (have .web.tutorials). Use for tutorial pages and copy_tutorials."""
     return {
-        k: v for k, v in worlds.AutoWorldRegister.world_types.items()
+        k: v for k, v in AutoWorldRegister.world_types.items()
         if hasattr(v.web, "tutorials")
     }
 
@@ -308,7 +305,7 @@ def get_datapackage():
 @cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
-    for game, world in worlds.AutoWorldRegister.world_types.items():
+    for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
             has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })

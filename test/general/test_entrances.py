@@ -1,6 +1,5 @@
 import unittest
-import worlds
-from worlds.AutoWorld import call_all, World
+from worlds.AutoWorld import AutoWorldRegister, call_all, World
 from . import setup_solo_multiworld
 
 
@@ -16,7 +15,7 @@ class TestBase(unittest.TestCase):
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
         additional_steps = ("generate_basic", "pre_fill")
 
-        for game_name, world_type in worlds.AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
 
@@ -43,7 +42,7 @@ class TestBase(unittest.TestCase):
 
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
 
-        for game_name, world_type in worlds.AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, ())
 

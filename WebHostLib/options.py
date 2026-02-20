@@ -9,8 +9,8 @@ import yaml
 from flask import redirect, render_template, request, Response, abort
 
 import Options
-from worlds.AutoWorld import AutoWorldRegister
 from Utils import local_path
+from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 from .generate import get_meta
 from .misc import get_world_theme

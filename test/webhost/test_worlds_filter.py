@@ -2,7 +2,7 @@
 
 import unittest
 
-import worlds
+from worlds.AutoWorld import AutoWorldRegister
 from WebHostLib.misc import get_webhost_worlds
 
 from . import TestBase
@@ -36,7 +36,7 @@ class TestGetWebhostWorlds(unittest.TestCase):
     def test_all_worlds_not_filtered_globally(self) -> None:
         """After using get_webhost_worlds(), get_all_worlds() still returns the full set (no world_types reassignment)."""
         get_webhost_worlds()
-        all_worlds = worlds.AutoWorldRegister.world_types
+        all_worlds = AutoWorldRegister.world_types
         webhost_worlds = get_webhost_worlds()
         self.assertGreaterEqual(
             len(all_worlds),

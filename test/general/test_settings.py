@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from settings import Group
-import worlds
+from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestSettings(TestCase):
@@ -9,7 +9,7 @@ class TestSettings(TestCase):
         """
         Test that world settings can update.
         """
-        for game_name, world_type in worlds.AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=game_name):
                 if world_type.settings is not None:
                     assert isinstance(world_type.settings, Group)
