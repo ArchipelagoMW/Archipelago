@@ -59,6 +59,9 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
+# Used for release notification batching and SetReply batching (flush when buffer reaches this size).
+BATCH_MESSAGE_CAP = 140
+
 
 def remove_from_list(container, value):
     try:
@@ -254,8 +257,9 @@ class Context:
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
-                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
-                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0,
+                 compatibility: int = 2, log_network: bool = False, set_reply_batch_ms: int = 50,
+                 logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -298,6 +302,7 @@ class Context:
         self.client_game_state: typing.Dict[team_slot, int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
         self.auto_shutdown = auto_shutdown
+        self.set_reply_batch_ms = set_reply_batch_ms
         self.commandprocessor = ServerCommandProcessor(self)
         self.embedded_blacklist = {"host", "port"}
         self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
@@ -450,13 +455,13 @@ class Context:
         async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
 
     def _schedule_flush_pending_set_replies(self):
-        """Schedule a single flush of pending SetReply buffers after a short delay (50ms)."""
+        """Schedule a single flush of pending SetReply buffers after a short delay."""
         if self._pending_set_reply_flush_scheduled:
             return
         self._pending_set_reply_flush_scheduled = True
 
         async def do_flush():
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(self.set_reply_batch_ms / 1000.0)
             self._pending_set_reply_flush_scheduled = False
             await self._flush_pending_set_replies()
 
@@ -471,6 +476,12 @@ class Context:
             msgs = self.pending_set_replies.pop(endpoint, None)
             if msgs:
                 await self.send_msgs(endpoint, msgs)
+
+    async def _flush_pending_set_replies_for_client(self, client: Client):
+        """Send one client's buffered SetReply messages and clear their buffer."""
+        msgs = self.pending_set_replies.pop(client, None)
+        if msgs:
+            await self.send_msgs(client, msgs)
 
     async def disconnect(self, endpoint: Client):
         self.pending_set_replies.pop(endpoint, None)
@@ -1180,7 +1191,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
                 ctx.player_names[(team, target_player)], ctx.location_names[ctx.slot_info[slot].game][location]))
-            if len(info_texts) >= 140:
+            if len(info_texts) >= BATCH_MESSAGE_CAP:
                 # split into chunks that are close to compression window of 64K but not too big on the wire
                 # (roughly 1300-2600 bytes after compression depending on repetitiveness)
                 ctx.broadcast_team(team, info_texts)
@@ -2212,6 +2223,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 reply = copy.deepcopy(args)
                 for c in targets:
                     ctx.pending_set_replies.setdefault(c, []).append(reply)
+                    if len(ctx.pending_set_replies[c]) >= BATCH_MESSAGE_CAP:
+                        await ctx._flush_pending_set_replies_for_client(c)
                 ctx._schedule_flush_pending_set_replies()
             ctx.save()
 
@@ -2664,6 +2677,8 @@ def parse_args() -> argparse.Namespace:
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
     parser.add_argument('--log_network', default=defaults["log_network"], action="store_true")
+    parser.add_argument('--set_reply_batch_ms', default=defaults["set_reply_batch_ms"], type=int,
+                        help="Max ms to batch SetReplies before flushing (default 50).")
     args = parser.parse_args()
     return args
 
@@ -2710,7 +2725,7 @@ async def main(args: argparse.Namespace):
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
                   args.countdown_mode, args.remaining_mode,
-                  args.auto_shutdown, args.compatibility, args.log_network)
+                  args.auto_shutdown, args.compatibility, args.log_network, args.set_reply_batch_ms)
     data_filename = args.multidata
 
     if not data_filename:
