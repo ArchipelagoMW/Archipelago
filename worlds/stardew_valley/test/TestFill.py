@@ -8,6 +8,7 @@ from ..mods.mod_data import ModNames
 class TestMinLocationsMaxItems(WorldAssertMixin, SVTestBase):
     options = minimal_locations_maximal_items()
 
+    @property
     def run_default_tests(self) -> bool:
         return True
 
@@ -24,6 +25,7 @@ class TestSpecificSeedForTroubleshooting(WorldAssertMixin, SVTestBase):
     }
     seed = 65453499742665118161
 
+    @property
     def run_default_tests(self) -> bool:
         return True
 
