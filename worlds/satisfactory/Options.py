@@ -58,15 +58,15 @@ class ElevatorPhase(NamedRange):
     Put the milestones accessible BEFORE this Space Elevator Phase in logic.
     Milestones after the selected Phase are empty and contain nothing.
     If your goal selection contains *Space Elevator Phase* then submitting this Phase's elevator package completes that goal.
-    If the goal is not enabled, this setting simply limits the HUB's content.
+    If the goal is not enabled, this setting simply limits the included HUB and MAM content.
     
     Estimated in-game completion times:
-    
+
     - **Phase 1 (Tiers 1-2)**: ~3 Hours
     - **Phase 2 (Tiers 1-4)**: ~8 Hours
     - **Phase 3 (Tiers 1-6)**: ~50 Hours
     - **Phase 4 (Tiers 1-8)**: ~100 Hours
-    - **Phase 5 (Tiers 1-9)**: ~150 Hours
+    - **Phase 5 (Tiers 1-9)**: ~140 Hours
     """
     display_name = "Final Space Elevator Phase in logic"
     default = 2
@@ -133,7 +133,6 @@ class ResourceSinkPointsPerMinute(NamedRange):
 
     Use the **TFIT - Ficsit Information Tool** mod or the Satisfactory wiki to find out how many points items are worth.
     """
-    # Coupon data for above comment from https://satisfactory.wiki.gg/wiki/AWESOME_Shop
     display_name = "AWESOME Sink points per minute"
     default = 50000
     range_start = 1000
@@ -310,7 +309,7 @@ class TrapSelectionOverride(OptionSet):
 class EnergyLink(DefaultOnToggle):
     """
     Allow transferring energy to and from other worlds using the Power Storage building.
-    No energy is lost in the transfer on Satisfactory's side, but other worlds may have other settings.
+    Some energy is lost when depositing it in the multiworld network.
     """
     display_name = "EnergyLink"
 
@@ -437,11 +436,11 @@ class ExplorationCollectableCount(Range):
     Collect this amount of Mercer Spheres, Somersloops, Hard Drives, Paleberries, Beryl Nuts, and Bacon Agarics each to finish.
 
     - The amount of **Mercer Spheres** is **2x** the selected amount
-    - The amount of **Somersloops** is **the** selected amount
+    - The amount of **Somersloops** is **1x** the selected amount
     - The amount of **Hard Drives** is **1/5th** the selected amount
     - The amount of **Paleberries** is **10x** the selected amount
     - The amount of **Beryl Nuts** is **20x** the selected amount
-    - The amount of **Bacon Agarics** is **the** selected amount
+    - The amount of **Bacon Agarics** is **1x** the selected amount
     """
     display_name = "Exploration Collectables"
     default = 20
@@ -475,6 +474,7 @@ class GoalSelection(OptionSet):
     - **AWESOME Sink Points (total)**
     - **AWESOME Sink Points (per minute)**
     - **Exploration Collectables**
+    - **Erect a FICSMAS Tree**
     """
     display_name = "Select your Goals"
     valid_keys = {
@@ -482,7 +482,7 @@ class GoalSelection(OptionSet):
         "AWESOME Sink Points (total)",
         "AWESOME Sink Points (per minute)",
         "Exploration Collectables",
-        # "Erect a FICSMAS Tree",
+        "Erect a FICSMAS Tree",
     }
     default = {"Space Elevator Phase"}
     schema = Schema(And(set, len),
@@ -504,8 +504,8 @@ class RandomizeTier0(DefaultOnToggle):
     Randomizes what recipes you use to craft the default unlocked parts:
     Iron Ingot, Iron Plate, Iron Rod, Copper Ingot, Wire, Concrete, Screw, Reinforced Iron Plate
 
-    * Could require usage of Foundries or Assemblers (which get unlocked by default if needed, at reduced build costs)
-    * Could require other ores to be mixed in via alt recipes (which will become hand-craftable if needed)
+    - Could require usage of Foundries or Assemblers (which get unlocked by default if needed, at reduced build costs)
+    - Could require other ores to be mixed in via alt recipes (which will become hand-craftable if needed)
     """
     display_name = "Randomize Default Part Recipes"
 
