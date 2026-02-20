@@ -109,52 +109,46 @@ A bare minimum world implementation must satisfy the following requirements:
 
 Within the `World` subclass you should also have:
 
-* A [unique game name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L260)
-* An [instance](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L295) of a `WebWorld` 
-subclass for webhost documentation and behaviors
+* A unique game name (`World.game`)
+* An instance of a `WebWorld` subclass on `World.web` for webhost documentation and behaviors
   * In your `WebWorld`, if you wrote a game_info doc in more than one language, override the list of 
-    [game info languages](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L210) with the 
-    ones you include.
-  * In your `WebWorld`, override the list of 
-    [tutorials](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L213) with each tutorial
-    or setup doc you included in the game folder.
+    `game info languages` with the ones you include.
+  * In your `WebWorld`, override the list of `tutorials` with each tutorial or setup doc you included in the game folder.
 * A mapping for items and locations defining their names and ids for clients to be able to identify them. These are 
   `item_name_to_id` and `location_name_to_id`, respectively.
 * An implementation of `create_item` that can create an item when called by either your code or by another process 
   within Archipelago
 * At least one `Region` for your player to start from (i.e. the Origin Region)
-  * The default name of this region is "Menu" but you may configure a different name with 
-    [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L299)
+  * The default name of this region is "Menu" but you may configure a different name with `origin_region_name`
 * A non-zero number of locations, added to your regions
 * A non-zero number of items **equal** to the number of locations, added to the multiworld itempool
   * In rare cases, there may be 0-location-0-item games, but this is extremely atypical.
-* A set 
-  [completion condition](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#L77) (aka "goal") for
-  the player.
+* A set `completion_condition` (aka "goal") for the player.
   * Use your player as the index (`multiworld.completion_condition[player]`) for your world's completion goal.
+
+Consult the relevant docstrings in [AutoWorld.py](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py)
+and [BaseClasses.py](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/BaseClasses.py)
+for more details on these APIs.
 
 ### Encouraged Features
 
 These are "nice to have" features for a world, but they are not strictly required. It is encouraged to add them 
 if possible.
 
-* An implementation of
-  [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
+* An implementation of `get_filler_item_name()`
   * By default, this function chooses any item name from `item_name_to_id`, so you want to limit it to only the true
     filler items.
 * An `options_dataclass` defining the options players have available to them
   * This should be accompanied by a type hint for `options` with the same class name
-* A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
-* A list of [option groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L226) 
-  for better organization on the webhost
-* A dictionary of [options presets](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L223)
-  for player convenience
-* A dictionary of [item name groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L273)
-  for player convenience
-* A dictionary of 
-  [location name groups](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L276)
-  for player convenience
+* A `bug_report_page`
+* A list of `option_groups` for better organization on the webhost
+* A dictionary of `options_presets` for player convenience
+* A dictionary of `item_name_groups` for player convenience
+* A dictionary of `location_name_groups` for player convenience
   * Other games may also benefit from your name group dictionaries for hints, features, etc.
+
+Again, consult the relevant docstrings in [AutoWorld.py](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py)
+for more details on these APIs.
 
 ### Discouraged or Prohibited Behavior
 
