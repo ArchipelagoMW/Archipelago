@@ -7,13 +7,20 @@ import bsdiff4
 import shutil
 
 import Utils
+from Utils import async_start
 
 from NetUtils import NetworkItem, ClientStatus
 from worlds import undertale
 from MultiServer import mark_raw
-from CommonClient import CommonContext, server_loop, \
-    gui_enabled, ClientCommandProcessor, logger, get_base_parser
-from Utils import async_start
+from CommonClient import server_loop, gui_enabled, ClientCommandProcessor, logger, get_base_parser
+
+# --- Universal Tracker (optional) ---
+tracker_loaded = False
+try:
+    from worlds.tracker.TrackerClient import TrackerGameContext as SuperContext
+    tracker_loaded = True
+except ModuleNotFoundError:
+    from CommonClient import CommonContext as SuperContext
 
 
 class UndertaleCommandProcessor(ClientCommandProcessor):
@@ -37,7 +44,8 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
         """Redirect to proper save data folder. This is necessary for Linux users to use before connecting."""
         if isinstance(self.ctx, UndertaleContext):
             self.ctx.save_game_folder = directory
-            self.output("Changed to the following directory: " + self.ctx.save_game_folder)
+            self.output("Changed to the following directory: " +
+                        self.ctx.save_game_folder)
 
     @mark_raw
     def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
@@ -84,12 +92,13 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             else:
                 self.output(f"Deathlink disabled.")
 
+class UndertaleContext(SuperContext):
+    tags = {"AP"}
 
-class UndertaleContext(CommonContext):
-    tags = {"AP", "Online"}
     game = "Undertale"
     command_processor = UndertaleCommandProcessor
     items_handling = 0b111
+
     route = None
     pieces_needed = None
     completed_routes = None
@@ -109,6 +118,17 @@ class UndertaleContext(CommonContext):
         self.completed_routes = {"pacifist": 0, "genocide": 0, "neutral": 0}
         # self.save_game_folder: files go in this path to pass data between us and the actual game
         self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
+
+        self.tags.add("Online")
+
+    def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
+        async_start(process_undertale_cmd(self, cmd, args))
+
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Archipelago Undertale Client"
+        return ui
 
     def patch_game(self):
         with open(Utils.user_path("Undertale", "data.win"), "rb") as f:
@@ -155,31 +175,16 @@ class UndertaleContext(CommonContext):
         self.clear_undertale_files()
         await super().shutdown()
 
-    def update_online_mode(self, online):
+    def update_online_mode(self, online: bool):
         old_tags = self.tags.copy()
         if online:
             self.tags.add("Online")
         else:
-            self.tags -= {"Online"}
+            self.tags.discard("Online")
+
         if old_tags != self.tags and self.server and not self.server.socket.closed:
-            async_start(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
-
-    def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
-            self.game = self.slot_info[self.slot].game
-        async_start(process_undertale_cmd(self, cmd, args))
-
-    def run_gui(self):
-        from kvui import GameManager
-
-        class UTManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Archipelago Undertale Client"
-
-        self.ui = UTManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+            async_start(self.send_msgs(
+                [{"cmd": "ConnectUpdate", "tags": self.tags}]))
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]):
         self.got_deathlink = True
@@ -209,6 +214,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
     if cmd == "Connected":
         if not os.path.exists(ctx.save_game_folder):
             os.mkdir(ctx.save_game_folder)
+
         ctx.route = args["slot_data"]["route"]
         ctx.pieces_needed = args["slot_data"]["key_pieces"]
         ctx.tem_armor = args["slot_data"]["temy_armor_include"]
@@ -484,12 +490,20 @@ def main():
 
     async def _main():
         ctx = UndertaleContext(None, None)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-        asyncio.create_task(
-            game_watcher(ctx), name="UndertaleProgressionWatcher")
+        ctx.server_task = asyncio.create_task(
+            server_loop(ctx), name="server loop")
 
-        asyncio.create_task(
-            multi_watcher(ctx), name="UndertaleMultiplayerWatcher")
+        asyncio.create_task(game_watcher(
+            ctx), name="UndertaleProgressionWatcher")
+        asyncio.create_task(multi_watcher(
+            ctx), name="UndertaleMultiplayerWatcher")
+
+        # Per UT docs: call ctx.run_generator() if UT was found
+        if tracker_loaded and hasattr(ctx, "run_generator"):
+            try:
+                ctx.run_generator()
+            except Exception:
+                logger.exception("Universal Tracker run_generator failed")
 
         if gui_enabled:
             ctx.run_gui()
