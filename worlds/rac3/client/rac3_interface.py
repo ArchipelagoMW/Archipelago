@@ -924,18 +924,18 @@ class Rac3Interface(GameInterface):
                 # Slim Cognito does not have a max ammo item, so we just replace the entire inventory
                 if is_slimcognito:
                     # Only show megacorp weapons
-                    filtered_items = [item for item in self.weapon_vendor_items if item in MEGACORP_WEAPONS]
+                    megacorp_weapons = [item for item in self.weapon_vendor_items if item in MEGACORP_WEAPONS]
                     new_inventory.extend(
-                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in filtered_items])
+                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in megacorp_weapons])
                 else:
                     # Only show gadgetron weapons, keep current inventory up to all_ammo
                     for slot_data in current_inventory:
                         new_inventory.append(slot_data)
                         if slot_data.all_ammo.value:
                             break
-                    filtered_items = [item for item in self.weapon_vendor_items if item not in MEGACORP_WEAPONS]
+                    gadgetron_weapons = [item for item in self.weapon_vendor_items if item not in MEGACORP_WEAPONS]
                     new_inventory.extend(
-                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in filtered_items])
+                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in gadgetron_weapons])
             case RAC3VENDORTYPE.ARMOR:
                 new_inventory = [RAC3ARMORVENDORSLOTDATA([0xEA92 + armor.ID - 0xF5, 694201337, armor.ID - 0xF5]) for
                                  armor in armor_data.values()]
