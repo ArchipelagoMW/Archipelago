@@ -21,7 +21,7 @@ class TestGetWebhostWorlds(unittest.TestCase):
                 )
 
     def test_is_subset_of_all_worlds(self) -> None:
-        all_worlds = worlds.AutoWorldRegister.world_types
+        all_worlds = AutoWorldRegister.world_types
         webhost_worlds = get_webhost_worlds()
         all_keys = set(all_worlds)
         webhost_keys = set(webhost_worlds)

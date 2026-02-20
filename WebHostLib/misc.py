@@ -13,7 +13,7 @@ from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
-from Utils import title_sorted
+from Utils import title_sorted, user_path
 
 class WebWorldTheme(StrEnum):
     DIRT = "dirt"
@@ -201,7 +201,6 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
     if room is None:
         return abort(404)
     if room.owner == session["_id"]:
-        from Utils import user_path
         file_path = user_path("logs", str(room.id) + ".txt")
         try:
             log = open(file_path, "rb")
@@ -261,7 +260,6 @@ def host_room(room: UUID):
         if max_size == 0:
             return "…", 0
         try:
-            from Utils import user_path
             with open(user_path("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
                 fragments: List[str] = []

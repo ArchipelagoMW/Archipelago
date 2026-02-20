@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from worlds.AutoWorld import AutoWorldRegister
+from worlds import AutoWorldRegister
 from Options import OptionCounter, NamedRange, NumericOption, OptionList, OptionSet, Visibility
 
 

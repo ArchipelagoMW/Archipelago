@@ -6,47 +6,46 @@ import zipfile
 import unittest
 from unittest.mock import MagicMock, patch
 
-import worlds
-from worlds import world_list_cache
+from worlds import AutoWorldRegister
 
 
 class TestGetEntryByPath(unittest.TestCase):
-    """Tests for world_list_cache.get_entry_by_path."""
+    """Tests for AutoWorldRegister.get_entry_by_path."""
 
     def test_get_entry_by_path_missing_returns_none(self) -> None:
-        result = world_list_cache.get_entry_by_path(os.path.join(tempfile.gettempdir(), "nonexistent_xyz"))
+        result = AutoWorldRegister.get_entry_by_path(os.path.join(tempfile.gettempdir(), "nonexistent_xyz"))
         self.assertIsNone(result)
 
     def test_get_entry_by_path_returns_entry_when_in_cache(self) -> None:
-        entries = worlds.AutoWorldRegister.get_world_list()
+        entries = AutoWorldRegister.get_world_list()
         if not entries:
             self.skipTest("No worlds in cache")
         path = entries[0]["path"]
-        result = world_list_cache.get_entry_by_path(path)
+        result = AutoWorldRegister.get_entry_by_path(path)
         self.assertIsNotNone(result)
         self.assertEqual(os.path.normpath(result["path"]), os.path.normpath(path))
         self.assertEqual(result.get("game"), entries[0].get("game"))
 
 
 class TestUnloadWorld(unittest.TestCase):
-    """Tests for worlds.unload_world and reload behavior."""
+    """Tests for AutoWorldRegister.unload_world and reload behavior."""
 
     def test_unload_world_removes_and_allows_reload(self) -> None:
-        entries = worlds.AutoWorldRegister.get_world_list()
+        entries = AutoWorldRegister.get_world_list()
         if not entries:
             self.skipTest("No worlds in cache")
         game = entries[0]["game"]
-        worlds.AutoWorldRegister.get_world_class(game)
-        self.assertIsNotNone(worlds.AutoWorldRegister.get_loaded_world(game))
+        AutoWorldRegister.get_world_class(game)
+        self.assertIsNotNone(AutoWorldRegister.get_loaded_world(game))
 
-        worlds.AutoWorldRegister.unload_world(game)
-        self.assertIsNone(worlds.AutoWorldRegister.get_loaded_world(game))
+        AutoWorldRegister.unload_world(game)
+        self.assertIsNone(AutoWorldRegister.get_loaded_world(game))
 
-        worlds.AutoWorldRegister.get_world_class(game)
-        self.assertIsNotNone(worlds.AutoWorldRegister.get_loaded_world(game))
+        AutoWorldRegister.get_world_class(game)
+        self.assertIsNotNone(AutoWorldRegister.get_loaded_world(game))
 
     def test_unload_world_no_op_for_unknown_game(self) -> None:
-        worlds.AutoWorldRegister.unload_world("NonExistentGameXYZ")
+        AutoWorldRegister.unload_world("NonExistentGameXYZ")
         # No raise; unknown game is simply not loaded
 
 
@@ -69,12 +68,12 @@ class TestInstallApworldUnloads(unittest.TestCase):
                 "load": MagicMock(return_value=True),
             })()
             with (
-                patch.object(worlds, "user_folder", tmp),
-                patch.object(worlds.AutoWorldRegister, "get_world_sources", return_value=[fake_source]),
-                patch.object(worlds.AutoWorldRegister, "get_entry_by_path",
+                patch("worlds.user_folder", tmp),
+                patch.object(AutoWorldRegister, "get_world_sources", return_value=[fake_source]),
+                patch.object(AutoWorldRegister, "get_entry_by_path",
                              return_value={"game": "FakeGame", "path": target_apworld}),
-                patch.object(worlds.AutoWorldRegister, "unload_world", MagicMock()) as mock_unload,
-                patch.object(worlds.AutoWorldRegister, "add_world_to_cache", return_value=True),
+                patch.object(AutoWorldRegister, "unload_world", MagicMock()) as mock_unload,
+                patch.object(AutoWorldRegister, "add_world_to_cache", return_value=True),
                 patch("worlds.LauncherComponents.open_filename", return_value=None),
             ):
                 try:

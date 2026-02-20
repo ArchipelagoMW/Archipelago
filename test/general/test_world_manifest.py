@@ -7,8 +7,7 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 import test
-import worlds
-from worlds import world_list_cache
+from worlds import AutoWorldRegister
 from ..param import classvar_matrix
 
 test_path = Path(test.__file__).resolve().parent
@@ -40,7 +39,7 @@ def _load_manifest_for_entry(entry: dict) -> dict[str, Any]:
         return json.load(f)
 
 
-_entries = worlds.AutoWorldRegister.get_world_list(force_rebuild=True)
+_entries = AutoWorldRegister.get_world_list(force_rebuild=True)
 _entries_under_test = [
     e
     for e in _entries
@@ -48,6 +47,7 @@ _entries_under_test = [
 ]
 # One test class per game; cache has at most one entry per game.
 source_world_names = list(dict.fromkeys(e["game"] for e in _entries_under_test))
+_entry_by_game = {e["game"]: e for e in _entries_under_test}
 
 
 @classvar_matrix(game=source_world_names)
@@ -57,8 +57,7 @@ class TestWorldManifest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        entry = world_list_cache.get_entry_by_game(cls.game)
-        assert entry is not None, f"Cache entry for {cls.game!r} not found"
+        entry = _entry_by_game[cls.game]
         cls.manifest = _load_manifest_for_entry(entry)
 
     def test_game(self) -> None:

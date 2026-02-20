@@ -4,6 +4,7 @@ import os
 
 from Utils import local_path, user_path
 
+from . import AutoWorld
 from .AutoWorld import AutoWorldRegister
 from .registry import get_registry
 
@@ -17,9 +18,10 @@ except OSError:
 _registry = get_registry()
 
 __all__ = [
-    "network_data_package",
+    "AutoWorld",
     "AutoWorldRegister",
     "local_folder",
+    "network_data_package",
     "user_folder",
 ]
 

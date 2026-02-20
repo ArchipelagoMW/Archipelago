@@ -548,8 +548,8 @@ class SMWSNIClient(SNIClient):
         level_clear_flags = bytearray(await snes_read(ctx, SMW_LEVEL_CLEAR_FLAGS, 0x60))
         from .Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
         from .Levels import location_id_to_level_id, level_info_dict, level_blocks_data
+        from worlds import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
-            from worlds import AutoWorldRegister
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
             if loc_id not in ctx.locations_checked:
 
