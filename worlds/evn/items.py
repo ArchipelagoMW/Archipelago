@@ -10,6 +10,8 @@ from . import rules
 from .rezdata import ships, outfits
 from .logics import ships_to_ignore, outf_to_ignore
 
+from .apdata.offsets import offsets_table as type_offset
+
 if TYPE_CHECKING:
     from .world import EVNWorld
 
@@ -42,12 +44,12 @@ CREDIT_IDS = {
 #     "outf": 3100,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
 # }
 # ADJUSTED FOR THE 128 OFFSET START ID OF EACH TYPE
-starting_id = 128
-type_offset: Dict[str, int] = {
-    "Credits": 9900, # Special case! These won't actually be set - the client will check for these ids and make its own adjustment.
-    "ship": 1550 - starting_id,   # 1550 - 1999 will be ships. We have 288/450 ships, so this should be safe.
-    "outf": 3100 - starting_id,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
-}
+# starting_id = 128
+# type_offset: Dict[str, int] = {
+#     "Credits": 9900, # Special case! These won't actually be set - the client will check for these ids and make its own adjustment.
+#     "ship": 1550 - starting_id,   # 1550 - 1999 will be ships. We have 288/450 ships, so this should be safe.
+#     "outf": 3100 - starting_id,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
+# }
 
 # I am bothered by having to do this, or at least using this solution.
 # specific_exclusions: List[int] = [

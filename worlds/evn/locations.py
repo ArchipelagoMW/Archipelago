@@ -7,7 +7,10 @@ from BaseClasses import ItemClassification, Location, Region
 #from worlds.evn.regions import can_accept_location  # Is this an improper import?
 
 from .rezdata import misns
+from .apdata.customoutf import cust_outf_table
 from .logics import possible_regions, EVNRegionData, story_routes, EVNStoryRoute, misns_to_ignore
+
+from .apdata.offsets import offsets_table as loc_type_offset
 
 # import re
 
@@ -49,10 +52,10 @@ GAME_NAME = "EV Nova"
 
 # to add other checks, such as outfits, give them their own offset and range.
 # TODO: Move all these offset dictionaries to an offset file that they will import from.
-starting_id = 128
-loc_type_offset: Dict[str, int] = {
-    "misn": 2000 - starting_id,   # 2000 - 2999 will be missions. We have 791/1000 misns, so this should be safe.
-}
+# starting_id = 128
+# loc_type_offset: Dict[str, int] = {
+#     "misn": 2000 - starting_id,   # 2000 - 2999 will be missions. We have 791/1000 misns, so this should be safe.
+# }
 
 class EVNLocationData(TypedDict, total=False): 
     name: str
@@ -92,6 +95,16 @@ def get_locations() -> Dict[int, EVNLocationData]:
         ret_data[loc_id] = EVNLocationData(
             name=temp_mission["name"].strip() + "-" + temp_mission["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
             address=loc_id,
+        )
+
+    # Custom outf checks
+    for coutf in cust_outf_table.keys():
+        temp_outf = cust_outf_table[coutf]
+        loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
+        logger.info(f'adding location (custom outf): {loc_id}, {temp_outf["name"]}')
+        ret_data[loc_id] = EVNLocationData(
+            name=temp_outf["name"].strip() + "-" + temp_outf["id"],
+            address=loc_id
         )
 
     return ret_data
@@ -150,10 +163,21 @@ def create_universe_locations(world: EVNWorld) -> None:
     # Get our default region, "Universe", as defined in world (Other games may use a different name)
     universe = world.get_region("Universe")
     misn_offset = loc_type_offset["misn"]
+    coutf_offset = loc_type_offset["outf_cks"]
 
     # Check if location used by any story regions
     for key, loc in ev_location_bank.items():
         loc_found = False
+
+        # cust outf - shortcut it (was added later)
+        if key > coutf_offset: # misn is 2k but outf_cks is 4k, so we know here this is an okay check
+            universe.add_locations(
+                get_location_names_with_ids(world, [loc["name"]])
+                , EVNLocation
+            )
+            continue
+
+        # misns
         offset_key = key - misn_offset
 
         # first, check if it is a link mission and auto-ignore

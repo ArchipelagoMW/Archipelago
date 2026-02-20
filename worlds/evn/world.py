@@ -14,7 +14,10 @@ from . import items, locations, regions, rules, web_world
 from . import options as evn_options  # rename due to a name conflict with World.options
 from .logics import story_routes, possible_regions, EVNStoryRoute, MISSION_BLOCKING_BIT
 
-from .rezdata import misns, ships, outfits
+from .rezdata import misns, ships, outfits, desc
+from .apdata.offsets import offsets_table
+from .apdata.customoutf import cust_outf_table
+from .apdata.customdesc import cust_desc_table
 
 GAME_NAME = "EV Nova"
 
@@ -164,7 +167,8 @@ class EVNWorld(World):
 
         # block_missions[self.options.chosen_string.value] = 0 #so we won't block the one that was chosen.
 
-        chosen_route = story_routes[self.options.chosen_string.value]
+        #chosen_route = story_routes[self.options.chosen_string.value]
+        chosen_route = self.get_chosen_string()
 
         # first, the column headers
         for column in misns.misn_columns.keys():
@@ -210,7 +214,7 @@ class EVNWorld(World):
                 if column == check_target:
                     # WARNING: if we ever change this format for location names, we need to change it in both the location creation code in locations.py and this export code here, to ensure the lookups work properly. We could consider making this more robust by storing the location name directly in the mission table, but that would require a lot of changes to the mission table and mission creation code, so for now we will just be careful to maintain this format.
                     # So, consider fetching this somehow instead of reconstructing it from the mission name and ID. That would be more robust and less error prone, but would require a lot of changes to the mission table and mission creation code, so for now we will just be careful to maintain this format.
-                    target_id = locations.loc_type_offset["misn"] + mission
+                    target_id = offsets_table["misn"] + mission
                     if target_id in locations.ev_location_bank:
                         associated_location = locations.ev_location_bank[target_id]
                         new_id = associated_location["address"]
@@ -229,7 +233,7 @@ class EVNWorld(World):
                         logger.info(f"Warning: on_success location id {target_id} for mission {temp_mission['name']} not found in location_id_to_name. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the mission table and location creation code to debug this issue.")
                         output_file_string += default_val
                 # elif column == "available_bits" and mission in block_missions.values():
-                #     output_file_string += f'"b{locations.loc_type_offset['misn-block']} & ({current_val})"\t'   #we know it is a bit string, and we know these ones have bits, so don't need to protect as much
+                #     output_file_string += f'"b{offsets_table['misn-block']} & ({current_val})"\t'   #we know it is a bit string, and we know these ones have bits, so don't need to protect as much
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"
@@ -256,7 +260,7 @@ class EVNWorld(World):
 
                 if column == "availability":
                     # We need to inject our special bit here as well, so the client can know when to unlock the ship.
-                    target_id = items.type_offset["ship"] + ship
+                    target_id = offsets_table["ship"] + ship
                     if target_id in items.ev_item_bank:
                         #associated_item = items.ev_item_bank[target_id]
                         new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
@@ -293,12 +297,14 @@ class EVNWorld(World):
             output_file_string += "\r\n"
 
         # Outfits
+        # Now, due to the outf checks, we will always have outf data, so do the columns
+        # column titles
+        output_file_string += "\r\n"
+        for column in outfits.outf_columns.keys():
+            output_file_string += f'"{outfits.outf_columns[column]}"\t'
+        output_file_string += "\r\n"
+
         if (self.options.include_outfits):
-            # column titles
-            output_file_string += "\r\n"
-            for column in outfits.outf_columns.keys():
-                output_file_string += f'"{outfits.outf_columns[column]}"\t'
-            output_file_string += "\r\n"
             # then, the outf data
             for outf in outfits.outf_table.keys():
                 temp_outf = outfits.outf_table[outf]
@@ -311,7 +317,7 @@ class EVNWorld(World):
 
                     if column == "availability":
                         # We need to inject our special bit here as well, so the client can know when to unlock the outf.
-                        target_id = items.type_offset["outf"] + outf
+                        target_id = offsets_table["outf"] + outf
                         if target_id in items.ev_item_bank:
                             #associated_item = items.ev_item_bank[target_id]
                             new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
@@ -346,6 +352,72 @@ class EVNWorld(World):
                     else:
                         output_file_string += default_val
                 output_file_string += "\r\n"
+
+        # then, custom outfit checks
+        # these are used as LOCATIONS not ITEMS, even though they are in game items.
+        # meaning, use locations.ev_location_bank not items.ev_item_bank.
+        for coutf in cust_outf_table.keys():
+            temp_coutf = cust_outf_table[coutf]
+            for column in outfits.outf_columns.keys():
+                current_val = temp_coutf[column]
+                default_val = current_val + "\t"
+                col_anno = outfits.OutfDict.__annotations__[column]
+                if col_anno == str:
+                    default_val = f'"{current_val}"\t'
+
+                target_id = offsets_table["outf_cks"] + coutf
+
+                if column == "on_purchase":
+                    # We need to inject our special bit here as well, so the client can know when to unlock the outf.
+                    if target_id in locations.ev_location_bank:
+                        associated_location = locations.ev_location_bank[target_id]
+                        new_id = associated_location["address"]
+                        if (new_id is not None):
+                            output_file_string += f'"b{new_id}"\t'
+                        else:
+                            logger.info(f"Warning: availability location {target_id} for outf {temp_coutf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
+                            output_file_string += default_val
+                    else:
+                        #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_coutf['name']}")
+                        output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
+                elif (column == "short_name"):
+                    mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
+                    output_file_string += f'"{temp_coutf["name"]}\\\\n- {mwloc.player} -"\t'
+                else:
+                    output_file_string += default_val
+            output_file_string += "\r\n"
+
+        # Descriptions
+        # column titles
+        output_file_string += "\r\n"
+        for column in desc.desc_columns.keys():
+            output_file_string += f'"{desc.desc_columns[column]}"\t'
+        output_file_string += "\r\n"
+
+        # finally, custom desc data
+        for cdesc in cust_desc_table.keys():
+            temp_desc = cust_desc_table[cdesc]
+            for column in desc.desc_columns.keys():
+                current_val = temp_desc[column]
+                default_val = current_val + "\t"
+                col_anno = desc.DescDict.__annotations__[column]
+                if col_anno == str:
+                    default_val = f'"{current_val}"\t'
+
+                target_id = cdesc - offsets_table["desc_alt"] + offsets_table["outf_cks"] # get custom outf id
+                if column == "text":
+                    #logger.info(f'trying to find desc for {target_id}, and I am player {self.player}')
+                    # We need to inject our special bit here as well, so the client can know when to unlock the outf.
+                    if target_id in locations.ev_location_bank:
+                        mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
+                        output_file_string += f'"{temp_desc["name"]} will unlock {mwloc.item.name}"\t' # I don't know how to get the player name yet. mwloc.player is just my player id, becuase it it is my check.
+                    else:
+                        #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_desc['name']}")
+                        output_file_string += default_val
+                else:
+                    output_file_string += default_val
+            output_file_string += "\r\n"
+
 
         logger.info(f"output file string prepared: {output_file_string[:1000]}...") # Log the first 1000 characters of the output for debugging purposes. Be careful with this if the output can be very large, as it may cause performance issues or clutter the logs.
 

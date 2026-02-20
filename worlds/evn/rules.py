@@ -9,7 +9,8 @@ from worlds.generic.Rules import add_rule, set_rule
 #from .logics import story_routes
 #from .locations import ev_location_bank
 from .rezdata.misns import misn_table
-from .locations import loc_type_offset
+#from .locations import loc_type_offset
+from .apdata.offsets import offsets_table as loc_type_offset
 
 if TYPE_CHECKING:
     from .world import EVNWorld

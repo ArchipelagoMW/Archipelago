@@ -44,12 +44,13 @@ class IncludeOutfits(DefaultOnToggle):
     """
     display_name = "Include Outfits in shuffle"
 
-class OutfitChecks(Toggle):
-    """
-    Will add Outfits that are purely checks. Purchasing them will unlock items for players.
-    (Not Implemented)
-    """
-    display_name = "Include Outfits as Checks"
+# We basically *have* to do this, so not going to bother with on/off
+# class OutfitChecks(Toggle):
+#     """
+#     Will add Outfits that are purely checks. Purchasing them will unlock items for players.
+#     (Not Implemented)
+#     """
+#     display_name = "Include Outfits as Checks"
 
 class AlwaysAvailableShops(Toggle):
     """
@@ -186,7 +187,7 @@ class ChosenString(Choice):
 class EVNOptions(PerGameCommonOptions):
     shuffle_systems: ShuffleSystems
     include_outfits: IncludeOutfits
-    outfit_checks: OutfitChecks
+    #outfit_checks: OutfitChecks
     chosen_string: ChosenString
     always_avail_shops: AlwaysAvailableShops
     ignore_tech: IgnoreTechReq
