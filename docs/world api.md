@@ -327,6 +327,11 @@ reject the placement of an item there.
 
 ### Events (or "generation-only items/locations")
 
+> **Warning:** If you're trying to tell the Archipelago server that the player has achieved their goal, you want to send
+a [StatusUpdate packet](network%20protocol.md#statusupdate), or however [your client library](network%20protocol.md)
+wraps it. Despite the popularity of "victory events" during generation, events have nothing to do with how goals are
+triggered during gameplay.
+
 An event item or location is one that only exists during multiworld generation; the server is never made aware of them.
 Event locations can never be checked by the player, and event items cannot be received during play.
 
