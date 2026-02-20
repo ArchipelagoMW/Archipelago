@@ -94,9 +94,13 @@ class NineSolsWorld(World):
                     self.options.prevent_weakened_prison_state.value = slot_data.get('prevent_weakened_prison_state', 0)
                     self.options.seals_for_ethereal.value = slot_data['seals_for_ethereal']
                     self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
+                    self.options.prevent_annoying_runbacks.value = slot_data.get('prevent_annoying_runbacks', 0)
                     self.options.first_root_node = FirstRootNode.from_text(slot_data['first_root_node_name'])
                     self.options.logic_difficulty.value = slot_data.get('logic_difficulty', 0)
                     self.options.shop_unlocks.value = slot_data.get('shop_unlocks', 0)
+                    self.options.shuffle_grapple.value = slot_data.get('shuffle_grapple', 0)
+                    self.options.shuffle_wall_climb.value = slot_data.get('shuffle_wall_climb', 0)
+                    self.options.shuffle_ledge_grab.value = slot_data.get('shuffle_ledge_grab', 0)
                     self.options.kuafu_shop_unlock_sol_seals.value = slot_data.get('kuafu_shop_unlock_sol_seals', 0)
                     self.options.chiyou_shop_unlock_sol_seals.value = slot_data.get('chiyou_shop_unlock_sol_seals', 0)
                     self.options.kuafu_extra_inventory_unlock_sol_seals.value = (
@@ -153,10 +157,14 @@ class NineSolsWorld(World):
             'seals_for_prison',
             'seals_for_ethereal',
             'logic_difficulty',
+            'shuffle_grapple',
+            'shuffle_wall_climb',
+            'shuffle_ledge_grab',
             'shop_unlocks',
             'kuafu_shop_unlock_sol_seals',
             'chiyou_shop_unlock_sol_seals',
             'kuafu_extra_inventory_unlock_sol_seals',
+            'prevent_annoying_runbacks',
             'prevent_weakened_prison_state',
         )
         slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
