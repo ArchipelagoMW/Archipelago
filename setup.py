@@ -381,6 +381,8 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         from Options import generate_yaml_templates
         from worlds.Files import APWorldContainer
         import worlds
+        # Force world list rebuild so cache reflects current source tree (CI/build may have no or stale cache)
+        worlds.AutoWorldRegister.get_world_list(force_rebuild=True)
         all_worlds = worlds.AutoWorldRegister.world_types
         assert not non_apworlds - set(all_worlds), \
             f"Unknown world {non_apworlds - set(all_worlds)} designated for .apworld"
