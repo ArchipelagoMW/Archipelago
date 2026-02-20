@@ -1,26 +1,18 @@
-import io
-import hashlib
 import logging
 import os
-import struct
-import random
 from collections import OrderedDict
-import urllib.request
-from urllib.error import URLError, HTTPError
-import json
 from enum import Enum
 
 from BaseClasses import Region
 from .Items import OOTItem
-from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
-    misc_item_hint_table, misc_location_hint_table
+from .HintList import getHint, getHintGroup, hintExclusions, misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
-from .TextBox import line_wrap, character_table, rom_safe_text
+from .TextBox import line_wrap, rom_safe_text
 from .Utils import data_path, read_json
 
 
 bingoBottlesForHints = (
-    "Bottle", "Bottle with Red Potion","Bottle with Green Potion", "Bottle with Blue Potion",
+    "Bottle", "Bottle with Red Potion", "Bottle with Green Potion", "Bottle with Blue Potion",
     "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs",
     "Bottle with Big Poe", "Bottle with Poe",
 )
@@ -38,14 +30,14 @@ class RegionRestriction(Enum):
     OVERWORLD = 2,
 
 
-class GossipStone():
+class GossipStone:
     def __init__(self, name, location):
         self.name = name
         self.location = location
         self.reachable = True
 
 
-class GossipText():
+class GossipText:
     def __init__(self, text, colors=None, prefix="They say that "):
         text = prefix + text
         text = text[:1].upper() + text[1:]
@@ -120,9 +112,7 @@ gossipLocations = {
     0x044A: GossipStone('DMC (Upper Grotto)',               'DMC Upper Grotto Gossip Stone'),
 }
 
-gossipLocations_reversemap = {
-    stone.name : stone_id for stone_id, stone in gossipLocations.items()
-}
+gossipLocations_reversemap = {stone.name: stone_id for stone_id, stone in gossipLocations.items()}
 
 def getItemGenericName(item):
     if item.game != "Ocarina of Time":
@@ -147,10 +137,12 @@ def isRestrictedDungeonItem(dungeon, item):
     return False
 
 
-# Attach a player name to the item or location text.
-# If the associated player of the item/location and the world are the same, does nothing.
-# Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
 def attach_name(text, hinted_object, world):
+    """
+    Attach a player name to the item or location text.
+    If the associated player of the item/location and the world are the same, does nothing.
+    Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
+    """
     if hinted_object.player == world.player:
         return text
     return rom_safe_text(f"{world.multiworld.get_player_name(hinted_object.player)}'s {text}")
@@ -236,7 +228,6 @@ def add_hint(world, groups, gossip_text, count, location=None, force_reachable=F
     groups.extend(duplicates)
     groups.extend(skipped_groups)
     return success
-
 
 
 def writeGossipStoneHints(world, messages):
@@ -340,10 +331,12 @@ class HintArea(Enum):
     DESERT_COLOSSUS        = 'at',     'at',     'the Desert Colossus',        "Desert Colossus",        'Yellow',     None
     SPIRIT_TEMPLE          = 'inside', 'in',     'the Spirit Temple',          "Spirit Temple",          'Yellow',     'Spirit Temple'
 
-    # Performs a breadth first search to find the closest hint area from a given spot (region, location, or entrance).
-    # May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
     @staticmethod
     def at(spot, use_alt_hint=False):
+        """
+        Performs a breadth first search to find the closest hint area from a given spot (region, location, or entrance).
+        May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
+        """
         if isinstance(spot, Region):
             original_parent = spot
         else:
@@ -415,9 +408,11 @@ class HintArea(Enum):
                 return dungeon.is_dungeon_item(item)
         return False
 
-    # Formats the hint text for this area with proper grammar.
-    # Dungeons are hinted differently depending on the clearer_hints setting.
     def text(self, rand, clearer_hints, preposition=False, world=None):
+        """
+        Formats the hint text for this area with proper grammar.
+        Dungeons are hinted differently depending on the clearer_hints setting.
+        """
         if self.is_dungeon:
             text = getHint(self.dungeon_name, rand, clearer_hints).text
         else:
@@ -444,10 +439,12 @@ class HintArea(Enum):
         return text
 
 
-# Peforms a breadth first search to find the closest hint area from a given spot (location or entrance)
-# May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
-# Returns the name of the location if the spot is not in OoT
 def get_hint_area(spot):
+    """
+    Peforms a breadth first search to find the closest hint area from a given spot (location or entrance)
+    May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
+    Returns the name of the location if the spot is not in OoT
+    """
     if spot.game == 'Ocarina of Time':
         already_checked = []
         spot_queue = [spot]
@@ -457,7 +454,7 @@ def get_hint_area(spot):
             already_checked.append(current_spot)
 
             parent_region = current_spot.parent_region
-        
+
             if parent_region.dungeon:
                 return parent_region.dungeon.hint_text
             elif parent_region.hint and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
@@ -573,11 +570,11 @@ def get_good_item_hint(world, checked):
     item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
     if getattr(location.parent_region, "dungeon", None):
         location_text = getHint(location.parent_region.dungeon.name, world.hint_rng, world.clearer_hints).text
-        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
             ['Green', 'Red']), location)
     else:
         location_text = get_hint_area(location)
-        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)), 
+        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)),
             ['Red', 'Green']), location)
 
 
@@ -585,7 +582,7 @@ def get_specific_item_hint(world, checked):
     if len(world.named_item_pool) == 0:
         logger = logging.getLogger('')
         logger.info("Named item hint requested, but pool is empty.")
-        return None  
+        return None
     while True:
         itemname = world.named_item_pool.pop(0)
         if itemname == "Bottle" and world.hint_dist == "bingo":
@@ -620,14 +617,14 @@ def get_specific_item_hint(world, checked):
         if world.hint_dist_user.get('vague_named_items', False):
             return (GossipText('#%s# may be on the hero\'s path.' % (location_text), ['Green']), location)
         else:
-            return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+            return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
                 ['Green', 'Red']), location)
     else:
         location_text = get_hint_area(location)
         if world.hint_dist_user.get('vague_named_items', False):
             return (GossipText('#%s# may be on the hero\'s path.' % (location_text), ['Green']), location)
         else:
-            return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)), 
+            return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)),
                 ['Red', 'Green']), location)
 
 
@@ -651,11 +648,11 @@ def get_random_location_hint(world, checked):
     item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
     if dungeon:
         location_text = getHint(dungeon.name, world.hint_rng, world.clearer_hints).text
-        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
             ['Green', 'Red']), location)
     else:
         location_text = get_hint_area(location)
-        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)), 
+        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)),
             ['Red', 'Green']), location)
 
 
@@ -677,7 +674,7 @@ def get_specific_hint(world, checked, type):
         location_text = '#%s#' % location_text
     item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
 
-    return (GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+    return (GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
         ['Green', 'Red']), location)
 
 
@@ -779,10 +776,8 @@ hint_dist_keys = {
 }
 
 
-
-# builds out general hints based on location and whether an item is required or not
 def buildWorldGossipHints(world, checkedLocations=None):
-
+    """Builds out general hints based on location and whether an item is required or not"""
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
 
@@ -830,7 +825,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
     stoneGroups.extend([[id] for id in stoneIDs])
 
     world.hint_rng.shuffle(stoneGroups)
-
 
     # Load hint distro from distribution file or pre-defined settings
     #
@@ -886,7 +880,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
             if '#' not in location_text:
                 location_text = '#%s#' % location_text
             item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
-            add_hint(world, stoneGroups, GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+            add_hint(world, stoneGroups, GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
                 ['Green', 'Red']), hint_dist['always'][1], location, force_reachable=True)
             logging.getLogger('').debug('Placed always hint for %s.', location.name)
 
@@ -897,11 +891,11 @@ def buildWorldGossipHints(world, checkedLocations=None):
         elif world.trials_random and world.trials == 0:
             add_hint(world, stoneGroups, GossipText("Sheik dispelled the barrier around #Ganon's Tower#.", ['Yellow']), hint_dist['trial'][1], force_reachable=True)
         elif world.trials < 6 and world.trials > 3:
-            for trial,skipped in world.skipped_trials.items():
+            for trial, skipped in world.skipped_trials.items():
                 if skipped:
-                    add_hint(world, stoneGroups,GossipText("the #%s Trial# was dispelled by Sheik." % trial, ['Yellow']), hint_dist['trial'][1], force_reachable=True)
+                    add_hint(world, stoneGroups, GossipText("the #%s Trial# was dispelled by Sheik." % trial, ['Yellow']), hint_dist['trial'][1], force_reachable=True)
         elif world.trials <= 3 and world.trials > 0:
-            for trial,skipped in world.skipped_trials.items():
+            for trial, skipped in world.skipped_trials.items():
                 if not skipped:
                     add_hint(world, stoneGroups, GossipText("the #%s Trial# protects Ganon's Tower." % trial, ['Pink']), hint_dist['trial'][1], force_reachable=True)
 
@@ -911,23 +905,23 @@ def buildWorldGossipHints(world, checkedLocations=None):
         if hint_dist['named-item'][1] == 0:
             raise Exception('User-provided item hints were requested, but copies per named-item hint is zero')
         else:
-            for i in range(0, len(world.named_item_pool)):
+            for _ in range(len(world.named_item_pool)):
                 hint = get_specific_item_hint(world, checkedLocations)
-                if hint == None:
+                if hint is None:
                     raise Exception('No valid hints for user-provided item')
                 else:
                     gossip_text, location = hint
                     place_ok = add_hint(world, stoneGroups, gossip_text, hint_dist['named-item'][1], location)
                     if not place_ok:
                         raise Exception('Not enough gossip stones for user-provided item hints')
-    
+
     # Shuffle named items hints
     # When all items are not required to be hinted, this allows for
     # opportunity-style hints to be drawn at random from the defined list.
     world.hint_rng.shuffle(world.named_item_pool)
 
     hint_types = list(hint_types)
-    hint_prob  = list(hint_prob)
+    hint_prob = list(hint_prob)
     hint_counts = {}
 
     custom_fixed = True
@@ -973,7 +967,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
 
         hint = hint_func[hint_type](world, checkedLocations)
 
-        if hint == None:
+        if hint is None:
             index = hint_types.index(hint_type)
             hint_prob[index] = 0
             # Zero out the probability in the base distribution in case the probability list is modified
@@ -993,18 +987,21 @@ def buildWorldGossipHints(world, checkedLocations=None):
                 fixed_hint_types.insert(0, hint_type)
 
 
-# builds text that is displayed at the temple of time altar for child and adult, rewards pulled based off of item in a fixed order.
 def buildAltarHints(world, messages, include_rewards=True, include_wincons=True):
+    """
+    Builds text that is displayed at the temple of time altar for child and adult,
+    rewards pulled based off of item in a fixed order.
+    """
     # text that appears at altar as a child.
     child_text = '\x08'
     if include_rewards:
         bossRewardsSpiritualStones = [
-            ('Kokiri Emerald',   'Green'), 
-            ('Goron Ruby',       'Red'), 
+            ('Kokiri Emerald',   'Green'),
+            ('Goron Ruby',       'Red'),
             ('Zora Sapphire',    'Blue'),
         ]
         child_text += getHint('Spiritual Stone Text Start', world.hint_rng, world.clearer_hints).text + '\x04'
-        for (reward, color) in bossRewardsSpiritualStones:
+        for reward, color in bossRewardsSpiritualStones:
             child_text += buildBossString(reward, color, world)
     child_text += getHint('Child Altar Text End', world.hint_rng, world.clearer_hints).text
     child_text += '\x0B'
@@ -1022,7 +1019,7 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
             ('Shadow Medallion', 'Pink'),
             ('Spirit Medallion', 'Yellow'),
         ]
-        for (reward, color) in bossRewardsMedallions:
+        for reward, color in bossRewardsMedallions:
             adult_text += buildBossString(reward, color, world)
     if include_wincons:
         adult_text += buildBridgeReqsString(world)
@@ -1034,8 +1031,8 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
     update_message_by_id(messages, 0x7057, get_raw_text(adult_text), 0x20)
 
 
-# pulls text string from hintlist for reward after sending the location to hintlist.
 def buildBossString(reward, color, world):
+    """Pulls text string from hintlist for reward after sending the location to hintlist."""
     item_icon = chr(world.create_item(reward).special['item_id'])
     if world.multiworld.state.has(reward, world.player):
         if world.clearer_hints:
@@ -1126,7 +1123,7 @@ def buildGanonText(world, messages):
     update_message_by_id(messages, 0x70CB, text)
 
 
-# Modified from original. Uses optimized AP methods, no support for custom items. 
+# Modified from original. Uses optimized AP methods, no support for custom items.
 def buildMiscItemHints(world, messages):
     for hint_type, data in misc_item_hint_table.items():
         if hint_type in world.misc_hints:

@@ -1,7 +1,5 @@
-class Dungeon(object):
-
+class Dungeon:
     def __init__(self, world, name, hint, font_color):
-
         self.world = world
         self.name = name
         self.hint_text = hint
@@ -14,8 +12,7 @@ class Dungeon(object):
         for region in world.multiworld.regions:
             if region.player == world.player and region.dungeon == self.name:
                 region.dungeon = self
-                self.regions.append(region)                
-
+                self.regions.append(region)
 
     def copy(self, new_world):
         new_boss_key = [item.copy(new_world) for item in self.boss_key]
@@ -26,29 +23,22 @@ class Dungeon(object):
 
         return new_dungeon
 
-
     @property
     def keys(self):
         return self.small_keys + self.boss_key
-
 
     @property
     def all_items(self):
         return self.dungeon_items + self.keys
 
-
     def is_dungeon_item(self, item):
         return item.name in [dungeon_item.name for dungeon_item in self.all_items]
-
 
     def item_name(self, name):
         return f"{name} ({self.name})"
 
-
     def __str__(self):
         return str(self.__unicode__())
 
-
     def __unicode__(self):
         return '%s' % self.name
-

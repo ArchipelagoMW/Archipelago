@@ -1,15 +1,10 @@
 from collections import deque
-import logging
-import typing
 
 from .Regions import TimeOfDay
-from .DungeonList import dungeon_table
-from .Hints import HintArea
 from .Items import oot_is_item_of_type
-from .LocationList import dungeon_song_locations
 
 from BaseClasses import CollectionState, MultiWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
+from worlds.generic.Rules import add_rule, add_item_rule, forbid_item
 from worlds.AutoWorld import LogicMixin
 
 
@@ -18,15 +13,15 @@ class OOTLogic(LogicMixin):
         # Separate stale state for OOTRegion.can_reach() to use because CollectionState.update_reachable_regions() sets
         # `self.state[player] = False` for all players without updating OOT's age region accessibility.
         self._oot_stale = {player: True for player, world in parent.worlds.items()
-                           if parent.worlds[player].game == "Ocarina of Time"}
+                           if world.game == "Ocarina of Time"}
 
-    def _oot_has_stones(self, count, player): 
+    def _oot_has_stones(self, count, player):
         return self.has_group("stones", player, count)
 
-    def _oot_has_medallions(self, count, player): 
+    def _oot_has_medallions(self, count, player):
         return self.has_group("medallions", player, count)
 
-    def _oot_has_dungeon_rewards(self, count, player): 
+    def _oot_has_dungeon_rewards(self, count, player):
         return self.has_group("rewards", player, count)
 
     def _oot_has_hearts(self, count, player):
@@ -35,31 +30,32 @@ class OOTLogic(LogicMixin):
         total_hearts = 3 + containers + int(pieces / 4)
         return total_hearts >= count
 
-    def _oot_has_bottle(self, player): 
+    def _oot_has_bottle(self, player):
         return self.has_group("logic_bottles", player)
 
     def _oot_has_beans(self, player):
         return self.has("Magic Bean Pack", player) or self.has("Buy Magic Bean", player) or self.has("Magic Bean", player, 10)
 
-    # Used for fall damage and other situations where damage is unavoidable
     def _oot_can_live_dmg(self, player, hearts):
+        """Used for fall damage and other situations where damage is unavoidable"""
         mult = self.multiworld.worlds[player].damage_multiplier
-        if hearts*4 >= 3:
+        if hearts * 4 >= 3:
             return mult != 'ohko' and mult != 'quadruple'
         else:
             return mult != 'ohko'
 
-    # Figure out if the given region's parent dungeon has shortcuts enabled
     def _oot_region_has_shortcuts(self, player, regionname):
+        """Figure out if the given region's parent dungeon has shortcuts enabled"""
         return self.multiworld.worlds[player].region_has_shortcuts(regionname)
 
-
-    # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
-    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
-    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
-    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region. 
-    def _oot_reach_as_age(self, regionname, age, player): 
-        if self.age[player] is None: 
+    def _oot_reach_as_age(self, regionname, age, player):
+        """
+        This function operates by assuming different behavior based on the "level of recursion", handled manually.
+        If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region.
+        If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal.
+          This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region.
+        """
+        if self.age[player] is None:
             self.age[player] = age
             can_reach = self.multiworld.get_region(regionname, player).can_reach(self)
             self.age[player] = None
@@ -107,7 +103,7 @@ class OOTLogic(LogicMixin):
             start = self.multiworld.get_region('Menu', player)
 
             # init on first call - this can't be done on construction since the regions don't exist yet
-            if not start in rrp:
+            if start not in rrp:
                 rrp.add(start)
                 bc.update(start.exits)
                 queue.extend(start.exits)
@@ -116,7 +112,7 @@ class OOTLogic(LogicMixin):
             while queue:
                 connection = queue.popleft()
                 new_region = connection.connected_region
-                if new_region is None: 
+                if new_region is None:
                     continue
                 if new_region in rrp:
                     bc.remove(connection)
@@ -128,17 +124,15 @@ class OOTLogic(LogicMixin):
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
 
-# Sets extra rules on various specific locations not handled by the rule parser.
 def set_rules(ootworld):
-    logger = logging.getLogger('')
-
+    """Sets extra rules on various specific locations not handled by the rule parser."""
     multiworld = ootworld.multiworld
     player = ootworld.player
 
-    if ootworld.logic_rules != 'no_logic': 
-        if ootworld.triforce_hunt: 
+    if ootworld.logic_rules != 'no_logic':
+        if ootworld.triforce_hunt:
             multiworld.completion_condition[player] = lambda state: state.has('Triforce Piece', player, ootworld.triforce_goal)
-        else: 
+        else:
             multiworld.completion_condition[player] = lambda state: state.has('Triforce', player)
 
     # ganon can only carry triforce
@@ -231,7 +225,6 @@ def set_shop_rules(ootworld):
 # This function should be ran once after setting up entrances and before placing items
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
 def set_entrances_based_rules(ootworld):
-
     all_state = ootworld.get_state_with_complete_itempool()
     all_state.sweep_for_advancements(locations=ootworld.get_locations())
 
@@ -240,4 +233,3 @@ def set_entrances_based_rules(ootworld):
         if not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
             forbid_item(location, 'Buy Goron Tunic', ootworld.player)
             forbid_item(location, 'Buy Zora Tunic', ootworld.player)
-
