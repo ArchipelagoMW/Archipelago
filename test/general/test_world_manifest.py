@@ -47,7 +47,6 @@ _entries_under_test = [
 ]
 # One test class per game; cache has at most one entry per game.
 source_world_names = list(dict.fromkeys(e["game"] for e in _entries_under_test))
-_entry_by_game = {e["game"]: e for e in _entries_under_test}
 
 
 @classvar_matrix(game=source_world_names)
@@ -57,7 +56,8 @@ class TestWorldManifest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        entry = _entry_by_game[cls.game]
+        entry = AutoWorldRegister.get_entry_by_game(cls.game)
+        assert entry is not None, f"Cache entry for {cls.game!r} not found"
         cls.manifest = _load_manifest_for_entry(entry)
 
     def test_game(self) -> None:

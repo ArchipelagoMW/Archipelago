@@ -17,7 +17,6 @@ def run_locations_benchmark(freeze_gc: bool = True) -> None:
 
     from Utils import init_logging
     from BaseClasses import MultiWorld, CollectionState, Location
-    import worlds
     from worlds.AutoWorld import AutoWorldRegister, call_all
 
     init_logging("Benchmark Runner")
@@ -55,7 +54,7 @@ def run_locations_benchmark(freeze_gc: bool = True) -> None:
             return t.dif
 
         def main(self):
-            all_worlds = worlds.AutoWorldRegister.world_types
+            all_worlds = AutoWorldRegister.world_types
             for game in sorted(all_worlds):
                 summary_data: typing.Dict[str, collections.Counter[str]] = {
                     "empty_state": collections.Counter(),

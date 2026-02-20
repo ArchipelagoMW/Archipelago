@@ -1,4 +1,4 @@
-"""Tests for world unload and get_entry_by_path."""
+"""Tests for world unload, get_entry_by_path, and get_entry_by_game."""
 
 import os
 import tempfile
@@ -25,6 +25,26 @@ class TestGetEntryByPath(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(os.path.normpath(result["path"]), os.path.normpath(path))
         self.assertEqual(result.get("game"), entries[0].get("game"))
+
+
+class TestGetEntryByGame(unittest.TestCase):
+    """Tests for AutoWorldRegister.get_entry_by_game."""
+
+    def test_get_entry_by_game_missing_returns_none(self) -> None:
+        result = AutoWorldRegister.get_entry_by_game("NonExistentGameXYZ")
+        self.assertIsNone(result)
+
+    def test_get_entry_by_game_returns_entry_when_in_cache(self) -> None:
+        entries = AutoWorldRegister.get_world_list()
+        if not entries:
+            self.skipTest("No worlds in cache")
+        game = entries[0].get("game")
+        if not game:
+            self.skipTest("First entry has no game name")
+        result = AutoWorldRegister.get_entry_by_game(game)
+        self.assertIsNotNone(result)
+        self.assertEqual(result.get("game"), game)
+        self.assertEqual(os.path.normpath(result["path"]), os.path.normpath(entries[0]["path"]))
 
 
 class TestUnloadWorld(unittest.TestCase):

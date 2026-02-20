@@ -15,6 +15,15 @@ CACHE_FILENAME = "worlds_cache.json"
 CACHE_FORMAT_VERSION = 1
 
 
+def _path_to_settings_key(path: str, is_zip: bool) -> str:
+    """Path-derived key for host.yaml world options (stem.lower() + '_options')."""
+    if is_zip:
+        stem = os.path.splitext(os.path.basename(path))[0]
+    else:
+        stem = os.path.basename(path.rstrip(os.sep))
+    return stem.lower() + "_options"
+
+
 def get_cache_path() -> str:
     return cache_path(CACHE_FILENAME)
 
@@ -171,6 +180,7 @@ def _entry_for_path(
         "world_version": manifest.get("world_version"),
         "manifest_path": manifest_path if not is_zip else None,
         "always_reload": manifest.get("always_reload", False),
+        "settings_key": _path_to_settings_key(path, is_zip),
     }
 
 
@@ -204,6 +214,7 @@ def _refresh_entry(entry: dict[str, Any]) -> bool:
         entry["game"] = manifest["game"]
         entry["world_version"] = manifest.get("world_version")
         entry["always_reload"] = manifest.get("always_reload", False)
+        entry["settings_key"] = _path_to_settings_key(path, is_zip)
         return True
     return True  # keep entry with existing game if manifest read failed
 
@@ -324,6 +335,7 @@ def add_world_to_cache(apworld_path: str) -> bool:
         "world_version": manifest.get("world_version"),
         "manifest_path": None,
         "always_reload": manifest.get("always_reload", False),
+        "settings_key": _path_to_settings_key(apworld_path, True),
     }
     entries.append(cache_entry)
     write_cache(entries)

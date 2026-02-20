@@ -67,6 +67,11 @@ class AutoWorldRegister(type):
         return get_registry().get_entry_by_path(path)
 
     @classmethod
+    def get_entry_by_game(mcs, game_name: str):
+        """Return cache entry for the given game name, or None. O(1) after first get_world_list()."""
+        return get_registry().get_entry_by_game(game_name)
+
+    @classmethod
     def add_world_to_cache(mcs, apworld_path: str) -> bool:
         """Add one apworld to cache and refresh in-memory world sources."""
         return get_registry().add_world_to_cache(apworld_path)
@@ -100,6 +105,26 @@ class AutoWorldRegister(type):
     def unload_world(mcs, game_name: str) -> None:
         """Unload game_name world so it can be reloaded from disk."""
         get_registry().unload_world(game_name)
+
+    @classmethod
+    def unregister_world_internal(mcs, game_name: str) -> None:
+        """Remove world class from registry if present. Used by tests to restore state."""
+        get_registry().unregister_world_internal(game_name)
+
+    @classmethod
+    def get_settings_keys(mcs) -> List[str]:
+        """Return list of settings_key values from the world list (for host.yaml world sections)."""
+        return get_registry().get_settings_keys()
+
+    @classmethod
+    def get_world_class_for_settings_key(mcs, settings_key: str) -> Optional[Type["World"]]:
+        """Return World class for this settings_key, loading on demand. None if not found or load failed."""
+        return get_registry().get_world_class_for_settings_key(settings_key)
+
+    @classmethod
+    def clear_data_package_cache(mcs, game_name: str) -> None:
+        """Remove cached data package for game_name so next access refetches. Used by tests."""
+        get_registry().clear_data_package_cache(game_name)
 
     @classmethod
     def get_world_sources(mcs) -> List[Any]:

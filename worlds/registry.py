@@ -234,8 +234,62 @@ class WorldRegistry:
         self._data_package_cache: dict[str, WorldDataPackage] = {}
         self._ensuring_all_loaded: bool = False
         self._network_data_package: _NetworkDataPackageView | None = None
+        # settings_key -> game (from world list); None = need rebuild. Cleared when world list cache is written.
+        self._settings_key_to_game: dict[str, str] | None = None
+        # settings_key -> World class; cleared per-game on unload so we don't hold stale refs.
+        self._settings_key_to_world_class: dict[str, WorldType] = {}
         world_list_cache.register_on_cache_written(self._data_package_cache.clear)
+        world_list_cache.register_on_cache_written(self._clear_settings_key_caches)
         self._refresh_world_sources()
+
+    def _clear_settings_key_caches(self) -> None:
+        """Clear settings_key caches so they are rebuilt from world list. Called when world list cache is written."""
+        self._settings_key_to_game = None
+        self._settings_key_to_world_class.clear()
+
+    def _build_settings_key_map(self) -> None:
+        """Populate _settings_key_to_game from world list entries."""
+        if self._settings_key_to_game is not None:
+            return
+        self._settings_key_to_game = {}
+        for entry in self.list_entries():
+            game = entry.get("game")
+            sk = entry.get("settings_key")
+            if game and sk:
+                self._settings_key_to_game[sk] = game
+
+    def get_settings_keys(self) -> list[str]:
+        """Return list of settings_key values from the world list (for host.yaml world sections)."""
+        self._build_settings_key_map()
+        assert self._settings_key_to_game is not None
+        return list(self._settings_key_to_game)
+
+    def get_world_class_for_settings_key(self, settings_key: str) -> WorldType | None:
+        """Return World class for this settings_key, loading on demand. None if not found or load failed."""
+        if settings_key in self._settings_key_to_world_class:
+            return self._settings_key_to_world_class[settings_key]
+        self._build_settings_key_map()
+        assert self._settings_key_to_game is not None
+        game = self._settings_key_to_game.get(settings_key)
+        if not game:
+            # Canonical key (e.g. apquest.world_options) may not be in cache; resolve by loading worlds
+            for path_derived_key in list(self._settings_key_to_game):
+                world = self.get_world_class_for_settings_key(path_derived_key)
+                if world is not None and getattr(world, "settings_key", None) == settings_key:
+                    self._settings_key_to_game[settings_key] = self._settings_key_to_game[path_derived_key]
+                    return world
+            return None
+        try:
+            world = self.get_world_class(game)
+        except KeyError:
+            return None
+        # Cache under both path-derived key and world.settings_key so both resolve to same class
+        self._settings_key_to_world_class[world.settings_key] = world
+        self._settings_key_to_world_class[settings_key] = world
+        # Expose canonical key so get_settings_keys() includes it (YAML/dump use canonical key)
+        if world.settings_key not in self._settings_key_to_game:
+            self._settings_key_to_game[world.settings_key] = game
+        return world
 
     def _world_sources_from_cache(self, entries: list[WorldListEntry]) -> list[WorldSource]:
         """Convert cached world-list entries into WorldSource objects."""
@@ -273,6 +327,10 @@ class WorldRegistry:
         """Return cache entry matching path, or None if absent."""
         return cast(WorldListEntry | None, world_list_cache.get_entry_by_path(path))
 
+    def get_entry_by_game(self, game_name: str) -> WorldListEntry | None:
+        """Return cache entry for the given game name, or None. O(1) after first list_entries()."""
+        return cast(WorldListEntry | None, world_list_cache.get_entry_by_game(game_name))
+
     def register_world_internal(self, world_class: WorldType, game_name: str | None = None) -> None:
         """Register a world class in internal storage.
 
@@ -301,8 +359,17 @@ class WorldRegistry:
         cls = _world_types_storage[game_name]
         module_name = cls.__module__
         self.unregister_world_internal(game_name)
-        self._data_package_cache.pop(game_name, None)
+        self.clear_data_package_cache(game_name)
         apworld_loader.forget_module(module_name)
+        # Clear settings_key cache for this game so we don't hold a stale World class ref
+        self._settings_key_to_world_class = {
+            k: v for k, v in self._settings_key_to_world_class.items()
+            if getattr(v, "game", None) != game_name
+        }
+
+    def clear_data_package_cache(self, game_name: str) -> None:
+        """Remove cached data package for game_name so next access refetches. Used by tests."""
+        self._data_package_cache.pop(game_name, None)
 
     def _load_entry(self, entry: WorldListEntry) -> bool:
         """Load one cache entry by matching it to a tracked world source."""
