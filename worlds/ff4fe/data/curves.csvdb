@@ -1,0 +1,52 @@
+area,wikiindex,wikiname,tier1,tier2,tier3,tier4,tier5,tier6,tier7,tier8
+BaronTown,1,Baron Town,40,20,20,18,2,0,0,0
+Damcyan,9,Damcyan,40,20,20,18,2,0,0,0
+Mist,5,Village Mist,20,30,30,18,2,0,0,0
+Kaipo,6,Kaipo,10,30,40,18,2,0,0,0
+Silvera,17,Silvera,10,30,40,18,2,0,0,0
+ToroiaTown,18,Toroia Town,10,30,40,18,2,0,0,0
+Agart,16,Agart,10,30,40,18,2,0,0,0
+AntlionCave,10,Antlion Cave,30,20,20,25,5,0,0,0
+BaronCastle,15,Baron Castle,10,20,30,25,15,0,0,0
+ChocoboForest,3,Chocobo Forests,10,20,30,20,18,2,0,0
+DwarfCastle,23,Dwarf Castle,10,25,35,28,2,0,0,0
+BahamutCave,35,Cave Bahamut,8,12,30,30,18,2,0,0
+LunarPath,36,Lunar Path,8,12,30,30,18,2,0,0
+CaveEblan,26,Cave Eblan,10,10,40,25,15,0,0,0
+CaveMagnes,21,Cave Magnes,0,20,40,30,10,0,0,0
+Eblan,25,Eblan,10,10,25,30,23,2,0,0
+Fabul,12,Fabul,20,30,30,18,2,0,0,0
+Giant,37,Giant of Bab-il,0,10,30,30,26,4,0,0
+Waterfall,8,Waterfall/Lake,0,0,35,40,23,2,0,0
+CaveOfSummons,32,Cave of Summons,0,25,25,30,20,0,0,0
+Feymarch,33,Town of Summons,10,20,40,28,2,0,0,0
+LunarCore,38,Lunar Subterrane/Core,0,10,25,20,41,4,0,0
+MistCave,4,Mist Cave,0,0,35,40,23,2,0,0
+MountHobs,11,Mount Hobs,10,10,45,25,10,0,0,0
+MountOrdeals,13,Mount Ordeals,10,10,45,25,10,0,0,0
+Sewer,14,Sewer,10,10,45,25,10,0,0,0
+BaronWeaponShop,2,Baron Town Weapon/Armor Shop,10,10,45,25,10,0,0,0
+SealedCave,34,Sealed Cave,10,10,30,30,20,0,0,0
+Smithy,30,Smithy House,10,10,30,30,20,0,0,0
+SylvanCave,31,Sylvan Cave,8,12,25,30,23,2,0,0
+Tomra,29,Tomra,10,20,40,28,2,0,0,0
+ToroiaCastle,19,Toroia Castle,10,30,35,21,4,0,0,0
+ToroiaTreasury,20,Toroia Castle Treasury,0,8,20,20,40,10,1,1
+UpperBabil,27,Upper Bab-il,10,10,35,30,15,0,0,0
+UpperBabilAfterFall,28,Upper Bab-il (after fall),0,10,35,30,15,10,0,0
+LowerBabil,24,Lower Bab-il,10,10,30,30,20,0,0,0
+Zot,22,Tower of Zot,10,10,35,30,15,0,0,0
+WateryPass,7,Watery Pass,10,20,30,25,13,2,0,0
+MIAB_Zot,1001,Tower of Zot,0,0,0,10,40,30,20,0
+MIAB_Eblan,1002,Eblan,0,0,0,0,30,35,35,0
+MIAB_CaveEblan,1003,Cave Eblan,0,0,0,20,40,25,15,0
+MIAB_LowerBabil,1004,Lower Bab-il,0,0,0,30,45,13,12,0
+MIAB_UpperBabil,1005,Upper Bab-il,0,0,0,10,60,15,15,0
+MIAB_CaveOfSummons,1006,Cave of Summons,0,0,0,5,45,35,15,0
+MIAB_SylvanCave,1007,Sylvan Cave,0,0,0,5,30,30,35,0
+MIAB_Giant,1008,Giant of Bab-il,0,0,0,0,30,35,35,0
+MIAB_LunarPath,1009,Lunar Path,0,0,0,0,40,40,20,0
+MIAB_LunarCore,1010,Lunar Subterrane/Core,0,0,0,0,10,20,50,20
+Ungated_Quest,2001,Ungated quests,0,0,0,40,60,0,0,0
+Gated_Quest,2002,Gated quests,0,0,0,10,40,40,10,0
+Moon_Quest,2003,Moon quests,0,0,0,0,30,50,15,5
