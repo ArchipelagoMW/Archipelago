@@ -301,6 +301,12 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
 | slot_data      | bool                              | If true, the Connect answer will contain slot_data                                           |
 
+The `uuid` is meant to identify a player, or more accurately a device that a player uses to play AP games.
+The idea is that some multiworlds (e.g. "races") would only ever allow "one player" to connect to each slot,
+and that requires knowing when one connection is "the same player" as a previous connection.
+Typically this means you want to generate a uuid on first launch, write it to some sort of cache file, then reload the
+cached uuid on all subsequent connections.
+
 #### items_handling flags
 | Value | Meaning |
 | ----- | ------- |
