@@ -1,20 +1,33 @@
 import yaml
 import os
 import zipfile
+import pkgutil
 import Utils
 from copy import deepcopy
 from .Regions import object_id_table
 from worlds.Files import APPatch
-import pkgutil
 
 settings_template = Utils.parse_yaml(pkgutil.get_data(__name__, "data/settings.yaml"))
 
 
+option_mapping = {
+    "_": "",  # Order matters here
+    "OverworldAndDungeons": "OverworldDungeons",
+    "MobsAndBosses": "MobsBosses",
+    "MobsBossesAndDarkKing": "MobsBossesDK",
+    "BenjaminLevelPlus": "BenPlus",
+    "BenjaminLevel": "BenPlus0",
+    "RandomCompanion": "Random",
+    "RandomTwoToTen": "Random210",
+    "RandomZeroToTwentyFive": "Random025",
+}
+
+
 def generate_output(self, output_directory):
-    def output_item_name(item):
+    def output_item_name(item, progressive_offset=0):
         if item.player == self.player:
             if item.code > 0x420000 + 256:
-                item_name = self.item_id_to_name[item.code - 256]
+                item_name = self.item_id_to_name[(item.code - 256) + min(progressive_offset, 2)]
             else:
                 item_name = item.name
             item_name = "".join(item_name.split("'"))
@@ -35,10 +48,10 @@ def generate_output(self, output_directory):
                                    "item_name": location.item.name})
 
     def cc(option):
-        return option.current_key.title().replace("_", "").replace("OverworldAndDungeons",
-            "OverworldDungeons").replace("MobsAndBosses", "MobsBosses").replace("MobsBossesAndDarkKing",
-            "MobsBossesDK").replace("BenjaminLevelPlus", "BenPlus").replace("BenjaminLevel", "BenPlus0").replace(
-            "RandomCompanion", "Random")
+        current_option = option.current_key.title()
+        for a, b in option_mapping.items():
+            current_option = current_option.replace(a, b)
+        return current_option
 
     def tf(option):
         return True if option else False
@@ -48,7 +61,7 @@ def generate_output(self, output_directory):
     option_writes = {
         "enemies_density": cc(self.options.enemies_density),
         "chests_shuffle": "Include",
-        "shuffle_boxes_content": self.options.brown_boxes == "shuffle",
+        "shuffle_boxes_content": False,
         "npcs_shuffle": "Include",
         "battlefields_shuffle": "Include",
         "logic_options": cc(self.options.logic),
@@ -69,12 +82,12 @@ def generate_output(self, output_directory):
         "progressive_gear": tf(self.options.progressive_gear),
         "tweaked_dungeons": tf(self.options.tweak_frustrating_dungeons),
         "doom_castle_mode": cc(self.options.doom_castle_mode),
-        "doom_castle_shortcut": tf(self.options.doom_castle_shortcut),
         "sky_coin_mode": cc(self.options.sky_coin_mode),
         "sky_coin_fragments_qty": cc(self.options.shattered_sky_coin_quantity),
-        "enable_spoilers": False,
+        "disable_spoilers": True,
         "progressive_formations": cc(self.options.progressive_formations),
         "map_shuffling": cc(self.options.map_shuffle),
+        "overworld_shuffle": tf(self.options.overworld_shuffle),
         "crest_shuffle": tf(self.options.crest_shuffle),
         "enemizer_groups": cc(self.options.enemizer_groups),
         "shuffle_res_weak_type": tf(self.options.shuffle_res_weak_types),
@@ -85,9 +98,19 @@ def generate_output(self, output_directory):
                                  "Three", "Four"][self.options.available_companions.value],
         "companions_locations": cc(self.options.companions_locations),
         "kaelis_mom_fight_minotaur": tf(self.options.kaelis_mom_fight_minotaur),
+        "hint_mode": cc(self.options.hint_mode),
+        "disable_duping": tf(self.options.disable_duping),
+        "seed_quantity": "Five",
+        "boxes_dont_reset": tf(self.options.boxes_dont_reset),
+        "seed_vendors_setting": cc(self.options.seed_vendors),
+        "doom_castle_access": cc(self.options.doom_castle_access),
+        "hidden_flags": False
     }
 
     for option, data in option_writes.items():
+        if data is None:
+            data = "None"
+        assert data in options["Final Fantasy Mystic Quest"][option]
         options["Final Fantasy Mystic Quest"][option][data] = 1
 
     rom_name = f'MQ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
@@ -95,10 +118,20 @@ def generate_output(self, output_directory):
                               'utf8')
     self.rom_name_available_event.set()
 
-    setup = {"version": "1.5", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
+    setup = {"version": "1.7", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
              hex(self.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
-    starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
+    progressives = {item: 0 for item in self.item_name_to_id if item.startswith("Progressive")}
+
+    def progressive(item_name):
+        if item_name not in progressives:
+            return 0
+        ret = progressives[item_name]
+        progressives[item_name] += 1
+        return ret
+    starting_items = [output_item_name(item, progressive(item.name))
+                      for item in self.multiworld.precollected_items[self.player]]
+
     if self.options.sky_coin_mode == "shattered_sky_coin":
         starting_items.append("SkyCoin")
 
@@ -112,9 +145,14 @@ def generate_output(self, output_directory):
         zf.writestr("startingitems.yaml", yaml.dump(starting_items))
         zf.writestr("setup.yaml", yaml.dump(setup))
         zf.writestr("rooms.yaml", yaml.dump(self.rooms))
+        if self.options.hint_mode != "none":
+            self.finished_hint_data_collection.wait()
+            hint_data = [{"content": output_item_name(location.item),
+                          "player": self.multiworld.player_name[location.player],
+                          "location_name": location.name} for location in self.hint_data]
+            zf.writestr("externalplacement.yaml", yaml.dump(hint_data))
 
         APMQ.write_contents(zf)
-
 
 class APMQFile(APPatch):
     game = "Final Fantasy Mystic Quest"
