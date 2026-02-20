@@ -79,3 +79,110 @@ class TestBase(unittest.TestCase):
                             locations.add(location)
                     self.assertGreater(len(locations), 0,
                                        msg="Need to be able to reach at least one location to get started.")
+
+    def test_collecting_and_removing_items_maintains_reachability(self):
+        """Test that worlds don't have situations where collecting an item makes a location become unreachable,
+        or removing an item makes a location become reachable. (Usually due to faulty "score calculation" algorithms)"""
+
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game_name, game_name=game_name):
+                multiworld = setup_solo_multiworld(
+                    world_type,
+                    steps=(
+                        "generate_early",
+                        "create_regions",
+                        "create_items",
+                        "set_rules",
+                        "connect_entrances",
+                        "generate_basic"
+                    )
+                )
+                proxy_world = multiworld.worlds[1]
+
+                # First, we need to get a set of items to test on.
+                # All of them need to be progression items. To ensure this, we need to do a bit of work.
+                # Since this is an actual world that gen steps were called on, we can take the ones from the item pool.
+                items_from_pool = [item for item in multiworld.itempool if item.advancement]
+
+                # However, the intent of this test is also to catch scenarios in which extra items were created,
+                # e.g. through plando or itemlinks. So, we make some random items from the datapackage as well.
+                # First, generate one copy of each item in the world's datapackage using the world's create_item.
+                additional_candidate_items = [
+                    proxy_world.create_item(item_name) for item_name in world_type.item_name_to_id
+                ]
+                # Only keep progression items.
+                additional_candidate_items = [item for item in additional_candidate_items if item.advancement]
+
+                # Now, we choose random items over and over, allowing duplicates but handling them carefully.
+                additional_chosen_items = []
+                target_amount = len(additional_candidate_items) / 4
+                while len(additional_chosen_items) < target_amount:
+                    random_item = proxy_world.random.choice(additional_candidate_items)
+
+                    # If the chosen candidate item is not already in our list of chosen items, just use that instance
+                    if random_item not in additional_chosen_items:
+                        additional_chosen_items.append(random_item)
+                        continue
+
+                    # Otherwise, we'll have to create a new copy.
+                    # Depending on the world's create_item, this new instance may not be an advancement.
+                    # If that's the case, we stop trying to use this item.
+                    second_or_higher_copy = proxy_world.create_item(random_item.name)
+                    if not second_or_higher_copy.advancement:
+                        additional_candidate_items.remove(random_item)
+
+                        if not additional_candidate_items:
+                            break
+
+                        continue
+
+                    additional_chosen_items.append(random_item)
+
+                chosen_items = [*items_from_pool, *additional_chosen_items]
+                proxy_world.random.shuffle(chosen_items)
+
+                all_locations = list(proxy_world.get_locations())
+
+                state = CollectionState(multiworld)
+                reachable_locations = {
+                    location for location in all_locations if location.can_reach(state)
+                }
+                for item in chosen_items:
+                    prog_items_before = str(state.prog_items)  # For error message
+
+                    state.collect(item)
+
+                    new_reachable_locations = {
+                        location for location in all_locations if location.can_reach(state)
+                    }
+                    locations_that_became_unreachable = reachable_locations - new_reachable_locations
+
+                    self.assertFalse(
+                        locations_that_became_unreachable,
+                        f"Locations {locations_that_became_unreachable} became unreachable after collecting "
+                        f"{item} into state. Progression items were:\n"
+                        f"Before: {prog_items_before}\nAfter: {state.prog_items}"
+                    )
+
+                    reachable_locations = new_reachable_locations
+
+                proxy_world.random.shuffle(chosen_items)
+
+                for item in chosen_items:
+                    prog_items_before = str(state.prog_items)  # For error message
+
+                    state.remove(item)
+
+                    new_reachable_locations = {
+                        location for location in all_locations if location.can_reach(state)
+                    }
+                    locations_that_became_reachable = new_reachable_locations - reachable_locations
+
+                    self.assertFalse(
+                        locations_that_became_reachable,
+                        f"Locations {locations_that_became_reachable} became reachable after removing "
+                        f"{item} from state. Progression items were:\n"
+                        f"Before: {prog_items_before}\nAfter: {state.prog_items}"
+                    )
+
+                    reachable_locations = new_reachable_locations
