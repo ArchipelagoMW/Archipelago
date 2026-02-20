@@ -178,6 +178,9 @@ def identify(path: None | str) -> tuple[None | str, None | Component]:
 
 
 def get_exe(component: str | Component) -> Sequence[str] | None:
+    if isinstance(component, Component) and component.func:
+        return [*get_exe("Launcher"), component.display_name]
+
     if isinstance(component, str):
         name = component
         component = None
@@ -218,6 +221,19 @@ def launch(exe, in_terminal=False):
             subprocess.Popen([*terminal, *exe])
             return
     subprocess.Popen(exe)
+
+
+def launch_component_from_gui(component, in_terminal=False):
+    """
+    Launch a component from within a GUI, deciding whether the component needs its own new process or not.
+    Should not be used as an "entry point" launch, because that will create an infinite loop. Use run_component instead.
+    """
+
+    if component.func and not in_terminal:
+        component.func()
+        return
+
+    launch(get_exe(component), in_terminal)
 
 
 def create_shortcut(button: Any, component: Component) -> None:
@@ -408,10 +424,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         def component_action(button):
             MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
                        size_hint_x=0.5).open()
-            if button.component.func:
-                button.component.func()
-            else:
-                launch(get_exe(button.component), button.component.cli)
+            launch_component_from_gui(button.component, button.component.cli)
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
