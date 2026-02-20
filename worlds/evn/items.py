@@ -8,6 +8,7 @@ from BaseClasses import Item, ItemClassification
 from . import rules
 
 from .rezdata import ships, outfits
+from .logics import ships_to_ignore, outf_to_ignore
 
 if TYPE_CHECKING:
     from .world import EVNWorld
@@ -49,9 +50,9 @@ type_offset: Dict[str, int] = {
 }
 
 # I am bothered by having to do this, or at least using this solution.
-specific_exclusions: List[int] = [
-    895 + type_offset["ship"], #escape pod
-]
+# specific_exclusions: List[int] = [
+#     895 + type_offset["ship"], #escape pod
+# ]
 
 #EVNItemData = TypedDict("EVNItemData", {"name": str, "classification": ItemClassification, "code": int})
 class EVNItemData(TypedDict, total=False): 
@@ -97,10 +98,12 @@ def get_items() -> Dict[int, EVNItemData]:
     # turns out, the ship names are not unique due to the various models. We could add the subname, but just cat ID.
     #i = 0
     for ship in ships.ship_table.keys():
+        if ship in ships_to_ignore:
+            continue
         temp_ship = ships.ship_table[ship]
         item_id = type_offset["ship"] + (int)(temp_ship["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
-        if item_id in specific_exclusions:
-            continue
+        # if item_id in specific_exclusions:
+        #     continue
         #item_id = type_offset["ship"] + i # IDs started at 128 and were not guaranteed to be contiguous
         ret_bank[item_id] = EVNItemData(
             name=temp_ship["name"].strip() + temp_ship["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
@@ -113,10 +116,12 @@ def get_items() -> Dict[int, EVNItemData]:
     # outf
     #j = 0
     for outf in outfits.outf_table.keys():
+        if outf in outf_to_ignore:
+            continue
         temp_outf = outfits.outf_table[outf]
         item_id = type_offset["outf"] + (int)(temp_outf["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
-        if item_id in specific_exclusions:
-            continue
+        # if item_id in specific_exclusions:
+        #     continue
         #item_id = type_offset["outf"] + j
         ret_bank[item_id] = EVNItemData(
             name=temp_outf["name"].strip() + temp_outf["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.

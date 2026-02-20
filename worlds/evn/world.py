@@ -12,7 +12,7 @@ from worlds.evn.patchfile import EVNContainer
 from . import items, locations, regions, rules, web_world
 # from . import web_world
 from . import options as evn_options  # rename due to a name conflict with World.options
-from .logics import story_routes, possible_regions, EVNStoryRoute
+from .logics import story_routes, possible_regions, EVNStoryRoute, MISSION_BLOCKING_BIT
 
 from .rezdata import misns, ships, outfits
 
@@ -244,8 +244,8 @@ class EVNWorld(World):
         output_file_string += "\r\n"
         # then, the ship data
         for ship in ships.ship_table.keys():
-            if ship in items.specific_exclusions:
-                continue
+            # if ship in items.specific_exclusions:
+            #     continue
             temp_ship = ships.ship_table[ship]
             for column in ships.ship_columns.keys():
                 current_val = temp_ship[column]
@@ -268,13 +268,16 @@ class EVNWorld(World):
                             logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
                             output_file_string += default_val
                     else:
-                        logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
-                        output_file_string += default_val
+                        #logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
+                        #output_file_string += default_val
+                        #logger.info(f"Ship blocked (must have been ignored): {target_id} for ship {temp_ship['name']}")
+                        output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
                 elif (column == "buy_random" and self.options.always_avail_shops):
                     output_file_string += f'100\t' # considering altering hire chance too
                 elif (column == "tech_level" and self.options.ignore_tech):
                     output_file_string += f'1\t'
-                elif (column == "require_bits" and self.options.ignore_tech): 
+                elif (column == "require_bits"): # and self.options.ignore_tech): 
+                    # ignore license requirements regardless of options. removing licenses from pool.
                     output_file_string += f"0x0000000000000000\t"
                 elif (column == "flags_3" and (self.options.always_avail_shops or self.options.ignore_tech)):
                     flag1 = 0x0100
@@ -291,6 +294,7 @@ class EVNWorld(World):
 
         # Outfits
         if (self.options.include_outfits):
+            # column titles
             output_file_string += "\r\n"
             for column in outfits.outf_columns.keys():
                 output_file_string += f'"{outfits.outf_columns[column]}"\t'
@@ -319,13 +323,16 @@ class EVNWorld(World):
                                 logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
                                 output_file_string += default_val
                         else:
-                            logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
-                            output_file_string += default_val
+                            #logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
+                            #output_file_string += default_val
+                            #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_outf['name']}")
+                            output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
                     elif (column == "buy_random" and self.options.always_avail_shops):
                         output_file_string += f'100\t'
                     elif (column == "tech_level" and self.options.ignore_tech):
                         output_file_string += f'1\t'
-                    elif (column == "require_bits" and self.options.ignore_tech): 
+                    elif (column == "require_bits"): # and self.options.ignore_tech): 
+                        # ignore license requirements regardless of options. removing licenses from pool.
                         output_file_string += f"0x0000000000000001\t"
                     elif (column == "flags" and (self.options.always_avail_shops or self.options.ignore_tech)):
                         flag1 = 0x0100  # show only if req bits met (or has 1)
