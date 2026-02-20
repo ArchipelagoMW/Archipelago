@@ -11,10 +11,14 @@ from worlds.rac3.client.texthelper import get_sent_item_message
 from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.locations.vendors import ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
+from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -360,6 +364,41 @@ async def handle_vendors(ctx: 'Context') -> None:
     if ctx.slot_data is None:
         return
     ctx.game_interface.vendor_update()
+    if (ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR 
+        or not ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False)):
+        return
+    
+    vendor_type = RAC3VENDORTYPE(
+            ctx.game_interface._read8(
+                RAC3VENDOR.get_vendor_property_address(ctx.game_interface.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+    vendor_location_apcodes = []
+    match vendor_type:
+        case RAC3VENDORTYPE.WEAPON:
+            vendor_items = ctx.game_interface.weapon_vendor_items
+            is_slimcognito = (
+            ctx.game_interface.planet == RAC3REGION.AQUATOS and
+            bool(ctx.game_interface._read8(
+                RAC3VENDOR.get_vendor_property_address(
+                    ctx.game_interface.planet,
+                    RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET)))
+            )
+            if is_slimcognito:
+                # Only hint Megacorp weapons
+                filtered_items = [item for item in vendor_items if item in MEGACORP_WEAPONS]
+            else:
+                # Only hint Gadgetron weapons
+                filtered_items = [item for item in vendor_items if item not in MEGACORP_WEAPONS]
+
+            vendor_locations = [ITEM_TO_WEAPON_VENDOR_LOCATION[item]
+                            for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
+            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
+
+    current_hints = set(vendor_location_apcodes)
+    if current_hints and current_hints != ctx.already_hinted:
+        await ctx.send_msgs([
+            {"cmd": "CreateHints", "locations": vendor_location_apcodes, "player": ctx.slot}
+        ])
+        ctx.already_hinted.update(current_hints)
 
 
 async def handle_sequence_break(ctx: 'Context') -> None:

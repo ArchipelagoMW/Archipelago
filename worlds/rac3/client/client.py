@@ -203,6 +203,7 @@ class CommandProcessor(ClientCommandProcessor):
 class Rac3Context(CommonContext):
     """Class for handling server connection with the game client"""
     # Client variables
+    already_hinted: set[int] = set()
     command_processor = CommandProcessor
     current_planet: str = RAC3REGION.GALAXY
     death_link: bool = False
