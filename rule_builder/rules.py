@@ -219,15 +219,74 @@ class Rule(Generic[TWorld]):
                 self.caching_enabled and not self.force_recalculate and not self.skip_cache,
             )
 
+        def _process_deferred_item_dependency_updates(
+                self, world: TWorld, player_results: dict[int, bool], deferred_updates: set[str]) -> bool:
+            """
+            Process deferred item dependency updates and return whether this rule was removed from the cache.
+
+            This method should only be called when this rule's cached result is False and deferred_updates is non-empty.
+            """
+            rule_item_dependencies: dict[str, set[int]]
+            rule_item_dependencies = getattr(world, "rule_item_dependencies", {})
+
+            # Given that multiple items may have been deferred, they can share dependent rule IDs, which get
+            # deduplicated using this set.
+            all_dependent_rule_ids: set[int] = set()
+            item_mapping: dict[str, str]
+            item_mapping = getattr(world, "item_mapping", {})
+            if item_mapping:
+                # `deferred_updates` may be mutated during the iteration, so a copy must be iterated instead.
+                for item_name in deferred_updates.copy():
+                    mapped_name = item_mapping.get(item_name)
+                    if mapped_name is not None and mapped_name not in deferred_updates:
+                        # There is a mapping for this item, and the mapping is new, so add it to the set, so it
+                        # can be skipped if it is found again.
+                        deferred_updates.add(mapped_name)
+                        mapped_rule_ids = rule_item_dependencies[mapped_name]
+                        if mapped_rule_ids:
+                            all_dependent_rule_ids.update(mapped_rule_ids)
+                    base_rule_ids = rule_item_dependencies[item_name]
+                    if base_rule_ids:
+                        all_dependent_rule_ids.update(base_rule_ids)
+            else:
+                # Optimized path for an empty item_mapping.
+                for item_name in deferred_updates:
+                    base_rule_ids = rule_item_dependencies[item_name]
+                    if base_rule_ids:
+                        all_dependent_rule_ids.update(base_rule_ids)
+
+            # Remove all rule IDs from the cache that were cached as False because they need to be reevaluated.
+            for rule_id in all_dependent_rule_ids:
+                if player_results.get(rule_id, None) is False:
+                    del player_results[rule_id]
+            # All deferred updates have been processed.
+            deferred_updates.clear()
+
+            # This rule's cached result was False. If this rule's cached result has been cleared by processing the
+            # deferred updates, this rule will need to be reevaluated.
+            return id(self) in all_dependent_rule_ids
+
         def __call__(self, state: CollectionState) -> bool:
             """Evaluate this rule's result with the given state, using the cached value if possible"""
             if not self.caching_enabled:
                 return self._evaluate(state)
 
             player_results = cast(dict[int, bool], state.rule_builder_cache[self.player])  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
+
             cached_result = player_results.get(id(self))
-            if cached_result is not None:
-                return cached_result
+            if cached_result is True:
+                return True
+            elif cached_result is False:
+                # If there are deferred item updates, process them because it could mean this rule needs to be
+                # reevaluated.
+                deferred_updates: set[str]
+                if deferred_updates := state.rule_builder_deferred_item_dependency_updates[self.player]:  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
+                    world = state.multiworld.worlds[self.player]
+                    if not self._process_deferred_item_dependency_updates(world, player_results, deferred_updates):
+                        return False
+                else:
+                    # There are no deferred updates, so this rule is still cached as False.
+                    return False
 
             result = self._evaluate(state)
             player_results[id(self)] = result
