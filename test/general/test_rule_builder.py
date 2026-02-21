@@ -32,6 +32,7 @@ from rule_builder.rules import (
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds.AutoWorld import AutoWorldRegister, World
+from worlds.registry import get_registry
 
 
 class CachedCollectionState(CollectionState):
@@ -73,7 +74,8 @@ LOC_COUNT = 20
 
 def _clear_world_class_cache_for_test() -> None:
     """Clear any world/data cache for GAME_NAME so set_options (get_world_class) sees our test world."""
-    AutoWorldRegister.clear_data_package_cache(GAME_NAME)
+    # Test-only cache reset: use the internal registry directly.
+    get_registry().clear_data_package_cache(GAME_NAME)
 
 
 class RuleBuilderItem(Item):
@@ -94,7 +96,8 @@ class RuleBuilderTestCase(unittest.TestCase):
 
     @override
     def tearDown(self) -> None:
-        AutoWorldRegister.unregister_world_internal(GAME_NAME)
+        # Test-only unregister: mutate registry internals directly to restore a clean global state.
+        get_registry().unregister_world_internal(GAME_NAME)
         _clear_world_class_cache_for_test()
         assert GAME_NAME not in AutoWorldRegister.world_types
 

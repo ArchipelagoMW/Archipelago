@@ -174,7 +174,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
             matching_source = loaded_world
             break
     if matching_source is not None:
-        entry = worlds.AutoWorldRegister.get_entry_by_path(matching_source.path)
+        entry = worlds.AutoWorldRegister.get_world_entry(path=matching_source.path)
         if entry and entry.get("game"):
             worlds.AutoWorldRegister.unload_world(entry["game"])
     if not worlds.AutoWorldRegister.add_world_to_cache(str(target)):
@@ -209,7 +209,7 @@ def export_datapackage() -> None:
 
     import worlds
 
-    worlds.AutoWorldRegister.ensure_all_worlds_loaded()
+    worlds.AutoWorldRegister.get_all_worlds()
     path = user_path("datapackage_export.json")
     with open(path, "w") as f:
         json.dump({"games": dict(worlds.network_data_package["games"])}, f, indent=4)
@@ -274,7 +274,7 @@ if not is_frozen():
         args = parser.parse_args(launch_args)
 
         import worlds
-        worlds.AutoWorldRegister.ensure_all_worlds_loaded()
+        worlds.AutoWorldRegister.get_all_worlds()
         if args.worlds:
             games = [(game, worlds.AutoWorldRegister.get_loaded_world(game)) for game in args.worlds]
         else:

@@ -9,7 +9,7 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit
 from werkzeug.utils import secure_filename
 
-from worlds.AutoWorld import AutoWorldRegister, World
+from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
@@ -34,22 +34,6 @@ def get_world_theme(game_name: str) -> str:
         warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
         return "grass"
     return chosen_theme
-
-
-def get_visible_worlds() -> dict[str, type(World)]:
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            worlds[game] = world
-    return worlds
-
-
-def get_webhost_worlds() -> dict[str, type(World)]:
-    """Return worlds valid for WebHost (have .web.tutorials). Use for tutorial pages and copy_tutorials."""
-    return {
-        k: v for k, v in AutoWorldRegister.world_types.items()
-        if hasattr(v.web, "tutorials")
-    }
 
 
 @app.errorhandler(404)
@@ -90,7 +74,7 @@ def game_info(game, lang):
 @cache.cached()
 def games():
     """List of supported games"""
-    return render_template("supportedGames.html", worlds=get_visible_worlds())
+    return render_template("supportedGames.html", worlds=AutoWorldRegister.get_worlds(include_hidden=False))
 
 
 @app.route('/tutorial/<string:game>/<string:file>')
@@ -126,7 +110,7 @@ def tutorial_redirect(game: str, file: str, lang: str):
 @cache.cached()
 def tutorial_landing():
     tutorials = {}
-    worlds = get_webhost_worlds()
+    worlds = AutoWorldRegister.get_worlds(require_tutorials=True)
     for world_name, world_type in worlds.items():
         current_world = tutorials[world_name] = {}
         for tutorial in world_type.web.tutorials:
@@ -303,8 +287,7 @@ def get_datapackage():
 @cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
-            available_games.append({ 'title': game, 'has_settings': has_settings })
+    for game, world in AutoWorldRegister.get_worlds(include_hidden=False).items():
+        has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
+        available_games.append({"title": game, "has_settings": has_settings})
     return render_template("siteMap.html", games=available_games)

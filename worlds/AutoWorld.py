@@ -62,14 +62,17 @@ class AutoWorldRegister(type):
         return get_registry().list_entries(force_rebuild=force_rebuild)
 
     @classmethod
-    def get_entry_by_path(mcs, path: str):
-        """Return cache entry for a world path, or None if absent."""
-        return get_registry().get_entry_by_path(path)
+    def get_world_entry(
+        mcs,
+        *,
+        path: str | None = None,
+        game_name: str | None = None,
+    ):
+        """Return a world-list cache entry by path or game_name.
 
-    @classmethod
-    def get_entry_by_game(mcs, game_name: str):
-        """Return cache entry for the given game name, or None. O(1) after first get_world_list()."""
-        return get_registry().get_entry_by_game(game_name)
+        Exactly one of `path` or `game_name` must be provided.
+        """
+        return get_registry().get_world_entry(path=path, game_name=game_name)
 
     @classmethod
     def add_world_to_cache(mcs, apworld_path: str) -> bool:
@@ -78,38 +81,48 @@ class AutoWorldRegister(type):
 
     @classmethod
     def get_world_class(mcs, game_name: str) -> Type["World"]:
-        """Return the World class for game_name, loading it on demand."""
+        """Return the World class for game_name, loading from cache metadata when needed."""
         return get_registry().get_world_class(game_name)
 
     @classmethod
     def get_loaded_world(mcs, game_name: str) -> Optional[Type["World"]]:
-        """Return loaded World class for game_name, or None without loading."""
+        """Return loaded World class for game_name, or None. Never triggers loading."""
         return get_registry().get_loaded_world(game_name)
 
     @classmethod
     def get_all_worlds(mcs) -> Dict[str, Type["World"]]:
-        """Load all worlds and return game-to-World mapping."""
+        """Load all cache-known worlds and return the game-to-World mapping."""
         return get_registry().get_all_worlds()
 
     @classmethod
-    def ensure_world_loaded(mcs, game_name: str) -> None:
-        """Ensure the world for game_name is loaded."""
-        mcs.get_world_class(game_name)
+    def get_worlds(
+        mcs,
+        *,
+        include_hidden: bool = True,
+        require_tutorials: bool = False,
+        loaded_only: bool = False,
+        include_hidden_games: Set[str] | FrozenSet[str] = frozenset(),
+    ) -> Dict[str, Type["World"]]:
+        """Return worlds filtered by visibility/tutorial flags, with explicit loading behavior.
 
-    @classmethod
-    def ensure_all_worlds_loaded(mcs) -> None:
-        """Ensure all worlds in cache are loaded."""
-        get_registry().load_all()
+        - loaded_only=True: only worlds already loaded are considered.
+        - loaded_only=False: all cache-known worlds are loaded before filtering.
+        - include_hidden_games: game names to include even when include_hidden=False.
+        """
+        worlds = _world_types_storage if loaded_only else mcs.get_all_worlds()
+        result: Dict[str, Type["World"]] = {}
+        for game_name, world in worlds.items():
+            if not include_hidden and world.hidden and game_name not in include_hidden_games:
+                continue
+            if require_tutorials and not hasattr(world.web, "tutorials"):
+                continue
+            result[game_name] = world
+        return result
 
     @classmethod
     def unload_world(mcs, game_name: str) -> None:
         """Unload game_name world so it can be reloaded from disk."""
         get_registry().unload_world(game_name)
-
-    @classmethod
-    def unregister_world_internal(mcs, game_name: str) -> None:
-        """Remove world class from registry if present. Used by tests to restore state."""
-        get_registry().unregister_world_internal(game_name)
 
     @classmethod
     def get_settings_keys(mcs) -> List[str]:
@@ -120,11 +133,6 @@ class AutoWorldRegister(type):
     def get_world_class_for_settings_key(mcs, settings_key: str) -> Optional[Type["World"]]:
         """Return World class for this settings_key, loading on demand. None if not found or load failed."""
         return get_registry().get_world_class_for_settings_key(settings_key)
-
-    @classmethod
-    def clear_data_package_cache(mcs, game_name: str) -> None:
-        """Remove cached data package for game_name so next access refetches. Used by tests."""
-        get_registry().clear_data_package_cache(game_name)
 
     @classmethod
     def get_world_sources(mcs) -> List[Any]:

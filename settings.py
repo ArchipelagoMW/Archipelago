@@ -737,17 +737,16 @@ class Settings(Group):
             # settings class not loaded yet
             import worlds
             requested_key = key
+            settings_keys = set(worlds.AutoWorldRegister.get_settings_keys())
             world = worlds.AutoWorldRegister.get_world_class_for_settings_key(key)
-            if key not in worlds.AutoWorldRegister.get_settings_keys() and world is None:
+            if key not in settings_keys and world is None:
                 # not a world group
                 return super().__getattribute__(key)
             # check for missing keys to update _changed
-            for world_settings_name in worlds.AutoWorldRegister.get_settings_keys():
+            for world_settings_name in settings_keys:
                 if world_settings_name not in dir(self):
                     self._changed = True
                     break
-            if world is None:
-                world = worlds.AutoWorldRegister.get_world_class_for_settings_key(key)
             if world is None:
                 impl = cast(Group, Group())
                 setattr(self, key, impl)
@@ -761,7 +760,9 @@ class Settings(Group):
                 import warnings
                 warnings.warn(f"World {world.__name__} does not define settings. Please consider upgrading the world.")
                 impl = cast(Group, Group())
-                setattr(self, key, impl)
+                # Preserve the requested section name when a world does not define
+                # a typed settings group, matching historical host.yaml layout.
+                setattr(self, requested_key, impl)
                 return impl
             if isinstance(cls_or_name, str):
                 # Try to resolve type. Sadly we can't use get_type_hints, see https://bugs.python.org/issue43463

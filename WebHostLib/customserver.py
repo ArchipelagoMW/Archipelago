@@ -183,11 +183,17 @@ def get_random_port():
 @cache_argsless
 def get_static_server_data() -> dict:
     import worlds
+    world_map = worlds.AutoWorldRegister.get_worlds()
+    item_name_groups: dict[str, typing.Any] = {}
+    location_name_groups: dict[str, typing.Any] = {}
+    non_hintable_names: dict[str, typing.Any] = {}
+    for world_name, world in world_map.items():
+        item_name_groups[world_name] = world.item_name_groups
+        location_name_groups[world_name] = world.location_name_groups
+        non_hintable_names[world_name] = world.hint_blacklist
+
     data = {
-        "non_hintable_names": {
-            world_name: world.hint_blacklist
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
-        },
+        "non_hintable_names": non_hintable_names,
         "gamespackage": {
             world_name: {
                 key: value
@@ -196,14 +202,8 @@ def get_static_server_data() -> dict:
             }
             for world_name, game_package in worlds.network_data_package["games"].items()
         },
-        "item_name_groups": {
-            world_name: world.item_name_groups
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
-        },
-        "location_name_groups": {
-            world_name: world.location_name_groups
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
-        },
+        "item_name_groups": item_name_groups,
+        "location_name_groups": location_name_groups,
     }
 
     return data

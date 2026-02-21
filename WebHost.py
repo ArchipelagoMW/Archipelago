@@ -57,19 +57,20 @@ def get_app() -> "Flask":
 def copy_tutorials_files_to_static() -> None:
     import shutil
     import zipfile
+    import worlds
     from werkzeug.utils import secure_filename
 
     zfile: zipfile.ZipInfo
 
-    from WebHostLib.misc import get_webhost_worlds
-    worlds = {
-        game: world for game, world in get_webhost_worlds().items()
-        if not world.hidden or game == 'Archipelago'
-    }
+    tutorial_worlds = worlds.AutoWorldRegister.get_worlds(
+        include_hidden=False,
+        require_tutorials=True,
+        include_hidden_games={"Archipelago"},
+    )
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
     shutil.rmtree(base_target_path, ignore_errors=True)
-    for game, world in worlds.items():
+    for game, world in tutorial_worlds.items():
         # copy files from world's docs folder to the generated folder
         target_path = os.path.join(base_target_path, secure_filename(game))
         os.makedirs(target_path, exist_ok=True)
@@ -100,7 +101,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
     import worlds
-    worlds.AutoWorldRegister.ensure_all_worlds_loaded()
+    worlds.AutoWorldRegister.get_all_worlds()
 
     from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
@@ -112,8 +113,7 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
-    from WebHostLib.misc import get_webhost_worlds
-    webhost_worlds = get_webhost_worlds()
+    webhost_worlds = worlds.AutoWorldRegister.get_worlds(require_tutorials=True)
     all_worlds = set(worlds.AutoWorldRegister.world_types)
     invalid_worlds = all_worlds - set(webhost_worlds)
     if invalid_worlds:

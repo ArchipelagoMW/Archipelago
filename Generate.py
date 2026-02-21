@@ -84,7 +84,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
         raise Exception("Worlds system should not be loaded before logging init.")
 
     import worlds
-    worlds.AutoWorldRegister.ensure_all_worlds_loaded()
+    worlds.AutoWorldRegister.get_all_worlds()
 
     if not args:
         args = mystery_argparse()
@@ -573,7 +573,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception('"game" not specified')
         raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
-        AutoWorldRegister.ensure_all_worlds_loaded()
+        AutoWorldRegister.get_all_worlds()
         failed_world_loads = AutoWorldRegister.get_failed_world_loads()
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
         if picks[0] in failed_world_loads:

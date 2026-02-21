@@ -56,7 +56,7 @@ class TestWorldManifest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        entry = AutoWorldRegister.get_entry_by_game(cls.game)
+        entry = AutoWorldRegister.get_world_entry(game_name=cls.game)
         assert entry is not None, f"Cache entry for {cls.game!r} not found"
         cls.manifest = _load_manifest_for_entry(entry)
 
