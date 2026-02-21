@@ -2622,8 +2622,8 @@ def parse_args() -> argparse.Namespace:
                              goal:     !remaining can be used after goal completion
                              ''')
     parser.add_argument('--auto_shutdown', default=defaults["auto_shutdown"], type=int,
-                        help="automatically shut down the server after this many minutes without new location checks. "
-                             "0 to keep running. Not yet implemented.")
+                        help="automatically shut down the server after this many seconds without new location checks. "
+                             "0 to keep running.")
     parser.add_argument('--use_embedded_options', action="store_true",
                         help='retrieve release, remaining and hint options from the multidata file,'
                              ' instead of host.yaml')
