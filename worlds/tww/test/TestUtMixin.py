@@ -3,7 +3,7 @@ Test the Universal Tracker mixin implementation.
 """
 import unittest
 
-from worlds.tww.Rules import TWWLogic, mix_in_universal_tracker_logic
+from worlds.tww.Rules import TWWLogic
 from BaseClasses import CollectionState
 
 
