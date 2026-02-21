@@ -583,7 +583,7 @@ class NormalizeEncounterRates(Toggle):
     Make every slot on an encounter table approximately equally likely.
 
     This does NOT mean each species is equally likely. In the vanilla game, each species may occupy more than one slot, and slots vary in probability.
-    
+
     Species will still occupy the same slots as vanilla, but the slots will be equally weighted. The minimum encounter rate will be 8% (higher in water).
     """
     display_name = "Normalize Encounter Rates"
