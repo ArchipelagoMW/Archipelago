@@ -24,17 +24,17 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
         lambda state: state.has("Ancient Tablet", player))
 
     # South House
-    set_rule(world.get_location("South House Chest Scraps 1", player),
+    set_rule(world.get_location("South House Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("South House Chest Scraps 2", player),
+    set_rule(world.get_location("South House Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("South House Chest Scraps 3", player),
+    set_rule(world.get_location("South House Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("South House Chest Scraps 4", player),
+    set_rule(world.get_location("South House Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("South House Chest Scraps 5", player),
+    set_rule(world.get_location("South House Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("South House Chest Scraps 6", player),
+    set_rule(world.get_location("South House Chest Scraps - 6", player),
         lambda state: state.has("Lockpicks", player))
 
     # South Mine
@@ -61,32 +61,32 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
         lambda state: state.has("Journal", player))
 
     # Trench House
-    set_rule(world.get_location("Trench House Chest Scraps 1", player),
+    set_rule(world.get_location("Trench House Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Trench House Chest Scraps 2", player),
+    set_rule(world.get_location("Trench House Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Trench House Chest Scraps 3", player),
+    set_rule(world.get_location("Trench House Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Trench House Chest Scraps 4", player),
+    set_rule(world.get_location("Trench House Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Trench House Chest Scraps 5", player),
+    set_rule(world.get_location("Trench House Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Trench House Chest Scraps 6", player),
+    set_rule(world.get_location("Trench House Chest Scraps - 6", player),
         lambda state: state.has("Lockpicks", player))
 
     # East House
-    set_rule(world.get_location("East House Chest Scraps 1", player),
+    set_rule(world.get_location("East House Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("East House Chest Scraps 2", player),
+    set_rule(world.get_location("East House Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("East House Chest Scraps 3", player),
+    set_rule(world.get_location("East House Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("East House Chest Scraps 4", player),
+    set_rule(world.get_location("East House Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("East House Chest Scraps 5", player),
+    set_rule(world.get_location("East House Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
 
-    # Rocket Testing Bunker
+    # Rocket Bunker
     set_rule(world.get_entrance("Stuck Bunker Door", player),
         lambda state: state.has("Timed Dynamite", player))
 
@@ -111,29 +111,29 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
         # lambda state: state.has("Remote Explosive", player, 8)) # TODO: Add an option to split remote explosives
 
     # West Beach
-    set_rule(world.get_location("West Beach Chest Scraps 1", player),
+    set_rule(world.get_location("West Beach Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("West Beach Chest Scraps 2", player),
+    set_rule(world.get_location("West Beach Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("West Beach Chest Scraps 3", player),
+    set_rule(world.get_location("West Beach Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("West Beach Chest Scraps 4", player),
+    set_rule(world.get_location("West Beach Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("West Beach Chest Scraps 5", player),
+    set_rule(world.get_location("West Beach Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("West Beach Chest Scraps 6", player),
+    set_rule(world.get_location("West Beach Chest Scraps - 6", player),
         lambda state: state.has("Lockpicks", player))
 
     # Caravan
-    set_rule(world.get_location("Caravan Chest Scraps 1", player),
+    set_rule(world.get_location("Caravan Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Caravan Chest Scraps 2", player),
+    set_rule(world.get_location("Caravan Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Caravan Chest Scraps 3", player),
+    set_rule(world.get_location("Caravan Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Caravan Chest Scraps 4", player),
+    set_rule(world.get_location("Caravan Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Caravan Chest Scraps 5", player),
+    set_rule(world.get_location("Caravan Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
 
     # Ronny
@@ -141,29 +141,29 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
         lambda state: state.has("Employment Contracts", player))
 
     # North Beach
-    set_rule(world.get_location("North Beach Chest Scraps 1", player),
+    set_rule(world.get_location("North Beach Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("North Beach Chest Scraps 2", player),
+    set_rule(world.get_location("North Beach Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("North Beach Chest Scraps 3", player),
+    set_rule(world.get_location("North Beach Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("North Beach Chest Scraps 4", player),
+    set_rule(world.get_location("North Beach Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
 
     # Mine Shaft
-    set_rule(world.get_location("Mine Shaft Chest Scraps 1", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Mine Shaft Chest Scraps 2", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Mine Shaft Chest Scraps 3", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Mine Shaft Chest Scraps 4", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Mine Shaft Chest Scraps 5", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Mine Shaft Chest Scraps 6", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 6", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Mine Shaft Chest Scraps 7", player),
+    set_rule(world.get_location("Mine Shaft Chest Scraps - 7", player),
         lambda state: state.has("Lockpicks", player))
 
     # Mob Camp
@@ -180,12 +180,12 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
     set_rule(world.get_location("Mountain Ruin Inside Red Paint Can", player),
         lambda state: state.has("Lockpicks", player))
 
-    # Prism Temple
-    set_rule(world.get_location("Prism Temple Chest Scraps 1", player),
+    # Temple
+    set_rule(world.get_location("Temple Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Prism Temple Chest Scraps 2", player),
+    set_rule(world.get_location("Temple Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Prism Temple Chest Scraps 3", player),
+    set_rule(world.get_location("Temple Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
 
     # Pickle Lady
@@ -195,15 +195,15 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
         lambda state: state.has("Jar of Pickles", player))
 
     # Morse Bunker
-    set_rule(world.get_location("Morse Bunker Chest Scraps 1", player),
+    set_rule(world.get_location("Morse Bunker Chest Scraps - 1", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Morse Bunker Chest Scraps 2", player),
+    set_rule(world.get_location("Morse Bunker Chest Scraps - 2", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Morse Bunker Chest Scraps 3", player),
+    set_rule(world.get_location("Morse Bunker Chest Scraps - 3", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Morse Bunker Chest Scraps 4", player),
+    set_rule(world.get_location("Morse Bunker Chest Scraps - 4", player),
         lambda state: state.has("Lockpicks", player))
-    set_rule(world.get_location("Morse Bunker Chest Scraps 5", player),
+    set_rule(world.get_location("Morse Bunker Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
 
     # Add rules to reach the "Go mode"
