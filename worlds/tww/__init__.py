@@ -999,6 +999,9 @@ class TWWWorld(World):
         team = getattr(self.multiworld, "team", 0)
         player = self.player
 
+        # Build reverse lookup for stage name from exit name
+        exit_to_stage_name = {exit: stage_name for stage_name, exit in self.stage_name_to_exit.items()}
+
         # Disconnect matching entrances and store mappings
         for entrance in all_entrances:
             # Extract just the entrance name (before the "->") for matching
@@ -1009,24 +1012,11 @@ class TWWWorld(World):
                 original_region = entrance.connected_region
                 self.disconnected_entrances[entrance] = original_region
 
-                # Extract stage name from entrance's destination region
-                # We need to find which stage_name maps to this destination
-                destination_region_name = original_region.name
-                stage_name = None
-
-                try:
-                    for stage, region_name in self.stage_name_to_exit.items():
-                        if region_name == destination_region_name:
-                            stage_name = stage
-                            break
-
-                    if stage_name:
-                        # Format datastorage key via standard means: "game_team_player_stagename"
-                        datastorage_key = self._format_datastorage_key(team, player, stage_name)
-                        self.found_entrances_datastorage_key.append(datastorage_key)
-                except (KeyError, AttributeError):
-                    # Skip if stage mapping fails
-                    pass
+                stage_name = exit_to_stage_name.get(original_region.name)
+                if stage_name:
+                    # Format datastorage key via standard means: "game_team_player_stagename"
+                    datastorage_key = self._format_datastorage_key(stage_name)
+                    self.found_entrances_datastorage_key.append(datastorage_key)
 
                 # Disconnect the entrance
                 entrance.connected_region = None
