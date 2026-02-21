@@ -896,15 +896,6 @@ class TWWWorld(World):
         return full_entrance_name.split(separator)[0] if separator in full_entrance_name else full_entrance_name
 
     @staticmethod
-    def _format_datastorage_key(team: int, player: int, stage_name: str) -> str:
-        """
-        Format a datastorage key for deferred entrance tracking.
-
-        :param team: The team number.
-        :param player: The player number.
-        :param stage_name: The stage name visited by the player.
-        :return: The formatted datastorage key.
-        """
     def _format_datastorage_key(stage_name: str) -> str:
         """
         Format a datastorage key for deferred entrance tracking.
