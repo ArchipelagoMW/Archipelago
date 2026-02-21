@@ -6,7 +6,7 @@ This guide is meant to help you get up and running with Ratchet and Clank 3 in y
 
 The following are required in order to play Ratchet and Clank 3 in Archipelago
 
-- Installed [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) v0.5.0 or higher.\
+- Installed [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) v0.5.0 or higher (the latest version is recommended).\
   **Make sure to install the Generator if you intend to generate multiworlds.**
 - The latest version of the [Ratchet and Clank 3 apworld](https://github.com/Taoshix/Archipelago-RaC3/releases).
 - [PCSX2 Emulator](https://pcsx2.net/downloads/). Must be v1.7 or higher for the required PINE support.
@@ -45,7 +45,7 @@ the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-o
 
 2. Launch Ratchet and Clank 3 client in the Archipelago Launcher
     - In the address field, enter your Archipelago connection address (e.g., archipelago.gg:51780 or localhost:38281). Then, type your player name (as specified in your YAML file, e.g., Player1) into the client.
-    - Start a new save file by choosing "New Game" from the main menu, then select your preferred save slot. Watch/skip the intro cutscene once the game starts. Items will begin being sent to the player before they are in their save file if the client is connected first.
+    - Start a new save file by choosing "New Game" from the main menu, then select your preferred save slot. Watch/skip the intro cutscene once the game starts. If the client is connected first, items will begin being sent to the player even if you are still on the main menu but you will not receive them until you are actually in-game.
     - To apply cosmetics, reload the save file by pausing and going into options and then load file with the same slot.
 
 
