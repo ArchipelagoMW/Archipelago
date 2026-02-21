@@ -265,7 +265,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     games[slot] = multiworld.game[slot]
                     slot_info[slot] = NetUtils.NetworkSlot(group["name"], multiworld.game[slot], multiworld.player_types[slot],
                                                            group_members=sorted(group["players"]))
-                precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
+                precollected_items = {player: [(item.code, item.classification.as_flag()) for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in multiworld.precollected_items.items()}
                 precollected_hints: dict[int, set[NetUtils.Hint]] = {
                     player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))
@@ -353,7 +353,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 serialized_multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-                    f.write(bytes([3]))  # version of format
+                    f.write(bytes([4]))  # version of format
                     f.write(serialized_multidata)
 
             output_file_futures.append(pool.submit(write_multidata))
