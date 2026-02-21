@@ -604,10 +604,17 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         sys.excepthook = handle_exception
 
     def _cleanup():
+        log_retention_days = get_settings().general_options.log_retention_days
+        if log_retention_days <= 0:
+            logging.debug("Automatic logfile cleanup has been disabled")
+            return
+        else:
+            logging.debug(f"Old logfiles will be deleted after: {log_retention_days} days")
+
         for file in os.scandir(log_folder):
             if file.name.endswith(".txt"):
                 last_change = datetime.datetime.fromtimestamp(file.stat().st_mtime)
-                if datetime.datetime.now() - last_change > datetime.timedelta(days=7):
+                if datetime.datetime.now() - last_change > datetime.timedelta(days=log_retention_days):
                     try:
                         os.unlink(file.path)
                     except Exception as e:
