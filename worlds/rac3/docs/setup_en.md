@@ -44,7 +44,13 @@ the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-o
 1. Launch PCSX2, boot your copy of RaC3
 
 2. Launch Ratchet and Clank 3 client in the Archipelago Launcher
-    - Under address input your archipelago connection address (ie: archipelago.gg:51780)
-    - Start a new file, watch/skip the intro cutscene and reload the file to apply cosmetics
-    - Items will begin being sent to the player before they are in their save file if the client is connected first
+    - In the address field, enter your Archipelago connection address (e.g., archipelago.gg:51780 or localhost:38281). Then, type your player name (as specified in your YAML file, e.g., Player1) into the client.
+    - Start a new save file by choosing "New Game" from the main menu, then select your preferred save slot. Watch/skip the intro cutscene once the game starts. Items will begin being sent to the player before they are in their save file if the client is connected first.
+    - To apply cosmetics, reload the save file by pausing and going into options and then load file with the same slot.
+
+
+## Troubleshooting
+For common issues, check the [FAQ](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/docs/frequently_asked_questions_Rac3_en.md).
+
+If you need further help, join the [Archipelago Discord](https://discord.gg/archipelago) and visit the `[PS2] Ratchet and Clank 3: Up Your Arsenal` thread in the `future-game-design` forum channel (located at the bottom).
 
