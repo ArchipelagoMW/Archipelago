@@ -234,7 +234,6 @@ class MultiWorld():
 
     def set_item_links(self):
         from worlds import AutoWorld
-
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:

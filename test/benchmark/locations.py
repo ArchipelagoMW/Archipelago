@@ -12,14 +12,12 @@ def run_locations_benchmark(freeze_gc: bool = True) -> None:
     import gc
     import collections
     import typing
-    import sys
 
     from time_it import TimeIt
 
     from Utils import init_logging
     from BaseClasses import MultiWorld, CollectionState, Location
-    from worlds import AutoWorld
-    from worlds.AutoWorld import call_all
+    from worlds.AutoWorld import AutoWorldRegister, call_all
 
     init_logging("Benchmark Runner")
     logger = logging.getLogger("Benchmark")
@@ -56,7 +54,8 @@ def run_locations_benchmark(freeze_gc: bool = True) -> None:
             return t.dif
 
         def main(self):
-            for game in sorted(AutoWorld.AutoWorldRegister.world_types):
+            all_worlds = AutoWorldRegister.world_types
+            for game in sorted(all_worlds):
                 summary_data: typing.Dict[str, collections.Counter[str]] = {
                     "empty_state": collections.Counter(),
                     "all_state": collections.Counter(),
@@ -67,7 +66,7 @@ def run_locations_benchmark(freeze_gc: bool = True) -> None:
                     multiworld.player_name = {1: "Tester"}
                     multiworld.set_seed(0)
                     args = argparse.Namespace()
-                    for name, option in AutoWorld.AutoWorldRegister.world_types[game].options_dataclass.type_hints.items():
+                    for name, option in AutoWorldRegister.world_types[game].options_dataclass.type_hints.items():
                         setattr(args, name, {
                             1: option.from_any(getattr(option, "default"))
                         })
