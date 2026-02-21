@@ -32,6 +32,18 @@ class EnableLockedPaintings(Toggle):
     """
     display_name = "Enable Locked Paintings"
 
+class EnableProgressiveMaxCoinChecks(Toggle):
+    """
+    Determine if max coin scores count as locations.
+
+    Off - Your max coin score on the main levels don't have any bearing on the rando (Vanilla behavior).
+
+    On - Every 10 coins of your maximum coin score counts as a check. Only coin counts between 10 and 100 count, so there are 10 checks per course.
+    This affects only the 15 main levels: BoB, WF, JRB, CCM, BBH, HMC, LLL, SSL, DDD, SL, WDW, TTM, THI, TTC, and RR.
+    In total, this adds 150 new locations.
+    """
+    display_name = "Enable Max Coin Score Locations"
+
 
 class StrictCapRequirements(DefaultOnToggle):
     """If disabled, Stars that expect special caps may have to be acquired without the caps"""
@@ -159,6 +171,7 @@ sm64_options_groups = [
         ProgressiveKeys,
         EnableCoinStars,
         EnableLockedPaintings,
+        EnableProgressiveMaxCoinChecks,
         StrictCapRequirements,
         StrictCannonRequirements,
     ]),
@@ -186,6 +199,7 @@ class SM64Options(PerGameCommonOptions):
     progressive_keys: ProgressiveKeys
     enable_coin_stars: EnableCoinStars
     enable_locked_paintings: EnableLockedPaintings
+    enable_progress_max_coins: EnableProgressiveMaxCoinChecks
     enable_move_rando: EnableMoveRandomizer
     move_rando_actions: MoveRandomizerActions
     strict_cap_requirements: StrictCapRequirements

@@ -3,6 +3,7 @@ from typing import Callable, Union, Dict, Set
 from BaseClasses import MultiWorld
 from ..generic.Rules import add_rule, set_rule
 from .Locations import location_table
+from .Locations import coinHiName
 from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
@@ -228,6 +229,63 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         rf.assign_rule("TTC: 100 Coins", "GP")
         rf.assign_rule("THI: 100 Coins", "GP")
         rf.assign_rule("RR: 100 Coins", "GP & WK")
+    # Ensure reachability for max coin locations
+    if options.enable_progress_max_coins:
+        # BoB can get up to 87 coins without visiting the floating island
+        rf.assign_max_coins_rule("BoB", 90, 100, "CANN & WC | CANNLESS & WC & TJ")
+
+        # WF can get to 90 without being able to ground pound
+        rf.assign_rule("WF: Coin Hi Score 100", "GP | MOVELESS")
+
+        # JRB can only get to ~48 without blue coins and visiting the ship
+        rf.assign_max_coins_rule("JRB", 40, 100, "GP & {JRB: Upper}")
+
+        # CCM can reach 100 without any moves
+
+        # BBH can reach 100 without any moves (through the carousel star)
+
+        # HMC can get to 58 without (DJ/TJ/LG/WK) & GP
+        rf.assign_max_coins_rule("HMC", 60, 100, "WK/LG/BF/SF/TJ & GP | MOVELESS & WK & GP")
+
+        # LLL can get 100 coins without any moves
+
+        # SSL can get to at least 68 without any moves
+        rf.assign_max_coins_rule("SSL", 70, 100, "{SSL: Upper Pyramid} | GP")
+
+        # DDD can get to 60 coins without ground pound and climb
+        rf.assign_max_coins_rule("DDD", 70, 100, "GP & {{DDD: Pole-Jumping for Red Coins}}")
+
+        # SL can get to 84 without some way to get to the vanish cap in the igloo
+        rf.assign_max_coins_rule("SL", 90, 100,  "WK & VC | SF/BF/TJ & VC | WK & CAPLESS | SF/BF/TJ & CAPLESS")
+
+        # WDW can get to 57 coins without blue coins or visiting downtown
+        # Getting downtown is basically equivalent of getting to the top, so this is a bit redundant
+        rf.assign_max_coins_rule("WDW", 60, 100, "GP & {WDW: Top} | GP & {WDW: Downtown}")
+
+        # TTM can reach 16 without any moves
+        # Beyond that, we need to be able to reach the top
+        rf.assign_max_coins_rule("TTM", 20, 100, "{TTM: Top}")
+
+        # THI differs a ton based on if you have access to small island (big mario) or big island
+        # THI small can do basically nothing without either side-flip or backflip
+        # THI big can do all the way up to 77 in testing without any moves (by transitioning between the two)
+        rf.assign_max_coins_rule("THI", 10, 70, "{THI: Pipes}")
+        # THI can then get to 100 if you have some form of jump
+        rf.assign_max_coins_rule("THI", 80, 100, "{THI: Pipes} & TJ/SF/BF/CANN")
+
+        # TTC can only get to 15 without ledge grab or double jump
+        rf.assign_max_coins_rule("TTC", 20, 40, "{TTC: Lower}")
+        # Need to be able to get to the upper portion of TTC to get up to 82 (and ground pound to get the blue coins)
+        rf.assign_max_coins_rule("TTC", 50, 80, "{TTC: Upper} & GP")
+        # Finally, need to be able to get to the top of the clock to get to 100
+        rf.assign_max_coins_rule("TTC", 70, 100, "{TTC: Top} & GP")
+
+        # RR can get to 26 without any moves, the maze has a good portion of coins,
+        #   including the blues which need wall kicks and ground pound
+        rf.assign_max_coins_rule("RR", 30, 70, "{RR: Maze} & WK & GP")
+        # RR can get the rest if we can get to both the cruiser and the lower portion
+        rf.assign_max_coins_rule("RR", 80, 100,
+                    "WK & GP & {RR: Maze} & {RR: Cruiser} & {{RR: Swingin' in the Breeze}} & {{RR: Tricky Triangles!}}")
     # Castle Stars
     add_rule(world.get_location("Toad (Basement)", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, 12))
     add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor", 'Region', player) and state.has("Power Star", player, 25))
@@ -300,6 +358,12 @@ class RuleFactory:
                 f"Error generating rule for {target_name} using rule expression {rule_expr}: {exception}")
         if rule:
             set_rule(target, rule)
+
+    ## For the interval of coin amounts expressed (inclusive), assign the given rule expression
+    def assign_max_coins_rule(self, target_course: str, min_coin_amt: int, max_coin_amt: int, rule_expr: str):
+        for coinAmt in range(min_coin_amt, max_coin_amt+1, 10):
+            locationName = coinHiName(target_course, coinAmt)
+            self.assign_rule(locationName, rule_expr)
 
     def build_rule(self, rule_expr: str, cannon_name: str = '', painting_lvl_name: str = None, star_num_req: int = None) -> Callable:
         # Star/painting requirements are outer and'd requirements, logically (painting? star? and (rule_expr))
