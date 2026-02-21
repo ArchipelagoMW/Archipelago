@@ -8,7 +8,7 @@ class TestWebDescriptions(unittest.TestCase):
         """Ensure all item descriptions match an item name or item group name"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             valid_names = world_type.item_names.union(world_type.item_name_groups)
-            for name in world_type.web.item_descriptions:
+            for name in world_type.item_descriptions:
                 with self.subTest("Name should be valid", game=game_name, item=name):
                     self.assertIn(name, valid_names,
                                   "All item descriptions must match defined item names")
@@ -17,7 +17,7 @@ class TestWebDescriptions(unittest.TestCase):
         """Ensure all location descriptions match a location name or location group name"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             valid_names = world_type.location_names.union(world_type.location_name_groups)
-            for name in world_type.web.location_descriptions:
+            for name in world_type.location_descriptions:
                 with self.subTest("Name should be valid", game=game_name, location=name):
                     self.assertIn(name, valid_names,
                                   "All location descriptions must match defined location names")
