@@ -425,8 +425,8 @@ Will provide a dict of static tracker data with the following keys:
 - A list of number of checks found vs. total checks available per player (`player_locations_total`)
   - Each list item contains a dict with three keys, the total locations for that slot `total_locations`, their player number `player`, and their team `team`
   - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
-- The game each player is playing (`player_game`)
-  - Provided as a list of objects with `team`, `player`, and `game`.
+- The static slot info for each player (`player_game`)
+  - Provided as a list of objects with `team`, `player` (slot number), `player_name` (slot name), and `game`.
 
 Example:
 ```json
@@ -473,11 +473,13 @@ Example:
     {
       "team": 0,
       "player": 1,
+      "player_name": "PlayerX",
       "game": "Archipelago"
     },
     {
       "team": 0,
       "player": 2,
+      "player_name": "PlayerY",
       "game": "The Messenger"
     }
   ]
