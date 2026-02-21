@@ -14,8 +14,9 @@ The following are required in order to play Ratchet and Clank 3 in Archipelago
 
 ## AP World Installation
 
-1. Unzip the downloaded Ratchet and Clank 3 apworld zip file
+1. Download the Ratchet and Clank 3 apworld file from the [GitHub Releases](https://github.com/Taoshix/Archipelago-RaC3/releases) page
 2. Double-click the `rac3.apworld` to install it to your local Archipelago instance
+3. Restart the Archipelago Launcher
 
 ## PCSX2 Settings
 
@@ -37,7 +38,22 @@ an experience customized for their taste, and different players in the same mult
 ### Where do I get a YAML file?
 
 You can customize your options by visiting
-the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-options).
+the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-options).\
+Alternatively, you can use the Options Creator (a GUI tool in the Archipelago Launcher) to customize your options and export your YAML file, or use the Generate Template Yamls feature if you prefer editing your YAML in a text editor. Both tools are available in the Archipelago Launcher.
+
+### Hosting your MultiWorld
+
+This section is for players who want to host a solo or multiplayer game.
+
+1. Collect YAML files from all participating players.
+    - In the Archipelago Launcher, select "Browse Files" and open the `Players` folder.
+    - Place each player's YAML file into the `Players` folder.
+
+2. In the Archipelago Launcher, select "Generate" to create your multiworld.
+    - The generated zip file will appear in the `output` folder.
+
+3. To host online, upload the zip file from the `output` folder to the [Archipelago Website](https://archipelago.gg/uploads).
+    - To host locally, select "Host" in the Archipelago Launcher and choose the zip file from the `output` folder.
 
 ### Connect to the MultiServer
 
