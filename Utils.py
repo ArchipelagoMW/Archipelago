@@ -914,6 +914,13 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    if not gui_enabled:
+        if error:
+            logging.error(f"{title}: {text}")
+        else:
+            logging.info(f"{title}: {text}")
+        return
+
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -948,6 +955,9 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         showerror(title, text) if error else showinfo(title, text)
         root.update()
 
+
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+"""Checks if the user wanted no GUI mode and has a terminal to use it with."""
 
 def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""

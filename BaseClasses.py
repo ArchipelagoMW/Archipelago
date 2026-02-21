@@ -22,6 +22,7 @@ import Utils
 
 if TYPE_CHECKING:
     from entrance_rando import ERPlacementState
+    from rule_builder.rules import Rule
     from worlds import AutoWorld
 
 
@@ -1368,7 +1369,7 @@ class Region:
         self,
         location_name: str,
         item_name: str | None = None,
-        rule: CollectionRule | None = None,
+        rule: CollectionRule | Rule[Any] | None = None,
         location_type: type[Location] | None = None,
         item_type: type[Item] | None = None,
         show_in_spoiler: bool = True,
@@ -1396,7 +1397,7 @@ class Region:
         event_location = location_type(self.player, location_name, None, self)
         event_location.show_in_spoiler = show_in_spoiler
         if rule is not None:
-            event_location.access_rule = rule
+            self.multiworld.worlds[self.player].set_rule(event_location, rule)
 
         event_item = item_type(item_name, ItemClassification.progression, None, self.player)
 
@@ -1407,7 +1408,7 @@ class Region:
         return event_item
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
-                rule: Optional[CollectionRule] = None) -> Entrance:
+                rule: Optional[CollectionRule | Rule[Any]] = None) -> Entrance:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
 
@@ -1415,8 +1416,8 @@ class Region:
         :param name: name of the connection being created
         :param rule: callable to determine access of this connection to go from self to the exiting_region"""
         exit_ = self.create_exit(name if name else f"{self.name} -> {connecting_region.name}")
-        if rule:
-            exit_.access_rule = rule
+        if rule is not None:
+            self.multiworld.worlds[self.player].set_rule(exit_, rule)
         exit_.connect(connecting_region)
         return exit_
 
@@ -1441,7 +1442,7 @@ class Region:
         return entrance
 
     def add_exits(self, exits: Iterable[str] | Mapping[str, str | None],
-                  rules: Mapping[str, CollectionRule] | None = None) -> List[Entrance]:
+                  rules: Mapping[str, CollectionRule | Rule[Any]] | None = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
