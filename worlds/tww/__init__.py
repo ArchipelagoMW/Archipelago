@@ -385,7 +385,7 @@ class TWWWorld(World):
         options_failed = []
 
         for key, value in slot_data.items():
-            if key == "charts" or key == "entrances" or key == "required_boss_item_locations":
+            if key in ("charts", "entrances", "required_boss_item_locations"):
                 continue
 
             try:
