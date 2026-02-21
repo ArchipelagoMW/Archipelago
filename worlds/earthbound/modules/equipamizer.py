@@ -444,7 +444,7 @@ def randomize_armor(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     }
 
     res_strength = [
-        ", just a little bit",
+        " a bit",
         " somewhat",
         ""
     ]
@@ -965,6 +965,8 @@ def randomize_weapons(world: "EarthBoundWorld", rom: "LocalRom") -> None:
         description = f" “{weapon.name}”\n"
         if weapon.can_equip != "All":
             description += f"@♪ can equip this weapon.\n"
+        else:
+            description += f"@A weapon anyone can use.\n"
 
         description += f"@+{weapon.offense} Offense.\n"
         if weapon.aux_stat > 0:
@@ -972,6 +974,8 @@ def randomize_weapons(world: "EarthBoundWorld", rom: "LocalRom") -> None:
         
         if weapon.miss_rate == 12:
             description += "@If you use this, you might just whiff.\n"
+        elif weapon.miss_rate == 3: #yo-yos
+            description += "@Easy to use, but tricky to aim.\n"
 
         description = text_encoder(description, 0x100)
         description = description[:-2]

@@ -597,103 +597,6 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
                     updated_list.add(world.enemies[f"{enemy.name} ({i + 1})"])
         world.regional_enemies[region] = updated_list
 
-
-combat_regions = [
-    "Northern Onett",
-    "Onett",
-    "Arcade",
-    "Giant Step",
-    "Twoson",
-    "Happy-Happy Village",
-    "Happy-Happy HQ"
-    "Lilliput Steps",
-    "Winters",
-    "Threed",
-    "Milky Well",
-    "Dusty Dunes Desert",
-    "Fourside",
-    "Moonside",
-    "Gold Mine",
-    "Monkey Caves",
-    "Monotoli Building",
-    "Rainy Circle",
-    "Summers",
-    "Magnet Hill",
-    "Pink Cloud",
-    "Scaraba",
-    "Pyramid",
-    "Southern Scaraba",
-    "Dungeon Man",
-    "Deep Darkness",
-    "Deep Darkness Darkness",
-    "Stonehenge Base",
-    "Lumine Hall",
-    "Lost Underworld",
-    "Fire Spring",
-    "Magicant",
-    "Cave of the Past",
-    "Endgame",
-    "Grapefruit Falls",
-    "Peaceful Rest Valley",
-    "Everdred's House",
-    "Belch's Factory",
-    "Southern Winters",
-    "Brickroad Maze"
-    "Summers Museum",
-    "Fourside Dept. Store",
-    "Threed Underground",
-    "Boogey Tent"
-]
-
-
-levels = [
-    1,  # north onett
-    2,  # south onett
-    3,  # giant step
-    5,  # twoson
-    7,  # everdred
-    9,  # peaceful rest
-    10,  # happy happy
-    12,  # lilliput steps
-    13,  # threed
-    14,  # threed caverns
-    15,  # grapefruit falls
-    17,  # belch base
-    18,  # milky well
-    19,  # duty dunes
-    21,  # fourside
-    23,  # gold mine
-    24,  # dept store
-    25,  # monkey cabves
-    26,  # monotoli building
-    28,  # winters
-    29,  # southern winters
-    31,  # rainy circle
-    32,  # summers
-    33,  # museum
-    35,  # Moonside
-    36,  # magnet hill
-    38,  # pink cloud
-    39,  # scaraba
-    42,  # pyramid
-    43,  # scaraba south
-    45,  # dungeon man
-    47,  # deep darkness
-    49,  # deep darkness swamp
-    51,  # Happy-Happy HQ
-    52,  # stonehenge
-    54,  # Arcade
-    56,  # lumine hall
-    59,  # lost underworld
-    61,  # fire spring
-    63,  # magicant
-    65,  # cave of the past
-    68,  # Sea of Eden
-    70,
-    73,
-    74,
-    75]  # gigyas
-
 spell_breaks: dict[str, dict[int, str]] = {
     "freeze": {8: "zeta", 12: "epsilon", 20: "delta", 25: "lambda", 40: "alpha", 65: "beta", 70: "gamma", 100: "omega"},
     "fire": {5: "zeta", 10: "epsilon", 20: "alpha", 50: "beta", 70: "gamma", 100: "omega"},  # zeta needs to do less damage
@@ -1246,16 +1149,16 @@ def scale_enemies(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     additional_party_members = 0
     if world.options.auto_scale_party_members:
         if world.starting_character != "Ness":
-            rom.write_bytes(0x15F5FB, bytearray([max(levels[world.scaled_area_order.index(world.Ness_region)] + world.random.randint(-3, 3), 1)]))
+            rom.write_bytes(0x15F5FB, bytearray([max(world.area_levels[world.Ness_region] + world.random.randint(-3, 3), 1)]))
 
         if world.starting_character != "Paula":
-            rom.write_bytes(0x15F60F, bytearray([max(levels[world.scaled_area_order.index(world.Paula_region)] + world.random.randint(-3, 3), 1)]))  # Paula starting level
+            rom.write_bytes(0x15F60F, bytearray([max(world.area_levels[world.Paula_region] + world.random.randint(-3, 3), 1)]))  # Paula starting level
 
         if world.starting_character != "Jeff":  
-            rom.write_bytes(0x15F623, bytearray([max(levels[world.scaled_area_order.index(world.Jeff_region)] + world.random.randint(-3, 3), 1)]))  # Jeff starting level
+            rom.write_bytes(0x15F623, bytearray([max(world.area_levels[world.Jeff_region] + world.random.randint(-3, 3), 1)]))  # Jeff starting level
 
         if world.starting_character != "Poo":
-            rom.write_bytes(0x15F637, bytearray([max(levels[world.scaled_area_order.index(world.Poo_region)] + world.random.randint(-3, 3), 1)]))  # Poo starting level
+            rom.write_bytes(0x15F637, bytearray([max(world.area_levels[world.Poo_region] + world.random.randint(-3, 3), 1)]))  # Poo starting level
 
     melody_number = 1
     has_badge = False

@@ -149,7 +149,12 @@ def setup_hints(world: "EarthBoundWorld") -> None:
         "you probably should have kept your money.",
         "there's a secret option to plando Lumine Hall's text.",
         "this isn't a very good hint.",
-        "some hints are good hints.\n@But not this one."
+        "some hints are good hints.\n@But not this one.",
+        "you just lost The Game.",
+        "your refrigerator may be running.",
+        "you should always wash your hands after washing your hands.",
+        "Clumsy Robot dislikes smoke.",
+        "you should check out the Archipelago Wiki!"
     ]
 
     hintable_location_groups = location_groups.copy()
