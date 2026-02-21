@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import enum
 import hashlib
 import logging
 import pathlib
@@ -19,6 +20,15 @@ if TYPE_CHECKING:
     from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
     from NetUtils import GamesPackage, MultiData
     from settings import Group
+
+
+class FillerReason(enum.StrEnum):
+    undefined = enum.auto()
+    item_link = enum.auto()
+    panic_fill = enum.auto()
+    start_inventory_from_pool = enum.auto()
+    world = enum.auto()
+
 
 perf_logger = logging.getLogger("performance")
 
@@ -560,7 +570,7 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     # following methods should not need to be overridden.
-    def create_filler(self) -> "Item":
+    def create_filler(self, reason: FillerReason = FillerReason.undefined) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
     # convenience methods
