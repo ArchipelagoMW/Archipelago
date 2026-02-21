@@ -905,7 +905,14 @@ class TWWWorld(World):
         :param stage_name: The stage name visited by the player.
         :return: The formatted datastorage key.
         """
-        return f"tww_{team}_{player}_{stage_name}"
+    def _format_datastorage_key(stage_name: str) -> str:
+        """
+        Format a datastorage key for deferred entrance tracking.
+
+        :param stage_name: The stage name visited by the player.
+        :return: The formatted datastorage key.
+        """
+        return f"tww_{{team}}_{{player}}_{stage_name}"
 
     @staticmethod
     def _parse_datastorage_key(key: str) -> DatastorageParsed | None:
