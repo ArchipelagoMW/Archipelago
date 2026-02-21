@@ -1,13 +1,16 @@
 import itertools
 import logging
+import math
 import os
 import threading
 import typing
 import unittest
+from collections.abc import Iterable
 from contextlib import contextmanager
+from copy import deepcopy
 from typing import Optional, Dict, Union, Any, List, Iterable
 
-from BaseClasses import get_seed, MultiWorld, Location, Item, CollectionState, Entrance
+from BaseClasses import get_seed, MultiWorld, Location, Item, Region, Entrance, CollectionState
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
@@ -18,6 +21,7 @@ from ..logic.time_logic import MONTH_COEFFICIENT
 from ..options import StardewValleyOption, options
 
 logger = logging.getLogger(__name__)
+
 DEFAULT_TEST_SEED = get_seed()
 logger.info(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
@@ -39,7 +43,7 @@ class SVTestCase(unittest.TestCase):
     @contextmanager
     def solo_world_sub_test(self, msg: str | None = None,
                             /,
-                            world_options: dict[str | type[StardewValleyOption], Any] | None = None,
+                            world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
                             *,
                             seed=DEFAULT_TEST_SEED,
                             world_caching=True,
@@ -76,7 +80,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         world = self.multiworld.worlds[self.player]
 
         self.original_state = self.multiworld.state.copy()
-        self.original_itempool = self.multiworld.itempool.copy()
+        self.original_itempool = deepcopy(self.multiworld.itempool)
         self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
         if self.constructed:
             self.world = world  # noqa
@@ -98,7 +102,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def collect_months(self, months: int) -> None:
         real_total_prog_items = self.world.total_progression_items
         percent = months * MONTH_COEFFICIENT
-        self.collect("Stardrop", real_total_prog_items * 100 // percent)
+        number_stardrops = math.ceil(real_total_prog_items * (percent / 100))
+        self.collect("Stardrop", number_stardrops)
         self.world.total_progression_items = real_total_prog_items
 
     def collect_lots_of_money(self, percent: float = 0.25):
@@ -111,28 +116,27 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.collect_lots_of_money(0.95)
 
     def collect_everything(self):
-        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        non_event_items = [i for i in self.multiworld.get_items() if i.advancement and i.code]
         for item in non_event_items:
             self.multiworld.state.collect(item)
 
     def collect_all_except(self, item_to_not_collect: str):
-        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        non_event_items = [i for i in self.multiworld.get_items() if i.advancement and i.code]
         for item in non_event_items:
             if item.name != item_to_not_collect:
                 self.multiworld.state.collect(item)
 
-    def get_real_locations(self) -> List[Location]:
+    def get_real_locations(self) -> list[Location]:
         return [location for location in self.multiworld.get_locations(self.player) if location.address is not None]
 
-    def get_real_location_names(self) -> List[str]:
+    def get_real_location_names(self) -> list[str]:
         return [location.name for location in self.get_real_locations()]
 
-    def collect(self, item: Union[str, Item, Iterable[Item]], count: int = 1) -> Union[None, Item, List[Item]]:
+    def collect(self, item: str | Item | Iterable[Item], count: int = 1) -> Item | list[Item] | None:
         assert count > 0
 
         if not isinstance(item, str):
-            super().collect(item)
-            return
+            return super().collect(item)
 
         if count == 1:
             item = self.create_item(item)
@@ -162,34 +166,54 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def assert_rule_true(self, rule: StardewRule, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_rule_true(rule, state)
+        return super().assert_rule_true(rule, state)
 
     def assert_rule_false(self, rule: StardewRule, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_rule_false(rule, state)
+        return super().assert_rule_false(rule, state)
 
     def assert_can_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_can_reach_location(location, state)
+        return super().assert_can_reach_location(location, state)
 
     def assert_cannot_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_cannot_reach_location(location, state)
+        return super().assert_cannot_reach_location(location, state)
+
+    def assert_can_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        return super().assert_can_reach_region(region, state)
+
+    def assert_cannot_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        return super().assert_cannot_reach_region(region, state)
+
+    def assert_can_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_region(region, state)
+
+    def assert_cannot_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_cannot_reach_region(region, state)
 
     def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_can_reach_entrance(entrance, state)
+        return super().assert_can_reach_entrance(entrance, state)
 
 
 pre_generated_worlds = {}
 
 
 @contextmanager
-def solo_multiworld(world_options: dict[str | type[StardewValleyOption], Any] | None = None,
+def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
                     *,
                     seed=DEFAULT_TEST_SEED,
                     world_caching=True) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
@@ -200,13 +224,11 @@ def solo_multiworld(world_options: dict[str | type[StardewValleyOption], Any] | 
         multiworld = setup_solo_multiworld(world_options, seed)
         try:
             multiworld.lock.acquire()
-            world = multiworld.worlds[1]
-
             original_state = multiworld.state.copy()
-            original_itempool = multiworld.itempool.copy()
+            original_itempool = deepcopy(multiworld.itempool)
             unfilled_locations = multiworld.get_unfilled_locations(1)
 
-            yield multiworld, typing.cast(StardewValleyWorld, world)
+            yield multiworld, typing.cast(StardewValleyWorld, multiworld.worlds[1])
 
             multiworld.state = original_state
             multiworld.itempool = original_itempool
@@ -217,9 +239,9 @@ def solo_multiworld(world_options: dict[str | type[StardewValleyOption], Any] | 
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOption], str]] = None,
+def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], str] | None = None,
                           seed=DEFAULT_TEST_SEED,
-                          _cache: Dict[frozenset, MultiWorld] = {},  # noqa
+                          _cache: dict[frozenset, MultiWorld] = {},  # noqa
                           _steps=gen_steps) -> MultiWorld:
     test_options = parse_class_option_keys(test_options)
 
@@ -276,7 +298,7 @@ def make_hashable(test_options, seed):
     return frozenset(test_options.items()).union({("seed", seed)})
 
 
-def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:
+def search_world_cache(cache: dict[frozenset, MultiWorld], frozen_options: frozenset) -> MultiWorld | None:
     try:
         return cache[frozen_options]
     except KeyError:
@@ -286,12 +308,12 @@ def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: froze
         return None
 
 
-def add_to_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset, multi_world: MultiWorld) -> None:
+def add_to_world_cache(cache: dict[frozenset, MultiWorld], frozen_options: frozenset, multi_world: MultiWorld) -> None:
     # We could complete the key with all the default options, but that does not seem to improve performances.
     cache[frozen_options] = multi_world
 
 
-def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -> MultiWorld:  # noqa
+def setup_multiworld(test_options: Iterable[dict[str, int]] | None = None, seed=None) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = []
 

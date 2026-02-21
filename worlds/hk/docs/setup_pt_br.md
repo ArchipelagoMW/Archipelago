@@ -5,6 +5,10 @@
 * Uma cópia legal de Hollow Knight.
     * Versões Steam, Gog, e Xbox Game Pass do jogo são suportadas.
     * Windows, Mac, e Linux (incluindo Steam Deck) são suportados.
+ 
+**NÃO** instale o BepInEx, ele **não** é necessário e é incompatível com vários mods. O Archipelago (e a maioria dos mods)
+usam ferramentas mais antigas do que o BepInEx, disponíveis apenas a partir de gerenciadores como o Lumafly e semelhantes,
+ao invés de sites como o Nexus Mods.
 
 ## Instalando o mod Archipelago Mod usando Lumafly
 1. Abra o Lumafly e confirme que ele localizou sua pasta de instalação do Hollow Knight.
@@ -36,7 +40,7 @@ Olhe o [guia de configuração básica de um multiworld](/tutorial/Archipelago/s
 Você pode usar a [página de configurações do jogador para Hollow Knight](/games/Hollow%20Knight/player-options) aqui no site do Archipelago 
 para gerar o YAML usando a interface gráfica.
 
-### Entrando numa partida de Archipelago no Hollow Knight
+## Entrando numa partida de Archipelago no Hollow Knight
 1. Começe o jogo depois de instalar todos os mods necessários.
 2. Crie um **novo jogo salvo.**
 3. Selecione o modo de jogo **Archipelago** do menu de seleção.

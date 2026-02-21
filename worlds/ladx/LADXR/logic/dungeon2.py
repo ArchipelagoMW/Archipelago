@@ -23,7 +23,7 @@ class Dungeon2:
         dungeon2_r5 = Location(dungeon=2).connect(dungeon2_r4, AND(KEY2, FOUND(KEY2, 3)))  # push two blocks together room with owl statue
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             Location(dungeon=2).add(OwlStatue(0x12F)).connect(dungeon2_r5, STONE_BEAK2)  # owl statue is before miniboss
-        miniboss = Location(dungeon=2).add(DungeonChest(0x126)).add(DungeonChest(0x121)).connect(dungeon2_r5, AND(FEATHER, r.miniboss_requirements[world_setup.miniboss_mapping[1]]))  # post hinox
+        miniboss = Location(dungeon=2).add(DungeonChest(0x126)).add(DungeonChest(0x121)).connect(dungeon2_r5, AND(FEATHER, r.miniboss_requirements[world_setup.miniboss_mapping['1']]))  # post hinox
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             Location(dungeon=2).add(OwlStatue(0x129)).connect(miniboss, STONE_BEAK2)  # owl statue after the miniboss
 
@@ -45,7 +45,7 @@ class Dungeon2:
             dungeon2_map_chest.connect(dungeon2_l2, AND(r.attack_hookshot_powder, r.boots_bonk_pit)) # use boots to jump over the pits
             dungeon2_r4.connect(dungeon2_r3, OR(r.boots_bonk_pit, r.hookshot_spam_pit)) # can use both pegasus boots bonks or hookshot spam to cross the pit room
             dungeon2_r4.connect(shyguy_key_drop, r.rear_attack_range, one_way=True) # adjust for alternate requirements for dungeon2_r4
-            miniboss.connect(dungeon2_r5, AND(r.boots_dash_2d, r.miniboss_requirements[world_setup.miniboss_mapping[1]])) # use boots to dash over the spikes in the 2d section
+            miniboss.connect(dungeon2_r5, AND(r.boots_dash_2d, r.miniboss_requirements[world_setup.miniboss_mapping['1']])) # use boots to dash over the spikes in the 2d section
             dungeon2_pre_stairs_boss.connect(dungeon2_r6, AND(HOOKSHOT, OR(BOW, BOMB, MAGIC_ROD, AND(OCARINA, SONG1)), FOUND(KEY2, 5))) # hookshot clip through the pot using both pol's voice
             dungeon2_post_stairs_boss.connect(dungeon2_pre_stairs_boss, OR(BOMB, r.boots_jump)) # use a bomb to lower the last platform, or boots + feather to cross over top (only relevant in hell logic)
             dungeon2_pre_boss.connect(dungeon2_post_stairs_boss, AND(r.boots_bonk_pit, r.hookshot_spam_pit)) # boots bonk off bottom wall + hookshot spam across the two 1 tile pits vertically
