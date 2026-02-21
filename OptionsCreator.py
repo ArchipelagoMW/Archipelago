@@ -377,10 +377,11 @@ class OptionsCreator(ThemedApp):
     def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str):
         text = VisualFreeText(option=option, name=name)
 
-        def set_value(instance):
-            self.options[name] = instance.text
+        def set_value(instance, value):
+            self.options[name] = value
 
-        text.bind(on_text_validate=set_value)
+        text.bind(text=set_value)
+        self.options[name] = option.default
         return text
 
     def create_choice(self, option: typing.Type[Choice], name: str):
