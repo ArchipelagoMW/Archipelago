@@ -29,32 +29,11 @@ EMERALD_TRAINER_PALETTES = {
 
 EMERALD_SIMPLE_TRAINER_FOLDERS: list[str] = []
 
-EMERALD_FOLDER_OBJECT_INFOS: list[dict[str, str | list[str] | dict[str, list[str]]]] = [
-    {
-        "name": "Egg",
-        "key": "pokemon",
-        "folders": POKEMON_FOLDERS,
-        "sprites": EMERALD_EGG_SPRITES,
-        "palettes": EMERALD_EGG_PALETTES
-    },
-    {
-        "key": "pokemon",
-        "folders": POKEMON_FOLDERS,
-        "sprites": EMERALD_POKEMON_SPRITES,
-        "palettes": EMERALD_POKEMON_PALETTES
-    },
-    {
-        "key": "players",
-        "folders": EMERALD_TRAINER_FOLDERS,
-        "sprites": EMERALD_TRAINER_SPRITES,
-        "palettes": EMERALD_TRAINER_PALETTES
-    },
-    {
-        "key": "trainer",
-        "folders": EMERALD_SIMPLE_TRAINER_FOLDERS,
-        "sprites": SIMPLE_TRAINER_SPRITES,
-        "palettes": SIMPLE_TRAINER_PALETTES
-    }
+EMERALD_FOLDER_OBJECT_INFOS: list[FolderObjectInfo] = [
+    FolderObjectInfo("pokemon", POKEMON_FOLDERS, EMERALD_EGG_SPRITES, EMERALD_EGG_PALETTES, "Egg"),
+    FolderObjectInfo("pokemon", POKEMON_FOLDERS, EMERALD_POKEMON_SPRITES, EMERALD_POKEMON_PALETTES),
+    FolderObjectInfo("players", EMERALD_TRAINER_FOLDERS, EMERALD_TRAINER_SPRITES, EMERALD_TRAINER_PALETTES),
+    FolderObjectInfo("trainer", EMERALD_SIMPLE_TRAINER_FOLDERS, SIMPLE_TRAINER_SPRITES, SIMPLE_TRAINER_PALETTES)
 ]
 
 EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS = {
@@ -181,60 +160,56 @@ EMERALD_DATA_ADDRESSES_ORIGINAL = {
 EMERALD_DATA_ADDRESS_BEGINNING = 0x00
 EMERALD_DATA_ADDRESS_END = 0xFFFFFF
 
-EMERALD_DATA_ADDRESS_INFOS: dict[str, int | dict[str, int]] = {
-    "Emerald": {
-        "crc32": 0x1f1c08fb,
-        "original_addresses": EMERALD_DATA_ADDRESSES_ORIGINAL,
-        "ap_addresses": data.rom_addresses,
-        "data_address_beginning": EMERALD_DATA_ADDRESS_BEGINNING,
-        "data_address_end": EMERALD_DATA_ADDRESS_END
-    }
+EMERALD_DATA_ADDRESS_INFOS: dict[str, DataAddressInfo] = {
+    "Emerald": DataAddressInfo(0x1f1c08fb,
+                               EMERALD_DATA_ADDRESSES_ORIGINAL,
+                               data.rom_addresses,
+                               EMERALD_DATA_ADDRESS_BEGINNING,
+                               EMERALD_DATA_ADDRESS_END)
 }
 
-EMERALD_VALID_OVERWORLD_SPRITE_SIZES: list[dict[str, int | str]] = [
-    {"width": 16, "height": 16, "data": "sOamTables_16x16", "distrib": "gObjectEventBaseOam_16x16"},
-    {"width": 16, "height": 32, "data": "sOamTables_16x32", "distrib": "gObjectEventBaseOam_16x32"},
-    {"width": 32, "height": 32, "data": "sOamTables_32x32", "distrib": "gObjectEventBaseOam_32x32"},
+EMERALD_VALID_OVERWORLD_SPRITE_SIZES: list[OverworldSpriteSize] = [
+    OverworldSpriteSize(16, 16, "sOamTables_16x16", "gObjectEventBaseOam_16x16"),
+    OverworldSpriteSize(16, 32, "sOamTables_16x32", "gObjectEventBaseOam_16x32"),
+    OverworldSpriteSize(32, 32, "sOamTables_32x32", "gObjectEventBaseOam_32x32")
 ]
 
-EMERALD_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {
-    "pokemon_front_anim":        {"frames": 2,      "width": 64, "height": 64},
-    "pokemon_back":              {"frames": 1,      "width": 64, "height": 64},
-    "pokemon_icon":              {"frames": 2,      "width": 32, "height": 32, "palette": VALID_ICON_PALETTES},
-    "pokemon_footprint":         {"frames": 1,      "width": 16, "height": 16, "palette_size": 2,
-                                  "palette": VALID_FOOTPRINT_PALETTE},
-    "pokemon_hatch_anim":        {"frames": 1,      "width": 32, "height": 136},
-    "players_walking_running":   {"frames": 18,     "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_reflection":        {"frames": 18,     "width": 16, "height": 32, "palette": []},
-    "players_mach_bike":         {"frames": 9,      "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_acro_bike":         {"frames": 27,     "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_surfing":           {"frames": 12,     "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_field_move":        {"frames": 5,      "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_underwater":        {"frames": 9,      "width": 32, "height": 32,
-                                  "palette": VALID_OVERWORLD_UNDERWATER_PALETTE},
-    "players_fishing":           {"frames": 12,     "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_watering":          {"frames": 9,      "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_decorating":        {"frames": 1,      "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "players_battle_front":      {"frames": 1,      "width": 64, "height": 64},
-    "players_battle_back":       {"frames": [4, 5], "width": 64, "height": 64},
-    "players_battle_back_throw": {"frames": [4, 5], "width": 64, "height": 64},
-    "trainer_walking":           {"frames": 9,      "width": 16, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "trainer_battle_front":      {"frames": 1,      "width": 64, "height": 64},
+EMERALD_SPRITES_REQUIREMENTS: dict[str, SpriteRequirement] = {
+    "pokemon_front_anim":        SpriteRequirement([2], 64, 64),
+    "pokemon_back":              SpriteRequirement([1], 64, 64),
+    "pokemon_icon":              SpriteRequirement([2], 32, 32, _palettes=VALID_ICON_PALETTES),
+    "pokemon_footprint":         SpriteRequirement([1], 16, 16, VALID_FOOTPRINT_PALETTE, _palette_size=2),
+    "pokemon_hatch_anim":        SpriteRequirement([1], 32, 136),
+    "players_walking_running":   SpriteRequirement([18], 16, 32, VALID_OVERWORLD_PALETTE),
+    "players_reflection":        SpriteRequirement([18], 16, 32, VALID_REFLECTION_PALETTE),
+    "players_mach_bike":         SpriteRequirement([9], 32, 32, VALID_OVERWORLD_PALETTE),
+    "players_acro_bike":         SpriteRequirement([27], 32, 32, VALID_OVERWORLD_PALETTE),
+    "players_surfing":           SpriteRequirement([12], 32, 32, VALID_OVERWORLD_PALETTE),
+    "players_field_move":        SpriteRequirement([5], 32, 32, VALID_OVERWORLD_PALETTE),
+    "players_underwater":        SpriteRequirement([9], 32, 32, VALID_OVERWORLD_UNDERWATER_PALETTE),
+    "players_fishing":           SpriteRequirement([12], 32, 32, VALID_OVERWORLD_PALETTE),
+    "players_watering":          SpriteRequirement([9], 32, 32, VALID_OVERWORLD_PALETTE),
+    "players_decorating":        SpriteRequirement([1], 16, 32, VALID_OVERWORLD_PALETTE),
+    "players_battle_front":      SpriteRequirement([1], 64, 64),
+    "players_battle_back":       SpriteRequirement([4, 5], 64, 64),
+    "players_battle_back_throw": SpriteRequirement([4, 5], 64, 64),
+    "trainer_walking":           SpriteRequirement([9], 16, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "trainer_battle_front":      SpriteRequirement([1], 64, 64),
 }
 
-EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = {
+EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, SpriteRequirement]] = {
     "Castform": {
-        "pokemon_front_anim": {"frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True},
-        "pokemon_back":       {"frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True},
+        "pokemon_front_anim": SpriteRequirement([4], _palette_number=4, _palette_size=16, _palette_per_frame=True),
+        "pokemon_back":       SpriteRequirement([4], _palette_number=4, _palette_size=16, _palette_per_frame=True),
     },
     "Deoxys": {
-        "pokemon_back":       {"frames": 2},
-        "pokemon_icon":       {"frames": 4},
+        "pokemon_back": SpriteRequirement([2]),
+        "pokemon_icon": SpriteRequirement([4]),
     },
     "Unown A": {
-        "pokemon_front_anim":  {"palette": VALID_UNOWN_PALETTE},
-        "pokemon_back":        {"palette": VALID_UNOWN_PALETTE},
-        "pokemon_sfront_anim": {"palette": VALID_UNOWN_SHINY_PALETTE},
-        "pokemon_sback":       {"palette": VALID_UNOWN_SHINY_PALETTE},
+        "pokemon_front_anim":  SpriteRequirement(_palette=VALID_UNOWN_PALETTE),
+        "pokemon_back":        SpriteRequirement(_palette=VALID_UNOWN_PALETTE),
+        "pokemon_sfront_anim": SpriteRequirement(_palette=VALID_UNOWN_SHINY_PALETTE),
+        "pokemon_sback":       SpriteRequirement(_palette=VALID_UNOWN_SHINY_PALETTE),
     }
 }

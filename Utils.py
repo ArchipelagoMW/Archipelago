@@ -1287,6 +1287,16 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     return isinstance(obj, typing.Iterable)
 
 
+def open_image_secure(path: str):
+    """Used to open PNG files using Pillow with extra security checks instead of PIL.Image.open"""
+    with open(path, "rb") as image_file:
+        image_data = image_file.read(8)
+        if image_data != b"\x89PNG\x0d\x0a\x1a\x0a":
+            raise Exception("The given image is not a valid PNG file!")
+    from PIL.Image import open as PIL_open
+    return PIL_open(path, formats=["PNG"])
+
+
 class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
     """
     ThreadPoolExecutor that uses daemonic threads that do not keep the program alive.
