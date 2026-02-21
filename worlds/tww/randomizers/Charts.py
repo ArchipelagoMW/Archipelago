@@ -72,6 +72,7 @@ class ChartRandomizer:
         self.multiworld = world.multiworld
 
         self.island_number_to_chart_name = ISLAND_NUMBER_TO_CHART_NAME.copy()
+        self.skip_randomization = False
 
     def setup_progress_sunken_treasure_locations(self) -> None:
         """
@@ -84,8 +85,9 @@ class ChartRandomizer:
 
         # Shuffles the list of island numbers if charts are randomized.
         # The shuffled island numbers determine which sector each chart points to.
+        # However, if skip_randomization is True, the charts remain in their pre-loaded state.
         shuffled_island_numbers = list(self.island_number_to_chart_name.keys())
-        if options.randomize_charts:
+        if options.randomize_charts and not self.skip_randomization:
             self.world.random.shuffle(shuffled_island_numbers)
 
         for original_item_name in reversed(original_item_names):
