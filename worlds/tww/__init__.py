@@ -151,9 +151,9 @@ class TWWWorld(World):
     logic_tuner_logic_enabled: bool
 
     # Universal Tracker stuff, does not do anything in normal gen
-    using_ut: bool # A way to check if Universal Tracker is active via early setting and forgetting
+    using_ut: bool  # A way to check if Universal Tracker is active via early setting and forgetting
     glitches_item_name = "Glitched"
-    ut_can_gen_without_yaml = True # class var that tells it to ignore the player yaml
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     # Deferred entrances support for Universal Tracker
     # Mapping from game stage names (from memory) to region/exit names
