@@ -200,7 +200,7 @@ class TWWWorld(World):
         "MiniKaz": "Fire Mountain Secret Cave",
         "MiniHyo": "Ice Ring Isle Secret Cave",
         "ITest63": "Shark Island Secret Cave",
-        "Cave03": "Cliff Plateau Isles Secret Cave",
+        "TF_04": "Cabana Labyrinth",
         "WarpD": "Diamond Steppe Island Warp Maze Cave",
         # Secret cave inner entrances (2)
         "ITest62": "Ice Ring Isle Inner Cave",
