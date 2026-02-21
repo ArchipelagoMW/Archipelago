@@ -1,7 +1,7 @@
 import datetime
 import collections
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, Counter
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, NamedTuple, Counter
 from uuid import UUID
 from email.utils import parsedate_to_datetime
 
@@ -493,6 +493,46 @@ from worlds import network_data_package
 
 
 if "Factorio" in network_data_package["games"]:
+    from  worlds.factorio.Technologies import progressive_rows
+
+    def revert_factorio_mapping(source: Dict[str, int]):
+        result: Dict[str, int] = {
+            "offshore-pump": 1,
+            "boiler": 1,
+            "steam-engine": 1,
+            "automation-science-pack": 1,
+            "inserter": 1,
+            "small-electric-pole": 1,
+            "copper-cable": 1,
+            "lab": 1,
+            "electronic-circuit": 1,
+            "electric-mining-drill": 1,
+            "pipe": 1,
+            "pipe-to-ground": 1,
+            "wooden-chest": 1,
+            "iron-chest": 1,
+            "stone-brick": 1,
+            "stone-furnace": 1,
+            "burner-mining-drill": 1,
+            "iron-plate": 1,
+            "copper-plate": 1,
+            "iron-gear-wheel": 1,
+            "firearm-magazine": 1,
+            "light-armor": 1,
+            "burner-inserter": 1
+        }
+
+        local_progressive_rows = progressive_rows
+
+        for progressiveTechnology in source:
+            if progressiveTechnology in local_progressive_rows:
+                for progression in range(source[progressiveTechnology]):
+                    result[local_progressive_rows[progressiveTechnology][progression]] = 1
+            else:
+                result[progressiveTechnology] = 1
+
+        return result
+
     def render_Factorio_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
         inventories: Dict[TeamPlayer, collections.Counter[str]] = {
             (team, player): collections.Counter({
@@ -525,8 +565,24 @@ if "Factorio" in network_data_package["games"]:
             location_id_to_name=tracker_data.location_id_to_name,
             inventories=inventories,
         )
+    
+    def render_Factorio_tracker(tracker_data: TrackerData, team: int, player: int):
+        inventory = revert_factorio_mapping(collections.Counter({
+            tracker_data.item_id_to_name["Factorio"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        }))
+
+        return render_template(
+            "tracker__Factorio.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            inventory=inventory,
+            player_name=tracker_data.get_player_name(player),
+        )
 
     _multiworld_trackers["Factorio"] = render_Factorio_multiworld_tracker
+    _player_trackers["Factorio"] = render_Factorio_tracker
 
 if "A Link to the Past" in network_data_package["games"]:
     # Mapping from non-progressive item to progressive name and max level.
