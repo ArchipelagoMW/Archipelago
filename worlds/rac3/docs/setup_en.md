@@ -14,7 +14,7 @@ The following are required in order to play Ratchet and Clank 3 in Archipelago
 
 ## AP World Installation
 
-1. Download the Ratchet and Clank 3 apworld file from the [GitHub Releases Page](https://github.com/Taoshix/Archipelago-RaC3/releases) page
+1. Download the Ratchet and Clank 3 apworld file from the [GitHub Releases Page](https://github.com/Taoshix/Archipelago-RaC3/releases)
 2. Double-click the `rac3.apworld` to install it to your local Archipelago instance
 3. Restart the Archipelago Launcher
 
@@ -39,7 +39,7 @@ an experience customized for their taste, and different players in the same mult
 
 You can customize your options by visiting
 the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-options).\
-Alternatively, you can use the "Options Creator" (a GUI tool in the Archipelago Launcher) to customize your options and export your YAML file, or use the "Generate Template Yamls" feature if you prefer editing your YAML in a text editor. Both tools are available in the Archipelago Launcher.
+Alternatively, you can use the "Options Creator" (a GUI tool in the Archipelago Launcher) to customize your options and export your YAML file, or use the "Generate Template Options" feature if you prefer editing your YAML in a text editor. Both tools are available in the Archipelago Launcher.
 
 ### Hosting your MultiWorld
 
