@@ -28,6 +28,10 @@ including the exclamation point.
   Defaults to 10 seconds if no argument is provided.
 - `!alias <alias>` Sets your alias, which allows you to use commands with the alias rather than your provided name.
   `!alias` on its own will reset the alias to the player's original name.
+- `!lock <password>` Locks the connected slot with the set password to prevent others from connecting to it.
+  `!lock` without a password set will instead collect the IDs of all clients currently connected and only allow
+  connections from devices with a recognized ID.
+- `!unlock` Removes a lock on the connected slot, if set.
 - `!admin <command>` Executes a command as if you typed it into the server console. Remote administration must be
   enabled.
 
@@ -66,7 +70,10 @@ including the exclamation point.
   argument is provided.
 - `/option <option name> <option value>` Set a server option. For a list of options, use the `/options` command.
 - `/alias <player name> <alias name>` Assign a player an alias, allowing you to reference the player by the alias in commands.
-  `!alias <player name>` on its own will reset the alias to the player's original name.
+  `/alias <player name>` on its own will reset the alias to the player's original name.
+- `/lock <player name> <password>` Lock the given player's slot with the set password. `/lock <player name>` on its own
+  will lock with the IDs of currently connected clients to that slot.
+- `/unlock <player name>` Remove a lock on the player's slot, if set.
 
 
 ### Collect/Release
