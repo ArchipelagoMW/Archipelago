@@ -171,8 +171,13 @@ class ClientCommandProcessor(CommandProcessor):
         if not self.ctx.game:
             self.output(f"No game set, cannot determine existing {name} Groups.")
             return False
-        lookup = Utils.persistent_load().get("groups_by_checksum", {}).get(self.ctx.checksums[self.ctx.game], {})\
-            .get(self.ctx.game, {}).get(group_key, {})
+        remote_checksum = self.ctx.checksums[self.ctx.game]
+        local_checksum: typing.Optional[str] = network_data_package["games"].get(self.ctx.game, {}).get("checksum")
+        if local_checksum == remote_checksum:
+            cached_game = network_data_package["games"][self.ctx.game]
+        else:
+            cached_game = Utils.load_data_package_for_checksum(self.ctx.game, remote_checksum)
+        lookup = cached_game.get(group_key, {})
         if lookup is None:
             self.output("datapackage not yet loaded, try again")
             return False
@@ -638,7 +643,7 @@ class CommonContext:
         if status is not None:
             msg["status"] = status
         async_start(self.send_msgs([msg]), name="update_hint")
-    
+
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
                                    remote_data_package_checksums: typing.Dict[str, str]):
@@ -690,23 +695,34 @@ class CommonContext:
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
 
-    def consume_network_item_groups(self):
-        data = {"item_name_groups": self.stored_data[f"_read_item_name_groups_{self.game}"]}
-        current_cache = Utils.persistent_load().get("groups_by_checksum", {}).get(self.checksums[self.game], {})
-        if self.game in current_cache:
-            current_cache[self.game].update(data)
+    def prepare_data_package_groups(self, game: str) -> None:
+        remote_checksum = self.checksums[game]
+        local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
+        if local_checksum == remote_checksum:
+            cached_game = network_data_package["games"][game]
         else:
-            current_cache[self.game] = data
-        Utils.persistent_store("groups_by_checksum", self.checksums[self.game], current_cache)
+            cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
+
+        item_name_groups = cached_game.get("item_name_groups", {})
+        location_name_groups = cached_game.get("location_name_groups", {})
+        if not item_name_groups:
+            self.stored_data_notification_keys.add(f"_read_item_name_groups_{game}")
+        if not location_name_groups:
+            self.stored_data_notification_keys.add(f"_read_location_name_groups_{game}")
+
+    def consume_network_item_groups(self):
+        cached_game = Utils.load_data_package_for_checksum(self.game, self.checksums[self.game])
+        cached_game["item_name_groups"] = self.stored_data[f"_read_item_name_groups_{self.game}"]
+        Utils.store_data_package_for_checksum(self.game, cached_game)
+        self.stored_data_notification_keys.remove(f"_read_item_name_groups_{self.game}")
+
+
 
     def consume_network_location_groups(self):
-        data = {"location_name_groups": self.stored_data[f"_read_location_name_groups_{self.game}"]}
-        current_cache = Utils.persistent_load().get("groups_by_checksum", {}).get(self.checksums[self.game], {})
-        if self.game in current_cache:
-            current_cache[self.game].update(data)
-        else:
-            current_cache[self.game] = data
-        Utils.persistent_store("groups_by_checksum", self.checksums[self.game], current_cache)
+        cached_game = Utils.load_data_package_for_checksum(self.game, self.checksums[self.game])
+        cached_game["location_name_groups"] = self.stored_data[f"_read_location_name_groups_{self.game}"]
+        Utils.store_data_package_for_checksum(self.game, cached_game)
+        self.stored_data_notification_keys.remove(f"_read_location_name_groups_{self.game}")
 
     # data storage
 
@@ -1012,8 +1028,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             game = ctx.game
         else:
             game = ctx.slot_info[ctx.slot][1]
-        ctx.stored_data_notification_keys.add(f"_read_item_name_groups_{game}")
-        ctx.stored_data_notification_keys.add(f"_read_location_name_groups_{game}")
+        ctx.prepare_data_package_groups(game)
         msgs = []
         if ctx.locations_checked:
             msgs.append({"cmd": "LocationChecks",
