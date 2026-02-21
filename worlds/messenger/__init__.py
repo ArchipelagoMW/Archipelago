@@ -290,6 +290,7 @@ class MessengerWorld(World):
     def connect_entrances(self) -> None:
         if self.options.shuffle_transitions:
             disconnect_entrances(self)
+            keep_entrance_logic = False
 
         if hasattr(self.multiworld, "re_gen_passthrough"):
             slot_data = self.multiworld.re_gen_passthrough.get(self.game)
@@ -297,6 +298,7 @@ class MessengerWorld(World):
                 self.multiworld.plando_options |= PlandoOptions.connections
                 self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
                 self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
+                keep_entrance_logic = True
 
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
@@ -314,7 +316,7 @@ class MessengerWorld(World):
                 raise RuntimeError("Unable to generate valid portal output.")
 
         if self.options.shuffle_transitions:
-            shuffle_transitions(self)
+            shuffle_transitions(self, keep_entrance_logic)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
@@ -482,7 +484,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
-    
+
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)
