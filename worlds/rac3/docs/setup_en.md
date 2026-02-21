@@ -62,6 +62,7 @@ This section is for players who want to host a solo or multiplayer game.
     - In the address field, enter your Archipelago connection address (e.g., archipelago.gg:51780 or localhost:38281). Then, type your player name (as specified in your YAML file, e.g., Player1) into the client.
     - Start a new save file by choosing "New Game" from the main menu, then select your preferred save slot. Watch/skip the intro cutscene once the game starts. If the client is connected first, items will begin being sent to the player even if you are still on the main menu but you will not receive them until you are actually in-game.
     - To apply cosmetics, reload the save file by pausing and going into options and then load file with the same slot.
+    - To continue a previous session, simply reconnect to the same Archipelago connection address and load the save file you used for that session.
 
 
 ## Troubleshooting
