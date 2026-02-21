@@ -17,7 +17,8 @@ it will not be detailed here.
 The client is an intermediary program between the game and the Archipelago server. This can either be a direct
 modification to the game, an external program, or both. This can be implemented in nearly any modern language, but it
 must fulfill a few requirements in order to function as expected. Libraries for most modern languages and the spec for 
-various packets can be found in the [network protocol](/docs/network%20protocol.md) API reference document.
+various packets can be found in the [network protocol](/docs/network%20protocol.md) API reference document. Additional help with specific game
+engines and rom formats can be found in the #ap-modding-help channel in the [Discord](https://archipelago.gg/discord).
 
 ### Hard Requirements
 
@@ -139,8 +140,8 @@ if possible.
 
 * An implementation of
   [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
-  * By default, this function chooses any item name from `item_name_to_id`, so you want to limit it to only the true
-    filler items.
+  * By default, this function chooses any item name from `item_name_to_id`, which may include items you consider
+  "non-repeatable".
 * An `options_dataclass` defining the options players have available to them
   * This should be accompanied by a type hint for `options` with the same class name
 * A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
