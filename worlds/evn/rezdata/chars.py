@@ -45,78 +45,115 @@ char_columns = {
 
 class CharDict(TypedDict, total=False): 
     resource_type: str
-    id: str
+    id: int
     name: str
-    cash: str
-    ship_type: str
-    system_1: str
-    system_2: str
-    system_3: str
-    system_4: str
-    government_1: str
-    status_1: str
-    government_2: str
-    status_2: str
-    government_3: str
-    status_3: str
-    government_4: str
-    status_4: str
-    combat_rating: str
-    intro_pict_1: str
-    intro_pict_2: str
-    intro_pict_3: str
-    intro_pict_4: str
-    pict_delay_1: str
-    pict_delay_2: str
-    pict_delay_3: str
-    pict_delay_4: str
-    intro_text: str
+    cash: int
+    ship_type: int
+    system_1: int
+    system_2: int
+    system_3: int
+    system_4: int
+    government_1: int
+    status_1: int
+    government_2: int
+    status_2: int
+    government_3: int
+    status_3: int
+    government_4: int
+    status_4: int
+    combat_rating: int
+    intro_pict_1: int
+    intro_pict_2: int
+    intro_pict_3: int
+    intro_pict_4: int
+    pict_delay_1: int
+    pict_delay_2: int
+    pict_delay_3: int
+    pict_delay_4: int
+    intro_text: int
     on_start: str
-    start_day: str
-    start_month: str
-    start_year: str
+    start_day: int
+    start_month: int
+    start_year: int
     date_prefix: str
     date_suffix: str
-    flags: str
+    flags: int
     end_of_resource: str
 
 
 char_table: Dict[int, CharDict] = {
     128: {
-            "Resource Type": "char",
-            "ID": "128",
-            "Name": ".Trader",
-            "Cash": "25000",
-            "Ship Type": "128",
-            "System 1": "128",
-            "System 2": "136",
-            "System 3": "170",
-            "System 4": "184",
-            "Government 1": "-1",
-            "Status 1": "-1",
-            "Government 2": "-1",
-            "Status 2": "-1",
-            "Government 3": "-1",
-            "Status 3": "-1",
-            "Government 4": "-1",
-            "Status 4": "-1",
-            "Combat Rating": "0",
-            "Intro Pict 1": "8200",
-            "Intro Pict 2": "8201",
-            "Intro Pict 3": "8202",
-            "Intro Pict 4": "-1",
-            "Pict Delay 1": "45",
-            "Pict Delay 2": "45",
-            "Pict Delay 3": "45",
-            "Pict Delay 4": "-1",
-            "Intro Text": "-1",
-            "On Start": "",
-            "Start Day": "23",
-            "Start Month": "6",
-            "Start Year": "1177",
-            "Date Prefix": "",
-            "Date Suffix": " NC",
-            "Flags": "0x0001",
-            "End-of-resource": "EOR",
-        }
+        "resource_type": "char",
+        "id": "128",
+        "name": ".Trader",
+        "cash": "25000",
+        "ship_type": "128",
+        "system_1": "128",
+        "system_2": "136",
+        "system_3": "170",
+        "system_4": "184",
+        "government_1": "-1",
+        "status_1": "-1",
+        "government_2": "-1",
+        "status_2": "-1",
+        "government_3": "-1",
+        "status_3": "-1",
+        "government_4": "-1",
+        "status_4": "-1",
+        "combat_rating": "0",
+        "intro_pict_1": "-1",
+        "intro_pict_2": "-1",
+        "intro_pict_3": "-1",
+        "intro_pict_4": "-1",
+        "pict_delay_1": "-1",
+        "pict_delay_2": "-1",
+        "pict_delay_3": "-1",
+        "pict_delay_4": "-1",
+        "intro_text": "-1",
+        "on_start": "",
+        "start_day": "23",
+        "start_month": "6",
+        "start_year": "1177",
+        "date_prefix": "",
+        "date_suffix": " NC",
+        "flags": "0x0001",
+        "end_of_resource": "EOR"
+    },
+    129: {
+        "resource_type": "char",
+        "id": "129",
+        "name": ".Head Start",
+        "cash": "500000",
+        "ship_type": "165", # mod starbridge
+        "system_1": "128",
+        "system_2": "136",
+        "system_3": "170",
+        "system_4": "184",
+        "government_1": "-1",
+        "status_1": "-1",
+        "government_2": "-1",
+        "status_2": "-1",
+        "government_3": "-1",
+        "status_3": "-1",
+        "government_4": "-1",
+        "status_4": "-1",
+        "combat_rating": "1600",
+        "intro_pict_1": "-1",
+        "intro_pict_2": "-1",
+        "intro_pict_3": "-1",
+        "intro_pict_4": "-1",
+        "pict_delay_1": "-1",
+        "pict_delay_2": "-1",
+        "pict_delay_3": "-1",
+        "pict_delay_4": "-1",
+        "intro_text": "-1",
+        "on_start": "",
+        "start_day": "23",
+        "start_month": "6",
+        "start_year": "1177",
+        "date_prefix": "",
+        "date_suffix": " NC",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    }
 }

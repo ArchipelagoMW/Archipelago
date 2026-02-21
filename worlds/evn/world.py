@@ -14,7 +14,7 @@ from . import items, locations, regions, rules, web_world
 from . import options as evn_options  # rename due to a name conflict with World.options
 from .logics import story_routes, possible_regions, EVNStoryRoute, MISSION_BLOCKING_BIT
 
-from .rezdata import misns, ships, outfits, desc
+from .rezdata import misns, ships, outfits, desc, chars
 from .apdata.offsets import offsets_table
 from .apdata.customoutf import cust_outf_table
 from .apdata.customdesc import cust_desc_table
@@ -416,6 +416,26 @@ class EVNWorld(World):
                         output_file_string += default_val
                 else:
                     output_file_string += default_val
+            output_file_string += "\r\n"
+
+        # Chars
+
+        # Actually, let's also throw in some pilot data options
+        output_file_string += "\r\n"
+        for column in chars.char_columns.keys():
+            output_file_string += f'"{chars.char_columns[column]}"\t'
+        output_file_string += "\r\n"
+        # then, the data
+        for pilot in chars.char_table.keys():
+            temp_char = chars.char_table[pilot]
+            for column in chars.char_columns.keys():
+                current_val = temp_char[column]
+                default_val = current_val + "\t"
+                col_anno = chars.CharDict.__annotations__[column]
+                if col_anno == str:
+                    default_val = f'"{current_val}"\t'
+
+                output_file_string += default_val
             output_file_string += "\r\n"
 
 

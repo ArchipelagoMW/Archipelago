@@ -101,7 +101,7 @@ def get_locations() -> Dict[int, EVNLocationData]:
     for coutf in cust_outf_table.keys():
         temp_outf = cust_outf_table[coutf]
         loc_id = loc_type_offset["outf_cks"] + (int)(temp_outf["id"])
-        logger.info(f'adding location (custom outf): {loc_id}, {temp_outf["name"]}')
+        #logger.info(f'adding location (custom outf): {loc_id}, {temp_outf["name"]}')
         ret_data[loc_id] = EVNLocationData(
             name=temp_outf["name"].strip() + "-" + temp_outf["id"],
             address=loc_id
