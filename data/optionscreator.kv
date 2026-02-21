@@ -117,10 +117,22 @@ ContainerLayout:
         padding: 3, 5, 0, 3
         spacing: "2dp"
 
-        ScrollBox:
-            id: scrollbox
+        MDBoxLayout:
+            orientation: "vertical"
             size_hint_x: None
             width: "150dp"
+            spacing: "5dp"
+
+            ResizableTextField:
+                id: world_search
+                multiline: False
+                size_hint_y: None
+
+                MDTextFieldHintText:
+                    text: "Search Games"
+
+            ScrollBox:
+                id: scrollbox
 
         MDDivider:
             orientation: "vertical"

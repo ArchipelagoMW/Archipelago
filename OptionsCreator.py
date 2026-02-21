@@ -74,6 +74,7 @@ class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTraili
 
 class WorldButton(ToggleButton):
     world_cls: typing.Type[World]
+    world_name: str
 
 
 class VisualRange(MDBoxLayout):
@@ -259,16 +260,28 @@ class OptionsCreator(ThemedApp):
     player_options: MainLayout
     option_layout: MainLayout
     name_input: ResizableTextField
+    world_search_input: ResizableTextField
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
+    world_buttons: list[WorldButton]
+    selected_world_button: WorldButton | None
 
     def __init__(self):
         self.title = self.base_title + " " + Utils.__version__
         self.icon = r"data/icon.png"
         self.current_game = ""
         self.options = {}
+        self.world_buttons = []
+        self.selected_world_button = None
         super().__init__()
+
+    def filter_world_buttons(self, value: str) -> None:
+        lowered = value.lower().strip()
+        self.scrollbox.layout.clear_widgets()
+        for world_button in self.world_buttons:
+            if lowered in world_button.world_name.lower():
+                self.scrollbox.layout.add_widget(world_button)
 
     @staticmethod
     def show_result_snack(text: str) -> None:
@@ -644,13 +657,10 @@ class OptionsCreator(ThemedApp):
         self.scrollbox = self.container.ids.scrollbox
 
         def world_button_action(world_btn: WorldButton):
-            if self.current_game != world_btn.world_cls.game:
-                old_button = next((button for button in self.scrollbox.layout.children
-                                   if button.world_cls.game == self.current_game), None)
-                if old_button:
-                    old_button.state = "normal"
-            else:
-                world_btn.state = "down"
+            if self.selected_world_button and self.selected_world_button is not world_btn:
+                self.selected_world_button.state = "normal"
+            world_btn.state = "down"
+            self.selected_world_button = world_btn
             self.create_options_panel(world_btn)
 
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
@@ -666,12 +676,16 @@ class OptionsCreator(ThemedApp):
                                        radius=(dp(5), dp(5), dp(5), dp(5)))
             world_button.bind(on_release=world_button_action)
             world_button.world_cls = cls
+            world_button.world_name = world
+            self.world_buttons.append(world_button)
             self.scrollbox.layout.add_widget(world_button)
         self.main_panel = self.container.ids.player_layout
         self.player_options = self.container.ids.player_options
         self.game_label = self.container.ids.game
         self.name_input = self.container.ids.player_name
+        self.world_search_input = self.container.ids.world_search
         self.option_layout = self.container.ids.options
+        self.world_search_input.bind(text=lambda instance, value: self.filter_world_buttons(value))
 
         def set_height(instance, value):
             instance.height = value[1]
