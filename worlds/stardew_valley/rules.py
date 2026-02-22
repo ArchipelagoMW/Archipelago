@@ -979,6 +979,7 @@ def set_shipsanity_rules(all_location_names: set[str], logic: StardewLogic, rule
         if location.name not in all_location_names:
             continue
         item_to_ship = location.name[len(shipsanity_prefix):]
+        # does not need to check for shipping bin as it is already in the region
         rule_collector.set_location_rule(location.name, logic.has(item_to_ship))
 
 
