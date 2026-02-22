@@ -1032,7 +1032,7 @@ class Rac3Interface(GameInterface):
             # Bring qwark back to life until Ratchet has met Sasha on the bridge
             if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
-        if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 30:
+        if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 75:
             if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
                 self.vidcomic_2_fix += 1
                 self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
@@ -1345,8 +1345,12 @@ class Rac3Interface(GameInterface):
                 target_name = ITEM_NAME_FROM_ID[target_id]
                 target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
                 logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
-                self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
-                self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
+                if self.pause_state_value == RAC3PAUSESTATE.VENDOR:
+                    self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, 0)
+                    self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, UPGRADE_DICT[weapon_name][0])
+                else:
+                    self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
+                    self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
 
     def verify_quick_select_and_last_used(self):
         """Check each slot in quick select and held item history, reset if that item has not been collected yet."""
