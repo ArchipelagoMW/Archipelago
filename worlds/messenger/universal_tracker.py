@@ -17,7 +17,6 @@ def find_spot(portal_key: int) -> str:
 
 
 def reverse_portal_exits_into_portal_plando(portal_exits: list[int]) -> list[PlandoConnection]:
-    print(find_spot(portal_exits[1]))
     return [
         PlandoConnection("Autumn Hills", find_spot(portal_exits[0]), "both"),
         PlandoConnection("Riviere Turquoise", find_spot(portal_exits[1]), "both"),
@@ -38,6 +37,5 @@ def reverse_transitions_into_plando_connections(transitions: list[list[int]]) ->
         if connection.exit in {con.entrance for con in plando_connections}:
             continue
         plando_connections.append(connection)
-        print(connection)
 
     return plando_connections
