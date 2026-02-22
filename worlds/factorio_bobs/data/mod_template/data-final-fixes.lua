@@ -147,6 +147,8 @@ end
 {# This got complex, but seems to be required to hit all corner cases #}
 function adjust_energy(recipe_name, factor)
     local recipe = data.raw.recipe[recipe_name]
+    if recipe == nil then return end
+
     local energy = recipe.energy_required
 
     if (recipe.normal ~= nil) then
@@ -174,6 +176,7 @@ end
 
 function set_energy(recipe_name, energy)
     local recipe = data.raw.recipe[recipe_name]
+    if recipe == nil then return end
 
     if (recipe.normal ~= nil) then
         recipe.normal.energy_required = energy
