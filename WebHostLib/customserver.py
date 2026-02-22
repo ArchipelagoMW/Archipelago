@@ -342,6 +342,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             except (KeyboardInterrupt, SystemExit):
                 if ctx.saving:
                     ctx._save(True)
+                    setattr(asyncio.current_task(), "save", None)
             except Exception as e:
                 with db_session:
                     room = Room.get(id=room_id)
@@ -352,6 +353,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             else:
                 if ctx.saving:
                     ctx._save(True)
+                    setattr(asyncio.current_task(), "save", None)
             finally:
                 try:
                     ctx.save_dirty = False  # make sure the saving thread does not write to DB after final wakeup
@@ -361,9 +363,6 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     if ctx.server and hasattr(ctx.server, "ws_server"):
                         ctx.server.ws_server.close()
                         await ctx.server.ws_server.wait_closed()
-
-                    if hasattr(asyncio.current_task(), "save"):
-                        delattr(asyncio.current_task(), "save")
 
                     with db_session:
                         # ensure the Room does not spin up again on its own, minute of safety buffer
