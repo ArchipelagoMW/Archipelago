@@ -140,8 +140,8 @@ if possible.
 
 * An implementation of
   [get_filler_item_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L473)
-  * By default, this function chooses any item name from `item_name_to_id`, so you want to limit it to only the true
-    filler items.
+  * By default, this function chooses any item name from `item_name_to_id`, which may include items you consider
+  "non-repeatable".
 * An `options_dataclass` defining the options players have available to them
   * This should be accompanied by a type hint for `options` with the same class name
 * A [bug report page](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L220)
