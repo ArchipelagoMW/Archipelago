@@ -26,6 +26,7 @@ data_final_template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
 main_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
+constants_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
 
@@ -94,7 +95,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, locale_template, main_template, data_template, settings_template
+    global data_final_template, locale_template, main_template, data_template, settings_template, constants_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -110,6 +111,7 @@ def generate_mod(world: "Factorio", output_directory: str):
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             main_template = template_env.get_template(r"/script/main.lua")
             settings_template = template_env.get_template("settings.lua")
+            constants_template = template_env.get_template("constants.lua")
     # get data for templates
     locations = [(location, location.item)
                  for location in world.science_locations + world.craftsanity_locations]
@@ -152,6 +154,7 @@ def generate_mod(world: "Factorio", output_directory: str):
         "liquids": fluids,
         "removed_technologies": world.removed_technologies,
         "chunk_shuffle": 0,
+        "techs_to_hint": world.techs_to_hint,
     }
 
     for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():
@@ -197,6 +200,8 @@ def generate_mod(world: "Factorio", output_directory: str):
                                       settings_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
                                       locale_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/constants.lua",
+                                      constants_template.render(**template_data)))
 
     info = base_info.copy()
     info["name"] = mod_name

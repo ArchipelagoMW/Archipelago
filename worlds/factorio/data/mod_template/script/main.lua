@@ -1,19 +1,20 @@
 {% from "macros.lua" import dict_to_lua %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 
-require "util"
+local util = require "util"
 local lib = require("lib")
+local constants = require("constants")
 
-local FREE_SAMPLES = {{ free_samples }}
-local SLOT_NAME = "{{ slot_name }}"
-local SEED_NAME = "{{ seed_name }}"
-local FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
-local TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
-local MAX_SCIENCE_PACK = {{ max_science_pack }}
-local GOAL = {{ goal }}
-local ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-local ENERGY_INCREMENT = {{ energy_link * 10000000 }}
-local ENERGY_LINK_EFFICIENCY = 0.75
+local FREE_SAMPLES = constants.FREE_SAMPLES
+local SLOT_NAME = constants.SLOT_NAME
+local SEED_NAME = constants.SEED_NAME
+local FREE_SAMPLE_BLACKLIST = constants.FREE_SAMPLE_BLACKLIST
+local TRAP_EVO_FACTOR = constants.TRAP_EVO_FACTOR
+local MAX_SCIENCE_PACK = constants.MAX_SCIENCE_PACK
+local GOAL = constants.GOAL
+local ARCHIPELAGO_DEATH_LINK_SETTING = constants.setting_names.death_link
+local ENERGY_INCREMENT = constants.ENERGY_INCREMENT
+local ENERGY_LINK_EFFICIENCY = constants.ENERGY_LINK_EFFICIENCY
 
 local DEATH_LINK
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
@@ -422,7 +423,7 @@ local function on_player_created(event)
     -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
     -- For now, they will (probably) always be on the 'player' force when this event fires.
     local data = {}
-    data['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
+    data['pending_samples'] = util.table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
     storage.playerdata[player.index] = data
     update_player(player.index)  -- Attempt to send pending free samples, if relevant.
     {%- if silo == 2 %}
@@ -446,27 +447,15 @@ local function on_player_removed(event)
 end
 events[defines.events.on_player_removed] = on_player_removed
 
-local function on_rocket_launched(event)
-    if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
-        satellite_count = 0
-        cargo_pod = event.rocket.cargo_pod
-        if cargo_pod then
-            satellite_count = cargo_pod.get_item_count("satellite")
+local function on_pre_scenario_finished(event)
+    if player_won then
+        for name, _ in pairs(game.forces) do
+            storage.forcedata[name]['victory'] = 1
         end
-        if satellite_count > 0 or GOAL == 0 then
-            storage.forcedata[event.rocket.force.name]['victory'] = 1
-            dumpInfo(event.rocket.force)
-            game.set_game_state
-            {
-                game_finished = true,
-                player_won = true,
-                can_continue = true,
-                victorious_force = event.rocket.force
-            }
-        end
+        dumpInfo(event.tick)
     end
 end
-events[defines.events.on_rocket_launched] = on_rocket_launched
+events[defines.events.on_pre_scenario_finished] = on_pre_scenario_finished
 
 
 local function add_samples(force, name, count)
@@ -505,7 +494,7 @@ local function on_init()
         on_player_created(e)
     end
 
-    if remote.interfaces["silo_script"] then
+    if remote.interfaces["silo_script"] then -- only disables vanilla win condition.
         remote.call("silo_script", "set_no_victory", true)
     end
 end
@@ -523,6 +512,15 @@ local function on_research_finished(event)
         -- check if it came from the server anyway, then we don't need to double send.
         dumpInfo(technology.force) --is sendable
     else
+        if constants.GOAL == 1 and event.research.name == "achipellago-trigger-"..constants.goal_science_pack then
+            game.set_game_state
+            {
+                game_finished = true,
+                player_won = true,
+                can_continue = true,
+                victorious_force = event.research.force
+            }
+        end
         if FREE_SAMPLES == 0 then
             return  -- Nothing else to do
         end
@@ -785,7 +783,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
     end
-    chunks = lib.split(call.parameter, "\t")
+    local chunks = lib.split(call.parameter, "\t")
     local item_name = chunks[1]
     local index = chunks[2]
     local source = chunks[3] or "Archipelago"
@@ -888,7 +886,7 @@ progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}
 
 local return_lib = {}
 
-return_lib.get_events = function() return events end
+return_lib.events = events
 return_lib.on_init = on_init
 return_lib.on_configuration_changed = function() return end
 return_lib.on_load = function() return end

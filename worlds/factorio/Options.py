@@ -151,10 +151,9 @@ class TechDepthObscurity(Range):
     If information is Full, then this will also hide the hints.
     Works alone or in combination with Layer Obscurity."""
     display_name = "Tech Depth Obscurity"
-    default = 2
+    default = 1
     option_disabled = 0
     disabled = 0
-    option_blind = 1
     range_start = 0
     range_end = 100
 
@@ -238,12 +237,14 @@ class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree.
     None: No indication of what a research unlocks.
     Advancement: Indicates if a research unlocks an item that is considered logical advancement, but not who it is for.
-    Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
+    Full only hint advancement: Labels with exact names and recipients of unlocked items; only the advancement unlocks are prefilled into the !hint command, or get hinted out by the tech obscurity.
+    Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command, or get hinted out by the tech obscurity.
     """
     display_name = "Technology Tree Information"
     option_none = 0
     option_advancement = 1
-    option_full = 2
+    option_full_only_hint_advancement = 2
+    option_full = 3
     default = 2
 
 

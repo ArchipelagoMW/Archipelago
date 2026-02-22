@@ -148,6 +148,8 @@ data.raw["ammo"]["artillery-shell"].stack_size = 10
 {%- for original_tech_name in base_tech_table -%}
 technologies["{{ original_tech_name }}"].hidden = true
 technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
+technologies["{{ original_tech_name }}"].research_trigger = {type = "scripted"}
+technologies["{{ original_tech_name }}"].unit = nil
 {% endfor %}
 {%- for location, item in locations %}
 {#- the tech researched by the local player #}
