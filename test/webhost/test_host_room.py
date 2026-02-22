@@ -4,18 +4,13 @@ from uuid import UUID, uuid4, uuid5
 
 from flask import url_for
 
-from WebHostLib.customserver import set_up_logging
+from WebHostLib.customserver import set_up_logging, tear_down_logging
 from . import TestBase
 
 
 def _cleanup_logger(room_id: UUID) -> None:
     from Utils import user_path
-    name = f"RoomLogger {room_id}"
-    if name in logging.Logger.manager.loggerDict:
-        logger = logging.getLogger(name)
-        for handler in logger.handlers[:]:
-            handler.close()
-        del logging.Logger.manager.loggerDict[name]
+    tear_down_logging(room_id)
     try:
         os.unlink(user_path("logs", f"{room_id}.txt"))
     except OSError:
