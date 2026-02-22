@@ -53,7 +53,7 @@ class TestEntranceRando(SVTestCase):
 
     def test_when_prepare_mod_data_then_swapped_connections_contains_both_directions(self):
         # all two-way warps are explicit to allow for detached.
-        placements = Mock(pairings=[("A to B", "C to A"), ("C to A", "B to A"), ("C to D", "A to C"), ("A to C", "C to D")])
+        placements = Mock(pairings=[("A to B", "C to A"), ("C to A", "A to B"), ("C to D", "A to C"), ("A to C", "C to D")])
 
         swapped_connections = prepare_mod_data(placements)
 

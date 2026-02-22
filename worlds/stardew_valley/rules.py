@@ -598,16 +598,16 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.mountain_to_leo_treehouse: logic.received("Treehouse"),
     }
     parrots = [
-        Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_jungle_to_volcano,
-        Entrance.parrot_express_dig_site_to_volcano, Entrance.parrot_express_farm_to_volcano,
-        Entrance.parrot_express_docks_to_dig_site, Entrance.parrot_express_jungle_to_dig_site, 
-        Entrance.parrot_express_volcano_to_dig_site, Entrance.parrot_express_farm_to_dig_site,
-        Entrance.parrot_express_docks_to_jungle, Entrance.parrot_express_dig_site_to_jungle,
-        Entrance.parrot_express_volcano_to_jungle, Entrance.parrot_express_farm_to_jungle,
-        Entrance.parrot_express_jungle_to_docks, Entrance.parrot_express_dig_site_to_docks, 
-        Entrance.parrot_express_volcano_to_docks, Entrance.parrot_express_volcano_to_farm,
-        Entrance.parrot_express_farm_to_dig_site, Entrance.parrot_express_farm_to_jungle,
+        Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_docks_to_jungle,
+        Entrance.parrot_express_docks_to_dig_site, Entrance.parrot_express_docks_to_farm,
+        Entrance.parrot_express_volcano_to_docks, Entrance.parrot_express_volcano_to_jungle,
+        Entrance.parrot_express_volcano_to_dig_site, Entrance.parrot_express_volcano_to_farm,
+        Entrance.parrot_express_jungle_to_docks, Entrance.parrot_express_jungle_to_volcano,
+        Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_jungle_to_farm,
+        Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_dig_site_to_volcano,
+        Entrance.parrot_express_dig_site_to_jungle, Entrance.parrot_express_dig_site_to_farm,
         Entrance.parrot_express_farm_to_docks, Entrance.parrot_express_farm_to_volcano,
+        Entrance.parrot_express_farm_to_jungle, Entrance.parrot_express_farm_to_dig_site,
     ]
     parrot_express_rule = logic.received(Transportation.parrot_express)
     parrot_express_to_dig_site_rule = dig_site_rule and parrot_express_rule

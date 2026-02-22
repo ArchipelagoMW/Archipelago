@@ -1,6 +1,6 @@
 from ..bases import SVTestBase
 from ..options.presets import maxsanity_mods_7_x_x
-from ... import locations_by_tag
+from ... import StardewItem, locations_by_tag
 from ...content.feature.hatsanity import to_location_name
 from ...data.hats_data import Hats
 from ...locations import LocationTags
@@ -33,17 +33,23 @@ class TestHatsLogic(SVTestBase):
             self.assert_can_reach_location(location)
 
     def test_reach_frog_hat(self):
-        required_item_names = ["Progressive Fishing Rod", "Island Obelisk", "Island West Turtle", "Island Farmhouse"]
-        required_items = [self.create_item(item_name) for item_name in required_item_names]
+        required_item_names = ["Progressive Fishing Rod", ["Island Obelisk", "Boat Repair"], ["Island West Turtle", "Parrot Express"], "Island Farmhouse"]
+        required_items = [self.create_item(item_name) if isinstance(item_name, str) else [self.create_item(itm) for itm in item_name] for item_name in required_item_names]
         location = to_location_name(Hats.frog_hat)
         for required_item in required_items:
             self.collect(required_item)
         self.assert_can_reach_location(location)
         for required_item in required_items:
-            with self.subTest(f"Requires {required_item.name} to {location}"):
-                self.remove(required_item)
-                self.assert_cannot_reach_location(location)
-                self.collect(required_item)
+            if isinstance(required_item, StardewItem):
+                with self.subTest(f"Requires {required_item.name} to {location}"):
+                    self.remove(required_item)
+                    self.assert_cannot_reach_location(location)
+                    self.collect(required_item)
+            else:
+                with self.subTest(f"Requires one of {", ".join((it.name for it in required_item))} to {location}"):
+                    self.remove(required_item)
+                    self.assert_cannot_reach_location(location)
+                    self.collect(required_item)
 
     def test_no_hats_in_item_pool(self):
         item_pool = self.multiworld.itempool
