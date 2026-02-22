@@ -579,22 +579,22 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.use_island_obelisk: logic.can_use_obelisk(Transportation.island_obelisk),
         Entrance.use_farm_obelisk: logic.can_use_obelisk(Transportation.farm_obelisk),
         Entrance.fish_shop_to_boat_tunnel: boat_repaired,
-        Entrance.boat_to_ginger_island: boat_repaired and logic.money.can_spend(1000),
+        Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000),
         Entrance.island_south_to_west: logic.received("Island West Turtle"),
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
         Entrance.island_west_to_island_farmhouse: logic.received("Island Farmhouse"),
         Entrance.island_west_to_gourmand_cave: logic.received("Island Farmhouse"),
-        Entrance.island_north_to_dig_site: dig_site_rule or logic.ability.can_chair_skip(),
+        Entrance.island_north_to_dig_site: dig_site_rule | logic.ability.can_chair_skip(),
         Entrance.dig_site_to_professor_snail_cave: logic.received("Open Professor Snail Cave"),
         Entrance.talk_to_island_trader: logic.received("Island Trader"),
         Entrance.island_south_to_southeast: logic.received("Island Resort"),
         Entrance.use_island_resort: logic.received("Island Resort"),
         Entrance.island_west_to_qi_walnut_room: logic.received("Qi Walnut Room"),
-        Entrance.island_north_to_volcano: logic.tool.can_water(1) or logic.received("Volcano Bridge") or logic.mod.magic.can_blink(),
+        Entrance.island_north_to_volcano: logic.tool.can_water(1) | logic.received("Volcano Bridge") | logic.mod.magic.can_blink(),
         Entrance.volcano_to_secret_beach: logic.tool.can_water(3),
-        Entrance.climb_to_volcano_5: logic.ability.can_mine_perfectly() and logic.tool.can_water(2),
+        Entrance.climb_to_volcano_5: logic.ability.can_mine_perfectly() & logic.tool.can_water(2),
         Entrance.talk_to_volcano_dwarf: logic.wallet.can_speak_dwarf(),
-        Entrance.climb_to_volcano_10: logic.ability.can_mine_perfectly() and logic.tool.can_water(2),
+        Entrance.climb_to_volcano_10: logic.ability.can_mine_perfectly() & logic.tool.can_water(2),
         Entrance.mountain_to_leo_treehouse: logic.received("Treehouse"),
     }
     parrots = [
@@ -610,7 +610,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.parrot_express_farm_to_jungle, Entrance.parrot_express_farm_to_dig_site,
     ]
     parrot_express_rule = logic.received(Transportation.parrot_express)
-    parrot_express_to_dig_site_rule = dig_site_rule and parrot_express_rule
+    parrot_express_to_dig_site_rule = dig_site_rule & parrot_express_rule
     for parrot in parrots:
         if "Dig Site" in parrot:
             entrance_rules[parrot] = parrot_express_to_dig_site_rule
