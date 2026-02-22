@@ -785,13 +785,15 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
 
         connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
                 lambda state: (state.can_reach(required_mission_name, "Location", player) and
-                               state.has(ItemName.white_emerald, player) and
-                               state.has(ItemName.red_emerald, player) and
-                               state.has(ItemName.cyan_emerald, player) and
-                               state.has(ItemName.purple_emerald, player) and
-                               state.has(ItemName.green_emerald, player) and
-                               state.has(ItemName.yellow_emerald, player) and
-                               state.has(ItemName.blue_emerald, player)))
+                               state.has_all((
+                                   ItemName.white_emerald,
+                                   ItemName.red_emerald,
+                                   ItemName.cyan_emerald,
+                                   ItemName.purple_emerald,
+                                   ItemName.green_emerald,
+                                   ItemName.yellow_emerald,
+                                   ItemName.blue_emerald
+                               ), player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(multiworld, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
