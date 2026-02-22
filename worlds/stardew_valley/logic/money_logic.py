@@ -43,7 +43,7 @@ class MoneyLogic(BaseLogic):
         if amount <= 1000:
             return self.logic.true_
 
-        shipping_rule = self.logic.shipping.can_use_shipping_bin
+        shipping_rule = self.logic.shipping.can_use_any_shipping_bin
         pierre_rule = self.logic.region.can_reach_all(Region.pierre_store, Region.forest)
         willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
         clint_rule = self.logic.region.can_reach_all(Region.blacksmith, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)

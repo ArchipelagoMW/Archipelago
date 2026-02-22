@@ -1,10 +1,11 @@
 from functools import cached_property
 
 from Utils import cache_self1
-from .base_logic import BaseLogic, BaseLogicMixin
+
 from ..locations import LocationTags, locations_by_tag
 from ..stardew_rule import StardewRule
 from ..strings.building_names import Building
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class ShippingLogicMixin(BaseLogicMixin):
@@ -25,11 +26,11 @@ class ShippingLogic(BaseLogic):
 
     @cached_property
     def can_use_any_shipping_bin(self) -> StardewRule:
-        return self.logic.shipping.can_use_shipping_bin or self.logic.shipping.can_use_island_shipping_bin
+        return self.logic.shipping.can_use_shipping_bin | self.logic.shipping.can_use_island_shipping_bin
 
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
-        return self.logic.shipping.can_use_any_shipping_bin and self.logic.has(item)
+        return self.logic.shipping.can_use_any_shipping_bin & self.logic.has(item)
 
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "

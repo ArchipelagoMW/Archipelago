@@ -969,7 +969,7 @@ def set_monstersanity_category_rules(all_location_names: Set[str], logic: Starde
         rule_collector.set_location_rule(location_name, rule)
 
 
-def set_shipsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+def set_shipsanity_rules(all_location_names: set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     shipsanity_option = world_options.shipsanity
     if shipsanity_option == Shipsanity.option_none:
         return
@@ -979,7 +979,7 @@ def set_shipsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule
         if location.name not in all_location_names:
             continue
         item_to_ship = location.name[len(shipsanity_prefix):]
-        rule_collector.set_location_rule(location.name, logic.shipping.can_ship(item_to_ship))
+        rule_collector.set_location_rule(location.name, logic.has(item_to_ship))
 
 
 def set_cooksanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
