@@ -165,7 +165,7 @@ new_tree_copy.unit = nil
 new_tree_copy.unit.count = {{ location.count }}
 new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredients) }}
 {% endif %}
-{%- if (location.revealed) and item.name in base_tech_table -%}
+{%- if location.revealed and item.name in base_tech_table -%}
 {#- copy Factorio Technology Icon #}
 copy_factorio_icon(new_tree_copy, "{{ item.name }}")
 {%- if item.name == "rocket-silo" and item.player == location.player %}
@@ -173,7 +173,7 @@ copy_factorio_icon(new_tree_copy, "{{ item.name }}")
 table.insert(new_tree_copy.effects, {type = "nothing", effect_description = "Ingredient {{ loop.index }}: {{ ingredient }}"})
 {% endfor -%}
 {% endif -%}
-{%- elif (location.revealed) and item.name in progressive_technology_table -%}
+{%- elif location.revealed and item.name in progressive_technology_table -%}
 copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item.name][0] }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
