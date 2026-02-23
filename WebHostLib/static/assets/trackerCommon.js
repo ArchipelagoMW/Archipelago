@@ -1,3 +1,72 @@
+/**
+ * Filter hints based on visibility settings
+ */
+const filterHints = () => {
+    const hideCompleted = document.getElementById('hide-completed-hints')?.checked || false;
+    const hideExternal = document.getElementById('hide-external-items')?.checked || false;
+    
+    const hintRows = document.querySelectorAll('.hint-row');
+    
+    hintRows.forEach(row => {
+        let shouldHide = false;
+        
+        if (hideCompleted && row.classList.contains('hint-completed')) {
+            shouldHide = true;
+        }
+        
+        if (hideExternal && row.classList.contains('hint-external')) {
+            shouldHide = true;
+        }
+        
+        row.style.display = shouldHide ? 'none' : '';
+    });
+    
+    // Save preferences to localStorage
+    localStorage.setItem('hideCompletedHints', hideCompleted);
+    localStorage.setItem('hideExternalItems', hideExternal);
+};
+
+/**
+ * Load hint visibility preferences from localStorage
+ */
+const loadHintPreferences = () => {
+    const hideCompleted = localStorage.getItem('hideCompletedHints') === 'true';
+    const hideExternal = localStorage.getItem('hideExternalItems') === 'true';
+    
+    const hideCompletedCheckbox = document.getElementById('hide-completed-hints');
+    const hideExternalCheckbox = document.getElementById('hide-external-items');
+    
+    if (hideCompletedCheckbox) {
+        hideCompletedCheckbox.checked = hideCompleted;
+    }
+    
+    if (hideExternalCheckbox) {
+        hideExternalCheckbox.checked = hideExternal;
+    }
+    
+    // Apply the filters
+    filterHints();
+};
+
+/**
+ * Initialize hint filtering functionality
+ */
+const initializeHintFiltering = () => {
+    const hideCompletedCheckbox = document.getElementById('hide-completed-hints');
+    const hideExternalCheckbox = document.getElementById('hide-external-items');
+    
+    if (hideCompletedCheckbox) {
+        hideCompletedCheckbox.addEventListener('change', filterHints);
+    }
+    
+    if (hideExternalCheckbox) {
+        hideExternalCheckbox.addEventListener('change', filterHints);
+    }
+    
+    // Load saved preferences
+    loadHintPreferences();
+};
+
 const adjustTableHeight = () => {
     const tablesContainer = document.getElementById('tables-container');
     if (!tablesContainer)
@@ -183,4 +252,7 @@ window.addEventListener('load', () => {
     });
 
     adjustTableHeight();
+    
+    // Initialize hint filtering functionality
+    initializeHintFiltering();
 });
