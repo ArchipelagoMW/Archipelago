@@ -169,7 +169,7 @@ sve_main_land_regions = [
     RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, (SVEEntrance.mountain_to_guild_summit,)),
     # These entrances are removed from the mountain region when SVE is enabled
-    RegionData(Region.mountain, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), flag=MergeFlag.REMOVE_EXITS),
+    RegionData(Region.outside_adventure_guild, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), flag=MergeFlag.REMOVE_EXITS),
     RegionData(SVERegion.guild_summit, (SVEEntrance.guild_to_interior, SVEEntrance.guild_to_mines)),
     RegionData(Region.railroad, (SVEEntrance.to_susan_house, SVEEntrance.enter_summit, SVEEntrance.railroad_to_grampleton_station)),
     RegionData(SVERegion.grampleton_station, (SVEEntrance.grampleton_station_to_grampleton_suburbs,)),
