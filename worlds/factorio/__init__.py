@@ -217,11 +217,9 @@ class Factorio(World):
                          "logistics": 1,
                          "rocket-silo": -1}
         loc: FactorioScienceLocation
-        if self.options.tech_tree_information ==  TechTreeInformation.option_full or self.options.tech_tree_information == TechTreeInformation.option_full_only_hint_advancement:
+        if self.options.tech_tree_information == TechTreeInformation.option_full or self.options.tech_tree_information == TechTreeInformation.option_full_only_hint_advancement:
             # mark all locations as pre-hinted
-            for loc in self.craftsanity_locations:
-                loc.revealed = True
-            for loc in self.science_locations:
+            for loc in self.craftsanity_locations + self.science_locations:
                 loc.revealed = True
         if self.skip_silo:
             self.removed_technologies |= {"rocket-silo"}
@@ -241,8 +239,7 @@ class Factorio(World):
                         # as automation is not achievable yet and hand-crafting for hours is not fun gameplay
                         loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
-                    if self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.disabled:
-                        loc.revealed = True
+                    loc.revealed = True
 
     def get_filler_item_name(self) -> str:
         tech_name: str = self.random.choice(tuple(tech_table))
@@ -638,10 +635,6 @@ class Factorio(World):
         for loc in self.craftsanity_locations:
             set_propper_hint(loc, self.options.tech_craft_obscurity == TechCraftObscurity.disabled)
 
-        
-
-                
-        
 
 class FactorioLocation(Location):
     game: str = Factorio.game

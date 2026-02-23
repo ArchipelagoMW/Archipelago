@@ -243,33 +243,37 @@ local function setup_storage(force)
 
     for name, tech in pairs(game.forces[force.name].technologies) do
         if tech.prototype.hidden == false then
-            if tech.prototype.research_trigger == nil and (settings.global[constants.setting_names.layer_obscurity] or settings.global[constants.setting_names.depth_obscurity]>=1) then
-                hidden_science_tech[tech.name] = true
-                for _, packs in pairs(tech.research_unit_ingredients) do
-                    if done_packs[packs.name] ~= true then
-                        done_packs[packs.name] = true
-                        science_packs_name[packs.name] = {name = packs.name, crafted = false}
+            if tech.prototype.research_trigger == nil then
+                if settings.global[constants.setting_names.layer_obscurity].value or settings.global[constants.setting_names.depth_obscurity].value>=1 then
+                    hidden_science_tech[tech.name] = true
+                    for _, packs in pairs(tech.research_unit_ingredients) do
+                        if done_packs[packs.name] ~= true then
+                            done_packs[packs.name] = true
+                            science_packs_name[packs.name] = {name = packs.name, crafted = false}
+                        end
                     end
+                    tech.enabled = false
                 end
-                tech.enabled = false
-            elseif (tech.prototype.research_trigger.type == "craft-item" or tech.prototype.research_trigger.type == "craft-fluid") and settings.global[constants.setting_names.craft_obscurity] then
+            elseif tech.prototype.research_trigger and (tech.prototype.research_trigger.type == "craft-item" or tech.prototype.research_trigger.type == "craft-fluid") then
+                if settings.global[constants.setting_names.craft_obscurity].value then
                 
-                local trigger_name
-                if tech.prototype.research_trigger.type == "craft-item" then
-                    trigger_name = tech.prototype.research_trigger.item.name
-                else
-                    trigger_name = tech.prototype.research_trigger.fluid
-                end
-                
-                hidden_trigger_tech[tech.name] = true
-                if done_triggers[trigger_name] ~= true then
-                    if triggers[trigger_name] == nil then
-                        triggers[trigger_name] = {name = trigger_name, unlocked_triggered = false, technologies = {tech.name}}
+                    local trigger_name
+                    if tech.prototype.research_trigger.type == "craft-item" then
+                        trigger_name = tech.prototype.research_trigger.item.name
                     else
-                        table.insert(triggers[trigger_name].technologies, tech.name)
+                        trigger_name = tech.prototype.research_trigger.fluid
                     end
+
+                    hidden_trigger_tech[tech.name] = true
+                    if done_triggers[trigger_name] ~= true then
+                        if triggers[trigger_name] == nil then
+                            triggers[trigger_name] = {name = trigger_name, unlocked_triggered = false, technologies = {tech.name}}
+                        else
+                            table.insert(triggers[trigger_name].technologies, tech.name)
+                        end
+                    end
+                    tech.enabled = false
                 end
-                tech.enabled = false
             end
         end
     end
