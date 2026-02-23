@@ -216,3 +216,32 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
             }
 
             self.assert_can_beat_with_minimally(exact_requirement)
+
+
+class LongBoxNeedsAllLasersWhenBoxIsRotated(WitnessTestBase):
+    options = {
+        "puzzle_randomization": "sigma_expert",
+        "shuffle_symbols": True,
+        "shuffle_doors": "mixed",
+        "door_groupings": "off",
+        "shuffle_boat": True,
+        "shuffle_lasers": "anywhere",
+        "disable_non_randomized_puzzles": False,
+        "shuffle_discarded_panels": True,
+        "shuffle_vault_boxes": True,
+        "obelisk_keys": True,
+        "shuffle_EPs": "individual",
+        "EP_difficulty": "eclipse",
+        "shuffle_postgame": False,
+        "victory_condition": "elevator",
+        "mountain_lasers": 11,
+        "challenge_lasers": 11,
+        "early_caves": "off",
+        "elevators_come_to_you": {"Quarry Elevator"},
+    }
+
+    run_default_tests = False
+
+    def test_long_box_needs_all_lasers_when_box_is_rotated(self):
+        long_box_location = self.world.get_location("Mountaintop Box Long Solved")
+        self.assert_dependency_on_event_item(long_box_location, "+1 Laser (Redirected)")
