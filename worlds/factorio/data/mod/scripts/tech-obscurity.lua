@@ -12,8 +12,7 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 -- TODO:
--- add yaml setting to only hint out logical advancement techs. (default on) (should work?)
--- fix victory. (might work?)
+-- nothing? I hope everything works. :pray:
 
 local constants = require("constants")
 

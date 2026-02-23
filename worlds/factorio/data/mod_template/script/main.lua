@@ -448,7 +448,7 @@ end
 events[defines.events.on_player_removed] = on_player_removed
 
 local function on_pre_scenario_finished(event)
-    if player_won then
+    if event.player_won then
         for name, _ in pairs(game.forces) do
             storage.forcedata[name]['victory'] = 1
         end

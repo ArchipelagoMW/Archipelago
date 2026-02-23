@@ -607,20 +607,10 @@ class Factorio(World):
     
     def post_fill(self) -> None:
         
-        locations = location_table
-        self.logger.warning(locations)
-        #for location in locations:
-        #    self.logger.warning(locations[location])
-
-        
         start_location_hints: typing.Set[str] = self.options.start_location_hints.value
         advancement_only: bool  = self.options.tech_tree_information == TechTreeInformation.option_full_only_hint_advancement
 
         def set_propper_hint(location, pre_hint):
-            self.logger.warning(f"loc: {location}")
-            self.logger.warning(f"loc.name: {location.name}")
-            self.logger.warning(f"loc.item: {location.item}")
-            self.logger.warning(f"loc.item: {location.item.advancement}")
             # show start_location_hints ingame
             if loc.name in start_location_hints:
                 loc.revealed = True
@@ -647,8 +637,6 @@ class Factorio(World):
 
         for loc in self.craftsanity_locations:
             set_propper_hint(loc, self.options.tech_craft_obscurity == TechCraftObscurity.disabled)
-        
-        self.logger.warning(f"self.techs_to_hint: {self.techs_to_hint}")
 
         
 
