@@ -242,6 +242,59 @@ def get_shapes(world: "FactorioBobs") -> Dict["FactorioScienceLocation", Set["Fa
             for choice in choices:
                 prerequisites[choice] = {source}
             current_choices.extendleft(choices)
+
+    elif layout == TechTreeLayout.option_irregular:
+        # TODO: Fix issue of techs going into their own tree's and thus being seen too early. (Fixed?)
+
+        # Made by: CosmicWolf @brattycosmicwolf
+        # I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
+        # This is the same method also used by the other tech tree methods.
+
+        minimum_dependencies = 1  # these can be propper options and/or settings.
+        maximum_dependencies = 5
+        even_distribution = False  # these can be propper options and/or settings. Can/should be combined with the one below.
+        weighted_distribution = 1  # these can be propper options and/or settings.
+        starting_techs = 5  # setting to pick amount of techs this tree starts with.
+
+        all_pre: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {}  # will be used to keep track of ALL previous dependencies. In order to ensure that A->B->C will not also get A->C. Since A is already required by B. Also the other way around A leading to both B and C and then preventing C from also getting B.
+
+        locations.sort(key=_sorter, reverse=True)
+        already_done = locations[-starting_techs:]  # remove the first techs from my actions
+        locations = locations[:-starting_techs]
+        while locations:  # Loop through all remaining techs
+            victim = locations.pop()
+            prerequisites[victim] = set()
+            all_pre[victim] = set()
+            current_choices = already_done.copy()
+            if even_distribution:
+                rand_num = world.random.randint(minimum_dependencies, maximum_dependencies)
+            else:
+                rand_num = int(world.random.triangular(minimum_dependencies, maximum_dependencies + 1, weighted_distribution))
+
+            while rand_num >= 1 and len(current_choices) > 0:
+                rand_num -= 1
+                dependency = current_choices[
+                    world.random.randint(0, len(current_choices) - 1)]  # pick one of the already established techs.
+                prerequisites[victim].add(dependency)  # Take one of the already processed techs as its prerequisite.
+
+                all_pre[victim].add(dependency)
+                if dependency in all_pre:
+                    for item in all_pre[dependency]:
+                        all_pre[victim].add(item)
+
+                current_choices.remove(dependency)
+                removal_list = []
+                for item in current_choices:
+                    if item in all_pre[victim]:  # remove choices if it already in the victims tree: A -> dependency -> Victim remove A from choices.
+                        removal_list.append(item)
+                    elif item in all_pre and dependency in all_pre[item]:  # remove a choice if the victim already has a pre of a dependency. dependency -> A and dependency -> victim. Remove A from the list of choices.
+                        removal_list.append(item)
+                for item in removal_list:
+                    current_choices.remove(item)
+
+            already_done.append(victim)
+
+        del all_pre
     else:
         raise NotImplementedError(f"Layout {layout} is not implemented.")
 
