@@ -6,10 +6,11 @@ This guide is meant to help you get up and running with Ratchet and Clank 3 in y
 
 The following are required in order to play Ratchet and Clank 3 in Archipelago
 
-- Installed the latest version of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).\
+- Installed the latest version of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - The latest version of the [Ratchet and Clank 3 apworld](https://github.com/Taoshix/Archipelago-RaC3/releases).
 - [PCSX2 Emulator](https://pcsx2.net/downloads/). Must be v1.7 or higher for the required PINE support (the latest stable version is recommended).
-- A Ratchet and Clank 3 US ISO (`SCUS-97353`)
+- A Ratchet and Clank 3 US ISO (`SCUS-97353`) \
+**Note:** To check the other game version's compatibility check the FAQ linked below.
 
 ## AP World Installation
 
