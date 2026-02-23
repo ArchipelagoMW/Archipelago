@@ -186,9 +186,6 @@ _speedups.c
 _speedups.cpp
 _speedups.html
 
-# pyenv
-.python-version
-
 #undertale stuff
 /Undertale/
 
