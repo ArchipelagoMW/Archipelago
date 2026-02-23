@@ -10,7 +10,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(
         RegionName.stardew_valley,
         (
-            Entrance.to_farm,
+            Entrance.to_farmhouse,
             LogicEntrance.fishing,
             LogicEntrance.wearing_hats,
             LogicEntrance.crafting,
@@ -455,7 +455,8 @@ vanilla_regions: tuple[RegionData, ...] = (
 # Exists and where they lead
 vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.to_stardew_valley, RegionName.stardew_valley),
-    ConnectionData(Entrance.to_farm, RegionName.farm),
+    ConnectionData(Entrance.to_farm, RegionName.farm),  # exists to make it easy to swap
+    ConnectionData(Entrance.to_farmhouse, RegionName.farm_house),
     ConnectionData(
         Entrance.farmhouse_to_farm,
         RegionName.farm,

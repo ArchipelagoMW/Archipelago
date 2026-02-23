@@ -21,6 +21,7 @@ def move_to_woods_depth(depth: int) -> str:
 class Entrance:
     to_stardew_valley = "To Stardew Valley"
     to_farm = "To Farm"
+    to_farmhouse = "To Farmhouse"
     farmhouse_to_farm = "Farmhouse to Farm"
     farm_to_farmhouse = "Farm to Farmhouse"
     downstairs_to_cellar = "Farmhouse to Cellar"
