@@ -11,7 +11,7 @@ import jinja2
 
 import Utils
 import worlds.Files
-from .FactorioOptions import RecipeTime, FactorioOptions, Silo, Satellite
+from .FactorioOptions import RecipeTime, Silo, Satellite
 
 if TYPE_CHECKING:
     from . import FactorioBobs
@@ -20,7 +20,6 @@ template_env: Optional[jinja2.Environment] = None
 
 data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
-locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
 settings_final_template: Optional[jinja2.Template] = None
@@ -89,7 +88,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, locale_template, control_template, data_template, settings_template, settings_final_template
+    global data_final_template, control_template, data_template, settings_template, settings_final_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -102,7 +101,6 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
 
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
-            locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
             settings_final_template = template_env.get_template(r"settings-final-fixes.lua")
@@ -207,8 +205,6 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                                       settings_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings-final-fixes.lua",
                                       settings_final_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
-                                      locale_template.render(**template_data)))
 
     info = copy.deepcopy(base_info)
     info["name"] = mod_name

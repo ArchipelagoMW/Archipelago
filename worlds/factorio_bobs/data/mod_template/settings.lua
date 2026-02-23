@@ -21,6 +21,8 @@ data:extend({
         type = "bool-setting",
         name = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}",
         setting_type = "runtime-global",
+        localised_name = {"mod-setting-name.archipelago-death-link"},
+        localised_description = {"mod-setting-description.archipelago-death-link"},
         {% if death_link %}
             default_value = true
         {% else %}
@@ -33,6 +35,8 @@ data:extend({
         type = "bool-setting",
         name = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}",
         setting_type = "runtime-global",
+        localised_name = {"mod-setting-name.archipelago-energy-link"},
+        localised_description = {"mod-setting-description.archipelago-energy-link"},
         {% if energy_link %}
             default_value = true
         {% else %}
