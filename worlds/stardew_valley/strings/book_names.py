@@ -41,7 +41,7 @@ class LostBook:
     tips_on_farming = lost_book("Tips on Farming")
     this_is_a_book_by_marnie = lost_book("This is a book by Marnie")
     on_foraging = lost_book("On Foraging")
-    the_fisherman_act_1 = lost_book("The Fisherman, Act 1")
+    the_fisherman_act_1 = lost_book("The Fisherman, Act I")
     how_deep_do_the_mines_go = lost_book("How Deep do the mines go?")
     an_old_farmers_journal = lost_book("An Old Farmer's Journal")
     scarecrows = lost_book("Scarecrows")

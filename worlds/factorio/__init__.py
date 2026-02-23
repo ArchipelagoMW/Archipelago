@@ -239,7 +239,8 @@ class Factorio(World):
                         # as automation is not achievable yet and hand-crafting for hours is not fun gameplay
                         loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
-                    loc.revealed = True
+                    if self.options.tech_layer_obscurity == TechLayerObscurity.disabled and self.options.tech_depth_obscurity == TechDepthObscurity.disabled:
+                        loc.revealed = True
 
     def get_filler_item_name(self) -> str:
         tech_name: str = self.random.choice(tuple(tech_table))
