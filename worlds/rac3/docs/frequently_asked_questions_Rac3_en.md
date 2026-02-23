@@ -4,6 +4,17 @@
 
 You can read about the changes [here](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/docs/en_Ratchet_and_Clank_3.md)
 
+## Which versions are supported?
+
+All game region versions are able to be played at various levels of compatibility:
+- **US (Black Label `SCUS-97353` + Greatest Hits `SCUS-97518`):** Fully Supported
+- **PAL (EU/AUS `SCES-52456`):** Intro skip, Home Warp, and Ship Warp are not supported. The game will crash if you try to 
+use these, disable intro skip and do not use the button combos for warping.
+- **Japanese (`SCPS-15084` + The Best release `SCPS-19309`):** No Information, Please provide feedback (previously 
+supported but got removed)
+- **Korean (`SCKA-20037`):** No Information, Please provide feedback
+- **Chinese (`SCAJ-20109`):** No Information, Please provide feedback
+
 ## I have my client connected, but I can't send out/receive checks, what can I do?
 
 It is probably caused by one of these:
