@@ -204,12 +204,16 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 **Cache timer: None**
 
 Will provide a dict of room data with the following keys:
+- Room shutdown / inavtivity timer (`remaining_time`)
+- Room status (`status`)
+    - `active` if the room is online
+    - `shutdown` if the room is shutdown and offline
 - Tracker SUUID (`tracker`)
 - A list of players (`players`)
     - Each item containing a list with the Slot name and Game
 - Last known hosted port (`last_port`)
 - Last activity timestamp (`last_activity`)
-- The room timeout counter (`timeout`)
+- The room timeout value (`timeout`)
 - A list of downloads for files required for gameplay (`downloads`)
     - Each item is a dict containing the download URL and slot (`slot`, `download`)
 
@@ -262,6 +266,8 @@ Example:
             "Ocarina of Time"
         ]
     ],
+    "remaining_time":59.928921,
+    "status":"active",
     "timeout": 7200,
     "tracker": "2gVkMQgISGScA8wsvDZg5A"
 }
