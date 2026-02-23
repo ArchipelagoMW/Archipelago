@@ -452,6 +452,26 @@ def set_farm_buildings_entrance_rules(logic, rule_collector: StardewRuleCollecto
         Entrance.use_water_obelisk,
         logic.can_use_obelisk(Transportation.water_obelisk),
     )
+    rule_collector.set_entrance_rule(
+        Entrance.use_farm_totem,
+        logic.has(Consumable.warp_totem_farm),
+    )
+    rule_collector.set_entrance_rule(
+        Entrance.use_mountain_totem,
+        logic.has(Consumable.warp_totem_mountains),
+    )
+    rule_collector.set_entrance_rule(
+        Entrance.use_beach_totem,
+        logic.has(Consumable.warp_totem_beach),
+    )
+    rule_collector.set_entrance_rule(
+        Entrance.use_desert_totem,
+        logic.has(Consumable.warp_totem_desert),
+    )
+    rule_collector.set_entrance_rule(
+        Entrance.use_return_scepter,
+        logic.received("Return Scepter"),
+    )
 
 
 def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, content: StardewContent):
@@ -578,6 +598,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
     entrance_rules = {
         Entrance.use_island_obelisk: logic.can_use_obelisk(Transportation.island_obelisk),
         Entrance.use_farm_obelisk: logic.can_use_obelisk(Transportation.farm_obelisk),
+        Entrance.use_island_totem: logic.has("Warp Totem: Island"),
         Entrance.fish_shop_to_boat_tunnel: boat_repaired,
         Entrance.boat_to_ginger_island: boat_repaired & logic.money.can_spend(1000),
         Entrance.island_south_to_west: logic.received("Island West Turtle"),

@@ -559,6 +559,7 @@ boarding_house_entrances = [
 ]
 
 ginger_island_regions = [
+    RegionData(Region.secret_woods, (Entrance.use_island_totem,)),
     RegionData(Region.mountain, (Entrance.mountain_to_leo_treehouse,)),
     RegionData(Region.wizard_tower, (Entrance.use_island_obelisk,)),
     RegionData(Region.fish_shop, (Entrance.fish_shop_to_boat_tunnel,)),
@@ -684,6 +685,11 @@ ginger_island_connections = [
         Region.island_south,
         flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
         group=GroupFlag.OUT_TO_OUT,
+    ),
+    ConnectionData(
+        Entrance.use_island_totem,
+        Region.island_south,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
     ),
     ConnectionData(
         Entrance.use_farm_obelisk,

@@ -96,6 +96,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_tools(item_factory, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, content, items)
+    create_return_scepter(item_factory, options, content, items)
     create_carpenter_buildings(item_factory, options, content, items)
     items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory(CommunityUpgrade.fruit_bats))
@@ -252,6 +253,16 @@ def create_wizard_buildings(
         items.append(item_factory("Island Obelisk"))
     if content.is_enabled(ModNames.deepwoods):
         items.append(item_factory("Woods Obelisk"))
+
+def create_return_scepter(
+    item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: list[Item]
+):
+    return_scepter_classification = (
+        ItemClassification.progression_skip_balancing
+        if options.entrance_randomization.randomized_transitions()
+        else ItemClassification.useful
+    )
+    items.append(item_factory("Return Scepter", classification_pre_fill=return_scepter_classification))
 
 
 def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):

@@ -105,7 +105,7 @@ id,name,classification,groups,content_packs
 119,Traveling Merchant: Saturday,progression,TRAVELING_MERCHANT_DAY,
 120,Traveling Merchant Stock Size,useful,,
 121,Traveling Merchant Discount,useful,DEPRECATED,
-122,Return Scepter,useful,,
+122,Return Scepter,progression,,
 123,Progressive Season,progression,,
 124,Spring,progression,SEASON,
 125,Summer,progression,SEASON,

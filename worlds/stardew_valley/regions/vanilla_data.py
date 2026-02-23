@@ -191,7 +191,10 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.ranch, (Entrance.marnie_ranch_to_forest,)),
     RegionData(RegionName.leah_house, (Entrance.leah_cottage_to_forest,)),
     RegionData(RegionName.mastery_cave, (Entrance.mastery_cave_to_forest,)),
-    RegionData(RegionName.sewer, (Entrance.sewer_to_town, Entrance.sewer_to_forest, Entrance.enter_mutant_bug_lair)),
+    RegionData(
+        RegionName.sewer,
+        (Entrance.sewer_to_town, Entrance.sewer_to_forest, Entrance.enter_mutant_bug_lair, Entrance.use_return_scepter),
+    ),
     RegionData(RegionName.mutant_bug_lair, (Entrance.leave_mutant_bug_lair,)),
     RegionData(
         RegionName.wizard_tower,
@@ -298,7 +301,17 @@ vanilla_regions: tuple[RegionData, ...] = (
     ),
     RegionData(RegionName.quarry_mine_entrance, (Entrance.leave_quarry_mine_entrance, Entrance.enter_quarry_mine)),
     RegionData(RegionName.quarry_mine),
-    RegionData(RegionName.secret_woods, (Entrance.leave_secret_woods, LogicEntrance.buy_from_lost_items_shop)),
+    RegionData(
+        RegionName.secret_woods,
+        (
+            Entrance.leave_secret_woods,
+            LogicEntrance.buy_from_lost_items_shop,
+            Entrance.use_beach_totem,
+            Entrance.use_farm_totem,
+            Entrance.use_mountain_totem,
+            Entrance.use_desert_totem,
+        ),
+    ),
     RegionData(
         RegionName.desert,
         (
@@ -548,6 +561,31 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         RegionName.beach,
         flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
         group=GroupFlag.OUT_TO_OUT,
+    ),
+    ConnectionData(
+        Entrance.use_farm_totem,
+        RegionName.farm,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.use_desert_totem,
+        RegionName.desert,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.use_mountain_totem,
+        RegionName.mountain,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.use_beach_totem,
+        RegionName.beach,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+    ),
+    ConnectionData(
+        Entrance.use_return_scepter,
+        RegionName.farm,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
     ),
     ConnectionData(
         Entrance.minecart_bus_stop_to_mines,
