@@ -1,8 +1,5 @@
-from collections import namedtuple
-from itertools import chain
 from .Items import item_table
 from .Location import DisableType
-from .LocationList import location_groups
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -26,10 +23,10 @@ plentiful_items = ([
     'Progressive Scale',
     'Progressive Wallet',
     'Magic Meter',
-    'Deku Stick Capacity', 
-    'Deku Nut Capacity', 
-    'Bow', 
-    'Slingshot', 
+    'Deku Stick Capacity',
+    'Deku Nut Capacity',
+    'Bow',
+    'Slingshot',
     'Bomb Bag',
     'Double Defense'] +
     ['Heart Container'] * 8
@@ -146,12 +143,12 @@ item_difficulty_max = {
         'Bombchus (5)': 1,
         'Bombchus (10)': 2,
         'Bombchus (20)': 0,
-        'Magic Meter': 1, 
-        'Double Defense': 0, 
-        'Deku Stick Capacity': 1, 
-        'Deku Nut Capacity': 1, 
-        'Bow': 2, 
-        'Slingshot': 2, 
+        'Magic Meter': 1,
+        'Double Defense': 0,
+        'Deku Stick Capacity': 1,
+        'Deku Nut Capacity': 1,
+        'Bow': 2,
+        'Slingshot': 2,
         'Bomb Bag': 2,
         'Heart Container': 0,
     },
@@ -160,13 +157,13 @@ item_difficulty_max = {
         'Bombchus (5)': 1,
         'Bombchus (10)': 0,
         'Bombchus (20)': 0,
-        'Magic Meter': 1, 
+        'Magic Meter': 1,
         'Nayrus Love': 1,
-        'Double Defense': 0, 
-        'Deku Stick Capacity': 0, 
-        'Deku Nut Capacity': 0, 
-        'Bow': 1, 
-        'Slingshot': 1, 
+        'Double Defense': 0,
+        'Deku Stick Capacity': 0,
+        'Deku Nut Capacity': 0,
+        'Bow': 1,
+        'Slingshot': 1,
         'Bomb Bag': 1,
         'Heart Container': 0,
         'Piece of Heart': 0,
@@ -313,7 +310,7 @@ def get_junk_item(rand, count=1, pool=None, plando_pool=None):
         count -= pending_count
 
     if pool and plando_pool:
-        jw_list = [(junk, weight) for (junk, weight) in junk_pool
+        jw_list = [(junk, weight) for junk, weight in junk_pool
                    if junk not in plando_pool or pool.count(junk) < plando_pool[junk].count]
         try:
             junk_items, junk_weights = zip(*jw_list)
@@ -328,7 +325,7 @@ def get_junk_item(rand, count=1, pool=None, plando_pool=None):
 
 def replace_max_item(items, item, max, rand):
     count = 0
-    for i,val in enumerate(items):
+    for i, val in enumerate(items):
         if val == item:
             if count >= max:
                 items[i] = get_junk_item(rand)[0]
@@ -341,19 +338,17 @@ def generate_itempool(ootworld):
     global random
     random = world.random
 
-    junk_pool = get_junk_pool(ootworld)
+    get_junk_pool(ootworld)
 
     # set up item pool
     (pool, placed_items) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
-    for (location_name, item) in placed_items.items():
+    for location_name, item in placed_items.items():
         location = world.get_location(location_name, player)
         location.place_locked_item(ootworld.create_item(item, allow_arbitrary_name=True))
 
 
 def get_pool_core(world):
-    global random
-
     pool = []
     placed_items = {}
     remain_shop_items = []
@@ -671,7 +666,7 @@ def get_pool_core(world):
     if world.free_scarecrow:
         world.multiworld.push_precollected(world.create_item('Scarecrow Song'))
         world.remove_from_start_inventory.append('Scarecrow Song')
-    
+
     if world.no_epona_race:
         world.multiworld.push_precollected(world.create_item('Epona', allow_arbitrary_name=True))
         world.remove_from_start_inventory.append('Epona')

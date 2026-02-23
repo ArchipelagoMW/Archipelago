@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         }
         strcat(name, "-decomp.z64");
     }
-    
+
     else
         name = argv[2];
 
@@ -106,9 +106,9 @@ int main(int argc, char** argv)
         setTabEnt(i, tempTab);
     }
 
-    /* Fix the CRC */ 
+    /* Fix the CRC */
     fix_crc(outROM);
-    
+
     /* Write the new ROM */
     outFile = fopen(name, "wb");
     fwrite(outROM, sizeof(uint32_t), UINTSIZE, outFile);
@@ -148,7 +148,7 @@ void loadROM(char* name)
     uint32_t size, i;
     uint16_t* tempROM;
     FILE* romFile;
-    
+
     /* Open file, make sure it exists */
     romFile = fopen(name, "rb");
     if(romFile == NULL)

@@ -110,7 +110,7 @@ int main(int argc, char** argv)
         fflush(stdout);
         archive = malloc(sizeof(archive_t));
         junk = fread(&(archive->fileCount), sizeof(uint32_t), 1, file);
-        
+
         /* Allocate space for files and sizes */
         archive->refSize = malloc(sizeof(uint32_t) * archive->fileCount);
         archive->srcSize = malloc(sizeof(uint32_t) * archive->fileCount);
@@ -158,7 +158,7 @@ int main(int argc, char** argv)
     /* The first 3 files are never compressed */
     /* They should never be given to the compression function anyway though */
     refTab[0] = refTab[1] = refTab[2] = 0;
-    
+
     /* Read in the rest of the exclusion list */
     for(i = 0; fscanf(file, "%d", &j) == 1; i++)
     {
@@ -254,7 +254,7 @@ int main(int argc, char** argv)
             /* If the file existed, write it */
             if(tab.startP != 0xFFFFFFFF)
                 memcpy(outROM + tab.startP, out[i].data, size);
-            
+
             /* Write the table entry */
             tab.startV = bSwap32(tab.startV);
 			tab.endV   = bSwap32(tab.endV);
@@ -271,7 +271,7 @@ int main(int argc, char** argv)
 
     /* Fix the CRC before writing the ROM */
     fix_crc(outROM);
-    
+
     /* Make and fill the output ROM */
     file = fopen(outName, "wb");
     fwrite(outROM, outSize, 1, file);
@@ -289,9 +289,9 @@ int main(int argc, char** argv)
         free(outName);
     free(inROM);
     free(outROM);
-    
+
     printf("Compression complete.\n");
-    
+
     return(0);
 }
 /* 1}}} */
@@ -372,7 +372,7 @@ void* threadFunc(void* null)
                 memcpy(out[i].data, dst, size);
                 free(dst);
             }
-            
+
             if(archive != NULL)
             {
                 free(archive->ref[nextArchive]);
@@ -439,7 +439,7 @@ void makeArchive()
 
     /* Write the archive data */
     fwrite(&fileCount, sizeof(uint32_t), 1, file);
-    
+
     /* Write the fileSize and data for each ref & src */
     for(i = 3; i < tabCount; i++)
     {
@@ -509,7 +509,7 @@ int32_t getNext()
     int32_t file, temp;
 
     pthread_mutex_lock(&filelock);
-    
+
     file = nextFile++;
 
     /* Progress tracker */
@@ -523,7 +523,7 @@ int32_t getNext()
     {
         file = -1;
     }
-    
+
     pthread_mutex_unlock(&filelock);
 
     return(file);

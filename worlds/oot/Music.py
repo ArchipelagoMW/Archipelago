@@ -1,7 +1,7 @@
 #Much of this is heavily inspired from and/or based on az64's / Deathbasket's MM randomizer
 
 import os
-from .Utils import compare_version, data_path
+from .Utils import data_path
 
 
 # Format: (Title, Sequence ID)
@@ -88,8 +88,9 @@ ocarina_sequence_ids = [
     ("Song of Storms", 0x49)
 ]
 
-# Represents the information associated with a sequence, aside from the sequence data itself
-class TableEntry(object):
+
+class TableEntry:
+    """Represents the information associated with a sequence, aside from the sequence data itself"""
     def __init__(self, name, cosmetic_name, type = 0x0202, instrument_set = 0x03, replaces = -1, vanilla_id = -1):
         self.name = name
         self.cosmetic_name = cosmetic_name
@@ -104,15 +105,15 @@ class TableEntry(object):
         return copy
 
 
-# Represents actual sequence data, along with metadata for the sequence data block
-class Sequence(object):
+class Sequence:
+    """Represents actual sequence data, along with metadata for the sequence data block"""
     def __init__(self):
         self.address = -1
         self.size = -1
         self.data = []
 
 
-def process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, ids, seq_type = 'bgm'):
+def process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, ids, seq_type='bgm'):
     # Process vanilla music data
     for bgm in ids:
         # Get sequence metadata
@@ -134,7 +135,7 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
 
     # If present, load the file containing custom music to exclude
     try:
-        with open(os.path.join(data_path(), u'custom_music_exclusion.txt')) as excl_in:
+        with open(os.path.join(data_path(), 'custom_music_exclusion.txt')) as excl_in:
             seq_exclusion_list = excl_in.readlines()
         seq_exclusion_list = [seq.rstrip() for seq in seq_exclusion_list if seq[0] != '#']
         seq_exclusion_list = [seq for seq in seq_exclusion_list if seq.endswith('.meta')]
@@ -144,7 +145,7 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
     # Process music data in data/Music/
     # Each sequence requires a valid .seq sequence file and a .meta metadata file
     # Current .meta format: Cosmetic Name\nInstrument Set\nPool
-    for dirpath, _, filenames in os.walk(u'./data/Music', followlinks=True):
+    for dirpath, _, filenames in os.walk('./data/Music', followlinks=True):
         for fname in filenames:
             # Skip if included in exclusion file
             if fname in seq_exclusion_list:
@@ -158,7 +159,7 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
                         lines = stream.readlines()
                     # Strip newline(s)
                     lines = [line.rstrip() for line in lines]
-                except FileNotFoundError as ex:
+                except FileNotFoundError:
                     raise FileNotFoundError('No meta file for: "' + fname + '". This should never happen')
 
                 # Create new sequence, checking third line for correct type
@@ -265,7 +266,7 @@ def rebuild_sequences(rom, sequences):
                     if new_entry.size <= 0x10:
                         raise Exception('Invalid sequence file "' + s.name + '.seq"')
                     new_entry.data[1] = 0x20
-                except FileNotFoundError as ex:
+                except FileNotFoundError:
                     raise FileNotFoundError('No sequence file for: "' + s.name + '"')
         else:
             new_entry.size = old_sequences[i].size
@@ -316,12 +317,12 @@ def rebuild_sequences(rom, sequences):
         if new_sequences[i].size == 0:
             try:
                 j = [seq for seq in sequences if seq.replaces == new_sequences[i].address].pop()
-            except:
+            except Exception:
                 j = -1
         else:
             try:
                 j = [seq for seq in sequences if seq.replaces == i].pop()
-            except:
+            except Exception:
                 j = -1
         if j != -1:
             rom.write_byte(base, j.instrument_set)
@@ -480,4 +481,3 @@ def restore_music(rom):
         # Zero out old audioseq
         rom.write_bytes(start, [0] * size)
         rom.update_dmadata_record(start, orig_start, orig_end)
-
