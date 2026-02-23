@@ -21,12 +21,14 @@ vanilla_regions: tuple[RegionData, ...] = (
         RegionName.farm_house,
         (
             Entrance.farmhouse_to_farm,
-            Entrance.downstairs_to_cellar,
-            LogicEntrance.farmhouse_cooking,
             LogicEntrance.watch_queen_of_sauce,
             LogicEntrance.find_secret_notes,
+            LogicEntrance.farmhouse_level_2,
+            LogicEntrance.farmhouse_cooking,
         ),
     ),
+    RegionData(RegionName.farm_house_2, (LogicEntrance.farmhouse_level_3,)),
+    RegionData(RegionName.farm_house_3, (Entrance.downstairs_to_cellar,)),
     RegionData(RegionName.cellar, (Entrance.cellar_to_downstairs,)),
     RegionData(
         RegionName.farm,
@@ -469,6 +471,8 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.FARMHOUSE,
         group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
+    ConnectionData(LogicEntrance.farmhouse_level_2, RegionName.farm_house_2),
+    ConnectionData(LogicEntrance.farmhouse_level_3, RegionName.farm_house_3),
     ConnectionData(
         Entrance.downstairs_to_cellar,
         RegionName.cellar,
@@ -477,7 +481,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.cellar_to_downstairs,
-        RegionName.farm_house,
+        RegionName.farm_house_3,
         flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),

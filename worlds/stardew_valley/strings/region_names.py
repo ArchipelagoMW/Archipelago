@@ -4,6 +4,8 @@ from .tool_names import ToolMaterial
 class Region:
     stardew_valley = "Stardew Valley"
     farm_house = "Farmhouse"
+    farm_house_2 = "Farmhouse 2"
+    farm_house_3 = "Farmhouse 3"
     cellar = "Cellar"
     farm = "Farm"
     coop = "Coop"

@@ -334,6 +334,8 @@ class LogicEntrance:
     buy_from_traveling_merchant_thursday = "Buy from Traveling Merchant Thursday"
     buy_from_traveling_merchant_friday = "Buy from Traveling Merchant Friday"
     buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
+    farmhouse_level_2 = "Upgraded Farmhouse"
+    farmhouse_level_3 = "Twice Upgraded Farmhouse"
     farmhouse_cooking = "Farmhouse Cooking"
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
