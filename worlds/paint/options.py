@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Range, PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Visibility
+from Options import OptionSet, Range, PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Visibility
 
 
 class LogicPercent(Range):
@@ -51,6 +51,44 @@ class CanvasSizeIncrement(Choice):
     option_50 = 50
     option_100 = 100
     default = 100
+    visibility = Visibility.none
+
+
+class CanvasWidthIncrement(Choice):
+    """Sets the number of pixels the canvas will expand for each width item received.
+    Ensure an adequate number of locations are generated if setting this below 50."""
+    display_name = "Canvas Width Increment"
+    # option_10 = 10
+    # option_20 = 20
+    option_25 = 25
+    option_50 = 50
+    option_100 = 100
+    default = 100
+
+
+class CanvasHeightIncrement(Choice):
+    """Sets the number of pixels the canvas will expand for each height item received.
+    Ensure an adequate number of locations are generated if setting this below 50."""
+    display_name = "Canvas Height Increment"
+    # option_10 = 10
+    # option_20 = 20
+    option_25 = 25
+    option_50 = 50
+    option_100 = 100
+    default = 100
+
+
+class AspectRatio(Choice):
+    """Sets the aspect ratio of your final image. Useful when using a custom goal image, also affects game length.
+    Possible options are fullscreen (800x600), widescreen (800x450), square (800x800), fullscreen vertical (600x800),
+    and widescreen vertical (450x800)."""
+    display_name = "Aspect Ratio"
+    option_fullscreen = 0
+    option_widescreen = 1
+    option_square = 2
+    option_fullscreen_vertical = 3
+    option_widescreen_vertical = 4
+    default = 0
 
 
 class GoalImage(Range):
@@ -67,6 +105,7 @@ class GoalImage(Range):
 
 class StartingTool(Choice):
     """Sets which tool (other than Magnifier) you will be able to use from the start."""
+    display_name = "Starting Tool"
     option_brush = 0
     option_pencil = 1
     option_eraser = 2
@@ -86,10 +125,26 @@ class TrapCount(Range):
     default = 0
 
 
+class TrapBlacklist(OptionSet):
+    """These types of traps will not be generated into the item pool nor received from Trap Link.
+    Possible traps are "Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap",
+    "Flip Vertical Trap", "Help Trap", "Zoom In Trap", "Zoom Out Trap", "Tool Swap Trap"."""
+    display_name = "Trap Blacklist"
+    valid_keys = [
+        "Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap",
+        "Help Trap", "Zoom In Trap", "Zoom Out Trap", "Tool Swap Trap"
+    ]
+
+
+class TrapLink(Toggle):
+    """Received traps will be simultaneously sent to other players with trap link on. This also works in reverse."""
+    display_name = "Trap Link"
+
+
 class DeathLink(Toggle):
     """If on, using the Undo or Clear Image functions will send a death to all other players with death link on.
     Receiving a death will clear the image and reset the history.
-    This option also prevents Undo and Clear Image traps from being generated in the item pool."""
+    This option also adds Undo and Clear Image traps to the trap blacklist."""
     display_name = "Death Link"
 
 
@@ -100,8 +155,13 @@ class PaintOptions(PerGameCommonOptions):
     half_percent_checks: HalfPercentChecks
     quarter_percent_checks: QuarterPercentChecks
     canvas_size_increment: CanvasSizeIncrement
+    canvas_width_increment: CanvasWidthIncrement
+    canvas_height_increment: CanvasHeightIncrement
+    aspect_ratio: AspectRatio
     goal_image: GoalImage
     starting_tool: StartingTool
     trap_count: TrapCount
+    trap_blacklist: TrapBlacklist
+    trap_link: TrapLink
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
