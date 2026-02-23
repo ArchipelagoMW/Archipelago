@@ -494,8 +494,10 @@ local function on_init()
         on_player_created(e)
     end
 
-    if remote.interfaces["silo_script"] then -- only disables vanilla win condition.
-        remote.call("silo_script", "set_no_victory", true)
+    if constants.GOAL == 1 then
+        if remote.interfaces["silo_script"] then -- only disables vanilla win condition.
+            remote.call("silo_script", "set_no_victory", true)
+        end
     end
 end
 
