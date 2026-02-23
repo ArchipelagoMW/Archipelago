@@ -1,0 +1,374 @@
+[
+  {
+    "name": "The Shop",
+    "sections": [
+      {
+        "name": "The Shop - Karuta Plates"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 397,
+        "y": 184,
+        "size": 16
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 398,
+        "y": 147,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Serendipitous Bodies"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 375,
+        "y": 127,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Path of Resilience"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 417,
+        "y": 126,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Kusari Jacket"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 462,
+        "y": 184,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Energy Shuriken"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 460,
+        "y": 155,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Serendipitous Minds"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 462,
+        "y": 127,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Prepared Mind"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 439,
+        "y": 110,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Meditation"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 417,
+        "y": 95,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Rejuvenative Spirit"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 462,
+        "y": 95,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Centered Mind"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 498,
+        "y": 184,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Strike of the Ninja"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 498,
+        "y": 155,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Second Wind"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 498,
+        "y": 127,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Currents Master"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 498,
+        "y": 95,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Aerobatics Warrior"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 462,
+        "y": 57,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Demon's Bane"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 533,
+        "y": 184,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Devil's Due"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 533,
+        "y": 155,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Time Sense"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 533,
+        "y": 127,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Power Sense"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 533,
+        "y": 95,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Focused Power Sense"
+      }
+    ]
+  },
+  {
+    "name": "The Shop",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 533,
+        "y": 57,
+        "size": 16
+      }
+    ],
+    "sections": [
+      {
+        "name": "The Shop - Money Wrench"
+      }
+    ]
+  },
+  {
+    "name": "Figurines",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "size": 16,
+        "x": 375,
+        "y": 55
+      }
+    ],
+    "sections": [
+      {
+        "name": "Green Kappa Figurine"
+      },
+      {
+        "name": "Blue Kappa Figurine"
+      },
+      {
+        "name": "Ountarde Figurine"
+      },
+      {
+        "name": "Red Kappa Figurine"
+      },
+      {
+        "name": "Demon King Figurine"
+      },
+      {
+        "name": "Quillshroom Figurine"
+      },
+      {
+        "name": "Jumping Quillshroom Figurine"
+      },
+      {
+        "name": "Scurubu Figurine"
+      },
+      {
+        "name": "Jumping Scurubu Figurine"
+      },
+      {
+        "name": "Wallaxer Figurine"
+      },
+      {
+        "name": "Barmath'azel Figurine"
+      },
+      {
+        "name": "Queen of Quills Figurine"
+      },
+      {
+        "name": "Demon Hive Figurine"
+      }
+    ]
+  }
+]

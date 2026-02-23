@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Tower of Time",
+    "sections": [
+      {
+        "name": "Tower of Time Seal - Time Waster"
+      },
+      {
+        "name": "Tower of Time Seal - Lantern Climb"
+      },
+      {
+        "name": "Tower of Time Seal - Arcane Orbs"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 624,
+        "y": 128,
+        "size": 30
+      }
+    ]
+  },
+  {
+    "name": "Tower of Time - Power Seals",
+    "children": [
+      {
+        "name": "Tower of Time Seal",
+        "sections": [
+          {
+            "name": "Tower of Time Seal - Time Waster"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Tower of Time",
+            "x": 193,
+            "y": 1124
+          }
+        ]
+      },
+      {
+        "name": "Tower of Time Seal",
+        "sections": [
+          {
+            "name": "Tower of Time Seal - Lantern Climb"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Tower of Time",
+            "x": 591,
+            "y": 721
+          }
+        ]
+      },
+      {
+        "name": "Tower of Time Seal",
+        "sections": [
+          {
+            "name": "Tower of Time Seal - Arcane Orbs"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Tower of Time",
+            "x": 272,
+            "y": 644
+          }
+        ]
+      }
+    ]
+  }
+]

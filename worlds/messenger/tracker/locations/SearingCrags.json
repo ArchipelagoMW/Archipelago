@@ -1,0 +1,191 @@
+[
+  {
+    "name": "Searing Crags",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 1178,
+        "y": 319,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Searing Crags - Rope Dart"
+      },
+      {
+        "name": "Searing Crags - Pyro"
+      },
+      {
+        "name": "Searing Crags - Power Thistle"
+      },
+      {
+        "name": "Searing Crags - Key of Strength"
+      },
+      {
+        "name": "Searing Crags - Astral Tea Leaves"
+      },
+      {
+        "name": "Searing Crags Seal - Triple Ball Spinner"
+      },
+      {
+        "name": "Searing Crags Seal - Raining Rocks"
+      },
+      {
+        "name": "Searing Crags Seal - Rhythm Rocks"
+      },
+      {
+        "name": "Searing Crags Mega Shard"
+      }
+    ]
+  },
+  {
+    "name": "Searing Crags - Key locations",
+    "children": [
+      {
+        "name": "Searing Crags",
+        "sections": [
+          {
+            "name": "Searing Crags - Rope Dart"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 319,
+            "y": 788
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Searing Crags - Pyro"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 706,
+            "y": 428,
+            "size": 32
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Searing Crags - Power Thistle"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 546,
+            "y": 106,
+            "size": 32
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Searing Crags - Key of Strength"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 475,
+            "y": 355
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Searing Crags - Astral Tea Leaves"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 546,
+            "y": 165,
+            "size": 32
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Searing Crags - Power Seals",
+    "children": [
+      {
+        "name": "Searing Crags Seal",
+        "sections": [
+          {
+            "name": "Searing Crags Seal - Triple Ball Spinner"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 350,
+            "y": 632
+          }
+        ]
+      },
+      {
+        "name": "Searing Crags Seal",
+        "sections": [
+          {
+            "name": "Searing Crags Seal - Raining Rocks"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 567,
+            "y": 355
+          }
+        ]
+      },
+      {
+        "name": "Searing Crags Seal",
+        "sections": [
+          {
+            "name": "Searing Crags Seal - Rhythm Rocks"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 629,
+            "y": 166
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Searing Crags - Mega Shards",
+    "children": [
+      {
+        "name": "Searing Crags Mega Shard",
+        "sections": [
+          {
+            "name": "Searing Crags Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Searing Crags",
+            "x": 550,
+            "y": 550
+          }
+        ]
+      }
+    ]
+  }
+]

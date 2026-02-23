@@ -15,11 +15,11 @@ from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTE
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
-from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
+from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules, GLITCHED_ITEM
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
-from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections
+from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections, TRACKER_PACK_CONFIG
 
 components.append(
     Component(
@@ -41,7 +41,12 @@ class MessengerSettings(Group):
         is_exe = True
         md5s = ["1b53534569060bc06179356cd968ed1d"]
 
+    class UTPackPath(FilePath):
+        required = False
+        ut_dialog_name = "Select The Messenger Randomizer Track Pack"
+
     game_path: GamePath = GamePath("TheMessenger.exe")
+    ut_pack_path: UTPackPath | str = UTPackPath()
 
 
 class MessengerWeb(WebWorld):
@@ -82,6 +87,9 @@ class MessengerWorld(World):
     options: MessengerOptions
     settings_key = "messenger_settings"
     settings: ClassVar[MessengerSettings]
+
+    tracker_world: ClassVar = TRACKER_PACK_CONFIG
+    glitches_item_name: ClassVar[str] = GLITCHED_ITEM
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
@@ -280,8 +288,13 @@ class MessengerWorld(World):
         logic = self.options.logic_level
         if logic == Logic.option_normal:
             MessengerRules(self).set_messenger_rules()
+
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                MessengerHardRules(self).add_glitched_rules()
+
         elif logic == Logic.option_hard:
             MessengerHardRules(self).set_messenger_rules()
+
         else:
             raise ValueError(f"Somehow you have a logic option that's currently invalid."
                              f" {logic} for {self.multiworld.get_player_name(self.player)}")

@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, CollectionRule
+from BaseClasses import CollectionState, CollectionRule, DEFAULT_COLLECTION_RULE
 from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
+
+GLITCHED_ITEM = "Glitched Item"
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -196,7 +198,7 @@ class MessengerRules:
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
-                            self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
+                        self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) and self.can_dboost(state),
             "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
@@ -374,6 +376,37 @@ class MessengerRules:
         if self.world.options.accessibility:  # not locations accessibility
             set_self_locking_items(self.world)
 
+    def add_glitched_rules(self) -> None:
+        multiworld = self.world.multiworld
+
+        for entrance in multiworld.get_entrances(self.player):
+            try:
+                rule = self.connection_rules[entrance.name]
+            except KeyError:
+                rule = DEFAULT_COLLECTION_RULE
+
+            if entrance.access_rule == rule:
+                continue
+
+            def glitch_aware_rule(state: CollectionState, glitched_rule=rule, previous_rule=entrance.access_rule) -> bool:
+                return (state.has(GLITCHED_ITEM, self.player) and glitched_rule(state)) or previous_rule(state)
+
+            entrance.access_rule = glitch_aware_rule
+
+        for loc in multiworld.get_locations(self.player):
+            try:
+                rule = self.location_rules[loc.name]
+            except KeyError:
+                rule = DEFAULT_COLLECTION_RULE
+
+            if loc.access_rule == rule:
+                continue
+
+            def glitch_aware_rule(state: CollectionState, glitched_rule=rule, previous_rule=loc.access_rule) -> bool:
+                return (state.has(GLITCHED_ITEM, self.player) and glitched_rule(state)) or previous_rule(state)
+
+            loc.access_rule = glitch_aware_rule
+
 
 class MessengerHardRules(MessengerRules):
     def __init__(self, world: "MessengerWorld") -> None:
@@ -488,7 +521,7 @@ class MessengerHardRules(MessengerRules):
 
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has("Second Wind", self.player)  # who really needs meditation
-    
+
     def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return super().can_destroy_projectiles(state) or self.has_windmill(state)
 
