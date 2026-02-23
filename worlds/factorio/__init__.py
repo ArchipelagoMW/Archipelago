@@ -607,6 +607,7 @@ class Factorio(World):
         
         start_location_hints: typing.Set[str] = self.options.start_location_hints.value
         advancement_only: bool  = self.options.tech_tree_information == TechTreeInformation.option_full_only_hint_advancement
+        full_hints: bool  = self.options.tech_tree_information == TechTreeInformation.option_full
 
         def set_propper_hint(location, pre_hint):
             # show start_location_hints ingame
@@ -622,11 +623,13 @@ class Factorio(World):
                         start_location_hints.add(loc.name)
             
             if loc.revealed:
-                if advancement_only:
+                if full_hints:
+                    self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = True
+                else:
                     if loc.item.advancement:
                         self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = True
-                else:
-                    self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = False
+                    else:
+                        self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = False
             else:
                 self.techs_to_hint[f"ap-{location_table[loc.name]}-"] = False
 
