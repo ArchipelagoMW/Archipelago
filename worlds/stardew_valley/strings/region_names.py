@@ -230,6 +230,7 @@ class LogicRegion:
     wizard_blueprints = "Wizard Blueprints"
 
     forest_part_behind_tree_stump = "Part Behind Tree Stump"
+    railroad_part_behind_chicken_stone = "Part Behind Chicken Stone"
 
 
 class DeepWoodsRegion:

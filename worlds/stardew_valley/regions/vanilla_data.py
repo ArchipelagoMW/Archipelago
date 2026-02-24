@@ -192,7 +192,15 @@ vanilla_regions: tuple[RegionData, ...] = (
     ),
     RegionData(
         RegionName.railroad,
-        (Entrance.railroad_to_mountain, Entrance.enter_bathhouse_entrance, Entrance.enter_witch_warp_cave),
+        (
+            Entrance.railroad_to_mountain,
+            Entrance.enter_bathhouse_entrance,
+            LogicEntrance.railroad_to_part_behind_chicken_stone,
+        ),
+    ),
+    RegionData(
+        LogicRegion.railroad_part_behind_chicken_stone,
+        (Entrance.enter_witch_warp_cave, LogicEntrance.part_behind_chicken_stone_to_railroad),
     ),
     RegionData(RegionName.ranch, (Entrance.marnie_ranch_to_forest,)),
     RegionData(RegionName.leah_house, (Entrance.leah_cottage_to_forest,)),
@@ -1269,7 +1277,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.leave_witch_warp_cave,
-        RegionName.railroad,
+        LogicRegion.railroad_part_behind_chicken_stone,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),

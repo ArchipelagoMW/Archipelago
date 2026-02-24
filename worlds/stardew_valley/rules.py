@@ -279,7 +279,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     set_farm_buildings_entrance_rules(logic, rule_collector)
 
     rule_collector.set_entrance_rule(Entrance.mountain_to_railroad, logic.received("Railroad Boulder Removed"))
-    rule_collector.set_entrance_rule(Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
+    rule_collector.set_entrance_rule(LogicEntrance.railroad_to_part_behind_chicken_stone, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
+    rule_collector.set_entrance_rule(LogicEntrance.part_behind_chicken_stone_to_railroad, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.enter_witch_hut, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.enter_mutant_bug_lair,
                                      (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(NPC.krobus))
