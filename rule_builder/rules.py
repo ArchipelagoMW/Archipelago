@@ -715,7 +715,7 @@ class Macro(WrapperRule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         child = data.get("child")
         if child is None:
             raise ValueError("Child rule cannot be None")
