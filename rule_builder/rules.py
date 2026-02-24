@@ -70,8 +70,8 @@ class CustomRuleRegister(type):
         if rule_hash in cls.resolved_rules:
             return cls.resolved_rules[rule_hash]
         cls.resolved_rules[rule_hash] = rule
-        if isinstance(rule, Macro):
-            cls.rule_macros[rule.player][rule.name] = rule
+        if isinstance(rule, Macro.Resolved):
+            cls.rule_macros.setdefault(rule.player, {})[rule.name] = rule
         return rule
 
     @classmethod
