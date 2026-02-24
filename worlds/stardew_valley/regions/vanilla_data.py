@@ -71,7 +71,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         (
             Entrance.forest_to_farm,
             Entrance.forest_to_town,
-            Entrance.enter_secret_woods,
+            LogicEntrance.forest_to_part_behind_tree_stump,
             Entrance.forest_to_wizard_tower,
             Entrance.forest_to_marnie_ranch,
             Entrance.forest_to_leah_cottage,
@@ -87,6 +87,10 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.attend_festival_of_ice,
             LogicEntrance.buy_from_hat_mouse,
         ),
+    ),
+    RegionData(
+        LogicRegion.forest_part_behind_tree_stump,
+        (LogicEntrance.part_behind_tree_stump_to_forest, Entrance.enter_secret_woods),
     ),
     RegionData(LogicRegion.forest_waterfall),
     RegionData(RegionName.trash_bear),
@@ -778,9 +782,11 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.OVERWORLD,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
+    ConnectionData(LogicEntrance.forest_to_part_behind_tree_stump, LogicRegion.forest_part_behind_tree_stump),
+    ConnectionData(LogicEntrance.part_behind_tree_stump_to_forest, RegionName.forest),
     ConnectionData(
         Entrance.leave_secret_woods,
-        RegionName.forest,
+        LogicRegion.forest_part_behind_tree_stump,
         flag=RandomizationFlag.OVERWORLD,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
@@ -796,7 +802,6 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
-    # We remove the bit for masteries, because the mastery cave is to be excluded from the randomization if masteries are not shuffled.
     ConnectionData(
         Entrance.forest_to_mastery_cave,
         RegionName.mastery_cave,

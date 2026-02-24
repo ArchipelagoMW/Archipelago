@@ -341,6 +341,8 @@ class LogicEntrance:
     shipping = "Use Shipping Bin"
     island_shipping = "Use Island Shipping Bin"
     watch_queen_of_sauce = "Watch Queen of Sauce"
+    forest_to_part_behind_tree_stump = "Forest to Behind Secret Woods Stump"
+    part_behind_tree_stump_to_forest = "Behind Secret Woods Stump to Forest"
 
     @staticmethod
     def blacksmith_upgrade(material: str) -> str:

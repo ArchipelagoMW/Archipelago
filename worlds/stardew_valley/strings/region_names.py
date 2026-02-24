@@ -229,6 +229,8 @@ class LogicRegion:
     garbage_cans = "Garbage Cans"
     wizard_blueprints = "Wizard Blueprints"
 
+    forest_part_behind_tree_stump = "Part Behind Tree Stump"
+
 
 class DeepWoodsRegion:
     main_lichtung = "Entrance to the Deep Woods"

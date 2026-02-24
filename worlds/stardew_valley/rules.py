@@ -252,7 +252,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.outside_adventure_guild_to_mountain, logic.received("Landslide Removed"))
     rule_collector.set_entrance_rule(Entrance.enter_quarry,
                                      (logic.received("Bridge Repair") | logic.mod.magic.can_blink()) & logic.tool.has_tool(Tool.pickaxe))
-    rule_collector.set_entrance_rule(Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | logic.mod.magic.can_blink() | logic.ability.can_chair_skip())
+    rule_collector.set_entrance_rule(LogicEntrance.forest_to_part_behind_tree_stump, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | logic.mod.magic.can_blink() | logic.ability.can_chair_skip())
+    rule_collector.set_entrance_rule(LogicEntrance.part_behind_tree_stump_to_forest, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | logic.mod.magic.can_blink() | logic.ability.can_chair_skip())
     rule_collector.set_entrance_rule(Entrance.town_to_community_center, logic.received("Community Center Key"))
     rule_collector.set_entrance_rule(Entrance.forest_to_wizard_tower, logic.received("Wizard Invitation"))
     rule_collector.set_entrance_rule(Entrance.forest_to_sewer, logic.wallet.has_rusty_key())
