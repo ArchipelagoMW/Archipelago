@@ -119,7 +119,7 @@ def set_rules(world: "ALTTPWorld"):
 
     set_trock_key_rules(multiworld, player)
 
-    set_rule(ganons_tower, lambda state: has_crystals(state, state.world.options.crystals_needed_for_gt, player))
+    set_rule(ganons_tower, lambda state: has_crystals(state, state.multiworld.options.crystals_needed_for_gt, player))
     if world.options.mode != 'inverted' and world.options.glitches_required in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         add_rule(multiworld.get_entrance('Ganons Tower', player), lambda state: state.multiworld.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
