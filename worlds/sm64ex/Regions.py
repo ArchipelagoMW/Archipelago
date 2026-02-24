@@ -132,7 +132,7 @@ def create_regions(multiworld: MultiWorld, options: SM64Options, player: int):
     regTotWC = create_region("Tower of the Wing Cap", player, multiworld)
     create_default_locs(regTotWC, locTotWC_table)
 
-    regBitDW = create_region("Bowser in the Dark World", player, world)
+    regBitDW = create_region("Bowser in the Dark World", player, multiworld)
     create_default_locs(regBitDW, locBitDW_table)
 
     create_region("Basement", player, multiworld)
