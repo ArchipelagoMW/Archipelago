@@ -91,6 +91,14 @@ class DarkSouls3World(World):
         self.created_regions = set()
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
+        if not self.options.enable_dlc:
+            dlc_bosses = [boss.region for boss in self._goal_bosses() if boss.dlc]
+            if dlc_bosses:
+                raise Exception(
+                    "DS3 options error: you chose to disable DLC but require the player to beat " +
+                    ",".join(dlc_bosses)
+                )
+
         # This code doesn't work because tests don't verify options
         # Don't consider disabled locations to be AP-excluded
         # if not self.options.enable_dlc:
