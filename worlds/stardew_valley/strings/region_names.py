@@ -38,6 +38,8 @@ class Region:
     skull_cavern_mining = "Skull Cavern Mining"
     sewer = "Sewer"
     mutant_bug_lair = "Mutant Bug Lair"
+    witch_swamp_bot = "Witch's Swamp Bottom"
+    witch_swamp_top = "Witch's Swamp Top"
     witch_swamp = "Witch's Swamp"
     witch_hut = "Witch's Hut"
     island_south = "Island South"
@@ -53,6 +55,7 @@ class Region:
     island_farmhouse = "Island Farmhouse"
     dig_site = "Dig Site"
     professor_snail_cave = "Professor Snail Cave"
+    professor_snail_cave_entrance = "Professor Snail Cave Entrance"
     field_office = "Field Office"
     volcano = "Volcano Entrance"
     volcano_secret_beach = "Volcano Secret Beach"
@@ -75,6 +78,7 @@ class Region:
     skull_cavern_200 = "Skull Cavern Floor 200"
     dangerous_skull_cavern = "Dangerous Skull Cavern"
     hospital = "Hospital"
+    hospital_back = "Hospital Back"
     carpenter = "Carpenter Shop"
     alex_house = "Alex's House"
     elliott_house = "Elliott's House"
@@ -231,6 +235,10 @@ class LogicRegion:
 
     forest_part_behind_tree_stump = "Part Behind Tree Stump"
     railroad_part_behind_chicken_stone = "Part Behind Chicken Stone"
+    town_cave_joja_shortcut = "Cave For Shortcut to Mountain"
+    town_fence_shortcut = "Fence For Shortcut to Mountain"
+    mountain_walkway_shortcut = "Mountian Walkway to Jojamart Shortcut"
+    mountain_fence_shortcut = "Mountain Behind Fence Shortcut"
 
 
 class DeepWoodsRegion:

@@ -281,7 +281,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.mountain_to_railroad, logic.received("Railroad Boulder Removed"))
     rule_collector.set_entrance_rule(LogicEntrance.railroad_to_part_behind_chicken_stone, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(LogicEntrance.part_behind_chicken_stone_to_railroad, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
-    rule_collector.set_entrance_rule(Entrance.enter_witch_hut, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
+    rule_collector.set_entrance_rule(LogicEntrance.witch_swamp_bot_to_top, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
+    rule_collector.set_entrance_rule(LogicEntrance.witch_swamp_top_to_bot, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.enter_mutant_bug_lair,
                                      (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(NPC.krobus))
                                      | logic.mod.magic.can_blink())
@@ -308,31 +309,25 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
         rule_collector.set_entrance_rule(LogicEntrance.purchase_wizard_blueprints, logic.quest.has_magic_ink())
     rule_collector.set_entrance_rule(LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS / 2))
 
-
-    rule_collector.set_entrance_rule(
-        Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut")
+    rule_collector.set_entrance_rule(Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
+    rule_collector.set_entrance_rule(Entrance.beach_forest_shortcut, logic.received("Forest To Beach Shortcut"))
+    rule_collector.set_many_island_entrances_rules(
+        {
+            entr: logic.received("Mountain Shortcuts")
+            for entr in [
+                LogicEntrance.mountain_shortcut_fence_entrance,
+                LogicEntrance.mountain_shortcut_fence_exit,
+                LogicEntrance.mountain_shortcut_walkway_entrance,
+                LogicEntrance.mountain_shortcut_walkway_exit,
+                LogicEntrance.jojamart_shortcut_cave_entrance,
+                LogicEntrance.jojamart_shortcut_cave_exit,
+                LogicEntrance.town_shortcut_fence_entrance,
+                LogicEntrance.town_shortcut_fence_exit,
+            ]
+        }
     )
-    rule_collector.set_entrance_rule(
-        Entrance.beach_forest_shortcut, logic.received("Forest To Beach Shortcut")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.mountain_jojamart_shortcut, logic.received("Mountain Shortcuts")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.jojamart_mountain_shortcut, logic.received("Mountain Shortcuts")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.mountain_town_shortcut, logic.received("Mountain Shortcuts")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.town_mountain_shortcut, logic.received("Mountain Shortcuts")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.town_tidepools_shortcut, logic.received("Town To Tide Pools Shortcut")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.tidepools_town_shortcut, logic.received("Town To Tide Pools Shortcut")
-    )
+    rule_collector.set_entrance_rule(Entrance.town_tidepools_shortcut, logic.received("Town To Tide Pools Shortcut"))
+    rule_collector.set_entrance_rule(Entrance.tidepools_town_shortcut, logic.received("Town To Tide Pools Shortcut"))
     rule_collector.set_entrance_rule(LogicEntrance.feed_trash_bear, logic.received("Trash Bear Arrival"))
     rule_collector.set_entrance_rule(Entrance.enter_shorts_maze, logic.has(Craftable.staircase))
 
@@ -345,51 +340,31 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(
         Entrance.minecart_bus_stop_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
     )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_bus_stop_to_town, logic.received("Minecarts Repair")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_mines_to_bus_stop, logic.received("Minecarts Repair")
-    )
+    rule_collector.set_entrance_rule(Entrance.minecart_bus_stop_to_town, logic.received("Minecarts Repair"))
+    rule_collector.set_entrance_rule(Entrance.minecart_mines_to_bus_stop, logic.received("Minecarts Repair"))
     rule_collector.set_entrance_rule(
         Entrance.minecart_mines_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
     )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_mines_to_town, logic.received("Minecarts Repair")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_quarry_to_bus_stop, logic.received("Minecarts Repair")
-    )
+    rule_collector.set_entrance_rule(Entrance.minecart_mines_to_town, logic.received("Minecarts Repair"))
+    rule_collector.set_entrance_rule(Entrance.minecart_quarry_to_bus_stop, logic.received("Minecarts Repair"))
     rule_collector.set_entrance_rule(
         Entrance.minecart_quarry_to_mines, logic.received_all("Minecarts Repair", "Landslide Removed")
     )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_quarry_to_town, logic.received("Minecarts Repair")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_town_to_bus_stop, logic.received("Minecarts Repair")
-    )
+    rule_collector.set_entrance_rule(Entrance.minecart_quarry_to_town, logic.received("Minecarts Repair"))
+    rule_collector.set_entrance_rule(Entrance.minecart_town_to_bus_stop, logic.received("Minecarts Repair"))
     rule_collector.set_entrance_rule(
         Entrance.minecart_town_to_mines, logic.received_all("Minecarts Repair", "Landslide Removed")
     )
     rule_collector.set_entrance_rule(
         Entrance.minecart_town_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
     )
+    rule_collector.set_entrance_rule(Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
+    rule_collector.set_entrance_rule(Entrance.backwoods_tunnel_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
     rule_collector.set_entrance_rule(
-        Entrance.tunnel_backwoods_shortcut,
-        logic.received("Tunnel To Backwoods Shortcut"),
+        Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Shortcuts")
     )
     rule_collector.set_entrance_rule(
-        Entrance.backwoods_tunnel_shortcut,
-        logic.received("Tunnel To Backwoods Shortcut"),
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.mountain_lake_to_outside_adventure_guild_shortcut,
-        logic.received("Mountain Shortcuts"),
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.outside_adventure_guild_to_mountain_lake_shortcut,
-        logic.received("Mountain Shortcuts"),
+        Entrance.outside_adventure_guild_to_mountain_lake_shortcut, logic.received("Mountain Shortcuts")
     )
 
 
@@ -480,8 +455,8 @@ def set_farm_buildings_entrance_rules(logic, rule_collector: StardewRuleCollecto
 
 
 def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, content: StardewContent):
-    rule_collector.set_entrance_rule(Entrance.enter_harvey_room, logic.relationship.has_hearts(NPC.harvey, 2))
-    rule_collector.set_entrance_rule(Entrance.leave_harvey_room, logic.relationship.has_hearts(NPC.harvey,2)) # TODO: you can go into the loading zone without the hearts, do we need a region in between?
+    rule_collector.set_entrance_rule(Entrance.hospital_back_to_hospital, logic.relationship.has_hearts(NPC.harvey, 2))
+    rule_collector.set_entrance_rule(Entrance.hospital_to_hospital_back, logic.relationship.has_hearts(NPC.harvey,2)) # TODO: you can go into the loading zone without the hearts, do we need a region in between?
     rule_collector.set_entrance_rule(Entrance.mountain_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.carpenter_shop_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.maru_room_to_carpenter_shop, logic.relationship.has_hearts(NPC.maru, 2))
@@ -611,7 +586,8 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.island_west_to_island_farmhouse: logic.received("Island Farmhouse"),
         Entrance.island_west_to_gourmand_cave: logic.received("Island Farmhouse"),
         Entrance.island_north_to_dig_site: dig_site_rule | logic.ability.can_chair_skip(),
-        Entrance.dig_site_to_professor_snail_cave: logic.received("Open Professor Snail Cave"),
+        Entrance.dig_site_to_professor_snail_cave_entrance: logic.received("Open Professor Snail Cave"),
+        Entrance.professor_snail_cave_entrance_to_dig_site: logic.received("Open Professor Snail Cave"),
         Entrance.talk_to_island_trader: logic.received("Island Trader"),
         Entrance.island_south_to_southeast: logic.received("Island Resort"),
         Entrance.use_island_resort: logic.received("Island Resort"),

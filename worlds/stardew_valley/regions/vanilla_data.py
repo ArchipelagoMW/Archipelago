@@ -117,7 +117,8 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_maru_room,
             Entrance.mountain_to_outside_adventure_guild,  # can't randomize
             Entrance.mountain_lake_to_outside_adventure_guild_shortcut,  # can't randomize
-            Entrance.mountain_town_shortcut,
+            LogicEntrance.mountain_shortcut_fence_entrance,
+            LogicEntrance.mountain_shortcut_walkway_entrance,
         ),
     ),
     RegionData(
@@ -126,7 +127,6 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_the_mines,
             Entrance.enter_quarry,  # can't randomize
             Entrance.mountain_to_adventurer_guild,
-            Entrance.mountain_jojamart_shortcut,
             Entrance.outside_adventure_guild_to_mountain_lake_shortcut,
             Entrance.outside_adventure_guild_to_mountain,
         ),
@@ -147,7 +147,6 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.town_to_bus_stop,
             Entrance.town_to_forest,
             Entrance.town_to_mountain,
-            Entrance.town_mountain_shortcut,
             Entrance.town_to_community_center,
             Entrance.town_to_beach,
             Entrance.town_to_hospital,
@@ -163,7 +162,6 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.town_to_museum,
             Entrance.town_to_jojamart,
             Entrance.town_tidepools_shortcut,
-            Entrance.jojamart_mountain_shortcut,
             Entrance.minecart_town_to_bus_stop,
             Entrance.minecart_town_to_mines,
             Entrance.minecart_town_to_quarry,
@@ -174,7 +172,24 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.attend_spirit_eve,
             LogicEntrance.attend_winter_star,
             LogicEntrance.search_garbage_cans,
+            LogicEntrance.jojamart_shortcut_cave_entrance,
+            LogicEntrance.town_shortcut_fence_entrance,
         ),
+    ),
+    RegionData(
+        LogicRegion.mountain_fence_shortcut,
+        (LogicEntrance.mountain_shortcut_fence_exit, Entrance.mountain_town_shortcut),
+    ),
+    RegionData(
+        LogicRegion.mountain_walkway_shortcut,
+        (LogicEntrance.mountain_shortcut_walkway_exit, Entrance.mountain_jojamart_shortcut),
+    ),
+    RegionData(
+        LogicRegion.town_cave_joja_shortcut,
+        (LogicEntrance.jojamart_shortcut_cave_exit, Entrance.jojamart_mountain_shortcut),
+    ),
+    RegionData(
+        LogicRegion.town_fence_shortcut, (LogicEntrance.town_shortcut_fence_exit, Entrance.town_mountain_shortcut)
     ),
     RegionData(
         RegionName.beach,
@@ -256,7 +271,8 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.boiler_room),
     RegionData(RegionName.bulletin_board),
     RegionData(RegionName.vault),
-    RegionData(RegionName.hospital, (Entrance.hospital_to_town, Entrance.enter_harvey_room)),
+    RegionData(RegionName.hospital, (Entrance.hospital_to_town, Entrance.hospital_to_hospital_back)),
+    RegionData(RegionName.hospital_back, (Entrance.hospital_back_to_hospital, Entrance.enter_harvey_room)),
     RegionData(RegionName.harvey_room, (Entrance.leave_harvey_room,)),
     RegionData(RegionName.pierre_store, (Entrance.pierre_general_store_to_town, Entrance.enter_sunroom)),
     RegionData(RegionName.sunroom, (Entrance.leave_sunroom,)),
@@ -301,7 +317,15 @@ vanilla_regions: tuple[RegionData, ...] = (
     ),
     RegionData(RegionName.public_bath, (Entrance.public_bath_to_mens_lockers, Entrance.public_bath_to_womens_lockers)),
     RegionData(RegionName.witch_warp_cave, (Entrance.leave_witch_warp_cave, Entrance.enter_witch_swamp)),
-    RegionData(RegionName.witch_swamp, (Entrance.leave_witch_swamp, Entrance.enter_witch_hut)),
+    RegionData(
+        RegionName.witch_swamp_bot,
+        (Entrance.leave_witch_swamp, LogicEntrance.witch_swamp_bot_to_top, LogicEntrance.access_witch_swamp_from_bot),
+    ),
+    RegionData(
+        RegionName.witch_swamp_top,
+        (LogicEntrance.witch_swamp_top_to_bot, Entrance.enter_witch_hut, LogicEntrance.access_witch_swamp_from_top),
+    ),
+    RegionData(RegionName.witch_swamp),
     RegionData(RegionName.witch_hut, (Entrance.leave_witch_hut, Entrance.witch_warp_to_wizard_basement)),
     RegionData(
         RegionName.quarry,
@@ -604,6 +628,14 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         RegionName.farm,
         flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
     ),
+    ConnectionData(LogicEntrance.mountain_shortcut_fence_entrance, LogicRegion.mountain_fence_shortcut),
+    ConnectionData(LogicEntrance.mountain_shortcut_fence_exit, RegionName.mountain),
+    ConnectionData(LogicEntrance.mountain_shortcut_walkway_entrance, LogicRegion.mountain_walkway_shortcut),
+    ConnectionData(LogicEntrance.mountain_shortcut_walkway_exit, RegionName.outside_adventure_guild),
+    ConnectionData(LogicEntrance.town_shortcut_fence_exit, RegionName.town),
+    ConnectionData(LogicEntrance.town_shortcut_fence_entrance, LogicRegion.town_cave_joja_shortcut),
+    ConnectionData(LogicEntrance.jojamart_shortcut_cave_exit, RegionName.town),
+    ConnectionData(LogicEntrance.jojamart_shortcut_cave_entrance, LogicRegion.town_fence_shortcut),
     ConnectionData(
         Entrance.minecart_bus_stop_to_mines,
         RegionName.mines,
@@ -981,6 +1013,8 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.PELICAN_TOWN,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(Entrance.hospital_to_hospital_back, RegionName.hospital_back),
+    ConnectionData(Entrance.hospital_back_to_hospital, RegionName.hospital),
     ConnectionData(
         Entrance.enter_harvey_room,
         RegionName.harvey_room,
@@ -989,7 +1023,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.leave_harvey_room,
-        RegionName.hospital,
+        RegionName.hospital_back,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
@@ -1281,9 +1315,11 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
+    ConnectionData(LogicEntrance.railroad_to_part_behind_chicken_stone, LogicRegion.railroad_part_behind_chicken_stone),
+    ConnectionData(LogicEntrance.part_behind_chicken_stone_to_railroad, RegionName.railroad),
     ConnectionData(
         Entrance.enter_witch_swamp,
-        RegionName.witch_swamp,
+        RegionName.witch_swamp_bot,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.UP,
     ),
@@ -1293,6 +1329,10 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.OUT_TO_IN | GroupFlag.DOWN,
     ),
+    ConnectionData(LogicEntrance.witch_swamp_bot_to_top, RegionName.witch_swamp_top),
+    ConnectionData(LogicEntrance.witch_swamp_top_to_bot, RegionName.witch_swamp_bot),
+    ConnectionData(LogicEntrance.access_witch_swamp_from_bot, RegionName.witch_swamp),
+    ConnectionData(LogicEntrance.access_witch_swamp_from_top, RegionName.witch_swamp),
     ConnectionData(
         Entrance.enter_witch_hut,
         RegionName.witch_hut,
@@ -1301,7 +1341,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.leave_witch_hut,
-        RegionName.witch_swamp,
+        RegionName.witch_swamp_top,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
@@ -1403,13 +1443,13 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.mountain_jojamart_shortcut,
-        RegionName.town,
+        LogicRegion.town_cave_joja_shortcut,
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.jojamart_mountain_shortcut,
-        RegionName.outside_adventure_guild,
+        LogicRegion.mountain_walkway_shortcut,
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
@@ -1417,13 +1457,13 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.backwoods_tunnel_shortcut, RegionName.tunnel_entrance),
     ConnectionData(
         Entrance.mountain_town_shortcut,
-        RegionName.town,
+        LogicRegion.town_fence_shortcut,
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_mountain_shortcut,
-        RegionName.mountain,
+        LogicRegion.mountain_fence_shortcut,
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
