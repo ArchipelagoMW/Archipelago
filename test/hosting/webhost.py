@@ -37,7 +37,6 @@ def get_app(tempdir: str) -> "Flask":
     }
     raw_app.config.update({
         "TESTING": True,
-        "HOST_ADDRESS": "localhost",
         "HOSTERS": 1,
         "GENERATORS": 1,
         "JOB_THRESHOLD": 1,
