@@ -112,6 +112,7 @@ class EnableDLCOption(Toggle):
     To use this option, you must own both the "Ashes of Ariandel" and the "Ringed City" DLCs.
     """
     display_name = "Enable DLC"
+    default = True
 
 
 class EnableNGPOption(Toggle):
