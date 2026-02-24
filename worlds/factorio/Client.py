@@ -418,7 +418,6 @@ async def game_watcher(ctx: FactorioContext):
                                 else:
                                     logger.debug(f"EnergyLink: Sent {format_SI_prefix(value)}J")
 
-
             await asyncio.sleep(0.1)
 
     except Exception as e:
