@@ -151,18 +151,18 @@ def set_always_allow(spot, rule):
     spot.always_allow = rule
 
 
-def add_lamp_requirement(world: MultiWorld, spot, player: int, has_accessible_torch: bool = False):
-    if world.worlds[player].options.dark_room_logic == "lamp":
+def add_lamp_requirement(multiworld: MultiWorld, spot, player: int, has_accessible_torch: bool = False):
+    if multiworld.worlds[player].options.dark_room_logic == "lamp":
         add_rule(spot, lambda state: state.has('Lamp', player))
-    elif world.worlds[player].options.dark_room_logic == "torches":  # implicitly lamp as well
+    elif multiworld.worlds[player].options.dark_room_logic == "torches":  # implicitly lamp as well
         if has_accessible_torch:
             add_rule(spot, lambda state: state.has('Lamp', player) or state.has('Fire Rod', player))
         else:
             add_rule(spot, lambda state: state.has('Lamp', player))
-    elif world.worlds[player].options.dark_room_logic == "none":
+    elif multiworld.worlds[player].options.dark_room_logic == "none":
         pass
     else:
-        raise ValueError(f"Unknown Dark Room Logic: {world.worlds[player].options.dark_room_logic}")
+        raise ValueError(f"Unknown Dark Room Logic: {multiworld.worlds[player].options.dark_room_logic}")
 
 
 non_crossover_items = (item_name_groups["Small Keys"] | item_name_groups["Big Keys"] | progression_items) - {
@@ -1650,7 +1650,7 @@ def set_inverted_big_bomb_rules(world, player):
         raise Exception('No logic found for routing from %s to the pyramid.' % bombshop_entrance.name)
 
 
-def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
+def set_bunny_rules(multiworld: MultiWorld, player: int, inverted: bool):
 
     # regions for the exits of multi-entrance caves/drops that bunny cannot pass
     # Note spiral cave and two brothers house are passable in superbunny state for glitch logic with extra requirements.
@@ -1690,7 +1690,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     def get_rule_to_add(region, location = None, connecting_entrance = None):
         # In OWG, a location can potentially be superbunny-mirror accessible or
         # bunny revival accessible.
-        if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
+        if multiworld.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
             if region.name == 'Swamp Palace (Entrance)':  # Need to 0hp revive - not in logic
                 return lambda state: state.has('Moon Pearl', player)
             if region.name == 'Tower of Hera (Bottom)':  # Need to hit the crystal switch
@@ -1730,7 +1730,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 seen.add(new_region)
                 if not is_link(new_region):
                     # For glitch rulesets, establish superbunny and revival rules.
-                    if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
+                    if multiworld.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         if region.name in OverworldGlitchRules.get_sword_required_superbunny_mirror_regions():
                             possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has('Magic Mirror', player) and has_sword(state, player))
                         elif (region.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_regions()
@@ -1753,29 +1753,29 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
         return options_to_access_rule(possible_options)
 
     # Add requirements for bunny-impassible caves if link is a bunny in them
-    for region in (world.get_region(name, player) for name in bunny_impassable_caves):
+    for region in (multiworld.get_region(name, player) for name in bunny_impassable_caves):
         if not is_bunny(region):
             continue
         rule = get_rule_to_add(region)
         for region_exit in region.exits:
             add_rule(region_exit, rule)
 
-    paradox_shop = world.get_region('Light World Death Mountain Shop', player)
+    paradox_shop = multiworld.get_region('Light World Death Mountain Shop', player)
     if is_bunny(paradox_shop):
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
-    for entrance in world.get_entrances(player):
+    for entrance in multiworld.get_entrances(player):
         if is_bunny(entrance.connected_region):
-            if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] :
+            if multiworld.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] :
                 if entrance.connected_region.type == LTTPRegionType.Dungeon:
                     if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
                     continue
                 if entrance.connected_region.name == 'Turtle Rock (Entrance)':
-                    add_rule(world.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
+                    add_rule(multiworld.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
             for location in entrance.connected_region.locations:
-                if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
+                if multiworld.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
                     continue
                 if location.name in bunny_accessible_locations:
                     continue
