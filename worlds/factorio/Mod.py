@@ -23,6 +23,7 @@ template_env: Optional[jinja2.Environment] = None
 
 data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
+    # if locale PR is also added then remove the line below:
 locale_template: Optional[jinja2.Template] = None
 main_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
@@ -96,6 +97,8 @@ def generate_mod(world: "Factorio", output_directory: str):
     random = world.random
 
     global data_final_template, locale_template, main_template, data_template, settings_template, constants_template
+    # if locale PR is also added then use this line (or in other words, just remove locale_template.):
+    # global data_final_template, main_template, data_template, settings_template, constants_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -108,6 +111,7 @@ def generate_mod(world: "Factorio", output_directory: str):
 
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
+            # if locale PR is also added then remove the line below:
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             main_template = template_env.get_template(r"/script/main.lua")
             settings_template = template_env.get_template("settings.lua")
@@ -198,6 +202,8 @@ def generate_mod(world: "Factorio", output_directory: str):
                                       main_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
                                       settings_template.render(**template_data)))
+    
+    # if locale PR is also added then remove the locale template line below:
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
                                       locale_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/constants.lua",
