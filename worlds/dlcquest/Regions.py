@@ -61,7 +61,7 @@ def create_regions_basic_campaign(has_campaign_basic: bool, region_menu: Region,
     create_region_and_locations_basic("Psychological Warfare", ["West Cave Sheep"], ["Cloud Double Jump"], player, multiworld, 100)
     locations_double_jump_left = ["Pet Pack", "Top Hat Pack", "North West Alcove Sheep"]
     create_region_and_locations_basic("Double Jump Total Left", locations_double_jump_left, ["Cave Tree", "Cave Roof"], player, multiworld, 50)
-    create_region_and_locations_basic("Double Jump Total Left Cave", ["Top Hat Sheep"], [], player, world, 9)
+    create_region_and_locations_basic("Double Jump Total Left Cave", ["Top Hat Sheep"], [], player, multiworld, 9)
     create_region_and_locations_basic("Double Jump Total Left Roof", ["North West Ceiling Sheep"], [], player, multiworld, 10)
     locations_double_jump_left_ceiling = ["Sexy Outfits Pack", "Double Jump Alcove Sheep", "Sexy Outfits Sheep"]
     create_region_and_locations_basic("Double Jump Behind Tree", locations_double_jump_left_ceiling, ["True Double Jump"], player, multiworld, 89)

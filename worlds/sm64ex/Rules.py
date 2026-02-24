@@ -280,8 +280,8 @@ class RuleFactory:
     class SM64LogicException(Exception):
         pass
 
-    def __init__(self, world, options: SM64Options, player: int, move_rando_bitvec: int):
-        self.world = world
+    def __init__(self, multiworld, options: SM64Options, player: int, move_rando_bitvec: int):
+        self.multiworld = multiworld
         self.player = player
         self.move_rando_bitvec = move_rando_bitvec
         self.area_randomizer = options.area_rando > 0
@@ -291,7 +291,7 @@ class RuleFactory:
         self.moveless = not options.strict_move_requirements
 
     def assign_rule(self, target_name: str, rule_expr: str):
-        target = self.multiworld.get_location(target_name, self.player) if target_name in location_table else self.world.get_entrance(target_name, self.player)
+        target = self.multiworld.get_location(target_name, self.player) if target_name in location_table else self.multiworld.get_entrance(target_name, self.player)
         cannon_name = "Cannon Unlock " + target_name.split(':')[0]
         try:
             rule = self.build_rule(rule_expr, cannon_name)
