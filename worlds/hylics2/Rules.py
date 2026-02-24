@@ -126,7 +126,7 @@ def enter_hylemxylem(state: CollectionState, player: int) -> bool:
 
 
 def set_rules(hylics2world):
-    world = hylics2world.multiworld
+    multiworld = hylics2world.multiworld
     player = hylics2world.player
 
     extra = hylics2world.options.extra_items_in_logic
@@ -135,23 +135,23 @@ def set_rules(hylics2world):
     start_location = hylics2world.options.start_location
 
     # Afterlife
-    add_rule(world.get_location("Afterlife: TV", player),
+    add_rule(multiworld.get_location("Afterlife: TV", player),
         lambda state: cave_key(state, player))
 
     # New Muldul
-    add_rule(world.get_location("New Muldul: Underground Chest", player),
+    add_rule(multiworld.get_location("New Muldul: Underground Chest", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("New Muldul: TV", player),
+    add_rule(multiworld.get_location("New Muldul: TV", player),
         lambda state: house_key(state, player))
-    add_rule(world.get_location("New Muldul: Upper House Chest 1", player),
+    add_rule(multiworld.get_location("New Muldul: Upper House Chest 1", player),
         lambda state: upper_house_key(state, player))
-    add_rule(world.get_location("New Muldul: Upper House Chest 2", player),
+    add_rule(multiworld.get_location("New Muldul: Upper House Chest 2", player),
         lambda state: upper_house_key(state, player))
-    add_rule(world.get_location("New Muldul: Pot above Vault", player),
+    add_rule(multiworld.get_location("New Muldul: Pot above Vault", player),
         lambda state: air_dash(state, player))
 
     # New Muldul Vault
-    add_rule(world.get_location("New Muldul: Rescued Blerol 1", player),
+    add_rule(multiworld.get_location("New Muldul: Rescued Blerol 1", player),
         lambda state: (
             (
                 (
@@ -165,7 +165,7 @@ def set_rules(hylics2world):
             )
             or enter_hylemxylem(state, player)
         ))
-    add_rule(world.get_location("New Muldul: Rescued Blerol 2", player),
+    add_rule(multiworld.get_location("New Muldul: Rescued Blerol 2", player),
         lambda state: (
             (
                 (
@@ -179,194 +179,194 @@ def set_rules(hylics2world):
             )
             or enter_hylemxylem(state, player)
         ))
-    add_rule(world.get_location("New Muldul: Vault Left Chest", player),
+    add_rule(multiworld.get_location("New Muldul: Vault Left Chest", player),
         lambda state: enter_hylemxylem(state, player))
-    add_rule(world.get_location("New Muldul: Vault Right Chest", player),
+    add_rule(multiworld.get_location("New Muldul: Vault Right Chest", player),
         lambda state: enter_hylemxylem(state, player))
-    add_rule(world.get_location("New Muldul: Vault Bomb", player),
+    add_rule(multiworld.get_location("New Muldul: Vault Bomb", player),
         lambda state: enter_hylemxylem(state, player))
 
     # Viewax's Edifice
-    add_rule(world.get_location("Viewax's Edifice: Canopic Jar", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Canopic Jar", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Cave Sarcophagus", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Cave Sarcophagus", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Shielded Key", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Shielded Key", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Shielded Key", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Shielded Key", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Tower Pot", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Tower Pot", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Tower Jar", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Tower Jar", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Tower Chest", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Tower Chest", player),
         lambda state: (
             paddle(state, player)
             and tower_key(state, player)
         ))
-    add_rule(world.get_location("Viewax's Edifice: Viewax Pot", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Viewax Pot", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Defeat Viewax", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Defeat Viewax", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Viewax's Edifice: TV", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: TV", player),
         lambda state: (
             paddle(state, player)
             and jail_key(state, player)
         ))
-    add_rule(world.get_location("Viewax's Edifice: Sage Fridge", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Sage Fridge", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Sage Item 1", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Sage Item 1", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Viewax's Edifice: Sage Item 2", player),
+    add_rule(multiworld.get_location("Viewax's Edifice: Sage Item 2", player),
         lambda state: air_dash(state, player))
 
     # Arcade 1
-    add_rule(world.get_location("Arcade 1: Key", player),
+    add_rule(multiworld.get_location("Arcade 1: Key", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Coin Dash", player),
+    add_rule(multiworld.get_location("Arcade 1: Coin Dash", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Burrito Alcove 1", player),
+    add_rule(multiworld.get_location("Arcade 1: Burrito Alcove 1", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Burrito Alcove 2", player),
+    add_rule(multiworld.get_location("Arcade 1: Burrito Alcove 2", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Behind Spikes Banana", player),
+    add_rule(multiworld.get_location("Arcade 1: Behind Spikes Banana", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Pyramid Banana", player),
+    add_rule(multiworld.get_location("Arcade 1: Pyramid Banana", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Moving Platforms Muscle Applique", player),
+    add_rule(multiworld.get_location("Arcade 1: Moving Platforms Muscle Applique", player),
         lambda state: paddle(state, player))
-    add_rule(world.get_location("Arcade 1: Bed Banana", player),
+    add_rule(multiworld.get_location("Arcade 1: Bed Banana", player),
         lambda state: paddle(state, player))
 
     # Airship
-    add_rule(world.get_location("Airship: Talk to Somsnosa", player),
+    add_rule(multiworld.get_location("Airship: Talk to Somsnosa", player),
         lambda state: worm_room_key(state, player))
 
     # Foglast
-    add_rule(world.get_location("Foglast: Underground Sarcophagus", player),
+    add_rule(multiworld.get_location("Foglast: Underground Sarcophagus", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Foglast: Shielded Key", player),
+    add_rule(multiworld.get_location("Foglast: Shielded Key", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Foglast: TV", player),
+    add_rule(multiworld.get_location("Foglast: TV", player),
         lambda state: (
             air_dash(state, player)
             and clicker(state, player)
         ))
-    add_rule(world.get_location("Foglast: Buy Clicker", player),
+    add_rule(multiworld.get_location("Foglast: Buy Clicker", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Foglast: Shielded Chest", player),
+    add_rule(multiworld.get_location("Foglast: Shielded Chest", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Foglast: Cave Fridge", player),
+    add_rule(multiworld.get_location("Foglast: Cave Fridge", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Foglast: Roof Sarcophagus", player),
+    add_rule(multiworld.get_location("Foglast: Roof Sarcophagus", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
-    add_rule(world.get_location("Foglast: Under Lair Sarcophagus 1", player),
+    add_rule(multiworld.get_location("Foglast: Under Lair Sarcophagus 1", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
-    add_rule(world.get_location("Foglast: Under Lair Sarcophagus 2", player),
+    add_rule(multiworld.get_location("Foglast: Under Lair Sarcophagus 2", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
-    add_rule(world.get_location("Foglast: Under Lair Sarcophagus 3", player),
+    add_rule(multiworld.get_location("Foglast: Under Lair Sarcophagus 3", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
-    add_rule(world.get_location("Foglast: Sage Sarcophagus", player),
+    add_rule(multiworld.get_location("Foglast: Sage Sarcophagus", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
-    add_rule(world.get_location("Foglast: Sage Item 1", player),
+    add_rule(multiworld.get_location("Foglast: Sage Item 1", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
-    add_rule(world.get_location("Foglast: Sage Item 2", player),
+    add_rule(multiworld.get_location("Foglast: Sage Item 2", player),
         lambda state: (
             air_dash(state, player)
             and bridge_key(state, player)
         ))
 
     # Drill Castle
-    add_rule(world.get_location("Drill Castle: Island Banana", player),
+    add_rule(multiworld.get_location("Drill Castle: Island Banana", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Drill Castle: Island Pot", player),
+    add_rule(multiworld.get_location("Drill Castle: Island Pot", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Drill Castle: Cave Sarcophagus", player),
+    add_rule(multiworld.get_location("Drill Castle: Cave Sarcophagus", player),
         lambda state: air_dash(state, player))
-    add_rule(world.get_location("Drill Castle: TV", player),
+    add_rule(multiworld.get_location("Drill Castle: TV", player),
         lambda state: air_dash(state, player))
 
     # Sage Labyrinth
-    add_rule(world.get_location("Sage Labyrinth: Sage Item 1", player),
+    add_rule(multiworld.get_location("Sage Labyrinth: Sage Item 1", player),
         lambda state: deep_key(state, player))
-    add_rule(world.get_location("Sage Labyrinth: Sage Item 2", player),
+    add_rule(multiworld.get_location("Sage Labyrinth: Sage Item 2", player),
         lambda state: deep_key(state, player))
-    add_rule(world.get_location("Sage Labyrinth: Sage Left Arm", player),
+    add_rule(multiworld.get_location("Sage Labyrinth: Sage Left Arm", player),
         lambda state: deep_key(state, player))
-    add_rule(world.get_location("Sage Labyrinth: Sage Right Arm", player),
+    add_rule(multiworld.get_location("Sage Labyrinth: Sage Right Arm", player),
         lambda state: deep_key(state, player))
-    add_rule(world.get_location("Sage Labyrinth: Sage Left Leg", player),
+    add_rule(multiworld.get_location("Sage Labyrinth: Sage Left Leg", player),
         lambda state: deep_key(state, player))
-    add_rule(world.get_location("Sage Labyrinth: Sage Right Leg", player),
+    add_rule(multiworld.get_location("Sage Labyrinth: Sage Right Leg", player),
         lambda state: deep_key(state, player))
 
     # Sage Airship
-    add_rule(world.get_location("Sage Airship: TV", player),
+    add_rule(multiworld.get_location("Sage Airship: TV", player),
         lambda state: all_tokens(state, player))
 
     # Hylemxylem
-    add_rule(world.get_location("Hylemxylem: Upper Chamber Banana", player),
+    add_rule(multiworld.get_location("Hylemxylem: Upper Chamber Banana", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Across Upper Reservoir Chest", player),
+    add_rule(multiworld.get_location("Hylemxylem: Across Upper Reservoir Chest", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Chest", player),
+    add_rule(multiworld.get_location("Hylemxylem: Drained Lower Reservoir Chest", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Burrito 1", player),
+    add_rule(multiworld.get_location("Hylemxylem: Drained Lower Reservoir Burrito 1", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Drained Lower Reservoir Burrito 2", player),
+    add_rule(multiworld.get_location("Hylemxylem: Drained Lower Reservoir Burrito 2", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 1", player),
+    add_rule(multiworld.get_location("Hylemxylem: Lower Reservoir Hole Pot 1", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 2", player),
+    add_rule(multiworld.get_location("Hylemxylem: Lower Reservoir Hole Pot 2", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Pot 3", player),
+    add_rule(multiworld.get_location("Hylemxylem: Lower Reservoir Hole Pot 3", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Sarcophagus", player),
+    add_rule(multiworld.get_location("Hylemxylem: Lower Reservoir Hole Sarcophagus", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 1", player),
+    add_rule(multiworld.get_location("Hylemxylem: Drained Upper Reservoir Burrito 1", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 2", player),
+    add_rule(multiworld.get_location("Hylemxylem: Drained Upper Reservoir Burrito 2", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Drained Upper Reservoir Burrito 3", player),
+    add_rule(multiworld.get_location("Hylemxylem: Drained Upper Reservoir Burrito 3", player),
         lambda state: upper_chamber_key(state, player))
-    add_rule(world.get_location("Hylemxylem: Upper Reservoir Hole Key", player),
+    add_rule(multiworld.get_location("Hylemxylem: Upper Reservoir Hole Key", player),
         lambda state: upper_chamber_key(state, player))
 
     # extra rules if Extra Items in Logic is enabled
     if extra:
-        for i in world.get_region("Foglast", player).entrances:
+        for i in multiworld.get_region("Foglast", player).entrances:
             add_rule(i, lambda state: charge_up(state, player))
-        for i in world.get_region("Sage Airship", player).entrances:
+        for i in multiworld.get_region("Sage Airship", player).entrances:
             add_rule(i, lambda state: (
                     charge_up(state, player)
                     and paper_cup(state, player)
                     and worm_room_key(state, player)
                 ))
-        for i in world.get_region("Hylemxylem", player).entrances:
+        for i in multiworld.get_region("Hylemxylem", player).entrances:
             add_rule(i, lambda state: (
                 charge_up(state, player)
                 and paper_cup(state, player)
             ))
 
-        add_rule(world.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player),
+        add_rule(multiworld.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player),
             lambda state: (
                 charge_up(state, player)
                 and paper_cup(state, player)
@@ -374,9 +374,9 @@ def set_rules(hylics2world):
 
     # extra rules if Shuffle Party Members is enabled
     if party:
-        for i in world.get_region("Arcade Island", player).entrances:
+        for i in multiworld.get_region("Arcade Island", player).entrances:
             add_rule(i, lambda state: party_3(state, player))
-        for i in world.get_region("Foglast", player).entrances:
+        for i in multiworld.get_region("Foglast", player).entrances:
             add_rule(i, lambda state: (
                 party_3(state, player)
                 or (
@@ -384,197 +384,197 @@ def set_rules(hylics2world):
                     and jail_key(state, player)
                 )
             ))
-        for i in world.get_region("Sage Airship", player).entrances:
+        for i in multiworld.get_region("Sage Airship", player).entrances:
             add_rule(i, lambda state: party_3(state, player))
-        for i in world.get_region("Hylemxylem", player).entrances:
+        for i in multiworld.get_region("Hylemxylem", player).entrances:
             add_rule(i, lambda state: party_3(state, player))
 
-        add_rule(world.get_location("Viewax's Edifice: Defeat Viewax", player),
+        add_rule(multiworld.get_location("Viewax's Edifice: Defeat Viewax", player),
             lambda state: party_2(state, player))
-        add_rule(world.get_location("New Muldul: Rescued Blerol 1", player),
+        add_rule(multiworld.get_location("New Muldul: Rescued Blerol 1", player),
             lambda state: party_2(state, player))
-        add_rule(world.get_location("New Muldul: Rescued Blerol 2", player),
+        add_rule(multiworld.get_location("New Muldul: Rescued Blerol 2", player),
             lambda state: party_2(state, player))
-        add_rule(world.get_location("New Muldul: Vault Left Chest", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Left Chest", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("New Muldul: Vault Right Chest", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Right Chest", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("New Muldul: Vault Bomb", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Bomb", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("Juice Ranch: Battle with Somsnosa", player),
+        add_rule(multiworld.get_location("Juice Ranch: Battle with Somsnosa", player),
             lambda state: party_2(state, player))
-        add_rule(world.get_location("Juice Ranch: Somsnosa Joins", player),
+        add_rule(multiworld.get_location("Juice Ranch: Somsnosa Joins", player),
             lambda state: party_2(state, player))
-        add_rule(world.get_location("Airship: Talk to Somsnosa", player),
+        add_rule(multiworld.get_location("Airship: Talk to Somsnosa", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player),
+        add_rule(multiworld.get_location("Sage Labyrinth: Motor Hunter Sarcophagus", player),
             lambda state: party_3(state, player))
 
     # extra rules if Shuffle Red Medallions is enabled
     if medallion:
-        add_rule(world.get_location("New Muldul: Upper House Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Upper House Medallion", player),
             lambda state: upper_house_key(state, player))
-        add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Rear Left Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
                 and air_dash(state, player)
             ))
-        add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Rear Right Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
                 and air_dash(state, player)
             ))
-        add_rule(world.get_location("New Muldul: Vault Center Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Center Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
                 and air_dash(state, player)
             ))
-        add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Front Left Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
                 and air_dash(state, player)
             ))
-        add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Front Right Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
                 and air_dash(state, player)
             ))
-        add_rule(world.get_location("Viewax's Edifice: Fort Wall Medallion", player),
+        add_rule(multiworld.get_location("Viewax's Edifice: Fort Wall Medallion", player),
             lambda state: paddle(state, player))
-        add_rule(world.get_location("Viewax's Edifice: Jar Medallion", player),
+        add_rule(multiworld.get_location("Viewax's Edifice: Jar Medallion", player),
             lambda state: paddle(state, player))
-        add_rule(world.get_location("Viewax's Edifice: Sage Chair Medallion", player),
+        add_rule(multiworld.get_location("Viewax's Edifice: Sage Chair Medallion", player),
             lambda state: air_dash(state, player))
-        add_rule(world.get_location("Arcade 1: Lonely Medallion", player),
+        add_rule(multiworld.get_location("Arcade 1: Lonely Medallion", player),
             lambda state: paddle(state, player))
-        add_rule(world.get_location("Arcade 1: Alcove Medallion", player),
+        add_rule(multiworld.get_location("Arcade 1: Alcove Medallion", player),
             lambda state: paddle(state, player))
-        add_rule(world.get_location("Arcade 1: Lava Medallion", player),
+        add_rule(multiworld.get_location("Arcade 1: Lava Medallion", player),
             lambda state: paddle(state, player))
-        add_rule(world.get_location("Foglast: Under Lair Medallion", player),
+        add_rule(multiworld.get_location("Foglast: Under Lair Medallion", player),
             lambda state: bridge_key(state, player))
-        add_rule(world.get_location("Foglast: Mid-Air Medallion", player),
+        add_rule(multiworld.get_location("Foglast: Mid-Air Medallion", player),
             lambda state: air_dash(state, player))
-        add_rule(world.get_location("Foglast: Top of Tower Medallion", player),
+        add_rule(multiworld.get_location("Foglast: Top of Tower Medallion", player),
             lambda state: paddle(state, player))
-        add_rule(world.get_location("Hylemxylem: Lower Reservoir Hole Medallion", player),
+        add_rule(multiworld.get_location("Hylemxylem: Lower Reservoir Hole Medallion", player),
             lambda state: upper_chamber_key(state, player))
 
     # extra rules if Shuffle Red Medallions and Party Shuffle are enabled
     if party and medallion:
-        add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Rear Left Medallion", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Rear Right Medallion", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("New Muldul: Vault Center Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Center Medallion", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Front Left Medallion", player),
             lambda state: party_3(state, player))
-        add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player),
+        add_rule(multiworld.get_location("New Muldul: Vault Front Right Medallion", player),
             lambda state: party_3(state, player))
 
     # entrances
-    for i in world.get_region("Airship", player).entrances:
+    for i in multiworld.get_region("Airship", player).entrances:
         add_rule(i, lambda state: airship(state, player))
-    for i in world.get_region("Arcade Island", player).entrances:
+    for i in multiworld.get_region("Arcade Island", player).entrances:
         add_rule(i, lambda state: (
             airship(state, player)
             and air_dash(state, player)
         ))
-    for i in world.get_region("Worm Pod", player).entrances:
+    for i in multiworld.get_region("Worm Pod", player).entrances:
         add_rule(i, lambda state: enter_wormpod(state, player))
-    for i in world.get_region("Foglast", player).entrances:
+    for i in multiworld.get_region("Foglast", player).entrances:
         add_rule(i, lambda state: enter_foglast(state, player))
-    for i in world.get_region("Sage Labyrinth", player).entrances:
+    for i in multiworld.get_region("Sage Labyrinth", player).entrances:
         add_rule(i, lambda state: skull_bomb(state, player))
-    for i in world.get_region("Sage Airship", player).entrances:
+    for i in multiworld.get_region("Sage Airship", player).entrances:
         add_rule(i, lambda state: enter_sageship(state, player))
-    for i in world.get_region("Hylemxylem", player).entrances:
+    for i in multiworld.get_region("Hylemxylem", player).entrances:
         add_rule(i, lambda state: enter_hylemxylem(state, player))
 
     # random start logic (default)
     if start_location == "waynehouse":
         # entrances
-        for i in world.get_region("Viewax", player).entrances:
+        for i in multiworld.get_region("Viewax", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
                 and airship(state, player)
             ))
-        for i in world.get_region("TV Island", player).entrances:
+        for i in multiworld.get_region("TV Island", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Shield Facility", player).entrances:
+        for i in multiworld.get_region("Shield Facility", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Juice Ranch", player).entrances:
+        for i in multiworld.get_region("Juice Ranch", player).entrances:
             add_rule(i, lambda state: airship(state, player))
 
     # random start logic (Viewax's Edifice)
     elif start_location == "viewaxs_edifice":
-        for i in world.get_region("Waynehouse", player).entrances:
+        for i in multiworld.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
                 or airship(state, player)
             ))
-        for i in world.get_region("New Muldul", player).entrances:
+        for i in multiworld.get_region("New Muldul", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
                 or airship(state, player)
             ))
-        for i in world.get_region("New Muldul Vault", player).entrances:
+        for i in multiworld.get_region("New Muldul Vault", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
                 or airship(state, player)
             ))
-        for i in world.get_region("Drill Castle", player).entrances:
+        for i in multiworld.get_region("Drill Castle", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
                 or airship(state, player)
             ))
-        for i in world.get_region("TV Island", player).entrances:
+        for i in multiworld.get_region("TV Island", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Shield Facility", player).entrances:
+        for i in multiworld.get_region("Shield Facility", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Juice Ranch", player).entrances:
+        for i in multiworld.get_region("Juice Ranch", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Sage Labyrinth", player).entrances:
+        for i in multiworld.get_region("Sage Labyrinth", player).entrances:
             add_rule(i, lambda state: airship(state, player))
 
     # start logic (TV Island)
     elif start_location == "tv_island":
-        for i in world.get_region("Waynehouse", player).entrances:
+        for i in multiworld.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("New Muldul", player).entrances:
+        for i in multiworld.get_region("New Muldul", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("New Muldul Vault", player).entrances:
+        for i in multiworld.get_region("New Muldul Vault", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Drill Castle", player).entrances:
+        for i in multiworld.get_region("Drill Castle", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Viewax", player).entrances:
+        for i in multiworld.get_region("Viewax", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Shield Facility", player).entrances:
+        for i in multiworld.get_region("Shield Facility", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Juice Ranch", player).entrances:
+        for i in multiworld.get_region("Juice Ranch", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Sage Labyrinth", player).entrances:
+        for i in multiworld.get_region("Sage Labyrinth", player).entrances:
             add_rule(i, lambda state: airship(state, player))
 
     # start logic (Shield Facility)
     elif start_location == "shield_facility":
-        for i in world.get_region("Waynehouse", player).entrances:
+        for i in multiworld.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("New Muldul", player).entrances:
+        for i in multiworld.get_region("New Muldul", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("New Muldul Vault", player).entrances:
+        for i in multiworld.get_region("New Muldul Vault", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Drill Castle", player).entrances:
+        for i in multiworld.get_region("Drill Castle", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Viewax", player).entrances:
+        for i in multiworld.get_region("Viewax", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("TV Island", player).entrances:
+        for i in multiworld.get_region("TV Island", player).entrances:
             add_rule(i, lambda state: airship(state, player))
-        for i in world.get_region("Sage Labyrinth", player).entrances:
+        for i in multiworld.get_region("Sage Labyrinth", player).entrances:
             add_rule(i, lambda state: airship(state, player))
