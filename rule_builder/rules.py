@@ -36,10 +36,13 @@ class CustomRuleRegister(type):
     """A metaclass to contain world custom rules and automatically convert resolved rules to frozen dataclasses"""
 
     resolved_rules: ClassVar[dict[int, "Rule.Resolved"]] = {}
-    """A cached of resolved rules to turn each unique one into a singleton"""
+    """A cached mapping of hash to resolved rule so each unique one can be a singleton"""
 
     custom_rules: ClassVar[dict[str, dict[str, type["Rule[Any]"]]]] = {}
     """A mapping of game name to mapping of rule name to rule class to hold custom rules implemented by worlds"""
+
+    rule_macros: ClassVar[dict[int, dict[str, "Rule.Resolved"]]] = {}
+    """A mapping of macro name to resolve rule for each player using macros in their rules"""
 
     rule_name: str = "Rule"
     """The string name of a rule, must be unique per game"""
@@ -62,11 +65,13 @@ class CustomRuleRegister(type):
 
     @override
     def __call__(cls, *args: Any, **kwds: Any) -> Any:
-        rule = super().__call__(*args, **kwds)
+        rule: Rule.Resolved = super().__call__(*args, **kwds)
         rule_hash = hash(rule)
         if rule_hash in cls.resolved_rules:
             return cls.resolved_rules[rule_hash]
         cls.resolved_rules[rule_hash] = rule
+        if isinstance(rule, Macro):
+            cls.rule_macros[rule.player][rule.name] = rule
         return rule
 
     @classmethod
@@ -682,6 +687,70 @@ class Filtered(WrapperRule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         return self.child.resolve(world)
+
+
+@dataclasses.dataclass()
+class Macro(WrapperRule[TWorld], game="Archipelago"):
+    name: str
+    description: str = ""
+
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        return self.Resolved(
+            self.child.resolve(world),
+            self.name,
+            self.description,
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
+
+    @override
+    def to_dict(self) -> dict[str, Any]:
+        data = super().to_dict()
+        data["args"] = {
+            "name": self.name,
+            "description": self.description,
+        }
+        return data
+
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+        child = data.get("child")
+        if child is None:
+            raise ValueError("Child rule cannot be None")
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(
+            child=world_cls.rule_from_dict(child),
+            name=data["name"],
+            description=data.get("description", ""),
+            options=options,
+        )
+
+    @override
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}[{self.child}]"
+
+    class Resolved(WrapperRule.Resolved):
+        name: str
+        description: str = ""
+
+        @override
+        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            if state is None:
+                return [{"type": "text", "text": str(self)}]
+            return [{"type": "color", "color": "green" if self(state) else "salmon", "text": str(self)}]
+
+        @override
+        def explain_str(self, state: CollectionState | None = None) -> str:
+            suffix = ""
+            if state is not None:
+                suffix = " ✓" if self(state) else " ✕"
+            return f"{self.name}{suffix}"
+
+        @override
+        def __str__(self) -> str:
+            return self.name
 
 
 @dataclasses.dataclass()
