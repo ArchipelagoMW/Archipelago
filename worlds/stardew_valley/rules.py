@@ -586,6 +586,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.island_west_to_island_farmhouse: logic.received("Island Farmhouse"),
         Entrance.island_west_to_gourmand_cave: logic.received("Island Farmhouse"),
         Entrance.island_north_to_dig_site: dig_site_rule | logic.ability.can_chair_skip(),
+        Entrance.dig_site_to_island_north: dig_site_rule | logic.ability.can_chair_skip(),
         Entrance.dig_site_to_professor_snail_cave_entrance: logic.received("Open Professor Snail Cave"),
         Entrance.professor_snail_cave_entrance_to_dig_site: logic.received("Open Professor Snail Cave"),
         Entrance.talk_to_island_trader: logic.received("Island Trader"),
