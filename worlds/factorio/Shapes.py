@@ -245,9 +245,6 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
 
     elif layout == TechTreeLayout.option_irregular:
 
-        #print("starting the tech tree layout")
-        # TODO: Fix issue of techs going into their own tree's and thus being seen too early. (Fixed?)
-        
         #Made by: CosmicWolf @brattycosmicwolf
         #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
         #This is the same method also used by the other tech tree methods.
@@ -274,36 +271,17 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
                 rand_num = int( world.random.uniform(minimum_dependencies, maximum_dependencies))
             else:
                 rand_num = int( world.random.triangular(minimum_dependencies, maximum_dependencies, weighted_distribution))
-            #info["victim"] = victim
-            #info["rand_num"] = rand_num
-            #info["attempts"] = {}
-            #print(f"starting the process with: {victim}")
-            #print(f"This will get {rand_num} dependencies.")
 
             while rand_num >=1 and len(current_choices) > 0:
-                #print(f"for dependecy {rand_num} the following happens:")
                 rand_num -= 1
-                #info["attempts"][rand_num] = {}
                 dependency = current_choices[world.random.randint(0, len(current_choices)-1)] #pick one of the already established techs.
                 prerequisites[victim].add(dependency) #Take one of the already processed techs as its prerequisite.
-                #info["attempts"][rand_num]["current_choices"] = current_choices.copy()
-                #info["attempts"][rand_num]["dependecy"] = dependency
-                #if dependency in all_pre:
-                #    info["attempts"][rand_num]["dependecy_pre"] = all_pre[dependency].copy()
-                #else:
-                #    info["attempts"][rand_num]["dependecy_pre"] = set()
-                #print(f"selected dependency: {dependency}")
-                #print(f"from current_choices: {current_choices}")
 
                 all_pre[victim].add(dependency)
                 if dependency in all_pre:
                     for item in all_pre[dependency]:
                         all_pre[victim].add(item)
-                
-                #info["attempts"][rand_num]["all_pre"] = all_pre[victim].copy()
-                #print(f"all current prequesites: {all_pre[victim]}")
 
-                #info["attempts"][rand_num]["removal_loop"] = {}
                 current_choices.remove(dependency)
                 removal_list = []
                 for item in current_choices:
@@ -316,30 +294,8 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
 
             already_done.append(victim)
 
-            # debug print
-            #print_info = False
-            #for layer_1 in prerequisites[victim]:
-            #    for layer_2 in prerequisites[victim]:
-            #        if layer_2 in all_pre and layer_1 in all_pre[layer_2]:
-            #            print_info = True
-            #if print_info:
-            #    print(f"starting the process with: {info["victim"]}")
-            #    print(f"This will get {info["rand_num"]} dependencies.")
-            #    for num in info["attempts"]:
-            #        print(f"for dependecy {num} the following happens:")
-            #        print(f"selected dependency: {info["attempts"][num]["dependecy"]}")
-            #        print(f"from current_choices: {info["attempts"][num]["current_choices"]}")
-            #        print(f"depedency_pre: {info["attempts"][num]["dependecy_pre"]}")
-            #        print(f"all current prequesites: {info["attempts"][num]["all_pre"]}")
-
-
-
-
         del all_pre
 
-        #print("almost the end of the tech tree layout")
-        #print(prerequisites)
-        #print("end of the tech tree layout")
     else:
         raise NotImplementedError(f"Layout {layout} is not implemented.")
 
