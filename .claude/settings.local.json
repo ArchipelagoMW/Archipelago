@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git -C \"H:/GhidraProjects/ArchipelagoMainMLSS\" status worlds/gl/ -- .)",
-      "Bash(git -C \"H:/GhidraProjects/ArchipelagoMainMLSS\" show HEAD:worlds/gl/GauntletLegendsClient.py)"
-    ]
-  }
-}
