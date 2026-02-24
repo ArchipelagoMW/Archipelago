@@ -51,11 +51,6 @@ class MessengerLocation(Location):
                 name = "Do the Thing!"
             self.place_locked_item(MessengerItem(name, ItemClassification.progression, None, parent.player))
 
-    def can_reach(self, state: CollectionState) -> bool:
-        # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
-        assert self.parent_region, f"called can_reach on a Location \"{self}\" with no parent_region"
-        return self.parent_region.can_reach(state) and self.access_rule(state)
-
 
 class MessengerShopLocation(MessengerLocation):
 

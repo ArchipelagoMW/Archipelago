@@ -36,7 +36,7 @@ def disconnect_entrances(world: "MessengerWorld") -> None:
         disconnect_entrance()
 
 
-def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando, keep_logic=False) -> None:
+def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando, keep_logic: bool = False) -> None:
     def remove_dangling_exit(region: Region) -> CollectionRule:
         # find the disconnected exit and remove references to it
         for _exit in region.exits:
@@ -89,7 +89,7 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
                 new_exit2.access_rule = access_rule
 
 
-def shuffle_transitions(world: "MessengerWorld", keep_logic=False) -> None:
+def shuffle_transitions(world: "MessengerWorld", keep_logic: bool = False) -> None:
     coupled = world.options.shuffle_transitions == ShuffleTransitions.option_coupled
 
     plando = world.options.plando_connections
