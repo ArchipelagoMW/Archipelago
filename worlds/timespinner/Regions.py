@@ -6,56 +6,56 @@ from .PreCalculatedWeights import PreCalculatedWeights
 from .LogicExtensions import TimespinnerLogic
 
 
-def create_regions_and_locations(world: MultiWorld, player: int, options: TimespinnerOptions,
+def create_regions_and_locations(multiworld: MultiWorld, player: int, options: TimespinnerOptions,
                                  precalculated_weights: PreCalculatedWeights):
 
     locations_per_region: Dict[str, List[LocationData]] = split_location_datas_per_region(
         get_location_datas(player, options, precalculated_weights))
 
     regions = [
-        create_region(world, player, locations_per_region, 'Menu'),
-        create_region(world, player, locations_per_region, 'Tutorial'),
-        create_region(world, player, locations_per_region, 'Lake desolation'),
-        create_region(world, player, locations_per_region, 'Upper lake desolation'),
-        create_region(world, player, locations_per_region, 'Lower lake desolation'),
-        create_region(world, player, locations_per_region, 'Eastern lake desolation'),
-        create_region(world, player, locations_per_region, 'Library'),
-        create_region(world, player, locations_per_region, 'Library top'),
-        create_region(world, player, locations_per_region, 'Varndagroth tower left'),
-        create_region(world, player, locations_per_region, 'Varndagroth tower right (upper)'),
-        create_region(world, player, locations_per_region, 'Varndagroth tower right (lower)'),
-        create_region(world, player, locations_per_region, 'Varndagroth tower right (elevator)'),
-        create_region(world, player, locations_per_region, 'Sealed Caves (Sirens)'),
-        create_region(world, player, locations_per_region, 'Military Fortress'),
-        create_region(world, player, locations_per_region, 'Military Fortress (hangar)'),
-        create_region(world, player, locations_per_region, 'Lab Entrance'),
-        create_region(world, player, locations_per_region, 'Main Lab'),
-        create_region(world, player, locations_per_region, 'Lab Research'),
-        create_region(world, player, locations_per_region, 'The lab (upper)'),
-        create_region(world, player, locations_per_region, 'Emperors tower (courtyard)'),
-        create_region(world, player, locations_per_region, 'Emperors tower'),
-        create_region(world, player, locations_per_region, 'Skeleton Shaft'),
-        create_region(world, player, locations_per_region, 'Sealed Caves (Xarion)'),
-        create_region(world, player, locations_per_region, 'Refugee Camp'),
-        create_region(world, player, locations_per_region, 'Forest'),
-        create_region(world, player, locations_per_region, 'Left Side forest Caves'),
-        create_region(world, player, locations_per_region, 'Upper Lake Serene'),
-        create_region(world, player, locations_per_region, 'Lower Lake Serene'),
-        create_region(world, player, locations_per_region, 'Caves of Banishment (upper)'),
-        create_region(world, player, locations_per_region, 'Caves of Banishment (Maw)'),
-        create_region(world, player, locations_per_region, 'Caves of Banishment (Flooded)'),
-        create_region(world, player, locations_per_region, 'Caves of Banishment (Sirens)'),
-        create_region(world, player, locations_per_region, 'Castle Ramparts'),
-        create_region(world, player, locations_per_region, 'Castle Keep'),
-        create_region(world, player, locations_per_region, 'Castle Basement'),
-        create_region(world, player, locations_per_region, 'Royal towers (lower)'),
-        create_region(world, player, locations_per_region, 'Royal towers'),
-        create_region(world, player, locations_per_region, 'Royal towers (upper)'),
-        create_region(world, player, locations_per_region, 'Temporal Gyre'),
-        create_region(world, player, locations_per_region, 'Ancient Pyramid (entrance)'),
-        create_region(world, player, locations_per_region, 'Ancient Pyramid (left)'),
-        create_region(world, player, locations_per_region, 'Ancient Pyramid (right)'),
-        create_region(world, player, locations_per_region, 'Space time continuum')
+        create_region(multiworld, player, locations_per_region, 'Menu'),
+        create_region(multiworld, player, locations_per_region, 'Tutorial'),
+        create_region(multiworld, player, locations_per_region, 'Lake desolation'),
+        create_region(multiworld, player, locations_per_region, 'Upper lake desolation'),
+        create_region(multiworld, player, locations_per_region, 'Lower lake desolation'),
+        create_region(multiworld, player, locations_per_region, 'Eastern lake desolation'),
+        create_region(multiworld, player, locations_per_region, 'Library'),
+        create_region(multiworld, player, locations_per_region, 'Library top'),
+        create_region(multiworld, player, locations_per_region, 'Varndagroth tower left'),
+        create_region(multiworld, player, locations_per_region, 'Varndagroth tower right (upper)'),
+        create_region(multiworld, player, locations_per_region, 'Varndagroth tower right (lower)'),
+        create_region(multiworld, player, locations_per_region, 'Varndagroth tower right (elevator)'),
+        create_region(multiworld, player, locations_per_region, 'Sealed Caves (Sirens)'),
+        create_region(multiworld, player, locations_per_region, 'Military Fortress'),
+        create_region(multiworld, player, locations_per_region, 'Military Fortress (hangar)'),
+        create_region(multiworld, player, locations_per_region, 'Lab Entrance'),
+        create_region(multiworld, player, locations_per_region, 'Main Lab'),
+        create_region(multiworld, player, locations_per_region, 'Lab Research'),
+        create_region(multiworld, player, locations_per_region, 'The lab (upper)'),
+        create_region(multiworld, player, locations_per_region, 'Emperors tower (courtyard)'),
+        create_region(multiworld, player, locations_per_region, 'Emperors tower'),
+        create_region(multiworld, player, locations_per_region, 'Skeleton Shaft'),
+        create_region(multiworld, player, locations_per_region, 'Sealed Caves (Xarion)'),
+        create_region(multiworld, player, locations_per_region, 'Refugee Camp'),
+        create_region(multiworld, player, locations_per_region, 'Forest'),
+        create_region(multiworld, player, locations_per_region, 'Left Side forest Caves'),
+        create_region(multiworld, player, locations_per_region, 'Upper Lake Serene'),
+        create_region(multiworld, player, locations_per_region, 'Lower Lake Serene'),
+        create_region(multiworld, player, locations_per_region, 'Caves of Banishment (upper)'),
+        create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Maw)'),
+        create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Flooded)'),
+        create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Sirens)'),
+        create_region(multiworld, player, locations_per_region, 'Castle Ramparts'),
+        create_region(multiworld, player, locations_per_region, 'Castle Keep'),
+        create_region(multiworld, player, locations_per_region, 'Castle Basement'),
+        create_region(multiworld, player, locations_per_region, 'Royal towers (lower)'),
+        create_region(multiworld, player, locations_per_region, 'Royal towers'),
+        create_region(multiworld, player, locations_per_region, 'Royal towers (upper)'),
+        create_region(multiworld, player, locations_per_region, 'Temporal Gyre'),
+        create_region(multiworld, player, locations_per_region, 'Ancient Pyramid (entrance)'),
+        create_region(multiworld, player, locations_per_region, 'Ancient Pyramid (left)'),
+        create_region(multiworld, player, locations_per_region, 'Ancient Pyramid (right)'),
+        create_region(multiworld, player, locations_per_region, 'Space time continuum')
     ]
 
     if options.gyre_archives:
@@ -223,8 +223,8 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
     return location
 
 
-def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str) -> Region:
-    region = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str) -> Region:
+    region = Region(name, player, multiworld)
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:
@@ -233,17 +233,17 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
     return region
 
 
-def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOptions):
-    menu = world.get_region('Menu', player)
-    tutorial = world.get_region('Tutorial', player)
-    space_time_continuum = world.get_region('Space time continuum', player)
+def connectStartingRegion(multiworld: MultiWorld, player: int, options: TimespinnerOptions):
+    menu = multiworld.get_region('Menu', player)
+    tutorial = multiworld.get_region('Tutorial', player)
+    space_time_continuum = multiworld.get_region('Space time continuum', player)
 
     if options.pyramid_start: 
-        starting_region = world.get_region('Ancient Pyramid (entrance)', player)
+        starting_region = multiworld.get_region('Ancient Pyramid (entrance)', player)
     elif options.inverted:
-        starting_region = world.get_region('Refugee Camp', player)
+        starting_region = multiworld.get_region('Refugee Camp', player)
     else:
-        starting_region = world.get_region('Lake desolation', player)
+        starting_region = multiworld.get_region('Lake desolation', player)
 
     menu_to_tutorial = Entrance(player, 'Tutorial', menu)
     menu_to_tutorial.connect(tutorial)
@@ -256,20 +256,20 @@ def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOp
     space_time_continuum.exits.append(teleport_back_to_start)
 
 
-def connect(world: MultiWorld, player: int, source: str, target: str, 
+def connect(multiworld: MultiWorld, player: int, source: str, target: str,
             rule: Optional[Callable[[CollectionState], bool]] = None,
             indirect: str = ""):
 
-    sourceRegion = world.get_region(source, player)
-    targetRegion = world.get_region(target, player)
+    sourceRegion = multiworld.get_region(source, player)
+    targetRegion = multiworld.get_region(target, player)
     entrance = sourceRegion.connect(targetRegion, rule=rule)
 
     if indirect:
-        indirectRegion = world.get_region(indirect, player)
-        if indirectRegion in world.indirect_connections:
-            world.indirect_connections[indirectRegion].add(entrance)
+        indirectRegion = multiworld.get_region(indirect, player)
+        if indirectRegion in multiworld.indirect_connections:
+            multiworld.indirect_connections[indirectRegion].add(entrance)
         else:
-            world.indirect_connections[indirectRegion] = {entrance}
+            multiworld.indirect_connections[indirectRegion] = {entrance}
 
 
 def split_location_datas_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:

@@ -45,7 +45,7 @@ def create_regions(multiworld: MultiWorld, player: int, world_options: Options.D
 
 
 def create_regions_basic_campaign(has_campaign_basic: bool, region_menu: Region, has_item_shuffle: bool, has_coinsanity: bool,
-                                  coin_bundle_size: int, player: int, world: MultiWorld):
+                                  coin_bundle_size: int, player: int, multiworld: MultiWorld):
     if not has_campaign_basic:
         return
 
@@ -73,7 +73,7 @@ def create_regions_basic_campaign(has_campaign_basic: bool, region_menu: Region,
 
     create_victory_event(region_final_boss_room, "Winning Basic", "Victory Basic", player)
 
-    connect_entrances_basic(player, world)
+    connect_entrances_basic(player, multiworld)
 
 
 def create_regions_lfod_campaign(coin_bundle_size, has_campaign_lfod, has_coinsanity, has_item_shuffle, multiworld, player, region_menu):
