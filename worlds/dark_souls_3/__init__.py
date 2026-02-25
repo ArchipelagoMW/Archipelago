@@ -1457,23 +1457,32 @@ class DarkSouls3World(World):
             # No worlds need item smoothing.
             return
 
-        spheres_per_player: Dict[int, List[List[Location]]] = {world.player: [] for world in ds3_worlds}
-        for sphere in multiworld.get_spheres():
-            locations_per_item_player: Dict[int, List[Location]] = {player: [] for player in spheres_per_player.keys()}
-            for location in sphere:
+        ds3_player_to_world = {world.player: world for world in ds3_worlds}
+        ds3_smoothing_location_to_sphere: dict[Location, int] = {}
+        ds3_player_full_items_by_name = {world.player: defaultdict(list) for world in ds3_worlds}
+        for sphere_number, sphere in enumerate(multiworld.get_spheres(), start=1):
+            # Sort for deterministic results in `ds3_player_full_items_by_name`.
+            for location in sorted(sphere):
                 if location.locked:
+                    # Locked locations should not have their items moved.
                     continue
-                item_player = location.item.player
-                if item_player in locations_per_item_player:
-                    locations_per_item_player[item_player].append(location)
-            for player, locations in locations_per_item_player.items():
-                # Sort for deterministic results.
-                locations.sort()
-                spheres_per_player[player].append(locations)
+                item = location.item
+                if item.player not in ds3_player_to_world:
+                    # The item does not belong to a DS3 player with smoothing enabled, so can be ignored.
+                    continue
+                if item.code is None:
+                    # Never re-order event items, because they weren't randomized in the first place. The locations
+                    # of event items should be locked anyway, so this is only for safety.
+                    continue
+                if location.player in ds3_player_to_world and not ds3_player_to_world[location.player]._is_location_available(location):
+                    # The location belongs to a DS3 player with smoothing enabled, but the location is not considered
+                    # available. This should mean that the location is not randomized, so the locations should be locked
+                    # anyway, so this is only for safety.
+                    continue
+                ds3_smoothing_location_to_sphere[location] = sphere_number
+                ds3_player_full_items_by_name[item.player][item.name].append(location.item)
 
         for ds3_world in ds3_worlds:
-            locations_by_sphere = spheres_per_player[ds3_world.player]
-
             # All items in the base game in approximately the order they appear
             all_item_order: List[DS3ItemData] = [
                 item_dictionary[location.default_item_name]
@@ -1484,12 +1493,7 @@ class DarkSouls3World(World):
             ]
 
             # All DarkSouls3Items for this world that have been assigned anywhere, grouped by name
-            full_items_by_name: Dict[str, List[DarkSouls3Item]] = defaultdict(list)
-            for location in multiworld.get_filled_locations():
-                if location.item.player == ds3_world.player and (
-                    location.player != ds3_world.player or ds3_world._is_location_available(location)
-                ):
-                    full_items_by_name[location.item.name].append(location.item)
+            full_items_by_name: defaultdict[str, List[DarkSouls3Item]] = ds3_player_full_items_by_name[ds3_world.player]
 
             def smooth_items(item_order: List[Union[DS3ItemData, DarkSouls3Item]]) -> None:
                 """Rearrange all items in item_order to match that order.
@@ -1498,52 +1502,49 @@ class DarkSouls3World(World):
                 world matching the given names.
                 """
 
-                # Convert items to full DarkSouls3Items.
-                converted_item_order: List[DarkSouls3Item] = [
-                    item for item in (
-                        (
-                            # full_items_by_name won't contain DLC items if the DLC is disabled.
-                            (full_items_by_name[item.name] or [None]).pop(0)
-                            if isinstance(item, DS3ItemData) else item
-                        )
-                        for item in item_order
-                    )
-                    # Never re-order event items, because they weren't randomized in the first place.
-                    if item and item.code is not None
-                ]
+                # Convert items to full DarkSouls3Items and get their locations.
+                converted_item_order: List[DarkSouls3Item] = []
+                locations_to_smooth: List[Location] = []
+                for ordered_item in item_order:
+                    # full_items_by_name won't contain DLC items if the DLC is disabled.
+                    if ordered_item.name not in full_items_by_name:
+                        continue
+                    items_list = full_items_by_name[ordered_item.name]
+                    item = items_list.pop(0)
+                    location = item.location
+                    converted_item_order.append(item)
+                    locations_to_smooth.append(location)
+                    # Un-place the item in preparation for placing all the items in a smoothed-out order.
+                    location.item = None
+                    item.location = None
+                    if not items_list:
+                        # The list is now empty, so remove it to prevent being able to get and pop an empty list.
+                        del full_items_by_name[ordered_item.name]
 
-                names = {item.name for item in converted_item_order}
+                # First sort locations by sphere (earliest first). Next sort non-DS3 locations after
+                # DS3 locations, so that non-DS3 locations get the best items within a sphere.
+                # Finally sort DS3 locations amongst themselves using their region values.
+                def location_sort_func(location: Location):
+                    sphere_number = ds3_smoothing_location_to_sphere[location]
+                    if location.game == cls.game:
+                        # The location is from a DS3 world, so will be sorted before non-DS3 locations within the same
+                        # sphere, and sorted additionally by the location's .region_value.
+                        ds3_location = cast(DarkSouls3Location, location)
+                        return sphere_number, 0, ds3_location.data.region_value
+                    else:
+                        # Within the same sphere, all non-DS3 locations will be sorted after DS3 locations.
+                        return sphere_number, 1
 
-                all_matching_locations = [
-                    loc
-                    for sphere in locations_by_sphere
-                    for loc in sphere
-                    if loc.item.name in names
-                ]
+                # Initially shuffle for varied results when there are ties in the sorting.
+                ds3_world.random.shuffle(locations_to_smooth)
+                locations_to_smooth.sort(key=location_sort_func)
 
-                # It's expected that there may be more total items than there are matching locations if
-                # the player has chosen a more limited accessibility option, since the matching
-                # locations *only* include items in the spheres of accessibility.
-                if len(converted_item_order) < len(all_matching_locations):
-                    raise Exception(
-                        f"DS3 bug: there are {len(all_matching_locations)} locations that can " +
-                        f"contain smoothed items, but only {len(converted_item_order)} items to smooth."
-                    )
-
-                sorted_spheres = []
-                for sphere in locations_by_sphere:
-                    locations = [loc for loc in sphere if loc.item.name in names]
-
-                    # Check the game, not the player, because we know how to sort within regions for DS3
-                    offworld = ds3_world._shuffle([loc for loc in locations if loc.game != "Dark Souls III"])
-                    onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
-                                     key=lambda loc: loc.data.region_value)
-                    # Give offworld regions the last (best) items within a given sphere
-                    sorted_spheres.extend(onworld)
-                    sorted_spheres.extend(offworld)
-
+                # Place the items so that earlier items in `converted_item_order` get placed into logically earlier
+                # locations.
+                # Locations are filled from the start, but items are placed starting from the end, so reverse the order
+                # of the items list.
                 converted_item_order.reverse()
-                remaining_fill(multiworld, sorted_spheres, converted_item_order, name="DS3 Smoothing", check_location_can_fill=True)
+                remaining_fill(multiworld, locations_to_smooth, converted_item_order, name="DS3 Smoothing", check_location_can_fill=True)
 
             if ds3_world.options.smooth_upgrade_items:
                 base_names = {
