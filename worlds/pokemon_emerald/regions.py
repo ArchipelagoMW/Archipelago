@@ -32,9 +32,9 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     print(world.options.dexsanity_encounter_types)
     print(encounter_categories.keys())
     encounter_table = {
-        "land": EncounterType.LAND,
-        "water": EncounterType.WATER,
-        "fishing": EncounterType.FISHING,
+        "LAND": EncounterType.LAND,
+        "WATER": EncounterType.WATER,
+        "FISHING": EncounterType.FISHING,
     }
 
     enabled_encounters = {
