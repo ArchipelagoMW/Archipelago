@@ -201,39 +201,39 @@ def create_regions(world: "NineSolsWorld") -> None:
 
     world.origin_region_name = "FSP - Root Node"
     if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
-        first_node_region = "AFM - Root Node"
+        first_node_region = "AF (Monitoring) - Root Node"
     elif options.first_root_node == FirstRootNode.option_galactic_dock:
-        first_node_region = "GD - Root Node & Right Exit"
+        first_node_region = "Galactic Dock - Root Node & Right Exit"
     elif options.first_root_node == FirstRootNode.option_power_reservoir_east:
-        first_node_region = "PRE - Root Node"
+        first_node_region = "PR (East) - Root Node"
     elif options.first_root_node == FirstRootNode.option_lake_yaochi_ruins:
         first_node_region = "LYR - Root Node"
     elif options.first_root_node == FirstRootNode.option_yinglong_canal:
-        first_node_region = "YC - Root Node"
+        first_node_region = "Yinglong Canal - Root Node"
     elif options.first_root_node == FirstRootNode.option_factory_great_hall:
-        first_node_region = "FGH - Lower Levels & Root Node"
+        first_node_region = "Factory (GH) - Lower Levels & Root Node"
     elif options.first_root_node == FirstRootNode.option_outer_warehouse:
         first_node_region = "OW - Root Node & Middle Exits"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_entry:
-        first_node_region = "GoSY - Root Node"
+        first_node_region = "GoS (Entry) - Root Node"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_east:
-        first_node_region = "GoSE - Root Node"
+        first_node_region = "GoS (East) - Root Node"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
-        first_node_region = "GoSW - Root Node"
+        first_node_region = "GoS (West) - Root Node"
     elif options.first_root_node == FirstRootNode.option_agrarian_hall:
         first_node_region = "AH - Root Node"
     elif options.first_root_node == FirstRootNode.option_radiant_pagoda:
         first_node_region = "RP - Root Node"
     elif options.first_root_node == FirstRootNode.option_apeman_facility_depths:
-        first_node_region = "AFD - Root Node"
+        first_node_region = "AF (Depths) - Root Node"
     elif options.first_root_node == FirstRootNode.option_central_transport_hub:
         first_node_region = "CTH - Root Node"
     elif options.first_root_node == FirstRootNode.option_factory_underground:
-        first_node_region = "FU - Root Node & Lower Elevator"
+        first_node_region = "Factory (U) - Root Node & Lower Elevator"
     elif options.first_root_node == FirstRootNode.option_inner_warehouse:
         first_node_region = "IW - Root Node"
     elif options.first_root_node == FirstRootNode.option_power_reservoir_west:
-        first_node_region = "PRW - Root Node"
+        first_node_region = "PR (West) - Root Node"
     else:
         raise Exception("Unrecognized first_root_node")
 

@@ -1,20 +1,20 @@
 [
     // Apeman Facility (Monitoring)
-    { "from": "AFM - Root Node", "to": "AFM - Vents", "requires": [ { "anyOf": [
+    { "from": "AF (Monitoring) - Root Node", "to": "AF (Monitoring) - Vents", "requires": [ { "anyOf": [
         { "item": "Wall Climb" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
-    { "from": "AFM - Vents", "to": "AFM - Exit", "requires": [] },
+    { "from": "AF (Monitoring) - Vents", "to": "AF (Monitoring) - Exit", "requires": [] },
     // Exit -> Vents can theoretically be done with CL + ledge storage getup, but there's no ledge there
-    { "from": "AFM - Exit", "to": "AFM - Root Node", "requires": [] },
+    { "from": "AF (Monitoring) - Exit", "to": "AF (Monitoring) - Root Node", "requires": [] },
     // since upper AFM is inaccessible otherwise, the mod will unlock AFM's root node when you walk into AFM
 
-    { "from": "AFM - Exit", "to": "AFE - Upper Root Node", "requires": [] },
-    { "from": "AFE - Upper Root Node", "to": "AFM - Exit", "requires": [] },
+    { "from": "AF (Monitoring) - Exit", "to": "AF (Elevator) - Upper Root Node", "requires": [] },
+    { "from": "AF (Elevator) - Upper Root Node", "to": "AF (Monitoring) - Exit", "requires": [] },
 
     // Apeman Facility (Elevator)
     {
-        "from": "AFE - Upper Root Node", "to": "AFE - Enter Tutorial Arena",
+        "from": "AF (Elevator) - Upper Root Node", "to": "AF (Elevator) - Enter Tutorial Arena",
         "requires": [ { "anyOf": [
             { "item": "Grapple" },
             { "item": "Cloud Leap" },
@@ -28,19 +28,19 @@
             { "item": "Trick - Bow Hover" }
         ]
     },
-    { "from": "AFE - Leave Tutorial Arena", "to": "AFE - Upper Root Node", "requires": [] }, // from this side, single jump is enough
+    { "from": "AF (Elevator) - Leave Tutorial Arena", "to": "AF (Elevator) - Upper Root Node", "requires": [] }, // from this side, single jump is enough
     {
-        "from": "AFE - Enter Tutorial Arena", "to": "AFE - Leave Tutorial Arena",
+        "from": "AF (Elevator) - Enter Tutorial Arena", "to": "AF (Elevator) - Leave Tutorial Arena",
         "requires": [ { "anyOf": [
             { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } // to reach the arena's upper enemy
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "AFE - Leave Tutorial Arena", "to": "AFE - Between Root Nodes", "requires": [] },
+    { "from": "AF (Elevator) - Leave Tutorial Arena", "to": "AF (Elevator) - Between Root Nodes", "requires": [] },
     // this assumes the elevator call button is enabled by the mod, since it's impassable otherwise
-    { "from": "AFE - Between Root Nodes", "to": "AFE - Enter Tutorial Arena", "requires": [] },
+    { "from": "AF (Elevator) - Between Root Nodes", "to": "AF (Elevator) - Enter Tutorial Arena", "requires": [] },
     {
-        "from": "AFE - Between Root Nodes", "to": "AFE - Upper Right Pagoda",
+        "from": "AF (Elevator) - Between Root Nodes", "to": "AF (Elevator) - Upper Right Pagoda",
         "requires": [ { "anyOf": [
             { "item": "Grapple" },
             [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
@@ -54,24 +54,24 @@
     },
     // moving boxes requires nothing to traverse (though the lower level of it is a trap without WC/LG/AD/CL),
     // which is why "Between Root Nodes" gets to remain a single region
-    { "from": "AFE - Between Root Nodes", "to": "AFE - Lower Root Node", "requires": [] },
+    { "from": "AF (Elevator) - Between Root Nodes", "to": "AF (Elevator) - Lower Root Node", "requires": [] },
     // this assumes the elevator call button is enabled by the mod, since it's impassable otherwise
     {
-        "from": "AFE - Lower Root Node", "to": "AFE - Between Root Nodes",
+        "from": "AF (Elevator) - Lower Root Node", "to": "AF (Elevator) - Between Root Nodes",
         "requires": [ { "item": "Grapple" } ],
         "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // CL + LS vault
     },
-    { "from": "AFE - Lower Root Node", "to": "AFE - Baichang Arena", "requires": [ { "anyOf": [
+    { "from": "AF (Elevator) - Lower Root Node", "to": "AF (Elevator) - Baichang Arena", "requires": [ { "anyOf": [
         { "item": "Wall Climb" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
-    { "from": "AFE - Lower Root Node", "to": "AFE - Statue Chest", "requires": [] }, // drop down
-    { "from": "AFE - Right Exit", "to": "AFE - Baichang Arena", "requires": [] }, // one-way door
-    { "from": "AFE - Baichang Arena", "to": "AFE - Lower Root Node", "requires": [
+    { "from": "AF (Elevator) - Lower Root Node", "to": "AF (Elevator) - Statue Chest", "requires": [] }, // drop down
+    { "from": "AF (Elevator) - Right Exit", "to": "AF (Elevator) - Baichang Arena", "requires": [] }, // one-way door
+    { "from": "AF (Elevator) - Baichang Arena", "to": "AF (Elevator) - Lower Root Node", "requires": [
         { "item": "Cloud Leap" }
     ] },
     {
-        "from": "AFE - Baichang Arena", "to": "AFE - Moving Boxes Below Root Node",
+        "from": "AF (Elevator) - Baichang Arena", "to": "AF (Elevator) - Moving Boxes Below Root Node",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" },
             [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
@@ -86,7 +86,7 @@
         ]
     },
     {
-        "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Baichang Arena",
+        "from": "AF (Elevator) - Moving Boxes Below Root Node", "to": "AF (Elevator) - Baichang Arena",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" },
             [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
@@ -100,21 +100,21 @@
             { "item": "Ledge Grab" } // T-dash setup from 2nd box to chest platform, parry hover the rest
         ]
     },
-    { "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Below Root Node", "requires": [] }, // just drop down
+    { "from": "AF (Elevator) - Moving Boxes Below Root Node", "to": "AF (Elevator) - Below Root Node", "requires": [] }, // just drop down
     {
-        "from": "AFE - Below Root Node", "to": "AFE - Moving Boxes Below Root Node",
+        "from": "AF (Elevator) - Below Root Node", "to": "AF (Elevator) - Moving Boxes Below Root Node",
         "requires": [ { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } ],
         "medium_requires": [ { "item": "Grapple" } ] // T-dash from the grapple platform (move camera to keep box spawned)
     },
     {
-        "from": "AFE - Below Root Node", "to": "AFE - Statue Chest", // climb up from the ground as intended
+        "from": "AF (Elevator) - Below Root Node", "to": "AF (Elevator) - Statue Chest", // climb up from the ground as intended
         "requires": [ { "anyOf": [
             { "item": "Grapple" },
             { "item": "Cloud Leap" }
         ] } ]
     },
     {
-        "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Statue Chest", // use the moving box as our starting point instead
+        "from": "AF (Elevator) - Moving Boxes Below Root Node", "to": "AF (Elevator) - Statue Chest", // use the moving box as our starting point instead
         "medium_requires": [ { "anyOf": [
             { "item": "Trick - Bow Hover" },
             { "item": "Air Dash" } // and T-dash
@@ -122,12 +122,12 @@
         "ls_requires": [ { "item": "Ledge Grab" } ] // LS parry hover from the moving box, T-dash setup
     },
     {
-        "from": "AFE - Statue Chest", "to": "AFE - Lower Root Node",
+        "from": "AF (Elevator) - Statue Chest", "to": "AF (Elevator) - Lower Root Node",
         "requires": [ { "item": "Grapple" } ],
         "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // carry LS from the moving box
     },
     {
-        "from": "AFE - Below Root Node", "to": "AFE - Lower Left Exit",
+        "from": "AF (Elevator) - Below Root Node", "to": "AF (Elevator) - Lower Left Exit",
         "requires": [ { "anyOf": [
             [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ],
             [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ],
@@ -143,7 +143,7 @@
         "ls_requires": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] // LS parry hover
     }, // with precise jumps, TCK alone is enough
     {
-        "from": "AFE - Lower Left Exit", "to": "AFE - Below Root Node",
+        "from": "AF (Elevator) - Lower Left Exit", "to": "AF (Elevator) - Below Root Node",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" },
             [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
@@ -154,17 +154,17 @@
         ] } ]
     }, // no access to LS from this side
 
-    { "from": "AFE - Baichang Arena", "to": "CH - Center", "requires": [] }, // elevator
+    { "from": "AF (Elevator) - Baichang Arena", "to": "Central Hall - Center", "requires": [] }, // elevator
 
-    { "from": "AFE - Right Exit", "to": "CTH - Lower Exits", "requires": [] }, // CTH's lower *left* exit
-    { "from": "CTH - Lower Exits", "to": "AFE - Right Exit", "requires": [] },
+    { "from": "AF (Elevator) - Right Exit", "to": "CTH - Lower Exits", "requires": [] }, // CTH's lower *left* exit
+    { "from": "CTH - Lower Exits", "to": "AF (Elevator) - Right Exit", "requires": [] },
 
-    { "from": "AFE - Lower Left Exit", "to": "AFD - Right Exit", "requires": [] },
-    { "from": "AFD - Right Exit", "to": "AFE - Lower Left Exit", "requires": [] },
+    { "from": "AF (Elevator) - Lower Left Exit", "to": "AF (Depths) - Right Exit", "requires": [] },
+    { "from": "AF (Depths) - Right Exit", "to": "AF (Elevator) - Lower Left Exit", "requires": [] },
 
     // Apeman Facility (Depths)
     {
-        "from": "AFD - Upper Left Exit", "to": "AFD - Crystal Caves",
+        "from": "AF (Depths) - Upper Left Exit", "to": "AF (Depths) - Crystal Caves",
         "requires": [ { "anyOf": [
             // first jump: grapple OR CL // need extra height so no AD
             // over crystals: CL OR AD
@@ -188,7 +188,7 @@
         ] // bow hover wouldn't help, no qi source for t-dash
     },
     {
-        "from": "AFD - Crystal Caves", "to": "AFD - Upper Left Exit",
+        "from": "AF (Depths) - Crystal Caves", "to": "AF (Depths) - Upper Left Exit",
         "requires": [
             { "item": "Wall Climb" },
             { "item": "Grapple" },
@@ -201,34 +201,34 @@
             { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] } // and T-dash
         ]
     },
-    { "from": "AFD - Crystal Caves", "to": "AFD - Shangui Arena", "requires": [ { "item": "Air Dash" } ] },
-    { "from": "AFD - Crystal Caves", "to": "AFD - Root Node", "requires": [] },
+    { "from": "AF (Depths) - Crystal Caves", "to": "AF (Depths) - Shangui Arena", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "AF (Depths) - Crystal Caves", "to": "AF (Depths) - Root Node", "requires": [] },
     {
-        "from": "AFD - Root Node", "to": "AFD - Shangui Arena",
+        "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Shangui Arena",
         "requires": [{ "item": "Air Dash" }, { "item": "Cloud Leap" }],
         "medium_requires": [{ "item": "Cloud Leap" }] // and swift runner
     },
-    { "from": "AFD - Root Node", "to": "AFD - Small Chest Below Root Node", "requires": [] }, // one-way fall
-    { "from": "AFD - Root Node", "to": "AFD - Lower Left Exit", "requires": [] }, // one-way fall
+    { "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Small Chest Below Root Node", "requires": [] }, // one-way fall
+    { "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Lower Left Exit", "requires": [] }, // one-way fall
     {
-        "from": "AFD - Lower Left Exit", "to": "AFD - Small Chest Below Root Node",
+        "from": "AF (Depths) - Lower Left Exit", "to": "AF (Depths) - Small Chest Below Root Node",
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // LS vault
         // though you have to run all the way to the right for a usable ledge
     },
-    { "from": "AFD - Lower Left Exit", "to": "AFD - Right Exit", "requires": [] }, // one-way door
+    { "from": "AF (Depths) - Lower Left Exit", "to": "AF (Depths) - Right Exit", "requires": [] }, // one-way door
     {
-        "from": "AFD - Right Exit", "to": "AFD - Lower Level",
+        "from": "AF (Depths) - Right Exit", "to": "AF (Depths) - Lower Level",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash // bow hover also works, as does (LG AND (swift runner OR CS-dash))
     },
-    { "from": "AFD - Lower Level", "to": "AFD - Right Exit", "requires": [ { "anyOf": [
+    { "from": "AF (Depths) - Lower Level", "to": "AF (Depths) - Right Exit", "requires": [ { "anyOf": [
         { "item": "Tai-Chi Kick" },
         [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
         { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "AFD - Lower Level", "to": "AFD - Under Lower Left Exit", "requires": [ { "anyOf": [
+    { "from": "AF (Depths) - Lower Level", "to": "AF (Depths) - Under Lower Left Exit", "requires": [ { "anyOf": [
         { "item": "Cloud Leap" },
         [
             { "item": "Grapple" },
@@ -236,75 +236,75 @@
         ]
     ] } ] }, // bow hover and T-dash work, but no arrow/qi source
     {
-        "from": "AFD - Under Lower Left Exit", "to": "AFD - Lower Level",
+        "from": "AF (Depths) - Under Lower Left Exit", "to": "AF (Depths) - Lower Level",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "AFD - Under Lower Left Exit", "to": "AFD - Lower Left Exit", "requires": [
+    { "from": "AF (Depths) - Under Lower Left Exit", "to": "AF (Depths) - Lower Left Exit", "requires": [
         { "item": "Mystic Nymph: Scout Mode" },
         { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] }
     ] },
     // you may need to nymph hack the door from below, then fall through that door from above to reach the ULLE chest
-    { "from": "AFD - Lower Left Exit", "to": "AFD - Under Lower Left Exit", "requires": [
+    { "from": "AF (Depths) - Lower Left Exit", "to": "AF (Depths) - Under Lower Left Exit", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }, // nymph hack the door from below
-        { "region": "AFD - Lower Level" } // this chest platform is plenty close to the hack point
+        { "region": "AF (Depths) - Lower Level" } // this chest platform is plenty close to the hack point
         // backtrack to Lower Left Exit, fall down, hold left, grab the rope, jump to ULLE platform; all itemless
     ] },
     {
-        "from": "AFD - Lower Left Exit", "to": "AFD - Climb to Root Node",
+        "from": "AF (Depths) - Lower Left Exit", "to": "AF (Depths) - Climb to Root Node",
         "requires": [ { "anyOf": [{ "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }] } ],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Air Dash" }] // and a T-dash
     },
-    { "from": "AFD - Climb to Root Node", "to": "AFD - Root Node", "requires": [] }, // one-way door
-    { "from": "AFD - Climb to Root Node", "to": "AFD - Upper Right", "requires": [] }, // hack the lift OR CL broken platforms near node
-    { "from": "AFD - Upper Right", "to": "AFD - Upper Right Chest", "requires": [
+    { "from": "AF (Depths) - Climb to Root Node", "to": "AF (Depths) - Root Node", "requires": [] }, // one-way door
+    { "from": "AF (Depths) - Climb to Root Node", "to": "AF (Depths) - Upper Right", "requires": [] }, // hack the lift OR CL broken platforms near node
+    { "from": "AF (Depths) - Upper Right", "to": "AF (Depths) - Upper Right Chest", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }, // to hold the right box in place
         { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] } // to get on top of the left box
     ] },
 
-    { "from": "AFD - Upper Left Exit", "to": "FU - Lower Right Exit", "requires": [] },
-    { "from": "FU - Lower Right Exit", "to": "AFD - Upper Left Exit", "requires": [] },
+    { "from": "AF (Depths) - Upper Left Exit", "to": "Factory (U) - Lower Right Exit", "requires": [] },
+    { "from": "Factory (U) - Lower Right Exit", "to": "AF (Depths) - Upper Left Exit", "requires": [] },
 
-    { "from": "AFD - Lower Left Exit", "to": "PRW - Root Node", "requires": [] },
-    { "from": "PRW - Root Node", "to": "AFD - Lower Left Exit", "requires": [] },
+    { "from": "AF (Depths) - Lower Left Exit", "to": "PR (West) - Root Node", "requires": [] },
+    { "from": "PR (West) - Root Node", "to": "AF (Depths) - Lower Left Exit", "requires": [] },
 
     // Central Hall
-    { "from": "CH - Center", "to": "CH - Left", "requires": [
+    { "from": "Central Hall - Center", "to": "Central Hall - Left", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }
     ] },
-    { "from": "CH - Center", "to": "CH - Upper Right Exit", "requires": [
+    { "from": "Central Hall - Center", "to": "Central Hall - Upper Right Exit", "requires": [
         { "item": "Tai-Chi Kick" }
     ] }, // kick AND hacking
-    { "from": "CH - Center", "to": "CH - Lower Right Exit", "requires": [
+    { "from": "Central Hall - Center", "to": "Central Hall - Lower Right Exit", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }
     ] },
-    { "from": "CH - Center", "to": "CH - Right Vents", "requires": [ { "anyOf": [
+    { "from": "Central Hall - Center", "to": "Central Hall - Right Vents", "requires": [ { "anyOf": [
         [ { "item": "Tai-Chi Kick" }, { "item": "Ledge Grab" } ],
         { "item": "Cloud Leap" }
     ] } ] }, // the 1st jump can be an LS getup, but not the 2nd
     {
-        "from": "CH - Right Vents", "to": "CH - Left Vents",
+        "from": "Central Hall - Right Vents", "to": "Central Hall - Left Vents",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }, { "item": "Air Dash" }
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "CH - Left Vents", "to": "CH - Left", "requires": [] }, // one-way fall + shortcut rope
+    { "from": "Central Hall - Left Vents", "to": "Central Hall - Left", "requires": [] }, // one-way fall + shortcut rope
 
-    { "from": "CH - Center", "to": "FSP - Root Node", "requires": [] }, // rando will make this a one-way door
+    { "from": "Central Hall - Center", "to": "FSP - Root Node", "requires": [] }, // rando will make this a one-way door
 
-    { "from": "CH - Right Vents", "to": "CTH - Above Elevator", "requires": [] }, // one-way fall
+    { "from": "Central Hall - Right Vents", "to": "CTH - Above Elevator", "requires": [] }, // one-way fall
 
-    { "from": "CH - Upper Right Exit", "to": "LYR - Left Exit", "requires": [] },
-    { "from": "LYR - Left Exit", "to": "CH - Upper Right Exit", "requires": [] },
+    { "from": "Central Hall - Upper Right Exit", "to": "LYR - Left Exit", "requires": [] },
+    { "from": "LYR - Left Exit", "to": "Central Hall - Upper Right Exit", "requires": [] },
 
-    { "from": "CH - Lower Right Exit", "to": "CTH - Upper Left Exit", "requires": [] },
-    { "from": "CTH - Upper Left Exit", "to": "CH - Lower Right Exit", "requires": [] },
+    { "from": "Central Hall - Lower Right Exit", "to": "CTH - Upper Left Exit", "requires": [] },
+    { "from": "CTH - Upper Left Exit", "to": "Central Hall - Lower Right Exit", "requires": [] },
 
-    { "from": "CH - Left", "to": "CC - Right Exit", "requires": [] },
-    { "from": "CC - Right Exit", "to": "CH - Left", "requires": [] },
+    { "from": "Central Hall - Left", "to": "Cortex Center - Right Exit", "requires": [] },
+    { "from": "Cortex Center - Right Exit", "to": "Central Hall - Left", "requires": [] },
 
     // Four Seasons Pavilion
     { "from": "FSP - Root Node", "to": "FSP - Roof", "requires": [
@@ -315,11 +315,11 @@
 
     // Cortex Center
     {
-        "from": "CC - Right Exit", "to": "CC - Root Node",
+        "from": "Cortex Center - Right Exit", "to": "Cortex Center - Root Node",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
     },
-    { "from": "CC - Root Node", "to": "CC - Root Node After Boss", "requires": [
+    { "from": "Cortex Center - Root Node", "to": "Cortex Center - Root Node After Boss", "requires": [
         { "item": "Event - Lady Ethereal Soulscape Unlocked" },
         {
             "option": "skip_soulscape_platforming",
@@ -334,33 +334,33 @@
         },
         { "item": "Air Dash" } // Lady Ethereal herself requires Air Dash to evade the phase 3 orb, making CL fully redundant
     ] },
-    { "from": "CC - Root Node", "to": "CC - After Large Door", "requires": [
+    { "from": "Cortex Center - Root Node", "to": "Cortex Center - After Large Door", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }
     ] }, // one-way nymph hack door
-    { "from": "CC - After Large Door", "to": "CC - Caves Upper Right", "requires": [
+    { "from": "Cortex Center - After Large Door", "to": "Cortex Center - Caves Upper Right", "requires": [
         { "item": "Grapple" },
         { "item": "Wall Climb" },
         { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ] }
     ] },
     {
-        "from": "CC - Caves Upper Right", "to": "CC - Caves Upper Left",
+        "from": "Cortex Center - Caves Upper Right", "to": "Cortex Center - Caves Upper Left",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
     {
-        "from": "CC - Caves Upper Left", "to": "CC - Caves Upper Right",
+        "from": "Cortex Center - Caves Upper Left", "to": "Cortex Center - Caves Upper Right",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
-    { "from": "CC - Caves Upper Left", "to": "CC - Caves Middle Left", "requires": [] },
-    { "from": "CC - Caves Middle Left", "to": "CC - Caves Upper Left", "requires": [ { "anyOf": [
+    { "from": "Cortex Center - Caves Upper Left", "to": "Cortex Center - Caves Middle Left", "requires": [] },
+    { "from": "Cortex Center - Caves Middle Left", "to": "Cortex Center - Caves Upper Left", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "CC - Caves Middle Left", "to": "CC - Caves Lower Left", "requires": [ { "anyOf": [
+    { "from": "Cortex Center - Caves Middle Left", "to": "Cortex Center - Caves Lower Left", "requires": [ { "anyOf": [
         { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] },
     {
-        "from": "CC - Caves Lower Left", "to": "CC - Caves Middle Left",
+        "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - Caves Middle Left",
         "requires": [
             { "anyOf": [
                 { "item": "Cloud Leap" },
@@ -381,9 +381,9 @@
             { "item": "Tai-Chi Kick" }
         ]
     },
-    { "from": "CC - Caves Lower Left", "to": "CC - After Large Door", "requires": [] }, // one-way fall + shortcut rope
+    { "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - After Large Door", "requires": [] }, // one-way fall + shortcut rope
     {
-        "from": "CC - After Large Door", "to": "CC - Caves Lower Left",
+        "from": "Cortex Center - After Large Door", "to": "Cortex Center - Caves Lower Left",
         "requires": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }, { "item": "Grapple" }
         ],
@@ -397,11 +397,11 @@
         ],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL + LS vault
     }, // any% NMG speedrun uses T-dash (and bow and CS and grapple) here, but there's no enemy for rando to get qi
-    { "from": "CC - Caves Lower Left", "to": "CC - Left Exit", "requires": [] },
-    { "from": "CC - Left Exit", "to": "CC - Caves Lower Left", "requires": [ { "item": "Grapple" } ] },
+    { "from": "Cortex Center - Caves Lower Left", "to": "Cortex Center - Left Exit", "requires": [] },
+    { "from": "Cortex Center - Left Exit", "to": "Cortex Center - Caves Lower Left", "requires": [ { "item": "Grapple" } ] },
 
-    { "from": "CC - Left Exit", "to": "FGH - Right Exit", "requires": [] },
-    { "from": "FGH - Right Exit", "to": "CC - Left Exit", "requires": [] },
+    { "from": "Cortex Center - Left Exit", "to": "Factory (GH) - Right Exit", "requires": [] },
+    { "from": "Factory (GH) - Right Exit", "to": "Cortex Center - Left Exit", "requires": [] },
 
     // Central Transport Hub
     { "from": "CTH - Upper Left Exit", "to": "CTH - Bottom of Large Shaft", "requires": [] }, // elevator combat gauntlet
@@ -492,78 +492,78 @@
         { "item": "Grapple" }, { "item": "Cloud Leap" }
     ] } ] },
 
-    { "from": "CTH - Middle Left Exit & Elevator", "to": "CH - Center", "requires": [] }, // elevator
+    { "from": "CTH - Middle Left Exit & Elevator", "to": "Central Hall - Center", "requires": [] }, // elevator
 
-    { "from": "CTH - Middle Left Exit & Elevator", "to": "GD - Root Node & Right Exit", "requires": [] },
-    { "from": "GD - Root Node & Right Exit", "to": "CTH - Middle Left Exit & Elevator", "requires": [] },
+    { "from": "CTH - Middle Left Exit & Elevator", "to": "Galactic Dock - Root Node & Right Exit", "requires": [] },
+    { "from": "Galactic Dock - Root Node & Right Exit", "to": "CTH - Middle Left Exit & Elevator", "requires": [] },
 
     { "from": "CTH - Upper Right Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
     { "from": "TRC - Ground Floor & Exits", "to": "CTH - Upper Right Exit", "requires": [] },
 
-    { "from": "CTH - Lower Exits", "to": "PRE - Right Transporter", "requires": [] }, // CTH's lower *right* exit
-    { "from": "PRE - Right Transporter", "to": "CTH - Lower Exits", "requires": [] },
+    { "from": "CTH - Lower Exits", "to": "PR (East) - Right Transporter", "requires": [] }, // CTH's lower *right* exit
+    { "from": "PR (East) - Right Transporter", "to": "CTH - Lower Exits", "requires": [] },
 
     // Power Reservoir (East)
-    { "from": "PRE - Right Transporter", "to": "PRE - Root Node", "requires": [
+    { "from": "PR (East) - Right Transporter", "to": "PR (East) - Root Node", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // for laser barrier
     ] },
-    { "from": "PRE - Root Node", "to": "PRE - Right Transporter", "requires": [
+    { "from": "PR (East) - Root Node", "to": "PR (East) - Right Transporter", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // for laser barrier
     ] },
     {
-        "from": "PRE - Root Node", "to": "PRE - Upper Right",
+        "from": "PR (East) - Root Node", "to": "PR (East) - Upper Right",
         "requires": [ { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] } ],
         "ls_requires": [{ "item": "Ledge Grab" }] // wall slide, any setup
     },
-    { "from": "PRE - Upper Right", "to": "PRE - Root Node", "requires": [] },
-    { "from": "PRE - Upper Right", "to": "PRE - Upper Left", "requires": [ { "anyOf": [
+    { "from": "PR (East) - Upper Right", "to": "PR (East) - Root Node", "requires": [] },
+    { "from": "PR (East) - Upper Right", "to": "PR (East) - Upper Left", "requires": [ { "anyOf": [
         { "item": "Grapple" }, { "item": "Cloud Leap" } // one-way hacking door, then this jump
     ] } ] },
-    { "from": "PRE - Upper Left", "to": "PRE - Left Transporter", "requires": [] }, // one-way hacking elevator
-    { "from": "PRE - Left Transporter", "to": "PRE - Jiaoduan Arena", "requires": [
+    { "from": "PR (East) - Upper Left", "to": "PR (East) - Left Transporter", "requires": [] }, // one-way hacking elevator
+    { "from": "PR (East) - Left Transporter", "to": "PR (East) - Jiaoduan Arena", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // for laser barrier
     ] },
-    { "from": "PRE - Jiaoduan Arena", "to": "PRE - Root Node", "requires": [] }, // one-way debris
+    { "from": "PR (East) - Jiaoduan Arena", "to": "PR (East) - Root Node", "requires": [] }, // one-way debris
 
-    { "from": "PRE - Left Transporter", "to": "PRC - Right Transporter", "requires": [] },
-    { "from": "PRC - Right Transporter", "to": "PRE - Left Transporter", "requires": [] },
+    { "from": "PR (East) - Left Transporter", "to": "PR (Central) - Right Transporter", "requires": [] },
+    { "from": "PR (Central) - Right Transporter", "to": "PR (East) - Left Transporter", "requires": [] },
 
     // Power Reservoir (Central)
     {
-        "from": "PRC - Right Transporter", "to": "PRC - Upper Right",
+        "from": "PR (Central) - Right Transporter", "to": "PR (Central) - Upper Right",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // just swift runner
     }, // bow hover or (CS + AD + T-dash) works but is redundant // no ledge for parry hover
     {
-        "from": "PRC - Upper Right", "to": "PRC - Building Right of Light Bridge",
+        "from": "PR (Central) - Upper Right", "to": "PR (Central) - Building Right of Light Bridge",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "PRC - Building Right of Light Bridge", "to": "PRC - Light Bridge", "requires": [] }, // one-way door
-    { "from": "PRC - Light Bridge", "to": "PRC - Backup Control Room", "requires": [] }, // one-way fall
-    { "from": "PRC - Backup Control Room", "to": "PRC - Light Bridge", "requires": [] }, // hacking to unlock door right of Backup Control Room
-    { "from": "PRC - Left Transporter", "to": "PRC - Chest Near Left Transporter", "requires": [
+    { "from": "PR (Central) - Building Right of Light Bridge", "to": "PR (Central) - Light Bridge", "requires": [] }, // one-way door
+    { "from": "PR (Central) - Light Bridge", "to": "PR (Central) - Backup Control Room", "requires": [] }, // one-way fall
+    { "from": "PR (Central) - Backup Control Room", "to": "PR (Central) - Light Bridge", "requires": [] }, // hacking to unlock door right of Backup Control Room
+    { "from": "PR (Central) - Left Transporter", "to": "PR (Central) - Chest Near Left Transporter", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "PRC - Chest Near Left Transporter", "to": "PRC - Left Transporter", "requires": [] }, // fall
-    { "from": "PRC - Left Transporter", "to": "PRC - Root Node", "requires": [] }, // one-way door
-    { "from": "PRC - Backup Control Room", "to": "PRC - Root Node", "requires": [] }, // one-way door
+    { "from": "PR (Central) - Chest Near Left Transporter", "to": "PR (Central) - Left Transporter", "requires": [] }, // fall
+    { "from": "PR (Central) - Left Transporter", "to": "PR (Central) - Root Node", "requires": [] }, // one-way door
+    { "from": "PR (Central) - Backup Control Room", "to": "PR (Central) - Root Node", "requires": [] }, // one-way door
     {
-        "from": "PRC - Left Transporter", "to": "PRC - Above Root Node",
+        "from": "PR (Central) - Left Transporter", "to": "PR (Central) - Above Root Node",
         "requires": [ { "anyOf": [
             { "item": "Grapple" }, { "item": "Cloud Leap" } // one-way hacking door, then this jump
         ] } ],
         "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }] // CL + LS vault from moving box
     },
-    { "from": "PRC - Above Root Node", "to": "PRC - Chest Near Left Transporter", "requires": [
+    { "from": "PR (Central) - Above Root Node", "to": "PR (Central) - Chest Near Left Transporter", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // to open door
     ] },
     {
-        "from": "PRC - Above Root Node", "to": "PRC - Chest Left of Light Bridge",
+        "from": "PR (Central) - Above Root Node", "to": "PR (Central) - Chest Left of Light Bridge",
         "requires": [ { "anyOf": [
             [ { "item": "Tai-Chi Kick" }, { "item": "Wall Climb" } ],
             [
@@ -575,19 +575,19 @@
             { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
         ]
     }, // parry hover would work, but the only ledge close enough needs CL
-    { "from": "PRC - Chest Left of Light Bridge", "to": "PRC - Light Bridge", "requires": [] }, // one-way door
+    { "from": "PR (Central) - Chest Left of Light Bridge", "to": "PR (Central) - Light Bridge", "requires": [] }, // one-way door
 
-    { "from": "PRC - Left Transporter", "to": "PRW - Right Transporter", "requires": [] },
-    { "from": "PRW - Right Transporter", "to": "PRC - Left Transporter", "requires": [] },
+    { "from": "PR (Central) - Left Transporter", "to": "PR (West) - Right Transporter", "requires": [] },
+    { "from": "PR (West) - Right Transporter", "to": "PR (Central) - Left Transporter", "requires": [] },
 
-    { "from": "PRC - Light Bridge", "to": "RP - Root Node", "requires": [
-        { "region": "PRC - Backup Control Room" } // AND hacking to restore power
+    { "from": "PR (Central) - Light Bridge", "to": "RP - Root Node", "requires": [
+        { "region": "PR (Central) - Backup Control Room" } // AND hacking to restore power
     ] },
-    { "from": "RP - Root Node", "to": "PRC - Light Bridge", "requires": [] }, // walking out of RP just works, even without the light bridge
+    { "from": "RP - Root Node", "to": "PR (Central) - Light Bridge", "requires": [] }, // walking out of RP just works, even without the light bridge
 
     // Power Reservoir (West)
     {
-        "from": "PRW - Root Node", "to": "PRW - Guarded Chest",
+        "from": "PR (West) - Root Node", "to": "PR (West) - Guarded Chest",
         "requires": [ { "anyOf": [
             // without WC, using a TCK target is the only way to go between the two long platforms in the big room
             [ { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" } ],
@@ -623,33 +623,33 @@
             ] }
         ]
     },
-    { "from": "PRW - Guarded Chest", "to": "PRW - Root Node", "requires": [ { "item": "Grapple" } ] },
-    { "from": "PRW - Guarded Chest", "to": "PRW - Power Lines", "requires": [] }, // one-way debris+fall
+    { "from": "PR (West) - Guarded Chest", "to": "PR (West) - Root Node", "requires": [ { "item": "Grapple" } ] },
+    { "from": "PR (West) - Guarded Chest", "to": "PR (West) - Power Lines", "requires": [] }, // one-way debris+fall
     {
-        "from": "PRW - Power Lines", "to": "PRW - Guarded Chest",
+        "from": "PR (West) - Power Lines", "to": "PR (West) - Guarded Chest",
         "medium_requires": [
             { "item": "Trick - Break One-Way Barrier With Bow" },
             { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] },
             { "anyOf": [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ] }
         ]
     }, // LS is irrelevant here because the one-way barriers are too high to spider leap onto
-    { "from": "PRW - Power Lines", "to": "PRW - Root Node", "requires": [] }, // one-way door
-    { "from": "PRW - Power Lines", "to": "PRW - Tao Fruit", "requires": [
+    { "from": "PR (West) - Power Lines", "to": "PR (West) - Root Node", "requires": [] }, // one-way door
+    { "from": "PR (West) - Power Lines", "to": "PR (West) - Tao Fruit", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // to open door, AND hacking 2
     ] },
     {
-        "from": "PRW - Power Lines", "to": "PRW - Above Power Lines",
+        "from": "PR (West) - Power Lines", "to": "PR (West) - Above Power Lines",
         "requires": [ { "anyOf": [
             { "item": "Wall Climb" }, // the intended way using the two boxes in the upper left and hacking a bridge
             [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] // shortcut using the turret-blocking box in upper right
         ] } ],
         "ls_requires": [{ "item": "Ledge Grab" }] // wall slide in upper left room
     },
-    { "from": "PRW - Above Power Lines", "to": "PRW - Right Transporter", "requires": [] }, // one-way door
+    { "from": "PR (West) - Above Power Lines", "to": "PR (West) - Right Transporter", "requires": [] }, // one-way door
 
     // Radiant Pagoda
     { "from": "RP - Root Node", "to": "RP - After Yingzhao", "requires": [] }, // TODO: combat logic?
-    { "from": "RP - After Yingzhao", "to": "CH - Center", "requires": [] }, // elevator
+    { "from": "RP - After Yingzhao", "to": "Central Hall - Center", "requires": [] }, // elevator
 
     // Lake Yaochi Ruins
     {
@@ -692,33 +692,33 @@
     },
     { "from": "LYR - Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
 
-    { "from": "LYR - Root Node", "to": "YC - Upper Exit", "requires": [] },
-    { "from": "YC - Upper Exit", "to": "LYR - Root Node", "requires": [] },
+    { "from": "LYR - Root Node", "to": "Yinglong Canal - Upper Exit", "requires": [] },
+    { "from": "Yinglong Canal - Upper Exit", "to": "LYR - Root Node", "requires": [] },
 
-    { "from": "LYR - Right Exit", "to": "GoSY - Root Node", "requires": [] },
-    { "from": "GoSY - Root Node", "to": "LYR - Right Exit", "requires": [] },
+    { "from": "LYR - Right Exit", "to": "GoS (Entry) - Root Node", "requires": [] },
+    { "from": "GoS (Entry) - Root Node", "to": "LYR - Right Exit", "requires": [] },
 
-    { "from": "LYR - Upper Exit", "to": "ST - Lower Exit", "requires": [] },
-    { "from": "ST - Lower Exit", "to": "LYR - Upper Exit", "requires": [] },
+    { "from": "LYR - Upper Exit", "to": "Sky Tower - Lower Exit", "requires": [] },
+    { "from": "Sky Tower - Lower Exit", "to": "LYR - Upper Exit", "requires": [] },
 
     // Greenhouse
     {
-        "from": "GH - Root Node", "to": "GH - Chiyou & 1st Waterfall Hack",
+        "from": "Greenhouse - Root Node", "to": "Greenhouse - Chiyou & 1st Waterfall Hack",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
     {
-        "from": "GH - Chiyou & 1st Waterfall Hack", "to": "GH - Root Node",
+        "from": "Greenhouse - Chiyou & 1st Waterfall Hack", "to": "Greenhouse - Root Node",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
-    { "from": "GH - Chiyou & 1st Waterfall Hack", "to": "GH - 2nd Waterfall Hack", "requires": [] }, // hacking
-    { "from": "GH - 2nd Waterfall Hack", "to": "GH - 3rd Waterfall Hack", "requires": [] }, // hacking
-    { "from": "GH - 3rd Waterfall Hack", "to": "GH - Mutated Crops", "requires": [] }, // hacking
-    { "from": "GH - Mutated Crops", "to": "GH - Shuigui Arena", "requires": [] }, // one-way fall
-    { "from": "GH - Shuigui Arena", "to": "GH - Chiyou & 1st Waterfall Hack", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] },
+    { "from": "Greenhouse - Chiyou & 1st Waterfall Hack", "to": "Greenhouse - 2nd Waterfall Hack", "requires": [] }, // hacking
+    { "from": "Greenhouse - 2nd Waterfall Hack", "to": "Greenhouse - 3rd Waterfall Hack", "requires": [] }, // hacking
+    { "from": "Greenhouse - 3rd Waterfall Hack", "to": "Greenhouse - Mutated Crops", "requires": [] }, // hacking
+    { "from": "Greenhouse - Mutated Crops", "to": "Greenhouse - Shuigui Arena", "requires": [] }, // one-way fall
+    { "from": "Greenhouse - Shuigui Arena", "to": "Greenhouse - Chiyou & 1st Waterfall Hack", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] },
 
-    { "from": "GH - 2nd Waterfall Hack", "to": "W&OS - Center", "requires": [] }, // one-way fall
+    { "from": "Greenhouse - 2nd Waterfall Hack", "to": "W&OS - Center", "requires": [] }, // one-way fall
 
     // Water & Oxygen Synthesis
     {
@@ -766,10 +766,10 @@
     { "from": "W&OS - Root Node", "to": "W&OS - Right Exit", "requires": [ { "item": "Charged Strike" } ] }, // one-way dragon boat ride
     // Thunder Buster and Cloud Piercer S arrows do *not* work on the CS bell, it really has to be CS here
 
-    { "from": "W&OS - Left Exit", "to": "YC - Root Node", "requires": [] },
-    { "from": "YC - Root Node", "to": "W&OS - Left Exit", "requires": [
+    { "from": "W&OS - Left Exit", "to": "Yinglong Canal - Root Node", "requires": [] },
+    { "from": "Yinglong Canal - Root Node", "to": "W&OS - Left Exit", "requires": [
         // YC's bottom right exit is blocked by a door until you do the 2nd GH hack to drain W&OS's yellow water
-        { "region": "GH - 3rd Waterfall Hack" }
+        { "region": "Greenhouse - 3rd Waterfall Hack" }
     ] },
 
     { "from": "W&OS - Right Exit", "to": "AH - Root Node", "requires": [] },
@@ -779,118 +779,118 @@
     { "from": "AH - Root Node", "to": "AH - After Goumang", "requires": [] }, // TODO: combat logic?
     { "from": "AH - After Goumang", "to": "AH - Root Node", "requires": [] },
 
-    { "from": "AH - After Goumang", "to": "GoSY - Lower Right Exit", "requires": [] },
-    { "from": "GoSY - Lower Right Exit", "to": "AH - After Goumang", "requires": [] },
+    { "from": "AH - After Goumang", "to": "GoS (Entry) - Lower Right Exit", "requires": [] },
+    { "from": "GoS (Entry) - Lower Right Exit", "to": "AH - After Goumang", "requires": [] },
 
     // Yinglong Canal
     {
-        "from": "YC - Upper Exit", "to": "YC - Upper Caves",
+        "from": "Yinglong Canal - Upper Exit", "to": "Yinglong Canal - Upper Caves",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
     {
-        "from": "YC - Upper Caves", "to": "YC - Upper Exit",
+        "from": "Yinglong Canal - Upper Caves", "to": "Yinglong Canal - Upper Exit",
         "requires": [ { "item": "Charged Strike" } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
-    { "from": "YC - Upper Caves", "to": "YC - Farmland Markings", "requires": [] }, // fall
-    { "from": "YC - Farmland Markings", "to": "YC - Upper Caves", "requires": [ { "anyOf": [
+    { "from": "Yinglong Canal - Upper Caves", "to": "Yinglong Canal - Farmland Markings", "requires": [] }, // fall
+    { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Upper Caves", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "YC - Farmland Markings", "to": "YC - Above Egg Cave", "requires": [ { "anyOf": [
+    { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Above Egg Cave", "requires": [ { "anyOf": [
         { "item": "Cloud Leap" }, // jump into "Between Egg Cave and Farmland Markings" room and jump to upper platforms of it
         [
             { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" } ] }, // get into the "Between ..." room somehow
             { "item": "Wall Climb" } // then climb the green wall in the "Between ..." room
         ]
     ] } ] },
-    { "from": "YC - Above Egg Cave", "to": "YC - Farmland Markings", "requires": [] }, // fall
-    { "from": "YC - Above Egg Cave", "to": "YC - Egg Cave & Left Exit", "requires": [] }, // fall
-    { "from": "YC - Egg Cave & Left Exit", "to": "YC - Above Egg Cave", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "YC - Farmland Markings", "to": "YC - Root Node", "requires": [] }, // fall
-    { "from": "YC - Root Node", "to": "YC - Farmland Markings", "requires": [ { "anyOf": [
+    { "from": "Yinglong Canal - Above Egg Cave", "to": "Yinglong Canal - Farmland Markings", "requires": [] }, // fall
+    { "from": "Yinglong Canal - Above Egg Cave", "to": "Yinglong Canal - Egg Cave & Left Exit", "requires": [] }, // fall
+    { "from": "Yinglong Canal - Egg Cave & Left Exit", "to": "Yinglong Canal - Above Egg Cave", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "Yinglong Canal - Farmland Markings", "to": "Yinglong Canal - Root Node", "requires": [] }, // fall
+    { "from": "Yinglong Canal - Root Node", "to": "Yinglong Canal - Farmland Markings", "requires": [ { "anyOf": [
         { "item": "Grapple" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
-    { "from": "YC - Egg Cave & Left Exit", "to": "YC - Root Node", "requires": [ // climbing to hack point above one-way door
+    { "from": "Yinglong Canal - Egg Cave & Left Exit", "to": "Yinglong Canal - Root Node", "requires": [ // climbing to hack point above one-way door
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Wall Climb" }, { "item": "Ledge Grab" } ] }
     ] },
 
-    { "from": "YC - Egg Cave & Left Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
-    { "from": "TRC - Ground Floor & Exits", "to": "YC - Egg Cave & Left Exit", "requires": [] },
+    { "from": "Yinglong Canal - Egg Cave & Left Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
+    { "from": "TRC - Ground Floor & Exits", "to": "Yinglong Canal - Egg Cave & Left Exit", "requires": [] },
 
     // Factory (Great Hall)
-    { "from": "FGH - Right Exit", "to": "FGH - Lower Levels & Root Node", "requires": [ { "anyOf": [
+    { "from": "Factory (GH) - Right Exit", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [ { "anyOf": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] } ] },
-    { "from": "FGH - Lower Levels & Root Node", "to": "FGH - Right Exit", "requires": [] }, // fall
-    { "from": "FGH - Lower Levels & Root Node", "to": "FGH - Lower Left Elevator", "requires": [] }, // fall
-    { "from": "FGH - Lower Left Elevator", "to": "FGH - Lower Levels & Root Node", "requires": [ { "item": "Grapple" } ] },
-    { "from": "FGH - Left Exit", "to": "FGH - Lower Levels & Root Node", "requires": [] }, // bridge only hackable from left side
-    { "from": "FGH - Lower Levels & Root Node", "to": "FGH - Upper Left Elevator", "requires": [ { "item": "Unbounded Counter" } ] },
+    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Right Exit", "requires": [] }, // fall
+    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Lower Left Elevator", "requires": [] }, // fall
+    { "from": "Factory (GH) - Lower Left Elevator", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [ { "item": "Grapple" } ] },
+    { "from": "Factory (GH) - Left Exit", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [] }, // bridge only hackable from left side
+    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Upper Left Elevator", "requires": [ { "item": "Unbounded Counter" } ] },
     {
-        "from": "FGH - Lower Levels & Root Node", "to": "FGH - Hammer Brothers Roof",
+        "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Hammer Brothers Roof",
         "requires": [ { "anyOf": [ // this is for the gap between two conveyor belts above the leftmost safety orb
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "FGH - Lower Levels & Root Node", "to": "FGH - Above Root Node", "requires": [
+    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Above Root Node", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] }, // from the rightmost safety orb's right platform, cloud leap is the only way to the higher middle platform
     // from the middle safety orb, G AND AD AND CL AND WC (in that order) works, but is redundant with these other routes
-    { "from": "FGH - Hammer Brothers Roof", "to": "FGH - Above Root Node", "requires": [ { "anyOf": [
+    { "from": "Factory (GH) - Hammer Brothers Roof", "to": "Factory (GH) - Above Root Node", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "FGH - Above Root Node", "to": "FGH - Hammer Brothers Roof", "requires": [] }, // fall
-    { "from": "FGH - Above Root Node", "to": "FGH - Lower Levels & Root Node", "requires": [] }, // fall farther
-    { "from": "FGH - Above Root Node", "to": "FGH - Upper Platforms of Nymph Puzzle Room", "requires": [
+    { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Hammer Brothers Roof", "requires": [] }, // fall
+    { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [] }, // fall farther
+    { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Upper Platforms of Nymph Puzzle Room", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }, // to rearrange the platforms
         { "anyOf": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] } // to actually climb onto them
     ] },
-    { "from": "FGH - Lower Levels & Root Node", "to": "FGH - Platform Above Factory (Underground)", "requires": [] }, // fall
-    { "from": "FGH - Platform Above Factory (Underground)", "to": "FGH - Lower Levels & Root Node", "requires": [ { "anyOf": [
+    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Factory (GH) - Platform Above Factory (Underground)", "requires": [] }, // fall
+    { "from": "Factory (GH) - Platform Above Factory (Underground)", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Ledge Grab" }, { "item": "Cloud Leap" }
     ] } ] },
 
-    { "from": "FGH - Left Exit", "to": "OW - Root Node & Middle Exits", "requires": [] },
-    { "from": "OW - Root Node & Middle Exits", "to": "FGH - Left Exit", "requires": [] },
+    { "from": "Factory (GH) - Left Exit", "to": "OW - Root Node & Middle Exits", "requires": [] },
+    { "from": "OW - Root Node & Middle Exits", "to": "Factory (GH) - Left Exit", "requires": [] },
 
-    { "from": "FGH - Platform Above Factory (Underground)", "to": "FU - Upper Right Exit", "requires": [] }, // one-way fall
-    { "from": "FU - Upper Right Exit", "to": "FGH - Platform Above Factory (Underground)", "requires": [] }, // just walk to the left, then one-way door
+    { "from": "Factory (GH) - Platform Above Factory (Underground)", "to": "Factory (U) - Upper Right Exit", "requires": [] }, // one-way fall
+    { "from": "Factory (U) - Upper Right Exit", "to": "Factory (GH) - Platform Above Factory (Underground)", "requires": [] }, // just walk to the left, then one-way door
 
-    { "from": "FGH - Lower Left Elevator", "to": "FU - Upper Elevator", "requires": [] },
-    { "from": "FU - Upper Elevator", "to": "FGH - Lower Left Elevator", "requires": [] },
+    { "from": "Factory (GH) - Lower Left Elevator", "to": "Factory (U) - Upper Elevator", "requires": [] },
+    { "from": "Factory (U) - Upper Elevator", "to": "Factory (GH) - Lower Left Elevator", "requires": [] },
 
-    { "from": "FGH - Upper Left Elevator", "to": "FPA - Lower Left Elevator", "requires": [] }, // one-way elevator
+    { "from": "Factory (GH) - Upper Left Elevator", "to": "Factory (PA) - Lower Left Elevator", "requires": [] }, // one-way elevator
 
     // Factory (Underground)
-    { "from": "FU - Upper Right Exit", "to": "FU - Upper Central Platform", "requires": [] }, // fall
-    { "from": "FU - Upper Central Platform", "to": "FU - Upper Right Exit", "requires": [
+    { "from": "Factory (U) - Upper Right Exit", "to": "Factory (U) - Upper Central Platform", "requires": [] }, // fall
+    { "from": "Factory (U) - Upper Central Platform", "to": "Factory (U) - Upper Right Exit", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "FU - Upper Central Platform", "to": "FU - Kuiyan Arena", "requires": [] }, // fall to the right
-    { "from": "FU - Kuiyan Arena", "to": "FU - Upper Central Platform", "requires": [
+    { "from": "Factory (U) - Upper Central Platform", "to": "Factory (U) - Kuiyan Arena", "requires": [] }, // fall to the right
+    { "from": "Factory (U) - Kuiyan Arena", "to": "Factory (U) - Upper Central Platform", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }
     ] },
-    { "from": "FU - Upper Central Platform", "to": "FU - Upper Elevator", "requires": [] }, // fall to the left
-    { "from": "FU - Upper Elevator", "to": "FU - Upper Central Platform", "requires": [
+    { "from": "Factory (U) - Upper Central Platform", "to": "Factory (U) - Upper Elevator", "requires": [] }, // fall to the left
+    { "from": "Factory (U) - Upper Elevator", "to": "Factory (U) - Upper Central Platform", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }
     ] },
-    { "from": "FU - Kuiyan Arena", "to": "FU - Main Intersection", "requires": [] }, // hacking one-way door
+    { "from": "Factory (U) - Kuiyan Arena", "to": "Factory (U) - Main Intersection", "requires": [] }, // hacking one-way door
     {
-        "from": "FU - Main Intersection", "to": "FU - Broken Shanhai (with qi)",
+        "from": "Factory (U) - Main Intersection", "to": "Factory (U) - Broken Shanhai (with qi)",
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ]
     },
     {
-        "from": "FU - Main Intersection", "to": "FU - Broken Shanhai",
+        "from": "Factory (U) - Main Intersection", "to": "Factory (U) - Broken Shanhai",
         "medium_requires": [] // T-dash
     },
-    { "from": "FU - Broken Shanhai (with qi)", "to": "FU - Broken Shanhai", "requires": [] },
+    { "from": "Factory (U) - Broken Shanhai (with qi)", "to": "Factory (U) - Broken Shanhai", "requires": [] },
     {
-        "from": "FU - Broken Shanhai", "to": "FU - Middle Right Exit",
+        "from": "Factory (U) - Broken Shanhai", "to": "Factory (U) - Middle Right Exit",
         "requires": [
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
             { "anyOf": [
@@ -903,24 +903,24 @@
         ] // can't assume you have qi for T-dash since you may have already spent it reaching FU-BS
     },
     {
-        "from": "FU - Broken Shanhai (with qi)", "to": "FU - Middle Right Exit",
+        "from": "Factory (U) - Broken Shanhai (with qi)", "to": "Factory (U) - Middle Right Exit",
         "medium_requires": [] // T-dash
     },
     // we skip the BS <- MRE connection because MRE -> MI -> BS has weaker requirements (unless we want a precise TCK-only jump)
     {
-        "from": "FU - Middle Right Exit", "to": "FU - Main Intersection",
+        "from": "Factory (U) - Middle Right Exit", "to": "Factory (U) - Main Intersection",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash
     }, // drop down to one-way door, then a long jump over spikes with a kick target
-    { "from": "FU - Middle Right Exit", "to": "FU - Lower Right Exit", "requires": [] }, // fall
-    { "from": "FU - Lower Right Exit", "to": "FU - Middle Right Exit", "requires": [ { "anyOf": [
+    { "from": "Factory (U) - Middle Right Exit", "to": "Factory (U) - Lower Right Exit", "requires": [] }, // fall
+    { "from": "Factory (U) - Lower Right Exit", "to": "Factory (U) - Middle Right Exit", "requires": [ { "anyOf": [
         { "item": "Grapple" }, { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "FU - Main Intersection", "to": "FU - Root Node & Lower Elevator", "requires": [] }, // fall from ropes on left
+    { "from": "Factory (U) - Main Intersection", "to": "Factory (U) - Root Node & Lower Elevator", "requires": [] }, // fall from ropes on left
     {
-        "from": "FU - Root Node & Lower Elevator", "to": "FU - Main Intersection",
+        "from": "Factory (U) - Root Node & Lower Elevator", "to": "Factory (U) - Main Intersection",
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ], // either CL up to the chest and ropes, or (AD OR CL) over the spikes to the statue
@@ -930,18 +930,18 @@
         ] } ]
     }, // in RN&LE no enemies for a T-dash, and no ledge to store
     {
-        "from": "FU - Upper Elevator", "to": "FU - Crystal Passage",
+        "from": "Factory (U) - Upper Elevator", "to": "Factory (U) - Crystal Passage",
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "FU - Crystal Passage", "to": "FU - Upper Elevator", "requires": [
+    { "from": "Factory (U) - Crystal Passage", "to": "Factory (U) - Upper Elevator", "requires": [
         { "item": "Wall Climb" },
         { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
     ] },
     {
-        "from": "FU - Root Node & Lower Elevator", "to": "FU - Crystal Passage",
+        "from": "Factory (U) - Root Node & Lower Elevator", "to": "Factory (U) - Crystal Passage",
         "requires": [
             { "item": "Wall Climb" },
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
@@ -953,50 +953,50 @@
             // ledge to the Crystal Passage platform, we can assume T-dash access in this case
         ]
     },
-    { "from": "FU - Crystal Passage", "to": "FU - Root Node & Lower Elevator", "requires": [] }, // single jump is enough to clear the spikes
-    { "from": "FU - Root Node & Lower Elevator", "to": "FU - Box After Laser", "requires": [
+    { "from": "Factory (U) - Crystal Passage", "to": "Factory (U) - Root Node & Lower Elevator", "requires": [] }, // single jump is enough to clear the spikes
+    { "from": "Factory (U) - Root Node & Lower Elevator", "to": "Factory (U) - Box After Laser", "requires": [
         { "item": "Air Dash" }, // to get past the laser
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // to get on top of the box
     ] },
-    { "from": "FU - Box After Laser", "to": "FU - Root Node & Lower Elevator", "requires": [
+    { "from": "Factory (U) - Box After Laser", "to": "Factory (U) - Root Node & Lower Elevator", "requires": [
         { "item": "Air Dash" } // in this direction, only the laser is a problem
     ] },
-    { "from": "FU - Box After Laser", "to": "FU - Left Exit", "requires": [
+    { "from": "Factory (U) - Box After Laser", "to": "Factory (U) - Left Exit", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // more boxes
     ] },
     {
-        "from": "FU - Left Exit", "to": "FU - Box After Laser",
+        "from": "Factory (U) - Left Exit", "to": "Factory (U) - Box After Laser",
         "requires": [
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" }, { "item": "Air Dash" } ] }
         ],
         "medium_requires": [] // 2 T-dashes (this is okay because both ledges have an enemy you can parry)
     },
-    { "from": "FU - Left Exit", "to": "FU - Behind Moving Boxes", "requires": [
+    { "from": "Factory (U) - Left Exit", "to": "Factory (U) - Behind Moving Boxes", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // for the ledge after climbing the rope
         { "item": "Mystic Nymph: Scout Mode" }, // to toggle the box movement
         { "item": "Wall Climb" } // to ride the boxes
     ] },
-    { "from": "FU - Behind Moving Boxes", "to": "FU - Left Exit", "requires": [
+    { "from": "Factory (U) - Behind Moving Boxes", "to": "Factory (U) - Left Exit", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
         // no need to toggle the box movement when we're going this way
         { "item": "Wall Climb" }
     ] },
-    { "from": "FU - Behind Moving Boxes", "to": "FU - Upper Elevator", "requires": [] }, // one-way debris
+    { "from": "Factory (U) - Behind Moving Boxes", "to": "Factory (U) - Upper Elevator", "requires": [] }, // one-way debris
     {
-        "from": "FU - Upper Elevator", "to": "FU - Behind Moving Boxes",
+        "from": "Factory (U) - Upper Elevator", "to": "Factory (U) - Behind Moving Boxes",
         "medium_requires": [{ "item": "Trick - Break One-Way Barrier With Bow" }]
     },
     // I could not get spider leap/wall slide into CS to work ^here, and this would've been the only place
     // it affected logic anyway, so definitely not worth adding "spider CS" to the list of medium tricks.
 
-    { "from": "FU - Middle Right Exit", "to": "AM - Left Exit", "requires": [] },
-    { "from": "AM - Left Exit", "to": "FU - Middle Right Exit", "requires": [] },
+    { "from": "Factory (U) - Middle Right Exit", "to": "AM - Left Exit", "requires": [] },
+    { "from": "AM - Left Exit", "to": "Factory (U) - Middle Right Exit", "requires": [] },
 
-    { "from": "FU - Root Node & Lower Elevator", "to": "FMR - Right Elevator", "requires": [] },
-    { "from": "FMR - Right Elevator", "to": "FU - Root Node & Lower Elevator", "requires": [] },
+    { "from": "Factory (U) - Root Node & Lower Elevator", "to": "Factory (MR) - Right Elevator", "requires": [] },
+    { "from": "Factory (MR) - Right Elevator", "to": "Factory (U) - Root Node & Lower Elevator", "requires": [] },
 
-    { "from": "FU - Left Exit", "to": "OW - Lower Right Exit", "requires": [] },
-    { "from": "OW - Lower Right Exit", "to": "FU - Left Exit", "requires": [] },
+    { "from": "Factory (U) - Left Exit", "to": "OW - Lower Right Exit", "requires": [] },
+    { "from": "OW - Lower Right Exit", "to": "Factory (U) - Left Exit", "requires": [] },
 
     // Outer Warehouse
     { "from": "OW - Lower Right Exit", "to": "OW - Activate Crates And Return", "requires": [
@@ -1241,11 +1241,11 @@
     // we can't let you leave until you've activated the root node, and we can't let you enter
     // until you have what you need to reach the root node. So we end up with the whole first
     // half of Prison being a single logical region.
-    { "from": "FGH - Lower Levels & Root Node", "to": "P - Up To Root Node", "requires": [
+    { "from": "Factory (GH) - Lower Levels & Root Node", "to": "Prison - Up To Root Node", "requires": [
         { "item": "Event - Jiequan 1 Fight Unlocked" } // see event logic for how you're expected to navigate Prison
     ] },
     {
-        "from": "P - Up To Root Node", "to": "P - Kanghui Level",
+        "from": "Prison - Up To Root Node", "to": "Prison - Kanghui Level",
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, // solves everything, even the grapple part if you hold up
             [
@@ -1268,39 +1268,39 @@
             ]
         ] } ] // parry hover works too, but the LS logic turns out to be redundant with medium / exactly LG AND G
     },
-    { "from": "P - Kanghui Level", "to": "P - After Kanghui", "requires": [] }, // TODO: combat logic?
+    { "from": "Prison - Kanghui Level", "to": "Prison - After Kanghui", "requires": [] }, // TODO: combat logic?
 
-    { "from": "P - After Kanghui", "to": "FMR - Left Elevator", "requires": [] }, // one-way elevator
+    { "from": "Prison - After Kanghui", "to": "Factory (MR) - Left Elevator", "requires": [] }, // one-way elevator
 
     // Factory (Machine Room)
-    { "from": "FMR - Left Elevator", "to": "FMR - Walking Chest Above Green Pillar", "requires": [
+    { "from": "Factory (MR) - Left Elevator", "to": "Factory (MR) - Walking Chest Above Green Pillar", "requires": [
         { "item": "Wall Climb" }, // partway up the pillar
         { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }, // left to turret platform
         { "item": "Unbounded Counter" }, // to break through turret wall
         { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } // final ledge up to walking chest platform
     ] }, // no parryable enemies for T-dash
-    { "from": "FMR - Walking Chest Above Green Pillar", "to": "FMR - Above Green Pillar", "requires": [] }, // fall
-    { "from": "FMR - Above Green Pillar", "to": "FMR - Walking Chest Above Green Pillar", "requires": [
+    { "from": "Factory (MR) - Walking Chest Above Green Pillar", "to": "Factory (MR) - Above Green Pillar", "requires": [] }, // fall
+    { "from": "Factory (MR) - Above Green Pillar", "to": "Factory (MR) - Walking Chest Above Green Pillar", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "FMR - Left Elevator", "to": "FMR - Top of Green Pillar", "requires": [
+    { "from": "Factory (MR) - Left Elevator", "to": "Factory (MR) - Top of Green Pillar", "requires": [
         { "item": "Wall Climb" },
         { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" } ] } // gap in the green wall
     ] },
-    { "from": "FMR - Top of Green Pillar", "to": "FMR - Above Green Pillar", "requires": [
+    { "from": "Factory (MR) - Top of Green Pillar", "to": "Factory (MR) - Above Green Pillar", "requires": [
         { "item": "Unbounded Counter" }, { "item": "Grapple" }
     ] }, // CL + LS getup is barely not enough
-    { "from": "FMR - Top of Green Pillar", "to": "FMR - Left Elevator", "requires": [] }, // fall
-    { "from": "FMR - Top of Green Pillar", "to": "FMR - Disc Throwers Right of Green Pillar", "requires": [] }, // fall
-    { "from": "FMR - Disc Throwers Right of Green Pillar", "to": "FMR - Top of Green Pillar", "requires": [ { "anyOf": [
+    { "from": "Factory (MR) - Top of Green Pillar", "to": "Factory (MR) - Left Elevator", "requires": [] }, // fall
+    { "from": "Factory (MR) - Top of Green Pillar", "to": "Factory (MR) - Disc Throwers Right of Green Pillar", "requires": [] }, // fall
+    { "from": "Factory (MR) - Disc Throwers Right of Green Pillar", "to": "Factory (MR) - Top of Green Pillar", "requires": [ { "anyOf": [
         { "item": "Wall Climb" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
-    { "from": "FMR - Top of Green Pillar", "to": "FMR - Chest Right of Green Pillar", "requires": [
+    { "from": "Factory (MR) - Top of Green Pillar", "to": "Factory (MR) - Chest Right of Green Pillar", "requires": [
         { "item": "Unbounded Counter" } // the intended way through the turret wall
     ] },
     {
-        "from": "FMR - Disc Throwers Right of Green Pillar", "to": "FMR - Chest Right of Green Pillar",
+        "from": "Factory (MR) - Disc Throwers Right of Green Pillar", "to": "Factory (MR) - Chest Right of Green Pillar",
         // climb down the rope past the disc throwers, and then cross the long gap to the left to reach this chest
         "medium_requires": [ { "anyOf": [
             { "item": "Trick - Bow Hover" },
@@ -1314,28 +1314,28 @@
             { "item": "Ledge Grab" } // parry hover
         ]
     },
-    { "from": "FMR - Disc Throwers Right of Green Pillar", "to": "FMR - Root Node", "requires": [] }, // fall
-    { "from": "FMR - Root Node", "to": "FMR - Disc Throwers Right of Green Pillar", "requires": [ { "anyOf": [
+    { "from": "Factory (MR) - Disc Throwers Right of Green Pillar", "to": "Factory (MR) - Root Node", "requires": [] }, // fall
+    { "from": "Factory (MR) - Root Node", "to": "Factory (MR) - Disc Throwers Right of Green Pillar", "requires": [ { "anyOf": [
         [ { "item": "Unbounded Counter" }, { "item": "Wall Climb" } ], // do the whole obstacle course loop
         { "item": "Cloud Leap" } // or just grab the rope you came down
     ] } ] },
-    { "from": "FMR - Above Green Pillar", "to": "FMR - Moving Platforms", "requires": [ { "anyOf": [
+    { "from": "Factory (MR) - Above Green Pillar", "to": "Factory (MR) - Moving Platforms", "requires": [ { "anyOf": [
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] }, // in practice this should be free, but collapsible platforms require us to assume the worst case
     // no T-dashes in logic because it's possible to get here from Left Elevator without passing a parryable enemy
-    { "from": "FMR - Moving Platforms", "to": "FMR - Right Elevator", "requires": [] }, // fall, one-way door
+    { "from": "Factory (MR) - Moving Platforms", "to": "Factory (MR) - Right Elevator", "requires": [] }, // fall, one-way door
 
     // Factory (Production Area)
-    { "from": "FPA - Lower Left Elevator", "to": "FPA - Root Node", "requires": [ { "item": "Wall Climb" } ] },
-    { "from": "FPA - Root Node", "to": "FPA - Lower Left Elevator", "requires": [
+    { "from": "Factory (PA) - Lower Left Elevator", "to": "Factory (PA) - Root Node", "requires": [ { "item": "Wall Climb" } ] },
+    { "from": "Factory (PA) - Root Node", "to": "Factory (PA) - Lower Left Elevator", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] }, // ledge storage can do one of the high jumps here, but not all of them
-    { "from": "FPA - Root Node", "to": "FPA - Lower Left Fire Zone", "requires": [
+    { "from": "Factory (PA) - Root Node", "to": "Factory (PA) - Lower Left Fire Zone", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // to lower rope
     ] },
-    { "from": "FPA - Lower Left Fire Zone", "to": "FPA - Lower Left Elevator", "requires": [] }, // one-way door
+    { "from": "Factory (PA) - Lower Left Fire Zone", "to": "Factory (PA) - Lower Left Elevator", "requires": [] }, // one-way door
     {
-        "from": "FPA - Lower Left Fire Zone", "to": "FPA - Lower Left Fire Zone Platforms",
+        "from": "Factory (PA) - Lower Left Fire Zone", "to": "Factory (PA) - Lower Left Fire Zone Platforms",
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" },
             [ { "item": "Air Dash" }, { "item": "Tai-Chi Kick" }, { "item": "Ledge Grab" } ]
@@ -1343,22 +1343,22 @@
         "medium_requires": [{ "item": "Tai-Chi Kick" }] // T-dash for horizontal and TCK for vertical
     },
     {
-        "from": "FPA - Lower Left Fire Zone Platforms", "to": "FPA - Chest Platform Below Sniper Zone",
+        "from": "Factory (PA) - Lower Left Fire Zone Platforms", "to": "Factory (PA) - Chest Platform Below Sniper Zone",
         "requires": [ { "item": "Cloud Leap" } ],
         "medium_requires": [{ "item": "Tai-Chi Kick" }] // and T-dash
     },
     {
-        "from": "FPA - Lower Left Fire Zone Platforms", "to": "FPA - Left Vents",
+        "from": "Factory (PA) - Lower Left Fire Zone Platforms", "to": "Factory (PA) - Left Vents",
         "requires": [
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Tai-Chi Kick" } ] }
         ],
         "medium_requires": [] // T-dash
     },
-    { "from": "FPA - Left Vents", "to": "FPA - Lower Left Fire Zone Platforms", "requires": [] },
-    { "from": "FPA - Left Vents", "to": "FPA - Lower Left Elevator", "requires": [] }, // shortcut rope
-    { "from": "FPA - Left Vents", "to": "FPA - Upper Left Fire Zone & Pharmacy", "requires": [] },
+    { "from": "Factory (PA) - Left Vents", "to": "Factory (PA) - Lower Left Fire Zone Platforms", "requires": [] },
+    { "from": "Factory (PA) - Left Vents", "to": "Factory (PA) - Lower Left Elevator", "requires": [] }, // shortcut rope
+    { "from": "Factory (PA) - Left Vents", "to": "Factory (PA) - Upper Left Fire Zone & Pharmacy", "requires": [] },
     {
-        "from": "FPA - Upper Left Fire Zone & Pharmacy", "to": "FPA - Top Floor of Left Building",
+        "from": "Factory (PA) - Upper Left Fire Zone & Pharmacy", "to": "Factory (PA) - Top Floor of Left Building",
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, // the left side, above the little room of fire
             [ { "item": "Mystic Nymph: Scout Mode" }, { "item": "Grapple" } ] // AND hacking 3 // the right side, grappling up the shaft
@@ -1368,7 +1368,7 @@
             { "item": "Ledge Grab" } // either LS vault on the left or wall slide up the right
         ]
     },
-    { "from": "FPA - Top Floor of Left Building", "to": "FPA - Cleared Top Floor of Left Building", "requires": [
+    { "from": "Factory (PA) - Top Floor of Left Building", "to": "Factory (PA) - Cleared Top Floor of Left Building", "requires": [
         { "anyOf": [ // reach the hack point to clear the enemies
             [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ],
             [
@@ -1379,55 +1379,55 @@
         ] }
     ] },
     {
-        "from": "FPA - Cleared Top Floor of Left Building", "to": "FPA - Hacked Statue in Left Building",
+        "from": "Factory (PA) - Cleared Top Floor of Left Building", "to": "Factory (PA) - Hacked Statue in Left Building",
         "requires": [ { "item": "Charged Strike" } ], // AND hacking to actually hack the statue
         "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
     },
     {
-        "from": "FPA - Upper Left Fire Zone & Pharmacy", "to": "FPA - Chest Platform Below Sniper Zone",
+        "from": "Factory (PA) - Upper Left Fire Zone & Pharmacy", "to": "Factory (PA) - Chest Platform Below Sniper Zone",
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, { "item": "Air Dash" }
         ] } ],
         "medium_requires": [{ "item": "Tai-Chi Kick" }] // for qi for a T-dash
     },
-    { "from": "FPA - Upper Left Fire Zone & Pharmacy", "to": "FPA - Pharmacy Interior", "requires": [
-        { "region": "FPA - Hacked Statue in Left Building" },
+    { "from": "Factory (PA) - Upper Left Fire Zone & Pharmacy", "to": "Factory (PA) - Pharmacy Interior", "requires": [
+        { "region": "Factory (PA) - Hacked Statue in Left Building" },
         { "item": "Unbounded Counter" } // AND hacking is all you need for the fire zone statue
     ] },
-    { "from": "FPA - Lower Left Fire Zone Platforms", "to": "FPA - Guard Production Station", "requires": [] }, // fall
+    { "from": "Factory (PA) - Lower Left Fire Zone Platforms", "to": "Factory (PA) - Guard Production Station", "requires": [] }, // fall
     {
-        "from": "FPA - Guard Production Station", "to": "FPA - Lower Left Fire Zone Platforms",
+        "from": "Factory (PA) - Guard Production Station", "to": "Factory (PA) - Lower Left Fire Zone Platforms",
         "requires": [{ "item": "Grapple" }],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // setup using ledge left of node
     },
-    { "from": "FPA - Guard Production Station", "to": "FPA - Root Node", "requires": [] }, // one-way door
-    { "from": "FPA - Guard Production Station", "to": "FPA - Right Fire Zone & Wuqiang Arena", "requires": [
+    { "from": "Factory (PA) - Guard Production Station", "to": "Factory (PA) - Root Node", "requires": [] }, // one-way door
+    { "from": "Factory (PA) - Guard Production Station", "to": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }, // to disable fire in the vents (one-way) to "sniper room"
         { "anyOf": [
             { "item": "Cloud Leap" },
             [ { "item": "Air Dash" }, { "item": "Tai-Chi Kick" }, { "item": "Grapple" } ]
         ] } // to traverse the "sniper room" up to the one-way door back to GPS
     ] },
-    { "from": "FPA - Right Fire Zone & Wuqiang Arena", "to": "FPA - Guard Production Station", "requires": [
+    { "from": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "to": "Factory (PA) - Guard Production Station", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // to reach the hallway above the "sniper room"
         { "item": "Mystic Nymph: Scout Mode" } // to open the "shortcut" door to GPS
     ] },
-    { "from": "FPA - Right Fire Zone & Wuqiang Arena", "to": "FPA - Upper Elevator", "requires": [ { "anyOf": [
+    { "from": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "to": "Factory (PA) - Upper Elevator", "requires": [ { "anyOf": [
         // using the rope on the far side of the miniboss arena, you can reach the top of the arena itemless,
         // after which you only need to do the last two TCK target jumps
         { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }
     ] } ] },
-    { "from": "FPA - Right Fire Zone & Wuqiang Arena", "to": "FPA - Lower Right Exit", "requires": [] }, // fall
-    { "from": "FPA - Lower Right Exit", "to": "FPA - Right Fire Zone & Wuqiang Arena", "requires": [
+    { "from": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "to": "Factory (PA) - Lower Right Exit", "requires": [] }, // fall
+    { "from": "Factory (PA) - Lower Right Exit", "to": "Factory (PA) - Right Fire Zone & Wuqiang Arena", "requires": [
         { "item": "Ledge Grab" }
     ] },
-    { "from": "FPA - Upper Elevator", "to": "FPA - Upper Left Fire Zone & Pharmacy", "requires": [
+    { "from": "Factory (PA) - Upper Elevator", "to": "Factory (PA) - Upper Left Fire Zone & Pharmacy", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Grapple" } ] }
     ] }, // one-way door
 
-    { "from": "FPA - Lower Right Exit", "to": "FGH - Above Root Node", "requires": [] }, // one-way elevator
+    { "from": "Factory (PA) - Lower Right Exit", "to": "Factory (GH) - Above Root Node", "requires": [] }, // one-way elevator
 
-    { "from": "FPA - Upper Elevator", "to": "SH - Root Node", "requires": [] }, // one-way elevator
+    { "from": "Factory (PA) - Upper Elevator", "to": "SH - Root Node", "requires": [] }, // one-way elevator
 
     // Shengwu Hall
     { "from": "SH - Root Node", "to": "SH - After Jiequan", "requires": [ { "item": "Charged Strike" } ] }, // TODO: (more) combat logic?
@@ -1450,31 +1450,31 @@
     ] },
     { "from": "UC - Camp", "to": "Lieguan Arena", "requires": [] },
 
-    { "from": "Lieguan Arena", "to": "GD - Left Exit", "requires": [] }, // TODO: combat logic?
+    { "from": "Lieguan Arena", "to": "Galactic Dock - Left Exit", "requires": [] }, // TODO: combat logic?
 
     // Galactic Dock
-    { "from": "GD - Left Exit", "to": "GD - Root Node & Right Exit", "requires": [] }, // one-way door
+    { "from": "Galactic Dock - Left Exit", "to": "Galactic Dock - Root Node & Right Exit", "requires": [] }, // one-way door
 
     // Grotto of Scriptures (Entry)
-    { "from": "GoSY - Root Node", "to": "GoSY - Treasure Room", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Treasure Room", "requires": [ { "item": "Cloud Leap" } ] },
     {
-        "from": "GoSY - Root Node", "to": "GoSY - Coffin",
+        "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Coffin",
         "requires": [ { "anyOf": [
             { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Charged Strike" }, { "item": "Ledge Grab" }
         ] } ],
         "medium_requires": [{ "item": "Trick - Bow Hover" }]
     }, // parry hover works but is redundant with vanilla logic
     {
-        "from": "GoSY - Root Node", "to": "GoSY - Greenhouse",
+        "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Greenhouse",
         "ls_requires": [
             { "item": "Trick - Bow Hover" },
             { "item": "Ledge Grab" }, // then LS parry vault
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
         ] // no one to parry for T-dash
     }, // "real elevator skip" in the ASS% speedrun is bow hover, parry vault, T-dash, AD, and 2 bow knockbacks
-    { "from": "GoSY - Greenhouse", "to": "GoSY - Coffin", "requires": [] }, // fall
+    { "from": "GoS (Entry) - Greenhouse", "to": "GoS (Entry) - Coffin", "requires": [] }, // fall
     {
-        "from": "GoSY - Lower Right Exit", "to": "GoSY - Middle Caves & Lower Portals",
+        "from": "GoS (Entry) - Lower Right Exit", "to": "GoS (Entry) - Middle Caves & Lower Portals",
         "requires": [ { "anyOf": [
             { "item": "Wall Climb" }, // climb up the caves the obvious way
             [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] // or cross the yellow water into a portal
@@ -1488,79 +1488,79 @@
         "ls_requires": [{ "item": "Ledge Grab" }] // T-dash setup into parry hover
     },
     {
-        "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Lower Right Exit",
+        "from": "GoS (Entry) - Middle Caves & Lower Portals", "to": "GoS (Entry) - Lower Right Exit",
         "requires": [ { "anyOf": [
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // climb the ledge to the left
             [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] // or take the portal and cross the yellow water
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Upper Caves", "requires": [
+    { "from": "GoS (Entry) - Middle Caves & Lower Portals", "to": "GoS (Entry) - Upper Caves", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] }
     ] },
-    { "from": "GoSY - Upper Caves", "to": "GoSY - Middle Caves & Lower Portals", "requires": [] }, // fall
+    { "from": "GoS (Entry) - Upper Caves", "to": "GoS (Entry) - Middle Caves & Lower Portals", "requires": [] }, // fall
     {
-        "from": "GoSY - Upper Caves", "to": "GoSY - Below Elevator & Upper Cave Portals",
+        "from": "GoS (Entry) - Upper Caves", "to": "GoS (Entry) - Below Elevator & Upper Cave Portals",
         "requires": [ { "anyOf": [
             { "item": "Charged Strike" }, // either go through the obvious CS barrier
             [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // or jump to the top right platform with chests and portal
         ] } ],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
-    { "from": "GoSY - Below Elevator & Upper Cave Portals", "to": "GoSY - Upper Caves", "requires": [] }, // fall, portal, fall again
-    { "from": "GoSY - Below Elevator & Upper Cave Portals", "to": "GoSY - Root Node", "requires": [] }, // one-way door
-    { "from": "GoSY - Below Elevator & Upper Cave Portals", "to": "GoSY - Elevator", "requires": [
+    { "from": "GoS (Entry) - Below Elevator & Upper Cave Portals", "to": "GoS (Entry) - Upper Caves", "requires": [] }, // fall, portal, fall again
+    { "from": "GoS (Entry) - Below Elevator & Upper Cave Portals", "to": "GoS (Entry) - Root Node", "requires": [] }, // one-way door
+    { "from": "GoS (Entry) - Below Elevator & Upper Cave Portals", "to": "GoS (Entry) - Elevator", "requires": [
         { "item": "Cloud Leap" } // this is one of the big CL barriers in vanilla
     ] },
-    { "from": "GoSY - Elevator", "to": "GoSY - Below Elevator & Upper Cave Portals", "requires": [] }, // fall
-    { "from": "GoSY - Elevator", "to": "GoSY - Greenhouse", "requires": [
+    { "from": "GoS (Entry) - Elevator", "to": "GoS (Entry) - Below Elevator & Upper Cave Portals", "requires": [] }, // fall
+    { "from": "GoS (Entry) - Elevator", "to": "GoS (Entry) - Greenhouse", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "GoSY - Elevator", "to": "GoSY - Upper Right Exit", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "GoSY - Upper Right Exit", "to": "GoSY - Elevator", "requires": [] }, // fall
+    { "from": "GoS (Entry) - Elevator", "to": "GoS (Entry) - Upper Right Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoS (Entry) - Upper Right Exit", "to": "GoS (Entry) - Elevator", "requires": [] }, // fall
 
-    { "from": "GoSY - Root Node", "to": "GH - Root Node", "requires": [] }, // one-way fall (scripted on first visit)
+    { "from": "GoS (Entry) - Root Node", "to": "Greenhouse - Root Node", "requires": [] }, // one-way fall (scripted on first visit)
 
-    { "from": "GoSY - Upper Right Exit", "to": "GoSE - Lower Exit", "requires": [] },
-    { "from": "GoSE - Lower Exit", "to": "GoSY - Upper Right Exit", "requires": [] },
+    { "from": "GoS (Entry) - Upper Right Exit", "to": "GoS (East) - Lower Exit", "requires": [] },
+    { "from": "GoS (East) - Lower Exit", "to": "GoS (Entry) - Upper Right Exit", "requires": [] },
 
     // Grotto of Scriptures (East)
-    { "from": "GoSE - Lower Exit", "to": "GoSE - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "GoSE - Above Lower Exit", "to": "GoSE - Lower Exit", "requires": [] },
-    { "from": "GoSE - Above Lower Exit", "to": "GoSE - Spike Ball Hall Floor", "requires": [] },
-    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoS (East) - Lower Exit", "to": "GoS (East) - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoS (East) - Above Lower Exit", "to": "GoS (East) - Lower Exit", "requires": [] },
+    { "from": "GoS (East) - Above Lower Exit", "to": "GoS (East) - Spike Ball Hall Floor", "requires": [] },
+    { "from": "GoS (East) - Spike Ball Hall Floor", "to": "GoS (East) - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
     {
-        "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Spike Ball Hall Platforms",
+        "from": "GoS (East) - Spike Ball Hall Floor", "to": "GoS (East) - Spike Ball Hall Platforms",
         "requires": [
             { "item": "Cloud Leap" }, // the spike balls are slightly too large to single jump over
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Grapple" } ] }
         ],
         "medium_requires": [{ "item": "Cloud Leap" }] // T-dash replaces AD
     }, // bow/parry hover works but are redundant
-    { "from": "GoSE - Spike Ball Hall Platforms", "to": "GoSE - Spike Ball Hall Floor", "requires": [] }, // fall
+    { "from": "GoS (East) - Spike Ball Hall Platforms", "to": "GoS (East) - Spike Ball Hall Floor", "requires": [] }, // fall
     {
-        "from": "GoSE - Spike Ball Hall Platforms", "to": "GoSE - Above Lower Exit", // T-dash setup on platforms above
+        "from": "GoS (East) - Spike Ball Hall Platforms", "to": "GoS (East) - Above Lower Exit", // T-dash setup on platforms above
         "ls_requires": [ { "item": "Trick - Bow Hover" }, { "item": "Ledge Grab" } ] // drop down, bow hover left into LS vault
     },
-    { "from": "GoSE - Spike Ball Hall Platforms", "to": "GoSE - Root Node", "requires": [
+    { "from": "GoS (East) - Spike Ball Hall Platforms", "to": "GoS (East) - Root Node", "requires": [
         { "item": "Cloud Leap" }
     ] }, // tricks help with parts of this, but you'll still need to CL over at least one spike ball no matter what
-    { "from": "GoSE - Root Node", "to": "GoSE - Spike Ball Hall Platforms", "requires": [] }, // fall
-    { "from": "GoSE - Root Node", "to": "GoSE - Middle Exit", "requires": [] }, // fall
-    { "from": "GoSE - Middle Exit", "to": "GoSE - Root Node", "requires": [
+    { "from": "GoS (East) - Root Node", "to": "GoS (East) - Spike Ball Hall Platforms", "requires": [] }, // fall
+    { "from": "GoS (East) - Root Node", "to": "GoS (East) - Middle Exit", "requires": [] }, // fall
+    { "from": "GoS (East) - Middle Exit", "to": "GoS (East) - Root Node", "requires": [
         { "item": "Cloud Leap" } // to jump up to the rope, and then from wooden platforms to node ledge
     ] },
     {
-        "from": "GoSE - Root Node", "to": "GoSE - Outside Yin Jifu's Tomb",
+        "from": "GoS (East) - Root Node", "to": "GoS (East) - Outside Yin Jifu's Tomb",
         "requires": [
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // fall slightly, use portal to the right
         ],
         "medium_requires": [] // T-dash
     },
-    { "from": "GoSE - Outside Yin Jifu's Tomb", "to": "GoSE - Stone Carvings", "requires": [] }, // one-way door
+    { "from": "GoS (East) - Outside Yin Jifu's Tomb", "to": "GoS (East) - Stone Carvings", "requires": [] }, // one-way door
     // we mostly ignore the logic for *exiting* YJ tomb regions, because this is the only way into any of them
     {
-        "from": "GoSE - Outside Yin Jifu's Tomb", "to": "GoSE - Yin Jifu's Tomb",
+        "from": "GoS (East) - Outside Yin Jifu's Tomb", "to": "GoS (East) - Yin Jifu's Tomb",
         "requires": [ { "anyOf": [
             [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
             { "item": "Cloud Leap" }
@@ -1569,40 +1569,40 @@
         "medium_requires": [{ "item": "Trick - Break One-Way Barrier With Bow" }]
     },
     // The GG tomb regions have interesting connections from GoSW and YJ's tomb, so these have to be as thorough as usual
-    { "from": "GoSE - Root Node", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [
+    { "from": "GoS (East) - Root Node", "to": "GoS (East) - Outside Guiguzi's Tomb", "requires": [
         { "item": "Cloud Leap" } // to the portal above and left of the root node
     ] }, // LS parry vault would work, but LS here needs CL setup
-    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Root Node", "requires": [] }, // portal, fall
-    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Upper Exit", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "GoSE - Upper Exit", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [] }, // fall
+    { "from": "GoS (East) - Outside Guiguzi's Tomb", "to": "GoS (East) - Root Node", "requires": [] }, // portal, fall
+    { "from": "GoS (East) - Outside Guiguzi's Tomb", "to": "GoS (East) - Upper Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoS (East) - Upper Exit", "to": "GoS (East) - Outside Guiguzi's Tomb", "requires": [] }, // fall
     {
-        "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Stone Carvings",
+        "from": "GoS (East) - Outside Guiguzi's Tomb", "to": "GoS (East) - Stone Carvings",
         "requires": [{ "item": "Cloud Leap" }, { "item": "Grapple" }],
         "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }]
     },
-    { "from": "GoSE - Stone Carvings", "to": "GoSE - Outside Guiguzi's Tomb", "requires": [] }, // fall
-    { "from": "GoSE - Stone Carvings", "to": "GoSE - Upper Exit", "requires": [
+    { "from": "GoS (East) - Stone Carvings", "to": "GoS (East) - Outside Guiguzi's Tomb", "requires": [] }, // fall
+    { "from": "GoS (East) - Stone Carvings", "to": "GoS (East) - Upper Exit", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "GoSE - Upper Exit", "to": "GoSE - Stone Carvings", "requires": [
+    { "from": "GoS (East) - Upper Exit", "to": "GoS (East) - Stone Carvings", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "GoSE - Outside Guiguzi's Tomb", "to": "GoSE - Guiguzi's Tomb", "requires": [
+    { "from": "GoS (East) - Outside Guiguzi's Tomb", "to": "GoS (East) - Guiguzi's Tomb", "requires": [
         { "item": "Cloud Leap" }, // technically unnecessary if you start from Upper Exit, but
         // that implies teleporting/quit-and-reloading if you mess it up, so I'd rather not
         { "item": "Mystic Nymph: Scout Mode" } // to release the spike ball
     ] },
 
-    { "from": "GoSE - Middle Exit", "to": "GoSW - Lower Right Exits", "requires": [] },
-    { "from": "GoSW - Lower Right Exits", "to": "GoSE - Middle Exit", "requires": [] },
+    { "from": "GoS (East) - Middle Exit", "to": "GoS (West) - Lower Right Exits", "requires": [] },
+    { "from": "GoS (West) - Lower Right Exits", "to": "GoS (East) - Middle Exit", "requires": [] },
 
-    { "from": "GoSE - Upper Exit", "to": "GoSW - Upper Right Exit", "requires": [] },
-    { "from": "GoSW - Upper Right Exit", "to": "GoSE - Upper Exit", "requires": [] },
+    { "from": "GoS (East) - Upper Exit", "to": "GoS (West) - Upper Right Exit", "requires": [] },
+    { "from": "GoS (West) - Upper Right Exit", "to": "GoS (East) - Upper Exit", "requires": [] },
 
     // Grotto of Scriptures (West)
     // First, the regions available "early", before completing enough of East Grotto to find the upper entrance
-    { "from": "GoSW - Lower Right Exits", "to": "GoSW - Cixing Arena", "requires": [] }, // fall
-    { "from": "GoSW - Cixing Arena", "to": "GoSW - Lower Right Exits", "requires": [
+    { "from": "GoS (West) - Lower Right Exits", "to": "GoS (West) - Cixing Arena", "requires": [] }, // fall
+    { "from": "GoS (West) - Cixing Arena", "to": "GoS (West) - Lower Right Exits", "requires": [
         { "item": "Grapple" }, // to get out of the arena itself
         { "anyOf": [
             { "item": "Air Dash" }, // across the chasm to portal
@@ -1610,27 +1610,27 @@
         ] }
     ] },
     {
-        "from": "GoSW - Cixing Arena", "to": "GoSW - Lower Left Transporter",
+        "from": "GoS (West) - Cixing Arena", "to": "GoS (West) - Lower Left Transporter",
         "requires": [
             { "item": "Grapple" }, // to get out of the arena itself
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
         ],
         "medium_requires": [{ "item": "Grapple" }] // and T-dashes
     },
-    { "from": "GoSW - Lower Left Transporter", "to": "GoSW - Cixing Arena", "requires": [
+    { "from": "GoS (West) - Lower Left Transporter", "to": "GoS (West) - Cixing Arena", "requires": [
         { "item": "Cloud Leap" } // the first rope after transporter hard requires CL,
         // middle -> right rope over the spikes doesn't work for me with AD alone (even though the reverse does),
         // and finally no grapple in this direction
     ] },
     {
-        "from": "GoSW - Lower Left Transporter", "to": "GoSW - Lower Right Exits",
+        "from": "GoS (West) - Lower Left Transporter", "to": "GoS (West) - Lower Right Exits",
         "medium_requires": [
             { "item": "Cloud Leap" }, // the first rope after transporter
             { "item": "Trick - Bow Hover" } // but this time float over the arena, reaching the far side without grapple
         ]
     },
     // And since these are also simple and isolated, we'll do the Lear's grave stuff next
-    { "from": "GoSW - Cixing Arena", "to": "GoSW - Lear's Lecture Hall", "requires": [
+    { "from": "GoS (West) - Cixing Arena", "to": "GoS (West) - Lear's Lecture Hall", "requires": [
         // to activate the door and force Cixing to spawn in defense
         { "location": "GoS (East): Examine Mural in Yin Jifu's Tomb" },
         { "location": "GoS (East): Examine Mural in Guiguzi's Tomb" },
@@ -1639,33 +1639,33 @@
         { "item": "Tai-Chi Kick" } // combat logic: specifically Cixing's crimson thrust combo needs kick IMO
     ] },
     {
-        "from": "GoSW - Lear's Lecture Hall", "to": "GoSW - Lear's Grave",
+        "from": "GoS (West) - Lear's Lecture Hall", "to": "GoS (West) - Lear's Grave",
         "requires": [{ "item": "Charged Strike" }],
         "medium_requires": [{ "item": "Trick - Break CS Barrier With Bow" }]
     },
     // Now for the messy part of West Grotto: the semi-scripted progression from
     // upper right exit to Ji fight through the rotating platforms puzzle.
     // Remember that unlike vanilla we might be starting at the GoSW node.
-    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Root Node", "requires": [
+    { "from": "GoS (West) - Upper Right Exit", "to": "GoS (West) - Root Node", "requires": [
         // The first time, when the spike ball chases you, the final jump requires just CL AND LG.
         // But if you die or TP out and come back this way later, you have to jump over the
         // stationary spike ball (or the gap where it was) and climb up to the node.
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] },
         { "item": "Wall Climb" }
     ] },
-    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Platform Rotation Button", "requires": [
+    { "from": "GoS (West) - Upper Right Exit", "to": "GoS (West) - Lower Platform Rotation Button", "requires": [
         // climb up rope, take portal on the right, fall down
     ] },
-    { "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Upper Right Exit", "requires": [
+    { "from": "GoS (West) - Lower Platform Rotation Button", "to": "GoS (West) - Upper Right Exit", "requires": [
         // rotate platforms to vertical
         { "item": "Wall Climb" } // climb up the platform / green wall on the right
         // go through portal, fall and walk right
     ] },
-    { "from": "GoSW - Root Node", "to": "GoSW - Lower Platform Rotation Button", "requires": [] }, // fall
-    { "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Lower Right Exits", "requires": [] }, // press button, fall, go right and open one-way door
+    { "from": "GoS (West) - Root Node", "to": "GoS (West) - Lower Platform Rotation Button", "requires": [] }, // fall
+    { "from": "GoS (West) - Lower Platform Rotation Button", "to": "GoS (West) - Lower Right Exits", "requires": [] }, // press button, fall, go right and open one-way door
     // This single region connection into SBR represents solving the rotating platforms puzzle
     {
-        "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Spike Ball Release",
+        "from": "GoS (West) - Lower Platform Rotation Button", "to": "GoS (West) - Spike Ball Release",
         "requires": [
             // open one-way door to Lower Right Exits as described above, then reset and return here
             // walk all the way right, drop down where the shortcut rope is, then walk left through the now-open door
@@ -1674,34 +1674,34 @@
         ],
         "medium_requires": [] // the statues allow T-dashing over both spike pits
     },
-    { "from": "GoSW - Spike Ball Release", "to": "GoSW - Luyan's Tomb", "requires": [
+    { "from": "GoS (West) - Spike Ball Release", "to": "GoS (West) - Luyan's Tomb", "requires": [
         // the portal at SBR lets you take shortcut ropes and more portals back and forth to the platform rotation button
         // to cross the gap, if you dropped the spike ball already
         { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
         { "item": "Wall Climb" } // to climb the vertical platform from the SBR side
     ] },
-    { "from": "GoSW - Spike Ball Release", "to": "GoSW - Above Western Cliffs", "requires": [
+    { "from": "GoS (West) - Spike Ball Release", "to": "GoS (West) - Above Western Cliffs", "requires": [
         { "item": "Cloud Leap" } // most jumps have alternatives, but the final jump around the westernmost outcrop is just CL
     ] }, // this is where any% runs do an enemy manip to skull kick, but we don't want that in logic
-    { "from": "GoSW - Above Western Cliffs", "to": "GoSW - Root Node", "requires": [
+    { "from": "GoS (West) - Above Western Cliffs", "to": "GoS (West) - Root Node", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // to open the one-way door
     ] },
-    { "from": "GoSW - Above Western Cliffs", "to": "GoSW - Upper Left Exit", "requires": [] }, // one-way bridge hack
-    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Right Exits", "requires": [] }, // rope to portal, fall, press button for vertical green platforms, fall, one-way door
-    { "from": "GoSW - Root Node", "to": "GoSW - Lower Right Exits", "requires": [] }, // fall, press button for vertical green platforms, fall, one-way door
+    { "from": "GoS (West) - Above Western Cliffs", "to": "GoS (West) - Upper Left Exit", "requires": [] }, // one-way bridge hack
+    { "from": "GoS (West) - Upper Right Exit", "to": "GoS (West) - Lower Right Exits", "requires": [] }, // rope to portal, fall, press button for vertical green platforms, fall, one-way door
+    { "from": "GoS (West) - Root Node", "to": "GoS (West) - Lower Right Exits", "requires": [] }, // fall, press button for vertical green platforms, fall, one-way door
 
-    { "from": "GoSW - Lower Right Exits", "to": "GoSY - Elevator", "requires": [] }, // one-way elevator
+    { "from": "GoS (West) - Lower Right Exits", "to": "GoS (Entry) - Elevator", "requires": [] }, // one-way elevator
 
-    { "from": "GoSW - Lower Left Transporter", "to": "EDP - Lower Right Transporter", "requires": [] },
-    { "from": "EDP - Lower Right Transporter", "to": "GoSW - Lower Left Transporter", "requires": [] },
+    { "from": "GoS (West) - Lower Left Transporter", "to": "ED (Passages) - Lower Right Transporter", "requires": [] },
+    { "from": "ED (Passages) - Lower Right Transporter", "to": "GoS (West) - Lower Left Transporter", "requires": [] },
 
-    { "from": "GoSW - Upper Left Exit", "to": "EDP - Upper Right Exit", "requires": [] },
-    { "from": "EDP - Upper Right Exit", "to": "GoSW - Upper Left Exit", "requires": [] },
+    { "from": "GoS (West) - Upper Left Exit", "to": "ED (Passages) - Upper Right Exit", "requires": [] },
+    { "from": "ED (Passages) - Upper Right Exit", "to": "GoS (West) - Upper Left Exit", "requires": [] },
 
     // Ancient Stone Pillar
     // No root node in here, so no need for a 2nd region.
     {
-        "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji",
+        "from": "GoS (West) - Above Western Cliffs", "to": "ASP - After Ji",
         "requires": [
             { "item": "Tai-Chi Kick" }, // or else Ji's divinations are a softlock
             {
@@ -1714,26 +1714,26 @@
 
     // Sky Tower
     {
-        "from": "ST - Lower Exit", "to": "ST - Lower Chest",
+        "from": "Sky Tower - Lower Exit", "to": "Sky Tower - Lower Chest",
         "requires": [ { "item": "Cloud Leap" } ],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Air Dash" }] // AD setup into LS vault solves the one CL jump
     },
     {
-        "from": "ST - Lower Exit", "to": "ST - Lower Checkpoint Platform",
+        "from": "Sky Tower - Lower Exit", "to": "Sky Tower - Lower Checkpoint Platform",
         "requires": [{ "item": "Cloud Leap" }, { "item": "Wall Climb" }],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Wall Climb" }, { "item": "Grapple" }]
     },
     {
-        "from": "ST - Lower Exit", "to": "ST - Middle Chest", // in case you lack Grapple and can't reach LCP
+        "from": "Sky Tower - Lower Exit", "to": "Sky Tower - Middle Chest", // in case you lack Grapple and can't reach LCP
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Wall Climb" }]
     },
-    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Lower Exit", "requires": [] }, // fall
-    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Lower Chest", "requires": [] }, // fall
-    { "from": "ST - Lower Checkpoint Platform", "to": "ST - Middle Chest", "requires": [
+    { "from": "Sky Tower - Lower Checkpoint Platform", "to": "Sky Tower - Lower Exit", "requires": [] }, // fall
+    { "from": "Sky Tower - Lower Checkpoint Platform", "to": "Sky Tower - Lower Chest", "requires": [] }, // fall
+    { "from": "Sky Tower - Lower Checkpoint Platform", "to": "Sky Tower - Middle Chest", "requires": [
         { "item": "Wall Climb" } // drop down from LCP, go right, then climb
     ] }, // ignore WC-less ways of dropping down from above, since you need WC to get this high on any logic
     {
-        "from": "ST - Lower Checkpoint Platform", "to": "ST - Upper Checkpoint Platform",
+        "from": "Sky Tower - Lower Checkpoint Platform", "to": "Sky Tower - Upper Checkpoint Platform",
         "requires": [
             { "item": "Cloud Leap" }, // LS tricks can skip one CL jump, but not all of them
             // for the green wall, laser and grapple point cluster: either WC OR G
@@ -1748,36 +1748,36 @@
     },
     // this is where the LS shenanigans end for our ST logic, because on UCP there's no way to set up another LS without CL
     // (...except carrying qi all the way up here from outside ST lol)
-    { "from": "ST - Upper Checkpoint Platform", "to": "ST - Lower Checkpoint Platform", "requires": [] }, // fall
-    { "from": "ST - Upper Checkpoint Platform", "to": "ST - Stowaway", "requires": [
+    { "from": "Sky Tower - Upper Checkpoint Platform", "to": "Sky Tower - Lower Checkpoint Platform", "requires": [] }, // fall
+    { "from": "Sky Tower - Upper Checkpoint Platform", "to": "Sky Tower - Stowaway", "requires": [
         { "item": "Cloud Leap" },
         { "item": "Wall Climb" },
         { "anyOf": [{ "item": "Air Dash" }, { "item": "Ledge Grab" }] }
     ] },
-    { "from": "ST - Stowaway", "to": "ST - Upper Checkpoint Platform", "requires": [] }, // fall
+    { "from": "Sky Tower - Stowaway", "to": "Sky Tower - Upper Checkpoint Platform", "requires": [] }, // fall
     {
-        "from": "ST - Stowaway", "to": "ST - Upper Exit & Root Node",
+        "from": "Sky Tower - Stowaway", "to": "Sky Tower - Upper Exit & Root Node",
         "requires": [
             { "item": "Mystic Nymph: Scout Mode" },
             { "item": "Grapple" }
         ],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL + LS vault replaces G
     },
-    { "from": "ST - Upper Exit & Root Node", "to": "ST - Right Exit", "requires": [
+    { "from": "Sky Tower - Upper Exit & Root Node", "to": "Sky Tower - Right Exit", "requires": [
         { "item": "Air Dash" } // since you have to cross the pink waterfall from the side with no platform
     ] }, // there is a tiny foothold you can use to ground dash, but (like OW) we won't put that in logic
-    { "from": "ST - Right Exit", "to": "ST - Upper Exit & Root Node", "requires": [
+    { "from": "Sky Tower - Right Exit", "to": "Sky Tower - Upper Exit & Root Node", "requires": [
         { "item": "Cloud Leap" }, { "item": "Wall Climb" } // this way you have to climb up the boxes as they move down
     ] }, // AD AND WC is just barely possible, but since single jump + WC isn't, that's not intuitive enough IMO
 
-    { "from": "ST - Upper Exit & Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
+    { "from": "Sky Tower - Upper Exit & Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
 
-    { "from": "ST - Right Exit", "to": "EDP - Left Exit", "requires": [] },
-    { "from": "EDP - Left Exit", "to": "ST - Right Exit", "requires": [] },
+    { "from": "Sky Tower - Right Exit", "to": "ED (Passages) - Left Exit", "requires": [] },
+    { "from": "ED (Passages) - Left Exit", "to": "Sky Tower - Right Exit", "requires": [] },
 
     // Empyrean Dist. (Passages)
     {
-        "from": "EDP - Left Exit", "to": "EDP - Under Root Node",
+        "from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Under Root Node",
         "requires": [
             { "item": "Cloud Leap" }, // up into the room after 1st zipline
             { "item": "Tai-Chi Kick" }, // both required to reach the TCK platforms in the middle room
@@ -1793,7 +1793,7 @@
         ]
     },
     {
-        "from": "EDP - Under Root Node", "to": "EDP - Around Root Node",
+        "from": "ED (Passages) - Under Root Node", "to": "ED (Passages) - Around Root Node",
         "requires": [
             { "item": "Wall Climb" },
             { "anyOf": [
@@ -1807,7 +1807,7 @@
         ]
     },
     {
-        "from": "EDP - Left Exit", "to": "EDP - Around Root Node", // without going through Under
+        "from": "ED (Passages) - Left Exit", "to": "ED (Passages) - Around Root Node", // without going through Under
         "medium_requires": [
             { "item": "Trick - Bow Hover" }, // across first gap
             { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }, // use TCK target to reach upper platform of next room
@@ -1815,7 +1815,7 @@
         ]
     },
     {
-        "from": "EDP - Around Root Node", "to": "EDP - Left Exit",
+        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Left Exit",
         "requires": [ { "anyOf": [
             [ // take the sliders backwards as intended
                 { "item": "Grapple" },
@@ -1835,50 +1835,50 @@
             ] // T-dashes replace AD, since TCKs give qi
         ] } ]
     },
-    { "from": "EDP - Around Root Node", "to": "EDP - Root Node", "requires": [
+    { "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Root Node", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Ledge Grab" } ] }
     ] },
-    { "from": "EDP - Root Node", "to": "EDP - Around Root Node", "requires": [] }, // fall
-    { "from": "EDP - Around Root Node", "to": "EDP - Above Right Transporter", "requires": [
+    { "from": "ED (Passages) - Root Node", "to": "ED (Passages) - Around Root Node", "requires": [] }, // fall
+    { "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Above Right Transporter", "requires": [
         { "item": "Grapple" } // zipline over the chasm
     ] },
-    { "from": "EDP - Above Right Transporter", "to": "EDP - Around Root Node", "requires": [
+    { "from": "ED (Passages) - Above Right Transporter", "to": "ED (Passages) - Around Root Node", "requires": [
         { "item": "Grapple" } // zipline over the chasm
     ] },
-    { "from": "EDP - Above Right Transporter", "to": "EDP - Lower Right Transporter", "requires": [
+    { "from": "ED (Passages) - Above Right Transporter", "to": "ED (Passages) - Lower Right Transporter", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // need to climb one of these box ledges
     ] },
     {
-        "from": "EDP - Lower Right Transporter", "to": "EDP - Above Right Transporter",
+        "from": "ED (Passages) - Lower Right Transporter", "to": "ED (Passages) - Above Right Transporter",
         "requires": [{ "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }],
         "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }] // CL + LS vault up through the other platform
     },
     {
-        "from": "EDP - Around Root Node", "to": "EDP - Alcove Right of Root Node",
+        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Alcove Right of Root Node",
         "requires": [
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
         ],
         "medium_requires": [] // T-dash (use small elevator right of node to find a parryable sniper)
     },
     {
-        "from": "EDP - Around Root Node", "to": "EDP - Base Of Pink Waterfall Right Of Root Node",
+        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Base Of Pink Waterfall Right Of Root Node",
         "requires": [{ "item": "Grapple" }],
         "medium_requires": [{ "item": "Cloud Leap" }, { "item": "Air Dash" }] // and T-dash (again, sniper near node)
     },
     {
-        "from": "EDP - Base Of Pink Waterfall Right Of Root Node", "to": "EDP - Above Pink Waterfall Right Of Root Node",
+        "from": "ED (Passages) - Base Of Pink Waterfall Right Of Root Node", "to": "ED (Passages) - Above Pink Waterfall Right Of Root Node",
         "requires": [ { "anyOf": [
             [ { "item": "Air Dash" }, { "item": "Wall Climb" } ], // the intended path around the pink waterfall
             { "item": "Cloud Leap" } // you have to hold up, but this does get you to the same platform
         ] }
     ] },
-    { "from": "EDP - Above Pink Waterfall Right Of Root Node", "to": "EDP - Between Root Node & Tianshou Arena", "requires": [] }, // fall
-    { "from": "EDP - Around Root Node", "to": "EDP - Left Pink Pool", "requires": [
+    { "from": "ED (Passages) - Above Pink Waterfall Right Of Root Node", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [] }, // fall
+    { "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Left Pink Pool", "requires": [
         { "item": "Grapple" }, // ziplines; the final jump can be CL OR TCK OR AD, but...
         { "item": "Air Dash" } // for the pink waterfall
     ] }, // ground dash AND CL can also bypass waterfall, that's out of logic for now
     {
-        "from": "EDP - Left Pink Pool", "to": "EDP - Outside Tianshou Arena",
+        "from": "ED (Passages) - Left Pink Pool", "to": "ED (Passages) - Outside Tianshou Arena",
         "requires": [
             { "item": "Tai-Chi Kick" }, // platforms above pool
             // one higher TCK target requires AD OR CL OR CS OR T-dash, but later steps will cover that
@@ -1894,10 +1894,10 @@
             { "item": "Charged Strike" }
         ] // bow hover works on the 1st zipline, but not the 2nd, so it's not relevant here
     },
-    { "from": "EDP - Outside Tianshou Arena", "to": "EDP - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
+    { "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
     // this region probably has no practical impact on logic, but let's map it out anyway
     {
-        "from": "EDP - Around Root Node", "to": "EDP - Robot Hack Point",
+        "from": "ED (Passages) - Around Root Node", "to": "ED (Passages) - Robot Hack Point",
         "requires": [
             { "item": "Grapple" },
             { "item": "Tai-Chi Kick" },
@@ -1911,20 +1911,20 @@
             { "item": "Charged Strike" }
         ] // since beetles aren't parryable, you only get T-dash for the 1st zipline
     },
-    { "from": "EDP - Robot Hack Point", "to": "EDP - Between Root Node & Tianshou Arena", "requires": [
+    { "from": "ED (Passages) - Robot Hack Point", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }
     ] },
-    { "from": "EDP - Outside Tianshou Arena", "to": "EDP - Tianshou Arena", "requires": [
+    { "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Tianshou Arena", "requires": [
         { "item": "Mystic Nymph: Scout Mode" } // to disable the triple pink waterfall
     ] },
-    { "from": "EDP - Tianshou Arena", "to": "EDP - Upper Elevator", "requires": [
+    { "from": "ED (Passages) - Tianshou Arena", "to": "ED (Passages) - Upper Elevator", "requires": [
         { "item": "Cloud Leap" }, { "item": "Grapple" } // after defeating Tianshou
     ] },
-    { "from": "EDP - Upper Elevator", "to": "EDP - Upper Right Exit", "requires": [] }, // one-way door
+    { "from": "ED (Passages) - Upper Elevator", "to": "ED (Passages) - Upper Right Exit", "requires": [] }, // one-way door
     // in most speedruns, the rope storage setup known as "miner skip" is all about teleporting past ^this door
-    { "from": "EDP - Upper Right Exit", "to": "EDP - Laser Gauntlet", "requires": [ { "item": "Tai-Chi Kick" } ] },
+    { "from": "ED (Passages) - Upper Right Exit", "to": "ED (Passages) - Laser Gauntlet", "requires": [ { "item": "Tai-Chi Kick" } ] },
     {
-        "from": "EDP - Laser Gauntlet", "to": "EDP - End Of Laser Gauntlet", // one-way door
+        "from": "ED (Passages) - Laser Gauntlet", "to": "ED (Passages) - End Of Laser Gauntlet", // one-way door
         "requires": [
             { "item": "Grapple" },
             { "item": "Wall Climb" }
@@ -1936,41 +1936,41 @@
             { "item": "Wall Climb" } // we still need to cling to the 2nd green wall to get past the last red floor
         ]
     },
-    { "from": "EDP - End Of Laser Gauntlet", "to": "EDP - Above Right Transporter", "requires": [] }, // one-way door
+    { "from": "ED (Passages) - End Of Laser Gauntlet", "to": "ED (Passages) - Above Right Transporter", "requires": [] }, // one-way door
 
-    { "from": "EDP - Upper Elevator", "to": "EDLA - Root Node & Lower Elevator", "requires": [] }, // one-way elevator
+    { "from": "ED (Passages) - Upper Elevator", "to": "ED (Living Area) - Root Node & Lower Elevator", "requires": [] }, // one-way elevator
 
     // Empyrean Dist. (Living Area)
     {
-        "from": "EDLA - Root Node & Lower Elevator", "to": "EDLA - East Building Interior Part 1",
+        "from": "ED (Living Area) - Root Node & Lower Elevator", "to": "ED (Living Area) - East Building Interior Part 1",
         "requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }], // AND hacking 2 to activate the lift
         "ls_requires": [{ "item": "Ledge Grab" }] // T-dash setup left of node into wall slide up the right edge of the map
     },
     {
-        "from": "EDLA - Root Node & Lower Elevator", "to": "EDLA - East Building Rooftops",
+        "from": "ED (Living Area) - Root Node & Lower Elevator", "to": "ED (Living Area) - East Building Rooftops",
         "ls_requires": [{ "item": "Ledge Grab" }] // wal; slide even longer
     },
-    { "from": "EDLA - East Building Interior Part 1", "to": "EDLA - East Building Interior Part 2", "requires": [
+    { "from": "ED (Living Area) - East Building Interior Part 1", "to": "ED (Living Area) - East Building Interior Part 2", "requires": [
         { "item": "Cloud Leap" }
     ] }, // even LS is not enough because the final jump up to walking chest platform has nowhere to set up LS
     // reaching the hack point for the next elevator requires CL or 1 LS getup, so we don't need a "part 3" region
-    { "from": "EDLA - East Building Interior Part 2", "to": "EDLA - Opera Theater", "requires": [] }, // one-way elevator
+    { "from": "ED (Living Area) - East Building Interior Part 2", "to": "ED (Living Area) - Opera Theater", "requires": [] }, // one-way elevator
     {
-        "from": "EDLA - Opera Theater", "to": "EDLA - East Building Rooftops",
+        "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - East Building Rooftops",
         "requires": [{ "item": "Cloud Leap" }, { "item": "Air Dash" }, { "item": "Wall Climb" }],
         "medium_requires": [{ "item": "Cloud Leap" }, { "item": "Air Dash" }] // and swift runner
     }, // you'll always need CL for the rope at the end
-    { "from": "EDLA - Opera Theater", "to": "EDLA - Opera Theater Roofs", "requires": [
+    { "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - Opera Theater Roofs", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "EDLA - Opera Theater Roofs", "to": "EDLA - East Building Rooftops", "requires": [] }, // fall
+    { "from": "ED (Living Area) - Opera Theater Roofs", "to": "ED (Living Area) - East Building Rooftops", "requires": [] }, // fall
     {
-        "from": "EDLA - East Building Rooftops", "to": "EDLA - East Building Rooftops Chest",
+        "from": "ED (Living Area) - East Building Rooftops", "to": "ED (Living Area) - East Building Rooftops Chest",
         "requires": [{ "item": "Mystic Nymph: Scout Mode" }], // to lower rope
         "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }] // CL + LS vault
     },
     {
-        "from": "EDLA - East Building Rooftops Chest", "to": "EDLA - Tao Fruit",
+        "from": "ED (Living Area) - East Building Rooftops Chest", "to": "ED (Living Area) - Tao Fruit",
         "requires": [{ "item": "Cloud Leap" }],
         "ls_requires": [
             { "item": "Mystic Nymph: Scout Mode" }, // if the rope has been lowered
@@ -1978,64 +1978,64 @@
             // then swift runner OR air dash to the Tao Fruit building
         ]
     },
-    { "from": "EDLA - Opera Theater", "to": "EDLA - Five Bells Room", "requires": [] }, // fall
-    { "from": "EDLA - Five Bells Room", "to": "EDLA - Opera Theater", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "ED (Living Area) - Opera Theater", "to": "ED (Living Area) - Five Bells Room", "requires": [] }, // fall
+    { "from": "ED (Living Area) - Five Bells Room", "to": "ED (Living Area) - Opera Theater", "requires": [ { "item": "Cloud Leap" } ] },
     // the rightmost bell is *just* low enough to grab its rope with single jump, but we won't expect players to find that
-    { "from": "EDLA - Five Bells Room", "to": "EDLA - Backer Room", "requires": [ { "item": "Charged Strike" } ] }, // to ring the bells
-    { "from": "EDLA - Five Bells Room", "to": "EDLA - Left Exit", "requires": [] }, // fall
-    { "from": "EDLA - Left Exit", "to": "EDLA - Five Bells Room", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "EDLA - Left Exit", "to": "EDLA - Root Node & Lower Elevator", "requires": [] }, // one-way hacking 2 door
+    { "from": "ED (Living Area) - Five Bells Room", "to": "ED (Living Area) - Backer Room", "requires": [ { "item": "Charged Strike" } ] }, // to ring the bells
+    { "from": "ED (Living Area) - Five Bells Room", "to": "ED (Living Area) - Left Exit", "requires": [] }, // fall
+    { "from": "ED (Living Area) - Left Exit", "to": "ED (Living Area) - Five Bells Room", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "ED (Living Area) - Left Exit", "to": "ED (Living Area) - Root Node & Lower Elevator", "requires": [] }, // one-way hacking 2 door
 
-    { "from": "EDLA - Left Exit", "to": "EDS - Right Exit", "requires": [] },
-    { "from": "EDS - Right Exit", "to": "EDLA - Left Exit", "requires": [] },
+    { "from": "ED (Living Area) - Left Exit", "to": "ED (Sanctum) - Right Exit", "requires": [] },
+    { "from": "ED (Sanctum) - Right Exit", "to": "ED (Living Area) - Left Exit", "requires": [] },
 
     // Empyrean Dist. (Sanctum)
-    { "from": "EDS - Right Exit", "to": "EDS - Below Root Node", "requires": [ { "item": "Air Dash" } ] },
-    { "from": "EDS - Below Root Node", "to": "EDS - Right Exit", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Below Root Node", "requires": [ { "item": "Air Dash" } ] },
+    { "from": "ED (Sanctum) - Below Root Node", "to": "ED (Sanctum) - Right Exit", "requires": [ { "item": "Air Dash" } ] },
     {
-        "from": "EDS - Right Exit", "to": "EDS - Root Node",
+        "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Root Node",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
         "medium_requires": [{ "item": "Charged Strike" }] // CS-dash
     },
     {
-        "from": "EDS - Root Node", "to": "EDS - Right Exit",
+        "from": "ED (Sanctum) - Root Node", "to": "ED (Sanctum) - Right Exit",
         "requires": [ { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } ],
         "medium_requires": [{ "item": "Charged Strike" }] // CS-dash
     },
-    { "from": "EDS - Right Exit", "to": "EDS - Monitoring Panel", "requires": [
+    { "from": "ED (Sanctum) - Right Exit", "to": "ED (Sanctum) - Monitoring Panel", "requires": [
         { "item": "Tai-Chi Kick" },
         { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
     ] },
-    { "from": "EDS - Monitoring Panel", "to": "EDS - East Rooftop", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "EDS - East Rooftop", "to": "EDS - Outside Nobility Hall", "requires": [] }, // fall
-    { "from": "EDS - Outside Nobility Hall", "to": "EDS - East Rooftop", "requires": [
+    { "from": "ED (Sanctum) - Monitoring Panel", "to": "ED (Sanctum) - East Rooftop", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "ED (Sanctum) - East Rooftop", "to": "ED (Sanctum) - Outside Nobility Hall", "requires": [] }, // fall
+    { "from": "ED (Sanctum) - Outside Nobility Hall", "to": "ED (Sanctum) - East Rooftop", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
-    { "from": "EDS - Outside Nobility Hall", "to": "EDS - Below Nobility Hall", "requires": [ { "item": "Super Mutant Buster" } ] },
-    { "from": "EDS - Outside Nobility Hall", "to": "EDS - Root Node", "requires": [] }, // shortcut rope
+    { "from": "ED (Sanctum) - Outside Nobility Hall", "to": "ED (Sanctum) - Below Nobility Hall", "requires": [ { "item": "Super Mutant Buster" } ] },
+    { "from": "ED (Sanctum) - Outside Nobility Hall", "to": "ED (Sanctum) - Root Node", "requires": [] }, // shortcut rope
     { // this is just a shortcut that doesn't matter in practice
-        "from": "EDS - Outside Nobility Hall", "to": "EDS - Monitoring Panel",
+        "from": "ED (Sanctum) - Outside Nobility Hall", "to": "ED (Sanctum) - Monitoring Panel",
         "requires": [
             { "item": "Mystic Nymph: Scout Mode" },
             { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
         ],
         "medium_requires": [{ "item": "Charged Strike" }] // CS-dash
     },
-    { "from": "EDS - Below Nobility Hall", "to": "EDS - Root Node", "requires": [ { "item": "Super Mutant Buster" } ] },
-    { "from": "EDS - Below Nobility Hall", "to": "EDS - Below Root Node", "requires": [
+    { "from": "ED (Sanctum) - Below Nobility Hall", "to": "ED (Sanctum) - Root Node", "requires": [ { "item": "Super Mutant Buster" } ] },
+    { "from": "ED (Sanctum) - Below Nobility Hall", "to": "ED (Sanctum) - Below Root Node", "requires": [
         { "item": "Super Mutant Buster" },
         { "item": "Mystic Nymph: Scout Mode" }
     ] },
-    { "from": "EDS - Below Root Node", "to": "EDS - Ground Floor Below Root Node", "requires": [] }, // fall
-    { "from": "EDS - Ground Floor Below Root Node", "to": "EDS - Below Root Node", "requires": [ { "item": "Grapple" } ] },
-    { "from": "EDS - Ground Floor Below Root Node", "to": "EDS - Right Exit", "requires": [] }, // one-way door
-    { "from": "EDS - Ground Floor Below Root Node", "to": "EDS - Elevator", "requires": [ { "item": "Super Mutant Buster" } ] },
+    { "from": "ED (Sanctum) - Below Root Node", "to": "ED (Sanctum) - Ground Floor Below Root Node", "requires": [] }, // fall
+    { "from": "ED (Sanctum) - Ground Floor Below Root Node", "to": "ED (Sanctum) - Below Root Node", "requires": [ { "item": "Grapple" } ] },
+    { "from": "ED (Sanctum) - Ground Floor Below Root Node", "to": "ED (Sanctum) - Right Exit", "requires": [] }, // one-way door
+    { "from": "ED (Sanctum) - Ground Floor Below Root Node", "to": "ED (Sanctum) - Elevator", "requires": [ { "item": "Super Mutant Buster" } ] },
 
-    { "from": "EDS - Elevator", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
+    { "from": "ED (Sanctum) - Elevator", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
 
     // Nobility Hall
     // No root node in here, so no need for a 2nd region.
-    { "from": "EDS - Outside Nobility Hall", "to": "NH - After Fengs", "requires": [] }, // TODO: combat logic?
+    { "from": "ED (Sanctum) - Outside Nobility Hall", "to": "NH - After Fengs", "requires": [] }, // TODO: combat logic?
 
     // Tiandao Research Center
     { "from": "TRC - Upper Exit", "to": "TRC - Root Node", "requires": [] }, // one-way door

@@ -28,10 +28,10 @@ class TestVanillaLogic(NineSolsTestBase):
 
     def test_afe_afd_regression(self):
         prereq_items = ["Wall Climb", "Grapple"]
-        self.assertRegionReachableWith("AFE - Lower Root Node", prereq_items + ["Air Dash", "Cloud Leap"])
-        self.assertRegionReachableWith("AFE - Below Root Node", prereq_items + ["Air Dash", "Cloud Leap"])
-        self.assertRegionNotReachableWith("AFE - Lower Left Exit", prereq_items)
-        self.assertRegionReachableWith("AFE - Lower Left Exit", prereq_items + ["Air Dash", "Cloud Leap"])
+        self.assertRegionReachableWith("AF (Elevator) - Lower Root Node", prereq_items + ["Air Dash", "Cloud Leap"])
+        self.assertRegionReachableWith("AF (Elevator) - Below Root Node", prereq_items + ["Air Dash", "Cloud Leap"])
+        self.assertRegionNotReachableWith("AF (Elevator) - Lower Left Exit", prereq_items)
+        self.assertRegionReachableWith("AF (Elevator) - Lower Left Exit", prereq_items + ["Air Dash", "Cloud Leap"])
         self.assertNotReachableWith("AF (Depths): Lower Level", prereq_items)
         self.assertReachableWith("AF (Depths): Lower Level", prereq_items + ["Air Dash", "Cloud Leap"])
 
@@ -65,10 +65,10 @@ class TestMediumLogic(NineSolsTestBase):
 
     def test_afe_afd_regression(self):
         prereq_items = ["Wall Climb", "Grapple"]
-        self.assertRegionReachableWith("AFE - Lower Root Node", prereq_items + ["Air Dash"])
-        self.assertRegionReachableWith("AFE - Below Root Node", prereq_items + ["Air Dash"])
-        self.assertRegionNotReachableWith("AFE - Lower Left Exit", prereq_items)
-        self.assertRegionReachableWith("AFE - Lower Left Exit", prereq_items + ["Air Dash"])
+        self.assertRegionReachableWith("AF (Elevator) - Lower Root Node", prereq_items + ["Air Dash"])
+        self.assertRegionReachableWith("AF (Elevator) - Below Root Node", prereq_items + ["Air Dash"])
+        self.assertRegionNotReachableWith("AF (Elevator) - Lower Left Exit", prereq_items)
+        self.assertRegionReachableWith("AF (Elevator) - Lower Left Exit", prereq_items + ["Air Dash"])
         self.assertNotReachableWith("AF (Depths): Lower Level", prereq_items)
         self.assertReachableWith("AF (Depths): Lower Level", prereq_items + ["Air Dash"])
 
