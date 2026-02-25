@@ -29,18 +29,15 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
             ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", world.player)),
         ],
     }
-    print(world.options.dexsanity_encounter_types)
-    print(encounter_categories.keys())
     encounter_table = {
         "LAND": EncounterType.LAND,
         "WATER": EncounterType.WATER,
         "FISHING": EncounterType.FISHING,
     }
+    enabled_encounters = set()
+    for encounter in world.options.dexsanity_encounter_types.value:
+        enabled_encounters.add(encounter_table[encounter])
 
-    enabled_encounters = {
-        encounter_table[name]
-        for name in world.options.dexsanity_encounter_types.value
-    }
     def connect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
         """
         Connects the provided region to the corresponding wild encounters for the given parent map.
