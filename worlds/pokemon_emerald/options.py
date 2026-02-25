@@ -855,13 +855,13 @@ class PokemonEmeraldStartInventory(StartInventory):
     """
 
 class Dexsanity_EncounterTypes(OptionSet):
-  """
-  Determines which Dexsanity Encounters areas are in logic
-  Removing an encounter type will remove it's location from the multiworld but you can Pokemon can still be randomized into those locations
-  """
-  display_name = "Dexsanity Encounter Types"
-  valid_keys = {"LAND", "WATER", "FISHING"}
-  default = valid_keys
+    """
+    Determines which Dexsanity Encounters areas are in logic
+    Removing an encounter type will remove it's location from the multiworld but you can Pokemon can still be randomized into those locations
+    """
+    display_name = "Dexsanity Encounter Types"
+    valid_keys = {"LAND", "WATER", "FISHING"}
+    default = valid_keys
 
 @dataclass
 class PokemonEmeraldOptions(PerGameCommonOptions):
