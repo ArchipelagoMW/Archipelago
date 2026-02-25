@@ -13,7 +13,7 @@ from .options import DexsanityEncounterTypes
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
 
-
+print(world.options.encounter_types)
 def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     """
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
