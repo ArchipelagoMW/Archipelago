@@ -38,7 +38,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     }
 
     enabled_encounters = {
-        OPTION_TO_ENUM[name]
+        encounter_table[name]
         for name in world.options.dexsanity_encounter_types.value
     }
     def connect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
