@@ -34,7 +34,7 @@ template_load_lock = threading.Lock()
 base_info = {
     "version": Utils.__version__,
     "title": "Archipelago",
-    "author": "Berserker",
+    "author": "Berserker, CosmicWolf",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
     "factorio_version": "2.0",
