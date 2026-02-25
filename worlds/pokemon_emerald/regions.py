@@ -31,7 +31,16 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     }
     print(world.options.dexsanity_encounter_types)
     print(encounter_categories.keys())
+    encounter_table = {
+        "land": EncounterType.LAND,
+        "water": EncounterType.WATER,
+        "fishing": EncounterType.FISHING,
+    }
 
+    enabled_encounters = {
+        OPTION_TO_ENUM[name]
+        for name in world.options.dexsanity_encounter_types.value
+    }
     def connect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
         """
         Connects the provided region to the corresponding wild encounters for the given parent map.
@@ -44,7 +53,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         """
         # For each of land, water, and fishing, connect the region if indicated by include_slots
         for i, (encounter_type, subcategories) in enumerate(encounter_categories.items()):
-            if encounter_type in world.options.dexsanity_encounter_types:
+            if encounter_type in enabled_encounters:
                 if include_slots[i]:
                     region_name = f"{map_name}_{encounter_type.value}_ENCOUNTERS"
 
