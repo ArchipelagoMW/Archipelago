@@ -166,7 +166,7 @@ new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredient
 {%- if location.revealed and item.name in base_tech_table -%}
 {#- copy Factorio Technology Icon #}
 copy_factorio_icon(new_tree_copy, "{{ item.name }}")
-{%- if item.name == "rocket-silo" and item.player == location.player %}
+{%- if item.name == "rocket-silo" and item.player == location.player and "rocket-part" in custom_recipes %}
 {%- for ingredient in custom_recipes["rocket-part"].ingredients %}
 table.insert(new_tree_copy.effects, {type = "nothing", effect_description = "Ingredient {{ loop.index }}: {{ ingredient }}"})
 {% endfor -%}
