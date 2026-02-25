@@ -37,6 +37,9 @@ The player can choose from a number of goals using their YAML settings:
   - The goal completes upon submitting the HUB milestone.
   - There is no partial progress system for this goal - combining it with another goal is recommended.
   - Time to finish this goal varies significantly depending on your map knowledge, equipment, and movement skills.
+- Complete the FICSMAS seasonal event MAM Tree
+  - The goal completes upon researching the Wonder Star MAM Tree Node. TODO Jarno update with decision on data cartridges
+  - If you are outside the natural FICSMAS season you must use [an additional mod](https://ficsit.app/mod/FicsmasEveryday) to enable it.
 
 You can also configure whether completing your slot requires *any one* goal or *all* goals to be met.
 
@@ -111,9 +114,9 @@ EnergyLink is an energy storage supported by certain games that is shared across
 In Satisfactory, if enabled in the player settings, all base-game Power Storage buildings will act as Energy Link interfaces.
 They will deposit surplus produced energy and draw energy from the shared storage when needed.
 
-Just like the base game, there is no limit to the discharge/draw rate of one building,
+Just like the base game, there is no limit to the discharge rate of one building,
 and each Power Storage provides 100 MW of charging throughput.
-The shared storage has unlimited capacity, and only a small amount of energy is lost during depositing.
+The shared storage has unlimited capacity and a small amount of energy is lost upon deposit.
 The amount of energy currently in the shared storage is displayed in the Archipelago client
 and appears in the Power Storage building UI.
 
