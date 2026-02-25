@@ -860,7 +860,7 @@ class DexsanityEncounterTypes(OptionSet):
     Removing an encounter type will remove it's location from the multiworld but you can Pokemon can still be randomized into those locations
     """
     display_name = "Dexsanity Encounter Types"
-    valid_keys = {"LAND", "WATER", "FISHING"}
+    valid_keys = {"ENCOUNTERTYPE.LAND", "ENCOUNTERTYPE.WATER", "ENCOUNTERTYPE.FISHING"}
     default = valid_keys
 
 @dataclass
