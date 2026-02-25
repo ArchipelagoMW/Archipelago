@@ -149,7 +149,7 @@ class ReadRequest(Request):
         self.size = size
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_int(1), buffer.consume_int(8), buffer.consume_int(2))
 
     def _get_body(self):
@@ -170,7 +170,7 @@ class WriteRequest(Request):
         self.data = bytes(data)
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_int(1), buffer.consume_int(8), buffer.consume_bytes(buffer.consume_int(2)))
 
     def _get_body(self):
@@ -191,7 +191,7 @@ class GuardRequest(Request):
         self.expected_data = bytes(expected_data)
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_int(1), buffer.consume_int(8), buffer.consume_bytes(buffer.consume_int(2)))
 
     def _get_body(self):
@@ -216,7 +216,7 @@ class DisplayMessageRequest(Request):
         self.message = message
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_bytes(buffer.consume_int(2)).decode("utf-8"))
 
     def _get_body(self):

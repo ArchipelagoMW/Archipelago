@@ -68,7 +68,7 @@ class DefaultAdapter(Adapter):
             finally:
                 self._streams = None
 
-    async def send_message(self, message) -> bytes:
+    async def send_message(self, message: bytes) -> bytes:
         message = len(message).to_bytes(2, "big") + message
 
         async with self._lock:

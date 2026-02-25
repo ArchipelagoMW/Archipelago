@@ -58,7 +58,7 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
         return new_class
 
     @staticmethod
-    async def get_handler(ctx: "PolyEmuClientContext", system: str) -> PolyEmuClient | None:
+    async def get_handler(ctx: "PolyEmuClientContext", system: int) -> PolyEmuClient | None:
         # TODO: Get clients to register the request types they need, and check
         # whether the device can fulfill the requests a handler uses.
         for systems, handlers in AutoPolyEmuClientRegister.game_handlers.items():
@@ -102,6 +102,6 @@ class PolyEmuClient(abc.ABC, metaclass=AutoPolyEmuClientRegister):
         to have passed your validator when this function is called, and the emulator is very likely to be connected."""
         ...
 
-    def on_package(self, ctx: "PolyEmuClientContext", cmd: str, args: dict) -> None:
+    def on_package(self, ctx: "PolyEmuClientContext", cmd: str, args: dict[str, Any]) -> None:
         """For handling packages from the server. Called from `PolyEmuClientContext.on_package`."""
         pass

@@ -57,7 +57,7 @@ class PolyEmuClientContext(CommonContext):
         ui.base_title = "Archipelago PolyEmu Client"
         return ui
 
-    def on_package(self, cmd, args):
+    def on_package(self, cmd: str, args: dict[str, Any]):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
             self.auth_status = AuthStatus.AUTHENTICATED

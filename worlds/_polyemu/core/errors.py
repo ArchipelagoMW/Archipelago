@@ -46,7 +46,7 @@ class MalformedRequestError(PolyEmuBaseError):
 
 
 class AutoPolyEmuErrorRegister(abc.ABCMeta):
-    exception_types: ClassVar[dict[int, PolyEmuError]] = {}
+    exception_types: ClassVar[dict[int, type[PolyEmuError]]] = {}
 
     def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> AutoPolyEmuErrorRegister:
         new_class = super().__new__(cls, name, bases, namespace)
@@ -78,7 +78,7 @@ class UnsupportedOperationError(PolyEmuError):
     code = ErrorType.UNSUPPORTED_OPERATION
 
     @classmethod
-    def from_response(cls, response) -> Self:
+    def from_response(cls, response: "ErrorResponse") -> Self:
         context = f"0x{hex(response.error_context[0])}" if response.error_context else "Unknown"
         return cls(f"Device does not support request type: {context}")
 
@@ -87,7 +87,7 @@ class MismatchedDeviceError(PolyEmuError):
     code = ErrorType.MISMATCHED_DEVICE
 
     @classmethod
-    def from_response(cls, response) -> Self:
+    def from_response(cls, response: "ErrorResponse") -> Self:
         return cls(f"Requests sent to wrong device. Expected [{response.error_context[:8]}] but got [{response.error_context[8:]}]")
 
 
@@ -95,7 +95,7 @@ class NoSuchDeviceError(PolyEmuError):
     code = ErrorType.NO_SUCH_DEVICE
 
     @classmethod
-    def from_response(cls, response) -> Self:
+    def from_response(cls, response: "ErrorResponse") -> Self:
         return cls(f"Device does not appear to exist: {response.error_context}")
 
 
@@ -103,5 +103,5 @@ class DeviceClosedConnectionError(PolyEmuError):
     code = ErrorType.DEVICE_CLOSED_CONNECTION
 
     @classmethod
-    def from_response(cls, response) -> Self:
+    def from_response(cls, response: "ErrorResponse") -> Self:
         return cls(f"Device closed the connection without sending response")

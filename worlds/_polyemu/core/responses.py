@@ -122,7 +122,7 @@ class SupportedOperationsResponse(Response):
         self.supported_operations = list(supported_operations)
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_bytes(buffer.consume_int(1)))
 
     def _get_body(self):
@@ -138,7 +138,7 @@ class PlatformResponse(Response):
         self.platform_id = platform_id
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_int(1))
 
     def _get_body(self):
@@ -154,9 +154,9 @@ class MemorySizeResponse(Response):
         self.memory_sizes = memory_sizes
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         num_entries = buffer.consume_int(1)
-        sizes = {}
+        sizes: dict[int, int] = {}
         for _ in range(num_entries):
             sizes[buffer.consume_int(1)] = buffer.consume_int(8)
         return cls(sizes)
@@ -177,7 +177,7 @@ class ListDevicesResponse(Response):
         self.devices = devices[:]
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         num_devices = buffer.consume_int(1)
         devices = [buffer.consume_bytes(8) for _ in range(num_devices)]
         return cls(devices)
@@ -198,7 +198,7 @@ class ReadResponse(Response):
         self.data = data
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_bytes(buffer.consume_int(2)))
 
     def _get_body(self):
@@ -218,7 +218,7 @@ class GuardResponse(Response):
         self.validated = validated
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_int(1) != 0)
 
     def _get_body(self):
@@ -248,7 +248,7 @@ class ErrorResponse(Response):
         self.error_context = context
 
     @classmethod
-    def consume_from_buffer(cls, buffer):
+    def consume_from_buffer(cls, buffer: Buffer):
         return cls(buffer.consume_int(1), buffer.consume_bytes(buffer.consume_int(2)))
 
     def _get_body(self):

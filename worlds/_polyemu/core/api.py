@@ -68,7 +68,7 @@ async def get_memory_size(ctx: PolyEmuContext) -> dict[int, int]:
     return res.memory_sizes
 
 
-async def get_platform(ctx: PolyEmuContext) -> str:
+async def get_platform(ctx: PolyEmuContext) -> int:
     res: PlatformResponse = (await send_requests(ctx, [PlatformRequest()]))[0]
     return res.platform_id
 

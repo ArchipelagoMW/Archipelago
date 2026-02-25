@@ -203,6 +203,8 @@ class Broker:
                 return
 
     async def close(self):
+        assert self.client_server is not None
+        assert self.device_server is not None
         try:
             self.client_server.close()
             self.device_server.close()

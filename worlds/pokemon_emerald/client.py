@@ -3,7 +3,7 @@ import copy
 import orjson
 import random
 import time
-from typing import TYPE_CHECKING, Optional, Dict, Set, Tuple
+from typing import TYPE_CHECKING, Any, Optional, Dict, Set, Tuple
 import uuid
 
 from NetUtils import ClientStatus
@@ -723,7 +723,7 @@ class PokemonEmeraldClient(polyemu.PolyEmuClient):
 
         return reply["value"][str(wonder_trade_slot)][1]
 
-    def on_package(self, ctx: "PolyEmuClientContext", cmd: str, args: dict) -> None:
+    def on_package(self, ctx: "PolyEmuClientContext", cmd: str, args: dict[str, Any]) -> None:
         if cmd == "Connected":
             Utils.async_start(ctx.send_msgs([{
                 "cmd": "SetNotify",
