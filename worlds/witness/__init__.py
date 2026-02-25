@@ -108,7 +108,7 @@ class WitnessWorld(World):
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
-            "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
+            "progressive_item_lists": self.player_items.get_progressive_item_ids(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
             "panel_hunt_required_absolute": self.panel_hunt_required_count
@@ -406,19 +406,47 @@ class WitnessWorld(World):
         else:
             item_data = static_witness_items.ITEM_DATA[item_name]
 
-        return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+        item = WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
-    def collect(self, state: "CollectionState", item: WitnessItem) -> bool:
-        changed = super().collect(state, item)
-        if changed and item.eggs:
+        item.is_alias_for = static_witness_items.ALL_ITEM_ALIASES.get(item_name, None)
+        if hasattr(self, "player_items") and self.player_items:
+            item.progressive_chain = self.player_items.all_progressive_item_lists.get(item_name, None)
+
+        return item
+
+    def collect(self, state: CollectionState, item: WitnessItem) -> bool:
+        if not super().collect(state, item):
+            return False
+
+        if item.eggs:
             state.prog_items[self.player]["Egg"] += item.eggs
-        return changed
 
-    def remove(self, state: "CollectionState", item: WitnessItem) -> bool:
-        changed = super().remove(state, item)
-        if changed and item.eggs:
+        elif item.is_alias_for:
+            state.prog_items[self.player][item.is_alias_for] += 1
+
+        elif item.progressive_chain:
+            index = state.prog_items[self.player][item.name] - 1
+            if index < len(item.progressive_chain):
+                state.prog_items[self.player][item.progressive_chain[index]] += 1
+
+        return True
+
+    def remove(self, state: CollectionState, item: WitnessItem) -> bool:
+        if not super().remove(state, item):
+            return False
+
+        if item.eggs:
             state.prog_items[self.player]["Egg"] -= item.eggs
-        return changed
+
+        elif item.is_alias_for:
+            state.prog_items[self.player][item.is_alias_for] -= 1
+
+        elif item.progressive_chain:
+            index = state.prog_items[self.player][item.name]
+            if index < len(item.progressive_chain):
+                state.prog_items[self.player][item.progressive_chain[index]] -= 1
+
+        return True
 
     def get_filler_item_name(self) -> str:
         return "Speed Boost"
