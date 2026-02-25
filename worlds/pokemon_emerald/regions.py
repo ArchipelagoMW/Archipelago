@@ -42,7 +42,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         """
         # For each of land, water, and fishing, connect the region if indicated by include_slots
         for i, (encounter_type, subcategories) in enumerate(encounter_categories.items()):
-            if encounter_type in world.options.Dexsanity_EncounterTypes:
+            if encounter_type in world.options.Dexsanity_EncounterTypes.keys():
                 if include_slots[i]:
                     region_name = f"{map_name}_{encounter_type.value}_ENCOUNTERS"
 
