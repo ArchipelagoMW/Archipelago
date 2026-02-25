@@ -878,6 +878,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     npc_gifts: RandomizeNpcGifts
     berry_trees: RandomizeBerryTrees
     dexsanity: Dexsanity
+    dexsanity_encounter_types: DexsanityEncounterTypes
     trainersanity: Trainersanity
     item_pool_type: ItemPoolType
 
