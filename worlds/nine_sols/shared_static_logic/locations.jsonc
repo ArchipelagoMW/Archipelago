@@ -1367,7 +1367,7 @@
         "region": "GoS (West) - Lower Right Exits", "requires": [
             { "item": "Cloud Leap" } // from the upper portal
         ],
-        "medium_requires": [
+        "ls_requires": [
             { "item": "Ledge Grab" } // T-dash setup from the ledge before the 3 wood platforms, falling down to portal
             // then T-dash from 2nd to 3rd wooden platform, and LS vault to the ropes
         ]
