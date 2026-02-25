@@ -136,8 +136,9 @@ class Rac3Interface(GameInterface):
     unfreeze_packs: bool = False
     vidcomic_2_fix: int = 0
     player_actionable: int = 0x8000
-    visited_planets: set[str]
-    weapon_vendor_items: list
+    visited_planets: set[str] = set()
+    weapon_vendor_items: list[str] = []
+    vendor_type: Optional[RAC3VENDORTYPE] = None
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -365,6 +366,7 @@ class Rac3Interface(GameInterface):
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
         self.player_actionable = self._read16(RAC3STATUS.PLAYER_ACTIONABLE)
         self.pda_vendor = self.find_pda_vendor()
+        self.vendor_type = self.vendor_check()
         self.get_visited_planets()
         self.determine_weapon_vendor_items()
         self.vehicle_check()
@@ -899,6 +901,13 @@ class Rac3Interface(GameInterface):
     # Vendor Handling #
     ###################
 
+    def vendor_check(self):
+        if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
+            vendor_type = RAC3VENDORTYPE(self._read8(
+                RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+            return vendor_type
+        return None
+
     def vendor_update(self):
         """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
         # Only update vendor if on a known planet with a vendor
@@ -995,22 +1004,27 @@ class Rac3Interface(GameInterface):
 
     def hovering_over_max_ammo(self) -> bool:
         """Check if the player is currently hovering over the max ammo item in a weapon vendor"""
-        if (self.pause_state_value == RAC3PAUSESTATE.VENDOR
-                and self.options.weapon_vendors
-                and self.planet in PLANET_VENDOR_OFFSET.keys()):
-            vendor_type = RAC3VENDORTYPE(
-                self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
-            if vendor_type != RAC3VENDORTYPE.WEAPON:
-                return False
-            cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
-            for slot in range(cursor_pos + 1):
-                slot_data = self.read_vendor_slot_data(vendor_type, slot)
-                if slot_data.all_ammo.value:
-                    if slot == cursor_pos:
-                        return True
-                    else:
-                        return False
+        if self.vendor_type != RAC3VENDORTYPE.WEAPON:
+            return False
+        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+        for slot in range(cursor_pos + 1):
+            slot_data = self.read_vendor_slot_data(RAC3VENDORTYPE.WEAPON, slot)
+            if slot_data.all_ammo.value:
+                if slot == cursor_pos:
+                    return True
+                else:
+                    return False
         return False
+    
+    def set_cursor_weapon_level(self, level: int = 1):
+        """Set the cursor weapon to level one for a given weapon name"""
+        if self.vendor_type != RAC3VENDORTYPE.WEAPON:
+            return
+        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+        slot_data = self.read_vendor_slot_data(RAC3VENDORTYPE.WEAPON, cursor_pos)
+        weapon_name = ITEM_NAME_FROM_ID.get(slot_data.item_id.value, None)
+        if weapon_name in non_prog_weapon_data.keys():
+            self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, level)
 
     ##################
     # Sequence Break #
@@ -1055,8 +1069,7 @@ class Rac3Interface(GameInterface):
         self.vidcomic_cycler()
         self.armor_cycler()
         self.timer_cycler()
-        if self.options.enable_progressive_weapons:
-            self.weapon_exp_cycler()
+        self.weapon_exp_cycler()
         self.verify_quick_select_and_last_used()
         self.clank_cycler()
         self.multiplier_cycler()
@@ -1335,22 +1348,43 @@ class Rac3Interface(GameInterface):
     def weapon_exp_cycler(self):
         """Keep weapon level tied to item count"""
         # TODO: Track weapon EXP
-        for weapon_name in non_prog_weapon_data.keys():
-            target_level = self.UnlockItem[weapon_name].status
-            if self.ryno and weapon_name == RAC3ITEM.RY3N0 and target_level > 4:
-                target_level = 4
-            logger.debug(f'weapon: {weapon_name}, target: {target_level}')
-            if target_level:
-                target_id = UPGRADE_DICT[weapon_name][target_level - 1]
-                target_name = ITEM_NAME_FROM_ID[target_id]
-                target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
-                logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
-                if self.pause_state_value == RAC3PAUSESTATE.VENDOR:
-                    self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, 0)
-                    self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, UPGRADE_DICT[weapon_name][0])
-                else:
+        if self.options.enable_progressive_weapons:
+            for weapon_name in non_prog_weapon_data.keys():
+                target_level = self.UnlockItem[weapon_name].status
+                if self.vendor_type == RAC3VENDORTYPE.WEAPON:
+                    cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+                    slot_data = self.read_vendor_slot_data(RAC3VENDORTYPE.WEAPON, cursor_pos)
+                    if slot_data.item_id.value == RAC3_ITEM_DATA_TABLE[weapon_name].ID:
+                        target_level = 1
+                if self.ryno and weapon_name == RAC3ITEM.RY3N0 and target_level > 4:
+                    target_level = 4
+                logger.debug(f'weapon: {weapon_name}, target: {target_level}')
+                if target_level:
+                    target_id = UPGRADE_DICT[weapon_name][target_level - 1]
+                    target_name = ITEM_NAME_FROM_ID[target_id]
+                    target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+                    logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
                     self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
                     self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
+        else:
+            for weapon_name in non_prog_weapon_data.keys():
+                if self.vendor_type == RAC3VENDORTYPE.WEAPON:
+                    cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+                    slot_data = self.read_vendor_slot_data(RAC3VENDORTYPE.WEAPON, cursor_pos)
+                    if slot_data.item_id.value == RAC3_ITEM_DATA_TABLE[weapon_name].ID:
+                        self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, RAC3_ITEM_DATA_TABLE[weapon_name].ID)
+                    else:
+                        current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
+                        restore_level = 1
+                        for lvl in range(1, 6):
+                            target_id = UPGRADE_DICT[weapon_name][lvl - 1]
+                            target_name = ITEM_NAME_FROM_ID[target_id]
+                            xp_threshold = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+                            if current_xp >= xp_threshold:
+                                restore_level = lvl
+                        restore_id = UPGRADE_DICT[weapon_name][restore_level - 1]
+                        self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, restore_id)
+            
 
     def verify_quick_select_and_last_used(self):
         """Check each slot in quick select and held item history, reset if that item has not been collected yet."""
