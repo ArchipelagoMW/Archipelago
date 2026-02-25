@@ -231,7 +231,7 @@
         "region": "FSP - Root Node", "requires": [
             {
                 "option": "shop_unlocks",
-                "vanilla_like_locations": { "region": "RP - After Yingzhao" },
+                "vanilla_like_locations": { "region": "Radiant Pagoda - After Yingzhao" },
                 "sol_seals": { "item_group": "Sol Seals", "count_option": "kuafu_shop_unlock_sol_seals" },
                 "unlock_items": { "item": "Progressive Shop Unlock" }
             }
@@ -510,15 +510,15 @@
     // Radiant Pagoda
     {
         "address": 1101, "name": "Examine Radiant Pagoda Control Panel",
-        "region": "RP - Root Node", "requires": []
+        "region": "Radiant Pagoda - Root Node", "requires": []
     },
     {
         "address": 1102, "name": "Defeat General Yingzhao",
-        "region": "RP - After Yingzhao", "requires": []
+        "region": "Radiant Pagoda - After Yingzhao", "requires": []
     },
     {
         "address": 1103, "name": "Kuafu's Vital Sanctum",
-        "region": "RP - After Yingzhao", "requires": []
+        "region": "Radiant Pagoda - After Yingzhao", "requires": []
     },
 
     // Lake Yaochi Ruins
@@ -654,15 +654,15 @@
     // Agrarian Hall
     {
         "address": 1501, "name": "Chest After Goumang (1st Reward)",
-        "region": "AH - After Goumang", "requires": []
+        "region": "Agrarian Hall - After Goumang", "requires": []
     },
     {
         "address": 1502, "name": "Chest After Goumang (2nd Reward)",
-        "region": "AH - After Goumang", "requires": []
+        "region": "Agrarian Hall - After Goumang", "requires": []
     },
     {
         "address": 1503, "name": "Goumang's Vital Sanctum",
-        "region": "AH - After Goumang", "requires": []
+        "region": "Agrarian Hall - After Goumang", "requires": []
     },
 
     // Yinglong Canal
@@ -970,11 +970,11 @@
     // Yangu Hall
     {
         "address": 2201, "name": "Yanlao's Tianhuo Flower",
-        "region": "YH - After Yanlao", "requires": []
+        "region": "Yangu Hall - After Yanlao", "requires": []
     },
     {
         "address": 2202, "name": "Yanlao's Vital Sanctum",
-        "region": "YH - After Yanlao", "requires": []
+        "region": "Yangu Hall - After Yanlao", "requires": []
     },
 
     // Abandoned Mines
@@ -1167,23 +1167,23 @@
     // Shengwu Hall
     {
         "address": 2701, "name": "Examine Sphere Before Jiequan",
-        "region": "SH - Root Node", "requires": []
+        "region": "Shengwu Hall - Root Node", "requires": []
     },
     {
         "address": 2702, "name": "Chest Before Jiequan",
-        "region": "SH - Root Node", "requires": []
+        "region": "Shengwu Hall - Root Node", "requires": []
     },
     {
         "address": 2703, "name": "Jiequan's Tianhuo Flower",
-        "region": "SH - After Jiequan", "requires": []
+        "region": "Shengwu Hall - After Jiequan", "requires": []
     },
     {
         "address": 2704, "name": "Chest After Jiequan",
-        "region": "SH - After Jiequan", "requires": []
+        "region": "Shengwu Hall - After Jiequan", "requires": []
     },
     {
         "address": 2705, "name": "Jiequan's Vital Sanctum",
-        "region": "SH - After Jiequan", "requires": []
+        "region": "Shengwu Hall - After Jiequan", "requires": []
     },
 
     // Underground Cave + 95th Livestock Pen / Peach Blossom Village + Livestock Harvesting Platform
@@ -1419,15 +1419,15 @@
     // Ancient Stone Pillar
     {
         "address": 3301, "name": "Examine Ji",
-        "region": "ASP - After Ji", "requires": []
+        "region": "Ancient Stone Pillar - After Ji", "requires": []
     },
     {
         "address": 3302, "name": "Ji's Vital Sanctum",
-        "region": "ASP - After Ji", "requires": []
+        "region": "Ancient Stone Pillar - After Ji", "requires": []
     },
     {
         "address": 3303, "name": "Retrieve Chip From Shanhai 1000",
-        "region": "ASP - After Ji", "requires": []
+        "region": "Ancient Stone Pillar - After Ji", "requires": []
     },
 
     // Sky Tower
@@ -1714,15 +1714,15 @@
     // Nobility Hall
     {
         "address": 3801, "name": "Nuwa's Vital Sanctum",
-        "region": "NH - After Fengs", "requires": []
+        "region": "Nobility Hall - After Fengs", "requires": []
     },
     {
         "address": 3802, "name": "Chest After Fengs",
-        "region": "NH - After Fengs", "requires": []
+        "region": "Nobility Hall - After Fengs", "requires": []
     },
     {
         "address": 3803, "name": "Nuwa's Tianhuo Flower",
-        "region": "NH - After Fengs", "requires": [ { "item": "Super Mutant Buster" } ]
+        "region": "Nobility Hall - After Fengs", "requires": [ { "item": "Super Mutant Buster" } ]
     },
 
     // Tiandao Research Center

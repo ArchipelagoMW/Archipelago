@@ -580,10 +580,10 @@
     { "from": "PR (Central) - Left Transporter", "to": "PR (West) - Right Transporter", "requires": [] },
     { "from": "PR (West) - Right Transporter", "to": "PR (Central) - Left Transporter", "requires": [] },
 
-    { "from": "PR (Central) - Light Bridge", "to": "RP - Root Node", "requires": [
+    { "from": "PR (Central) - Light Bridge", "to": "Radiant Pagoda - Root Node", "requires": [
         { "region": "PR (Central) - Backup Control Room" } // AND hacking to restore power
     ] },
-    { "from": "RP - Root Node", "to": "PR (Central) - Light Bridge", "requires": [] }, // walking out of RP just works, even without the light bridge
+    { "from": "Radiant Pagoda - Root Node", "to": "PR (Central) - Light Bridge", "requires": [] }, // walking out of RP just works, even without the light bridge
 
     // Power Reservoir (West)
     {
@@ -648,8 +648,8 @@
     { "from": "PR (West) - Above Power Lines", "to": "PR (West) - Right Transporter", "requires": [] }, // one-way door
 
     // Radiant Pagoda
-    { "from": "RP - Root Node", "to": "RP - After Yingzhao", "requires": [] }, // TODO: combat logic?
-    { "from": "RP - After Yingzhao", "to": "Central Hall - Center", "requires": [] }, // elevator
+    { "from": "Radiant Pagoda - Root Node", "to": "Radiant Pagoda - After Yingzhao", "requires": [] }, // TODO: combat logic?
+    { "from": "Radiant Pagoda - After Yingzhao", "to": "Central Hall - Center", "requires": [] }, // elevator
 
     // Lake Yaochi Ruins
     {
@@ -772,15 +772,15 @@
         { "region": "Greenhouse - 3rd Waterfall Hack" }
     ] },
 
-    { "from": "W&OS - Right Exit", "to": "AH - Root Node", "requires": [] },
-    { "from": "AH - Root Node", "to": "W&OS - Right Exit", "requires": [] },
+    { "from": "W&OS - Right Exit", "to": "Agrarian Hall - Root Node", "requires": [] },
+    { "from": "Agrarian Hall - Root Node", "to": "W&OS - Right Exit", "requires": [] },
 
     // Agrarian Hall
-    { "from": "AH - Root Node", "to": "AH - After Goumang", "requires": [] }, // TODO: combat logic?
-    { "from": "AH - After Goumang", "to": "AH - Root Node", "requires": [] },
+    { "from": "Agrarian Hall - Root Node", "to": "Agrarian Hall - After Goumang", "requires": [] }, // TODO: combat logic?
+    { "from": "Agrarian Hall - After Goumang", "to": "Agrarian Hall - Root Node", "requires": [] },
 
-    { "from": "AH - After Goumang", "to": "GoS (Entry) - Lower Right Exit", "requires": [] },
-    { "from": "GoS (Entry) - Lower Right Exit", "to": "AH - After Goumang", "requires": [] },
+    { "from": "Agrarian Hall - After Goumang", "to": "GoS (Entry) - Lower Right Exit", "requires": [] },
+    { "from": "GoS (Entry) - Lower Right Exit", "to": "Agrarian Hall - After Goumang", "requires": [] },
 
     // Yinglong Canal
     {
@@ -1038,8 +1038,8 @@
     },
     { "from": "OW - Robot", "to": "OW - Upper Left Exit", "requires": [] }, // hacking, one-way robot-breakable box
 
-    { "from": "OW - Root Node & Middle Exits", "to": "YH - Right Exit", "requires": [] }, // OW's *left* middle exit
-    { "from": "YH - Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [] },
+    { "from": "OW - Root Node & Middle Exits", "to": "Yangu Hall - Right Exit", "requires": [] }, // OW's *left* middle exit
+    { "from": "Yangu Hall - Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [] },
 
     { "from": "OW - Upper Left Exit", "to": "IW - Right Exit", "requires": [] },
     { "from": "IW - Right Exit", "to": "OW - Upper Left Exit", "requires": [] },
@@ -1127,15 +1127,15 @@
         // Lock 4 requires clearing the shielded enemies; there are many options here but
         // AD to break the shield tower is the easiest since After Gauntlet already requires AD
         // In the end the only novel requirement is that lock 5 requires beating Yanlao first:
-        { "region": "YH - After Yanlao" } // AND hacking 3
+        { "region": "Yangu Hall - After Yanlao" } // AND hacking 3
     ] },
 
-    { "from": "BR - After Gauntlet", "to": "YH - Left Exit", "requires": [] },
+    { "from": "BR - After Gauntlet", "to": "Yangu Hall - Left Exit", "requires": [] },
 
     // Yangu Hall
-    { "from": "YH - Left Exit", "to": "YH - After Yanlao", "requires": [] }, // TODO: combat logic?
+    { "from": "Yangu Hall - Left Exit", "to": "Yangu Hall - After Yanlao", "requires": [] }, // TODO: combat logic?
     // the claw fight definitely expects WC, but seems doable without it
-    { "from": "YH - After Yanlao", "to": "YH - Right Exit", "requires": [] },
+    { "from": "Yangu Hall - After Yanlao", "to": "Yangu Hall - Right Exit", "requires": [] },
 
     // Abandoned Mines
     { "from": "AM - Left Exit", "to": "AM - Above Left Exit", "requires": [
@@ -1427,10 +1427,10 @@
 
     { "from": "Factory (PA) - Lower Right Exit", "to": "Factory (GH) - Above Root Node", "requires": [] }, // one-way elevator
 
-    { "from": "Factory (PA) - Upper Elevator", "to": "SH - Root Node", "requires": [] }, // one-way elevator
+    { "from": "Factory (PA) - Upper Elevator", "to": "Shengwu Hall - Root Node", "requires": [] }, // one-way elevator
 
     // Shengwu Hall
-    { "from": "SH - Root Node", "to": "SH - After Jiequan", "requires": [ { "item": "Charged Strike" } ] }, // TODO: (more) combat logic?
+    { "from": "Shengwu Hall - Root Node", "to": "Shengwu Hall - After Jiequan", "requires": [ { "item": "Charged Strike" } ] }, // TODO: (more) combat logic?
     // "Trick - Break CS Barrier With Bow" doesn't apply here because Jiequan's shield recharges
 
     // Underground Cave + 95th Livestock Pen / Peach Blossom Village + Livestock Harvesting Platform
@@ -1701,7 +1701,7 @@
     // Ancient Stone Pillar
     // No root node in here, so no need for a 2nd region.
     {
-        "from": "GoS (West) - Above Western Cliffs", "to": "ASP - After Ji",
+        "from": "GoS (West) - Above Western Cliffs", "to": "Ancient Stone Pillar - After Ji",
         "requires": [
             { "item": "Tai-Chi Kick" }, // or else Ji's divinations are a softlock
             {
@@ -2035,7 +2035,7 @@
 
     // Nobility Hall
     // No root node in here, so no need for a 2nd region.
-    { "from": "ED (Sanctum) - Outside Nobility Hall", "to": "NH - After Fengs", "requires": [] }, // TODO: combat logic?
+    { "from": "ED (Sanctum) - Outside Nobility Hall", "to": "Nobility Hall - After Fengs", "requires": [] }, // TODO: combat logic?
 
     // Tiandao Research Center
     { "from": "TRC - Upper Exit", "to": "TRC - Root Node", "requires": [] }, // one-way door

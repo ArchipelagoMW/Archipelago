@@ -221,9 +221,9 @@ def create_regions(world: "NineSolsWorld") -> None:
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
         first_node_region = "GoS (West) - Root Node"
     elif options.first_root_node == FirstRootNode.option_agrarian_hall:
-        first_node_region = "AH - Root Node"
+        first_node_region = "Agrarian Hall - Root Node"
     elif options.first_root_node == FirstRootNode.option_radiant_pagoda:
-        first_node_region = "RP - Root Node"
+        first_node_region = "Radiant Pagoda - Root Node"
     elif options.first_root_node == FirstRootNode.option_apeman_facility_depths:
         first_node_region = "AF (Depths) - Root Node"
     elif options.first_root_node == FirstRootNode.option_central_transport_hub:
