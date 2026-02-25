@@ -861,7 +861,7 @@ class DexsanityEncounterTypes(OptionSet):
     """
     display_name = "Dexsanity Encounter Types"
     valid_keys = {"LAND", "WATER", "FISHING"}
-    default = valid_keys
+    default = {"LAND"}
 
 @dataclass
 class PokemonEmeraldOptions(PerGameCommonOptions):
