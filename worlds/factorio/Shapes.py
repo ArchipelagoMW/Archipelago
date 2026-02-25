@@ -250,7 +250,7 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
         #This is the same method also used by the other tech tree methods.
 
         minimum_dependencies = 1 #these can be proper options and/or settings.
-        maximum_dependencies = 5 + 1 #The +1 is to ensure all values are equally likely.    Long explanation; if I want a number [1,5] and I only rolled a float with [1,10] and then round. The 1 would only be rolled if the roll is [1, 1.5>. Which is only half a number compared to the random range of 2; [1.5, 2,5>. Technically it is possible that because of rounding errors the highest value becomes this max+1. Chances of this happening are so low I am going to leave it as an easter egg.
+        maximum_dependencies = 5
         even_distribution = False #these can be proper options and/or settings. Can/should be combined with the one below.
         weighted_distribution = 1 #these can be proper options and/or settings.
         starting_techs = 5 #setting to pick amount of techs this tree starts with.
@@ -268,9 +268,9 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
             current_choices = already_done.copy()
             number_of_dependencies = 0
             if even_distribution:
-                number_of_dependencies = int( world.random.uniform(minimum_dependencies, maximum_dependencies))
+                number_of_dependencies = int( world.random.randint(minimum_dependencies, maximum_dependencies))
             else:
-                number_of_dependencies = int( world.random.triangular(minimum_dependencies, maximum_dependencies, weighted_distribution))
+                number_of_dependencies = int( world.random.triangular(minimum_dependencies, maximum_dependencies+1, weighted_distribution)) #The +1 is to ensure all values are equally likely.    Long explanation; if I want a number [1,5] and I only rolled a float with [1,10] and then round. The 1 would only be rolled if the roll is [1, 1.5>. Which is only half a number compared to the random range of 2; [1.5, 2,5>. Technically it is possible that because of rounding errors the highest value becomes this max+1. Chances of this happening are so low I am going to leave it as an easter egg.
 
             while number_of_dependencies >=1 and len(current_choices) > 0:
                 number_of_dependencies -= 1
