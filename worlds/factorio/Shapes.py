@@ -249,10 +249,10 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
         #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
         #This is the same method also used by the other tech tree methods.
 
-        minimum_dependencies = 1 #these can be propper options and/or settings.
+        minimum_dependencies = 1 #these can be proper options and/or settings.
         maximum_dependencies = 5 + 1 #The +1 is to ensure all values are equally likely.    Long explanation; if I want a number [1,5] and I only rolled a float with [1,10] and then round. The 1 would only be rolled if the roll is [1, 1.5>. Which is only half a number compared to the random range of 2; [1.5, 2,5>. Technically it is possible that because of rounding errors the highest value becomes this max+1. Chances of this happening are so low I am going to leave it as an easter egg.
-        even_distribution = False #these can be propper options and/or settings. Can/should be combined with the one below.
-        weighted_distribution = 1 #these can be propper options and/or settings.
+        even_distribution = False #these can be proper options and/or settings. Can/should be combined with the one below.
+        weighted_distribution = 1 #these can be proper options and/or settings.
         starting_techs = 5 #setting to pick amount of techs this tree starts with.
 
         all_pre: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {} #will be used to keep track of ALL previous dependencies. In order to ensure that A->B->C will not also get A->C. Since A is already required by B. Also the other way around A leading to both B and C and then preventing C from also getting B.
@@ -266,14 +266,14 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
             prerequisites[victim] = set()
             all_pre[victim] = set()
             current_choices = already_done.copy()
-            rand_num = 0
+            number_of_dependencies = 0
             if even_distribution:
-                rand_num = int( world.random.uniform(minimum_dependencies, maximum_dependencies))
+                number_of_dependencies = int( world.random.uniform(minimum_dependencies, maximum_dependencies))
             else:
-                rand_num = int( world.random.triangular(minimum_dependencies, maximum_dependencies, weighted_distribution))
+                number_of_dependencies = int( world.random.triangular(minimum_dependencies, maximum_dependencies, weighted_distribution))
 
-            while rand_num >=1 and len(current_choices) > 0:
-                rand_num -= 1
+            while number_of_dependencies >=1 and len(current_choices) > 0:
+                number_of_dependencies -= 1
                 dependency = current_choices[world.random.randint(0, len(current_choices)-1)] #pick one of the already established techs.
                 prerequisites[victim].add(dependency) #Take one of the already processed techs as its prerequisite.
 
