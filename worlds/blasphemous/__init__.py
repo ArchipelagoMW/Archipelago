@@ -287,7 +287,7 @@ class BlasphemousWorld(World):
             "StartingLocation": self.options.starting_location.value,
             "VersionCreated": "AP",
             
-            "UnlockTeleportation": bool(self.options.prie_dieu_warp.value),
+            "UnlockTeleportation": True,
             "AllowHints": bool(self.options.corpse_hints.value),
             "AllowPenitence": bool(self.options.penitence.value),
             
