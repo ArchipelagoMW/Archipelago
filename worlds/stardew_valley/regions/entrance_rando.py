@@ -1,11 +1,13 @@
 from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
+from worlds.stardew_valley.options.options import \
+    EntranceRandomizationBehaviour
 
 from ..content import StardewContent
 from ..options import EntranceRandomization
 from ..strings.ap_names.ap_option_names import \
     EntranceRandomizerBehaviourOptionName
-from .model import (ConnectionData, RandomizationFlag, RegionData,
+from .model import (ConnectionData, GroupFlag, RandomizationFlag, RegionData,
                     reverse_connection_name)
 
 
@@ -45,6 +47,73 @@ def create_player_randomization_flag(
     return flag
 
 
+def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBehaviour):
+
+    direction_matching_group_lookup = {
+        GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT],
+        GroupFlag.UP: [GroupFlag.DOWN, GroupFlag.TO_ANY],
+        GroupFlag.DOWN: [GroupFlag.UP, GroupFlag.DOOR, GroupFlag.TO_ANY],
+        GroupFlag.LEFT: [GroupFlag.RIGHT, GroupFlag.TO_ANY],
+        GroupFlag.RIGHT: [GroupFlag.LEFT, GroupFlag.TO_ANY],
+        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.TO_ANY],
+    }
+
+    area_matching_group_lookup = {
+        GroupFlag.TO_ANY: [
+            GroupFlag.IN_TO_IN,
+            GroupFlag.IN_TO_OUT,
+            GroupFlag.OUT_TO_IN,
+            GroupFlag.OUT_TO_OUT,
+            GroupFlag.TO_ANY,
+        ],
+        GroupFlag.IN_TO_IN: [GroupFlag.IN_TO_IN, GroupFlag.TO_ANY],
+        GroupFlag.IN_TO_OUT: [GroupFlag.OUT_TO_IN, GroupFlag.TO_ANY],
+        GroupFlag.OUT_TO_IN: [GroupFlag.IN_TO_OUT, GroupFlag.TO_ANY],
+        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY],
+    }
+
+    dir_mask = 0b0
+    area_mask = 0b0
+    farmhouse_mask = GroupFlag.FROM_FARMHOUSE
+
+    if EntranceRandomizerBehaviourOptionName.same_direction in entrance_randomization_behaviour:
+        dir_mask = GroupFlag.DIR_MASK
+
+    if EntranceRandomizerBehaviourOptionName.same_type in entrance_randomization_behaviour:
+        area_mask = GroupFlag.AREA_MASK
+
+    groups = {
+        int(direction | inorout): [
+            int(pair_direction | pair_inorout)
+            for pair_direction in direction_matching_group_lookup[direction & dir_mask]
+            for pair_inorout in area_matching_group_lookup[inorout & area_mask]
+        ]
+        for direction in [
+            GroupFlag.TO_ANY,
+            GroupFlag.UP,
+            GroupFlag.DOWN,
+            GroupFlag.LEFT,
+            GroupFlag.RIGHT,
+            GroupFlag.DOOR,
+        ]
+        for inorout in [
+            GroupFlag.TO_ANY,
+            GroupFlag.IN_TO_IN,
+            GroupFlag.IN_TO_OUT,
+            GroupFlag.OUT_TO_IN,
+            GroupFlag.OUT_TO_OUT,
+        ]
+    }
+
+    groups[int(GroupFlag.DOWN | GroupFlag.IN_TO_OUT | GroupFlag.FROM_FARMHOUSE)] = [
+        int(pair_direction | pair_inorout | farmhouse_flag)
+        for pair_direction in direction_matching_group_lookup[GroupFlag.DOWN & dir_mask]
+        for pair_inorout in area_matching_group_lookup[GroupFlag.IN_TO_OUT]
+        for farmhouse_flag in [GroupFlag.FROM_FARMHOUSE, GroupFlag.TO_ANY]
+    ]
+    return groups
+
+
 def connect_regions(
     region_data_by_name: dict[str, RegionData],
     connection_data_by_name: dict[str, ConnectionData],
@@ -69,14 +138,18 @@ def create_entrance_rando_target(origin: Region, destination: Region, connection
     We need to know exactly which entrances to swap in both directions."""
 
     if RandomizationFlag.IS_ONE_WAY in connection_data.flag:
-        origin.create_exit(connection_data.name).randomization_type = EntranceType.ONE_WAY
+        exit = origin.create_exit(connection_data.name)
+        exit.randomization_type = EntranceType.ONE_WAY
+        exit.randomization_group = connection_data.group
         destination.create_er_target(f"{connection_data.name} exit").randomization_type = EntranceType.ONE_WAY
         return
 
     rev = connection_data.reverse
     assert rev is not None, f"Could not get reverse of '{connection_data.name}'"
 
-    origin.create_exit(connection_data.name).randomization_type = EntranceType.TWO_WAY
+    exit = origin.create_exit(connection_data.name)
+    exit.randomization_type = EntranceType.TWO_WAY
+    exit.randomization_group = connection_data.group
     destination.create_er_target(rev).randomization_type = EntranceType.TWO_WAY
 
 

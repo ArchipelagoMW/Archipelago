@@ -46,8 +46,10 @@ class ChefsanityOptionName:
 class EntranceRandomizerBehaviourOptionName:
     chaos = "Chaos"
     decoupled = "Decoupled"
+    same_direction = "Same Direction"
     same_type = "Same Type"
     shuffle_farmhouse = "Shuffle Farmhouse"
+    shuffle_farmhouse_anywhere = "Shuffle Farmhouse Anywhere"
 
 
 class StartWithoutOptionName:

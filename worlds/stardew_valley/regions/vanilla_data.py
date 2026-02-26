@@ -499,7 +499,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         Entrance.farmhouse_to_farm,
         RegionName.farm,
         flag=RandomizationFlag.FARMHOUSE,
-        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN | GroupFlag.FROM_FARMHOUSE,
     ),
     ConnectionData(
         Entrance.farm_to_farmhouse,

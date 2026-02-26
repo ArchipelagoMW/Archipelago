@@ -224,7 +224,10 @@ class EntranceRandomizationBehaviour(OptionSet):
     """Modifications to how ER will behave within the randomized locations.
     - Chaos: all Enabled entrances are reshuffled every day!
     - Decoupled: Going into an entrance and going back might bring you somewhere different.
-    - Shuffle Farmhouse: shuffles the farmhouse with the other locations
+    - Shuffle Farmhouse: shuffles the farmhouse exit to some outside entrance
+    - Shuffle Farmhouse Anywhere: Like Shuffle Farmhouse but the farmhouse could end up inside and in any direction
+    - Same Direction: Makes entrances you go in towards the top link up with entrances you go in downward etc.
+    - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside
     """
 
     internal_name = "er_behaviour"
@@ -234,6 +237,9 @@ class EntranceRandomizationBehaviour(OptionSet):
             EntranceRandomizerBehaviourOptionName.chaos,
             EntranceRandomizerBehaviourOptionName.decoupled,
             EntranceRandomizerBehaviourOptionName.shuffle_farmhouse,
+            EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere,
+            EntranceRandomizerBehaviourOptionName.same_direction,
+            EntranceRandomizerBehaviourOptionName.same_type,
         }
     )
 

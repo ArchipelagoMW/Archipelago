@@ -56,24 +56,27 @@ class RandomizationFlag(IntFlag):
 class GroupFlag(IntFlag):
     TO_ANY = 0b0
 
-    UP = 0b0001
-    DOWN = 0b0010
-    LEFT = 0b0100
-    RIGHT = 0b1000
-    DOOR = UP  # doors/ladders etc.
+    UP = 0b00001
+    DOWN = 0b00010
+    LEFT = 0b00100
+    RIGHT = 0b01000
+    DOOR = 0b10000  # doors/ladders etc.
 
-    ANY = UP | DOWN | LEFT | RIGHT
+    FROM_INDOOR = 0b01 << 5
+    FROM_OUTDOOR = 0b10 << 5
 
-    FROM_INDOOR = 0b01 << 4
-    FROM_OUTDOOR = 0b10 << 4
+    TO_INDOOR = 0b01 << 7
+    TO_OUTDOOR = 0b10 << 7
 
-    TO_INDOOR = 0b01 << 6
-    TO_OUTDOOR = 0b10 << 6
+    FROM_FARMHOUSE = 0b01 << 9
 
     IN_TO_OUT = FROM_INDOOR | TO_OUTDOOR
     IN_TO_IN = FROM_INDOOR | TO_INDOOR
     OUT_TO_OUT = FROM_OUTDOOR | TO_OUTDOOR
     OUT_TO_IN = FROM_OUTDOOR | TO_INDOOR
+
+    DIR_MASK = UP | DOWN | LEFT | RIGHT | DOOR
+    AREA_MASK = IN_TO_IN | IN_TO_OUT | OUT_TO_IN | OUT_TO_OUT
 
 
 @dataclass(frozen=True)

@@ -12,6 +12,7 @@ from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, icon_paths, Type
+from .regions.entrance_rando import get_target_groups
 from .strings.region_names import Region as RegionNames
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
@@ -432,8 +433,10 @@ class StardewValleyWorld(World):
         set_rules(self)
 
     def connect_entrances(self) -> None:
-        no_target_groups = {0: [0]}
-        placement = entrance_rando.randomize_entrances(self, coupled=EntranceRandomizerBehaviourOptionName.decoupled not in self.options.entrance_randomization_behaviour, target_group_lookup=no_target_groups)
+        target_groups = get_target_groups(self.options.entrance_randomization_behaviour)
+
+
+        placement = entrance_rando.randomize_entrances(self, coupled=EntranceRandomizerBehaviourOptionName.decoupled not in self.options.entrance_randomization_behaviour, target_group_lookup=target_groups)
         self.randomized_entrances = prepare_mod_data(placement)
 
     def generate_basic(self):
