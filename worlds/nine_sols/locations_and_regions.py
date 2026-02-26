@@ -178,26 +178,49 @@ def create_regions(world: "NineSolsWorld") -> None:
     for region_name in region_data_table.keys():
         mw.regions.append(Region(region_name, p, mw))
 
-    # add locations and connections to each region
-    for region_name, region_data in region_data_table.items():
-        region = mw.get_region(region_name, p)
-        region.add_locations({
-            location_name: location_data.address for location_name, location_data in locations_to_create.items()
-            if location_data.region == region_name
-        }, NineSolsLocation)
+    try:
+        from rule_builder.rules import Has  # we don't use it yet, this is just to branch on whether it's available
 
-        exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
-        for connection in exit_connections:
-            rule, indirect_region_names = get_combined_access_rule(connection, world)
-            entrance = region.connect(mw.get_region(connection["to"], p), None, rule)
-            for indirect_region_name in indirect_region_names:
-                mw.register_indirect_condition(mw.get_region(indirect_region_name, p), entrance)
+        # add locations and connections to each region
+        for region_name, region_data in region_data_table.items():
+            region = mw.get_region(region_name, p)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in locations_to_create.items()
+                if location_data.region == region_name
+            }, NineSolsLocation)
 
-    # add access rules to the created locations
-    for ld in locations_data:
-        if ld["name"] in locations_to_create:
-            rule, _ = get_combined_access_rule(ld, world)
-            set_rule(mw.get_location(ld["name"], p), rule)
+            exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
+            for connection in exit_connections:
+                rule = get_combined_rb_rule(connection, world)
+                world.create_entrance(region, mw.get_region(connection["to"], p), rule)
+
+        # add access rules to the created locations
+        for ld in locations_data:
+            if ld["name"] in locations_to_create:
+                rule = get_combined_rb_rule(ld, world)
+                world.set_rule(mw.get_location(ld["name"], p), rule)
+
+    except ImportError: # use our pre-RB code instead
+        # add locations and connections to each region
+        for region_name, region_data in region_data_table.items():
+            region = mw.get_region(region_name, p)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in locations_to_create.items()
+                if location_data.region == region_name
+            }, NineSolsLocation)
+
+            exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
+            for connection in exit_connections:
+                rule, indirect_region_names = get_combined_access_rule(connection, world)
+                entrance = region.connect(mw.get_region(connection["to"], p), None, rule)
+                for indirect_region_name in indirect_region_names:
+                    mw.register_indirect_condition(mw.get_region(indirect_region_name, p), entrance)
+
+        # add access rules to the created locations
+        for ld in locations_data:
+            if ld["name"] in locations_to_create:
+                rule, _ = get_combined_access_rule(ld, world)
+                set_rule(mw.get_location(ld["name"], p), rule)
 
     world.origin_region_name = "FSP - Root Node"
     if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
@@ -240,6 +263,37 @@ def create_regions(world: "NineSolsWorld") -> None:
     mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
 
 # `logic` can be a location or a connection
+def get_combined_rb_rule(logic: Any, world: "NineSolsWorld") -> Any:  # TODO: proper return type when 0.6.7 is the minimum
+    vanilla_requires = logic["requires"] if "requires" in logic else None
+
+    medium_requires = None
+    if "medium_requires" in logic:
+        if world.options.logic_difficulty >= LogicDifficulty.option_medium:
+            medium_requires = logic["medium_requires"]
+        elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_vanilla:
+            medium_requires = [{"item": world.glitches_item_name}] + logic["medium_requires"]
+
+    ls_requires = None
+    if "ls_requires" in logic:
+        if world.options.logic_difficulty >= LogicDifficulty.option_ledge_storage:
+            ls_requires = logic["ls_requires"]
+        elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_medium:
+            ls_requires = [{"item": world.glitches_item_name}] + logic["ls_requires"]
+
+    all_requires_levels = [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]
+    if len(all_requires_levels) == 0:
+        from rule_builder.rules import False_
+        return False_()
+    elif all(len(r) == 0 for r in all_requires_levels):
+        from rule_builder.rules import True_
+        return True_()
+    else:
+        requires = all_requires_levels[0] if len(all_requires_levels) == 1 else [{"anyOf": all_requires_levels}]
+        # RB could do this optimization, but I've already implemented it here, so that's easier that porting to OptionFilters
+        requires = pre_eval_option_criteria_in_rule(world.options, requires)
+        return eval_rb_rule(requires, world.options)
+
+
 def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> tuple[CollectionRule, list[str]]:
     vanilla_requires = logic["requires"] if "requires" in logic else None
 
@@ -278,6 +332,52 @@ def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> tuple[Collec
 
 # In particular: this eval_rule() function is the main piece of code which will have to
 # be implemented in both languages, so it's important we keep the implementations in sync
+def eval_rb_rule(rule: list[Any], options: NineSolsGameOptions) -> Any:  # TODO: proper return type when 0.6.7 is the minimum
+    from rule_builder.rules import True_
+
+    rb_rule = True_()
+    for criterion in rule:
+        rb_rule &= eval_rb_criterion(criterion, options)
+    return rb_rule
+
+
+def eval_rb_criterion(criterion: Any, options: NineSolsGameOptions) -> Any:  # TODO: proper return type when 0.6.7 is the minimum
+    from rule_builder.rules import Has, HasGroup, CanReachLocation, CanReachRegion, True_, False_
+
+    if isinstance(criterion, list):
+        rule = True_()
+        for sub_criterion in criterion:
+            rule &= eval_rb_criterion(sub_criterion, options)
+        return rule
+
+    if isinstance(criterion, dict):
+        # we can ignore "option" criteria here, because those should have been "pre-eval"ed already
+        key, value = next(iter(criterion.items()))
+        if (key == "item" or key == "item_group") and isinstance(value, str):
+            count = 1
+            if "count" in criterion:
+                count = criterion["count"]
+            if "count_option" in criterion:
+                count = getattr(options, criterion["count_option"]).value
+
+            if key == "item_group":
+                return HasGroup(value, count)
+            return Has(value, count)
+        elif key == "count":
+            raise ValueError("Apparently dict iteration can hit 'count' first?: " + json.dumps(criterion))
+        elif key == "anyOf" and isinstance(value, list):
+            rule = False_()
+            for sub_criterion in value:
+                rule |= eval_rb_criterion(sub_criterion, options)
+            return rule
+        elif key == "location" and isinstance(value, str):
+            return CanReachLocation(value)
+        elif key == "region" and isinstance(value, str):
+            return CanReachRegion(value)
+
+    raise ValueError("Unable to evaluate rule criterion: " + json.dumps(criterion))
+
+
 def eval_rule(state: CollectionState, p: int, options: NineSolsGameOptions, rule: list[Any]) -> bool:
     return all(eval_criterion(state, p, options, criterion) for criterion in rule)
 
