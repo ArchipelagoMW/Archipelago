@@ -1017,7 +1017,7 @@
     },
     {
         "address": 2402, "name": "Prison: Lower Left Cell",
-        "region": "Prison - Up To Root Node", "requires": []
+        "region": "Prison - Up To Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
     },
     {
         "address": 2403, "name": "Prison: Above Stairs on Second Level",
