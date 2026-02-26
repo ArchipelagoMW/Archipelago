@@ -6,8 +6,9 @@ from typing_extensions import override
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart
-from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Toggle
+from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Range, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
+from rule_builder.field_resolvers import FieldResolver, FromOption, FromWorldAttr, resolve_field
 from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
     And,
@@ -59,12 +60,20 @@ class SetOption(OptionSet):
     valid_keys: ClassVar[set[str]] = {"one", "two", "three"}  # pyright: ignore[reportIncompatibleVariableOverride]
 
 
+class RangeOption(Range):
+    auto_display_name = True
+    range_start = 1
+    range_end = 10
+    default = 5
+
+
 @dataclass
 class RuleBuilderOptions(PerGameCommonOptions):
     toggle_option: ToggleOption
     choice_option: ChoiceOption
     text_option: FreeTextOption
     set_option: SetOption
+    range_option: RangeOption
 
 
 GAME_NAME = "Rule Builder Test Game"
@@ -651,14 +660,15 @@ class TestRules(RuleBuilderTestCase):
         self.assertFalse(resolved_rule(self.state))
 
     def test_has_any_count(self) -> None:
-        item_counts = {"Item 1": 1, "Item 2": 2}
+        item_counts: dict[str, int | FieldResolver] = {"Item 1": 1, "Item 2": 2}
         rule = HasAnyCount(item_counts)
         resolved_rule = rule.resolve(self.world)
         self.world.register_rule_dependencies(resolved_rule)
 
         for item_name, count in item_counts.items():
             item = self.world.create_item(item_name)
-            for _ in range(count):
+            num_items = resolve_field(count, self.world, int)
+            for _ in range(num_items):
                 self.assertFalse(resolved_rule(self.state))
                 self.state.collect(item)
             self.assertTrue(resolved_rule(self.state))
@@ -755,7 +765,7 @@ class TestSerialization(RuleBuilderTestCase):
 
     rule: ClassVar[Rule[Any]] = And(
         Or(
-            Has("i1", count=4),
+            Has("i1", count=FromOption(RangeOption)),
             HasFromList("i2", "i3", "i4", count=2),
             HasAnyCount({"i5": 2, "i6": 3}),
             options=[OptionFilter(ToggleOption, 0)],
@@ -763,7 +773,7 @@ class TestSerialization(RuleBuilderTestCase):
         Or(
             HasAll("i7", "i8"),
             HasAllCounts(
-                {"i9": 1, "i10": 5},
+                {"i9": 1, "i10": FromWorldAttr("instance_data.i10_count")},
                 options=[OptionFilter(ToggleOption, 1, operator="ne")],
                 filtered_resolution=True,
             ),
@@ -803,7 +813,14 @@ class TestSerialization(RuleBuilderTestCase):
                         "rule": "Has",
                         "options": [],
                         "filtered_resolution": False,
-                        "args": {"item_name": "i1", "count": 4},
+                        "args": {
+                            "item_name": "i1",
+                            "count": {
+                                "resolver": "FromOption",
+                                "option": "test.general.test_rule_builder.RangeOption",
+                                "field": "value",
+                            },
+                        },
                     },
                     {
                         "rule": "HasFromList",
@@ -840,7 +857,12 @@ class TestSerialization(RuleBuilderTestCase):
                             },
                         ],
                         "filtered_resolution": True,
-                        "args": {"item_counts": {"i9": 1, "i10": 5}},
+                        "args": {
+                            "item_counts": {
+                                "i9": 1,
+                                "i10": {"resolver": "FromWorldAttr", "name": "instance_data.i10_count"},
+                            }
+                        },
                     },
                     {
                         "rule": "CanReachRegion",
@@ -915,7 +937,7 @@ class TestSerialization(RuleBuilderTestCase):
         multiworld = setup_solo_multiworld(self.world_cls, steps=(), seed=0)
         world = multiworld.worlds[1]
         deserialized_rule = world.rule_from_dict(self.rule_dict)
-        self.assertEqual(deserialized_rule, self.rule, str(deserialized_rule))
+        self.assertEqual(deserialized_rule, self.rule, f"\n{deserialized_rule}\n{self.rule}")
 
 
 class TestExplain(RuleBuilderTestCase):
@@ -1334,3 +1356,32 @@ class TestExplain(RuleBuilderTestCase):
             "& False)",
         )
         assert str(self.resolved_rule) == " ".join(expected)
+
+
+@classvar_matrix(
+    rules=(
+        (
+            Has("A", FromOption(RangeOption)),
+            Has.Resolved("A", count=5, player=1),
+        ),
+        (
+            Has("B", FromWorldAttr("pre_calculated")),
+            Has.Resolved("B", count=3, player=1),
+        ),
+        (
+            Has("C", FromWorldAttr("instance_data.key")),
+            Has.Resolved("C", count=7, player=1),
+        ),
+    )
+)
+class TestFieldResolvers(RuleBuilderTestCase):
+    rules: ClassVar[tuple[Rule[Any], Rule.Resolved]]
+
+    def test_simplify(self) -> None:
+        multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
+        world = multiworld.worlds[1]
+        world.pre_calculated = 3  # pyright: ignore[reportAttributeAccessIssue]
+        world.instance_data = {"key": 7}  # pyright: ignore[reportAttributeAccessIssue]
+        rule, expected = self.rules
+        resolved_rule = rule.resolve(world)
+        self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
