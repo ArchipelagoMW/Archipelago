@@ -153,6 +153,27 @@ location_name_groups = {
 }
 
 
+root_node_to_region_name: dict[int, str] = {
+    FirstRootNode.option_apeman_facility_monitoring: "AF (Monitoring) - Root Node",
+    FirstRootNode.option_galactic_dock: "Galactic Dock - Root Node & Right Exit",
+    FirstRootNode.option_power_reservoir_east: "PR (East) - Root Node",
+    FirstRootNode.option_lake_yaochi_ruins: "LYR - Root Node",
+    FirstRootNode.option_yinglong_canal: "Yinglong Canal - Root Node",
+    FirstRootNode.option_factory_great_hall: "Factory (GH) - Lower Levels & Root Node",
+    FirstRootNode.option_outer_warehouse: "OW - Root Node & Middle Exits",
+    FirstRootNode.option_grotto_of_scriptures_entry: "GoS (Entry) - Root Node",
+    FirstRootNode.option_grotto_of_scriptures_east: "GoS (East) - Root Node",
+    FirstRootNode.option_grotto_of_scriptures_west: "GoS (West) - Root Node",
+    FirstRootNode.option_agrarian_hall: "Agrarian Hall - Root Node",
+    FirstRootNode.option_radiant_pagoda: "Radiant Pagoda - Root Node",
+    FirstRootNode.option_apeman_facility_depths: "AF (Depths) - Root Node",
+    FirstRootNode.option_central_transport_hub: "CTH - Root Node",
+    FirstRootNode.option_factory_underground: "Factory (U) - Root Node & Lower Elevator",
+    FirstRootNode.option_inner_warehouse: "IW - Root Node",
+    FirstRootNode.option_power_reservoir_west: "PR (West) - Root Node",
+}
+
+
 region_data_table: dict[str, NineSolsRegionData] = {}
 
 
@@ -226,43 +247,7 @@ def create_regions(world: "NineSolsWorld") -> None:
                 set_rule(mw.get_location(ld["name"], p), rule)
 
     world.origin_region_name = "FSP - Root Node"
-    if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
-        first_node_region = "AF (Monitoring) - Root Node"
-    elif options.first_root_node == FirstRootNode.option_galactic_dock:
-        first_node_region = "Galactic Dock - Root Node & Right Exit"
-    elif options.first_root_node == FirstRootNode.option_power_reservoir_east:
-        first_node_region = "PR (East) - Root Node"
-    elif options.first_root_node == FirstRootNode.option_lake_yaochi_ruins:
-        first_node_region = "LYR - Root Node"
-    elif options.first_root_node == FirstRootNode.option_yinglong_canal:
-        first_node_region = "Yinglong Canal - Root Node"
-    elif options.first_root_node == FirstRootNode.option_factory_great_hall:
-        first_node_region = "Factory (GH) - Lower Levels & Root Node"
-    elif options.first_root_node == FirstRootNode.option_outer_warehouse:
-        first_node_region = "OW - Root Node & Middle Exits"
-    elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_entry:
-        first_node_region = "GoS (Entry) - Root Node"
-    elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_east:
-        first_node_region = "GoS (East) - Root Node"
-    elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
-        first_node_region = "GoS (West) - Root Node"
-    elif options.first_root_node == FirstRootNode.option_agrarian_hall:
-        first_node_region = "Agrarian Hall - Root Node"
-    elif options.first_root_node == FirstRootNode.option_radiant_pagoda:
-        first_node_region = "Radiant Pagoda - Root Node"
-    elif options.first_root_node == FirstRootNode.option_apeman_facility_depths:
-        first_node_region = "AF (Depths) - Root Node"
-    elif options.first_root_node == FirstRootNode.option_central_transport_hub:
-        first_node_region = "CTH - Root Node"
-    elif options.first_root_node == FirstRootNode.option_factory_underground:
-        first_node_region = "Factory (U) - Root Node & Lower Elevator"
-    elif options.first_root_node == FirstRootNode.option_inner_warehouse:
-        first_node_region = "IW - Root Node"
-    elif options.first_root_node == FirstRootNode.option_power_reservoir_west:
-        first_node_region = "PR (West) - Root Node"
-    else:
-        raise Exception("Unrecognized first_root_node")
-
+    first_node_region = root_node_to_region_name[options.first_root_node.value]
     mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
 
 # `logic` can be a location or a connection
