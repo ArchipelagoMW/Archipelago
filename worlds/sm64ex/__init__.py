@@ -75,6 +75,9 @@ class SM64World(World):
             max_stars -= len(painting_unlock_item_data_table) # free up space for the required paintings
         self.number_of_stars = min(self.options.amount_of_stars, max_stars)
         self.filler_count = max_stars - self.number_of_stars
+        # If we have all the max-coins locations, we need much more filler
+        if self.options.enable_progress_max_coins:
+            self.filler_count += 150 # There's a lot of them!
         self.star_costs = {
             'FirstBowserDoorCost': round(self.options.first_bowser_star_door_cost * self.number_of_stars / 100),
             'BasementDoorCost': round(self.options.basement_star_door_cost * self.number_of_stars / 100),
@@ -207,6 +210,7 @@ class SM64World(World):
             "AreaRando": self.area_connections,
             "MoveRandoVec": self.move_rando_bitvec,
             "PaintingRando": self.options.enable_locked_paintings.value,
+            "ProgressiveMaxCoins": self.options.enable_progress_max_coins.value,
             "DeathLink": self.options.death_link.value,
             "CompletionType": self.options.completion_type.value,
             **self.star_costs
