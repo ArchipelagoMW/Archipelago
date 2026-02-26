@@ -82,6 +82,29 @@ The list of possible locations that can contain a bounty:
 - Transport to Remembrance
 - Goddess of Fate cup and Hades Paradox cup
 
+For players looking for a more casual experience with the Hitlist goal, there is an "Add Casual Bounties" option to introduce more bounty locations.<br>
+The list of possible bounty locations that get added with this setting enabled:
+
+- Future Pete
+- TT3 Bond of Flame
+- Grim Reaper 2
+- 1000 Heartless
+- Winner's Proof
+- Experiment
+- Groundshaker
+- Hades
+- Genie Jafar
+- Xaldin
+- Storm Rider
+- MCP
+- STT Post Axel 2 Chest
+- Xemnas 1
+- Xigbar
+- Level 50 (Depending on choice of level checks.)
+- Level 99 (Depending on choice of level checks.)
+
+For those who only want the casual bounty locations, you can effectively disable the normal bounty locations by excluding the "General Bounties" location group.
+
 ## Quality of life:
 
 
