@@ -28,15 +28,16 @@ class TestOptions(unittest.TestCase):
                                 f" {gamename} does not resolve to a listed value!"
                             )
                         # Standard "can default generate" test
-                        err_raised = False
+                        err_raised = None
                         try:
                             option.from_any(option.default)
-                        except Exception:
-                            err_raised = True
-                        self.assertFalse(err_raised,
+                        except Exception as ex:
+                            err_raised = ex
+                        self.assertIsNone(err_raised,
                             f"Default value {option.default} for option {option.__name__} in {gamename}"
-                             f" is not valid!"
+                            f" is not valid! Exception: {err_raised}"
                         )
+
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
