@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional, Union
+from typing import TYPE_CHECKING, NamedTuple, cast
 
 from BaseClasses import CollectionState
 
@@ -163,14 +163,14 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     # We also need a way from Town to Tunnels.
 
     return (
-        any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in two_way_entrance_register["Outside Windmill", "Windmill Interior"])
+        (any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in two_way_entrance_register["Outside Windmill", "Windmill Interior"]))
         or any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Town"])
     )
 
 
 def _has_item(item: str, world: "WitnessWorld",
-              player_logic: WitnessPlayerLogic) -> Union[CollectionRule, SimpleItemRepresentation]:
+              player_logic: WitnessPlayerLogic) -> CollectionRule | SimpleItemRepresentation:
     """
     Convert a single element of a WitnessRule into a CollectionRule, unless it is referring to an item,
     in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
@@ -210,8 +210,8 @@ def _has_item(item: str, world: "WitnessWorld",
     return simple_rule
 
 
-def optimize_requirement_option(requirement_option: List[Union[CollectionRule, SimpleItemRepresentation]])\
-        -> List[Union[CollectionRule, SimpleItemRepresentation]]:
+def optimize_requirement_option(requirement_option: list[CollectionRule | SimpleItemRepresentation])\
+        -> list[CollectionRule | SimpleItemRepresentation]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
@@ -220,7 +220,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     if not direct_items:
         return requirement_option
 
-    max_per_item: Dict[str, int] = Counter()
+    max_per_item: dict[str, int] = Counter()
     for item_rule in direct_items:
         max_per_item[item_rule[0]] = max(max_per_item[item_rule[0]], item_rule[1])
 
@@ -230,14 +230,17 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     ]
 
 
-def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],
-                               player: int) -> List[CollectionRule]:
+def convert_requirement_option(requirement: list[CollectionRule | SimpleItemRepresentation],
+                               player: int) -> list[CollectionRule]:
     """
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
     """
 
-    collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
+    collection_rules = cast(
+        list[CollectionRule],
+        [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
+    )
     item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
 
     if len(item_rules) == 0:
@@ -268,7 +271,7 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
     return collection_rules + item_rules_converted
 
 
-def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
+def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> CollectionRule | None:
     """
     Converts a WitnessRule into a CollectionRule.
     """
@@ -296,7 +299,7 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     )
 
 
-def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRule]:
+def make_lambda(entity_hex: str, world: "WitnessWorld") -> CollectionRule | None:
     """
     Lambdas are created in a for loop so values need to be captured
     """
@@ -315,25 +318,25 @@ def set_rules(world: "WitnessWorld") -> None:
     Sets all rules for all locations
     """
 
-    for location in world.player_locations.CHECK_LOCATION_TABLE:
-        real_location = location
+    for location_name in world.player_locations.CHECK_LOCATION_TABLE:
+        real_location_name = location_name
 
-        if location in world.player_locations.EVENT_LOCATION_TABLE:
-            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+        if location_name in world.player_locations.EVENT_LOCATION_TABLE:
+            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location_name][1]
             if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
-                set_rule(world.get_location(location), make_region_lambda(entity_hex_or_region_name, world))
+                set_rule(world.get_location(location_name), make_region_lambda(entity_hex_or_region_name, world))
                 continue
 
-            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
+            real_location_name = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
 
-        associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
+        associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location_name]
         entity_hex = associated_entity["entity_hex"]
 
         rule = make_lambda(entity_hex, world)
         if rule is None:
             continue
 
-        location = world.get_location(location)
+        location = world.get_location(location_name)
 
         set_rule(location, rule)
 

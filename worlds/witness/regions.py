@@ -3,7 +3,7 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
+from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
 
@@ -37,11 +37,11 @@ class WitnessPlayerRegions:
             self.reference_logic = static_witness_logic.vanilla
 
         self.player_locations = player_locations
-        self.two_way_entrance_register: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
-        self.created_region_names: Set[str] = set()
+        self.two_way_entrance_register: dict[tuple[str, str], list[Entrance]] = defaultdict(lambda: [])
+        self.created_region_names: set[str] = set()
 
     @staticmethod
-    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
+    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> CollectionRule | None:
         from .rules import _meets_item_requirements
 
         """
@@ -52,7 +52,7 @@ class WitnessPlayerRegions:
         return _meets_item_requirements(item_requirement, world)
 
     def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: WitnessRule,
-                            regions_by_name: Dict[str, Region]) -> None:
+                            regions_by_name: dict[str, Region]) -> None:
         """
         connect two regions and set the corresponding requirement
         """
@@ -107,15 +107,15 @@ class WitnessPlayerRegions:
         """
         from . import create_region
 
-        all_locations: Set[str] = set()
-        regions_by_name: Dict[str, Region] = {}
+        all_locations: set[str] = set()
+        regions_by_name: dict[str, Region] = {}
 
         regions_to_create = {
             k: v for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
             if k not in player_logic.UNREACHABLE_REGIONS
         }
 
-        event_locations_per_region: Dict[str, Dict[str, int]] = defaultdict(dict)
+        event_locations_per_region: dict[str, dict[str, int]] = defaultdict(dict)
 
         for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
             entity_or_region = event_item_and_entity[1]
@@ -162,6 +162,6 @@ class WitnessPlayerRegions:
 
         world.multiworld.regions += regions_by_name.values()
 
-        for region_name, region in regions_to_create.items():
+        for region_name in regions_to_create:
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
