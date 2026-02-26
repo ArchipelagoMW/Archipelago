@@ -18,6 +18,11 @@ except ImportError:
 if typing.TYPE_CHECKING:
     from . import NineSolsWorld
 
+from worlds.generic.Rules import CollectionRule
+
+rule_table: dict[str, CollectionRule] = {
+    "sword": lambda state: state.has("Sword"),
+}
 
 class NineSolsLocation(Location):
     game = "Nine Sols"
@@ -178,17 +183,20 @@ def create_regions(world: "NineSolsWorld") -> None:
     for region_name in region_data_table.keys():
         mw.regions.append(Region(region_name, p, mw))
 
+    # add locations to each region
+    for region_name, region_data in region_data_table.items():
+        region = mw.get_region(region_name, p)
+        region.add_locations({
+            location_name: location_data.address for location_name, location_data in locations_to_create.items()
+            if location_data.region == region_name
+        }, NineSolsLocation)
+
     try:
         from rule_builder.rules import Has  # we don't use it yet, this is just to branch on whether it's available
 
-        # add locations and connections to each region
+        # add connections to each region
         for region_name, region_data in region_data_table.items():
             region = mw.get_region(region_name, p)
-            region.add_locations({
-                location_name: location_data.address for location_name, location_data in locations_to_create.items()
-                if location_data.region == region_name
-            }, NineSolsLocation)
-
             exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
             for connection in exit_connections:
                 rule = get_combined_rb_rule(connection, world)
@@ -201,14 +209,9 @@ def create_regions(world: "NineSolsWorld") -> None:
                 world.set_rule(mw.get_location(ld["name"], p), rule)
 
     except ImportError: # use our pre-RB code instead
-        # add locations and connections to each region
+        # add connections to each region
         for region_name, region_data in region_data_table.items():
             region = mw.get_region(region_name, p)
-            region.add_locations({
-                location_name: location_data.address for location_name, location_data in locations_to_create.items()
-                if location_data.region == region_name
-            }, NineSolsLocation)
-
             exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
             for connection in exit_connections:
                 rule, indirect_region_names = get_combined_access_rule(connection, world)
@@ -264,23 +267,7 @@ def create_regions(world: "NineSolsWorld") -> None:
 
 # `logic` can be a location or a connection
 def get_combined_rb_rule(logic: Any, world: "NineSolsWorld") -> Any:  # TODO: proper return type when 0.6.7 is the minimum
-    vanilla_requires = logic["requires"] if "requires" in logic else None
-
-    medium_requires = None
-    if "medium_requires" in logic:
-        if world.options.logic_difficulty >= LogicDifficulty.option_medium:
-            medium_requires = logic["medium_requires"]
-        elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_vanilla:
-            medium_requires = [{"item": world.glitches_item_name}] + logic["medium_requires"]
-
-    ls_requires = None
-    if "ls_requires" in logic:
-        if world.options.logic_difficulty >= LogicDifficulty.option_ledge_storage:
-            ls_requires = logic["ls_requires"]
-        elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_medium:
-            ls_requires = [{"item": world.glitches_item_name}] + logic["ls_requires"]
-
-    all_requires_levels = [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]
+    all_requires_levels = get_all_requires_levels(logic, world)
     if len(all_requires_levels) == 0:
         from rule_builder.rules import False_
         return False_()
@@ -295,6 +282,21 @@ def get_combined_rb_rule(logic: Any, world: "NineSolsWorld") -> Any:  # TODO: pr
 
 
 def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> tuple[CollectionRule, list[str]]:
+    all_requires_levels = get_all_requires_levels(logic, world)
+    if len(all_requires_levels) == 0:
+        return lambda state: False, []
+    elif all(len(r) == 0 for r in all_requires_levels):
+        return lambda state: True, []
+    else:
+        requires = all_requires_levels[0] if len(all_requires_levels) == 1 else [{"anyOf": all_requires_levels}]
+        requires = pre_eval_option_criteria_in_rule(world.options, requires)
+        return (
+            lambda state, r=requires: eval_rule(state, world.player, world.options, r),  # noqa
+            regions_referenced_by_rule(requires)
+        )
+
+
+def get_all_requires_levels(logic: Any, world: "NineSolsWorld") -> Any:
     vanilla_requires = logic["requires"] if "requires" in logic else None
 
     medium_requires = None
@@ -311,18 +313,7 @@ def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> tuple[Collec
         elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_medium:
             ls_requires = [{"item": world.glitches_item_name}] + logic["ls_requires"]
 
-    all_requires_levels = [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]
-    if len(all_requires_levels) == 0:
-        return lambda state: False, []
-    elif all(len(r) == 0 for r in all_requires_levels):
-        return lambda state: True, []
-    else:
-        requires = all_requires_levels[0] if len(all_requires_levels) == 1 else [{"anyOf": all_requires_levels}]
-        requires = pre_eval_option_criteria_in_rule(world.options, requires)
-        return (
-            lambda state, r=requires: eval_rule(state, world.player, world.options, r),  # noqa
-            regions_referenced_by_rule(requires)
-        )
+    return [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]
 
 
 # In the .jsonc files we use, a location or region connection's "access rule" is defined
