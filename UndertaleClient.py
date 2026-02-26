@@ -161,7 +161,7 @@ class UndertaleContext(CommonContext):
             self.tags.add("Online")
         else:
             self.tags -= {"Online"}
-        if old_tags != self.tags and self.server and not self.server.socket.closed:
+        if old_tags != self.tags and self.server:
             async_start(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
 
     def on_package(self, cmd: str, args: dict):
