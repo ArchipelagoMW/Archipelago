@@ -335,7 +335,7 @@ class PanelHuntPlando(LocationSet):
 
     display_name = "Panel Hunt Plando"
 
-    valid_keys = [static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS]
+    valid_keys = [static_witness_logic.ENTITIES_BY_ID[entity_id].entity_name for entity_id in ALL_HUNTABLE_PANELS]
 
 
 class PuzzleRandomization(Choice):

@@ -20,8 +20,19 @@ class RegionDefinition:
     name: str
     short_name: str
     area: AreaDefinition
-    logical_entities: List[str] = field(default_factory=list)
-    physical_entities: List[str] = field(default_factory=list)
+    logical_entities: List[int] = field(default_factory=list)
+    physical_entities: List[int] = field(default_factory=list)
+
+
+@dataclass
+class EntityDefinition:
+    entity_name: str
+    entity_id: int
+    region: RegionDefinition | None
+    entity_type: str
+    location_type: str | None
+    area: AreaDefinition
+    order: int = 0
 
 
 class ConnectionDefinition(NamedTuple):

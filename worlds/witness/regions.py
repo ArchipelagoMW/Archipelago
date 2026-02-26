@@ -119,25 +119,25 @@ class WitnessPlayerRegions:
 
         for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
             entity_or_region = event_item_and_entity[1]
-            if entity_or_region in static_witness_logic.ALL_REGIONS_BY_NAME:
+            if isinstance(entity_or_region, str):
                 region_name = entity_or_region
                 order = -1
             else:
-                region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
+                region = static_witness_logic.ENTITIES_BY_ID[entity_or_region].region
                 if region is None:
                     region_name = "Entry"
                 else:
                     region_name = region.name
-                order = self.reference_logic.ENTITIES_BY_HEX[entity_or_region]["order"]
+                order = self.reference_logic.ENTITIES_BY_ID[entity_or_region].order
             event_locations_per_region[region_name][event_location] = order
 
         for region_name, region in regions_to_create.items():
             location_entities_for_this_region = [
-                self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region.logical_entities
+                self.reference_logic.ENTITIES_BY_ID[entity] for entity in region.logical_entities
             ]
             locations_for_this_region = {
-                entity["checkName"]: entity["order"] for entity in location_entities_for_this_region
-                if entity["checkName"] in self.player_locations.CHECK_LOCATION_TABLE
+                entity.entity_name: entity.order for entity in location_entities_for_this_region
+                if entity.entity_name in self.player_locations.CHECK_LOCATION_TABLE
             }
 
             events = event_locations_per_region[region_name]

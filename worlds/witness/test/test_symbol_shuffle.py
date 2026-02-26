@@ -69,12 +69,12 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
             self.assertTrue(self.get_items_by_name("Arrows", 4))
 
         with self.subTest("Test that Discards ask for Triangles in normal, but Arrows in expert."):
-            desert_discard = "0x17CE7"
+            desert_discard = 0x17CE7
             triangles = frozenset({frozenset({"Triangles"})})
             arrows = frozenset({frozenset({"Arrows"})})
             both = frozenset({frozenset({"Triangles", "Arrows"})})
 
-            self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
-            self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_HEX[desert_discard], arrows)
-            self.assertEqual(self.multiworld.worlds[3].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
-            self.assertEqual(self.multiworld.worlds[4].player_logic.REQUIREMENTS_BY_HEX[desert_discard], both)
+            self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_ENTITY_ID[desert_discard], triangles)
+            self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_ENTITY_ID[desert_discard], arrows)
+            self.assertEqual(self.multiworld.worlds[3].player_logic.REQUIREMENTS_BY_ENTITY_ID[desert_discard], triangles)
+            self.assertEqual(self.multiworld.worlds[4].player_logic.REQUIREMENTS_BY_ENTITY_ID[desert_discard], both)

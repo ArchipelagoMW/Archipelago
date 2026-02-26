@@ -70,7 +70,10 @@ class WitnessPlayerItems:
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
 
-            if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
+            if all(
+                not self._logic.solvability_guaranteed(entity_id)
+                for entity_id in item_data.definition.panel_entity_ids
+            ):
                 item_data.classification = ItemClassification.useful
 
             if item_data.definition.category == ItemCategory.LASER and self._world.options.shuffle_lasers == "local":
