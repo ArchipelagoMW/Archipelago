@@ -24,7 +24,7 @@ import uuid
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser, handle_url_arg
 from Utils import init_logging, is_windows, async_start
 from .item import item_names, item_parents, race_to_item_type
 from .item.item_annotations import ITEM_NAME_ANNOTATIONS
@@ -40,6 +40,7 @@ from .options import (
     SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms, VoidTradeWorkers,
     DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs,
     is_mission_in_soa_presence,
+    upgrade_included_names,
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionOrderObjectSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
@@ -71,9 +72,11 @@ from .mission_tables import (
 )
 
 import colorama
-from .options import Option, upgrade_included_names
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
+
+if typing.TYPE_CHECKING:
+    from Options import Option
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
 loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -81,7 +84,7 @@ nest_asyncio.apply(loop)
 MAX_BONUS: int = 28
 
 # GitHub repo where the Map/mod data is hosted for /download_data command
-DATA_REPO_OWNER = "Ziktofel"
+DATA_REPO_OWNER = "archipelago-sc2"
 DATA_REPO_NAME = "Archipelago-SC2-data"
 DATA_API_VERSION = "API4"
 
@@ -1298,20 +1301,15 @@ class CompatItemHolder(typing.NamedTuple):
     quantity: int = 1
 
 
-def parse_uri(uri: str) -> str:
-    if "://" in uri:
-        uri = uri.split("://", 1)[1]
-    return uri.split('?', 1)[0]
-
-
-async def main():
+async def main(args: typing.Sequence[str] | None):
     multiprocessing.freeze_support()
     parser = get_base_parser()
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
-    args, uri = parser.parse_known_args()
+    args, uri = parser.parse_known_args(args)
 
     if uri and uri[0].startswith('archipelago://'):
-        args.connect = parse_uri(' '.join(uri))
+        args.url = uri[0]
+        handle_url_arg(args, parser)
 
     ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
@@ -2346,7 +2344,7 @@ def force_settings_save_on_close() -> None:
     _has_forced_save = True
 
 
-def launch():
+def launch(*args: str):
     colorama.just_fix_windows_console()
-    asyncio.run(main())
+    asyncio.run(main(args))
     colorama.deinit()
