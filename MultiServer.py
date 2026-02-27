@@ -271,7 +271,7 @@ class Context:
             compatibility: int = 2,
             log_network: bool = False,
             games_package_cache: GamesPackageCache | None = None,
-            logger: logging.Logger = logging.getLogger()
+            logger: logging.Logger = logging.getLogger(),
     ) -> None:
         self.logger = logger
         super(Context, self).__init__()

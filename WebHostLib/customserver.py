@@ -232,7 +232,7 @@ def run_server_process(
         cert_key_file: typing.Optional[str],
         host: str,
         rooms_to_run: multiprocessing.Queue,
-        rooms_shutting_down: multiprocessing.Queue
+        rooms_shutting_down: multiprocessing.Queue,
 ) -> None:
     import gc
 
