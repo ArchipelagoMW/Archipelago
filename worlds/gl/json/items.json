@@ -1,0 +1,574 @@
+[
+  {
+    "id": 77780000,
+    "item_name": "Key",
+    "progression": 0,
+    "rom_id": "0x0000",
+    "frequency": 700
+  },
+  {
+    "id": 77780001,
+    "item_name": "Lightning Potion",
+    "progression": 0,
+    "rom_id": "0x0101",
+    "frequency": 25
+  },
+  {
+    "id": 77780002,
+    "item_name": "Light Potion",
+    "progression": 0,
+    "rom_id": "0x0102",
+    "frequency": 25
+  },
+  {
+    "id": 77780003,
+    "item_name": "Acid Potion",
+    "progression": 0,
+    "rom_id": "0x0103",
+    "frequency": 25
+  },
+  {
+    "id": 77780004,
+    "item_name": "Fire Potion",
+    "progression": 0,
+    "rom_id": "0x0104",
+    "frequency": 25
+  },
+  {
+    "id": 77780005,
+    "item_name": "Acid Breath",
+    "progression": 0,
+    "rom_id": "0x0212",
+    "frequency": 20
+  },
+  {
+    "id": 77780006,
+    "item_name": "Lightning Breath",
+    "progression": 0,
+    "rom_id": "0x0211",
+    "frequency": 20
+  },
+  {
+    "id": 77780007,
+    "item_name": "Fire Breath",
+    "progression": 0,
+    "rom_id": "0x0210",
+    "frequency": 20
+  },
+  {
+    "id": 77780008,
+    "item_name": "Light Amulet",
+    "progression": 0,
+    "rom_id": "0x0209",
+    "frequency": 20
+  },
+  {
+    "id": 77780009,
+    "item_name": "Acid Amulet",
+    "progression": 0,
+    "rom_id": "0x020A",
+    "frequency": 20
+  },
+  {
+    "id": 77780010,
+    "item_name": "Lightning Amulet",
+    "progression": 0,
+    "rom_id": "0x0208",
+    "frequency": 20
+  },
+  {
+    "id": 77780011,
+    "item_name": "Fire Amulet",
+    "progression": 0,
+    "rom_id": "0x0207",
+    "frequency": 20
+  },
+  {
+    "id": 77780012,
+    "item_name": "Lightning Shield",
+    "progression": 0,
+    "rom_id": "0x0218",
+    "frequency": 15
+  },
+  {
+    "id": 77780013,
+    "item_name": "Fire Shield",
+    "progression": 0,
+    "rom_id": "0x0217",
+    "frequency": 15
+  },
+  {
+    "id": 77780014,
+    "item_name": "Invisibility",
+    "progression": 0,
+    "rom_id": "0x0205",
+    "frequency": 15
+  },
+  {
+    "id": 77780015,
+    "item_name": "Levitate",
+    "progression": 0,
+    "rom_id": "0x021C",
+    "frequency": 10
+  },
+  {
+    "id": 77780016,
+    "item_name": "Speed Boots",
+    "progression": 0,
+    "rom_id": "0x0200",
+    "frequency": 30
+  },
+  {
+    "id": 77780017,
+    "item_name": "3-Way Shot",
+    "progression": 0,
+    "rom_id": "0x0204",
+    "frequency": 15
+  },
+  {
+    "id": 77780018,
+    "item_name": "5-Way Shot",
+    "progression": 0,
+    "rom_id": "0x020E",
+    "frequency": 15
+  },
+  {
+    "id": 77780019,
+    "item_name": "Rapid Fire",
+    "progression": 0,
+    "rom_id": "0x021A",
+    "frequency": 15
+  },
+  {
+    "id": 77780020,
+    "item_name": "Reflective Shot",
+    "progression": 0,
+    "rom_id": "0x0202",
+    "frequency": 10
+  },
+  {
+    "id": 77780021,
+    "item_name": "Reflective Shield",
+    "progression": 0,
+    "rom_id": "0x0216",
+    "frequency": 10
+  },
+  {
+    "id": 77780022,
+    "item_name": "Super Shot",
+    "progression": 0,
+    "rom_id": "0x0203",
+    "frequency": 15
+  },
+  {
+    "id": 77780023,
+    "item_name": "Timestop",
+    "progression": 0,
+    "rom_id": "0x020C",
+    "frequency": 15
+  },
+  {
+    "id": 77780024,
+    "item_name": "Phoenix Familiar",
+    "progression": 0,
+    "rom_id": "0x0213",
+    "frequency": 20
+  },
+  {
+    "id": 77780025,
+    "item_name": "Growth",
+    "progression": 0,
+    "rom_id": "0x0214",
+    "frequency": 20
+  },
+  {
+    "id": 77780026,
+    "item_name": "Shrink",
+    "progression": 0,
+    "rom_id": "0x0215",
+    "frequency": 15
+  },
+  {
+    "id": 77780027,
+    "item_name": "Thunder Hammer",
+    "progression": 0,
+    "rom_id": "0x0219",
+    "frequency": 15
+  },
+  {
+    "id": 77780028,
+    "item_name": "Anti-Death Halo",
+    "progression": 0,
+    "rom_id": "0x020D",
+    "frequency": 15
+  },
+  {
+    "id": 77780029,
+    "item_name": "Invulnerability",
+    "progression": 0,
+    "rom_id": "0x0206",
+    "frequency": 15
+  },
+  {
+    "id": 77780030,
+    "item_name": "Fruit",
+    "progression": 0,
+    "rom_id": "0x0401",
+    "frequency": 250
+  },
+  {
+    "id": 77780031,
+    "item_name": "Meat",
+    "progression": 0,
+    "rom_id": "0x0403",
+    "frequency": 200
+  },
+  {
+    "id": 77780032,
+    "item_name": "Runestone 1",
+    "progression": 1,
+    "rom_id": "0x1501"
+  },
+  {
+    "id": 77780033,
+    "item_name": "Runestone 2",
+    "progression": 1,
+    "rom_id": "0x1502"
+  },
+  {
+    "id": 77780034,
+    "item_name": "Runestone 3",
+    "progression": 1,
+    "rom_id": "0x1503"
+  },
+  {
+    "id": 77780035,
+    "item_name": "Runestone 4",
+    "progression": 1,
+    "rom_id": "0x1504"
+  },
+  {
+    "id": 77780036,
+    "item_name": "Runestone 5",
+    "progression": 1,
+    "rom_id": "0x1505"
+  },
+  {
+    "id": 77780037,
+    "item_name": "Runestone 6",
+    "progression": 1,
+    "rom_id": "0x1506"
+  },
+  {
+    "id": 77780038,
+    "item_name": "Runestone 7",
+    "progression": 1,
+    "rom_id": "0x1507"
+  },
+  {
+    "id": 77780039,
+    "item_name": "Runestone 8",
+    "progression": 1,
+    "rom_id": "0x1508"
+  },
+  {
+    "id": 77780040,
+    "item_name": "Runestone 9",
+    "progression": 1,
+    "rom_id": "0x1509"
+  },
+  {
+    "id": 77780041,
+    "item_name": "Runestone 10",
+    "progression": 1,
+    "rom_id": "0x150A"
+  },
+  {
+    "id": 77780042,
+    "item_name": "Runestone 11",
+    "progression": 1,
+    "rom_id": "0x150B"
+  },
+  {
+    "id": 77780043,
+    "item_name": "Runestone 12",
+    "progression": 1,
+    "rom_id": "0x150C"
+  },
+  {
+    "id": 77780044,
+    "item_name": "Runestone 13",
+    "progression": 1,
+    "rom_id": "0x150D"
+  },
+  {
+    "id": 77780045,
+    "item_name": "Dragon Mirror Shard",
+    "progression": 1,
+    "rom_id": "0x2B01"
+  },
+  {
+    "id": 77780046,
+    "item_name": "Yeti Mirror Shard",
+    "progression": 1,
+    "rom_id": "0x2B02"
+  },
+  {
+    "id": 77780047,
+    "item_name": "Chimera Mirror Shard",
+    "progression": 1,
+    "rom_id": "0x2B03"
+  },
+  {
+    "id": 77780048,
+    "item_name": "Plague Fiend Mirror Shard",
+    "progression": 1,
+    "rom_id": "0x2B04"
+  },
+  {
+    "id": 77780049,
+    "item_name": "Ice Axe of Untar",
+    "progression": 2,
+    "rom_id": "0x2901"
+  },
+  {
+    "id": 77780050,
+    "item_name": "Flame of Tarkana",
+    "progression": 2,
+    "rom_id": "0x2902"
+  },
+  {
+    "id": 77780051,
+    "item_name": "Scimitar of Decapitation",
+    "progression": 2,
+    "rom_id": "0x2903"
+  },
+  {
+    "id": 77780052,
+    "item_name": "Marker's Javelin",
+    "progression": 2,
+    "rom_id": "0x2904"
+  },
+  {
+    "id": 77780053,
+    "item_name": "Soul Savior",
+    "progression": 2,
+    "rom_id": "0x2905"
+  },
+  {
+    "id": 77780054,
+    "item_name": "Gold",
+    "progression": 0,
+    "rom_id": "0x0302",
+    "frequency": 800
+  },
+  {
+    "id": 77780055,
+    "item_name": "Valley of Fire Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780056,
+    "item_name": "Dagger Peak Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780057,
+    "item_name": "Cliffs of Desolation Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780058,
+    "item_name": "Poisoned Fields Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780059,
+    "item_name": "Haunted Cemetery Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780060,
+    "item_name": "Castle Courtyard Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780061,
+    "item_name": "Dungeon of Torment Obelisk",
+    "progression": 1
+  },
+  {
+    "id": 77780062,
+    "item_name": "Death",
+    "progression": 4,
+    "rom_id": "0x2101"
+  },
+  {
+    "id": 77780063,
+    "item_name": "Poison Fruit",
+    "progression": 4,
+    "rom_id": "0x0402"
+  },
+  {
+    "id": 77780064,
+    "item_name": "Skorne's Mask",
+    "progression": 2,
+    "rom_id": "0x2A01"
+  },
+  {
+    "id": 77780065,
+    "item_name": "Skorne's Horns",
+    "progression": 2,
+    "rom_id": "0x2A02"
+  },
+  {
+    "id": 77780066,
+    "item_name": "Skorne's Right Gauntlet",
+    "progression": 2,
+    "rom_id": "0x2A03"
+  },
+  {
+    "id": 77780067,
+    "item_name": "Skorne's Left Gauntlet",
+    "progression": 2,
+    "rom_id": "0x2A04"
+  },
+  {
+    "id": 77780068,
+    "item_name": "Portal to Dagger Peak",
+    "progression": 1,
+    "rom_id": "0x2709"
+  },
+  {
+    "id": 77780069,
+    "item_name": "Portal to Cliffs of Desolation",
+    "progression": 1,
+    "rom_id": "0x270A"
+  },
+  {
+    "id": 77780070,
+    "item_name": "Portal to Lost Cave",
+    "progression": 1,
+    "rom_id": "0x270B"
+  },
+  {
+    "id": 77780071,
+    "item_name": "Portal to Volcanic Caverns",
+    "progression": 1,
+    "rom_id": "0x270C"
+  },
+  {
+    "id": 77780072,
+    "item_name": "Portal to Dragon's Lair",
+    "progression": 1,
+    "rom_id": "0x270D"
+  },
+  {
+    "id": 77780073,
+    "item_name": "Portal to Dungeon of Torment",
+    "progression": 1,
+    "rom_id": "0x270E"
+  },
+  {
+    "id": 77780074,
+    "item_name": "Portal to Tower Armory",
+    "progression": 1,
+    "rom_id": "0x270F"
+  },
+  {
+    "id": 77780075,
+    "item_name": "Portal to Castle Treasury",
+    "progression": 1,
+    "rom_id": "0x2710"
+  },
+  {
+    "id": 77780076,
+    "item_name": "Portal to Chimera's Keep",
+    "progression": 1,
+    "rom_id": "0x2711"
+  },
+  {
+    "id": 77780077,
+    "item_name": "Portal to Haunted Cemetery",
+    "progression": 1,
+    "rom_id": "0x2712"
+  },
+  {
+    "id": 77780078,
+    "item_name": "Portal to Venomous Spire",
+    "progression": 1,
+    "rom_id": "0x2713"
+  },
+  {
+    "id": 77780079,
+    "item_name": "Portal to Toxic Air Ship",
+    "progression": 1,
+    "rom_id": "0x2714"
+  },
+  {
+    "id": 77780080,
+    "item_name": "Portal to Vat of the Plague Fiend",
+    "progression": 1,
+    "rom_id": "0x2715"
+  },
+  {
+    "id": 77780081,
+    "item_name": "Portal to Frozen Camp",
+    "progression": 1,
+    "rom_id": "0x2716"
+  },
+  {
+    "id": 77780082,
+    "item_name": "Portal to Crystal Mine",
+    "progression": 1,
+    "rom_id": "0x2717"
+  },
+  {
+    "id": 77780083,
+    "item_name": "Portal to Erupting Fissure",
+    "progression": 1,
+    "rom_id": "0x2718"
+  },
+  {
+    "id": 77780084,
+    "item_name": "Portal to Yeti's Cavern",
+    "progression": 1,
+    "rom_id": "0x2719"
+  },
+  {
+    "id": 77780085,
+    "item_name": "Portal to Fortified Towers",
+    "progression": 1,
+    "rom_id": "0x271A"
+  },
+  {
+    "id": 77780086,
+    "item_name": "Portal to Infernal Fortress",
+    "progression": 1,
+    "rom_id": "0x271B"
+  },
+  {
+    "id": 77780087,
+    "item_name": "Crossbow Shooter",
+    "progression": 4,
+    "rom_id": "0x05030411"
+  },
+  {
+    "id": 77780088,
+    "item_name": "Bomb Thrower",
+    "progression": 4,
+    "rom_id": "0x05030511"
+  },
+  {
+    "id": 77780089,
+    "item_name": "Bomb Runner",
+    "progression": 4,
+    "rom_id": "0x05030612"
+  },
+  {
+    "id": 77780090,
+    "item_name": "Golem",
+    "progression": 4,
+    "rom_id": "0x05080113"
+  }
+]
