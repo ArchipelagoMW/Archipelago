@@ -190,8 +190,16 @@ class Level:
         self.room_connections = room_connections.copy()
 
 
-def load_logic_data() -> dict[str, Level]:
-    from .data.CelesteLevelData import all_levels
+def load_logic_data(logic=0) -> dict[str, Level]:
+    # 0 mean casual
+    # 1 mean hell
+    # 2 mean no logic
+    if logic == 1:
+        from .data.CelesteLevelDataHell import all_levels
+    elif logic == 2:
+        from .data.CelesteLevelDataNoLogic import all_levels
+    else:
+        from .data.CelesteLevelData import all_levels
 
     #for _, level in all_levels.items():
     #    print(level.display_name)

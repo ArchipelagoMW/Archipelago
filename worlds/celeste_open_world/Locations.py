@@ -43,9 +43,9 @@ location_id_offsets: dict[LocationType, int | None] = {
 }
 
 
-def generate_location_table() -> dict[str, int]:
+def generate_location_table(logic: int = 0) -> dict[str, int]:
     from .Levels import Level, LocationType, load_logic_data
-    level_data: dict[str, Level] = load_logic_data()
+    level_data: dict[str, Level] = load_logic_data(logic)
     location_table = {}
 
     location_counts: dict[LocationType, int] = {
@@ -253,13 +253,15 @@ def create_regions_and_locations(world: CelesteOpenWorld):
             source_region_golden = world.get_region("10c_end-golden_top")
             source_region_golden.add_exits(["10b_GOAL_main"])
 
+def location_data_table(logic: int = 0) -> dict[str, int]:
+    return generate_location_table(logic)
 
-location_data_table: dict[str, int] = generate_location_table()
 
-
-def generate_location_groups() -> dict[str, list[str]]:
+def generate_location_groups(logic=0) -> dict[str, list[str]]:
     from .Levels import Level, LocationType, load_logic_data
-    level_data: dict[str, Level] = load_logic_data()
+    level_data: dict[str, Level] = load_logic_data(logic)
+
+    location_data_table: dict[str, int] = generate_location_table(logic)
 
     location_groups: dict[str, list[str]] = {
         "Strawberries": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.strawberry] and id < location_id_offsets[LocationType.golden_strawberry]],

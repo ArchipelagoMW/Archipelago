@@ -46,7 +46,7 @@ class CelesteOpenWorld(World):
 
     level_data: dict[str, Level] = load_logic_data()
 
-    location_name_to_id: dict[str, int] = location_data_table
+    location_name_to_id: dict[str, int] = location_data_table()
     location_name_groups: dict[str, list[str]] = generate_location_groups()
     item_name_to_id: dict[str, int] = generate_item_table()
     item_name_groups: dict[str, list[str]] = generate_item_groups()
@@ -60,12 +60,18 @@ class CelesteOpenWorld(World):
 
     active_levels: set[str]
     active_items: set[str]
-
+    
+    def get_logic_class(self) -> None:
+        if self.options.logic != 0:
+            self.level_data: dict[str, Level] = load_logic_data(self.options.logic)
+            self.location_name_to_id: dict[str, int] = location_data_table(self.options.logic)
+            self.location_name_groups: dict[str, list[str]] = generate_location_groups(self.options.logic)
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise RuntimeError(f"Invalid player_name {self.player_name} for game {self.game}. Name must be ascii.")
-
+        
+        self.get_logic_class()
         resolve_options(self)
 
         self.goal_area: str = goal_area_option_to_name[self.options.goal_area.value]

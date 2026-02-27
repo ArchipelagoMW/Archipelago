@@ -142,6 +142,16 @@ class IncludeCSides(Toggle):
     """
     display_name = "Include C-Sides"
 
+class Logic(Choice):
+    """
+    Determines which logic will be used
+    """
+    display_name = "Logic settings"
+    option_casual = 0
+    option_hell = 1
+    option_no_logic = 2
+    default = 0
+
 
 class JunkFillPercentage(Range):
     """
@@ -420,6 +430,9 @@ celeste_option_groups = [
         MadelineNoDashHairColor,
         MadelineFeatherHairColor,
     ]),
+    OptionGroup("Logic Options", [
+        Logic,
+    ]),
 ]
 
 
@@ -526,3 +539,5 @@ class CelesteOptions(PerGameCommonOptions):
     madeline_two_dash_hair_color: MadelineTwoDashHairColor
     madeline_no_dash_hair_color: MadelineNoDashHairColor
     madeline_feather_hair_color: MadelineFeatherHairColor
+
+    logic: Logic

@@ -93,6 +93,13 @@ Additionally, the following locations can optionally be included in the Location
 - Binoculars
 - Rooms
 
+## What are the Logic settings?
+
+These are the rulesets used by the generator to shuffle items. Three options are available:
+- Casual: Play the game the way the developers intended.
+- Hell: Adds most of the known tricks (except DTS). The seed can be __**nearly impossible**__ to beat.
+- No Logic: Items are shuffled without considering any rules. The seed (for you and for other players) can be __**impossible**__ to beat. 
+
 ## How can I get started?
 
 To get started playing Celeste (Open World) in Archipelago, [go to the setup guide for this game](/tutorial/Celeste%20%28Open%20World%29/guide_en)
