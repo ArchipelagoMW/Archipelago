@@ -982,7 +982,6 @@ popups_set = {
     LocationName.BaileySecretAnsemReport7,
     LocationName.BaseballCharm,
     LocationName.AnsemsStudyMasterForm,
-    LocationName.AnsemsStudySkillRecipe,
     LocationName.AnsemsStudySleepingLion,
     LocationName.FFFightsCureElement,
     LocationName.ThousandHeartlessSecretAnsemReport1,
@@ -1282,6 +1281,25 @@ exclusion_table = {
         LocationName.HadesCupTrophyParadoxCups,
         LocationName.MusicalOrichalcumPlus,
     ],
+    "HitlistCasual":          {
+        LocationName.FuturePete,
+        LocationName.BetwixtandBetweenBondofFlame,
+        LocationName.GrimReaper2,
+        LocationName.ThousandHeartless,
+        LocationName.WinnersProof,
+        LocationName.Experiment,
+        LocationName.Groundshaker,
+        LocationName.Hades,
+        LocationName.GenieJafar,
+        LocationName.Xaldin,
+        LocationName.StormRider,
+        LocationName.MansionBasementCorridorHiPotion,
+        LocationName.Xemnas1SecretAnsemReport13,
+        LocationName.XigbarSecretAnsemReport3,
+        LocationName.MCP,
+        LocationName.Lvl50,
+        LocationName.Lvl99
+    },
     "Cups":          {
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
@@ -1358,3 +1376,8 @@ location_groups = {
     Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
     for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and "Event" not in Region_Locs[0]
 }
+
+# This seems like the not-correct way to handle these location groups, but making these sets regions so the above works
+# causes not enough items to be generated for some reason.
+location_groups["Casual Bounties"] = exclusion_table["HitlistCasual"]
+location_groups["General Bounties"] = exclusion_table["Hitlist"]

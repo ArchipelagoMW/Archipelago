@@ -24,7 +24,7 @@ if __name__ == "__main__":
 from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
-from Utils import Version, stream_input, async_start
+from Utils import gui_enabled, Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
 import ssl
@@ -34,9 +34,6 @@ if typing.TYPE_CHECKING:
     import argparse
 
 logger = logging.getLogger("Client")
-
-# without terminal, we have to use gui mode
-gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
 @Utils.cache_argsless
@@ -65,6 +62,8 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Close connections and client"""
+        if self.ctx.ui:
+            self.ctx.ui.stop()
         self.ctx.exit_event.set()
         return True
 
@@ -323,7 +322,7 @@ class CommonContext:
     hint_cost: int | None
     """Current Hint Cost per Hint from the server"""
     hint_points: int | None
-    """Current avaliable Hint Points from the server"""
+    """Current available Hint Points from the server"""
     player_names: dict[int, str]
     """Current lookup of slot number to player display name from server (includes aliases)"""
 
@@ -572,6 +571,10 @@ class CommonContext:
         return print_json_packet.get("type", "") == "ItemSend" \
             and not self.slot_concerns_self(print_json_packet["receiving"]) \
             and not self.slot_concerns_self(print_json_packet["item"].player)
+    
+    def is_connection_change(self, print_json_packet: dict) -> bool:
+        """Helper function for filtering out connection changes."""
+        return print_json_packet.get("type", "") in ["Join","Part"]
 
     def on_print(self, args: dict):
         logger.info(args["text"])
