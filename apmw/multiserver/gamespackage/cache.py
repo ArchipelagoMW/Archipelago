@@ -31,7 +31,7 @@ class GamesPackageCache:
     def _cached_item_name(self, key: GameAndChecksum, item_name: str) -> str:
         """Returns a reference to an already-stored copy of item_name, or item_name"""
         # TODO: there gotta be a better way, but maybe only in a C module?
-        for cached_item_name in self._reduced_games_packages[key].keys():
+        for cached_item_name in self._reduced_games_packages[key]["item_name_to_id"].keys():
             if cached_item_name == item_name:
                 return cached_item_name
         return item_name
@@ -39,9 +39,9 @@ class GamesPackageCache:
     def _cached_location_name(self, key: GameAndChecksum, location_name: str) -> str:
         """Returns a reference to an already-stored copy of location_name, or location_name"""
         # TODO: as above
-        for cached_item_name in self._reduced_games_packages[key].keys():
-            if cached_item_name == location_name:
-                return cached_item_name
+        for cached_location_name in self._reduced_games_packages[key]["location_name_to_id"].keys():
+            if cached_location_name == location_name:
+                return cached_location_name
         return location_name
 
     def _get(
