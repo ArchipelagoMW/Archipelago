@@ -8,7 +8,7 @@ class ShipVendors(Choice):
     Disabled: No ship vendor cosmetics are locations.
     Enabled: Ship vendor cosmetics are added as locations.
 
-    Note: Each planet you have will unlock 3 new ship paint jobs in the vendor.
+    Note: Each planet you have will put the next 3 items in the ship vendor in order of how they would appear in the vanilla game.
     """
     display_name = RAC3OPTION.SHIP_VENDOR
     option_disabled = 0
