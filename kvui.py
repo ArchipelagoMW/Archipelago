@@ -96,6 +96,7 @@ from kivymd.uix.recycleview import MDRecycleView
 from kivymd.uix.textfield.textfield import MDTextField
 from kivymd.uix.progressindicator import MDLinearProgressIndicator
 from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.slider import MDSlider, MDSliderHandle, MDSliderValueLabel
 from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
@@ -221,43 +222,162 @@ def on_release(self: MDButton, *args):
 MDButton.on_release = on_release
 
 
-# I was surprised to find this didn't already exist in kivy :(
+# --- Hover behavior (window-space hit test for ScrollView) ---
+# Match KivyMD's approach: https://github.com/kivymd/KivyMD/blob/master/kivymd/uix/behaviors/hover_behavior.py
+# Hit-test in *window* coordinates so ScrollView is handled correctly (to_window walks the tree).
 class HoverBehavior(object):
-    """originally from https://stackoverflow.com/a/605348110"""
+    """Hover detection using Window.mouse_pos with window-space hit test (like KivyMD HoverBehavior).
+
+    KivyMD does not use collide_point(to_widget(pos)); they convert the widget's AABB to window
+    coords (to_window(*self.pos)) and test the raw mouse pos against it. That way ScrollView
+    is correct because to_window applies the scroll transform when walking up the tree.
+    """
     hovered = BooleanProperty(False)
     border_point = ObjectProperty(None)
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.register_event_type("on_enter")
         self.register_event_type("on_leave")
-        Window.bind(mouse_pos=self.on_mouse_pos)
-        Window.bind(on_cursor_leave=self.on_cursor_leave)
-        super(HoverBehavior, self).__init__(**kwargs)
+        Window.bind(mouse_pos=self._on_mouse_pos)
+        Window.bind(on_cursor_leave=self._on_cursor_leave)
+        super(HoverBehavior, self).__init__(*args, **kwargs)
 
-    def on_mouse_pos(self, window, pos):
+    def _is_mouse_inside_widget(self, pos):
+        """True if pos (window coords) is inside this widget's on-screen box."""
+        x, y = self.to_window(*self.pos)
+        return (
+            x <= pos[0] <= x + self.width
+            and y <= pos[1] <= y + self.height
+        )
+
+    def _on_mouse_pos(self, window, pos):
         if not self.get_root_window():
-            return  # Abort if not displayed
-
-        # to_widget translates window pos to within widget pos
-        inside = self.collide_point(*self.to_widget(*pos))
+            return
+        if self.disabled:
+            return
+        inside = self._is_mouse_inside_widget(pos)
         if self.hovered == inside:
-            return  # We have already done what was needed
+            return
         self.border_point = pos
         self.hovered = inside
-
         if inside:
             self.dispatch("on_enter")
         else:
             self.dispatch("on_leave")
 
-    def on_cursor_leave(self, *args):
-        # if the mouse left the window, it is obviously no longer inside the hover label.
-        self.hovered = BooleanProperty(False)
-        self.border_point = ObjectProperty(None)
-        self.dispatch("on_leave")
+    def _on_cursor_leave(self, *args):
+        if self.hovered:
+            self.hovered = False
+            # Use () instead of None: ObjectProperty rejects None on set in some Kivy versions
+            self.border_point = ()
+            self.dispatch("on_leave")
 
 
 Factory.register("HoverBehavior", HoverBehavior)
+
+
+class HoverableMDButton(HoverBehavior, MDButton):
+    """MDButton with hover detection (window-space hit test).
+    Gates the built-in hover visual so it only shows when our hit test passes.
+    """
+
+    def on_enter(self, *args):
+        if self._is_mouse_inside_widget(Window.mouse_pos):
+            super().on_enter(*args)
+
+    def on_leave(self, *args):
+        if not self._is_mouse_inside_widget(Window.mouse_pos):
+            super().on_leave(*args)
+
+
+class HoverableToggleButton(HoverBehavior, ToggleButton):
+    """ToggleButton (MDButton + ToggleButtonBehavior) with hover detection."""
+
+    def on_enter(self, *args):
+        if self._is_mouse_inside_widget(Window.mouse_pos):
+            super().on_enter(*args)
+
+    def on_leave(self, *args):
+        if not self._is_mouse_inside_widget(Window.mouse_pos):
+            super().on_leave(*args)
+
+
+class HoverableMDIconButton(HoverBehavior, MDIconButton):
+    """MDIconButton with hover detection."""
+
+    def on_enter(self, *args):
+        if self._is_mouse_inside_widget(Window.mouse_pos):
+            super().on_enter(*args)
+
+    def on_leave(self, *args):
+        if not self._is_mouse_inside_widget(Window.mouse_pos):
+            super().on_leave(*args)
+
+
+Factory.register("HoverableMDButton", HoverableMDButton)
+Factory.register("HoverableToggleButton", HoverableToggleButton)
+Factory.register("HoverableMDIconButton", HoverableMDIconButton)
+
+
+# --- KivyMD animation-origin fixes for ScrollView ---
+
+class FixedPositionMDDropdownMenu(MDDropdownMenu):
+    """MDDropdownMenu that uses window coordinates for the scale animation origin.
+
+    The base class sets scale_value_center = self.caller.center (parent-relative),
+    so when the caller is inside a ScrollView/expansion panel the open animation
+    appears to scroll in from the wrong place. We fix it by using the caller's
+    position in window coordinates.
+    """
+
+    def open(self) -> None:
+        super().open()
+        if self.caller:
+            self.scale_value_center = self.caller.to_window(*self.caller.center)
+
+
+class FixedScaleMDSlider(MDSlider):
+    """MDSlider that sets the state layer scale origin before the hover animation.
+
+    The base class sets state_layer.scale_value_center to handle_container.center
+    (slider coords). The ScaleBehavior canvas uses that as the scale origin; when
+    the slider is inside a ScrollView the coordinate mismatch makes the circle
+    appear to expand from the bottom-left. We set the origin in window
+    coordinates (like FixedPositionMDDropdownMenu) so the animation expands
+    from the handle regardless of scroll position.
+    """
+
+    def _update_state_layer_pos(self, *args) -> None:
+        if self._handle:
+            layer = self._handle.ids.state_layer
+            # In slider.kv the state_layer draws a circle at (root.x - sz/4, root.y - sz/4)
+            # with size state_layer_size, so the circle center in handle coords is
+            # (handle.x + sz[0]/4, handle.y + sz[1]/4). ScaleBehavior origin is in the
+            # state_layer widget's canvas (local) coords, so we need that point in
+            # state_layer-local coords: (handle.x + sz/4 - layer.x, handle.y + sz/4 - layer.y).
+            h = self._handle
+            sz = h.state_layer_size
+            cx = h.x + sz[0] / 4 - layer.x
+            cy = h.y + sz[1] / 4 - layer.y
+            layer.scale_value_center = (cx, cy)
+
+    def on_kv_post(self, base_widget) -> None:
+        super().on_kv_post(base_widget)
+        if self._handle:
+            orig_enter = self._handle.on_enter
+            orig_leave = self._handle.on_leave
+            def wrap_enter():
+                self._update_state_layer_pos()
+                orig_enter()
+            def wrap_leave():
+                self._update_state_layer_pos()
+                orig_leave()
+            self._handle.on_enter = wrap_enter
+            self._handle.on_leave = wrap_leave
+
+
+Factory.register("FixedPositionMDDropdownMenu", FixedPositionMDDropdownMenu)
+Factory.register("FixedScaleMDSlider", FixedScaleMDSlider)
 
 
 class ToolTip(MDTooltipPlain):
@@ -277,7 +397,7 @@ class TooltipLabel(HovererableLabel, MDTooltip):
 
     def create_tooltip(self, text, x, y):
         text = text.replace("<br>", "\n").replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
-        # position float layout
+        # position float layout (x, y are window coords)
         center_x, center_y = self.to_window(self.center_x, self.center_y)
         self.shift_y = y - center_y
         shift_x = center_x - x
@@ -293,15 +413,13 @@ class TooltipLabel(HovererableLabel, MDTooltip):
             self._tooltip = ToolTip(text=text, pos_hint={})
             self.display_tooltip()
 
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
-        if self.disabled:
+    def _on_mouse_pos(self, window, pos):
+        super()._on_mouse_pos(window, pos)
+        if not self.get_root_window() or self.disabled:
             return
-        super().on_mouse_pos(window, pos)
-        if self.refs and self.hovered:
-
-            tx, ty = self.to_widget(*pos, relative=True)
+        if self.refs and self.hovered and self.border_point:
+            # border_point is window pos; convert to local for texture zones
+            tx, ty = self.to_widget(*self.border_point, relative=True)
             # Why TF is Y flipped *within* the texture?
             ty = self.texture_size[1] - ty
             hit = False
@@ -309,7 +427,7 @@ class TooltipLabel(HovererableLabel, MDTooltip):
                 for zone in zones:
                     x, y, w, h = zone
                     if x <= tx <= w and y <= ty <= h:
-                        self.create_tooltip(uid.split("|", 1)[1], *pos)
+                        self.create_tooltip(uid.split("|", 1)[1], *self.border_point)
                         hit = True
                         break
             if not hit:
