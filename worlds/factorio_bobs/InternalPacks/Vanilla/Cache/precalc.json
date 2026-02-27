@@ -19,9 +19,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -61,7 +61,6 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
-            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -74,6 +73,7 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick"
         ],
@@ -134,6 +134,7 @@
             "concrete",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -149,8 +150,7 @@
             "resource_iron-ore",
             "resource_stone",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 4389.3604742777825
     },
@@ -272,9 +272,9 @@
             "resource_iron-ore",
             "resource_stone",
             "resource_uranium-ore",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid",
             "uranium-processing"
@@ -324,9 +324,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -352,9 +352,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -429,6 +429,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -441,7 +442,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick"
         ],
@@ -572,9 +572,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur"
         ],
         "score": 108.44071212222232
@@ -608,6 +608,7 @@
             "concrete",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -625,7 +626,6 @@
             "resource_stone",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -667,9 +667,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 8870.696769888891
     },
@@ -785,6 +785,9 @@
             "resource_coal"
         ],
         "score": 1.0010009999999998
+    },
+    "combat-shotgun": {
+        "invalid": true
     },
     "concrete": {
         "recipes": [
@@ -950,6 +953,9 @@
         ],
         "score": 200.46308950000002
     },
+    "depleted-uranium-fuel-cell": {
+        "invalid": true
+    },
     "destroyer-capsule": {
         "recipes": [
             "advanced-circuit",
@@ -960,7 +966,6 @@
             "defender-capsule",
             "destroyer-capsule",
             "distractor-capsule",
-            "electric-furnace",
             "electronic-circuit",
             "firearm-magazine",
             "iron-gear-wheel",
@@ -976,6 +981,7 @@
             "resource_iron-ore",
             "resource_stone",
             "speed-module",
+            "steel-furnace",
             "steel-plate",
             "stone-brick"
         ],
@@ -1128,6 +1134,7 @@
             "efficiency-module",
             "efficiency-module-2",
             "efficiency-module-3",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -1143,7 +1150,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -1337,9 +1343,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -1367,9 +1373,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur"
         ],
         "score": 126.19072775555568
@@ -1431,9 +1437,9 @@
             "resource_iron-ore",
             "resource_stone",
             "resource_uranium-ore",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid",
             "uranium-processing"
@@ -1460,9 +1466,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur"
         ],
         "score": 17.772015633333396
@@ -1476,7 +1482,6 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
-            "electric-furnace",
             "electronic-circuit",
             "express-splitter",
             "fast-splitter",
@@ -1495,6 +1500,7 @@
             "resource_iron-ore",
             "resource_stone",
             "splitter",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "transport-belt"
@@ -1717,6 +1723,9 @@
             "stone-furnace"
         ],
         "score": 1637.014551
+    },
+    "fluid-unknown": {
+        "invalid": true
     },
     "fluid-wagon": {
         "recipes": [
@@ -2047,9 +2056,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -2084,9 +2093,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
-            "stone-brick"
+            "stone-brick",
+            "stone-furnace"
         ],
         "score": 1.3533354917294442
     },
@@ -2226,9 +2235,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 194.68674672222218
     },
@@ -2312,9 +2321,9 @@
             "resource_copper-ore",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "stone-wall"
         ],
         "score": 72.76403550000006
@@ -2352,6 +2361,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -2365,7 +2375,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick"
         ],
@@ -2402,9 +2411,9 @@
             "rocket-fuel",
             "solid-fuel-from-heavy-oil",
             "solid-fuel-from-petroleum-gas",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid",
             "uranium-processing"
@@ -2465,9 +2474,9 @@
             "resource_copper-ore",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 868.5133509999997
     },
@@ -2507,6 +2516,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -2525,7 +2535,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -2541,6 +2550,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -2556,7 +2566,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -2573,6 +2582,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -2591,7 +2601,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -2693,6 +2702,9 @@
         ],
         "score": 34.25602049999999
     },
+    "pistol": {
+        "invalid": true
+    },
     "plastic-bar": {
         "recipes": [
             "basic-oil-processing",
@@ -2711,9 +2723,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 4.352336744444426
     },
@@ -2743,6 +2755,7 @@
             "copper-cable",
             "copper-plate",
             "electric-engine-unit",
+            "electric-furnace",
             "electronic-circuit",
             "engine-unit",
             "iron-gear-wheel",
@@ -2761,7 +2774,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -2951,6 +2963,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -2969,7 +2982,6 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -3083,6 +3095,9 @@
         ],
         "score": 33.25901849999998
     },
+    "raw-fish": {
+        "invalid": true
+    },
     "refined-concrete": {
         "recipes": [
             "assembling-machine-1",
@@ -3100,9 +3115,9 @@
             "resource_copper-ore",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 44.49803579999996
     },
@@ -3124,9 +3139,9 @@
             "resource_copper-ore",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 44.52403589999996
     },
@@ -3249,9 +3264,9 @@
             "rocket-fuel",
             "solid-fuel-from-heavy-oil",
             "solid-fuel-from-petroleum-gas",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 100.209253678765
     },
@@ -3281,6 +3296,7 @@
             "copper-cable",
             "copper-plate",
             "electric-engine-unit",
+            "electric-furnace",
             "electronic-circuit",
             "engine-unit",
             "iron-gear-wheel",
@@ -3306,7 +3322,6 @@
             "solid-fuel-from-petroleum-gas",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -3341,9 +3356,9 @@
             "resource_iron-ore",
             "resource_stone",
             "rocket-silo",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -3360,6 +3375,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -3382,7 +3398,6 @@
             "solar-panel",
             "solid-fuel-from-heavy-oil",
             "solid-fuel-from-petroleum-gas",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
@@ -3398,7 +3413,6 @@
             "copper-cable",
             "copper-plate",
             "decider-combinator",
-            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -3412,10 +3426,14 @@
             "resource_iron-ore",
             "resource_stone",
             "selector-combinator",
+            "steel-furnace",
             "steel-plate",
             "stone-brick"
         ],
         "score": 450.6556221277773
+    },
+    "shotgun": {
+        "invalid": true
     },
     "shotgun-shell": {
         "recipes": [
@@ -3444,6 +3462,9 @@
             "stone-furnace"
         ],
         "score": 110.51104300000004
+    },
+    "small-electric-pole": {
+        "invalid": true
     },
     "small-lamp": {
         "recipes": [
@@ -3518,9 +3539,9 @@
             "resource_iron-ore",
             "resource_stone",
             "solid-fuel-from-petroleum-gas",
+            "steel-furnace",
             "steel-plate",
-            "stone-brick",
-            "stone-furnace"
+            "stone-brick"
         ],
         "score": 7.684672488888846
     },
@@ -3535,7 +3556,6 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
-            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -3549,6 +3569,7 @@
             "resource_iron-ore",
             "resource_stone",
             "speed-module",
+            "steel-furnace",
             "steel-plate",
             "stone-brick"
         ],
@@ -3595,6 +3616,7 @@
             "chemical-plant",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -3613,13 +3635,15 @@
             "speed-module",
             "speed-module-2",
             "speed-module-3",
-            "steel-furnace",
             "steel-plate",
             "stone-brick",
             "sulfur",
             "sulfuric-acid"
         ],
         "score": 15377.12171086112
+    },
+    "spidertron": {
+        "invalid": true
     },
     "splitter": {
         "recipes": [
@@ -3636,6 +3660,9 @@
             "transport-belt"
         ],
         "score": 107.96106450000005
+    },
+    "steam": {
+        "invalid": true
     },
     "steam-engine": {
         "recipes": [
@@ -3820,9 +3847,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur"
         ],
         "score": 20.520019116666653
@@ -3845,9 +3872,9 @@
             "resource_crude-oil",
             "resource_iron-ore",
             "resource_stone",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -3959,6 +3986,7 @@
             "concrete",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "iron-gear-wheel",
             "iron-plate",
@@ -3977,7 +4005,6 @@
             "resource_uranium-ore",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid",
             "uranium-processing"
@@ -4029,6 +4056,7 @@
             "concrete",
             "copper-cable",
             "copper-plate",
+            "electric-furnace",
             "electronic-circuit",
             "explosives",
             "iron-gear-wheel",
@@ -4047,7 +4075,6 @@
             "resource_uranium-ore",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid",
             "uranium-cannon-shell",
@@ -4110,9 +4137,9 @@
             "resource_iron-ore",
             "resource_stone",
             "resource_uranium-ore",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid"
         ],
@@ -4145,9 +4172,9 @@
             "resource_iron-ore",
             "resource_stone",
             "resource_uranium-ore",
+            "steel-furnace",
             "steel-plate",
             "stone-brick",
-            "stone-furnace",
             "sulfur",
             "sulfuric-acid",
             "uranium-processing",
@@ -4227,5 +4254,11 @@
             "water-barrel"
         ],
         "score": 88.21606300000008
+    },
+    "wood": {
+        "invalid": true
+    },
+    "wooden-chest": {
+        "invalid": true
     }
 }
