@@ -52,6 +52,7 @@ If the start is completable, it should be completable all the way through.
 
 10. You can now zip the FacPack for distribution
     - FacPacks work in zipped and non-zipped states
+    - When zipped all facpacks must start with a full stop `.`, this is for it to get excluded when put into players folder
     - Ensure that all the files are on top level of the zip
 
 # Format specification
