@@ -7,11 +7,12 @@ from typing import TYPE_CHECKING
 from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
-from worlds.rac3.client.texthelper import get_sent_item_message
-from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
+from worlds.rac3.client.texthelper import colorize_item_name, get_sent_item_message
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
-from worlds.rac3.constants.locations.vendors import ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS
+from worlds.rac3.constants.instruction import RAC3INSTRUCTION
+from worlds.rac3.constants.locations.vendors import ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
@@ -170,6 +171,7 @@ async def _handle_game_ready(ctx: 'Context') -> None:
             ctx.game_interface.reset_death_count()
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
+            await handle_codecave(ctx)
             logger.info("Load the latest autosave or enter the Armor Vendor to apply cosmetics")
             logger.info("Game READY!")
 
@@ -396,6 +398,13 @@ async def handle_vendors(ctx: 'Context') -> None:
             vendor_locations = [ITEM_TO_WEAPON_VENDOR_LOCATION[item]
                             for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
             vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
+        case RAC3VENDORTYPE.ARMOR:
+            pass
+        case RAC3VENDORTYPE.SHIP:
+            # ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[ctx.game_interface.UnlockItem[RAC3REGION.SLOT_0].status*3]
+            # filtered_ship_keys = [key for key in ship_keys if key not in ctx.game_interface.checked_locations]
+            # vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[key].AP_CODE for key in filtered_ship_keys]
+            pass
 
     current_hints = set(vendor_location_apcodes)
     if current_hints and current_hints != ctx.already_hinted:
@@ -411,3 +420,29 @@ async def handle_sequence_break(ctx: 'Context') -> None:
     if ctx.slot_data is None:
         return
     ctx.game_interface.sequence_break()
+
+async def handle_codecave(ctx: 'Context') -> None:
+    """Set up the codecave with the current item locations for use in the randomizer"""
+    if ctx.slot_data is None:
+        return
+    ship_locations = list(SHIP_VENDOR_INVENTORY.keys())
+    ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in ship_locations]
+    ctx.game_interface.ship_vendor_string_pointers = {}
+    offset = 0
+    for loc_key, ap_code in zip(ship_locations, ap_codes):
+        net_item = ctx.locations_info.get(ap_code, None)
+        if net_item is not None:
+            item_name = colorize_item_name(
+                ctx.item_names.lookup_in_slot(net_item.item, net_item.player),
+                net_item.flags
+            )
+            if ctx.slot == net_item.player:
+                string = item_name
+            else:
+                player_name = ctx.player_names.get(net_item.player, "???")
+                string = f"{player_name}'s {item_name}"
+            addr = RAC3INSTRUCTION.CODECAVE_START + offset
+            format_string = ctx.game_interface.format_color_string(string)
+            ctx.game_interface._write_bytes(addr, format_string[0])
+            ctx.game_interface.ship_vendor_string_pointers[loc_key] = addr
+            offset += len(format_string[0]) + 1  # +1 for null terminator

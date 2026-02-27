@@ -142,6 +142,7 @@ class Rac3Interface(GameInterface):
     visited_planets: set[str] = set()
     weapon_vendor_items: list[str] = []
     vendor_type: Optional[RAC3VENDORTYPE] = None
+    ship_vendor_string_pointers: dict[str, int] = None
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -350,11 +351,6 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.SHIP_SKIN, self.options.ship_skin)
         self._write8(RAC3STATUS.PLAYER_SKIN, self.options.skin)
         self._write8(RAC3STATUS.PLAYER_SKIN_2, self.options.skin)
-    
-    def setup_codecave(self):
-        """Set up the persistent data in the codecave for use in the randomizer"""
-        #TODO: Use ctx.locations_info to put all ship vendor locations here for vendor update to read from
-        self._write_string(RAC3INSTRUCTION.CODECAVE_START, 'This is a string in the codecave!')
 
     #############################
     # Start of Main Update Loop #
@@ -965,10 +961,13 @@ class Rac3Interface(GameInterface):
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
-                ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:6 + self.UnlockItem[RAC3REGION.SLOT_0].status*3]
+                ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:self.UnlockItem[RAC3REGION.SLOT_0].status*3]
+                # Set item_name_ptr for each ship item using the string pointer
+                for key in ship_keys:
+                    addr = self.ship_vendor_string_pointers.get(key, 0)
+                    SHIP_VENDOR_INVENTORY[key].item_name_ptr.value = addr
                 filtered_ship_items = [SHIP_VENDOR_INVENTORY[key] for key in ship_keys if key not in self.checked_locations]
                 new_inventory = filtered_ship_items
-                
                 # Undo the cosmetic overwrite from buying ship vendor items
                 self.add_cosmetics()
             case _:
