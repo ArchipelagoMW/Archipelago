@@ -51,7 +51,7 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/Ijwu/Enemizer/releases/download/${Env:ENEMIZER_VERSION}/win-x64.zip -OutFile enemizer.zip
           Expand-Archive -Path enemizer.zip -DestinationPath EnemizerCLI -Force
-          choco install innosetup --version=6.2.2 --allow-downgrade
+          choco install innosetup --version=6.7.0 --allow-downgrade
       - name: Build
         run: |
           python -m pip install --upgrade pip
