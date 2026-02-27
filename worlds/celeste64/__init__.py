@@ -1,4 +1,5 @@
 from copy import deepcopy
+import math
 from typing import Dict, List, Tuple
 
 from BaseClasses import ItemClassification, Location, Region, Tutorial
@@ -134,22 +135,46 @@ class Celeste64World(World):
 
         item_pool += [self.create_item(ItemName.strawberry) for _ in range(real_total_strawberries)]
 
+        trap_weights = []
+        trap_weights += ([ItemName.bald_trap] * self.options.bald_trap_weight.value)
+        trap_weights += ([ItemName.bubble_trap] * self.options.bubble_trap_weight.value)
+        trap_weights += ([ItemName.hiccup_trap] * self.options.hiccup_trap_weight.value)
+        trap_weights += ([ItemName.ice_trap] * self.options.ice_trap_weight.value)
+        trap_weights += ([ItemName.invisible_trap] * self.options.invisible_trap_weight.value)
+        trap_weights += ([ItemName.literature_trap] * self.options.literature_trap_weight.value)
+        trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
+        trap_weights += ([ItemName.stun_trap] * self.options.stun_trap_weight.value)
+        trap_weights += ([ItemName.zoom_in_trap] * self.options.zoom_in_trap_weight.value)
+        trap_weights += ([ItemName.zoom_out_trap] * self.options.zoom_out_trap_weight.value)
+
         filler_item_count: int = location_count - len(item_pool)
+        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(filler_item_count * (self.options.trap_fill_percentage.value / 100.0))
+        filler_item_count -= trap_count
+
         item_pool += [self.create_item(ItemName.raspberry) for _ in range(filler_item_count)]
+
+        trap_pool = []
+        for i in range(trap_count):
+            trap_item = self.random.choice(trap_weights)
+            trap_pool.append(self.create_item(trap_item))
+
+        item_pool += trap_pool
 
         self.multiworld.itempool += item_pool
 
 
     def create_regions(self) -> None:
-        from .Regions import region_data_table
+        from .Regions import region_data_table, cassette_entrance_regions, cassette_regions
         # Create regions.
         for region_name in region_data_table.keys():
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
+        self.generate_cassette_order()
+
         # Create locations.
         for region_name, region_data in region_data_table.items():
-            region = self.multiworld.get_region(region_name, self.player)
+            region = self.get_region(region_name)
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in strawberry_location_data_table.items()
                 if location_data.region == region_name
@@ -181,6 +206,11 @@ class Celeste64World(World):
             from .Rules import connect_region
             connect_region(self, region, region_data_table[region_name].connecting_regions)
 
+            if region_name in cassette_entrance_regions:
+                cassette_entrance_index = cassette_entrance_regions.index(region_name)
+                mapped_cassette_name = cassette_regions[self.cassette_map[cassette_entrance_index]]
+                self.get_region(region_name).connect(self.get_region(mapped_cassette_name), None, lambda state: state.has(ItemName.cassette, self.player))
+
         # Have to do this here because of other games using State in a way that's bad
         from .Rules import set_rules
         set_rules(self)
@@ -194,17 +224,50 @@ class Celeste64World(World):
         return {
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
+            "trap_link": self.options.trap_link.value,
             "strawberries_required": self.strawberries_required,
+
             "move_shuffle": self.options.move_shuffle.value,
+            "cassette_map": self.cassette_map,
+
             "friendsanity": self.options.friendsanity.value,
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,
             "checkpointsanity": self.options.checkpointsanity.value,
+
+            "trap_expiration_amount": self.options.trap_expiration_amount.value,
+            "active_traps": self.output_active_traps(),
+
+            "madeline_hair_length": self.options.madeline_hair_length.value,
             "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
             "madeline_feather_hair_color": self.madeline_feather_hair_color,
+
             "badeline_chaser_source": self.options.badeline_chaser_source.value,
             "badeline_chaser_frequency": self.options.badeline_chaser_frequency.value,
             "badeline_chaser_speed": self.options.badeline_chaser_speed.value,
         }
+
+    def generate_cassette_order(self) -> dict[int, int]:
+        cassettelist_o = list(range(0, 10))
+        cassettelist_s = cassettelist_o.copy()
+        if self.options.cassette_shuffle:
+            self.random.shuffle(cassettelist_s)
+        self.cassette_map = dict(zip(cassettelist_o, cassettelist_s))
+
+    def output_active_traps(self) -> dict[int, int]:
+        trap_data = {}
+
+        trap_data[0x30] = self.options.bald_trap_weight.value
+        trap_data[0x31] = self.options.bubble_trap_weight.value
+        trap_data[0x32] = self.options.hiccup_trap_weight.value
+        trap_data[0x33] = self.options.ice_trap_weight.value
+        trap_data[0x34] = self.options.invisible_trap_weight.value
+        trap_data[0x35] = self.options.literature_trap_weight.value
+        trap_data[0x36] = self.options.reverse_trap_weight.value
+        trap_data[0x37] = self.options.stun_trap_weight.value
+        trap_data[0x38] = self.options.zoom_in_trap_weight.value
+        trap_data[0x39] = self.options.zoom_out_trap_weight.value
+
+        return trap_data
