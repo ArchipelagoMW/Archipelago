@@ -143,8 +143,11 @@ JSON list containing all science packs in the order they are to be obtained
 ## Optional files
 
 ### customRecipes.json
+recipe name must follow factorio requirements:
+- Only characters A-Z a-z 0-9 _- are allowed.
+
 replace <>
-- "recipe_name":
+- "<recipe_name>":
   - "ingredients": 
     - "<ingredient_name>": amount
     - "<ingredient_name>": amount
