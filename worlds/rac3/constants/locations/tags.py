@@ -17,3 +17,4 @@ class RAC3TAG:
     VR = "VR"
     NOT_IMPLEMENTED = "Not Implemented"
     NGPLUS = "New Game Plus"
+    SHIP = "Ship"

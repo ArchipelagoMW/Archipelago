@@ -32,6 +32,9 @@ class GameInterface:
 
     def _read_float(self, address: int):
         return unpack('f', self.pcsx2_interface.read_bytes(address, 4))[0]
+    
+    def _read_string(self, address: int, n: int):
+        return self.pcsx2_interface.read_string(address, n)
 
     def _write8(self, address: int, value: int):
         self.pcsx2_interface.write_int8(address, value)

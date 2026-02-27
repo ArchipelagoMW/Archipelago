@@ -15,3 +15,18 @@ class RAC3VERSION:
     EU_ID = "SCES-52456"
     EU_BETA_ID = "TCES-52456"
     EU_DEMO_ID = "SCED-52847"
+
+GAME_ID_TO_VERSION: dict[str, str] = {
+    RAC3VERSION.US_ID: "US release",
+    RAC3VERSION.US_BETA_ID: "US beta",
+    RAC3VERSION.US_DEMO_ID: "US demo",
+    RAC3VERSION.US_GH_ID: "US Greatest Hits release",
+    RAC3VERSION.JP_ID: "Japanese release",
+    RAC3VERSION.JP_TRIAL_ID: "Japanese trial version",
+    RAC3VERSION.JP_TB_ID: "Japanese The Best release",
+    RAC3VERSION.KO_ID: "Korean release",
+    RAC3VERSION.CH_ID: "Chinese release",
+    RAC3VERSION.EU_ID: "EU release",
+    RAC3VERSION.EU_BETA_ID: "EU beta",
+    RAC3VERSION.EU_DEMO_ID: "EU demo",
+}

@@ -18,6 +18,7 @@ class RAC3VENDOR:
     VENDORTYPE_TO_SLOT_SIZE: dict[int, int] = {
         RAC3VENDORTYPE.WEAPON: 0x14,
         RAC3VENDORTYPE.ARMOR: 0x10,
+        RAC3VENDORTYPE.SHIP: 0x24,
     }
 
     @staticmethod
@@ -65,3 +66,26 @@ class RAC3ARMORVENDOR(RAC3VENDOR):
     ITEM_COST_SIZE: int = 4
     ITEM_LEVEL_OFFSET: int = 0x08
     ITEM_LEVEL_SIZE: int = 1
+
+class RAC3SHIPVENDOR(RAC3VENDOR):
+    """Struct for Ship Vendor data, with ship-specific slot size and offsets"""
+    SLOT_SIZE: int = 0x24
+
+    ITEM_ICON_OFFSET: int = 0x00
+    ITEM_ICON_SIZE: int = 4
+    ITEM_COST_OFFSET: int = 0x04
+    ITEM_COST_SIZE: int = 4
+    ITEM_HIGHLIGHTED_PART_OFFSET: int = 0x08
+    ITEM_HIGHLIGHTED_PART_SIZE: int = 4
+    ITEM_SHIP_CONFIG_OFFSET: int = 0x0C
+    ITEM_SHIP_CONFIG_SIZE: int = 2
+    ITEM_COLOR_ID_OFFSET: int = 0x0E
+    ITEM_COLOR_ID_SIZE: int = 2
+    ITEM_UNLOCK_ID_OFFSET: int = 0x10
+    ITEM_UNLOCK_ID_SIZE: int = 4
+    ITEM_NAME_PTR_OFFSET: int = 0x14
+    ITEM_NAME_PTR_SIZE: int = 4
+    ITEM_ICON_COLOR_OFFSET: int = 0x1C
+    ITEM_ICON_COLOR_SIZE: int = 4
+    ITEM_IS_EQUIPPED_OFFSET: int = 0x20 
+    ITEM_IS_EQUIPPED_SIZE: int = 1

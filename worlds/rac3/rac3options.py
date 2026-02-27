@@ -23,6 +23,7 @@ from worlds.rac3.options.sewer_limitation_options import SewerLimitation
 from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
 from worlds.rac3.options.ship_skin_options import ShipSkin
+from worlds.rac3.options.ship_vendor_options import ShipVendors
 from worlds.rac3.options.ship_wings_options import ShipWings
 from worlds.rac3.options.skillpoints_options import SkillPoints
 from worlds.rac3.options.starting_weapons_options import StartingWeapons
@@ -77,6 +78,7 @@ class RaC3Options(PerGameCommonOptions):
     intro_skip: IntroSkip
     holostar_skip: HolostarSkip
     clank_options: ClankOptions
+    ship_vendor: ShipVendors
 
 
 rac3_option_groups = [
@@ -102,6 +104,7 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Location Options", [
         WeaponVendors,
+        ShipVendors,
         SkillPoints,
         Trophies,
         TitaniumBolts,
@@ -155,4 +158,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.ONE_HP_CHALLENGE,
     RAC3OPTION.INTRO_SKIP,
     RAC3OPTION.CLANK_OPTIONS,
+    RAC3OPTION.SHIP_VENDOR,
 ]

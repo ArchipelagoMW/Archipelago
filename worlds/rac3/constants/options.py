@@ -40,3 +40,4 @@ class RAC3OPTION:
     INTRO_SKIP = "Intro Skip"
     HOLOSTAR_SKIP = "Holostar Skip"
     CLANK_OPTIONS = "Clank Pack Options"
+    SHIP_VENDOR = "Ship Vendor"
