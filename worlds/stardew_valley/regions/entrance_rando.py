@@ -37,7 +37,10 @@ def create_player_randomization_flag(
     elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
         flag |= RandomizationFlag.SET_EVERYTHING
 
-    if EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behavour_choice:
+    if (
+        EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behavour_choice
+        or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in entrance_behavour_choice
+    ):
         flag |= RandomizationFlag.FARMHOUSE
     if content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.MASTERY_CAVE
