@@ -70,6 +70,15 @@ Double-click on your `.apz5` file to start your client and start the ROM patch p
 (this can take a while), the client and the emulator will be started automatically (if you associated the extension
 to the emulator as recommended).
 
+If the `.apz5` file type is not associated with the Archipelago client (often the case with Linux):
+
+1. Open the Archipelago launcher (either appimage or binary).
+2. Select "Open Patch" on the left side and select your patch file.
+3. If this is your first time patching, you will be prompted to locate your vanilla ROM.
+4. A patched `.z64` file will be created in the same place and with the same name as the patch file.
+5. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
+   BizHawk install.
+
 ### Connect to the Multiserver
 
 Once both the client and the emulator are started, you must connect them. Navigate to your Archipelago install folder,
