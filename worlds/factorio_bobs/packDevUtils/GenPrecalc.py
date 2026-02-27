@@ -18,7 +18,8 @@ def main():
     amount = len(modpack.recipe_engine.game_items)
     done = 0
     mean_time = 0
-    for item in modpack.recipe_engine.game_items.values():
+    items = modpack.recipe_engine.game_items.copy()
+    for item in items.values():
         item_timer = timeit.default_timer()
         print(f"Calculating: {item}")
         item.raw_calculate()

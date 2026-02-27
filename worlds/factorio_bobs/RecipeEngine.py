@@ -282,6 +282,11 @@ class RecipeEngine:
             category: pulp.LpVariable(f"cgc_{category.name}", cat="Binary")
             for category in self.categories.values()
         }
+        # Add a 'ghost' supply for every item with a massive penalty
+        slack = {
+            item: pulp.LpVariable(f"slack_{item.name}", lowBound=0)
+            for item in self.game_items.values()
+        }
 
         # goal
         epsilon = 1e-3
@@ -290,7 +295,8 @@ class RecipeEngine:
             recipe.energy * recipe_qty[recipe]
             for recipe in recipe_qty.keys()
         ) + epsilon * pulp.lpSum(can_get_recipe.values())
-                     + epsilon_2 * pulp.lpSum(waste.values()) + epsilon_2 * pulp.lpSum(recipe_qty.values()))
+                     + epsilon_2 * pulp.lpSum(waste.values()) + epsilon_2 * pulp.lpSum(recipe_qty.values())
+                     + pulp.lpSum(slack.values()) * 1e10)
 
         # constraint first pass get best
         for item in self.game_items.values():
@@ -298,9 +304,9 @@ class RecipeEngine:
             consumed = [recipe_qty[recipe] * recipe.ingredients[item] for recipe in item.used_in]
 
             if item == goal:
-                probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) == 1, f"balance_{item.name}"
+                probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) + slack[item] == 1, f"balance_{item.name}"
             else:
-                probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) == 0 + waste[item], f"balance_{item.name}"
+                probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) + slack[item] == 0 + waste[item], f"balance_{item.name}"
 
             probBest += can_get_item[item] <= pulp.lpSum(can_get_recipe[recipe] for recipe in item.crafted_by), f"can_get_{item.name}"
 
@@ -326,6 +332,9 @@ class RecipeEngine:
 
         req_recipes = set(recipe for recipe, value in can_get_recipe.items() if not math.isclose(value.value(), 0))
 
+        spawned_items = {item: var.value() for item, var in slack.items() if not math.isclose(var.value(), 0)}
+        if spawned_items:
+            status = -1
         if not remove_waste:
             return status, score, req_recipes, set(), depulp_dict(waste)
 
@@ -452,8 +461,7 @@ class GameItem(RecipeEngineType):
         status, score, best_recipes, waste_recipes, waste = self.ctx.run_pulp_solver(self)
         if status != pulp.LpStatusOptimal:
             if self.name not in {"space-science-pack"}:
-                self.ctx.modpack.logger.warn(f"{self}: is uncraftable with status {status}\n"
-                                         f"removing {self}")
+                self.ctx.modpack.logger.warn(f"{self}: is uncraftable with status {pulp.LpStatus[status]}")
                 self.set_invalid()
             return
         self.score = score
@@ -478,8 +486,8 @@ class GameItem(RecipeEngineType):
         self.is_valid = False
         for recipe in self.used_in.copy():
             recipe.set_invalid()
-        if self.name in self.ctx.game_items:
-            del self.ctx.game_items[self.name]
+        # if self.name in self.ctx.game_items:
+        #     del self.ctx.game_items[self.name]
 
     def get_req_techs(self) -> set[Technology]:
         techs = set()
@@ -555,8 +563,8 @@ class GameRecipe(RecipeEngineType):
         for ingredient in self.ingredients:
             if self in ingredient.used_in:
                 ingredient.used_in.remove(self)
-        if self.name in self.ctx.recipes:
-            del self.ctx.recipes[self.name]
+        # if self.name in self.ctx.recipes:
+        #     del self.ctx.recipes[self.name]
 
     def get_req_techs(self) -> set[Technology]:
         techs = set()
