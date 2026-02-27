@@ -352,14 +352,10 @@ class FactorioBobs(World):
         if self.options.goal == Goal.option_satellite:
             victory_tech |= self.get_item_tech_req("satellite")
         victory_tech_names = set(tech.name for tech in victory_tech)
-        if self.options.silo == Silo.option_spawn:
-            victory_tech_names -= {"rocket-silo"}
-        else:
-            victory_tech_names |= {"rocket-silo"}
         self.get_location("Rocket Launch").access_rule = lambda state: all(state.has(technology, player)
                                                                            for technology in
                                                                            victory_tech_names)
-        self.multiworld.completion_condition[player] = lambda state: state.has('Victory', player)
+        self.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
     def get_science_pack_rule(self, complexity: int) -> FactorioRules.Rule:
         science_pack = self.modpack.ordered_science_packs[complexity-1]
