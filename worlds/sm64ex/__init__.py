@@ -111,22 +111,22 @@ class SM64World(World):
     def build_filler_list(self, num_items=None):
         if num_items is None or num_items < 0:
             num_items = 1
-        filler_item_proportion_map = {
-            "1Up Mushroom": self.options.one_up_filler_proportion,
-            "Health Restore 1 Pip": self.options.one_health_pip_filler_proportion,
-            "Health Restore 2 Pip": self.options.two_health_pip_filler_proportion,
-            "Health Restore 3 Pip": self.options.three_health_pip_filler_proportion,
-            "Health Restore 4 Pip": self.options.four_health_pip_filler_proportion,
-            "Health Full Restore": self.options.full_restore_filler_proportion,
-            "Bonk Trap": self.options.bonk_trap_filler_proportion,
-            "Fire Trap": self.options.fire_trap_filler_proprtion,
-            "Amp Trap": self.options.amp_trap_filler_proportion,
-            "Chuckya Trap": self.options.chukya_trap_filler_proportion,
-            "Spin Trap": self.options.spin_trap_filler_proportion,
-            "Gust Trap": self.options.gust_trap_filler_proportion,
+        filler_item_percentage_map = {
+            "1Up Mushroom": self.options.one_up_filler_percentage,
+            "Health Restore 1 Pip": self.options.one_health_pip_filler_percentage,
+            "Health Restore 2 Pip": self.options.two_health_pip_filler_percentage,
+            "Health Restore 3 Pip": self.options.three_health_pip_filler_percentage,
+            "Health Restore 4 Pip": self.options.four_health_pip_filler_percentage,
+            "Health Full Restore": self.options.full_restore_filler_percentage,
+            "Bonk Trap": self.options.bonk_trap_filler_percentage,
+            "Fire Trap": self.options.fire_trap_filler_percentage,
+            "Amp Trap": self.options.amp_trap_filler_percentage,
+            "Chuckya Trap": self.options.chukya_trap_filler_percentage,
+            "Spin Trap": self.options.spin_trap_filler_percentage,
+            "Gust Trap": self.options.gust_trap_filler_percentage,
         }
-        filler_item_names = list(filler_item_proportion_map.keys())
-        filler_weights = [filler_item_proportion_map[k] for k in filler_item_names]
+        filler_item_names = list(filler_item_percentage_map.keys())
+        filler_weights = [filler_item_percentage_map[k] for k in filler_item_names]
         filler_items = self.random.choices(filler_item_names, weights=filler_weights, k=num_items)
         return filler_items
 

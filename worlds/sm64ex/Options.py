@@ -32,156 +32,156 @@ class EnableLockedPaintings(Toggle):
     """
     display_name = "Enable Locked Paintings"
 
-class OneUpFillerProportion(Range):
+class OneUpFillerPercentage(Range):
     """
-    Adds 1-Ups to the item pool.
+    Set the percentage of 1-Ups in the filler item pool.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "1Up Filler Proportion"
+    display_name = "1Up Filler Percentage"
     range_start = 0
     range_end = 100
     default = 100
 
-class OneHealthPipFillerProportion(Range):
+class OneHealthPipFillerPercentage(Range):
     """
-    Set the proportion of 1-pip health restore filler in the filler item pool.
+    Set the percentage of 1-pip health restore filler in the filler item pool.
 
     Mario's total health bar is 8 pips, these items restore 1 pip.
 
-    The value you set here is a proportion. The total number of filler items is split according to the relative proportions of all filler items.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "One Health Pip Filler Proportion"
+    display_name = "One Health Pip Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class TwoHealthPipFillerProportion(Range):
+class TwoHealthPipFillerPercentage(Range):
     """
-    Set the proportion of 2-pip health restore filler in the filler item pool.
+    Set the percentage of 2-pip health restore filler in the filler item pool.
 
     Mario's total health bar is 8 pips, these items restore 2 pips.
 
-    The value you set here is a proportion. The total number of filler items is split according to the relative proportions of all filler items.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Two Health Pip Filler Proportion"
+    display_name = "Two Health Pip Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class ThreeHealthPipFillerProportion(Range):
+class ThreeHealthPipFillerPercentage(Range):
     """
-    Set the proportion of 3-pip health restore filler in the filler item pool.
+    Set the percentage of 3-pip health restore filler in the filler item pool.
 
     Mario's total health bar is 8 pips, these items restore 3 pips.
 
-    The value you set here is a proportion. The total number of filler items is split according to the relative proportions of all filler items.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Three Health Pip Filler Proportion"
+    display_name = "Three Health Pip Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class FourHealthPipFillerProportion(Range):
+class FourHealthPipFillerPercentage(Range):
     """
-    Set the proportion of 4-pip health restore filler in the filler item pool.
+    Set the percentage of 4-pip health restore filler in the filler item pool.
 
     Mario's total health bar is 8 pips, these items restore 4 pips.
 
-    The value you set here is a proportion. The total number of filler items is split according to the relative proportions of all filler items.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Four Health Pip Filler Proportion"
+    display_name = "Four Health Pip Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class FullRestoreFillerProportion(Range):
+class FullRestoreFillerPercentage(Range):
     """
-    Set the proportion of full health restore filler in the filler item pool.
+    Set the percentage of full health restore filler in the filler item pool.
 
     Mario's total health bar is 8 pips, these items fully restore Mario's health.
 
-    The value you set here is a proportion. The total number of filler items is split according to the relative proportions of all filler items.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Full Health Filler Proportion"
+    display_name = "Full Health Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class BonkTrapFillerProportion(Range):
+class BonkTrapFillerPercentage(Range):
     """
-    Set the proportion of bonk trap filler in the filler item pool.
+    Set the percentage of bonk trap filler in the filler item pool.
     
     Bonk traps stop Mario in place and shove him in a random direction.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Bonk Trap Filler Proportion"
+    display_name = "Bonk Trap Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class FireTrapFillerProportion(Range):
+class FireTrapFillerPercentage(Range):
     """
-    Set the proportion of fire trap filler in the filler item pool.
+    Set the percentage of fire trap filler in the filler item pool.
     
     Fire traps set Mario on fire, causing him to run uncontrollably.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Fire Trap Filler Proportion"
+    display_name = "Fire Trap Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class AmpTrapFillerProportion(Range):
+class AmpTrapFillerPercentage(Range):
     """
-    Set the proportion of fire trap filler in the filler item pool.
+    Set the percentage of fire trap filler in the filler item pool.
     
     Amp traps shock Mario, like an Amp does, and take some health.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Amp Trap Filler Proportion"
+    display_name = "Amp Trap Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class ChuckyaTrapFillerProportion(Range):
+class ChuckyaTrapFillerPercentage(Range):
     """
-    Set the proportion of Chuckya trap filler in the filler item pool.
+    Set the percentage of Chuckya trap filler in the filler item pool.
     
     Chuckya traps throw Mario in a random direction.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Chuckya Trap Filler Proportion"
+    display_name = "Chuckya Trap Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class SpinTrapFillerProportion(Range):
+class SpinTrapFillerPercentage(Range):
     """
-    Set the proportion of spin trap filler in the filler item pool.
+    Set the percentage of spin trap filler in the filler item pool.
     
     Spin traps spin Mario up into the air like a Tweester.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Spin Trap Filler Proportion"
+    display_name = "Spin Trap Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
 
-class GustTrapFillerProportion(Range):
+class GustTrapFillerPercentage(Range):
     """
-    Set the proportion of gust trap filler in the filler item pool.
+    Set the percentage of gust trap filler in the filler item pool.
     
     Gust traps blow Mario away in a random direction like the giant snowman in Snowman's Land.
 
-    The value you set here is a proportion. The total number of filler items is split according to the combined proportions of health restores, traps, and 1-Ups.
+    The total number of filler items is split according to the combined percentages of health restores, traps, and 1-Ups.
     """
-    display_name = "Gust Trap Filler Proportion"
+    display_name = "Gust Trap Filler Percentage"
     range_start = 0
     range_end = 100
     default = 0
@@ -330,18 +330,18 @@ sm64_options_groups = [
         StarsToFinish,
     ]),
     OptionGroup("Filler Options", [
-        OneUpFillerProportion,
-        OneHealthPipFillerProportion,
-        TwoHealthPipFillerProportion,
-        ThreeHealthPipFillerProportion,
-        FourHealthPipFillerProportion,
-        FullRestoreFillerProportion,
-        BonkTrapFillerProportion,
-        FireTrapFillerProportion,
-        AmpTrapFillerProportion,
-        ChuckyaTrapFillerProportion,
-        SpinTrapFillerProportion,
-        GustTrapFillerProportion,
+        OneUpFillerPercentage,
+        OneHealthPipFillerPercentage,
+        TwoHealthPipFillerPercentage,
+        ThreeHealthPipFillerPercentage,
+        FourHealthPipFillerPercentage,
+        FullRestoreFillerPercentage,
+        BonkTrapFillerPercentage,
+        FireTrapFillerPercentage,
+        AmpTrapFillerPercentage,
+        ChuckyaTrapFillerPercentage,
+        SpinTrapFillerPercentage,
+        GustTrapFillerPercentage,
     ]),
 ]
 
@@ -358,18 +358,18 @@ class SM64Options(PerGameCommonOptions):
     strict_cap_requirements: StrictCapRequirements
     strict_cannon_requirements: StrictCannonRequirements
     strict_move_requirements: StrictMoveRequirements
-    one_up_filler_proportion: OneUpFillerProportion
-    one_health_pip_filler_proportion: OneHealthPipFillerProportion
-    two_health_pip_filler_proportion: TwoHealthPipFillerProportion
-    three_health_pip_filler_proportion: ThreeHealthPipFillerProportion
-    four_health_pip_filler_proportion: FourHealthPipFillerProportion
-    full_restore_filler_proportion: FullRestoreFillerProportion
-    bonk_trap_filler_proportion: BonkTrapFillerProportion
-    fire_trap_filler_proprtion: FireTrapFillerProportion
-    amp_trap_filler_proportion: AmpTrapFillerProportion
-    chukya_trap_filler_proportion: ChuckyaTrapFillerProportion
-    spin_trap_filler_proportion: SpinTrapFillerProportion
-    gust_trap_filler_proportion: GustTrapFillerProportion
+    one_up_filler_percentage: OneUpFillerPercentage
+    one_health_pip_filler_percentage: OneHealthPipFillerPercentage
+    two_health_pip_filler_percentage: TwoHealthPipFillerPercentage
+    three_health_pip_filler_percentage: ThreeHealthPipFillerPercentage
+    four_health_pip_filler_percentage: FourHealthPipFillerPercentage
+    full_restore_filler_percentage: FullRestoreFillerPercentage
+    bonk_trap_filler_percentage: BonkTrapFillerPercentage
+    fire_trap_filler_percentage: FireTrapFillerPercentage
+    amp_trap_filler_percentage: AmpTrapFillerPercentage
+    chukya_trap_filler_percentage: ChuckyaTrapFillerPercentage
+    spin_trap_filler_percentage: SpinTrapFillerPercentage
+    gust_trap_filler_percentage: GustTrapFillerPercentage
     amount_of_stars: AmountOfStars
     first_bowser_star_door_cost: FirstBowserStarDoorCost
     basement_star_door_cost: BasementStarDoorCost
