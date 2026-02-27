@@ -710,7 +710,7 @@ class OptionsCreator(ThemedApp):
                                text=self.create_free_text(option, name, text_initial))
 
         def set_value(instance):
-            set_button_text(box.choice, "Custom")
+            box.choice.text.text = "Custom"
             self.options[name] = instance.text
             self._save_options_cache()
 
