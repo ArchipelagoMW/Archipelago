@@ -263,7 +263,7 @@ class RecipeEngine:
 
         recipe_qty = {
             recipe: pulp.LpVariable(f"recipe_{recipe.name}", lowBound=0)
-            for recipe in self.recipes.values()
+            for recipe in self.recipes.values() if recipe.is_valid
         }
         waste = {
             item: pulp.LpVariable(f"waste_{item.name}", lowBound=0)
@@ -272,20 +272,20 @@ class RecipeEngine:
         # todo these are bad and massively slow things down a graph based solution to get bootstrap before hand would be better
         can_get_item = {
             item: pulp.LpVariable(f"cgi_{item.name}", cat="Binary")
-            for item in self.game_items.values()
+            for item in self.game_items.values() if item.is_valid
         }
         can_get_recipe = {
             recipe: pulp.LpVariable(f"cgr_{recipe.name}", cat="Binary")
-            for recipe in self.recipes.values()
+            for recipe in self.recipes.values() if recipe.is_valid
         }
         can_get_category = {
             category: pulp.LpVariable(f"cgc_{category.name}", cat="Binary")
-            for category in self.categories.values()
+            for category in self.categories.values() if category.is_valid
         }
         # Add a 'ghost' supply for every item with a massive penalty
         slack = {
             item: pulp.LpVariable(f"slack_{item.name}", lowBound=0)
-            for item in self.game_items.values()
+            for item in self.game_items.values() if item.is_valid
         }
 
         # goal
@@ -300,6 +300,8 @@ class RecipeEngine:
 
         # constraint first pass get best
         for item in self.game_items.values():
+            if not item.is_valid:
+                continue
             produced = [recipe_qty[recipe] * recipe.products[item] for recipe in item.crafted_by]
             consumed = [recipe_qty[recipe] * recipe.ingredients[item] for recipe in item.used_in]
 
@@ -312,6 +314,8 @@ class RecipeEngine:
 
         big_M = 1e5
         for recipe in self.recipes.values():
+            if not recipe.is_valid:
+                continue
             rec_qty = recipe_qty[recipe]
             can_rec = can_get_recipe[recipe]
 
@@ -323,7 +327,7 @@ class RecipeEngine:
                 probBest += can_rec <= catalyst
 
         for category in self.categories.values():
-            if category.manual:
+            if category.manual or not category.is_valid:
                 continue
             probBest += can_get_category[category] <= pulp.lpSum(can_get_item[item] for item in category.machines)
 
@@ -454,7 +458,7 @@ class GameItem(RecipeEngineType):
         self.__is_valid_pool = is_valid_pool
 
     def raw_calculate(self) -> None:
-        if self.has_calculated_raw:
+        if self.has_calculated_raw or not self.is_valid:
             return
         self.has_calculated_raw = True
 
