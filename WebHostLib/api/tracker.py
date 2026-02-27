@@ -64,6 +64,12 @@ class PlayerGame(TypedDict):
     game: str
 
 
+class PlayerStartingInventory(TypedDict):
+    team: int
+    player: int
+    items: list[int]
+
+
 @api_endpoints.route("/tracker/<suuid:tracker>")
 @cache.memoize(timeout=60)
 def tracker_data(tracker: UUID) -> dict[str, Any]:
@@ -221,12 +227,20 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
     for team, players in all_players.items():
         for player in players:
             player_game.append({"team": team, "player": player, "game": tracker_data.get_player_game(player)})
+            
+    player_starting_inventory: list[PlayerStartingInventory] = []
+    """Items received by each player."""
+    for team, players in all_players.items():
+        for player in players:
+            player_starting_inventory.append(
+                {"team": team, "player": player, "items": tracker_data.get_player_starting_inventory(player)})
 
     return {
         "groups": groups,
         "datapackage": tracker_data._multidata["datapackage"],
         "player_locations_total": player_locations_total,
         "player_game": player_game,
+        "player_starting_inventory": player_starting_inventory,
     }
 
 
