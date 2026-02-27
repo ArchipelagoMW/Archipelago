@@ -16,6 +16,24 @@ class DictLike(dict[K, V]):
     __slots__ = ("__weakref__",)
 
 
+def _cached_item_name(games_package: GamesPackage, item_name: str) -> str:
+    """Returns a reference to an already-stored copy of item_name, or item_name"""
+    # TODO: there gotta be a better way, but maybe only in a C module?
+    for cached_item_name in games_package["item_name_to_id"].keys():
+        if cached_item_name == item_name:
+            return cached_item_name
+    return item_name
+
+
+def _cached_location_name(games_package: GamesPackage, location_name: str) -> str:
+    """Returns a reference to an already-stored copy of location_name, or location_name"""
+    # TODO: as above
+    for cached_location_name in games_package["location_name_to_id"].keys():
+        if cached_location_name == location_name:
+            return cached_location_name
+    return location_name
+
+
 class GamesPackageCache:
     # NOTE: this uses 3 separate collections because unpacking the get() result would end the container lifetime
     _reduced_games_packages: WeakValueDictionary[GameAndChecksum, GamesPackage]
@@ -27,22 +45,6 @@ class GamesPackageCache:
         self._reduced_games_packages = WeakValueDictionary()
         self._item_name_groups = WeakValueDictionary()
         self._location_name_groups = WeakValueDictionary()
-
-    def _cached_item_name(self, key: GameAndChecksum, item_name: str) -> str:
-        """Returns a reference to an already-stored copy of item_name, or item_name"""
-        # TODO: there gotta be a better way, but maybe only in a C module?
-        for cached_item_name in self._reduced_games_packages[key]["item_name_to_id"].keys():
-            if cached_item_name == item_name:
-                return cached_item_name
-        return item_name
-
-    def _cached_location_name(self, key: GameAndChecksum, location_name: str) -> str:
-        """Returns a reference to an already-stored copy of location_name, or location_name"""
-        # TODO: as above
-        for cached_location_name in self._reduced_games_packages[key]["location_name_to_id"].keys():
-            if cached_location_name == location_name:
-                return cached_location_name
-        return location_name
 
     def _get(
         self,
@@ -72,7 +74,7 @@ class GamesPackageCache:
                     {
                         "item_name_to_id": full_games_package["item_name_to_id"],
                         "location_name_to_id": full_games_package["location_name_to_id"],
-                        "checksum": full_games_package["checksum"],
+                        "checksum": full_games_package.get("checksum", None),
                     }
                 ),
             )
@@ -82,7 +84,9 @@ class GamesPackageCache:
         if cached_item_name_groups is None:
             cached_item_name_groups = DictLike(
                 {
-                    group_name: [self._cached_item_name(cache_key, item_name) for item_name in group_items]
+                    group_name: [
+                        _cached_item_name(cached_reduced_games_package, item_name) for item_name in group_items
+                    ]
                     for group_name, group_items in full_games_package["item_name_groups"].items()
                 }
             )
@@ -93,7 +97,8 @@ class GamesPackageCache:
             cached_location_name_groups = DictLike(
                 {
                     group_name: [
-                        self._cached_location_name(cache_key, location_name) for location_name in group_locations
+                        _cached_location_name(cached_reduced_games_package, location_name)
+                        for location_name in group_locations
                     ]
                     for group_name, group_locations in full_games_package.get("location_name_groups", {}).items()
                 }
