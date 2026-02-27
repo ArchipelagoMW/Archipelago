@@ -213,7 +213,7 @@ class DoomCastle(Choice):
     option_dark_king_only = 2
 
 
-class DoomCastleAccess(Toggle):
+class DoomCastleAccess(Choice):
     """Set how accessible Doom Castle is.
     Standard: You need to free Mac's Ship with the Mega Grenades and give Mac his cap to reach Doom Castle.
     Freed Ship: Mac's Ship is already freed, you just need the Captain Cap.
@@ -224,6 +224,7 @@ class DoomCastleAccess(Toggle):
     option_standard = 0
     option_freed_ship = 1
     option_focus_tower_shortcut = 2
+
 
 class TweakFrustratingDungeons(Toggle):
     """Make some small changes to a few of the most annoying dungeons. Ice Pyramid: Add 3 shortcuts on the 1st floor.
