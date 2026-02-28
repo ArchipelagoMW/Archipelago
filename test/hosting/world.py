@@ -20,7 +20,7 @@ def copy(src: str, dst: str) -> None:
     src_cls = AutoWorldRegister.world_types[src]
     src_folder = Path(src_cls.__file__).parent
     worlds_folder = src_folder.parent
-    if (not src_cls.__file__.endswith(("__init__.py", "world.py")) or not src_folder.is_dir()
+    if (not src_cls.__file__.endswith(("__init__.py", "world.py", "web_world.py")) or not src_folder.is_dir()
             or not (worlds_folder / "generic").is_dir()):
         raise ValueError(f"Unsupported layout for copy_world from {src}")
     dst_folder = worlds_folder / dst_folder_name
@@ -29,12 +29,12 @@ def copy(src: str, dst: str) -> None:
     shutil.copytree(src_folder, dst_folder)
     _new_worlds[dst] = str(dst_folder)
 
-    for potential_world_class_file in ("__init__.py", "world.py"):
+    for potential_world_class_file in ("__init__.py", "world.py", "web_world.py"):
         with open(dst_folder / potential_world_class_file, "r", encoding="utf-8-sig") as f:
             contents = f.read()
         r_src = re.escape(src)
         contents = re.sub(r'game\s*(:\s*[a-zA-Z\[\]]+)?\s*=\s*[\'"]' + r_src + r'[\'"]', f'game = "{dst}"', contents)
-        with open(dst_folder / "__init__.py", "w", encoding="utf-8") as f:
+        with open(dst_folder / potential_world_class_file, "w", encoding="utf-8") as f:
             f.write(contents)
 
 

@@ -7,6 +7,8 @@
 # You can ignore this for now. If you are specifically interested in components, you can read components.py.
 from . import components as components
 
-# The main thing we do in our __init__.py is importing our world class from our world.py to initialize it.
-# Obviously, this world class needs to exist first. For this, read world.py.
+# The main thing we do in our __init__.py is importing our World and WebWorld classes
+# from our world.py and web_world.py to initialize them.
+# Obviously,these classes needs to exist first. For this, read world.py and web_world.py.
 from .world import APQuestWorld as APQuestWorld
+from .web_world import APQuestWebWorld as APQuestWebWorld

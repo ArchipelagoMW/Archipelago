@@ -5,7 +5,7 @@ import os
 from werkzeug.utils import secure_filename
 
 import WebHost
-from worlds.AutoWorld import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister, WebWorldRegister
 
 
 class TestDocs(unittest.TestCase):
@@ -13,11 +13,17 @@ class TestDocs(unittest.TestCase):
     def setUpClass(cls) -> None:
         WebHost.copy_tutorials_files_to_static()
 
-    def test_has_tutorial(self):
+    def test_has_webworld(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
                 with self.subTest(game_name):
-                    tutorials = world_type.web.tutorials
+                    self.assertIn(game_name, WebWorldRegister.web_worlds, msg=f"{game_name} has no associated WebWorld.")
+
+    def test_has_tutorial(self):
+        for game_name, web_world in WebWorldRegister.web_worlds.items():
+            if not web_world.hidden:
+                with self.subTest(game_name):
+                    tutorials = web_world.tutorials
                     self.assertGreater(len(tutorials), 0, msg=f"{game_name} has no setup tutorial.")
 
                     safe_name = secure_filename(game_name)
@@ -29,11 +35,11 @@ class TestDocs(unittest.TestCase):
                         )
 
     def test_has_game_info(self):
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden:
+        for game_name, web_world in WebWorldRegister.web_worlds.items():
+            if not web_world.hidden:
                 safe_name = secure_filename(game_name)
                 target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", safe_name)
-                for game_info_lang in world_type.web.game_info_languages:
+                for game_info_lang in web_world.game_info_languages:
                     with self.subTest(game_name):
                         self.assertTrue(
                             os.path.isfile(Utils.local_path(target_path, f'{game_info_lang}_{safe_name}.md')),

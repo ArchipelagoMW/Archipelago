@@ -1,7 +1,7 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    <title>Supported Games</title>
+    <title>Tools</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/supportedGames.css") }}" />
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/supportedGames.js") }}"></script>
@@ -30,14 +30,16 @@
 {% block body %}
     {% include 'header/oceanHeader.html' %}
     <div id="games" class="markdown">
-        <h1>Currently Supported Games</h1>
-        <p>Below are the games that are currently included with the Archipelago software. To play a game that is not on
-        this page, please refer to the <a href="/tutorial/Archipelago/setup/en#playing-with-custom-worlds">playing with
-        custom worlds</a> section of the setup guide.</p>
+        <h1>Tools</h1>
+        <p>This is a list of tools that may be useful when using Archipelago.</p>
+        {% if not worlds %}
+
+        <p>There are currently no tools to list on this page.</p>
+        {% else %}
         <div class="js-only">
-            <label for="game-search">Search for your game below!</label><br />
+            <label for="game-search">Search for your tool below!</label><br />
             <div class="page-controls">
-                <input id="game-search" placeholder="Search by title..." autofocus />
+                <input id="game-search" placeholder="Search by name..." autofocus />
                 <button id="expand-all">Expand All</button>
                 <button id="collapse-all">Collapse All</button>
             </div>
@@ -47,7 +49,7 @@
         <details data-game="{{ game_name }}">
             <summary class="h2">{{ game_name }}</summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
-            <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
+            <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Tool Page</a>
             {% if world.tutorials %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("tutorial_landing", _anchor = game_name | urlencode) }}">Setup Guides</a>
@@ -55,11 +57,6 @@
             {% if world.options_page is string %}
             <span class="link-spacer">|</span>
             <a href="{{ world.options_page }}">Options Page (External Link)</a>
-            {% elif world.options_page %}
-            <span class="link-spacer">|</span>
-            <a href="{{ url_for("player_options", game=game_name) }}">Options Page</a>
-            <span class="link-spacer">|</span>
-            <a href="{{ url_for("weighted_options", game=game_name) }}">Advanced Options</a>
             {% endif %}
             {% if world.bug_report_page %}
             <span class="link-spacer">|</span>
@@ -67,5 +64,6 @@
             {% endif %}
         </details>
         {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

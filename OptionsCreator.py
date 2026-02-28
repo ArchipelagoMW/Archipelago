@@ -554,21 +554,23 @@ class OptionsCreator(ThemedApp):
         self.option_layout.clear_widgets()
         self.options.clear()
         cls: typing.Type[World] = world_button.world_cls
+        from worlds.AutoWorld import WebWorldRegister
+        web_world = WebWorldRegister.web_worlds.get(cls.game, None)
 
         self.current_game = cls.game
-        if not cls.web.options_page:
+        if not web_world.options_page:
             self.current_game = "None"
             return
-        elif isinstance(cls.web.options_page, str):
+        elif isinstance(web_world.options_page, str):
             self.current_game = "None"
-            if validate_url(cls.web.options_page):
-                webbrowser.open(cls.web.options_page)
+            if validate_url(web_world.options_page):
+                webbrowser.open(web_world.options_page)
                 MDSnackbar(MDSnackbarText(text="Launching in default browser..."), y=dp(24), pos_hint={"center_x": 0.5},
                            size_hint_x=0.5).open()
                 world_button.state = "normal"
             else:
                 # attach onto archipelago.gg and see if we pass
-                new_url = "https://archipelago.gg/" + cls.web.options_page
+                new_url = "https://archipelago.gg/" + web_world.options_page
                 if validate_url(new_url):
                     webbrowser.open(new_url)
                     MDSnackbar(MDSnackbarText(text="Launching in default browser..."), y=dp(24),
@@ -586,10 +588,10 @@ class OptionsCreator(ThemedApp):
             expansion_box.layout.spacing = dp(3)
             expansion_box.scroll_type = ["bars"]
             expansion_box.do_scroll_x = False
-            group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
+            group_names = ["Game Options", *(group.name for group in cls.option_groups)]
             groups = {name: [] for name in group_names}
             for name, option in cls.options_dataclass.type_hints.items():
-                group = next((group.name for group in cls.web.option_groups if option in group.options), "Game Options")
+                group = next((group.name for group in cls.option_groups if option in group.options), "Game Options")
                 groups[group].append((name, option))
 
             for group, options in groups.items():

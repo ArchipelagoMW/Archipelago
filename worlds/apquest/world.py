@@ -5,7 +5,7 @@ from typing import Any
 from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
-from . import items, locations, regions, rules, web_world
+from . import items, locations, regions, rules
 from . import options as apquest_options  # rename due to a name conflict with World.options
 
 # APQuest will go through all the parts of the world api one step at a time,
@@ -23,23 +23,17 @@ from . import options as apquest_options  # rename due to a name conflict with W
 # regions.py, locations.py, rules.py, items.py, options.py and web_world.py.
 # It is recommended that you read these in that specific order, then come back to the world class.
 class APQuestWorld(World):
-    """
-    APQuest is a minimal 8bit-era inspired adventure game with grid-like movement.
-    Good games don't need more than six checks.
-    """
-
-    # The docstring should contain a description of the game, to be displayed on the WebHost.
-
     # You must override the "game" field to say the name of the game.
     game = "APQuest"
-
-    # The WebWorld is a definition class that governs how this world will be displayed on the website.
-    web = web_world.APQuestWebWorld()
 
     # This is how we associate the options defined in our options.py with our world.
     # (Note: options.py has been imported as "apquest_options" at the top of this file to avoid a name conflict)
     options_dataclass = apquest_options.APQuestOptions
     options: apquest_options.APQuestOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+
+    # If we have option groups and/or option presets, we need to specify these here as well.
+    option_groups = apquest_options.option_groups
+    options_presets = apquest_options.option_presets
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
