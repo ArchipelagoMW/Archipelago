@@ -82,6 +82,8 @@ def patch_kh2(self, output_directory):
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}-{curr_timestamp}"
     all_valid_locations = {location for location, data in all_locations.items()}
 
+    formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
+
     for location in self.multiworld.get_filled_locations(self.player):
         if location.name in all_valid_locations:
             data = all_locations[location.name]
@@ -144,21 +146,24 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if data.locid == 2:
-                formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
-                formDictExp = {
-                    1: self.options.Valor_Form_EXP.value,
-                    2: self.options.Wisdom_Form_EXP.value,
-                    3: self.options.Limit_Form_EXP.value,
-                    4: self.options.Master_Form_EXP.value,
-                    5: self.options.Final_Form_EXP.value
-                }
-                formexp = formDictExp[data.charName]
-                formName = formDict[data.charName]
+            formDictExp = {
+                1: self.options.Valor_Form_EXP.value,
+                2: self.options.Wisdom_Form_EXP.value,
+                3: self.options.Limit_Form_EXP.value,
+                4: self.options.Master_Form_EXP.value,
+                5: self.options.Final_Form_EXP.value
+            }
+            formexp = formDictExp[data.charName]
+            formName = formDict[data.charName]
+            currentFormLevelExp = int(formExp[data.charName][data.locid] / formexp)
+            #prevent valor from needing more than 120 hits to level up
+            if data.charName == 1 and currentFormLevelExp >= 100 and formexp > 1:
+                currentFormLevelExp = int(90 + data.locid * 5)
+            if data.locid ==     2:
                 self.formattedFmlv[formName] = []
                 self.formattedFmlv[formName].append({
                     "Ability":            1,
-                    "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                    "Experience":         currentFormLevelExp,
                     "FormId":             data.charName,
                     "FormLevel":          1,
                     "GrowthAbilityLevel": 0,
@@ -166,7 +171,7 @@ def patch_kh2(self, output_directory):
             # row is form column is lvl
             self.formattedFmlv[formName].append({
                 "Ability":            itemcode,
-                "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                "Experience":         currentFormLevelExp,
                 "FormId":             data.charName,
                 "FormLevel":          data.locid,
                 "GrowthAbilityLevel": 0,
@@ -407,6 +412,129 @@ def patch_kh2(self, output_directory):
         'title':  'Randomizer Seed'
     }
 
+    if self.options.HarderAS == True:
+        self.mod_yml['assets'] +=[
+            {
+                 'name':   'ard/us/hb32.ard',
+                 'multi':  [
+                     {
+                         'name': 'ard/fr/hb32.ard'
+                     },
+                     {
+                         'name': 'ard/gr/hb32.ard'
+                     },
+                     {
+                         'name': 'ard/it/hb32.ard'
+                     },
+                     {
+                         'name': 'ard/sp/hb32.ard'
+                     }
+                 ],
+                 'method': 'binarc',
+                 'source': [
+                     {
+                         'name':   'btl',
+                         'type':   'AreaDataScript',
+                         'method': 'areadatascript',
+                         'source': [
+                             {
+                                 'name':     'hb32btl.script'
+                             }
+                         ]
+                     }
+                 ]
+            },
+            {
+                'name':   'ard/us/hb33.ard',
+                'multi':  [
+                    {
+                        'name': 'ard/fr/hb33.ard'
+                    },
+                    {
+                        'name': 'ard/gr/hb33.ard'
+                    },
+                    {
+                        'name': 'ard/it/hb33.ard'
+                    },
+                    {
+                        'name': 'ard/sp/hb33.ard'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'btl',
+                        'type':   'AreaDataScript',
+                        'method': 'areadatascript',
+                        'source': [
+                            {
+                                'name':     'hb33btl.script'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                'name':   'ard/us/hb34.ard',
+                'multi':  [
+                    {
+                        'name': 'ard/fr/hb34.ard'
+                    },
+                    {
+                        'name': 'ard/gr/hb34.ard'
+                    },
+                    {
+                        'name': 'ard/it/hb34.ard'
+                    },
+                    {
+                        'name': 'ard/sp/hb34.ard'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'btl',
+                        'type':   'AreaDataScript',
+                        'method': 'areadatascript',
+                        'source': [
+                            {
+                                'name':     'hb34btl.script'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                'name':   'ard/us/hb38.ard',
+                'multi':  [
+                    {
+                        'name': 'ard/fr/hb38.ard'
+                    },
+                    {
+                        'name': 'ard/gr/hb38.ard'
+                    },
+                    {
+                        'name': 'ard/it/hb38.ard'
+                    },
+                    {
+                        'name': 'ard/sp/hb38.ard'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'btl',
+                        'type':   'AreaDataScript',
+                        'method': 'areadatascript',
+                        'source': [
+                            {
+                                'name':     'hb38btl.script'
+                            }
+                        ]
+                    }
+                ]
+            }]
+
     goal_to_text = {
         0: "Three Proofs",
         1: "Lucky Emblem",
@@ -503,30 +631,57 @@ def patch_kh2(self, output_directory):
     apworldloc = os.path.join("worlds","kh2","data")
     if os.path.exists(apworldloc):
         try:
-            with open(os.path.join(apworldloc, "khapicon.png"),'rb') as icon, \
-                 open(os.path.join(apworldloc, "preview.png"),'rb') as preview:
+            with open(os.path.join(apworldloc, "khapicon.png"),"rb") as icon, \
+                 open(os.path.join(apworldloc, "preview.png"),"rb") as preview:
                 iconbytes = icon.read()
                 previewbytes = preview.read()
             openkhmod["icon.png"] = iconbytes
             openkhmod["preview.png"] = previewbytes
         except IOError as openerror:
             logging.warning(openerror)
+        try:
+            with open(os.path.join(apworldloc, "hb32btl.script"),"rb") as hb32, \
+                 open(os.path.join(apworldloc, "hb33btl.script"),"rb") as hb33, \
+                 open(os.path.join(apworldloc, "hb34btl.script"),"rb") as hb34, \
+                 open(os.path.join(apworldloc, "hb38btl.script"),"rb") as hb38:
+                if self.options.HarderAS:
+                    openkhmod["hb32.script"] = hb32.read()
+                    openkhmod["hb33.script"] = hb33.read()
+                    openkhmod["hb34.script"] = hb34.read()
+                    openkhmod["hb38.script"] = hb38.read()
+        except IOError as openerror:
+            logging.warning(openerror)
+
 
     # client install generating
     apworldloc = os.path.join("lib","worlds")
-    if not os.path.isfile(Utils.user_path(apworldloc, 'kh2.apworld')): 
+    if not os.path.isfile(Utils.user_path(apworldloc, "kh2.apworld")):
         apworldloc = os.path.join("custom_worlds", "")
     if os.path.exists(os.path.join(apworldloc,"kh2.apworld")):
-        try: 
+        try:
             with zipfile.ZipFile(Utils.user_path(os.path.join(
-                                 apworldloc, 'kh2.apworld')), 'r') as apworld_archive:
+                                 apworldloc, "kh2.apworld")), "r") as apworld_archive:
                 # zipfile requires the forward slash
-                with apworld_archive.open('kh2/data/khapicon.png', 'r') as icon, \
-                     apworld_archive.open('kh2/data/preview.png', 'r') as preview:
+                with apworld_archive.open("kh2/data/khapicon.png", "r") as icon, \
+                     apworld_archive.open("kh2/data/preview.png", "r") as preview:
                     iconbytes = icon.read()
                     previewbytes = preview.read()
                 openkhmod["icon.png"] = iconbytes
                 openkhmod["preview.png"] = previewbytes
+        except IOError as openerror:
+            logging.warning(openerror)
+        try:
+            with zipfile.ZipFile(Utils.user_path(os.path.join(
+                                 apworldloc, "kh2.apworld")), "r") as apworld_archive:
+                with apworld_archive.open("kh2/data/hb32btl.script","r") as hb32, \
+                     apworld_archive.open("kh2/data/hb33btl.script","r") as hb33, \
+                     apworld_archive.open("kh2/data/hb34btl.script","r") as hb34, \
+                     apworld_archive.open("kh2/data/hb38btl.script","r") as hb38:
+                    if self.options.HarderAS:
+                        openkhmod["hb32.script"] = hb32.read()
+                        openkhmod["hb33.script"] = hb33.read()
+                        openkhmod["hb34.script"] = hb34.read()
+                        openkhmod["hb38.script"] = hb38.read()
         except IOError as openerror:
             logging.warning(openerror)
 

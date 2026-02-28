@@ -46,7 +46,9 @@ class WisdomEXP(Range):
 
 
 class ValorEXP(Range):
-    """Valor Form Exp Multiplier"""
+    """Valor Form Exp Multiplier
+
+    If Multiplier is greater than 1 then required hits to level Valor Form can never be greater than 120 hits."""
     display_name = "Valor Form EXP"
     range_start = 1
     range_end = 10
@@ -133,9 +135,11 @@ class FightLogic(Choice):
 class FinalFormLogic(Choice):
     """Determines forcing final form logic
 
-    No Light and Darkness: Light and Darkness is not in logic.
-    Light And Darkness: Final Forcing with light and darkness is in logic.
-    Just a Form: All that requires final forcing is another form.
+    No Light and Darkness: Forcing final form is never in logic.
+
+    Light And Darkness: Forcing final form with light and darkness is in logic.
+
+    Just a Form: All that requires forcing final form is another form.
     """
     display_name = "Final Form Logic"
     option_no_light_and_darkness = 0
@@ -158,6 +162,14 @@ class RandomVisitLockingItem(Range):
     range_end = 25
     default = 0
 
+
+class HarderAS(Toggle):
+    """Choose if there are Absent Silhouettes to fight for checks or only Datas
+
+    True: The 5 fights that can be Absent Silhouettes will be the Data Version
+    False: The 5 fights that can be Absent Silhouettes will be Absent Silhouettes"""
+    display_name = "Data Organization Fights Only"
+    default = False
 
 class SuperBosses(Toggle):
     """Terra Sephiroth and Data Fights Toggle."""
@@ -203,19 +215,25 @@ class DonaldGoofyStatsanity(Toggle):
 
 
 class AtlanticaToggle(Toggle):
-    """Atlantica Toggle"""
+    """Determines if Atlantica is enabled to have non junk items. (Yes is enabled)"""
     display_name = "Atlantica Toggle"
     default = False
 
 
 class PromiseCharm(Toggle):
-    """Add Promise Charm to the pool"""
+    """Add Promise Charm to the pool.
+
+    Letting you interact with the PC at the center of the GoA.
+
+    This puts all levels in logic when you find/receive promise charm"""
     display_name = "Promise Charm"
     default = False
 
 
 class AntiForm(Toggle):
-    """Add Anti Form to the pool"""
+    """Add an Anti Form item to the pool.
+
+    Allowing you to select Anti Form in your Drive menu costing all your drive"""
     display_name = "Anti Form"
     default = False
 
@@ -242,7 +260,7 @@ class FinalXemnas(Toggle):
 
     This is in addition to your Goal.
 
-    I.E. get three proofs+kill final Xemnas"""
+    I.E. get three proofs + kill final Xemnas"""
     display_name = "Final Xemnas"
     default = True
 
@@ -300,7 +318,7 @@ class CasualBounties(Toggle):
 
 
 class WeaponSlotStartHint(Toggle):
-    """Start with Weapon Slots' Hinted"""
+    """Start with Weapon Slots Hinted"""
     display_name = "Start with Weapon Slots Hinted"
     default = False
 
@@ -311,6 +329,8 @@ class CorSkipToggle(Toggle):
     Tools depend on which difficulty was chosen on Fight Difficulty.
 
     Toggle does not negate fight logic but is an alternative.
+
+    Toggle True means you are expected to do the out of bounds clip to get chests without doing the forced fights
 
     Full Cor Skip is also affected by this Toggle.
     """
@@ -340,7 +360,7 @@ class SummonLevelLocationToggle(Toggle):
 # shamelessly stolen from the messanger
 @dataclass
 class KingdomHearts2Options(PerGameCommonOptions):
-    start_inventory: StartInventoryPool
+    start_inventory_from_pool: StartInventoryPool
     LevelDepth: LevelDepth
     Sora_Level_EXP: SoraEXP
     Valor_Form_EXP: ValorEXP
@@ -370,6 +390,7 @@ class KingdomHearts2Options(PerGameCommonOptions):
     FillerItemsLocal: FillerItemsLocal
     Visitlocking: Visitlocking
     RandomVisitLockingItem: RandomVisitLockingItem
+    HarderAS: HarderAS
     SuperBosses: SuperBosses
     CasualBounties: CasualBounties
     Cups: Cups

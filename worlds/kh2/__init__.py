@@ -14,15 +14,16 @@ from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
+from itertools import chain
 
 
-def launch_client():
-    from .ClientStuff.Client import launch
-    launch_component(launch, name="KH2Client")
+def launch_client(*args: str):
+    from .Client.Client import launch
+    launch_component(launch, name="KH2Client", args=args)
 
 
 icon_paths['kh2apicon'] = f"ap:{__name__}/data/khapicon.png"
-components.append(Component("KH2 Client", func=launch_client, component_type=Type.CLIENT, icon='kh2apicon'))
+components.append(Component("KH2 Client", func=launch_client, game_name="Kingdom Hearts 2", component_type=Type.CLIENT, icon="kh2apicon", supports_uri=True))
 
 
 class KingdomHearts2Web(WebWorld):
@@ -120,11 +121,10 @@ class KH2World(World):
                 "SummonLevelLocationToggle",
         )
         slot_data.update({
-            "hitlist":                [],  # remove this after next update
             "PoptrackerVersionCheck": 4.3,
-            "KeybladeAbilities":      self.sora_ability_dict,
-            "StaffAbilities":         self.donald_ability_dict,
-            "ShieldAbilities":        self.goofy_ability_dict,
+            "SoraAbilities":      self.sora_ability_dict,
+            "DonaldAbilities":         self.donald_ability_dict,
+            "GoofyAbilities":        self.goofy_ability_dict,
         })
         return slot_data
 
@@ -453,7 +453,7 @@ class KH2World(World):
         """
         Making sure the player doesn't put too many abilities in their starting inventory.
         """
-        for item, value in self.options.start_inventory.value.items():
+        for item, value in chain(self.options.start_inventory.value.items(), self.options.start_inventory_from_pool.value.items()):
             if item in ActionAbility_Table \
                     or item in SupportAbility_Table or item in exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
