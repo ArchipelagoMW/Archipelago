@@ -1,6 +1,6 @@
 # __init__.py
 #
-# Copyright (C) 2025 James Petersen <m@jamespetersen.ca>
+# Copyright (C) 2025-2026 James Petersen <m@jamespetersen.ca>
 # Licensed under MIT. See LICENSE
 
 from BaseClasses import ItemClassification, Tutorial
@@ -12,7 +12,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonPlatinumClient
 from .data import items as itemdata
-from .data.locations import RequiredLocations
+from .data.locations import RequiredLocations, locations as locationdata
 from .items import create_item_label_to_code_map, get_item_classification, PokemonPlatinumItem, get_item_groups
 from .locations import PokemonPlatinumLocation, create_location_label_to_code_map, create_locations
 from .options import PokemonPlatinumOptions, UnownsOption
@@ -134,5 +134,7 @@ class PokemonPlatinumWorld(World):
             self.player)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        ret = self.options.as_dict("goal", "remote_items")
+        ret = self.options.save_options()
+        ret["remote_items"] = self.options.remote_items.value
+        ret["version"] = "0.1.7"
         return ret

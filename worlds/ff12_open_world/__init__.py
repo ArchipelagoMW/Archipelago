@@ -14,7 +14,7 @@ from .Items import FF12OpenWorldItem, item_data_table, item_table, filler_items,
 from .Locations import FF12OpenWorldLocation, location_data_table, location_table
 from .Options import FF12OpenWorldGameOptions
 from .Regions import region_data_table
-from .Rules import rule_data_table, entrance_rule_data_table, entrance_rule_difficulty_table
+from .Rules import rule_data_table, entrance_rule_data_table, entrance_rule_difficulty_table, indirect_entrance_table
 from .Events import event_data_table, FF12OpenWorldEventData
 from .RuleLogic import state_has_characters
 
@@ -24,7 +24,7 @@ def launch_client(*args):
     launch_subprocess(launch, name="FF12 Open World Client", args=args)
 
 
-components.append(Component("FF12 Open World Client", "FF12OpenWorldClient",
+components.append(Component("FF12 Open World Client",
                             func=launch_client, component_type=Type.CLIENT,
                             game_name="Final Fantasy 12 Open World", supports_uri=True))
 
@@ -151,6 +151,19 @@ class FF12OpenWorldWorld(World):
         for region_name, data in region_data_table.items():
             region = self.multiworld.get_region(region_name, self.player)
             region.add_exits(region_data_table[region_name].connecting_regions)
+
+        # Register indirect connections
+        # TODO: None anymore so skip for now
+        '''
+        for region_name, connection_tuples in indirect_entrance_table.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            for conn in connection_tuples:
+                name = f"{conn[0]} -> {conn[1]}"
+                connection = self.multiworld.get_entrance(name, self.player)
+                if connection is None:
+                    raise Exception(f"Indirect connection {name} not found")
+                self.multiworld.register_indirect_condition(region, connection)
+        '''
 
         if len(self.re_gen_data) > 0:
             locations_to_add = self.re_gen_data["re_gen_locations"]

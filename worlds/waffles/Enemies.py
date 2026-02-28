@@ -274,6 +274,7 @@ enemy_list_special_cases = {
         0x00A: EnemyData(0x00A, "Red vertical flying Koopa", 20, (0,0), ["flying"], ["flying", "floating", "flying koopa"]),
         0x00B: EnemyData(0x00B, "Red horizontal flying Koopa", 20, (0,0), ["flying"], ["flying", "floating", "flying koopa"]),
         0x0A1: EnemyData(0x0A1, "Bowser's bowling ball", 20, (0,0), ["flying koopa"], ["skip"]),
+        0x0BC: EnemyData(0x0BC, "Bowser statue, normal/fire/leap (X&3)", 20, (0,0), ["skip"], ["skip"]),
     },
     0x135: {
         0x008: EnemyData(0x008, "Green Koopa, flying left", 20, (0,0), ["flying"], ["floating", "flying", "flying koopa"]),

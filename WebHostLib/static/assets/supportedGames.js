@@ -71,7 +71,7 @@ window.addEventListener('load', () => {
       favoritesSection.style.display = 'none';
       // Update star icons in the main list when favorites section is hidden
       document.querySelectorAll('.star-icon').forEach(starIcon => {
-        const gameName = starIcon.getAttribute('data-game');
+        const gameName = starIcon.getAttribute('data-game-display');
         if (gameName) {
           updateStarIcon(starIcon, favoriteGames.has(gameName));
         }
@@ -89,8 +89,8 @@ window.addEventListener('load', () => {
 
       if (!elementA || !elementB) return 0;
 
-      const displayNameA = elementA.getAttribute('data-game') || a;
-      const displayNameB = elementB.getAttribute('data-game') || b;
+      const displayNameA = elementA.getAttribute('data-game-display') || a;
+      const displayNameB = elementB.getAttribute('data-game-display') || b;
 
       return displayNameA.toLowerCase().localeCompare(displayNameB.toLowerCase());
     });
@@ -119,7 +119,7 @@ window.addEventListener('load', () => {
 
     // Update star icons in the main list
     document.querySelectorAll('.star-icon').forEach(starIcon => {
-      const gameName = starIcon.getAttribute('data-game');
+      const gameName = starIcon.getAttribute('data-game-display');
       if (gameName) {
         updateStarIcon(starIcon, favoriteGames.has(gameName));
       }
@@ -130,7 +130,7 @@ window.addEventListener('load', () => {
   function updateMainListVisibility() {
     // Only target details in the main list, not in the favorites section
     document.querySelectorAll('#games > details').forEach(detail => {
-      const gameName = detail.getAttribute('data-game');
+      const gameName = detail.getAttribute('data-game-display');
       if (gameName && favoriteGames.has(gameName)) {
         detail.style.display = 'none';
       } else {
@@ -142,7 +142,7 @@ window.addEventListener('load', () => {
   // Store original elements for cloning
   function storeOriginalElements() {
     document.querySelectorAll('details').forEach(detail => {
-      const gameName = detail.getAttribute('data-game');
+      const gameName = detail.getAttribute('data-game-display');
       if (gameName) {
         originalElements.set(gameName, detail.cloneNode(true));
       }
@@ -152,7 +152,7 @@ window.addEventListener('load', () => {
   // Add click handlers to all star icons
   function initializeStarIcons() {
     document.querySelectorAll('.star-icon').forEach(starIcon => {
-      const gameName = starIcon.getAttribute('data-game');
+      const gameName = starIcon.getAttribute('data-game-display');
       if (!gameName) return;
 
       updateStarIcon(starIcon, favoriteGames.has(gameName));
@@ -212,7 +212,7 @@ window.addEventListener('load', () => {
     favoriteItems.forEach(item => {
       const gameName = item.getAttribute('data-game-display').toLowerCase();
 
-      if (gameName.includes(searchTerm)) {
+      if (gameName.includes(evt.target.value.toLowerCase())) {
         item.style.display = null;
         item.setAttribute('open', '1');
       } else {

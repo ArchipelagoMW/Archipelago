@@ -8,7 +8,6 @@ import randomizer.CollectibleLogicFiles.FranticFactory
 import randomizer.CollectibleLogicFiles.FungiForest
 import randomizer.CollectibleLogicFiles.GloomyGalleon
 import randomizer.CollectibleLogicFiles.JungleJapes
-import randomizer.CollectibleLogicFiles.DKIsles
 import randomizer.Fill as Fill
 import randomizer.Lists.CBLocations.AngryAztecCBLocations
 import randomizer.Lists.CBLocations.CreepyCastleCBLocations
@@ -18,13 +17,6 @@ import randomizer.Lists.CBLocations.FungiForestCBLocations
 import randomizer.Lists.CBLocations.GloomyGalleonCBLocations
 import randomizer.Lists.CBLocations.JungleJapesCBLocations
 import randomizer.Lists.CBLocations.DKIslesCBLocations
-import randomizer.CollectibleLogicFiles.AngryAztec
-import randomizer.CollectibleLogicFiles.CreepyCastle
-import randomizer.CollectibleLogicFiles.CrystalCaves
-import randomizer.CollectibleLogicFiles.FranticFactory
-import randomizer.CollectibleLogicFiles.FungiForest
-import randomizer.CollectibleLogicFiles.GloomyGalleon
-import randomizer.CollectibleLogicFiles.JungleJapes
 import randomizer.Lists.Exceptions as Ex
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
@@ -163,6 +155,10 @@ def ShuffleCBs(spoiler):
                     balloon_upper = balloons_left
                 else:
                     balloon_upper = min(int(balloons_left / (levels_to_populate - level_index)) + 3, int(balloons_left / global_divisor))
+                if level == Levels.FranticFactory:
+                    # Fill Factory with more balloons to mitigate OM2 overpopulation
+                    balloon_upper = int(balloon_upper * 1.5)
+                    balloon_lower = int(balloon_lower * 1.5)
                 balloon_lst = level_data[level]["balloons"].copy()
                 selected_balloon_count = min(
                     spoiler.settings.random.randint(min(balloon_lower, balloon_upper), max(balloon_lower, balloon_upper)),

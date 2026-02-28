@@ -31,8 +31,8 @@ class Pools:
 
     options: IncludeOptions
 
-    location_pool: set[LocationData]
-    event_pool: set[LocationData]
+    location_pool: list[LocationData]
+    event_pool: list[LocationData]
 
     item_pools: dict[str, ItemPool]
     _item_pool_lists: dict[str, tuple[list[ItemData], list[int]]]
@@ -53,8 +53,8 @@ class Pools:
 
     def __init__(self, world_data: WorldData, opts: IncludeOptions):
         self.options = opts
-        self.location_pool = set()
-        self.event_pool = set()
+        self.location_pool = []
+        self.event_pool = []
         self.item_pools = {}
         self._item_pool_lists = {}
         self.progressive_chains = {}
@@ -64,11 +64,11 @@ class Pools:
 
         for loc in world_data.pool_locations:
             if self.__should_include(loc.metadata):
-                self.location_pool.add(loc)
+                self.location_pool.append(loc)
 
         for ev in world_data.events_dict.values():
             if self.__should_include(ev.metadata):
-                self.event_pool.add(ev)
+                self.event_pool.append(ev)
 
         for name, pool in world_data.item_pools_template.items():
             counter = defaultdict(lambda: 0)

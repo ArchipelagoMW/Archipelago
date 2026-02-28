@@ -8,10 +8,38 @@ from .Items import all_item_table
 def get_enemy_pool(enemy_rando_enabled: bool):
     """Return the list of all enemies available for randomization."""
     all_enemies = [
-        0x0FB, 0x0FC, 0x0FD, 0x100, 0x103, 0x12C, 0x12D, 0x130,
-        0x0FF, 0x10F, 0x106, 0x132, 0x133, 0x145, 0x148, 0x105,
-        0x10C, 0x13C, 0x13D, 0x13F, 0x147, 0x13E, 0x140, 0x141,
-        0x190, 0x108, 0x109, 0x10A, 0x10B, 0x12E, 0x12F, 0x144,
+        0x0FB,
+        0x0FC,
+        0x0FD,
+        0x100,
+        0x103,
+        0x12C,
+        0x12D,
+        0x130,
+        0x0FF,
+        0x10F,
+        0x106,
+        0x132,
+        0x133,
+        0x145,
+        0x148,
+        0x105,
+        0x10C,
+        0x13C,
+        0x13D,
+        0x13F,
+        0x147,
+        0x13E,
+        0x140,
+        0x141,
+        0x190,
+        0x108,
+        0x109,
+        0x10A,
+        0x10B,
+        0x12E,
+        0x12F,
+        0x144,
     ]
 
     # If enemy randomization is disabled, clear the enemy pool to skip randomization
@@ -271,8 +299,4 @@ def raise_memory_error(region_name: str, room_id: int) -> None:
     """Raise a runtime error for memory budget failures."""
     from .file_memory_sizes import MINIMUM_SAFE_BUDGET
 
-    raise RuntimeError(
-        f"Room {hex(room_id)} in region '{region_name}' exceeds memory budget even with extreme reduction! "
-        f"Budget limit: {MINIMUM_SAFE_BUDGET} bytes. "
-        f"Room ID: {hex(room_id)}"
-    )
+    raise RuntimeError(f"Room {hex(room_id)} in region '{region_name}' exceeds memory budget even with extreme reduction! " f"Budget limit: {MINIMUM_SAFE_BUDGET} bytes. " f"Room ID: {hex(room_id)}")

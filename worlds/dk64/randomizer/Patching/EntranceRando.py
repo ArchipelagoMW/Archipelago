@@ -6,8 +6,9 @@ from randomizer.Enums.Maps import Maps
 from randomizer.Lists.MapsAndExits import GetExitId, GetMapId
 from randomizer.Patching.Patcher import LocalROM
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
+from randomizer.Patching.Library.ASM import writeValue, populateOverlayOffsets, getSym, Overlay
 
-valid_lz_types = [9, 12, 13, 16]
+valid_lz_types = [9, 12, 13, 15, 16]
 
 
 def getFilteredExit(settings, mapId, exit):
@@ -45,6 +46,74 @@ def getEntranceDict(spoiler, transition: Transitions, vanilla_map: Maps, vanilla
     }
 
 
+def writeCastleCannonEntrance(ROM_COPY: LocalROM, spoiler, map_id_override: int = None, exit_id_override: int = None):
+    """Write the castle cannon entrance to ROM."""
+    isles_cutscenes = getPointerLocation(TableNames.Cutscenes, Maps.Isles)
+    ROM_COPY.seek(isles_cutscenes)
+    header_end = isles_cutscenes + 0x30
+    for _ in range(0x18):
+        count = int.from_bytes(ROM_COPY.readBytes(2), "big")
+        header_end += 0x12 * count
+    ROM_COPY.seek(header_end)
+    count = int.from_bytes(ROM_COPY.readBytes(2), "big")
+    header_end += 2 + (0x1C * count)
+    ROM_COPY.seek(header_end)
+    cutscene_count = int.from_bytes(ROM_COPY.readBytes(2), "big")
+    read_location = header_end + 2
+    for _ in range(cutscene_count):
+        ROM_COPY.seek(read_location)
+        point_count = int.from_bytes(ROM_COPY.readBytes(2), "big")
+        read_location += 2 + (4 * point_count)
+    ROM_COPY.seek(read_location)
+    item_count = int.from_bytes(ROM_COPY.readBytes(2), "big")
+    read_location += 2
+    count_copy = item_count
+    segment_index = 0
+    while count_copy != 0:
+        ROM_COPY.seek(read_location + 1)
+        command = int.from_bytes(ROM_COPY.readBytes(1), "big")
+        if segment_index == 44:
+            exit_id = 0  # I trust that this line will never be needed, but codeQL panicked
+            map_id = 0  # Same for this variable. codeQL thinks it can be used before being initialized
+            ROM_COPY.seek(read_location + 8)
+            if map_id_override is None or exit_id_override is None:
+                data = getEntranceDict(spoiler, Transitions.IslesMainToCastleLobby, Maps.CreepyCastleLobby, 0)
+                map_id = data["map"]
+                exit_id = data["exit"]
+            if map_id_override is not None:
+                map_id = map_id_override
+            if exit_id_override is not None:
+                exit_id = exit_id_override
+            if exit_id < 0:
+                exit_id += 0x10000
+            ROM_COPY.writeMultipleBytes(map_id, 2)
+            ROM_COPY.writeMultipleBytes(exit_id & 0xFFFF, 2)
+            break
+        segment_index += 1
+        count_copy -= 1
+        if command == 1:
+            read_location += 10
+        elif command == 2:
+            read_location += 12
+        elif command in (3, 13):
+            read_location += 16
+        elif command in (4, 5):
+            ROM_COPY.seek(read_location + 4)
+            inner_count = int.from_bytes(ROM_COPY.readBytes(2), "big")
+            if command == 4:
+                read_location += 0x20 + (inner_count * 0xE)
+            elif command == 5:
+                read_location += 0x14 + (inner_count * 0x8)
+        elif command in (10, 15, 16):
+            read_location += 18
+        elif command == 12:
+            read_location += 6
+        else:
+            read_location += 4
+            count_copy += 1  # Not important cutscene
+    print("Exited while loop")
+
+
 def writeEntrance(ROM_COPY: LocalROM, spoiler, transition: Transitions, offset: int, vanilla_map: Maps, vanilla_exit: int):
     """Write LZREntrance struct to ROM."""
     ROM_COPY.seek(spoiler.settings.rom_data + offset)
@@ -71,13 +140,26 @@ def randomize_entrances(spoiler, ROM_COPY: LocalROM):
                 lz_type = int.from_bytes(ROM_COPY.readBytes(2), "big")
                 # print(lz_type)
                 if lz_type in valid_lz_types:
-                    ROM_COPY.seek(cont_map_lzs_address + start + 0x12)
-                    lz_map = int.from_bytes(ROM_COPY.readBytes(2), "big")
-                    ROM_COPY.seek(cont_map_lzs_address + start + 0x14)
-                    lz_exit = int.from_bytes(ROM_COPY.readBytes(2), "big")
+                    if lz_type == 15:
+                        # Warp Trigger
+                        lz_map = cont_map_id
+                        ROM_COPY.seek(cont_map_lzs_address + start + 0x12)
+                        lz_exit = int.from_bytes(ROM_COPY.readBytes(2), "big")
+                        # print(lz_map)
+                        # print(lz_exit)
+                        # print(cont_map["zones"])
+                    else:
+                        ROM_COPY.seek(cont_map_lzs_address + start + 0x12)
+                        lz_map = int.from_bytes(ROM_COPY.readBytes(2), "big")
+                        ROM_COPY.seek(cont_map_lzs_address + start + 0x14)
+                        lz_exit = int.from_bytes(ROM_COPY.readBytes(2), "big")
                     for zone in cont_map["zones"]:
                         if lz_map == zone["vanilla_map"]:
                             if lz_exit == zone["vanilla_exit"] or (lz_map == Maps.FactoryCrusher):
+                                if lz_type == 15:
+                                    # Set the type
+                                    ROM_COPY.seek(cont_map_lzs_address + start + 0x10)
+                                    ROM_COPY.writeMultipleBytes(12, 2)
                                 ROM_COPY.seek(cont_map_lzs_address + start + 0x12)
                                 ROM_COPY.writeMultipleBytes(zone["new_map"], 2)
                                 ROM_COPY.seek(cont_map_lzs_address + start + 0x14)
@@ -98,7 +180,9 @@ def randomize_entrances(spoiler, ROM_COPY: LocalROM):
         writeEntrance(ROM_COPY, spoiler, Transitions.GalleonLighthouseAreaToSickBay, 0x6A, Maps.GalleonSickBay, 0)
         writeEntrance(ROM_COPY, spoiler, Transitions.ForestMainToCarts, 0x6C, Maps.ForestMinecarts, 0)
         writeEntrance(ROM_COPY, spoiler, Transitions.IslesMainToCastleLobby, 0x74, Maps.CreepyCastleLobby, 0)
-        # /* 0x078 */ unsigned short exit_levels[8]; // Same as "aztec_beetle_enter" but for the loading zone dictated by the name
+        # Write Castle Lobby entrance
+        writeCastleCannonEntrance(ROM_COPY, spoiler)
+        # Everything else
         enter_transitions = [
             Transitions.IslesToJapes,
             Transitions.IslesToAztec,
@@ -119,16 +203,22 @@ def randomize_entrances(spoiler, ROM_COPY: LocalROM):
             Transitions.HelmToIsles,
         ]
         ROM_COPY.seek(varspaceOffset + 0x78)
-        for transition in exit_transitions:
+        sym_maps = getSym("replacement_lobbies_array")
+        sym_exits = getSym("replacement_lobby_exits_array")
+        offset_dict = populateOverlayOffsets(ROM_COPY)
+        for index, transition in enumerate(exit_transitions):
+            map_id = None
+            exit_id = None
             if transition == Transitions.HelmToIsles and not spoiler.settings.shuffle_helm_location:
                 # Helm exit won't be in the shuffled_exit_data dict, so just write the vanilla value without reference
-                ROM_COPY.write(Maps.HideoutHelmLobby)
-                ROM_COPY.write(1)
+                map_id = Maps.HideoutHelmLobby
+                exit_id = 1
             else:
                 shuffledBack = spoiler.shuffled_exit_data[transition]
                 map_id = GetMapId(spoiler.settings, shuffledBack.regionId)
-                ROM_COPY.write(map_id)
-                ROM_COPY.write(getFilteredExit(spoiler.settings, map_id, getOneByteExit(shuffledBack)))
+                exit_id = getFilteredExit(spoiler.settings, map_id, getOneByteExit(shuffledBack))
+            writeValue(ROM_COPY, sym_maps + (index * 2), Overlay.Custom, map_id, offset_dict)
+            writeValue(ROM_COPY, sym_exits + (index * 2), Overlay.Custom, exit_id, offset_dict)
         # /* 0x088 */ unsigned short enter_levels[7]; // Same as "aztec_beetle_enter" but for the loading zone dictated by the name
         for world_index, transition in enumerate(enter_transitions):
             shuffledBack = spoiler.shuffled_exit_data[transition]
@@ -272,6 +362,4 @@ def placeLevelOrder(spoiler, order: list, ROM_COPY: LocalROM):
     level_7_lobby = lobbies[order[6]]
     ROM_COPY.seek(varspaceOffset + 0x5D)
     ROM_COPY.write(2)
-    ROM_COPY.seek(varspaceOffset + 0x74)
-    ROM_COPY.write(level_7_lobby)
-    ROM_COPY.write(0)
+    writeCastleCannonEntrance(ROM_COPY, spoiler, level_7_lobby, 0)

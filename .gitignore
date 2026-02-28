@@ -209,3 +209,7 @@ Thumbs.db
 !worlds/albw/albwrandomizer
 !worlds/albw/albwrandomizer/*.pyd
 !worlds/albw/albwrandomizer/*.so
+!worlds/som/vendored
+!worlds/som/vendored/*/*/*/*.pyd
+!worlds/som/vendored/*/*/*/*.dll
+!worlds/som/vendored/*/*/*/*.so

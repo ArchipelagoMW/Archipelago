@@ -389,9 +389,34 @@ class GameLogicDifficulty(Choice):
 
 class InventoryYoshiLogic(Toggle):
     """
-    Whether being able to use Yoshi inventory items is considered in logic or not for Blue Yoshi logic
+    Whether being able to use Yoshi inventory items is considered in logic or not for Yoshi related logic
+    If disabled, you need to reach a level with a Yoshi block on it in order to have Yoshi related checks in logic.
     """
     display_name = "Inventory Yoshi Logic"
+
+
+class DecoupledYoshiCarry(DefaultOnToggle):
+    """
+    Whether Yoshi's Tongue requires an additional Progressive Yoshi item to be unlocked or not.
+    If disabled, Yoshi will be able to use his tongue immediately after unlocking him.
+    """
+    display_name = "Decoupled Yoshi Carry"
+
+
+class DecoupledWallRun(DefaultOnToggle):
+    """
+    Whether Wall Run Anywhere requires an additional Progressive Run item or not.
+    If disabled, Mario will gain the ability right after getting a Run item.
+    """
+    display_name = "Decoupled Wall Run Anywhere"
+
+
+class DecoupledFastSwim(DefaultOnToggle):
+    """
+    Whether Fast Swimming requires an additional Progressive Swim item or not.
+    If disabled, Mario will gain the ability right after getting a Swim item.
+    """
+    display_name = "Decoupled Fast Swimming"
 
 
 class DisplayReceivedItemPopups(Choice):
@@ -650,6 +675,9 @@ waffle_option_groups = [
         AbilityItemShuffle,
         GameLogicDifficulty,
         InventoryYoshiLogic,
+        DecoupledYoshiCarry,
+        DecoupledWallRun,
+        DecoupledFastSwim,
     ]),
     OptionGroup("Location Options", [
         DragonCoinChecks,
@@ -715,6 +743,9 @@ class WaffleOptions(PerGameCommonOptions):
     ability_shuffle: AbilityItemShuffle
     game_logic_difficulty: GameLogicDifficulty
     inventory_yoshi_logic: InventoryYoshiLogic
+    decoupled_yoshi_carry: DecoupledYoshiCarry
+    decoupled_wall_run_anywhere: DecoupledWallRun
+    decoupled_fast_swimming: DecoupledFastSwim
     goal: Goal
     yoshi_egg_count: NumberOfYoshiEggs
     percentage_of_yoshi_eggs: PercentageOfYoshiEggs

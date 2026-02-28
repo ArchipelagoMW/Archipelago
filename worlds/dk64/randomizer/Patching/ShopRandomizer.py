@@ -3,8 +3,9 @@
 from randomizer.Enums.Regions import Regions
 from randomizer.Enums.Maps import Maps
 from randomizer.Enums.VendorType import VendorType
-from randomizer.Patching.Library.DataTypes import float_to_hex, intf_to_float
+from randomizer.Patching.Library.DataTypes import intf_to_float
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
+from randomizer.Patching.Library.ItemRando import CustomActors
 from randomizer.Patching.Patcher import LocalROM
 from randomizer.ShuffleShopLocations import available_shops
 
@@ -584,6 +585,8 @@ def ApplyShopRandomizer(spoiler, ROM_COPY: LocalROM):
                     model_index = -1
                     zone_index = -1
                     ROM_COPY.seek(setup_address)
+                    shop_coords = []
+                    # Modify Object
                     model2_count = int.from_bytes(ROM_COPY.readBytes(4), "big")
                     for model2_index in range(model2_count):
                         if model_index == -1:
@@ -593,6 +596,33 @@ def ApplyShopRandomizer(spoiler, ROM_COPY: LocalROM):
                             if obj_type == search_model:
                                 model_index = model2_index
                                 obj_id = int.from_bytes(ROM_COPY.readBytes(2), "big")
+                                ROM_COPY.seek(obj_start)
+                                for x in range(3):
+                                    shop_coords.append(intf_to_float(int.from_bytes(ROM_COPY.readBytes(4), "big")))
+                    # Modify indicator
+                    closest_indicator_index = None
+                    closest_indicator_dist = 9999999
+                    ROM_COPY.seek(setup_address + 4 + (0x30 * model2_count))
+                    mys_count = int.from_bytes(ROM_COPY.readBytes(4), "big")
+                    actor_block_start = setup_address + 8 + (0x30 * model2_count) + (0x24 * mys_count)
+                    ROM_COPY.seek(actor_block_start)
+                    act_count = int.from_bytes(ROM_COPY.readBytes(4), "big")
+                    for actor_index in range(act_count):
+                        act_start = actor_block_start + (actor_index * 0x38) + 4
+                        delta_sum = 0
+                        ROM_COPY.seek(act_start)
+                        for x in range(3):
+                            coord_value = intf_to_float(int.from_bytes(ROM_COPY.readBytes(4), "big"))
+                            delta = shop_coords[x] - coord_value
+                            delta_sum += delta * delta
+                        if closest_indicator_index is None or delta_sum < closest_indicator_dist:
+                            closest_indicator_index = actor_index
+                            closest_indicator_dist = delta_sum
+                    closest_start = actor_block_start + 4 + (closest_indicator_index * 0x38)
+                    ROM_COPY.seek(closest_start + 0x32)
+                    closest_new_type = CustomActors.SpreadCounter if new_model == 0x79 else 70
+                    ROM_COPY.writeMultipleBytes(closest_new_type - 0x10, 2)
+                    # Modify LZ
                     ROM_COPY.seek(lz_address)
                     lz_count = int.from_bytes(ROM_COPY.readBytes(2), "big")
                     for lz_index in range(lz_count):
@@ -635,13 +665,13 @@ def ApplyShopRandomizer(spoiler, ROM_COPY: LocalROM):
                     elif new_angle >= 360:
                         new_angle -= 360
                     ROM_COPY.seek(setup_item + 0x1C)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(new_angle), 16), 4)
+                    ROM_COPY.writeFloat(new_angle)
                 # Scale
                 ROM_COPY.seek(setup_item + 0xC)
                 original_scale = intf_to_float(int.from_bytes(ROM_COPY.readBytes(4), "big"))
                 new_scale = original_scale * placement["scale_factor"]
                 ROM_COPY.seek(setup_item + 0xC)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(new_scale), 16), 4)
+                ROM_COPY.writeFloat(new_scale)
                 # Get Model X and Z
                 ROM_COPY.seek(setup_item)
                 model_x = intf_to_float(int.from_bytes(ROM_COPY.readBytes(4), "big"))

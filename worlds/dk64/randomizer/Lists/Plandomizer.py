@@ -9,8 +9,6 @@ from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Maps import Maps
 from randomizer.Enums.Minigames import Minigames
 from randomizer.Enums.Plandomizer import ItemToPlandoItemMap, PlandoItems
-from randomizer.Enums.Switches import Switches
-from randomizer.Enums.SwitchTypes import SwitchType
 from randomizer.Enums.Types import Types
 from randomizer.Enums.VendorType import VendorType
 from randomizer.Lists.CustomLocations import CustomLocations, LocationTypes
@@ -22,7 +20,6 @@ from randomizer.Lists.Location import LocationListOriginal as LocationList
 from randomizer.Lists.MapsAndExits import RegionMapList
 from randomizer.Lists.Minigame import BarrelMetaData, MinigameRequirements
 from randomizer.Lists.ShufflableExit import ShufflableExits
-from randomizer.Lists.Switches import GetSwitchName, SwitchData
 
 
 def getKongString(kongEnum: Kongs) -> str:
@@ -156,10 +153,12 @@ PlandomizerPanels = {
         "name": "Shops",
         "levels": createPlannableLevelObj(include_isles=True),
     },
-    "Switches": {
-        "name": "Switches",
-        "locations": [],
-    },
+    # "Snide": {
+    #     "name": "Snide HQ",
+    #     "locations": {
+    #         "All Kongs": [],
+    #     },
+    # },
     # "Blueprints": {
     #    "name": "Blueprints",
     #    "locations": createPlannableKongObj()
@@ -729,7 +728,7 @@ for level, locations in KasplatLocationToRewardMap.items():
 for i in range(0, 16):
     PlandomizerPanels["Locations"]["categories"]["DirtPatch"]["locations"].append(
         {
-            "name": f"Dirt Patch {i+1}",
+            "name": f"Dirt Patch {i + 1}",
             "vanilla_value": "",
             "location_id": f"plando_patch_{i}_location",
             "reward_id": f"plando_patch_{i}_location_reward",
@@ -752,7 +751,7 @@ for level, fairyLimit in fairyLevelCounts.items():
     for i in range(0, fairyLimit):
         PlandomizerPanels["Locations"]["categories"]["Fairy"]["locations"].append(
             {
-                "name": f"{GetLevelString(level)} Fairy {i+1}",
+                "name": f"{GetLevelString(level)} Fairy {i + 1}",
                 "level": level.name,
                 "vanilla_value": "",
                 "location_id": f"plando_fairy_{overallFairyCount}_location",
@@ -764,7 +763,7 @@ for level, fairyLimit in fairyLevelCounts.items():
 for i in range(0, 13):
     PlandomizerPanels["Locations"]["categories"]["MelonCrate"]["locations"].append(
         {
-            "name": f"Melon Crate {i+1}",
+            "name": f"Melon Crate {i + 1}",
             "vanilla_value": "",
             "location_id": f"plando_crate_{i}_location",
             "reward_id": f"plando_crate_{i}_location_reward",
@@ -955,8 +954,9 @@ for wrinklyDoor in WrinklyDoorEnumList:
     }
     for door in door_locations[doorLocation.level]:
         if door.placed == DoorType.wrinkly and door.default_kong == doorLocation.kong:
-            WrinklyVanillaMap[wrinklyDoor.name] = door.name
-            jsonValue["vanilla_value"] = door.name
+            vanillaDoor = f"{doorLocation.level.name};{door.name}"
+            WrinklyVanillaMap[wrinklyDoor.name] = vanillaDoor
+            jsonValue["vanilla_value"] = vanillaDoor
             break
     PlandomizerPanels["Locations"]["categories"]["WrinklyDoor"]["locations"].append(jsonValue)
 
@@ -974,13 +974,14 @@ TnsVanillaMap = {
 # Derive the list of vanilla locations.
 for level, doorList in door_locations.items():
     for door in doorList:
+        jsonValue = f"{level.name};{door.name}"
         if door.placed == DoorType.boss:
             # There is one vanilla TnS portal that cannot be used in TnS portal
             # rando for DK64 reasons.
             if DoorType.boss not in door.door_type:
                 TnsVanillaMap[level.name].append("")
             else:
-                TnsVanillaMap[level.name].append(door.name)
+                TnsVanillaMap[level.name].append(jsonValue)
     # If there are fewer than five vanilla locations, fill out the rest of the
     # list with "none".
     while len(TnsVanillaMap[level.name]) < 5:
@@ -990,7 +991,7 @@ for level, doorList in door_locations.items():
 for level, vanillaDoors in TnsVanillaMap.items():
     for index, vanillaDoor in enumerate(vanillaDoors):
         jsonValue = {
-            "name": f"{GetLevelString(Levels[level])} TnS Portal {index+1}",
+            "name": f"{GetLevelString(Levels[level])} TnS Portal {index + 1}",
             "level": level,
             "location_id": f"plando_{level}_{index}_tns_portal",
             "vanilla_value": vanillaDoor,
@@ -1031,86 +1032,12 @@ for level, doorList in door_locations.items():
         # Right now, users cannot place other doors on the vanilla portal.
         if door.placed == DoorType.dk_portal:
             continue
+        jsonValue = f"{level.name};{door.name}"
+        doorObj = {"name": door.name, "value": jsonValue}
         if DoorType.wrinkly in door.door_type:
             for kong in door.kongs:
-                WrinklyDoorLocationOptions[level.name][kong.name].append(door.name)
+                WrinklyDoorLocationOptions[level.name][kong.name].append(doorObj)
         if DoorType.boss in door.door_type:
-            TnsDoorLocationOptions[level.name].append(door.name)
+            TnsDoorLocationOptions[level.name].append(doorObj)
 PlannableCustomLocations["WrinklyDoor"] = WrinklyDoorLocationOptions
 PlannableCustomLocations["TnsPortal"] = TnsDoorLocationOptions
-
-############
-# SWITCHES #
-############
-
-# A map of switch locations to vanilla values.
-SwitchVanillaMap = {}
-
-# Each SwitchType gets its own list, as well as two switch locations that are
-# exceptional cases.
-PlannableSwitches = {
-    SwitchType.GunSwitch.name: [],
-    SwitchType.InstrumentPad.name: [],
-    SwitchType.MiscActivator.name: [],
-    SwitchType.PadMove.name: [],
-    SwitchType.SlamSwitch.name: [],
-    Switches.IslesHelmLobbyGone.name: [],
-    Switches.IslesMonkeyport.name: [],
-}
-
-for switchEnum, switchInfo in SwitchData.items():
-    jsonValue = {
-        "name": switchInfo.name,
-        "switch_loc": switchEnum.name,
-        "switch_type": switchInfo.switch_type.name,
-        "vanilla_value": switchInfo.kong.name,
-    }
-    if switchEnum == Switches.IslesHelmLobbyGone:
-        jsonValue["vanilla_value"] = f"{switchInfo.kong.name};{switchInfo.switch_type.name}"
-    SwitchVanillaMap[switchEnum.name] = jsonValue["vanilla_value"]
-    PlandomizerPanels["Switches"]["locations"].append(jsonValue)
-
-for switchType in [
-    SwitchType.GunSwitch,
-    SwitchType.InstrumentPad,
-    SwitchType.MiscActivator,
-    SwitchType.PadMove,
-    SwitchType.SlamSwitch,
-]:
-    for kong in [Kongs.donkey, Kongs.diddy, Kongs.lanky, Kongs.tiny, Kongs.chunky]:
-        switchName = GetSwitchName(switchType, kong)
-        PlannableSwitches[switchType.name].append(
-            {
-                "name": switchName,
-                "value": kong.name,
-            }
-        )
-        # Handle the two exceptions.
-        if switchType == SwitchType.PadMove and kong not in [Kongs.diddy, Kongs.chunky]:
-            PlannableSwitches[Switches.IslesMonkeyport.name].append(
-                {
-                    "name": switchName,
-                    "value": kong.name,
-                }
-            )
-        if switchType == SwitchType.PadMove and kong == Kongs.chunky:
-            PlannableSwitches[Switches.IslesHelmLobbyGone.name].append(
-                {
-                    "name": switchName,
-                    "value": f"{kong.name};{switchType.name}",
-                }
-            )
-        if switchType == SwitchType.MiscActivator and kong in [Kongs.donkey, Kongs.diddy]:
-            PlannableSwitches[Switches.IslesHelmLobbyGone.name].append(
-                {
-                    "name": switchName,
-                    "value": f"{kong.name};{switchType.name}",
-                }
-            )
-        if switchType == SwitchType.InstrumentPad:
-            PlannableSwitches[Switches.IslesHelmLobbyGone.name].append(
-                {
-                    "name": switchName,
-                    "value": f"{kong.name};{switchType.name}",
-                }
-            )

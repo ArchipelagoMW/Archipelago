@@ -4,7 +4,11 @@ from ...output import Shapez2ScenarioContainer
 
 
 def get_fixed_patches(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
-    shapes_order = ["RuRuRuRu", "SuSuSuSu", "CuCuCuCu", "WuWuWuWu"]
+    if container.world.options.shape_configuration == "tetragonal":
+        shapes_order = ["RuRuRuRu", "SuSuSuSu", "CuCuCuCu", "WuWuWuWu"]
+    else:
+        shapes_order = ["FuFuFuFuFuFu", "GuGuGuGuGuGu", "HuHuHuHuHuHu"]
+        shapes_order.append(container.world.random.choice(shapes_order))
     container.world.random.shuffle(shapes_order)
     return [
         {
@@ -33,7 +37,9 @@ def get_fixed_patches(container: "Shapez2ScenarioContainer") -> list[dict[str, A
 def get_starting_chunks(container: "Shapez2ScenarioContainer") -> list[dict[str, Any]]:
     return [
         {
-            "GuaranteedShapePatches": ["CuCuCuCu", "RuRuRuRu", "SuSuSuSu", "WuWuWuWu"],
+            "GuaranteedShapePatches": (["CuCuCuCu", "RuRuRuRu", "SuSuSuSu", "WuWuWuWu"]
+                                       if container.world.options.shape_configuration == "tetragonal"
+                                       else ["FuFuFuFuFuFu", "GuGuGuGuGuGu", "HuHuHuHuHuHu"]),
             "GuaranteedColorPatches": ["r", "b", "g"]
         }
     ]

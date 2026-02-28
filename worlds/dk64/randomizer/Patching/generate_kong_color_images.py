@@ -86,11 +86,11 @@ def convertColors(color_palettes, ROM_COPY: ROM):
                 rgba = [0, 0, 0, 1]
                 for i in range(3):
                     if zone["fill_type"] == PaletteFillType.radial:
-                        val = int(int(f"0x{zone['colors'][0][(2*i)+1:(2*i)+3]}", 16) * (1 / 8))
+                        val = int(int(f"0x{zone['colors'][0][(2 * i) + 1:(2 * i) + 3]}", 16) * (1 / 8))
                         if x == 1:
                             val = int(val * 2)
                     else:
-                        val = int(int(f"0x{zone['colors'][x][(2*i)+1:(2*i)+3]}", 16) * (1 / 8))
+                        val = int(int(f"0x{zone['colors'][x][(2 * i) + 1:(2 * i) + 3]}", 16) * (1 / 8))
                     if val < 0:
                         val = 0
                     elif val > 31:

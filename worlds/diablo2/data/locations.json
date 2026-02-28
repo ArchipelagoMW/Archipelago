@@ -1,0 +1,3827 @@
+[
+	{
+		"name": "Quest: Den of Evil - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Quests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Quest: Sisters' Burial Grounds - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Quests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Quest: Search for Cain - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Quests - Normal" ],
+		"requires": [ "Scroll of Inifuss:1" ]
+	},
+	{
+		"name": "Quest: The Forgotten Tower - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Quests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Quest: Tools of the Trade - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Quests - Normal" ],
+		"requires": [ "Horadric Hammer:1" ]
+	},
+	{
+		"name": "Quest: Sisters to the Slaughter - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Quests - Normal" ],
+		"requires": [ "Level Up:14" ],
+		"place_item": [ "Act Clear - Normal" ]
+	},
+	{
+		"name": "Quest: Radament's Lair - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Quests - Normal" ],
+		"requires": [ "Horadric Scroll:1", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Quest: The Horadric Staff - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Quests - Normal" ],
+		"requires": [ "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Quest: Tainted Sun - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Quests - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Quest: Arcane Sanctuary - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Quests - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Quest: The Summoner - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Quests - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Quest: The Seven Tombs - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Quests - Normal" ],
+		"requires": [ "Level Up:19", "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1", "Act Clear - Normal:1" ],
+		"place_item": [ "Act Clear - Normal" ]
+	},
+	{
+		"name": "Quest: The Golden Bird - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Quests - Normal", "A-Sync"],
+		"requires": [ "Jade Figurine:1", "Golden Bird:1", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Quest: Blade of the Old Religion - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Quests - Normal", "A-Sync"],
+		"requires": [ "Gidbinn:1", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Quest: Khalim's Will - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Quests - Normal", "A-Sync"],
+		"requires": [ "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Quest: Lam Esen's Tome - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Quests - Normal", "A-Sync"],
+		"requires": [ "Lam Esen's Tome:1", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Quest: The Blackened Temple - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Quests - Normal", "A-Sync"],
+		"requires": [ "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Quest: The Guardian - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Quests - Normal", "A-Sync"],
+		"requires": [ "Level Up:24", "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1", "Act Clear - Normal:2" ],
+		"place_item": [ "Act Clear - Normal" ]
+	},
+	{
+		"name": "Quest: Fallen Angel - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Quests - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Quest: Hell's Forge - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Quests - Normal", "A-Sync"],
+		"requires": [ "Mephisto's Soulstone:1", "Hellforge Hammer:1", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Quest: Terror's End - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Quests - Normal", "A-Sync"],
+		"requires": [ "Level Up:29", "Act Clear - Normal:3" ],
+		"place_item": [ "Act Clear - Normal" ]
+	},
+	{
+		"name": "Quest: Siege on Harrogath - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Quests - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Quest: Rescue on Mount Arreat - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Quests - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Quest: Prison of Ice - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Quests - Normal", "A-Sync"],
+		"requires": [ "Malah's Potion:1", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Quest: Betrayal of Harrogath - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Quests - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Quest: Rite of Passage - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Quests - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Quest: Eve of Destruction - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Quests - Normal", "A-Sync"],
+		"requires": [ "Level Up:34", "Act Clear - Normal:4" ],
+		"place_item": [ "Act Clear - Normal" ]
+	},
+	{
+		"name": "Quest: Den of Evil - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Quest: Sisters' Burial Grounds - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Quest: Search for Cain - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Scroll of Inifuss:2", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Quest: The Forgotten Tower - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Quest: Tools of the Trade - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Horadric Hammer:2", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Quest: Sisters to the Slaughter - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:39", "Act Clear - Normal:5" ],
+		"place_item": [ "Act Clear - Nightmare" ]
+	},
+	{
+		"name": "Quest: Radament's Lair - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Horadric Scroll:2", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Quest: The Horadric Staff:2",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Quest: Tainted Sun - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Quest: Arcane Sanctuary - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Quest: The Summoner - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Quest: The Seven Tombs - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:44", "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ],
+		"place_item": [ "Act Clear - Nightmare" ]
+	},
+	{
+		"name": "Quest: The Golden Bird - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Jade Figurine:2", "Golden Bird:2", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Quest: Blade of the Old Religion - Nightmare",
+		"category": [ "Act 3 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Gidbinn:2", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Quest: Khalim's Will - Nightmare",
+		"category": [ "Act 3 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Quest: Lam Esen's Tome - Nightmare",
+		"category": [ "Act 3 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Lam Esen's Tome:2", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Quest: The Blackened Temple - Nightmare",
+		"category": [ "Act 3 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Quest: The Guardian - Nightmare",
+		"category": [ "Act 3 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:49", "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ],
+		"place_item": [ "Act Clear - Nightmare" ]
+	},
+	{
+		"region": "Act 4 - Nightmare",
+		"name": "Quest: Fallen Angel - Nightmare",
+		"category": [ "Act 4 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"region": "Act 4 - Nightmare",
+		"name": "Quest: Hell's Forge - Nightmare",
+		"category": [ "Act 4 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Mephisto's Soulstone:2", "Hellforge Hammer:2", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"region": "Act 4 - Nightmare",
+		"name": "Quest: Terror's End - Nightmare",
+		"category": [ "Act 4 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:54", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ],
+		"place_item": [ "Act Clear - Nightmare" ]
+	},
+	{
+		"region": "Act 5 - Nightmare",
+		"name": "Quest: Siege on Harrogath - Nightmare",
+		"category": [ "Act 5 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"region": "Act 5 - Nightmare",
+		"name": "Quest: Rescue on Mount Arreat - Nightmare",
+		"category": [ "Act 5 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"region": "Act 5 - Nightmare",
+		"name": "Quest: Prison of Ice - Nightmare",
+		"category": [ "Act 5 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Malah's Potion:2", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"region": "Act 5 - Nightmare",
+		"name": "Quest: Betrayal of Harrogath - Nightmare",
+		"category": [ "Act 5 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"region": "Act 5 - Nightmare",
+		"name": "Quest: Rite of Passage - Nightmare",
+		"category": [ "Act 5 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"region": "Act 5 - Nightmare",
+		"name": "Quest: Eve of Destruction - Nightmare",
+		"category": [ "Act 5 Quests - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:59", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ],
+		"place_item": [ "Act Clear - Nightmare" ]
+	},
+	{
+		"region": "Act 1 - Hell",
+		"name": "Quest: Den of Evil - Hell",
+		"category": [ "Act 1 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"region": "Act 1 - Hell",
+		"name": "Quest: Sisters' Burial Grounds - Hell",
+		"category": [ "Act 1 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"region": "Act 1 - Hell",
+		"name": "Quest: Search for Cain - Hell",
+		"category": [ "Act 1 Quests - Hell", "A-Sync"],
+		"requires": [ "Scroll of Inifuss:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"region": "Act 1 - Hell",
+		"name": "Quest: The Forgotten Tower - Hell",
+		"category": [ "Act 1 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"region": "Act 1 - Hell",
+		"name": "Quest: Tools of the Trade - Hell",
+		"category": [ "Act 1 Quests - Hell", "A-Sync"],
+		"requires": [ "Horadric Hammer:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"region": "Act 1 - Hell",
+		"name": "Quest: Sisters to the Slaughter - Hell",
+		"category": [ "Act 1 Quests - Hell", "A-Sync"],
+		"requires": [ "Level Up:64", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ],
+		"place_item": [ "Act Clear - Hell" ]
+	},
+	{
+		"region": "Act 2 - Hell",
+		"name": "Quest: Radament's Lair - Hell",
+		"category": [ "Act 2 Quests - Hell", "A-Sync"],
+		"requires": [ "Horadric Scroll:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"region": "Act 2 - Hell",
+		"name": "Quest: The Horadric Staff - Hell",
+		"category": [ "Act 2 Quests - Hell", "A-Sync"],
+		"requires": [ "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3", "Horadric Staff:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"region": "Act 2 - Hell",
+		"name": "Quest: Tainted Sun - Hell",
+		"category": [ "Act 2 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"region": "Act 2 - Hell",
+		"name": "Quest: Arcane Sanctuary - Hell",
+		"category": [ "Act 2 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"region": "Act 2 - Hell",
+		"name": "Quest: The Summoner - Hell",
+		"category": [ "Act 2 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"region": "Act 2 - Hell",
+		"name": "Quest: The Seven Tombs - Hell",
+		"category": [ "Act 2 Quests - Hell", "A-Sync"],
+		"requires": [ "Level Up:69", "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3", "Horadric Staff:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ],
+		"place_item": [ "Act Clear - Hell" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Quest: The Golden Bird - Hell",
+		"category": [ "Act 3 Quests - Hell", "A-Sync"],
+		"requires": [ "Jade Figurine:3", "Golden Bird:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Quest: Blade of the Old Religion - Hell",
+		"category": [ "Act 3 Quests - Hell", "A-Sync"],
+		"requires": [ "Gidbinn:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Quest: Khalim's Will - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Quests - Hell", "A-Sync"],
+		"requires": [ "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Quest: Lam Esen's Tome - Hell",
+		"category": [ "Act 3 Quests - Hell", "A-Sync"],
+		"requires": [ "Lam Esen's Tome:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Quest: The Blackened Temple - Hell",
+		"category": [ "Act 3 Quests - Hell", "A-Sync"],
+		"requires": [ "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Quest: The Guardian - Hell",
+		"category": [ "Act 3 Quests - Hell", "A-Sync"],
+		"requires": [ "Level Up:74", "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ],
+		"place_item": [ "Act Clear - Hell" ]
+	},
+	{
+		"region": "Act 4 - Hell",
+		"name": "Quest: Fallen Angel - Hell",
+		"category": [ "Act 4 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"region": "Act 4 - Hell",
+		"name": "Quest: Hell's Forge - Hell",
+		"category": [ "Act 4 Quests - Hell", "A-Sync"],
+		"requires": [ "Mephisto's Soulstone:3", "Hellforge Hammer:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"region": "Act 4 - Hell",
+		"name": "Quest: Terror's End - Hell",
+		"category": [ "Act 4 Quests - Hell", "A-Sync"],
+		"requires": [ "Level Up:79", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ],
+		"place_item": [ "Act Clear - Hell" ]
+	},
+	{
+		"region": "Act 5 - Hell",
+		"name": "Quest: Siege on Harrogath - Hell",
+		"category": [ "Act 5 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"region": "Act 5 - Hell",
+		"name": "Quest: Rescue on Mount Arreat - Hell",
+		"category": [ "Act 5 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"region": "Act 5 - Hell",
+		"name": "Quest: Prison of Ice - Hell",
+		"category": [ "Act 5 Quests - Hell", "A-Sync"],
+		"requires": [ "Malah's Potion:3", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"region": "Act 5 - Hell",
+		"name": "Quest: Betrayal of Harrogath - Hell",
+		"category": [ "Act 5 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"region": "Act 5 - Hell",
+		"name": "Quest: Rite of Passage - Hell",
+		"category": [ "Act 5 Quests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"region": "Act 5 - Hell",
+		"name": "Quest: Eve of Destruction - Hell",
+		"category": [ "Act 5 Quests - Hell", "A-Sync"],
+		"requires": [ "Level Up:84", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ],
+		"place_item": [ "Act Clear - Hell" ]
+	},
+	{
+		"victory": true,
+		"name": "Consequences Unforseen",
+		"category": ["Triumph over Evil"],
+		"requires": "{OptOne(|Act Clear - Normal:2|)} AND {OptOne(|Act Clear - Normal:5|)} AND {OptOne(|Act Clear - Nightmare:5|)} AND {OptOne(|Act Clear - Hell:5|)}"
+	},
+	{
+		"name": "Level 1 (Yay, Freebie)",
+		"category": ["Levels 1-19"],
+		"requires": []
+	},
+	{
+		"name": "Level 2",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:1"]
+	},
+	{
+		"name": "Level 3",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:2"]
+	},
+	{
+		"name": "Level 4",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:3"]
+	},
+	{
+		"name": "Level 5",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:4"]
+	},
+	{
+		"name": "Level 6",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:5"]
+	},
+	{
+		"name": "Level 7",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:6"]
+	},
+	{
+		"name": "Level 8",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:7"]
+	},
+	{
+		"name": "Level 9",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:8"]
+	},
+	{
+		"name": "Level 10",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:9"]
+	},
+	{
+		"name": "Level 11",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:10"]
+	},
+	{
+		"name": "Level 12",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:11"]
+	},
+	{
+		"name": "Level 13",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:12"]
+	},
+	{
+		"name": "Level 14",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:13"]
+	},
+	{
+		"name": "Level 15",
+		"category": ["Levels 1-19"],
+		"requires": ["Level Up:14", "Act Clear - Normal:1"]
+	},
+	{
+		"name": "Level 16",
+		"category": ["Levels 1-19"],
+		"requires": [ "Level Up:15", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Level 17",
+		"category": ["Levels 1-19"],
+		"requires": [ "Level Up:16", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Level 18",
+		"category": ["Levels 1-19"],
+		"requires": [ "Level Up:17", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Level 19",
+		"category": ["Levels 1-19"],
+		"requires": [ "Level Up:18", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Level 20",
+		"category": ["Levels 20-39"],
+		"requires": [ "Level Up:19", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Level 21",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:20", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Level 22",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:21", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Level 23",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:22", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Level 24",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:23", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Level 25",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:24", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Level 26",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:25", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Level 27",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:26", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Level 28",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:27", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Level 29",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:28", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Level 30",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:29", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Level 31",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:30", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Level 32",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:31", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Level 33",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:32", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Level 34",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:33", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Level 35",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:34", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Level 36",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:35", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Level 37",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:36", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Level 38",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:37", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Level 39",
+		"category": ["Levels 20-39", "A-Sync"],
+		"requires": [ "Level Up:38", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Level 40",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:39", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Level 41",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:40", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Level 42",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:41", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Level 43",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:42", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Level 44",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:43", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Level 45",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:44", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Level 46",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:45", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Level 47",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:46", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Level 48",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:47", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Level 49",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:48", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Level 50",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:49", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Level 51",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:50", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Level 52",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:51", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Level 53",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:52", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Level 54",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:53", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Level 55",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:54", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Level 56",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:55", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Level 57",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:56", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Level 58",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:57", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Level 59",
+		"category": ["Levels 40-59", "A-Sync"],
+		"requires": [ "Level Up:58", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Level 60",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:59", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Level 61",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:60", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Level 62",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:61", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Level 63",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:62", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Level 64",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:63", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Level 65",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:64", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Level 66",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:65", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Level 67",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:66", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Level 68",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:67", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Level 69 (Nice)",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:68", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Level 70",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:69", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Level 71",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:70", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Level 72",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:71", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Level 73",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:72", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Level 74",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:73", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Level 75",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:74", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Level 76",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:75", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Level 77",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:76", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Level 78",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:77", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Level 79",
+		"category": ["Levels 60-79", "A-Sync"],
+		"requires": [ "Level Up:78", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Level 80",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:79", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 81",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:80", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 82",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:81", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 83",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:82", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 84",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:83", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 85",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:84", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 86",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:85", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 87",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:86", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 88",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:87", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 89",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:88", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 90",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:89", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 91",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:90", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 92",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:91", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 93",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:92", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 94",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:93", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 95",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:94", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 96",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:95", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 97",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:96", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 98",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:97", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Level 99",
+		"category": ["Levels 80-99", "A-Sync"],
+		"requires": [ "Level Up:98", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Kill Corpsefire - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Bishibosh - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Coldcrow - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Blood Raven - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Bonebreaker - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Rakanishu - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Treehead Woodfist - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Griswold - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": [ "Scroll of Inifuss:1" ]
+	},
+	{
+		"name": "Kill the Countess - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill the Smith - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Pitspawn Fouldog - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Bone Ash - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Kill Andariel - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal" ],
+		"requires": [ "Level Up:14", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Kill Cow King - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Corpsefire - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Bishibosh - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Coldcrow - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Blood Raven - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Bonebreaker - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Rakanishu - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Treehead Woodfist - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Griswold - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Scroll of Inifuss:2"]
+	},
+	{
+		"name": "Kill the Countess - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill the Smith - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Pitspawn Fouldog - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Bone Ash - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5"]
+	},
+	{
+		"name": "Kill Andariel - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:39", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Kill Cow King - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Corpsefire - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Bishibosh - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Coldcrow - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Blood Raven - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Bonebreaker - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Rakanishu - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Treehead Woodfist - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Griswold - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Scroll of Inifuss:3" ]
+	},
+	{
+		"name": "Kill the Countess - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill the Smith - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Pitspawn Fouldog - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Bone Ash - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5"]
+	},
+	{
+		"name": "Kill Andariel - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Bounties - Hell", "A-Sync"],
+		"requires": [ "Level Up:64", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Kill Radament - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Creeping Feature - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Bloodwitch the Wild - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Beetleburst - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Coldworm the Burrower - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Dark Elder - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Fangskin - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Fire Eye - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill The Summoner - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Ancient Kaa the Soulless - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": ["Act Clear - Normal:1"]
+	},
+	{
+		"name": "Kill Duriel - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Bounties - Normal" ],
+		"requires": [ "Level Up:19", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Kill Radament - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Creeping Feature - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Bloodwitch the Wild - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Beetleburst - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Coldworm the Burrower - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Dark Elder - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Fangskin - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Fire Eye - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill The Summoner - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Ancient Kaa the Soulless - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:1"]
+	},
+	{
+		"name": "Kill Duriel - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:44", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Kill Radament - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Creeping Feature - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Bloodwitch the Wild - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Beetleburst - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Coldworm the Burrower - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Dark Elder - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Fangskin - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Fire Eye - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill The Summoner - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Ancient Kaa the Soulless - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:1", "Act Clear - Nightmare:5", "Act Clear - Hell:1"]
+	},
+	{
+		"name": "Kill Duriel - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Bounties - Hell", "A-Sync"],
+		"requires": [ "Level Up:69", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Kill Sszark the Burning - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Witch Doctor Endugu - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Stormtree - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Battlemaid Sarina - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Icehawk Riftwing - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Ismail Vilehand - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Geleb Flamefinger - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Toorc Icefist - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:2"]
+	},
+	{
+		"name": "Kill Wyand Voidbringer - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:2", "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1" ]
+	},
+	{
+		"name": "Kill Maffer Dragonhand - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:2", "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1" ]
+	},
+	{
+		"name": "Kill Bremm Sparkfist - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": [ "Act Clear - Normal:2", "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1" ]
+	},
+	{
+		"name": "Kill Mephisto - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Bounties - Normal", "A-Sync"],
+		"requires": [ "Level Up:24", "Horadric Cube:1", "Khalim's Eye:1", "Khalim's Brain:1", "Khalim's Heart:1", "Khalim's Flail:1", "Khalim's Will:1", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Kill Sszark the Burning - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Witch Doctor Endugu - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Stormtree - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Battlemaid Sarina - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Icehawk Riftwing - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Ismail Vilehand - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Geleb Flamefinger - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Toorc Icefist - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:2"]
+	},
+	{
+		"name": "Kill Wyand Voidbringer - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2", "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Kill Maffer Dragonhand - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2", "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Kill Bremm Sparkfist - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2", "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Kill Mephisto - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:49", "Act Clear - Normal:5", "Act Clear - Nightmare:3", "Horadric Cube:2", "Khalim's Eye:2", "Khalim's Brain:2", "Khalim's Heart:2", "Khalim's Flail:2", "Khalim's Will:2" ]
+	},
+	{
+		"name": "Kill Sszark the Burning - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Witch Doctor Endugu - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Stormtree - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Battlemaid Sarina - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Icehawk Riftwing - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Ismail Vilehand - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Geleb Flamefinger - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Toorc Icefist - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2"]
+	},
+	{
+		"name": "Kill Wyand Voidbringer - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2", "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3" ]
+	},
+	{
+		"name": "Kill Maffer Dragonhand - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2", "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3" ]
+	},
+	{
+		"name": "Kill Bremm Sparkfist - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2", "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3" ]
+	},
+	{
+		"name": "Kill Mephisto - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Bounties - Hell", "A-Sync"],
+		"requires": [ "Level Up:74", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3", "Horadric Cube:3", "Khalim's Eye:3", "Khalim's Brain:3", "Khalim's Heart:3", "Khalim's Flail:3", "Khalim's Will:3" ]
+	},
+	{
+		"name": "Kill Izual - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:3"]
+	},
+	{
+		"name": "Kill Hephasto the Armorer - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:3"]
+	},
+	{
+		"name": "Kill Infector of Souls - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:3"]
+	},
+	{
+		"name": "Kill Grand Vizier of Chaos - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:3"]
+	},
+	{
+		"name": "Kill Lord De Seis - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:3"]
+	},
+	{
+		"name": "Kill Diablo - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Bounties - Normal", "A-Sync"],
+		"requires": [ "Level Up:29", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Kill Izual - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:3"]
+	},
+	{
+		"name": "Kill Hephasto the Armorer - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:3"]
+	},
+	{
+		"name": "Kill Infector of Souls - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:3"]
+	},
+	{
+		"name": "Kill Grand Vizier of Chaos - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:3"]
+	},
+	{
+		"name": "Kill Lord De Seis - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:3"]
+	},
+	{
+		"name": "Kill Diablo - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:54", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Kill Izual - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3"]
+	},
+	{
+		"name": "Kill Hephasto the Armorer - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3"]
+	},
+	{
+		"name": "Kill Infector of Souls - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3"]
+	},
+	{
+		"name": "Kill Grand Vizier of Chaos - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3"]
+	},
+	{
+		"name": "Kill Lord De Seis - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3"]
+	},
+	{
+		"name": "Kill Diablo - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Bounties - Hell", "A-Sync"],
+		"requires": [ "Level Up:79", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Kill Dac Farren - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Shenk the Overseer - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Eldritch the Rectifier - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Sharptooth Slayer - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Eyeback the Unleashed - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Thresh Socket - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Frozenstein - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Bonesaw Breaker - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Pindleskin - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Nihlathak - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Snapchip Shatter - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Defeat Talic - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Defeat Madawc - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Defeat Korlic - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Colenzo the Annihilator - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Achmel the Cursed - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Bartuc the Bloody - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Ventar the Unholy - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Lister the Tormentor - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": ["Act Clear - Normal:4"]
+	},
+	{
+		"name": "Kill Baal - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Bounties - Normal", "A-Sync"],
+		"requires": [ "Level Up:34", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Kill Dac Farren - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Shenk the Overseer - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Eldritch the Rectifier - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Sharptooth Slayer - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Eyeback the Unleashed - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Thresh Socket - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Frozenstein - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Bonesaw Breaker - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Pindleskin - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Nihlathak - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Snapchip Shatter - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Defeat Talic - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Defeat Madawc - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Defeat Korlic - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Colenzo the Annihilator - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Achmel the Cursed - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Bartuc the Bloody - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Ventar the Unholy - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Lister the Tormentor - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:4"]
+	},
+	{
+		"name": "Kill Baal - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Bounties - Nightmare", "A-Sync"],
+		"requires": [ "Level Up:59", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Kill Dac Farren - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Shenk the Overseer - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Eldritch the Rectifier - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Sharptooth Slayer - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Eyeback the Unleashed - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Thresh Socket - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Frozenstein - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Bonesaw Breaker - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Pindleskin - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Nihlathak - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Snapchip Shatter - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Defeat Talic - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Defeat Madawc - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Defeat Korlic - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Colenzo the Annihilator - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Achmel the Cursed - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Bartuc the Bloody - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Ventar the Unholy - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Lister the Tormentor - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": ["Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4"]
+	},
+	{
+		"name": "Kill Baal - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Bounties - Hell", "A-Sync"],
+		"requires": [ "Level Up:84", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:5" ]
+	},
+	{
+		"name": "El",
+		"category": [ "Runes" ],
+		"requires": ["Knowledge of El", "Level Up:10"]
+	},
+	{
+		"name": "Eld",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Eld", "Level Up:10" ]
+	},
+	{
+		"name": "Tir",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Tir", "Level Up:12" ]
+	},
+	{
+		"name": "Nef",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Nef", "Level Up:12" ]
+	},
+	{
+		"name": "Eth",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Eth", "Level Up:14" ]
+	},
+	{
+		"name": "Ith",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Ith", "Level Up:14" ]
+	},
+	{
+		"name": "Tal",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Tal", "Level Up:16", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Ral",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Ral", "Level Up:18", "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Ort",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Ort", "Level Up:20", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Thul",
+		"category": [ "Runes" ],
+		"requires": [ "Knowledge of Thul", "Level Up:22", "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Amn",
+		"category": [ "Runes", "A-Sync"],
+		"requires": [ "Knowledge of Amn", "Level Up:24", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Sol",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Sol", "Level Up:26", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Shael",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Shael", "Level Up:28", "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Dol",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Dol", "Level Up:30", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Hel",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Hel", "Level Up:32", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Io",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Io", "Level Up:34", "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Lum",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Lum", "Level Up:36", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Ko",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Ko", "Level Up:38", "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Fal",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Fal", "Level Up:40", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Lem",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Lem", "Level Up:42", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Pul",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Pul", "Level Up:44", "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Um",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Um", "Level Up:46", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Mal",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Mal", "Level Up:48", "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Ist",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Ist", "Level Up:50", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Gul",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Gul", "Level Up:52", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Vex",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Vex", "Level Up:54", "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Ohm",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Ohm", "Level Up:56", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Lo",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Lo", "Level Up:58", "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sur",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Sur", "Level Up:60", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Ber",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Ber", "Level Up:62", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Jah",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Jah", "Level Up:64", "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Cham",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Cham", "Level Up:66", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Zod",
+		"category": [ "Runes", "A-Sync" ],
+		"requires": [ "Knowledge of Zod", "Level Up:68", "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Cave L2 - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Sparkly Chests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Sparkly Chest: Crypt - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Sparkly Chests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Sparkly Chest: Mausoleum - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Sparkly Chests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Sparkly Chest: Underground Passage L2 - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Sparkly Chests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Sparkly Chest: The Hole L2 - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Sparkly Chests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Sparkly Chest: The Pit L2 - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Sparkly Chests - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Sparkly Chest: Cave L2 - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Crypt - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Mausoleum - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Underground Passage L2 - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Sparkly Chest: The Hole L2 - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Sparkly Chest: The Pit L2 - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Cave L2 - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Crypt - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Mausoleum - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Underground Passage L2 - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Sparkly Chest: The Hole L2 - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Sparkly Chest: The Pit L2 - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Sparkly Chest: Stoney Tomb L2 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Ancient Tunnels - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 1 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1", "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 2 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1", "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 3 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1", "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 4 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1", "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 5 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Sparkly Chests - Normal" ],
+		"requires": [ "Act Clear - Normal:1", "Horadric Cube:1", "Staff of Kings:1", "Viper Amulet:1", "Horadric Staff:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Stoney Tomb L2 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Ancient Tunnels - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 1 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1", "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 2 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1", "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 3 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1", "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 4 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1", "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 5 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1", "Horadric Cube:2", "Staff of Kings:2", "Viper Amulet:2", "Horadric Staff:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Stoney Tomb L2 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Ancient Tunnels - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 1 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1", "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3"]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 2 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1", "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3"]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 3 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1", "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3"]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 4 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1", "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3"]
+	},
+	{
+		"name": "Sparkly Chest: Tal Rasha's Tomb 5 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1", "Horadric Cube:3", "Staff of Kings:3", "Viper Amulet:3"]
+	},
+	{
+		"region": "Act 3 - Normal",
+		"name": "Sparkly Chest: Arachnid Lair - Normal",
+		"category": [ "Act 3 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Great Marsh 1 - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Great Marsh 2 - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Swampy Pit L3 - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"region": "Act 3 - Normal",
+		"name": "Sparkly Chest: Kurast Sewer L1 - Normal",
+		"category": [ "Act 3 Sparkly Chests- Normal" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Sparkly Chest: Arachnid Lair - Nightmare",
+		"category": [ "Act 3 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Great Marsh 1 - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Great Marsh 2 - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Swampy Pit L3 - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Nightmare",
+		"name": "Sparkly Chest: Kurast Sewer L1 - Nightmare",
+		"category": [ "Act 3 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Sparkly Chest: Arachnid Lair - Hell",
+		"category": [ "Act 3 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Great Marsh 1 - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Great Marsh 2 - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Swampy Pit L3 - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"region": "Act 3 - Hell",
+		"name": "Sparkly Chest: Kurast Sewer L1 - Hell",
+		"category": [ "Act 3 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Sparkly Chest: Glacial Trail - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Drifter Cavern - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Icy Cellar - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Abaddon - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Pit of Acheron - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Infernal Pit - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Sparkly Chests - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Glacial Trail - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Drifter Cavern - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Icy Cellar - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Abaddon - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Pit of Acheron - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Infernal Pit - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Sparkly Chests - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Glacial Trail - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Drifter Cavern - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Icy Cellar - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Abaddon - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Pit of Acheron - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Sparkly Chest: Infernal Pit - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Sparkly Chests - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Den of Evil - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Activities - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Purge the Burial Grounds of the Undead - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Activities - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Purge the Crypt of the Undead - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Activities - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Purge the Mausoleum of the Undead - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Activities - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Moldy Tome - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Activities - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Cold Plains Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Stony Field Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Dark Wood Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Black Marsh Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Outer Cloister Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Jail L1 Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Inner Cloister Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Find the Catacombs L2 Waypoint - Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Waypoints - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 1- Normal",
+		"region": "Act 1 - Normal",
+	"category": [ "Act 1 Activities - Normal" ],
+		"requires": []
+	},
+	{
+		"name": "Activity: Purge the Stoney Tomb of Evil - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Activities - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Purge the Ancient Tunnels of Evil - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Activities - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Purge the Claw Viper Temple of Evil - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Activities - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Purge the Palace Cellar of Evil - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Activities - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Visit all 4 corners of the Arcane Sanctuary - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Activities - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Sewers L2 Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Dry Hills Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Halls of the Dead L2 Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Far Oasis Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Lost City Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Palace Cellar L1 Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Arcane Sanctuary Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Find the Canyon of the Magi Waypoint - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Waypoints - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 2 - Normal",
+		"region": "Act 2 - Normal",
+		"category": [ "Act 2 Activities - Normal" ],
+		"requires": [ "Act Clear - Normal:1" ]
+	},
+	{
+		"name": "Activity: Purge Arachnid Lair of Evil - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Purge Spider Cavern of Evil - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Ruined and Forgotten Temples of Evil - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Ruined and Disused Fanes of Evil - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Forgotten and Disused Reliquarys of Evil - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Spider Forest Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Great Marsh Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Flayer Jungle Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Lower Kurast Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Kurast Bazaar Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Upper Kurast Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Travincal Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Find the Durance of Hate L2 Waypoint - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 3 - Normal",
+		"region": "Act 3 - Normal",
+		"category": [ "Act 3 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:2" ]
+	},
+	{
+		"name": "Activity: Purge the River of Flames of Evil - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Activity: Purge the Chaos Sanctuary of Evil - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Activity: Find the City of the Damned Waypoint - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Activity: Find the River of Flames Waypoint - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 4 - Normal",
+		"region": "Act 4 - Normal",
+		"category": [ "Act 4 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:3" ]
+	},
+	{
+		"name": "Activity: Purge Crystalline Passage of Evil - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Purge the Halls of Vaught of Evil - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Purge the Glacial Trail of Evil - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Purge the Ancient's Way of Evil - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Purge the Throne of Destruction of Evil - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Frigid Highlands Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Arreat Plateau Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Crystalline Passage Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Halls of Pain Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Glacial Trail Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Frozen Tundra Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the The Ancients' Way Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Worldstone Keep L2 Waypoint - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Waypoints - Normal", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 5 - Normal",
+		"region": "Act 5 - Normal",
+		"category": [ "Act 5 Activities - Normal", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:4" ]
+	},
+	{
+		"name": "Activity: Find the Den of Evil - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Purge the Burial Grounds of the Undead - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Purge the Crypt of the Undead - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Purge the Mausoleum of the Undead - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Moldy Tome - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Cold Plains Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Stony Field Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Dark Wood Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Black Marsh Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Outer Cloister Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Jail L1 Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Inner Cloister Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Find the Catacombs L2 Waypoint - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 1 - Nightmare",
+		"region": "Act 1 - Nightmare",
+		"category": [ "Act 1 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5" ]
+	},
+	{
+		"name": "Activity: Purge the Stoney Tomb of Evil - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Purge the Ancient Tunnels of Evil - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Purge the Claw Viper Temple of Evil - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Purge the Palace Cellar of Evil - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Visit all 4 corners of the Arcane Sanctuary - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Sewers L2 Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Dry Hills Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Halls of the Dead L2 Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Far Oasis Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Lost City Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Palace Cellar L1 Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Arcane Sanctuary Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Find the Canyon of the Magi Waypoint - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Waypoints - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 2 - Nightmare",
+		"region": "Act 2 - Nightmare",
+		"category": [ "Act 2 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:1" ]
+	},
+	{
+		"name": "Activity: Purge Arachnid Lair of Evil - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Purge Spider Cavern of Evil - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Ruined and Forgotten Temples of Evil - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Ruined and Disused Fanes of Evil - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Forgotten and Disused Reliquarys of Evil - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Spider Forest Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Great Marsh Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Flayer Jungle Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Lower Kurast Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Kurast Bazaar Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Upper Kurast Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Travincal Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Find the Durance of Hate L2 Waypoint - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 3 - Nightmare",
+		"region": "Act 3 - Nightmare",
+		"category": [ "Act 3 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:2" ]
+	},
+	{
+		"name": "Activity: Purge the River of Flames of Evil - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Activity: Purge the Chaos Sanctuary of Evil - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Activity: Find the City of the Damned Waypoint - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Activity: Find the River of Flames Waypoint - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 4 - Nightmare",
+		"region": "Act 4 - Nightmare",
+		"category": [ "Act 4 Activities - Nightmare" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:3" ]
+	},
+	{
+		"name": "Activity: Purge Crystalline Passage of Evil - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Activities - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Purge the Halls of Vaught of Evil - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Activities - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Purge the Glacial Trail of Evil - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Activities - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Purge the Ancient's Way of Evil - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Activities - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Purge the Throne of Destruction of Evil - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Activities - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Frigid Highlands Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Arreat Plateau Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Crystalline Passage Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Halls of Pain Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Glacial Trail Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Frozen Tundra Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the The Ancients' Way Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Worldstone Keep L2 Waypoint - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Waypoints - Nightmare", "A-Sync"  ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 5 - Nightmare",
+		"region": "Act 5 - Nightmare",
+		"category": [ "Act 5 Activities - Nightmare", "A-Sync" ],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:4" ]
+	},
+	{
+		"name": "Activity: Find the Den of Evil - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Purge the Burial Grounds of the Undead - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Purge the Crypt of the Undead - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Purge the Mausoleum of the Undead - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Moldy Tome - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Cold Plains Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Stony Field Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Dark Wood Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Black Marsh Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Outer Cloister Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Jail L1 Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Inner Cloister Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Find the Catacombs L2 Waypoint - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 1 - Hell",
+		"region": "Act 1 - Hell",
+		"category": [ "Act 1 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5" ]
+	},
+	{
+		"name": "Activity: Purge the Stoney Tomb of Evil - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Purge the Ancient Tunnels of Evil - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Purge the Claw Viper Temple of Evil - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Purge the Palace Cellar of Evil - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Visit all 4 corners of the Arcane Sanctuary - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Sewers L2 Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Dry Hills Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Halls of the Dead L2 Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Far Oasis Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Lost City Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Palace Cellar L1 Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Arcane Sanctuary Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Find the Canyon of the Magi Waypoint - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 2 - Hell",
+		"region": "Act 2 - Hell",
+		"category": [ "Act 2 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:1" ]
+	},
+	{
+		"name": "Activity: Purge Arachnid Lair of Evil - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Purge Spider Cavern of Evil - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Ruined and Forgotten Temples of Evil - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Ruined and Disused Fanes of Evil - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Purge both the Forgotten and Disused Reliquarys of Evil - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Spider Forest Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Great Marsh Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Flayer Jungle Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Lower Kurast Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Kurast Bazaar Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Upper Kurast Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Travincal Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Find the Durance of Hate L2 Waypoint - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 3 - Hell",
+		"region": "Act 3 - Hell",
+		"category": [ "Act 3 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:2" ]
+	},
+	{
+		"name": "Activity: Purge the River of Flames of Evil - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Activity: Purge the Chaos Sanctuary of Evil - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Activity: Find the City of the Damned Waypoint - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Activity: Find the River of Flames Waypoint - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 4 - Hell",
+		"region": "Act 4 - Hell",
+		"category": [ "Act 4 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:3" ]
+	},
+	{
+		"name": "Activity: Purge Crystalline Passage of Evil - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Purge the Halls of Vaught of Evil - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Purge the Glacial Trail of Evil - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Purge the Ancient's Way of Evil - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Purge the Throne of Destruction of Evil - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Frigid Highlands Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Arreat Plateau Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Crystalline Passage Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Halls of Pain Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Glacial Trail Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Frozen Tundra Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the The Ancients' Way Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Find the Worldstone Keep L2 Waypoint - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Waypoints - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	},
+	{
+		"name": "Activity: Open 10 random loot containers in Act 5 - Hell",
+		"region": "Act 5 - Hell",
+		"category": [ "Act 5 Activities - Hell", "A-Sync"],
+		"requires": [ "Act Clear - Normal:5", "Act Clear - Nightmare:5", "Act Clear - Hell:4" ]
+	}
+]

@@ -20,6 +20,12 @@ class Test3Milestones(Shapez2TestBase):
     }}
 
 
+class Test20Milestones(Shapez2TestBase):
+    options = {"location_adjustments": {
+        "Milestones": 20,
+    }}
+
+
 class TestLockTaskLines(Shapez2TestBase):
     options = {"location_modifiers": ["Lock task lines"]}
 
@@ -45,6 +51,10 @@ class TestSomeStartingResearchAndBlueprintPoints(Shapez2TestBase):
         "Starting research points": 10,
         "Starting blueprint points": 1000,
     }}
+
+
+class TestHexagonalConfiguration(Shapez2TestBase):
+    options = {"shape_configuration": "hexagonal"}
 
 
 class TestNoMilestoneOperatorLines(Shapez2TestBase):

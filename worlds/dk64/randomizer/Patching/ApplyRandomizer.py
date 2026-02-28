@@ -8,7 +8,7 @@ import time
 from tempfile import mktemp
 from randomizer.Enums.Settings import (
     BananaportRando,
-    CBRando,
+    CBRequirement,
     CrownEnemyDifficulty,
     DamageAmount,
     FasterChecksSelected,
@@ -20,6 +20,7 @@ from randomizer.Enums.Settings import (
     ProgressiveHintItem,
     PuzzleRando,
     RemovedBarriersSelected,
+    RandomStartingRegion,
     ShockwaveStatus,
     ShuffleLoadingZones,
     SlamRequirement,
@@ -42,9 +43,9 @@ from randomizer.Lists.Multiselectors import QoLSelector, RemovedBarrierSelector,
 from randomizer.Patching.BananaPlacer import randomize_cbs
 from randomizer.Patching.BananaPortRando import randomize_bananaport, move_bananaports
 from randomizer.Patching.BarrelRando import randomize_barrels
-from randomizer.Patching.CoinPlacer import randomize_coins
+from randomizer.Patching.CoinPlacer import randomize_coins, place_mayhem_coins
 from randomizer.Patching.Cosmetics.TextRando import writeBootMessages
-from randomizer.Patching.Cosmetics.Puzzles import updateMillLeverTexture, updateCryptLeverTexture, updateDiddyDoors
+from randomizer.Patching.Cosmetics.Puzzles import updateMillLeverTexture, updateCryptLeverTexture, updateDiddyDoors, updateHelmFaces, updateSnidePanel
 from randomizer.Patching.CosmeticColors import (
     applyHelmDoorCosmetics,
     applyKongModelSwaps,
@@ -61,10 +62,11 @@ from randomizer.Patching.EntranceRando import (
     placeLevelOrder,
 )
 from randomizer.Patching.FairyPlacer import PlaceFairies
-from randomizer.Patching.ItemRando import place_randomized_items, alterTextboxRequirements
+from randomizer.Patching.ItemRando import place_randomized_items, alterTextboxRequirements, calculateInitFileScreen, place_spoiler_hint_data
 from randomizer.Patching.KasplatLocationRando import randomize_kasplat_locations
 from randomizer.Patching.KongRando import apply_kongrando_cosmetic
-from randomizer.Patching.Library.Generic import setItemReferenceName, addNewScript, IsItemSelected, getIceTrapCount, getProgHintBarrierItem, getHintRequirementBatch
+from randomizer.Patching.Library.Generic import setItemReferenceName, addNewScript, IsItemSelected, getProgHintBarrierItem, getHintRequirementBatch, IsDDMSSelected
+from randomizer.Patching.Library.Assets import CompTextFiles, ItemPreview
 from randomizer.Patching.MiscSetupChanges import (
     randomize_setup,
     updateKrushaMoveNames,
@@ -72,7 +74,7 @@ from randomizer.Patching.MiscSetupChanges import (
     updateSwitchsanity,
     remove5DSCameraPoint,
 )
-from randomizer.Patching.MoveLocationRando import place_pregiven_moves, randomize_moves, parseMoveBlock
+from randomizer.Patching.MoveLocationRando import place_pregiven_moves, randomize_moves
 from randomizer.Patching.Patcher import LocalROM
 from randomizer.Patching.PhaseRando import randomize_helm, randomize_krool
 from randomizer.Patching.PriceRando import randomize_prices
@@ -81,7 +83,6 @@ from randomizer.Patching.ShopRandomizer import ApplyShopRandomizer
 from randomizer.Patching.UpdateHints import (
     PushHints,
     replaceIngameText,
-    wipeHints,
     PushItemLocations,
     PushHelpfulHints,
     PushHintTiedRegions,
@@ -104,7 +105,6 @@ class BooleanProperties:
 
 
 def writeMultiselector(
-    enabled: bool,
     enabled_selections: list,
     selector: list[dict],
     selection_enum,
@@ -113,18 +113,16 @@ def writeMultiselector(
     write_start: int,
 ):
     """Write multiselector choices to ROM."""
-    if enabled:
-        force = len(enabled_selections) == 0
-        write_data = [0] * data_length
-        for item in selector:
-            if item["shift"] >= 0:
-                if force or selection_enum[item["value"]] in enabled_selections:
-                    offset = int(item["shift"] >> 3)
-                    check = int(item["shift"] % 8)
-                    write_data[offset] |= 0x80 >> check
-        ROM_COPY.seek(write_start)
-        for byte_data in write_data:
-            ROM_COPY.writeMultipleBytes(byte_data, 1)
+    write_data = [0] * data_length
+    for item in selector:
+        if item["shift"] >= 0:
+            if selection_enum[item["value"]] in enabled_selections:
+                offset = int(item["shift"] >> 3)
+                check = int(item["shift"] % 8)
+                write_data[offset] |= 0x80 >> check
+    ROM_COPY.seek(write_start)
+    for byte_data in write_data:
+        ROM_COPY.writeMultipleBytes(byte_data, 1)
 
 
 def encPass(spoiler) -> int:
@@ -162,7 +160,6 @@ def patching_response(spoiler):
     sav = spoiler.settings.rom_data
 
     # Shuffle Levels
-    flut_items = []
     if spoiler.settings.shuffle_loading_zones == ShuffleLoadingZones.levels:
         ROM_COPY.seek(sav + 0)
         ROM_COPY.write(1)
@@ -193,51 +190,16 @@ def patching_response(spoiler):
             level_order.append(vanilla_lobby_exit_order.index(spoiler.shuffled_exit_data[int(level)].reverse))
         placeLevelOrder(spoiler, level_order, ROM_COPY)
 
-        vanilla_key_order = [0x1A, 0x4A, 0x8A, 0xA8, 0xEC, 0x124, 0x13D, 0x17C]
-        if Types.Key not in spoiler.settings.shuffled_location_types:
-            # Append to FLUT
-            for index, vanilla_key in enumerate(vanilla_key_order):
-                level_index_in_slot = level_order[index]
-                flut_items.append(
-                    [
-                        vanilla_key_order[level_index_in_slot],
-                        vanilla_key,
-                    ]
-                )
-            # Re-write FLUT
-            written_flut = flut_items.copy()  # Making a FLUT copy so that the flut sent to item rando isn't getting a double terminator
-            written_flut.append([0xFFFF, 0xFFFF])
-            ROM_COPY.seek(0x1FF2000)
-            for flut in sorted(written_flut, key=lambda x: x[0]):
-                for flag in flut:
-                    ROM_COPY.writeMultipleBytes(flag, 2)
-
-    # Unlock All Kongs
-    kong_items = [Items.Donkey, Items.Diddy, Items.Lanky, Items.Tiny, Items.Chunky]
-    starting_kongs = []
-    if spoiler.settings.starting_kongs_count == 5:
-        ROM_COPY.seek(sav + 0x02C)
-        ROM_COPY.write(0x1F)
-        starting_kongs = kong_items.copy()
-    else:
-        bin_value = 0
-        for x in spoiler.settings.starting_kong_list:
-            bin_value |= 1 << x
-            starting_kongs.append(kong_items[x])
-        ROM_COPY.seek(sav + 0x02C)
-        ROM_COPY.write(bin_value)
-    for kong in starting_kongs:
-        setItemReferenceName(spoiler, kong, 0, "Starting Kong")
+    ROM_COPY.seek(sav + 0x151)
+    ROM_COPY.writeMultipleBytes(spoiler.settings.starting_kong, 1)
 
     boolean_props = [
         BooleanProperties(spoiler.settings.fast_start_beginning_of_game, 0x2E),  # Fast Start Game
         BooleanProperties(spoiler.settings.enable_tag_anywhere, 0x30),  # Tag Anywhere
-        BooleanProperties(spoiler.settings.fps_display, 0x96),  # FPS Display
         BooleanProperties(spoiler.settings.no_melons, 0x128),  # No Melon Drops
         BooleanProperties(spoiler.settings.bonus_barrel_auto_complete, 0x126),  # Auto-Complete Bonus Barrels
         BooleanProperties(spoiler.settings.warp_to_isles, 0x135),  # Warp to Isles
         BooleanProperties(spoiler.settings.perma_death, 0x14D),  # Permadeath
-        BooleanProperties(spoiler.settings.disable_tag_barrels, 0x14F),  # Disable Tag Spawning
         BooleanProperties(spoiler.settings.ice_traps_damage, 0x150),  # Enable Ice Trap Damage
         BooleanProperties(spoiler.settings.shorten_boss, 0x13B),  # Shorten Boss Fights
         BooleanProperties(spoiler.settings.fast_warps, 0x13A),  # Fast Warps
@@ -257,6 +219,10 @@ def patching_response(spoiler):
         BooleanProperties(spoiler.settings.sprint_barrel_requires_sprint, 0x2F),  # Sprint Barrel requires OSprint
         BooleanProperties(spoiler.settings.fix_lanky_tiny_prod, 0x114),  # Fix Lanky Tiny Prod
         BooleanProperties(spoiler.settings.enemy_kill_crown_timer, 0x35),  # Enemy crown timer reduction
+        BooleanProperties(spoiler.settings.race_coin_rando, 0x94),  # Race Coin Location Rando
+        BooleanProperties(spoiler.settings.disable_racing_patches, 0x91),  # Disable Racing Patches
+        BooleanProperties(spoiler.settings.shops_dont_cost, 0x95),  # Shops don't cost
+        BooleanProperties(spoiler.settings.snide_reward_rando, 0x69),  # Snides has rewards
     ]
 
     for prop in boolean_props:
@@ -279,7 +245,13 @@ def patching_response(spoiler):
     ROM_COPY.write(int(spoiler.settings.coin_door_item))
     ROM_COPY.write(spoiler.settings.coin_door_item_count)
 
-    if spoiler.settings.switchsanity:
+    kong_free_switches = [
+        Switches.JapesFreeKong,
+        Switches.AztecLlamaPuzzle,
+        Switches.AztecOKONGPuzzle,
+        Switches.FactoryFreeKong,
+    ]
+    if spoiler.settings.switchsanity_enabled:
         for slot in spoiler.settings.switchsanity_data:
             ROM_COPY.seek(sav + spoiler.settings.switchsanity_data[slot].rom_offset)
             pad_kong = spoiler.settings.switchsanity_data[slot].kong
@@ -297,6 +269,8 @@ def patching_response(spoiler):
                         ROM_COPY.writeMultipleBytes(7, 1)
                 elif pad_type != SwitchType.PadMove:
                     ROM_COPY.writeMultipleBytes(int(pad_kong) + 1, 1)
+            elif slot in kong_free_switches:
+                ROM_COPY.writeMultipleBytes(int(pad_kong), 1)
             else:
                 ROM_COPY.writeMultipleBytes(int(pad_kong) + 1, 1)
 
@@ -312,7 +286,7 @@ def patching_response(spoiler):
     given_moves = []
     if spoiler.settings.shockwave_status == ShockwaveStatus.start_with:
         given_moves.extend([39, 40])  # 39 = Camera, 40 = Shockwave
-        setItemReferenceName(spoiler, Items.CameraAndShockwave, 0, "Extra Training")
+        setItemReferenceName(spoiler, Items.CameraAndShockwave, 0, "Extra Training", 0)
     move_bitfields = [0] * 6
     for move in given_moves:
         offset = int(move >> 3)
@@ -322,19 +296,7 @@ def patching_response(spoiler):
         ROM_COPY.seek(sav + 0xD5 + offset)
         ROM_COPY.writeMultipleBytes(value, 1)
 
-    # Free Trade Agreement
-    if spoiler.settings.free_trade_items:
-        ROM_COPY.seek(sav + 0x113)
-        old = int.from_bytes(ROM_COPY.readBytes(1), "big")
-        ROM_COPY.seek(sav + 0x113)
-        ROM_COPY.write(old | 0x80)
-    if spoiler.settings.free_trade_blueprints:
-        ROM_COPY.seek(sav + 0x113)
-        old = int.from_bytes(ROM_COPY.readBytes(1), "big")
-        ROM_COPY.seek(sav + 0x113)
-        ROM_COPY.write(old | 0x40)
     writeMultiselector(
-        spoiler.settings.quality_of_life,
         spoiler.settings.misc_changes_selected,
         QoLSelector,
         MiscChangesSelected,
@@ -343,7 +305,6 @@ def patching_response(spoiler):
         sav + 0x0B0,
     )
     writeMultiselector(
-        spoiler.settings.remove_barriers_enabled,
         spoiler.settings.remove_barriers_selected,
         RemovedBarrierSelector,
         RemovedBarriersSelected,
@@ -352,7 +313,6 @@ def patching_response(spoiler):
         sav + 0x1DE,
     )
     writeMultiselector(
-        spoiler.settings.faster_checks_enabled,
         spoiler.settings.faster_checks_selected,
         FasterCheckSelector,
         FasterChecksSelected,
@@ -361,7 +321,6 @@ def patching_response(spoiler):
         sav + 0x1E0,
     )
     writeMultiselector(
-        spoiler.settings.hard_mode and len(spoiler.settings.hard_mode_selected) > 0,
         spoiler.settings.hard_mode_selected,
         HardSelector,
         HardModeSelected,
@@ -370,20 +329,26 @@ def patching_response(spoiler):
         sav + 0x0C6,
     )
 
-    is_dw = IsItemSelected(spoiler.settings.hard_mode, spoiler.settings.hard_mode_selected, HardModeSelected.donk_in_the_dark_world, False)
-    is_sky = IsItemSelected(spoiler.settings.hard_mode, spoiler.settings.hard_mode_selected, HardModeSelected.donk_in_the_sky, False)
+    is_dw = IsDDMSSelected(spoiler.settings.hard_mode_selected, HardModeSelected.donk_in_the_dark_world)
+    is_sky = IsDDMSSelected(spoiler.settings.hard_mode_selected, HardModeSelected.donk_in_the_sky)
     if is_dw and is_sky:
-        # Memory challenge
+        # Memory Challenge
         ROM_COPY.seek(sav + 0x0C6)
         old = int.from_bytes(ROM_COPY.readBytes(1), "big")
         ROM_COPY.seek(sav + 0x0C6)
-        ROM_COPY.write(old | 0x2)
-
-    keys = 0xFF
-    if spoiler.settings.k_rool_vanilla_requirement:
-        keys = 0x84  # 8765 4321 bitfield, only enable the keys 3 and 8 bits, meaning 0b1000 0100, which is 0x84
-    ROM_COPY.seek(sav + 0x1DD)
-    ROM_COPY.write(keys)
+        ROM_COPY.write(old | 0x8 | 0x2)
+    elif is_dw and not is_sky:
+        # Dark world only
+        ROM_COPY.seek(sav + 0x0C6)
+        old = int.from_bytes(ROM_COPY.readBytes(1), "big")
+        ROM_COPY.seek(sav + 0x0C6)
+        ROM_COPY.write(old | 0x8)
+    elif is_sky and not is_dw:
+        # Sky only
+        ROM_COPY.seek(sav + 0x0C6)
+        old = int.from_bytes(ROM_COPY.readBytes(1), "big")
+        ROM_COPY.seek(sav + 0x0C6)
+        ROM_COPY.write(old | 0x4)
 
     # Damage amount
     damage_multipliers = {
@@ -458,15 +423,15 @@ def patching_response(spoiler):
     ROM_COPY.write(int(spoiler.settings.activate_all_bananaports))
 
     # Fast GBs - Change jetpac text
-    if IsItemSelected(spoiler.settings.faster_checks_enabled, spoiler.settings.faster_checks_selected, FasterChecksSelected.jetpac):
-        cranky_index = 8
-        data = {"textbox_index": 2, "mode": "replace", "search": "5000", "target": "2500"}
-        if cranky_index in spoiler.text_changes:
-            spoiler.text_changes[8].append(data)
-        else:
-            spoiler.text_changes[8] = [data]
+    if IsDDMSSelected(spoiler.settings.faster_checks_selected, FasterChecksSelected.jetpac):
+        data = {"textbox_index": ItemPreview.JetpacIntro, "mode": "replace", "search": "5000", "target": "2500"}
+        for file in [CompTextFiles.PreviewsFlavor, CompTextFiles.PreviewsNormal]:
+            if file in spoiler.text_changes:
+                spoiler.text_changes[file].append(data)
+            else:
+                spoiler.text_changes[file] = [data]
 
-    if IsItemSelected(spoiler.settings.hard_bosses, spoiler.settings.hard_bosses_selected, HardBossesSelected.kut_out_phase_rando, False):
+    if IsDDMSSelected(spoiler.settings.hard_bosses_selected, HardBossesSelected.kut_out_phase_rando):
         # KKO Phase Order
         for phase_slot in range(3):
             ROM_COPY.seek(sav + 0x17B + phase_slot)
@@ -480,11 +445,20 @@ def patching_response(spoiler):
         WinConditionComplex.get_key8: {
             "index": 1,
         },
+        WinConditionComplex.get_keys_3_and_8: {
+            "index": 7,
+        },
         WinConditionComplex.krem_kapture: {
             "index": 2,
         },
         WinConditionComplex.dk_rap_items: {
             "index": 4,
+        },
+        WinConditionComplex.krools_challenge: {
+            "index": 5,
+        },
+        WinConditionComplex.kill_the_rabbit: {
+            "index": 6,
         },
         WinConditionComplex.req_bean: {
             "index": 3,
@@ -525,6 +499,14 @@ def patching_response(spoiler):
         WinConditionComplex.req_rainbowcoin: {
             "index": 3,
             "item": 0xC,
+        },
+        WinConditionComplex.req_bonuses: {
+            "index": 3,
+            "item": 0x11,
+        },
+        WinConditionComplex.req_bosses: {
+            "index": 3,
+            "item": 0x10,
         },
     }
     win_con = spoiler.settings.win_condition_item
@@ -582,7 +564,7 @@ def patching_response(spoiler):
     if spoiler.settings.fast_start_beginning_of_game:
         # Write a null move to this spot if fast start beginning of game is on
         ROM_COPY.seek(spoiler.settings.move_location_data + (125 * 6))
-        ROM_COPY.writeMultipleBytes(7, 2)
+        ROM_COPY.writeMultipleBytes(0, 2)
         ROM_COPY.writeMultipleBytes(0, 4)
 
     # ROM Flags
@@ -610,10 +592,10 @@ def patching_response(spoiler):
         byte_data, password = encPass(spoiler)
         ROM_COPY.writeMultipleBytes(byte_data, 4)
 
-    # Ice Trap Count
-    ROM_COPY.seek(sav + 0x14E)
-    ice_trap_count = max(16, getIceTrapCount(spoiler.settings))
-    ROM_COPY.writeMultipleBytes(ice_trap_count, 1)
+    # Set K. Rool ship spawn method
+    ROM_COPY.seek(sav + 0x1B6)
+    # Write the user's setting directly - beat_krool/krools_challenge will use key-based spawning unless this is explicitly enabled
+    ROM_COPY.writeMultipleBytes(spoiler.settings.win_condition_spawns_ship, 1)
 
     # Mill Levers
     if spoiler.settings.mill_levers[0] > 0:
@@ -624,76 +606,49 @@ def patching_response(spoiler):
         # Change default wrinkly hint
         if spoiler.settings.wrinkly_hints == WrinklyHints.off:
             if (
-                IsItemSelected(
-                    spoiler.settings.faster_checks_enabled,
+                IsDDMSSelected(
                     spoiler.settings.faster_checks_selected,
                     FasterChecksSelected.forest_mill_conveyor,
                 )
                 or spoiler.settings.puzzle_rando_difficulty != PuzzleRando.off
             ):
-                wrinkly_index = 41
                 data = {"textbox_index": 21, "mode": "replace", "search": "21132", "target": mill_text}
-                if wrinkly_index in spoiler.text_changes:
-                    spoiler.text_changes[41].append(data)
-                else:
-                    spoiler.text_changes[41] = [data]
+                for file in [CompTextFiles.Wrinkly]:
+                    if file in spoiler.text_changes:
+                        spoiler.text_changes[file].append(data)
+                    else:
+                        spoiler.text_changes[file] = [data]
 
-    # Diddy R&D Codes
-    enable_code = False
-    encoded_codes = []
-    for code in spoiler.settings.diddy_rnd_doors:
-        value = 0
-        if sum(code) > 0:  # Has a non-zero element
-            enable_code = True
-        for subindex in range(4):
-            shift = 12 - (subindex << 2)
-            shifted = (code[subindex] & 3) << shift
-            value |= shifted
-        encoded_codes.append(value)
-    if enable_code:
-        ROM_COPY.seek(sav + 0x1B8)
-        for code in encoded_codes:
-            ROM_COPY.writeMultipleBytes(code, 2)
-
-    keys_turned_in = [0, 1, 2, 3, 4, 5, 6, 7]
-    if len(spoiler.settings.krool_keys_required) > 0:
-        for key in spoiler.settings.krool_keys_required:
-            key_index = key - 4
-            if key_index in keys_turned_in:
-                keys_turned_in.remove(key_index)
-    key_bitfield = 0
-    for key in keys_turned_in:
-        key_bitfield = key_bitfield | (1 << key)
-    ROM_COPY.seek(sav + 0x127)
-    ROM_COPY.write(key_bitfield)
-
-    if spoiler.settings.rareware_gb_fairies != 20:
-        ROM_COPY.seek(sav + 0x36)
-        ROM_COPY.write(spoiler.settings.rareware_gb_fairies)
+    ROM_COPY.seek(sav + 0x36)
+    ROM_COPY.write(spoiler.settings.rareware_gb_fairies)
 
     ROM_COPY.seek(sav + 0x1EB)
     ROM_COPY.write(spoiler.settings.mermaid_gb_pearls)
 
-    if spoiler.settings.medal_cb_req != 75:
-        ROM_COPY.seek(sav + 0x112)
-        ROM_COPY.write(spoiler.settings.medal_cb_req)
-
-    if len(spoiler.settings.enemies_selected) == 0 and (spoiler.settings.enemy_rando or spoiler.settings.crown_enemy_difficulty != CrownEnemyDifficulty.vanilla):
-        lst = []
-        for enemy in EnemySelector:
-            lst.append(Enemies[enemy["value"]])
-        spoiler.settings.enemies_selected = lst
-
-    if spoiler.settings.random_starting_region:
+    if spoiler.settings.random_starting_region_new != RandomStartingRegion.off:
         ROM_COPY.seek(sav + 0x10C)
         ROM_COPY.write(spoiler.settings.starting_region["map"])
-        ROM_COPY.write(spoiler.settings.starting_region["exit"])
+        exit_val = spoiler.settings.starting_region["exit"]
+        if exit_val == -1:
+            exit_val = 0xFF
+        ROM_COPY.write(exit_val)
     if spoiler.settings.alter_switch_allocation:
         ROM_COPY.seek(sav + 0x103)
         ROM_COPY.write(1)
         for x in range(7):  # Shouldn't need index 8 since Helm has no slam switches in it
             ROM_COPY.seek(sav + 0x104 + x)
             ROM_COPY.write(spoiler.settings.switch_allocation[x])
+    # Dartboard order
+    ROM_COPY.seek(sav + 0x173)
+    for x in range(6):
+        ROM_COPY.writeMultipleBytes(spoiler.settings.dartboard_order[x], 1)
+
+    ROM_COPY.seek(sav + 0x060)
+    for x in spoiler.settings.medal_cb_req_level:
+        ROM_COPY.writeMultipleBytes(x, 1)
+    if Types.HalfMedal in spoiler.settings.shuffled_location_types:
+        ROM_COPY.seek(sav + 0x068)
+        ROM_COPY.write(1)
 
     # Helm Required Minigames - Always set to 2 for now
     ROM_COPY.seek(sav + 0x2D)
@@ -711,18 +666,19 @@ def patching_response(spoiler):
     randomize_bananaport(spoiler, ROM_COPY)
     randomize_kasplat_locations(spoiler, ROM_COPY)
     randomize_enemies(spoiler, ROM_COPY)
-    apply_kongrando_cosmetic(spoiler, ROM_COPY)
+    apply_kongrando_cosmetic(ROM_COPY)
     randomize_setup(spoiler, ROM_COPY)
     randomize_puzzles(spoiler, ROM_COPY)
     randomize_cbs(spoiler, ROM_COPY)
     randomize_coins(spoiler, ROM_COPY)
+    place_mayhem_coins(spoiler, ROM_COPY)
     ApplyShopRandomizer(spoiler, ROM_COPY)
-    showWinCondition(spoiler.settings, ROM_COPY)
     remove5DSCameraPoint(spoiler, ROM_COPY)
     alterTextboxRequirements(spoiler)
     spoiler.arcade_item_reward = Items.NintendoCoin
     spoiler.jetpac_item_reward = Items.RarewareCoin
-    place_randomized_items(spoiler, flut_items.copy(), ROM_COPY)  # Has to be after kong rando cosmetic and moves
+    place_randomized_items(spoiler, ROM_COPY)  # Has to be after kong rando cosmetic and moves
+    place_spoiler_hint_data(sav, spoiler, ROM_COPY)
     # Arcade detection for colorblind mode
     arcade_item_index = 0
     potion_pools = [
@@ -750,17 +706,15 @@ def patching_response(spoiler):
     updateSwitchsanity(spoiler, ROM_COPY)
     updateRandomSwitches(spoiler, ROM_COPY)  # Has to be after all setup changes that may alter the item type of slam switches
     PushItemLocations(spoiler, ROM_COPY)
-    parseMoveBlock(spoiler, ROM_COPY)  # Has to be after anything which messes with the move block, in this case, randomize_moves and place_randomized_items
 
     if spoiler.settings.wrinkly_hints != WrinklyHints.off:
-        wipeHints()
         PushHints(spoiler, ROM_COPY)
         if spoiler.settings.dim_solved_hints:
             PushHelpfulHints(spoiler, ROM_COPY)
     if Types.Hint in spoiler.settings.shuffled_location_types and spoiler.settings.progressive_hint_item == ProgressiveHintItem.off:
         PushHintTiedRegions(spoiler, ROM_COPY)
 
-    writeBootMessages(ROM_COPY, spoiler.settings.random)
+    writeBootMessages(ROM_COPY, spoiler)
     enableTriggerText(spoiler, ROM_COPY)
     shortenCastleMinecart(spoiler, ROM_COPY)
     alterStoryCutsceneWarps(spoiler, ROM_COPY)
@@ -772,8 +726,12 @@ def patching_response(spoiler):
         updateDiddyDoors(spoiler.settings, ROM_COPY)
         applyHelmDoorCosmetics(spoiler.settings, ROM_COPY)
         applyKongModelSwaps(spoiler.settings, ROM_COPY)
+        updateHelmFaces(spoiler.settings, ROM_COPY)
+        updateSnidePanel(spoiler.settings, ROM_COPY)
+        showWinCondition(spoiler.settings, ROM_COPY)
 
         patchAssembly(ROM_COPY, spoiler)
+        calculateInitFileScreen(spoiler, ROM_COPY)
         ApplyMirrorMode(spoiler.settings, ROM_COPY)
 
     # Apply Hash

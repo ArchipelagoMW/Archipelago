@@ -1,15 +1,16 @@
 """Randomize Boss Locations."""
 
 from array import array
+import math
 
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
-from randomizer.Enums.Settings import SlamRequirement, HardBossesSelected
+from randomizer.Enums.Settings import SlamRequirement, HardBossesSelected, KroolInBossPool
 from randomizer.Lists.Exceptions import BossOutOfLocationsException, PlandoIncompatibleException
 from randomizer.Enums.Maps import Maps
-from randomizer.Patching.Library.Generic import IsItemSelected
+from randomizer.Patching.Library.Generic import IsDDMSSelected
 
 BossMapList = [
     Maps.JapesBoss,
@@ -32,14 +33,21 @@ KRoolMaps = [
 def getBosses(settings) -> list:
     """Get list of bosses."""
     boss_maps = BossMapList.copy()
-    if settings.krool_in_boss_pool:
+    if settings.krool_in_boss_pool_v2 != KroolInBossPool.off:
         boss_maps.extend(KRoolMaps.copy())
-    return [x for x in boss_maps if x not in settings.krool_order]
+    if not settings.allow_boss_duping:
+        return [x for x in boss_maps if x not in settings.krool_order and x in settings.bosses_selected]
+    return [x for x in boss_maps if x in settings.bosses_selected]
 
 
 def ShuffleBosses(boss_location_rando: bool, settings):
     """Shuffle boss locations."""
     boss_maps = getBosses(settings)
+    if len(boss_maps) < 7:
+        dupe_count = math.ceil(7 / len(boss_maps))
+        original_maps = boss_maps.copy()
+        for _ in range(dupe_count):
+            boss_maps.extend(original_maps)
     if boss_location_rando:
         settings.random.shuffle(boss_maps)
     return boss_maps
@@ -47,7 +55,7 @@ def ShuffleBosses(boss_location_rando: bool, settings):
 
 def HardBossesEnabled(settings, check: HardBossesSelected) -> bool:
     """Return whether the hard bosses setting is on."""
-    return IsItemSelected(settings.hard_bosses, settings.hard_bosses_selected, check, False)
+    return IsDDMSSelected(settings.hard_bosses_selected, check)
 
 
 def ShuffleBossKongs(settings, locked_levels=[]):
@@ -73,7 +81,7 @@ def ShuffleBossKongs(settings, locked_levels=[]):
             boss_kongs.append(settings.boss_kongs[level])
             continue
         boss_map = settings.boss_maps[level]
-        if settings.boss_kong_rando:
+        if settings.boss_location_rando:
             kong = settings.random.choice(GetKongOptionsForBoss(boss_map, HardBossesEnabled(settings, HardBossesSelected.alternative_mad_jack_kongs)))
         else:
             kong = vanillaBossKongs[boss_map]
@@ -116,11 +124,11 @@ def GetKongOptionsForBoss(boss_map: Maps, alt_mj_kongs: bool):
     return possibleKongs
 
 
-def ShuffleKutoutKongs(random, boss_maps: array, boss_kongs: array, boss_kong_rando: bool):
+def ShuffleKutoutKongs(random, boss_maps: array, boss_kongs: array, boss_rando: bool):
     """Shuffle the Kutout kong order."""
     vanillaKutoutKongs = [Kongs.lanky, Kongs.tiny, Kongs.chunky, Kongs.donkey, Kongs.diddy]
     kutout_kongs = []
-    if boss_kong_rando:
+    if boss_rando:
         if Maps.CastleBoss in boss_maps:
             kutoutLocation = boss_maps.index(Maps.CastleBoss)
             if kutoutLocation < 0 or kutoutLocation >= len(boss_kongs):
@@ -144,10 +152,7 @@ def ShuffleKKOPhaseOrder(settings):
     """Shuffle the phase order in King Kut Out."""
     kko_phases = [0, 1, 2, 3]
     settings.random.shuffle(kko_phases)
-    kko_phase_subset = []
-    for phase_slot in range(3):
-        kko_phase_subset.append(kko_phases[phase_slot])
-    return kko_phase_subset.copy()
+    return kko_phases.copy()
 
 
 def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
@@ -174,9 +179,9 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
             if Kongs.chunky in ownedKongs[level] and Items.HunkyChunky in ownedMoves[level]:
                 bossOptions[level].append(Maps.FungiBoss)
             # Lanky Phase also needs Lanky and Trombone
-            is_beta_lanky = IsItemSelected(spoiler.settings.hard_bosses, spoiler.settings.hard_bosses_selected, HardBossesSelected.beta_lanky_phase, False)
+            is_beta_lanky = IsDDMSSelected(spoiler.settings.hard_bosses_selected, HardBossesSelected.beta_lanky_phase)
             required_additional_item_lankyphase = Items.Grape if is_beta_lanky else Items.Trombone
-            if spoiler.settings.krool_in_boss_pool and Kongs.lanky in ownedKongs[level] and required_additional_item_lankyphase in ownedMoves[level]:
+            if spoiler.settings.krool_in_boss_pool_v2 != KroolInBossPool.off and Kongs.lanky in ownedKongs[level] and required_additional_item_lankyphase in ownedMoves[level]:
                 bossOptions[level].append(Maps.KroolLankyPhase)
         # Mad Jack always requires a slam
         if Items.ProgressiveSlam in ownedMoves[level]:
@@ -186,7 +191,7 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
             # Outside of hard bosses, you need exactly Tiny and Twirl
             elif Kongs.tiny in ownedKongs[level] and Items.PonyTailTwirl in ownedMoves[level]:
                 bossOptions[level].append(Maps.FactoryBoss)
-        if spoiler.settings.krool_in_boss_pool:
+        if spoiler.settings.krool_in_boss_pool_v2 != KroolInBossPool.off:
             # Donkey Phase may or may not need Blast
             if Kongs.donkey in ownedKongs[level] and Items.Climbing in ownedMoves[level] and (not spoiler.settings.cannons_require_blast or Items.BaboonBlast in ownedMoves[level]):
                 bossOptions[level].append(Maps.KroolDonkeyPhase)
@@ -207,10 +212,13 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
                     slamsRequired = 3
                 if ownedMoves[level].count(Items.ProgressiveSlam) >= slamsRequired:
                     bossOptions[level].append(Maps.KroolChunkyPhase)
+        # Quick filter to remove any boss options that we don't want to be added
+        bossOptions[level] = [x for x in bossOptions[level] if x in spoiler.settings.bosses_selected]
     placedLevels = []
     placedBossMaps = []
     placedBossKongs = []
-    while len(placedBossMaps) < 7:
+    clearedBossMaps = False
+    while len(placedLevels) < 7:
         # The number of options are the boss options for each level not already placed
         levelsSortedByNumberOfOptions = [level for level in bossOptions.keys() if level not in placedLevels]
         # This can include endgame phases, and this is intentional. If you have to squeeze in every boss/phase into this, you need every inch of leeway you can get.
@@ -220,14 +228,22 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
         )  # The random factor here is so there's randomness among tied counts (but never greater than 1)
         # Always pick the level with the least options - this guarantees we never orphan a level with no options (unless it was forced anyway)
         mostRestrictiveLevel = levelsSortedByNumberOfOptions[0]
-        notTakenBossOptions = [map for map in bossOptions[mostRestrictiveLevel] if map not in placedBossMaps and map not in spoiler.settings.krool_order]
+        if spoiler.settings.allow_boss_duping:
+            notTakenBossOptions = [map for map in bossOptions[mostRestrictiveLevel] if map not in placedBossMaps]
+        else:
+            notTakenBossOptions = [map for map in bossOptions[mostRestrictiveLevel] if map not in placedBossMaps and map not in spoiler.settings.krool_order]
         chosenBoss = None
         # If we don't have an option available for this very restrictive level
         # OR if we haven't placed many bosses yet, we'll take a peek at the endgame and see if any of those could fit
-        if not any(notTakenBossOptions) or (spoiler.settings.krool_in_boss_pool and len(placedLevels) < 2):
+        if not any(notTakenBossOptions) and spoiler.settings.allow_boss_duping:
+            if not clearedBossMaps:  # To prevent against potential inf loops
+                placedBossMaps = []  # Clear placed bosses
+                clearedBossMaps = True
+                continue
+        if not any(notTakenBossOptions) or (spoiler.settings.krool_in_boss_pool_v2 != KroolInBossPool.off and len(placedLevels) < 2):
             # If we don't have an option available, desperate times call for desperate measures
             # If T&S Bosses could be on endgame fights, we might have to go steal one
-            if spoiler.settings.krool_in_boss_pool:
+            if spoiler.settings.krool_in_boss_pool_v2 != KroolInBossPool.off:
                 # It's possible we can take a boss out of the endgame rotation and put it here instead
                 possibleEndgameBossSwaps = [map for map in bossOptions[mostRestrictiveLevel] if map in spoiler.settings.krool_order]
                 # If we can't do that, then there exists no combination of bosses that could make this fill work
@@ -257,10 +273,14 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
         placedLevels.append(mostRestrictiveLevel)
         placedBossMaps.append(chosenBoss)
         placedBossKongs.append(Kongs(spoiler.settings.random.choice(kongOptions)))
+        clearedBossMaps = False  # Clear flag
     # If we did steal a boss from the endgame, we need to put one back in.
     # Note that this has zero impact on logic: you should have all items by the time you reach the endgame
     while len(spoiler.settings.krool_order) < spoiler.settings.krool_phase_count:
-        possibleBosses = [map for map in getBosses(spoiler.settings) if map not in placedBossMaps and map not in spoiler.settings.krool_order]
+        if spoiler.settings.allow_boss_duping:
+            possibleBosses = [map for map in getBosses(spoiler.settings) if map not in placedBossMaps and map]
+        else:
+            possibleBosses = [map for map in getBosses(spoiler.settings) if map not in placedBossMaps and map not in spoiler.settings.krool_order]
         newEndgameBoss = spoiler.settings.random.choice(possibleBosses)
         spoiler.settings.krool_order.append(newEndgameBoss)
         updateKRoolSettings(spoiler, newEndgameBoss)
@@ -279,7 +299,7 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
         spoiler.settings.boss_maps = newBossMaps
     else:
         spoiler.settings.boss_maps = getBosses(spoiler.settings)
-    if spoiler.settings.kong_rando or spoiler.settings.boss_kong_rando:
+    if spoiler.settings.kong_rando or spoiler.settings.boss_location_rando:
         # If we shuffle kongs but not locations, we must forcibly sort the array with the known valid kongs
         if not spoiler.settings.boss_location_rando:
             # This is outrageously niche, I sure hope it doesn't break
@@ -305,7 +325,7 @@ def ShuffleBossesBasedOnOwnedItems(spoiler, ownedKongs: dict, ownedMoves: dict):
             spoiler.settings.boss_kongs = newBossKongs
     else:
         spoiler.settings.boss_kongs = ShuffleBossKongs(spoiler.settings)
-    spoiler.settings.kutout_kongs = ShuffleKutoutKongs(spoiler.settings.random, spoiler.settings.boss_maps, spoiler.settings.boss_kongs, spoiler.settings.boss_kong_rando)
+    spoiler.settings.kutout_kongs = ShuffleKutoutKongs(spoiler.settings.random, spoiler.settings.boss_maps, spoiler.settings.boss_kongs, spoiler.settings.boss_location_rando)
 
 
 def ShuffleTinyPhaseToes(random):
@@ -416,4 +436,4 @@ def PlandoBosses(spoiler):
             spoiler.settings.boss_maps[level] = bossMap
             remainingBosses.remove(bossMap)
         spoiler.settings.boss_kongs = ShuffleBossKongs(spoiler.settings, locked_levels=filledLevels)
-        spoiler.settings.kutout_kongs = ShuffleKutoutKongs(spoiler.settings.random, spoiler.settings.boss_maps, spoiler.settings.boss_kongs, spoiler.settings.boss_kong_rando)
+        spoiler.settings.kutout_kongs = ShuffleKutoutKongs(spoiler.settings.random, spoiler.settings.boss_maps, spoiler.settings.boss_kongs, spoiler.settings.boss_location_rando)

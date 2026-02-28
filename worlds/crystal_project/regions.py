@@ -613,7 +613,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, LABYRINTH_ENTRANCE_PUSHBLOCK_AP_REGION, [TOWER_OF_ZOT_CAMP_AP_REGION, ATOP_LABYRINTH_CUBE_AP_REGION, GOLD_BEDAZZLING_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_AP_REGION],
                     {ATOP_LABYRINTH_CUBE_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_golden_quintar(state),
                      GOLD_BEDAZZLING_LABYRINTH_AP_REGION: lambda state: logic.has_glide(state) or (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)),
-                     ANCIENT_LABYRINTH_AP_REGION: lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or logic.is_regionsanity_disabled()) and (state.has(ANCIENT_TABLET_A, player) or logic.obscure_routes_on()),})
+                     ANCIENT_LABYRINTH_AP_REGION: lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or logic.is_regionsanity_disabled()) and (logic.has_a_caster(state)) and (state.has(ANCIENT_TABLET_A, player) or logic.obscure_routes_on()),})
     fancy_add_exits(world, GOLD_BEDAZZLING_LABYRINTH_AP_REGION, [RUINS_CRUMBLING_ON_SHORE_AP_REGION])
     fancy_add_exits(world, POKO_POKO_LAKE_DELENDE_PASS_AP_REGION, [POKO_POKO_EAST_PLATEAU_AP_REGION, TOWER_OF_ZOT_CAMP_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, LAKE_DELENDE_AP_REGION, SALMON_BAY_WEST_CRAG_AP_REGION, SALMON_RIVER_MOUTH_AP_REGION],
                     {TOWER_OF_ZOT_CAMP_AP_REGION: lambda state: logic.has_glide(state),
@@ -1137,7 +1137,17 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, THE_DEPTHS_AP_REGION, [THE_DEEP_SEA_AP_REGION],
                     {THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, CASTLE_SEQUOIA_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION])
+    fancy_add_exits(world, CASTLE_SEQUOIA_AP_REGION, [CASTLE_SEQUOIA_FIRE_AP_REGION],
+                    {CASTLE_SEQUOIA_FIRE_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)})
+    fancy_add_exits(world, CASTLE_SEQUOIA_FIRE_AP_REGION, [CASTLE_SEQUOIA_SHROOM_AP_REGION])
+    fancy_add_exits(world, CASTLE_SEQUOIA_SHROOM_AP_REGION, [CASTLE_SEQUOIA_ICE_AP_REGION],
+                    {CASTLE_SEQUOIA_ICE_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, CASTLE_SEQUOIA_ICE_AP_REGION, [CASTLE_SEQUOIA_FISH_AP_REGION],
+                    {CASTLE_SEQUOIA_FISH_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, CASTLE_SEQUOIA_FISH_AP_REGION, [CASTLE_SEQUOIA_2D_AP_REGION])
+    fancy_add_exits(world, CASTLE_SEQUOIA_2D_AP_REGION, [CASTLE_SEQUOIA_THRONE_AP_REGION],
+                    {CASTLE_SEQUOIA_THRONE_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, CASTLE_SEQUOIA_THRONE_AP_REGION, [CASTLE_SEQUOIA_AP_REGION])
     #The New World start
     # Normally this would take the proof of merit but we unlocked the door
     fancy_add_exits(world, THE_NEW_WORLD_AP_REGION, [DISCIPLINE_HOLLOW_AP_REGION])
@@ -1318,7 +1328,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      EUROPA_SHRINE_AP_REGION: lambda state: (state.has(EUROPA_STONE, player) or state.has(HOMEPOINT_EUROPA_SHRINE_NAME, player)),
                      EACLANEYA_ENTRANCE_AP_REGION: lambda state: state.has(HOMEPOINT_EACLANEYA_ENTRANCE_NAME, player),
                      SALMON_ROOM_AP_REGION: lambda state: state.has(HOMEPOINT_SALMON_ROOM_NAME, player),
-                     LABYRINTH_CORE_AP_REGION: lambda state: state.has(HOMEPOINT_ANCIENT_LABYRINTH_CORE_NAME, player),
+                     LABYRINTH_CORE_AP_REGION: lambda state: (state.has(HOMEPOINT_ANCIENT_LABYRINTH_CORE_NAME, player) and logic.has_a_caster(state)),
                      DIONE_SHRINE_AP_REGION: lambda state: state.has(HOMEPOINT_FLYERS_LOOKOUT_NAME, player),
                      DIONE_ROOF_AP_REGION: lambda state: state.has(DIONE_STONE, player),
                      THE_SEQUOIA_AP_REGION: lambda state: state.has(HOMEPOINT_TOP_OF_THE_SEQUOIA_NAME, player),

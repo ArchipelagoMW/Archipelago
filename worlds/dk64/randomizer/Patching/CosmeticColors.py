@@ -13,7 +13,7 @@ from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Settings import CharacterColors, ColorblindMode, KongModels, WinConditionComplex
 from randomizer.Enums.Maps import Maps
 from randomizer.Enums.Types import BarrierItems
-from randomizer.Patching.Cosmetics.CustomTextures import writeTransition, writeCustomPaintings, writeCustomPortal
+from randomizer.Patching.Cosmetics.CustomTextures import writeTransition, writeCustomPaintings, writeCustomPortal, writeCustomArcadeSprites, writeCustomReels, writeCustomItemSprites
 from randomizer.Patching.Cosmetics.Krusha import placeKrushaHead, fixBaboonBlasts, kong_index_mapping, fixModelSmallKongCollision
 from randomizer.Patching.Cosmetics.Colorblind import (
     recolorKlaptraps,
@@ -31,7 +31,7 @@ from randomizer.Patching.Cosmetics.Colorblind import (
     recolorKRoolShipSwitch,
     recolorRotatingRoomTiles,
 )
-from randomizer.Patching.Library.Generic import compatible_background_textures
+from randomizer.Patching.Library.Generic import compatible_background_textures, IsColorOptionSelected
 from randomizer.Patching.Library.Image import (
     getImageFile,
     TextureFormat,
@@ -46,7 +46,7 @@ from randomizer.Patching.Library.Image import (
 )
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
 from randomizer.Patching.Patcher import ROM, LocalROM
-from randomizer.Settings import Settings
+from randomizer.Settings import Settings, ColorOptions
 from randomizer.Patching.Cosmetics.ModelSwaps import (
     model_mapping,
     applyCosmeticModelSwaps,
@@ -86,9 +86,6 @@ class HelmDoorImages:
         self.format = format
 
 
-RECOLOR_MEDAL_RIM = False
-
-
 def changePatchFace(settings: Settings, ROM_COPY: ROM):
     """Change the top of the dirt patch image."""
     if not settings.better_dirt_patch_cosmetic:
@@ -111,41 +108,41 @@ def changePatchFace(settings: Settings, ROM_COPY: ROM):
 
 def apply_cosmetic_colors(settings: Settings, ROM_COPY: ROM):
     """Apply cosmetic skins to kongs."""
-    sav = settings.rom_data
-
     applyCosmeticModelSwaps(settings, ROM_COPY)
     changePatchFace(settings, ROM_COPY)
     writeKongColors(settings, ROM_COPY)
 
     settings.jetman_color = [0xFF, 0xFF, 0xFF]
-    if settings.misc_cosmetics and settings.override_cosmetics:
-        ROM_COPY.seek(sav + 0x196)
-        ROM_COPY.write(1)
-        # Menu Background
-        textures = list(compatible_background_textures.keys())
-        weights = [compatible_background_textures[x].weight for x in textures]
-        selected_texture = settings.random.choices(textures, weights=weights, k=1)[0]
-        settings.menu_texture_index = selected_texture
-        settings.menu_texture_name = compatible_background_textures[selected_texture].name
-        # Jetman
-        jetman_color = [0xFF] * 3
-        sufficiently_bright = False
-        brightness_threshold = 80
-        for channel in range(3):
-            jetman_color[channel] = settings.random.randint(0, 0xFF)
-            if jetman_color[channel] >= brightness_threshold:
-                sufficiently_bright = True
-        if not sufficiently_bright:
-            channel = settings.random.randint(0, 2)
-            value = settings.random.randint(brightness_threshold, 0xFF)
-            jetman_color[channel] = value
-        settings.jetman_color = jetman_color.copy()
+    if settings.override_cosmetics:
+        if settings.misc_cosmetics:
+            # Menu Background
+            textures = list(compatible_background_textures.keys())
+            weights = [compatible_background_textures[x].weight for x in textures]
+            selected_texture = settings.random.choices(textures, weights=weights, k=1)[0]
+            settings.menu_texture_index = selected_texture
+            settings.menu_texture_name = compatible_background_textures[selected_texture].name
+        if IsColorOptionSelected(settings, ColorOptions.playable_characters):
+            # Jetman
+            jetman_color = [0xFF] * 3
+            sufficiently_bright = False
+            brightness_threshold = 80
+            for channel in range(3):
+                jetman_color[channel] = settings.random.randint(0, 0xFF)
+                if jetman_color[channel] >= brightness_threshold:
+                    sufficiently_bright = True
+            if not sufficiently_bright:
+                channel = settings.random.randint(0, 2)
+                value = settings.random.randint(brightness_threshold, 0xFF)
+                jetman_color[channel] = value
+            settings.jetman_color = jetman_color.copy()
 
     if js.document.getElementById("override_cosmetics").checked or True:
         writeTransition(settings, ROM_COPY)
         writeCustomPortal(settings, ROM_COPY)
         writeCustomPaintings(settings, ROM_COPY)
-        # randomizePlants(ROM_COPY, settings)  # Not sure how much I like how this feels
+        writeCustomReels(settings, ROM_COPY)
+        writeCustomArcadeSprites(settings, ROM_COPY)
+        writeCustomItemSprites(settings, ROM_COPY)
         settings.gb_colors = CharacterColors[js.document.getElementById("gb_colors").value]
         settings.gb_custom_color = js.document.getElementById("gb_custom_color").value
     else:
@@ -163,10 +160,7 @@ def apply_cosmetic_colors(settings: Settings, ROM_COPY: ROM):
                 finish = (2 * x) + 3
                 channel = int(settings.gb_custom_color[start:finish], 16)
                 channels.append(channel)
-        rim_texture = getBonusSkinOffset(ExtraTextures.MedalRim)
         base_textures = [0xB7B, 0x323]
-        if RECOLOR_MEDAL_RIM:
-            base_textures.extend([rim_texture, 0xBAA])  # Medal and top ring
         # base_textures = [0xB7B, 0x323, 0xBAA, rim_texture, 0xE4D, 0xE4E]  # Banana hoard looks **very** strange like this
         textures = base_textures + list(range(0x155C, 0x1568))
         for tex in textures:
@@ -174,7 +168,6 @@ def apply_cosmetic_colors(settings: Settings, ROM_COPY: ROM):
                 0xB7B: (32, 32),
                 0x323: (32, 32),
                 0xBAA: (4, 4),
-                rim_texture: (32, 32),
                 0xE4D: (64, 32),
                 0xE4E: (64, 32),
             }
@@ -479,6 +472,7 @@ model_index_mapping = {
     KongModels.cranky: (0x115, 0x115),
     KongModels.candy: (0x116, 0x116),
     KongModels.funky: (0x117, 0x117),
+    KongModels.disco_donkey: (0x129, 0x129),
 }
 
 LIME_COLORS = {
@@ -556,16 +550,8 @@ def darkenDPad(ROM_COPY: ROM):
     for y in range(32):
         for x in range(32):
             pix_data = list(px[x, y])
-            if pix_data[0] > 245 and pix_data[1] > 245 and pix_data[2] > 245:
-                # Main white bit
-                pix_data[0] = 0
-                pix_data[1] = 0
-                pix_data[2] = 0
-            elif pix_data[0] == 0 and pix_data[1] == 0 and pix_data[2] == 0:
-                # Arrow impressions
-                pix_data[0] = 0xAB
-                pix_data[1] = 0xAB
-                pix_data[2] = 0xAB
+            for c in range(3):
+                pix_data[c] = 255 - pix_data[c]
             value = 1 if pix_data[3] > 128 else 0
             for v in range(3):
                 value |= (pix_data[v] >> 3) << 1 + (5 * (2 - v))
@@ -692,30 +678,76 @@ class WinConData:
         self.default_count = default_count
 
 
+def writeWinConImage(settings: Settings, image: Image, ROM_COPY: LocalROM):
+    """Wrap function for writing a win con image, detecting K Rool win con."""
+    # if settings.win_condition_spawns_ship:
+    #     base_im = Image.new(mode="RGBA", size=(64, 64))
+    #     left_im = getImageFile(ROM_COPY, TableNames.TexturesGeometry, 0x383, True, 32, 64, TextureFormat.RGBA5551)
+    #     right_im = getImageFile(ROM_COPY, TableNames.TexturesGeometry, 0x384, True, 32, 64, TextureFormat.RGBA5551)
+    #     base_im.paste(left_im, (0, 0), left_im)
+    #     base_im.paste(right_im, (32, 0), right_im)
+    #     base_im = base_im.transpose(Image.FLIP_TOP_BOTTOM)
+    #     base_im = base_im.resize((32, 32))
+    #     base_im.paste(image, (0, 0), image)
+    # else:
+    #     base_im = image
+    base_im = image
+    writeColorImageToROM(base_im, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
+
+
 def showWinCondition(settings: Settings, ROM_COPY: LocalROM):
     """Alter the image that's shown on the main menu to display the win condition."""
     win_con = settings.win_condition_item
-    if win_con == WinConditionComplex.beat_krool:
-        # Default, don't alter image
+    helmhurry = settings.helm_hurry and settings.archipelago
+
+    if win_con == WinConditionComplex.krools_challenge:
+        images = [
+            (0x903, 0, 1),
+            (0x904, 0, 2),
+            (0x905, 0, 3),
+            (0x906, 1, 3),
+            (0x907, 1, 2),
+            (0x908, 1, 1),
+            (0x909, 1, 0),
+            (0x90A, 0, 0),
+        ]
+        output_image = Image.new(mode="RGBA", size=(128, 128))
+        for img in images:
+            local_img = getImageFile(ROM_COPY, 25, img[0], True, 64, 32, TextureFormat.RGBA5551)
+            local_img = local_img.convert("RGBA")
+            pos_x = 64 * img[1]
+            pos_y = 32 * img[2]
+            output_image.paste(local_img, (pos_x, pos_y), local_img)
+        output_image = output_image.resize((32, 32)).transpose(Image.FLIP_TOP_BOTTOM)
+        writeWinConImage(settings, output_image, ROM_COPY)
+    if helmhurry:
+        output_image = Image.open(BytesIO(js.getFile("base-hack/assets/displays/treasurechest.png")))
+        output_image = output_image.resize((32, 32))
+        writeWinConImage(settings, output_image, ROM_COPY)
         return
     if win_con == WinConditionComplex.get_key8:
-        output_image = Image.open(BytesIO(js.getFile("./base-hack/assets/displays/key8.png")))
+        output_image = Image.open(BytesIO(js.getFile("base-hack/assets/displays/key8.png")))
         output_image = output_image.resize((32, 32))
-        writeColorImageToROM(output_image, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
+        writeWinConImage(settings, output_image, ROM_COPY)
         return
     if win_con == WinConditionComplex.req_bean:
-        output_image = Image.open(BytesIO(js.getFile("./base-hack/assets/arcade_jetpac/arcade/bean.png")))
+        output_image = Image.open(BytesIO(js.getFile("base-hack/assets/arcade_jetpac/arcade/bean.png")))
         output_image = output_image.resize((32, 32))
-        writeColorImageToROM(output_image, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
+        writeWinConImage(settings, output_image, ROM_COPY)
         return
     if win_con == WinConditionComplex.krem_kapture:
         item_im = getImageFile(ROM_COPY, 14, 0x90, True, 32, 32, TextureFormat.RGBA5551)
-        writeColorImageToROM(item_im, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
+        writeWinConImage(settings, item_im, ROM_COPY)
         return
     if win_con == WinConditionComplex.dk_rap_items:
         item_im = getImageFile(ROM_COPY, 7, 0x3D3, False, 40, 40, TextureFormat.RGBA5551)
         item_im = item_im.resize((32, 32)).transpose(Image.FLIP_TOP_BOTTOM)
-        writeColorImageToROM(item_im, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
+        writeWinConImage(settings, item_im, ROM_COPY)
+        return
+    if win_con == WinConditionComplex.kill_the_rabbit:
+        output_image = Image.open(BytesIO(js.getFile("base-hack/assets/displays/kill_the_rabbit.png")))
+        output_image = output_image.resize((32, 32))
+        writeColorImageToROM(output_image, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
         return
     win_con_data = {
         WinConditionComplex.req_bp: WinConData(25, 0x1593, TextureFormat.RGBA5551, 48, 42, True, 40),
@@ -727,12 +759,14 @@ def showWinCondition(settings: Settings, ROM_COPY: LocalROM):
         WinConditionComplex.req_gb: WinConData(25, 0x155C, TextureFormat.RGBA5551, 44, 44, True, 201),
         WinConditionComplex.req_pearl: WinConData(25, 0, TextureFormat.RGBA5551, 44, 44, True, 5),
         WinConditionComplex.req_rainbowcoin: WinConData(25, 0x174B, TextureFormat.RGBA5551, 48, 42, True, 16),
+        WinConditionComplex.req_bosses: WinConData(25, 0xC9D, TextureFormat.RGBA5551, 48, 42, True, 7),
+        WinConditionComplex.req_bonuses: WinConData(14, 0x2B, TextureFormat.RGBA32, 32, 32, False, 43),
     }
     if win_con not in win_con_data:
         return
     item_data = win_con_data[win_con]
     if win_con == WinConditionComplex.req_pearl:
-        base_im = Image.open(BytesIO(js.getFile("./base-hack/assets/arcade_jetpac/arcade/pearl.png")))
+        base_im = Image.open(BytesIO(js.getFile("base-hack/assets/arcade_jetpac/arcade/pearl.png")))
     else:
         item_im = getImageFile(
             ROM_COPY,
@@ -751,34 +785,4 @@ def showWinCondition(settings: Settings, ROM_COPY: LocalROM):
     base_im = base_im.resize((32, 32))
     num_im = numberToImage(settings.win_condition_count, (20, 20), ROM_COPY)
     base_im.paste(num_im, (6, 6), num_im)
-    writeColorImageToROM(base_im, 14, 195, 32, 32, False, TextureFormat.RGBA5551, ROM_COPY)
-
-
-def randomizePlants(ROM_COPY: ROM, settings: Settings):
-    """Randomize the plants in the setup file."""
-    if not settings.misc_cosmetics:
-        return
-
-    flowers = [0x05, 0x08, 0x43]
-    for x in range(0x1F1 - 0x1DE):
-        flowers.append(0x1DE + x)
-    maps_that_contain_flowers = [
-        Maps.JungleJapes,
-        Maps.JungleJapesLobby,
-        Maps.TrainingGrounds,
-        Maps.JapesTinyHive,
-        Maps.AngryAztec,
-        Maps.Isles,
-        Maps.BananaFairyRoom,
-    ]
-    for map_id in maps_that_contain_flowers:
-        setup_file = getPointerLocation(TableNames.Setups, map_id)
-        ROM_COPY.seek(setup_file)
-        model2_count = int.from_bytes(ROM_COPY.readBytes(4), "big")
-        for model2_item in range(model2_count):
-            item_start = setup_file + 4 + (model2_item * 0x30)
-            ROM_COPY.seek(item_start + 0x28)
-            item_type = int.from_bytes(ROM_COPY.readBytes(2), "big")
-            if item_type in flowers:
-                ROM_COPY.seek(item_start + 0x28)
-                ROM_COPY.writeMultipleBytes(settings.random.choice(flowers), 2)
+    writeWinConImage(settings, base_im, ROM_COPY)

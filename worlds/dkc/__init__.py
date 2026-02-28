@@ -117,7 +117,7 @@ class DKCWorld(World):
         
         if not self.using_ut:
             # Test if sphere 1 has at least 2 reachable locations
-            state = CollectionState(self.multiworld)
+            state = CollectionState(self.multiworld, allow_partial_entrances=True)
             initial_world = option_name_to_world_name[self.options.starting_world.current_option_name]
             available_items = items_that_open_checks[initial_world].copy()
             self.random.shuffle(available_items)
@@ -178,16 +178,17 @@ class DKCWorld(World):
 
         # Submit item pool
         precollected_items_by_name = [item.name for item in self.multiworld.precollected_items[self.player]]
-        for item in item_groups["Worlds"]:
+        for item in sorted(item_groups["Worlds"]):
             if item in precollected_items_by_name:
                 continue
             else:
                 itempool.append(self.create_item(item))
-                
-        for item in item_groups["Abilities"]:
+
+        shuffle_abilities = sorted(self.options.shuffle_abilities.value)
+        for item in sorted(item_groups["Abilities"]):
             if item in precollected_items_by_name:
                 continue
-            elif item in self.options.shuffle_abilities.value:
+            elif item in shuffle_abilities:
                 classification = False
                 if self.options.banana_checks.value and item == ItemName.slap:
                     classification = ItemClassification.progression | ItemClassification.useful
@@ -195,18 +196,20 @@ class DKCWorld(World):
             else:
                 self.multiworld.push_precollected(self.create_item(item))
 
-        for item in item_groups["Animals"]:
+        shuffle_animals = sorted(self.options.shuffle_animals.value)
+        for item in sorted(item_groups["Animals"]):
             if item in precollected_items_by_name:
                 continue
-            elif item in self.options.shuffle_animals.value:
+            elif item in shuffle_animals:
                 itempool += [self.create_item(item)]
             else:
                 self.multiworld.push_precollected(self.create_item(item))
                 
-        for item in item_groups["Objects"]:
+        shuffle_objects = sorted(self.options.shuffle_objects.value)
+        for item in sorted(item_groups["Objects"]):
             if item in precollected_items_by_name:
                 continue
-            elif item in self.options.shuffle_objects.value:
+            elif item in shuffle_objects:
                 itempool += [self.create_item(item)]
             else:
                 self.multiworld.push_precollected(self.create_item(item))

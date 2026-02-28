@@ -8,7 +8,6 @@ from randomizer.Enums.Maps import Maps
 from randomizer.Lists.Warps import BananaportVanilla
 from randomizer.Lists.CustomLocations import CustomLocations
 from randomizer.Enums.Levels import Levels
-from randomizer.Patching.Library.DataTypes import float_to_hex
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
 
 
@@ -140,9 +139,9 @@ def move_bananaports(spoiler, ROM_COPY: LocalROM):
                     for k in modification_table:
                         if k["obj_id"] == item_id:
                             for c in k["coords"]:
-                                ROM_COPY.writeMultipleBytes(int(float_to_hex(c), 16), 4)
-                            ROM_COPY.writeMultipleBytes(int(float_to_hex(k["scale"]), 16), 4)
+                                ROM_COPY.writeFloat(c)
+                            ROM_COPY.writeFloat(k["scale"])
                             ROM_COPY.seek(item_start + 0x18)
-                            ROM_COPY.writeMultipleBytes(int(float_to_hex(k["rot_x"]), 16), 4)
-                            ROM_COPY.writeMultipleBytes(int(float_to_hex(k["rot_y"]), 16), 4)
-                            ROM_COPY.writeMultipleBytes(int(float_to_hex(k["rot_z"]), 16), 4)
+                            ROM_COPY.writeFloat(k["rot_x"])
+                            ROM_COPY.writeFloat(k["rot_y"])
+                            ROM_COPY.writeFloat(k["rot_z"])

@@ -1,14 +1,14 @@
 
 import time
 import logging
-from typing import TYPE_CHECKING, Set, Dict, Any
+from typing import TYPE_CHECKING, Set, Dict, Any, Iterable
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from ..data.Constants import *
 from ..Util import *
-from .subclasses import read_multiple, write_multiple
+from .subclasses import read_multiple, write_multiple, storage_key, get_stored_data
 
 from ..data.Addresses import *
 
@@ -30,31 +30,40 @@ class DSZeldaClient(BizHawkClient):
     watches: Dict[str, tuple[int, int, str]]
     item_data: dict[str, "DSItem"]
 
-    stage_address: "Address"
+    addr_game_state: "Address"
+    addr_slot_id: "Address"
+    addr_received_item_index: "Address"
+    addr_stage: "Address"
+    addr_room: "Address"
+    addr_entrance: "Address"
+    save_spam_protection: bool
+    stage_flag_address: "Address"  # Stage flag address
     health_address: "Address"
 
     treasure_tracker: dict["Address" or str, int]
 
+    starting_flags: list
+    dungeon_key_data: dict
+
+    starting_entrance: tuple  # stage_id, room_id, entrance_id
+    scene_addr: tuple  # stage, room, floor, entrance
+    exit_coords_addr: tuple  # x, y, z. what coords to spawn link at when entering a continuous transition
+
+    dynamic_entrances_by_scene: dict
+
+    stage_flag_offset: int
+    er_y_offest: int # In ph i use coords who's y is 164 off the entrance y
+
     def __init__(self) -> None:
         super().__init__()
+        # all grabbed from util
         self.item_id_to_name = build_item_id_to_name_dict()
         self.location_name_to_id = build_location_name_to_id_dict()
         self.location_area_to_watches = build_location_room_to_watches()
         self.scene_to_dynamic_flag = build_scene_to_dynamic_flag()
         self.hint_scene_to_watches = build_hint_scene_to_watches()
         self.entrance_id_to_entrance = build_entrance_id_to_data()
-        self.dynamic_entrances_by_scene = {}
 
-        self.starting_flags = None
-        self.dungeon_key_data = None
-        self.slot_id_addr = None
-        self.received_item_index_addr = None
-        self.starting_entrance = (11, 3, 5)  # stage, room, entrance
-        self.scene_addr: tuple["Address"] or None = None
-        self.exit_coords_addr = None  # x, y, z. what coords to spawn link at when entering a
-        # continuous transition
-        self.er_y_offest = 164  # In ph i use coords who's y is 164 off the entrance y
-        self.stage_flag_offset = 0x268
         self.entrances = {}
         self.hint_data = {}
 
@@ -89,6 +98,7 @@ class DSZeldaClient(BizHawkClient):
         self.read_result = {}
         self.current_stage = 0xB
         self.current_scene = None
+        self.current_room = None
         self.last_stage = None
         self.entering_from = None
         self.entering_dungeon = None
@@ -113,7 +123,6 @@ class DSZeldaClient(BizHawkClient):
         self.delay_pickup = None
         self.last_key_count = 0
         self.key_address: "Address" = addr_null
-        self.metal_count = 0
 
         self.last_dungeon_warp_target = None
         self.tried_short_cs = False
@@ -123,13 +132,8 @@ class DSZeldaClient(BizHawkClient):
         self.heal_on_load = False
         self.precision_delay_flags = False
 
-        # Mandatory addresses:
-        self.addr_game_state = None
-        self.addr_slot_id = None
-        self.addr_stage = None
-        self.addr_room = None
-        self.addr_entrance = None
-        self.addr_received_item_index = None
+        self.lss_retry_attempts = 4
+        self.last_saved_scene = None
 
     def item_count(self, ctx, item_name, items_received=-1) -> int:
         return self.item_data[item_name].get_count(ctx, items_received)
@@ -284,6 +288,8 @@ class DSZeldaClient(BizHawkClient):
             self.last_scene = None
             self._from_menu = True
             self.er_in_scene = None
+            self.lss_retry_attempts = 4
+            self.last_saved_scene = None
             self.clear_variables()
             ctx.watcher_timeout = 0.4
             return
@@ -368,10 +374,10 @@ class DSZeldaClient(BizHawkClient):
             current_room = read_result.get(self.addr_room, None)
             current_room = 0 if current_room == 0xFF and current_stage != 0x29 else current_room  # Resetting in a dungeon sets a special value
             current_room = 3 if current_room == 0xFF else current_room
+            self.current_room = current_room
             self.current_scene = current_scene = current_stage * 0x100 + current_room
             current_entrance = read_result.get(self.addr_entrance, 0)
             num_received_items = read_result.get(self.addr_received_item_index, None)
-
 
             await self.process_read_list(ctx, read_result)
 
@@ -384,6 +390,7 @@ class DSZeldaClient(BizHawkClient):
                 self.current_entrance = current_entrance
                 self.current_scene = current_scene
                 self.current_stage = current_stage
+                self.current_room = current_room
 
                 # Backup in case of missing loading
                 self._backup_coord_read = await self.get_coords(ctx, multi=True)
@@ -402,9 +409,10 @@ class DSZeldaClient(BizHawkClient):
                     self.delay_reset = 0
                     await self._remove_vanilla_item(ctx, num_received_items)
 
-            # Nothing happens while loading
-            if ctx.server is not None and not loading and not self._loading_scene and not self._entered_entrance:
+                await self.detected_new_scene(ctx)
 
+            # Nothing happens while loading
+            if ctx.server and not loading and not self._loading_scene and not self._entered_entrance:
                 # If new file, set up starting flags
                 if slot_memory == 0:
                     if await self.watched_intro_cs(ctx):  # Check if watched intro cs
@@ -437,17 +445,19 @@ class DSZeldaClient(BizHawkClient):
                     await self._process_checked_locations(ctx, None, detection_type=self.getting_location_type)
 
                 # Process received items
-                if num_received_items is not None and num_received_items < len(ctx.items_received):
-                    if self._just_entered_game:
-                        self._log_received_items = True
-                    await self._process_received_items(ctx, num_received_items, self._log_received_items)
-                else:
-                    self._log_received_items = False
+                if num_received_items is not None:
+                    if num_received_items < len(ctx.items_received):
+                        print(f"Received items: {num_received_items}")
+                        if self._just_entered_game:
+                            self._log_received_items = True
+                        await self._process_received_items(ctx, num_received_items, self._log_received_items)
+                    else:
+                        self._log_received_items = False
 
-                if num_received_items > len(ctx.items_received):
-                    await self.received_item_index_addr.overwrite(ctx, len(ctx.items_received))
-                    logger.info(f"Save file has more items than Multiworld. Probable cause: loaded wrong save file. \n"
-                                f"Reset item count to Multiworld's. If this is the wrong save file, you can safely quit without saving.")
+                    if num_received_items > len(ctx.items_received):
+                        await self.addr_received_item_index.overwrite(ctx, len(ctx.items_received))
+                        logger.info(f"Save file has more items than Multiworld. Probable cause: loaded wrong save file. \n"
+                                    f"Reset item count to Multiworld's. If this is the wrong save file, you can safely quit without saving.")
 
                 # Exit location received cs
                 if self.receiving_location and not self.getting_location:
@@ -480,6 +490,9 @@ class DSZeldaClient(BizHawkClient):
 
                         self.delay_pickup = None
                         self.last_key_count = 0
+                        if self.last_vanilla_item:
+                            print("Delay Pickup is removing vanilla item")
+                            await self._remove_vanilla_item(ctx, num_received_items)
 
                     # Remove vanilla item
                     elif self.last_vanilla_item:
@@ -514,6 +527,7 @@ class DSZeldaClient(BizHawkClient):
                 print("Fully Loaded Room", current_scene)
                 self._loading_scene = False
                 self._backup_coord_read = None
+                self.save_spam_protection = False
 
                 # Set dynamic flags now if precision loading
                 if self.precision_delay_flags:
@@ -573,6 +587,12 @@ class DSZeldaClient(BizHawkClient):
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             print("Couldn't read data")
+
+    async def detected_new_scene(self, ctx: "BizHawkClientContext"):
+        """
+        Called on having detected a new scene, after updating entrance warp and setting dynaflags etc.
+        """
+        pass
 
     async def update_main_read_list(self, ctx: "BizHawkClientContext", stage: int, in_game=True):
         """
@@ -637,7 +657,7 @@ class DSZeldaClient(BizHawkClient):
         pass
 
     async def _set_starting_flags(self, ctx: "BizHawkClientContext") -> None:
-        write_list = self.slot_id_addr.get_write_list(ctx.slot)
+        write_list = self.addr_slot_id.get_write_list(ctx.slot)
         print(f"New game, setting starting flags for slot {ctx.slot}")
         for adr, _value in STARTING_FLAGS:
             write_list += adr.get_write_list(_value)
@@ -903,10 +923,9 @@ class DSZeldaClient(BizHawkClient):
             else:
                 return True
 
-            for has_item in ctx.items_received:
-                for i, want_item in enumerate(d[label]):
-                    if has_item.item == self.item_data[want_item[0]].id:
-                        counter[i] += 1
+            for i, want_item in enumerate(d[label]):
+                counter[i] = self.item_count(ctx, want_item[0])
+            # print(f"Item Counter {d['name']}: {counter}")
 
             for item, count_have in zip(d.get("has_items", []), counter):
                 item, count_want, *operation = item
@@ -923,7 +942,8 @@ class DSZeldaClient(BizHawkClient):
             not_have_counter = 0
             for item, count_have in zip(d.get("not_has_all_items", []), counter):
                 item, count_want, *operation = item
-                if count_have > count_want:
+                # print(f"count have {count_have} >= {count_want}")
+                if count_have >= count_want:
                     not_have_counter += 1
                 if not_have_counter == len(counter):
                     return False
@@ -1196,7 +1216,7 @@ class DSZeldaClient(BizHawkClient):
             logger.info(f"Received Backlogged Item: {item_name}")
 
         # Increment in-game items received count
-        write_list = self.received_item_index_addr.get_write_list(num_received_items+1)
+        write_list = self.addr_received_item_index.get_write_list(num_received_items+1)
         print(f"Vanilla item: {self.last_vanilla_item} for {item_name}")
 
         # If same as vanilla item don't remove
@@ -1435,7 +1455,7 @@ class DSZeldaClient(BizHawkClient):
         :return:
         """
         key_address = self.key_address = await self.get_small_key_address(ctx)
-        key_data = self.dungeon_key_data.get(current_stage, None)
+        key_data = self.dungeon_key_data.get(current_stage, {})
         tracker = key_data["address"]
         read_list = [key_address, tracker]
         key_values = await read_multiple(ctx, read_list)
@@ -1556,3 +1576,30 @@ class DSZeldaClient(BizHawkClient):
         :return: list of location to scout
         """
         return []
+
+    async def save_scene(self, ctx, read_result, save_addr, save_key, save_comp: "Iterable"):
+        """
+        Save the current scene to memory. Used in ph for precision warps and st for weird scene stuff from menu
+        """
+        if read_result.get(save_addr, False) in save_comp and not self.save_spam_protection:
+            print(f"Saving scene {hex(self.current_scene)}")
+            self.last_saved_scene = self.current_scene
+            await self.store_data(ctx, storage_key(ctx, save_key), self.last_saved_scene, "replace", default=0)
+            self.save_spam_protection = True
+            return True
+        return False
+
+    async def get_saved_scene(self, ctx, save_key):
+        """
+        Get the last saved scene from datastorage. call from menu
+        """
+        if not self.last_saved_scene:
+            key = storage_key(ctx, save_key)
+            await ctx.send_msgs([{
+                "cmd": "Get",
+                "keys": [key]
+            }])
+            last_saved_scene = get_stored_data(ctx, save_key)
+            print(f"fetched last saved scene: {last_saved_scene}")
+            self.last_saved_scene = last_saved_scene if self.lss_retry_attempts >= 0 else 0 # if last_saved_scene is not None else False
+            self.lss_retry_attempts -= 1

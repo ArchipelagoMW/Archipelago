@@ -30,6 +30,10 @@ class FasterProduction(Toggle):
     """Enable faster production and harvesting of resources."""
     display_name = "Faster production"
 
+class FasterUnitProduction(Toggle):
+    """Enable faster unit production."""
+    display_name = "Faster unit production"
+
 class FasterConveyor(Toggle):
     """Enable faster conveyor."""
     display_name = "Faster conveyor"
@@ -78,6 +82,10 @@ class ProgressiveGenerators(Toggle):
     """Makes Generators progressive."""
     display_name = "Progressive Generators"
 
+class ProgressivePumps(Toggle):
+    """Makes Pumps progressive."""
+    display_name = "Progressive Pumps"
+
 class MakeEarlyRoadblocksLocal(Toggle):
     """Make items that could block the player early on local."""
     display_name = "Make early roadblocks local"
@@ -85,9 +93,33 @@ class MakeEarlyRoadblocksLocal(Toggle):
 class AmountOfResourcesRequired(Range):
     """The amount of resources required to complete the 'Every resources collection' goal."""
     display_name = "Amount of resources required"
-    range_start = 100
-    range_end = 100000
+    range_start = 1
+    range_end = 1000000
     default = 2000
+
+class FactoryMalfunctionTrap(Toggle):
+    """Add the Factory malfunction trap to the filler pool"""
+    display_name = "Factory malfunction trap"
+
+class LaunchWaveTrap(Toggle):
+    """Add the Launch wave trap to the filler pool (Only work for serpulo campaign)"""
+    display_name = "Launch wave trap"
+
+class ConstructionSpeedBuffs(Toggle):
+    """Add the Construction speed buffs to the filler pool"""
+    display_name = "Construction speed buffs"
+
+class ResearchDiscountBuffs(Toggle):
+    """Add the Research discount buffs to the filler pool"""
+    display_name = "Research discount buffs"
+
+class AddSectorsAsLocations(Toggle):
+    """Add selected campaign(s) sectors as locations in the research tech tree."""
+    display_name = "Add sectors as locations"
+
+class AddResourcesAsLocations(Toggle):
+    """Add selected campaign(s) resources as locations in the research tech tree."""
+    display_name = "Add resources as locations"
 
 @dataclass
 class MindustryOptions(PerGameCommonOptions):
@@ -100,14 +132,22 @@ class MindustryOptions(PerGameCommonOptions):
     goal: Goal
     disable_invasions: DisableInvasions
     faster_production: FasterProduction
+    faster_unit_production: FasterUnitProduction
     faster_conveyor: FasterConveyor
     death_link: DeathLink
     death_link_mode: DeathLinkMode
     military_level_tracking: MilitaryLevelTracking
     randomize_core_units_weapon: RandomizeCoreUnitsWeapon
     logistic_distribution: LogisticDistribution
-    progressive_drills : ProgressiveDrills
-    progressive_generators : ProgressiveGenerators
+    progressive_drills: ProgressiveDrills
+    progressive_generators: ProgressiveGenerators
+    progressive_pumps: ProgressivePumps
     make_early_roadblocks_local: MakeEarlyRoadblocksLocal
     amount_of_resources_required: AmountOfResourcesRequired
     core_russian_roulette_chambers: CoreRussianRouletteChambers
+    factory_malfunction_trap: FactoryMalfunctionTrap
+    launch_wave_trap: LaunchWaveTrap
+    construction_speed_buffs: ConstructionSpeedBuffs
+    research_discount_buffs: ResearchDiscountBuffs
+    add_sectors_as_locations: AddSectorsAsLocations
+    add_resources_as_locations: AddResourcesAsLocations

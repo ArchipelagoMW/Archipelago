@@ -6,7 +6,7 @@ from randomizer.Enums.Settings import CharacterColors, KongModels
 from randomizer.Settings import Settings
 from randomizer.Patching.Library.Generic import PaletteFillType
 from randomizer.Patching.Library.DataTypes import int_to_list
-from randomizer.Patching.Library.Image import getKongItemColor
+from randomizer.Patching.Library.Image import getKongItemColor, getBonusSkinOffset, ExtraTextures
 from randomizer.Patching.Library.Assets import TableNames, getRawFile, writeRawFile
 from randomizer.Patching.generate_kong_color_images import convertColors
 from randomizer.Patching.Cosmetics.Krusha import kong_index_mapping
@@ -126,7 +126,7 @@ def writeKongColors(settings: Settings, ROM_COPY: ROM):
     ]
 
     if js.document.getElementById("override_cosmetics").checked or True:
-        if js.document.getElementById("random_colors").checked:
+        if js.document.getElementById("random_kong_colors").checked:
             for kong in KONG_ZONES:
                 for zone in KONG_ZONES[kong]:
                     settings.__setattr__(f"{kong.lower()}_{zone.lower()}_colors", CharacterColors.randomized)
@@ -142,7 +142,7 @@ def writeKongColors(settings: Settings, ROM_COPY: ROM):
                         js.document.getElementById(f"{kong.lower()}_{zone.lower()}_custom_color").value,
                     )
     else:
-        if settings.random_colors:
+        if len(settings.random_colors_selected) > 0:
             for kong in KONG_ZONES:
                 for zone in KONG_ZONES[kong]:
                     settings.__setattr__(f"{kong.lower()}_{zone.lower()}_colors", CharacterColors.randomized)
@@ -158,6 +158,14 @@ def writeKongColors(settings: Settings, ROM_COPY: ROM):
                 kong.palettes = [
                     KongPalette("main", 3777, PaletteFillType.sparkle),
                     KongPalette("other", 3778, PaletteFillType.sparkle),
+                ]
+        elif kong.kong_index == 0:
+            if settings.kong_model_dk == KongModels.disco_donkey:
+                kong.palettes = [
+                    KongPalette("fur", getBonusSkinOffset(ExtraTextures.DiscoDonkShirt), PaletteFillType.sparkle),
+                    KongPalette("tie", getBonusSkinOffset(ExtraTextures.DiscoDonkGlove), PaletteFillType.sparkle),
+                    KongPalette("tie", 0x177D, PaletteFillType.block),
+                    KongPalette("tie", 0xE8D, PaletteFillType.patch),
                 ]
         settings_values = [
             settings.kong_model_dk,

@@ -2,6 +2,7 @@
 
 import json
 import re
+import os
 from js import getStringFile
 from enum import IntEnum, auto
 import pathlib
@@ -114,7 +115,10 @@ def generate_globals(path):
     # Replace the current path to find the JSONC file
     path = pathlib.Path(path).name
     path = "randomizer/Enums/" + path
-    path = path.replace(".py", ".jsonc")
+    root, ext = os.path.splitext(path)
+    # Handle case of cx_freeze turning jsonc into jsoncc
+    if ext in (".py", ".pyc"):
+        path = root + ".jsonc"
 
     # If the path starts with a slash, remove it
     if "\\" in path:

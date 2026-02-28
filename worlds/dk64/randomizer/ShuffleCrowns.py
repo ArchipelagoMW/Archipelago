@@ -2,7 +2,6 @@
 
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
-from randomizer.Lists import Exceptions
 from randomizer.Lists.CustomLocations import CustomLocations, LocationTypes
 from randomizer.LogicClasses import LocationLogic
 

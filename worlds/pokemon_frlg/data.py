@@ -13,7 +13,7 @@ from pkg_resources import resource_listdir, resource_isdir
 from typing import Dict, List, NamedTuple, Set, FrozenSet, Any, Tuple
 from BaseClasses import ItemClassification
 
-APWORLD_VERSION = "1.0.2"
+APWORLD_VERSION = "1.0.4"
 POPTRACKER_CHECKSUM = 0x4A497E8F
 NUM_REAL_SPECIES = 386
 
@@ -1918,7 +1918,7 @@ three_island_fly_destinations: List[FlyData] = [
 four_island_fly_destinations: List[FlyData] = [
     FlyData("Four Island Pokemon Center", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 18, 21, 3, 91),
     FlyData("Four Island Pokemon Day Care", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 12, 14, 3, 91),
-    FlyData("Four Island Move Tutor's House", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 25, 15, 3, 91),
+    FlyData("Move Tutor's House", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 25, 15, 3, 91),
     FlyData("Lorelei's House", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 33, 24, 3, 91),
     FlyData("Sticker Man's House", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 25, 27, 3, 91),
     FlyData("Four Island Harbor", "FOUR ISLAND", "Four Island", "Four Island Town", 3, 15, 10, 28, 3, 91),

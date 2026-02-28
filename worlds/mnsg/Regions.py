@@ -12,7 +12,7 @@ def import_region_logic() -> Dict:
     from .Logic import (
         mn64_bizen,
         mn64_festival_temple_castle,
-        mn64_folypoke_village,
+        mn64_folkypoke_village,
         mn64_ghost_toys_castle,
         mn64_gorgeous_music_castle,
         mn64_gourmet_submarine,
@@ -24,7 +24,7 @@ def import_region_logic() -> Dict:
         mn64_oedo_town,
         mn64_sanuki,
         mn64_tosa,
-        mn64_yamamoto,
+        mn64_yamato,
         mn64_zazen_town,
     )
 
@@ -34,9 +34,9 @@ def import_region_logic() -> Dict:
     all_regions.update(mn64_zazen_town.LogicRegions)
     all_regions.update(mn64_musashi.LogicRegions)
     all_regions.update(mn64_mutsu.LogicRegions)
-    all_regions.update(mn64_yamamoto.LogicRegions)
+    all_regions.update(mn64_yamato.LogicRegions)
     all_regions.update(mn64_sanuki.LogicRegions)
-    all_regions.update(mn64_folypoke_village.LogicRegions)
+    all_regions.update(mn64_folkypoke_village.LogicRegions)
     all_regions.update(mn64_tosa.LogicRegions)
     all_regions.update(mn64_iyo.LogicRegions)
     all_regions.update(mn64_kai.LogicRegions)
@@ -50,31 +50,58 @@ def import_region_logic() -> Dict:
     return all_regions
 
 
+def build_location_names(all_regions: Dict) -> list:
+    """Build the complete list of AP location names derived from Logic region data.
+
+    Uses identical counter/dedup logic to create_game_regions so names always match.
+    Event locations are excluded. Pass the result of import_region_logic() as all_regions.
+    """
+    event_item_names = get_event_item_names()
+    names = []
+    for region_name, region_data in all_regions.items():
+        display_name = region_data.name
+        location_counter: Dict[str, int] = {}
+        for location_logic in region_data.locations:
+            base_name = location_logic.name
+            item_name = location_logic.item_type.value
+            # Mirror the counter increment even for event items so numbering stays consistent
+            if base_name in location_counter:
+                location_counter[base_name] += 1
+                unique_name = f"{display_name} - {base_name} {location_counter[base_name]}"
+            else:
+                location_counter[base_name] = 1
+                unique_name = f"{display_name} - {base_name}"
+            if item_name not in event_item_names:
+                names.append(unique_name)
+    return names
+
+
 def create_game_regions(world, all_regions: Dict, location_name_to_id: Dict) -> None:
     """Create all game regions and their locations."""
     # Import MN64Location here to avoid circular import
     from . import MN64Location
-    
+
     event_item_names = get_event_item_names()
-    vanilla_item_names = get_vanilla_item_names(world.options.randomize_health.value)
+    vanilla_item_names = get_vanilla_item_names(world.options.randomize_health.value, world.options.randomize_ryo.value, world.options.pot_rando.value)
 
     for region_name, region_data in all_regions.items():
         region = Region(region_name, world.player, world.multiworld)
+        display_name = region_data.name
 
         # Add locations to region with unique names
         location_counter = {}  # Track duplicate names within same region
         for location_logic in region_data.locations:
-            # Create unique location name using internal region name (without spaces)
+            # Create unique location name using display region name (with spaces)
             base_name = location_logic.name
             item_name = location_logic.item_type.value
 
             # Check if this location name was already used in this region
             if base_name in location_counter:
                 location_counter[base_name] += 1
-                unique_name = f"{region_name} - {base_name} {location_counter[base_name]}"
+                unique_name = f"{display_name} - {base_name} {location_counter[base_name]}"
             else:
                 location_counter[base_name] = 1
-                unique_name = f"{region_name} - {base_name}"
+                unique_name = f"{display_name} - {base_name}"
 
             # Event locations have address None
             location_id = None if item_name in event_item_names else location_name_to_id.get(unique_name, None)
@@ -143,28 +170,32 @@ def connect_regions(world, all_regions: Dict, logger) -> None:
 
 def setup_starting_region(world, all_regions: Dict, logger) -> None:
     """Setup starting region connection from menu."""
+    # During a Universal Tracker regen, restore the original starting region from slot data
+    if getattr(world, "using_ut", False) and world.passthrough.get("starting_region_name"):
+        starting_region_name = world.passthrough["starting_region_name"]
     # Randomly select a starting region if option is enabled
-    if world.options.starting_room_rando.value:
-        possible_regions = [
-            "GoemonsHouse",
-            "ZazenTownEntrance",
-            "FestivalVillageEntrance",
-            "KaisCoffeeShop",
-            "IyoCoffeeShop",
-            "IzumoCoffeeShop",
-            "KompurasCoffeeShop",
-            "KiisCoffeeShop",
-        ]
-        starting_region_name = world.random.choice(possible_regions)
+    elif world.options.starting_room_rando.value:
+        # Find all regions that have spawn data defined
+        possible_regions = []
+        for region_name, region_data in all_regions.items():
+            if hasattr(region_data, "spawn") and region_data.spawn:
+                possible_regions.append(region_name)
+
+        if possible_regions:
+            starting_region_name = world.random.choice(possible_regions)
+        else:
+            # Fallback to default if no spawn regions found
+            starting_region_name = "GoemonsHouse"
     else:
         # Default starting region
         starting_region_name = "GoemonsHouse"
 
     world.starting_region_name = starting_region_name  # Store for slot data
 
-    # Store the room_id for the starting region
+    # Store the room_id and spawn data for the starting region
     starting_region_data = all_regions.get(starting_region_name)
     world.starting_room_id = getattr(starting_region_data, "room_id", None) if starting_region_data else None
+    world.starting_spawn_data = getattr(starting_region_data, "spawn", {}) if starting_region_data else {}
 
     try:
         menu = world.multiworld.get_region("Menu", world.player)

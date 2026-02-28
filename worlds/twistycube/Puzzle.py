@@ -39,25 +39,26 @@ class CubePuzzle:
         return dict(groups)
     
     # Returns a map containing the permutation of the color layout
-    # If has_random_layout is false, returns the identity permutation (Each color maps to itself)
-    def get_color_permutation(self, has_random_layout: bool) -> dict[str, str]:
+    def get_color_permutation(self) -> dict[str, str]:
         if self.random is None:
             raise ValueError("The 'random' attribute has not been set.")
         side_keys = self.colors.copy()
         side_values = side_keys.copy()
-        if has_random_layout:
-            self.random.shuffle(side_values)
+        self.random.shuffle(side_values)
         return dict(zip(side_keys, side_values))
     
+    def get_number_of_stickers(self):
+        return 6*self.size*self.size
+
     # Returns a map of locations with their requirements
     def get_location_table(self, starting_stickers: int) -> dict[str, int]:
         locations_to_id = {}
-        for i in range(starting_stickers, self.size*self.size*6+1):
+        for i in range(starting_stickers, self.get_number_of_stickers()+1):
             locations_to_id[f"{i} Correct"] = i
         return locations_to_id
     
     def get_goal_location(self) -> str:
-        return f"{self.size*self.size*6} Correct"
+        return f"{self.get_number_of_stickers()} Correct"
 
 
 LARGEST_CUBE = CubePuzzle(CubePuzzle.MAX_SIZE)

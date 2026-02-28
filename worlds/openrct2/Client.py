@@ -42,8 +42,6 @@ class OpenRCT2Context(CommonContext):
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
-        # if cmd == "Connected":
-        #     self.game = self.game#slot_info[self.slot].game
         if cmd == "PrintJSON":
             for index, item in enumerate(args['data']):
                 match = re.search(r'\[color=[^\]]+\](.*?)\[/color\]', args['data'][index]['text'])
@@ -51,14 +49,6 @@ class OpenRCT2Context(CommonContext):
                     args['data'][index]['text'] = match.group(1) 
         print(args)
         self.gamesock.sendobj(args)
-
-
-
-    # DeathLink hooks
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        """Gets dispatched when a new DeathLink is triggered by another linked player."""
-        super().on_deathlink(data)
-        self.gamesock.sendobj({'cmd': 'DeathLink'})
 
     def run_gui(self): #Sets the title of the client
         """Import kivy UI system and start running it as self.ui_task."""

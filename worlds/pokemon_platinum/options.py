@@ -1,8 +1,9 @@
 # options.py
 #
-# Copyright (C) 2025 James Petersen <m@jamespetersen.ca>
+# Copyright (C) 2025-2026 James Petersen <m@jamespetersen.ca>
 # Licensed under MIT. See LICENSE
 
+from collections.abc import MutableMapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 from Options import Choice, DefaultOnToggle, OptionDict, OptionError, OptionSet, PerGameCommonOptions, Range, Toggle
@@ -202,11 +203,11 @@ class RequireParcelCouponsCheckRoute203(DefaultOnToggle):
     """
     display_name = "Require Parcel and Coupons for Route 203 from Jubilife"
 
-class ShowUnrandomizedProgressionItems(DefaultOnToggle):
+class ShowUnrandomizedProgressionItems(Toggle):
     """
     Whether unrandomized progression items should be sent to the server and
     displayed in the chat. This also means that trackers will consider it a location
-    to be checked. If this is off, trackers may assume that it is obtained when
+    to be checked. If this is off, some trackers may assume that it is obtained when
     accessible.
     """
     display_name = "Show Unrandomized Progression Items"
@@ -323,6 +324,37 @@ class HBSpeed(Range):
     range_end = 16
     default = 1
 
+slot_data_options: Sequence[str] = [
+    "hms",
+    "badges",
+    "overworlds",
+    "hiddens",
+    "npc_gifts",
+    "key_items",
+    "rods",
+    "poketch_apps",
+    "running_shoes",
+    "bicycle",
+    "pokedex",
+    "accessories",
+    "hm_badge_requirement",
+    "remove_badge_requirements",
+    "visibility_hm_logic",
+    "dowsing_machine_logic",
+    "north_sinnoh_fly",
+    "parcel_coupons_route_203",
+    "regional_dex_goal",
+    "early_sunyshore",
+    "pastoria_barriers",
+    "master_repel",
+    "s_s_ticket",
+    "marsh_pass",
+    "storage_key",
+    "bag",
+    "unown_option",
+    "goal",
+]
+
 @dataclass
 class PokemonPlatinumOptions(PerGameCommonOptions):
     hms: RandomizeHms
@@ -382,3 +414,6 @@ class PokemonPlatinumOptions(PerGameCommonOptions):
         if self.bag and self.dowsing_machine_logic and not (self.overworlds or self.npc_gifts or self.rods or self.running_shoes or self.pokedex or self.key_items.value > 0):
             raise OptionError(f"if the bag is enabled, then at least one of overworlds, npc_gifts, rods, running_shoes, pokedex, key_items must be enabled")
 
+
+    def save_options(self) -> MutableMapping[str, Any]:
+        return self.as_dict(*slot_data_options)

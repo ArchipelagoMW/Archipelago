@@ -36,11 +36,11 @@ collectable_table = {
 }
 
 upgrade_table = {
-    ItemName.mario_run:             ItemData(0xBC0003, ItemClassification.progression),
-    ItemName.mario_carry:           ItemData(0xBC0004, ItemClassification.progression | ItemClassification.useful),
-    ItemName.mario_swim:            ItemData(0xBC0005, ItemClassification.progression),
-    ItemName.mario_spin_jump:       ItemData(0xBC0006, ItemClassification.progression),
-    ItemName.mario_climb:           ItemData(0xBC0007, ItemClassification.progression),
+    ItemName.run:                   ItemData(0xBC0003, ItemClassification.progression),
+    ItemName.carry:                 ItemData(0xBC0004, ItemClassification.progression | ItemClassification.useful),
+    ItemName.swim:                  ItemData(0xBC0005, ItemClassification.progression),
+    ItemName.spin_jump:             ItemData(0xBC0006, ItemClassification.progression),
+    ItemName.climb:                 ItemData(0xBC0007, ItemClassification.progression),
     ItemName.yoshi:                 ItemData(0xBC0008, ItemClassification.progression | ItemClassification.useful),
     ItemName.p_switch:              ItemData(0xBC0009, ItemClassification.progression),
     ItemName.progressive_powerup:   ItemData(0xBC000A, ItemClassification.progression | ItemClassification.useful),
@@ -51,6 +51,9 @@ upgrade_table = {
     ItemName.midway_point:          ItemData(0xBC0021, ItemClassification.progression),
     ItemName.better_timer:          ItemData(0xBC0022, ItemClassification.useful),
     ItemName.item_box:              ItemData(0xBC0023, ItemClassification.useful),
+    ItemName.progressive_yoshi:     ItemData(0xBC0024, ItemClassification.progression),
+    ItemName.progressive_run:       ItemData(0xBC0025, ItemClassification.progression),
+    ItemName.progressive_swim:      ItemData(0xBC0026, ItemClassification.progression),
 }
 
 switch_palace_table = {
@@ -97,11 +100,11 @@ item_table = {
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
 
 option_name_to_item_unlock = {
-    "Run": ItemName.mario_run,
-    "Carry": ItemName.mario_carry,
-    "Swim": ItemName.mario_swim,
-    "Spin Jump": ItemName.mario_spin_jump,
-    "Climb": ItemName.mario_spin_jump,
+    "Run": ItemName.run,
+    "Carry": ItemName.carry,
+    "Swim": ItemName.swim,
+    "Spin Jump": ItemName.spin_jump,
+    "Climb": ItemName.spin_jump,
     "P-Balloon": ItemName.p_balloon,
     "Yoshi": ItemName.yoshi,
     "Powerups": ItemName.progressive_powerup,

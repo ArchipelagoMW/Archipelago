@@ -8,6 +8,8 @@ from .Locations import TwistyCubeLocation, location_table
 from .Options import TwistyCubeOptions
 from .Puzzle import CubePuzzle
 
+import math
+
 
 from worlds.LauncherComponents import (
     Component,
@@ -48,13 +50,14 @@ class TwistyCubeWorld(World):
 
     puzzle: CubePuzzle
     
-    ap_world_version = "0.0.2"
+    ap_world_version = "1.0.0"
 
     def _get_twistycube_data(self):
         return {
             "seed_name": self.multiworld.seed,
             "color_permutation": self.color_permutation,
-            "ap_world_version": self.ap_world_version
+            "ap_world_version": self.ap_world_version,
+            "minimum_stickers_unlocked_to_goal_when_solved": self.minimum_stickers_unlocked_to_goal_when_solved
         }
 
     def generate_early(self):
@@ -76,8 +79,11 @@ class TwistyCubeWorld(World):
         # simple menu-board construction
         menu = Region("Menu", self.player, self.multiworld)
         board = Region("Board", self.player, self.multiworld)
-        
-        self.color_permutation = self.puzzle.get_color_permutation(bool(self.options.randomize_color_layout.value))
+
+        self.minimum_stickers_unlocked_to_goal_when_solved = math.ceil(
+            self.puzzle.get_number_of_stickers() * self.options.minimum_stickers_unlocked_percent_to_goal_when_solved.value / 100.0
+        )
+        self.color_permutation = self.puzzle.get_color_permutation() if self.options.randomize_color_layout.value else None
         
         all_locations = []
         for location, requirements in self.puzzle.get_location_table(self.options.starting_stickers.value).items():

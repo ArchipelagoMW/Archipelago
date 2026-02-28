@@ -13,8 +13,8 @@ from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item
 from . import RegionAgeAccess
-from .DungeonRewardShuffle import pre_fill_dungeon, get_pre_fill_rewards
-from .KeyShuffle import pre_fill_keys, get_pre_fill_keys
+from .DungeonRewardShuffle import pre_fill_dungeon_rewards, get_pre_fill_rewards
+from .KeyShuffle import pre_fill_own_dungeon_items, pre_fill_any_dungeon_keys, pre_fill_overworld_items, get_own_dungeon_prefill_items, get_any_dungeon_prefill_items, get_overworld_prefill_items
 from .SongShuffle import pre_fill_songs, get_prefill_songs
 from .ShopItems import fill_shop_items, generate_shop_prices, generate_scrub_prices, generate_merchant_prices, set_price_rules
 from .Presets import oot_soh_options_presets
@@ -146,15 +146,12 @@ class SohWorld(World):
                                                self.options.ganons_castle_boss_key_skull_tokens_required.value if self.options.ganons_castle_boss_key.value == 7 else 0, turn_in_amount)
 
         if self.options.shuffle_skull_tokens:
-            self.randomized_progressive_skulltula_count = progressive_skulltula_count
-
             if self.options.shuffle_skull_tokens == "dungeon":
-                self.vanilla_progressive_skulltula_count = max(
-                    self.randomized_progressive_skulltula_count - TokenCounts.OVERWORLD.value, 0)
-
-            if self.options.shuffle_skull_tokens == "overworld":
-                self.vanilla_progressive_skulltula_count = max(
-                    self.randomized_progressive_skulltula_count - TokenCounts.DUNGEON.value, 0)
+                self.vanilla_progressive_skulltula_count = max(progressive_skulltula_count - int(TokenCounts.DUNGEON), 0)
+            elif self.options.shuffle_skull_tokens == "overworld":
+                self.vanilla_progressive_skulltula_count = max(progressive_skulltula_count - int(TokenCounts.OVERWORLD), 0)
+                
+            self.randomized_progressive_skulltula_count = progressive_skulltula_count - self.vanilla_progressive_skulltula_count
         else:
             self.vanilla_progressive_skulltula_count = progressive_skulltula_count
 
@@ -184,8 +181,10 @@ class SohWorld(World):
         # generate the prefill pool
         self.pre_fill_pool += get_pre_fill_rewards(self)
         self.pre_fill_pool += get_prefill_songs(self)
-        for key_shuffle in get_pre_fill_keys(self).values():
+        for key_shuffle in get_own_dungeon_prefill_items(self).values():
             self.pre_fill_pool += key_shuffle
+        self.pre_fill_pool += get_any_dungeon_prefill_items(self)
+        self.pre_fill_pool += get_overworld_prefill_items(self)
         self.pre_fill_pool += ShopItems.get_vanilla_shop_pool(self)
 
         if self.using_ut:   # can't this get moved to 'UniversalTracker.py' ?
@@ -210,6 +209,9 @@ class SohWorld(World):
             location.name = str(location.name)
         for region in self.get_regions():
             region.name = str(region.name)
+
+        if self.using_ut:
+            fill_shop_items(self)
 
     def reserve_prefill_locations(self) -> None:
         DungeonRewardShuffle.reserve_dungeon_reward_locations(self)
@@ -247,12 +249,13 @@ class SohWorld(World):
         return locations
 
     def get_pre_fill_state(self) -> CollectionState:
+        my_locations = list(self.multiworld.get_locations(self.player))
         prefill_state = CollectionState(self.multiworld)
         for item in self.item_pool:
             prefill_state.collect(item, True)
         for item in self.pre_fill_pool:
             prefill_state.collect(self.create_item(item), True)
-        prefill_state.sweep_for_advancements()
+        prefill_state.sweep_for_advancements(my_locations)
         return prefill_state
     
     def set_rules(self) -> None:
@@ -301,9 +304,11 @@ class SohWorld(World):
     def pre_fill(self) -> None:
         original_completion_goal = self.multiworld.completion_condition[self.player]
 
-        pre_fill_dungeon(self)
+        pre_fill_own_dungeon_items(self)
+        pre_fill_dungeon_rewards(self)
         pre_fill_songs(self)
-        pre_fill_keys(self)
+        pre_fill_any_dungeon_keys(self)
+        pre_fill_overworld_items(self)
         fill_shop_items(self)
 
         self.multiworld.completion_condition[self.player] = original_completion_goal

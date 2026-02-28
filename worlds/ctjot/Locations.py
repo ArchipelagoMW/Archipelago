@@ -146,6 +146,9 @@ class CTJoTLocationManager:
             filler_location_ids.extend(self._locations_600ad_1000ad)
             filler_location_ids.extend(self._locations_prison_tower_1000ad)
             filler_location_ids.extend(self._locations_future)
+
+            # Magic Cave sealed chest is not available in this mode
+            filler_location_ids.remove(173)
         else:
             # Add all chronosanity locations
             filler_location_ids.extend(self._locations_prehistory)

@@ -255,9 +255,9 @@ def write_tokens(world: "PokemonFRLGWorld") -> None:
             patch.write_token(item_name_address, item_name_offsets[item_name], encode_string(item_name) + b"\xFF")
 
         # There should always be enough space for one entry per location
-        patch.write_token(name_table_address, (i * 5) + 0, struct.pack("<H", flag))
-        patch.write_token(name_table_address, (i * 5) + 2, struct.pack("<H", item_name_offsets[item_name]))
-        patch.write_token(name_table_address, (i * 5) + 4, struct.pack("<H", player_name_ids[player_name]))
+        patch.write_token(name_table_address, (i * 6) + 0, struct.pack("<H", flag))
+        patch.write_token(name_table_address, (i * 6) + 2, struct.pack("<H", item_name_offsets[item_name]))
+        patch.write_token(name_table_address, (i * 6) + 4, struct.pack("<H", player_name_ids[player_name]))
 
     # Set starting items
     start_inventory = world.options.start_inventory.value.copy()

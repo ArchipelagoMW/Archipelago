@@ -9,7 +9,8 @@ from .options import FreeFlyLocation, Route32Condition, JohtoOnly, RandomizeBadg
     Route3Access, EliteFourRequirement, Goal, Route44AccessRequirement, BlackthornDarkCaveAccess, RedRequirement, \
     MtSilverRequirement, HMBadgeRequirements, RedGyaradosAccess, EarlyFly, RadioTowerRequirement, \
     BreedingMethodsRequired, Shopsanity, KantoTrainersanity, JohtoTrainersanity, RandomizePokemonRequests, \
-    EnhancedOptionSet, RandomizeTypes, RandomizeEvolution, RandomizeTrades, TradesRequired, MagnetTrainAccess
+    EnhancedOptionSet, RandomizeTypes, RandomizeEvolution, RandomizeTrades, TradesRequired, MagnetTrainAccess, \
+    Dexsanity, EncounterGrouping
 from ..Files import APTokenTypes
 
 if TYPE_CHECKING:
@@ -401,36 +402,52 @@ def _starting_town_valid(world: "PokemonCrystalWorld", starting_town: StartingTo
     full_kanto_trainersanity = world.options.kanto_trainersanity == KantoTrainersanity.range_end
     johto_shopsanity = Shopsanity.johto_marts in world.options.shopsanity.value
     kanto_shopsanity = Shopsanity.kanto_marts in world.options.shopsanity.value
+    full_dexsanity = (world.options.dexsanity == Dexsanity.range_end
+                      or (world.options.dexcountsanity >= 10 and world.options.dexcountsanity_step == 1))
+    immediate_wilds = ("Land" in world.options.wild_encounter_methods_required.value
+                       and world.options.encounter_grouping != EncounterGrouping.option_one_per_method)
+    immediate_dexsanity = full_dexsanity and immediate_wilds
 
     if starting_town.name == "Cianwood City":
         return world.options.static_pokemon_required and (
                 (full_johto_trainersanity and immediate_hiddens) or johto_shopsanity)
+
     if starting_town.name in ("Lake of Rage", "Mahogany Town"):
         return ((not world.options.mount_mortar_access and "Mount Mortar" not in world.options.dark_areas)
                 or johto_shopsanity or full_johto_trainersanity)
+
     if starting_town.name == "Azalea Town":
         return ("Slowpoke Well" not in world.options.dark_areas
-                or "Union Cave" not in world.options.dark_areas)
+                or "Union Cave" not in world.options.dark_areas or immediate_dexsanity)
 
     if starting_town.name in ("Pallet Town", "Viridian City", "Pewter City"):
         return (immediate_hiddens or world.options.route_3_access == Route3Access.option_vanilla or kanto_shopsanity
-                or world.options.randomize_berry_trees)
+                or world.options.randomize_berry_trees or immediate_dexsanity)
+
     if starting_town.name == "Rock Tunnel":
-        return full_kanto_trainersanity
+        return full_kanto_trainersanity or immediate_dexsanity or ("Rock Tunnel" not in world.options.dark_areas.value)
+
     if starting_town.name == "Vermilion City":
-        return "South" not in world.options.saffron_gatehouse_tea or world.options.undergrounds_require_power not in (
+        return ("South" not in world.options.saffron_gatehouse_tea or world.options.undergrounds_require_power not in (
             UndergroundsRequirePower.option_both, UndergroundsRequirePower.option_north_south) or kanto_shopsanity
+                or immediate_dexsanity)
+
     if starting_town.name == "Cerulean City":
         return ("North" not in world.options.saffron_gatehouse_tea or immediate_hiddens or kanto_shopsanity
-                or full_kanto_trainersanity)
+                or full_kanto_trainersanity or immediate_dexsanity)
+
     if starting_town.name == "Celadon City":
-        return "West" not in world.options.saffron_gatehouse_tea or immediate_hiddens or kanto_shopsanity
+        return ("West" not in world.options.saffron_gatehouse_tea or immediate_hiddens or kanto_shopsanity
+                or immediate_dexsanity)
+
     if starting_town.name == "Lavender Town":
-        return "East" not in world.options.saffron_gatehouse_tea or full_kanto_trainersanity or kanto_shopsanity or (
-                not world.options.route_12_access and immediate_hiddens and world.options.randomize_berry_trees)
+        return ("East" not in world.options.saffron_gatehouse_tea or full_kanto_trainersanity or kanto_shopsanity
+                or (immediate_dexsanity and "Rock Tunnel" not in world.options.dark_areas.value) or (
+                        not world.options.route_12_access and immediate_hiddens and world.options.randomize_berry_trees))
+
     if starting_town.name == "Fuchsia City":
         return ("East" not in world.options.saffron_gatehouse_tea and not world.options.route_12_access) or (
-                immediate_hiddens and world.options.randomize_berry_trees) or (
+                immediate_hiddens and world.options.randomize_berry_trees) or immediate_dexsanity or (
                 not world.options.route_12_access and kanto_shopsanity) or full_kanto_trainersanity
 
     return True

@@ -1,3 +1,4 @@
+from logging import warning
 from typing import Mapping, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Tutorial, ItemClassification, Region
@@ -64,12 +65,16 @@ class Spelunky2World(World):
     def create_regions(self) -> None:
         exclude_regions = []
 
-        if self.options.goal == Spelunky2Goal.EASY:
+        starting_characters = set(self.options.starting_characters or [ItemName.ANA_SPELUNKY.value])
+
+        # Convert character names → journal entry names
+        starting_character_journal_locations = { f"{char_name} Journal Entry" for char_name in starting_characters }
+
+        if self.options.goal < Spelunky2Goal.CO:
+            exclude_regions.append(WorldName.COSMIC_OCEAN)
+        if self.options.goal < Spelunky2Goal.HARD:
             exclude_regions.append(WorldName.SUNKEN_CITY)
             exclude_regions.append(WorldName.EGGPLANT)
-
-        if self.options.goal != Spelunky2Goal.CO:
-            exclude_regions.append(WorldName.COSMIC_OCEAN)
 
         for region_name in region_data_table.keys():
             if region_name in exclude_regions:
@@ -90,12 +95,15 @@ class Spelunky2World(World):
                     connecting_region = self.get_region(region_exit)
                     region.connect(connecting_region)
 
-            region.add_locations({
-                location_name: self.location_name_to_id[location_name]
-                for location_name, location_data in location_data_table.items()
-                if location_data.region == region_name and location_data.goal <= self.options.goal
-                and (location_name not in hard_locations or self.options.include_hard_locations)
-            }, Spelunky2Location)
+            region.add_locations(
+                {
+                    location_name: self.location_name_to_id[location_name]
+                    for location_name, location_data in location_data_table.items()
+                    if location_data.region == region_name
+                    and location_data.goal <= self.options.goal
+                    and (location_name not in hard_locations or self.options.include_hard_locations)
+                    and location_name not in starting_character_journal_locations
+                }, Spelunky2Location)
 
         if self.options.goal == Spelunky2Goal.HARD:
             goal_region = self.get_region(WorldName.SUNKEN_CITY)
@@ -249,6 +257,8 @@ class Spelunky2World(World):
 
         if sum(self.filler_weights.values()) <= 0:
             self.filler_weights = {ItemName.GOLD_BAR.value: 1}
+            warning(f"!WARNING! NO filler items found with a value, \"{self.player_name}\" may want to check their YAML."
+                    f"\n---Assigning Gold bar as filler.")
 
         if self.options.enable_traps.value:
             self.trap_count = int(self.filler_count * (self.options.trap_weight.value / 100))
@@ -261,6 +271,11 @@ class Spelunky2World(World):
             self.trap_weights[ItemName.LOOSE_BOMBS_TRAP.value] = self.options.bomb_weight.value
             self.trap_weights[ItemName.BLINDNESS_TRAP.value]   = self.options.blind_weight.value
             self.trap_weights[ItemName.PUNISH_BALL_TRAP.value] = self.options.punish_weight.value
+
+            if sum(self.trap_weights.values()) <= 0:
+                self.trap_weights = {ItemName.BLINDNESS_TRAP.value: 1}
+                warning(f"!WARNING! NO traps items found with a value and traps is on, \"{self.player_name}\" may want to check their YAML."
+                        f"\n---Assigning Blindness as traps.")
 
             for _ in range(self.trap_count):
                 spelunky2_item_pool.append(self.create_trap())

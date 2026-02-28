@@ -25,7 +25,7 @@ song_vanilla_locations: dict[Locations, Items] = {
     Locations.SHEIK_AT_TEMPLE: Items.PRELUDE_OF_LIGHT
 }
 
-dungeon_reward_locations: list[Locations] = [
+dungeon_reward_song_locations: list[Locations] = [
     Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER,
     Locations.DODONGOS_CAVERN_KING_DODONGO_HEART_CONTAINER,
     Locations.JABU_JABUS_BELLY_BARINADE_HEART_CONTAINER,
@@ -56,7 +56,7 @@ def reserve_song_locations(world: "SohWorld") -> None:
     if world.options.shuffle_songs == "song_locations":
         reservation_locations = list(song_vanilla_locations.keys())
     if world.options.shuffle_songs == "dungeon_rewards":
-        reservation_locations = dungeon_reward_locations
+        reservation_locations = dungeon_reward_song_locations
 
     for song_location in reservation_locations:
         location = world.get_location(song_location)
@@ -64,7 +64,7 @@ def reserve_song_locations(world: "SohWorld") -> None:
 
 def remove_song_reservations(world: "SohWorld") -> None:
     reservation_locations = list(song_vanilla_locations.keys())
-    reservation_locations += dungeon_reward_locations
+    reservation_locations += dungeon_reward_song_locations
 
     for song_location in reservation_locations:
         location = world.get_location(song_location)
@@ -89,13 +89,12 @@ def pre_fill_songs(world: "SohWorld") -> None:
     world.multiworld.completion_condition[world.player] = lambda state: all([state.can_reach(loc) for loc in reward_goal_locations])
 
     if world.options.shuffle_songs == "song_locations":
-        song_locations = [world.get_location(loc) for loc in song_vanilla_locations.keys()]
-
+        song_locations = world.get_empty_locations_from_list_shuffled(list(song_vanilla_locations.keys()))
         fill_restrictive(world.multiworld, prefill_state, song_locations, songs, single_player_placement=True, lock=True)
         return
 
     if world.options.shuffle_songs == "dungeon_rewards":
-        reward_locations = [world.get_location(loc) for loc in dungeon_reward_locations]
+        reward_locations = world.get_empty_locations_from_list_shuffled(dungeon_reward_song_locations)
         fill_restrictive(world.multiworld, prefill_state, reward_locations, songs, single_player_placement=True, lock=True)
         return
     

@@ -46,7 +46,6 @@ def int_to_list(num: int, size: int):
 
 def arr_to_value(arr: bytearray, offset: int, size: int) -> int:
     """Read value from bytearray and convert it to a value."""
-    print(arr, hex(len(arr)), offset, size)
     value = 0
     for x in range(size):
         value <<= 8

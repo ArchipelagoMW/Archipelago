@@ -118,7 +118,6 @@ class LocationModifiers(CasefoldOptionSet):
     - **Lock operator lines** - Makes operator lines require an item to be unlocked.
     - **Lock operator levels tab** - Makes the operator levels tab require an item to be unlocked.
     """
-    # - **Add sandbox buildings** - Adds the sandbox item and fluid producers to the itempool.
     display_name = "Location Modifiers"
     valid_keys = [
         "Lock task lines",
@@ -220,11 +219,11 @@ class ShapeConfiguration(Choice):
     Choose how many corners all shapes have.
 
     - **Tetragonal** - 4 corners (standard).
-    - **Hexagonal** (not implemented) - 6 corners.
+    - **Hexagonal** - 6 corners.
     """
     display_name = "Shape Configuration"
     option_tetragonal = 4
-    # option_hexagonal = 6
+    option_hexagonal = 6
     default = 4
 
 

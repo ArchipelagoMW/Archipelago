@@ -277,3 +277,6 @@
 [submodule "ashipelago/pop_trackers/twilight_princess/src"]
 	path = ashipelago/pop_trackers/twilight_princess/src
 	url = https://github.com/Kizugaya/TPRAP_poptracker.git
+[submodule "ashipelago/pop_trackers/sm_map_rando/src"]
+	path = ashipelago/pop_trackers/sm_map_rando/src
+	url = https://github.com/Cinaeth/SMMR.git

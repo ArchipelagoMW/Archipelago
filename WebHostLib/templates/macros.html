@@ -52,9 +52,9 @@
                                     Download .lanky File...</a>
                             {% elif patch.game == "Final Fantasy XIV" %}
                                     No .apmanual required for this version. Must use the Dalamud plugin.
-                            {% elif patch.game == "FZeroGX Manual_Only" %}
+                            {% elif patch.game == "FZeroGX Manual_Only" or patch.game == "Diablo2 Manual_Only" %}
                                 <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                    Download Patch File...
+                                    Download .apmanual File...(Optional for auto-launching manual client)
                             {% elif patch.game == "Pikmin 2" %}
                                 <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                     Download .appik2 File...

@@ -1,7 +1,10 @@
+### This script is not ran by the AP World
+### This is a helper script to parse logic expressions to create python code
+### Do not run this file directly! Use LogicExport.py
+
 import re
 
-from .Logic import ALL_REQUIREMENTS, MACROS
-from ..Items import ITEM_TABLE
+from Logic import ALL_REQUIREMENTS, MACROS
 
 def parse_expression(expression: str) -> str:
     """
@@ -49,15 +52,15 @@ def parse_expression(expression: str) -> str:
                 quantity = ex_list[1]
                 assert quantity.isnumeric(), f"Quantity found is not numeric: {ex}"
                 quantity = int(quantity)
-                assert quantity <= ITEM_TABLE[item].quantity, f"Quantity required is greater than quantity available: {ex}"
+                #assert quantity <= ITEM_TABLE[item].quantity, f"Quantity required is greater than quantity available: {ex}"
             else:
                 item = ex
                 quantity = 1
 
-            if item in ITEM_TABLE.keys():
-                py_exp = py_exp + f"""state.has("{item}", player, {quantity})"""
-            else:
-                raise Exception(f"Unknown logic expression: {ex}")
+            #if item in ITEM_TABLE.keys():
+            py_exp = py_exp + f"""state.has("{item}", player, {quantity})"""
+            #else:
+            #    raise Exception(f"Unknown logic expression: {ex}")
 
     return py_exp
 

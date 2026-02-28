@@ -62,7 +62,9 @@ LogicRegions = {
         name="Gourmet Submarine Hot Chainblock Sushi",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
-        locations=[],
+        locations=[
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x190F, instance_id=0x0B),
+        ],
         exits=[
             MN64TransitionFront("GourmetSubmarineEntrance", lambda l: True, type=MN64DoorType.DOOR),
             MN64TransitionFront("GourmetSubmarineFightandHealth", lambda l: True, type=MN64DoorType.DOOR),
@@ -308,7 +310,17 @@ LogicRegions = {
         name="Gourmet Submarine Miso Broth Hallway",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
-        locations=[],
+        locations=[
+            MN64LocationLogic("Ryo 1", lambda l: True, MN64Items.RYO, flag_id=0x187B, instance_id=0x18),
+            MN64LocationLogic("Ryo 2", lambda l: True, MN64Items.RYO, flag_id=0x187C, instance_id=0x19),
+            MN64LocationLogic("Ryo 3", lambda l: True, MN64Items.RYO, flag_id=0x187D, instance_id=0x1A),
+            MN64LocationLogic("Ryo 4", lambda l: True, MN64Items.RYO, flag_id=0x187E, instance_id=0x1B),
+            MN64LocationLogic("Ryo 5", lambda l: True, MN64Items.RYO, flag_id=0x187F, instance_id=0x1C),
+            MN64LocationLogic("Ryo 6", lambda l: True, MN64Items.RYO, flag_id=0x1880, instance_id=0x1D),
+            MN64LocationLogic("Ryo 7", lambda l: True, MN64Items.RYO, flag_id=0x1881, instance_id=0x1E),
+            MN64LocationLogic("Ryo 8", lambda l: True, MN64Items.RYO, flag_id=0x1882, instance_id=0x1F),
+            MN64LocationLogic("Ryo 9", lambda l: True, MN64Items.RYO, flag_id=0x1883, instance_id=0x20),
+        ],
         exits=[
             MN64TransitionFront("GourmetSubmarineThreeBowls", lambda l: l.mermaid and l.yae),
             MN64TransitionFront("GourmetSubmarineEvilFishRoom", lambda l: l.mermaid and l.yae),
@@ -468,7 +480,20 @@ LogicRegions = {
                 flag_id=0x1822,
                 instance_id=0x0F,
             ),
-            # TODO: I might be missing some healths here
+            MN64LocationLogic(
+                "Normal Health 9",
+                lambda l: (l.chain_pipe and l.goemon),
+                MN64Items.NORMAL_HEALTH,
+                flag_id=0x1966,
+                instance_id=0x10,
+            ),
+            MN64LocationLogic(
+                "Normal Health 10",
+                lambda l: (l.chain_pipe and l.goemon),
+                MN64Items.NORMAL_HEALTH,
+                flag_id=0x1967,
+                instance_id=0x11,
+            ),
         ],
         exits=[
             MN64TransitionFront("GourmetSubmarineEvilFishRoom", lambda l: l.mermaid and l.yae),
@@ -592,6 +617,7 @@ LogicRegions = {
                 flag_id=0x181F,
                 instance_id=0x16,
             ),
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x1910, instance_id=0x14),
         ],
         exits=[
             MN64TransitionFront("GourmetSubmarineHotConveyers", lambda l: True, type=MN64DoorType.DOOR),
@@ -761,6 +787,8 @@ LogicRegions = {
                 flag_id=0x00F9,
                 instance_id=0x05,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x1915, instance_id=0x06),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x1916, instance_id=0x07),
         ],
         exits=[
             MN64TransitionFront(
@@ -808,6 +836,10 @@ LogicRegions = {
                 flag_id=0x181D,
                 instance_id=0x0B,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x1911, instance_id=0x07),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x1912, instance_id=0x08),
+            MN64LocationLogic("Pot 3", lambda l: True, MN64Items.POT, flag_id=0x1913, instance_id=0x09),
+            MN64LocationLogic("Pot 4", lambda l: True, MN64Items.POT, flag_id=0x1914, instance_id=0x0A),
         ],
         exits=[
             MN64TransitionFront("GourmetSubmarineGiantCrabFight", lambda l: True, type=MN64DoorType.DOOR),

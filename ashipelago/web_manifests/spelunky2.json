@@ -1,6 +1,6 @@
 {
   "game": "Spelunky 2",
-  "server_version": "0.3.9",
+  "server_version": "0.4.0",
   "discord_channel": "https://discord.com/channels/731205301247803413/1142626744629735555",
   "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/spelunky2_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/spelunky2.apworld"

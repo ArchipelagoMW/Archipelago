@@ -96,8 +96,7 @@ quest_items_table: Dict[str, ItemData] = {
 
 # Upgrades
 upgrades_table: Dict[str, ItemData] = {
-    "Strength Upgrade 1": ItemData(BASE_ID + 32, 1, ItemClassification.progression, entity_id=0x91),
-    "Strength Upgrade 2": ItemData(BASE_ID + 33, 1, ItemClassification.progression, entity_id=0x91),
+    "Progressive Strength": ItemData(BASE_ID + 32, 2, ItemClassification.progression, entity_id=0x91),
     "Surprise Pack": ItemData(BASE_ID + 34, 8, ItemClassification.filler, entity_id=0x91),
 }
 
@@ -153,6 +152,8 @@ training_table: Dict[str, ItemData] = {
 # Filler Items
 filler_table: Dict[str, ItemData] = {
     "Nothing": ItemData(BASE_ID + 55, 0, ItemClassification.filler),
+    "Pot of Ryo": ItemData(BASE_ID + 59, 0, ItemClassification.filler, entity_id=0x192),
+    "Ryo": ItemData(BASE_ID + 58, 83, ItemClassification.filler, entity_id=0x82),
 }
 
 # Trap Items (for future use)
@@ -262,7 +263,7 @@ def get_event_item_names():
     }
 
 
-def get_vanilla_item_names(randomize_health: bool):
+def get_vanilla_item_names(randomize_health: bool, randomize_ryo: bool, randomize_pots: bool):
     """Return set of vanilla item names (items that stay at their original locations)."""
     vanilla_item_names = {
         MN64Items.MIRACLE_STAR.value,
@@ -275,6 +276,14 @@ def get_vanilla_item_names(randomize_health: bool):
     if not randomize_health:
         vanilla_item_names.add(MN64Items.GOLDEN_HEALTH.value)
         vanilla_item_names.add(MN64Items.NORMAL_HEALTH.value)
+
+    # If ryo randomization is disabled, keep ryo items at vanilla locations
+    if not randomize_ryo:
+        vanilla_item_names.add(MN64Items.RYO.value)
+
+    # If pot randomization is disabled, keep pot items at vanilla locations
+    if not randomize_pots:
+        vanilla_item_names.add(MN64Items.POT.value)
 
     return vanilla_item_names
 

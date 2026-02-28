@@ -41,6 +41,8 @@ class WordipelagoWorld(World):
 
     def generate_early(self):
         location_count = self.options.word_checks + self.options.word_streak_checks + self.options.minimum_point_shop_checks
+        
+
         if(self.options.letter_checks >= 1):
             location_count += 6
         if(self.options.letter_checks >= 2):
@@ -75,7 +77,7 @@ class WordipelagoWorld(World):
                 checks_needed += 1
 
             can_reach_words = self.options.starting_letters >= 8 and self.options.yellow_unlocked and self.options.starting_guesses >= 4
-            yellow_checks_available = self.options.yellow_checks == 1 and (self.options.green_checks != 0 or self.options.letter_checks != 0)
+            yellow_checks_available = self.options.yellow_checks == 1 and (self.options.green_checks.value != 0 or self.options.letter_checks.value != 0)
             enough_checks = self.options.letter_checks >= 2 or self.options.green_checks >= 2
             if(not can_reach_words and not yellow_checks_available and not enough_checks):
                 if(not enough_checks):
@@ -162,8 +164,10 @@ class WordipelagoWorld(World):
             self.starting_items.append(weighted_letter)
             self.multiworld.push_precollected(self.create_item('Letter ' + weighted_letter))
         
-        for i in range(self.options.starting_guesses):
+        for i in range(self.options.starting_guesses.value):
             self.multiworld.push_precollected(self.create_item('Guess'))
+        if(self.options.starting_guesses.value < 2):
+            self.multiworld.early_items[self.player]["Guess"] = 1 
         if(self.options.yellow_unlocked): 
             self.multiworld.push_precollected(self.create_item('Yellow Letters'))
         if(self.options.unused_letters_unlocked): 
@@ -251,6 +255,8 @@ class WordipelagoWorld(World):
         item_count = (26 - self.options.starting_letters) + (6 - self.options.starting_guesses) + self.options.time_reward_count + self.options.additional_guesses
         if not self.options.yellow_unlocked: 
             item_count += 1
+            # self.multiworld.early_items[self.player]["Yellow Letters"] = 1
+
         if not self.options.unused_letters_unlocked: 
             item_count += 1
 
@@ -327,6 +333,4 @@ class WordipelagoWorld(World):
         create_rules(self)
 
     def get_filler_item_name(self) -> str:
-        if self.options.shop_points_item_default_filler:
-            return "Shop Points"
         return "Suggestion"

@@ -31,7 +31,11 @@ class PHAddr:
     link_z = Address(0x1B6FF4, size=4, name="link_z")
     boat_x = Address(0x1B8518, size=4, name="boat_x")
     boat_z = Address(0x1B8520, size=4, name="boat_y")
-    
+
+    boat_speed = Address(0x1FA0A4, size=4)
+    boat_max_speed = Address(0x13674C, size=4)
+    boat_gear = Address(0x1F8FD0)
+
     # Technical Reads
     getting_location = Address(0x1B6F44)
     shot_frog = Address(0x1B7038)

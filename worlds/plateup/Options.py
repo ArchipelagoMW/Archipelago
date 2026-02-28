@@ -30,7 +30,7 @@ class DayLeaseInterval(Range):
     default = 5
 
 class DishCount(Range):
-    """How many dishes the player starts with (1-17) or 0 for disabled."""
+    """How many dishes get dedicated checks and unlocks -1 (1 free starter dish). 0 keeps every dish unlocked and disables dish checks."""
     display_name = "Starting Dish Count"
     range_start = 0
     range_end = 17
@@ -87,6 +87,11 @@ class StartingMoneyCap(Range):
     default = 20
 
 
+class TrapCards(Toggle):
+    """Enable trap cards that add Random Customer Card items to the pool."""
+    display_name = "Enable Trap Cards"
+    default = 1
+
 
 @dataclass
 class PlateUpOptions(PerGameCommonOptions):
@@ -102,4 +107,5 @@ class PlateUpOptions(PerGameCommonOptions):
     player_speed_upgrade_count: PlayerSpeedUpgradeCount
     appliance_speed_upgrade_count: ApplianceSpeedUpgradeCount
     starting_money_cap: StartingMoneyCap
+    trap_cards: TrapCards
     # removed item count; items are generated automatically from total days

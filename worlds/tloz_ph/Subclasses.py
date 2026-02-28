@@ -71,7 +71,7 @@ async def remove_vanilla_potion(client: "PhantomHourglassClient", ctx: "BizHawkC
     print(f"Removing potion rupees")
     prev_rupees = await PHAddr.rupee_count.read(ctx)
     rupee_count = max(prev_rupees - rupee_item.value, 0)
-    return PHAddr.rupee_count.get_write_list(ctx, rupee_count)
+    return PHAddr.rupee_count.get_write_list(rupee_count)
 
 async def remove_vanilla_oshus_sword(client: "PhantomHourglassClient", ctx: "BizHawkClientContext", item: "PHItem", _):
     res = item.ammo_address.get_write_list(0)

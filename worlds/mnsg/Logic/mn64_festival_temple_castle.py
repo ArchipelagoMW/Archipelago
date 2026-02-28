@@ -7,7 +7,11 @@ LogicRegions = {
         name="Festival Temple Entrance",
         hint_name=MN64HintRegion.FESTIVAL_TEMPLE_CASTLE,
         level=MN64Levels.FESTIVAL_TEMPLE_CASTLE,
-        locations=[],
+        locations=[
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x1922, instance_id=0x10),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x1923, instance_id=0x11),
+            MN64LocationLogic("Pot 3", lambda l: True, MN64Items.POT, flag_id=0x1924, instance_id=0x12),
+        ],
         exits=[
             MN64TransitionFront("Shuhodo", lambda l: l.sasuke),
             MN64TransitionFront(
@@ -165,6 +169,7 @@ LogicRegions = {
                 flag_id=0x016E,
                 instance_id=0x07,
             ),
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x1952, instance_id=8),
         ],
         exits=[
             MN64TransitionFront(
@@ -237,6 +242,11 @@ LogicRegions = {
                 flag_id=0x00F3,
                 instance_id=0x0C,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x1959, instance_id=9),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x195A, instance_id=10),
+            MN64LocationLogic("Pot 3", lambda l: True, MN64Items.POT, flag_id=0x195B, instance_id=11),
+            # MN64LocationLogic("Pot 4", lambda l: True, MN64Items.POT, flag_id=0x195C, instance_id=16), - This item is out of bounds for some reason
+            MN64LocationLogic("Pot 4", lambda l: True, MN64Items.POT, flag_id=0x195D, instance_id=17),
         ],
         exits=[
             MN64TransitionFront("FestivalTempleGoldKeyRoomLower", lambda l: True, type=MN64DoorType.DOOR),
@@ -352,6 +362,8 @@ LogicRegions = {
                 flag_id=0x183B,
                 instance_id=0x0C,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x195E, instance_id=10),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x195F, instance_id=11),
         ],
         exits=[
             MN64TransitionFront(
@@ -408,6 +420,8 @@ LogicRegions = {
                 flag_id=0x00D2,
                 instance_id=0x08,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x1926, instance_id=9),
+            MN64LocationLogic("Pot 2", lambda l: l.jetpack and l.sasuke, MN64Items.POT, flag_id=0x1927, instance_id=11),
         ],
         exits=[
             MN64TransitionFront(
@@ -457,8 +471,7 @@ LogicRegions = {
             ),
         ],
         exits=[
-            MN64TransitionFront("FestivalTempleExteriorGrass", lambda l: True, type=MN64DoorType.DOOR),
-            MN64TransitionFront("FestivalTempleStaircaseTanks", lambda l: True, type=MN64DoorType.DOOR),
+            MN64TransitionFront("FestivalTempleSilverKeySplitoff", lambda l: True, type=MN64DoorType.DOOR),
             MN64TransitionFront(
                 "FestivalTempleExplodingBoxesRoom",
                 lambda l: True,
@@ -495,7 +508,7 @@ LogicRegions = {
         level=MN64Levels.FESTIVAL_TEMPLE_CASTLE,
         locations=[],
         exits=[
-            MN64TransitionFront("FestivalTempleCannonExterior", lambda l: True, type=MN64DoorType.DOOR),
+            MN64TransitionFront("FestivalTempleExteriorGrass", lambda l: True, type=MN64DoorType.DOOR),
             MN64TransitionFront("FestivalTempleFishClimb", lambda l: True, type=MN64DoorType.DOOR),
         ],
         room_id=0x069,
@@ -714,6 +727,9 @@ LogicRegions = {
                 flag_id=0x00D4,
                 instance_id=0x0F,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x192F, instance_id=12),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x1930, instance_id=13),
+            MN64LocationLogic("Pot 3", lambda l: True, MN64Items.POT, flag_id=0x1931, instance_id=14),
         ],
         exits=[
             MN64TransitionFront("FestivalTempleCannonExterior", lambda l: True, type=MN64DoorType.DOOR),
@@ -979,11 +995,7 @@ LogicRegions = {
         level=MN64Levels.FESTIVAL_TEMPLE_CASTLE,
         locations=[],
         exits=[
-            MN64TransitionFront(
-                "FestivalTempleMeatHammerRoom",
-                lambda l: (l.chain_pipe and l.goemon) or (l.sasuke and l.jetpack),
-                type=MN64DoorType.DOOR,
-            ),
+            MN64TransitionFront("FestivalTempleMeatHammerRoom", lambda l: True, type=MN64DoorType.DOOR),
             MN64TransitionFront("FestivalTempleJumpingDrums", lambda l: True, type=MN64DoorType.DOOR),
             MN64TransitionFront("FestivalTempleWaterExteriorLower", lambda l: True),
         ],
@@ -1028,6 +1040,7 @@ LogicRegions = {
                 flag_id=0x0106,
                 instance_id=0x10,
             ),
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x1925, instance_id=17),
         ],
         exits=[
             MN64TransitionFront("FestivalTempleJumpingDrums", lambda l: True, type=MN64DoorType.DOOR),
@@ -1060,7 +1073,7 @@ LogicRegions = {
         locations=[],
         exits=[
             MN64TransitionFront(
-                "FestivalTempleExplodingBoxesRoom",
+                "FestivalTempleCannonExterior",
                 lambda l: True,
                 type=MN64DoorType.DOOR,
             ),
@@ -1139,7 +1152,7 @@ LogicRegions = {
                 lambda l: True,
                 type=MN64DoorType.DOOR,
             ),
-            MN64TransitionFront("FestivalTempleCannonExterior", lambda l: True, type=MN64DoorType.DOOR),
+            MN64TransitionFront("FestivalTempleStaircaseTanks", lambda l: (l.goemon and l.chain_pipe) or (l.sasuke and l.jetpack), type=MN64DoorType.DOOR),
             MN64TransitionFront(
                 "FestivalTempleCobblestoneExterior",
                 lambda l: l.has_gold_key(),
@@ -1170,7 +1183,7 @@ LogicRegions = {
         level=MN64Levels.FESTIVAL_TEMPLE_CASTLE,
         locations=[],
         exits=[
-            MN64TransitionFront("FestivalTempleExteriorGrass", lambda l: True, type=MN64DoorType.DOOR),
+            MN64TransitionFront("FestivalTempleExteriorGrass", lambda l: (l.chain_pipe and l.goemon) or (l.sasuke and l.jetpack), type=MN64DoorType.DOOR),
             MN64TransitionFront("FestivalTempleMovingStaircases", lambda l: True, type=MN64DoorType.DOOR),
         ],
         room_id=0x06A,
@@ -1301,7 +1314,10 @@ LogicRegions = {
         name="Festival Temple Samurai Moving Platforms",
         hint_name=MN64HintRegion.FESTIVAL_TEMPLE_CASTLE,
         level=MN64Levels.FESTIVAL_TEMPLE_CASTLE,
-        locations=[],
+        locations=[
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x192D, instance_id=20),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x192E, instance_id=21),
+        ],
         exits=[
             MN64TransitionFront(
                 "FestivalTempleWoodenHallwayLower",
@@ -1365,6 +1381,7 @@ LogicRegions = {
                 flag_id=0x00D3,
                 instance_id=0x11,
             ),
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x1962, instance_id=16),
         ],
         exits=[
             MN64TransitionFront("FestivalTempleWoodenHallwayLower", lambda l: True),

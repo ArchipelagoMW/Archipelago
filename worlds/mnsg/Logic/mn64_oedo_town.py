@@ -33,12 +33,21 @@ LogicRegions = {
             0x01B,
             0x03D,
         ],
+        spawn={"x": 56.0, "y": -40.0, "z": 51.0},
     ),
     "SpawnHousing": MN64Region(
-        name="Spawn Housing",
+        name="Oedo Town Housing",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
-        locations=[],
+        locations=[
+            MN64LocationLogic("Ryo 1", lambda l: True, MN64Items.RYO, flag_id=0x185B, instance_id=0x16),
+            MN64LocationLogic("Ryo 2", lambda l: True, MN64Items.RYO, flag_id=0x185C, instance_id=0x17),
+            MN64LocationLogic("Ryo 3", lambda l: True, MN64Items.RYO, flag_id=0x185D, instance_id=0x18),
+            MN64LocationLogic("Ryo 4", lambda l: l.yae and l.mermaid, MN64Items.RYO, flag_id=0x185E, instance_id=0x19),
+            MN64LocationLogic("Ryo 5", lambda l: l.yae and l.mermaid, MN64Items.RYO, flag_id=0x185F, instance_id=0x1A),
+            MN64LocationLogic("Ryo 6", lambda l: l.yae and l.mermaid, MN64Items.RYO, flag_id=0x1860, instance_id=0x1B),
+            MN64LocationLogic("Ryo 7", lambda l: l.yae and l.mermaid, MN64Items.RYO, flag_id=0x1861, instance_id=0x1C),
+        ],
         exits=[
             MN64TransitionFront("ShoppingDistrict", lambda l: True),
             MN64TransitionFront("ShrineArea", lambda l: True),
@@ -75,9 +84,10 @@ LogicRegions = {
             0x195,
             0x038,
         ],
+        spawn={"x": -97.0, "y": 0.0, "z": -190.0},
     ),
     "PipeMakersHouse": MN64Region(
-        name="Pipe Makers House",
+        name="Oedo Town Pipe Makers House",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
         locations=[
@@ -95,7 +105,7 @@ LogicRegions = {
         room_default_definitions=[0x062, 0x47F, 0x191, 0x152, 0x32A, 0x030, 0x1EE],
     ),
     "ShoppingDistrict": MN64Region(
-        name="Shopping District",
+        name="Oedo Town Shopping District",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
         locations=[],
@@ -136,9 +146,10 @@ LogicRegions = {
             0x274,
             0x27D,
         ],
+        spawn={"x": -103.0, "y": 0.0, "z": 5.0},
     ),
     "SuperPassBridge": MN64Region(
-        name="Super Pass Bridge",
+        name="Oedo Town Super Pass Bridge",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
         locations=[
@@ -180,9 +191,10 @@ LogicRegions = {
             0x01A,
             0x038,
         ],
+        spawn={"x": -440.0, "y": 0.0, "z": -47.0},
     ),
     "ShrineArea": MN64Region(
-        name="Shrine Area",
+        name="Oedo Town Shrine Area",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
         locations=[],
@@ -222,9 +234,10 @@ LogicRegions = {
             0x280,
             0x158,
         ],
+        spawn={"x": 62.0, "y": 7.0, "z": 45.0},
     ),
     "NihonBashiBridge": MN64Region(
-        name="Nihon Bashi Bridge",
+        name="Oedo Town Nihon Bashi Bridge",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
         locations=[],
@@ -256,6 +269,7 @@ LogicRegions = {
             0x195,
             0x038,
         ],
+        spawn={"x": -238.0, "y": 8.0, "z": 228.0},
     ),
     "OedoCastleMainGate": MN64Region(
         name="Oedo Castle Main Gate",
@@ -269,6 +283,9 @@ LogicRegions = {
                 flag_id=0x00ED,
                 instance_id=0x0F,
             ),
+            MN64LocationLogic("Ryo 1", lambda l: (l.chain_pipe and l.goemon) or (l.sasuke and l.jetpack), MN64Items.RYO, flag_id=0x1862, instance_id=0x10),
+            MN64LocationLogic("Ryo 2", lambda l: (l.chain_pipe and l.goemon) or (l.sasuke and l.jetpack), MN64Items.RYO, flag_id=0x1863, instance_id=0x11),
+            MN64LocationLogic("Ryo 3", lambda l: (l.chain_pipe and l.goemon) or (l.sasuke and l.jetpack), MN64Items.RYO, flag_id=0x1864, instance_id=0x12),
         ],
         exits=[
             MN64TransitionFront("NihonBashiBridge", lambda l: True),
@@ -295,6 +312,7 @@ LogicRegions = {
             0x01A,
             0x038,
         ],
+        spawn={"x": -350.0, "y": 7.0, "z": 93.0},
     ),
     "StairstoOedoCastle": MN64Region(
         name="Stairs to Oedo Castle",
@@ -307,6 +325,7 @@ LogicRegions = {
         ],
         room_id=0x165,
         room_default_definitions=[0x40F, 0x152, 0x033, 0x1FA, 0x16F, 0x2FC, 0x02B],
+        spawn={"x": 101.0, "y": 7.0, "z": 109.0},
     ),
     "OedoCastleEntrance": MN64Region(
         name="Oedo Castle Entrance",
@@ -332,9 +351,10 @@ LogicRegions = {
             0x195,
             0x04C,
         ],
+        spawn={"x": -143.0, "y": 147.0, "z": 264.0},
     ),
     "RoadtoMtFuji": MN64Region(
-        name="Road to Mt Fuji",
+        name="Oedo Town Road to Mt Fuji",
         hint_name=MN64HintRegion.OEDO_TOWN,
         level=MN64Levels.OEDO_TOWN,
         locations=[],
@@ -366,5 +386,6 @@ LogicRegions = {
             0x273,
             0x195,
         ],
+        spawn={"x": 34.0, "y": -14.0, "z": 6.0},
     ),
 }

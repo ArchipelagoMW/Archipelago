@@ -44,8 +44,6 @@ item_pools_template: dict[str, list[ItemPoolEntry]] = {
         ItemPoolEntry(item=items_dict['Mine Master Key', 1], quantity=1),
         ItemPoolEntry(item=items_dict["Faj'ro Master Key", 1], quantity=1),
         ItemPoolEntry(item=items_dict['Kajo Master Key', 1], quantity=1),
-        ItemPoolEntry(item=items_dict['East Gaia Pass', 1], quantity=1),
-        ItemPoolEntry(item=items_dict['West Gaia Pass', 1], quantity=1),
         ItemPoolEntry(item=items_dict['Old Dojo Key', 1], quantity=1),
         ItemPoolEntry(item=items_dict['Broken Gauntlet', 1], quantity=1),
         ItemPoolEntry(item=items_dict['Broken Shield', 1], quantity=1),

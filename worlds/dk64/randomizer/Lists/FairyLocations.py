@@ -391,7 +391,7 @@ fairy_locations = {
             spawn_y=1050,
         ),
         FairyData(
-            name="Research and Development Pole",
+            name="R&D Pole",
             map=Maps.FranticFactory,
             region=Regions.Testing,
             fence=Fence(3129, 1052, 3207, 1110),
@@ -413,7 +413,7 @@ fairy_locations = {
             logic=lambda l: l.camera and ((l.triangle and l.punch and l.ischunky and l.climbing) or l.CanAccessRNDRoom()),
         ),
         FairyData(
-            name="Diddy Research and Development Room",
+            name="Diddy R&D Room",
             map=Maps.FranticFactory,
             region=Regions.RandDUpper,
             fence=Fence(4322, 387, 4672, 597),
@@ -455,7 +455,7 @@ fairy_locations = {
         ),
         relocated_5ds_fairy,
         FairyData(
-            name="Tiny Slam Button",
+            name="Tiny Slam Switch",
             map=Maps.GloomyGalleon,
             region=Regions.GloomyGalleonStart,
             fence=Fence(2222, 2659, 2299, 2731),
@@ -483,14 +483,14 @@ fairy_locations = {
             spawn_y=1707,
         ),
         FairyData(
-            name="Inbetween 5-Door Ship and 2-Door Ship",
+            name="Towards the 2-Door Ship",
             map=Maps.GloomyGalleon,
             region=Regions.ShipyardUnderwater,
             fence=Fence(1628, 1883, 1746, 2235),
             spawn_y=1220,
         ),
         FairyData(
-            name="Inbetween 5-Door Ship and Seal Race",
+            name="Towards the Seal Race",
             map=Maps.GloomyGalleon,
             region=Regions.ShipyardUnderwater,
             fence=Fence(2691, 441, 3345, 1305),
@@ -973,7 +973,7 @@ fairy_locations = {
             spawn_y=300,
         ),
         FairyData(
-            name="Above Donkey Diddy Chunky Crypt Entrance",
+            name="Above entrance to Crypt",
             map=Maps.CastleLowerCave,
             region=Regions.LowerCave,
             fence=Fence(134, 1173, 702, 1293),

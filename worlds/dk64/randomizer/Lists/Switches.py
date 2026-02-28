@@ -39,6 +39,7 @@ SwitchData = {
     Switches.JapesRambi: SwitchInfo("Japes Switch to Rambi", Kongs.donkey, SwitchType.GunSwitch, 0x1CC, Maps.JungleJapes, [0x123]),
     Switches.JapesPainting: SwitchInfo("Japes Switch to Painting", Kongs.diddy, SwitchType.GunSwitch, 0x1CD, Maps.JungleJapes, [40]),
     Switches.JapesDiddyCave: SwitchInfo("Japes Diddy Cave Switches", Kongs.diddy, SwitchType.GunSwitch, 0x1CE, Maps.JungleJapes, [0x29, 0x2A]),
+    Switches.JapesFreeKong: SwitchInfo("Japes Free Kong Switches", Kongs.donkey, SwitchType.GunSwitch, 0x153, Maps.JungleJapes, [0x30, 0x31, 0x32]),
     Switches.AztecBlueprintDoor: SwitchInfo("Aztec Blueprint Door Switches", Kongs.donkey, SwitchType.GunSwitch, 0x1CF, Maps.AngryAztec, [0x9D, 0x9E]),
     Switches.AztecLlamaCoconut: SwitchInfo("Aztec Llama Switch (1)", Kongs.donkey, SwitchType.GunSwitch, 0x1D0, Maps.AngryAztec, [13]),
     Switches.AztecLlamaGrape: SwitchInfo(
@@ -61,6 +62,9 @@ SwitchData = {
     ),
     Switches.AztecQuicksandSwitch: SwitchInfo("Aztec Quicksand Tunnel Switch", Kongs.donkey, SwitchType.SlamSwitch, 0x1D3, Maps.AztecLlamaTemple, [0x69]),
     Switches.AztecGuitar: SwitchInfo("Aztec Guitar Pad", Kongs.diddy, SwitchType.InstrumentPad, 0x1D4, Maps.AngryAztec, [0x44]),
+    Switches.AztecOKONGPuzzle: SwitchInfo("Aztec Tiny Temple Free Kong Switches", Kongs.diddy, SwitchType.PushableButton, 0x157, Maps.AztecTinyTemple, [0x14]),
+    Switches.AztecLlamaPuzzle: SwitchInfo("Aztec Llama Temple Free Kong Switches", Kongs.donkey, SwitchType.GunInstrumentCombo, 0x155, Maps.AztecLlamaTemple, [0x12, 0x16]),
+    Switches.FactoryFreeKong: SwitchInfo("Factory Free Kong Switch", Kongs.lanky, SwitchType.SlamSwitch, 0x159, Maps.FranticFactory, [0x24]),
     Switches.GalleonLighthouse: SwitchInfo("Galleon Lighthouse Switches", Kongs.donkey, SwitchType.GunSwitch, 0x1D5, Maps.GloomyGalleon, [0xA, 0xB]),
     Switches.GalleonShipwreck: SwitchInfo("Galleon Shipwreck Switches", Kongs.diddy, SwitchType.GunSwitch, 0x1D6, Maps.GloomyGalleon, [8, 9]),
     Switches.GalleonCannonGame: SwitchInfo("Galleon Cannon Game Switches", Kongs.chunky, SwitchType.GunSwitch, 0x1D7, Maps.GloomyGalleon, [6, 7]),
@@ -110,11 +114,8 @@ SwitchNameDict = {
         SwitchType.PadMove: "Gorilla Gone (Chunky)",
         SwitchType.SlamSwitch: "Chunky",
     },
+    Kongs.any: {
+        SwitchType.GunSwitch: "Any Gun",
+        SwitchType.InstrumentPad: "Any Instrument",
+    },
 }
-
-
-def GetSwitchName(switchType: SwitchType, kong: Kongs) -> str:
-    """Derive a readable name for a Kong/switch type combination."""
-    if kong in SwitchNameDict and switchType in SwitchNameDict[kong]:
-        return SwitchNameDict[kong][switchType]
-    return None

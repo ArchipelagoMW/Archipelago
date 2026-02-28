@@ -2,8 +2,9 @@
 
 from randomizer.Enums.EnemySubtypes import EnemySubtype
 from randomizer.Enums.Settings import CrownEnemyDifficulty, DamageAmount, WinConditionComplex
-from randomizer.Lists.EnemyTypes import EnemyMetaData, enemy_location_list
+from randomizer.Lists.EnemyTypes import EnemyMetaData
 from randomizer.Enums.Enemies import Enemies
+from randomizer.Enums.Items import Items
 from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Maps import Maps
 from randomizer.Patching.Patcher import LocalROM
@@ -24,6 +25,12 @@ class PkmnSnapEnemy:
             Enemies.KasplatChunky,
             Enemies.Book,
             Enemies.EvilTomato,
+            Enemies.FairyQueen,
+            Enemies.IceTomato,
+            Enemies.Llama,
+            Enemies.Mermaid,
+            Enemies.Seal1,
+            Enemies.MechFish,
         ):
             # Always spawned, not in pool
             self.spawned = True
@@ -89,6 +96,12 @@ pkmn_snap_enemies = [
     PkmnSnapEnemy(Enemies.Bug),
     PkmnSnapEnemy(Enemies.ZingerFlamethrower),
     PkmnSnapEnemy(Enemies.Scarab),
+    PkmnSnapEnemy(Enemies.FairyQueen),
+    PkmnSnapEnemy(Enemies.IceTomato),
+    PkmnSnapEnemy(Enemies.Mermaid),
+    PkmnSnapEnemy(Enemies.Llama),
+    PkmnSnapEnemy(Enemies.MechFish),
+    PkmnSnapEnemy(Enemies.Seal1),
 ]
 
 valid_maps = [
@@ -239,7 +252,10 @@ def resetPkmnSnap():
 def setPkmnSnapEnemy(focused_enemy):
     """Set enemy to being spawned."""
     for enemy in pkmn_snap_enemies:
-        if enemy.enemy == focused_enemy:
+        ref_enemies = [enemy.enemy]
+        if enemy.enemy == Enemies.Guard:
+            ref_enemies = [Enemies.Guard, Enemies.GuardDisableA, Enemies.GuardDisableZ, Enemies.GuardTag, Enemies.GuardGetOut]
+        if focused_enemy in ref_enemies:
             enemy.addEnemy()
 
 
@@ -543,6 +559,14 @@ def writeEnemy(spoiler, ROM_COPY: LocalROM, cont_map_spawner_address: int, new_e
                     new_speed = 255
                 ROM_COPY.seek(cont_map_spawner_address + spawner.offset + speed_offset)
                 ROM_COPY.writeMultipleBytes(new_speed, 1)
+        # Cap Klobber Speed
+        if new_enemy_id in (Enemies.Klobber, Enemies.Kaboom):
+            for speed_offset in [0xC, 0xD]:
+                ROM_COPY.seek(cont_map_spawner_address + spawner.offset + speed_offset)
+                current_speed = int.from_bytes(ROM_COPY.readBytes(1), "big")
+                new_speed = max(1, int(current_speed * 0.6))
+                ROM_COPY.seek(cont_map_spawner_address + spawner.offset + speed_offset)
+                ROM_COPY.writeMultipleBytes(new_speed, 1)
     # Fix Tiny 5DI enemy to not respawn
     ROM_COPY.seek(cont_map_spawner_address + spawner.offset + 0x13)
     id = int.from_bytes(ROM_COPY.readBytes(1), "big")
@@ -551,30 +575,100 @@ def writeEnemy(spoiler, ROM_COPY: LocalROM, cont_map_spawner_address: int, new_e
         ROM_COPY.writeMultipleBytes(0, 1)  # Disable respawning
 
 
+krem_kap_mapping = {
+    Enemies.BeaverBlue: Items.PhotoBeaverBlue,
+    Enemies.Book: Items.PhotoBook,
+    Enemies.ZingerCharger: Items.PhotoZingerCharger,
+    Enemies.Klobber: Items.PhotoKlobber,
+    Enemies.Klump: Items.PhotoKlump,
+    Enemies.Kaboom: Items.PhotoKaboom,
+    Enemies.KlaptrapGreen: Items.PhotoKlaptrapGreen,
+    Enemies.ZingerLime: Items.PhotoZingerLime,
+    Enemies.KlaptrapPurple: Items.PhotoKlaptrapPurple,
+    Enemies.KlaptrapRed: Items.PhotoKlaptrapRed,
+    Enemies.BeaverGold: Items.PhotoBeaverGold,
+    Enemies.Fireball: Items.PhotoFireball,
+    Enemies.MushroomMan: Items.PhotoMushroomMan,
+    Enemies.Ruler: Items.PhotoRuler,
+    Enemies.RoboKremling: Items.PhotoRoboKremling,
+    Enemies.Kremling: Items.PhotoKremling,
+    Enemies.KasplatDK: Items.PhotoKasplatDK,
+    Enemies.KasplatDiddy: Items.PhotoKasplatDiddy,
+    Enemies.KasplatLanky: Items.PhotoKasplatLanky,
+    Enemies.KasplatTiny: Items.PhotoKasplatTiny,
+    Enemies.KasplatChunky: Items.PhotoKasplatChunky,
+    Enemies.ZingerRobo: Items.PhotoZingerRobo,
+    Enemies.Krossbones: Items.PhotoKrossbones,
+    Enemies.Shuri: Items.PhotoShuri,
+    Enemies.Gimpfish: Items.PhotoGimpfish,
+    Enemies.MrDice0: Items.PhotoMrDice0,
+    Enemies.SirDomino: Items.PhotoSirDomino,
+    Enemies.MrDice1: Items.PhotoMrDice1,
+    Enemies.Bat: Items.PhotoBat,
+    Enemies.Ghost: Items.PhotoGhost,
+    Enemies.Pufftup: Items.PhotoPufftup,
+    Enemies.Kosha: Items.PhotoKosha,
+    Enemies.SpiderSmall: Items.PhotoSpider,
+    Enemies.FireballGlasses: Items.PhotoFireball,
+    Enemies.Bug: Items.PhotoBug,
+    Enemies.Guard: Items.PhotoKop,
+    Enemies.GuardDisableA: Items.PhotoKop,
+    Enemies.GuardDisableZ: Items.PhotoKop,
+    Enemies.GuardGetOut: Items.PhotoKop,
+    Enemies.GuardTag: Items.PhotoKop,
+    Enemies.FairyQueen: Items.PhotoBFI,
+    Enemies.IceTomato: Items.PhotoIceTomato,
+    Enemies.Mermaid: Items.PhotoMermaid,
+    Enemies.Llama: Items.PhotoLlama,
+    Enemies.MechFish: Items.PhotoMechfish,
+    Enemies.Seal1: Items.PhotoSeal,
+}
+
+
 def randomize_enemies_0(spoiler):
     """Determine randomized enemies."""
     data = {}
-    noise_management_dict = {}  # Prevent known game freezes
     pkmn = []
     resetPkmnSnap()
-    for loc in enemy_location_list:
-        if enemy_location_list[loc].enable_randomization:
-            sound_safeguard = False
-            map = enemy_location_list[loc].map
+    spoiler.valid_photo_items = [
+        Items.PhotoBook,  # Not randomized (yet), but permanently existing no matter what
+        Items.PhotoTomato,  # Not randomized (yet), but permanently existing no matter what
+        # Kasplats are always present outside enemy rando
+        Items.PhotoKasplatDK,
+        Items.PhotoKasplatDiddy,
+        Items.PhotoKasplatLanky,
+        Items.PhotoKasplatTiny,
+        Items.PhotoKasplatChunky,
+        Items.PhotoBFI,  # Not Randomized
+        Items.PhotoIceTomato,  # Not Randomized
+        Items.PhotoMermaid,  # Not Randomized
+        Items.PhotoLlama,  # Not Randomized
+        Items.PhotoMechfish,  # Not Randomized
+        Items.PhotoSeal,  # Not Randomized
+    ]
+    for loc in spoiler.enemy_location_list:
+        if spoiler.enemy_location_list[loc].enable_randomization:
+            map = spoiler.enemy_location_list[loc].map
             if map not in data:
                 data[map] = []
-                noise_management_dict[map] = 0
-            sound_safeguard = noise_management_dict[map] > 2
-            new_enemy = enemy_location_list[loc].placeNewEnemy(spoiler.settings.random, spoiler.settings.enemies_selected, True, sound_safeguard)
-            if map == Maps.ForestAnthill or not enemy_location_list[loc].respawns and EnemyMetaData[new_enemy].audio_engine_burden:
-                noise_management_dict[map] += 1
-            if enemy_location_list[loc].respawns:
+            new_enemy = spoiler.enemy_location_list[loc].placeNewEnemy(spoiler.settings.random, spoiler.settings.enemies_selected, True)
+            krem_kap_location = (loc - Locations.JapesMainEnemy_Start) + Locations.KremKap_JapesMainEnemy_Start
+            if krem_kap_location in spoiler.LocationList:
+                item = krem_kap_mapping[new_enemy]
+                spoiler.LocationList[krem_kap_location].default = item  # I hate hate hate this
+                spoiler.LocationList[krem_kap_location].item = item
+                if item not in spoiler.valid_photo_items:
+                    spoiler.valid_photo_items.append(item)
                 setPkmnSnapEnemy(new_enemy)
+                if not spoiler.enemy_location_list[loc].respawns:
+                    print(f"ALERT: INCORRECT ENEMY {loc.name}")
+            elif spoiler.enemy_location_list[loc].respawns:
+                print(f"ALERT: MISSING ENEMY {loc.name}")
             data[map].append(
                 {
                     "enemy": new_enemy,
-                    "speeds": [enemy_location_list[loc].idle_speed, enemy_location_list[loc].aggro_speed],
-                    "id": enemy_location_list[loc].id,
+                    "speeds": [spoiler.enemy_location_list[loc].idle_speed, spoiler.enemy_location_list[loc].aggro_speed],
+                    "id": spoiler.enemy_location_list[loc].id,
                     "location": Locations(loc).name,
                 }
             )
@@ -623,7 +717,7 @@ def randomize_enemies(spoiler, ROM_COPY: LocalROM):
     for enemy in EnemyMetaData:
         if EnemyMetaData[enemy].crown_enabled is True:
             crown_enemies.append(enemy)
-    if spoiler.settings.enemy_rando or spoiler.settings.crown_enemy_difficulty != CrownEnemyDifficulty.vanilla:
+    if len(spoiler.settings.enemies_selected) > 0 or spoiler.settings.crown_enemy_difficulty != CrownEnemyDifficulty.vanilla:
         boolean_damage_is_ohko = spoiler.settings.damage_amount == DamageAmount.ohko
         crown_enemies_library = getBalancedCrownEnemyRando(spoiler, spoiler.settings.crown_enemy_difficulty, boolean_damage_is_ohko)
         minigame_enemies_simple = []
@@ -673,7 +767,7 @@ def randomize_enemies(spoiler, ROM_COPY: LocalROM):
                 extra_count = int.from_bytes(ROM_COPY.readBytes(1), "big")
                 offset += 0x16 + (extra_count * 2)
                 vanilla_spawners.append(Spawner(enemy_id, init_offset, enemy_index))
-            if spoiler.settings.enemy_rando and cont_map_id in spoiler.enemy_rando_data:
+            if len(spoiler.settings.enemies_selected) > 0 and cont_map_id in spoiler.enemy_rando_data:
                 referenced_spawner = None
                 for enemy in spoiler.enemy_rando_data[cont_map_id]:
                     for spawner in vanilla_spawners:
@@ -682,7 +776,7 @@ def randomize_enemies(spoiler, ROM_COPY: LocalROM):
                             break
                     if referenced_spawner is not None:
                         writeEnemy(spoiler, ROM_COPY, cont_map_spawner_address, enemy["enemy"], referenced_spawner, cont_map_id, 0)
-            if spoiler.settings.enemy_rando and cont_map_id in minigame_maps_total:
+            if len(spoiler.settings.enemies_selected) > 0 and cont_map_id in minigame_maps_total:
                 tied_enemy_list = []
                 if cont_map_id in minigame_maps_easy:
                     tied_enemy_list = minigame_enemies_simple.copy()
@@ -728,7 +822,7 @@ def randomize_enemies(spoiler, ROM_COPY: LocalROM):
                         ROM_COPY.writeMultipleBytes(crown_timer, 1)  # Determine Crown length. DK64 caps at 255 seconds
         if spoiler.settings.win_condition_item == WinConditionComplex.krem_kapture:
             # Pkmn snap handler
-            values = [0, 0, 0, 0, 0]
+            values = [0, 0, 0, 0, 0, 0]
             # In some cases, the Pkmn Snap data hasn't yet been initialized (enemy rando disabled)
             # so we use the default values
             if len(spoiler.pkmn_snap_data) == 0:
@@ -769,12 +863,18 @@ def randomize_enemies(spoiler, ROM_COPY: LocalROM):
                     True,  # Ghost
                     True,  # Pufftup
                     True,  # Kosha
+                    True,  # Fairy Queen
+                    True,  # Ice Tomato
+                    True,  # Mermaid
+                    True,  # Llama
+                    True,  # Mechfish
+                    True,  # Seal
                 ]
             for enemy_index, spawned in enumerate(spoiler.pkmn_snap_data):
                 if spawned:
                     offset = enemy_index >> 3
                     shift = enemy_index & 7
                     values[offset] |= 1 << shift
-            ROM_COPY.seek(spoiler.settings.rom_data + 0x117)
+            ROM_COPY.seek(spoiler.settings.rom_data + 0x196)
             for value in values:
                 ROM_COPY.writeMultipleBytes(value, 1)

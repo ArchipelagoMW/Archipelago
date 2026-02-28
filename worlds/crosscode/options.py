@@ -20,20 +20,6 @@ from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, 
 
 #     default = 1
 
-class Goal(Choice):
-    """
-    Determines what must be done to complete the game.
-    [Creator] Ascend Vermillion Tower and fight the Creator.
-    [Monkey] Ascend the Grand Krys'kajo and defeat the Son of the East.
-    [Observatory] Complete all five A Promise is a Promise quests and uncover the secret of the Observatory.
-    """
-    display_name = "Goal"
-
-    option_creator = 0
-    option_monkey = 1
-    option_observatory = 2
-    default = 0
-
 class VTShadeLock(Choice):
     """
     If set to a non-None value, creates an in-game barrier at the entrance of Vermillion Tower to prevent extremely
@@ -56,21 +42,6 @@ class VWMeteorPassage(DefaultOnToggle):
     If enabled, places a gate between Sapphire Ridge and Vermillion Wasteland unlockable with the meteor shade,
     """
     display_name = "Vermillion Wasteland Meteor Passage"
-
-class ClosedGaia(Choice):
-    """
-    If set to a non-None value, adds barriers to each side of Gaia's Garden to decrease the amount of immediate checks
-    when unlocking the area, openable with East and West Gaia Pass obtained from Apollo duel encounter.
-    [Minimal] Adds barriers to Left and Right side of Gaia (includes dungeons).
-    [Full] Besides the Left and Right barriers, also adds gates in Grove and Infested areas which require the dungeon shades.
-    
-    """
-    display_name = "Closed Gaia"
-
-    option_none = 0
-    option_minimal = 1
-    option_full = 2
-    default = 0
 
 class VTSkip(DefaultOnToggle):
     """
@@ -214,13 +185,6 @@ class Keyrings(Toggle):
     """
     display_name = "Keyrings"
 
-class RhombusHubUnlock(Toggle):
-    """
-    If enabled, allows traveling to areas out of order from the hub in Rhombus Square. Allows skipping areas such as
-    Autumn's Fall if you are missing the Red Flame Shade, but have the Green Seed Shade / Star Shade.
-    """
-    display_name = "Rhombus Hub Unlock"
-
 class ProgressiveAreaUnlocks(Choice):
     """
     If enabled, the items that unlock overworld areas and dungeons (including shades and some passes) will be made
@@ -278,10 +242,10 @@ class Reachability(Choice):
         """
         if self.value == Reachability.option_own_world:
             for _, lst in self.items.items():
-                local_items |= lst
+                local_items.update(lst)
         elif self.value == Reachability.option_different_world:
             for _, lst in self.items.items():
-                non_local_items |= lst
+                non_local_items.update(lst)
 
 class DungeonReachability(Reachability):
     """
@@ -301,7 +265,7 @@ class DungeonReachability(Reachability):
         """
         if self.value == DungeonReachability.option_own_dungeons:
             for _, lst in self.items.items():
-                all_dungeons |= lst
+                all_dungeons.update(lst)
         if self.value == DungeonReachability.option_original_dungeons:
             for key, lst in self.items.items():
                 specific_dungeons[key] |= lst
@@ -495,10 +459,8 @@ class CrossCodeOptions(PerGameCommonOptions):
     Options dataclass for CrossCode
     """
     # logic_mode: LogicMode
-    goal: Goal
     vt_shade_lock: VTShadeLock
     vw_meteor_passage: VWMeteorPassage
-    closed_gaia: ClosedGaia
     vt_skip: VTSkip
 
     quest_rando: QuestRando
@@ -516,7 +478,6 @@ class CrossCodeOptions(PerGameCommonOptions):
     start_with_discs: StartWithDiscs
     start_with_pet: StartWithPet
 
-    rhombus_hub_unlock: RhombusHubUnlock
     progressive_area_unlocks: ProgressiveAreaUnlocks
     progressive_equipment: ProgressiveEquipment
     keyrings: Keyrings

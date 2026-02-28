@@ -235,14 +235,15 @@ class PlateUpWorld(World):
             for _ in range(lease_count)
         ])
 
-        # Add traps at ~10% of total locations, minimum 3
-        remaining_capacity = max(0, total_locations - len(item_pool))
-        desired_traps = max(3, total_days // 10)  # scale with run length
-        trap_to_add = min(desired_traps, remaining_capacity)
-        item_pool.extend([
-            self.create_item("Random Customer Card", classification=ItemClassification.trap)
-            for _ in range(trap_to_add)
-        ])
+        if self.options.trap_cards.value:
+            # Add traps at ~10% of total locations, minimum 3
+            remaining_capacity = max(0, total_locations - len(item_pool))
+            desired_traps = max(3, total_days // 10)  # scale with run length
+            trap_to_add = min(desired_traps, remaining_capacity)
+            item_pool.extend([
+                self.create_item("Random Customer Card", classification=ItemClassification.trap)
+                for _ in range(trap_to_add)
+            ])
 
         # Top up remaining capacity with a mix of normal and filler appliances
         remaining = max(0, total_locations - len(item_pool))
@@ -308,7 +309,8 @@ class PlateUpWorld(World):
             "death_link_behavior",
             "appliance_speed_mode",
             "day_lease_interval",
-                "starting_money_cap"
+            "starting_money_cap",
+            "trap_cards"
         )
         options_dict["items_kept"] = self.options.appliances_kept.value
         if self.options.dish.value == 0:

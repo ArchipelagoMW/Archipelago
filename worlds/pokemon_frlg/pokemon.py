@@ -715,27 +715,48 @@ def randomize_wild_encounters(world: "PokemonFRLGWorld") -> None:
         if map_name == "MAP_ROUTE21_NORTH" or map_name == "MAP_ROUTE21_SOUTH":
             route_21_encounters = new_encounters
 
-    # If we failed to place Magikarp, Heracross, and/or Togepi put them in their vanilla spots
+    # Ensure Magikarp, Heracross, and Togepi are each present in at least one encounter.
+    # The main loop may fail to place them, and placing one can overwrite another (e.g.
+    # Magikarp replaces Heracross via species grouping, then Heracross gets force-placed
+    # back over those same slots). When that happens we cascade: any displaced priority
+    # species gets moved to its own fallback location.
     if world.options.pokemon_request_locations:
-        if data.constants["SPECIES_MAGIKARP"] in priority_species:
-            map_data = world.modified_maps["MAP_PALLET_TOWN"]
-            slots = map_data.encounters[EncounterType.FISHING].slots[game_version]
-            for i in [0, 1, 3]:
-                slots[i].species_id = data.constants["SPECIES_MAGIKARP"]
-
+        # Each entry: (map_name, encounter_type, slot_indices or None for all)
+        fallbacks: Dict[int, Tuple[str, EncounterType, List[int] | None]] = {
+            data.constants["SPECIES_MAGIKARP"]:
+                ("MAP_PALLET_TOWN", EncounterType.FISHING, [0, 1, 3]),
+        }
         if not world.options.kanto_only:
-            if data.constants["SPECIES_HERACROSS"] in priority_species:
-                map_data = world.modified_maps["MAP_SIX_ISLAND_PATTERN_BUSH"]
-                slots = map_data.encounters[EncounterType.LAND].slots[game_version]
-                for i in [5, 7, 9, 11]:
-                    slots[i].species_id = data.constants["SPECIES_HERACROSS"]
-
+            fallbacks[data.constants["SPECIES_HERACROSS"]] = \
+                ("MAP_SIX_ISLAND_PATTERN_BUSH", EncounterType.LAND, [5, 7, 9, 11])
             if world.options.famesanity:
-                if data.constants["SPECIES_TOGEPI"] in priority_species:
-                    map_data = world.modified_maps["MAP_FIVE_ISLAND_MEMORIAL_PILLAR"]
-                    slots = map_data.encounters[EncounterType.LAND].slots[game_version]
-                    for slot in slots:
-                        slot.species_id = data.constants["SPECIES_TOGEPI"]
+                fallbacks[data.constants["SPECIES_TOGEPI"]] = \
+                    ("MAP_FIVE_ISLAND_MEMORIAL_PILLAR", EncounterType.LAND, None)
+
+        placed_fallbacks: Set[int] = set()
+
+        def _place_at_fallback(species_id: int) -> None:
+            placed_fallbacks.add(species_id)
+            map_name, enc_type, indices = fallbacks[species_id]
+            md = world.modified_maps[map_name]
+            slots = md.encounters[enc_type].slots[game_version]
+            target = indices if indices is not None else range(len(slots))
+            displaced = set()
+            for i in target:
+                if slots[i].species_id in fallbacks and slots[i].species_id != species_id:
+                    displaced.add(slots[i].species_id)
+                slots[i].species_id = species_id
+            for d in displaced:
+                if d not in priority_species and d not in placed_fallbacks:
+                    _place_at_fallback(d)
+                elif d in placed_fallbacks:
+                    assert False, (f"Priority species fallback conflict: {data.species[d].name} "
+                                   f"was displaced after already being placed. "
+                                   f"Fallback locations must not overlap.")
+
+        for species_id in fallbacks:
+            if species_id in priority_species:
+                _place_at_fallback(species_id)
 
 
 def randomize_starters(world: "PokemonFRLGWorld") -> None:

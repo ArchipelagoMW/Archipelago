@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, PerGameCommonOptions, Range
+from Options import Choice, Toggle, PerGameCommonOptions, Range, DeathLink
 
 
 class Goal(Range):
@@ -72,9 +72,6 @@ class AutoBuild(Choice):
     option_muska_robot_only = 5
     default = 2
 
-# TODO death link.
-# class DeathLink(DeathLink):
-
 @dataclass
 class DarkCloudOptions(PerGameCommonOptions):
     boss_goal: Goal
@@ -86,4 +83,5 @@ class DarkCloudOptions(PerGameCommonOptions):
     attach_multiplier: AttachmentMultiplierValue
     attach_mult_config: AttachmentMultiplierConfig
     auto_build: AutoBuild
+    death_link: DeathLink
 

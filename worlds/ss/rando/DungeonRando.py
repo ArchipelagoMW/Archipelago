@@ -9,8 +9,6 @@ from ..Items import ITEM_TABLE
 from ..Options import SSOptions
 from ..Constants import *
 
-from ..logic.Logic import ALL_REQUIREMENTS
-
 if TYPE_CHECKING:
     from .. import SSWorld
 

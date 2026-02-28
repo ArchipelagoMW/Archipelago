@@ -3,7 +3,7 @@ from BaseClasses import Item, ItemClassification
 
 class SongData(NamedTuple):
     code: Optional[int]
-    song_name: str
+    song_id: str
     DLC: str
     diff_easy: int
     diff_medium: int

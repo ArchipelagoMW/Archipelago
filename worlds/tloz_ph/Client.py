@@ -5,10 +5,93 @@ from .data.Items import ITEMS
 from .MapWarp import map_mode
 from .data.Entrances import entrance_id_to_entrance
 from .data.DynamicEntrances import DYNAMIC_ENTRANCES_BY_SCENE
+from typing import Literal
+from settings import get_settings
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
     from .Subclasses import PHTransition
+    from . import PhantomHourglassSettings
+
+default_boat_speed = 0x10A
+
+def get_client_as_command_processor(self: "BizHawkClientCommandProcessor"):
+    ctx = self.ctx
+    from worlds._bizhawk.context import BizHawkClientContext
+    assert isinstance(ctx, BizHawkClientContext)
+    client = ctx.client_handler
+    assert isinstance(client, PhantomHourglassClient)
+    return client
+
+def cmd_boat_option(self: "BizHawkClientCommandProcessor",
+                     option: Literal["snap_speed", "speed", "options"] = "options",
+                     *args: str):
+    """
+    Change various train options. Currently implemented:
+      - speed <speed: int | "default" | "reset" | "list"> <gear>
+      - snap_speed (True): instantly switch to new speeds after charting or starting the engine.
+      - options: lists current option values
+    """
+    # Thanks to Silvris's mm2 implementation for help with bizhawk command processing
+    valid_options = ["snap_speed", "speed", "options"]
+    option = option.lower()
+    if option not in valid_options:
+        self.output(f"  \"{option}\" is not a valid option! {valid_options}")
+        return False
+
+    if option == "speed":
+        return cmd_boat_speed(self, *args)
+
+    value = args[0].lower() if args else "true"
+    valid_bool_values = {"0": False, "1": True, "false": False, "true": True, "default": True, "reset": True}
+    value_bool = valid_bool_values.get(value, None)
+    if value_bool is None:
+        self.output(f"  \"{value}\" is not a valid boolean!")
+        return False
+
+    client = get_client_as_command_processor(self)
+    if option == "options":
+        self.output(f"  Current boat options:")
+        self.output(f"    speed: {client.boat_speed}")
+        self.output(f"    snap_speed: {client.boat_snap_speed}")
+        return True
+
+    setattr(client, f"boat_{option}", value_bool)
+    host_settings: PhantomHourglassSettings = get_settings().get('tloz_ph_options')
+    host_settings.update({f"boat_{option}": value_bool})
+    self.output(f"  Set option {option} to {value_bool}")
+    return True
+
+def cmd_boat_speed(self: "BizHawkClientCommandProcessor",
+                    speed: int or str = "list"):
+
+    def set_speed(speed: int):
+        client.boat_speed = speed
+        client.update_boat_speed = True
+        self.output(f"  Setting boat speed: {speed}")
+        host_settings: PhantomHourglassSettings = get_settings().get('tloz_ph_options')
+        host_settings.update({f"boat_speed": speed})
+
+    client = get_client_as_command_processor(self)
+    special_speeds = ["list", "default", "reset"]
+    if speed in special_speeds:
+        if speed == "list":
+            self.output(f"  Current boat speed: {client.boat_speed}")
+            return True
+        elif speed in ["default", "reset"]:
+            set_speed(default_boat_speed)
+            return True
+
+    try:
+        speed = min(int(speed), 9999)
+        speed = max(speed, -9999)  # soft cap of 9999
+    except ValueError:
+        self.output(f"  \"{speed}\" is not a valid speed, must be an int or in {special_speeds}")
+        return False
+
+    client.train_speed = speed
+    set_speed(client.train_speed)
+    return True
 
 EQUIP_TIMER_OFFSET = 0x20
 
@@ -25,7 +108,7 @@ read_keys_always = [PHAddr.game_state, PHAddr.in_cutscene, PHAddr.loading_room,
 
 read_keys_deathlink = []
 read_keys_land = [PHAddr.getting_location, PHAddr.getting_ship_part, PHAddr.in_map]
-read_keys_sea = [PHAddr.shot_frog, PHAddr.boat_health, PHAddr.drawing_sea_route]
+read_keys_sea = [PHAddr.shot_frog, PHAddr.boat_health, PHAddr.drawing_sea_route, PHAddr.boat_gear]
 read_keys_salvage = [PHAddr.salvage_health]
 
 # datastore_keys
@@ -46,8 +129,6 @@ class PhantomHourglassClient(DSZeldaClient):
         # Required variables from inherit
         self.starting_flags = STARTING_FLAGS
         self.dungeon_key_data = DUNGEON_KEY_DATA
-        self.slot_id_addr = PHAddr.slot_id
-        self.received_item_index_addr = PHAddr.received_item_index
         self.starting_entrance = (11, 3, 5)  # stage, room, entrance
         self.scene_addr = (PHAddr.stage, PHAddr.room, PHAddr.floor, PHAddr.entrance)  # Stage, room, floor, entrance
         self.exit_coords_addr = (PHAddr.transition_x, PHAddr.transition_y, PHAddr.transition_z)  # x, y, z. what coords to spawn link at when entering a
@@ -75,6 +156,7 @@ class PhantomHourglassClient(DSZeldaClient):
         self.boss_warp_entrance = None
         self.last_warp_stage = None
         self.item_location_combo = None
+        self.metal_count = 0
 
         self.sent_event = False
         self.event_reads = []
@@ -102,6 +184,11 @@ class PhantomHourglassClient(DSZeldaClient):
         self.addr_entrance = PHAddr.entrance
         self.addr_received_item_index = PHAddr.received_item_index
 
+        self.boat_speed = default_boat_speed
+        self.boat_snap_speed = True
+        self.update_boat_speed = True
+        self.last_gear = True
+
 
     async def check_game_version(self, ctx: "BizHawkClientContext") -> bool:
         rom_name_bytes = (await PHAddr.game_identifier.read_bytes(ctx))[0]
@@ -113,7 +200,19 @@ class PhantomHourglassClient(DSZeldaClient):
                 logger.error("You are using a US rom that is not supported yet. sorry!")
                 self.version_offset = -64
             return False
+
+        # Set commands
+        if "boat" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["boat"] = cmd_boat_option
+
         return True
+
+    async def on_connect(self, ctx):
+        # Get train settings from host.yaml
+        host_settings: PhantomHourglassSettings = get_settings().get('tloz_ph_options')
+        print(f"SETTINGS: {host_settings.get('boat_speed', self.boat_speed)}")
+        self.boat_speed = host_settings.get("boat_speed", self.boat_speed)
+        self.boat_snap_speed = host_settings.get("boat_snap_speed", self.boat_snap_speed)
 
     async def set_special_starting_flags(self, ctx: "BizHawkClientContext") -> list[tuple[int, list, str]]:
         """
@@ -297,11 +396,7 @@ class PhantomHourglassClient(DSZeldaClient):
         if self.current_stage == 3 and read_result.get(PHAddr.salvage_health, 5) <= 1:
             await self.instant_repair_salvage_arm(ctx)
 
-        if read_result.get(PHAddr.saving) == 0x46 and not self.save_spam_protection:
-            print(f"Saving scene {hex(self.current_scene)}")
-            self.last_saved_scene = self.current_scene
-            await self.store_data(ctx, storage_key(ctx, save_scene_key), self.last_saved_scene, "replace", default=0)
-            self.save_spam_protection = True
+        await self.save_scene(ctx, read_result, PHAddr.saving, save_scene_key, [0x46])
 
         # Map warp entrypoint
         if read_result.get(PHAddr.in_map, 0):
@@ -324,6 +419,21 @@ class PhantomHourglassClient(DSZeldaClient):
             self.death_warning_spam_protect = True
         elif not self.is_dead:
             self.death_warning_spam_protect = False
+
+        if self.current_stage == 0:
+            if read_result[PHAddr.drawing_sea_route]:
+                self.update_boat_speed = True
+
+            if self.last_gear != read_result[PHAddr.boat_gear]:
+                self.update_boat_speed = True
+
+            if self.update_boat_speed:
+                self.update_boat_speed = False
+                await PHAddr.boat_max_speed.overwrite(ctx, self.boat_speed, silent=True)
+                if self.boat_snap_speed:
+                    await PHAddr.boat_speed.overwrite(ctx, self.boat_speed * read_result[PHAddr.boat_gear]//2, silent=True)
+
+            self.last_gear = read_result[PHAddr.boat_gear]
 
 
     async def detect_warp_to_start(self, ctx, read_result: dict):
@@ -416,11 +526,11 @@ class PhantomHourglassClient(DSZeldaClient):
                 if (self.item_count(ctx, "Round Crystal (Temple of the Ocean King)")
                         or self.item_count(ctx, "Round Pedestal B8 (Temple of the Ocean King)")
                         or self.item_count(ctx, "Round Crystals")):
-                    await PHAddr.totok_b3_state.set_bits(ctx, 0x2)
+                    await PHAddr.totok_b8_state.set_bits(ctx, 0x2)
                 if (self.item_count(ctx, "Triangle Crystal (Temple of the Ocean King)")
                         or self.item_count(ctx, "Triangle Crystals")
                         or self.item_count(ctx, "Triangle Pedestal B8 (Temple of the Ocean King)")):
-                    await PHAddr.totok_b3_state.set_bits(ctx, 0x4)
+                    await PHAddr.totok_b8_state.set_bits(ctx, 0x4)
             elif current_scene == 0x250C:  # B9
                 if (self.item_count(ctx, "Round Crystal (Temple of the Ocean King)")
                         or self.item_count(ctx, "Round Pedestal B9 (Temple of the Ocean King)")
@@ -458,16 +568,16 @@ class PhantomHourglassClient(DSZeldaClient):
                 if (self.item_count(ctx, "Square Pedestal South (Temple of Courage)")
                         or self.item_count(ctx, "Square Crystal (Temple of Courage)")
                         or self.item_count(ctx, "Square Crystals")):
-                    await self.stage_address.set_bits(ctx, 0x80)
+                    await self.stage_flag_address.set_bits(ctx, 0x80)
 
             # === Ghost Ship ===
             elif current_scene == 0x2900:
                 if (self.item_count(ctx, "Triangle Crystal (Ghost Ship)")
                         or self.item_count(ctx, "Triangle Crystals")):
-                    await self.stage_address.set_bits(ctx, 0x8, offset=1)
+                    await self.stage_flag_address.set_bits(ctx, 0x8, offset=1)
                 if (self.item_count(ctx, "Round Crystal (Ghost Ship)")
                         or self.item_count(ctx, "Round Crystals")):
-                    await self.stage_address.set_bits(ctx, 0x2, offset=3)
+                    await self.stage_flag_address.set_bits(ctx, 0x2, offset=3)
 
     async def write_totok_midway_keys(self, ctx):
         data = DUNGEON_KEY_DATA[372]
@@ -598,8 +708,8 @@ class PhantomHourglassClient(DSZeldaClient):
 
     async def set_stage_flags(self, ctx, stage):
         print(f"Setting stage flags")
-        self.stage_address = await get_address_from_heap(ctx, PHAddr.gMapManager, STAGE_FLAGS_OFFSET)
-        self.key_address = AddrFromPointer(self.stage_address + SMALL_KEY_OFFSET)
+        self.stage_flag_address = await get_address_from_heap(ctx, PHAddr.gMapManager, STAGE_FLAGS_OFFSET)
+        self.key_address = AddrFromPointer(self.stage_flag_address + SMALL_KEY_OFFSET)
         if stage in STAGE_FLAGS:
             flags = STAGE_FLAGS[stage]
 
@@ -610,8 +720,8 @@ class PhantomHourglassClient(DSZeldaClient):
                 flags = SPAWN_B3_REAPLING_FLAGS
 
             print(f"\tSetting Stage flags for {STAGES[stage]}, "
-                  f"adr: {self.stage_address}")
-            await self.stage_address.set_bits(ctx, flags)
+                  f"adr: {self.stage_flag_address}")
+            await self.stage_flag_address.set_bits(ctx, flags)
 
         # Unlock boss door if have bk
         data = BOSS_DOOR_DATA.get(stage, False)
@@ -682,32 +792,26 @@ class PhantomHourglassClient(DSZeldaClient):
         # Sand of hours check
         _value = 0
         if "Sand" in item_data.value:
+            if ctx.slot_data["ph_required"] and not self.item_count(ctx, "Phantom Hourglass"):
+                return 0
+            sand_lookup = {
+                "Phantom Hourglass": ctx.slot_data["ph_starting_time"] * 60,
+                "Sand of Hours": ctx.slot_data["ph_time_increment"] * 60,
+                "Sand of Hours (Small)": 3600,
+                "Sand of Hours (Boss)": 7200
+            }
+            _value = sum([self.item_count(ctx, i)*v for i, v in sand_lookup.items()])
 
-            if item_data.value == "Sand":
-                if not ctx.slot_data["ph_required"] or self.item_count(ctx, "Phantom Hourglass"):
-                    _value = ctx.slot_data["ph_time_increment"] * 60
-                else:
-                    _value = 0
-            elif item_data.value == "Sand PH":
-                _value = ctx.slot_data["ph_starting_time"] * 60
-
-                # If ph is required, add all time so far on finding
-                if ctx.slot_data["ph_required"] and self.item_count(ctx, "Phantom Hourglass") < 2:
-                    _value += (ctx.slot_data["ph_time_increment"] * 60 * self.item_count(ctx, "Sand of Hours")
-                              + self.item_count(ctx, "Sand of Hours (Small)") * 3600
-                              + self.item_count(ctx, "Sand of Hours (Boss)") * 7200)
-            else:
-                _value = item_data.value
-            last_time = await item_data.address.read(ctx)
-            if last_time + _value > 359940:
-                print(f"Time: Last time {last_time} value {_value} new {359940 - last_time} max {359940}")
-                _value = 359940 - last_time
+            if _value > 359940:
+                _value = 359940
             print(f"Sand stage {self.current_stage} {_value}")
             if self.current_stage == 0x25:
-                await PHAddr.phantom_hourglass_current.add(ctx, _value)
+                add_value = sand_lookup[item_data.name]
+                await PHAddr.phantom_hourglass_current.add(ctx, add_value)
 
         elif item_data.value == "pack_size":
-            _value = ctx.slot_data["spirit_gem_packs"]
+            _value = ctx.slot_data["spirit_gem_packs"] * self.item_count(ctx, item_data.name)
+            _value += self.item_count(ctx, item_data.name.removesuffix(" Pack"))
         else:
             raise ValueError(f"Special item value {item_data.value} is not supported")
         return _value
@@ -752,7 +856,7 @@ class PhantomHourglassClient(DSZeldaClient):
                 for addr, _value, *args in item_data.set_bit_in_room[self.current_scene]:
                     print(f"args {args}")
                     if addr == "stage_flag":
-                        addr = self.stage_address
+                        addr = self.stage_flag_address
                         print(f"Stage address: {addr}")
                     if args and "count" in args[0]:
                         if self.item_count(ctx, item_name) < args[0]["count"]:
@@ -917,7 +1021,7 @@ class PhantomHourglassClient(DSZeldaClient):
                 data = [data] if isinstance(data, dict) else data
                 self.event_data = data
                 for i, event in enumerate(data):
-                    address = AddrFromPointer(self.stage_address + event.get("offset", 0), size=event.get("size", 1)) if event["address"] == "stage_flags" else event["address"]
+                    address = AddrFromPointer(self.stage_flag_address + event.get("offset", 0), size=event.get("size", 1)) if event["address"] == "stage_flags" else event["address"]
                     print(f"event data {self.event_data}")
                     self.event_data[i]["address"] = address
                     print(f"event data {self.event_data}")
@@ -1119,16 +1223,7 @@ class PhantomHourglassClient(DSZeldaClient):
             self.map_warp_reselector = True
             logger.info(f"Illegal map menu exit, canceling all map warps")
 
-        if self.last_saved_scene is None:
-            key = storage_key(ctx, save_scene_key)
-            await ctx.send_msgs([{
-                "cmd": "Get",
-                "keys": [key]
-            }])
-            last_saved_scene = get_stored_data(ctx, save_scene_key)
-            print(f"fetched last saved scene: {last_saved_scene}")
-            self.last_saved_scene = last_saved_scene if self.lss_retry_attempts >= 0 else 0 # if last_saved_scene is not None else False
-            self.lss_retry_attempts -= 1
+        await self.get_saved_scene(ctx, save_scene_key)
 
         if self.current_stage & 0xFF == 0x6E:
             started_save_file = await PHAddr.started_save_file.read(ctx, silent=True)
@@ -1155,7 +1250,3 @@ class PhantomHourglassClient(DSZeldaClient):
                 print(f"New file, cancel precision")
                 return True
         return False
-
-    def clear_variables(self):
-        self.last_saved_scene = None
-        self.lss_retry_attempts = 4

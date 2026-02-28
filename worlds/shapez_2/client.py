@@ -88,7 +88,7 @@ class Shapez2Context(CommonContext):
                     def action(level: int) -> Callable:
                         return lambda instance: self.send_operator_level(level)
 
-                    operator_levels: int = 100
+                    operator_levels: int = 200
                     scroll = ScrollView(do_scroll=(False, True))
                     commander_group = GridLayout(cols=5, height=600, size_hint_y=None)
                     for i in range(operator_levels):

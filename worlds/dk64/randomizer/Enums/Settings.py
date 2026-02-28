@@ -13,7 +13,6 @@ from randomizer.Enums.Levels import Levels
 from randomizer.Lists.EnemyTypes import Enemies
 from randomizer.Enums.Maps import Maps
 
-
 # Each select-based setting should have its own associated enum class. The enum
 # values should exactly match the input values in the HTML (not the IDs).
 # Do not change the values of any enums in this file, or settings strings will

@@ -3867,5 +3867,3 @@ class KeyShuffleLocations(Enum):
     BOTTOM_OF_THE_WELL = auto()
     GERUDO_TRAINING_GROUNDS = auto()
     GANONS_CASTLE = auto()
-    ANY_DUNGEON = auto()
-    OVERWORLD = auto()

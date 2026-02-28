@@ -77,10 +77,13 @@ class MindustryWorld(World):
         try:
             data = item_table[name]
             classification: ItemClassification = ItemClassification.useful
-            if data.group == ItemGroup.FILLER:
-                classification = ItemClassification.filler
             if data.type == ItemType.NECESSARY:
                 classification = ItemClassification.progression
+            if data.group == ItemGroup.FILLER:
+                if data.type == ItemType.TRAP:
+                    classification = ItemClassification.trap
+                else:
+                    classification = ItemClassification.filler
             result = MindustryItem(name, classification, data.id, self.player)
         except BaseException:
             raise Exception('The item ' + name + ' is not valid.')
@@ -108,11 +111,12 @@ class MindustryWorld(World):
                         item = self.create_item(name)
                         self.multiworld.itempool.append(item)
                         world_item_count += 1
-        #Check how many location are empty and fill them with FILLERS
-        remaining = len(self.multiworld.get_unfilled_locations(self.player)) - world_item_count
-        while remaining > 0:
-            self.__create_filler_item(campaign)
-            remaining -= 1
+        #Check how many location are empty and fill them with fillers and traps.
+        unfilledLocationCount = len(self.multiworld.get_unfilled_locations(self.player)) - world_item_count
+        if unfilledLocationCount > 0:
+            fillers = self.__generateFillers(unfilledLocationCount)
+            for x in range(len(fillers)):
+                self.multiworld.itempool.append(self.create_item(fillers[x]))
 
     def generate_early(self) -> None:
         """Change item classification based on options."""
@@ -263,12 +267,39 @@ class MindustryWorld(World):
         item_table["Mender"].type = ItemType.NECESSARY
         item_table["Mend Projector"].type = ItemType.NECESSARY
         item_table["Shock Mine"].type = ItemType.NECESSARY
+    
+    def __generateFillers(self, count: int):
+        """Create filler for the remaining amount of empty location"""
+        fillers = []
+        fillerCreated = 0
 
-    def __create_filler_item(self, campaign):
-        """
-        Create a filler item from the selected campaign
-        """
-        self.multiworld.itempool.append(self.create_item("A fistful of nothing..."))
+        if self.options.research_discount_buffs:
+            while fillerCreated < 20 or fillerCreated == count: # Discount cap at 99%. Each buff is 5%.
+                fillers.append("Research discount buff")
+                fillerCreated += 1
+
+        if fillerCreated < count:
+            possibleFillers = []
+            if self.options.construction_speed_buffs:
+                possibleFillers.append("Construction speed buff")
+            if self.options.factory_malfunction_trap:
+                possibleFillers.append("Factory malfunction trap")
+            if self.options.launch_wave_trap:
+                possibleFillers.append("Launch wave trap")
+            
+            if not possibleFillers:
+                possibleFillers.append("Nothing")
+
+            nameIndex = 0
+            namesLen = len(possibleFillers)
+            fillersRemainingToCreate = count - fillerCreated
+            for x in range (fillersRemainingToCreate):
+                fillers.append(possibleFillers[nameIndex])
+                nameIndex += 1
+                if nameIndex == namesLen:
+                    nameIndex = 0
+            
+        return fillers
 
     def __from_selected_campaign(self, data, campaign: int) -> bool:
         """
@@ -295,7 +326,7 @@ class MindustryWorld(World):
         self.regions.initialise_rules(self.options)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(["A fistful of nothing..."])
+        return self.multiworld.random.choice(["Nothing"])
 
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialise the Mindustry World"""
@@ -310,6 +341,7 @@ class MindustryWorld(World):
             "goal": self.options.goal.value,
             "disable_invasions": bool(self.options.disable_invasions.value),
             "faster_production": bool(self.options.faster_production.value),
+            "faster_unit_production": bool(self.options.faster_unit_production.value),
             "faster_conveyor": bool(self.options.faster_conveyor.value),
             "death_link": bool(self.options.death_link.value),
             "death_link_mode": self.options.death_link_mode.value,
@@ -318,9 +350,13 @@ class MindustryWorld(World):
             "logistic_distribution": self.options.logistic_distribution.value,
             "progressive_drills": bool(self.options.progressive_drills),
             "progressive_generators": bool(self.options.progressive_generators),
+            "progressive_pumps": bool(self.options.progressive_pumps),
             "make_early_roadblocks_local": bool(self.options.make_early_roadblocks_local),
             "amount_of_resources_required": self.options.amount_of_resources_required.value,
-            "core_russian_roulette_chambers": self.options.core_russian_roulette_chambers.value
+            "core_russian_roulette_chambers": self.options.core_russian_roulette_chambers.value,
+            "research_discount_buffs": bool(self.options.research_discount_buffs),
+            "add_sectors_as_locations": bool(self.options.add_sectors_as_locations),
+            "add_resources_as_locations": bool(self.options.add_resources_as_locations)
         }
 
     def __exclude_items(self, options: MindustryOptions) -> None:
@@ -328,6 +364,7 @@ class MindustryWorld(World):
         campaign = options.campaign_choice.value
         progressive_drills = bool(options.progressive_drills)
         progressive_generators = bool(options.progressive_generators)
+        progressive_pumps = bool(options.progressive_pumps)
 
         if campaign == 0: #Serpulo
             if self.options.logistic_distribution == 3:  # Starter logistics
@@ -340,6 +377,10 @@ class MindustryWorld(World):
                 self.__exclude_serpulo_generators()
             else:
                 self.__exclude_serpulo_progressive_generators()
+            if progressive_pumps:
+                self.__exclude_serpulo_pumps()
+            else:
+                self.__exclude_serpulo_progressive_pumps()
         if campaign == 1: #Erekir
             if self.options.logistic_distribution == 3:  # Starter logistics
                 self.__starter_erekir_logistics()
@@ -367,11 +408,20 @@ class MindustryWorld(World):
             else:
                 self.__exclude_serpulo_progressive_generators()
                 self.__exclude_erekir_progressive_generators()
+            if progressive_pumps:
+                self.__exclude_serpulo_pumps()
+            else:
+                self.__exclude_serpulo_progressive_pumps()
 
     def __exclude_serpulo_progressive_drills(self) -> None:
         """Exclude Serpulo progressive drills from the item pool"""
         for x in range(3):
             self.exclude.append("Progressive Drills Serpulo")
+
+    def __exclude_serpulo_progressive_pumps(self) -> None:
+        """Exclude Serpulo progressive pumps from the item pool"""
+        for x in range(3):
+            self.exclude.append("Progressive Pumps Serpulo")
 
     def __exclude_serpulo_progressive_generators(self) -> None:
         """Exclude Serpulo progressive generators from the item pool"""
@@ -434,6 +484,11 @@ class MindustryWorld(World):
         self.multiworld.push_precollected(self.create_item("Reinforced Liquid Router"))
         self.exclude.append("Reinforced Liquid Router")
 
+    def __exclude_serpulo_pumps(self):
+        self.exclude.append("Mechanical Pump")
+        self.exclude.append("Rotary Pump")
+        self.exclude.append("Impulse Pump")
+
     def __exclude_serpulo_drills(self):
         self.exclude.append("Pneumatic Drill")
         self.exclude.append("Laser Drill")
@@ -447,7 +502,6 @@ class MindustryWorld(World):
         self.exclude.append("Thorium Reactor")
         self.exclude.append("Impact Reactor")
         self.exclude.append("RTG Generator")
-
 
     def __exclude_erekir_drills(self):
         self.exclude.append("Impact Drill")

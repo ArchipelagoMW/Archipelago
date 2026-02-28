@@ -154,14 +154,11 @@ def ph_has_big_catch_lure(state, player):
 
 
 def ph_has_swordfish_shadows(state, player):
-    return state.has("Swordfish Shadows", player)
+    return state.has("Swordfish Shadows", player) and ph_has_big_catch_lure(state, player)
 
 
 def ph_can_catch_rsf(state, player):
-    return any([
-        ph_has_big_catch_lure(state, player),
-        ph_has_swordfish_shadows(state, player)
-    ])
+    return ph_has_big_catch_lure(state, player)
 
 
 def ph_ut_can_stowfish(state, player):
@@ -633,7 +630,10 @@ def ph_option_phantoms_hard(state: CollectionState, player: int):
             state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon"],
             ph_UT_glitched_logic(state, player)
         ]),
-        ph_has_grapple(state, player)
+        any([
+            ph_has_grapple(state, player),
+            ph_has_boomerang(state, player)
+        ]),
     ])
 
 

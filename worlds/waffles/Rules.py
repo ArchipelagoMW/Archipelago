@@ -17,31 +17,39 @@ class WaffleRules:
     carryless_exit_rules: Dict[str, CollectionRule]
     region_rules: Dict[str, CollectionRule]
     location_rules: Dict[str, CollectionRule]
+    using_ut: bool
+    enemy_shuffle: int
+    required_egg_count: int
+    inventory_yoshi_logic: int
 
     def __init__(self, world: "WaffleWorld") -> None:
         self.player = world.player
         self.world = world
+        self.using_ut = world.using_ut
+        self.enemy_shuffle = world.options.enemy_shuffle.value
+        self.required_egg_count = world.required_egg_count
+        self.inventory_yoshi_logic = world.options.inventory_yoshi_logic.value
 
     def can_carry(self, state: CollectionState) -> bool:
-        return state.has(ItemName.mario_carry, self.player)
+        return state.has(ItemName.carry, self.player)
 
     def can_carry_or_yoshi_tongue(self, state: CollectionState) -> bool:
         return self.can_carry(state) or self.has_yoshi_carry(state)
     
     def can_run(self, state: CollectionState) -> bool:
-        return state.has(ItemName.mario_run, self.player)
+        return state.has_any([ItemName.run, ItemName.progressive_run], self.player)
     
     def can_wall_run(self, state: CollectionState) -> bool:
-        return state.has(ItemName.mario_run, self.player, 2)
+        return state.has_any_count({ItemName.progressive_run: 2, ItemName.run: 1}, self.player)
     
     def can_swim(self, state: CollectionState) -> bool:
-        return state.has(ItemName.mario_swim, self.player)
+        return state.has_any([ItemName.swim, ItemName.progressive_swim], self.player)
     
     def can_climb(self, state: CollectionState) -> bool:
-        return state.has(ItemName.mario_climb, self.player)
+        return state.has(ItemName.climb, self.player)
     
     def can_spin_jump(self, state: CollectionState) -> bool:
-        return state.has(ItemName.mario_spin_jump, self.player)
+        return state.has(ItemName.spin_jump, self.player)
     
     def has_mushroom(self, state: CollectionState) -> bool:
         return state.has(ItemName.progressive_powerup, self.player, 1)
@@ -62,10 +70,10 @@ class WaffleRules:
         return state.has(ItemName.p_switch, self.player)
     
     def has_yoshi(self, state: CollectionState) -> bool:
-        return state.has(ItemName.yoshi, self.player) and self.can_get_green_yoshi(state)
+        return state.has_any([ItemName.yoshi, ItemName.progressive_yoshi], self.player) and self.can_get_green_yoshi(state)
     
     def has_yoshi_carry(self, state: CollectionState) -> bool:
-        return state.has(ItemName.yoshi, self.player, 2) and self.can_get_green_yoshi(state)
+        return state.has_any_count({ItemName.progressive_yoshi: 2, ItemName.yoshi: 1}, self.player) and self.can_get_green_yoshi(state)
     
     def has_special_world(self, state: CollectionState) -> bool:
         return state.has(ItemName.special_world_clear, self.player)
@@ -92,7 +100,7 @@ class WaffleRules:
         return state.has(ItemName.extra_defense, self.player)
 
     def has_tokens(self, state: CollectionState) -> bool:
-        return state.has(ItemName.yoshi_egg, self.player, self.world.required_egg_count)
+        return state.has(ItemName.yoshi_egg, self.player, self.required_egg_count)
 
 
     def can_cape_fly(self, state: CollectionState) -> bool:
@@ -105,13 +113,13 @@ class WaffleRules:
         return self.can_cape_fly(state) or self.can_yoshi_fly(state)
     
     def butter_bridge_special_case(self, state: CollectionState) -> bool:
-        if self.world.options.enemy_shuffle.value:
+        if self.enemy_shuffle:
             return self.has_rsp(state)
         else:
             return True
         
     def twin_bridges_castle_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_climb(state) or (
                 state.has(ItemName.glitched, self.player) and self.can_wall_run(state)
             )
@@ -119,7 +127,7 @@ class WaffleRules:
             return self.can_climb(state)
         
     def forest_ghost_house_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.has_p_switch(state) or (
                 state.has(ItemName.glitched, self.player) and self.can_wall_run(state)
             )
@@ -127,7 +135,7 @@ class WaffleRules:
             return self.has_p_switch(state)
         
     def vanilla_dome_1_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_run(state) and (
                 self.has_super_star(state) or self.has_mushroom(state)
             ) or state.has(ItemName.glitched, self.player)
@@ -137,7 +145,7 @@ class WaffleRules:
             )
 
     def vanilla_dome_4_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_carry(state) or (state.has(ItemName.glitched, self.player) and (
                 self.has_feather(state) or self.has_yoshi(state))
             )
@@ -145,7 +153,7 @@ class WaffleRules:
             return True
 
     def vanilla_secret_1_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_climb(state) or (
                 state.has(ItemName.glitched, self.player) and self.can_wall_run(state)
             )
@@ -153,19 +161,19 @@ class WaffleRules:
             return self.can_climb(state)
         
     def vanilla_secret_3_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_swim(state) or state.has(ItemName.glitched, self.player)
         else:
             return self.can_swim(state)
         
     def cheese_bridge_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_cape_fly(state) or (state.has(ItemName.glitched, self.player) and self.has_yoshi(state))
         else:
             return self.can_cape_fly(state)
     
     def cookie_mountain_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_swim(state) or (
                 state.has(ItemName.glitched, self.player) and self.can_wall_run(state)
             )
@@ -173,7 +181,7 @@ class WaffleRules:
             return self.can_swim(state)
         
     def forest_of_illusion_1_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.has_p_balloon(state) or (
                 state.has(ItemName.glitched, self.player) and self.has_yoshi(state)
             )
@@ -181,15 +189,15 @@ class WaffleRules:
             return self.has_p_balloon(state)
         
     def forest_of_illusion_2_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut and self.world.options.enemy_shuffle.value:
+        if self.using_ut and self.enemy_shuffle:
             return state.has(ItemName.super_star_active, self.player, 3) or state.has(ItemName.glitched, self.player)
-        elif self.world.options.enemy_shuffle.value:
+        elif self.enemy_shuffle:
             return state.has(ItemName.super_star_active, self.player, 3)
         else:
             return True
         
     def forest_of_illusion_3_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return (self.can_carry_or_yoshi_tongue(state) and self.can_break_turn_blocks(state)) or (
                 state.has(ItemName.glitched, self.player) and self.has_yoshi_carry(state)
             )
@@ -197,43 +205,43 @@ class WaffleRules:
             return self.can_carry_or_yoshi_tongue(state) and self.can_break_turn_blocks(state)
         
     def forest_of_illusion_3_can_pass_big_pipe(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_carry(state) or self.has_yoshi(state) or state.has(ItemName.glitched, self.player)
         else:
             return self.can_carry(state) or self.has_yoshi(state)
         
     def forest_secret_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.has_bsp(state) or state.has(ItemName.glitched, self.player)
         else:
             return self.has_bsp(state)
         
     def chocolate_island_1_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.has_yoshi(state) or (state.has(ItemName.glitched, self.player) and self.can_pass_munchers(state))
         else:
             return self.has_yoshi(state)
         
     def chocolate_secret_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_run(state) or state.has(ItemName.glitched, self.player)
         else:
             return self.can_run(state)
         
     def valley_of_bowser_3_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_carry(state) or (state.has(ItemName.glitched, self.player) and self.has_yoshi(state))
         else:
             return self.can_carry(state)
         
     def valley_of_bowser_4_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return self.can_climb(state) or (state.has(ItemName.glitched, self.player) and self.has_yoshi(state))
         else:
             return self.can_climb(state)
         
     def special_zone_4_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
+        if self.using_ut:
             return state.has(ItemName.glitched, self.player) or (
                 (self.can_carry(state) or self.has_p_switch(state)) and self.has_super_star(state)
             )
@@ -241,8 +249,8 @@ class WaffleRules:
             return (self.can_carry(state) or self.has_p_switch(state)) and self.has_super_star(state)
         
     def special_zone_6_special_case(self, state: CollectionState) -> bool:
-        if self.world.using_ut:
-            if self.world.options.enemy_shuffle:
+        if self.using_ut:
+            if self.enemy_shuffle:
                 return self.can_swim(state) or (state.has(ItemName.glitched, self.player) and state.has(ItemName.super_star_active, self.player, 2))
             else:
                 return self.can_swim(state) or state.has(ItemName.glitched, self.player)
@@ -256,10 +264,11 @@ class WaffleRules:
         return self.has_mushroom(state) or self.has_yoshi(state)
     
     def can_get_green_yoshi(self, state: CollectionState) -> bool:
-        if self.world.options.inventory_yoshi_logic.value:
+        if self.inventory_yoshi_logic:
             return True
         else:
             return (
+                state.can_reach_region(LocationName.donut_plains_top_secret, self.player) or \
                 state.can_reach_region(LocationName.yoshis_island_2_region, self.player) or \
                 state.can_reach_region(LocationName.yoshis_island_3_region, self.player) or \
                 state.can_reach_region(LocationName.donut_plains_1_region, self.player) or \
@@ -279,7 +288,7 @@ class WaffleRules:
             )
         
     def can_get_blue_yoshi(self, state: CollectionState) -> bool:
-        if self.world.options.inventory_yoshi_logic.value:
+        if self.inventory_yoshi_logic:
             return True
         else:
             return ((
@@ -294,7 +303,7 @@ class WaffleRules:
 
     
     def can_get_red_yoshi(self, state: CollectionState) -> bool:
-        if self.world.options.inventory_yoshi_logic.value:
+        if self.inventory_yoshi_logic:
             return True
         else:
             return (
@@ -303,7 +312,7 @@ class WaffleRules:
             ) and self.can_carry(state)
 
     def can_get_yellow_yoshi(self, state: CollectionState) -> bool:
-        if self.world.options.inventory_yoshi_logic.value:
+        if self.inventory_yoshi_logic:
             return True
         else:
             return (
@@ -333,7 +342,7 @@ class WaffleRules:
     def set_smw_rules(self) -> None:
         world = self.world
         multiworld = self.world.multiworld
-        game_difficulty = world.options.game_logic_difficulty.value
+        game_difficulty = self.world.options.game_logic_difficulty.value
 
         # Swap exit rules and use carryless rules if needed
         for level_id, level_info in level_info_dict.items():
@@ -385,7 +394,7 @@ class WaffleRules:
                     lambda state: state.has(ItemName.yoshi_egg, world.player, world.required_egg_count))
         elif world.options.goal == Goal.option_bowser:
             add_rule(world.multiworld.get_location(LocationName.bowser, world.player), 
-                     lambda state: state.has(ItemName.mario_carry, world.player) and self.has_tokens(state))
+                     lambda state: state.has(ItemName.carry, world.player) and self.has_tokens(state))
 
         multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
 

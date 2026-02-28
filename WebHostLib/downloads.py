@@ -100,7 +100,7 @@ def download_slot_file(room_id, player_id: int):
             fname = f"AP+{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.appik2"
         elif slot_data.game == "Twilight Princess":
             fname = f"AP+{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.aptp"
-        elif slot_data.game == "FZeroGX Manual_Only":
+        elif slot_data.game == "FZeroGX Manual_Only" or slot_data.game == "Diablo2 Manual_Only":
             fname = f"AP+{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmanual"
         else:
             return "Game download not supported."

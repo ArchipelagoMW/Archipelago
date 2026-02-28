@@ -1,6 +1,6 @@
 {
   "game": "plateup",
-  "server_version": "0.2.4.1",
+  "server_version": "0.2.4.3",
   "display_name": "PlateUp!",
   "discord_channel": "https://discord.com/channels/731205301247803413/1159168584505901106",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/plateup.apworld"

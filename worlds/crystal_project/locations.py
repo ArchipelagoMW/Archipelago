@@ -339,9 +339,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #Treasure chests
         #Sewer Main (lol)
         LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Hiding in the guarded grass", 743 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Eastside sewer green room", 2658 + treasure_index_offset), #Iron Helm chest
         LocationData(JOJO_SEWERS_AP_REGION, "Underpass Chest - Walking the plank above Pale Grotto waterfall", 3670 + treasure_index_offset, lambda state: logic.has_swimming(state), tags=[PURPLE_CHEST_LOCATION_GROUP]), #(337, 155, -319) Underpass Scrap chest
-        #Ominous Red-Lit Sewers
+        # Ominous Red-Lit Sewers
+        LocationData(OMINOUS_RED_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Eastside sewer green room", 2658 + treasure_index_offset),  # Iron Helm chest
         LocationData(OMINOUS_RED_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Invisible maze", 744 + treasure_index_offset), #Iron Armor chest
         #Past Secret Password
         LocationData(SEWERS_TO_BOOMER_SOCIETY_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Drowned passage to Boomer Society", 634 + treasure_index_offset),  # Money chest
@@ -1228,7 +1228,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #NPCs
         #Todo NPCs Job Masters: Jidamba Tangle (Outpost) has Master Weaver ID 3579 (627, 140, 77); gives you Weaver Seal in exchange for job mastery
         #Forest Floor
-        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond atop broken ruins along the beach", 2872 + npc_index_offset, lambda state: logic.has_glide(state), tags=[ORE_LOCATION_GROUP]),  # Ore
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond atop broken ruins along the beach", 2872 + npc_index_offset, lambda state: logic.has_glide(state) or logic.has_swimming(state), tags=[ORE_LOCATION_GROUP]),  # Ore
         #Diamondsmith
         LocationData(JIDAMBA_DIAMONDSMITH_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset, tags=[ORE_LOCATION_GROUP]),  # Ingot
         #Southwest Beach
@@ -1397,20 +1397,20 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #Treasure chests
         #Map and Decapitator chests categorized in Castle Ramparts since they're in a locked room there requiring the Ramparts key
         LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Hop through keyhole over lava", 2515 + treasure_index_offset), #(422, 169, -406) (Skums) Zether Pouch chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Stared at by lava miniboss", 1465 + treasure_index_offset), #(427, 170, -441) (Skums) Z-Potion chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Enjoy riding lava shrooms", 1447 + treasure_index_offset), #(409, 169, -406) (Skums) Z-Potion Pouch chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Biiig bounce!", 1472 + treasure_index_offset), #(375, 153, -405) (Bounce) Beads of Defense chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce up!!", 2949 + treasure_index_offset), #(401, 151, -404) (Bounce) Ether chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce around!", 2948 + treasure_index_offset), #(401, 151, -424) (Bounce) Fenix Syrup chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce right!", 2945 + treasure_index_offset), #(434, 154, -441) (Bounce) Potion chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce up!", 2922 + treasure_index_offset), #(395, 155, -453) (Bounce) Protector chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Chilly uno in Chips Challenge of doom", 2927 + treasure_index_offset), #(387, 134, -431) (Ice) Kings Guard chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Chilly duo in Chips Challenge of doom", 1492 + treasure_index_offset), #(387, 134, -427) (Ice) Royal Guard chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - One fish", 2479 + treasure_index_offset), #(401, 119, -415) (Fish) Dream Hunter chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Two fish", 2509 + treasure_index_offset), #(388, 122, -445) (Fish) Nightingale chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Redfish bluefish", 2484 + treasure_index_offset), #(397, 119, -415) (Fish) Oily Sword chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce for your life", 2510 + treasure_index_offset), #(364, 85, -424) (2D) Paladin Wand chest
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Throne snacks", 2505 + treasure_index_offset, tags=[PURPLE_CHEST_LOCATION_GROUP]), #(401, 250, -478) (Throne) New World Stone chest
+        LocationData(CASTLE_SEQUOIA_FIRE_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Stared at by lava miniboss", 1465 + treasure_index_offset), #(427, 170, -441) (Skums) Z-Potion chest
+        LocationData(CASTLE_SEQUOIA_FIRE_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Enjoy riding lava shrooms", 1447 + treasure_index_offset), #(409, 169, -406) (Skums) Z-Potion Pouch chest
+        LocationData(CASTLE_SEQUOIA_SHROOM_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Biiig bounce!", 1472 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #(375, 153, -405) (Bounce) Beads of Defense chest
+        LocationData(CASTLE_SEQUOIA_SHROOM_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce up!!", 2949 + treasure_index_offset), #(401, 151, -404) (Bounce) Ether chest
+        LocationData(CASTLE_SEQUOIA_SHROOM_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce around!", 2948 + treasure_index_offset), #(401, 151, -424) (Bounce) Fenix Syrup chest
+        LocationData(CASTLE_SEQUOIA_SHROOM_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce right!", 2945 + treasure_index_offset), #(434, 154, -441) (Bounce) Potion chest
+        LocationData(CASTLE_SEQUOIA_SHROOM_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce up!", 2922 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(395, 155, -453) (Bounce) Protector chest
+        LocationData(CASTLE_SEQUOIA_ICE_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Chilly uno in Chips Challenge of doom", 2927 + treasure_index_offset), #(387, 134, -431) (Ice) Kings Guard chest
+        LocationData(CASTLE_SEQUOIA_ICE_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Chilly duo in Chips Challenge of doom", 1492 + treasure_index_offset), #(387, 134, -427) (Ice) Royal Guard chest
+        LocationData(CASTLE_SEQUOIA_FISH_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - One fish", 2479 + treasure_index_offset), #(401, 119, -415) (Fish) Dream Hunter chest
+        LocationData(CASTLE_SEQUOIA_FISH_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Two fish", 2509 + treasure_index_offset), #(388, 122, -445) (Fish) Nightingale chest
+        LocationData(CASTLE_SEQUOIA_FISH_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Redfish bluefish", 2484 + treasure_index_offset), #(397, 119, -415) (Fish) Oily Sword chest
+        LocationData(CASTLE_SEQUOIA_2D_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Bounce for your life", 2510 + treasure_index_offset), #(364, 85, -424) (2D) Paladin Wand chest
+        LocationData(CASTLE_SEQUOIA_THRONE_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Throne snacks", 2505 + treasure_index_offset, tags=[PURPLE_CHEST_LOCATION_GROUP]), #(401, 250, -478) (Throne) New World Stone chest
 
         #NPCs
         #NPCs CheckOrNot: Z58_StrandedShard ID 3785 (401, 183, -382); this gives you a Gaea Shard if you're stuck: no
@@ -1486,7 +1486,7 @@ def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(MOAT_SHALLOWS_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ENAMI_FIGHT_LEVEL)), #Monster ID: 49
         LocationData(SEWER_DETOUR_FOR_QUINTAR_NEST_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, BLOOD_SLOP_FIGHT_LEVEL)), #Monster ID: 4
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, FANCY_QUINTAR_FIGHT_LEVEL)), #Monster ID: 68
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, WARDEN_FIGHT_LEVEL)), #Monster ID: 37
+        LocationData(JAIL_DARK_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Boss - Warden", 907 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, WARDEN_FIGHT_LEVEL)), #Monster ID: 37
         LocationData(WEST_COBBLESTONE_CRAG_AP_REGION, COBBLESTONE_CRAG_DISPLAY_NAME + " Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, CRAG_DEMON_FIGHT_LEVEL)), #Monster ID: 217
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, KUROMANTO_FIGHT_LEVEL)), #Monster ID: 63
         LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, POSSESSOR_FIGHT_LEVEL)), #Monster ID: 221

@@ -33,7 +33,7 @@ classifications = {
     "Progressive Baron's House": ItemClassification.progression | ItemClassification.useful,
     "Progressive Couscous's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
     "Progressive Gob's House": ItemClassification.progression | ItemClassification.useful,
-    "Progressive Mushroom House": ItemClassification.progression,
+    "Progressive Mushroom House": ItemClassification.progression | ItemClassification.useful,
     "Progressive Well 1": ItemClassification.filler,
     "Progressive Well 2": ItemClassification.filler,
     "Progressive Well 3": ItemClassification.filler,

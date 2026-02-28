@@ -96,6 +96,9 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
                 "ganons_castle_boss_key_dungeons_required"]
             world.options.ganons_castle_boss_key_skull_tokens_required.value = world.passthrough[
                 "ganons_castle_boss_key_skull_tokens_required"]
+            world.options.small_key_shuffle.value = world.passthrough["small_key_shuffle"]
+            world.options.gerudo_fortress_key_shuffle.value = world.passthrough["gerudo_fortress_key_shuffle"]
+            world.options.boss_key_shuffle.value = world.passthrough["boss_key_shuffle"]
             world.options.key_rings.value = world.passthrough["key_rings"]
             world.options.big_poe_target_count.value = world.passthrough["big_poe_target_count"]
             world.options.skip_child_zelda.value = world.passthrough["skip_child_zelda"]

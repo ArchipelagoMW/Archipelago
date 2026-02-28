@@ -1,7 +1,6 @@
 
 from typing import TYPE_CHECKING
 from .subclasses import split_bits
-from ..data.Constants import DUNGEON_KEY_DATA
 
 if TYPE_CHECKING:
     from BaseClasses import ItemClassification
@@ -14,6 +13,7 @@ if TYPE_CHECKING:
 async def receive_small_key(client: "DSZeldaClient", ctx: "BizHawkClientContext", item: "DSItem", num_received_items):
     res = []
     async def write_keys_to_storage(dungeon) -> tuple[int, list, str]:
+        from ..data.Constants import DUNGEON_KEY_DATA
         key_data = DUNGEON_KEY_DATA[dungeon]  # TODO: Add dungeon key data to item_data
         prev = await key_data["address"].read(ctx)
         bit_filter = key_data["filter"]
@@ -82,7 +82,7 @@ async def receive_normal(client: "DSZeldaClient", ctx: "BizHawkClientContext", i
             item_value = min(item.max, prev_value)
     elif hasattr(item, "progressive"):
         if "progressive_overwrite" in item.tags and prog_received >= 1:
-            item_value = item_value  # Bomb upgrades need to overwrite of everything breaks
+            item_value = item_value  # Bomb upgrades need to overwrite or everything breaks
         else:
             item_value = prev_value | item_value
     elif "monotone_incremental" in item.tags:  # For incremental items you want to recalculate their count for each time.
@@ -125,6 +125,8 @@ async def remove_vanilla_progressive(client: "DSZeldaClient", ctx: "BizHawkClien
     if hasattr(item, "give_ammo"):
         ammo_v = item.give_ammo[min(max(index - 1, 0), len(item.give_ammo) - 1)]
         res += item.ammo_address.get_write_list(ammo_v)
+    prev = await address.read(ctx)
+    res += address.get_write_list(prev & (~value))
     # Progressive overwrite fix
     if "progressive_overwrite" in item.tags and index > 1:
         res += address.get_write_list(value)

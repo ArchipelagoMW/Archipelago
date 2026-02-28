@@ -137,13 +137,11 @@ class SonicAdventureDXWorld(World):
 
                 self.options.enemy_sanity.value = passthrough["EnemySanity"]
                 self.options.enemy_sanity_list = EnemySanityCategory.to_object_list(passthrough["EnemySanityList"])
-                self.options.enemy_sanity_list.value = passthrough["EnemySanityList"]
                 self.options.missable_enemies.value = passthrough["MissableEnemies"]
 
                 self.options.capsule_sanity.value = passthrough["CapsuleSanity"]
                 self.options.capsule_sanity_list = CapsuleSanityCategory.to_object_list(
                     passthrough["CapsuleSanityList"])
-                self.options.capsule_sanity_list.value = passthrough["CapsuleSanityList"]
                 self.options.missable_capsules.value = passthrough["MissableCapsules"]
                 self.options.pinball_capsules.value = passthrough["PinballCapsules"]
 

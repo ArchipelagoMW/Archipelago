@@ -41,38 +41,11 @@ BLUE_TRAINER_PALETTES = {
 FR_LG_SIMPLE_TRAINER_FOLDERS = ["Blue"]
 
 FR_LG_FOLDER_OBJECT_INFOS = [
-    {
-        "name": "Blue",
-        "key": "trainer",
-        "folders": FR_LG_SIMPLE_TRAINER_FOLDERS,
-        "sprites": BLUE_TRAINER_SPRITES,
-        "palettes": BLUE_TRAINER_PALETTES
-    },
-    {
-        "name": "Egg",
-        "key": "pokemon",
-        "folders": POKEMON_FOLDERS,
-        "sprites": FR_LG_EGG_SPRITES,
-        "palettes": FR_LG_EGG_PALETTES
-    },
-    {
-        "key": "pokemon",
-        "folders": POKEMON_FOLDERS,
-        "sprites": FR_LG_POKEMON_SPRITES,
-        "palettes": FR_LG_POKEMON_PALETTES
-    },
-    {
-        "key": "players",
-        "folders": FR_LG_TRAINER_FOLDERS,
-        "sprites": FR_LG_TRAINER_SPRITES,
-        "palettes": FR_LG_TRAINER_PALETTES
-    },
-    {
-        "key": "trainer",
-        "folders": FR_LG_SIMPLE_TRAINER_FOLDERS,
-        "sprites": SIMPLE_TRAINER_SPRITES,
-        "palettes": SIMPLE_TRAINER_PALETTES
-    }
+    FolderObjectInfo("trainer", FR_LG_SIMPLE_TRAINER_FOLDERS, BLUE_TRAINER_SPRITES, BLUE_TRAINER_PALETTES, "Blue"),
+    FolderObjectInfo("pokemon", POKEMON_FOLDERS, FR_LG_EGG_SPRITES, FR_LG_EGG_PALETTES, "Egg"),
+    FolderObjectInfo("pokemon", POKEMON_FOLDERS, FR_LG_POKEMON_SPRITES, FR_LG_POKEMON_PALETTES),
+    FolderObjectInfo("players", FR_LG_TRAINER_FOLDERS, FR_LG_TRAINER_SPRITES, FR_LG_TRAINER_PALETTES),
+    FolderObjectInfo("trainer", FR_LG_SIMPLE_TRAINER_FOLDERS, SIMPLE_TRAINER_SPRITES, SIMPLE_TRAINER_PALETTES)
 ]
 
 FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS = {
@@ -175,11 +148,9 @@ FIRERED_DATA_ADDRESSES_ORIGINAL = {
     "gTrainerBackPicTable": 0x239fa4,
     "gTrainerBackPicPaletteTable": 0x239fd4,
     "sTrainerBackSpriteTemplates": 0x25df50,
+    "gTrainerBackAnimsPtrTable": 0x239f74,
     "sBackAnims_Red": 0x239f44,
     "sBackAnims_RSBrendan": 0x239f64,
-    "gObjectEventBaseOam_16x16": 0x3a36f0,
-    "gObjectEventBaseOam_16x32": 0x3a3710,
-    "gObjectEventBaseOam_32x32": 0x3a3718,
     "gObjectEventSpriteOamTables_16x16": 0x3a3748,
     "gObjectEventSpriteOamTables_16x32": 0x3a379c,
     "gObjectEventSpriteOamTables_32x32": 0x3a37f0,
@@ -207,11 +178,9 @@ FIRERED_REV1_DATA_ADDRESSES_ORIGINAL = {
     "gTrainerBackPicTable": 0x23a014,
     "gTrainerBackPicPaletteTable": 0x23a044,
     "sTrainerBackSpriteTemplates": 0x25dfc0,
+    "gTrainerBackAnimsPtrTable": 0x239fe4,
     "sBackAnims_Red": 0x239fb4,
     "sBackAnims_RSBrendan": 0x239fd4,
-    "gObjectEventBaseOam_16x16": 0x3a3760,
-    "gObjectEventBaseOam_16x32": 0x3a3780,
-    "gObjectEventBaseOam_32x32": 0x3a3788,
     "gObjectEventSpriteOamTables_16x16": 0x3a37b8,
     "gObjectEventSpriteOamTables_16x32": 0x3a380c,
     "gObjectEventSpriteOamTables_32x32": 0x3a3860,
@@ -239,11 +208,9 @@ LEAFGREEN_DATA_ADDRESSES_ORIGINAL = {
     "gTrainerBackPicTable": 0x239f80,
     "gTrainerBackPicPaletteTable": 0x239fb0,
     "sTrainerBackSpriteTemplates": 0x25df30,
+    "gTrainerBackAnimsPtrTable": 0x239f50,
     "sBackAnims_Red": 0x239f20,
     "sBackAnims_RSBrendan": 0x239f40,
-    "gObjectEventBaseOam_16x16": 0x3a36d0,
-    "gObjectEventBaseOam_16x32": 0x3a36f0,
-    "gObjectEventBaseOam_32x32": 0x3a36f8,
     "gObjectEventSpriteOamTables_16x16": 0x3a3728,
     "gObjectEventSpriteOamTables_16x32": 0x3a377c,
     "gObjectEventSpriteOamTables_32x32": 0x3a37d0,
@@ -271,11 +238,9 @@ LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL = {
     "gTrainerBackPicTable": 0x239ff0,
     "gTrainerBackPicPaletteTable": 0x23a020,
     "sTrainerBackSpriteTemplates": 0x25dfa0,
+    "gTrainerBackAnimsPtrTable": 0x239fc0,
     "sBackAnims_Red": 0x239f90,
     "sBackAnims_RSBrendan": 0x239fb0,
-    "gObjectEventBaseOam_16x16": 0x3a3740,
-    "gObjectEventBaseOam_16x32": 0x3a3760,
-    "gObjectEventBaseOam_32x32": 0x3a3768,
     "gObjectEventSpriteOamTables_16x16": 0x3a3798,
     "gObjectEventSpriteOamTables_16x32": 0x3a37ec,
     "gObjectEventSpriteOamTables_32x32": 0x3a3840,
@@ -284,41 +249,33 @@ LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL = {
 FR_LG_DATA_ADDRESS_BEGINNING = 0xA00000
 FR_LG_DATA_ADDRESS_END = 0xCFFFFF
 
-FR_LG_DATA_ADDRESS_INFOS: dict[str, int|dict[str, int]] = {
-    "Firered": {
-        "crc32": 0xdd88761c,
-        "original_addresses": FIRERED_DATA_ADDRESSES_ORIGINAL,
-        "ap_addresses": {k: v["firered"] for k, v in data.rom_addresses.items()},
-        "data_address_beginning": FR_LG_DATA_ADDRESS_BEGINNING,
-        "data_address_end": FR_LG_DATA_ADDRESS_END
-    },
-    "Firered_rev1": {
-        "crc32": 0x84ee4776,
-        "original_addresses": FIRERED_REV1_DATA_ADDRESSES_ORIGINAL,
-        "ap_addresses": {k: v["firered_rev1"] for k, v in data.rom_addresses.items()},
-        "data_address_beginning": FR_LG_DATA_ADDRESS_BEGINNING,
-        "data_address_end": FR_LG_DATA_ADDRESS_END
-    },
-    "Leafgreen": {
-        "crc32": 0xd69c96cc,
-        "original_addresses": LEAFGREEN_DATA_ADDRESSES_ORIGINAL,
-        "ap_addresses": {k: v["leafgreen"] for k, v in data.rom_addresses.items()},
-        "data_address_beginning": FR_LG_DATA_ADDRESS_BEGINNING,
-        "data_address_end": FR_LG_DATA_ADDRESS_END
-    },
-    "Leafgreen_rev1": {
-        "crc32": 0xdaffecec,
-        "original_addresses": LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL,
-        "ap_addresses": {k: v["leafgreen_rev1"] for k, v in data.rom_addresses.items()},
-        "data_address_beginning": FR_LG_DATA_ADDRESS_BEGINNING,
-        "data_address_end": FR_LG_DATA_ADDRESS_END
-    }
+FR_LG_DATA_ADDRESS_INFOS: dict[str, DataAddressInfo] = {
+    "Firered": DataAddressInfo(0xdd88761c,
+                               FIRERED_DATA_ADDRESSES_ORIGINAL,
+                               {k: v["firered"] for k, v in data.rom_addresses.items()},
+                               FR_LG_DATA_ADDRESS_BEGINNING,
+                               FR_LG_DATA_ADDRESS_END),
+    "Firered_rev1": DataAddressInfo(0x84ee4776,
+                                    FIRERED_REV1_DATA_ADDRESSES_ORIGINAL,
+                                    {k: v["firered_rev1"] for k, v in data.rom_addresses.items()},
+                                    FR_LG_DATA_ADDRESS_BEGINNING,
+                                    FR_LG_DATA_ADDRESS_END),
+    "Leafgreen": DataAddressInfo(0xd69c96cc,
+                                 LEAFGREEN_DATA_ADDRESSES_ORIGINAL,
+                                 {k: v["leafgreen"] for k, v in data.rom_addresses.items()},
+                                 FR_LG_DATA_ADDRESS_BEGINNING,
+                                 FR_LG_DATA_ADDRESS_END),
+    "Leafgreen_rev1": DataAddressInfo(0xdaffecec,
+                                      LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL,
+                                      {k: v["leafgreen_rev1"] for k, v in data.rom_addresses.items()},
+                                      FR_LG_DATA_ADDRESS_BEGINNING,
+                                      FR_LG_DATA_ADDRESS_END)
 }
 
-FR_LG_VALID_OVERWORLD_SPRITE_SIZES = [
-    {"width": 16, "height": 16, "data": "gObjectEventSpriteOamTables_16x16", "distrib": 'gObjectEventBaseOam_16x16'},
-    {"width": 16, "height": 32, "data": "gObjectEventSpriteOamTables_16x32", "distrib": 'gObjectEventBaseOam_16x32'},
-    {"width": 32, "height": 32, "data": "gObjectEventSpriteOamTables_32x32", "distrib": 'gObjectEventBaseOam_32x32'},
+FR_LG_VALID_OVERWORLD_SPRITE_SIZES: list[OverworldSpriteSize] = [
+    OverworldSpriteSize(16, 16, "gObjectEventSpriteOamTables_16x16"),
+    OverworldSpriteSize(16, 32, "gObjectEventSpriteOamTables_16x32"),
+    OverworldSpriteSize(32, 32, "gObjectEventSpriteOamTables_32x32")
 ]
 
 FR_LG_POINTER_REFERENCES = {
@@ -326,47 +283,46 @@ FR_LG_POINTER_REFERENCES = {
                                 ("FindObjectEventPaletteIndexByTag", 40)]
 }
 
-FR_LG_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {
-    "pokemon_front":             {"frames": [1, 2], "width": 64, "height": 64},
-    "pokemon_back":              {"frames": 1,      "width": 64, "height": 64},
-    "pokemon_icon":              {"frames": 2,      "width": 32, "height": 32, "palette": VALID_ICON_PALETTES},
-    "pokemon_footprint":         {"frames": 1,      "width": 16, "height": 16, "palette_size": 2,
-                                  "palette": VALID_FOOTPRINT_PALETTE},
-    "pokemon_hatch_anim":        {"frames": 1,      "width": 32, "height": 136},
-    "players_walking_running":   {"frames": 20,     "width": 16, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "players_reflection":        {"frames": 20,     "width": 16, "height": 32, "palette": []},
-    "players_bike":              {"frames": 9,      "width": 32, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "players_surfing":           {"frames": 12,     "width": 16, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "players_field_move":        {"frames": 9,      "width": 16, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "players_fishing":           {"frames": 12,     "width": 32, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "players_bike_vs_seeker":    {"frames": 6,      "width": 32, "height": 32, "palette": VALID_WEAK_OVERWORLD_PALETTE},
-    "players_battle_front":      {"frames": 1,      "width": 64, "height": 64},
-    "players_battle_back":       {"frames": [4, 5], "width": 64, "height": 64, "internal_frames": 5},
-    "players_battle_back_throw": {"frames": [4, 5], "width": 64, "height": 64, "internal_frames": 5},
-    "trainer_walking":           {"frames": 10,     "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
-    "trainer_battle_front":      {"frames": 1,      "width": 64, "height": 64},
+FR_LG_SPRITES_REQUIREMENTS: dict[str, SpriteRequirement] = {
+    "pokemon_front":             SpriteRequirement([1, 2], 64, 64),
+    "pokemon_back":              SpriteRequirement([1], 64, 64),
+    "pokemon_icon":              SpriteRequirement([2], 32, 32, VALID_ICON_PALETTES),
+    "pokemon_footprint":         SpriteRequirement([1], 16, 16, VALID_FOOTPRINT_PALETTE, _palette_size=2),
+    "pokemon_hatch_anim":        SpriteRequirement([1], 32, 136),
+    "players_walking_running":   SpriteRequirement([20], 16, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "players_reflection":        SpriteRequirement([20], 16, 32, VALID_REFLECTION_PALETTE),
+    "players_bike":              SpriteRequirement([9], 32, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "players_surfing":           SpriteRequirement([12], 16, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "players_field_move":        SpriteRequirement([9], 16, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "players_fishing":           SpriteRequirement([12], 32, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "players_bike_vs_seeker":    SpriteRequirement([6], 32, 32, VALID_WEAK_OVERWORLD_PALETTE),
+    "players_battle_front":      SpriteRequirement([1], 64, 64),
+    "players_battle_back":       SpriteRequirement([4, 5], 64, 64, _internal_frames=5),
+    "players_battle_back_throw": SpriteRequirement([4, 5], 64, 64, _internal_frames=5),
+    "trainer_walking":           SpriteRequirement([10], 16, 32, VALID_OVERWORLD_PALETTE),
+    "trainer_battle_front":      SpriteRequirement([1], 64, 64),
 }
 
-FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = {
+FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, SpriteRequirement]] = {
     "Castform": {
-        "pokemon_front":      {"frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True},
-        "pokemon_back":       {"frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True},
+        "pokemon_front": SpriteRequirement([4], _palette_number=4, _palette_size=16, _palette_per_frame=True),
+        "pokemon_back":  SpriteRequirement([4], _palette_number=4, _palette_size=16, _palette_per_frame=True),
     },
     "Deoxys": {
-        "pokemon_front":      {"frames": 2},
-        "pokemon_back":       {"frames": 2},
-        "pokemon_icon":       {"frames": 4},
+        "pokemon_front": SpriteRequirement([2]),
+        "pokemon_back":  SpriteRequirement([2]),
+        "pokemon_icon":  SpriteRequirement([4]),
     },
     "Unown A": {
-        "pokemon_front":  {"palette": VALID_UNOWN_PALETTE},
-        "pokemon_back":   {"palette": VALID_UNOWN_PALETTE},
-        "pokemon_sfront": {"palette": VALID_UNOWN_SHINY_PALETTE},
-        "pokemon_sback":  {"palette": VALID_UNOWN_SHINY_PALETTE},
+        "pokemon_front":  SpriteRequirement(_palette=VALID_UNOWN_PALETTE),
+        "pokemon_back":   SpriteRequirement(_palette=VALID_UNOWN_PALETTE),
+        "pokemon_sfront": SpriteRequirement(_palette=VALID_UNOWN_SHINY_PALETTE),
+        "pokemon_sback":  SpriteRequirement(_palette=VALID_UNOWN_SHINY_PALETTE),
     },
     "Blue": {
-        "trainer_walking":        {"frames": 9},
-        "trainer_battle_front_1": {"frames": 1, "width": 64, "height": 64},
-        "trainer_battle_front_2": {"frames": 1, "width": 64, "height": 64},
-        "trainer_battle_front_3": {"frames": 1, "width": 64, "height": 64},
+        "trainer_walking":        SpriteRequirement([9]),
+        "trainer_battle_front_1": SpriteRequirement([1], 64, 64),
+        "trainer_battle_front_2": SpriteRequirement([1], 64, 64),
+        "trainer_battle_front_3": SpriteRequirement([1], 64, 64),
     }
 }

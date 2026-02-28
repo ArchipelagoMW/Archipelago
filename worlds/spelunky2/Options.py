@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-
 from BaseClasses import PlandoOptions
 from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, DeathLink, ItemSet
 from .enums import ItemName, Spelunky2Goal, Spelunky2ShortcutMode
@@ -208,7 +207,8 @@ Options (any selected here override options in item_upgrades):
 {locked_items_text}"""  # noqa: E128
     display_name = "Waddler Items"
     valid_keys = locked_items
-    default = equip_options - {ItemName.TRUE_CROWN.value, ItemName.EGGPLANT_CROWN.value, ItemName.PASTE.value}
+    default = equip_options - {ItemName.TRUE_CROWN.value, ItemName.EGGPLANT_CROWN.value,
+                               ItemName.PASTE.value, ItemName.SHIELD.value}
 
 
 class AnkhSkipLogic(Toggle):

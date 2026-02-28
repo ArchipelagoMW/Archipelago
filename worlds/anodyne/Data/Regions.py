@@ -274,8 +274,10 @@ class Forest(RegionEnum):
             (80, 128, 48, 112)
         ]
 
-    DEFAULT = auto()
-    island = auto()
+    west = auto()
+    east = auto()
+    lake = auto()
+    inlet = auto()
 
 
 class Go(RegionEnum):

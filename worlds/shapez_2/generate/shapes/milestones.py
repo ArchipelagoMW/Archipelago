@@ -16,7 +16,7 @@ def get_processors_list(world: "Shapez2World") -> list[list[Processor]]:
     for i in range(milestone_count):
         order_index = (i * 8) // milestone_count if milestone_count > 8 else i
         proc = [milestone_order[order_index]]
-        for _ in range(min(max_processors - 1, i)):
+        for _ in range(min(max_processors - 1, order_index)):
             if not Processor.add_restricted_previous(world.random, proc, milestone_order[:order_index]):
                 Processor.add_random_next(world.random, proc, milestone_order[:order_index])
         milestone_processors.append(proc)

@@ -612,7 +612,7 @@ song_data = {
         mood_tags=[SongGroup.Gloomy, SongGroup.Calm],
     ),
     Songs.CastleShed: Song(
-        "Fungi Forest (Winch)",
+        "Creepy Castle (Shed)",
         mem_idx=139,
         type=SongType.BGM,
         memory=0x100,
@@ -1395,6 +1395,7 @@ song_data = {
     Songs.WaterDroplets: Song("Water Droplets", mem_idx=38, type=SongType.Ambient, memory=0x914),
     Songs.TwinklySounds: Song("Generic Twinkly Sounds", mem_idx=59, type=SongType.Ambient, memory=0x934),
     Songs.FairyNearby: Song("Fairy Nearby", mem_idx=66, type=SongType.Ambient, memory=0x925),
+    Songs.FakeFairyNearby: Song("Fake Fairy Nearby", mem_idx=175, type=SongType.Ambient, memory=0x925),
     Songs.SeasideSounds: Song("Generic Seaside Sounds", mem_idx=96, type=SongType.Ambient, memory=0x912),
     # Protected
     Songs.UnusedCoin: Song("Unused Coin Pickup", mem_idx=7, type=SongType.Protected, memory=0x440),
@@ -1588,6 +1589,7 @@ song_idx_list = [
     song_data[Songs.FinalCBGet],
     song_data[Songs.KRoolDefeat],
     song_data[Songs.NintendoLogo],
+    song_data[Songs.FakeFairyNearby],
 ]
 
 DKIslesSongs = {

@@ -28,6 +28,7 @@ LogicRegions = {
             0x273,
             0x27C,
         ],
+        spawn={"x": 48.0, "y": -50.0, "z": 35.0},
     ),
     "IyoHills": MN64Region(
         name="Iyo Hills",
@@ -76,6 +77,7 @@ LogicRegions = {
             0x15: 0x130,
             0x16: 0x130,
         },
+        spawn={"x": 48.0, "y": -50.0, "z": 35.0},
     ),
     "DogoHotsprings": MN64Region(
         name="Dogo Hotsprings",

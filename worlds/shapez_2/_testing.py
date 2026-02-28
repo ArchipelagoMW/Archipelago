@@ -9,18 +9,29 @@ class ConsoleWriter(StringIO):
         pass
 
 
-def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrades: bool):
+def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrades: bool,
+         *, all_downgrades: bool = False, print_progress: bool = False):
     if write:
         writer = open("generate/shapes/_temp/output.txt", "wt")
     else:
         writer = ConsoleWriter()
     with writer as file:
         if __name__ == "__main__":
-            from generate.shapes import generator, downgrade_tetragonal, Processor
-            from generate.shapes.generate_tetragonal import Variant
+            from generate.shapes import generator, Processor
+            if hexagonal:
+                from generate.shapes.generate_hexagonal import Variant
+                from generate.shapes.downgrade_hexagonal import downgrade_6 as downgrade_alg
+            else:
+                from generate.shapes.generate_tetragonal import Variant
+                from generate.shapes.downgrade_tetragonal import downgrade_4 as downgrade_alg
         else:
-            from .generate.shapes import generator, downgrade_tetragonal, Processor
-            from .generate.shapes.generate_tetragonal import Variant
+            from .generate.shapes import generator, Processor
+            if hexagonal:
+                from .generate.shapes.generate_hexagonal import Variant
+                from .generate.shapes.downgrade_hexagonal import downgrade_6 as downgrade_alg
+            else:
+                from .generate.shapes.generate_tetragonal import Variant
+                from .generate.shapes.downgrade_tetragonal import downgrade_4 as downgrade_alg
         import datetime
         start_time = datetime.datetime.utcnow()
         file.write(
@@ -57,6 +68,8 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
         )
         rand = Random()
         for i in range(count):
+            if print_progress and (i+1) % (count//20) == 0:
+                print(f"Generating shape #{i+1}")
             proc: list[Processor] = []
             for _ in range(rand.randint(1, min(8, i // 2 + 1))):
                 Processor.add_random_next(rand, proc, None)
@@ -72,10 +85,11 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
             for cached in builder.cached_tasks:
                 file.write("".join(str(int(b)) for b in cached) + ", ")
             file.write("]\n")
-            downgrades = rand.randint(1, min(len(proc), i // 2 + 1)) if enable_downgrades else 0
+            downgrades = len(proc) if all_downgrades else (rand.randint(1, min(len(proc), i // 2 + 1))
+                                                           if enable_downgrades else 0)
             for _ in range(downgrades):
                 missing = proc.pop()
-                builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
+                builder = downgrade_alg(rand, builder, proc, missing, complexity)
                 down_shape = builder.build()
                 tries = 0
                 while shape == down_shape:
@@ -91,7 +105,7 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
                                        f"(try #{tries+1})\n")
                             proc.insert(-1, missing)
                             missing = proc.pop()
-                            builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
+                            builder = downgrade_alg(rand, builder, proc, missing, complexity)
                             down_shape = builder.build()
                             tries += 1
                             continue
@@ -102,7 +116,7 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
                     file.write(f"  - Downgraded shape identical, putting {missing.name} at bottom (try #{tries+1})\n")
                     proc.insert(0, missing)
                     missing = proc.pop()
-                    builder = downgrade_tetragonal.downgrade_4(rand, builder, proc, missing, complexity)
+                    builder = downgrade_alg(rand, builder, proc, missing, complexity)
                     down_shape = builder.build()
                     tries += 1
                 shape = down_shape
@@ -120,4 +134,4 @@ def test(write: bool, layers: int, hexagonal: bool, count: int, enable_downgrade
 
 
 if __name__ == "__main__":
-    test(True, 4, False, 1000, True)
+    test(False, 4, True, 2000, True, all_downgrades=True, print_progress=True)

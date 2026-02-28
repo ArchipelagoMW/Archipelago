@@ -3,5 +3,6 @@
   "server_version": "119.2.3",
   "display_name": "Super Metroid - Map Rando",
   "discord_channel": "https://discord.com/channels/731205301247803413/1156395911874875473",
+  "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/sm_map_rando_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/sm_map_rando.apworld"
 }

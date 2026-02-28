@@ -1,11 +1,14 @@
 """Rules for Mystical Ninja Starring Goemon (MN64)."""
 
+import logging
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Entrance
 from worlds.generic.Rules import add_rule, set_rule
 
 from .Logic.mn64_logic_classes import MN64Items
+
+logger = logging.getLogger("Mystical Ninja 64")
 
 if TYPE_CHECKING:
     from . import MN64World
@@ -17,11 +20,11 @@ def create_logic_holder_from_state(state: CollectionState, player: int, context_
     from .Logic.mn64_logic_holder import MN64LogicHolder
 
     # Use a global holder instance to maintain door tracking across evaluations
-    if not hasattr(create_logic_holder_from_state, '_holder_instance'):
+    if not hasattr(create_logic_holder_from_state, "_holder_instance"):
         create_logic_holder_from_state._holder_instance = MN64LogicHolder()
-    
+
     holder = create_logic_holder_from_state._holder_instance
-    
+
     # Reset context but keep door tracking
     holder.reset_lock_tracking()
     holder._current_location_context = context_name
@@ -56,8 +59,7 @@ def create_logic_holder_from_state(state: CollectionState, player: int, context_
     # Character Upgrades
     holder.sasuke_battery_1 = state.has(MN64Items.SASUKE_BATTERY_1.value, player)
     holder.sasuke_battery_2 = state.has(MN64Items.SASUKE_BATTERY_2.value, player)
-    holder.strength_upgrade_1 = state.has(MN64Items.STRENGTH_UPGRADE_1.value, player)
-    holder.strength_upgrade_2 = state.has(MN64Items.STRENGTH_UPGRADE_2.value, player)
+    holder.strength_count = state.count(MN64Items.PROGRESSIVE_STRENGTH.value, player)
 
     # Boss Defeats (Event Items)
     holder.beat_tsurami = state.has(MN64Items.beat_tsurami.value, player)
@@ -107,7 +109,7 @@ def set_rules(world: "MN64World") -> None:
     from .Logic import (
         mn64_bizen,
         mn64_festival_temple_castle,
-        mn64_folypoke_village,
+        mn64_folkypoke_village,
         mn64_ghost_toys_castle,
         mn64_gorgeous_music_castle,
         mn64_gourmet_submarine,
@@ -119,7 +121,7 @@ def set_rules(world: "MN64World") -> None:
         mn64_oedo_town,
         mn64_sanuki,
         mn64_tosa,
-        mn64_yamamoto,
+        mn64_yamato,
         mn64_zazen_town,
     )
 
@@ -129,9 +131,9 @@ def set_rules(world: "MN64World") -> None:
     all_regions.update(mn64_zazen_town.LogicRegions)
     all_regions.update(mn64_musashi.LogicRegions)
     all_regions.update(mn64_mutsu.LogicRegions)
-    all_regions.update(mn64_yamamoto.LogicRegions)
+    all_regions.update(mn64_yamato.LogicRegions)
     all_regions.update(mn64_sanuki.LogicRegions)
-    all_regions.update(mn64_folypoke_village.LogicRegions)
+    all_regions.update(mn64_folkypoke_village.LogicRegions)
     all_regions.update(mn64_tosa.LogicRegions)
     all_regions.update(mn64_iyo.LogicRegions)
     all_regions.update(mn64_kai.LogicRegions)
@@ -150,6 +152,7 @@ def set_rules(world: "MN64World") -> None:
             continue  # Region doesn't exist yet
 
         # Set location access rules with unique naming
+        display_name = region_data.name
         location_counter = {}  # Track duplicate names within same region
         for location_logic in region_data.locations:
             # Create the same unique location name as in create_regions()
@@ -158,10 +161,10 @@ def set_rules(world: "MN64World") -> None:
             # Check if this location name was already used in this region
             if base_name in location_counter:
                 location_counter[base_name] += 1
-                unique_name = f"{region_name} - {base_name} {location_counter[base_name]}"
+                unique_name = f"{display_name} - {base_name} {location_counter[base_name]}"
             else:
                 location_counter[base_name] = 1
-                unique_name = f"{region_name} - {base_name}"
+                unique_name = f"{display_name} - {base_name}"
 
             try:
                 location = next(loc for loc in region.locations if loc.name == unique_name)
@@ -171,8 +174,9 @@ def set_rules(world: "MN64World") -> None:
                         def location_rule(state):
                             holder = create_logic_holder_from_state(state, player_id, location_name)
                             return logic_func(holder)
+
                         return location_rule
-                    
+
                     set_rule(location, make_location_rule(location_logic.logic, unique_name, player))
             except StopIteration:
                 continue  # Location doesn't exist
@@ -194,14 +198,72 @@ def set_rules(world: "MN64World") -> None:
                             def entrance_rule(state):
                                 holder = create_logic_holder_from_state(state, player_id, entrance_name)
                                 return logic_func(holder)
+
                             return entrance_rule
-                        
+
                         entrance_name = f"{region_name} -> {exit_logic.destinationRegion}"
                         if exit_logic.consumes_key:
                             entrance_name += f" ({exit_logic.consumes_key} key)"
-                        
+
                         set_rule(entrance, make_entrance_rule(exit_logic.logic, entrance_name, player))
                     break
+
+    # Option: Chugoku Door Unlocked
+    # Override the ghost_toys_defeated requirement on both sides of the BizenBridge <-> Kurashiki door.
+    if world.options.chugoku_door_unlocked.value:
+        for src_name, dst_name in [("BizenBridge", "Kurashiki"), ("Kurashiki", "BizenBridge")]:
+            try:
+                region = multiworld.get_region(src_name, player)
+                for entrance in region.exits:
+                    if entrance.connected_region and entrance.connected_region.name == dst_name:
+                        set_rule(entrance, lambda state: True)
+                        break
+            except KeyError:
+                logger.warning(f"MN64: Chugoku door region '{src_name}' not found")
+
+    # Option: Pre-Unlocked Warps
+    # Add direct Menu -> destination entrances gated only by Flute + Yae, bypassing the
+    # normal in-world travel required to unlock each warp destination.
+    if world.options.pre_unlocked_warps.value:
+        warp_destinations = [
+            "KaisCoffeeShop",
+            "GoemonsHouse",
+            "OedoCastleEntrance",
+            "ZazenTownMainTown",
+            "KiisCoffeeShop",
+            "IyoCoffeeShop",
+            "FolkypokeVillageEntrance",
+            "KompirasCoffeeShop",
+            "DogoHotsprings",
+            "IzumoCoffeeShop",
+            "Shuhodo",
+            "FestivalVillageEntrance",
+        ]
+        try:
+            menu_region = multiworld.get_region("Menu", player)
+        except KeyError:
+            menu_region = None
+            logger.warning("MN64: Menu region not found; pre-unlocked warps will not be created")
+
+        if menu_region is not None:
+            flute_item = MN64Items.FLUTE.value
+            yae_item = MN64Items.YAE.value
+
+            def make_warp_rule(flute: str, yae: str, pid: int):
+                def warp_rule(state: CollectionState) -> bool:
+                    return state.has(flute, pid) and state.has(yae, pid)
+                return warp_rule
+
+            for dest_name in warp_destinations:
+                try:
+                    dest_region = multiworld.get_region(dest_name, player)
+                except KeyError:
+                    logger.warning(f"MN64: Pre-unlocked warp destination '{dest_name}' not found")
+                    continue
+                warp_entrance = Entrance(player, f"Flute Warp -> {dest_name}", menu_region)
+                menu_region.exits.append(warp_entrance)
+                warp_entrance.connect(dest_region)
+                set_rule(warp_entrance, make_warp_rule(flute_item, yae_item, player))
 
 
 def has_item(state: CollectionState, player: int, item: str) -> bool:

@@ -92,6 +92,8 @@ class Transitions(IntEnum):
     FactoryLowerCoreToInsideCore = auto()
     FactoryInsideCoreToLowerCore = auto()
     FactoryMainToBBlast = auto()
+    FactoryStorageToArcade = auto()
+    FactoryArcadeToStorage = auto()
 
     # Gloomy Galleon Exits
     GalleonLighthouseAreaToLighthouse = auto()

@@ -157,9 +157,7 @@ Offset: 0x{:x}
 Command: {:d}
 Length: 0x{:x}
 Source position: 0x{:x}
-Target position: 0x{:x}""".format(
-            bps_pos, command, length, source_position, target_position
-        )
+Target position: 0x{:x}""".format(bps_pos, command, length, source_position, target_position)
         # logger.debug("Decoded a command.\n%s", error_details)
         if command == 0:
             # SourceRead

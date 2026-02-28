@@ -1,5 +1,5 @@
 from enum import IntEnum
-from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup, Visibility as OptionVisibility
+from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup, DeathLink, Visibility as OptionVisibility
 from dataclasses import dataclass
 
 class Scenario(IntEnum):
@@ -157,10 +157,6 @@ class Scenario(IntEnum):
     archipelago_madness_vanilla = 151
     archipelago_madness_expansions = 152
 
-class DeathLinkMode(IntEnum):
-    disabled = 0
-    enabled = 1
-
 class Visibility(IntEnum):
     nothing = 0
     progression = 1
@@ -235,18 +231,6 @@ class ForbidTreeRemoval(IntEnum):
     off = 0
     unlockable = 1
     on = 2
-
-class OpenRCT2OnToggle(DefaultOnToggle):
-    @property
-    def result(self) -> bool:
-        return self.value
-
-
-class OpenRCT2Toggle(Toggle):
-    @property
-    def result(self) -> bool:
-        return self.value
-
 
 class SelectedScenario(Choice):
     """Choose which scenario you'd like to play! Random won't choose scenarios that are unreasonably difficult/tedious.
@@ -408,17 +392,13 @@ class SelectedScenario(Choice):
     option_build_your_own_six_flags_over_texas = Scenario.build_your_own_six_flags_over_texas.value
     default = Scenario.archipelago_madness_vanilla.value    
 
-class DeathLink(Choice):
-    """If you die, everybody dies, and vise versa!
-    - This manifests itself in exploding rides. Somebody dying will cause a random ride to crash,
-    and building rides badly will cause others to die. There's a 20 second timer between deathlink events.
-    Fix that coaster quickly! This option can be enabled/disabled in game as well by typing !!toggledeathlink
-    in the chat tab of the unlock shop.
-    """
-    display_name = "DeathLink"
-    option_disabled = DeathLinkMode.disabled.value
-    option_enabled = DeathLinkMode.enabled.value
-    default = DeathLinkMode.enabled.value
+
+
+class openRCT2DeathLink(DeathLink):
+    __doc__ = (DeathLink.__doc__ + "\nThis manifests itself in exploding rides. Somebody dying will cause a random ride to crash,"
+        + " and building rides badly will cause others to die. \n There's a 20 second timer between deathlink events."
+        + "Fix that coaster quickly!\n This option can be enabled/disabled in game as well by typing !!toggledeathlink"
+        + " in the chat tab of the unlock shop.")
 
 class SelectedVisibility(Choice):
     """Choose how much the unlock shop displays. 
@@ -457,7 +437,7 @@ class Awards(Choice):
     option_none = Awards.none.value
     default = Awards.all_awards.value
 
-class ExcludeSafestPark(OpenRCT2Toggle):
+class ExcludeSafestPark(Toggle):
     """Exclude the Safest Park Award from having a check. This may be useful depending on deathlink settings."""
     display_name = "Exclude Safest Park Award"
 
@@ -496,7 +476,7 @@ class SelectedRandomizationRange(Choice):
     option_extreme = RandomizationRange.extreme.value
     default = RandomizationRange.medium.value
 
-class IgnoreRideStatChanges(OpenRCT2Toggle):
+class IgnoreRideStatChanges(Toggle):
     """Disables changes to base ride stats. If enabled, rides will always behave like they do in the base game."""
     display_name = "Ignore Ride Stat Changes"
 
@@ -575,11 +555,11 @@ class SelectedForbidTreeRemoval(Choice):
     default = ForbidTreeRemoval.unlockable.value
 
 
-class RandomizeParkValues(OpenRCT2OnToggle):
+class RandomizeParkValues(DefaultOnToggle):
     """Randomizes values such as starting cash, starting bank loan amount, and the max bank loan"""
     display_name = "Randomize Park Values"
 
-# class Include_Guest_Objective(OpenRCT2OnToggle):
+# class Include_Guest_Objective(DefaultOnToggle):
 #     """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
 #     display_name = "Include Guest Objective"
 
@@ -590,7 +570,7 @@ class GuestObjective(Range):
     range_end = 7500
     default = 1000
 
-# class Include_Park_Value_Objective(OpenRCT2OnToggle):
+# class Include_Park_Value_Objective(DefaultOnToggle):
 #     """Include an objective to achieve a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
 #     display_name = "Include Park Value Objective"
 
@@ -601,7 +581,7 @@ class ParkValueObjective(Range):
     range_end = 1000000
     default = 200000
 
-# class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
+# class Include_Roller_Coaster_Objective(DefaultOnToggle):
 #     """Include an objective to build a certain number of Roller Coasters with optional parameters. Multiple objectives can be enabled!"""
 #     display_name = "Include Roller Coaster Objective"
 
@@ -722,7 +702,7 @@ class ShopMaximumTotalCustomers(Range):
     range_end = 1000
     default = 400
 
-class BalanceGuestCounts(OpenRCT2OnToggle):
+class BalanceGuestCounts(DefaultOnToggle):
     """Attempts to balance the minimum guest requirements to the ride they're attached to. Low throughput rides
     like Spiral Slides will tend towards the minimum, while high throughput rides like roller coasters will 
     tend towards the maximum.
@@ -753,19 +733,19 @@ class ParkRatingObjective(Range):
     range_end = 999
     default = 800
 
-class PayOffLoan(OpenRCT2OnToggle):
+class PayOffLoan(DefaultOnToggle):
     """Require Loan to be paid off before scenario completion is awarded. Multiple objectives can be enabled!"""
     display_name = "Pay Off Loan"
 
-class MonopolyMode(OpenRCT2Toggle):
+class MonopolyMode(Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
 
-class Fireworks(OpenRCT2OnToggle):
+class Fireworks(DefaultOnToggle):
     """Have an explosive firework display on victory! Strongly discouraged if you intend to keep playing after victory or if you expect to have a huge park."""
     display_name = "Fireworks"
 
-class IncludeGamespeedItems(OpenRCT2OnToggle):
+class IncludeGamespeedItems(DefaultOnToggle):
     """If included, the ability to use the speed toggle will be restricted behind an item. 4 items total will be added, each progressively unlocking a faster speed."""
     display_name = "Include Gamespeed Items"
 
@@ -797,6 +777,13 @@ class LoanSharkTraps(Range):
     range_end = 20
     default = 5
 
+class FoodPoisioningTraps(Range):
+    """When found, gives everybody with food in the park Norovirus! Adding traps will increase the total number of items in the world."""
+    display_name = "Food Poisioning Trap"
+    range_start = 0
+    range_end = 20
+    default = 5
+
 class Filler(Range):
     """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses."""
     display_name = "Filler"
@@ -804,19 +791,19 @@ class Filler(Range):
     range_end = 50
     default = 10
 
-class IncludeATM(OpenRCT2OnToggle):
+class IncludeATM(DefaultOnToggle):
     """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include ATM"
 
-class IncludeFirstAid(OpenRCT2OnToggle):
+class IncludeFirstAid(DefaultOnToggle):
     """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include First Aid Room"
 
-class AllRidesAndSceneryBase(OpenRCT2Toggle):
+class AllRidesAndSceneryBase(Toggle):
     """Adds every ride and scenery pack in the base game to the item pool. This will make for a significantly longer scenario."""
     display_name = "Include All Rides and Scenery (Base Game)"
 
-class AllRidesAndSceneryExpansion(OpenRCT2Toggle):
+class AllRidesAndSceneryExpansion(Toggle):
     """Adds every ride and scenery pack in the RCT2 Expansion Packs to the item pool. If this is true the base game rides and 
     scenery will also be included. This will make for a significantly longer scenario."""
     display_name = "Include All Rides and Scenery (Expansion Packs)"
@@ -887,6 +874,7 @@ openrct2_option_groups = [
         BathroomTraps,
         SpamTraps,
         LoanSharkTraps,
+        FoodPoisioningTraps,
         AllRidesAndSceneryBase,
         AllRidesAndSceneryExpansion
     ]),
@@ -921,13 +909,14 @@ class openRCT2Options(PerGameCommonOptions):
     skips: Skips
 
     # deathlink
-    death_link: DeathLink
+    death_link: openRCT2DeathLink
 
     # traps
     furry_convention_traps: FurryConventionTraps
     bathroom_traps: BathroomTraps
     spam_traps: SpamTraps
     loan_shark_traps: LoanSharkTraps
+    food_poisioning_traps: FoodPoisioningTraps
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     randomization_range: SelectedRandomizationRange

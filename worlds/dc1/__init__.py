@@ -390,6 +390,7 @@ class DarkCloudWorld(World):
                 "attach_mult_config": self.options.attach_mult_config.value,
                 "auto_build": self.options.auto_build.value,
                 "miracle_sanity": self.options.miracle_sanity.value,
+                "death_link": self.options.death_link.value,
             },
         }
 

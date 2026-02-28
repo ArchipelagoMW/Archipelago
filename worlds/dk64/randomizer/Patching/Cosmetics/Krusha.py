@@ -135,18 +135,18 @@ def fixBaboonBlasts(ROM_COPY: LocalROM):
     item_start = getObjectAddress(ROM_COPY, 0xBA, 4, "actor")
     if item_start is not None:
         ROM_COPY.seek(item_start + 0x4)
-        ROM_COPY.writeMultipleBytes(int(float_to_hex(510), 16), 4)
+        ROM_COPY.writeFloat(510)
     item_start = getObjectAddress(ROM_COPY, 0xBA, 12, "actor")
     if item_start is not None:
         ROM_COPY.seek(item_start + 0x4)
-        ROM_COPY.writeMultipleBytes(int(float_to_hex(333), 16), 4)
+        ROM_COPY.writeFloat(333)
     # Castle Baboon Blast
     item_start = getObjectAddress(ROM_COPY, 0xBB, 4, "actor")
     if item_start is not None:
         ROM_COPY.seek(item_start + 0x0)
-        ROM_COPY.writeMultipleBytes(int(float_to_hex(2472), 16), 4)
+        ROM_COPY.writeFloat(2472)
         ROM_COPY.seek(item_start + 0x8)
-        ROM_COPY.writeMultipleBytes(int(float_to_hex(1980), 16), 4)
+        ROM_COPY.writeFloat(1980)
 
 
 def placeKrushaHead(ROM_COPY: LocalROM, settings: Settings, slot):

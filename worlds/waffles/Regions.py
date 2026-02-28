@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from . import WaffleWorld
 
 GREEN_YOSHI_LEVELS = [
+    LocationName.donut_plains_top_secret,
     LocationName.yoshis_island_2_region,
     LocationName.yoshis_island_3_region,
     LocationName.donut_plains_1_region,

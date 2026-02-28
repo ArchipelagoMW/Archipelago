@@ -1,0 +1,788 @@
+[
+	{
+		"count": "98",
+		"name": "Level Up",
+		"category": [ "Level Up" ],
+		"progression": true
+	},
+	{
+		"count": "5",
+		"name": "Act Clear - Normal",
+		"category": [ "Act Clear - Normal" ],
+		"progression": true
+	},
+	{
+		"count": "5",
+		"name": "Act Clear - Nightmare",
+		"category": [ "Act Clear - Nightmare", "Nightmare" ],
+		"progression": true
+	},
+	{
+		"count": "5",
+		"name": "Act Clear - Hell",
+		"category": [ "Act Clear - Hell", "Hell" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Scroll of Inifuss",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Horadric Hammer",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Horadric Scroll",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Horadric Cube",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Staff of Kings",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Viper Amulet",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Horadric Staff",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Jade Figurine",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Golden Bird",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Gidbinn",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Khalim's Eye",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Khalim's Brain",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Khalim's Heart",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Khalim's Flail",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Khalim's Will",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Lam Esen's Tome",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Mephisto's Soulstone",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Hellforge Hammer",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":3,
+		"name": "Malah's Potion",
+		"category": [ "Quest Progression" ],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Den of Evil Skill Point Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Den of Evil Skill Point Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Den of Evil Skill Point Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Sister's Burial Grounds Merc Hire Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Sister's Burial Grounds Merc Hire Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Sister's Burial Grounds Merc Hire Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Search for Cain Free Identify Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Search for Cain Free Identify Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Search for Cain Free Identify Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Tools of the Trade Enchant Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Tools of the Trade Enchant Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Tools of the Trade Enchant Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Radament's Lair Book of Skill Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Radament's Lair Book of Skill Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Radament's Lair Book of Skill Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"category": [ "Quest Rewards - Normal" ],
+		"name": "The Golden Bird Potion of Life Reward - Normal",
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "The Golden Bird Potion of Life Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "The Golden Bird Potion of Life Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Blade of the Old Religion Merc Hire Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Blade of the Old Religion Merc Hire Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Blade of the Old Religion Merc Hire Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Lam Esen's Tome Stat Point Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Lam Esen's Tome Stat Point Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Lam Esen's Tome Stat Point Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Fallen Angel Skill Points Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Fallen Angel Skill Points Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Fallen Angel Skill Points Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Hell's Forge Rune/Gem Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Hell's Forge Rune/Gem Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Hell's Forge Rune/Gem Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Siege on Harrogath Socket Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Siege on Harrogath Socket Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Siege on Harrogath Socket Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Rescue on Mount Arreat Rune Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Rescue on Mount Arreat Rune Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Rescue on Mount Arreat Rune Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Prison of Ice Resistance Scroll Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Prison of Ice Resistance Scroll Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Prison of Ice Resistance Scroll Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Prison of Ice Rare Item Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Prison of Ice Rare Item Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Prison of Ice Rare Item Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"useful": true
+	},
+	{
+		"count":1,
+		"name": "Betrayal of Harrogath Quest Reward - Normal",
+		"category": [ "Quest Rewards - Normal" ],
+		"filler": true
+	},
+	{
+		"count":1,
+		"name": "Betrayal of Harrogath Quest Reward - Nightmare",
+		"category": [ "Quest Rewards - Nightmare", "Nightmare" ],
+		"filler": true
+	},
+	{
+		"count": "1",
+		"name": "Betrayal of Harrogath Quest Reward - Hell",
+		"category": [ "Quest Rewards - Hell", "Hell" ],
+		"filler": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of El",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Eld",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Tir",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Nef",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Eth",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Ith",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Tal",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Ral",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Ort",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Thul",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Amn",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Sol",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Shael",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Dol",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Hel",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Io",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Lum",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Ko",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Fal",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Lem",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Pul",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Um",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Mal",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Ist",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Gul",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Vex",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Ohm",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Knowledge of Lo",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count":"1",
+		"name": "Knowledge of Sur",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count":"1",
+		"name": "Knowledge of Ber",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count":"1",
+		"name": "Knowledge of Jah",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count":"1",
+		"name": "Knowledge of Cham",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count":"1",
+		"name": "Knowledge of Zod",
+		"category": [ "Runes" ],
+		"progression": true
+	},
+	{
+		"count": "5",
+		"name": "Shako Extended Warranty Policy",
+		"category": [ "Junk" ],
+		"filler": true
+	},
+	{
+		"count": "4",
+		"name": "Visit Beautiful Worthram!",
+		"category": [ "Junk" ],
+		"filler": true
+	},
+	{
+		"count": "3",
+		"name": "Your relaxation awaits! Caldeum - Jewel of the East",
+		"category": [ "Junk" ],
+		"filler": true
+	},
+	{
+		"count":1,
+		"name": "Find Adventure in King Leoric's Hunting Grounds!",
+		"category": [ "Junk" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Key",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Minor Healing Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Minor Mana Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Light Healing Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Light Mana Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Healing Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Mana Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Greater Healing Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Greater Mana Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Super Healing Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Super Mana Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Rejuvenation Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "4",
+		"name": "Full Rejuvenation Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Antidote Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Stamina Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Thawing Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Fulminating Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Exploding Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Oil Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Strangling Gas Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Choking Gas Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Rancid Gas Potion",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Scroll of Town Portal",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Scroll of Identify",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Bolts",
+		"category": [ "Consumables" ],
+		"filler": true
+	},
+	{
+		"count": "10",
+		"name": "Arrows",
+		"category": [ "Consumables" ],
+		"filler": true
+	}
+]

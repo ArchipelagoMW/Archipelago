@@ -77,6 +77,12 @@ class HintRegion(IntEnum):
     # Other
     Helm = auto()
     Bosses = auto()
+    Snide = auto()
+    SnideFirstGroup = auto()
+    SnideSecondGroup = auto()
+    SnideThirdGroup = auto()
+    SnideFourthGroup = auto()
+    SnideLastGroup = auto()
     # Debuggging
     Error = auto()
 
@@ -93,6 +99,11 @@ HINT_REGION_PAIRING = {
     HintRegion.CavesShops: "Caves Shops",
     HintRegion.CastleShops: "Castle Shops",
     HintRegion.Jetpac: "Jetpac Game",
+    HintRegion.SnideFirstGroup: "1st to 8th Blueprint Rewards",
+    HintRegion.SnideSecondGroup: "9th to 16th Blueprint Rewards",
+    HintRegion.SnideThirdGroup: "17th to 24th Blueprint Rewards",
+    HintRegion.SnideFourthGroup: "25th to 32nd Blueprint Rewards",
+    HintRegion.SnideLastGroup: "33rd to 40th Blueprint Rewards",
     # CB Regions
     HintRegion.IslesCBs: "Isles Medal Rewards",
     HintRegion.JapesCBs: "Japes Medal Rewards",
@@ -117,18 +128,18 @@ HINT_REGION_PAIRING = {
     HintRegion.Hillside: "Japes Hillside",
     HintRegion.StormyTunnel: "Japes Stormy Tunnel Area",
     HintRegion.HiveTunnel: "Hive Tunnel Area",
-    HintRegion.CavesAndMines: "Japes Caves and Mines",
+    HintRegion.CavesAndMines: "Japes Caves & Mines",
     # Aztec
-    HintRegion.OasisAndTotem: "Aztec Oasis and Totem Area",
+    HintRegion.OasisAndTotem: "Aztec Oasis & Totem Area",
     HintRegion.TinyTemple: "Tiny Temple",
     HintRegion.FiveDoorTemple: "5 Door Temple",
     HintRegion.LlamaTemple: "Llama Temple",
     HintRegion.AztecTunnels: "Various Aztec Tunnels",
     # Factory
-    HintRegion.FactoryStart: "Frantic Factory Start",
+    HintRegion.FactoryStart: "Frantic Factory Foyer",
     HintRegion.Testing: "Testing Area",
-    HintRegion.ResearchAndDevelopment: "Research and Development Area",
-    HintRegion.Storage: "Storage and Arcade Area",
+    HintRegion.ResearchAndDevelopment: "R&D Area",
+    HintRegion.Storage: "Storage & Arcade Area",
     HintRegion.ProductionRoom: "Production Room",
     # Galleon
     HintRegion.GalleonCaverns: "Galleon Caverns",
@@ -137,7 +148,7 @@ HINT_REGION_PAIRING = {
     HintRegion.TreasureRoom: "Treasure Room",
     HintRegion.FiveDoorShip: "5 Door Ship",
     # Forest
-    HintRegion.ForestCenterAndBeanstalk: "Forest Center and Beanstalk",
+    HintRegion.ForestCenterAndBeanstalk: "Forest Center & Beanstalk",
     HintRegion.MushroomExterior: "Giant Mushroom Exterior",
     HintRegion.MushroomInterior: "Giant Mushroom Insides",
     HintRegion.OwlTree: "Owl Tree Area",

@@ -3,7 +3,7 @@ import pkgutil
 from typing import Any, TextIO
 
 from BaseClasses import Tutorial
-from Options import OptionError
+from Options import OptionError, OptionGroup
 from worlds.AutoWorld import WebWorld, World
 from .coordinates import coordinate_description, generate_random_coordinates
 from .db_layout import generate_random_db_layout
@@ -26,6 +26,42 @@ class OuterWildsWebWorld(WebWorld):
             authors=["Ixrec"]
         )
     ]
+    option_groups = [
+        OptionGroup("Goal", [
+            Goal,
+            RequiredFriends,
+        ]),
+        OptionGroup("Spawn & General Progression", [
+            Spawn,
+            EarlyKeyItem,
+            RandomizeWarpPlatforms,
+            SplitTranslator,
+            Logsanity,
+            ShuffleSpacesuit,
+        ]),
+        OptionGroup("Content", [
+            EnableEchoesOfTheEyeDLC,
+            DLCOnly,
+            EnableAstralCodecMod,
+            EnableEchoHikeMod,
+            EnableForgottenCastawaysMod,
+            EnableFretsQuestMod,
+            EnableHearthsNeighborMod,
+            EnableHearthsNeighbor2MagistariumMod,
+            EnableTheOutsiderMod,
+        ]),
+        OptionGroup("Additional Non-Logical Randomizations", [
+            RandomizeCoordinates,
+            RandomizeOrbits,
+            RandomizeRotations,
+            RandomizeDarkBrambleLayout,
+        ]),
+        OptionGroup("(Non-Progression) Item Options", [
+            TrapChance,
+            TrapTypeWeights,
+            UpgradeCounts,
+        ]),
+    ]
 
 
 class OuterWildsWorld(World):
@@ -42,12 +78,7 @@ class OuterWildsWorld(World):
     rotation_axes = 'vanilla'
     warps = 'vanilla'
 
-    # this is how we tell the Universal Tracker we want to use re_gen_passthrough
-    @staticmethod
-    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-        return slot_data
-
-    # and this is how we tell Universal Tracker we don't need the yaml
+    # this is how we tell Universal Tracker we don't need the yaml
     ut_can_gen_without_yaml = True
 
     def generate_early(self) -> None:
@@ -80,6 +111,20 @@ class OuterWildsWorld(World):
             ]:
                 raise OptionError('Incompatible options: goal %s requires enable_eote_dlc to be true', self.options.goal)
 
+        if self.options.goal == Goal.option_song_of_the_universe:
+            max_friends = sum([
+                self.options.enable_eote_dlc,
+                self.options.enable_hn1_mod,
+                self.options.enable_outsider_mod,
+                self.options.enable_ac_mod,
+                self.options.enable_hn2_mod,
+                self.options.enable_fq_mod,
+                self.options.enable_fc_mod,
+                self.options.enable_eh_mod,
+            ], 1) # Solanum always counts
+            if self.options.required_friends > max_friends:
+                raise OptionError(f'Incompatible options: required_friends is ({self.options.required_friends}), but the other options only make {max_friends} available')
+
         if self.options.shuffle_spacesuit and self.options.spawn != Spawn.option_vanilla:
             raise OptionError('Incompatible options: shuffle_spacesuit is true and spawn is non-vanilla (%s)', self.options.spawn)
 
@@ -91,20 +136,21 @@ class OuterWildsWorld(World):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Outer Wilds" in self.multiworld.re_gen_passthrough:
                     slot_data = self.multiworld.re_gen_passthrough["Outer Wilds"]
-                    self.warps = slot_data["warps"]
-                    self.options.goal.value = slot_data["goal"]
-                    self.options.spawn = slot_data["spawn"]
-                    self.options.logsanity.value = slot_data["logsanity"]
-                    self.options.enable_eote_dlc.value = slot_data["enable_eote_dlc"]
-                    self.options.dlc_only.value = slot_data["dlc_only"]
-                    self.options.enable_hn1_mod.value = slot_data["enable_hn1_mod"]
-                    self.options.enable_hn2_mod.value = slot_data["enable_hn2_mod"]
-                    self.options.enable_outsider_mod.value = slot_data["enable_outsider_mod"]
-                    self.options.enable_ac_mod.value = slot_data["enable_ac_mod"]
-                    self.options.enable_fq_mod.value = slot_data["enable_fq_mod"]
-                    self.options.enable_fc_mod.value = slot_data["enable_fc_mod"]
-                    self.options.enable_eh_mod.value = slot_data["enable_eh_mod"]
-                    self.options.split_translator.value = slot_data["split_translator"]
+                    self.warps = slot_data["warps"] # is always set
+                    self.options.goal.value = slot_data.get("goal", 0)
+                    self.options.spawn.value = slot_data.get("spawn", 0)
+                    self.options.logsanity.value = slot_data.get("logsanity", 0)
+                    self.options.enable_eote_dlc.value = slot_data.get("enable_eote_dlc", 0)
+                    self.options.dlc_only.value = slot_data.get("dlc_only", 0)
+                    self.options.enable_hn1_mod.value = slot_data.get("enable_hn1_mod", 0)
+                    self.options.enable_hn2_mod.value = slot_data.get("enable_hn2_mod", 0)
+                    self.options.enable_outsider_mod.value = slot_data.get("enable_outsider_mod", 0)
+                    self.options.enable_ac_mod.value = slot_data.get("enable_ac_mod", 0)
+                    self.options.enable_fq_mod.value = slot_data.get("enable_fq_mod", 0)
+                    self.options.enable_fc_mod.value = slot_data.get("enable_fc_mod", 0)
+                    self.options.enable_eh_mod.value = slot_data.get("enable_eh_mod", 0)
+                    self.options.split_translator.value = slot_data.get("split_translator", 0)
+                    self.options.shuffle_spacesuit.value = slot_data.get("shuffle_spacesuit", 0)
             return
 
         # generate game-specific randomizations separate from AP items/locations
@@ -197,6 +243,7 @@ class OuterWildsWorld(World):
             'song_of_six':          "Victory - Song of Six",
             'song_of_seven':        "Victory - Song of Seven",
             'echoes_of_the_eye':    "Victory - Echoes of the Eye",
+            'song_of_the_universe': "Victory - Song of the Universe",
         }
 
         goal_item = option_key_to_item_name[self.options.goal.current_key]
@@ -205,11 +252,12 @@ class OuterWildsWorld(World):
     def fill_slot_data(self):
         slot_data = self.options.as_dict(
             "death_link",                   # a client/mod feature
-            "goal", "spawn",                             # affects tons of stuff, but also a client/mod faeture
+            "goal", "required_friends", "spawn",         # affects tons of stuff, but also a client/mod faeture
             "logsanity", "enable_eote_dlc", "dlc_only",  # changes AP locations, needed by in-game tracker
             "enable_hn1_mod", "enable_hn2_mod",
             "enable_outsider_mod", "enable_ac_mod", "enable_fq_mod", "enable_fc_mod", "enable_eh_mod",
-            "split_translator"                           # changes AP items, and how client/mod implements Translator
+            "split_translator",                          # changes AP items, and how client/mod implements Translator
+            "shuffle_spacesuit",
         )
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
         slot_data["eotu_coordinates"] = self.eotu_coordinates

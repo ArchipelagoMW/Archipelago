@@ -2746,7 +2746,7 @@ GAME_ENTRANCE_TABLE = [
         "Volcano Entry",
         "Eldin Province",
         "F200", 0, 0, 2, 2,
-        "Statue", "Eldin Volcano - Volcano Ascent",
+        "Statue", "Eldin Volcano - Volcano Entry",
         "Story", 804, True,
     ),
     SSEntranceData(
@@ -4224,3 +4224,4 @@ AP_EXIT_GRAPH = {
         "Trial Gate": "Lanayru Desert - North Desert",
     },
 }
+

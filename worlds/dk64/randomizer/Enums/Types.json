@@ -1,99 +1,447 @@
 {
     "ItemRandoSelector": [
         {
-            "name": "Shops & Moves",
+            "name": "Shops",
             "value": "shop",
-            "tooltip": "Cranky, Funky, and Candy Moves are in the Pool and become possible locations for items.&#10;By selecting this, Cross-Kong purchases is forced on."
+            "tooltip": "Cranky, Funky, and Candy Moves become possible locations for items.",
+            "check_count": 100,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "moves"
+        },
+        {
+            "name": "Moves",
+            "value": "moves",
+            "tooltip": "Cranky, Funky, and Candy Moves are in the Pool.",
+            "check_count": 0,
+            "item_count": 42,
+            "is_check": false
         },
         {
             "name": "Camera & Shockwave",
             "value": "shockwave",
-            "tooltip": "Camera and Shockwave may not necessarily be the Fairy Queen's gift."
+            "tooltip": "Camera and Shockwave may not necessarily be the Fairy Queen's gift.",
+            "check_count": 0,
+            "item_count": 2,
+            "is_check": false
+        },
+        {
+            "name": "Banana Fairy's Gift",
+            "value": "bfi_gift",
+            "tooltip": "Fairy Queen's gift will give a random item.",
+            "check_count": 1,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "shockwave"
         },
         {
             "name": "Golden Bananas",
             "value": "banana",
-            "tooltip": ""
+            "tooltip": "",
+            "check_count": 0,
+            "item_count": 161,
+            "is_check": false
         },
         {
-            "name": "Tough Golden Bananas",
-            "value": "toughbanana",
-            "tooltip": "Tougher Golden Banana checks will be in the pool:&#10;- All 3 Minecart Rides&#10;- Both Beetle Races&#10;- Fungi and Caves Baboon Blasts&#10;- Rabbit, Owl, Vulture and Seal Races&#10;- Arcade Round 1&#10;- Rareware Golden Banana"
+            "name": "Golden Bananas Checks",
+            "value": "banana_checks",
+            "tooltip": "",
+            "check_count": 134,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "banana"
+        },
+        {
+            "name": "Minecart & Race Checks",
+            "value": "racebanana",
+            "tooltip": "All banana checks tied to a minecart ride or race.",
+            "check_count": 11,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "banana"
+        },
+        {
+            "name": "Gauntlet & Mini-Boss Checks",
+            "value": "gauntletbanana",
+            "tooltip": "All banana checks which are obtained after killing a hoard of enemies or killing a mini boss.",
+            "check_count": 16,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "banana"
+        },
+        {
+            "name": "Snide's Rewards",
+            "value": "sniderewards",
+            "tooltip": "Snide can have random rewards instead of Golden Bananas. Use the Max Snide Reward Limit to customize how many locations will be shuffled.",
+            "check_count": 40,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "blueprintbanana"
+        },
+        {
+            "name": "Snide's Bananas",
+            "value": "blueprintbanana",
+            "tooltip": "All banana checks which are obtained after turning in a blueprint are in the pool. Use the Max Snide Reward Limit to customize how many GBs will be shuffled.",
+            "check_count": 0,
+            "item_count": 40,
+            "is_check": false
+        },
+        {
+            "name": "Crown Arenas",
+            "value": "arenas",
+            "tooltip": "Battle Arenas become possible locations for items.",
+            "check_count": 10,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "crown"
         },
         {
             "name": "Battle Crowns",
             "value": "crown",
-            "tooltip": "Crowns are in the Pool and Battle Arenas become possible locations for items."
+            "tooltip": "Crowns are in the Pool.",
+            "check_count": 0,
+            "item_count": 10,
+            "is_check": false
         },
         {
             "name": "Blueprints",
             "value": "blueprint",
-            "tooltip": "Blueprints are in the Pool and Kasplats become possible locations for items."
+            "tooltip": "Blueprints are in the Pool.",
+            "check_count": 0,
+            "item_count": 40,
+            "is_check": false
+        },
+        {
+            "name": "Kasplats",
+            "value": "kasplat",
+            "tooltip": "Kasplats become possible locations for items.",
+            "check_count": 40,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "blueprint"
         },
         {
             "name": "Keys",
             "value": "key",
-            "tooltip": "Keys are in the Pool and Bosses become possible locations for items."
+            "tooltip": "Keys are in the Pool.",
+            "check_count": 0,
+            "item_count": 8,
+            "is_check": false
+        },
+        {
+            "name": "Bosses",
+            "value": "bosses",
+            "tooltip": "Bosses become possible locations for items.",
+            "check_count": 7,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "key"
+        },
+        {
+            "name": "End of Helm",
+            "value": "endofhelm",
+            "tooltip": "The standalone item at the end of helm becomes a possible location for items.",
+            "check_count": 1,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "key"
         },
         {
             "name": "Banana Medals",
             "value": "medal",
-            "tooltip": "Medals are in the Pool and Collecting the required amount of Colored Bananas&#10;for a Banana Medal can reward items."
+            "tooltip": "Medals are in the Pool.",
+            "check_count": 0,
+            "item_count": 40,
+            "is_check": false
+        },
+        {
+            "name": "Regular Medal Rewards",
+            "value": "medal_checks",
+            "tooltip": "Collecting the required amount of Colored Bananas for a Banana Medal can reward items.",
+            "check_count": 35,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "medal"
+        },
+        {
+            "name": "Helm Medal Rewards",
+            "value": "medal_checks_helm",
+            "tooltip": "Collecting the reward for shutting down a Helm Room can reward items.",
+            "check_count": 5,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "medal"
         },
         {
             "name": "Nintendo Coin",
             "value": "nintendocoin",
-            "tooltip": "Nintendo Coin are in the Pool and DK Arcade becomes a possible location for items."
+            "tooltip": "Nintendo Coin is in the Pool.",
+            "check_count": 0,
+            "item_count": 1,
+            "is_check": false
+        },
+        {
+            "name": "DK Arcade",
+            "value": "arcade",
+            "tooltip": "DK Arcade becomes a possible location for items.",
+            "check_count": 1,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "nintendocoin"
         },
         {
             "name": "Rareware Coin",
             "value": "rarewarecoin",
-            "tooltip": "Rareware Coin are in the Pool and Jetpac become a possible location for items."
+            "tooltip": "Rareware Coin is in the Pool.",
+            "check_count": 0,
+            "item_count": 1,
+            "is_check": false
+        },
+        {
+            "name": "Jetpac",
+            "value": "jetpac",
+            "tooltip": "Jetpac become a possible location for items.",
+            "check_count": 1,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "rarewarecoin"
         },
         {
             "name": "Kongs",
             "value": "kong",
-            "tooltip": "Kongs are in the Pool but are not replaced with an item currently."
+            "tooltip": "Kongs are in the Pool but are not replaced with an item currently.",
+            "check_count": 0,
+            "item_count": 4,
+            "is_check": false
+        },
+        {
+            "name": "Kong Cages",
+            "value": "kong_cages",
+            "tooltip": "Kongs are in the Pool but are not replaced with an item currently.",
+            "check_count": 4,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "kong"
         },
         {
             "name": "Fairies",
             "value": "fairy",
-            "tooltip": "Fairies are in the Pool and Items in their place can be captured with a camera."
+            "tooltip": "Fairies are in the Pool.",
+            "check_count": 0,
+            "item_count": 20,
+            "is_check": false
+        },
+        {
+            "name": "Fairy Checks",
+            "value": "fairy_checks",
+            "tooltip": "Items on these checks can be captured with a camera.",
+            "check_count": 20,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "fairy"
         },
         {
             "name": "Rainbow Coins",
             "value": "rainbowcoin",
-            "tooltip": "Rainbow Coins are in the Pool and Dirt Patches become possible locations for items."
+            "tooltip": "Rainbow Coins are in the Pool.",
+            "check_count": 0,
+            "item_count": 16,
+            "is_check": false
         },
         {
-            "name": "Miscellaneous Items",
-            "value": "beanpearl",
-            "tooltip": "The 5 Pearls and the Bean are in the Pool&#10;Tiny's Anthill and Treasure Chest become possible locations for items."
+            "name": "Dirt Patches",
+            "value": "dirt_patches",
+            "tooltip": "Dirt Patches become possible locations for items.",
+            "check_count": 16,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "rainbowcoin"
         },
         {
-            "name": "Ice Traps",
-            "value": "fakeitem",
-            "tooltip": "If you pick up a fake item it'll hurt and freeze you."
+            "name": "Pearls",
+            "value": "pearl",
+            "tooltip": "The 5 Pearls are in the Pool.",
+            "check_count": 0,
+            "item_count": 5,
+            "is_check": false
         },
         {
-            "name": "Junk Items",
-            "value": "junkitem",
-            "tooltip": "Pointless items will fill no-item slots."
+            "name": "Clam Items",
+            "value": "clams",
+            "tooltip": "The Treasure Chest become possible locations for items.",
+            "check_count": 5,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "pearl"
+        },
+        {
+            "name": "The Bean",
+            "value": "bean",
+            "tooltip": "The Bean is in the Pool.",
+            "check_count": 0,
+            "item_count": 1,
+            "is_check": false
+        },
+        {
+            "name": "Anthill 2nd Reward",
+            "value": "anthillreward",
+            "tooltip": "Tiny's Anthill 2nd Reward becomes a possible location for items.",
+            "check_count": 1,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "bean"
         },
         {
             "name": "Melon Crates",
             "value": "crateitem",
-            "tooltip": "Melon Crates become possible locations for items."
+            "tooltip": "Melon Crates become possible locations for items.",
+            "check_count": 13,
+            "item_count": 0,
+            "is_check": true
         },
         {
             "name": "Shop Owners",
             "value": "shopowners",
-            "tooltip": "Shop Owner Items are added into the pool."
+            "tooltip": "Shop Owner Items are added into the pool.",
+            "check_count": 0,
+            "item_count": 4,
+            "is_check": false
         },
         {
             "name": "Hints",
             "value": "hint",
-            "tooltip": "Hints and Wrinkly Doors are in the pool."
+            "tooltip": "Hints are in the pool.",
+            "check_count": 0,
+            "item_count": 35,
+            "is_check": false
+        },
+        {
+            "name": "Wrinkly Doors",
+            "value": "wrinkly",
+            "tooltip": "Wrinkly Doors become possible locations for items.",
+            "check_count": 35,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "hint"
+        },
+        {
+            "name": "Holdable Objects",
+            "value": "boulderitem",
+            "tooltip": "Destroying boulders and other holdable objects spawn items.",
+            "check_count": 16,
+            "item_count": 0,
+            "is_check": true
+        },
+        {
+            "name": "Enemy Drops",
+            "value": "enemies",
+            "tooltip": "Killing enemies that produce sparkles spawns items.",
+            "check_count": 283,
+            "item_count": 0,
+            "is_check": true
+        },
+        {
+            "name": "Enemy Drops",
+            "value": "dummyitem_enemies",
+            "tooltip": "Killing enemies that produce sparkles spawns items.",
+            "check_count": 283,
+            "item_count": 0,
+            "is_check": false,
+            "is_dummy": true
+        },
+        {
+            "name": "Holdable Objects",
+            "value": "dummyitem_boulderitem",
+            "tooltip": "Destroying boulders and other holdable objects spawn items.",
+            "check_count": 16,
+            "item_count": 0,
+            "is_check": false,
+            "is_dummy": true
+        },
+        {
+            "name": "Melon Crates",
+            "value": "dummyitem_crateitem",
+            "tooltip": "Melon Crates become possible locations for items.",
+            "check_count": 13,
+            "item_count": 0,
+            "is_check": false,
+            "is_dummy": true
+        },
+        {
+            "name": "Training Moves",
+            "value": "trainingmoves",
+            "tooltip": "Training Moves are in the pool.",
+            "check_count": 0,
+            "item_count": 4,
+            "is_check": false
+        },
+        {
+            "name": "Training Barrels",
+            "value": "trainingbarrels",
+            "tooltip": "Training Barrels (The 4 moves pre-given at the start of seeds).",
+            "check_count": 4,
+            "item_count": 0,
+            "is_check": true,
+            "tied": "trainingmoves"
+        },
+        {
+            "name": "Half-Medals",
+            "value": "halfmedal",
+            "tooltip": "Collecting half of the required CBs for a medal will yield an item.",
+            "check_count": 35,
+            "item_count": 0,
+            "is_check": true
+        },
+        {
+            "name": "Half-Medals",
+            "value": "dummyitem_halfmedal",
+            "tooltip": "Collecting half of the required CBs for a medal will yield an item.",
+            "check_count": 35,
+            "item_count": 0,
+            "is_check": false,
+            "is_dummy": true
+        }
+    ],
+    "ItemRandoFillerSelector": [
+        {
+            "name": "Junk Items",
+            "value": "junkitem",
+            "tooltip": "Health refills will be added to filler"
+        },
+        {
+            "name": "Ice Traps",
+            "value": "icetraps",
+            "tooltip": "Fake versions of items will be added which apply various negative temporary effects to the player upon picking up that item."
+        },
+        {
+            "name": "Battle Crowns",
+            "value": "crown",
+            "tooltip": "Battle Crowns will be added to filler."
+        },
+        {
+            "name": "Fairies",
+            "value": "fairy",
+            "tooltip": "Fairies will be added to filler."
+        },
+        {
+            "name": "Banana Medals",
+            "value": "medal",
+            "tooltip": "Banana Medals will be added to filler."
+        },
+        {
+            "name": "Pearls",
+            "value": "pearl",
+            "tooltip": "Pearls will be added to filler."
+        },
+        {
+            "name": "Rainbow Coins",
+            "value": "rainbowcoin",
+            "tooltip": "Rainbow Coins will be added to filler."
+        },
+        {
+            "name": "Golden Banana",
+            "value": "banana",
+            "tooltip": "Golden Banana will be added to filler."
         }
     ],
     "KeySelector": [

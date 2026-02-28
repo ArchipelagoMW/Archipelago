@@ -46,6 +46,7 @@ LogicRegions = {
             0x13: 0x147,
             0x14: 0x130,
         },
+        spawn={"x": 328.0, "y": -150.0, "z": 302.0},
     ),
     "UzenTunnel": MN64Region(
         name="Uzen Tunnel",
@@ -59,6 +60,7 @@ LogicRegions = {
                 flag_id=0x00EB,
                 instance_id=0x12,
             ),
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x191D, instance_id=0x11),
         ],
         exits=[
             MN64TransitionFront("MutsuCrossroads", lambda l: True),
@@ -111,6 +113,7 @@ LogicRegions = {
             0x1D: 0x0FF,
             0x1E: 0x0FB,
         },
+        spawn={"x": -547.0, "y": -24.0, "z": 27.0},
     ),
     "WaterfallofKegon": MN64Region(
         name="Waterfall of Kegon",
@@ -164,6 +167,7 @@ LogicRegions = {
             0x023,
             0x1D4,
         ],
+        spawn={"x": 29.0, "y": -319.0, "z": -535.0},
         enemies={0x0E: 0x148, 0x0F: 0x148, 0x10: 0x148, 0x11: 0x148, 0x12: 0x148},
     ),
     "FestivalVillageEntrance": MN64Region(
@@ -211,6 +215,7 @@ LogicRegions = {
             0x273,
             0x27B,
         ],
+        spawn={"x": -372.0, "y": 70.0, "z": -129.0},
     ),
     "FestivalVillageShoppingDistrict": MN64Region(
         name="Festival Village Shopping District",
@@ -255,6 +260,7 @@ LogicRegions = {
             0x273,
             0x038,
         ],
+        spawn={"x": -3.0, "y": 0.0, "z": -385.0},
     ),
     "FestivalVillageSecretShop": MN64Region(
         name="Festival Village Secret Shop",
@@ -321,6 +327,7 @@ LogicRegions = {
             0x27A,
             0x274,
         ],
+        spawn={"x": 224.0, "y": 0.0, "z": 0.0},
     ),
     "FestivalVillageRear": MN64Region(
         name="Festival Village Rear",
@@ -355,6 +362,7 @@ LogicRegions = {
             0x27C,
             0x274,
         ],
+        spawn={"x": -176.0, "y": 70.0, "z": 87.0},
     ),
     "MtFear": MN64Region(
         name="Mt Fear",
@@ -364,7 +372,7 @@ LogicRegions = {
         exits=[
             MN64TransitionFront("FestivalVillageRear", lambda l: True, type=MN64DoorType.DOOR),
             MN64TransitionFront("Shoreline", lambda l: True, type=MN64DoorType.DOOR),
-            MN64TransitionFront("WitchesHouse", lambda l: l.strength_upgrade_1),
+            MN64TransitionFront("WitchesHouse", lambda l: l.strength_count >= 1),
         ],
         room_id=0x14B,
         room_default_definitions=[
@@ -406,6 +414,7 @@ LogicRegions = {
             0x1D: 0x133,
             0x1E: 0x133,
         },
+        spawn={"x": 441.0, "y": -299.0, "z": 758.0},
     ),
     "WitchesHouse": MN64Region(
         name="Witches House",
@@ -457,6 +466,7 @@ LogicRegions = {
             0x1D: 0x133,
             0x1E: 0x133,
         },
+        spawn={"x": 56.0, "y": -40.0, "z": 51.0},
     ),
     "Shoreline": MN64Region(
         name="Shoreline",
@@ -555,6 +565,7 @@ LogicRegions = {
             0x1A: 0x147,
             0x1B: 0x147,
         },
+        spawn={"x": -242.0, "y": 200.0, "z": -816.0},
     ),
     "UgoStoneCircle": MN64Region(
         name="Ugo Stone Circle",
@@ -589,6 +600,7 @@ LogicRegions = {
             0x1FB,
             0x16F,
         ],
+        spawn={"x": 0.0, "y": -46.0, "z": -576.0},
     ),
     "UnderwaterJapanSea": MN64Region(
         name="Underwater Japan Sea",

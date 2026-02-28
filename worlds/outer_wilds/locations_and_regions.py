@@ -5,8 +5,8 @@ from typing import Any, NamedTuple
 
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
-from worlds.generic.Rules import set_rule
-from .options import Spawn
+from worlds.generic.Rules import add_rule, set_rule
+from .options import Goal, Spawn
 from .should_generate import should_generate, should_generate_location
 from .warp_platforms import warp_platform_to_logical_region, warp_platform_required_items
 
@@ -160,6 +160,23 @@ def create_regions(world: "OuterWildsWorld") -> None:
     elif options.spawn == Spawn.option_deep_bramble:
         menu.add_exits(["Deep Bramble"])
         mw.get_entrance("Menu -> Space", p).access_rule = lambda state: state.has_all(["Launch Codes", "Deep Bramble Coordinates"], p)
+
+    if options.goal == Goal.option_song_of_the_universe:
+        friend_list = [
+            ("QM: Explore the Sixth Location", True),                                    # Solanum
+            ("DW: Sealed Vault", options.enable_eote_dlc),                               # Prisoner
+            ("HN1: Scan Derelict Ship Cockpit Signal", options.enable_hn1_mod),          # Hearth's Neighbor
+            ("TO: Cliffside Home Explanation (Text Wall)", options.enable_outsider_mod), # The Outsider
+            ("AC: The Astral Codec", options.enable_ac_mod),                             # Astral Codec
+            ("HN2: Activate The Device", options.enable_hn2_mod),                        # Hearth's Neighbor 2 Magistarium
+            ("FQ: Tuner's Song", options.enable_fq_mod),                                 # Fret's Quest
+            ("FC: Conclusion", options.enable_fc_mod),                                   # Forgotten Castaways
+            ("EH: Meet The Phosphors", options.enable_eh_mod),                           # Echo Hike
+        ]
+        available_friend_locations = [location for (location, enabled) in friend_list if enabled]
+        required_count = options.required_friends
+        add_rule(mw.get_location("Victory - Song of the Universe", p),
+                 lambda state: sum([state.can_reach_location(friend, p) for friend in available_friend_locations]) >= required_count)
 
     if world.warps == 'vanilla':
         def has_codes(state): return state.has("Nomai Warp Codes", p)

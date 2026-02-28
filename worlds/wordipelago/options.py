@@ -115,7 +115,7 @@ class WordWeighting(Range):
 class MinimumPointShopChecks(Range):
     """How many items are present in the point shop."""
     display_name = "Point Shop Checks"
-    range_start = 1
+    range_start = 10
     default = 10
     range_end = 50
     
@@ -135,7 +135,7 @@ class GreenChecks(Choice):
     composition: checks for every configuration of green letters.
     complete: Best and composition combined."""
     display_name = "Green Checks"
-    option_none = 0
+    # option_none = 0
     option_best = 1
     option_composition = 2
     option_complete = 3
@@ -157,7 +157,7 @@ class LetterChecks(Choice):
     common: Checks for using vowels and common consonants.
     all: Checks for using all letters."""
     display_name = "Letter Checks"
-    option_none = 0
+    # option_none = 0
     option_vowels = 1
     option_common = 2
     option_all = 3
@@ -198,10 +198,6 @@ class ShopPointsItemSize(Range):
     range_start = 0
     range_end = 1000
     default = 100
-    
-class ShopPointsItemDefaultFiller(Toggle):
-    """Whether the default filler item is point shop points, extra fillers are Suggestions otherwise."""
-    display_name = "Shop Points as Default Filler"
 
 class BadGuessTrapPercent(Range):
     """What percentage of filler items will be replaced with Bad Guess traps."""
@@ -265,7 +261,6 @@ class WordipelagoOptions(PerGameCommonOptions):
     extra_time_reward_percent: ExtraTimeRewardPercent
     shop_points_item_reward_percent: ShopPointsItemRewardPercent
     shop_points_item_size: ShopPointsItemSize
-    shop_points_item_default_filler: ShopPointsItemDefaultFiller
     
     #Traps
     bad_guess_trap_percent: BadGuessTrapPercent
@@ -308,7 +303,6 @@ option_groups = [
         ExtraTimeRewardPercent,
         ShopPointsItemRewardPercent,
         ShopPointsItemSize,
-        ShopPointsItemDefaultFiller
     ]),
     OptionGroup("Traps", [
         BadGuessTrapPercent,

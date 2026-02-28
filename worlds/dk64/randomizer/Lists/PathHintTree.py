@@ -14,7 +14,9 @@ class PathHintTreeNode:
         """Create a path hint tree node for the parameter location."""
         self.node_location_id = loc
         self.path_hinted = False
+        self.in_region_with_path_hint = False
         self.woth_hinted = False
+        self.region_hinted = False
         self.goals = []
         self.parents = []
         self.children = []

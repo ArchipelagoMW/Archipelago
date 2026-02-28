@@ -306,10 +306,10 @@ def get_connection_requirement(connection_key, area_map):
     # Define alternative connection groups
     alternative_groups = {
         "SSMain_EcOutside": [
-            AreaConnection.SSMain_to_EcOutside,
-            AreaConnection.EcOutside_to_SSMain,
-            AreaConnection.SSMain_to_Bridge,
-            AreaConnection.Bridge_to_SSMain,
+            AreaConnection.SsMain_to_EcOutside,
+            AreaConnection.EcOutside_to_SsMain,
+            AreaConnection.SsMain_to_Bridge,
+            AreaConnection.Bridge_to_SsMain,
         ],
         "MrMain_EcOutside": [
             AreaConnection.MrMain_to_EcOutside,

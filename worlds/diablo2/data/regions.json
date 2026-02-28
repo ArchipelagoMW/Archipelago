@@ -1,0 +1,64 @@
+{
+	"Act 1 - Normal": 	{
+		"connects_to": ["Act 2 - Normal"],
+		"starting": true,
+		"requires": []
+	},
+	"Act 2 - Normal": 	{
+		"connects_to": ["Act 3 - Normal"],
+		"requires": []
+	},
+	"Act 3 - Normal": 	{
+		"connects_to": ["Act 4 - Normal"],
+		"requires": []
+	},
+	"Act 4 - Normal": 	{
+		"connects_to": ["Act 5 - Normal"],
+		"requires": []
+	},
+	"Act 5 - Normal": 	{
+		"connects_to": ["Act 1 - Nightmare"],
+		"requires": []
+	},
+	"Act 1 - Nightmare": 	{
+		"connects_to": ["Act 2 - Nightmare"],
+		"requires": []
+	},
+	"Act 2 - Nightmare": 	{
+		"connects_to": ["Act 3 - Nightmare"],
+		"requires": []
+	},
+	"Act 3 - Nightmare": 	{
+		"connects_to": ["Act 4 - Nightmare"],
+		"requires": []
+	},
+	"Act 4 - Nightmare": 	{
+		"connects_to": ["Act 5 - Nightmare"],
+		"requires": []
+	},
+	"Act 5 - Nightmare": 	{
+		"connects_to": ["Act 1 - Hell"],
+		"requires": []
+	},
+	"Act 1 - Hell": 	{
+		"connects_to": ["Act 2 - Hell"],
+		"requires": []
+	},
+	"Act 2 - Hell": 	{
+		"connects_to": ["Act 3 - Hell"],
+		"requires": []
+	},
+	"Act 3 - Hell": 	{
+		"connects_to": ["Act 4 - Hell"],
+		"requires": []
+	},
+	"Act 4 - Hell": 	{
+		"connects_to": ["Act 5 - Hell"],
+		"requires": []
+	},
+	"Act 5 - Hell": 	{
+		"starting": false,
+		"connects_to": [],
+		"requires": []
+}
+}

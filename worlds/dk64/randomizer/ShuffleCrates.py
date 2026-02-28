@@ -1,8 +1,5 @@
 """Shuffle Melon Crate Locations."""
 
-from randomizer.Enums.Plandomizer import PlandoItems
-from randomizer.Lists import Exceptions
-
 import randomizer.LogicFiles.AngryAztec
 import randomizer.LogicFiles.CreepyCastle
 import randomizer.LogicFiles.CrystalCaves

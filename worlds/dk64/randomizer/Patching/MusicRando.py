@@ -11,12 +11,12 @@ from zipfile import ZipFile
 from randomizer.Enums.Songs import Songs
 from randomizer.Enums.SongType import SongType
 from randomizer.Enums.SongGroups import SongGroup
-from randomizer.Enums.Settings import MusicFilters, WinConditionComplex
+from randomizer.Enums.Settings import MusicFilters
 from randomizer.Lists.Songs import song_data, song_idx_list
 from randomizer.Patching.Patcher import ROM
 from randomizer.Settings import Settings
-from randomizer.Patching.Library.Generic import IsItemSelected, Overlay
-from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
+from randomizer.Patching.Library.Generic import Overlay, IsDDMSSelected
+from randomizer.Patching.Library.Assets import TableNames, writeRawFile
 from randomizer.Patching.Library.ASM import writeValue, populateOverlayOffsets, getROMAddress
 
 storage_banks = {
@@ -248,11 +248,6 @@ def writeSongVolume(ROM_COPY: ROM, index: int, song_type: SongType):
         SongType.MajorItem: 27000,
         SongType.MinorItem: 25000,
     }
-    ROM_COPY.seek(TYPE_ARRAY + index)
-    if song_type in TYPE_VALUES:
-        ROM_COPY.write(TYPE_VALUES.index(song_type))
-    else:
-        ROM_COPY.write(255)
     if song_type in volumes:
         writeValue(ROM_COPY, 0x807454F0 + (index * 2), Overlay.Static, volumes.get(song_type, 23000), offset_dict)
 
@@ -417,8 +412,8 @@ def insertUploaded(
     # Add assigned custom songs back as locations.
     songs_to_be_replaced.extend(custom_song_locations)
 
-    length_filter = IsItemSelected(settings.music_filtering, settings.music_filtering_selected, MusicFilters.length)
-    location_filter = IsItemSelected(settings.music_filtering, settings.music_filtering_selected, MusicFilters.location)
+    length_filter = IsDDMSSelected(settings.music_filtering_selected, MusicFilters.length)
+    location_filter = IsDDMSSelected(settings.music_filtering_selected, MusicFilters.location)
 
     # Place Songs
     for song_enum in songs_to_be_replaced:
@@ -463,13 +458,10 @@ def insertUploaded(
                 song.output_name = new_song.name
                 song.output_name_short = new_song.name_short
                 song.shuffled = True
-                ROM_COPY.seek(getPointerLocation(TableNames.MusicMIDI, song.mem_idx))
-                zipped_data = gzip.compress(new_song_data, compresslevel=9)
-                ROM_COPY.writeBytes(zipped_data)
+                writeRawFile(TableNames.MusicMIDI, song.mem_idx, False, new_song_data, ROM_COPY)
 
 
 ENABLE_CHAOS = False  # Enable DK Rap everywhere
-TYPE_ARRAY = 0x1FEE200
 TYPE_VALUES = [SongType.BGM, SongType.Event, SongType.MajorItem, SongType.MinorItem]
 
 
@@ -482,7 +474,7 @@ def randomize_music(settings: Settings, ROM_COPY: ROM):
     music_data = {"music_bgm_data": {}, "music_majoritem_data": {}, "music_minoritem_data": {}, "music_event_data": {}}
     music_names = [None] * 175
     if js.document.getElementById("override_cosmetics").checked or True:
-        if js.document.getElementById("random_music").checked:
+        if js.document.getElementById("random_music").checked or js.document.getElementById("music_is_custom").checked:
             settings.music_bgm_randomized = True
             settings.music_majoritems_randomized = True
             settings.music_minoritems_randomized = True
@@ -492,12 +484,6 @@ def randomize_music(settings: Settings, ROM_COPY: ROM):
             settings.music_majoritems_randomized = js.document.getElementById("music_majoritems_randomized").checked
             settings.music_minoritems_randomized = js.document.getElementById("music_minoritems_randomized").checked
             settings.music_events_randomized = js.document.getElementById("music_events_randomized").checked
-    else:
-        if settings.random_music:
-            settings.music_bgm_randomized = True
-            settings.music_majoritems_randomized = True
-            settings.music_minoritems_randomized = True
-            settings.music_events_randomized = True
 
     NON_BGM_DATA = [
         # Minor Items
@@ -545,6 +531,7 @@ def randomize_music(settings: Settings, ROM_COPY: ROM):
         or settings.music_minoritems_randomized
         or categoriesHaveAssignedSongs(settings, TYPE_VALUES)
     ):
+        settings.music_rando_enabled = True
         sav = settings.rom_data
         ROM_COPY.seek(sav + 0x12E)
         ROM_COPY.write(1)
@@ -567,8 +554,6 @@ def randomize_music(settings: Settings, ROM_COPY: ROM):
     for song in song_data.values():
         song.Reset()
         writeSongVolume(ROM_COPY, song.mem_idx, song.type)
-    if settings.win_condition_item == WinConditionComplex.dk_rap_items:
-        song_data[Songs.DKRap].type = SongType.Protected  # Protect the rap, used for end seq
     # Check if we have anything beyond default set for BGM
     if settings.music_bgm_randomized or categoriesHaveAssignedSongs(settings, [SongType.BGM]):
         # If the user selected standard rando
@@ -668,10 +653,10 @@ def randomize_music(settings: Settings, ROM_COPY: ROM):
                 ROM_COPY.seek(song["pointing_to"])
                 ROM_COPY.writeBytes(stored_data)
                 # Update the uncompressed data table to have our new size.
-                ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song_list.index(song)))
-                new_bytes = ROM_COPY.readBytes(4)
-                ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song_list.index(rap)))
-                ROM_COPY.writeBytes(new_bytes)
+                # ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song_list.index(song)))
+                # new_bytes = ROM_COPY.readBytes(4)
+                # ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song_list.index(rap)))
+                # ROM_COPY.writeBytes(new_bytes)
                 # Update data
                 writeSongMemory(ROM_COPY, song["index"], rap_song_data.memory)
 
@@ -762,9 +747,9 @@ def shuffle_music(ROM_COPY: ROM, settings, music_data, music_names, pool_to_shuf
         stored_data = ROM_COPY.readBytes(song["compressed_size"])
         stored_song_data[song["index"]] = stored_data
         # Update the uncompressed data table to have our new size.
-        ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song["index"]))
-        new_bytes = ROM_COPY.readBytes(4)
-        stored_song_sizes[song["index"]] = new_bytes
+        # ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song["index"]))
+        # new_bytes = ROM_COPY.readBytes(4)
+        # stored_song_sizes[song["index"]] = new_bytes
 
     for song, shuffled_song in zip(pool_to_shuffle, shuffled_list):
         # If we are inserting an assigned vanilla song, we should write the
@@ -778,19 +763,17 @@ def shuffle_music(ROM_COPY: ROM, settings, music_data, music_names, pool_to_shuf
             songs = song_rom_data[shuffled_song["index"]]["data"]
             song_name = song_rom_data[shuffled_song["index"]]["name"]
             song_short_name = song_name
-            song_size = song_rom_data[shuffled_song["index"]]["size"]
             song_memory = song_rom_data[shuffled_song["index"]]["memory"]
         else:
             songs = stored_song_data[shuffled_song["index"]]
             song_name = song_idx_list[shuffledIndex].output_name
             song_short_name = song_idx_list[shuffledIndex].output_name_short
-            song_size = stored_song_sizes[shuffled_song["index"]]
             song_memory = song_idx_list[shuffledIndex].memory
         ROM_COPY.seek(song["pointing_to"])
         ROM_COPY.writeBytes(songs)
         # Update the uncompressed data table to have our new size.
-        ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song["index"]))
-        ROM_COPY.writeBytes(song_size)
+        # ROM_COPY.seek(uncompressed_data_table["pointing_to"] + (4 * song["index"]))
+        # ROM_COPY.writeBytes(song_size)
         writeSongMemory(ROM_COPY, originalIndex, song_memory)
         music_names[originalIndex] = song_short_name
         if song_idx_list[originalIndex].type == SongType.BGM:

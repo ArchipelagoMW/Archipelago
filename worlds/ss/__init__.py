@@ -7,6 +7,7 @@ from collections.abc import Mapping
 from dataclasses import fields
 from typing import Any, ClassVar
 
+import threading
 import yaml
 
 from BaseClasses import MultiWorld, Region, Tutorial, LocationProgressType, ItemClassification as IC
@@ -39,12 +40,11 @@ from .rando.ItemPlacement import handle_itempool, item_classification
 from .rando.HintPlacement import Hints
 from .rando.MiscRando import shuffle_batreaux_counts
 
-from .logic.LogicParser import parse_expression
-from .logic.Logic import ALL_REQUIREMENTS
+from .logic.Requirements import location_requirements, exit_requirements, ALL_REQUIREMENTS
 
 AP_VERSION = [0, 6, 5]
-WORLD_VERSION = [0, 5, 4]
-RANDO_VERSION = [0, 5, 4]
+WORLD_VERSION = [0, 5, 5]
+RANDO_VERSION = [0, 5, 5]
 
 
 def run_client() -> None:
@@ -154,6 +154,8 @@ class SSWorld(World):
 
         self.dungeons = DungeonRando(self)
         self.entrances = EntranceRando(self)
+
+        self.hints_ready = threading.Event()
 
     def determine_progress_and_nonprogress_locations(self) -> tuple[set[str], set[str]]:
         """
@@ -452,7 +454,7 @@ class SSWorld(World):
                 else:
                     region.add_exits(
                         {entrance_region: exit_full_name},
-                        {entrance_region: eval(f"lambda state, player=self.player: {parse_expression(rule)}")}
+                        {entrance_region: exit_requirements(self, exit_full_name)}
                     )
 
                 # if entrance_full_name is None:
@@ -517,7 +519,8 @@ class SSWorld(World):
         #     locs[i] = sorted([(loc.name, loc.item.name) for loc in sphere], key=lambda loc: loc[0])
         # with open("./worlds/ss/Playthrough.json", "w") as f:
         #     json.dump(locs, f, indent=2)
-        
+        self.hints_ready.set()
+          
         multiworld = self.multiworld
         player = self.player
         player_hash = self.random.sample(HASH_NAMES, 3)
@@ -652,6 +655,9 @@ class SSWorld(World):
 
         :return: A dictionary to be sent to the client when it connects to the server.
         """
+        #Make sure slotdata doesnt fill before hints are ready from generate output 
+        self.hints_ready.wait()
+
         slot_data = {
             "required_dungeon_count": self.options.required_dungeon_count.value,
             "triforce_required": self.options.triforce_required.value,

@@ -854,7 +854,7 @@
     "warps": {
       "MAP_FOUR_ISLAND:0/MAP_FOUR_ISLAND_POKEMON_CENTER_1F:0": "Four Island Pokemon Center",
       "MAP_FOUR_ISLAND:1/MAP_FOUR_ISLAND_POKEMON_DAY_CARE:0": "Four Island Pokemon Day Care",
-      "MAP_FOUR_ISLAND:2/MAP_FOUR_ISLAND_HOUSE1:0": "Four Island Move Tutor's House",
+      "MAP_FOUR_ISLAND:2/MAP_FOUR_ISLAND_HOUSE1:0": "Move Tutor's House",
       "MAP_FOUR_ISLAND:4/MAP_FOUR_ISLAND_LORELEIS_HOUSE:0": "Lorelei's House",
       "MAP_FOUR_ISLAND:5/MAP_FOUR_ISLAND_HOUSE2:0": "Sticker Man's House",
       "MAP_FOUR_ISLAND:6/MAP_FOUR_ISLAND_HARBOR:0": "Four Island Harbor",
@@ -947,7 +947,7 @@
   },
   "REGION_FOUR_ISLAND_HOUSE1/MAIN": {
     "parent_map": "MAP_FOUR_ISLAND_HOUSE1",
-    "name": "Four Island Move Tutor's House",
+    "name": "Move Tutor's House",
     "encounter_region": null,
     "has_land": false,
     "has_water": false,
@@ -957,7 +957,7 @@
     "events": [],
     "exits": {},
     "warps": {
-      "MAP_FOUR_ISLAND_HOUSE1:0/MAP_FOUR_ISLAND:2": "Four Island Move Tutor's House Exit"
+      "MAP_FOUR_ISLAND_HOUSE1:0/MAP_FOUR_ISLAND:2": "Move Tutor's House Exit"
     }
   },
   "REGION_FOUR_ISLAND_LORELEIS_HOUSE/MAIN": {

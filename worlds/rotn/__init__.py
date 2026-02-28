@@ -1,4 +1,5 @@
-from BaseClasses import Tutorial, Region, Item, ItemClassification
+from BaseClasses import Tutorial, Region, Item, ItemClassification, logging
+from Options import Optional, Option
 from worlds.AutoWorld import WebWorld, World
 from typing import List, ClassVar, Type
 from math import floor
@@ -9,6 +10,7 @@ from .options import RotNOptions, rotn_option_groups
 from .RiftCollections import RotNCollections
 from .items import RotNSongItem, RotNFixedItem
 from .locations import RotNLocation
+from .datagen import getPlayerSpecificIds
 
 class RotNWeb(WebWorld):
     theme = "stone"
@@ -45,14 +47,20 @@ class RotNWorld(World):
     location_name_to_id = {name: code for name, code in rift_collection.location_names_to_id.items()}
     item_name_groups = rift_collection.getItemNameGroups()
 
+    player_mod_data = {}
+    player_mod_ids = {}
+    player_mod_remmap = {}
     victory_song_name: str = ""
     victory_song_type: int = 0
     starting_songs: List[str] = []
-    included_songs: List[str]
+    included_songs: List[str] = []
     final_song_ids: set[int] = set()
     location_count: int
 
+    ut_can_gen_without_yaml = True
+
     def generate_early(self):
+        logger = logging.getLogger("RotN")
         # Universal Tracker Support
         re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if re_gen_passthrough and self.game in re_gen_passthrough:
@@ -60,53 +68,73 @@ class RotNWorld(World):
 
             if "finalSongIDs" in slot_data:
                 final = slot_data.get("finalSongIDs", [])
-                self.included_songs = [key for key, song in self.rift_collection.song_items.items() if song.song_name in final]
+                self.included_songs = [key for key, song in self.rift_collection.song_items.items() if song.song_id in final]
                 self.location_count = len(self.included_songs) * 2
+
+            slot_options: dict[str, any] = slot_data.get("options", {})
+
+            for key, value in slot_options.items():
+                opt: Optional[Option] = getattr(self.options, key, None)
+                if opt is not None:
+                    # You can also set .value directly but that won't work if you have OptionSets
+                    setattr(self.options, key, opt.from_any(value))
             return
         
+        if len(self.options.difficulty_option.value) == 0:
+            self.options.difficulty_option.value = self.options.difficulty_option.default
+            logger.warning(f"\nWarning: {self.player_name} has no difficulties selected in difficulty_option.  They should fix their yaml.\nResetting to default value to continue gen.")
+
         min_diff = min(self.options.min_intensity.value, self.options.max_intensity.value)
         max_diff = max(self.options.min_intensity.value, self.options.max_intensity.value)
 
         starter_song_count = self.options.starting_song_count.value
         goal_song_pool = self.options.goal_song_pool.value
+        filter_error = False
+
+        self.player_mod_data, self.player_mod_ids, self.player_mod_remap = getPlayerSpecificIds(self.options.rotn_mod_data.value, self.rift_collection.mod_remaps)
 
         while True:
-            available_song_keys = self.rift_collection.getSongsWithSettings(self.options, min_diff, max_diff)
+            available_song_keys = self.rift_collection.getSongsWithSettings(self.options, min_diff, max_diff, self.player_mod_data)
             available_song_keys = self.handle_plando(available_song_keys)
 
-            # Find the proposed goal songs and add them to a new list
-            victory_song_keys = []
-            for goal_song_canidate in goal_song_pool:
-                for index, available_song in enumerate(available_song_keys):
-                    if goal_song_canidate == available_song:
-                        # Include the canidates correlating index to the full list for later use
-                        victory_song_keys.append([index, available_song])
+            if len(available_song_keys) > 0:
+                # Find the proposed goal songs and add them to a new list
+                victory_song_keys = []
+                for goal_song_canidate in goal_song_pool:
+                    for index, available_song in enumerate(available_song_keys):
+                        if goal_song_canidate == available_song:
+                            # Include the canidates correlating index to the full list for later use
+                            victory_song_keys.append([index, available_song])
 
-            if victory_song_keys:
-                chosen_song_index = self.random.randrange(0, len(victory_song_keys))
-                self.victory_song_name = victory_song_keys[chosen_song_index][1]
-                self.victory_song_type = self.rift_collection.song_items[self.victory_song_name].type
-                # Replace the chosen goal song's index with the index from the full list we saved earlier.
-                chosen_song_index = victory_song_keys[chosen_song_index][0]
-            else:
-                chosen_song_index = self.random.randrange(0, len(available_song_keys))
-                self.victory_song_name = available_song_keys[chosen_song_index]
-                self.victory_song_type = self.rift_collection.song_items[self.victory_song_name].type
-            del available_song_keys[chosen_song_index]
+                if victory_song_keys:
+                    chosen_song_index = self.random.randrange(0, len(victory_song_keys))
+                    self.victory_song_name = victory_song_keys[chosen_song_index][1]
+                    self.victory_song_type = self.rift_collection.song_items[self.victory_song_name].type
+                    # Replace the chosen goal song's index with the index from the full list we saved earlier.
+                    chosen_song_index = victory_song_keys[chosen_song_index][0]
+                else:
+                    chosen_song_index = self.random.randrange(0, len(available_song_keys))
+                    self.victory_song_name = available_song_keys[chosen_song_index]
+                    self.victory_song_type = self.rift_collection.song_items[self.victory_song_name].type
+                del available_song_keys[chosen_song_index]
 
-            count_needed_for_start = max(0, starter_song_count - len(self.starting_songs))
-            if len(available_song_keys) + len(self.included_songs) >= count_needed_for_start + 11:
-                final_song_list = available_song_keys
-                break
+                count_needed_for_start = max(0, starter_song_count - len(self.starting_songs))
+                if len(available_song_keys) >= count_needed_for_start + 11:
+                    final_song_list = [s for s in available_song_keys if s not in self.included_songs]
+                    break
 
             # If the above fails, we want to adjust the difficulty thresholds.
             # Easier first, then harder
+            filter_error = True
             if min_diff <= 1 and max_diff >= 40:
                 raise OptionError("Failed to find enough songs, even with maximum difficulty thresholds.  (Did you exclude too many songs?)")
             elif min_diff <= 1:
                 max_diff += 1
             else:
                 min_diff -= 1
+            
+        if filter_error:
+            logger.warning(f"\nWarning: {self.player_name}'s song filtering settings were too restrictive.  {self.player_name} should fix their yaml settings.\nGeneration will continue with the following difficulty ranges ({min_diff} - {max_diff}).")
 
         self.create_song_pool(final_song_list)
 
@@ -114,17 +142,19 @@ class RotNWorld(World):
             self.multiworld.push_precollected(self.create_item(song))
 
     def handle_plando(self, available_song_keys: List[str]) -> List[str]:
-        song_items = self.rift_collection.song_items
-
         start_items = self.options.start_inventory.value.keys()
         include_songs = self.options.include_songs.value
         exclude_songs = self.options.exclude_songs.value
 
         self.starting_songs = [s for s in start_items if s in available_song_keys]
-        self.included_songs = [s for s in include_songs if s in available_song_keys and s not in self.starting_songs]
+
+        for song in include_songs:
+            if song in available_song_keys and song not in self.starting_songs:
+                if self.random.randint(1, 100) < self.options.include_songs_percentage.value:
+                    self.included_songs.append(song)
 
         return [s for s in available_song_keys if s not in start_items
-                and s not in include_songs and s not in exclude_songs]
+                and s not in exclude_songs]
     
     def create_song_pool(self, available_song_keys: List[str]):
         starting_song_count = self.options.starting_song_count.value
@@ -169,7 +199,7 @@ class RotNWorld(World):
             return RotNFixedItem(name, ItemClassification.filler, filler, self.player)
         
         song = self.rift_collection.song_items[name]
-        self.final_song_ids.add(song.song_name)
+        self.final_song_ids.add(song.song_id)
         return RotNSongItem(name, self.player, song)
     
     def get_filler_item_name(self):
@@ -276,4 +306,10 @@ class RotNWorld(World):
             "minigameMode": self.options.include_minigames.value,
             "bossMode": self.options.include_boss_battle.value,
             "finalSongIDs": self.final_song_ids,
+            "modData": {pack: [[song[0], song[1]] for song in songs if song[1] in self.final_song_ids]
+                        for pack, songs in self.player_mod_data.items()},
+            "modRemap": self.player_mod_remap,
+
+            # Might not be able to trim this slot data out as most of this info is already in slot data already
+            "options": self.options.as_dict("duplicate_song_percentage", "diamond_count_percentage", "diamond_win_percentage")
         }

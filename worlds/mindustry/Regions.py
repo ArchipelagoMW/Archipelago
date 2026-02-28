@@ -441,11 +441,11 @@ class MindustryRegions():
         self.menu = self.__add_region("Menu", None)
 
         if options.campaign_choice.value == 0:
-            self.__create_serpulo_campaign()
+            self.__create_serpulo_campaign(options)
         elif options.campaign_choice.value == 1:
-            self.__create_erekir_campaign()
+            self.__create_erekir_campaign(options)
         elif options.campaign_choice.value == 2:
-            self.__create_all_campaign()
+            self.__create_all_campaign(options)
 
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -468,7 +468,7 @@ class MindustryRegions():
         region.locations.append(location)
         location.place_locked_item(MindustryItem(event_name, ItemClassification.progression, None, self.player))
 
-    def __create_serpulo_campaign(self):
+    def __create_serpulo_campaign(self, options: MindustryOptions):
         """
         Create region related to the serpulo campaign.
         """
@@ -649,44 +649,44 @@ class MindustryRegions():
         self.node_tetrative_reconstructor = self.__add_region("AP-S-05-42", MindustryLocations.serpulo_tetrative_reconstructor)
 
         self.node_ground_zero = self.__add_region("Ground Zero", None)
-        self.node_frozen_forest = self.__add_region("Frozen Forest", None)
-        self.node_the_craters = self.__add_region("The Craters", None)
-        self.node_ruinous_shores = self.__add_region("Ruinous Shores", None)
-        self.node_windswept_islands = self.__add_region("Windswept Islands", None)
-        self.node_tar_fields = self.__add_region("Tar Fields", None)
-        self.node_impact_0078 = self.__add_region("Impact 0078", None)
-        self.node_desolate_rift = self.__add_region("Desolate Rift", None)
-        self.node_planetary_launch_terminal = self.__add_region("Planetary Launch Terminal", None)
-        self.node_extraction_outpost = self.__add_region("Extraction Outpost", None)
-        self.node_salt_flats = self.__add_region("Salt Flats", None)
-        self.node_coastline = self.__add_region("Coastline", None)
-        self.node_naval_fortress = self.__add_region("Naval Fortress", None)
-        self.node_overgrowth = self.__add_region("Overgrowth", None)
-        self.node_biomass_synthesis_facility = self.__add_region("Biomass Synthesis Facility", None)
-        self.node_stained_mountains = self.__add_region("Stained Mountains", None)
-        self.node_fungal_pass = self.__add_region("Fungal Pass", None)
-        self.node_nuclear_production_complex = self.__add_region("Nuclear Production Complex", None)
+        self.node_frozen_forest = self.__add_region("Frozen Forest", self.__getFrozenForestLocation(options))
+        self.node_the_craters = self.__add_region("The Craters", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_the_craters)
+        self.node_ruinous_shores = self.__add_region("Ruinous Shores", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_ruinous_shores)
+        self.node_windswept_islands = self.__add_region("Windswept Islands", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_windswept_islands)
+        self.node_tar_fields = self.__add_region("Tar Fields", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_tar_fields)
+        self.node_impact_0078 = self.__add_region("Impact 0078", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_impact_0078)
+        self.node_desolate_rift = self.__add_region("Desolate Rift", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_desolate_rift)
+        self.node_planetary_launch_terminal = self.__add_region("Planetary Launch Terminal", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_planetary_launch_terminal)
+        self.node_extraction_outpost = self.__add_region("Extraction Outpost", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_extraction_outpost)
+        self.node_salt_flats = self.__add_region("Salt Flats", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_salt_flats)
+        self.node_coastline = self.__add_region("Coastline", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_coastline)
+        self.node_naval_fortress = self.__add_region("Naval Fortress", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_naval_fortress)
+        self.node_overgrowth = self.__add_region("Overgrowth", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_overgrowth)
+        self.node_biomass_synthesis_facility = self.__add_region("Biomass Synthesis Facility", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_biomass_synthesis_facility)
+        self.node_stained_mountains = self.__add_region("Stained Mountains", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_stained_mountains)
+        self.node_fungal_pass = self.__add_region("Fungal Pass", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_fungal_pass)
+        self.node_nuclear_production_complex = self.__add_region("Nuclear Production Complex", None if not options.add_sectors_as_locations else MindustryLocations.serpulo_nuclear_production_complex)
 
-        self.node_copper = self.__add_region("Copper", None)
-        self.node_water_serpulo = self.__add_region("Water Serpulo", None)
-        self.node_sand_serpulo = self.__add_region("Sand Serpulo", None)
-        self.node_lead = self.__add_region("Lead", None)
-        self.node_titanium = self.__add_region("Titanium", None)
-        self.node_cryofluid = self.__add_region("Cryofluid", None)
-        self.node_thorium_serpulo = self.__add_region("Thorium Serpulo", None)
-        self.node_surge_alloy_serpulo = self.__add_region("Surge Alloy Serpulo", None)
-        self.node_phase_fabric_serpulo = self.__add_region("Phase Fabric Serpulo", None)
-        self.node_metaglass = self.__add_region("Metaglass", None)
-        self.node_scrap = self.__add_region("Scrap", None)
-        self.node_slag_serpulo = self.__add_region("Slag Serpulo", None)
-        self.node_coal = self.__add_region("Coal", None)
-        self.node_graphite_serpulo = self.__add_region("Graphite Serpulo", None)
-        self.node_silicon_serpulo = self.__add_region("Silicon Serpulo", None)
-        self.node_pyratite = self.__add_region("Pyratite", None)
-        self.node_blast_compound = self.__add_region("Blast Compound", None)
-        self.node_spore_pod = self.__add_region("Spore Pod", None)
-        self.node_oil = self.__add_region("Oil", None)
-        self.node_plastanium = self.__add_region("Plastanium", None)
+        self.node_copper = self.__add_region("Copper Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_copper)
+        self.node_water_serpulo = self.__add_region("Water Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_water)
+        self.node_sand_serpulo = self.__add_region("Sand Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_sand)
+        self.node_lead = self.__add_region("Lead Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_lead)
+        self.node_titanium = self.__add_region("Titanium Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_titanium)
+        self.node_cryofluid = self.__add_region("Cryofluid Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_cryofluid)
+        self.node_thorium_serpulo = self.__add_region("Thorium Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_thorium)
+        self.node_surge_alloy_serpulo = self.__add_region("Surge Alloy Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_surge_alloy)
+        self.node_phase_fabric_serpulo = self.__add_region("Phase Fabric Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_phase_fabric)
+        self.node_metaglass = self.__add_region("Metaglass Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_metaglass)
+        self.node_scrap = self.__add_region("Scrap Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_scrap)
+        self.node_slag_serpulo = self.__add_region("Slag Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_slag)
+        self.node_coal = self.__add_region("Coal Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_coal)
+        self.node_graphite_serpulo = self.__add_region("Graphite Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_graphite)
+        self.node_silicon_serpulo = self.__add_region("Silicon Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_silicon)
+        self.node_pyratite = self.__add_region("Pyratite Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_pyratite)
+        self.node_blast_compound = self.__add_region("Blast Compound Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_blast_compound)
+        self.node_spore_pod = self.__add_region("Spore Pod Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_spore_pod)
+        self.node_oil = self.__add_region("Oil Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_oil)
+        self.node_plastanium = self.__add_region("Plastanium Serpulo", None if not options.add_resources_as_locations else MindustryLocations.serpulo_plastanium)
 
 
     def __connect_serpulo_campaign(self, options: MindustryOptions):
@@ -1179,7 +1179,7 @@ class MindustryRegions():
         self.__connect_regions(self.node_coal, self.node_spore_pod,
                                lambda state: has_cultivator(state, self.player))
         self.__connect_regions(self.node_coal, self.node_oil,
-                               lambda state: has_mechanical_pump(state, self.player))
+                               lambda state: has_pump(state, self.player))
         self.__connect_regions(self.node_oil, self.node_plastanium,
                                lambda state: has_plastanium_compressor(state, self.player))
 
@@ -1223,7 +1223,7 @@ class MindustryRegions():
                                              has_desolate_rift(state, self.player) and
                                              has_planetary_launch_terminal(state, self.player))
 
-    def __create_erekir_campaign(self):
+    def __create_erekir_campaign(self, options: MindustryOptions):
         """
         Create region related to the Erekir campaign.
         """
@@ -1352,41 +1352,41 @@ class MindustryRegions():
         self.node_basic_assembler_module = self.__add_region("AP-E-06-27", MindustryLocations.erekir_basic_assembler_module)
 
         self.node_the_onset = self.__add_region("The Onset", None)
-        self.node_aegis = self.__add_region("Aegis", None)
-        self.node_lake = self.__add_region("Lake", None)
-        self.node_intersect = self.__add_region("Intersect", None)
-        self.node_atlas = self.__add_region("Atlas", None)
-        self.node_split = self.__add_region("Split", None)
-        self.node_basin = self.__add_region("Basin", None)
-        self.node_marsh = self.__add_region("Marsh", None)
-        self.node_ravine = self.__add_region("Ravine", None)
-        self.node_caldera = self.__add_region("Caldera", None)
-        self.node_stronghold = self.__add_region("Stronghold", None)
-        self.node_crevice = self.__add_region("Crevice", None)
-        self.node_siege = self.__add_region("Siege", None)
-        self.node_crossroads = self.__add_region("Crossroads", None)
-        self.node_karst = self.__add_region("Karst", None)
-        self.node_origin = self.__add_region("Origin", None)
-        self.node_peaks = self.__add_region("Peaks", None)
+        self.node_aegis = self.__add_region("Aegis", self.__getAegisLocation(options))
+        self.node_lake = self.__add_region("Lake", None if not options.add_sectors_as_locations else MindustryLocations.erekir_lake)
+        self.node_intersect = self.__add_region("Intersect", None if not options.add_sectors_as_locations else MindustryLocations.erekir_intersect)
+        self.node_atlas = self.__add_region("Atlas", None if not options.add_sectors_as_locations else MindustryLocations.erekir_atlas)
+        self.node_split = self.__add_region("Split", None if not options.add_sectors_as_locations else MindustryLocations.erekir_split)
+        self.node_basin = self.__add_region("Basin", None if not options.add_sectors_as_locations else MindustryLocations.erekir_basin)
+        self.node_marsh = self.__add_region("Marsh", None if not options.add_sectors_as_locations else MindustryLocations.erekir_marsh)
+        self.node_ravine = self.__add_region("Ravine", None if not options.add_sectors_as_locations else MindustryLocations.erekir_ravine)
+        self.node_caldera = self.__add_region("Caldera", None if not options.add_sectors_as_locations else MindustryLocations.erekir_caldera)
+        self.node_stronghold = self.__add_region("Stronghold", None if not options.add_sectors_as_locations else MindustryLocations.erekir_stronghold)
+        self.node_crevice = self.__add_region("Crevice", None if not options.add_sectors_as_locations else MindustryLocations.erekir_crevice)
+        self.node_siege = self.__add_region("Siege", None if not options.add_sectors_as_locations else MindustryLocations.erekir_siege)
+        self.node_crossroads = self.__add_region("Crossroads", None if not options.add_sectors_as_locations else MindustryLocations.erekir_crossroads)
+        self.node_karst = self.__add_region("Karst", None if not options.add_sectors_as_locations else MindustryLocations.erekir_karst)
+        self.node_origin = self.__add_region("Origin", None if not options.add_sectors_as_locations else MindustryLocations.erekir_origin)
+        self.node_peaks = self.__add_region("Peaks", None if not options.add_sectors_as_locations else MindustryLocations.erekir_peaks)
 
-        self.node_beryllium = self.__add_region("Beryllium", None)
-        self.node_sand_erekir = self.__add_region("Sand Erekir", None)
-        self.node_silicon_erekir = self.__add_region("Silicon Erekir", None)
-        self.node_oxide = self.__add_region("Oxide", None)
-        self.node_water_erekir = self.__add_region("Water Erekir", None)
-        self.node_ozone = self.__add_region("Ozone", None)
-        self.node_hydrogen = self.__add_region("Hydrogen", None)
-        self.node_nitrogen = self.__add_region("Nitrogen", None)
-        self.node_cyanogen = self.__add_region("Cyanogen", None)
-        self.node_neoplasm = self.__add_region("Neoplasm", None)
-        self.node_graphite_erekir = self.__add_region("Graphite Erekir", None)
-        self.node_tungsten = self.__add_region("Tungsten", None)
-        self.node_slag_erekir = self.__add_region("Slag Erekir", None)
-        self.node_arkycite = self.__add_region("Arkycite", None)
-        self.node_thorium_erekir = self.__add_region("Thorium Erekir", None)
-        self.node_carbide = self.__add_region("Carbide", None)
-        self.node_surge_alloy_erekir = self.__add_region("Surge Alloy Erekir", None)
-        self.node_phase_fabric_erekir = self.__add_region("Phase Fabric Erekir", None)
+        self.node_beryllium = self.__add_region("Beryllium", None if not options.add_resources_as_locations else MindustryLocations.erekir_beryllium)
+        self.node_sand_erekir = self.__add_region("Sand Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_sand)
+        self.node_silicon_erekir = self.__add_region("Silicon Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_silicon)
+        self.node_oxide = self.__add_region("Oxide", None if not options.add_resources_as_locations else MindustryLocations.erekir_oxide)
+        self.node_water_erekir = self.__add_region("Water Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_water)
+        self.node_ozone = self.__add_region("Ozone", None if not options.add_resources_as_locations else MindustryLocations.erekir_ozone)
+        self.node_hydrogen = self.__add_region("Hydrogen", None if not options.add_resources_as_locations else MindustryLocations.erekir_hydrogen)
+        self.node_nitrogen = self.__add_region("Nitrogen", None if not options.add_resources_as_locations else MindustryLocations.erekir_nitrogen)
+        self.node_cyanogen = self.__add_region("Cyanogen", None if not options.add_resources_as_locations else MindustryLocations.erekir_cyanogen)
+        self.node_neoplasm = self.__add_region("Neoplasm", None if not options.add_resources_as_locations else MindustryLocations.erekir_neoplasm)
+        self.node_graphite_erekir = self.__add_region("Graphite Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_graphite)
+        self.node_tungsten = self.__add_region("Tungsten", None if not options.add_resources_as_locations else MindustryLocations.erekir_tungsten)
+        self.node_slag_erekir = self.__add_region("Slag Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_slag)
+        self.node_arkycite = self.__add_region("Arkycite", None if not options.add_resources_as_locations else MindustryLocations.erekir_arkycite)
+        self.node_thorium_erekir = self.__add_region("Thorium Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_thorium)
+        self.node_carbide = self.__add_region("Carbide", None if not options.add_resources_as_locations else MindustryLocations.erekir_carbide)
+        self.node_surge_alloy_erekir = self.__add_region("Surge Alloy Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_surge_alloy)
+        self.node_phase_fabric_erekir = self.__add_region("Phase Fabric Erekir", None if not options.add_resources_as_locations else MindustryLocations.erekir_phase_fabric)
 
     def __connect_erekir_campaign(self, options: MindustryOptions):
         """
@@ -1731,13 +1731,13 @@ class MindustryRegions():
                                              has_surge_alloy_erekir(state, self.player) and
                                              has_phase_fabric_erekir(state, self.player))
 
-    def __create_all_campaign(self):
+    def __create_all_campaign(self, options:MindustryOptions):
         """
         Create region related to the all campaigns.
         """
         self.all_campaign_victory = self.__add_region("All campaign victory", None)
-        self.__create_serpulo_campaign()
-        self.__create_erekir_campaign()
+        self.__create_serpulo_campaign(options)
+        self.__create_erekir_campaign(options)
 
 
     def __connect_all_campaign(self, options:MindustryOptions):
@@ -1776,6 +1776,13 @@ class MindustryRegions():
         if rule is not None:
             set_rule(entrance, rule)
 
+    def __getFrozenForestLocation(self, options: MindustryOptions):
+        """Get Frozen forest sector location based on player option"""
+        return None if options.tutorial_skip or not options.add_sectors_as_locations else MindustryLocations.serpulo_frozen_forest
+    
+    def __getAegisLocation(self, options: MindustryOptions):
+        """Get Aegis sector location based on player option"""
+        return None if options.tutorial_skip or not options.add_sectors_as_locations else MindustryLocations.erekir_aegis
 
 
     def __add_serpulo_events(self):

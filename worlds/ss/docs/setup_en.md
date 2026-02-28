@@ -8,6 +8,8 @@ From now on, Archipelago may be referred to as "AP". Skyward Sword may be referr
 - The latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 - [Dolphin Emulator](https://dolphin-emu.org/download/) (use the dev version!) or a homebrewed Wii or Wii U console that can connect to the Internet.
 - A `The Legend of Zelda: Skyward Sword` unrandomzied US 1.00 iso
+    - This can be obtained legally by dumping a legally-obtained (purchased) disc [using homebrew](https://wii.hacks.guide/dump-games.html)
+    - Note that it is illegal and against discord TOS to distribute copyrighted materials, such as ROMs or ISOs
 - The Skyward Sword AP World:
     - This includes the [APWorld file and the YAML options file](https://github.com/Battlecats59/SS_APWorld/releases/latest)
     - You must also download the SS game patcher, which will also be available in the release above
@@ -39,7 +41,7 @@ From now on, Archipelago may be referred to as "AP". Skyward Sword may be referr
 ### Joining a Multiworld
 - To join a multiworld, edit your YAML file to your desired settings and send the file to the multiworld host. They will use your YAML, along with those of the other players, to generate the multiworld.
 - The host should send you a APSSR file named accordingly: `AP_{seed}_P{player id}_{player name}.apssr`. If the title of this file does not fit the template, ask the host if something went wrong. See example below.
-- Open the AP release of the Skyward Sword Randomizer. Set your output folder to wherever you would like the randomized iso placed. Set the APSSR file in the randomizer window to the APSSR file that you just received from the host. **MAKE SURE that you put in the correct APSSR file.**
+- Open the SS AP Patcher that you downloaded alongside the AP World. Set your output folder to wherever you would like the randomized iso placed. Set the APSSR file in the randomizer window to the APSSR file that you just received from the host. **MAKE SURE that you put in the correct APSSR file.**
 - Set your cosmetic options in the randomizer window and select randomize.
     - NOTE: If you want to play on console, you **must** enable the `Use Wii UDP Socket` option before randomizing.
 - After randomization, see [Setting up your Client (Dolphin Emulator)](#setting-up-your-client-dolphin-emulator) or [Setting up your Client (Wii Console)](#setting-up-your-client-wii-console).
@@ -84,7 +86,7 @@ From now on, Archipelago may be referred to as "AP". Skyward Sword may be referr
 
 ### Playing the Game
 - Once the game is started, you will receive items that other players pick up for you while Link is in a state where he can receive items.
-- If you find an item that belongs to someone else, it will appear as a letter and the game will say that you received an Archipelago item.
+- If you find an item that belongs to someone else, it will appear as a custom item with the AP model and the game will say that you received an Archipelago item.
     - Some AP items from other Skyward Sword games, such as B items and boss keys, will appear as their normal model, held in front of link. The game will say that you found someone else's (item name).
     - AP items in Beedle's shop will tell you what item it is and who it belongs to, so you know if you should purchase it or not. Keep in mind, you may need to buy some items to unlock or view items hidden behind that item.
 - When you beat the game, make sure the client detects that and releases your items to the other players.
@@ -169,6 +171,7 @@ Discussion regarding this APWorld is in the [Archipelago Main Discord](https://d
 - **Trez**: Archipelago web implementation
 - **Fireworkspinner**: Early Archipelago manual designs
 - **RayStormThunder**: Skyward Sword Archipelago logo design
+- **FrasseFreak**: Designing the AP item and AP junk item in-game models
 - **lepelog**: SS Rando creator, arc work for multiworld, Rust networking code for console support
 - **SS Rando Devs**: Creating the Skyward Sword Randomizer
 - **tanjo3 and TWW APWorld Devs**: Created the TWW APWorld, which provided a lot of code for the SS APWorld

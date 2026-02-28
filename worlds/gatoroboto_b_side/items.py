@@ -32,8 +32,7 @@ ITEM_NAME_TO_ID = {
     "Palette 14": 10014,
     "Palette 15": 10015,
     "Water Level": 10237,
-    "Lava Cooled 1": 10254,
-    "Lava Cooled 2": 10255,
+    "Hotboy defeated": 10254,
     "Lava Cooled": 10257,
     "Vent Level": 10268,
     "Cute Meow": 10001,
@@ -62,10 +61,9 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Palette 13": ItemClassification.progression_deprioritized_skip_balancing,
     "Palette 14": ItemClassification.progression_deprioritized_skip_balancing,
     "Palette 15": ItemClassification.progression_deprioritized_skip_balancing,
-    "Health Upgrade": ItemClassification.useful | ItemClassification.deprioritized,
+    "Health Upgrade": ItemClassification.useful,
     "Water Level": ItemClassification.progression,
-    "Lava Cooled 1": ItemClassification.progression,
-    "Lava Cooled 2": ItemClassification.progression,
+    "Hotboy defeated": ItemClassification.progression,
     "Lava Cooled": ItemClassification.progression,
     "Vent Level": ItemClassification.progression_skip_balancing,
     "Cute Meow": ItemClassification.filler,
@@ -120,7 +118,7 @@ def create_all_items(world: GatoRobotoWorld) -> None:
         world.create_item("Palette 14"),
         world.create_item("Palette 15"),
     ]
-    for i in range(9):
+    for i in range(10):
         itempool.append(world.create_item(f"Health Upgrade"))
     for i in range(3):
         itempool.append(world.create_item(f"Water Level"))
@@ -137,13 +135,13 @@ def create_all_items(world: GatoRobotoWorld) -> None:
 
     # Lock the hot boys
     lava_cooled = world.get_location("Hotboy 1 (Heater Core-0019)")
-    lava_cooled.place_locked_item(world.create_item("Lava Cooled 1"))
+    lava_cooled.place_locked_item(world.create_item("Hotboy defeated"))
     lava_cooled = world.get_location("Hotboy 2 (Heater Core-0313)")
-    lava_cooled.place_locked_item(world.create_item("Lava Cooled 2"))
+    lava_cooled.place_locked_item(world.create_item("Hotboy defeated"))
 
     # Make the final item for rebba quest... not very useful :)
-    rebba_quest = world.get_location("Rebba quest 2 (Nexus-1716)")
-    rebba_quest.place_locked_item(world.create_item("Health Upgrade"))
+    #rebba_quest = world.get_location("Rebba quest 2 (Nexus-1716)")
+    #rebba_quest.place_locked_item(world.create_item("Health Upgrade"))
 
     number_of_items = len(itempool)
     number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
@@ -158,10 +156,10 @@ def generate_early(world: GatoRobotoWorld) -> None:
 
 
     # Early Starter items
-    if world.options.unlock_all_warps:
+    '''if world.options.unlock_all_warps:
         starter_pick = world.random.choice(["Rocket Start", "Spin Jump Start"])
-    else:
-        starter_pick = "Rocket Start"
+    else:'''
+    starter_pick = "Rocket Start"
 
     if starter_pick == "Rocket Start":
         if world.options.local_start:

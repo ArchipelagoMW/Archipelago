@@ -1,4 +1,4 @@
-from Options import Toggle, Range, Choice, ItemSet, OptionSet, PerGameCommonOptions, OptionGroup
+from Options import Toggle, Range, Choice, ItemSet, OptionSet, PerGameCommonOptions, OptionGroup, FreeText, Visibility
 from dataclasses import dataclass
 from .RiftCollections import RotNCollections
 
@@ -77,6 +77,7 @@ class DifficultyOption(OptionSet):
 class MinIntensity(Range):
     """ 
     Ensures chosen rhythm rift will have a chart with an intensity value higher than this value (Rhythm Rifts only)
+    Note: Highest intensity song in vanilla is 30
     """
     range_start = 1
     range_end = 40
@@ -86,10 +87,11 @@ class MinIntensity(Range):
 class MaxIntensity(Range):
     """
     Ensures chosen rhythm rift will have a chart with an intensity value lower than this value (Rhythm Rifts only)
+    Note: Highest intensity song in vanilla is 30
     """
     range_start = 1
     range_end = 40
-    default = 30
+    default = 40
     display_name = "Maximum Intensity"
 
 class GradeNeeded(Choice):
@@ -126,12 +128,21 @@ class DiamondWinPercentage(Range):
     default = 80
     display_name = "Diamonds Needed to Win"
 
+class IncludeSongsPercentage(Range):
+    """
+    Percentage chance for songs in the included list to be chosen.
+    """
+    range_start = 0
+    range_end = 100
+    default = 100
+    display_name = "Include Songs Percentage"
+
 class IncludeSongs(ItemSet):
     """
-    These songs will be guaranteed to show up within the seed.
-    - You must have the DLC enabled to play those songs.
-    - Difficulty options will not affect these songs.
-    - If there are too many included songs, this will act as a whitelist ignoring song difficulty.
+    These songs will be guaranteed* to show up within the seed.
+    - You must have the DLC or respective game mode enabled for these songs to actually be picked.
+    - Difficulty options will affect these songs.
+    - *Changing Include Songs Percentage from 100% will make it no longer guarenteed.
     """
     verify_item_name = True
     display_name = "Include Songs"
@@ -147,28 +158,52 @@ class ExcludeSongs(ItemSet):
     display_name = "Exclude Songs"
 
 class GoalSongPool(ItemSet):
-    """Songs listed here will randomly chosen to be the final song.
-    If empty, the goal song will be chosen randomly from all included songs."""
+    """
+    Songs listed here will randomly chosen to be the final song.
+    If empty, the goal song will be chosen randomly from all included songs.
+    """
     verify_item_name = True
     display_name = "Goal Song Pool"
 
+class ModData(FreeText):
+    """
+    Experimental: Custom songs to add to the pool.  If you want to use this, ppen the custom songs menu
+    with the mod active and paste the contents of the /Output/CustomSongs.json file here.
+
+    Note: Any songs with intensity ratings outside of the range -1 - 40 will be automatically changed to fit this range
+    If this is an issue, exclude them instead
+    """
+    default = ''
+    visibility = Visibility.template
+
 rotn_option_groups = [
-    OptionGroup("Song Pool Settings", [
+    OptionGroup("Game Length Settings", [
+        DiamondCountPercentage,
+        DiamondWinPercentage,
+        StartingSongs,
+        AdditionalSongs,
+        DuplicateSongPercentage,
+    ]),
+    OptionGroup("Song Choice Settings", [
         DLCMusicPacks,
         IncludeRemixMode,
         IncludeBossBattles,
         IncludeMinigames,
+        IncludeSongsPercentage,
         IncludeSongs,
         ExcludeSongs,
         GoalSongPool,
+        ModData,
     ]),
-    OptionGroup("Difficulty Settings", [
+    OptionGroup("Difficulty Filtering Settings", [
         DifficultyOption,
         MinIntensity,
         MaxIntensity,
+    ]),
+    OptionGroup("Difficulty Modifiers", [
         GradeNeeded,
         FullComboNeeded,
-    ]),
+    ])
 ]
 
 @dataclass
@@ -187,6 +222,8 @@ class RotNOptions(PerGameCommonOptions):
     full_combo_needed: FullComboNeeded
     diamond_count_percentage: DiamondCountPercentage
     diamond_win_percentage: DiamondWinPercentage
+    include_songs_percentage: IncludeSongsPercentage
     include_songs: IncludeSongs
     exclude_songs: ExcludeSongs
     goal_song_pool: GoalSongPool
+    rotn_mod_data: ModData

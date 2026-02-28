@@ -1,5 +1,5 @@
 from test.bases import WorldTestBase
 
 
-class CV64TestBase(WorldTestBase):
+class OpenRCT2TestBase(WorldTestBase):
     game = "OpenRCT2"

@@ -67,8 +67,15 @@ class PhantomHourglassSettings(settings.Group):
         For use with universal tracker.
         Toggles if universal tracker can use unlocked shortcuts and map warps to find shorter paths for /get_logical_path.
         """
+    class BoatSpeed(int):
+        """Your boat's max speed. Default is 266."""
+
+    class BoatFastAccel(str):
+        """Makes your boat accelerate instantly after charting a route or changing gear."""
 
     ut_get_logical_path_shortcuts: Union[PHGetLogicalPathShortcuts, bool] = True
+    boat_speed: BoatSpeed = 0x10A
+    boat_snap_speed: Union[BoatFastAccel, bool] = True
 
 
 # Adds a consistent count of items to pool, independent of how many are from locations
@@ -211,7 +218,7 @@ class PhantomHourglassWorld(World):
                     setattr(self.options, key, opt.from_any(value))
 
             # Set randomized data that effects exclusions etc
-            self.required_dungeons = slot_data["required_dungeons"]
+            self.required_dungeons = list(slot_data["required_dungeons"])
             self.boss_reward_items_pool = slot_data["boss_reward_items_pool"]
             self.ut_pairings = slot_data.get("er_pairings", {})
             self.treasure_price_index = slot_data.get("treasure_price_index", 0)
@@ -219,7 +226,7 @@ class PhantomHourglassWorld(World):
             # Figure out what events are active, and add to ut_pairings
             print(F"Generating early")
             print(f"UT Pairings: {self.ut_pairings}")
-            if self.options.ut_events:
+            if (self.options.ut_events and getattr(self.multiworld, "enforce_deferred_connections", "default") != "off"):
                 for event in EVENTS.values():
                     if self.options.ut_events == "unique_events" and event.extra_data.get("shared_event", False):
                         continue
@@ -235,8 +242,10 @@ class PhantomHourglassWorld(World):
                         continue
                     if not self.options.shuffle_overworld_transitions and event.name == "EVENT: Gust Windmills":
                         continue
+                    if "Unnamed Entrance" in event.name:
+                        continue
 
-                    print(f"Adding Event: {event.name}")
+                    print(f"Adding Event: {event.name} {event.id} => {event.vanilla_reciprocal.id}")
                     self.ut_pairings[str(event.id)] = event.vanilla_reciprocal.id
 
             # Hide stuff in UT map page based on what entrances are randomized
@@ -599,12 +608,11 @@ class PhantomHourglassWorld(World):
                 if ENTRANCES[e.name].id in disconnect_ids:
                     target_name = ENTRANCES[e.name].vanilla_reciprocal.name
                     disconnect_entrance_for_randomization(e, one_way_target_name=target_name)
-            if hasattr(self.multiworld, "enforce_deferred_connections"):
-                if getattr(self.multiworld, "enforce_deferred_connections") == "off":
-                    for i, pairing in self.ut_pairings.items():
-                        _exit: "Entrance" = self.get_entrance(entrance_id_to_entrance[int(i)].name)
-                        entrance_region: "Region" = self.get_region(entrance_id_to_region[pairing])
-                        _exit.connect(entrance_region)
+            if getattr(self.multiworld, "enforce_deferred_connections", "default") == "off":
+                for i, pairing in self.ut_pairings.items():
+                    _exit: "Entrance" = self.get_entrance(entrance_id_to_entrance[int(i)].name)
+                    entrance_region: "Region" = self.get_region(entrance_id_to_region[pairing])
+                    _exit.connect(entrance_region)
         else:
             # What option corresponds with what type
             type_option_lookup = {
@@ -1498,51 +1506,56 @@ class PhantomHourglassWorld(World):
                         self.get_region(reg1).connect(self.get_region(reg2), name)
                     self.ut_created_events.append(stored_name)
 
-            # Sent on getting location. Does not show event in UT
             manage_ut_event("1f", "TotOK 1F Chart", "_UT_got_chart")
-            # Connected on flag read
-            connect_existing_regions("gsb", "Goron NW Shortcut", "Goron NW Outside Temple")
-            connect_existing_regions("fi", "Mercay NE", "Mercay NW Freedle Island")
-            connect_existing_regions("gms", "Goron NE Middle", "Goron NE")
-            connect_existing_regions("gss", "Goron NE South", "Goron NE")
-            connect_existing_regions("gls", "Goron NW Outside Temple", "Goron NW Like Like")
+            for event_tag in stored_data:
+                if event_tag in hidden_event_connect:
+                    connect_existing_regions(event_tag, *hidden_event_connect[event_tag])
 
-            connect_existing_regions("rb", "Ruins SE Return Bridge West", "Ruins SE Return Bridge East")
-            connect_existing_regions("fif", "Frost SE Exit", "Frost SE")
-            connect_existing_regions("ub", "Uncharted Outside Cave", "Uncharted Island")
-            connect_existing_regions("md", "Molida Outside Temple", "Molida North")
-            connect_existing_regions("cb", "Cannon Outside Eddo", "Cannon Bomb Garden")
-            connect_existing_regions("mcb", "Sun Lake Cave", "Sun Lake Cave Back")
-
-            connect_existing_regions("tfw", "ToF 1F", "ToF 4F")
-            connect_existing_regions("tww", "ToW 1F", "ToW 2F")
-            connect_existing_regions("tcw", "ToC 1F", "ToC 3F")
-            connect_existing_regions("gtw", "GT 1F", "GT B4")
-            connect_existing_regions("tiw", "ToI 1F", "ToI Blue Warp")
-            connect_existing_regions("mtw", "MT 1F", "MT B3")
-
-            # map warp connections
-            connect_existing_regions("wsw", "Menu", "SW Ocean East", "Warp to SW Ocean")
-            connect_existing_regions("wse", "Menu", "SE Ocean", "Warp to SE Ocean")
-            connect_existing_regions("wnw", "Menu", "NW Ocean", "Warp to NW Ocean")
-            connect_existing_regions("wne", "Menu", "NE Ocean", "Warp to NE Ocean")
-
-            connect_existing_regions("wmc", "Menu", "Mercay SE", "Warp to Mercay Island")
-            connect_existing_regions("wc", "Menu", "Cannon Island", "Warp to Cannon Island")
-            connect_existing_regions("we", "Menu", "Ember Port", "Warp to Isle of Ember")
-            connect_existing_regions("wml", "Menu", "Molida South", "Warp to Molida Island")
-            connect_existing_regions("ws", "Menu", "Spirit Island", "Warp to Spirit Island")
-
-            connect_existing_regions("wgu", "Menu", "Gust South", "Warp to Isle of Gust")
-            connect_existing_regions("wb", "Menu", "Bannan Island", "Warp to Bannan Island")
-            connect_existing_regions("wz", "Menu", "Zauz's Island", "Warp to Zauz' Island")
-            connect_existing_regions("wu", "Menu", "Uncharted Island", "Warp to Uncharted Island")
-
-            connect_existing_regions("wgo", "Menu", "Goron SW", "Warp to Goron Island")
-            connect_existing_regions("wf", "Menu", "Frost SW", "Warp to Isle of Frost")
-            connect_existing_regions("wh", "Menu", "Harrow Island", "Warp to Harrow Island")
-            connect_existing_regions("wds", "Menu", "Dee Ess Island", "Warp to Dee Ess Island")
-
-            connect_existing_regions("wd", "Menu", "IotD Port", "Warp to Isle of the Dead")
-            connect_existing_regions("wr", "Menu", "Ruins SW Port", "Warp to Isle of Ruins")
-            connect_existing_regions("wmz", "Menu", "Maze Island", "Warp to Maze Island")
+            # # Sent on getting location. Does not show event in UT
+            # manage_ut_event("1f", "TotOK 1F Chart", "_UT_got_chart")
+            # # Connected on flag read
+            # connect_existing_regions("gsb", "Goron NW Shortcut", "Goron NW Outside Temple")
+            # connect_existing_regions("fi", "Mercay NE", "Mercay NW Freedle Island")
+            # connect_existing_regions("gms", "Goron NE Middle", "Goron NE")
+            # connect_existing_regions("gss", "Goron NE South", "Goron NE")
+            # connect_existing_regions("gls", "Goron NW Outside Temple", "Goron NW Like Like")
+            #
+            # connect_existing_regions("rb", "Ruins SE Return Bridge West", "Ruins SE Return Bridge East")
+            # connect_existing_regions("fif", "Frost SE Exit", "Frost SE")
+            # connect_existing_regions("ub", "Uncharted Outside Cave", "Uncharted Island")
+            # connect_existing_regions("md", "Molida Outside Temple", "Molida North")
+            # connect_existing_regions("cb", "Cannon Outside Eddo", "Cannon Bomb Garden")
+            # connect_existing_regions("mcb", "Sun Lake Cave", "Sun Lake Cave Back")
+            #
+            # connect_existing_regions("tfw", "ToF 1F", "ToF 4F")
+            # connect_existing_regions("tww", "ToW 1F", "ToW 2F")
+            # connect_existing_regions("tcw", "ToC 1F", "ToC 3F")
+            # connect_existing_regions("gtw", "GT 1F", "GT B4")
+            # connect_existing_regions("tiw", "ToI 1F", "ToI Blue Warp")
+            # connect_existing_regions("mtw", "MT 1F", "MT B3")
+            #
+            # # map warp connections
+            # connect_existing_regions("wsw", "Menu", "SW Ocean East", "Warp to SW Ocean")
+            # connect_existing_regions("wse", "Menu", "SE Ocean", "Warp to SE Ocean")
+            # connect_existing_regions("wnw", "Menu", "NW Ocean", "Warp to NW Ocean")
+            # connect_existing_regions("wne", "Menu", "NE Ocean", "Warp to NE Ocean")
+            #
+            # connect_existing_regions("wmc", "Menu", "Mercay SE", "Warp to Mercay Island")
+            # connect_existing_regions("wc", "Menu", "Cannon Island", "Warp to Cannon Island")
+            # connect_existing_regions("we", "Menu", "Ember Port", "Warp to Isle of Ember")
+            # connect_existing_regions("wml", "Menu", "Molida South", "Warp to Molida Island")
+            # connect_existing_regions("ws", "Menu", "Spirit Island", "Warp to Spirit Island")
+            #
+            # connect_existing_regions("wgu", "Menu", "Gust South", "Warp to Isle of Gust")
+            # connect_existing_regions("wb", "Menu", "Bannan Island", "Warp to Bannan Island")
+            # connect_existing_regions("wz", "Menu", "Zauz's Island", "Warp to Zauz' Island")
+            # connect_existing_regions("wu", "Menu", "Uncharted Island", "Warp to Uncharted Island")
+            #
+            # connect_existing_regions("wgo", "Menu", "Goron SW", "Warp to Goron Island")
+            # connect_existing_regions("wf", "Menu", "Frost SW", "Warp to Isle of Frost")
+            # connect_existing_regions("wh", "Menu", "Harrow Island", "Warp to Harrow Island")
+            # connect_existing_regions("wds", "Menu", "Dee Ess Island", "Warp to Dee Ess Island")
+            #
+            # connect_existing_regions("wd", "Menu", "IotD Port", "Warp to Isle of the Dead")
+            # connect_existing_regions("wr", "Menu", "Ruins SW Port", "Warp to Isle of Ruins")
+            # connect_existing_regions("wmz", "Menu", "Maze Island", "Warp to Maze Island")

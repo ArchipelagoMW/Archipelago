@@ -2,7 +2,6 @@
 
 import math
 
-from randomizer.Enums.Enemies import Enemies
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.SwitchTypes import SwitchType
@@ -21,7 +20,7 @@ from randomizer.Enums.Settings import (
 from randomizer.Lists.CustomLocations import CustomLocations
 from randomizer.Enums.Maps import Maps
 from randomizer.Lists.MapsAndExits import LevelMapTable
-from randomizer.Patching.Library.Generic import IsItemSelected
+from randomizer.Patching.Library.Generic import IsDDMSSelected
 from randomizer.Patching.Library.DataTypes import float_to_hex
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
 from randomizer.Patching.Patcher import LocalROM
@@ -226,13 +225,11 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
         for _ in range(pickup["weight"]):
             pickup_list.append(pickup["type"])
 
-    arcade_r1_shortened = IsItemSelected(
-        spoiler.settings.faster_checks_enabled,
+    arcade_r1_shortened = IsDDMSSelected(
         spoiler.settings.faster_checks_selected,
         FasterChecksSelected.factory_arcade_round_1,
     )
-    lighthouse_on = IsItemSelected(
-        spoiler.settings.remove_barriers_enabled,
+    lighthouse_on = IsDDMSSelected(
         spoiler.settings.remove_barriers_selected,
         RemovedBarriersSelected.galleon_seasick_ship,
     )
@@ -242,9 +239,14 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
         {"map": Maps.FranticFactory, "item_list": [0x14D, 0x14C, 0x14B, 0x14A]},
         {"map": Maps.CastleCrypt, "item_list": [0x247, 0x248, 0x249, 0x24A]},
     ]
-    if not spoiler.settings.perma_death and spoiler.settings.damage_amount not in (
-        DamageAmount.quad,
-        DamageAmount.ohko,
+    if (
+        not spoiler.settings.perma_death
+        and not spoiler.settings.wipe_file_on_death
+        and spoiler.settings.damage_amount
+        not in (
+            DamageAmount.quad,
+            DamageAmount.ohko,
+        )
     ):
         swap_list.append({"map": Maps.CastleMuseum, "item_list": [0x17]})
     number_gb_data = [
@@ -306,20 +308,17 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
     chunky_5dc_pads = pickChunkyCabinPadPositions(spoiler.settings.random)
     spoiler.settings.random.shuffle(vase_puzzle_positions)
     vase_puzzle_rando_progress = 0
-    raise_patch = IsItemSelected(
-        spoiler.settings.quality_of_life,
+    raise_patch = IsDDMSSelected(
         spoiler.settings.misc_changes_selected,
         MiscChangesSelected.raise_fungi_dirt_patch,
     )
-    move_cabin_barrel = IsItemSelected(
-        spoiler.settings.quality_of_life,
+    move_cabin_barrel = IsDDMSSelected(
         spoiler.settings.misc_changes_selected,
         MiscChangesSelected.move_spring_cabin_rocketbarrel,
     )
-    random_pufftoss_stars = IsItemSelected(spoiler.settings.hard_bosses, spoiler.settings.hard_bosses_selected, HardBossesSelected.pufftoss_star_rando, False)
-    higher_pufftoss_stars = IsItemSelected(spoiler.settings.hard_bosses, spoiler.settings.hard_bosses_selected, HardBossesSelected.pufftoss_star_raised, False)
-    removed_crypt_doors = IsItemSelected(
-        spoiler.settings.remove_barriers_enabled,
+    random_pufftoss_stars = IsDDMSSelected(spoiler.settings.hard_bosses_selected, HardBossesSelected.pufftoss_star_rando)
+    higher_pufftoss_stars = IsDDMSSelected(spoiler.settings.hard_bosses_selected, HardBossesSelected.pufftoss_star_raised)
+    removed_crypt_doors = IsDDMSSelected(
         spoiler.settings.remove_barriers_selected,
         RemovedBarriersSelected.castle_crypt_doors,
     )
@@ -373,7 +372,7 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
                         if y_position < 0:
                             star_donut_boundaries = [230, 300.971]
                         else:
-                            star_donut_boundaries = [123.128, 235.971]
+                            star_donut_boundaries = [170.128, 235.971]
                         star_height_boundaries = [y_position, y_position]
                     elif cont_map_id == Maps.GalleonBoss:
                         star_donut_center = [1216, 1478]
@@ -386,20 +385,20 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
                     star_x = star_pos[0]
                     star_z = star_pos[1]
                     ROM_COPY.seek(item_start)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(star_x), 16), 4)
+                    ROM_COPY.writeFloat(star_x)
                     ROM_COPY.seek(item_start + 8)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(star_z), 16), 4)
+                    ROM_COPY.writeFloat(star_z)
                     ROM_COPY.seek(item_start + 0x1C)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(star_a), 16), 4)
+                    ROM_COPY.writeFloat(star_a)
                     if len(star_height_boundaries) > 0:
                         star_y = spoiler.settings.random.uniform(star_height_boundaries[0], star_height_boundaries[1])
                         ROM_COPY.seek(item_start + 4)
-                        ROM_COPY.writeMultipleBytes(int(float_to_hex(star_y), 16), 4)
+                        ROM_COPY.writeFloat(star_y)
             if item_type == 0x74 and cont_map_id == Maps.GalleonLighthouse and lighthouse_on:
                 new_gb_coords = [407.107, 720, 501.02]
                 for coord_i, coord in enumerate(new_gb_coords):
                     ROM_COPY.seek(item_start + (coord_i * 4))
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(coord), 16), 4)
+                    ROM_COPY.writeFloat(coord)
             elif cont_map_id == Maps.FranticFactory and spoiler.settings.puzzle_rando_difficulty != PuzzleRando.off and item_type >= 0xF4 and item_type <= 0x103:
                 for subtype_item in number_gb_data:
                     for num_item in subtype_item["numbers"]:
@@ -415,38 +414,41 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
                 if item_type >= 0x1BA and item_type <= 0x1BE:  # Mushrooms
                     spawner_pos = lanky_fungi_mush["picked"][lanky_fungi_mush["index"]]
                     ROM_COPY.seek(item_start)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                    ROM_COPY.writeFloat(spawner_pos[0])
                     ROM_COPY.seek(item_start + 8)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                    ROM_COPY.writeFloat(spawner_pos[1])
                     lanky_fungi_mush["index"] += 1
                 elif item_type == 0x205:  # Lanky Bunch
                     spawner_pos = lanky_fungi_mush["picked"][0]
                     ROM_COPY.seek(item_start)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                    ROM_COPY.writeFloat(spawner_pos[0])
                     ROM_COPY.seek(item_start + 8)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                    ROM_COPY.writeFloat(spawner_pos[1])
             elif cont_map_id == Maps.AngryAztec and spoiler.settings.puzzle_rando_difficulty != PuzzleRando.off and (item_type == 0x121 or (item_type >= 0x226 and item_type <= 0x228)):
                 # Is Vase Pad
                 ROM_COPY.seek(item_start)
                 for coord in range(3):
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(vase_puzzle_positions[vase_puzzle_rando_progress][coord]), 16), 4)
+                    ROM_COPY.writeFloat(vase_puzzle_positions[vase_puzzle_rando_progress][coord])
                 vase_puzzle_rando_progress += 1
             elif cont_map_id == Maps.CavesChunkyCabin and spoiler.settings.puzzle_rando_difficulty != PuzzleRando.off and item_type == 0x203:
                 spawner_pos = chunky_5dc_pads["picked"][chunky_5dc_pads["index"]]
                 ROM_COPY.seek(item_start)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                ROM_COPY.writeFloat(spawner_pos[0])
                 ROM_COPY.seek(item_start + 8)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                ROM_COPY.writeFloat(spawner_pos[1])
                 chunky_5dc_pads["index"] += 1
             elif cont_map_id == Maps.GloomyGalleon and item_id == 0xC and spoiler.settings.puzzle_rando_difficulty in (PuzzleRando.hard, PuzzleRando.chaos):
                 coords = list(getRandomGalleonStarLocation(spoiler.settings.random))
                 ROM_COPY.seek(item_start)
                 for x in coords:
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(x), 16), 4)
+                    ROM_COPY.writeFloat(x)
+            elif cont_map_id == Maps.Isles and item_type == 619 and not spoiler.settings.disable_racing_patches:
+                ROM_COPY.seek(item_start + 0x28)
+                ROM_COPY.writeMultipleBytes(664, 2)  # Overwrite type of obj to custom "Factory Door"
             # Regular if because it can be combined with regular hard bosses
             if item_type == 0x235 and cont_map_id == Maps.GalleonBoss and higher_pufftoss_stars:
                 ROM_COPY.seek(item_start + 4)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(345), 16), 4)
+                ROM_COPY.writeFloat(345)
             elif item_type == 0xCE and cont_map_id == Maps.HelmBarrelLankyMaze and spoiler.settings.sprint_barrel_requires_sprint:
                 ROM_COPY.seek(item_start + 0x28)
                 ROM_COPY.writeMultipleBytes(611, 2)  # Overwrite type of obj to custom "Sprint Switch"
@@ -512,15 +514,17 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
             actor_start = actor_block_start + 4 + (actor_item * 0x38)
             ROM_COPY.seek(actor_start + 0x32)
             actor_type = int.from_bytes(ROM_COPY.readBytes(2), "big") + 0x10
-            if spoiler.settings.random_patches:
-                if not actor_type == 139:
-                    byte_list = []
-                    ROM_COPY.seek(actor_start + 0x34)
-                    used_actor_ids.append(int.from_bytes(ROM_COPY.readBytes(2), "big"))
-                    ROM_COPY.seek(actor_start)
-                    for x in range(int(0x38 / 4)):
-                        byte_list.append(int.from_bytes(ROM_COPY.readBytes(4), "big"))
-                    actor_bytes.append(byte_list.copy())
+            if spoiler.settings.random_patches and actor_type == 139:
+                continue
+            if spoiler.settings.disable_tag_barrels and actor_type in (98, 136, 137):
+                continue
+            byte_list = []
+            ROM_COPY.seek(actor_start + 0x34)
+            used_actor_ids.append(int.from_bytes(ROM_COPY.readBytes(2), "big"))
+            ROM_COPY.seek(actor_start)
+            for x in range(int(0x38 / 4)):
+                byte_list.append(int.from_bytes(ROM_COPY.readBytes(4), "big"))
+            actor_bytes.append(byte_list.copy())
         if spoiler.settings.random_patches:
             new_actor_id = 0x20
             for dirt_item in spoiler.dirt_patch_placement:
@@ -564,15 +568,15 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
             if actor_type >= 100 and actor_type <= 105 and spoiler.settings.puzzle_rando_difficulty != PuzzleRando.off and cont_map_id == Maps.CavesDiddyIgloo:  # 5DI Spawner
                 spawner_pos = diddy_5di_pads["picked"][diddy_5di_pads["index"]]
                 ROM_COPY.seek(actor_start)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                ROM_COPY.writeFloat(spawner_pos[0])
                 ROM_COPY.seek(actor_start + 8)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                ROM_COPY.writeFloat(spawner_pos[1])
                 diddy_5di_pads["index"] += 1
             elif actor_type >= 64 and actor_type <= 66 and spoiler.settings.puzzle_rando_difficulty != PuzzleRando.off and cont_map_id == Maps.AngryAztec:  # Exclude O Vase to force it to be vanilla
                 # Vase
                 ROM_COPY.seek(actor_start)
                 for coord in range(3):
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(vase_puzzle_positions[vase_puzzle_rando_progress][coord]), 16), 4)
+                    ROM_COPY.writeFloat(vase_puzzle_positions[vase_puzzle_rando_progress][coord])
                 vase_puzzle_rando_progress += 1
             elif actor_type == 0x1C and actor_id == 16 and spoiler.settings.fix_lanky_tiny_prod and cont_map_id == Maps.FranticFactory:
                 ROM_COPY.seek(actor_start + 0x14)
@@ -580,12 +584,12 @@ def randomize_setup(spoiler, ROM_COPY: LocalROM):
             elif actor_type == 139 and raise_patch and not spoiler.settings.random_patches:
                 if cont_map_id == Maps.FungiForest and actor_id == 47:
                     ROM_COPY.seek(actor_start + 4)
-                    ROM_COPY.writeMultipleBytes(int(float_to_hex(155), 16), 4)
+                    ROM_COPY.writeFloat(155)
             elif actor_type == 49 and move_cabin_barrel and cont_map_id == Maps.CavesDiddyUpperCabin and actor_id == 0:
                 ROM_COPY.seek(actor_start)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(300), 16), 4)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(110), 16), 4)
-                ROM_COPY.writeMultipleBytes(int(float_to_hex(380), 16), 4)
+                ROM_COPY.writeFloat(300)
+                ROM_COPY.writeFloat(110)
+                ROM_COPY.writeFloat(380)
 
 
 def updateRandomSwitches(spoiler, ROM_COPY: LocalROM):
@@ -626,7 +630,7 @@ def updateRandomSwitches(spoiler, ROM_COPY: LocalROM):
 
 def updateSwitchsanity(spoiler, ROM_COPY: LocalROM):
     """Update setup to account for switchsanity."""
-    if spoiler.settings.switchsanity:
+    if spoiler.settings.switchsanity_enabled:
         switches = {
             SwitchType.SlamSwitch: [
                 0x94,
@@ -645,10 +649,11 @@ def updateSwitchsanity(spoiler, ROM_COPY: LocalROM):
                 0x16A,
                 0x165,  # Chunky
             ],
-            SwitchType.GunSwitch: [0x129, 0x126, 0x128, 0x127, 0x125],
-            SwitchType.InstrumentPad: [0xA8, 0xA9, 0xAC, 0xAA, 0xAB],
+            SwitchType.GunSwitch: [0x129, 0x126, 0x128, 0x127, 0x125, 0x296],
+            SwitchType.InstrumentPad: [0xA8, 0xA9, 0xAC, 0xAA, 0xAB, 0x297],
             SwitchType.PadMove: [0x97, 0xD4, 0x10C, 0x10B, 0x10A],
             SwitchType.MiscActivator: [0x28, 0xC3],
+            SwitchType.PushableButton: [None, 0xE3, None, None, 0x70],
         }
         switchsanity_maps = []
         # Get list of maps which contain a switch affected by switchsanity, to reduce references to pointer table
@@ -688,6 +693,10 @@ def updateSwitchsanity(spoiler, ROM_COPY: LocalROM):
                                     old_type = int.from_bytes(ROM_COPY.readBytes(2), "big")
                                     old_level = switches[SwitchType.SlamSwitch].index(old_type) % 3
                                     switch_offset = (3 * int(switch_kong)) + old_level
+                                elif switch_type == SwitchType.GunInstrumentCombo:
+                                    switch_type = SwitchType.InstrumentPad
+                                    if item_id == spoiler.settings.switchsanity_data[slot].ids[0]:
+                                        switch_type = SwitchType.GunSwitch
                     if switch_kong is not None and switch_type is not None and switch_offset is not None:
                         new_obj = switches[switch_type][switch_offset]
                         ROM_COPY.seek(item_start + 0x28)
@@ -695,7 +704,7 @@ def updateSwitchsanity(spoiler, ROM_COPY: LocalROM):
                         if switch_slot == Switches.IslesHelmLobbyGone and switch_type == SwitchType.MiscActivator:
                             if switch_kong == Kongs.diddy:
                                 ROM_COPY.seek(item_start + 0xC)
-                                ROM_COPY.writeMultipleBytes(0x3F400000, 4)
+                                ROM_COPY.writeFloat(0.75)
                             # elif switch_kong == Kongs.donkey:
                             #     ROM_COPY.seek(item_start + 0x1C)
                             #     ROM_COPY.writeMultipleBytes(0, 4)
@@ -804,7 +813,7 @@ def updateKrushaMoveNames(spoiler):
 
 def remove5DSCameraPoint(spoiler, ROM_COPY: LocalROM):
     """Remove the camera lock triggers for Tiny 5DS entry."""
-    if not IsItemSelected(spoiler.settings.quality_of_life, spoiler.settings.misc_changes_selected, MiscChangesSelected.vanilla_bug_fixes):
+    if not IsDDMSSelected(spoiler.settings.misc_changes_selected, MiscChangesSelected.vanilla_bug_fixes):
         return
     file_start = getPointerLocation(TableNames.Cutscenes, Maps.Galleon5DShipDKTiny)
     ROM_COPY.seek(file_start)

@@ -1,0 +1,51 @@
+[
+    {
+        "name": "Landing Site",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Landing Site.png"
+    },
+    {
+        "name": "Nexus",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Nexus.png"
+    },
+    {
+        "name": "Aqueducts",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Aqueducts.png"
+    },
+    {
+        "name": "Heater Core",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Heater Core.png"
+    },
+    {
+        "name": "Ventilation",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Ventilation.png"
+    },
+    {
+        "name": "Incubator",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Incubator.png"
+    },
+    {
+        "name": "Laboratory",
+        "location_size": 34,
+        "location_border_thickness": 0,
+        "location_shape": "rect",
+        "img": "maps/Laboratory.png"
+    }
+]

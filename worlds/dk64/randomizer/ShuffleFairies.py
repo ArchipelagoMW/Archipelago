@@ -1,17 +1,7 @@
 """File that shuffles fairies locations."""
 
-from randomizer.Enums.Plandomizer import PlandoItems
 from randomizer.Lists import Exceptions
 
-import randomizer.LogicFiles.AngryAztec
-import randomizer.LogicFiles.CreepyCastle
-import randomizer.LogicFiles.CrystalCaves
-import randomizer.LogicFiles.DKIsles
-import randomizer.LogicFiles.FranticFactory
-import randomizer.LogicFiles.FungiForest
-import randomizer.LogicFiles.GloomyGalleon
-import randomizer.LogicFiles.HideoutHelm
-import randomizer.LogicFiles.JungleJapes
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
 from randomizer.Lists.FairyLocations import fairy_locations

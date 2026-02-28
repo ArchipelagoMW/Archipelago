@@ -17,7 +17,7 @@ from CommonClient import CommonContext, server_loop, \
     gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from Utils import is_linux
 
-verbose = True
+verbose = False
 
 def long_file(path):
     """ Creates the full path of the files in the save game folder. """
@@ -80,14 +80,14 @@ class GatoRobotoCommandProcessor(ClientCommandProcessor):
                         break
 
             #If no valid file error out
-            if (not os.path.exists(steam_install)
-                    or not os.path.isfile(os.path.join(steam_install, "data.win"))):
-                self.output("ERROR: Cannot find Gato Roboto. Please rerun the command with the correct folder."
-                            " command. \"/auto_patch (Steam directory)\".")
-            #Patch game if valid file
-            else:
+            if not os.path.exists(steam_install):
+                self.output("ERROR: Cannot find Gato Roboto. Please rerun the command with the correct folder.\n"
+                            "command. \"/auto_patch (Steam directory)\" or \"/auto_patch\" for an automatic search.")
+            elif not (os.path.isfile(os.path.join(steam_install, "data.win")) or os.path.isfile(os.path.join(steam_install, "ArchipelagoData/data.win"))):
+                self.output("ERROR: data.win is missing. Please validate your files.")
+            else: #Patch game if valid file
                 self.ctx.patch_game(steam_install)
-                self.output("Patching successful!")  #
+                self.output("Patching complete!")
 
                 # TODO: Include auto start
                 ''' 
@@ -121,24 +121,38 @@ class GatoRobotoContext(CommonContext):
         self.game = "Gato Roboto B-Side"
         self.syncing = False
 
+    # TODO: move this to the other spot
     @staticmethod
     def patch_game(filepath):
-
         #Save vanilla game data for backup purposes
-        os.makedirs(name=f"{filepath}/VanillaData", exist_ok=True)
-        if not os.path.exists(f"{filepath}/VanillaData/data.win"):
-            shutil.copy(f"{filepath}/data.win", f"{filepath}/VanillaData")
+        os.makedirs(name=f"{filepath}/ArchipelagoData", exist_ok=True)
+        if not os.path.exists(f"{filepath}/ArchipelagoData/data.win"):
+            shutil.copy(f"{filepath}/data.win", f"{filepath}/ArchipelagoData/data.win")
+        else:
+            # Revert first, to prevent double patches
+            if os.path.exists(f"{filepath}/data.win"):
+                os.remove(f"{filepath}/data.win")
+            shutil.copy( f"{filepath}/ArchipelagoData/data.win", f"{filepath}/data.win")
+
+        # First test to copy the images over
+        def copy_over(source_path, destination_path):
+            data = gatoroboto_b_side.data_path(source_path)
+            with open(destination_path, "wb") as f:
+                f.write(data)
 
         # TODO: make full patch work
         if False:
-            safe_delete_file("data.win")
-            shutil.copy(os.path.join(os.path.dirname(__file__), "data/data.win"), f"{filepath}/")
+            copy_over("data.win", f"{filepath}/data.win")
         else:
             #Write patched game data
             with open(f"{filepath}/data.win", "rb") as f:
                 patched_file: bytes = bsdiff4.patch(f.read(), gatoroboto_b_side.data_path("patch.bsdiff"))
             with open(f"{filepath}/data.win", "wb") as f:
                 f.write(patched_file)
+
+        copy_over("warp_pic_ls.png", f"{filepath}/ArchipelagoData/warp_pic_ls.png")
+        copy_over("warp_pic_nexus.png", f"{filepath}/ArchipelagoData/warp_pic_nexus.png")
+
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:

@@ -22,16 +22,29 @@ class EnemyRando(DefaultOnToggle):
 
     display_name = "Enemy Rando"
 
+
 class IncreasedPotRyo(DefaultOnToggle):
     """Determines if pots have an increased amount of ryo."""
 
     display_name = "Increase Pot Ryo"
 
 
+class PotRando(Toggle):
+    """Determines if pot locations are randomized."""
+
+    display_name = "Pot Rando"
+
+
 class HealthInPool(DefaultOnToggle):
     """Determines if Health Items are added into the pool."""
 
     display_name = "Health In Pool"
+
+
+class RyoInPool(Toggle):
+    """Determines if Ryo Items are added into the pool."""
+
+    display_name = "Ryo In Pool"
 
 
 class PreventOneWaySoftlocks(DefaultOnToggle):
@@ -52,6 +65,21 @@ class PreUnlockedWarps(Toggle):
     display_name = "Pre-Unlocked Warps"
 
 
+class MusicRando(Choice):
+    """Determines if and how music tracks are randomized.
+
+    - Off: No music randomization
+    - On: Full music randomization
+    - On with Area Music: Music randomization with area-specific handling
+    """
+
+    display_name = "Music Rando"
+    option_off = 0
+    option_on = 1
+    option_on_with_area_music = 2
+    default = 0
+
+
 class MajorHintCount(Range):
     """Number of hints for progression items in the player's world."""
 
@@ -70,6 +98,18 @@ class LocationHintCount(Range):
     default = 5
 
 
+class FastText(DefaultOnToggle):
+    """Make text appear instantly instead of being typed out character by character."""
+
+    display_name = "Fast Text"
+
+
+class KeepIntroCutscene(Toggle):
+    """Keep the intro cutscene at the start of the game."""
+
+    display_name = "Keep Intro Cutscene"
+
+
 @dataclass
 class MN64Options(PerGameCommonOptions):
     """Options for MN64"""
@@ -77,10 +117,15 @@ class MN64Options(PerGameCommonOptions):
     enemy_rando: EnemyRando
     starting_room_rando: StartingRoomRando
     increase_pot_ryo: IncreasedPotRyo
+    pot_rando: PotRando
     randomize_health: HealthInPool
+    randomize_ryo: RyoInPool
     prevent_oneway_softlocks: PreventOneWaySoftlocks
     chugoku_door_unlocked: ChugokuDoorUnlocked
     pre_unlocked_warps: PreUnlockedWarps
+    music_rando: MusicRando
     major_hint_count: MajorHintCount
     location_hint_count: LocationHintCount
+    fast_text: FastText
+    keep_intro_cutscene: KeepIntroCutscene
     death_link: DeathLink

@@ -1,12 +1,12 @@
 from collections.abc import Mapping
-from typing import Any
+from typing import Any, ClassVar
 
 from Options import OptionError
 # Imports of base Archipelago modules must be absolute.
 from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
-from . import items, locations, options, regions, rules, web_world
+from . import items, locations, options, regions, rules, web_world, ut_stuff
 
 import uuid
 
@@ -31,6 +31,27 @@ class GatoRobotoWorld(World):
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
     origin_region_name = "Landing Site"
+
+    # this is how we tell the Universal Tracker we want to use re_gen_passthrough
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        return slot_data
+
+    # Universal Tracker configuration
+    ut_can_gen_without_yaml = True
+    tracker_world: ClassVar = {
+        "map_page_folder": "ut_maps",
+        "map_page_maps": "maps/maps.json",
+        "map_page_locations": "locations/locations.json",
+        #"map_page_setting_key": "{player}_{team}_gato_roboto_area",
+        #"map_page_index": ut_stuff.map_page_index
+    }
+
+    def __init__(self, multiworld, player):
+        super(GatoRobotoWorld, self).__init__(multiworld, player)
+
+        # initial values of instance attributes (*not* class attributes)
+        self.using_ut = False
 
     # Our world class must have certain functions ("steps") that get called during generation.
     # The main ones are: create_regions, set_rules, create_items.
@@ -59,9 +80,11 @@ class GatoRobotoWorld(World):
         return "Cute Meow"
 
     def generate_early(self) -> None:
-        if self.options.unlock_all_warps:
+        ut_stuff.setup_options_from_slot_data(self)
+
+        '''if self.options.unlock_all_warps:
             self.options.unlock_all_warps.value = False
-            #raise OptionError
+            #raise OptionError'''
         items.generate_early(self)
 
     # There may be data that the game client will need to modify the behavior of the game.
@@ -69,7 +92,7 @@ class GatoRobotoWorld(World):
     # slot_data is just a dictionary using basic types, that will be converted to json when sent to the client.
     def fill_slot_data(self) -> Mapping[str, Any]:
         # If you need access to the player's chosen options on the client side, there is a helper for that.
-        slot_data = self.options.as_dict("nexus_start", "unlock_all_warps", "gato_tech")
+        slot_data = self.options.as_dict("use_smallmech", "use_watermech", "nexus_start", "gato_tech")
         slot_data["game_id"] = str(uuid.uuid4())
         return slot_data
 

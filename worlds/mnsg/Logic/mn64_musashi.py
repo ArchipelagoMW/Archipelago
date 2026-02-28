@@ -53,6 +53,7 @@ LogicRegions = {
             0x1FD,
             0x156,
         ],
+        spawn={"x": -10.0, "y": 56.0, "z": -976.0},
         enemies={0x11: 0x0FC, 0x12: 0x0FC, 0x13: 0x0FC, 0x14: 0x0FC},
     ),
     "MusashiTunnel": MN64Region(
@@ -81,6 +82,7 @@ LogicRegions = {
             0x16F,
             0x3DC,
         ],
+        spawn={"x": -377.0, "y": -48.0, "z": -430.0},
     ),
     "TunneltoNortheast1": MN64Region(
         name="Tunnel to Northeast 1",
@@ -94,6 +96,7 @@ LogicRegions = {
                 flag_id=0x1817,
                 instance_id=0x13,
             ),
+            MN64LocationLogic("Pot", lambda l: True, MN64Items.POT, flag_id=0x191A, instance_id=0x14),
         ],
         exits=[
             MN64TransitionFront("MusashiBeach", lambda l: l.sudden_impact and l.goemon),
@@ -135,6 +138,7 @@ LogicRegions = {
             0x11: 0x148,
             0x12: 0x148,
         },
+        spawn={"x": -377.0, "y": -48.0, "z": -430.0},
     ),
     "TunneltoNortheast2": MN64Region(
         name="Tunnel to Northeast 2",
@@ -162,6 +166,8 @@ LogicRegions = {
                 flag_id=0x1815,
                 instance_id=0x24,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x191B, instance_id=0x22),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x191C, instance_id=0x23),
         ],
         exits=[
             MN64TransitionFront("TunneltoNortheast1", lambda l: True),
@@ -212,6 +218,7 @@ LogicRegions = {
             0x1E: 0x148,
             0x1F: 0x148,
         },
+        spawn={"x": -577.0, "y": -106.0, "z": 400.0},
     ),
     "Iga": MN64Region(
         name="Iga",
@@ -225,6 +232,9 @@ LogicRegions = {
                 flag_id=0x1814,
                 instance_id=0x0C,
             ),
+            MN64LocationLogic("Ryo 1", lambda l: True, MN64Items.RYO, flag_id=0x1878, instance_id=0x0D),
+            MN64LocationLogic("Ryo 2", lambda l: True, MN64Items.RYO, flag_id=0x1879, instance_id=0x0E),
+            MN64LocationLogic("Ryo 3", lambda l: True, MN64Items.RYO, flag_id=0x187A, instance_id=0x10),
             # MN64LocationLogic("Triton Shell", lambda l: True, MN64Items.TRITON_HORN, save_id=0xF4, flag_id=0x099),
         ],
         exits=[
@@ -257,6 +267,7 @@ LogicRegions = {
             0x197,
             0x159,
         ],
+        spawn={"x": -2975.0, "y": -293.0, "z": -311.0},
         enemies={0x08: 0x0FB, 0x09: 0x0FB, 0x0A: 0x0FB, 0x0B: 0x0FB, 0x0F: 0x0FC},
     ),
 }

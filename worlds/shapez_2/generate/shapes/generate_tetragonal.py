@@ -240,6 +240,7 @@ def generate_layer(rand: Random, complexity: int, builder: ShapeBuilder,
                 complexity += 3
             elif not any(builder.tasked):  # If nothing tasked, then a full layer doesn't do anything
                 variants[Variant.full] = True
+                break
             else:  # Last resort, maybe a very bad combination?
                 builder.tasked[rand.choice([x for x in range(8) if builder.tasked[x]])] = False
             continue

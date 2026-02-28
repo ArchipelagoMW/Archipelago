@@ -2191,7 +2191,7 @@
     "locations": [],
     "events": [],
     "exits": {
-      "REGION_ROUTE22/WEST": "Route 22 South Ledge",
+      "REGION_ROUTE22/EAST": "Route 22 South Ledge",
       "REGION_ROUTE22/WATER": "Route 22 (West) Surfing Spot"
     },
     "warps": {

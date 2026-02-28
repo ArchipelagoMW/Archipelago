@@ -77,6 +77,43 @@ boot_phrases = (
     "Saving 20 frames",
     "Reporting bugs. Unlike some",
     "Color-coding Krusha for convenience",
+    "Adding the dot com",
+    "Plugging the randomizer",
+    "Ensuring Lanky is not in a keg",
+    "Generating a jet seed",
+    "Generating a casino",
+)
+
+archipelago_boot_phrases = (
+    "Enabling Deathlink",
+    "Going to Burger King",
+    "Lowering Ballaam into his grave",
+    "Pinging someone to get a hinted item",
+    "Waiting for a release",
+    "Prioritizing Check of Legends",
+    "Enabling Taglink",
+    "Enabling Traplink",
+    "Enabling Ringlink",
+    "Checking yamls",
+    "Updating APworld once again",
+    "Maxing out B. Lockers",
+    "Starting the gen gamba",
+    "Rolling around at the speed of sound",
+    "Skipping Aginah",
+    "Hunting for the Ice Rod",
+    "Constructing additional Pylons",
+    "Sleeping until Winter",
+    "BLJing to Bowser",
+    "Rolling the Dice",
+    "Looking for Oak's Parcel",
+    "Teleporting back to Lumbridge",
+    "Putting off Deepnest",
+    "Asking what Raspberries are",
+    "Asking if everyone is OK with a death",
+    "Junking Hailfire Peaks",
+    "Going out of logic",
+    "Adding another sanity option",
+    "Sending the Bean",
 )
 
 crown_heads = (
@@ -194,6 +231,7 @@ crown_heads = (
     "Beetle",
     "Vulture",
     "Boulder",
+    "Electric",
 )
 
 crown_tails = (
@@ -274,6 +312,7 @@ crown_tails = (
     "Tangle",
     "Crossfire",
     "Royale",
+    "Boogaloo",
 )
 
 
@@ -308,9 +347,16 @@ def writeCrownNames(ROM_COPY: ROM):
     writeText(ROM_COPY, 35, old_text)
 
 
-def writeBootMessages(ROM_COPY: LocalROM, rando) -> None:
+def writeBootMessages(ROM_COPY: LocalROM, spoiler) -> None:
     """Write boot messages into ROM."""
-    placed_messages = rando.sample(boot_phrases, 4)
+    # Use archipelago boot phrases if archipelago is enabled
+    if spoiler.settings.archipelago:
+        phrases = archipelago_boot_phrases
+    else:
+        phrases = boot_phrases
+
+    placed_messages = spoiler.settings.random.sample(phrases, 4)
     for message_index, message in enumerate(placed_messages):
         ROM_COPY.seek(0x1FFD000 + (0x40 * message_index))
         ROM_COPY.writeBytes(message.upper().encode("ascii"))
+        ROM_COPY.write(0)

@@ -140,7 +140,7 @@
 { "name": "Mercay SE Cucco Chest", "sections": [{ "name": "Mercay SE Cucco Chest" }], "map_locations": [{ "map": "Mercay Island (SE)", "x": 18, "y": 102}] },
 { "name": "Mercay NE Freedle Gift Item", "sections": [{ "name": "Mercay NE Freedle Gift Item" }], "map_locations": [{ "map": "Mercay Island", "x": 190, "y": 32}] },
 { "name": "Mercay NE Freedle Gift Item", "sections": [{ "name": "Mercay NE Freedle Gift Item" }], "map_locations": [{ "map": "Mercay Island (NE)", "x": 124, "y": 64}] },
-{ "name": "Mercay NE Freedle Island Chest", "sections": [{ "name": "Mercay NE Freedle Island Chest" }], "map_locations": [{ "map": "Mercay Island", "x": 210, "y": 36}] },
+{ "name": "Mercay NE Freedle Island Chest", "sections": [{ "name": "Mercay NE Freedle Island Chest" }], "map_locations": [{ "map": "Mercay Island", "x": 210, "y": 34}] },
 { "name": "Mercay NE Freedle Island Chest", "sections": [{ "name": "Mercay NE Freedle Island Chest" }], "map_locations": [{ "map": "Mercay Island (NE)", "x": 164, "y": 76}] },
 { "name": "Long Bridge Cave Chest", "sections": [{ "name": "Long Bridge Cave Chest" }], "map_locations": [{ "map": "Long Bridge Cave", "x": 170, "y": 42}] },
 { "name": "Eye Bridge Cave Chest", "sections": [{ "name": "Eye Bridge Cave Chest" }], "map_locations": [{ "map": "Eye Bridge Cave", "x": 98, "y": 42}] },

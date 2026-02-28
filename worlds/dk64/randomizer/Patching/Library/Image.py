@@ -95,12 +95,72 @@ class ExtraTextures(IntEnum):
     KrushaFace323 = auto()
     KrushaFace324 = auto()
     KrushaFace325 = auto()
+    FakeKey = auto()
+    FakeKeyPalette = auto()
+    FakeBean = auto()
     APPearl0 = auto()
     APPearl1 = auto()
     APPearl2 = auto()
     APPearl3 = auto()
     APPearl4 = auto()
     APPearl5 = auto()
+    StaticGoldPalette = auto()
+    PotionSpin0 = auto()
+    PotionSpin1 = auto()
+    PotionSpin2 = auto()
+    PotionSpin3 = auto()
+    PotionSpin4 = auto()
+    PotionSpin5 = auto()
+    PotionSpin6 = auto()
+    PotionSpin7 = auto()
+    PotionSpin8 = auto()
+    DiscoDonkShirt = auto()
+    DiscoDonkGlove = auto()
+    FinalBoss1Left = auto()
+    FinalBoss1Right = auto()
+    FinalBoss2Left = auto()
+    FinalBoss2Right = auto()
+    FinalBoss3Left = auto()
+    FinalBoss3Right = auto()
+    FinalBoss4Left = auto()
+    FinalBoss4Right = auto()
+    FinalBoss5Left = auto()
+    FinalBoss5Right = auto()
+    BanditImage0 = auto()
+    BanditImage1 = auto()
+    BanditImage2 = auto()
+    BanditImage3 = auto()
+    SpecialAPPearlGold = auto()
+    SpecialAPPearlSilver = auto()
+    FoolsAPPearlBlack = auto()
+    FoolsAPPearlSilver = auto()
+    DonkeyPadLeft = auto()
+    DonkeyPadRight = auto()
+    DiddyPadLeft = auto()
+    DiddyPadRight = auto()
+    LankyPadLeft = auto()
+    LankyPadRight = auto()
+    ChunkyPadLeft = auto()
+    ChunkyPadRight = auto()
+    AnyGunFront = auto()
+    AnyInsLeft = auto()
+    AnyInsRight = auto()
+    BoulderBounce01 = auto()
+    BoulderBounce02 = auto()
+    BoulderBounce03 = auto()
+    BoulderBounce04 = auto()
+    BoulderBounce05 = auto()
+    BoulderBounce06 = auto()
+    BoulderBounce07 = auto()
+    BoulderBounce08 = auto()
+    HalfMedal01 = auto()
+    HalfMedal02 = auto()
+    HalfMedal03 = auto()
+    HalfMedal04 = auto()
+    HalfMedal05 = auto()
+    HalfMedal06 = auto()
+    HalfMedal07 = auto()
+    HalfMedal08 = auto()
 
 
 barrel_skins = (
@@ -129,6 +189,15 @@ barrel_skins = (
     "snide",
     "hint",
     "ap",
+    "fakebean",
+    "fakekey",
+    "shared",
+    "soldout",
+    "null",
+    "fakefairy",
+    "ap_useful",
+    "ap_junk",
+    "ap_trap",
 )
 
 
@@ -306,12 +375,11 @@ def imageToCI(ROM_COPY: ROM, im_f, ci_index: int, tex_index: int, pal_index: int
     ROM_COPY.write(pal_bin_file)
 
 
-def writeColorImageToROM(im_f, table_index: TableNames, file_index: int, width: int, height: int, transparent_border: bool, format: TextureFormat, ROM_COPY: Union[LocalROM, ROM]) -> None:
-    """Write texture to ROM."""
-    file_start = getPointerLocation(table_index, file_index)
-    file_end = getPointerLocation(table_index, file_index + 1)
-    file_size = file_end - file_start
-    ROM_COPY.seek(file_start)
+def writeColorImageToAddress(
+    im_f, address: int, width: int, height: int, transparent_border: bool, format: TextureFormat, ROM_COPY: Union[LocalROM, ROM], compressed: bool, max_file_size: int = None
+) -> None:
+    """Write texture to ROM at a static address."""
+    ROM_COPY.seek(address)
     pix = im_f.load()
     width, height = im_f.size
     bytes_array = []
@@ -357,12 +425,21 @@ def writeColorImageToROM(im_f, table_index: TableNames, file_index: int, width: 
     if format == TextureFormat.RGBA32:
         bytes_per_px = 4
     if len(data) > (bytes_per_px * width * height):
-        print(f"Image too big error: {table_index} > {file_index}")
-    if table_index in (14, 25):
+        print(f"Image too big error: {hex(address)}")
+    if compressed:
         data = gzip.compress(data, compresslevel=9)
-    if len(data) > file_size:
-        print(f"File too big error: {table_index} > {file_index}")
+    if max_file_size is not None:
+        if len(data) > max_file_size:
+            print(f"File too big error: {hex(address)}")
     ROM_COPY.writeBytes(data)
+
+
+def writeColorImageToROM(im_f, table_index: TableNames, file_index: int, width: int, height: int, transparent_border: bool, format: TextureFormat, ROM_COPY: Union[LocalROM, ROM]) -> None:
+    """Write texture to ROM."""
+    file_start = getPointerLocation(table_index, file_index)
+    file_end = getPointerLocation(table_index, file_index + 1)
+    file_size = file_end - file_start
+    writeColorImageToAddress(im_f, file_start, width, height, transparent_border, format, ROM_COPY, table_index in (14, 25), file_size)
 
 
 def getNumberImage(number: int, ROM_COPY: Union[LocalROM, ROM]):

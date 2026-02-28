@@ -14,9 +14,9 @@ class MN64Levels(Enum):
     OEDO_TOWN = "Oedo Town"
     MUSASHI = "Musashi"
     MUTSU = "Mutsu"
-    YAMAMOTO = "Yamamoto"
+    YAMATO = "Yamato"
     SANUKI = "Sanuki"
-    FOLYPOKE_VILLAGE = "Folypoke Village"
+    FOLKYPOKE_VILLAGE = "Folkypoke Village"
     TOSA = "Tosa"
     IYO = "Iyo"
     GHOST_TOYS_CASTLE = "Ghost Toys Castle"
@@ -33,9 +33,9 @@ class MN64HintRegion(Enum):
     OEDO_TOWN = "Oedo Town"
     MUSASHI = "Musashi"
     MUTSU = "Mutsu"
-    YAMAMOTO = "Yamamoto"
+    YAMATO = "Yamato"
     SANUKI = "Sanuki"
-    FOLYPOKE_VILLAGE = "Folypoke Village"
+    FOLKYPOKE_VILLAGE = "Folkypoke Village"
     TOSA = "Tosa"
     IYO = "Iyo"
     GHOST_TOYS_CASTLE = "Ghost Toys Castle"
@@ -105,9 +105,12 @@ class MN64Items(Enum):
     # BLUE_FISH = "Blue Fish"
 
     # Upgrades and Power-ups
-    STRENGTH_UPGRADE_1 = "Strength Upgrade 1"
-    STRENGTH_UPGRADE_2 = "Strength Upgrade 2"
+    PROGRESSIVE_STRENGTH = "Progressive Strength"
     SURPRISE_PACK = "Surprise Pack"
+
+    # Filler Items
+    RYO = "Ryo"
+    POT = "Pot of Ryo"
 
     # Special Items and NPCs
     MR_ELLY_FANT_OEDO_CASTLE = "Mr Elly Fant (Oedo Castle)"
@@ -200,6 +203,7 @@ class MN64Region:
         room_id: Optional[Union[int, str]] = None,
         room_default_definitions: Optional[List[str]] = None,
         enemies: Optional[Dict[int, int]] = None,
+        spawn: Optional[Dict[str, float]] = None,
     ) -> None:
         """Initialize with given parameters."""
         self.name = name
@@ -211,3 +215,4 @@ class MN64Region:
         self.room_id = room_id
         self.room_default_definitions = room_default_definitions or []
         self.enemies = enemies or {}
+        self.spawn = spawn or {}

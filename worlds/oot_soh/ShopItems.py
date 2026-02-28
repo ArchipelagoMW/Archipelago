@@ -27,7 +27,7 @@ vanilla_shop_prices: dict[Items, int] = {
     Items.BUY_HYLIAN_SHIELD: 80,
     Items.BUY_DEKU_SHIELD: 40,
     Items.BUY_GORON_TUNIC: 200,
-    Items.BUY_ZORA_TUNIC: 20,
+    Items.BUY_ZORA_TUNIC: 300,
     Items.BUY_HEART: 10,
     Items.BUY_BOMBCHUS10: 99,
     Items.BUY_BOMBCHUS20: 180,
@@ -207,6 +207,11 @@ def remove_vanilla_shop_reservations(world: "SohWorld") -> None:
             location.locked = False
 
 def fill_shop_items(world: "SohWorld") -> None:
+    if not world.options.shuffle_shops:
+        return
+    
+    remove_vanilla_shop_reservations(world)
+    
     # if we're using UT, we just want to place the event shop items in their proper spots
     if world.using_ut:
         world.shop_vanilla_items = world.passthrough["shop_vanilla_items"]
@@ -216,11 +221,6 @@ def fill_shop_items(world: "SohWorld") -> None:
             location.address = None
             location.place_locked_item(world.create_item(item, create_as_event=True))
         return
-
-    if not world.options.shuffle_shops:
-        return
-
-    remove_vanilla_shop_reservations(world)
     
     # select what shop slots to and vanilla items to shuffle
     num_vanilla = 8 - world.options.shuffle_shops_item_amount

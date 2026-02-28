@@ -56,7 +56,7 @@ class SlotLockContext(CommonContext):
     locked_slots = []
     unlocked_slots = []
     players = {}
-    slot_dependency = {} #stores a list of all connections: {1:2, 3:2} means 1 gets unlocked by 2. And 3 also gets unlocked by 2.
+    slot_dependency = {} #stores a list of all connections: {2:[1,3], 1:[3]} means 2 unlocks 1 and 3. And 1 also unlocks 3.
     use_server_password = False
     connected = False
     has_hinted = []
@@ -189,7 +189,11 @@ class SlotLockContext(CommonContext):
                     for player in self.players:
                         #players: 0 = team, 1 = slot, 2 = alias, 3 = name
                         if player_name == player[3]:
-                            self.slot_dependency[player[1]] = hint["finding_player"]
+                            if hint["finding_player"] in self.slot_dependency:
+                                if not player[1] in self.slot_dependency[hint["finding_player"]]:
+                                    self.slot_dependency[hint["finding_player"]].append(player[1])
+                            else:
+                                self.slot_dependency[hint["finding_player"]] = [player[1]]
                             break
         
     
@@ -202,7 +206,11 @@ class SlotLockContext(CommonContext):
                     for item in self.items_received:
                         item_name = self.item_names.lookup_in_game(item.item, "SlotLock")
                         if f"Unlock {slot[3]}" == item_name: #find where this slot was found, likely from slot 0; archipelago.
-                            self.slot_dependency[slot[1]] = item.player
+                            if item.player in self.slot_dependency:
+                                if not slot[1] in self.slot_dependency[item.player]:
+                                    self.slot_dependency[item.player].append(slot[1])
+                            else:
+                                self.slot_dependency[item.player] = [slot[1]]
                             break
                     break
         for item in self.items_received:
@@ -210,19 +218,31 @@ class SlotLockContext(CommonContext):
             for slot in self.players:
                 #players: 0 = team, 1 = slot, 2 = alias, 3 = name
                 if f"Unlock {slot[3]}" == item_name:
-                    self.slot_dependency[slot[1]] = item.player
+                    if item.player in self.slot_dependency:
+                        if not slot[1] in self.slot_dependency[item.player]:
+                            self.slot_dependency[item.player].append(slot[1])
+                    else:
+                        self.slot_dependency[item.player] = [slot[1]]
                     break
 
     #start the display sequence. 
     def display_dependencies(self, named):
         
-        temp_slot_dependency = self.slot_dependency.copy()
-        for recieve in self.slot_dependency:
-            give = self.slot_dependency[recieve]
-            if not ((give in self.slot_dependency) or (give < 1)):
-                temp_slot_dependency[give] = -1 #add temp exta things for unhinted games. So they show up as mystery.
+        temp_slot_dependency =  {k: v.copy() for k, v in self.slot_dependency.items()}
+        temp_slot_dependency[0] = temp_slot_dependency[0] or []
+        temp_slot_dependency[-1] = []
+        for key_holder in self.slot_dependency:
+            cages = self.slot_dependency[key_holder]
+            nothing = True
+            for key_holder_2 in self.slot_dependency:
+                if (key_holder in self.slot_dependency[key_holder_2]):
+                    nothing = False
+                    break
+            if nothing and key_holder > 1:
+                temp_slot_dependency[-1].append(key_holder) #add temp exta things for unhinted games. So they show up as mystery.
 
         named_num = -1
+        named_is_mystery = True
         if not named == None:
             for player in self.players: 
                 if named == player[3]: # find the info on this slot.
@@ -236,39 +256,52 @@ class SlotLockContext(CommonContext):
             if named_num == -1:
                 logger.info(f"The slot {named} was not found in both the names and the aliases. The search is case sensitive.")
                 return
-            temp_slot_dependency[named_num] = temp_slot_dependency[named_num] or -1
+            
+            for key_holder in self.slot_dependency:
+                if (named_num in self.slot_dependency[key_holder]):
+                    named_is_mystery = False
+                    break
+
+            if not named_num in temp_slot_dependency[0]:
+                temp_slot_dependency[-1] = [named_num]
 
 
-        for recieve in temp_slot_dependency:
-            give = temp_slot_dependency[recieve]
-            if (not give in temp_slot_dependency) and named == None or named_num == recieve: #if this slot does not yet have a known game that unlocks it.
-                recieve_name = ""
-                for player in self.players: 
-                    if recieve == player[1]: # find the info on this slot.
-                        recieve_name = player[2]
-                        break
-                if recieve_name in self.unlocked_slots or self.slot == recieve: #Display the correct game name with current state
-                    logger.info(f"{recieve_name}     (Unlocked)")
-                elif give == -1:
-                    logger.info(f"{recieve_name}     (Mystery)")
-                else:
-                    logger.info(f"{recieve_name}     (Hinted)")
-                self.recusion_display(temp_slot_dependency, recieve, "  |  ") #Start the recusion with a sinlge bar.
+        for key_holder in [0,-1]:
+            cages = temp_slot_dependency[key_holder]
+            for cage in cages:
+                if named == None or named_num == cage: #if this slot does not yet have a known game that unlocks it.
+                    cage_name = ""
+                    for player in self.players: 
+                        if cage == player[1]: # find the info on this slot.
+                            cage_name = player[2]
+                            break
+                    if cage_name in self.unlocked_slots or self.slot == cage: #Display the correct game name with current state
+                        logger.info(f"{cage_name}     (Unlocked)")
+                    elif key_holder == -1 and named == None or named_is_mystery:
+                        logger.info(f"{cage_name}     (Mystery)")
+                    else:
+                        logger.info(f"{cage_name}     (Hinted)")
+                    temp_2_slot_dependency = {k: v.copy() for k, v in temp_slot_dependency.items()}
+                    temp_2_slot_dependency[key_holder].remove(cage)
+                    if cage in temp_2_slot_dependency:
+                        self.recusion_display(temp_2_slot_dependency, cage, "  |  ") #Start the recusion with a sinlge bar.
 
-    def recusion_display(self, temp_slot_dependency, previous_layer, depth):
-        for recieve in temp_slot_dependency:
-            give = temp_slot_dependency[recieve]
-            if give == previous_layer: #if the game is unlocked by the previous layer.
-                recieve_name = ""
-                for player in self.players:
-                    if recieve == player[1]: # find the info on this slot.
-                        recieve_name = player[2]
-                        break
-                if recieve_name in self.unlocked_slots: #Display the correct game name with current state and extra depth
-                    logger.info(f"{depth}{recieve_name}     (Unlocked)")
-                else:
-                    logger.info(f"{depth}{recieve_name}     (Hinted)")
-                self.recusion_display(temp_slot_dependency, recieve, depth + "  |  ") #do more recursion with an extra line.
+    def recusion_display(self, temp_slot_dependency: dict, this_layer, depth):
+        cages = temp_slot_dependency[this_layer]
+        for cage in cages:
+            cage_name = ""
+            for player in self.players: 
+                if cage == player[1]: # find the info on this slot.
+                    cage_name = player[2]
+                    break
+            if cage_name in self.unlocked_slots: #Display the correct game name with current state and extra depth
+                logger.info(f"{depth}{cage_name}     (Unlocked)")
+            else:
+                logger.info(f"{depth}{cage_name}     (Hinted)")
+            temp_2_slot_dependency = {k: v.copy() for k, v in temp_slot_dependency.items()}
+            temp_2_slot_dependency[this_layer].remove(cage)
+            if cage in temp_2_slot_dependency:
+                self.recusion_display(temp_2_slot_dependency, cage, depth + "  |  ") #do more recursion with an extra line.
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":

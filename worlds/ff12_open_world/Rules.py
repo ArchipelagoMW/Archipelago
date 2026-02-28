@@ -311,174 +311,170 @@ rule_data_list: List[Callable[[CollectionState, int], bool]] = [
      state.has("HuntClubStart", player) and
      state.has("Dawn Shard", player)),  # Rule 110
     lambda state, player:
-    (state.has("Sandalwood Chop", player) and
-     state.has("HuntClubKill", player, 5)),  # Rule 111
+    (state.has("Shelled Trophy", player) and
+     state.has("HuntClubStart", player) and
+     state.has("Black Orb", player, 3)),  # Rule 111
     lambda state, player:
     (state.has("Sandalwood Chop", player) and
-     state.has("HuntClubKill", player, 10)),  # Rule 112
+     state.has("HuntClubKill", player, 5)),  # Rule 112
     lambda state, player:
     (state.has("Sandalwood Chop", player) and
-     state.has("HuntClubKill", player, 15)),  # Rule 113
+     state.has("HuntClubKill", player, 10)),  # Rule 113
     lambda state, player:
     (state.has("Sandalwood Chop", player) and
-     state.has("HuntClubKill", player, 20)),  # Rule 114
+     state.has("HuntClubKill", player, 15)),  # Rule 114
     lambda state, player:
     (state.has("Sandalwood Chop", player) and
-     state.has("HuntClubKill", player, 25)),  # Rule 115
+     state.has("HuntClubKill", player, 20)),  # Rule 115
     lambda state, player:
     (state.has("Sandalwood Chop", player) and
-     state.has("HuntClubKill", player, 30)),  # Rule 116
+     state.has("HuntClubKill", player, 25)),  # Rule 116
     lambda state, player:
-    state.has("Vaan", player),  # Rule 117
+    (state.has("Sandalwood Chop", player) and
+     state.has("HuntClubKill", player, 30)),  # Rule 117
     lambda state, player:
-    state.has("Ashe", player),  # Rule 118
+    state.has("Vaan", player),  # Rule 118
     lambda state, player:
-    state.has("Fran", player),  # Rule 119
+    state.has("Ashe", player),  # Rule 119
     lambda state, player:
-    state.has("Balthier", player),  # Rule 120
+    state.has("Fran", player),  # Rule 120
     lambda state, player:
-    state.has("Basch", player),  # Rule 121
+    state.has("Balthier", player),  # Rule 121
     lambda state, player:
-    state.has("Penelo", player),  # Rule 122
+    state.has("Basch", player),  # Rule 122
+    lambda state, player:
+    state.has("Penelo", player),  # Rule 123
     lambda state, player:
     (state.has("Wind Globe", player) and
      state.has("Windvane", player) and
-     state.has("Defeat Vossler", player)),  # Rule 123
+     state.has("Defeat Vossler", player)),  # Rule 124
     lambda state, player:
     (state.has("Defeat Cid", player) and
-     state.has("Treaty-Blade", player)),  # Rule 124
+     state.has("Treaty-Blade", player)),  # Rule 125
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 2)),  # Rule 125
+     state.has("Hunt", player, 2)),  # Rule 126
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 4)),  # Rule 126
+     state.has("Hunt", player, 4)),  # Rule 127
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 8)),  # Rule 127
+     state.has("Hunt", player, 8)),  # Rule 128
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 10)),  # Rule 128
+     state.has("Hunt", player, 10)),  # Rule 129
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 12)),  # Rule 129
+     state.has("Hunt", player, 12)),  # Rule 130
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 14)),  # Rule 130
+     state.has("Hunt", player, 14)),  # Rule 131
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 16)),  # Rule 131
+     state.has("Hunt", player, 16)),  # Rule 132
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 24)),  # Rule 132
+     state.has("Hunt", player, 24)),  # Rule 133
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 28)),  # Rule 133
+     state.has("Hunt", player, 28)),  # Rule 134
     lambda state, player:
     (state.has("Clan Primer", player) and
-     state.has("Hunt", player, 32)),  # Rule 134
+     state.has("Hunt", player, 32)),  # Rule 135
     lambda state, player:
     (state.has("Clan Primer", player) and
      state.has("Hunt", player, 45) and
      state_has_category(state, player, "Esper", 13) and
      state.has("HuntClubKill", player, 30) and
      state.has("Soul Ward Key", player) and
-     state.has("Ageworn Key", player)),  # Rule 135
+     state.has("Ageworn Key", player)),  # Rule 136
     lambda state, player:
     (state.has("Rabanastre Aeropass", player) and
      state.has("Bhujerba Aeropass", player) and
      state.can_reach_region("Rabanastre", player) and
-     state.can_reach_region("Bhujerba", player)),  # Rule 136
+     state.can_reach_region("Bhujerba", player)),  # Rule 137
     lambda state, player:
     (state.has("Rabanastre Aeropass", player) and
      state.has("Nalbina Aeropass", player) and
      state.can_reach_region("Rabanastre", player) and
-     state.can_reach_region("Nalbina Fortress", player)),  # Rule 137
+     state.can_reach_region("Nalbina Fortress", player)),  # Rule 138
     lambda state, player:
     (state.has("Rabanastre Aeropass", player) and
      state.has("Archades Aeropass", player) and
      state.can_reach_region("Rabanastre", player) and
-     state.can_reach_region("Archades", player)),  # Rule 138
+     state.can_reach_region("Archades", player)),  # Rule 139
     lambda state, player:
     (state.has("Nalbina Aeropass", player) and
      state.has("Archades Aeropass", player) and
      state.can_reach_region("Nalbina Fortress", player) and
-     state.can_reach_region("Archades", player)),  # Rule 139
+     state.can_reach_region("Archades", player)),  # Rule 140
     lambda state, player:
     (state.has("Nalbina Aeropass", player) and
      state.has("Balfonheim Aeropass", player) and
      state.can_reach_region("Nalbina Fortress", player) and
-     state.can_reach_region("Balfonheim", player)),  # Rule 140
+     state.can_reach_region("Balfonheim", player)),  # Rule 141
     lambda state, player:
     (state.has("Bhujerba Aeropass", player) and
      state.has("Balfonheim Aeropass", player) and
      state.can_reach_region("Bhujerba", player) and
-     state.can_reach_region("Balfonheim", player)),  # Rule 141
+     state.can_reach_region("Balfonheim", player)),  # Rule 142
     lambda state, player:
     (state.has("Archades Aeropass", player) and
      state.has("Balfonheim Aeropass", player) and
      state.can_reach_region("Archades", player) and
-     state.can_reach_region("Balfonheim", player)),  # Rule 142
+     state.can_reach_region("Balfonheim", player)),  # Rule 143
     lambda state, player:
-    state.has("Crescent Stone", player),  # Rule 143
+    state.has("Crescent Stone", player),  # Rule 144
     lambda state, player:
-    state.has("Barheim Key", player),  # Rule 144
+    state.has("Barheim Key", player),  # Rule 145
     lambda state, player:
-    state.has("Defeat Ghis", player),  # Rule 145
+    state.has("Defeat Ghis", player),  # Rule 146
     lambda state, player:
-    state.has("Defeat Bergan", player),  # Rule 146
+    state.has("Defeat Bergan", player),  # Rule 147
     lambda state, player:
-    state_has_category(state, player, "Esper", 10),  # Rule 147
+    state_has_category(state, player, "Esper", 10),  # Rule 148
     lambda state, player:
-    state.has("Lente's Tear", player),  # Rule 148
+    state.has("Lente's Tear", player),  # Rule 149
     lambda state, player:
-    state.has("Belias", player),  # Rule 149
+    state.has("Belias", player),  # Rule 150
     lambda state, player:
-    state.has("Soul Ward Key", player),  # Rule 150
+    state.has("Soul Ward Key", player),  # Rule 151
     lambda state, player:
     (state.has("Pinewood Chop", player, 3) or
-     state.has("Sandalwood Chop", player)),  # Rule 151
+     state.has("Sandalwood Chop", player)),  # Rule 152
     lambda state, player:
     (state.has("Rabanastre Aeropass", player) and
-     state.has("Nalbina Aeropass", player)),  # Rule 152
+     state.has("Nalbina Aeropass", player)),  # Rule 153
     lambda state, player:
     (state.has("Rabanastre Aeropass", player) and
-     state.has("Bhujerba Aeropass", player)),  # Rule 153
+     state.has("Bhujerba Aeropass", player)),  # Rule 154
     lambda state, player:
     (state.has("Rabanastre Aeropass", player) and
-     state.has("Archades Aeropass", player)),  # Rule 154
-    lambda state, player:
-    (state.has("Nalbina Aeropass", player) and
      state.has("Archades Aeropass", player)),  # Rule 155
     lambda state, player:
     (state.has("Nalbina Aeropass", player) and
-     state.has("Balfonheim Aeropass", player)),  # Rule 156
+     state.has("Archades Aeropass", player)),  # Rule 156
     lambda state, player:
-    (state.has("Bhujerba Aeropass", player) and
+    (state.has("Nalbina Aeropass", player) and
      state.has("Balfonheim Aeropass", player)),  # Rule 157
     lambda state, player:
-    (state.has("Archades Aeropass", player) and
+    (state.has("Bhujerba Aeropass", player) and
      state.has("Balfonheim Aeropass", player)),  # Rule 158
     lambda state, player:
-    state.has("Systems Access Key", player),  # Rule 159
+    (state.has("Archades Aeropass", player) and
+     state.has("Balfonheim Aeropass", player)),  # Rule 159
     lambda state, player:
-    state.has("Systems Access Key", player, 3),  # Rule 160
+    state.has("Systems Access Key", player),  # Rule 160
+    lambda state, player:
+    state.has("Systems Access Key", player, 3),  # Rule 161
     lambda state, player:
     (state.has("Systems Access Key", player) and
-     state.has("Rainstone", player)),  # Rule 161
+     state.has("Rainstone", player)),  # Rule 162
     lambda state, player:
-    state.has("Systems Access Key", player, 2),  # Rule 162
+    state.has("Systems Access Key", player, 2),  # Rule 163
     lambda state, player:
     (state.has("Basch", player) or
-     state.has("Goddess's Magicite", player)),  # Rule 163
-    lambda state, player:
-    (state.can_reach_region("Rabanastre <-> Nalbina Skyferry", player) or
-     state.can_reach_region("Rabanastre <-> Bhujerba Skyferry", player) or
-     state.can_reach_region("Rabanastre <-> Archades Skyferry", player) or
-     state.can_reach_region("Nalbina <-> Archades Skyferry", player) or
-     state.can_reach_region("Nalbina <-> Balfonheim Skyferry", player) or
-     state.can_reach_region("Bhujerba <-> Balfonheim Skyferry", player) or
-     state.can_reach_region("Archades <-> Balfonheim Skyferry", player)),  # Rule 164
+     state.has("Goddess's Magicite", player)),  # Rule 164
     lambda state, player:
     (state.has("Writ of Transit", player) and
      state.has("Systems Access Key", player)),  # Rule 165
@@ -2811,27 +2807,27 @@ rule_data_table: Dict[str, Callable[[CollectionState, int], bool]] = {
     "Ridorana Cataract - Abelisk - Reptilian Trophy Reward (1)": rule_data_list[108],
     "Ridorana Cataract - Abelisk - Reptilian Trophy Reward (2)": rule_data_list[108],
     "Ridorana Cataract - Abelisk - Reptilian Trophy Reward (3)": rule_data_list[108],
-    "Pharos of Ridorana - Avenger - Vile Trophy Reward (1)": rule_data_list[108],
-    "Pharos of Ridorana - Avenger - Vile Trophy Reward (2)": rule_data_list[108],
-    "Pharos of Ridorana - Avenger - Vile Trophy Reward (3)": rule_data_list[108],
-    "Archades - Hunt Club Owner 5 Trophy Rares Defeated Reward (1)": rule_data_list[111],
-    "Archades - Hunt Club Owner 5 Trophy Rares Defeated Reward (2)": rule_data_list[111],
-    "Archades - Hunt Club Owner 5 Trophy Rares Defeated Reward (3)": rule_data_list[111],
-    "Archades - Hunt Club Owner 10 Trophy Rares Defeated Reward (1)": rule_data_list[112],
-    "Archades - Hunt Club Owner 10 Trophy Rares Defeated Reward (2)": rule_data_list[112],
-    "Archades - Hunt Club Owner 10 Trophy Rares Defeated Reward (3)": rule_data_list[112],
-    "Archades - Hunt Club Owner 15 Trophy Rares Defeated Reward (1)": rule_data_list[113],
-    "Archades - Hunt Club Owner 15 Trophy Rares Defeated Reward (2)": rule_data_list[113],
-    "Archades - Hunt Club Owner 15 Trophy Rares Defeated Reward (3)": rule_data_list[113],
-    "Archades - Hunt Club Owner 20 Trophy Rares Defeated Reward (1)": rule_data_list[114],
-    "Archades - Hunt Club Owner 20 Trophy Rares Defeated Reward (2)": rule_data_list[114],
-    "Archades - Hunt Club Owner 20 Trophy Rares Defeated Reward (3)": rule_data_list[114],
-    "Archades - Hunt Club Owner 25 Trophy Rares Defeated Reward (1)": rule_data_list[115],
-    "Archades - Hunt Club Owner 25 Trophy Rares Defeated Reward (2)": rule_data_list[115],
-    "Archades - Hunt Club Owner 25 Trophy Rares Defeated Reward (3)": rule_data_list[115],
-    "Archades - Hunt Club Owner 30 Trophy Rares Defeated Reward (1)": rule_data_list[116],
-    "Archades - Hunt Club Owner 30 Trophy Rares Defeated Reward (2)": rule_data_list[116],
-    "Archades - Hunt Club Owner 30 Trophy Rares Defeated Reward (3)": rule_data_list[116],
+    "Pharos of Ridorana - Avenger - Vile Trophy Reward (1)": rule_data_list[111],
+    "Pharos of Ridorana - Avenger - Vile Trophy Reward (2)": rule_data_list[111],
+    "Pharos of Ridorana - Avenger - Vile Trophy Reward (3)": rule_data_list[111],
+    "Archades - Hunt Club Owner 5 Trophy Rares Defeated Reward (1)": rule_data_list[112],
+    "Archades - Hunt Club Owner 5 Trophy Rares Defeated Reward (2)": rule_data_list[112],
+    "Archades - Hunt Club Owner 5 Trophy Rares Defeated Reward (3)": rule_data_list[112],
+    "Archades - Hunt Club Owner 10 Trophy Rares Defeated Reward (1)": rule_data_list[113],
+    "Archades - Hunt Club Owner 10 Trophy Rares Defeated Reward (2)": rule_data_list[113],
+    "Archades - Hunt Club Owner 10 Trophy Rares Defeated Reward (3)": rule_data_list[113],
+    "Archades - Hunt Club Owner 15 Trophy Rares Defeated Reward (1)": rule_data_list[114],
+    "Archades - Hunt Club Owner 15 Trophy Rares Defeated Reward (2)": rule_data_list[114],
+    "Archades - Hunt Club Owner 15 Trophy Rares Defeated Reward (3)": rule_data_list[114],
+    "Archades - Hunt Club Owner 20 Trophy Rares Defeated Reward (1)": rule_data_list[115],
+    "Archades - Hunt Club Owner 20 Trophy Rares Defeated Reward (2)": rule_data_list[115],
+    "Archades - Hunt Club Owner 20 Trophy Rares Defeated Reward (3)": rule_data_list[115],
+    "Archades - Hunt Club Owner 25 Trophy Rares Defeated Reward (1)": rule_data_list[116],
+    "Archades - Hunt Club Owner 25 Trophy Rares Defeated Reward (2)": rule_data_list[116],
+    "Archades - Hunt Club Owner 25 Trophy Rares Defeated Reward (3)": rule_data_list[116],
+    "Archades - Hunt Club Owner 30 Trophy Rares Defeated Reward (1)": rule_data_list[117],
+    "Archades - Hunt Club Owner 30 Trophy Rares Defeated Reward (2)": rule_data_list[117],
+    "Archades - Hunt Club Owner 30 Trophy Rares Defeated Reward (3)": rule_data_list[117],
     "Phon Coast - All Trophies Atak 16 or more Reward (1)": rule_data_list[108],
     "Phon Coast - All Trophies Atak 16 or more Reward (2)": rule_data_list[108],
     "Phon Coast - All Trophies Atak 16 or more Reward (3)": rule_data_list[108],
@@ -2943,60 +2939,60 @@ rule_data_table: Dict[str, Callable[[CollectionState, int], bool]] = {
     "Phon Coast - Atak 5, Blok 5, Stok 12 Outfitters Reward (1)": rule_data_list[108],
     "Phon Coast - Atak 5, Blok 5, Stok 12 Outfitters Reward (2)": rule_data_list[108],
     "Phon Coast - Atak 5, Blok 5, Stok 12 Outfitters Reward (3)": rule_data_list[108],
-    "Vaan's Starting Items (1)": rule_data_list[117],
-    "Vaan's Starting Items (2)": rule_data_list[117],
-    "Vaan's Starting Items (3)": rule_data_list[117],
-    "Vaan's Starting Items (4)": rule_data_list[117],
-    "Vaan's Starting Items (5)": rule_data_list[117],
-    "Vaan's Starting Items (6)": rule_data_list[117],
-    "Vaan's Starting Items (7)": rule_data_list[117],
-    "Vaan's Starting Items (8)": rule_data_list[117],
-    "Vaan's Starting Items (9)": rule_data_list[117],
-    "Ashe's Starting Items (1)": rule_data_list[118],
-    "Ashe's Starting Items (2)": rule_data_list[118],
-    "Ashe's Starting Items (3)": rule_data_list[118],
-    "Ashe's Starting Items (4)": rule_data_list[118],
-    "Ashe's Starting Items (5)": rule_data_list[118],
-    "Ashe's Starting Items (6)": rule_data_list[118],
-    "Ashe's Starting Items (7)": rule_data_list[118],
-    "Ashe's Starting Items (8)": rule_data_list[118],
-    "Ashe's Starting Items (9)": rule_data_list[118],
-    "Fran's Starting Items (1)": rule_data_list[119],
-    "Fran's Starting Items (2)": rule_data_list[119],
-    "Fran's Starting Items (3)": rule_data_list[119],
-    "Fran's Starting Items (4)": rule_data_list[119],
-    "Fran's Starting Items (5)": rule_data_list[119],
-    "Fran's Starting Items (6)": rule_data_list[119],
-    "Fran's Starting Items (7)": rule_data_list[119],
-    "Fran's Starting Items (8)": rule_data_list[119],
-    "Fran's Starting Items (9)": rule_data_list[119],
-    "Balthier's Starting Items (1)": rule_data_list[120],
-    "Balthier's Starting Items (2)": rule_data_list[120],
-    "Balthier's Starting Items (3)": rule_data_list[120],
-    "Balthier's Starting Items (4)": rule_data_list[120],
-    "Balthier's Starting Items (5)": rule_data_list[120],
-    "Balthier's Starting Items (6)": rule_data_list[120],
-    "Balthier's Starting Items (7)": rule_data_list[120],
-    "Balthier's Starting Items (8)": rule_data_list[120],
-    "Balthier's Starting Items (9)": rule_data_list[120],
-    "Basch's Starting Items (1)": rule_data_list[121],
-    "Basch's Starting Items (2)": rule_data_list[121],
-    "Basch's Starting Items (3)": rule_data_list[121],
-    "Basch's Starting Items (4)": rule_data_list[121],
-    "Basch's Starting Items (5)": rule_data_list[121],
-    "Basch's Starting Items (6)": rule_data_list[121],
-    "Basch's Starting Items (7)": rule_data_list[121],
-    "Basch's Starting Items (8)": rule_data_list[121],
-    "Basch's Starting Items (9)": rule_data_list[121],
-    "Penelo's Starting Items (1)": rule_data_list[122],
-    "Penelo's Starting Items (2)": rule_data_list[122],
-    "Penelo's Starting Items (3)": rule_data_list[122],
-    "Penelo's Starting Items (4)": rule_data_list[122],
-    "Penelo's Starting Items (5)": rule_data_list[122],
-    "Penelo's Starting Items (6)": rule_data_list[122],
-    "Penelo's Starting Items (7)": rule_data_list[122],
-    "Penelo's Starting Items (8)": rule_data_list[122],
-    "Penelo's Starting Items (9)": rule_data_list[122],
+    "Vaan's Starting Items (1)": rule_data_list[118],
+    "Vaan's Starting Items (2)": rule_data_list[118],
+    "Vaan's Starting Items (3)": rule_data_list[118],
+    "Vaan's Starting Items (4)": rule_data_list[118],
+    "Vaan's Starting Items (5)": rule_data_list[118],
+    "Vaan's Starting Items (6)": rule_data_list[118],
+    "Vaan's Starting Items (7)": rule_data_list[118],
+    "Vaan's Starting Items (8)": rule_data_list[118],
+    "Vaan's Starting Items (9)": rule_data_list[118],
+    "Ashe's Starting Items (1)": rule_data_list[119],
+    "Ashe's Starting Items (2)": rule_data_list[119],
+    "Ashe's Starting Items (3)": rule_data_list[119],
+    "Ashe's Starting Items (4)": rule_data_list[119],
+    "Ashe's Starting Items (5)": rule_data_list[119],
+    "Ashe's Starting Items (6)": rule_data_list[119],
+    "Ashe's Starting Items (7)": rule_data_list[119],
+    "Ashe's Starting Items (8)": rule_data_list[119],
+    "Ashe's Starting Items (9)": rule_data_list[119],
+    "Fran's Starting Items (1)": rule_data_list[120],
+    "Fran's Starting Items (2)": rule_data_list[120],
+    "Fran's Starting Items (3)": rule_data_list[120],
+    "Fran's Starting Items (4)": rule_data_list[120],
+    "Fran's Starting Items (5)": rule_data_list[120],
+    "Fran's Starting Items (6)": rule_data_list[120],
+    "Fran's Starting Items (7)": rule_data_list[120],
+    "Fran's Starting Items (8)": rule_data_list[120],
+    "Fran's Starting Items (9)": rule_data_list[120],
+    "Balthier's Starting Items (1)": rule_data_list[121],
+    "Balthier's Starting Items (2)": rule_data_list[121],
+    "Balthier's Starting Items (3)": rule_data_list[121],
+    "Balthier's Starting Items (4)": rule_data_list[121],
+    "Balthier's Starting Items (5)": rule_data_list[121],
+    "Balthier's Starting Items (6)": rule_data_list[121],
+    "Balthier's Starting Items (7)": rule_data_list[121],
+    "Balthier's Starting Items (8)": rule_data_list[121],
+    "Balthier's Starting Items (9)": rule_data_list[121],
+    "Basch's Starting Items (1)": rule_data_list[122],
+    "Basch's Starting Items (2)": rule_data_list[122],
+    "Basch's Starting Items (3)": rule_data_list[122],
+    "Basch's Starting Items (4)": rule_data_list[122],
+    "Basch's Starting Items (5)": rule_data_list[122],
+    "Basch's Starting Items (6)": rule_data_list[122],
+    "Basch's Starting Items (7)": rule_data_list[122],
+    "Basch's Starting Items (8)": rule_data_list[122],
+    "Basch's Starting Items (9)": rule_data_list[122],
+    "Penelo's Starting Items (1)": rule_data_list[123],
+    "Penelo's Starting Items (2)": rule_data_list[123],
+    "Penelo's Starting Items (3)": rule_data_list[123],
+    "Penelo's Starting Items (4)": rule_data_list[123],
+    "Penelo's Starting Items (5)": rule_data_list[123],
+    "Penelo's Starting Items (6)": rule_data_list[123],
+    "Penelo's Starting Items (7)": rule_data_list[123],
+    "Penelo's Starting Items (8)": rule_data_list[123],
+    "Penelo's Starting Items (9)": rule_data_list[123],
     "Vaan Event (1)": rule_data_list[1],
     "Penelo Event (1)": rule_data_list[1],
     "Dreadnought Leviathan Guest Event (1)": rule_data_list[1],
@@ -3008,7 +3004,7 @@ rule_data_table: Dict[str, Callable[[CollectionState, int], bool]] = {
     "Barheim Guest Event (1)": rule_data_list[1],
     "Defeat Vossler Event (1)": rule_data_list[1],
     "Defeat Bergan Event (1)": rule_data_list[92],
-    "Defeat Earth Tyrant Event (1)": rule_data_list[123],
+    "Defeat Earth Tyrant Event (1)": rule_data_list[124],
     "Defeat Cid Event (1)": rule_data_list[5],
     "Hunt 1: Rogue Tomato Event (1)": rule_data_list[25],
     "Hunt 2: Thextera Event (1)": rule_data_list[26],
@@ -3060,7 +3056,7 @@ rule_data_table: Dict[str, Callable[[CollectionState, int], bool]] = {
     "Hunt 43: Ixion Event (1)": rule_data_list[62],
     "Hunt 44: Shadowseer Event (1)": rule_data_list[63],
     "Hunt 45: Yiazmat Event (1)": rule_data_list[64],
-    "Reddas Event (1)": rule_data_list[124],
+    "Reddas Event (1)": rule_data_list[125],
     "Basch Event (1)": rule_data_list[18],
     "Thalassinon - Shelled Trophy Event (1)": rule_data_list[1],
     "Gavial - Fur-scaled Trophy Event (1)": rule_data_list[108],
@@ -3102,17 +3098,17 @@ rule_data_table: Dict[str, Callable[[CollectionState, int], bool]] = {
     "Migelo's Sundries Shop Event (1)": rule_data_list[1],
     "Yamoora's Gambits Shop Event (1)": rule_data_list[1],
     "Clan Provisioner 1 Shop Event (1)": rule_data_list[52],
-    "Clan Provisioner 2 Shop Event (1)": rule_data_list[125],
-    "Clan Provisioner 3 Shop Event (1)": rule_data_list[126],
-    "Clan Provisioner 4 Shop Event (1)": rule_data_list[127],
-    "Clan Provisioner 5 Shop Event (1)": rule_data_list[128],
-    "Clan Provisioner 6 Shop Event (1)": rule_data_list[129],
-    "Clan Provisioner 7 Shop Event (1)": rule_data_list[130],
-    "Clan Provisioner 8 Shop Event (1)": rule_data_list[131],
-    "Clan Provisioner 9 Shop Event (1)": rule_data_list[132],
-    "Clan Provisioner 10 Shop Event (1)": rule_data_list[133],
-    "Clan Provisioner 11 Shop Event (1)": rule_data_list[134],
-    "Clan Provisioner 12 Shop Event (1)": rule_data_list[135],
+    "Clan Provisioner 2 Shop Event (1)": rule_data_list[126],
+    "Clan Provisioner 3 Shop Event (1)": rule_data_list[127],
+    "Clan Provisioner 4 Shop Event (1)": rule_data_list[128],
+    "Clan Provisioner 5 Shop Event (1)": rule_data_list[129],
+    "Clan Provisioner 6 Shop Event (1)": rule_data_list[130],
+    "Clan Provisioner 7 Shop Event (1)": rule_data_list[131],
+    "Clan Provisioner 8 Shop Event (1)": rule_data_list[132],
+    "Clan Provisioner 9 Shop Event (1)": rule_data_list[133],
+    "Clan Provisioner 10 Shop Event (1)": rule_data_list[134],
+    "Clan Provisioner 11 Shop Event (1)": rule_data_list[135],
+    "Clan Provisioner 12 Shop Event (1)": rule_data_list[136],
     "Travelling Merchant North Shop Event (1)": rule_data_list[1],
     "Travelling Merchant South Shop Event (1)": rule_data_list[1],
     "Weapons of War Shop Event (1)": rule_data_list[1],
@@ -3153,13 +3149,13 @@ rule_data_table: Dict[str, Callable[[CollectionState, int], bool]] = {
     "Vendor of Goods Shop Event (1)": rule_data_list[1],
     "Stranded Merchant Shop Event (1)": rule_data_list[1],
     "Baknamy Shop Event (1)": rule_data_list[1],
-    "Storekeeper (Rabanastre <-> Bhujerba) Shop Event (1)": rule_data_list[136],
-    "Storekeeper (Rabanastre <-> Nalbina) Shop Event (1)": rule_data_list[137],
-    "Storekeeper (Rabanastre <-> Archades) Shop Event (1)": rule_data_list[138],
-    "Storekeeper (Nalbina <-> Archades) Shop Event (1)": rule_data_list[139],
-    "Storekeeper (Nalbina <-> Balfonheim) Shop Event (1)": rule_data_list[140],
-    "Storekeeper (Bhujerba <-> Balfonheim) Shop Event (1)": rule_data_list[141],
-    "Storekeeper (Archades <-> Balfonheim) Shop Event (1)": rule_data_list[142],
+    "Storekeeper (Rabanastre <-> Bhujerba) Shop Event (1)": rule_data_list[137],
+    "Storekeeper (Rabanastre <-> Nalbina) Shop Event (1)": rule_data_list[138],
+    "Storekeeper (Rabanastre <-> Archades) Shop Event (1)": rule_data_list[139],
+    "Storekeeper (Nalbina <-> Archades) Shop Event (1)": rule_data_list[140],
+    "Storekeeper (Nalbina <-> Balfonheim) Shop Event (1)": rule_data_list[141],
+    "Storekeeper (Bhujerba <-> Balfonheim) Shop Event (1)": rule_data_list[142],
+    "Storekeeper (Archades <-> Balfonheim) Shop Event (1)": rule_data_list[143],
     "Storekeeper (All) Shop Event (1)": rule_data_list[1],
 }
 
@@ -3179,14 +3175,14 @@ entrance_rule_data_table: Dict[Tuple[str, str], Callable[[CollectionState, int],
     ("Clan Hall", "Rabanastre"): rule_data_list[52],
     ("Lowtown", "Garamsythe Waterway"): rule_data_list[1],
     ("Garamsythe Waterway", "Lowtown"): rule_data_list[1],
-    ("Lowtown", "Royal Palace"): rule_data_list[143],
+    ("Lowtown", "Royal Palace"): rule_data_list[144],
     ("Royal Palace", "Nalbina Dungeon"): rule_data_list[1],
     ("Nalbina Dungeon", "Barheim Passage Shop"): rule_data_list[1],
     ("Royal Palace", "Barheim Passage Story"): rule_data_list[1],
     ("Barheim Passage Story", "Dalmasca Estersand"): rule_data_list[1],
-    ("Barheim Passage", "Garamsythe Waterway"): rule_data_list[38],
-    ("Barheim Passage", "Dalmasca Estersand"): rule_data_list[144],
-    ("Dalmasca Estersand", "Barheim Passage"): rule_data_list[144],
+    ("Barheim Passage", "Garamsythe Waterway"): rule_data_list[1],
+    ("Barheim Passage", "Dalmasca Estersand"): rule_data_list[145],
+    ("Dalmasca Estersand", "Barheim Passage"): rule_data_list[145],
     ("Dalmasca Estersand", "Nalbina Fortress"): rule_data_list[1],
     ("Nalbina Fortress", "Dalmasca Estersand"): rule_data_list[1],
     ("Dalmasca Estersand", "Giza Plains Dry"): rule_data_list[1],
@@ -3204,12 +3200,12 @@ entrance_rule_data_table: Dict[Tuple[str, str], Callable[[CollectionState, int],
     ("Giza Plains Dry", "Dalmasca Westersand"): rule_data_list[1],
     ("Dalmasca Westersand", "Giza Plains Rains"): rule_data_list[14],
     ("Giza Plains Rains", "Dalmasca Westersand"): rule_data_list[14],
-    ("Dalmasca Westersand", "Ogir-Yensa Sandsea"): rule_data_list[145],
-    ("Ogir-Yensa Sandsea", "Dalmasca Westersand"): rule_data_list[145],
+    ("Dalmasca Westersand", "Ogir-Yensa Sandsea"): rule_data_list[146],
+    ("Ogir-Yensa Sandsea", "Dalmasca Westersand"): rule_data_list[146],
     ("Barheim Passage", "Barheim Passage Shop"): rule_data_list[1],
-    ("Nalbina Fortress", "Mosphoran Highwaste"): rule_data_list[146],
-    ("Mosphoran Highwaste", "Nalbina Fortress"): rule_data_list[146],
-    ("Mosphoran Highwaste", "Mosphoran Highwaste Upper"): rule_data_list[146],
+    ("Nalbina Fortress", "Mosphoran Highwaste"): rule_data_list[147],
+    ("Mosphoran Highwaste", "Nalbina Fortress"): rule_data_list[147],
+    ("Mosphoran Highwaste", "Mosphoran Highwaste Upper"): rule_data_list[147],
     ("Mosphoran Highwaste", "Salikawood"): rule_data_list[1],
     ("Salikawood", "Mosphoran Highwaste"): rule_data_list[1],
     ("Salikawood", "Salikawood NW"): rule_data_list[1],
@@ -3247,16 +3243,16 @@ entrance_rule_data_table: Dict[Tuple[str, str], Callable[[CollectionState, int],
     ("Golmore Jungle NW", "Ozmone Plain"): rule_data_list[1],
     ("Ozmone Plain", "Henne Mines"): rule_data_list[1],
     ("Henne Mines", "Ozmone Plain"): rule_data_list[1],
-    ("Henne Mines", "Henne Mines Deep"): rule_data_list[147],
+    ("Henne Mines", "Henne Mines Deep"): rule_data_list[148],
     ("Henne Mines Deep", "Henne Mines Feywood"): rule_data_list[1],
     ("Henne Mines Feywood", "Feywood"): rule_data_list[1],
     ("Feywood", "Henne Mines Feywood"): rule_data_list[1],
     ("Golmore Jungle NW", "Eruyt Village"): rule_data_list[1],
     ("Eruyt Village", "Golmore Jungle NW"): rule_data_list[1],
-    ("Golmore Jungle NW", "Golmore Jungle S"): rule_data_list[148],
-    ("Golmore Jungle S", "Golmore Jungle NW"): rule_data_list[148],
-    ("Golmore Jungle NW", "Golmore Jungle E"): rule_data_list[148],
-    ("Golmore Jungle E", "Golmore Jungle NW"): rule_data_list[148],
+    ("Golmore Jungle NW", "Golmore Jungle S"): rule_data_list[149],
+    ("Golmore Jungle S", "Golmore Jungle NW"): rule_data_list[149],
+    ("Golmore Jungle NW", "Golmore Jungle E"): rule_data_list[149],
+    ("Golmore Jungle E", "Golmore Jungle NW"): rule_data_list[149],
     ("Golmore Jungle S", "Feywood"): rule_data_list[1],
     ("Feywood", "Golmore Jungle S"): rule_data_list[1],
     ("Golmore Jungle E", "Paramina Rift"): rule_data_list[1],
@@ -3267,7 +3263,7 @@ entrance_rule_data_table: Dict[Tuple[str, str], Callable[[CollectionState, int],
     ("Feywood", "Paramina Rift"): rule_data_list[1],
     ("Paramina Rift", "Stilshrine of Miriam"): rule_data_list[1],
     ("Stilshrine of Miriam", "Paramina Rift"): rule_data_list[1],
-    ("Feywood", "Giruvegan"): rule_data_list[149],
+    ("Feywood", "Giruvegan"): rule_data_list[150],
     ("Giruvegan", "Great Crystal"): rule_data_list[1],
     ("Great Crystal", "Giruvegan"): rule_data_list[1],
     ("Great Crystal", "Giruvegan End"): rule_data_list[1],
@@ -3288,82 +3284,95 @@ entrance_rule_data_table: Dict[Tuple[str, str], Callable[[CollectionState, int],
     ("Cerobi Steppe", "Tchita Uplands"): rule_data_list[1],
     ("Balfonheim", "Cerobi Steppe"): rule_data_list[1],
     ("Cerobi Steppe", "Balfonheim"): rule_data_list[1],
-    ("Sochen Cave Palace S", "Sochen Cave Palace Middle"): rule_data_list[150],
-    ("Sochen Cave Palace Middle", "Sochen Cave Palace S"): rule_data_list[150],
-    ("Sochen Cave Palace N", "Sochen Cave Palace Middle"): rule_data_list[150],
-    ("Sochen Cave Palace Middle", "Sochen Cave Palace N"): rule_data_list[150],
+    ("Sochen Cave Palace S", "Sochen Cave Palace Middle"): rule_data_list[151],
+    ("Sochen Cave Palace Middle", "Sochen Cave Palace S"): rule_data_list[151],
+    ("Sochen Cave Palace N", "Sochen Cave Palace Middle"): rule_data_list[151],
+    ("Sochen Cave Palace Middle", "Sochen Cave Palace N"): rule_data_list[151],
     ("Sochen Cave Palace N", "Old Archades"): rule_data_list[1],
     ("Old Archades", "Sochen Cave Palace N"): rule_data_list[1],
     ("Old Archades", "Archades"): rule_data_list[1],
     ("Archades", "Old Archades"): rule_data_list[1],
-    ("Archades", "Draklor Laboratory"): rule_data_list[151],
-    ("Draklor Laboratory", "Archades"): rule_data_list[151],
+    ("Archades", "Draklor Laboratory"): rule_data_list[152],
+    ("Draklor Laboratory", "Archades"): rule_data_list[152],
     ("Bhujerba", "Lhusu Mines"): rule_data_list[1],
     ("Lhusu Mines", "Bhujerba"): rule_data_list[1],
     ("Ridorana Cataract", "Pharos of Ridorana"): rule_data_list[1],
     ("Pharos of Ridorana", "Ridorana Cataract"): rule_data_list[1],
     ("Pharos of Ridorana", "Pharos of Ridorana Subterra"): rule_data_list[1],
     ("Pharos of Ridorana Subterra", "Pharos of Ridorana"): rule_data_list[1],
-    ("Rabanastre", "Nalbina Fortress"): rule_data_list[152],
-    ("Nalbina Fortress", "Rabanastre"): rule_data_list[152],
-    ("Rabanastre", "Bhujerba"): rule_data_list[153],
-    ("Bhujerba", "Rabanastre"): rule_data_list[153],
-    ("Rabanastre", "Archades"): rule_data_list[154],
-    ("Archades", "Rabanastre"): rule_data_list[154],
-    ("Nalbina Fortress", "Archades"): rule_data_list[155],
-    ("Archades", "Nalbina Fortress"): rule_data_list[155],
-    ("Nalbina Fortress", "Balfonheim"): rule_data_list[156],
-    ("Balfonheim", "Nalbina Fortress"): rule_data_list[156],
-    ("Bhujerba", "Balfonheim"): rule_data_list[157],
-    ("Balfonheim", "Bhujerba"): rule_data_list[157],
-    ("Archades", "Balfonheim"): rule_data_list[158],
-    ("Balfonheim", "Archades"): rule_data_list[158],
-    ("Rabanastre", "Strahl"): rule_data_list[159],
-    ("Strahl", "Rabanastre"): rule_data_list[159],
-    ("Bhujerba", "Strahl"): rule_data_list[159],
-    ("Strahl", "Bhujerba"): rule_data_list[159],
-    ("Nalbina Fortress", "Strahl"): rule_data_list[159],
-    ("Strahl", "Nalbina Fortress"): rule_data_list[159],
-    ("Archades", "Strahl"): rule_data_list[160],
-    ("Strahl", "Archades"): rule_data_list[160],
-    ("Balfonheim", "Strahl"): rule_data_list[160],
-    ("Strahl", "Balfonheim"): rule_data_list[160],
-    ("Dalmasca Estersand", "Strahl"): rule_data_list[159],
-    ("Strahl", "Dalmasca Estersand"): rule_data_list[159],
-    ("Dalmasca Westersand", "Strahl"): rule_data_list[159],
-    ("Strahl", "Dalmasca Westersand"): rule_data_list[159],
-    ("Giza Plains Dry", "Strahl"): rule_data_list[159],
-    ("Strahl", "Giza Plains Dry"): rule_data_list[159],
-    ("Giza Plains Rains", "Strahl"): rule_data_list[161],
-    ("Strahl", "Giza Plains Rains"): rule_data_list[161],
-    ("Ogir-Yensa Sandsea", "Strahl"): rule_data_list[159],
-    ("Strahl", "Ogir-Yensa Sandsea"): rule_data_list[159],
-    ("Nam-Yensa Sandsea", "Strahl"): rule_data_list[159],
-    ("Strahl", "Nam-Yensa Sandsea"): rule_data_list[159],
-    ("Ozmone Plain", "Strahl"): rule_data_list[162],
-    ("Strahl", "Ozmone Plain"): rule_data_list[162],
-    ("Paramina Rift", "Strahl"): rule_data_list[162],
-    ("Strahl", "Paramina Rift"): rule_data_list[162],
-    ("Mosphoran Highwaste", "Strahl"): rule_data_list[160],
-    ("Strahl", "Mosphoran Highwaste"): rule_data_list[160],
-    ("Phon Coast", "Strahl"): rule_data_list[160],
-    ("Strahl", "Phon Coast"): rule_data_list[160],
-    ("Tchita Uplands", "Strahl"): rule_data_list[160],
-    ("Strahl", "Tchita Uplands"): rule_data_list[160],
-    ("Cerobi Steppe", "Strahl"): rule_data_list[160],
-    ("Strahl", "Cerobi Steppe"): rule_data_list[160],
-    ("Ridorana Cataract", "Strahl"): rule_data_list[162],
-    ("Strahl", "Ridorana Cataract"): rule_data_list[162],
-    ("Initial", "Rabanastre <-> Nalbina Skyferry"): rule_data_list[137],
-    ("Initial", "Rabanastre <-> Bhujerba Skyferry"): rule_data_list[136],
-    ("Initial", "Rabanastre <-> Archades Skyferry"): rule_data_list[138],
-    ("Initial", "Nalbina <-> Archades Skyferry"): rule_data_list[139],
-    ("Initial", "Nalbina <-> Balfonheim Skyferry"): rule_data_list[140],
-    ("Initial", "Bhujerba <-> Balfonheim Skyferry"): rule_data_list[141],
-    ("Initial", "Archades <-> Balfonheim Skyferry"): rule_data_list[142],
-    ("Bhujerba", "Dreadnought Leviathan"): rule_data_list[163],
+    ("Rabanastre", "Nalbina Fortress"): rule_data_list[153],
+    ("Nalbina Fortress", "Rabanastre"): rule_data_list[153],
+    ("Rabanastre", "Bhujerba"): rule_data_list[154],
+    ("Bhujerba", "Rabanastre"): rule_data_list[154],
+    ("Rabanastre", "Archades"): rule_data_list[155],
+    ("Archades", "Rabanastre"): rule_data_list[155],
+    ("Nalbina Fortress", "Archades"): rule_data_list[156],
+    ("Archades", "Nalbina Fortress"): rule_data_list[156],
+    ("Nalbina Fortress", "Balfonheim"): rule_data_list[157],
+    ("Balfonheim", "Nalbina Fortress"): rule_data_list[157],
+    ("Bhujerba", "Balfonheim"): rule_data_list[158],
+    ("Balfonheim", "Bhujerba"): rule_data_list[158],
+    ("Archades", "Balfonheim"): rule_data_list[159],
+    ("Balfonheim", "Archades"): rule_data_list[159],
+    ("Rabanastre", "Strahl"): rule_data_list[160],
+    ("Strahl", "Rabanastre"): rule_data_list[160],
+    ("Bhujerba", "Strahl"): rule_data_list[160],
+    ("Strahl", "Bhujerba"): rule_data_list[160],
+    ("Nalbina Fortress", "Strahl"): rule_data_list[160],
+    ("Strahl", "Nalbina Fortress"): rule_data_list[160],
+    ("Archades", "Strahl"): rule_data_list[161],
+    ("Strahl", "Archades"): rule_data_list[161],
+    ("Balfonheim", "Strahl"): rule_data_list[161],
+    ("Strahl", "Balfonheim"): rule_data_list[161],
+    ("Dalmasca Estersand", "Strahl"): rule_data_list[160],
+    ("Strahl", "Dalmasca Estersand"): rule_data_list[160],
+    ("Dalmasca Westersand", "Strahl"): rule_data_list[160],
+    ("Strahl", "Dalmasca Westersand"): rule_data_list[160],
+    ("Giza Plains Dry", "Strahl"): rule_data_list[160],
+    ("Strahl", "Giza Plains Dry"): rule_data_list[160],
+    ("Giza Plains Rains", "Strahl"): rule_data_list[162],
+    ("Strahl", "Giza Plains Rains"): rule_data_list[162],
+    ("Ogir-Yensa Sandsea", "Strahl"): rule_data_list[160],
+    ("Strahl", "Ogir-Yensa Sandsea"): rule_data_list[160],
+    ("Nam-Yensa Sandsea", "Strahl"): rule_data_list[160],
+    ("Strahl", "Nam-Yensa Sandsea"): rule_data_list[160],
+    ("Ozmone Plain", "Strahl"): rule_data_list[163],
+    ("Strahl", "Ozmone Plain"): rule_data_list[163],
+    ("Paramina Rift", "Strahl"): rule_data_list[163],
+    ("Strahl", "Paramina Rift"): rule_data_list[163],
+    ("Mosphoran Highwaste", "Strahl"): rule_data_list[161],
+    ("Strahl", "Mosphoran Highwaste"): rule_data_list[161],
+    ("Phon Coast", "Strahl"): rule_data_list[161],
+    ("Strahl", "Phon Coast"): rule_data_list[161],
+    ("Tchita Uplands", "Strahl"): rule_data_list[161],
+    ("Strahl", "Tchita Uplands"): rule_data_list[161],
+    ("Cerobi Steppe", "Strahl"): rule_data_list[161],
+    ("Strahl", "Cerobi Steppe"): rule_data_list[161],
+    ("Ridorana Cataract", "Strahl"): rule_data_list[163],
+    ("Strahl", "Ridorana Cataract"): rule_data_list[163],
+    ("Rabanastre", "Rabanastre <-> Nalbina Skyferry"): rule_data_list[153],
+    ("Nalbina Fortress", "Rabanastre <-> Nalbina Skyferry"): rule_data_list[153],
+    ("Rabanastre", "Rabanastre <-> Bhujerba Skyferry"): rule_data_list[154],
+    ("Bhujerba", "Rabanastre <-> Bhujerba Skyferry"): rule_data_list[154],
+    ("Rabanastre", "Rabanastre <-> Archades Skyferry"): rule_data_list[155],
+    ("Archades", "Rabanastre <-> Archades Skyferry"): rule_data_list[155],
+    ("Nalbina Fortress", "Nalbina <-> Archades Skyferry"): rule_data_list[156],
+    ("Archades", "Nalbina <-> Archades Skyferry"): rule_data_list[156],
+    ("Nalbina Fortress", "Nalbina <-> Balfonheim Skyferry"): rule_data_list[157],
+    ("Balfonheim", "Nalbina <-> Balfonheim Skyferry"): rule_data_list[157],
+    ("Bhujerba", "Bhujerba <-> Balfonheim Skyferry"): rule_data_list[158],
+    ("Balfonheim", "Bhujerba <-> Balfonheim Skyferry"): rule_data_list[158],
+    ("Archades", "Archades <-> Balfonheim Skyferry"): rule_data_list[159],
+    ("Balfonheim", "Archades <-> Balfonheim Skyferry"): rule_data_list[159],
+    ("Bhujerba", "Dreadnought Leviathan"): rule_data_list[164],
     ("Draklor Laboratory", "Balfonheim"): rule_data_list[5],
-    ("Initial", "Skyferry"): rule_data_list[164],
+    ("Rabanastre <-> Nalbina Skyferry", "Skyferry"): rule_data_list[1],
+    ("Rabanastre <-> Bhujerba Skyferry", "Skyferry"): rule_data_list[1],
+    ("Rabanastre <-> Archades Skyferry", "Skyferry"): rule_data_list[1],
+    ("Nalbina <-> Archades Skyferry", "Skyferry"): rule_data_list[1],
+    ("Nalbina <-> Balfonheim Skyferry", "Skyferry"): rule_data_list[1],
+    ("Bhujerba <-> Balfonheim Skyferry", "Skyferry"): rule_data_list[1],
+    ("Archades <-> Balfonheim Skyferry", "Skyferry"): rule_data_list[1],
     ("Rabanastre", "Bahamut"): rule_data_list[165],
     ("Rabanastre", "Aerodrome"): rule_data_list[1],
     ("Bhujerba", "Aerodrome"): rule_data_list[1],
@@ -3571,16 +3580,29 @@ entrance_rule_difficulty_table: Dict[Tuple[str, str], int] = {
     ("Strahl", "Cerobi Steppe"): 5,
     ("Ridorana Cataract", "Strahl"): 5,
     ("Strahl", "Ridorana Cataract"): 5,
-    ("Initial", "Rabanastre <-> Nalbina Skyferry"): 0,
-    ("Initial", "Rabanastre <-> Bhujerba Skyferry"): 0,
-    ("Initial", "Rabanastre <-> Archades Skyferry"): 0,
-    ("Initial", "Nalbina <-> Archades Skyferry"): 0,
-    ("Initial", "Nalbina <-> Balfonheim Skyferry"): 0,
-    ("Initial", "Bhujerba <-> Balfonheim Skyferry"): 0,
-    ("Initial", "Archades <-> Balfonheim Skyferry"): 0,
+    ("Rabanastre", "Rabanastre <-> Nalbina Skyferry"): 0,
+    ("Nalbina Fortress", "Rabanastre <-> Nalbina Skyferry"): 0,
+    ("Rabanastre", "Rabanastre <-> Bhujerba Skyferry"): 0,
+    ("Bhujerba", "Rabanastre <-> Bhujerba Skyferry"): 0,
+    ("Rabanastre", "Rabanastre <-> Archades Skyferry"): 0,
+    ("Archades", "Rabanastre <-> Archades Skyferry"): 0,
+    ("Nalbina Fortress", "Nalbina <-> Archades Skyferry"): 0,
+    ("Archades", "Nalbina <-> Archades Skyferry"): 0,
+    ("Nalbina Fortress", "Nalbina <-> Balfonheim Skyferry"): 0,
+    ("Balfonheim", "Nalbina <-> Balfonheim Skyferry"): 0,
+    ("Bhujerba", "Bhujerba <-> Balfonheim Skyferry"): 0,
+    ("Balfonheim", "Bhujerba <-> Balfonheim Skyferry"): 0,
+    ("Archades", "Archades <-> Balfonheim Skyferry"): 0,
+    ("Balfonheim", "Archades <-> Balfonheim Skyferry"): 0,
     ("Bhujerba", "Dreadnought Leviathan"): 1,
     ("Draklor Laboratory", "Balfonheim"): 5,
-    ("Initial", "Skyferry"): 0,
+    ("Rabanastre <-> Nalbina Skyferry", "Skyferry"): 0,
+    ("Rabanastre <-> Bhujerba Skyferry", "Skyferry"): 0,
+    ("Rabanastre <-> Archades Skyferry", "Skyferry"): 0,
+    ("Nalbina <-> Archades Skyferry", "Skyferry"): 0,
+    ("Nalbina <-> Balfonheim Skyferry", "Skyferry"): 0,
+    ("Bhujerba <-> Balfonheim Skyferry", "Skyferry"): 0,
+    ("Archades <-> Balfonheim Skyferry", "Skyferry"): 0,
     ("Rabanastre", "Bahamut"): 5,
     ("Rabanastre", "Aerodrome"): 0,
     ("Bhujerba", "Aerodrome"): 0,
@@ -3589,4 +3611,7 @@ entrance_rule_difficulty_table: Dict[Tuple[str, str], int] = {
     ("Balfonheim", "Aerodrome"): 0,
     ("Pharos of Ridorana", "Balfonheim"): 5,
     ("Initial", "Trials"): 0,
+}
+
+indirect_entrance_table: Dict[str, List[Tuple[str, str]]] = {
 }

@@ -560,7 +560,7 @@ class WaffleSNIClient(SNIClient):
                     goal_item_count = await snes_read(ctx, SMW_GOAL_ITEM_COUNT, 1)
                     snes_buffered_write(ctx, SMW_GOAL_ITEM_COUNT, bytes([goal_item_count[0] + 1]))
 
-            elif item.item == 0xBC0005:
+            elif item.item == 0xBC0026:
                 # Handle Progressive Swim
                 data = await snes_read(ctx, SMW_BWRAM + 0x03E0, 0x01)
                 if data is None:
@@ -591,6 +591,7 @@ class WaffleSNIClient(SNIClient):
                     masked_data = data[0] | (1 << rom_data[1])
                     snes_buffered_write(ctx, SRAM_START + rom_data[0], bytes([masked_data]))
                     snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x3E]))
+                    await snes_flush_writes(ctx)
                     
             elif item.item == 0xBC000A:
                 # Handle Progressive Powerup

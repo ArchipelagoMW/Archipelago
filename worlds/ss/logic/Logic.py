@@ -1,18 +1,18 @@
-from .Macros import BASE_MACROS
+from Macros import BASE_MACROS
 
-from .requirements.Skyloft import SKYLOFT_REQUIREMENTS
-from .requirements.Sky import SKY_REQUIREMENTS
-from .requirements.Faron import FARON_REQUIREMENTS
-from .requirements.Eldin import ELDIN_REQUIREMENTS
-from .requirements.Lanayru import LANAYRU_REQUIREMENTS
+from requirements.Skyloft import SKYLOFT_REQUIREMENTS
+from requirements.Sky import SKY_REQUIREMENTS
+from requirements.Faron import FARON_REQUIREMENTS
+from requirements.Eldin import ELDIN_REQUIREMENTS
+from requirements.Lanayru import LANAYRU_REQUIREMENTS
 
-from .requirements.Skyview import SKYVIEW_REQUIREMENTS
-from .requirements.Earth_Temple import EARTH_TEMPLE_REQUIREMENTS
-from .requirements.Lanayru_Mining_Facility import LANAYRU_MINING_FACILITY_REQUIREMENTS
-from .requirements.Ancient_Cistern import ANCIENT_CISTERN_REQUIREMENTS
-from .requirements.Sandship import SANDSHIP_REQUIREMENTS
-from .requirements.Fire_Sanctuary import FIRE_SANCTUARY_REQUIREMENTS
-from .requirements.Sky_Keep import SKY_KEEP_REQUIREMENTS
+from requirements.Skyview import SKYVIEW_REQUIREMENTS
+from requirements.Earth_Temple import EARTH_TEMPLE_REQUIREMENTS
+from requirements.Lanayru_Mining_Facility import LANAYRU_MINING_FACILITY_REQUIREMENTS
+from requirements.Ancient_Cistern import ANCIENT_CISTERN_REQUIREMENTS
+from requirements.Sandship import SANDSHIP_REQUIREMENTS
+from requirements.Fire_Sanctuary import FIRE_SANCTUARY_REQUIREMENTS
+from requirements.Sky_Keep import SKY_KEEP_REQUIREMENTS
 
 ALL_REQUIREMENTS = (
     SKYLOFT_REQUIREMENTS

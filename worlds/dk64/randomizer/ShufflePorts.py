@@ -1,6 +1,5 @@
 """Shuffle Bananaport Locations."""
 
-from randomizer.Lists.MapsAndExits import RegionMapList
 import randomizer.LogicFiles.AngryAztec
 import randomizer.LogicFiles.CreepyCastle
 import randomizer.LogicFiles.CrystalCaves
@@ -193,6 +192,7 @@ ONE_KONG_REGIONS = [
     Regions.CavesBlueprintCave,
     Regions.CavesBlueprintPillar,
     Regions.CavesBananaportSpire,
+    Regions.GiantKosha,
 ]
 
 warp_event_pairs = {}

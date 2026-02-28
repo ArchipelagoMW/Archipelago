@@ -56,7 +56,7 @@
             <summary {% if world.is_experimental %} class="h2 experimental"  {% else %} class="h2" {% endif %}>
                 {{ world.web.display_name | default(game_name) }}
                 {% if world.is_experimental %} *Experimental*{% endif %}
-                <span class="star-icon" data-game="{{ game_name }}" title="Add to favorites">❤︎</span>
+                <span class="star-icon" data-game-display="{{ world.web.display_name | default(game_name) }}" title="Add to favorites">❤︎</span>
             </summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>

@@ -1,7 +1,5 @@
 """Shuffles the locations of shops."""
 
-import randomizer.Lists.Exceptions as Ex
-
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Regions import Regions
 from randomizer.Enums.Settings import ShuffleLoadingZones

@@ -171,7 +171,7 @@ class WaffleWorld(World):
                 self.options.ring_link.value = False
 
             if self.options.early_climb:
-                self.multiworld.local_early_items[self.player][ItemName.mario_climb] = 1
+                self.multiworld.local_early_items[self.player][ItemName.climb] = 1
 
             # Only randomize data if not using UT
             generate_entrance_rando(self)
@@ -272,37 +272,55 @@ class WaffleWorld(World):
             self.multiworld.push_precollected(self.create_item(ItemName.progressive_powerup))
 
         if "Yoshi" in self.options.ability_shuffle.value:
-            itempool += [self.create_item(ItemName.yoshi) for _ in range(2)]
+            if self.options.decoupled_yoshi_carry:
+                itempool += [self.create_item(ItemName.progressive_yoshi) for _ in range(2)]
+            else:
+                itempool += [self.create_item(ItemName.yoshi)]
         else:
-            self.multiworld.push_precollected(self.create_item(ItemName.yoshi))
-            self.multiworld.push_precollected(self.create_item(ItemName.yoshi))
+            if self.options.decoupled_yoshi_carry:
+                self.multiworld.push_precollected(self.create_item(ItemName.progressive_yoshi))
+                self.multiworld.push_precollected(self.create_item(ItemName.progressive_yoshi))
+            else:
+                self.multiworld.push_precollected(self.create_item(ItemName.yoshi))
 
         if "Run" in self.options.ability_shuffle.value:
-            itempool += [self.create_item(ItemName.mario_run) for _ in range(2)]
+            if self.options.decoupled_wall_run_anywhere:
+                itempool += [self.create_item(ItemName.progressive_run) for _ in range(2)]
+            else:
+                itempool += [self.create_item(ItemName.run)]
         else:
-            itempool += [self.create_item(ItemName.mario_run)]
-            self.multiworld.push_precollected(self.create_item(ItemName.mario_run))
+            if self.options.decoupled_wall_run_anywhere:
+                itempool += [self.create_item(ItemName.progressive_run)]
+                self.multiworld.push_precollected(self.create_item(ItemName.progressive_run))
+            else:
+                self.multiworld.push_precollected(self.create_item(ItemName.run))
 
         if "Carry" in self.options.ability_shuffle.value:
-            itempool += [self.create_item(ItemName.mario_carry)]
+            itempool += [self.create_item(ItemName.carry)]
         else:
-            self.multiworld.push_precollected(self.create_item(ItemName.mario_carry))
+            self.multiworld.push_precollected(self.create_item(ItemName.carry))
 
         if "Swim" in self.options.ability_shuffle.value:
-            itempool += [self.create_item(ItemName.mario_swim) for _ in range(2)]
+            if self.options.decoupled_fast_swimming:
+                itempool += [self.create_item(ItemName.progressive_swim) for _ in range(2)]
+            else:
+                itempool += [self.create_item(ItemName.swim)]
         else:
-            itempool += [self.create_item(ItemName.mario_swim)]
-            self.multiworld.push_precollected(self.create_item(ItemName.mario_swim))
+            if self.options.decoupled_fast_swimming:
+                itempool += [self.create_item(ItemName.progressive_swim)]
+                self.multiworld.push_precollected(self.create_item(ItemName.progressive_swim))
+            else:
+                self.multiworld.push_precollected(self.create_item(ItemName.swim))
 
         if "Spin Jump" in self.options.ability_shuffle.value:
-            itempool += [self.create_item(ItemName.mario_spin_jump)]
+            itempool += [self.create_item(ItemName.spin_jump)]
         else:
-            self.multiworld.push_precollected(self.create_item(ItemName.mario_spin_jump))
+            self.multiworld.push_precollected(self.create_item(ItemName.spin_jump))
 
         if "Climb" in self.options.ability_shuffle.value:
-            itempool += [self.create_item(ItemName.mario_climb)]
+            itempool += [self.create_item(ItemName.climb)]
         else:
-            self.multiworld.push_precollected(self.create_item(ItemName.mario_climb))
+            self.multiworld.push_precollected(self.create_item(ItemName.climb))
 
         if "P-Switch" in self.options.ability_shuffle.value:
             itempool += [self.create_item(ItemName.p_switch)]

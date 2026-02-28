@@ -48,6 +48,7 @@ from randomizer.Enums.Settings import (
     ShockwaveStatus,
     ShuffleLoadingZones,
     TrainingBarrels,
+    TricksSelected,
     HelmSetting,
     KongModels,
     SlamRequirement,
@@ -59,15 +60,20 @@ from randomizer.Lists.Item import ItemList
 from randomizer.Enums.Maps import Maps
 from randomizer.Lists.ShufflableExit import GetShuffledLevelIndex
 from randomizer.Lists.Warps import BananaportVanilla
-from randomizer.Patching.Library.Generic import IsItemSelected, getProgHintBarrierItem
+from randomizer.Patching.Library.Generic import getProgHintBarrierItem, sumChecks, getCompletableBonuses, IsDDMSSelected
 from randomizer.Prices import AnyKongCanBuy, CanBuy, GetPriceAtLocation
 
 STARTING_SLAM = 0  # Currently we're assuming you always start with 1 slam
 
 
-def IsGlitchEnabled(settings, glitch_enum):
+def IsGlitchEnabled(settings, glitch_enum: GlitchesSelected):
     """Check if glitch is enabled in the settings."""
-    return len(settings.glitches_selected) == 0 or glitch_enum in settings.glitches_selected
+    return glitch_enum in settings.glitches_selected
+
+
+def IsTrickEnabled(settings, trick_enum: TricksSelected):
+    """Check if trick is enabled in the settings."""
+    return trick_enum in settings.tricks_selected
 
 
 class LogicVarHolder:
@@ -83,6 +89,7 @@ class LogicVarHolder:
         # See CalculateWothPaths method for details on these assumptions
         self.assumePaidBLockers = False
         self.assumeInfiniteCoins = False
+        self.assumeInfiniteRaceCoins = False
         self.assumeAztecEntry = False
         self.assumeLevel4Entry = False
         self.assumeLevel8Entry = False  # Extra important to never assume this in LZR!
@@ -90,6 +97,12 @@ class LogicVarHolder:
         self.assumeKRoolAccess = False
 
         self.startkong = self.settings.starting_kong
+        # AGL
+        enable_agl = self.settings.logic_type in (LogicType.advanced_glitchless, LogicType.glitch)
+        self.monkey_maneuvers = enable_agl and IsTrickEnabled(settings, TricksSelected.monkey_maneuvers)
+        self.hard_shooting = enable_agl and IsTrickEnabled(settings, TricksSelected.hard_shooting)
+        self.advanced_grenading = enable_agl and IsTrickEnabled(settings, TricksSelected.advanced_grenading)
+        self.slope_resets = enable_agl and IsTrickEnabled(settings, TricksSelected.slope_resets)
         # Glitch Logic
         enable_glitch_logic = self.settings.logic_type == LogicType.glitch
         self.phasewalk = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.phase_walking)
@@ -101,7 +114,6 @@ class LogicVarHolder:
         self.dk_blocker_skip = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.b_locker_skips)
         self.troff_skip = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.troff_n_scoff_skips)
         self.spawn_snags = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.spawn_snags)
-        self.advanced_platforming = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.advanced_platforming)
         self.tbs = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.tag_barrel_storage) and not self.settings.disable_tag_barrels
         self.swim_through_shores = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.swim_through_shores)
         self.boulder_clip = enable_glitch_logic and IsGlitchEnabled(settings, GlitchesSelected.boulder_clips) and False  # Temporarily disabled
@@ -219,7 +231,11 @@ class LogicVarHolder:
         self.superSlam = False
         self.superDuperSlam = False
 
-        self.Blueprints = []
+        self.bosses_beaten = 0
+        self.bonuses_beaten = 0
+
+        self.Blueprints = 0
+        self.BlueprintsWithKong = 0
 
         self.Events = []
 
@@ -297,6 +313,8 @@ class LogicVarHolder:
         self.RegularCoins = [0] * 5
         self.RainbowCoins = 0
         self.SpentCoins = [0] * 5
+        self.RaceCoins = 0
+        self.Photos = {}
 
         self.kong = self.startkong
 
@@ -347,6 +365,7 @@ class LogicVarHolder:
         self.vines = self.vines or Items.Vines in ownedItems
         self.swim = self.swim or Items.Swim in ownedItems
         self.oranges = self.oranges or Items.Oranges in ownedItems
+        self.adv_orange_usage = self.oranges and self.advanced_grenading
         self.barrels = self.barrels or Items.Barrels in ownedItems
         self.can_use_vines = self.vines  # and self.climbing to restore old behavior
 
@@ -428,6 +447,21 @@ class LogicVarHolder:
             )
         self.allTrainingChecks = self.allTrainingChecks or has_all
 
+        self.bosses_beaten = sumChecks(
+            self.spoiler,
+            ownedItems,
+            (
+                Locations.JapesKey,
+                Locations.AztecKey,
+                Locations.FactoryKey,
+                Locations.GalleonKey,
+                Locations.ForestKey,
+                Locations.CavesKey,
+                Locations.CastleKey,
+            ),
+        )
+        self.bonuses_beaten = sumChecks(self.spoiler, ownedItems, getCompletableBonuses(self.spoiler.settings))
+
         self.Slam = item_counts[Items.ProgressiveSlam] + STARTING_SLAM
         self.AmmoBelts = item_counts[Items.ProgressiveAmmoBelt]
         self.InstUpgrades = item_counts[Items.ProgressiveInstrumentUpgrade]
@@ -437,11 +471,11 @@ class LogicVarHolder:
         if self.InstUpgrades >= 2:
             self.Melons = 3
 
-        self.GoldenBananas = item_counts[Items.GoldenBanana]
-        self.BananaFairies = item_counts[Items.BananaFairy]
-        self.BananaMedals = item_counts[Items.BananaMedal]
-        self.BattleCrowns = item_counts[Items.BattleCrown]
-        self.RainbowCoins = item_counts[Items.RainbowCoin]
+        self.GoldenBananas = item_counts[Items.GoldenBanana] + item_counts[Items.FillerBanana]
+        self.BananaFairies = item_counts[Items.BananaFairy] + item_counts[Items.FillerFairy]
+        self.BananaMedals = item_counts[Items.BananaMedal] + item_counts[Items.FillerMedal]
+        self.BattleCrowns = item_counts[Items.BattleCrown] + item_counts[Items.FillerCrown]
+        self.RainbowCoins = item_counts[Items.RainbowCoin] + item_counts[Items.FillerRainbowCoin]
 
         self.camera = self.camera or Items.CameraAndShockwave in ownedItems or Items.Camera in ownedItems
         self.shockwave = self.shockwave or Items.CameraAndShockwave in ownedItems or Items.Shockwave in ownedItems
@@ -453,10 +487,67 @@ class LogicVarHolder:
         self.superSlam = self.Slam >= 2
         self.superDuperSlam = self.Slam >= 3
 
-        self.Blueprints = [x for x in ownedItems if x >= Items.JungleJapesDonkeyBlueprint and x <= Items.DKIslesChunkyBlueprint]
+        total_bp_count = 0
+        total_bp_count_nokong = 0
+        kong_ownership = [self.donkey, self.diddy, self.lanky, self.tiny, self.chunky]
+        bp_counts = [item_counts[Items.DonkeyBlueprint + kong] for kong in range(5)]
+        for kong in range(5):
+            if kong_ownership[kong]:
+                total_bp_count += bp_counts[kong]
+            total_bp_count_nokong += bp_counts[kong]
+        self.Blueprints = total_bp_count_nokong
+        self.BlueprintsWithKong = total_bp_count
         self.Hints = [x for x in ownedItems if x >= Items.JapesDonkeyHint and x <= Items.CastleChunkyHint]
         self.Beans = sum(1 for x in ownedItems if x == Items.Bean)
-        self.Pearls = sum(1 for x in ownedItems if x == Items.Pearl)
+        self.Pearls = sum(1 for x in ownedItems if x in [Items.Pearl, Items.FillerPearl])
+
+        photo_subjects = [
+            Items.PhotoBeaverBlue,
+            Items.PhotoBook,
+            Items.PhotoZingerCharger,
+            Items.PhotoKlobber,
+            Items.PhotoKlump,
+            Items.PhotoKaboom,
+            Items.PhotoKlaptrapGreen,
+            Items.PhotoZingerLime,
+            Items.PhotoKlaptrapPurple,
+            Items.PhotoKlaptrapRed,
+            Items.PhotoBeaverGold,
+            Items.PhotoFireball,
+            Items.PhotoMushroomMan,
+            Items.PhotoRuler,
+            Items.PhotoRoboKremling,
+            Items.PhotoKremling,
+            Items.PhotoKasplatDK,
+            Items.PhotoKasplatDiddy,
+            Items.PhotoKasplatLanky,
+            Items.PhotoKasplatTiny,
+            Items.PhotoKasplatChunky,
+            Items.PhotoZingerRobo,
+            Items.PhotoKrossbones,
+            Items.PhotoShuri,
+            Items.PhotoGimpfish,
+            Items.PhotoMrDice0,
+            Items.PhotoSirDomino,
+            Items.PhotoMrDice1,
+            Items.PhotoBat,
+            Items.PhotoGhost,
+            Items.PhotoPufftup,
+            Items.PhotoKosha,
+            Items.PhotoSpider,
+            Items.PhotoFireball,
+            Items.PhotoBug,
+            Items.PhotoKop,
+            Items.PhotoTomato,
+            Items.PhotoBFI,
+            Items.PhotoIceTomato,
+            Items.PhotoMermaid,
+            Items.PhotoLlama,
+            Items.PhotoMechfish,
+            Items.PhotoSeal,
+        ]
+        for subject in photo_subjects:
+            self.Photos[subject] = sum(1 for x in ownedItems if x == subject)
 
         self.UpdateCoins()
 
@@ -486,39 +577,38 @@ class LogicVarHolder:
     @lru_cache(maxsize=None)
     def IsLavaWater(self) -> bool:
         """Determine whether the water is lava water or not."""
-        return IsItemSelected(self.settings.hard_mode, self.settings.hard_mode_selected, HardModeSelected.water_is_lava, False)
+        return IsDDMSSelected(self.settings.hard_mode_selected, HardModeSelected.water_is_lava)
 
     @lru_cache(maxsize=None)
     def HardBossesSettingEnabled(self, check: HardBossesSelected) -> bool:
         """Determine whether the hard bosses feature is enabled or not."""
-        return IsItemSelected(self.settings.hard_bosses, self.settings.hard_bosses_selected, check, False)
+        return IsDDMSSelected(self.settings.hard_bosses_selected, check)
 
     @lru_cache(maxsize=None)
     def IsHardFallDamage(self) -> bool:
         """Determine whether the lowered fall damage height threshold is enabled or not."""
-        return IsItemSelected(self.settings.hard_mode, self.settings.hard_mode_selected, HardModeSelected.reduced_fall_damage_threshold, False)
+        return IsDDMSSelected(self.settings.hard_mode_selected, HardModeSelected.reduced_fall_damage_threshold)
 
     def canAccessHelm(self) -> bool:
         """Determine whether the player can access helm whilst the timer is active."""
-        if IsItemSelected(self.settings.hard_mode, self.settings.hard_mode_selected, HardModeSelected.strict_helm_timer, False):
-            return self.snideAccess and len(self.Blueprints) > (4 + (2 * self.settings.helm_phase_count))
+        if IsDDMSSelected(self.settings.hard_mode_selected, HardModeSelected.strict_helm_timer):
+            return self.snideAccess and self.Blueprints > (4 + (2 * self.settings.helm_phase_count))
         return self.snideAccess or self.assumeFillSuccess
 
     @lru_cache(maxsize=None)
     def checkFastCheck(self, check: FasterChecksSelected):
         """Determine whether a fast check is selected."""
-        return IsItemSelected(self.settings.faster_checks_enabled, self.settings.faster_checks_selected, check)
+        return IsDDMSSelected(self.settings.faster_checks_selected, check)
 
     @lru_cache(maxsize=None)
     def checkBarrier(self, check: RemovedBarriersSelected):
         """Determine whether a barrier has been removed by the removed barriers setting."""
-        return IsItemSelected(self.settings.remove_barriers_enabled, self.settings.remove_barriers_selected, check)
+        return IsDDMSSelected(self.settings.remove_barriers_selected, check)
 
     @lru_cache(maxsize=None)
     def galleonGatesStayOpen(self) -> bool:
         """Determine whether the galleon gates stay open once the instrument is played."""
-        return IsItemSelected(
-            self.settings.quality_of_life,
+        return IsDDMSSelected(
             self.settings.misc_changes_selected,
             MiscChangesSelected.remove_galleon_ship_timers,
         )
@@ -526,8 +616,7 @@ class LogicVarHolder:
     @lru_cache(maxsize=None)
     def cabinBarrelMoved(self) -> bool:
         """Determine whether the upper cabin rocketbarrel has been moved."""
-        return IsItemSelected(
-            self.settings.quality_of_life,
+        return IsDDMSSelected(
             self.settings.misc_changes_selected,
             MiscChangesSelected.move_spring_cabin_rocketbarrel,
         )
@@ -566,12 +655,27 @@ class LogicVarHolder:
             return kong_data and misc_abilities[data.kong]
         elif data.switch_type == SwitchType.GunSwitch:
             gun_abilities = [self.coconut, self.peanut, self.grape, self.feather, self.pineapple]
+            if data.kong == Kongs.any:
+                return self.HasGun(Kongs.any)
             return kong_data and gun_abilities[data.kong]
         elif data.switch_type == SwitchType.InstrumentPad:
             instrument_abilities = [self.bongos, self.guitar, self.trombone, self.saxophone, self.triangle]
+            if data.kong == Kongs.any:
+                return self.HasInstrument(Kongs.any)
             return kong_data and instrument_abilities[data.kong]
         elif data.switch_type == SwitchType.SlamSwitch:
             return kong_data and self.CanSlamSwitch(level, default_slam_level)
+        elif data.switch_type == SwitchType.GunInstrumentCombo:
+            gun_abilities = [self.coconut, self.peanut, self.grape, self.feather, self.pineapple]
+            instrument_abilities = [self.bongos, self.guitar, self.trombone, self.saxophone, self.triangle]
+            if data.kong == Kongs.any:
+                return self.HasGun(Kongs.any) and self.HasInstrument(Kongs.any)
+            return kong_data and gun_abilities[data.kong] and instrument_abilities[data.kong]
+        elif data.switch_type == SwitchType.PushableButton:
+            if data.kong == Kongs.diddy:
+                return kong_data and self.charge
+            if data.kong == Kongs.chunky:
+                return kong_data and self.punch
         return False
 
     def CanPhaseswim(self):
@@ -596,7 +700,7 @@ class LogicVarHolder:
 
     def CanGetOnCannonGamePlatform(self):
         """Determine whether the player can get on the platform in Cannon Game Room in Gloomy Galleon."""
-        return Events.WaterRaised in self.Events or (self.advanced_platforming and (self.ischunky or (self.islanky and self.settings.kong_model_lanky == KongModels.default)))
+        return Events.WaterRaised in self.Events or (self.monkey_maneuvers and (self.ischunky or (self.islanky and self.settings.kong_model_lanky == KongModels.default)))
 
     def CanSkew(self, swim, is_japes=True, kong_req=Kongs.any):
         """Determine whether the player can skew."""
@@ -775,7 +879,7 @@ class LogicVarHolder:
         # Create check counts dictionary
         check_counts = {
             BarrierItems.GoldenBanana: self.GoldenBananas,
-            BarrierItems.Blueprint: len(self.Blueprints),
+            BarrierItems.Blueprint: self.Blueprints,
             BarrierItems.CompanyCoin: company_coins,
             BarrierItems.Key: keys,
             BarrierItems.Medal: self.BananaMedals,
@@ -814,7 +918,7 @@ class LogicVarHolder:
 
     def CanFreeDiddy(self):
         """Check if the cage locking Diddy's vanilla location can be opened."""
-        return self.spoiler.LocationList[Locations.DiddyKong].item == Items.NoItem or self.HasGun(self.settings.diddy_freeing_kong)
+        return self.spoiler.LocationList[Locations.DiddyKong].item == Items.NoItem or self.hasMoveSwitchsanity(Switches.JapesFreeKong)
 
     def CanOpenJapesGates(self):
         """Check if we can pick up the item inside Diddy's cage, thus opening the gates in Japes."""
@@ -846,10 +950,8 @@ class LogicVarHolder:
         """Check if kong at Tiny location can be freed, requires either chimpy charge or primate punch."""
         if self.spoiler.LocationList[Locations.TinyKong].item == Items.NoItem:
             return self.IsKong(self.settings.tiny_freeing_kong) or self.settings.free_trade_items
-        elif self.settings.tiny_freeing_kong == Kongs.diddy:
-            return self.charge and self.isdiddy
-        elif self.settings.tiny_freeing_kong == Kongs.chunky:
-            return self.punch and self.ischunky
+        elif self.settings.tiny_freeing_kong == Kongs.diddy or self.settings.tiny_freeing_kong == Kongs.chunky:
+            return self.hasMoveSwitchsanity(Switches.AztecOKONGPuzzle)
         # Used only as placeholder during fill when kong puzzles are not yet assigned
         elif self.settings.tiny_freeing_kong == Kongs.any:
             return True
@@ -860,9 +962,10 @@ class LogicVarHolder:
 
     def CanFreeLanky(self):
         """Check if kong at Lanky location can be freed, requires freeing kong to have its gun and instrument."""
-        return (self.HasGun(self.settings.lanky_freeing_kong) or self.spoiler.LocationList[Locations.LankyKong].item == Items.NoItem) and (
-            (self.swim and self.HasInstrument(self.settings.lanky_freeing_kong)) or self.CanPhase() or self.CanPhaseswim()
-        )
+        if self.spoiler.LocationList[Locations.LankyKong].item == Items.NoItem:
+            return self.CanLlamaSpit(self) and self.swim and (self.IsKong(self.settings.lanky_freeing_kong) or self.settings.free_trade_items)
+        else:
+            return (self.swim and self.hasMoveSwitchsanity(Switches.AztecLlamaPuzzle)) or self.CanPhase() or self.CanPhaseswim()
 
     def CanFreeChunky(self):
         """Check if kong at Chunky location can be freed."""
@@ -871,7 +974,13 @@ class LogicVarHolder:
             return self.IsKong(self.settings.chunky_freeing_kong) or self.settings.free_trade_items
         # Otherwise you need the right slam level (usually 1)
         else:
-            return self.CanSlamSwitch(Levels.FranticFactory, 1) and self.IsKong(self.settings.chunky_freeing_kong)
+            return self.hasMoveSwitchsanity(Switches.FactoryFreeKong, level=Levels.FranticFactory, default_slam_level=1)
+
+    def CanOpenForestLobbyGoneDoor(self):
+        """Check if the player can open the door to the gone pad in forest lobby."""
+        if self.CanPhase():
+            return True
+        return (self.donkey and self.coconut) and (self.diddy and self.peanut) and (self.lanky and self.grape) and (self.tiny and self.feather) and (self.chunky and self.pineapple)
 
     def LevelEntered(self, level):
         """Check whether a level, or any level above it, has been entered."""
@@ -911,6 +1020,8 @@ class LogicVarHolder:
                     self.ColoredBananas[level][collectible.kong] += collectible.amount * 10
                     collectible.added = True
                 missingGun = True
+            elif collectible.type == Collectibles.racecoin:
+                self.RaceCoins += collectible.amount
             if not missingGun:
                 collectible.added = True
 
@@ -920,6 +1031,9 @@ class LogicVarHolder:
         price = GetPriceAtLocation(self.settings, location_id, location, self.Slam, self.AmmoBelts, self.InstUpgrades)
         if price is None:  # This shouldn't happen but it's probably harmless
             return  # TODO: solve this
+        if self.settings.shops_dont_cost:
+            # If shops don't cost anything, then don't deduct this cost
+            return
         # If shared move, take the price from all kongs EVEN IF THEY AREN'T FREED YET
         if location.kong == Kongs.any:
             for kong in range(0, 5):
@@ -972,7 +1086,73 @@ class LogicVarHolder:
         return AnyKongCanBuy(self.spoiler, location, self, buy_empty)
 
     def CanAccessKRool(self):
-        """Make sure that each required key has been turned in."""
+        """Make sure that each required key has been turned in, or if ship spawn method is win condition-based, check if win condition items are obtained."""
+        # If using win condition-based ship spawning, check if win condition item requirements are met
+        if self.settings.win_condition_spawns_ship:
+            condition = self.settings.win_condition_item
+            if condition == WinConditionComplex.krem_kapture:
+                for subject in self.spoiler.valid_photo_items:
+                    if subject in (
+                        Items.PhotoKasplatDK,
+                        Items.PhotoKasplatDiddy,
+                        Items.PhotoKasplatLanky,
+                        Items.PhotoKasplatTiny,
+                        Items.PhotoKasplatChunky,
+                    ):
+                        continue
+                    if self.Photos.get(subject, 0) == 0:
+                        return False
+                return self.camera
+            elif condition == WinConditionComplex.get_key8:
+                return self.HelmKey
+            elif condition == WinConditionComplex.dk_rap_items:
+                dk_rap_items = [
+                    self.donkey,
+                    self.diddy,
+                    self.lanky,
+                    self.tiny,
+                    self.chunky,
+                    self.coconut,
+                    self.peanut,
+                    self.grape,
+                    self.pineapple,
+                    self.guitar,
+                    self.trombone,
+                    self.strongKong,
+                    self.jetpack,
+                    self.handstand,
+                    self.balloon,
+                    self.mini,
+                    self.twirl,
+                    self.barrels,
+                    self.oranges,
+                    self.climbing,
+                    self.crankyAccess,
+                ]
+                return all(dk_rap_items)
+            elif condition == WinConditionComplex.req_bonuses:
+                return self.bonuses_beaten >= self.settings.win_condition_count
+            elif condition == WinConditionComplex.req_bosses:
+                return self.bosses_beaten >= self.settings.win_condition_count
+            else:
+                # Item-based win conditions
+                win_con_table = {
+                    WinConditionComplex.req_bean: BarrierItems.Bean,
+                    WinConditionComplex.req_bp: BarrierItems.Blueprint,
+                    WinConditionComplex.req_companycoins: BarrierItems.CompanyCoin,
+                    WinConditionComplex.req_crown: BarrierItems.Crown,
+                    WinConditionComplex.req_fairy: BarrierItems.Fairy,
+                    WinConditionComplex.req_key: BarrierItems.Key,
+                    WinConditionComplex.req_gb: BarrierItems.GoldenBanana,
+                    WinConditionComplex.req_medal: BarrierItems.Medal,
+                    WinConditionComplex.req_pearl: BarrierItems.Pearl,
+                    WinConditionComplex.req_rainbowcoin: BarrierItems.RainbowCoin,
+                }
+                if condition in win_con_table:
+                    return self.ItemCheck(win_con_table[condition], self.settings.win_condition_count)
+                return True
+
+        # Otherwise use key-based access
         required_base_keys = [
             Events.JapesKeyTurnedIn,
             Events.AztecKeyTurnedIn,
@@ -983,7 +1163,7 @@ class LogicVarHolder:
             Events.CastleKeyTurnedIn,
             Events.HelmKeyTurnedIn,
         ]
-        if self.settings.k_rool_vanilla_requirement:
+        if self.settings.win_condition_item == WinConditionComplex.get_keys_3_and_8:
             required_base_keys = [
                 Events.FactoryKeyTurnedIn,
                 Events.HelmKeyTurnedIn,
@@ -1062,7 +1242,7 @@ class LogicVarHolder:
         elif bossFight == Maps.KroolDiddyPhase:
             hasRequiredMoves = self.jetpack and self.peanut
         elif bossFight == Maps.KroolLankyPhase:
-            hasRequiredMoves = self.barrels and self.trombone
+            hasRequiredMoves = self.CanBeatLankyPhase()
         elif bossFight == Maps.KroolTinyPhase:
             hasRequiredMoves = self.mini and self.feather
         elif bossFight == Maps.KroolChunkyPhase:
@@ -1140,6 +1320,20 @@ class LogicVarHolder:
             return self.lanky and self.grape and self.barrels
         return self.lanky and self.trombone and self.barrels
 
+    def HasEnoughRaceCoins(self, map_id: Maps, default_kong: Kongs, kong_mandatory: bool) -> bool:
+        """Check if the player has enough race coins to beat the challenge."""
+        if self.settings.race_coin_rando:
+            has_enough_coins = self.RaceCoins >= self.spoiler.coin_requirements[map_id]
+            if self.assumeInfiniteRaceCoins:
+                has_enough_coins = True
+            is_kong = True
+            if not self.settings.free_trade_items or kong_mandatory:
+                is_kong = self.IsKong(default_kong)
+            return has_enough_coins and is_kong
+        if kong_mandatory:
+            return self.IsKong(default_kong)
+        return True
+
     def IsLevelEnterable(self, level):
         """Check if level entry requirement is met."""
         # We must meet the fill's kong and move requirements to enter this level
@@ -1167,14 +1361,35 @@ class LogicVarHolder:
 
     def WinConditionMet(self):
         """Check if the current game state has met the win condition."""
+        condition = self.settings.win_condition_item
+        # When using win condition-based ship spawning, always require K. Rool defeat in addition to win condition items
+        krool_complete = not self.settings.win_condition_spawns_ship or Events.KRoolDefeated in self.Events
+
         # Special Win Cons
-        if self.settings.win_condition_item == WinConditionComplex.beat_krool:
+        if condition == WinConditionComplex.beat_krool:
             return Events.KRoolDefeated in self.Events
-        elif self.settings.win_condition_item == WinConditionComplex.krem_kapture:  # Photo taking doesn't have a perfect wincon so this'll do until something better is concocted
-            return Events.KRoolDefeated in self.Events and self.camera
-        elif self.settings.win_condition_item == WinConditionComplex.get_key8:
-            return self.HelmKey
-        elif self.settings.win_condition_item == WinConditionComplex.dk_rap_items:
+        elif condition == WinConditionComplex.krem_kapture:
+            for subject in self.spoiler.valid_photo_items:
+                if subject in (
+                    Items.PhotoKasplatDK,
+                    Items.PhotoKasplatDiddy,
+                    Items.PhotoKasplatLanky,
+                    Items.PhotoKasplatTiny,
+                    Items.PhotoKasplatChunky,
+                ):
+                    continue
+                if self.Photos.get(subject, 0) == 0:
+                    # print(f"Could not reach {subject.name}")
+                    return False
+            result = self.camera
+            return result and krool_complete
+        elif condition == WinConditionComplex.get_key8:
+            result = self.HelmKey
+            return result and krool_complete
+        elif condition == WinConditionComplex.get_keys_3_and_8:
+            result = self.FactoryKey and self.HelmKey
+            return result and krool_complete
+        elif condition == WinConditionComplex.dk_rap_items:
             dk_rap_items = [
                 self.donkey,
                 self.diddy,
@@ -1205,7 +1420,20 @@ class LogicVarHolder:
             for k in dk_rap_items:
                 if not k:
                     return False
-            return True
+            result = True
+            return result and krool_complete
+        elif condition == WinConditionComplex.krools_challenge:
+            # Krool's Challenge: Beat K. Rool + collect all Keys, Blueprints, Bosses, and Bonus Barrels
+            return Events.KRoolDefeated in self.Events and self.ItemCheck(BarrierItems.Key, 8) and self.ItemCheck(BarrierItems.Blueprint, 40) and self.bosses_beaten >= 7 and self.bonuses_beaten >= 43
+        elif condition == WinConditionComplex.kill_the_rabbit:
+            result = Events.KilledRabbit in self.Events
+            return result and krool_complete
+        elif condition == WinConditionComplex.req_bonuses:
+            result = self.bonuses_beaten >= self.settings.win_condition_count
+            return result and krool_complete
+        elif condition == WinConditionComplex.req_bosses:
+            result = self.bosses_beaten >= self.settings.win_condition_count
+            return result and krool_complete
         # Get X amount of Y item win cons
         win_con_table = {
             WinConditionComplex.req_bean: BarrierItems.Bean,
@@ -1219,9 +1447,10 @@ class LogicVarHolder:
             WinConditionComplex.req_pearl: BarrierItems.Pearl,
             WinConditionComplex.req_rainbowcoin: BarrierItems.RainbowCoin,
         }
-        if self.settings.win_condition_item not in win_con_table:
+        if condition not in win_con_table:
             raise Exception(f"Invalid Win Condition {self.settings.win_condition_item.name}")
-        return self.ItemCheck(win_con_table[self.settings.win_condition_item], self.settings.win_condition_count)
+        result = self.ItemCheck(win_con_table[condition], self.settings.win_condition_count)
+        return result and krool_complete
 
     def CanGetRarewareCoin(self):
         """Check if you meet the logical requirements to obtain the Rareware Coin."""
@@ -1236,6 +1465,18 @@ class LogicVarHolder:
         is_correct_kong = self.istiny or self.settings.free_trade_items
         required_level_order = max(2, min(ceil(self.settings.rareware_gb_fairies / 2), 5))  # At least level 2 to give space for fairy placements, at most level 5 to allow shenanigans
         return have_enough_fairies and is_correct_kong and self.HasFillRequirementsForLevel(self.settings.level_order[required_level_order])
+
+    def CanGetBlueprintReward(self, value):
+        """Check if you have sufficient access to a Blueprint reward location."""
+        # A Blueprint buffer is not required after the fill is complete or if there can only be GBs here
+        if self.assumeFillSuccess or Types.BlueprintBanana not in self.settings.shuffled_location_types or value > self.settings.most_snide_rewards:
+            return self.BlueprintsWithKong >= value
+        # If we're still filling, we need to be a bit more advanced than purely having the Blueprints in hand
+        bufferValue = ceil(value * 0.2)  # A small buffer is designed to smooth out progression if the next big ticket item is on Snide
+        required_level_order = min(
+            7, ceil(value / 5)
+        )  # A level order requirement is imposed in SLO to prevent early keys being on late rewards. This is necessary for fill success due to progression being calculated after the fill.
+        return self.BlueprintsWithKong >= min(40, bufferValue + value) and self.HasFillRequirementsForLevel(self.settings.level_order[required_level_order])
 
     def HasAllItems(self):
         """Return if you have all progression items."""

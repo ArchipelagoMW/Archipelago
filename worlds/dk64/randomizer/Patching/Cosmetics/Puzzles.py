@@ -1,9 +1,12 @@
 """All code associated with updating textures for puzzles."""
 
+import io
+import js
+from randomizer.Enums.Maps import Maps
 from randomizer.Settings import Settings
-from randomizer.Patching.Library.Image import writeColorImageToROM, TextureFormat, getImageFile, getNumberImage
+from randomizer.Patching.Library.Image import writeColorImageToROM, TextureFormat, getImageFile, getNumberImage, ExtraTextures, getBonusSkinOffset, TableNames
 from randomizer.Patching.Patcher import LocalROM
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 
 def updateMillLeverTexture(settings: Settings, ROM_COPY: LocalROM) -> None:
@@ -120,3 +123,103 @@ def updateCryptLeverTexture(settings: Settings, ROM_COPY: LocalROM) -> None:
                 texture_1.paste(num, (tl_x, tl_y), num)
         writeColorImageToROM(texture_0, 25, 0x99A, 32, 64, False, TextureFormat.RGBA5551, ROM_COPY)
         writeColorImageToROM(texture_1, 25, 0x999, 32, 64, False, TextureFormat.RGBA5551, ROM_COPY)
+
+
+def updateHelmFaces(settings: Settings, ROM_COPY: LocalROM) -> None:
+    """Write the textures for Helm Order."""
+    helm_order_images = [
+        ExtraTextures.FinalBoss1Left,
+        ExtraTextures.FinalBoss1Right,
+        ExtraTextures.FinalBoss2Left,
+        ExtraTextures.FinalBoss2Right,
+        ExtraTextures.FinalBoss3Left,
+        ExtraTextures.FinalBoss3Right,
+        ExtraTextures.FinalBoss4Left,
+        ExtraTextures.FinalBoss4Right,
+        ExtraTextures.FinalBoss5Left,
+        ExtraTextures.FinalBoss5Right,
+    ]
+    map_data = {
+        Maps.KroolDonkeyPhase: {
+            "local_image": False,
+            "images": [0x27C, 0x27B],
+        },
+        Maps.KroolDiddyPhase: {
+            "local_image": False,
+            "images": [0x279, 0x27A],
+        },
+        Maps.KroolLankyPhase: {
+            "local_image": False,
+            "images": [0x277, 0x278],
+        },
+        Maps.KroolTinyPhase: {
+            "local_image": False,
+            "images": [0x276, 0x275],
+        },
+        Maps.KroolChunkyPhase: {
+            "local_image": False,
+            "images": [0x273, 0x274],
+        },
+        Maps.JapesBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_dillo1.png",
+        },
+        Maps.AztecBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_dog1.png",
+        },
+        Maps.FactoryBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_mj.png",
+        },
+        Maps.GalleonBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_pufftoss.png",
+        },
+        Maps.FungiBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_dog2.png",
+        },
+        Maps.CavesBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_dillo2.png",
+        },
+        Maps.CastleBoss: {
+            "local_image": True,
+            "image": "base-hack/assets/displays/head_kko.png",
+        },
+    }
+    for index, image in enumerate(helm_order_images):
+        order_index = int(index / 2)
+        img_index = getBonusSkinOffset(image)
+        if order_index >= len(settings.krool_order):
+            # Overwrite with a blank image
+            img_written = Image.new(mode="RGBA", size=(32, 64))
+        else:
+            map_index = settings.krool_order[order_index]
+            data = map_data[map_index]
+            big_image = None
+            if data["local_image"]:
+                # Pull image from the repo
+                big_image = Image.open(io.BytesIO(js.getFile(data["image"])))
+                big_image = big_image.resize((64, 64)).transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+                if index % 2 == 0:
+                    # Left side
+                    img_written = big_image.crop((0, 0, 32, 64))
+                else:
+                    # Right side
+                    img_written = big_image.crop((32, 0, 64, 64))
+            else:
+                # Pull image from ROM
+                img_written = getImageFile(ROM_COPY, TableNames.TexturesGeometry, data["images"][index % 2], True, 32, 64, TextureFormat.RGBA5551)
+        writeColorImageToROM(img_written, TableNames.TexturesGeometry, img_index, 32, 64, False, TextureFormat.RGBA5551, ROM_COPY)
+
+
+def updateSnidePanel(settings: Settings, ROM_COPY: LocalROM) -> None:
+    """Modify the panel on Snide's to make it easier to spot the indicator."""
+    if not settings.snide_reward_rando:
+        return
+    im_f = getImageFile(ROM_COPY, TableNames.TexturesGeometry, 0xA6F, True, 32, 64, TextureFormat.RGBA5551)
+    enhancer = ImageEnhance.Brightness(im_f)
+    im_f = enhancer.enhance(0.5)
+    writeColorImageToROM(im_f, TableNames.TexturesGeometry, 0xB85, 32, 64, False, TextureFormat.RGBA5551, ROM_COPY)

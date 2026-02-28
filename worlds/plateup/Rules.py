@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+import math
 import sys
 
 # Increase recursion limit to allow deep day chains (up to 1000). Default (~1000) is borderline once
@@ -29,11 +30,39 @@ def add_rule(spot: Location | Entrance, rule, combine="and"):
             spot.access_rule = lambda state: rule(state) or old_rule(state)
 
 
+def _extract_dish_day_number(name: str) -> int | None:
+    if " - Day " not in name:
+        return None
+    try:
+        return int(name.rsplit(" - Day ", 1)[1])
+    except ValueError:
+        return None
+
+
 def restrict_locations_by_progression(world: "PlateUpWorld"):
     # Chain dish day locations to require the previous day.
     # For non-starting dishes, Day 1 requires the corresponding Unlock item.
     dish_order = getattr(world, 'valid_dish_locations', [])
     starting_dish = getattr(world, 'starting_dish', None)
+
+    interval = max(1, int(world.options.day_lease_interval.value))
+    try:
+        required_days = max(1, int(world.options.day_count.value))
+    except Exception:
+        required_days = 1
+    try:
+        required_franchises = max(1, int(world.options.franchise_count.value))
+    except Exception:
+        required_franchises = 1
+    total_progress_days = required_days if world.options.goal.value == 1 else 15 * required_franchises
+    total_progress_days = max(1, total_progress_days)
+    try:
+        speed_upgrade_count = max(0, int(world.options.player_speed_upgrade_count.value))
+    except Exception:
+        speed_upgrade_count = 0
+    speed_slots = max(1, speed_upgrade_count)
+    speed_interval = max(1, math.ceil(total_progress_days / speed_slots))
+
     for i in range(len(dish_order) - 1):
         current_loc_name = dish_order[i]
         next_loc_name = dish_order[i + 1]
@@ -50,6 +79,18 @@ def restrict_locations_by_progression(world: "PlateUpWorld"):
                     if starting_dish and dish_name != starting_dish:
                         unlock_item = f"{dish_name} Unlock"
                         add_rule(loc, lambda state, item=unlock_item: state.has(item, world.player))
+
+                day_number = _extract_dish_day_number(next_loc_name)
+                if day_number:
+                    leases_required = max(0, (day_number - 1) // interval)
+                    speed_required = min(speed_upgrade_count, (day_number - 1) // speed_interval)
+                    add_rule(
+                        loc,
+                        lambda state, req=leases_required, spd=speed_required: (
+                            state.has("Day Lease", world.player, req)
+                            and state.has("Speed Upgrade Player", world.player, spd)
+                        )
+                    )
             except KeyError:
                 pass
 

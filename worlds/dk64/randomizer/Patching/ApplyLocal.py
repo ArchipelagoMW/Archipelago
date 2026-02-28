@@ -12,11 +12,11 @@ from datetime import datetime as Datetime
 from datetime import timezone
 import js
 from randomizer.Enums.Models import Model, ModelNames, HeadResizeImmune
-from randomizer.Enums.Settings import RandomModels, BigHeadMode
+from randomizer.Enums.Settings import RandomModels, BigHeadMode, ColorOptions
 from randomizer.Lists.Songs import ExcludedSongsSelector
 from randomizer.Patching.Cosmetics.TextRando import writeCrownNames
 from randomizer.Patching.Cosmetics.Holiday import applyHolidayMode
-from randomizer.Patching.Cosmetics.EnemyColors import writeMiscCosmeticChanges
+from randomizer.Patching.Cosmetics.EnemyColors import writeMiscCosmeticChanges, writeRainbowAmmo
 from randomizer.Patching.CosmeticColors import (
     apply_cosmetic_colors,
     overwrite_object_colors,
@@ -26,9 +26,10 @@ from randomizer.Patching.CosmeticColors import (
 from randomizer.Patching.Hash import get_hash_images
 from randomizer.Patching.MusicRando import randomize_music
 from randomizer.Patching.Patcher import ROM
-from randomizer.Patching.Library.Generic import recalculatePointerJSON, camelCaseToWords, getHoliday, Holidays
+from randomizer.Patching.Library.Generic import recalculatePointerJSON, camelCaseToWords, getHoliday, Holidays, IsColorOptionSelected
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames, writeText
 from randomizer.Patching.ASMPatcher import patchAssemblyCosmetic, disableDynamicReverb, fixLankyIncompatibility
+from randomizer.Patching.MirrorMode import truncateFiles
 
 # from randomizer.Spoiler import Spoiler
 from randomizer.Settings import Settings, ExcludedSongs, DPadDisplays, KongModels
@@ -85,25 +86,21 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
     js.event_response_data = data
     if lanky_from_history:
         js.save_text_as_file(data, f"dk64r-patch-{seed_id}.lanky")
-        loop.run_until_complete(ProgressBar().reset())
+        await ProgressBar().reset()
         return
     # elif settings.download_patch_file and from_patch_gen is False:
     #     js.write_seed_history(seed_id, str(data), json.dumps(settings.seed_hash))
     #     js.load_old_seeds()
     #     js.save_text_as_file(data, f"dk64r-patch-{seed_id}.lanky")
-    #     loop.run_until_complete(ProgressBar().reset())
     #     return
     elif from_patch_gen is True:
-        if (js.document.getElementById("download_patch_file").checked or js.document.getElementById("load_patch_file").checked) and js.document.getElementById(
-            "generate_seed"
-        ).value != "Download Seed":
+        if js.document.getElementById("download_patch_file").checked and js.document.getElementById("generate_seed").value != "Download Seed":
             js.save_text_as_file(data, f"dk64r-patch-{seed_id}.lanky")
         # gif_fairy = get_hash_images("browser", "loading-fairy")
         # gif_dead = get_hash_images("browser", "loading-dead")
         # js.document.getElementById("progress-fairy").src = "data:image/jpeg;base64," + gif_fairy[0]
         # js.document.getElementById("progress-dead").src = "data:image/jpeg;base64," + gif_dead[0]
         # Apply the base patch
-        await js.apply_patch(data)
         if gen_history is False:
             js.write_seed_history(seed_id, str(data), json.dumps(settings.seed_hash))
             js.load_old_seeds()
@@ -127,11 +124,34 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
             f"This patch was generated with version {patch_major}.{patch_minor}.{patch_patch} of the randomizer, but you are using version {major}.{minor}.{patch}. Cosmetic packs have been disabled for this patch."
         )
         fixLankyIncompatibility(ROM_COPY)
+        truncateFiles(ROM_COPY)
     elif from_patch_gen is True:
         sav = settings.rom_data
         if from_patch_gen:
             recalculatePointerJSON(ROM_COPY)
         js.document.getElementById("patch_version_warning").hidden = True
+        # Disco DK
+        ROM_COPY.seek(settings.rom_data + 0x1B8 + 0)
+        dk_model_setting = int.from_bytes(ROM_COPY.readBytes(1), "big")  # 0 is default
+        if settings.disco_donkey and dk_model_setting == 0 and settings.override_cosmetics:
+            settings.kong_model_dk = KongModels.disco_donkey
+            ROM_COPY.seek(settings.rom_data + 0x1B8 + 0)
+            ROM_COPY.writeMultipleBytes(13, 1)
+            dest_start = getPointerLocation(TableNames.ActorGeometry, 3)
+            source_start = getPointerLocation(TableNames.ActorGeometry, 0x129)
+            source_end = getPointerLocation(TableNames.ActorGeometry, 0x129 + 1)
+            source_size = source_end - source_start
+            ROM_COPY.seek(source_start)
+            file_bytes = ROM_COPY.readBytes(source_size)
+            ROM_COPY.seek(dest_start)
+            ROM_COPY.writeBytes(file_bytes)
+            # Write uncompressed size
+            unc_table = getPointerLocation(TableNames.UncompressedFileSizes, TableNames.ActorGeometry)
+            ROM_COPY.seek(unc_table + (0x129 * 4))
+            unc_size = int.from_bytes(ROM_COPY.readBytes(4), "big")
+            ROM_COPY.seek(unc_table + (3 * 4))
+            ROM_COPY.writeMultipleBytes(unc_size, 4)
+        # Disco Chunky
         ROM_COPY.seek(settings.rom_data + 0x1B8 + 4)
         chunky_model_setting = int.from_bytes(ROM_COPY.readBytes(1), "big")  # 0 is default
         if settings.disco_chunky and chunky_model_setting == 0 and settings.override_cosmetics:
@@ -162,6 +182,7 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
         if settings.override_cosmetics:
             overwrite_object_colors(settings, ROM_COPY)
             writeMiscCosmeticChanges(settings, ROM_COPY)
+            writeRainbowAmmo(settings, ROM_COPY)
             applyHolidayMode(settings, ROM_COPY)
             darkenPauseBubble(settings, ROM_COPY)
             if settings.misc_cosmetics:
@@ -177,14 +198,14 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
             ]
             holiday_colors = {
                 Holidays.Anniv25: [0xFF, 0xFF, 0x00],
-                Holidays.Halloween: [0xFF, 0x00, 0x00],
+                Holidays.Halloween: [0x80, 0x20, 0x20],
                 Holidays.Christmas: [0x00, 0xFF, 0xFF],
             }
             if holiday in holiday_colors:
                 fog_enabled = [1, 1, 1]
                 for x in range(3):
                     default_colors[x] = holiday_colors[holiday]
-            elif settings.misc_cosmetics:
+            elif IsColorOptionSelected(settings, ColorOptions.environment):
                 fog_enabled = [2, 1, 1]
             for index, enabled_setting in enumerate(fog_enabled):
                 if enabled_setting != 0:
@@ -264,23 +285,19 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
             ROM_COPY.seek(sav + 0xC7)
             ROM_COPY.write(int(settings.sound_type))  # Sound Type
 
-            music_volume = 40
-            sfx_volume = 40
-            if settings.sfx_volume is not None and settings.sfx_volume != "":
-                sfx_volume = int(settings.sfx_volume / 2.5)
-            if settings.music_volume is not None and settings.music_volume != "":
-                music_volume = int(settings.music_volume / 2.5)
-            ROM_COPY.seek(sav + 0xC8)
-            ROM_COPY.write(sfx_volume)
-            ROM_COPY.seek(sav + 0xC9)
-            ROM_COPY.write(music_volume)
-
             boolean_props = [
                 BooleanProperties(settings.remove_water_oscillation, 0x10F),  # Remove Water Oscillation
                 BooleanProperties(settings.dark_mode_textboxes, 0x44),  # Dark Mode Text bubble
-                BooleanProperties(settings.pause_hint_coloring, 0x1E4),  # Pause Hint Coloring
+                BooleanProperties(not settings.pause_hint_coloring, 0x1E4, 0),  # Pause Hint Coloring (inverted for Obiyo)
                 BooleanProperties(settings.camera_is_follow, 0xCB),  # Free/Follow Cam
                 BooleanProperties(settings.camera_is_not_inverted, 0xCC),  # Inverted/Non-Inverted Camera
+                BooleanProperties(settings.fps_display, 0x96),  # FPS Display
+                BooleanProperties(settings.song_speed_near_win, 0x1B4),  # Song Win Con Speedup
+                BooleanProperties(settings.disable_flavor_text, 0xAF),  # Disable Flavor Text
+                BooleanProperties(settings.rainbow_ammo, 0x112),  # Rainbow Ammo
+                BooleanProperties(settings.isles_cool_musical, 0x127),  # DK Isles always plays music
+                BooleanProperties(settings.pool_tracks, 0x50),  # Bonus Music
+                BooleanProperties(settings.pool_tracks, 0x51),  # Boss Music
             ]
 
             for prop in boolean_props:
@@ -289,25 +306,24 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
                     ROM_COPY.write(prop.target)
 
             # Excluded Songs
-            if settings.songs_excluded:
-                disabled_songs = settings.excluded_songs_selected.copy()
-                write_data = [0]
-                for item in ExcludedSongsSelector:
-                    if (ExcludedSongs[item["value"]] in disabled_songs and item["shift"] >= 0) or len(disabled_songs) == 0:
-                        offset = int(item["shift"] >> 3)
-                        check = int(item["shift"] % 8)
-                        write_data[offset] |= 0x80 >> check
-                ROM_COPY.seek(sav + 0x1B7)
-                ROM_COPY.writeMultipleBytes(write_data[0], 1)
+            disabled_songs = settings.excluded_songs_selected.copy()
+            write_data = [0]
+            for item in ExcludedSongsSelector:
+                if ExcludedSongs[item["value"]] in disabled_songs and item["shift"] >= 0:
+                    offset = int(item["shift"] >> 3)
+                    check = int(item["shift"] % 8)
+                    write_data[offset] |= 0x80 >> check
+            ROM_COPY.seek(sav + 0x1B7)
+            ROM_COPY.writeMultipleBytes(write_data[0], 1)
 
-            patchAssemblyCosmetic(ROM_COPY, settings)
             music_data, music_names = randomize_music(settings, ROM_COPY)
+            patchAssemblyCosmetic(ROM_COPY, settings)
             # Disable dynamic FXMix (reverb)
             # If this impacts non-BGM music in a way that produces unwanted behavior, we'll want to only apply this to BGM
             if settings.music_disable_reverb:
                 disableDynamicReverb(ROM_COPY)
             music_text = []
-            accepted_characters = [*string.ascii_uppercase] + [" ", "\n", "(", ")", "%", ",", ".", "!", ">", ":", ";", "'", "-"] + [*string.digits]
+            accepted_characters = [*string.ascii_uppercase] + [" ", "\n", "(", ")", "%", ",", ".", "!", ">", ":", "'", "-", "&", ";"] + [*string.digits]
             for name in music_names:
                 output_name = name
                 if name is None:
@@ -319,6 +335,7 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
                 ROM_COPY.seek(sav + 0x1ED)
                 ROM_COPY.write(1)
 
+            truncateFiles(ROM_COPY)
             spoiler = updateJSONCosmetics(spoiler, settings, music_data, int(unix), head_sizes)
 
         # Apply Hash
@@ -337,9 +354,9 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
 
     if from_patch_gen is True:
         await ProgressBar().update_progress(10, "Seed Generated.")
-    js.document.getElementById("nav-settings-tab").style.display = ""
+    js.document.getElementById("nav-settings-tab").removeAttribute("hidden")
     js.document.getElementById("spoiler_log_block").style.display = ""
-    loop.run_until_complete(js.GenerateSpoiler(json.dumps(spoiler)))
+    await js.GenerateSpoiler(json.dumps(spoiler))
     js.document.getElementById("generated_seed_id").innerHTML = seed_id
     # Set the current URL to the seed ID so that it can be shared without reloading the page
     js.window.history.pushState("generated_seed", hash_id, f"/randomizer?seed_id={hash_id}")
@@ -360,7 +377,7 @@ async def patching_response(data, from_patch_gen=False, lanky_from_history=False
     if from_patch_gen is True:
         ROM_COPY.fixSecurityValue()
         ROM_COPY.save(f"dk64r-rom-{seed_id}.z64")
-        loop.run_until_complete(ProgressBar().reset())
+        await ProgressBar().reset()
     js.jq("#nav-settings-tab").tab("show")
     js.check_seed_info_tab()
 
@@ -403,7 +420,7 @@ def updateJSONCosmetics(spoiler, settings, music_data, cosmetic_seed, head_sizes
         {"name": "Funky's Boot (Chunky Phase)", "setting": settings.boot_cutscene_model},
     ]
 
-    if settings.colors != {} or settings.random_models != RandomModels.off or settings.misc_cosmetics:
+    if settings.colors != {} or settings.random_models != RandomModels.off or settings.misc_cosmetics or len(settings.random_colors_selected) > 0:
         humanspoiler["Cosmetics"]["Colors"] = {}
         humanspoiler["Cosmetics"]["Models"] = {}
         humanspoiler["Cosmetics"]["Sprites"] = {}
@@ -417,7 +434,7 @@ def updateJSONCosmetics(spoiler, settings, music_data, cosmetic_seed, head_sizes
                 humanspoiler["Cosmetics"]["Models"][data["name"]] = camelCaseToWords(data["setting"].name)
             else:
                 humanspoiler["Cosmetics"]["Models"][data["name"]] = f"Unknown Model {hex(int(data['setting']))}"
-    if settings.misc_cosmetics:
+    if IsColorOptionSelected(settings, ColorOptions.items):
         humanspoiler["Cosmetics"]["Sprites"]["Minigame Melon"] = camelCaseToWords(settings.minigame_melon_sprite.name)
     if settings.music_bgm_randomized or settings.bgm_songs_selected:
         humanspoiler["Cosmetics"]["Background Music"] = music_data.get("music_bgm_data")

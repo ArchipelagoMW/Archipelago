@@ -1,3 +1,5 @@
+import random
+
 from .world import GatoRobotoWorld as GatoRobotoWorld
 from worlds.LauncherComponents import launch_subprocess, components, Component, Type, icon_paths
 
@@ -17,12 +19,14 @@ def launch_client(*args):
 components.append(Component("Gato Roboto Client B-Side",
                             func=launch_client,
                             component_type=Type.CLIENT,
-                            icon="kiki",
+                            icon="gato",
                             supports_uri=True,
                             game_name="Gato Roboto B-Side"))
 
-icon_paths['kiki'] = f"ap:{__name__}/data/Kiki.png"
-
+if random.random() > 0.01:
+    icon_paths['gato'] = f"ap:{__name__}/data/main_gato.webp"
+else:
+    icon_paths['gato'] = f"ap:{__name__}/data/evil_gato.webp"
 
 def data_path(file_name: str):
     import pkgutil

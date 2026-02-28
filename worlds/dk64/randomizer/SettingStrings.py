@@ -100,12 +100,8 @@ settingsExclusionMap = {
         ]
     },
     "shuffle_items": {False: ["item_rando_list_selected"]},
-    "enemy_rando": {False: ["enemies_selected"]},
-    "bonus_barrel_rando": {False: ["minigames_list_selected", "disable_hard_minigames"]},
     "cb_rando_enabled": {False: ["cb_rando_list_selected"]},
-    "logic_type": {LogicType.glitchless: ["glitches_selected"], LogicType.nologic: ["glitches_selected"]},
-    "quality_of_life": {False: ["misc_changes_selected"]},
-    "hard_mode": {False: ["hard_mode_selected"]},
+    "logic_type": {LogicType.glitchless: ["glitches_selected"], LogicType.nologic: ["glitches_selected"], LogicType.minimal: ["glitches_selected"]},
     "spoiler_hints": {
         SpoilerHints.off: [
             "points_list_kongs"
@@ -183,7 +179,9 @@ def encrypt_settings_string_enum(dict_data: dict):
         "random_models",
         "random_enemy_colors",
         "misc_cosmetics",
+        "disco_donkey",
         "disco_chunky",
+        "rainbow_ammo",
         "dark_mode_textboxes",
         "pause_hint_coloring",
         "lanky_clothes_colors",
@@ -194,8 +192,9 @@ def encrypt_settings_string_enum(dict_data: dict):
         "rambi_skin_custom_color",
         "gb_colors",
         "gb_custom_color",
-        "random_colors",
+        "random_kong_colors",
         "random_music",
+        "music_is_custom",
         "music_bgm_randomized",
         "music_events_randomized",
         "music_majoritems_randomized",
@@ -207,23 +206,30 @@ def encrypt_settings_string_enum(dict_data: dict):
         "tiny_clothes_custom_color",
         "override_cosmetics",
         "remove_water_oscillation",
+        "fps_display",
         "head_balloons",
+        "song_speed_near_win",
+        "disable_flavor_text",
         "colorblind_mode",
         "big_head_mode",
         "search",
         "holiday_setting",
         "holiday_setting_offseason",
         "homebrew_header",
+        "homebrew_header_patch",
         "dpad_display",
         "camera_is_follow",
         "sfx_volume",
         "music_volume",
         "true_widescreen",
+        "anamorphic_widescreen",
         "camera_is_not_inverted",
         "sound_type",
         "smoother_camera",
         "songs_excluded",
         "excluded_songs_selected",
+        "random_colors",
+        "random_colors_selected",
         "music_filtering",
         "music_filtering_selected",
         "troff_brighten",
@@ -231,11 +237,22 @@ def encrypt_settings_string_enum(dict_data: dict):
         "crosshair_outline",
         "custom_music_proportion",
         "fill_with_custom_music",
+        "pool_tracks",
+        "color_coded_powerups",
         "show_song_name",
         "delayed_spoilerlog_release",
         "shockwave_status",  # Deprecated with starting move selector rework - this is now derived in the settings constructor
         "music_disable_reverb",
+        "isles_cool_musical",
         "archipelago",
+        "bonus_barrel_rando",  # Deprecated with dropdown multiselector rework
+        "hard_mode",  # Deprecated with dropdown multiselector rework
+        "hard_bosses",  # Deprecated with dropdown multiselector rework
+        "quality_of_life",  # Deprecated with dropdown multiselector rework
+        "enemy_rando",  # Deprecated with dropdown multiselector rework
+        "faster_checks_enabled",  # Deprecated with dropdown multiselector rework
+        "remove_barriers_enabled",  # Deprecated with dropdown multiselector rework
+        "",
     ]:
         if pop in dict_data:
             dict_data.pop(pop)
@@ -258,7 +275,7 @@ def encrypt_settings_string_enum(dict_data: dict):
             bitstring += "1" if value else "0"
         elif key_data_type == SettingsStringDataType.int4:
             bitstring += int_to_bin_string(value, 4)
-        elif key_data_type == SettingsStringDataType.int8:
+        elif key_data_type in (SettingsStringDataType.int8, SettingsStringDataType.u8):
             bitstring += int_to_bin_string(value, 8)
         elif key_data_type in (SettingsStringDataType.int16, SettingsStringDataType.u16):
             bitstring += int_to_bin_string(value, 16)
@@ -274,7 +291,7 @@ def encrypt_settings_string_enum(dict_data: dict):
                     bitstring += "1" if item else "0"
                 elif key_list_data_type == SettingsStringDataType.int4:
                     bitstring += int_to_bin_string(item, 4)
-                elif key_list_data_type == SettingsStringDataType.int8:
+                elif key_list_data_type in (SettingsStringDataType.int8, SettingsStringDataType.u8):
                     bitstring += int_to_bin_string(item, 8)
                 elif key_list_data_type in (SettingsStringDataType.int16, SettingsStringDataType.u16):
                     bitstring += int_to_bin_string(item, 16)
@@ -345,8 +362,10 @@ def decrypt_settings_string_enum(encrypted_string: str) -> Dict[str, Any]:
         elif key_data_type == SettingsStringDataType.int4:
             val = bin_string_to_int(bitstring[bit_index : bit_index + 4], 4)
             bit_index += 4
-        elif key_data_type == SettingsStringDataType.int8:
+        elif key_data_type in (SettingsStringDataType.int8, SettingsStringDataType.u8):
             val = bin_string_to_int(bitstring[bit_index : bit_index + 8], 8)
+            if key_data_type == SettingsStringDataType.u8 and val < 0:
+                val += 256
             bit_index += 8
         elif key_data_type in (SettingsStringDataType.int16, SettingsStringDataType.u16):
             val = bin_string_to_int(bitstring[bit_index : bit_index + 16], 16)
@@ -370,12 +389,14 @@ def decrypt_settings_string_enum(encrypted_string: str) -> Dict[str, Any]:
                 elif key_list_data_type == SettingsStringDataType.int4:
                     list_val = bin_string_to_int(bitstring[bit_index : bit_index + 4], 4)
                     bit_index += 4
-                elif key_list_data_type == SettingsStringDataType.int8:
+                elif key_list_data_type in (SettingsStringDataType.int8, SettingsStringDataType.u8):
                     list_val = bin_string_to_int(bitstring[bit_index : bit_index + 8], 8)
+                    if key_list_data_type == SettingsStringDataType.u8 and val < 0:
+                        val += 256
                     bit_index += 8
                 elif key_list_data_type in (SettingsStringDataType.int16, SettingsStringDataType.u16):
                     list_val = bin_string_to_int(bitstring[bit_index : bit_index + 16], 16)
-                    if key_data_type == SettingsStringDataType.u16 and val < 0:
+                    if key_list_data_type == SettingsStringDataType.u16 and val < 0:
                         val += 65536
                     bit_index += 16
                 elif key_data_type == SettingsStringDataType.var_int:

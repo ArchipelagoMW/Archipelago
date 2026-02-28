@@ -1578,6 +1578,55 @@ UT_EVENT_DATA = {
              "event": "mcb"},
 }
 
+hidden_event_connect = {
+    # Connected on flag read
+    "gsb": ("Goron NW Shortcut", "Goron NW Outside Temple"),
+    "fi": ("Mercay NE", "Mercay NW Freedle Island"),
+    "gms": ("Goron NE Middle", "Goron NE"),
+    "gss": ("Goron NE South", "Goron NE"),
+    "gls": ("Goron NW Outside Temple", "Goron NW Like Like"),
+
+    "rb": ("Ruins SE Return Bridge West", "Ruins SE Return Bridge East"),
+    "fif": ("Frost SE Exit", "Frost SE"),
+    "ub": ("Uncharted Outside Cave", "Uncharted Island"),
+    "md": ("Molida Outside Temple", "Molida North"),
+    "cb": ("Cannon Outside Eddo", "Cannon Bomb Garden"),
+    "mcb": ("Sun Lake Cave", "Sun Lake Cave Back"),
+
+    "tfw": ("ToF 1F", "ToF 4F"),
+    "tww": ("ToW 1F", "ToW 2F"),
+    "tcw": ("ToC 1F", "ToC 3F"),
+    "gtw": ("GT 1F", "GT B4"),
+    "tiw": ("ToI 1F", "ToI Blue Warp"),
+    "mtw": ("MT 1F", "MT B3"),
+
+    # map warp connections
+    "wsw": ("Menu", "SW Ocean East", "Warp to SW Ocean"),
+    "wse": ("Menu", "SE Ocean", "Warp to SE Ocean"),
+    "wnw": ("Menu", "NW Ocean", "Warp to NW Ocean"),
+    "wne": ("Menu", "NE Ocean", "Warp to NE Ocean"),
+
+    "wmc": ("Menu", "Mercay SE", "Warp to Mercay Island"),
+    "wc": ("Menu", "Cannon Island", "Warp to Cannon Island"),
+    "we": ("Menu", "Ember Port", "Warp to Isle of Ember"),
+    "wml": ("Menu", "Molida South", "Warp to Molida Island"),
+    "ws": ("Menu", "Spirit Island", "Warp to Spirit Island"),
+
+    "wgu": ("Menu", "Gust South", "Warp to Isle of Gust"),
+    "wb": ("Menu", "Bannan Island", "Warp to Bannan Island"),
+    "wz": ("Menu", "Zauz's Island", "Warp to Zauz' Island"),
+    "wu": ("Menu", "Uncharted Island", "Warp to Uncharted Island"),
+
+    "wgo": ("Menu", "Goron SW", "Warp to Goron Island"),
+    "wf": ("Menu", "Frost SW", "Warp to Isle of Frost"),
+    "wh": ("Menu", "Harrow Island", "Warp to Harrow Island"),
+    "wds": ("Menu", "Dee Ess Island", "Warp to Dee Ess Island"),
+
+    "wd": ("Menu", "IotD Port", "Warp to Isle of the Dead"),
+    "wr": ("Menu", "Ruins SW Port", "Warp to Isle of Ruins"),
+    "wmz": ("Menu", "Maze Island", "Warp to Maze Island"),
+    }
+
 BOSS_EVENT_TO_LOCATION = {
     "EVENT: Defeat Blaaz": "Blaaz Boss Reward",
     "EVENT: Defeat Cyclok": "Cyclok Boss Reward",

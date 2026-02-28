@@ -164,13 +164,13 @@ def has_spore_pod(state: CollectionState, player: int) -> bool:
 def has_oil(state: CollectionState, player: int) -> bool:
     """If the player has produced Oil on Serpulo"""
     available: bool = False
-    if state.has("Oil produced on Serpulo", player) and has_mechanical_pump(state, player):
+    if state.has("Oil produced on Serpulo", player) and has_pump(state, player):
         available = True
     return available
 
 def has_slag_serpulo(state: CollectionState, player: int) -> bool:
     """If the player has produced Slag on Serpulo"""
-    return state.has("Slag produced on Serpulo", player) and has_melter(state, player) and has_mechanical_pump(state, player)
+    return state.has("Slag produced on Serpulo", player) and has_melter(state, player) and has_pump(state, player)
 
 def has_plastanium(state: CollectionState, player: int) -> bool:
     """If the player has produced Plastanium on Serpulo"""
@@ -183,12 +183,26 @@ def has_power_serpulo(state: CollectionState, player: int) -> bool:
     """If the player has acces to electricity on Serpulo"""
     return state.has("Combustion Generator", player) or state.has("Progressive Generators Serpulo", player, 1)
 
-def has_mechanical_pump(state: CollectionState, player: int) -> bool:
-    """If the player has received Mechanical Pump"""
+def has_pump(state: CollectionState, player: int) -> bool:
+    """If the player has received a pump"""
     available: bool = False
-    if state.has_all(["Mechanical Pump", "Conduit"], player) and has_metaglass(state, player):
+    if (state.has("Progressive Pumps Serpulo", player) or has_mechanical_pump(state, player) or has_rotary_pump(state, player)
+        or has_impulse_pump(state, player)) and has_metaglass(state, player) and state.has("Conduit", player):
         available = True
     return available
+
+def has_mechanical_pump(state: CollectionState, player: int) -> bool:
+    """If the player has received Mechanical Pump"""
+    return state.has("Mechanical Pump", player)
+
+def has_rotary_pump(state: CollectionState, player: int) -> bool:
+    """If the player has received Rotary Pump"""
+    return state.has("Rotary Pump", player) and has_titanium(state, player) and has_silicon_serpulo(state, player)
+
+def has_impulse_pump(state: CollectionState, player: int) -> bool:
+    """If the player has received Impulse Pump"""
+    return (state.has("Impulse Pump", player) and has_thorium_serpulo(state, player) and has_silicon_serpulo(state, player)
+            and has_titanium(state, player))
 
 def has_graphite_press(state: CollectionState, player: int) -> bool:
     """If the player has received Graphite Press"""
@@ -205,7 +219,7 @@ def has_pneumatic_drill(state: CollectionState, player: int) -> bool:
 def has_cultivator(state: CollectionState, player: int) -> bool:
     """If the player has received Cultivator"""
     available: bool = False
-    if state.has("Cultivator", player) and has_silicon_serpulo(state, player) and has_mechanical_pump(state, player):
+    if state.has("Cultivator", player) and has_silicon_serpulo(state, player) and has_pump(state, player):
         available = True
     return available
 
@@ -368,7 +382,7 @@ def has_foreshadow_requirements(state: CollectionState, player:int) -> bool:
 def has_meltdown_requirements(state: CollectionState, player:int) -> bool:
     """If the player has requirement to place and fire the Meltdown turret."""
     can_place = has_graphite_serpulo(state, player) and has_silicon_serpulo(state, player) and has_surge_alloy_serpulo(state, player)
-    can_fire = has_mechanical_pump(state, player) # Req fluids
+    can_fire = has_pump(state, player) # Req fluids
     return can_place and can_fire
 
 def has_scorch_requirements(state: CollectionState, player:int) -> bool:
@@ -380,7 +394,7 @@ def has_scorch_requirements(state: CollectionState, player:int) -> bool:
 def has_wave_requirements(state: CollectionState, player:int) -> bool:
     """If the player has requirement to place and fire the Wave turret."""
     can_place = has_metaglass(state, player)
-    can_fire = has_mechanical_pump(state, player)
+    can_fire = has_pump(state, player)
     return can_place and can_fire
 
 def has_parallax_requirements(state: CollectionState, player:int) -> bool:
@@ -428,7 +442,7 @@ def has_ripple_requirements(state: CollectionState, player:int) -> bool:
 def has_tsunami_requirements(state: CollectionState, player:int) -> bool:
     """If the player has requirement to place and fire the Tsunami turret."""
     can_place = has_metaglass(state, player) and has_titanium(state, player) and has_thorium_serpulo(state, player)
-    can_fire = has_mechanical_pump(state, player)
+    can_fire = has_pump(state, player)
     return can_place and can_fire
 
 def has_fuse_requirements(state: CollectionState, player:int) -> bool:

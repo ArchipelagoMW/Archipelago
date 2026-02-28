@@ -1,0 +1,8 @@
+{
+    "minimum_ap_version": "0.6.5",
+    "world_version": "1.4.47",
+    "authors": ["2dos", "AlmostSeagull", "Ballaam", "Green Bean", "Killklli", "Lrauq", "PoryGone", "Umed"],
+    "version": 7,
+    "compatible_version": 7,
+    "game": "Donkey Kong 64"
+}

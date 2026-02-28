@@ -23,7 +23,7 @@ class InvalidYamlException(Exception):
 
 
 class CTJoTWebWorld(WebWorld):
-    settings_page = "https://multiworld.ctjot.com/"
+    options_page = "https://multiworld.ctjot.com/options/"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Jets of Time multiworld.",

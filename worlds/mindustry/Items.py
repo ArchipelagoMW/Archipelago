@@ -36,7 +36,7 @@ class ItemGroup(Enum):
     LOGIC = 8
     MISC = 9
     UNIT = 10
-    RESSOURCES = 11
+    RESOURCES = 11
     SECTOR = 12
     FILLER = 13
 
@@ -96,9 +96,9 @@ class ItemData:
 item_table = {
     #Serpulo and Erekir
 
-    #"Thorium": ItemData(MINDUSTRY_BASE_ID + 169, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Surge Alloy": ItemData(MINDUSTRY_BASE_ID + 170, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Phase Fabric": ItemData(MINDUSTRY_BASE_ID + 171, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
+    #"Thorium": ItemData(MINDUSTRY_BASE_ID + 169, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Surge Alloy": ItemData(MINDUSTRY_BASE_ID + 170, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Phase Fabric": ItemData(MINDUSTRY_BASE_ID + 171, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
 
     #Serpulo
 
@@ -257,22 +257,23 @@ item_table = {
     #"Stained Mountains": ItemData(MINDUSTRY_BASE_ID + 152, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.SECTOR, 1),
     #"Fungal Pass": ItemData(MINDUSTRY_BASE_ID + 153, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.SECTOR, 1),
     #"Nuclear Production Complex": ItemData(MINDUSTRY_BASE_ID + 154, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.SECTOR, 1),
-    #"Lead": ItemData(MINDUSTRY_BASE_ID + 155, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Titanium": ItemData(MINDUSTRY_BASE_ID + 156, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Cryofluid": ItemData(MINDUSTRY_BASE_ID + 157, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Metaglass": ItemData(MINDUSTRY_BASE_ID + 158, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Scrap": ItemData(MINDUSTRY_BASE_ID + 159, ItemPlanet.SERPULO, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Slag": ItemData(MINDUSTRY_BASE_ID + 160, ItemPlanet.SERPULO, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Coal": ItemData(MINDUSTRY_BASE_ID + 161, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Graphite": ItemData(MINDUSTRY_BASE_ID + 162, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Silicon": ItemData(MINDUSTRY_BASE_ID + 163, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Pyratite": ItemData(MINDUSTRY_BASE_ID + 164, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Blast Compound": ItemData(MINDUSTRY_BASE_ID + 165, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Spore Pod": ItemData(MINDUSTRY_BASE_ID + 166, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Oil": ItemData(MINDUSTRY_BASE_ID + 167, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
-    #"Plastanium": ItemData(MINDUSTRY_BASE_ID + 168, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESSOURCES, 1),
+    #"Lead": ItemData(MINDUSTRY_BASE_ID + 155, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Titanium": ItemData(MINDUSTRY_BASE_ID + 156, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Cryofluid": ItemData(MINDUSTRY_BASE_ID + 157, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Metaglass": ItemData(MINDUSTRY_BASE_ID + 158, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Scrap": ItemData(MINDUSTRY_BASE_ID + 159, ItemPlanet.SERPULO, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Slag": ItemData(MINDUSTRY_BASE_ID + 160, ItemPlanet.SERPULO, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Coal": ItemData(MINDUSTRY_BASE_ID + 161, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Graphite": ItemData(MINDUSTRY_BASE_ID + 162, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Silicon": ItemData(MINDUSTRY_BASE_ID + 163, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Pyratite": ItemData(MINDUSTRY_BASE_ID + 164, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Blast Compound": ItemData(MINDUSTRY_BASE_ID + 165, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Spore Pod": ItemData(MINDUSTRY_BASE_ID + 166, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Oil": ItemData(MINDUSTRY_BASE_ID + 167, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
+    #"Plastanium": ItemData(MINDUSTRY_BASE_ID + 168, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.RESOURCES, 1),
     "Progressive Drills Serpulo": ItemData(MINDUSTRY_BASE_ID + 172, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.EXTRACTION, 3),
     "Progressive Generators Serpulo": ItemData(MINDUSTRY_BASE_ID + 173, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.ENERGY, 7),
+    "Progressive Pumps Serpulo": ItemData(MINDUSTRY_BASE_ID + 174, ItemPlanet.SERPULO, ItemType.NECESSARY, ItemGroup.EXTRACTION, 3),
 
 
     #Erekir
@@ -412,19 +413,19 @@ item_table = {
     #"Origin": ItemData(MINDUSTRY_BASE_ID + 326, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.SECTOR, 1),
     #"Peaks": ItemData(MINDUSTRY_BASE_ID + 327, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.SECTOR, 1),
 #
-    #"Oxide": ItemData(MINDUSTRY_BASE_ID + 328, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Ozone": ItemData(MINDUSTRY_BASE_ID + 329, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Hydrogen": ItemData(MINDUSTRY_BASE_ID + 330, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Nitrogen": ItemData(MINDUSTRY_BASE_ID + 331, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Cyanogen": ItemData(MINDUSTRY_BASE_ID + 332, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Neoplasm": ItemData(MINDUSTRY_BASE_ID + 333, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Tungsten": ItemData(MINDUSTRY_BASE_ID + 334, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Slag": ItemData(MINDUSTRY_BASE_ID + 335, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Arkycite": ItemData(MINDUSTRY_BASE_ID + 336, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Carbide": ItemData(MINDUSTRY_BASE_ID + 337, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Thorium Erekir": ItemData(MINDUSTRY_BASE_ID + 338, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Phase Fabric Erekir": ItemData(MINDUSTRY_BASE_ID + 339, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
-    #"Surge Alloy Erekir": ItemData(MINDUSTRY_BASE_ID + 340, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESSOURCES, 1),
+    #"Oxide": ItemData(MINDUSTRY_BASE_ID + 328, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Ozone": ItemData(MINDUSTRY_BASE_ID + 329, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Hydrogen": ItemData(MINDUSTRY_BASE_ID + 330, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Nitrogen": ItemData(MINDUSTRY_BASE_ID + 331, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Cyanogen": ItemData(MINDUSTRY_BASE_ID + 332, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Neoplasm": ItemData(MINDUSTRY_BASE_ID + 333, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Tungsten": ItemData(MINDUSTRY_BASE_ID + 334, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Slag": ItemData(MINDUSTRY_BASE_ID + 335, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Arkycite": ItemData(MINDUSTRY_BASE_ID + 336, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Carbide": ItemData(MINDUSTRY_BASE_ID + 337, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Thorium Erekir": ItemData(MINDUSTRY_BASE_ID + 338, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Phase Fabric Erekir": ItemData(MINDUSTRY_BASE_ID + 339, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
+    #"Surge Alloy Erekir": ItemData(MINDUSTRY_BASE_ID + 340, ItemPlanet.EREKIR, ItemType.USEFUL, ItemGroup.RESOURCES, 1),
 
     "Progressive Tanks": ItemData(MINDUSTRY_BASE_ID + 341, ItemPlanet.EREKIR, ItemType.NECESSARY, ItemGroup.UNIT, 4),
     "Progressive Ships": ItemData(MINDUSTRY_BASE_ID + 342, ItemPlanet.EREKIR, ItemType.NECESSARY, ItemGroup.UNIT, 5),
@@ -432,6 +433,12 @@ item_table = {
     "Progressive Drills Erekir": ItemData(MINDUSTRY_BASE_ID + 344, ItemPlanet.EREKIR, ItemType.NECESSARY, ItemGroup.UNIT, 3),
     "Progressive Generators Erekir": ItemData(MINDUSTRY_BASE_ID + 345, ItemPlanet.EREKIR, ItemType.NECESSARY, ItemGroup.UNIT, 4),
 
-    #Filler Items
-    "A fistful of nothing...": ItemData(MINDUSTRY_BASE_ID + 700, ItemPlanet.ALL, ItemType.JUNK, ItemGroup.FILLER, 1)
+    #Filler items 700 - 849
+    "Nothing": ItemData(MINDUSTRY_BASE_ID + 700, ItemPlanet.ALL, ItemType.JUNK, ItemGroup.FILLER, 1),
+    "Construction speed buff": ItemData(MINDUSTRY_BASE_ID + 701, ItemPlanet.ALL, ItemType.JUNK, ItemGroup.FILLER, 1),
+    "Research discount buff": ItemData(MINDUSTRY_BASE_ID + 702, ItemPlanet.ALL, ItemType.JUNK, ItemGroup.FILLER, 1),
+
+    #Filler trap items 850 - 999
+    "Factory malfunction trap": ItemData(MINDUSTRY_BASE_ID + 850, ItemPlanet.ALL, ItemType.TRAP, ItemGroup.FILLER, 1),
+    "Launch wave trap": ItemData(MINDUSTRY_BASE_ID + 851, ItemPlanet.ALL, ItemType.TRAP, ItemGroup.FILLER, 1)
 }

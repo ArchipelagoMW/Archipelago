@@ -9,7 +9,6 @@ def get_home_points() -> List[LocationData]:
     home_point_table: List[LocationData] = [
         #Beginner
         #Spawning Meadows
-        LocationData(HOMEPOINT_AP_SPAWN_AP_REGION, HOMEPOINT_AP_SPAWN_NAME, 5003),
         LocationData(HOMEPOINT_OLD_NANS_WATERING_HOLE_AP_REGION, HOMEPOINT_OLD_NANS_WATERING_HOLE_NAME, 59),
         #Delende
         LocationData(HOMEPOINT_FISH_HATCHERY_AP_REGION, HOMEPOINT_FISH_HATCHERY_NAME, 127),

@@ -14,6 +14,7 @@ class Goal(Choice):
     Song of Six:          Reach the Eye after meeting either Solanum or the Prisoner
     Song of Seven:        Reach the Eye after meeting both Solanum and the Prisoner
     Echoes of the Eye:    Meet the Prisoner and complete the DLC
+    Song of the Universe: Reach the Eye after meeting the specified number of friends
     """
     display_name = "Goal"
     option_song_of_five = 0
@@ -22,6 +23,24 @@ class Goal(Choice):
     option_song_of_six = 3
     option_song_of_seven = 4
     option_echoes_of_the_eye = 5
+    option_song_of_the_universe = 6
+
+
+class RequiredFriends(Range):
+    """The number of "friends" you have to meet before reaching the Eye
+    (not counting the five Hearthian travelers who always join you there).
+    Only used with the `song_of_the_universe` goal option.
+    Each enabled story mod adds a potential "friend," as does the DLC. Solanum is, of course, always enabled.
+    
+    For example, setting this to `0` is the same as the `song_of_five` goal.
+    Enabling the DLC, no story mods, and setting this to `1` is equivalent to the `song_of_six` goal.
+
+    Enabling the DLC & all 7 story mods allows a maximum of 9 "friends."
+    """
+    display_name = "Required Friends"
+    range_start = 0
+    range_end = 9
+    default = 1
 
 
 class RandomizeCoordinates(DefaultOnToggle):
@@ -299,6 +318,7 @@ class EnableEchoHikeMod(Toggle):
 class OuterWildsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
+    required_friends: RequiredFriends
     spawn: Spawn
     early_key_item: EarlyKeyItem
     enable_eote_dlc: EnableEchoesOfTheEyeDLC

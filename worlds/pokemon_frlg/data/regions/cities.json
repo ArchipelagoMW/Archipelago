@@ -290,8 +290,8 @@
     "has_fishing": false,
     "kanto": true,
     "locations": [
-      "FAME_CHECKER_DAISY_4",
-      "FAME_CHECKER_OAK_4"
+      "FAME_CHECKER_OAK_4",
+      "FAME_CHECKER_DAISY_4"
     ],
     "events": [],
     "exits": {},

@@ -4,7 +4,6 @@ from randomizer.Enums.DoorType import DoorType
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
-from randomizer.Enums.Maps import Maps
 from randomizer.Enums.Regions import Regions
 from randomizer.Enums.Types import Types
 from randomizer.Enums.Settings import DKPortalRando
@@ -12,13 +11,6 @@ from randomizer.Lists import Exceptions
 from randomizer.Lists.DoorLocations import door_locations
 from randomizer.LogicClasses import LocationLogic
 from randomizer.Patching.Library.Generic import getHintRequirement
-import randomizer.LogicFiles.AngryAztec
-import randomizer.LogicFiles.CreepyCastle
-import randomizer.LogicFiles.CrystalCaves
-import randomizer.LogicFiles.FranticFactory
-import randomizer.LogicFiles.FungiForest
-import randomizer.LogicFiles.GloomyGalleon
-import randomizer.LogicFiles.JungleJapes
 
 level_list = [
     "Jungle Japes",

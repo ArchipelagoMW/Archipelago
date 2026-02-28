@@ -305,7 +305,7 @@ def create_item_pool(world: "SohWorld") -> None:
             if world.options.item_pool in ("plentiful", "minimal"):
                 items_to_create[Items.HEART_CONTAINER] = hearts_to_place
             elif world.options.item_pool == "balanced":
-                half_hearts: int = max_hearts >> 2
+                half_hearts: int = int(hearts_to_place / 2)
                 items_to_create[Items.HEART_CONTAINER] = hearts_to_place - half_hearts
                 items_to_create[Items.PIECE_OF_HEART] += half_hearts * 4
             elif world.options.item_pool == "scarce":

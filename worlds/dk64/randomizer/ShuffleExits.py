@@ -7,13 +7,13 @@ from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Regions import Regions
-from randomizer.Enums.Settings import ActivateAllBananaports, RandomPrices, ShuffleLoadingZones, RemovedBarriersSelected, CrownEnemyDifficulty
+from randomizer.Enums.Settings import ActivateAllBananaports, RandomPrices, ShuffleLoadingZones, RemovedBarriersSelected, CrownEnemyDifficulty, CBRequirement
 from randomizer.Enums.Transitions import Transitions
 from randomizer.Enums.Types import Types
 from randomizer.Lists.ShufflableExit import ShufflableExits
 from randomizer.LogicClasses import TransitionFront
 from randomizer.Settings import Settings
-from randomizer.Patching.Library.Generic import IsItemSelected
+from randomizer.Patching.Library.Generic import IsDDMSSelected, IsItemSelected, MEDAL_PROGRESSIVE_RATIOS
 
 # Used when level order rando is ON
 LobbyEntrancePool = [
@@ -211,7 +211,7 @@ def AssumeExits(spoiler, frontpool, backpool, newpool):
         exit.shuffledId = None
         exit.toBeShuffled = True
         # 2) Attach to root of world (DK Isles)
-        newExit = TransitionFront(exit.back.regionId, lambda l: True, exitId, True)
+        newExit = TransitionFront(exit.back.regionId, lambda _: True, exitId, True)
         AddRootExit(spoiler, newExit)
 
 
@@ -229,10 +229,29 @@ def ShuffleExits(spoiler):
             new_level_order = GenerateLevelOrderUnrestricted(settings)
         ShuffleLevelExits(settings, newLevelOrder=new_level_order)
         if settings.alter_switch_allocation:
-            allocation = [1, 1, 1, 1, 2, 2, 3, 3]
+            allocation = [
+                settings.prog_slam_level_1,
+                settings.prog_slam_level_2,
+                settings.prog_slam_level_3,
+                settings.prog_slam_level_4,
+                settings.prog_slam_level_5,
+                settings.prog_slam_level_6,
+                settings.prog_slam_level_7,
+                settings.prog_slam_level_8,
+            ]
             for x in range(8):
                 level = settings.level_order[x + 1]
                 settings.switch_allocation[level] = allocation[x]
+        if settings.cb_medal_behavior_new == CBRequirement.progressive:
+            ratios = MEDAL_PROGRESSIVE_RATIOS.copy()
+            if not IsItemSelected(settings.cb_rando_enabled, settings.cb_rando_list_selected, Levels.DKIsles):
+                ratios[6] = 1
+            allocation = [int(settings.medal_cb_req * x) for x in ratios]
+            # ensures that progressive will never set a 0 for CB medal which would fuck logic
+            allocation = [max(1, cb_req) for cb_req in allocation]
+            for x in range(8):
+                level = settings.level_order[x + 1]
+                settings.medal_cb_req_level[level] = allocation[x]
         if settings.crown_enemy_difficulty == CrownEnemyDifficulty.progressive:
             # There's 4 levels of easy, 2 of medium, 2 of hard
             # Both Isles crowns will be a random difficulty.
@@ -560,8 +579,7 @@ def GenerateLevelOrderForMultipleStartingKongs(settings: Settings):
                     if lankyAccessible:
                         guitarDoorAccess = (
                             Kongs.diddy in settings.starting_kong_list
-                            or IsItemSelected(
-                                settings.remove_barriers_enabled,
+                            or IsDDMSSelected(
                                 settings.remove_barriers_selected,
                                 RemovedBarriersSelected.aztec_tunnel_door,
                             )

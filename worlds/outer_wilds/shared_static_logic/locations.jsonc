@@ -1746,6 +1746,16 @@
         "category": "dlc", "address": null, "name": "Victory - Echoes of the Eye",
         "region": "Sealed Vault", "requires": []
     },
+    {
+        "category": "base", "address": null, "name": "Victory - Song of the Universe",
+        "region": "The Vessel",
+        "requires": [
+            { "item": "Warp Core Installation Manual" },
+            { "item": "Coordinates" },
+            { "region": "Ash Twin Interior" }
+            // More logic is added dynamically
+        ]
+    },
 
 // Hearth's Neighbor Story Mod Default Locations
 // These location ids start at 1085042000 (i.e. rounding up to the next thousand),

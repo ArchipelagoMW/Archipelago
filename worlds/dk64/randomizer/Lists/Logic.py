@@ -19,10 +19,6 @@ GlitchSelector = []
 # If you make changes to this list, make sure to change the corresponding
 # GlitchesSelected enum in randomizer.Enums.Settings.
 GlitchLogicItems = [
-    GlitchLogicItem(
-        "Advanced Platforming",
-        "Platforming techniques that don't require any glitches but might be too tough for some players.",
-    ),
     GlitchLogicItem("B Locker Skips", "Any skip that allows you to bypass the B. Locker's requirements."),
     GlitchLogicItem(
         "General Clips",
@@ -56,3 +52,14 @@ GlitchLogicItems = [
 for item in GlitchLogicItems:
     if item.name != "No Group":
         GlitchSelector.append({"name": item.name, "value": item.shorthand, "tooltip": item.tooltip})
+
+TrickSelector = []
+TrickItems = [
+    GlitchLogicItem("Advanced Grenading", "Advanced techniques using oranges."),
+    GlitchLogicItem("Monkey Maneuvers", "Advanced platforming techniques that aren't considered beginner friendly will be considered as part of logic."),
+    GlitchLogicItem("Hard Shooting", "Doing gun shooting tasks without items that make the task easy will be considered in logic."),
+    GlitchLogicItem("Slope Resets", "Can use the Kong's techniques to climb a slippery slope without Orangstand."),
+]
+for item in TrickItems:
+    if item.name != "No Group":
+        TrickSelector.append({"name": item.name, "value": item.shorthand, "tooltip": item.tooltip})

@@ -7,7 +7,7 @@ class TestHN1(OuterWildsTestBase):
     }
 
     def test_hn1(self):
-        self.assertEqual(self.getLocationCount(), 109)  # 87(+2V) base game + 20 HN1 locations
+        self.assertEqual(self.getLocationCount(), 110)  # 87(+3V) base game + 20 HN1 locations
 
 
 class TestHN1Logsanity(OuterWildsTestBase):
@@ -17,9 +17,9 @@ class TestHN1Logsanity(OuterWildsTestBase):
     }
 
     def test_hn1_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 20 HN1 default locations + 41 HN1 logsanity locations
-        self.assertEqual(self.getLocationCount(), 326)
+        self.assertEqual(self.getLocationCount(), 327)
 
 
 class TestOutsider(OuterWildsTestBase):
@@ -28,7 +28,7 @@ class TestOutsider(OuterWildsTestBase):
     }
 
     def test_outsider(self):
-        self.assertEqual(self.getLocationCount(), 110)  # 87(+2V) base game + 21 TO locations
+        self.assertEqual(self.getLocationCount(), 111)  # 87(+3V) base game + 21 TO locations
 
 
 class TestOutsiderLogsanity(OuterWildsTestBase):
@@ -38,9 +38,9 @@ class TestOutsiderLogsanity(OuterWildsTestBase):
     }
 
     def test_outsider_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 21 TO default locations + 44 TO logsanity locations
-        self.assertEqual(self.getLocationCount(), 330)
+        self.assertEqual(self.getLocationCount(), 331)
 
 
 class TestAC(OuterWildsTestBase):
@@ -49,7 +49,7 @@ class TestAC(OuterWildsTestBase):
     }
 
     def test_ac(self):
-        self.assertEqual(self.getLocationCount(), 110)  # 87(+2V) base game + 21 AC locations
+        self.assertEqual(self.getLocationCount(), 111)  # 87(+3V) base game + 21 AC locations
 
 
 class TestACLogsanity(OuterWildsTestBase):
@@ -59,9 +59,9 @@ class TestACLogsanity(OuterWildsTestBase):
     }
 
     def test_ac_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 21 AC default locations + 39 AC logsanity locations
-        self.assertEqual(self.getLocationCount(), 325)
+        self.assertEqual(self.getLocationCount(), 326)
 
 
 class TestHN2(OuterWildsTestBase):
@@ -70,7 +70,7 @@ class TestHN2(OuterWildsTestBase):
     }
 
     def test_hn2(self):
-        self.assertEqual(self.getLocationCount(), 107)  # 87(+2V) base game + 18 HN2 locations
+        self.assertEqual(self.getLocationCount(), 108)  # 87(+3V) base game + 18 HN2 locations
 
 
 class TestHN2Logsanity(OuterWildsTestBase):
@@ -80,9 +80,9 @@ class TestHN2Logsanity(OuterWildsTestBase):
     }
 
     def test_hn2_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 18 HN2 default locations + 30 HN2 logsanity locations
-        self.assertEqual(self.getLocationCount(), 313)
+        self.assertEqual(self.getLocationCount(), 314)
 
 
 class TestFQ(OuterWildsTestBase):
@@ -91,7 +91,7 @@ class TestFQ(OuterWildsTestBase):
     }
 
     def test_fq(self):
-        self.assertEqual(self.getLocationCount(), 107)  # 87(+2V) base game + 18 FQ locations
+        self.assertEqual(self.getLocationCount(), 108)  # 87(+3V) base game + 18 FQ locations
 
 
 class TestFQLogsanity(OuterWildsTestBase):
@@ -101,9 +101,9 @@ class TestFQLogsanity(OuterWildsTestBase):
     }
 
     def test_fq_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 18 FQ default locations + 38 FQ logsanity locations
-        self.assertEqual(self.getLocationCount(), 321)
+        self.assertEqual(self.getLocationCount(), 322)
 
 
 class TestFC(OuterWildsTestBase):
@@ -112,7 +112,7 @@ class TestFC(OuterWildsTestBase):
     }
 
     def test_fc(self):
-        self.assertEqual(self.getLocationCount(), 143)  # 87(+2V) base game + 54 FC locations
+        self.assertEqual(self.getLocationCount(), 144)  # 87(+3V) base game + 54 FC locations
 
 
 class TestFCLogsanity(OuterWildsTestBase):
@@ -122,9 +122,9 @@ class TestFCLogsanity(OuterWildsTestBase):
     }
 
     def test_fc_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 54 FC default locations + 118 FC logsanity locations
-        self.assertEqual(self.getLocationCount(), 437)
+        self.assertEqual(self.getLocationCount(), 438)
 
 
 class TestEH(OuterWildsTestBase):
@@ -133,7 +133,7 @@ class TestEH(OuterWildsTestBase):
     }
 
     def test_eh(self):
-        self.assertEqual(self.getLocationCount(), 92)  # 87(+2V) base game + 3 EH locations
+        self.assertEqual(self.getLocationCount(), 93)  # 87(+3V) base game + 3 EH locations
 
 
 class TestEHLogsanity(OuterWildsTestBase):
@@ -143,9 +143,9 @@ class TestEHLogsanity(OuterWildsTestBase):
     }
 
     def test_eh_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 3 EH default locations + 8 EH logsanity locations
-        self.assertEqual(self.getLocationCount(), 276)
+        self.assertEqual(self.getLocationCount(), 277)
 
 
 class TestAllMods(OuterWildsTestBase):
@@ -160,7 +160,7 @@ class TestAllMods(OuterWildsTestBase):
     }
 
     def test_all_mods(self):
-        # 87(+2V) base game default locations +
+        # 87(+3V) base game default locations +
         # 20 HN1 default locations +
         # 21 TO default locations +
         # 21 AC locations +
@@ -168,7 +168,7 @@ class TestAllMods(OuterWildsTestBase):
         # 18 FQ default locations +
         # 54 FC default locations +
         # 3 EH default locations
-        self.assertEqual(self.getLocationCount(), 244)
+        self.assertEqual(self.getLocationCount(), 245)
 
 
 class TestAllModsLogsanity(OuterWildsTestBase):
@@ -184,7 +184,7 @@ class TestAllModsLogsanity(OuterWildsTestBase):
     }
 
     def test_all_mods_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 20 HN1 default locations + 41 HN1 logsanity locations +
         # 21 TO default locations + 44 TO logsanity locations +
         # 21 AC default locations + 39 AC logsanity locations +
@@ -192,7 +192,7 @@ class TestAllModsLogsanity(OuterWildsTestBase):
         # 18 FQ default locations + 38 FQ logsanity locations +
         # 54 FC default locations + 118 FC logsanity locations +
         # 3 EH default locations + 8 EH logsanity locations
-        self.assertEqual(self.getLocationCount(), 738)
+        self.assertEqual(self.getLocationCount(), 739)
 
 
 # this is just to get an assertion on the maximum possible location count
@@ -210,7 +210,7 @@ class TestAllModsAndDLCLogsanity(OuterWildsTestBase):
     }
 
     def test_all_mods_and_dlc_logsanity(self):
-        # 87(+2V) base game default locations + 176 base game logsanity locations +
+        # 87(+3V) base game default locations + 176 base game logsanity locations +
         # 34(+4V) DLC default locations + 72 DLC logsanity locations +
         # 20 HN1 default locations + 41 HN1 logsanity locations +
         # 21 TO default locations + 44 TO logsanity locations +
@@ -219,7 +219,7 @@ class TestAllModsAndDLCLogsanity(OuterWildsTestBase):
         # 18 FQ default locations + 38 FQ logsanity locations +
         # 54 FC default locations + 118 FC logsanity locations
         # 3 EH default locations + 8 EH logsanity locations
-        self.assertEqual(self.getLocationCount(), 848)
+        self.assertEqual(self.getLocationCount(), 849)
 
 
 class RegressionTestACAndWarpRando(OuterWildsTestBase):
@@ -234,3 +234,32 @@ class RegressionTestACAndWarpRando(OuterWildsTestBase):
 
     def world_setup(self, *args, **kwargs):
         super().world_setup(self.seed)
+
+
+class TestSongOfTheUniverseMinContentZeroFriends(OuterWildsTestBase):
+    options = {
+        "song_of_the_universe": 1,
+        "required_friends": 0,
+    }
+
+
+class TestSongOfTheUniverseMinContentMaxFriends(OuterWildsTestBase):
+    options = {
+        "song_of_the_universe": 1,
+        "required_friends": 1,
+    }
+
+
+class TestSongOfTheUniverseMaxContentMaxFriends(OuterWildsTestBase):
+    options = {
+        "song_of_the_universe": 1,
+        "required_friends": 9,
+        "enable_eote_dlc": 1,
+        "enable_hn1_mod": 1,
+        "enable_outsider_mod": 1,
+        "enable_ac_mod": 1,
+        "enable_hn2_mod": 1,
+        "enable_fq_mod": 1,
+        "enable_fc_mod": 1,
+        "enable_eh_mod": 1,
+    }

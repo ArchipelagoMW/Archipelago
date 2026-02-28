@@ -217,7 +217,7 @@
 ### Four Island
 + Four Island Pokemon Center
 + Four Island Pokemon Day Care
-+ Four Island Move Tutor's House
++ Move Tutor's House
 + Lorelei's House
 + Sticker Man's House
 + Four Island Harbor

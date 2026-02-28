@@ -11,3 +11,5 @@ class SwitchType(IntEnum):
     InstrumentPad = auto()
     SlamSwitch = auto()
     MiscActivator = auto()
+    PushableButton = auto()
+    GunInstrumentCombo = auto()

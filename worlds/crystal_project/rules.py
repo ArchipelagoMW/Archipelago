@@ -1,7 +1,7 @@
 from BaseClasses import CollectionState
 from .constants.display_regions import *
 from .constants.item_groups import *
-from .constants.jobs import SCHOLAR_JOB
+from .constants.jobs import *
 from .constants.key_items import *
 from .constants.keys import *
 from .constants.level_requirements import *
@@ -11,7 +11,6 @@ from .constants.scholar_abilities import REVERSE_POLARITY
 from .constants.teleport_stones import *
 from .items import singleton_keys
 from .options import CrystalProjectOptions
-
 
 class CrystalProjectLogic:
     player: int
@@ -32,6 +31,11 @@ class CrystalProjectLogic:
 
         #subtract starting jobs
         return count - self.get_starting_job_count()
+
+    def has_a_caster(self, state: CollectionState) -> bool:
+        return (state.has(CLERIC_JOB, self.player) or state.has(WIZARD_JOB, self.player)
+            or state.has(WARLOCK_JOB, self.player) or state.has(SHAMAN_JOB, self.player)
+            or state.has(SCHOLAR_JOB, self.player) or state.has(DERVISH_JOB, self.player))
 
     def get_starting_job_count(self):
         if self.options.job_rando.value == self.options.job_rando.option_full:

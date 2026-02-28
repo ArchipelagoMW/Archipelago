@@ -1,6 +1,12 @@
 # Changelog
 Versions are sorted in ascending order, i.e. the most recent changes are at the top.
 
+## 0.99.5 (Hexagonal update)
+
+- Added the hexagonal shape configuration
+- Fixed milestone counts of more than 8 always crashing multiworld generation
+- Fixed manual-like client not allowing to check operator levels over 100
+
 ## 0.99.4 (Who's that pokémon? update)
 
 - Fixed bad copy-pasting of the scenario preset file content

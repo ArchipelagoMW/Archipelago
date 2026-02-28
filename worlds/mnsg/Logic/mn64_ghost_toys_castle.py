@@ -351,6 +351,10 @@ LogicRegions = {
                 flag_id=0x00CE,
                 instance_id=0x19,
             ),
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x190B, instance_id=0x15),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x190C, instance_id=0x16),
+            MN64LocationLogic("Pot 3", lambda l: True, MN64Items.POT, flag_id=0x190D, instance_id=0x17),
+            MN64LocationLogic("Pot 4", lambda l: True, MN64Items.POT, flag_id=0x190E, instance_id=0x18),
         ],
         exits=[
             MN64TransitionFront("GhostToysCastlePlatformRoom", lambda l: True, type=MN64DoorType.DOOR),
@@ -748,7 +752,11 @@ LogicRegions = {
         name="Ghost Toys Castle Three Pot Room",
         hint_name=MN64HintRegion.GHOST_TOYS_CASTLE,
         level=MN64Levels.GHOST_TOYS_CASTLE,
-        locations=[],
+        locations=[
+            MN64LocationLogic("Pot 1", lambda l: True, MN64Items.POT, flag_id=0x1963, instance_id=3),
+            MN64LocationLogic("Pot 2", lambda l: True, MN64Items.POT, flag_id=0x1964, instance_id=4),
+            MN64LocationLogic("Pot 3", lambda l: True, MN64Items.POT, flag_id=0x1965, instance_id=5),
+        ],
         exits=[
             MN64TransitionFront("GhostToysCastleJumpRope", lambda l: True, type=MN64DoorType.DOOR),
         ],

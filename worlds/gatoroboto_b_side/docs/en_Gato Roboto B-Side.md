@@ -1,34 +1,22 @@
 # Gato Roboto
 
+## What is this game?
+It is a very action focused metroid-like, where you control a little cat in a mechsuit.  
+A lot of the fun comes from the unique abilities, which work similar to those from metroid, but add unique additional effects, like rockets allowing for rocket jump and spin jump allowing for pogos.  
+Additionally, some glitches give you unique transformation, allowing you to travere the game in an entirely unique way!
+
+## What unlockables get randomized?
+- Upgrades 
+  - Abilities like Spinjump
+  - Health upgrades
+- VHS (Collectibles)
+- The shop items
+- Events (The progression in each world)
+  - Dropping water levels in aqueducts
+  - Cooling the lava in heater core
+  - Fixing the vents in ventilation
+
 ## Where is the options page?
 
-Visit the [options page for this game](../player-options) to generate a YAML file.
-
-## What does randomization do to this game?
-
-Currently the randomizer supports item and event randomization. There are also options to include skips and/or sequence breaks, such as **Rocket Jumping**, to vary the logic.
-
-The default goal is to **Defeat Gary**, which is identical to the vanilla experience. No other goals exist currently, but future plans include **All Cartridges** and **100%** as alternative and longer gameplay experiences.
-
-## What items and locations get randomized?
-
-By default, all of the following are randomized:
-- Healthkits
-- Cartridges
-- Upgrade Modules
-- Progressive Events (Aqueducts' Treadmills, Heater Core's Hotboys and Heater Tubes, Ventilation's Buttons)
-- Rebba's Shop
-
-A future update will enable options to disable shuffling of these individual item groups.
-
-Visit the [options page](../player-options) for a comprehensive list of items and locations and what changes you can make to the game.
-
-## What other changes are made to the game?
-
-A few quality of life improvements have been made to the base game:
-- A single save slot exists to contain the AP save, to avoid save file issues.
-- Starting a new game now places Kiki directly in the mech room, allowing the player immediate access to the mech suit.
-- Tutorial dialogs (intro, swimming, mech, etc.) have been removed.
-- Warps have been added to the pause menu, allowing players to warp to any area they've previously been to.
-- All collectible item sprites have been replaced with the AP icon.
-- WARNING: USE WITH CAUTION. Press F12 to enable/disable the debug menu in the pause menu rotation. Keys 1-9 can also be used to increment the debug menu options.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
+config file.

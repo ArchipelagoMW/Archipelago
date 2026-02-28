@@ -44,10 +44,10 @@ def connect_regions(world: GatoRobotoWorld) -> None:
     nexus.connect(landing_site, "Zu Landing Site")
     nexus.connect(aqueducts, "Zu Aqueducts")
     nexus.connect(heater_core, "Zu Heater Core")
-    if world.options.unlock_all_warps:
+    '''if world.options.unlock_all_warps:
         nexus.connect(ventilation, "Zu Ventilation")
-    else:
-        heater_core.connect(ventilation, "Zu Ventilation")
+    else:'''
+    heater_core.connect(ventilation, "Zu Ventilation")
     nexus.connect(incubator, "Zu Incubator")
 
     #overworld.connect(top_left_room, "Overworld to Top Left Room", lambda state: state.has("Key", world.player))

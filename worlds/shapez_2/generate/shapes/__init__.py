@@ -46,6 +46,10 @@ class Processor(enum.IntEnum):
                 poss.remove(cls.CUTTER)
         # if cls.STACKER in poss:
         #     poss.extend([cls.STACKER] * (len(poss) // 4))
+        if not poss:
+            raise Exception("active "+(",".join(p.name for p in active))+
+                            "\npossible "+(",".join(p.name for p in possible))+
+                            "\nposs "+(",".join(p.name for p in poss)))
         active.append(random.choice(poss))
 
     @classmethod
@@ -72,8 +76,10 @@ class ShapeBuilder:
         self.processors = processors
         self.tasked = tasked
         self.has_crystals = False
-        self.blueprint: list[tuple[int, bool, dict[str, str | Sequence[str] | int]]] = []
+        self.blueprint: list[tuple[int, bool, dict[str, str | int | Sequence[str | int]]]] = []
         self.cached_tasks: list[list[bool]] = []
+        self.unrotated: int | None = None  # starts at user pov as 0, going clockwise
+        self.splits: int = 0  # bitflag, b1 is vertical, b10 is slash, b100 is backslash
         # blueprint data naming conventions:
         #   part = "Cu"
         #   shape = "C"
@@ -82,13 +88,17 @@ class ShapeBuilder:
         #   ordered = ["Cu", "Cu", "Cu", "Cu"] | ["C", "C", "C", "C"] | ["u", "u", "u", "u"]
         #   layer = "CuCuCuCu"
         #   subvariant = 1
+        #   direction = 0
+        #   directions = (2, 3, ...)
 
     def build(self) -> str:
         return ":".join(self.shape)
 
     def debug_string(self) -> str:
         return (f"[shape = {self.shape}, processors = {self.processors}, tasked = {self.tasked}, "
-                f"blueprint = {self.blueprint}]")
+                f"blueprint = {self.blueprint}, cached tasks = "
+                f"{''.join(str(int(t)) for l in self.cached_tasks for t in l)}, unrotated = {self.unrotated}, "
+                f"splits = {self.splits}]")
 
     def __contains__(self, item):
         return item in self.processors

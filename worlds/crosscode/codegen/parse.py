@@ -12,8 +12,9 @@ from .util import BASE_ID, RESERVED_ITEM_IDS, get_item_classification
 
 from ..types.items import ItemData, ProgressiveChainEntry, ProgressiveItemChain, ProgressiveItemChainSingle, ProgressiveItemChainMulti, ProgressiveItemSubchain, SingleItemData
 from ..types.locations import AccessInfo, Condition
-from ..types.regions import Goal, RegionConnection, RegionsData
-from ..types.condition import *
+from ..types.regions import RegionConnection, RegionsData
+from ..types.condition import AndCondition, ChestKeyCondition, ItemCondition, LocationCondition, NeverCondition, QuestCondition, RegionCondition, AnyElementCondition, \
+    OrCondition, ShopSlotCondition, VariableCondition
 
 class JsonParserError(Exception):
     """
@@ -114,10 +115,6 @@ class JsonParser:
             elif cond[0] == "var":
                 if num_args == 1:
                     result.append(VariableCondition(cond[1]))
-                elif num_args == 2:
-                    result.append(VariableEntryCondition(cond[1], cond[2], True))
-                elif num_args == 3:
-                    result.append(VariableEntryCondition(cond[1], cond[2], cond[3]))
                 else:
                     raise JsonParserError(
                         raw,
@@ -305,18 +302,7 @@ class JsonParser:
                 items=self.__parse_progressive_itemlist(raw_items),
             )
 
-    def parse_goal(self, raw: dict[str, typing.Any]) -> Goal:
-        if "region" not in raw:
-            raise JsonParserError(raw, None, "goal", "goals must have a source region")
 
-        region = raw["region"]
-
-        if "condition" not in raw or len(raw["condition"]) == 0:
-            condition = None
-        else:
-            condition = self.parse_condition(raw["condition"])
-
-        return Goal(region, condition)
 
     def parse_region_connection(self, raw: dict[str, typing.Any]) -> RegionConnection:
         """
@@ -353,6 +339,13 @@ class JsonParser:
         if not isinstance(start, str):
             raise JsonParserError(raw, start, "regions data", "starting region must be a string")
 
+        if "goal" not in raw:
+            raise JsonParserError(raw, None, "regions data", "must have goal region")
+        goal = raw["goal"]
+
+        if not isinstance(goal, str):
+            raise JsonParserError(raw, goal, "regions data", "goal region must be a string")
+
         exclude = []
         if "exclude" in raw:
             exclude = raw["exclude"]
@@ -377,21 +370,11 @@ class JsonParser:
 
             connections.append(conn)
 
-        if "goals" not in raw:
-            raise JsonParserError(raw, None, "regions data", "must have goal region")
-
-        if not isinstance(raw["goals"], dict):
-            raise JsonParserError(raw, None, "regions data", "goals must be a dict")
-
-        goals = {}
-        for goal_name, goal in raw["goals"].items():
-            goals[goal_name] = self.parse_goal(goal)
-
         region_list = list(regions_seen)
 
         region_list.sort(key=lambda x: float(x.strip(string.ascii_letters)))
 
-        return RegionsData(start, exclude, region_list, connections, goals)
+        return RegionsData(start, goal, exclude, region_list, connections)
 
     def parse_regions_data_list(self, raw: dict[str, dict[str, typing.Any]]) -> dict[str, RegionsData]:
         """

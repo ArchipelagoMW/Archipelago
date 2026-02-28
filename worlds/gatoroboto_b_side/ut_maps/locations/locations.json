@@ -1,0 +1,278 @@
+[
+    {
+        "name": "Landing Site",
+        "children": [
+            {
+                "name": "Rocket (Landing Site-0814)", "sections": [
+                    { "name": "Rocket (Landing Site-0814)"}
+                ],
+                "map_locations": [{"map": "Landing Site", "x": 1680, "y": 1473}]
+            },
+            {
+                "name": "Health Upgrade (Landing Site-0408)", "sections": [
+                    { "name": "Health Upgrade (Landing Site-0408)"}
+                ],
+                "map_locations": [{"map": "Landing Site", "x": 400, "y": 273}]
+            },
+            {
+                "name": "VHS (Landing Site-0710)", "sections": [
+                    { "name": "VHS (Landing Site-0710)"}
+                ],
+                "map_locations": [{"map": "Landing Site", "x": 1424, "y": 689}]
+            },
+            {
+                "name": "Decoder (Landing Site-0807)", "sections": [
+                    { "name": "Decoder (Landing Site-0807)"}
+                ],
+                "map_locations": [{"map": "Landing Site", "x": 1584, "y": 129}]
+            },
+            {
+                "name": "VHS (Landing Site-1810)", "sections": [
+                    { "name": "VHS (Landing Site-1810)"}
+                ],
+                "map_locations": [{"map": "Landing Site", "x": 4736, "y": 673}]
+            },
+            {
+                "name": "Health Upgrade (Landing Site-1812)", "sections": [
+                    { "name": "Health Upgrade (Landing Site-1812)"}
+                ],
+                "map_locations": [{"map": "Landing Site", "x": 4752, "y": 1057}]
+            }
+        ]
+    },
+
+    {
+        "name": "Nexus",
+        "children": [
+            {
+                "name": "VHS (Nexus-0914)", "sections": [
+                    { "name": "VHS (Nexus-0914)"}
+                ],
+                "map_locations": [{"map": "Nexus", "x": 80, "y": 1089}]
+            },
+            {
+                "name": "Health Upgrade (Nexus-1014)", "sections": [
+                    { "name": "Health Upgrade (Nexus-1014)"}
+                ],
+                "map_locations": [{"map": "Nexus", "x": 384, "y": 1041}]
+            },
+            {
+                "name": "VHS (Nexus-1413)", "sections": [
+                    { "name": "VHS (Nexus-1413)"}
+                ],
+                "map_locations": [{"map": "Nexus", "x": 1760, "y": 897}]
+            },
+            {
+                "name": "VHS (Nexus-2113)", "sections": [
+                    { "name": "VHS (Nexus-2113)"}
+                ],
+                "map_locations": [{"map": "Nexus", "x": 3808, "y": 897}]
+            },
+            {
+                "name": "Health Upgrade (Nexus-2314)", "sections": [
+                    { "name": "Health Upgrade (Nexus-2314)"}
+                ],
+                "map_locations": [{"map": "Nexus", "x": 4400, "y": 1089}]
+            },
+            {
+                "name": "Rebba quest (Nexus-1716)", "sections": [
+                    { "name": "Rebba quest 1 (Nexus-1716)"},
+                    { "name": "Rebba quest 2 (Nexus-1716)"}
+                ],
+                "map_locations": [{"map": "Nexus", "x": 2536, "y": 1490}]
+            }
+        ]
+    },
+
+    {
+        "name": "Aqueducts",
+        "children": [
+            {
+                "name": "Water Level (Aqueducts-0204)", "sections": [
+                    { "name": "Water Level (Aqueducts-0204)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 760, "y": 312}]
+            },
+            {
+                "name": "Health Upgrade (Aqueducts-0406)", "sections": [
+                    { "name": "Health Upgrade (Aqueducts-0406)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 1440, "y": 689}]
+            },
+            {
+                "name": "VHS (Aqueducts-0707)", "sections": [
+                    { "name": "VHS (Aqueducts-0707)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 2192, "y": 897}]
+            },
+            {
+                "name": "VHS (Aqueducts-1106)", "sections": [
+                    { "name": "VHS (Aqueducts-1106)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 3488, "y": 657}]
+            },
+            {
+                "name": "Water Level (Aqueducts-1603)", "sections": [
+                    { "name": "Water Level (Aqueducts-1603)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 4616, "y": 120}]
+            },
+            {
+                "name": "Health Upgrade (Aqueducts-1606)", "sections": [
+                    { "name": "Health Upgrade (Aqueducts-1606)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 5088, "y": 705}]
+            },
+            {
+                "name": "Water Level (Aqueducts-1908)", "sections": [
+                    { "name": "Water Level (Aqueducts-1908)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 5832, "y": 1128}]
+            },
+            {
+                "name": "VHS (Aqueducts-2106)", "sections": [
+                    { "name": "VHS (Aqueducts-2106)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 6576, "y": 625}]
+            },
+            {
+                "name": "Spin Jump (Aqueducts-2410)", "sections": [
+                    { "name": "Spin Jump (Aqueducts-2410)"}
+                ],
+                "map_locations": [{"map": "Aqueducts", "x": 7520, "y": 1473}]
+            }
+        ]
+    },
+
+    {
+        "name": "Heater Core",
+        "children": [
+            {
+                "name": "Lava Cooled (Heater Core-0015)", "sections": [
+                    { "name": "Lava Cooled (Heater Core-0015)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 141, "y": 492}]
+            },
+            {
+                "name": "Hotboy 1 (Heater Core-0019)", "sections": [
+                    { "name": "Hotboy 1 (Heater Core-0019)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 62, "y": 1475}]
+            },
+            {
+                "name": "Hotboy 2 (Heater Core-0313)", "sections": [
+                    { "name": "Hotboy 2 (Heater Core-0313)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 1154, "y": 318}]
+            },
+            {
+                "name": "Cooler (Heater Core-0113)", "sections": [
+                    { "name": "Cooler (Heater Core-0113)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 400, "y": 305}]
+            },
+            {
+                "name": "VHS (Heater Core-0414)", "sections": [
+                    { "name": "VHS (Heater Core-0414)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 1328, "y": 465}]
+            },
+            {
+                "name": "Health Upgrade (Heater Core-0417)", "sections": [
+                    { "name": "Health Upgrade (Heater Core-0417)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 1440, "y": 1089}]
+            },
+            {
+                "name": "Dash (Heater Core-1114)", "sections": [
+                    { "name": "Dash (Heater Core-1114)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 3456, "y": 449}]
+            },
+            {
+                "name": "VHS (Heater Core-1318)", "sections": [
+                    { "name": "VHS (Heater Core-1318)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 4048, "y": 1441}]
+            },
+            {
+                "name": "Health Upgrade (Heater Core-1713)", "sections": [
+                    { "name": "Health Upgrade (Heater Core-1713)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 5408, "y": 321}]
+            },
+            {
+                "name": "VHS (Heater Core-1916)", "sections": [
+                    { "name": "VHS (Heater Core-1916)"}
+                ],
+                "map_locations": [{"map": "Heater Core", "x": 5872, "y": 881}]
+            }
+        ]
+    },
+
+    {
+        "name": "Ventilation",
+        "children": [
+            {
+                "name": "Vent Level (Ventilation-0521)", "sections": [
+                    { "name": "Vent Level (Ventilation-0521)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 720, "y": 1865}]
+            },
+            {
+                "name": "VHS (Ventilation-0517)", "sections": [
+                    { "name": "VHS (Ventilation-0517)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 736, "y": 1057}]
+            },
+            {
+                "name": "Health Upgrade (Ventilation-0815)", "sections": [
+                    { "name": "Health Upgrade (Ventilation-0815)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 1584, "y": 705}]
+            },
+            {
+                "name": "Vent Level (Ventilation-1113)", "sections": [
+                    { "name": "Vent Level (Ventilation-1113)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 2656, "y": 88}]
+            },
+            {
+                "name": "Vent Level (Ventilation-1122)", "sections": [
+                    { "name": "Vent Level (Ventilation-1122)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 2592, "y": 2056}]
+            },
+            {
+                "name": "VHS (Ventilation-1613)", "sections": [
+                    { "name": "VHS (Ventilation-1613)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 4192, "y": 225}]
+            },
+            {
+                "name": "Bigshot (Ventilation-1718)", "sections": [
+                    { "name": "Bigshot (Ventilation-1718)"}
+                ],
+                "map_locations": [{"map": "Ventilation", "x": 4448, "y": 1249}]
+            }
+        ]
+    },
+
+    {
+        "name": "Incubator",
+        "children": [
+            {
+                "name": "Health Upgrade (Incubator-2413)", "sections": [
+                    { "name": "Health Upgrade (Incubator-2413)"}
+                ],
+                "map_locations": [{"map": "Incubator", "x": 4944, "y": 321}]
+            },
+            {
+                "name": "VHS (Incubator-1513)", "sections": [
+                    { "name": "VHS (Incubator-1513)"}
+                ],
+                "map_locations": [{"map": "Incubator", "x": 2272, "y": 257}]
+            }
+        ]
+    }
+]

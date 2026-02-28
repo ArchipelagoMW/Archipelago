@@ -1,45 +1,39 @@
-# Gato Roboto Randomizer Setup Guide
+# Gato Roboto B-Side Randomizer Setup Guide
 
 ## Required Software
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+- The game (Gato Roboto)
 
-- Gato Roboto: [Steam Store](https://store.steampowered.com/app/391540)
-- Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-
-## First Time Setup
-
->Gato Roboto Archipelago **does not** overwrite vanilla saves, but you may wish to create a backup as a precaution.
-
-Open the Archipelago Launcher and start the `Gato Roboto Client` from the clients list, and input 
-`/auto_patch <Your Gato Roboto Install Directory>` in the command line at the bottom of the client. 
-
-The default directory is located at `C:\Program Files\Steam\steamapps\common\Gato Roboto` or 
-`C:\Program Files (x86)\Steam\steamapps\common\Gato Roboto`, but it can change depending on your installation. 
-Navigate to your Steam library, right-click on Gato Roboto, and select `Manage -> Browse local files` to view your 
-install directory.
-
-After the `/auto_patch` command fires, your installation of Gato Roboto will be updated to the Archipelago version. You can open it through Steam as normal.
-
->Any major updates to the APWorld will require you to re-patch the game.
-
-## Connecting to a Multi-World Server
-
-Make sure both Gato Roboto and its client are running.
-
-In the top text box of the client, enter the `IP Address` (or `Hostname`) and `Port` separated with a `:` symbol. (Ex. `archipelago.gg:38281`)
-
-You will then be prompted for the slot name to connect to. Input your slot name chosen during YAML creation in the 
-command line at the bottom of the client.
-
-## Playing the Game
-
-When the client console tells you that you have joined the room, you're all set. Congratulations on successfully joining
-a multi-world game!
-
-## Reverting Changes
-
-When you would like to revert any AP changes to Gato Roboto, you can input `/unpatch` in the command line of the client.
-This will provide a vanilla installation and remove any existing related AP files.
-
-## Where do I get a YAML file?
-
-You can generate a YAML file by visiting the [Gato Roboto Player Options Page](/games/Gato Roboto/player-options).
+## Installation
+### Archipelago install
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer file is located in the assets section at the bottom of the version information.**
+2. Make sure it properly installs (due to emulator modding tools some anti-viruses try to prevent you from installing it)
+3. Use the "Archipelago Launcher" whenever you are prompted to use a "Launcher" here!
+### APWorld install
+1. Get the apworld (.apworld file) in the [releases](https://github.com/Nitroxyz/Gato-Roboto-B-Side-Archipelago/releases/latest)  
+2. Then install the apworld into the archipelago Launcher (you can double-click the .apworld anywhere on your pc it if you have the Launcher installed)  
+3. If it prompts you with an "apworld installed" dialogue box, then you successfully installed it!
+### Generate and host a game
+*Only one person needs to do this process if you are playing together*  
+1. Generate the default option template by opening up the Launcher, the selecting the box "Generate Template Options" 
+2. A folder will open, which gives you the default template for each game installed. Find the one for "Gato Roboto B-Side"
+3. Customize your options. Make sure to give yourself a unique for the slot name first! For any option you don't want, set them to 0 and set at least one to a value greater than 0. I recommend keeping (progression_balancing => 50:50) and (accessibility => full:50)
+4. In the root of the folder, where you generate the templates (a folder called `Players`), put one yaml for each individual player who is playing a game (one for a solo game).
+5. In the Launcher, select the box "Generate". If a command window opens and closes, then the generation was successful
+6. You can find the generated multiworld inside of `output` folder (go one path down from `Players`), then you will find it
+7. Go to the Archipelago website and go to the [host game](https://archipelago.gg/uploads) tab. Select the zip file inside of the output folder and pass it to the website
+8. Select "Start a new room"
+9. Success! You now hosted a new multiworld! Keep the link to the website you are on (which is your room) and whenever you have it open, your multiroom is active! 
+10. Note the ``archipelago:XXXXX`` (with specific number)! You need this in the next step!
+### Start the client and patch the game
+1. If you have the apworld installed, you should be able to find a "Gato Roboto B-Side Client" box in the Launcher.
+2. When you open it you get a Text client
+3. At the top you need to input the ``archipelago:XXXXX`` thing from the multiworld and press the "connect" button
+4. Inside the Text client, it now prompts you to input your slot name. This is the name you made inside the yaml for your game
+5. Once you connected, it will return a "Client connected" prompt and you might see all the items being sent by other players already
+6. You need to patch the game by typing ``/auto_patch`` into your Text client. If your game is in a different location than your steam directory, you will have to add the file path after the command.
+7. Once you did that successfully, you can open up the game!
+8. Keep in mind that you only need to patch once!
+9. When you are inside of the game, you can confirm that you have correctly installed the mod by seeing only one savefile
+10. Make sure to delete your current savefile if you played a different randomizer before!
+11. If you manage to enter the game, you successfully connected the client!

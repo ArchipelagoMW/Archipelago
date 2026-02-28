@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from BaseClasses import ItemClassification, Location
+from BaseClasses import ItemClassification, Location, LocationProgressType
 
 from . import items
+from worlds.generic.Rules import forbid_item
 
 if TYPE_CHECKING:
     from .world import GatoRobotoWorld
@@ -87,6 +88,8 @@ def create_regular_locations(world: GatoRobotoWorld) -> None:
     ventilation.add_locations(get_location_names_with_ids(ventilation_list), GatoRobotoLocation)
     incubator.add_locations(get_location_names_with_ids(incubator_list), GatoRobotoLocation)
 
+    forbid_item(world.get_location("Rebba quest 2 (Nexus-1716)"), "Rocket", world.player)
+
 def create_events(world: GatoRobotoWorld) -> None:
     nexus = world.get_region("Nexus")
     ventilation = world.get_region("Ventilation")
@@ -94,8 +97,11 @@ def create_events(world: GatoRobotoWorld) -> None:
 
     nexus.add_event("Completed all areas (Nexus)", "<Completed all areas>", location_type=GatoRobotoLocation, item_type=items.GatoRobotoItem, show_in_spoiler=False)
 
+    ventilation.add_event("RightSide entry (Ventilation)", "<RightSide entry>", location_type=GatoRobotoLocation, item_type=items.GatoRobotoItem, show_in_spoiler=False)
     if world.options.use_smallmech:
         ventilation.add_event("Smallmech entry (Ventilation)", "<Smallmech entry>", location_type=GatoRobotoLocation, item_type=items.GatoRobotoItem, show_in_spoiler=False)
+
+
 
     incubator.add_event("Victory", "Victory", location_type=GatoRobotoLocation, item_type=items.GatoRobotoItem, show_in_spoiler=False)
 

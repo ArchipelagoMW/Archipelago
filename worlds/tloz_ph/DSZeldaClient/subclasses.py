@@ -15,8 +15,8 @@ async def read_multiple(ctx, addresses, signed=False, keys=None) -> dict["Addres
         return {k: r for k, r in zip(keys, reads)}
     return {a: r for a, r in zip(addresses, reads)}
 
-async def write_multiple(ctx, addresses, values):
-    writes = [a.overwrite(ctx, v) for a, v in zip(addresses, values)]
+async def write_multiple(ctx, addresses: list["Address"], values: list[int]):
+    writes = [a.get_inner_write_list(v) for a, v in zip(addresses, values)]
     await bizhawk.write(ctx.bizhawk_ctx, writes)
 
 
@@ -33,10 +33,10 @@ async def get_address_from_heap(ctx, pointer, offset=0, size=4) -> "Address":
     m_course = 0
     while m_course == 0:
         m_course = await pointer.read(ctx)
-    m_course = AddrFromPointer(m_course - 0x02000000, size=4)
+    m_course = Address.from_pointer(m_course - 0x02000000, size=4)
     read = await m_course.read(ctx)
     print(f"Got map address @ {hex(read + offset - 0x02000000)}")
-    return AddrFromPointer(read + offset - 0x02000000, size=size)
+    return Address.from_pointer(read + offset - 0x02000000, size=size)
 
 def storage_key(ctx, key: str):
     return f"{key}_{ctx.slot}_{ctx.team}"
@@ -133,6 +133,7 @@ class Address:
         return await bizhawk.write(ctx.bizhawk_ctx, [(self.addr+offset, value, self.domain)])
 
     async def add(self, ctx, value: int, silent=False, offset=0):
+        silent=False
         prev = await self.read(ctx, silent=silent)
         return await self.overwrite(ctx, prev + value, silent=silent, offset=offset)
 
@@ -190,9 +191,20 @@ class Address:
     def __le__(self, other):
         return self.addr <= other
 
+    @classmethod
+    def pointer(cls, addr, name=""):
+        """Pointer from Data TCM"""
+        return cls(addr, addr, 4, "Data TCM", name)
+
+    @classmethod
+    def from_pointer(cls, addr, size=1, domain="Main RAM", name=""):
+        """When addresses are grabbed from pointers, the address is the same in all versions"""
+        return cls(addr, addr, size, domain, name)
+
 class Pointer(Address):
     """
     Pointer from Data TCM
+    work towards depreciating, it should have been a classmethod from the start
     """
 
     def __init__(self, addr, name=""):
@@ -202,6 +214,7 @@ class Pointer(Address):
 class AddrFromPointer(Address):
     """
     When addresses are grabbed from pointers, version doesn't matter.
+    work towards depreciating, it should have been a classmethod from the start
     """
 
     def __init__(self, addr, size=1, domain="Main RAM", name=""):

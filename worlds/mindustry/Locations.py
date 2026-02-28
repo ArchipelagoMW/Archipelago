@@ -518,525 +518,575 @@ class MindustryLocations:
     serpulo_tetrative_reconstructor = {
         "AP-S-05-42": MINDUSTRY_BASE_ID + 165,
     }
+
+
+    #serpulo_ground_zero = {
+    #    "Node Ground Zero": MINDUSTRY_BASE_ID + 180,
+    #}
     serpulo_frozen_forest = {
-        "Node Frozen Forest": MINDUSTRY_BASE_ID + 166,
+        "Node Frozen Forest": MINDUSTRY_BASE_ID + 181,
     }
     serpulo_the_craters = {
-        "Node The Craters": MINDUSTRY_BASE_ID + 167,
+        "Node The Craters": MINDUSTRY_BASE_ID + 182,
     }
     serpulo_ruinous_shores = {
-        "Node Ruinous Shores": MINDUSTRY_BASE_ID + 168,
+        "Node Ruinous Shores": MINDUSTRY_BASE_ID + 183,
     }
     serpulo_windswept_islands = {
-        "Node Windswept Islands": MINDUSTRY_BASE_ID + 169,
+        "Node Windswept Islands": MINDUSTRY_BASE_ID + 184,
     }
     serpulo_tar_fields = {
-        "Node Tar Fields": MINDUSTRY_BASE_ID + 170,
+        "Node Tar Fields": MINDUSTRY_BASE_ID + 185,
     }
     serpulo_impact_0078 = {
-        "Node Impact 0078": MINDUSTRY_BASE_ID + 171,
+        "Node Impact 0078": MINDUSTRY_BASE_ID + 186,
     }
     serpulo_desolate_rift = {
-        "Node Desolate Rift": MINDUSTRY_BASE_ID + 172,
+        "Node Desolate Rift": MINDUSTRY_BASE_ID + 187,
     }
     serpulo_planetary_launch_terminal = {
-        "Node Planetary Launch Terminal": MINDUSTRY_BASE_ID + 173,
+        "Node Planetary Launch Terminal": MINDUSTRY_BASE_ID + 188,
     }
     serpulo_extraction_outpost = {
-        "Node Extraction Outpost": MINDUSTRY_BASE_ID + 174,
+        "Node Extraction Outpost": MINDUSTRY_BASE_ID + 189,
     }
     serpulo_salt_flats = {
-        "Node Slat Flats": MINDUSTRY_BASE_ID + 175,
+        "Node Slat Flats": MINDUSTRY_BASE_ID + 190,
     }
     serpulo_coastline = {
-        "Node Coastline": MINDUSTRY_BASE_ID + 176,
+        "Node Coastline": MINDUSTRY_BASE_ID + 191,
     }
     serpulo_naval_fortress = {
-        "Node Naval Fortress": MINDUSTRY_BASE_ID + 177,
+        "Node Naval Fortress": MINDUSTRY_BASE_ID + 192,
     }
     serpulo_overgrowth = {
-        "Node Overgrowth": MINDUSTRY_BASE_ID + 178,
+        "Node Overgrowth": MINDUSTRY_BASE_ID + 193,
     }
     serpulo_biomass_synthesis_facility = {
-        "Node Biomass Synthesis Facility": MINDUSTRY_BASE_ID + 179,
+        "Node Biomass Synthesis Facility": MINDUSTRY_BASE_ID + 194,
     }
     serpulo_stained_mountains = {
-        "Node Stained Mountains": MINDUSTRY_BASE_ID + 180,
+        "Node Stained Mountains": MINDUSTRY_BASE_ID + 195,
     }
     serpulo_fungal_pass = {
-        "Node Fungal Pass": MINDUSTRY_BASE_ID + 181,
+        "Node Fungal Pass": MINDUSTRY_BASE_ID + 196,
     }
     serpulo_nuclear_production_complex = {
-        "Node Nuclear Production Complex": MINDUSTRY_BASE_ID + 182,
+        "Node Nuclear Production Complex": MINDUSTRY_BASE_ID + 197,
+    }
+
+
+    serpulo_copper = {
+        "Copper Serpulo": MINDUSTRY_BASE_ID + 210,
+    }
+    serpulo_water = {
+        "Water Serpulo": MINDUSTRY_BASE_ID + 211,
     }
     serpulo_lead = {
-        "Node Lead": MINDUSTRY_BASE_ID + 183,
+        "Lead Serpulo": MINDUSTRY_BASE_ID + 212,
     }
     serpulo_titanium = {
-        "Node Titanium": MINDUSTRY_BASE_ID + 184,
+        "Titanium Serpulo": MINDUSTRY_BASE_ID + 213,
     }
     serpulo_cryofluid = {
-        "Node Cryofluid": MINDUSTRY_BASE_ID + 185,
+        "Cryofluid Serpulo": MINDUSTRY_BASE_ID + 214,
     }
     serpulo_thorium = {
-        "Node Thorium": MINDUSTRY_BASE_ID + 186,
+        "Thorium Serpulo": MINDUSTRY_BASE_ID + 215,
     }
     serpulo_surge_alloy = {
-        "Node Surge Alloy": MINDUSTRY_BASE_ID + 187,
+        "Surge Alloy Serpulo": MINDUSTRY_BASE_ID + 216,
     }
     serpulo_phase_fabric = {
-        "Node Phase Fabric": MINDUSTRY_BASE_ID + 188,
+        "Phase Fabric Serpulo": MINDUSTRY_BASE_ID + 217,
     }
     serpulo_metaglass = {
-        "Node Metaglass": MINDUSTRY_BASE_ID + 189,
+        "Metaglass Serpulo": MINDUSTRY_BASE_ID + 218,
+    }
+    serpulo_sand = {
+        "Sand Serpulo": MINDUSTRY_BASE_ID + 219,
     }
     serpulo_scrap = {
-        "Node Scrap": MINDUSTRY_BASE_ID + 190,
+        "Scrap Serpulo": MINDUSTRY_BASE_ID + 220,
     }
     serpulo_slag = {
-        "Node Slag": MINDUSTRY_BASE_ID + 191,
+        "Slag Serpulo": MINDUSTRY_BASE_ID + 221,
     }
     serpulo_coal = {
-        "Node Coal": MINDUSTRY_BASE_ID + 192,
+        "Coal Serpulo": MINDUSTRY_BASE_ID + 222,
     }
     serpulo_graphite = {
-        "Node Graphite": MINDUSTRY_BASE_ID + 193,
+        "Graphite Serpulo": MINDUSTRY_BASE_ID + 223,
     }
     serpulo_silicon = {
-        "Node Silicon": MINDUSTRY_BASE_ID + 194,
+        "Silicon Serpulo": MINDUSTRY_BASE_ID + 224,
     }
     serpulo_pyratite = {
-        "Node Pyratite": MINDUSTRY_BASE_ID + 195,
+        "Pyratite Serpulo": MINDUSTRY_BASE_ID + 225,
     }
     serpulo_blast_compound = {
-        "Node Blast Compound": MINDUSTRY_BASE_ID + 196,
+        "Blast Compound Serpulo": MINDUSTRY_BASE_ID + 226,
     }
     serpulo_spore_pod = {
-        "Node Spore Pod": MINDUSTRY_BASE_ID + 197,
+        "Spore Pod Serpulo": MINDUSTRY_BASE_ID + 227,
     }
     serpulo_oil = {
-        "Node Oil": MINDUSTRY_BASE_ID + 198,
+        "Oil Serpulo": MINDUSTRY_BASE_ID + 228,
     }
     serpulo_plastanium = {
-        "Node Plastanium": MINDUSTRY_BASE_ID + 199,
+        "Plastanium Serpulo": MINDUSTRY_BASE_ID + 229,
     }
 
 
 
     erekir_duct = {
-        "AP-E-01-01": MINDUSTRY_BASE_ID + 200,
+        "AP-E-01-01": MINDUSTRY_BASE_ID + 300,
     }
     erekir_duct_router = {
-        "AP-E-01-02": MINDUSTRY_BASE_ID + 201,
+        "AP-E-01-02": MINDUSTRY_BASE_ID + 301,
     }
     erekir_duct_bridge = {
-        "AP-E-01-03": MINDUSTRY_BASE_ID + 202,
+        "AP-E-01-03": MINDUSTRY_BASE_ID + 302,
     }
     erekir_armored_duct = {
-        "AP-E-01-04": MINDUSTRY_BASE_ID + 203,
+        "AP-E-01-04": MINDUSTRY_BASE_ID + 303,
     }
     erekir_surge_conveyor = {
-        "AP-E-01-05": MINDUSTRY_BASE_ID + 204,
+        "AP-E-01-05": MINDUSTRY_BASE_ID + 304,
     }
     erekir_surge_router = {
-        "AP-E-01-06": MINDUSTRY_BASE_ID + 205,
+        "AP-E-01-06": MINDUSTRY_BASE_ID + 305,
     }
     erekir_unit_cargo_loader = {
-        "AP-E-01-07": MINDUSTRY_BASE_ID + 206,
+        "AP-E-01-07": MINDUSTRY_BASE_ID + 306,
     }
     erekir_unit_cargo_unload_point = {
-        "AP-E-01-08": MINDUSTRY_BASE_ID + 207,
+        "AP-E-01-08": MINDUSTRY_BASE_ID + 307,
     }
     erekir_overflow_duct = {
-        "AP-E-01-09": MINDUSTRY_BASE_ID + 208,
+        "AP-E-01-09": MINDUSTRY_BASE_ID + 308,
     }
     erekir_underflow_duct = {
-        "AP-E-01-10": MINDUSTRY_BASE_ID + 209,
+        "AP-E-01-10": MINDUSTRY_BASE_ID + 309,
     }
     erekir_reinforced_container = {
-        "AP-E-01-11": MINDUSTRY_BASE_ID + 210,
+        "AP-E-01-11": MINDUSTRY_BASE_ID + 310,
     }
     erekir_duct_unloader = {
-        "AP-E-01-12": MINDUSTRY_BASE_ID + 211
+        "AP-E-01-12": MINDUSTRY_BASE_ID + 311
     }
     erekir_reinforced_vault = {
-        "AP-E-01-13": MINDUSTRY_BASE_ID + 212,
+        "AP-E-01-13": MINDUSTRY_BASE_ID + 312,
     }
     erekir_reinforced_message = {
-        "AP-E-01-14": MINDUSTRY_BASE_ID + 213,
+        "AP-E-01-14": MINDUSTRY_BASE_ID + 313,
     }
     erekir_canvas = {
-        "AP-E-01-15": MINDUSTRY_BASE_ID + 214,
+        "AP-E-01-15": MINDUSTRY_BASE_ID + 314,
     }
     erekir_reinforced_payload_conveyor = {
-        "AP-E-01-16": MINDUSTRY_BASE_ID + 215,
+        "AP-E-01-16": MINDUSTRY_BASE_ID + 315,
     }
     erekir_payload_mass_driver = {
-        "AP-E-01-17": MINDUSTRY_BASE_ID + 216,
+        "AP-E-01-17": MINDUSTRY_BASE_ID + 316,
     }
     erekir_payload_loader = {
-        "AP-E-01-18": MINDUSTRY_BASE_ID + 217,
+        "AP-E-01-18": MINDUSTRY_BASE_ID + 317,
     }
     erekir_payload_unloader = {
-        "AP-E-01-19": MINDUSTRY_BASE_ID + 218,
+        "AP-E-01-19": MINDUSTRY_BASE_ID + 318,
     }
     erekir_large_payload_mass_driver = {
-        "AP-E-01-20": MINDUSTRY_BASE_ID + 219,
+        "AP-E-01-20": MINDUSTRY_BASE_ID + 319,
     }
     erekir_constructor = {
-        "AP-E-01-21": MINDUSTRY_BASE_ID + 220,
+        "AP-E-01-21": MINDUSTRY_BASE_ID + 320,
     }
     erekir_deconstructor = {
-        "AP-E-01-22": MINDUSTRY_BASE_ID + 221,
+        "AP-E-01-22": MINDUSTRY_BASE_ID + 321,
     }
     erekir_large_constructor = {
-        "AP-E-01-23": MINDUSTRY_BASE_ID + 222,
+        "AP-E-01-23": MINDUSTRY_BASE_ID + 322,
     }
     erekir_large_deconstructor = {
-        "AP-E-01-24": MINDUSTRY_BASE_ID + 223,
+        "AP-E-01-24": MINDUSTRY_BASE_ID + 323,
     }
     erekir_reinforced_payload_router = {
-        "AP-E-01-25": MINDUSTRY_BASE_ID + 224,
+        "AP-E-01-25": MINDUSTRY_BASE_ID + 324,
     }
     erekir_plasma_bore = {
-        "AP-E-02-01": MINDUSTRY_BASE_ID + 225,
+        "AP-E-02-01": MINDUSTRY_BASE_ID + 325,
     }
     erekir_impact_drill = {
-        "AP-E-02-02": MINDUSTRY_BASE_ID + 226,
+        "AP-E-02-02": MINDUSTRY_BASE_ID + 326,
     }
     erekir_large_plasma_bore = {
-        "AP-E-02-03": MINDUSTRY_BASE_ID + 227,
+        "AP-E-02-03": MINDUSTRY_BASE_ID + 327,
     }
     erekir_eruption_drill = {
-        "AP-E-02-04": MINDUSTRY_BASE_ID + 228,
+        "AP-E-02-04": MINDUSTRY_BASE_ID + 328,
     }
     erekir_turbine_condenser = {
-        "AP-E-03-01": MINDUSTRY_BASE_ID + 229,
+        "AP-E-03-01": MINDUSTRY_BASE_ID + 329,
     }
     erekir_beam_node = {
-        "AP-E-03-02": MINDUSTRY_BASE_ID + 230,
+        "AP-E-03-02": MINDUSTRY_BASE_ID + 330,
     }
     erekir_vent_condenser = {
-        "AP-E-03-03": MINDUSTRY_BASE_ID + 231,
+        "AP-E-03-03": MINDUSTRY_BASE_ID + 331,
     }
     erekir_chemical_combustion_chamber = {
-        "AP-E-03-04": MINDUSTRY_BASE_ID + 232,
+        "AP-E-03-04": MINDUSTRY_BASE_ID + 332,
     }
     erekir_pyrolysis_generator = {
-        "AP-E-03-05": MINDUSTRY_BASE_ID + 233,
+        "AP-E-03-05": MINDUSTRY_BASE_ID + 333,
     }
     erekir_flux_reactor = {
-        "AP-E-03-06": MINDUSTRY_BASE_ID + 234,
+        "AP-E-03-06": MINDUSTRY_BASE_ID + 334,
     }
     erekir_neoplasia_reactor = {
-        "AP-E-03-07": MINDUSTRY_BASE_ID + 235,
+        "AP-E-03-07": MINDUSTRY_BASE_ID + 335,
     }
     erekir_beam_tower = {
-        "AP-E-03-08": MINDUSTRY_BASE_ID + 236,
+        "AP-E-03-08": MINDUSTRY_BASE_ID + 336,
     }
     erekir_regen_projector = {
-        "AP-E-03-09": MINDUSTRY_BASE_ID + 237,
+        "AP-E-03-09": MINDUSTRY_BASE_ID + 337,
     }
     erekir_build_tower = {
-        "AP-E-03-10": MINDUSTRY_BASE_ID + 238,
+        "AP-E-03-10": MINDUSTRY_BASE_ID + 338,
     }
     erekir_shockwave_tower = {
-        "AP-E-03-11": MINDUSTRY_BASE_ID + 239,
+        "AP-E-03-11": MINDUSTRY_BASE_ID + 339,
     }
     erekir_reinforced_conduit = {
-        "AP-E-03-12": MINDUSTRY_BASE_ID + 240,
+        "AP-E-03-12": MINDUSTRY_BASE_ID + 340,
     }
     erekir_reinforced_pump = {
-        "AP-E-03-13": MINDUSTRY_BASE_ID + 241,
+        "AP-E-03-13": MINDUSTRY_BASE_ID + 341,
     }
     erekir_reinforced_liquid_junction = {
-        "AP-E-03-14": MINDUSTRY_BASE_ID + 242,
+        "AP-E-03-14": MINDUSTRY_BASE_ID + 342,
     }
     erekir_reinforced_bridge_conduit = {
-        "AP-E-03-15": MINDUSTRY_BASE_ID + 243,
+        "AP-E-03-15": MINDUSTRY_BASE_ID + 343,
     }
     erekir_reinforced_liquid_router = {
-        "AP-E-03-16": MINDUSTRY_BASE_ID + 244,
+        "AP-E-03-16": MINDUSTRY_BASE_ID + 344,
     }
     erekir_reinforced_liquid_container = {
-        "AP-E-03-17": MINDUSTRY_BASE_ID + 245,
+        "AP-E-03-17": MINDUSTRY_BASE_ID + 345,
     }
     erekir_reinforced_liquid_tank = {
-        "AP-E-03-18": MINDUSTRY_BASE_ID + 246,
+        "AP-E-03-18": MINDUSTRY_BASE_ID + 346,
     }
     erekir_cliff_crusher = {
-        "AP-E-03-19": MINDUSTRY_BASE_ID + 247,
+        "AP-E-03-19": MINDUSTRY_BASE_ID + 347,
     }
     erekir_silicon_arc_furnace = {
-        "AP-E-03-20": MINDUSTRY_BASE_ID + 248,
+        "AP-E-03-20": MINDUSTRY_BASE_ID + 348,
     }
     erekir_electrolyzer = {
-        "AP-E-03-21": MINDUSTRY_BASE_ID + 249,
+        "AP-E-03-21": MINDUSTRY_BASE_ID + 349,
     }
     erekir_oxidation_chamber = {
-        "AP-E-03-22": MINDUSTRY_BASE_ID + 250,
+        "AP-E-03-22": MINDUSTRY_BASE_ID + 350,
     }
     erekir_surge_crucible = {
-        "AP-E-03-23": MINDUSTRY_BASE_ID + 251,
+        "AP-E-03-23": MINDUSTRY_BASE_ID + 351,
     }
     erekir_heat_redirector = {
-        "AP-E-03-24": MINDUSTRY_BASE_ID + 252,
+        "AP-E-03-24": MINDUSTRY_BASE_ID + 352,
     }
     erekir_electric_heater = {
-        "AP-E-03-25": MINDUSTRY_BASE_ID + 253,
+        "AP-E-03-25": MINDUSTRY_BASE_ID + 353,
     }
     erekir_slag_heater = {
-        "AP-E-03-26": MINDUSTRY_BASE_ID + 254,
+        "AP-E-03-26": MINDUSTRY_BASE_ID + 354,
     }
     erekir_atmospheric_concentrator = {
-        "AP-E-03-27": MINDUSTRY_BASE_ID + 255,
+        "AP-E-03-27": MINDUSTRY_BASE_ID + 355,
     }
     erekir_cyanogen_synthesizer = {
-        "AP-E-03-28": MINDUSTRY_BASE_ID + 256,
+        "AP-E-03-28": MINDUSTRY_BASE_ID + 356,
     }
     erekir_carbide_crucible = {
-        "AP-E-03-29": MINDUSTRY_BASE_ID + 257,
+        "AP-E-03-29": MINDUSTRY_BASE_ID + 357,
     }
     erekir_phase_synthesizer = {
-        "AP-E-03-30": MINDUSTRY_BASE_ID + 258,
+        "AP-E-03-30": MINDUSTRY_BASE_ID + 358,
     }
     erekir_phase_heater = {
-        "AP-E-03-31": MINDUSTRY_BASE_ID + 259,
+        "AP-E-03-31": MINDUSTRY_BASE_ID + 359,
     }
     erekir_heat_router = {
-        "AP-E-03-32": MINDUSTRY_BASE_ID + 260,
+        "AP-E-03-32": MINDUSTRY_BASE_ID + 360,
     }
     erekir_slag_incinerator = {
-        "AP-E-03-33": MINDUSTRY_BASE_ID + 261,
+        "AP-E-03-33": MINDUSTRY_BASE_ID + 361,
     }
     erekir_breach = {
-        "AP-E-04-01": MINDUSTRY_BASE_ID + 262,
+        "AP-E-04-01": MINDUSTRY_BASE_ID + 362,
     }
     erekir_beryllium_wall = {
-        "AP-E-04-02": MINDUSTRY_BASE_ID + 263,
+        "AP-E-04-02": MINDUSTRY_BASE_ID + 363,
     }
     erekir_large_beryllium_wall = {
-        "AP-E-04-03": MINDUSTRY_BASE_ID + 264,
+        "AP-E-04-03": MINDUSTRY_BASE_ID + 364,
     }
     erekir_tungsten_wall = {
-        "AP-E-04-04": MINDUSTRY_BASE_ID + 265,
+        "AP-E-04-04": MINDUSTRY_BASE_ID + 365,
     }
     erekir_large_tungsten_wall = {
-        "AP-E-04-05": MINDUSTRY_BASE_ID + 266,
+        "AP-E-04-05": MINDUSTRY_BASE_ID + 366,
     }
     erekir_blast_door = {
-        "AP-E-04-06": MINDUSTRY_BASE_ID + 267,
+        "AP-E-04-06": MINDUSTRY_BASE_ID + 367,
     }
     erekir_reinforced_surge_wall = {
-        "AP-E-04-07": MINDUSTRY_BASE_ID + 268,
+        "AP-E-04-07": MINDUSTRY_BASE_ID + 368,
     }
     erekir_large_reinforced_surge_wall = {
-        "AP-E-04-08": MINDUSTRY_BASE_ID + 269,
+        "AP-E-04-08": MINDUSTRY_BASE_ID + 369,
     }
     erekir_shielded_wall = {
-        "AP-E-04-09": MINDUSTRY_BASE_ID + 270,
+        "AP-E-04-09": MINDUSTRY_BASE_ID + 370,
     }
     erekir_carbide_wall = {
-        "AP-E-04-10": MINDUSTRY_BASE_ID + 271,
+        "AP-E-04-10": MINDUSTRY_BASE_ID + 371,
     }
     erekir_large_carbide_wall = {
-        "AP-E-04-11": MINDUSTRY_BASE_ID + 272,
+        "AP-E-04-11": MINDUSTRY_BASE_ID + 372,
     }
     erekir_diffuse = {
-        "AP-E-04-12": MINDUSTRY_BASE_ID + 273,
+        "AP-E-04-12": MINDUSTRY_BASE_ID + 373,
     }
     erekir_sublimate = {
-        "AP-E-04-13": MINDUSTRY_BASE_ID + 274,
+        "AP-E-04-13": MINDUSTRY_BASE_ID + 374,
     }
     erekir_afflict = {
-        "AP-E-04-14": MINDUSTRY_BASE_ID + 275,
+        "AP-E-04-14": MINDUSTRY_BASE_ID + 375,
     }
     erekir_titan = {
-        "AP-E-04-15": MINDUSTRY_BASE_ID + 276,
+        "AP-E-04-15": MINDUSTRY_BASE_ID + 376,
     }
     erekir_lustre = {
-        "AP-E-04-16": MINDUSTRY_BASE_ID + 277,
+        "AP-E-04-16": MINDUSTRY_BASE_ID + 377,
     }
     erekir_smite = {
-        "AP-E-04-17": MINDUSTRY_BASE_ID + 278,
+        "AP-E-04-17": MINDUSTRY_BASE_ID + 378,
     }
     erekir_disperse = {
-        "AP-E-04-18": MINDUSTRY_BASE_ID + 279,
+        "AP-E-04-18": MINDUSTRY_BASE_ID + 379,
     }
     erekir_scathe = {
-        "AP-E-04-19": MINDUSTRY_BASE_ID + 280,
+        "AP-E-04-19": MINDUSTRY_BASE_ID + 380,
     }
     erekir_malign = {
-        "AP-E-04-20": MINDUSTRY_BASE_ID + 281,
+        "AP-E-04-20": MINDUSTRY_BASE_ID + 381,
     }
     erekir_radar = {
-        "AP-E-04-21": MINDUSTRY_BASE_ID + 282,
+        "AP-E-04-21": MINDUSTRY_BASE_ID + 382,
     }
     erekir_core_citadel = {
-        "AP-E-05-01": MINDUSTRY_BASE_ID + 283,
+        "AP-E-05-01": MINDUSTRY_BASE_ID + 383,
     }
     erekir_core_acropolis = {
-        "AP-E-05-02": MINDUSTRY_BASE_ID + 284,
+        "AP-E-05-02": MINDUSTRY_BASE_ID + 384,
     }
     erekir_tank_fabricator = {
-        "AP-E-06-01": MINDUSTRY_BASE_ID + 285,
+        "AP-E-06-01": MINDUSTRY_BASE_ID + 385,
     }
     erekir_stell = {
-        "AP-E-06-02": MINDUSTRY_BASE_ID + 286,
+        "AP-E-06-02": MINDUSTRY_BASE_ID + 386,
     }
     erekir_unit_repair_tower = {
-        "AP-E-06-03": MINDUSTRY_BASE_ID + 287,
+        "AP-E-06-03": MINDUSTRY_BASE_ID + 387,
     }
     erekir_ship_fabricator = {
-        "AP-E-06-04": MINDUSTRY_BASE_ID + 288,
+        "AP-E-06-04": MINDUSTRY_BASE_ID + 388,
     }
     erekir_elude = {
-        "AP-E-06-05": MINDUSTRY_BASE_ID + 289,
+        "AP-E-06-05": MINDUSTRY_BASE_ID + 389,
     }
     erekir_mech_fabricator = {
-        "AP-E-06-06": MINDUSTRY_BASE_ID + 290,
+        "AP-E-06-06": MINDUSTRY_BASE_ID + 390,
     }
     erekir_merui = {
-        "AP-E-06-07": MINDUSTRY_BASE_ID + 291,
+        "AP-E-06-07": MINDUSTRY_BASE_ID + 391,
     }
     erekir_tank_refabricator = {
-        "AP-E-06-08": MINDUSTRY_BASE_ID + 292,
+        "AP-E-06-08": MINDUSTRY_BASE_ID + 392,
     }
     erekir_locus = {
-        "AP-E-06-09": MINDUSTRY_BASE_ID + 293,
+        "AP-E-06-09": MINDUSTRY_BASE_ID + 393,
     }
     erekir_mech_refrabricator = {
-        "AP-E-06-10": MINDUSTRY_BASE_ID + 294,
+        "AP-E-06-10": MINDUSTRY_BASE_ID + 394,
     }
     erekir_cleroi = {
-        "AP-E-06-11": MINDUSTRY_BASE_ID + 295,
+        "AP-E-06-11": MINDUSTRY_BASE_ID + 395,
     }
     erekir_ship_refabricator = {
-        "AP-E-06-12": MINDUSTRY_BASE_ID + 296,
+        "AP-E-06-12": MINDUSTRY_BASE_ID + 396,
     }
     erekir_avert = {
-        "AP-E-06-13": MINDUSTRY_BASE_ID + 297,
+        "AP-E-06-13": MINDUSTRY_BASE_ID + 397,
     }
     erekir_prime_refabricator = {
-        "AP-E-06-14": MINDUSTRY_BASE_ID + 298,
+        "AP-E-06-14": MINDUSTRY_BASE_ID + 398,
     }
     erekir_precept = {
-        "AP-E-06-15": MINDUSTRY_BASE_ID + 299,
+        "AP-E-06-15": MINDUSTRY_BASE_ID + 399,
     }
     erekir_anthicus = {
-        "AP-E-06-16": MINDUSTRY_BASE_ID + 300,
+        "AP-E-06-16": MINDUSTRY_BASE_ID + 400,
     }
     erekir_obviate = {
-        "AP-E-06-17": MINDUSTRY_BASE_ID + 301,
+        "AP-E-06-17": MINDUSTRY_BASE_ID + 401,
     }
     erekir_tank_assembler = {
-        "AP-E-06-18": MINDUSTRY_BASE_ID + 302,
+        "AP-E-06-18": MINDUSTRY_BASE_ID + 402,
     }
     erekir_vanquish = {
-        "AP-E-06-19": MINDUSTRY_BASE_ID + 303,
+        "AP-E-06-19": MINDUSTRY_BASE_ID + 403,
     }
     erekir_conquer = {
-        "AP-E-06-20": MINDUSTRY_BASE_ID + 304,
+        "AP-E-06-20": MINDUSTRY_BASE_ID + 404,
     }
     erekir_ship_assembler = {
-        "AP-E-06-21": MINDUSTRY_BASE_ID + 305,
+        "AP-E-06-21": MINDUSTRY_BASE_ID + 405,
     }
     erekir_quell = {
-        "AP-E-06-22": MINDUSTRY_BASE_ID + 306,
+        "AP-E-06-22": MINDUSTRY_BASE_ID + 406,
     }
     erekir_disrupt = {
-        "AP-E-06-23": MINDUSTRY_BASE_ID + 307,
+        "AP-E-06-23": MINDUSTRY_BASE_ID + 407,
     }
     erekir_mech_assembler = {
-        "AP-E-06-24": MINDUSTRY_BASE_ID + 308,
+        "AP-E-06-24": MINDUSTRY_BASE_ID + 408,
     }
     erekir_tecta = {
-        "AP-E-06-25": MINDUSTRY_BASE_ID + 309,
+        "AP-E-06-25": MINDUSTRY_BASE_ID + 409,
     }
     erekir_collaris = {
-        "AP-E-06-26": MINDUSTRY_BASE_ID + 310,
+        "AP-E-06-26": MINDUSTRY_BASE_ID + 410,
     }
     erekir_basic_assembler_module = {
-        "AP-E-06-27": MINDUSTRY_BASE_ID + 311,
+        "AP-E-06-27": MINDUSTRY_BASE_ID + 411,
     }
+
+    #erekir_onset = {
+    #    "Node The onset": MINDUSTRY_BASE_ID + 450,
+    #}
     erekir_aegis = {
-        "AP-E-07-02": MINDUSTRY_BASE_ID + 312,
+        "Node Aegis": MINDUSTRY_BASE_ID + 451,
     }
     erekir_lake = {
-        "AP-E-07-03": MINDUSTRY_BASE_ID + 313,
+        "Node Lake": MINDUSTRY_BASE_ID + 452,
     }
     erekir_intersect = {
-        "AP-E-07-04": MINDUSTRY_BASE_ID + 314,
+        "Node Intersect": MINDUSTRY_BASE_ID + 453,
     }
     erekir_atlas = {
-        "AP-E-07-05": MINDUSTRY_BASE_ID + 315,
+        "Node Atlas": MINDUSTRY_BASE_ID + 454,
     }
     erekir_split = {
-        "AP-E-07-06": MINDUSTRY_BASE_ID + 316,
+        "Node Split": MINDUSTRY_BASE_ID + 455,
     }
     erekir_basin = {
-        "AP-E-07-07": MINDUSTRY_BASE_ID + 317,
+        "Node Basin": MINDUSTRY_BASE_ID + 456,
     }
     erekir_marsh = {
-        "AP-E-07-08": MINDUSTRY_BASE_ID + 318,
+        "Node Marsh": MINDUSTRY_BASE_ID + 457,
     }
     erekir_ravine = {
-        "AP-E-07-09": MINDUSTRY_BASE_ID + 319,
+        "Node Ravine": MINDUSTRY_BASE_ID + 458,
     }
     erekir_caldera = {
-        "AP-E-07-10": MINDUSTRY_BASE_ID + 320,
+        "Node Caldera": MINDUSTRY_BASE_ID + 459,
     }
     erekir_stronghold = {
-        "AP-E-07-11": MINDUSTRY_BASE_ID + 321,
+        "Node Stronghold": MINDUSTRY_BASE_ID + 460,
     }
     erekir_crevice = {
-        "AP-E-07-12": MINDUSTRY_BASE_ID + 322,
+        "Node Crevice": MINDUSTRY_BASE_ID + 461,
     }
     erekir_siege = {
-        "AP-E-07-13": MINDUSTRY_BASE_ID + 323,
+        "Node Siege": MINDUSTRY_BASE_ID + 462,
     }
     erekir_crossroads = {
-        "AP-E-07-14": MINDUSTRY_BASE_ID + 324,
+        "Node Crossroads": MINDUSTRY_BASE_ID + 463,
     }
-    erekir_krast = {
-        "AP-E-07-15": MINDUSTRY_BASE_ID + 325,
+    erekir_karst = {
+        "Node Karst": MINDUSTRY_BASE_ID + 464,
     }
     erekir_origin = {
-        "AP-E-07-16": MINDUSTRY_BASE_ID + 326,
+        "Node Origin": MINDUSTRY_BASE_ID + 465,
     }
     erekir_peaks = {
-        "AP-E-07-17": MINDUSTRY_BASE_ID + 327,
+        "Node Peaks": MINDUSTRY_BASE_ID + 466,
+    }
+
+
+    erekir_beryllium = {
+        "Beryllium Erekir": MINDUSTRY_BASE_ID + 500,
+    }
+    erekir_sand = {
+        "Sand Erekir": MINDUSTRY_BASE_ID + 501,
+    }
+    erekir_silicon = {
+        "Silicon Erekir": MINDUSTRY_BASE_ID + 502,
     }
     erekir_oxide = {
-        "AP-E-08-04": MINDUSTRY_BASE_ID + 328,
+        "Oxide Erekir": MINDUSTRY_BASE_ID + 503,
+    }
+    erekir_water = {
+        "Water Erekir": MINDUSTRY_BASE_ID + 504,
     }
     erekir_ozone = {
-        "AP-E-07-06": MINDUSTRY_BASE_ID + 329,
+        "Ozone Erekir": MINDUSTRY_BASE_ID + 505,
     }
     erekir_hydrogen = {
-        "AP-E-07-07": MINDUSTRY_BASE_ID + 330,
+        "Hydrogen Erekir": MINDUSTRY_BASE_ID + 506,
     }
     erekir_nitrogen = {
-        "AP-E-07-08": MINDUSTRY_BASE_ID + 331,
+        "Nitrogen Erekir": MINDUSTRY_BASE_ID + 507,
     }
     erekir_cyanogen = {
-        "AP-E-07-09": MINDUSTRY_BASE_ID + 332,
+        "Cyanogen Erekir": MINDUSTRY_BASE_ID + 508,
     }
     erekir_neoplasm = {
-        "AP-E-07-10": MINDUSTRY_BASE_ID + 333,
+        "Neoplasm Erekir": MINDUSTRY_BASE_ID + 509,
+    }
+    erekir_graphite = {
+        "Graphite Erekir": MINDUSTRY_BASE_ID + 510,
     }
     erekir_tungsten = {
-        "AP-E-07-12": MINDUSTRY_BASE_ID + 334,
+        "Tungsten Erekir": MINDUSTRY_BASE_ID + 511,
     }
     erekir_slag = {
-        "AP-E-07-13": MINDUSTRY_BASE_ID + 335,
+        "Slag Erekir": MINDUSTRY_BASE_ID + 512,
     }
     erekir_arkycite = {
-        "AP-E-07-14": MINDUSTRY_BASE_ID + 336,
+        "Arkycite Erekir": MINDUSTRY_BASE_ID + 513,
+    }
+    erekir_thorium = {
+        "Thorium Erekir": MINDUSTRY_BASE_ID + 514,
     }
     erekir_carbide = {
-        "AP-E-07-16": MINDUSTRY_BASE_ID + 337,
+        "Carbide Erekir": MINDUSTRY_BASE_ID + 515,
     }
+    erekir_surge_alloy = {
+        "Surge Alloy Erekir": MINDUSTRY_BASE_ID + 516,
+    }
+    erekir_phase_fabric = {
+        "Phase Fabric Erekir": MINDUSTRY_BASE_ID + 517,
+    }
+
+
+
+
 
 
 
@@ -1225,7 +1275,10 @@ location_table = {
     **MindustryLocations.serpulo_stained_mountains,
     **MindustryLocations.serpulo_fungal_pass,
     **MindustryLocations.serpulo_nuclear_production_complex,
+    **MindustryLocations.serpulo_copper,
     **MindustryLocations.serpulo_lead,
+    **MindustryLocations.serpulo_water,
+    **MindustryLocations.serpulo_sand,
     **MindustryLocations.serpulo_titanium,
     **MindustryLocations.serpulo_cryofluid,
     **MindustryLocations.serpulo_thorium,
@@ -1368,9 +1421,14 @@ location_table = {
     **MindustryLocations.erekir_crevice,
     **MindustryLocations.erekir_siege,
     **MindustryLocations.erekir_crossroads,
-    **MindustryLocations.erekir_krast,
+    **MindustryLocations.erekir_karst,
     **MindustryLocations.erekir_origin,
     **MindustryLocations.erekir_peaks,
+    **MindustryLocations.erekir_beryllium,
+    **MindustryLocations.erekir_sand,
+    **MindustryLocations.erekir_water,
+    **MindustryLocations.erekir_graphite,
+    **MindustryLocations.erekir_silicon,
     **MindustryLocations.erekir_oxide,
     **MindustryLocations.erekir_ozone,
     **MindustryLocations.erekir_hydrogen,
@@ -1381,4 +1439,6 @@ location_table = {
     **MindustryLocations.erekir_slag,
     **MindustryLocations.erekir_arkycite,
     **MindustryLocations.erekir_carbide,
+    **MindustryLocations.erekir_surge_alloy,
+    **MindustryLocations.erekir_phase_fabric
 }

@@ -1,0 +1,24 @@
+{
+	"Levels 1-19": {
+		"yaml_option": ["Enable_Levels_1_to_19"]
+	},
+	"Levels 20-39": {
+		"yaml_option": ["Enable_Levels_20_to_39"]	
+	},
+	"Levels 40-59": {
+		"yaml_option": ["Enable_Levels_40_to_59"]
+	},
+	"Levels 60-79": {
+		"yaml_option": ["Enable_Levels_60_to_79"]
+	},
+	"Levels 80-99": {
+		"yaml_option": ["Enable_Levels_80_to_99"]
+	},
+	"Runes": {
+		"yaml_option": ["Enable_Runes"]
+	},
+	"A-Sync": {
+		"yaml_option": ["Is_this_an_Async_run"],
+		"hidden": true
+	}
+}

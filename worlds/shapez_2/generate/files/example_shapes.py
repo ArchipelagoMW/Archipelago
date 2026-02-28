@@ -5,7 +5,10 @@ def get_example_shapes(container: "Shapez2ScenarioContainer") -> list[str]:
     milestones = container.world.milestone_shapes
     tasks = container.world.task_shapes
     task_processors = container.world.task_processors
-    task_1, task_2, found = "CuCuCuCu", "CuCuCuCu", 0
+    if container.world.options.shape_configuration == "tetragonal":
+        task_1, task_2, found = "CuCuCuCu", "CuCuCuCu", 0
+    else:
+        task_1, task_2, found = "FuFuFuFuFuFu", "FuFuFuFuFuFu", 0
     for count in reversed(range(6)):
         for i in reversed(range(len(task_processors))):
             if len(task_processors[i]) >= count:

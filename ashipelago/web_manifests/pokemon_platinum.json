@@ -1,6 +1,6 @@
 {
   "game": "Pokemon Platinum",
-  "server_version": "0.1.6",
+  "server_version": "0.1.8",
   "discord_channel": "https://discord.com/channels/731205301247803413/1414786317014929418",
   "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/pokemon_platinum_pack.zip",
   "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/pokemon_platinum.apworld"

@@ -46,6 +46,63 @@ class TableNames(IntEnum):
     Unknown31 = auto()
 
 
+class ItemPreview(IntEnum):
+    """Item Preview Enum."""
+
+    JapesMinecartIntro = 0
+    JapesMinecartReward = auto()
+    JapesMinecartFail = auto()
+    FungiMinecartIntro = auto()
+    FungiMinecartFail = auto()
+    CastleMinecartIntro = auto()
+    CastleMinecartReward = auto()
+    FactoryCarRace = auto()
+    MermaidIntro = auto()
+    MermaidReward = auto()
+    MermaidMissing = auto()
+    VultureFreedom = auto()
+    VulturePreview = auto()
+    LlamaTalk = auto()
+    LlamaRescue = auto()
+    JetpacIntro = auto()
+    JetpacReward = auto()
+    RabbitFinalRaceIntro = auto()
+    RabbitFirstRaceReward = auto()
+    RabbitFinalRaceReward = auto()
+    AppleIntro = auto()
+    ApplePickUp = auto()
+    AppleReward = auto()
+    Seal = auto()
+    RarewareGB = auto()
+    IceTomato = auto()
+    CastleCarRace = auto()
+    OwlRace = auto()
+    GoneMicro = auto()
+    PortMicro = auto()
+    BongosMicro = auto()
+    TriangleMicro = auto()
+    SaxMicro = auto()
+    TromboneMicro = auto()
+    GuitarMicro = auto()
+    SpiderIntro = auto()
+    SlamMicro = auto()
+    ChunkyIgloo = auto()
+    CrankyMicro = auto()
+    FunkyMicro = auto()
+    CandyMicro = auto()
+    SnideMicro = auto()
+
+
+class CompTextFiles(IntEnum):
+    """Compressed Text Files Enum."""
+
+    PreviewsNormal = 0x40
+    PreviewsFlavor = auto()
+    Wrinkly = auto()
+    WrinklyShort = auto()
+    ItemLocations = auto()
+
+
 class TableData:
     """Class to store information regarding a pointer table."""
 
@@ -211,7 +268,7 @@ def writeRawFile(table_index: TableNames, file_index: int, compressed: bool, dat
     if compressed:
         write_data = gzip.compress(bytes(data), compresslevel=9)
     if len(write_data) > file_size:
-        raise Exception(f"Cannot write file {file_index} in table {table_index} to ROM as it's too big.")
+        raise Exception(f"Cannot write file {file_index} in table {table_index} to ROM as it's too big ({hex(len(write_data))} > {hex(file_size)}).")
     ROM_COPY.seek(file_start)
     ROM_COPY.writeBytes(write_data)
 
@@ -398,40 +455,37 @@ icon_db = {
 
 def grabText(ROM_COPY: Union[ROM, LocalROM], file_index: int) -> List[List[Dict[str, List[str]]]]:
     """Pull text from ROM with a particular file index."""
-    file_start = getPointerLocation(TableNames.Text, file_index)
-    ROM_COPY.seek(file_start + 0)
-    count = int.from_bytes(ROM_COPY.readBytes(1), "big")
+    table_index = TableNames.Text
+    if (file_index & 0x40) != 0:
+        table_index = TableNames.Unknown6
+        file_index &= 0x3F
+    file = getRawFile(ROM_COPY, table_index, file_index, table_index == TableNames.Unknown6)
+    count = file[0]
     text = []
     text_data = []
     text_start = (count * 0xF) + 3
     data_start = 1
     for i in range(count):
-        ROM_COPY.seek(file_start + data_start)
-        section_1_count = int.from_bytes(ROM_COPY.readBytes(1), "big")
-        section_2_count = int.from_bytes(ROM_COPY.readBytes(1), "big")
-        section_3_count = int.from_bytes(ROM_COPY.readBytes(1), "big")
-        ROM_COPY.seek(file_start + data_start + 5)
-        start = int.from_bytes(ROM_COPY.readBytes(2), "big")
-        int.from_bytes(ROM_COPY.readBytes(2), "big")
+        section_1_count = file[data_start + 0]
+        section_2_count = file[data_start + 1]
+        section_3_count = file[data_start + 2]
+        start = int.from_bytes(file[data_start + 5 : data_start + 7], "big")
+        int.from_bytes(file[data_start + 7 : data_start + 9], "big")
         block_start = 1
         blocks = []
         for k in range(section_1_count):
-            ROM_COPY.seek(file_start + data_start + block_start)
-            sec2ct = int.from_bytes(ROM_COPY.readBytes(1), "big")
+            sec2ct = file[data_start + block_start]
             offset = 0
             if (sec2ct & 4) != 0:
                 offset += 4
             text_blocks = []
             if (sec2ct & 1) == 0:
                 if (sec2ct & 2) != 0:
-                    ROM_COPY.seek(file_start + data_start + block_start + offset + 1)
-                    sec3ct = int.from_bytes(ROM_COPY.readBytes(1), "big")
+                    sec3ct = file[data_start + block_start + offset + 1]
                     for j in range(sec3ct):
                         _block = block_start + 2 + offset + (4 * j) - 1
-                        ROM_COPY.seek(file_start + data_start + _block)
-                        _pos = int.from_bytes(ROM_COPY.readBytes(2), "big")
-                        ROM_COPY.seek(file_start + data_start + _block)
-                        _dat = int.from_bytes(ROM_COPY.readBytes(4), "big")
+                        _pos = int.from_bytes(file[data_start + _block : data_start + _block + 2], "big")
+                        _dat = int.from_bytes(file[data_start + _block : data_start + _block + 4], "big")
                         text_blocks.append(
                             {
                                 "type": "sprite",
@@ -442,14 +496,11 @@ def grabText(ROM_COPY: Union[ROM, LocalROM], file_index: int) -> List[List[Dict[
                         )
                     added = block_start + 2 + offset + (4 * sec3ct) + 4
             else:
-                ROM_COPY.seek(file_start + data_start + block_start + offset + 1)
-                sec3ct = int.from_bytes(ROM_COPY.readBytes(1), "big")
+                sec3ct = file[data_start + block_start + offset + 1]
                 for j in range(sec3ct):
                     _block = block_start + 2 + offset + (8 * j) - 1
-                    ROM_COPY.seek(file_start + data_start + _block + 3)
-                    _start = int.from_bytes(ROM_COPY.readBytes(2), "big")
-                    ROM_COPY.seek(file_start + data_start + _block + 5)
-                    _size = int.from_bytes(ROM_COPY.readBytes(2), "big")
+                    _start = int.from_bytes(file[data_start + _block + 3 : data_start + _block + 5], "big")
+                    _size = int.from_bytes(file[data_start + _block + 5 : data_start + _block + 7], "big")
                     text_blocks.append({"type": "normal", "start": _start, "size": _size})
                 added = block_start + 2 + offset + (8 * sec3ct) + 4
             # print(f"File {file_index}, Textbox {i}, section {k}")
@@ -463,11 +514,10 @@ def grabText(ROM_COPY: Union[ROM, LocalROM], file_index: int) -> List[List[Dict[
                 }
             )
             block_start = added
-        ROM_COPY.seek(file_start + data_start)
         if added < data_start:
             info = b""
         else:
-            info = ROM_COPY.readBytes(added - data_start)
+            info = file[data_start:added]
         text_data.append(
             {
                 "arr": info,
@@ -491,8 +541,7 @@ def grabText(ROM_COPY: Union[ROM, LocalROM], file_index: int) -> List[List[Dict[
                     start = item3["start"] + data_start + 2
                     # print(hex(start))
                     start + item3["size"]
-                    ROM_COPY.seek(file_start + start)
-                    temp.append(ROM_COPY.readBytes(item3["size"]).decode())
+                    temp.append(file[start : start + item3["size"]].decode())
                 elif item3["type"] == "sprite":
                     temp.append(item3["sprite"])
                     # print(fh.read(item3["size"]))
@@ -509,12 +558,11 @@ def grabText(ROM_COPY: Union[ROM, LocalROM], file_index: int) -> List[List[Dict[
 
 def writeText(ROM_COPY: Union[ROM, LocalROM], file_index: int, text: List[Union[List[Dict[str, List[str]]], Tuple[Dict[str, List[str]]]]]) -> None:
     """Write the text to ROM."""
-    text_start = getPointerLocation(TableNames.Text, file_index)
-    ROM_COPY.seek(text_start)
-    ROM_COPY.writeBytes(bytearray([len(text)]))
+    file = []
+    file.append(len(text))
     position = 0
     for textbox in text:
-        ROM_COPY.writeBytes(len(textbox).to_bytes(1, "big"))
+        file.append(len(textbox))
         for block in textbox:
             # Get Icon State
             icon_id = -1
@@ -524,21 +572,31 @@ def writeText(ROM_COPY: Union[ROM, LocalROM], file_index: int, text: List[Union[
                         if icon_db[icon] == string:
                             icon_id = icon
             if icon_id > -1:
-                ROM_COPY.writeBytes(bytearray([2, 1]))
-                ROM_COPY.writeBytes(icon_id.to_bytes(2, "big"))
-                ROM_COPY.writeBytes(bytearray([0, 0]))
+                file.extend([2, 1])
+                file.append((icon_id >> 8) & 0xFF)
+                file.append(icon_id & 0xFF)
+                file.extend([0, 0])
             else:
-                ROM_COPY.writeBytes(bytearray([1, len(block["text"])]))
+                file.extend([1, len(block["text"])])
                 for string in block["text"]:
-                    ROM_COPY.writeBytes(position.to_bytes(4, "big"))
-                    ROM_COPY.writeBytes(len(string).to_bytes(2, "big"))
-                    ROM_COPY.writeBytes(bytearray([0, 0]))
+                    file.append((position >> 24) & 0xFF)
+                    file.append((position >> 16) & 0xFF)
+                    file.append((position >> 8) & 0xFF)
+                    file.append(position & 0xFF)
+                    file.append((len(string) >> 8) & 0xFF)
+                    file.append(len(string) & 0xFF)
+                    file.extend([0, 0])
                     position += len(string)
             unk0 = 0
             if "unk0" in block:
                 unk0 = block["unk0"]
-            ROM_COPY.writeBytes(int(float_to_hex(unk0), 16).to_bytes(4, "big"))
-    ROM_COPY.writeBytes(bytearray(position.to_bytes(2, "big")))
+            value = int(float_to_hex(unk0), 16)
+            file.append((value >> 24) & 0xFF)
+            file.append((value >> 16) & 0xFF)
+            file.append((value >> 8) & 0xFF)
+            file.append(value & 0xFF)
+    file.append((position >> 8) & 0xFF)
+    file.append(position & 0xFF)
     for textbox in text:
         for block in textbox:
             is_icon = False
@@ -547,4 +605,15 @@ def writeText(ROM_COPY: Union[ROM, LocalROM], file_index: int, text: List[Union[
                     is_icon = True
             if not is_icon:
                 for string in block["text"]:
-                    ROM_COPY.writeBytes(string.encode("ascii"))
+                    file.extend(list(string.encode("ascii")))
+    table_index = TableNames.Text
+    data = bytes(file)
+    if (file_index & 0x40) != 0:
+        table_index = TableNames.Unknown6
+        file_index &= 0x3F
+        uncompressed_size = len(data)
+        unc_data = getPointerLocation(TableNames.UncompressedFileSizes, TableNames.Unknown6)
+        ROM_COPY.seek(unc_data + (file_index * 4))
+        ROM_COPY.writeMultipleBytes(uncompressed_size, 4)
+    # print("Attempting to write", hex(len(data)), "bytes to pointer", int(table_index), "file", int(file_index))
+    writeRawFile(table_index, file_index, table_index == TableNames.Unknown6, bytearray(data), ROM_COPY)

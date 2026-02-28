@@ -1,14 +1,9 @@
-import logging
-from typing import Tuple
-
 from BaseClasses import CollectionState
 from .bases import CrystalProjectTestBase
 from .. import display_region_subregions_dictionary
-from ..constants.ap_regions import *
 from ..constants.display_regions import *
 from ..constants.home_points import *
-from ..constants.region_passes import *
-
+from ..constants.jobs import *
 
 class TestHomePointHustle(CrystalProjectTestBase):
     options = {
@@ -19,7 +14,6 @@ class TestHomePointHustle(CrystalProjectTestBase):
     def test_home_points_giving_access_to_correct_region(self):
         home_point_name_to_ap_region_dict: dict[str, str] = {
             # Beginner
-            HOMEPOINT_AP_SPAWN_NAME: HOMEPOINT_AP_SPAWN_AP_REGION,
             HOMEPOINT_OLD_NANS_WATERING_HOLE_NAME: HOMEPOINT_OLD_NANS_WATERING_HOLE_AP_REGION,
             HOMEPOINT_THE_PALE_GROTTO_ENTRANCE_NAME: HOMEPOINT_THE_PALE_GROTTO_ENTRANCE_AP_REGION,
             HOMEPOINT_SOILED_DEN_NAME: HOMEPOINT_SOILED_DEN_AP_REGION,

@@ -14,6 +14,7 @@ import randomizer.Lists.Exceptions as Ex
 from randomizer.Enums.Collectibles import Collectibles
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
+from randomizer.Enums.Maps import Maps
 from randomizer.Lists.BananaCoinLocations import BananaCoinGroupList
 from randomizer.LogicClasses import Collectible
 
@@ -33,9 +34,15 @@ level_data = {
 }
 
 
-def getCoinRequirement(random) -> int:
+def getCoinRequirement(random, level: Levels) -> int:
     """Get requirement for a kong's coin amount."""
-    return int(random.randint(KONG_COIN_REQUIREMENT, KONG_COIN_CAP) / 8)
+    req = KONG_COIN_REQUIREMENT
+    cap = KONG_COIN_CAP
+    if level == Levels.FranticFactory:
+        # Reduce burden on Factory
+        req = 80
+        cap = 110
+    return int(random.randint(req, cap) / 8)
 
 
 def ShuffleCoins(spoiler):
@@ -48,15 +55,19 @@ def ShuffleCoins(spoiler):
             # First, remove all placed coins (excl. Rabbit Race R1)
             for region_id in spoiler.CollectibleRegions.keys():
                 spoiler.CollectibleRegions[region_id] = [collectible for collectible in spoiler.CollectibleRegions[region_id] if collectible.type != Collectibles.coin or collectible.locked]
+            for level in BananaCoinGroupList:
+                for group in BananaCoinGroupList[level]:
+                    if group.placed_type == Collectibles.coin:
+                        group.placed_type = None
             for level_index, level in enumerate(level_data):
                 level_placement = []
                 global_divisor = 7 - level_index
                 kong_specific_left = {
-                    Kongs.donkey: getCoinRequirement(spoiler.settings.random),
-                    Kongs.diddy: getCoinRequirement(spoiler.settings.random),
-                    Kongs.lanky: getCoinRequirement(spoiler.settings.random),
-                    Kongs.tiny: getCoinRequirement(spoiler.settings.random),
-                    Kongs.chunky: getCoinRequirement(spoiler.settings.random),
+                    Kongs.donkey: getCoinRequirement(spoiler.settings.random, level),
+                    Kongs.diddy: getCoinRequirement(spoiler.settings.random, level),
+                    Kongs.lanky: getCoinRequirement(spoiler.settings.random, level),
+                    Kongs.tiny: getCoinRequirement(spoiler.settings.random, level),
+                    Kongs.chunky: getCoinRequirement(spoiler.settings.random, level),
                 }
                 coins_left = (KONG_COIN_CAP * 5) - total_coins
                 coins_lower = max(int(coins_left / (8 - level_index)) - 10, 0)
@@ -107,6 +118,9 @@ def ShuffleCoins(spoiler):
                                     "locations": group.locations,
                                 }
                             )
+                            for group in BananaCoinGroupList[level]:
+                                if group.group == groupId:
+                                    group.placed_type = Collectibles.coin
                         placed_coins += group_weight
                     # If all kongs have 0 unplaced, we're done here
                     if len(kong_specific_left.keys()) == 0:
@@ -125,3 +139,81 @@ def ShuffleCoins(spoiler):
                 raise Ex.CoinFillFailureException
             retries += 1
             js.postMessage("Coin Randomizer failed to fill. Tries: " + str(retries))
+
+
+RACE_COINS_TO_PLACE = 97 + 71 + 25 + 19 + 87 + 77 + 68 + 17
+BANNED_COIN_MAPS = [
+    Maps.JapesMinecarts,
+    Maps.AztecTinyRace,
+    Maps.FactoryTinyRace,
+    Maps.GalleonSealRace,
+    Maps.ForestMinecarts,
+    Maps.CavesLankyRace,
+    Maps.CastleTinyRace,
+    Maps.CastleMinecarts,
+]
+
+
+def shuffleRaceCoins(spoiler):
+    """Shuffle race coins selected from location files."""
+    retries = 0
+    while True:
+        try:
+            race_coin_data = []
+            # First, remove all placed race coins
+            for region_id in spoiler.CollectibleRegions.keys():
+                spoiler.CollectibleRegions[region_id] = [collectible for collectible in spoiler.CollectibleRegions[region_id] if collectible.type != Collectibles.racecoin or collectible.locked]
+            for level in BananaCoinGroupList:
+                for group in BananaCoinGroupList[level]:
+                    if group.placed_type == Collectibles.racecoin:
+                        group.placed_type = None
+            coins_to_place_factory = RACE_COINS_TO_PLACE / (len(level_data) * 2)
+            coins_to_place_in_level = (RACE_COINS_TO_PLACE - coins_to_place_factory) / (len(level_data) - 1)
+            for level in level_data:
+                level_placement = []
+                coin_size = coins_to_place_in_level
+                if level == Levels.FranticFactory:
+                    coin_size = coins_to_place_factory
+                groupIds = list(set([group.group for group in BananaCoinGroupList[level] if group.placed_type is None and group.map not in BANNED_COIN_MAPS]))
+                spoiler.settings.random.shuffle(groupIds)
+                for groupId in groupIds:
+                    group_weight = 0
+                    coin_groups = [group for group in BananaCoinGroupList[level] if group.group == groupId]
+                    for group in coin_groups:
+                        group_weight = len(group.locations)
+                    if coin_size >= group_weight:
+                        coin_size -= group_weight  # Remove Coins
+                        for group in coin_groups:
+                            # Calculate the number of coins we have to place by lesser group so different coins in the same group can have different logic
+                            if len(group.locations) > 0:
+                                if group.region not in spoiler.CollectibleRegions:
+                                    spoiler.CollectibleRegions[group.region] = []
+                                spoiler.CollectibleRegions[group.region].append(Collectible(Collectibles.racecoin, Kongs.any, group.logic, None, len(group.locations), name=group.name))
+                            level_placement.append(
+                                {
+                                    "group": group.group,
+                                    "name": group.name,
+                                    "level": level,
+                                    "map": group.map,
+                                    "locations": group.locations,
+                                }
+                            )
+                            for group in BananaCoinGroupList[level]:
+                                if group.group == groupId:
+                                    group.placed_type = Collectibles.racecoin
+                    # If all kongs have 0 unplaced, we're done here
+                    if coin_size < 1:
+                        break
+                # Placement is valid
+                race_coin_data.extend(level_placement.copy())
+            spoiler.Reset()
+            if not Fill.VerifyWorld(spoiler):
+                raise Ex.RaceCoinFillFailureException
+            spoiler.race_coin_placements = race_coin_data
+            return
+        except Ex.RaceCoinFillFailureException:
+            if retries >= 10:
+                js.postMessage("Race Coin Randomizer failed to fill. REPORT THIS TO THE DEVS!!")
+                raise Ex.RaceCoinFillFailureException
+            retries += 1
+            js.postMessage("Race Coin Randomizer failed to fill. Tries: " + str(retries))

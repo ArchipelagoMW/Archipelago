@@ -8,12 +8,17 @@ SADX_BASE_ID = 543800000
 
 
 def pascal_to_space(s):
+    s = re.sub(r'^(Ss)', 'S.S.', s)
     s = re.sub(r'^(SS)', 'S.S.', s)
+    s = re.sub(r'^(Mr)', 'M.R.', s)
     s = re.sub(r'^(MR)', 'M.R.', s)
+    s = re.sub(r'^(Tp)', 'T.P.', s)
     s = re.sub(r'^(TP)', 'T.P.', s)
+    s = re.sub(r'^(Ec)', 'E.C.', s)
     s = re.sub(r'^(EC)', 'E.C.', s)
     s = re.sub(r'_', ' ', s)  # Replace underscores with spaces
     s = re.sub(r'(?<!^)(?=[A-Z][a-z])', ' ', s)  # Add spaces before PascalCase words
+    s = re.sub(r'(?<=[a-zA-Z])(?=\d)', ' ', s)  # Add spaces between letters and numbers
     s = re.sub(r'\s{2,}', ' ', s)  # Remove extra spaces
     return s.strip()
 
@@ -280,13 +285,13 @@ class Area(Enum):
 
 class AreaConnection(Enum):
     # City Hall
-    CityHall_to_SSMain = (Area.CityHall, Area.SSMain)
+    CityHall_to_SsMain = (Area.CityHall, Area.SSMain)
     CityHall_to_Sewers = (Area.CityHall, Area.Sewers)
     CityHall_to_SpeedHighway = (Area.CityHall, Area.SpeedHighway)
     CityHall_to_Chaos0 = (Area.CityHall, Area.Chaos0)
 
     # Station
-    Station_to_SSMain = (Area.Station, Area.SSMain)
+    Station_to_SsMain = (Area.Station, Area.SSMain)
     Station_to_MrMain = (Area.Station, Area.MRMain)
     Station_to_Casino = (Area.Station, Area.Casino)
 
@@ -301,16 +306,16 @@ class AreaConnection(Enum):
     Sewers_to_TPTunnel = (Area.Sewers, Area.TPTunnel)
 
     # SSMain
-    SSMain_to_Hotel = (Area.SSMain, Area.Hotel)
-    SSMain_to_Station = (Area.SSMain, Area.Station)
-    SSMain_to_CityHall = (Area.SSMain, Area.CityHall)
-    SSMain_to_TwinkleParkTunnel = (Area.SSMain, Area.TPTunnel)
-    SSMain_to_EcOutside = (Area.SSMain, Area.ECOutside)
-    SSMain_to_Bridge = (Area.SSMain, Area.ECBridge)
-    SSMain_to_SpeedHighway = (Area.SSMain, Area.SpeedHighway)
+    SsMain_to_Hotel = (Area.SSMain, Area.Hotel)
+    SsMain_to_Station = (Area.SSMain, Area.Station)
+    SsMain_to_CityHall = (Area.SSMain, Area.CityHall)
+    SsMain_to_TpTunnel = (Area.SSMain, Area.TPTunnel)
+    SsMain_to_EcOutside = (Area.SSMain, Area.ECOutside)
+    SsMain_to_Bridge = (Area.SSMain, Area.ECBridge)
+    SsMain_to_SpeedHighway = (Area.SSMain, Area.SpeedHighway)
 
     # Hotel
-    Hotel_to_SSMain = (Area.Hotel, Area.SSMain)
+    Hotel_to_SsMain = (Area.Hotel, Area.SSMain)
     Hotel_to_Casino = (Area.Hotel, Area.Casino)
     Hotel_to_SsChaoGarden = (Area.Hotel, Area.SSChaoGarden)
     Hotel_to_Chaos2 = (Area.Hotel, Area.Chaos2)
@@ -321,14 +326,14 @@ class AreaConnection(Enum):
     HotelPool_to_EmeraldCoast = (Area.HotelPool, Area.EmeraldCoast)
 
     # Twinkle Park Tunnel
-    TwinkleParkTunnel_to_SSMain = (Area.TPTunnel, Area.SSMain)
-    TwinkleParkTunnel_to_TwinkleParkLobby = (Area.TPTunnel, Area.TPLobby)
-    TwinkleParkTunnel_to_Sewers = (Area.TPTunnel, Area.Sewers)
+    TpTunnel_to_SsMain = (Area.TPTunnel, Area.SSMain)
+    TpTunnel_to_TpLobby = (Area.TPTunnel, Area.TPLobby)
+    TpTunnel_to_Sewers = (Area.TPTunnel, Area.Sewers)
 
     # Twinkle Park Lobby
-    TwinkleParkLobby_to_TwinkleParkTunnel = (Area.TPLobby, Area.TPTunnel)
-    TwinkleParkLobby_to_TwinklePark = (Area.TPLobby, Area.TwinklePark)
-    TwinkleParkLobby_to_TwinkleCircuit = (Area.TPLobby, Area.TwinkleCircuit)
+    TpLobby_to_TpTunnel = (Area.TPLobby, Area.TPTunnel)
+    TpLobby_to_TwinklePark = (Area.TPLobby, Area.TwinklePark)
+    TpLobby_to_TwinkleCircuit = (Area.TPLobby, Area.TwinkleCircuit)
 
     # MRMain
     MrMain_to_Station = (Area.MRMain, Area.Station)
@@ -375,7 +380,7 @@ class AreaConnection(Enum):
     FinalEggTower_to_BetaEggViper = (Area.FinalEggTower, Area.BetaEggViper)
     FinalEggTower_to_EcInside = (Area.FinalEggTower, Area.ECInside)
     # Egg Carrier Outside (Untransformed)
-    EcOutside_to_SSMain = (Area.ECOutside, Area.SSMain)
+    EcOutside_to_SsMain = (Area.ECOutside, Area.SSMain)
     EcOutside_to_MrMain = (Area.ECOutside, Area.MRMain)
     EcOutside_to_SkyChase2 = (Area.ECOutside, Area.SkyChase2)
     EcOutside_to_Chaos6ZeroBeta = (Area.ECOutside, Area.Chaos6ZeroBeta)
@@ -385,7 +390,7 @@ class AreaConnection(Enum):
     EcOutside_to_Pool = (Area.ECOutside, Area.ECPool)
 
     # Bridge (Transformed)
-    Bridge_to_SSMain = (Area.ECBridge, Area.SSMain)
+    Bridge_to_SsMain = (Area.ECBridge, Area.SSMain)
     Bridge_to_MrMain = (Area.ECBridge, Area.MRMain)
     Bridge_to_SkyDeck = (Area.ECBridge, Area.SkyDeck)
     Bridge_to_SkyChase2 = (Area.ECBridge, Area.SkyChase2)
@@ -500,9 +505,9 @@ bosses_areas = [
 level_area_connections = [
     AreaConnection.CityHall_to_SpeedHighway,
     AreaConnection.Casino_to_Casinopolis,
-    AreaConnection.SSMain_to_SpeedHighway,
+    AreaConnection.SsMain_to_SpeedHighway,
     AreaConnection.HotelPool_to_EmeraldCoast,
-    AreaConnection.TwinkleParkLobby_to_TwinklePark,
+    AreaConnection.TpLobby_to_TwinklePark,
     AreaConnection.MrMain_to_WindyValley,
     AreaConnection.AngelIsland_to_RedMountain,
     AreaConnection.IceCave_to_IceCap,
@@ -520,7 +525,7 @@ bosses_area_connections = [
     AreaConnection.Casino_to_EggWalker,
     AreaConnection.Hotel_to_SsChaoGarden,
     AreaConnection.Hotel_to_Chaos2,
-    AreaConnection.TwinkleParkLobby_to_TwinkleCircuit,
+    AreaConnection.TpLobby_to_TwinkleCircuit,
     AreaConnection.MrMain_to_Chaos4,
     AreaConnection.MrMain_to_EggHornet,
     AreaConnection.MrMain_to_MrChaoGarden,

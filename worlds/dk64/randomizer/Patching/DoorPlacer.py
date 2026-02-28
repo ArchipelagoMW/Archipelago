@@ -10,7 +10,7 @@ from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Maps import Maps
 from randomizer.Lists.DoorLocations import door_locations
 from randomizer.Lists.MapsAndExits import GetExitId, GetMapId
-from randomizer.Patching.Library.Generic import IsItemSelected, addNewScript, getNextFreeID
+from randomizer.Patching.Library.Generic import addNewScript, getNextFreeID, IsDDMSSelected
 from randomizer.Patching.Library.DataTypes import float_to_hex
 from randomizer.Patching.Library.Assets import getPointerLocation, TableNames
 from randomizer.Patching.Patcher import LocalROM
@@ -389,13 +389,26 @@ def place_door_locations(spoiler, ROM_COPY: LocalROM):
                     door_type = data[1]
                     if door.map == cont_map_id:
                         # If any wrinkly doors have had their location changed or randomized
-                        if door_type == DoorType.wrinkly and (spoiler.settings.wrinkly_location_rando or spoiler.settings.remove_wrinkly_puzzles):
+                        if door_type == DoorType.wrinkly and (
+                            IsDDMSSelected(
+                                spoiler.settings.misc_changes_selected,
+                                MiscChangesSelected.remove_wrinkly_puzzles,
+                            )
+                            or spoiler.settings.wrinkly_location_rando
+                        ):
                             # If hint doors should exist (no progressive hints unless hints are in the pool, or the edge case of wrinkly puzzles
                             # being removed without wrinkly location rando AND progressive hints being set to off)
                             if (
                                 (spoiler.settings.progressive_hint_item == ProgressiveHintItem.off)
                                 or Types.Hint in spoiler.settings.shuffled_location_types
-                                or (spoiler.settings.remove_wrinkly_puzzles and not spoiler.settings.wrinkly_location_rando and spoiler.settings.progressive_hint_item == ProgressiveHintItem.off)
+                                or (
+                                    IsDDMSSelected(
+                                        spoiler.settings.misc_changes_selected,
+                                        MiscChangesSelected.remove_wrinkly_puzzles,
+                                    )
+                                    and not spoiler.settings.wrinkly_location_rando
+                                    and spoiler.settings.progressive_hint_item == ProgressiveHintItem.off
+                                )
                             ):
                                 kong = data[2]
                                 item_data = []
@@ -494,8 +507,8 @@ def place_door_locations(spoiler, ROM_COPY: LocalROM):
                     pushNewDKPortalScript(portal_map, dk_portal_ids, ROM_COPY)
                     exit_start = getPointerLocation(TableNames.Exits, portal_map)
                     exits_to_alter = [-1]
-                    if cont_map_id in LEVEL_MAIN_MAPS:
-                        exits_to_alter = PORTAL_MAP_EXIT_PAIRING[portal_map]
+                    if portal_map in LEVEL_MAIN_MAPS:
+                        exits_to_alter = [-1] + PORTAL_MAP_EXIT_PAIRING[portal_map]
                     for exit_index in exits_to_alter:
                         if exit_index >= 0:
                             ROM_COPY.seek(exit_start + 12 + (exit_index * 10))

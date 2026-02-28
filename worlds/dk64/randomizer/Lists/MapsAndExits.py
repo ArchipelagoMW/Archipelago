@@ -163,6 +163,7 @@ RegionMapList = {
     Regions.MushroomNightDoor: Maps.ForestGiantMushroom,
     Regions.MushroomNightExterior: Maps.FungiForest,
     Regions.MushroomUpperExterior: Maps.FungiForest,
+    Regions.MushroomVeryTopExterior: Maps.FungiForest,
     Regions.MushroomChunkyRoom: Maps.ForestChunkyFaceRoom,
     Regions.MushroomLankyMushroomsRoom: Maps.ForestLankyMushroomsRoom,
     Regions.MushroomLankyZingersRoom: Maps.ForestLankyZingersRoom,
@@ -259,6 +260,14 @@ RegionMapList = {
     Regions.HideoutHelmKeyRoom: Maps.HideoutHelm,
     Regions.HideoutHelmOOBChunky: Maps.HideoutHelm,
     Regions.HideoutHelmOOBLanky: Maps.HideoutHelm,
+    # Misc
+    Regions.Snide: Maps.Snide,
+    Regions.SnideFirstGroup: Maps.Snide,
+    Regions.SnideSecondGroup: Maps.Snide,
+    Regions.SnideThirdGroup: Maps.Snide,
+    Regions.SnideFourthGroup: Maps.Snide,
+    Regions.SnideLastGroup: Maps.Snide,
+    Regions.FactoryArcadePole: Maps.FranticFactory,
 }
 
 LevelMapTable = {
