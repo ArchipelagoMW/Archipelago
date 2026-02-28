@@ -433,6 +433,15 @@ async def multi_watcher(ctx: UndertaleContext):
                                                                            "time": now}}}]
                             }])
 
+                        # If player was visible but timed out (heartbeat) or left the room, remove them.
+                        for slot, entry in ctx.other_undertale_status.items():
+                            if entry.get("room") != this_room or \
+                                    now - entry.get("time", now) > UNDERTALE_ONLINE_TIMEOUT:
+                                playerspot = os.path.join(ctx.save_game_folder,
+                                                          f"FRISK{slot}.playerspot")
+                                if os.path.exists(playerspot):
+                                    os.remove(playerspot)
+
                         current_position = (this_x, this_y, this_room, this_sprite, this_frame)
                         if current_position == ctx.last_sent_position:
                             continue
