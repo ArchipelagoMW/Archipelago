@@ -22,6 +22,8 @@ class DBGamesPackageCache(GamesPackageCache):
         cache_key = (game, full_games_package.get("checksum", None))
         cached = self._get(cache_key)
         if any(value is None for value in cached):
+            if "checksum" not in full_games_package:
+                return super().get(game, full_games_package)  # predates checksum, assume fully populated
             row = GameDataPackage.get(checksum=full_games_package["checksum"])
             if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
                 return super().get(game, restricted_loads(row.data))
