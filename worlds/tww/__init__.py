@@ -26,7 +26,7 @@ from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
 from .Rules import set_rules
 
-VERSION: tuple[int, int, int] = (3, 0, 0)
+VERSION: tuple[int, int, int] = (3, 1, 0)
 
 
 def run_client(*args: str) -> None:
@@ -132,7 +132,7 @@ class TWWWorld(World):
 
     item_name_groups: ClassVar[dict[str, set[str]]] = item_name_groups
 
-    required_client_version: tuple[int, int, int] = (0, 5, 1)
+    required_client_version: tuple[int, int, int] = (0, 6, 0)
 
     web: ClassVar[TWWWeb] = TWWWeb()
 
