@@ -124,6 +124,8 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             update(self.ctx)
             self.output("Update cycle complete")
+            self.ctx.code_cave_setup = False
+            self.output("Forcing reset of code cave")
 
     def _cmd_deathlink(self):
         """Toggles Death Link on and off."""
