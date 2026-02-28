@@ -188,6 +188,7 @@ def stop_room(app_client: "FlaskClient",
             if address:
                 room.timeout = original_timeout
                 room.last_activity = new_last_activity
+                room.commands.clear()  # make sure there is no leftover /exit
                 print("timeout restored")
 
 
