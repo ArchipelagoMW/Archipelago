@@ -10,7 +10,10 @@ class DBGamesPackageCache(GamesPackageCache):
 
     def __init__(self, static_games_package: dict[str, GamesPackage]) -> None:
         super().__init__()
-        self._static = {game: GamesPackageCache.get(self, game, games_package) for game, games_package in static_games_package.items()}
+        self._static = {
+            game: GamesPackageCache.get(self, game, games_package)
+            for game, games_package in static_games_package.items()
+        }
 
     @override
     def get(
