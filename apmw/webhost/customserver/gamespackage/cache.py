@@ -2,8 +2,6 @@ from NetUtils import GamesPackage
 from Utils import restricted_loads
 from apmw.multiserver.gamespackage.cache import GamesPackageCache, ItemNameGroups, LocationNameGroups
 
-from WebHostLib.models import GameDataPackage
-
 
 class DBGamesPackageCache(GamesPackageCache):
     _static: dict[str, tuple[GamesPackage, ItemNameGroups, LocationNameGroups]]
@@ -22,11 +20,15 @@ class DBGamesPackageCache(GamesPackageCache):
         cached = self._get(cache_key)
         if any(value is None for value in cached):
             if "checksum" not in full_games_package:
-                return super().get(game, full_games_package)  # predates checksum, assume fully populated
+                return super().get(game, full_games_package)  # no checksum, assume fully populated
+
+            from WebHostLib.models import GameDataPackage
+
             row = GameDataPackage.get(checksum=full_games_package["checksum"])
             if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
                 return super().get(game, restricted_loads(row.data))
             return super().get(game, full_games_package)  # ... in which case full_games_package should be populated
+
         return cached  # type: ignore # mypy doesn't understand any value is None
 
     def get_static(self, game: str) -> tuple[GamesPackage, ItemNameGroups, LocationNameGroups]:

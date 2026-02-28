@@ -5,8 +5,6 @@ from test.multiserver.test_gamespackage_cache import GamesPackageCacheTest
 
 import Utils
 from NetUtils import GamesPackage
-
-import apmw.webhost.customserver.gamespackage.cache
 from apmw.webhost.customserver.gamespackage.cache import DBGamesPackageCache
 
 
@@ -37,15 +35,23 @@ class DBGamesPackageCacheTest(GamesPackageCacheTest):
             "checksum": "2345",
         }
     }
-    orig_db_type: t.Any
+    orig_db_type: t.ClassVar[type]
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import WebHostLib.models
+
+        cls.orig_db_type = WebHostLib.models.GameDataPackage
+        WebHostLib.models.GameDataPackage = FakeGameDataPackage  # type: ignore
 
     def setUp(self) -> None:
-        self.orig_db_type = apmw.webhost.customserver.gamespackage.cache.GameDataPackage  # type: ignore[attr-defined]
         self.cache = DBGamesPackageCache(self.static_data)
-        apmw.webhost.customserver.gamespackage.cache.GameDataPackage = FakeGameDataPackage  # type: ignore
 
-    def tearDown(self) -> None:
-        apmw.webhost.customserver.gamespackage.cache.GameDataPackage = self.orig_db_type  # type: ignore[attr-defined]
+    @classmethod
+    def tearDownClass(cls) -> None:
+        import WebHostLib.models
+
+        WebHostLib.models.GameDataPackage = cls.orig_db_type  # type: ignore
 
     def assert_conversion(
         self,
