@@ -16,6 +16,7 @@ import operator
 import pickle
 import random
 import shlex
+import sys
 import threading
 import time
 import typing
@@ -46,7 +47,6 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType, LocationStore, MultiData, Hint, HintStatus
 from BaseClasses import ItemClassification
 
-
 min_client_version = Version(0, 5, 0)
 colorama.just_fix_windows_console()
 
@@ -59,16 +59,98 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
+class Limit:
+    name: str
+    value: int
+    unit: str
 
-def remove_from_list(container, value):
+    def __init__(self, name: str, value: int, unit: str):
+        self.name = name
+        self.value = value
+        self.unit = unit
+
+    def is_exceeded(self, value: int | float) -> bool:
+        return value > self.value
+
+    def check(self, value: int | float):
+        if self.is_exceeded(value):
+            raise LimitExceeded(self)
+
+        return value
+
+
+class LimitExceeded(Exception):
+    limit: Limit
+    message: str
+
+    def __init__(self, limit: Limit):
+        self.limit = limit
+        self.message = f"Value exceeds `{limit.name}` limit of {limit.value} {limit.unit}"
+
+        super().__init__(self.message)
+
+
+ServerLimits = typing.TypedDict('ServerLimits', {
+    'max_int_bits': Limit,
+    'max_list_len': Limit,
+    'max_string_len': Limit,
+})
+
+def operator_mod(ctx: Context, lhs, rhs):
+    if ctx.disable_string_modulo and isinstance(lhs, str):
+        raise ValueError("Can't modulo a string")
+
+    return lhs % rhs
+
+def operator_add(ctx: Context, lhs, rhs):
+    match (lhs, rhs):
+        case (str(), str()):
+            ctx.limits['max_string_len'].check(len(lhs) + len(rhs))
+        case (list(), list()):
+            ctx.limits['max_list_len'].check(len(lhs) + len(rhs))
+
+    return lhs + rhs
+
+def operator_mul(ctx: Context, lhs: typing.Any, rhs: typing.Any):
+    match (lhs, rhs):
+        case (int(lhs), int(rhs)) if lhs != 0 and rhs != 0:
+            num_bits = math.ceil(math.log2(abs(lhs)) + math.log2(abs(rhs)))
+            ctx.limits['max_int_bits'].check(num_bits)
+        case (str(lhs), int(rhs)):
+            ctx.limits['max_string_len'].check(len(lhs) * rhs)
+        case (int(lhs), str(rhs)):
+            ctx.limits['max_string_len'].check(lhs * len(rhs))
+        case (list(lhs), int(rhs)):
+            ctx.limits['max_list_len'].check(len(lhs) * rhs)
+        case (int(lhs), list(rhs)):
+            ctx.limits['max_list_len'].check(lhs * len(rhs))
+
+    return lhs * rhs
+
+def operator_pow(ctx: Context, base, exp):
+    match (base, exp):
+        case (int(), int()) if abs(base) > 1 and exp > 1:
+            num_bits = math.ceil(math.log2(abs(base)) * exp)
+            ctx.limits['max_int_bits'].check(num_bits)
+
+    return base ** exp
+
+def operator_lshift(ctx: Context, lhs, rhs):
+    if lhs != 0:
+        num_bits = lhs.bit_length() + rhs
+        ctx.limits['max_int_bits'].check(num_bits)
+
+    return lhs << rhs
+
+
+def remove_from_list(ctx: Context, container, value):
     try:
         container.remove(value)
     except ValueError:
         pass
     return container
 
-
-def pop_from_container(container, value):
+def pop_from_container(ctx: Context, container, value):
     if isinstance(container, list) and isinstance(value, int) and len(container) <= value:
         return container
 
@@ -79,10 +161,11 @@ def pop_from_container(container, value):
         container.pop(value)
     except ValueError:
         pass
+
     return container
 
 
-def update_container_unique(container, entries):
+def update_container_unique(ctx: Context, container, entries):
     if isinstance(container, list):
         existing_container_as_set = set(container)
         container.extend([entry for entry in entries if entry not in existing_container_as_set])
@@ -109,23 +192,23 @@ def queue_gc():
 # functions callable on storable data on the server by clients
 modify_functions = {
     # generic:
-    "replace": lambda old, new: new,
-    "default": lambda old, new: old,
+    "replace": lambda ctx, old, new: new,
+    "default": lambda ctx, old, new: old,
     # numeric:
-    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
-    "mul": operator.mul,
-    "pow": operator.pow,
-    "mod": operator.mod,
-    "floor": lambda value, _: math.floor(value),
-    "ceil": lambda value, _: math.ceil(value),
-    "max": max,
-    "min": min,
+    "add": operator_add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
+    "mul": operator_mul,
+    "pow": operator_pow,
+    "mod": operator_mod,
+    "floor": lambda ctx, value, _: math.floor(value),
+    "ceil": lambda ctx, value, _: math.ceil(value),
+    "max": lambda ctx, a, b: max(a, b),
+    "min": lambda ctx, a, b: min(a, b),
     # bitwise:
-    "xor": operator.xor,
-    "or": operator.or_,
-    "and": operator.and_,
-    "left_shift": operator.lshift,
-    "right_shift": operator.rshift,
+    "xor": lambda ctx, a, b: operator.xor(a, b),
+    "or": lambda ctx, a, b: operator.or_(a, b),
+    "and": lambda ctx, a, b: operator.and_(a, b),
+    "left_shift": operator_lshift,
+    "right_shift": lambda ctx, a, b: operator.rshift(a, b),
     # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
@@ -249,12 +332,20 @@ class Context:
     non_hintable_names: typing.Dict[str, typing.AbstractSet[str]]
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
+    limits: ServerLimits
+    disable_limit_commands: bool
+    disable_string_modulo: bool
     logger: logging.Logger
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
-                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger(),
+                 disable_limit_commands: bool = False,
+                 limit_max_int_bits: int = 128,
+                 limit_max_list_len: int = 1 * 1024 * 1024,
+                 limit_max_string_len: int = 1 * 1024 * 1024,
+                ):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -314,6 +405,13 @@ class Context:
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
         self.spheres = []
+        self.limits = {
+            'max_int_bits': Limit("max_int_bits", limit_max_int_bits, "bits"),
+            'max_list_len': Limit("max_list_len", limit_max_list_len, "list elements"),
+            'max_string_len': Limit("max_string_len", limit_max_string_len, "string characters"),
+        }
+        self.disable_limit_commands = disable_limit_commands
+        self.disable_string_modulo = True
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -344,8 +442,16 @@ class Context:
 
         for game_package in self.gamespackage.values():
             # remove groups from data sent to clients
-            del game_package["item_name_groups"]
-            del game_package["location_name_groups"]
+            try:
+                del game_package["item_name_groups"]
+                del game_package["location_name_groups"]
+            except:
+                # Key removal throws during test execution because
+                # game_package is a global reference and
+                # tests creating multiple `Context` instances,
+                # which attempt to remove already removed keys.
+                if "pytest" not in sys.modules:
+                    raise
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
@@ -1843,6 +1949,14 @@ def get_slot_points(ctx: Context, team: int, slot: int) -> int:
     return (ctx.location_check_points * len(ctx.location_checks[team, slot]) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
+def compute_value(ctx: Context, operation: str, lhs: typing.Any, rhs: typing.Any) -> typing.Any:
+    func = modify_functions[operation]
+    value = func(ctx, lhs, rhs)
+
+    if isinstance(value, int):
+        ctx.limits['max_int_bits'].check(value.bit_length())
+
+    return value
 
 async def process_client_cmd(ctx: Context, client: Client, args: dict):
     try:
@@ -2176,8 +2290,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["original_value"] = copy.copy(value)
             args["slot"] = client.slot
             for operation in args["operations"]:
-                func = modify_functions[operation["operation"]]
-                value = func(value, operation["value"])
+                value = compute_value(ctx, operation["operation"], value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", False):
@@ -2548,6 +2661,66 @@ class ServerCommandProcessor(CommonCommandProcessor):
                         f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
         self.output("\n".join(texts))
 
+    def _cmd_limits(self):
+        """List all server limits and their values."""
+        if self.ctx.disable_limit_commands:
+            self.output("Limit commands are disabled.")
+            return
+
+        items = [f"{key} = {value}" for key, value in self.ctx.limits.items()]
+        self.output("\n".join(items))
+
+    def _cmd_set_limit(self, key: str, value: str):
+        """Set a single server limit."""
+        if self.ctx.disable_limit_commands:
+            self.output("Limit commands are disabled.")
+            return
+
+        if not key in self.ctx.limits:
+            self.output(f"Invalid limit `{key}`")
+            return
+
+        try:
+            value_int = int(value)
+        except:
+            self.output(f"Limit value `{value}` is not a valid integer")
+            return
+
+        self.ctx.limits[key].value = value_int
+        self.output(f"Set limit `{key} = {value_int}`")
+
+    def _cmd_raise_limit(self, key: str, value: str):
+        """Raise a single server limit by a given amount."""
+        if self.ctx.disable_limit_commands:
+            self.output("Limit commands are disabled.")
+            return
+        
+        if not key in self.ctx.limits:
+            self.output(f"Invalid limit `{key}`")
+            return
+
+        try:
+            value_int = int(value)
+        except:
+            self.output(f"Limit value `{value}` is not a valid integer")
+            return
+
+        old_limit = self.ctx.limits[key].value
+        new_limit = old_limit + value_int
+        self.ctx.limits[key].value = new_limit
+        self.output(f"Raised limit `{key}` by `{value_int}`: `{old_limit}` -> `{new_limit}`")
+    
+    def _cmd_toggle_string_modulo(self):
+        """Toggle modulo operations on strings on/off"""
+        if self.ctx.disable_limit_commands:
+            self.output("Limit commands are disabled.")
+            return
+
+        self.ctx.disable_string_modulo = not self.ctx.disable_string_modulo
+
+        status = "disabled" if self.ctx.disable_string_modulo else "enabled"
+        self.output(f"Modulo operations on strings are now {status}.")
+
 
 async def console(ctx: Context):
     import sys
@@ -2635,6 +2808,14 @@ def parse_args() -> argparse.Namespace:
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
     parser.add_argument('--log_network', default=defaults["log_network"], action="store_true")
+    parser.add_argument('--disable_limit_commands', default=defaults["disable_limit_commands"], action="store_true")
+    parser.add_argument('--limit_max_int_bits', default=defaults["limit_max_int_bits"], type=int,
+        help="limit allowed number of integer bits per data storage value")
+    parser.add_argument('--limit_max_list_len', default=defaults["limit_max_list_len"], type=int,
+        help="limit allowed number of elements per data storage value")
+    parser.add_argument('--limit_max_string_len', default=defaults["limit_max_string_len"], type=int,
+        help="limit allowed number of string characters per data storage value")
+
     args = parser.parse_args()
     return args
 
@@ -2681,7 +2862,12 @@ async def main(args: argparse.Namespace):
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
                   args.countdown_mode, args.remaining_mode,
-                  args.auto_shutdown, args.compatibility, args.log_network)
+                  args.auto_shutdown, args.compatibility, args.log_network,
+                  disable_limit_commands = args.disable_limit_commands,
+                  limit_max_int_bits = args.limit_max_int_bits,
+                  limit_max_list_len = args.limit_max_list_len,
+                  limit_max_string_len = args.limit_max_string_len,
+                 )
     data_filename = args.multidata
 
     if not data_filename:
