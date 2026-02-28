@@ -456,7 +456,7 @@ def set_farm_buildings_entrance_rules(logic, rule_collector: StardewRuleCollecto
 
 def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, content: StardewContent):
     rule_collector.set_entrance_rule(Entrance.hospital_back_to_hospital, logic.relationship.has_hearts(NPC.harvey, 2))
-    rule_collector.set_entrance_rule(Entrance.hospital_to_hospital_back, logic.relationship.has_hearts(NPC.harvey,2)) # TODO: you can go into the loading zone without the hearts, do we need a region in between?
+    rule_collector.set_entrance_rule(Entrance.hospital_to_hospital_back, logic.relationship.has_hearts(NPC.harvey,2)) 
     rule_collector.set_entrance_rule(Entrance.mountain_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.carpenter_shop_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.maru_room_to_carpenter_shop, logic.relationship.has_hearts(NPC.maru, 2))
@@ -465,7 +465,7 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
     rule_collector.set_entrance_rule(Entrance.enter_elliott_house, logic.relationship.has_hearts(NPC.elliott, 2))
     rule_collector.set_entrance_rule(Entrance.enter_sunroom, logic.relationship.has_hearts(NPC.caroline, 2))
     rule_collector.set_entrance_rule(Entrance.enter_wizard_basement, logic.relationship.has_hearts(NPC.wizard, 4))
-    rule_collector.set_entrance_rule(Entrance.wizard_basement_to_witch_warp, logic.quest.has_magic_ink()) # TODO: check if logic correct
+    rule_collector.set_entrance_rule(Entrance.wizard_basement_to_witch_warp, logic.quest.can_complete_quest(Quest.goblin_problem))
     rule_collector.set_entrance_rule(Entrance.enter_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 2))
     rule_collector.set_entrance_rule(Entrance.leave_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 2))
     if content.is_enabled(ModNames.alec):
