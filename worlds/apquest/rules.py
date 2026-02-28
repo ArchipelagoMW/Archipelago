@@ -53,7 +53,7 @@ def set_all_entrance_rules(world: APQuestWorld) -> None:
 
     # So far, we've been using "Has" from the Rule Builder to make our rules.
     # There is another way to make rules that you will see in a lot of older worlds.
-    # A rule can just be  a function that takes a "state" argument and returns a bool.
+    # A rule can just be a function that takes a "state" argument and returns a bool.
     # As a demonstration of what that looks like, let's do it with our final Entrance rule:
     world.set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
     # This style is not really recommended anymore, though.
