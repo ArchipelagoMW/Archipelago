@@ -1,16 +1,9 @@
 from Utils import cache_self1
-from .base_logic import BaseLogic, BaseLogicMixin
-from ..options import EntranceRandomization
-from ..stardew_rule import StardewRule, Reach, false_, true_
-from ..strings.region_names import Region
 
-main_outside_area = {Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
-                     Region.bus_stop, Region.backwoods, Region.tunnel_entrance}
-always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.hospital, Region.carpenter, Region.alex_house,
-                                                     Region.ranch, Region.farm_cave, Region.tent,
-                                                     Region.pierre_store, Region.saloon, Region.blacksmith, Region.trailer, Region.museum, Region.mayor_house,
-                                                     Region.haley_house, Region.sam_house, Region.jojamart, Region.fish_shop}
-always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er}
+from ..options import EntranceRandomization
+from ..stardew_rule import Reach, StardewRule, false_, true_
+from ..strings.region_names import Region
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class RegionLogicMixin(BaseLogicMixin):
