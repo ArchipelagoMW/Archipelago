@@ -1,7 +1,7 @@
 import typing as t
 from weakref import WeakValueDictionary
 
-from NetUtils import GamesPackage, DataPackage
+from NetUtils import GamesPackage
 
 GameAndChecksum = tuple[str, str | None]
 ItemNameGroups = dict[str, list[str]]

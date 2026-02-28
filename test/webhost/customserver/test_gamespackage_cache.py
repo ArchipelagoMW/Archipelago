@@ -1,11 +1,13 @@
 import typing as t
 from copy import deepcopy
 
-import Utils
-import apmw.webhost.customserver.gamespackage.cache
-from NetUtils import GamesPackage
-from apmw.webhost.customserver.gamespackage.cache import DBGamesPackageCache
 from test.multiserver.test_gamespackage_cache import GamesPackageCacheTest
+
+import Utils
+from NetUtils import GamesPackage
+
+import apmw.webhost.customserver.gamespackage.cache
+from apmw.webhost.customserver.gamespackage.cache import DBGamesPackageCache
 
 
 class FakeGameDataPackage:

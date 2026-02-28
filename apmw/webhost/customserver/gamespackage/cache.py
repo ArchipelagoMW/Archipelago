@@ -1,7 +1,8 @@
 from NetUtils import GamesPackage
 from Utils import restricted_loads
-from WebHostLib.models import GameDataPackage
 from apmw.multiserver.gamespackage.cache import GamesPackageCache, ItemNameGroups, LocationNameGroups
+
+from WebHostLib.models import GameDataPackage
 
 
 class DBGamesPackageCache(GamesPackageCache):
