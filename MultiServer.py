@@ -316,10 +316,12 @@ class Context:
         self.spheres = []
 
         # init empty to satisfy linter, I suppose
-        self.gamespackage = {}
-        self.checksums = {}
-        self.item_name_groups = {}
-        self.location_name_groups = {}
+        self.gamespackage: dict[str, NetUtils.GamesPackage] = {}
+        self.dynamic_package: dict[str, NetUtils.GamesPackage] = {}
+        self.checksums: dict[str, str] = {}
+        self.dynamic_checksums: dict[str, str] = {}
+        self.item_name_groups: dict[str, dict[str, set[str]]] = {}
+        self.location_name_groups: dict[str, dict[str, set[str]]] = {}
         self.all_item_and_group_names = {}
         self.all_location_and_group_names = {}
         self.item_names = collections.defaultdict(
@@ -360,6 +362,16 @@ class Context:
             self.all_location_and_group_names[game_name] = \
                 set(game_package["location_name_to_id"]) | set(self.location_name_groups.get(game_name, []))
 
+        for game_name, game_package in self.dynamic_package.items():
+            if "checksum" in game_package:
+                self.dynamic_checksums[game_name] = game_package["checksum"]
+            for item_name, item_id in game_package["item_name_to_id"].items():
+                self.item_names[game_name][item_id] = item_name
+            for location_name, location_id in game_package["location_name_to_id"].items():
+                self.location_names[game_name][location_id] = location_name
+            self.all_item_and_group_names[game_name] |= set(game_package["item_name_to_id"])
+            self.all_location_and_group_names[game_name] |= set(game_package["location_name_to_id"])
+
         archipelago_item_names = self.item_names["Archipelago"]
         archipelago_location_names = self.location_names["Archipelago"]
         for game in [game_name for game_name in self.gamespackage if game_name != "Archipelago"]:
@@ -368,10 +380,26 @@ class Context:
             self.location_names[game].update(archipelago_location_names)
 
     def item_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
-        return self.gamespackage[game]["item_name_to_id"] if game in self.gamespackage else None
+        return (self.gamespackage[game]["item_name_to_id"] |
+                self.dynamic_package.get(game, {}).get("item_name_to_id", {})) \
+            if game in self.gamespackage else None
+
+    def get_item_id_from_game(self, game: str, item: str) -> int | None:
+        if item in self.gamespackage[game]["item_name_to_id"]:
+            return self.gamespackage[game]["item_name_to_id"][item]
+        dynamic_items = self.dynamic_package.get(game, {}).get("item_name_to_id", {})
+        return dynamic_items.get(item, None)
 
     def location_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
-        return self.gamespackage[game]["location_name_to_id"] if game in self.gamespackage else None
+        return (self.gamespackage[game]["location_name_to_id"] |
+                self.dynamic_package.get(game, {}).get("location_name_to_id", {})) \
+            if game in self.gamespackage else None
+
+    def get_location_id_from_game(self, game: str, location: str) -> int | None:
+        if location in self.gamespackage[game]["location_name_to_id"]:
+            return self.gamespackage[game]["location_name_to_id"][location]
+        dynamic_items = self.dynamic_package.get(game, {}).get("location_name_to_id", {})
+        return dynamic_items.get(location, None)
 
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
@@ -569,6 +597,15 @@ class Context:
                 self.location_name_groups[game_name] = data["location_name_groups"]
                 del data["location_name_groups"]
             del data["item_name_groups"]  # remove from data package, but keep in self.item_name_groups
+
+        for game_name, data in decoded_obj.get("dynamic_datapackage", {}).items():
+            self.logger.info(f"Loading dynamic data package for game {game_name}")
+            self.dynamic_package[game_name] = data
+            self.item_name_groups[game_name] |= data["item_name_groups"]
+            self.location_name_groups[game_name] |= data["location_name_groups"]
+            del data["item_name_groups"]
+            del data["location_name_groups"]
+
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
             self.read_data[f"item_name_groups_{game_name}"] = lambda lgame=game_name: self.item_name_groups[lgame]
@@ -934,6 +971,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'location_check_points': ctx.location_check_points,
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
+        "dynamic_checksums": {game: game_data["checksum"] for game, game_data in ctx.dynamic_package.items()
+                              if game in games},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
@@ -1191,7 +1230,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
         if slot in group:
             slots.add(group_id)
 
-    seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
+    seeked_item_id = item if isinstance(item, int) else ctx.get_item_id_from_game(ctx.games[slot], item)
     for finding_player, location_id, item_id, receiving_player, item_flags \
             in ctx.locations.find_item(slots, seeked_item_id):
         prev_hint = ctx.get_hint(team, finding_player, location_id)
@@ -1223,7 +1262,7 @@ def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str
     Collect a new hint for a given location name, with a given status (defaults to "unspecified").
     If None is passed for the status, then an automatic status will be determined from the item's quality.
     """
-    seeked_location: int = ctx.location_names_for_game(ctx.games[slot])[location]
+    seeked_location: int = ctx.get_location_id_from_game(ctx.games[slot], location)
     return collect_hint_location_id(ctx, team, slot, seeked_location, status)
 
 
@@ -1729,14 +1768,14 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 elif not for_location and hint_name in self.ctx.item_name_groups[game]:  # item group name
                     hints = []
                     for item_name in self.ctx.item_name_groups[game][hint_name]:
-                        if item_name in self.ctx.item_names_for_game(game):  # ensure item has an ID
+                        if self.ctx.get_item_id_from_game(game, item_name) is not None:  # ensure item has an ID
                             hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name))
-                elif not for_location and hint_name in self.ctx.item_names_for_game(game):  # item name
+                elif not for_location and self.ctx.get_item_id_from_game(game, hint_name) is not None:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name)
                 elif hint_name in self.ctx.location_name_groups[game]:  # location group name
                     hints = []
                     for loc_name in self.ctx.location_name_groups[game][hint_name]:
-                        if loc_name in self.ctx.location_names_for_game(game):
+                        if self.ctx.get_location_id_from_game(game, loc_name) is not None:
                             hints.extend(
                                 collect_hint_location_name(self.ctx, self.client.team, self.client.slot, loc_name)
                             )
@@ -1932,25 +1971,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
-        exclusions = args.get("exclusions", [])
         if "games" in args:
             games = {name: game_data for name, game_data in ctx.gamespackage.items()
                      if name in set(args.get("games", []))}
+            dynamic = {name: game_data for name, game_data in ctx.dynamic_package.items()
+                       if name in set(args.get("games", []))}
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                          "data": {"games": games}}])
-        # TODO: remove exclusions behaviour around 0.5.0
-        elif exclusions:
-            exclusions = set(exclusions)
-            games = {name: game_data for name, game_data in ctx.gamespackage.items()
-                     if name not in exclusions}
-
-            package = {"games": games}
-            await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                          "data": package}])
-
+                                          "data": {"games": games, "dynamic": dynamic}}])
         else:
             await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                          "data": {"games": ctx.gamespackage}}])
+                                          "data": {"games": ctx.gamespackage, "dynamic": ctx.dynamic_package}}])
 
     elif client.auth:
         if cmd == "ConnectUpdate":
@@ -2413,7 +2443,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if isinstance(location, int):
                     register_location_checks(self.ctx, team, slot, [location])
                 else:
-                    seeked_location: int = self.ctx.location_names_for_game(self.ctx.games[slot])[location]
+                    seeked_location: int = self.ctx.get_location_id_from_game(self.ctx.games[slot], location)
                     register_location_checks(self.ctx, team, slot, [seeked_location])
                 return True
             else:
@@ -2444,7 +2474,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if game in self.ctx.item_name_groups and item in self.ctx.item_name_groups[game]:
                     hints = []
                     for item_name_from_group in self.ctx.item_name_groups[game][item]:
-                        if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
+                        if self.ctx.get_item_id_from_game(game, item_name_from_group):  # ensure item has an ID
                             hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
                 else:  # item name or id
                     hints = collect_hints(self.ctx, team, slot, item)
@@ -2485,7 +2515,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
                     hints = []
                     for loc_name_from_group in self.ctx.location_name_groups[game][location]:
-                        if loc_name_from_group in self.ctx.location_names_for_game(game):
+                        if self.ctx.get_location_id_from_game(game, loc_name_from_group) is not None:
                             hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
                 else:
                     hints = collect_hint_location_name(self.ctx, team, slot, location)
