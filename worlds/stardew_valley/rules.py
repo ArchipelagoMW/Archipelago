@@ -460,7 +460,7 @@ def set_bedroom_entrance_rules(logic, rule_collector: StardewRuleCollector, cont
     rule_collector.set_entrance_rule(Entrance.mountain_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.carpenter_shop_to_maru_room, logic.relationship.has_hearts(NPC.maru, 2))
     rule_collector.set_entrance_rule(Entrance.maru_room_to_carpenter_shop, logic.relationship.has_hearts(NPC.maru, 2))
-    rule_collector.set_entrance_rule(Entrance.enter_sebastian_room,(logic.relationship.has_hearts(NPC.sebastian, 2) | logic.mod.magic.can_blink())) # TODO: you can go into the loading zone without the hearts, do we need a region in between?
+    rule_collector.set_entrance_rule(Entrance.enter_sebastian_room,(logic.relationship.has_hearts(NPC.sebastian, 2) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.forest_to_leah_cottage, logic.relationship.has_hearts(NPC.leah, 2))
     rule_collector.set_entrance_rule(Entrance.enter_elliott_house, logic.relationship.has_hearts(NPC.elliott, 2))
     rule_collector.set_entrance_rule(Entrance.enter_sunroom, logic.relationship.has_hearts(NPC.caroline, 2))

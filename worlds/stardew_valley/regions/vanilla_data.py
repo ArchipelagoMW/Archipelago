@@ -244,10 +244,13 @@ vanilla_regions: tuple[RegionData, ...] = (
         (
             Entrance.carpenter_shop_to_mountain,
             Entrance.carpenter_shop_to_maru_room,  # can't randomize
-            Entrance.enter_sebastian_room,
+            Entrance.enter_sebastian_room_stairwell,
         ),
     ),
-    RegionData(RegionName.sebastian_room, (Entrance.leave_sebastian_room,)),
+    RegionData(
+        RegionName.sebastian_room_stairwell, (Entrance.leave_sebastian_room_stairwell, Entrance.enter_sebastian_room)
+    ),
+    RegionData(RegionName.sebastian_room),
     RegionData(
         RegionName.adventurer_guild,
         (Entrance.adventurer_guild_to_mountain, Entrance.adventurer_guild_to_bedroom),  # can't randomize
@@ -928,17 +931,18 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.enter_sebastian_room,
-        RegionName.sebastian_room,
+        Entrance.enter_sebastian_room_stairwell,
+        RegionName.sebastian_room_stairwell,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.leave_sebastian_room,
+        Entrance.leave_sebastian_room_stairwell,
         RegionName.carpenter,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
+    ConnectionData(Entrance.enter_sebastian_room, RegionName.sebastian_room),
     ConnectionData(Entrance.carpenter_shop_to_maru_room, RegionName.maru_room),
     ConnectionData(Entrance.maru_room_to_carpenter_shop, RegionName.carpenter),
     ConnectionData(Entrance.mountain_to_outside_adventure_guild, RegionName.outside_adventure_guild),

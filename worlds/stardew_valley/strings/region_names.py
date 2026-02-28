@@ -92,6 +92,7 @@ class Region:
     tent = "Tent"
     maru_room = "Maru's Room"
     sebastian_room = "Sebastian's Room"
+    sebastian_room_stairwell = "Sebastian's Room Stairs"
     adventurer_guild = "Adventurer's Guild"
     adventurer_guild_bedroom = "Marlon's bedroom"
     quarry = "Quarry"
