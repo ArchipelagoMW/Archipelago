@@ -137,6 +137,7 @@ Ce randomiseur ne pouvait pas être possible sans l'aide de :
 - Ouro: (Support du tracker)
 - tal (matzahTalSoup): (guide pour les dungeon secrets)
 - Tubamann: (programmation additionnelle)
+- ChinchyPandora7: (Traduction du guide espagnol)
 
 Le logo archipelago © 2022 par Krista Corkos et Christopher Wilson, sous licence
 [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
