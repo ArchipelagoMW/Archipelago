@@ -222,6 +222,7 @@ class Rac3Context(CommonContext):
     slot_data: Optional[dict[str, Any]] = None
     last_deathlink_msg: Optional[str] = None
     last_deathlink_sender: Optional[str] = None
+    code_cave_setup: bool = False
     data_package: int = 0
 
     def __init__(self, server_address: str, password: str):

@@ -171,8 +171,9 @@ async def _handle_game_ready(ctx: 'Context') -> None:
             ctx.game_interface.reset_death_count()
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
-            await handle_codecave(ctx)
             logger.info("Load the latest autosave or enter the Armor Vendor to apply cosmetics")
+            logger.info("Setting up codecave...")
+            await handle_codecave(ctx)
             logger.info("Game READY!")
 
         if not ctx.main_menu:
@@ -211,7 +212,7 @@ async def update(ctx: 'Context') -> None:
     # Check sequence breaks
     await handle_sequence_break(ctx)
     ctx.game_interface.late_update()
-
+    await handle_codecave(ctx)
     # logger.info(f"Update is called")
 
 
@@ -423,7 +424,7 @@ async def handle_sequence_break(ctx: 'Context') -> None:
 
 async def handle_codecave(ctx: 'Context') -> None:
     """Set up the codecave with the current item locations for use in the randomizer"""
-    if ctx.slot_data is None:
+    if ctx.slot_data is None or ctx.code_cave_setup:
         return
     ship_locations = list(SHIP_VENDOR_INVENTORY.keys())
     ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in ship_locations]
@@ -446,3 +447,4 @@ async def handle_codecave(ctx: 'Context') -> None:
             ctx.game_interface._write_bytes(addr, format_string[0])
             ctx.game_interface.ship_vendor_string_pointers[loc_key] = addr
             offset += len(format_string[0]) + 1  # +1 for null terminator
+            ctx.code_cave_setup = True
