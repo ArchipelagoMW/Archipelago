@@ -1,6 +1,8 @@
 import typing as t
 from copy import deepcopy
 
+from typing_extensions import override
+
 from test.multiserver.test_gamespackage_cache import GamesPackageCacheTest
 
 import Utils
@@ -37,6 +39,7 @@ class DBGamesPackageCacheTest(GamesPackageCacheTest):
     }
     orig_db_type: t.ClassVar[type]
 
+    @override
     @classmethod
     def setUpClass(cls) -> None:
         import WebHostLib.models
@@ -44,9 +47,11 @@ class DBGamesPackageCacheTest(GamesPackageCacheTest):
         cls.orig_db_type = WebHostLib.models.GameDataPackage
         WebHostLib.models.GameDataPackage = FakeGameDataPackage  # type: ignore
 
+    @override
     def setUp(self) -> None:
         self.cache = DBGamesPackageCache(self.static_data)
 
+    @override
     @classmethod
     def tearDownClass(cls) -> None:
         import WebHostLib.models

@@ -2,6 +2,8 @@ import typing as t
 from copy import deepcopy
 from unittest import TestCase
 
+from typing_extensions import override
+
 import NetUtils
 from NetUtils import GamesPackage
 from apmw.multiserver.gamespackage.cache import GamesPackageCache
@@ -18,6 +20,7 @@ class GamesPackageCacheTest(TestCase):
         "checksum": "1234",
     }
 
+    @override
     def setUp(self) -> None:
         self.cache = GamesPackageCache()
 

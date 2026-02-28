@@ -1,3 +1,5 @@
+from typing_extensions import override
+
 from NetUtils import GamesPackage
 from Utils import restricted_loads
 from apmw.multiserver.gamespackage.cache import GamesPackageCache, ItemNameGroups, LocationNameGroups
@@ -10,6 +12,7 @@ class DBGamesPackageCache(GamesPackageCache):
         super().__init__()
         self._static = {game: GamesPackageCache.get(self, game, games_package) for game, games_package in static_games_package.items()}
 
+    @override
     def get(
         self,
         game: str,
@@ -24,12 +27,13 @@ class DBGamesPackageCache(GamesPackageCache):
 
             from WebHostLib.models import GameDataPackage
 
-            row = GameDataPackage.get(checksum=full_games_package["checksum"])
+            row: GameDataPackage | None = GameDataPackage.get(checksum=full_games_package["checksum"])
             if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
                 return super().get(game, restricted_loads(row.data))
             return super().get(game, full_games_package)  # ... in which case full_games_package should be populated
 
         return cached  # type: ignore # mypy doesn't understand any value is None
 
+    @override
     def get_static(self, game: str) -> tuple[GamesPackage, ItemNameGroups, LocationNameGroups]:
         return self._static[game]
