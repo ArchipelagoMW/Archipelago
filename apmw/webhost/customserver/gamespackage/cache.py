@@ -1,5 +1,3 @@
-import typing as t
-
 from NetUtils import GamesPackage
 from Utils import restricted_loads
 from WebHostLib.models import GameDataPackage
@@ -28,7 +26,7 @@ class DBGamesPackageCache(GamesPackageCache):
             if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
                 return super().get(game, restricted_loads(row.data))
             return super().get(game, full_games_package)  # ... in which case full_games_package should be populated
-        return t.cast(tuple[GamesPackage, ItemNameGroups, LocationNameGroups], cached)
+        return cached  # type: ignore # mypy doesn't understand any value is None
 
     def get_static(self, game: str) -> tuple[GamesPackage, ItemNameGroups, LocationNameGroups]:
         return self._static[game]
