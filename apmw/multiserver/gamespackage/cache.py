@@ -16,24 +16,6 @@ class DictLike(dict[K, V]):
     __slots__ = ("__weakref__",)
 
 
-def _cached_item_name(games_package: GamesPackage, item_name: str) -> str:
-    """Returns a reference to an already-stored copy of item_name, or item_name"""
-    # TODO: there gotta be a better way, but maybe only in a C module?
-    for cached_item_name in games_package["item_name_to_id"].keys():
-        if cached_item_name == item_name:
-            return cached_item_name
-    return item_name
-
-
-def _cached_location_name(games_package: GamesPackage, location_name: str) -> str:
-    """Returns a reference to an already-stored copy of location_name, or location_name"""
-    # TODO: as above
-    for cached_location_name in games_package["location_name_to_id"].keys():
-        if cached_location_name == location_name:
-            return cached_location_name
-    return location_name
-
-
 class GamesPackageCache:
     # NOTE: this uses 3 separate collections because unpacking the get() result would end the container lifetime
     _reduced_games_packages: WeakValueDictionary[GameAndChecksum, GamesPackage]
@@ -82,11 +64,11 @@ class GamesPackageCache:
                 self._reduced_games_packages[cache_key] = cached_reduced_games_package
 
         if cached_item_name_groups is None:
+            # optimize strings to be references instead of copies
+            item_names = {name: name for name in cached_reduced_games_package["item_name_to_id"].keys()}
             cached_item_name_groups = DictLike(
                 {
-                    group_name: [
-                        _cached_item_name(cached_reduced_games_package, item_name) for item_name in group_items
-                    ]
+                    group_name: [item_names.get(item_name, item_name) for item_name in group_items]
                     for group_name, group_items in full_games_package["item_name_groups"].items()
                 }
             )
@@ -94,12 +76,11 @@ class GamesPackageCache:
                 self._item_name_groups[cache_key] = cached_item_name_groups
 
         if cached_location_name_groups is None:
+            # optimize strings to be references instead of copies
+            location_names = {name: name for name in cached_reduced_games_package["location_name_to_id"].keys()}
             cached_location_name_groups = DictLike(
                 {
-                    group_name: [
-                        _cached_location_name(cached_reduced_games_package, location_name)
-                        for location_name in group_locations
-                    ]
+                    group_name: [location_names.get(location_name, location_name) for location_name in group_locations]
                     for group_name, group_locations in full_games_package.get("location_name_groups", {}).items()
                 }
             )
