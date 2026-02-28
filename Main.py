@@ -272,7 +272,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 }
 
                 for slot in multiworld.player_ids:
-                    slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
+                    slot_data[slot] = AutoWorld.call_single(multiworld, "fill_slot_data", slot)
 
                 def precollect_hint(location: Location, auto_status: HintStatus):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
