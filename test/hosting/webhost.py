@@ -6,6 +6,7 @@ import zipfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Iterable, Optional, cast
 
+from Utils import utcnow
 from WebHostLib import to_python
 
 if TYPE_CHECKING:
@@ -133,7 +134,7 @@ def stop_room(app_client: "FlaskClient",
               room_id: str,
               timeout: Optional[float] = None,
               simulate_idle: bool = True) -> None:
-    from datetime import datetime, timedelta
+    from datetime import timedelta
     from time import sleep
 
     from pony.orm import db_session
@@ -151,10 +152,11 @@ def stop_room(app_client: "FlaskClient",
 
     with db_session:
         room: Room = Room.get(id=room_uuid)
+        now = utcnow()
         if simulate_idle:
-            new_last_activity = datetime.utcnow() - timedelta(seconds=room.timeout + 5)
+            new_last_activity = now - timedelta(seconds=room.timeout + 5)
         else:
-            new_last_activity = datetime.utcnow() - timedelta(days=3)
+            new_last_activity = now - timedelta(days=3)
         room.last_activity = new_last_activity
         address = f"localhost:{room.last_port}" if room.last_port > 0 else None
         if address:
