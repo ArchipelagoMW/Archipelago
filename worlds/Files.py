@@ -250,7 +250,7 @@ class APPlayerContainer(APContainer):
             "player_name": self.player_name,
             "game": self.game,
             "patch_file_ending": self.patch_file_ending,
-            "force_file_name": self.force_file_name,
+            "force_file_name": self.force_file_name,  # if set, forces the file to be this name when downloaded ignoring patch_file_ending
         })
         return manifest
 
