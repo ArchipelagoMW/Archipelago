@@ -1377,12 +1377,11 @@
         "region": "GoS (West) - Spike Ball Release", "requires": [
             // portal next to SBR is the only way to the upper half of this room // couldn't get wall slide here
             { "item": "Cloud Leap" } // without the collapsing platforms, AD might also work
-        ] // does NOT require spike ball chase
+        ]
     },
     {
         "address": 3203, "name": "GoS (West): Below Western Cliffs",
-        "region": "GoS (West) - Spike Ball Release",
-        // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
+        "region": "GoS (West) - Western Cliffs",
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],

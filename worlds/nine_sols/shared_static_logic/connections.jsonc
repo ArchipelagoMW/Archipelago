@@ -1646,13 +1646,17 @@
     // Now for the messy part of West Grotto: the semi-scripted progression from
     // upper right exit to Ji fight through the rotating platforms puzzle.
     // Remember that unlike vanilla we might be starting at the GoSW node.
-    { "from": "GoS (West) - Upper Right Exit", "to": "GoS (West) - Root Node", "requires": [
-        // The first time, when the spike ball chases you, the final jump requires just CL AND LG.
-        // But if you die or TP out and come back this way later, you have to jump over the
-        // stationary spike ball (or the gap where it was) and climb up to the node.
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] },
-        { "item": "Wall Climb" }
+    { "from": "GoS (West) - Upper Right Exit", "to": "GoS (West) - Spike Ball Chase", "requires": [] }, // just walk left
+    { "from": "GoS (West) - Root Node", "to": "GoS (West) - Spike Ball Chase", "requires": [] }, // just walk right
+    { "from": "GoS (West) - Spike Ball Chase", "to": "GoS (West) - Survived Spike Ball Chase", "requires": [
+        // Because the tunnel collapses behind the spike ball, this jump is only logic-relevant when you're
+        // first doing it to end the chase. So we get to assume the floor hasn't broken yet.
+        { "item": "Cloud Leap" },
+        { "anyOf": [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ] }
+        // It's possible to stand on the breakable floor, wait for the spike ball to break it, then
+        // fall to the left before the spike ball touches you. But we're keeping that out of logic.
     ] },
+    { "from": "GoS (West) - Survived Spike Ball Chase", "to": "GoS (West) - Root Node", "requires": [] },
     { "from": "GoS (West) - Upper Right Exit", "to": "GoS (West) - Lower Platform Rotation Button", "requires": [
         // climb up rope, take portal on the right, fall down
     ] },
@@ -1661,7 +1665,7 @@
         { "item": "Wall Climb" } // climb up the platform / green wall on the right
         // go through portal, fall and walk right
     ] },
-    { "from": "GoS (West) - Root Node", "to": "GoS (West) - Lower Platform Rotation Button", "requires": [] }, // fall
+    { "from": "GoS (West) - Root Node", "to": "GoS (West) - Lower Platform Rotation Button", "requires": [] }, // fall and hold right
     { "from": "GoS (West) - Lower Platform Rotation Button", "to": "GoS (West) - Lower Right Exits", "requires": [] }, // press button, fall, go right and open one-way door
     // This single region connection into SBR represents solving the rotating platforms puzzle
     {
@@ -1680,7 +1684,10 @@
         { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
         { "item": "Wall Climb" } // to climb the vertical platform from the SBR side
     ] },
-    { "from": "GoS (West) - Spike Ball Release", "to": "GoS (West) - Above Western Cliffs", "requires": [
+    { "from": "GoS (West) - Spike Ball Release", "to": "GoS (West) - Western Cliffs", "requires": [
+        { "region": "GoS (West) - Survived Spike Ball Chase" } // can't release the spike ball if it's not here yet
+    ] },
+    { "from": "GoS (West) - Western Cliffs", "to": "GoS (West) - Above Western Cliffs", "requires": [
         { "item": "Cloud Leap" } // most jumps have alternatives, but the final jump around the westernmost outcrop is just CL
     ] }, // this is where any% runs do an enemy manip to skull kick, but we don't want that in logic
     { "from": "GoS (West) - Above Western Cliffs", "to": "GoS (West) - Root Node", "requires": [
