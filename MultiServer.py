@@ -487,7 +487,7 @@ class Context:
     @staticmethod
     def decompress(data: bytes) -> dict:
         format_version = data[0]
-        if format_version > 3:
+        if format_version > 4:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
@@ -542,8 +542,16 @@ class Context:
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
 
         # load start inventory:
-        for slot, item_codes in decoded_obj["precollected_items"].items():
-            self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
+        precollected_items = decoded_obj["precollected_items"]
+        if NetUtils.is_old_precollected(precollected_items):
+            for slot, item_codes in precollected_items.items():
+                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
+        else:
+            for slot, item_data in precollected_items.items():
+                self.start_inventory[slot] = [
+                    NetworkItem(item_id, -2, 0, item_flags)
+                    for item_id, item_flags in item_data
+                ]
 
         for slot, hints in decoded_obj["precollected_hints"].items():
             self.hints[0, slot].update(hints)
