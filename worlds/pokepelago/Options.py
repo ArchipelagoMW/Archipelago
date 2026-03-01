@@ -3,10 +3,10 @@ from Options import PerGameCommonOptions, Toggle, Choice, Range
 
 
 class Dexsanity(Toggle):
-    """If enabled, each Pokemon has its own location check ('Guess {Pokemon}') and requires
-    a '{Pokemon} Unlock' item to be received before it can be guessed. Disabling this removes
-    all per-Pokemon locations and Unlock items, leaving only milestone-based progression.
-    Disabling dramatically reduces generation time and item pool size."""
+    """If enabled, each Pokemon has its own location check ('Guess {Pokemon}').
+    The location becomes accessible once that Pokemon's region is unlocked (via Region Pass).
+    Disabling removes all per-Pokemon locations, leaving only milestone-based filler checks.
+    Disabling dramatically reduces item pool size and works well for milestone-only games."""
     display_name = "Dexsanity"
     default = 1
 
@@ -17,37 +17,86 @@ class EnableTypeLocks(Toggle):
     default = 1
 
 
-class PokemonGenerations(Choice):
-    """Select how many generations of Pokémon to include in the randomizer.
-    Gen 1 (Kanto) = 151
-    Gen 2 (Johto) = 251 
-    Gen 3 (Hoenn) = 386
-    Gen 4 (Sinnoh) = 493
-    Gen 5 (Unova) = 649
-    Gen 6 (Kalos) = 721
-    Gen 7 (Alola) = 809
-    Gen 8 (Galar) = 898
-    Gen 9 (Paldea) = 1025"""
-    display_name = "Pokemon Generations"
-    option_gen1 = 0
-    option_gen2 = 1
-    option_gen3 = 2
-    option_gen4 = 3
-    option_gen5 = 4
-    option_gen6 = 5
-    option_gen7 = 6
-    option_gen8 = 7
-    option_gen9 = 8
+class RegionLocks(Toggle):
+    """If enabled, non-starting regions require a Region Pass item to access.
+    Disabling this makes all selected regions freely accessible from the start."""
+    display_name = "Region Locks"
+    default = 1
+
+
+class IncludeKanto(Toggle):
+    """Include Generation 1 Pokémon (Kanto, #1–151)."""
+    display_name = "Include Kanto"
+    default = 1
+
+
+class IncludeJohto(Toggle):
+    """Include Generation 2 Pokémon (Johto, #152–251)."""
+    display_name = "Include Johto"
     default = 0
 
 
-class StartingPokemon(Choice):
-    """(Deprecated) This option is currently ignored as all three starters are provided by default."""
-    display_name = "Starting Pokémon (Legacy)"
-    option_bulbasaur = 0
-    option_charmander = 1
-    option_squirtle = 2
+class IncludeHoenn(Toggle):
+    """Include Generation 3 Pokémon (Hoenn, #252–386)."""
+    display_name = "Include Hoenn"
     default = 0
+
+
+class IncludeSinnoh(Toggle):
+    """Include Generation 4 Pokémon (Sinnoh, #387–493)."""
+    display_name = "Include Sinnoh"
+    default = 0
+
+
+class IncludeUnova(Toggle):
+    """Include Generation 5 Pokémon (Unova, #494–649)."""
+    display_name = "Include Unova"
+    default = 0
+
+
+class IncludeKalos(Toggle):
+    """Include Generation 6 Pokémon (Kalos, #650–721)."""
+    display_name = "Include Kalos"
+    default = 0
+
+
+class IncludeAlola(Toggle):
+    """Include Generation 7 Pokémon (Alola, #722–809)."""
+    display_name = "Include Alola"
+    default = 0
+
+
+class IncludeGalar(Toggle):
+    """Include Generation 8 Pokémon (Galar, #810–898)."""
+    display_name = "Include Galar"
+    default = 0
+
+
+class IncludeHisui(Toggle):
+    """Include Hisui-exclusive Pokémon (#899–905). Note: Hisui has no traditional starters."""
+    display_name = "Include Hisui"
+    default = 0
+
+
+class IncludePaldea(Toggle):
+    """Include Generation 9 Pokémon (Paldea, #906–1025)."""
+    display_name = "Include Paldea"
+    default = 0
+
+
+# Maps region name to the PokepelagoOptions attribute for that region's toggle
+REGION_OPTION_ATTRS = {
+    "Kanto": "include_kanto",
+    "Johto": "include_johto",
+    "Hoenn": "include_hoenn",
+    "Sinnoh": "include_sinnoh",
+    "Unova": "include_unova",
+    "Kalos": "include_kalos",
+    "Alola": "include_alola",
+    "Galar": "include_galar",
+    "Hisui": "include_hisui",
+    "Paldea": "include_paldea",
+}
 
 
 class GoalType(Choice):
@@ -92,9 +141,18 @@ class TrapChance(Range):
 @dataclass
 class PokepelagoOptions(PerGameCommonOptions):
     dexsanity: Dexsanity
-    pokemon_generations: PokemonGenerations
     type_locks: EnableTypeLocks
-    starting_pokemon: StartingPokemon
+    region_locks: RegionLocks
+    include_kanto: IncludeKanto
+    include_johto: IncludeJohto
+    include_hoenn: IncludeHoenn
+    include_sinnoh: IncludeSinnoh
+    include_unova: IncludeUnova
+    include_kalos: IncludeKalos
+    include_alola: IncludeAlola
+    include_galar: IncludeGalar
+    include_hisui: IncludeHisui
+    include_paldea: IncludePaldea
     goal_type: GoalType
     goal_percentage: GoalPercentage
     goal_count: GoalCount
