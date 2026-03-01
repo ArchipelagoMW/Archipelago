@@ -300,11 +300,8 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if start_index == 0:
             ctx.items_received = []
         elif start_index != len(ctx.items_received):
-            sync_msg = [{"cmd": "Sync"}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks",
-                                 "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
+            await ctx.check_locations(ctx.locations_checked)
+            await ctx.send_msgs([{"cmd": "Sync"}])
         if start_index == len(ctx.items_received):
             counter = -1
             placedWeapon = 0
@@ -473,10 +470,9 @@ async def game_watcher(ctx: UndertaleContext):
                 for file in files:
                     if ".item" in file:
                         os.remove(os.path.join(root, file))
-            sync_msg = [{"cmd": "Sync"}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
+            await ctx.check_locations(ctx.locations_checked)
+            await ctx.send_msgs([{"cmd": "Sync"}])
+
             ctx.syncing = False
         if ctx.got_deathlink:
             ctx.got_deathlink = False
@@ -511,7 +507,7 @@ async def game_watcher(ctx: UndertaleContext):
                         for l in lines:
                             sending = sending+[(int(l.rstrip('\n')))+12000]
                     finally:
-                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sending}])
+                        await ctx.check_locations(sending)
                 if "victory" in file and str(ctx.route) in file:
                     victory = True
                 if ".playerspot" in file and "Online" not in ctx.tags:
