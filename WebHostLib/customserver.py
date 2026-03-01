@@ -247,7 +247,8 @@ def tear_down_logging(room_id):
 
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
-                       host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+                       host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue,
+                       room_idle_timeout: int):
     from setproctitle import setproctitle
 
     setproctitle(name)
@@ -332,7 +333,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 else:
                     ctx.logger.exception("Could not determine port. Likely hosting failure.")
                 with db_session:
-                    ctx.auto_shutdown = Room.get(id=room_id).timeout
+                    ctx.auto_shutdown = room_idle_timeout
                 if ctx.saving:
                     setattr(asyncio.current_task(), "save", lambda: ctx._save(True))
                 assert ctx.shutdown_task is None
@@ -368,7 +369,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
                         room.last_activity = datetime.datetime.utcnow() - \
-                                             datetime.timedelta(minutes=1, seconds=room.timeout)
+                                             datetime.timedelta(minutes=1, seconds=room_idle_timeout)
                     del room
                     tear_down_logging(room_id)
                     logging.info(f"Shutting down room {room_id} on {name}.")

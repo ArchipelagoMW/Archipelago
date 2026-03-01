@@ -19,7 +19,6 @@ __all__ = [
     "create_room",
     "start_room",
     "stop_room",
-    "set_room_timeout",
     "get_multidata_for_room",
     "set_multidata_for_room",
     "stop_autogen",
@@ -139,7 +138,6 @@ def stop_room(app_client: "FlaskClient",
     from pony.orm import db_session
 
     from WebHostLib.models import Command, Room
-    from WebHostLib import app
 
     poll_interval = 2
 
@@ -152,14 +150,12 @@ def stop_room(app_client: "FlaskClient",
     with db_session:
         room: Room = Room.get(id=room_uuid)
         if simulate_idle:
-            new_last_activity = datetime.utcnow() - timedelta(seconds=room.timeout + 5)
+            new_last_activity = datetime.utcnow() - timedelta(seconds=2 * 60 * 60 + 5)
         else:
             new_last_activity = datetime.utcnow() - timedelta(days=3)
         room.last_activity = new_last_activity
         address = f"localhost:{room.last_port}" if room.last_port > 0 else None
         if address:
-            original_timeout = room.timeout
-            room.timeout = 1  # avoid spinning it up again
             Command(room=room, commandtext="/exit")
 
     try:
@@ -186,28 +182,13 @@ def stop_room(app_client: "FlaskClient",
             room = Room.get(id=room_uuid)
             room.last_port = 0  # easier to detect when the host is up this way
             if address:
-                room.timeout = original_timeout
                 room.last_activity = new_last_activity
-                print("timeout restored")
-
-
-def set_room_timeout(room_id: str, timeout: float) -> None:
-    from pony.orm import db_session
-
-    from WebHostLib.models import Room
-    from WebHostLib import app
-
-    room_uuid = to_python(room_id)
-    with db_session:
-        room: Room = Room.get(id=room_uuid)
-        room.timeout = timeout
 
 
 def get_multidata_for_room(webhost_client: "FlaskClient", room_id: str) -> bytes:
     from pony.orm import db_session
 
     from WebHostLib.models import Room
-    from WebHostLib import app
 
     room_uuid = to_python(room_id)
     with db_session:
@@ -219,7 +200,6 @@ def set_multidata_for_room(webhost_client: "FlaskClient", room_id: str, data: by
     from pony.orm import db_session
 
     from WebHostLib.models import Room
-    from WebHostLib import app
 
     room_uuid = to_python(room_id)
     with db_session:
@@ -258,9 +238,11 @@ def _stop_webhost_mp(name_filter: str, graceful: bool = True) -> None:
             proc.kill()
             proc.join()
 
+
 def stop_autogen(graceful: bool = True) -> None:
     # FIXME: this name filter is jank, but there seems to be no way to add a custom prefix for a Pool
     _stop_webhost_mp("SpawnPoolWorker-", graceful)
+
 
 def stop_autohost(graceful: bool = True) -> None:
     _stop_webhost_mp("MultiHoster", graceful)

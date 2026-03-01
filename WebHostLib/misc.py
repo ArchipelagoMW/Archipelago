@@ -236,7 +236,7 @@ def host_room(room: UUID):
     now = datetime.datetime.utcnow()
     # indicate that the page should reload to get the assigned port
     should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
-                      or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
+                      or room.last_activity < now - datetime.timedelta(seconds=app.config["ROOM_IDLE_TIMEOUT"]))
 
     if now - room.last_activity > datetime.timedelta(minutes=1):
         # we only set last_activity if needed, otherwise parallel access on /room will cause an internal server error
