@@ -1,0 +1,285 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
+{% endblock %}
+
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Exit Book"             : "https://static.wikia.nocookie.net/finalfantasy/images/5/51/MQExitIcon.PNG",
+    "Cure Book"             : "https://static.wikia.nocookie.net/finalfantasy/images/2/28/MQCureIcon.PNG",
+    "Heal Book"             : "https://static.wikia.nocookie.net/finalfantasy/images/4/48/MQHealIcon.PNG",
+    "Life Book"             : "https://static.wikia.nocookie.net/finalfantasy/images/5/5c/MQLifeIcon.PNG",
+
+    "Quake Book"            : "https://static.wikia.nocookie.net/finalfantasy/images/2/2b/MQQuakeIcon.PNG",
+    "Blizzard Book"         : "https://static.wikia.nocookie.net/finalfantasy/images/8/8d/MQBlizzardIcon.PNG",
+    "Fire Book"             : "https://static.wikia.nocookie.net/finalfantasy/images/e/ea/MQFireIcon.PNG",
+    "Aero Book"             : "https://static.wikia.nocookie.net/finalfantasy/images/8/82/MQAeroIcon.PNG",
+
+    "Thunder Seal"          : "https://static.wikia.nocookie.net/finalfantasy/images/6/6f/MQFlareIcon.PNG",
+    "White Seal"            : "https://static.wikia.nocookie.net/finalfantasy/images/6/68/MQWhiteIcon.PNG",
+    "Meteor Seal"           : "https://static.wikia.nocookie.net/finalfantasy/images/c/c2/MQMeteorIcon.PNG",
+    "Flare Seal"            : "https://static.wikia.nocookie.net/finalfantasy/images/7/77/MQThunderIcon.PNG",
+
+    "Steel Helm"            : "https://static.wikia.nocookie.net/finalfantasy/images/6/6c/MQSteelHelmet.PNG",
+    "Moon Helm"             : "https://static.wikia.nocookie.net/finalfantasy/images/6/62/MQMoonHelm.PNG",
+    "Apollo Helm"           : "https://static.wikia.nocookie.net/finalfantasy/images/0/0d/MQApolloHelm.PNG",
+
+    "Steel Armor"           : "https://static.wikia.nocookie.net/finalfantasy/images/4/4f/MQSteelArmor.PNG",
+    "Noble Armor"           : "https://static.wikia.nocookie.net/finalfantasy/images/2/25/MQNobleArmor.PNG",
+    "Gaia's Armor"          : "https://static.wikia.nocookie.net/finalfantasy/images/9/95/MQGaiaArmor.PNG",
+
+    "Steel Shield"          : "https://static.wikia.nocookie.net/finalfantasy/images/e/eb/MQSteelShield.PNG",
+    "Venus Shield"          : "https://static.wikia.nocookie.net/finalfantasy/images/0/08/MQVenusShield.PNG",
+    "Aegis Shield"          : "https://static.wikia.nocookie.net/finalfantasy/images/f/f0/MQAegisShield.PNG",
+
+    "Charm"                 : "https://static.wikia.nocookie.net/finalfantasy/images/a/a2/MQCharm.PNG",
+    "Magic Ring"            : "https://static.wikia.nocookie.net/finalfantasy/images/a/a1/MQMagicRing.PNG",
+    "Cupid Locket"          : "https://static.wikia.nocookie.net/finalfantasy/images/3/34/MQCupidLocket.PNG",
+
+    "Captain's Cap"         : "https://static.wikia.nocookie.net/finalfantasy/images/2/2f/MQCaptainCap.PNG",
+    "Elixir"                : "https://static.wikia.nocookie.net/finalfantasy/images/0/0a/MQElixir.PNG",
+    "Magic Mirror"          : "https://static.wikia.nocookie.net/finalfantasy/images/a/ab/MQMagicMirror.PNG",
+    "Mask"                  : "https://static.wikia.nocookie.net/finalfantasy/images/d/df/MQGasMask.PNG",
+    "Multi Key"             : "https://static.wikia.nocookie.net/finalfantasy/images/d/d2/MQMultiKey.PNG",
+    "Thunder Rock"          : "https://static.wikia.nocookie.net/finalfantasy/images/b/ba/MQThunderRock.PNG",
+    "Tree Wither"           : "https://static.wikia.nocookie.net/finalfantasy/images/7/77/MQTreeWither.PNG",
+    "Venus Key"             : "https://static.wikia.nocookie.net/finalfantasy/images/e/e0/MQVenusKey.PNG",
+    "Wakewater"             : "https://static.wikia.nocookie.net/finalfantasy/images/b/b0/MQWakewater.PNG",
+
+    "Libra Crest"           : "https://static.wikia.nocookie.net/finalfantasy/images/8/88/MQLibraCrest.PNG",
+    "Gemini Crest"          : "https://static.wikia.nocookie.net/finalfantasy/images/5/52/MQGeminiCrest.PNG",
+    "Mobius Crest"          : "https://static.wikia.nocookie.net/finalfantasy/images/6/65/MQMobiusCrest.PNG",
+
+    "Sand Coin"             : "https://static.wikia.nocookie.net/finalfantasy/images/f/f8/MQSandCoin.PNG",
+    "River Coin"            : "https://static.wikia.nocookie.net/finalfantasy/images/2/24/MQRiverCoin.PNG",
+    "Sun Coin"              : "https://static.wikia.nocookie.net/finalfantasy/images/a/a9/MQSunCoin.PNG",
+    "Sky Coin"              : "https://static.wikia.nocookie.net/finalfantasy/images/0/0c/MQSkyCoin.PNG",
+    "Sky Fragment"          : "https://static.wikia.nocookie.net/finalfantasy/images/0/0c/MQSkyCoin.PNG",
+    "Progressive Sky Coin"  : "https://static.wikia.nocookie.net/finalfantasy/images/0/0c/MQSkyCoin.PNG",
+
+    "Axe"                   : "https://static.wikia.nocookie.net/finalfantasy/images/7/7e/MQAxe.PNG",
+    "Battle Axe"            : "https://static.wikia.nocookie.net/finalfantasy/images/5/58/MQBattleAxe.PNG",
+    "Giant's Axe"           : "https://static.wikia.nocookie.net/finalfantasy/images/5/57/MQGiantAxe.PNG",
+
+    "Bomb"                  : "https://static.wikia.nocookie.net/finalfantasy/images/9/92/MQBomb.PNG",
+    "Jumbo Bomb"            : "https://static.wikia.nocookie.net/finalfantasy/images/2/27/MQJumboBomb.PNG",
+    "Mega Grenade"          : "https://static.wikia.nocookie.net/finalfantasy/images/5/5f/MQMegaGrenade.PNG",
+
+    "Cat Claw"              : "https://static.wikia.nocookie.net/finalfantasy/images/0/08/MQCatClaw.PNG",
+    "Charm Claw"            : "https://static.wikia.nocookie.net/finalfantasy/images/5/5d/MQCharmClaw.PNG",
+    "Dragon Claw"           : "https://static.wikia.nocookie.net/finalfantasy/images/b/b4/MQDragonClaw.PNG",
+
+    "Steel Sword"           : "https://static.wikia.nocookie.net/finalfantasy/images/d/de/MQSteelSword.PNG",
+    "Knight Sword"          : "https://static.wikia.nocookie.net/finalfantasy/images/f/ff/MQKnightSword.PNG",
+    "Excalibur"             : "https://static.wikia.nocookie.net/finalfantasy/images/a/ac/MQExcalibur.PNG",
+
+    "IsCompleted"           : "https://static.wikia.nocookie.net/finalfantasy/images/9/9e/FFMQ_Warrior_Statue.png"
+} %}
+
+{% set inventory_order = [
+    "Mega Grenade",
+    "Thunder Rock",
+    "Mobius Crest",
+    "Captain's Cap",
+    "Progressive Sky Coin",
+    "IsCompleted"
+] %}
+
+{% set multi_items = [
+    "Progressive Sword",
+    "Progressive Axe",
+    "Progressive Claw",
+    "Progressive Bomb"
+] %}
+
+{% set weapons = [
+    "Progressive Sword",
+    "Progressive Axe",
+    "Progressive Claw",
+    "Progressive Bomb",
+] %}
+
+{% set armors = [
+    "Progressive Helm",
+    "Progressive Armor",
+    "Progressive Shield",
+    "Progressive Accessory",
+] %}
+
+{% set spells = [
+    "Exit Book",
+    "Cure Book",
+    "Heal Book",
+    "Life Book",
+    "Quake Book",
+    "Blizzard Book",
+    "Fire Book",
+    "Aero Book",
+    "Thunder Seal",
+    "White Seal",
+    "Meteor Seal",
+    "Flare Seal"
+] %}
+
+{% set keyItems = [
+    "Elixir",
+    "Tree Wither",
+    "Wakewater",
+    "Venus Key",
+    "Multi Key",
+    "Mask",
+    "Magic Mirror",
+    "Thunder Rock",
+    "Captain's Cap"
+] %}
+
+{% set crests = [
+    "Libra Crest",
+    "Gemini Crest",
+    "Mobius Crest"
+] %}
+
+{% set coins = [
+    "Sand Coin",
+    "River Coin",
+    "Sun Coin",
+    "Sky Coin",
+    "Sky Fragment"
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    "Progressive Helm" :        ["Steel Helm", "Steel Helm", "Moon Helm", "Apollo Helm"],
+    "Progressive Armor":        ["Steel Armor", "Noble Armor", "Gaia's Armor"],
+    "Progressive Shield":       ["Steel Shield", "Steel Shield", "Venus Shield", "Aegis Shield"],
+    "Progressive Accessory":    ["Charm", "Charm", "Magic Ring", "Cupid Locket"],
+    "Progressive Sword":        ["Steel Sword", "Steel Sword", "Knight Sword", "Excalibur"],
+    "Progressive Axe":          ["Axe", "Axe", "Battle Axe", "Giant's Axe"],
+    "Progressive Claw":         ["Cat Claw", "Cat Claw", "Charm Claw", "Dragon Claw"],
+    "Progressive Bomb":         ["Bomb", "Bomb", "Jumbo Bomb", "Mega Grenade"]
+} %}
+
+{% set allItems = {
+    "Weapons"   : weapons,
+    "Armor"     : armors,
+    "Spells"    : spells,
+    "Key Items" : keyItems,
+    "Crests"    : crests,
+    "Coins"     : coins
+} %}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        {%- if item in icons -%}
+            <th class="center-column">
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}">
+            </th>
+        {%- endif %}
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {{ inventories[(team, player)][item] }}
+                {% else %}
+                    {% if item == "Progressive Sky Coin" and inventories[(team, player)][item] == 1 %}
+                        {{ inventories[(team, player)]["Sky Fragment"] }}
+                    {% else %}
+                        ✔️
+                    {% endif %}
+                {% endif %}
+            </td>
+        {%- else -%}
+            <td></td>
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
+
+{% block custom_tables %}
+{% for team in total_team_locations %}
+    <div class="table-wrapper">
+        <table class="table non-unique-item-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+
+                    {% for category in allItems %}
+                        <th class="center-column">{{ category }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for (player_team, player), inventory in inventories.items() if team == player_team %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">
+                                {{ player }}
+                            </a>
+                        </td>
+                        <td>{{ player_names_with_alias[(team, player)] | e }}</td>
+
+                        {% for category, items in allItems.items() %}
+                            <td class="center-column">
+                                {% for item in items %}
+                                    {% if inventory[item] > 0 %}
+                                        {% if item in progressive_order %}
+                                            {% set non_prog_item = progressive_order[item][inventory[item]] %}
+                                            <img
+                                                height="24"
+                                                src="{{ icons[non_prog_item] }}"
+                                                alt="{{ non_prog_item }}"
+                                                title="{{ non_prog_item }}"
+                                            />
+                                        {% else %}
+                                            <img
+                                                height="24"
+                                                src="{{ icons[item] }}"
+                                                alt="{{ item }}"
+                                                title="{{ item }}"
+                                            />
+
+                                            {% if item == "Sky Fragment" %}
+                                                <div style="
+                                                    display: inline;
+                                                    font-size: 0.75rem;
+                                                    line-height: 0.75rem;
+                                                    user-select: none;"
+                                                >x{{ inventory[item] }}</div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {# Progressive Armor gets a special exception, since it starts displaying Steel Armor. #}
+                                    {% elif item == "Progressive Armor" %}
+                                        {% set non_prog_item = progressive_order[item][0] %}
+                                        <img
+                                            height="24"
+                                            src="{{ icons[non_prog_item] }}"
+                                            alt="{{ non_prog_item }}"
+                                            title="{{ non_prog_item }}"
+                                        />
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}
+{% endblock %}
