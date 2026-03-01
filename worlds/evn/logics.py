@@ -45,6 +45,7 @@ misns_to_ignore: List[int] = [
     899, 900, 905, 913,   # silent misn
     880, 881, 883, 884,    # pursuit groups of enemies
     886, 894, 890, 891, 892, 
+    794, # comes from a silent mission. I think this one was supposed to be marked as silent as well... Auroran 12a
     # invisible misn - again, don't seem to have ability to complete
     802, 803, 833, 
     # Krypt mind attack string from Polars32... Could have on success, but I'm unclear what it takes to meet that req...
@@ -53,6 +54,8 @@ misns_to_ignore: List[int] = [
     872, 
     # generic post game missions (but victory will already have released, so can't get to before end.)
     874, 876, 877, 878, 910, 911, 
+    # I don't know how this mission is gained and done...
+    625, 
 ]
 
 # Introducing this logic caused the number of available missions to drop below the item count
@@ -509,7 +512,7 @@ possible_regions: Dict[int, EVNRegionData] = {
         "name": "Pirate - Pt 2",
         "missions": [
             697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 712, 
-            300, 720, 718, 721, 722, 723, 724, 
+            300, 720, 719, 721, 722, 723, 724, 
             842, # some kind of link or something, but has on_success bits
             # ?
             # 874, 876, # i think postgame
