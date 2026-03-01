@@ -609,6 +609,9 @@ class ServerOptions(Group):
         OFF = 0
         ON = 1
 
+    class SetReplyBatchMs(int):
+        """How long (in milliseconds) the server may wait before sending stored-data updates to clients. Lower values send updates sooner; higher values can reduce network traffic when many players update at once. Default is 50."""
+
     host: str | None = None
     port: int = 38281
     password: str | None = None
@@ -628,6 +631,7 @@ class ServerOptions(Group):
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
     log_network: LogNetwork = LogNetwork(0)
+    set_reply_batch_ms: SetReplyBatchMs = SetReplyBatchMs(50)
 
 
 class GeneratorOptions(Group):
