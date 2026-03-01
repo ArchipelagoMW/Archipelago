@@ -309,20 +309,24 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         menu_region.locations.append(victory_location)
 
     def pre_fill(self):
-        """Pre-place non-starter Type Keys into starting locations before the main fill.
+        """Pre-place non-starter Type Keys into global milestone locations.
 
-        With type_locks enabled, Type Keys gate type-milestone locations. If the main fill
-        places a Type Key in a location that itself requires that Type Key, a circular dependency
-        forms. The fill's swap mechanism can resolve it but is extremely slow (O(n³)).
+        With type_locks enabled, Type Keys gate type-milestone and individual Pokemon locations.
+        Placing a Type Key in a location that itself requires that Type Key creates a circular
+        dependency. Global milestone locations ("Guessed N Pokemon") have no type-key access rules,
+        making them always safe for pre-placement.
 
-        The fix: put all 14 non-starter Type Keys in the 20 always-accessible starting locations
-        (Menu region, no access rules) before fill_restrictive ever runs. This guarantees no
-        circular dependency and removes Type Keys from the main fill entirely.
+        With dexsanity=on: milestone locations are gated by Pokemon-count rules, so Type Keys are
+        naturally distributed through progression (first key after 1st catch, last after ~100th).
+        With dexsanity=off: milestone locations have no AP-side rules (client-driven), so AP
+        considers them accessible in sphere 0 — but the client still gates them by guess count.
+
+        Applies whenever type_locks=on regardless of dexsanity setting.
         """
-        if not self.options.type_locks.value or not self.options.dexsanity.value:
+        if not self.options.type_locks.value:
             return
 
-        from .Locations import starting_locations
+        from .Locations import milestones
         from .data import GEN_1_TYPES
 
         STARTER_TYPES = {"Grass", "Poison", "Fire", "Water"}
@@ -340,20 +344,27 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         if not my_keys:
             return
 
-        # Find unfilled starting locations for this player (always reachable, no access rule).
-        safe_locs = [
-            self.multiworld.get_location(name, self.player)
-            for name in starting_locations
-            if self.multiworld.get_location(name, self.player).item is None
-        ]
+        # Collect unfilled global milestone locations for this player.
+        # These are safe: their access rules depend only on Pokemon count, never on Type Keys.
+        milestone_locs: list = []
+        for count in milestones:
+            if count > len(self.active_pokemon) - 3:
+                break
+            loc_name = f"Guessed {count} Pokemon"
+            try:
+                loc = self.multiworld.get_location(loc_name, self.player)
+                if loc.item is None:
+                    milestone_locs.append(loc)
+            except KeyError:
+                pass
 
-        if len(safe_locs) < len(my_keys):
-            # Shouldn't happen (20 starting locs, 14 keys), but bail safely if it does.
+        if len(milestone_locs) < len(my_keys):
+            # Fewer milestone locs than keys — shouldn't happen with 20+ milestones and 14 keys.
             return
 
         self.multiworld.itempool[:] = remaining
-        self.random.shuffle(safe_locs)
-        for key, loc in zip(my_keys, safe_locs):
+        self.random.shuffle(milestone_locs)
+        for key, loc in zip(my_keys, milestone_locs):
             loc.place_locked_item(key)
 
     def set_rules(self):

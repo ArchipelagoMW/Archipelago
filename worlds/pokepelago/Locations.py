@@ -11,9 +11,6 @@ location_table = {}
 starting_locations = [
     "Oak's Parcel Delivery", "Pokedex Received", "Mom's Running Shoes", "Town Map Received",
     "Professor Oak's Advice", "Boulder Badge (Replica)", "Old Amber (Replica)", "Helix Fossil (Replica)",
-    "Dome Fossil (Replica)", "Silph Co. Pass", "Ticket to Cinnabar", "S.S. Ticket (Replica)",
-    "Secret Key (Replica)", "Bike Voucher (Replica)", "Gold Teeth (Replica)", "Card Key (Replica)",
-    "Lift Key (Replica)", "Silph Scope (Replica)", "Poke Flute (Replica)", "Item Finder (Replica)"
 ]
 for i, name in enumerate(starting_locations):
     location_table[name] = LOCATION_ID_OFFSET + 100_000 + i

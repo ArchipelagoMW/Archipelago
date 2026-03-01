@@ -7,8 +7,8 @@ import os
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-sys.argv = ['Generate.py', '--player_files_path', 'Players/test_2p_typed',
-            '--multi', '2', '--skip_output', '--skip_prog_balancing']
+sys.argv = ['Generate.py', '--player_files_path', 'Players',
+            '--multi', '4', '--skip_output']
 
 pr = cProfile.Profile()
 pr.enable()
