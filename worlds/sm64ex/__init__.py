@@ -121,7 +121,7 @@ class SM64World(World):
             "Bonk Trap": self.options.bonk_trap_filler_percentage,
             "Fire Trap": self.options.fire_trap_filler_percentage,
             "Amp Trap": self.options.amp_trap_filler_percentage,
-            "Chuckya Trap": self.options.chukya_trap_filler_percentage,
+            "Chuckya Trap": self.options.chuckya_trap_filler_percentage,
             "Spin Trap": self.options.spin_trap_filler_percentage,
             "Gust Trap": self.options.gust_trap_filler_percentage,
         }
