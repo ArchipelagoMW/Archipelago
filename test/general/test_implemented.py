@@ -3,7 +3,6 @@ import unittest
 from Fill import distribute_items_restrictive
 from NetUtils import convert_to_base_types
 from worlds.AutoWorld import AutoWorldRegister, call_all
-from worlds import failed_world_loads
 from . import setup_solo_multiworld
 
 
@@ -51,6 +50,7 @@ class TestImplemented(unittest.TestCase):
                     convert_to_base_types(data)  # only put base data types into slot data
 
     def test_no_failed_world_loads(self):
+        failed_world_loads = AutoWorldRegister.get_failed_world_loads()
         if failed_world_loads:
             self.fail(f"The following worlds failed to load: {failed_world_loads}")
 

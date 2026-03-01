@@ -51,16 +51,17 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)
 
-    logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
-    longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
+    all_worlds = worlds.AutoWorldRegister.world_types
+    logger.info(f"Found {len(all_worlds)} World Types:")
+    longest_name = max(len(text) for text in all_worlds)
 
-    world_classes = AutoWorld.AutoWorldRegister.world_types.values()
+    world_classes = all_worlds.values()
 
     version_count = max(len(cls.world_version.as_simple_string()) for cls in world_classes)
     item_count = len(str(max(len(cls.item_names) for cls in world_classes)))
     location_count = len(str(max(len(cls.location_names) for cls in world_classes)))
 
-    for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
+    for name, cls in all_worlds.items():
         if not cls.hidden and len(cls.item_names) > 0:
             logger.info(f" {name:{longest_name}}: "
                         f"v{cls.world_version.as_simple_string():{version_count}} | "

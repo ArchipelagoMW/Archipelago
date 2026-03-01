@@ -24,26 +24,7 @@ __all__ = [
 
 no_gui = False
 skip_autosave = False
-_world_settings_name_cache: dict[str, str] = {}  # TODO: cache on disk and update when worlds change
-_world_settings_name_cache_updated = False
 _lock = Lock()
-
-
-def _update_cache() -> None:
-    """Load all worlds and update world_settings_name_cache"""
-    global _world_settings_name_cache_updated
-    if _world_settings_name_cache_updated:
-        return
-
-    try:
-        from worlds.AutoWorld import AutoWorldRegister
-        for world in AutoWorldRegister.world_types.values():
-            annotation = world.__annotations__.get("settings", None)
-            if annotation is None or annotation == "ClassVar[Optional['Group']]":
-                continue
-            _world_settings_name_cache[world.settings_key] = f"{world.__module__}.{world.__name__}"
-    finally:
-        _world_settings_name_cache_updated = True
 
 
 def fmt_doc(cls: type, level: int) -> str:
@@ -754,42 +735,46 @@ class Settings(Group):
             pass
         elif key not in dir(self) or isinstance(super().__getattribute__(key), dict):
             # settings class not loaded yet
-            if key not in _world_settings_name_cache:
-                # find world that provides the settings class
-                _update_cache()
-                # check for missing keys to update _changed
-                for world_settings_name in _world_settings_name_cache:
-                    if world_settings_name not in dir(self):
-                        self._changed = True
-            if key not in _world_settings_name_cache:
+            import worlds
+            requested_key = key
+            settings_keys = set(worlds.AutoWorldRegister.get_settings_keys())
+            world = worlds.AutoWorldRegister.get_world_class_for_settings_key(key)
+            if key not in settings_keys and world is None:
                 # not a world group
                 return super().__getattribute__(key)
-            # directly import world and grab settings class
-            world_mod, world_cls_name = _world_settings_name_cache[key].rsplit(".", 1)
-            try:
-                world = cast(type, getattr(__import__(world_mod, fromlist=[world_cls_name]), world_cls_name))
-            except AttributeError:
-                import warnings
-                warnings.warn(f"World {world_cls_name} failed to initialize properly.")
-                return super().__getattribute__(key)
+            # check for missing keys to update _changed
+            for world_settings_name in settings_keys:
+                if world_settings_name not in dir(self):
+                    self._changed = True
+                    break
+            if world is None:
+                impl = cast(Group, Group())
+                setattr(self, key, impl)
+                return impl
+            # Use canonical key (world.settings_key) for the main attribute
+            key = world.settings_key
             assert getattr(world, "settings_key") == key
             try:
                 cls_or_name = world.__annotations__["settings"]
             except KeyError:
                 import warnings
-                warnings.warn(f"World {world_cls_name} does not define settings. Please consider upgrading the world.")
-                return super().__getattribute__(key)
+                warnings.warn(f"World {world.__name__} does not define settings. Please consider upgrading the world.")
+                impl = cast(Group, Group())
+                # Preserve the requested section name when a world does not define
+                # a typed settings group, matching historical host.yaml layout.
+                setattr(self, requested_key, impl)
+                return impl
             if isinstance(cls_or_name, str):
                 # Try to resolve type. Sadly we can't use get_type_hints, see https://bugs.python.org/issue43463
                 cls_name = cls_or_name
                 if "[" in cls_name:  # resolve ClassVar[]
                     cls_name = cls_name.split("[", 1)[1].rsplit("]", 1)[0]
-                cls = cast(type, getattr(__import__(world_mod, fromlist=[cls_name]), cls_name))
+                cls = cast(type, getattr(__import__(world.__module__, fromlist=[cls_name]), cls_name))
             else:
                 type_args = typing.get_args(cls_or_name)  # resolve ClassVar[]
                 cls = type_args[0] if type_args else cast(type, cls_or_name)
             impl: Group = cast(Group, cls())
-            assert isinstance(impl, Group), f"{world_cls_name}.settings has to inherit from settings.Group. " \
+            assert isinstance(impl, Group), f"{world.__name__}.settings has to inherit from settings.Group. " \
                                             "If that's already the case, please avoid recursive partial imports."
             # above assert fails for recursive partial imports
             # upcast loaded data to settings class
@@ -802,6 +787,8 @@ class Settings(Group):
             except AttributeError:
                 self._changed = True  # key is unknown -> new section
             setattr(self, key, impl)
+            if requested_key != key:
+                setattr(self, requested_key, impl)
 
         return super().__getattribute__(key)
 
@@ -822,7 +809,7 @@ class Settings(Group):
                         raise Exception(f"{ex.context} {ex.problem}\n{problem_line}{error_line}")
                     raise ex
                 # TODO: detect if upgrade is required
-                # TODO: once we have a cache for _world_settings_name_cache, detect if any game section is missing
+                # TODO: detect if any section is missing
                 self.update(options or {})
             self._filename = location
 
@@ -866,9 +853,15 @@ class Settings(Group):
 
     def dump(self, f: TextIO, level: int = 0) -> None:
         # load all world setting classes
-        _update_cache()
-        for key in _world_settings_name_cache:
-            self.__getattribute__(key)  # load all worlds
+        import worlds
+        for key in list(worlds.AutoWorldRegister.get_settings_keys()):
+            try:
+                self.__getattribute__(key)  # load all worlds
+            except (KeyError, Exception) as e:
+                # Only use empty Group for "world not found" (e.g. custom world not present), not for re-entrancy/other failures
+                if "not found in cache" not in str(e) and "failed to load" not in str(e):
+                    raise
+                setattr(self, key, Group())
         super().dump(f, level)
 
     @property

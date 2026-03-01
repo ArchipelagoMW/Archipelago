@@ -5,7 +5,7 @@ import logging
 import pathlib
 import sys
 import time
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, MutableMapping
 from random import Random
 from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
@@ -14,6 +14,8 @@ from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGa
 from BaseClasses import CollectionState, Entrance
 from rule_builder.rules import CustomRuleRegister, Rule
 from Utils import Version
+
+from .registry import _world_types_mapping, _world_types_storage, get_registry
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
@@ -28,11 +30,20 @@ class InvalidItemError(KeyError):
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    """Compatibility facade around the registry plus metaclass registration behavior."""
+    world_types: MutableMapping[str, Type["World"]] = _world_types_mapping
+
     __file__: str
     zip_path: Optional[str]
     settings_key: str
     __settings: Any
+
+    def __setattr__(cls, name: str, value: Any) -> None:
+        if name == "world_types" and isinstance(value, Mapping):
+            _world_types_storage.clear()
+            _world_types_storage.update(value)
+            value = _world_types_mapping
+        super().__setattr__(name, value)
 
     @property
     def settings(cls) -> Any:  # actual type is defined in World
@@ -44,6 +55,94 @@ class AutoWorldRegister(type):
             except AttributeError:
                 return None
         return cls.__settings
+
+    @classmethod
+    def get_world_list(mcs, force_rebuild: bool = False) -> list:
+        """Return world cache entries; optionally rebuild cache metadata first."""
+        return get_registry().list_entries(force_rebuild=force_rebuild)
+
+    @classmethod
+    def get_world_entry(
+        mcs,
+        *,
+        path: str | None = None,
+        game_name: str | None = None,
+    ):
+        """Return a world-list cache entry by path or game_name.
+
+        Exactly one of `path` or `game_name` must be provided.
+        """
+        return get_registry().get_world_entry(path=path, game_name=game_name)
+
+    @classmethod
+    def add_world_to_cache(mcs, apworld_path: str) -> bool:
+        """Add one apworld to cache and refresh in-memory world sources."""
+        return get_registry().add_world_to_cache(apworld_path)
+
+    @classmethod
+    def get_world_class(mcs, game_name: str) -> Type["World"]:
+        """Return the World class for game_name, loading from cache metadata when needed."""
+        return get_registry().get_world_class(game_name)
+
+    @classmethod
+    def get_loaded_world(mcs, game_name: str) -> Optional[Type["World"]]:
+        """Return loaded World class for game_name, or None. Never triggers loading."""
+        return get_registry().get_loaded_world(game_name)
+
+    @classmethod
+    def get_all_worlds(mcs) -> Dict[str, Type["World"]]:
+        """Load all cache-known worlds and return the game-to-World mapping."""
+        return get_registry().get_all_worlds()
+
+    @classmethod
+    def get_worlds(
+        mcs,
+        *,
+        include_hidden: bool = True,
+        require_tutorials: bool = False,
+        loaded_only: bool = False,
+        include_hidden_games: Set[str] | FrozenSet[str] = frozenset(),
+    ) -> Dict[str, Type["World"]]:
+        """Return worlds filtered by visibility/tutorial flags, with explicit loading behavior.
+
+        - loaded_only=True: only worlds already loaded are considered.
+        - loaded_only=False: all cache-known worlds are loaded before filtering.
+        - include_hidden_games: game names to include even when include_hidden=False.
+        """
+        worlds = _world_types_storage if loaded_only else mcs.get_all_worlds()
+        result: Dict[str, Type["World"]] = {}
+        for game_name, world in worlds.items():
+            if not include_hidden and world.hidden and game_name not in include_hidden_games:
+                continue
+            if require_tutorials and not hasattr(world.web, "tutorials"):
+                continue
+            result[game_name] = world
+        return result
+
+    @classmethod
+    def unload_world(mcs, game_name: str) -> None:
+        """Unload game_name world so it can be reloaded from disk."""
+        get_registry().unload_world(game_name)
+
+    @classmethod
+    def get_settings_keys(mcs) -> List[str]:
+        """Return list of settings_key values from the world list (for host.yaml world sections)."""
+        return get_registry().get_settings_keys()
+
+    @classmethod
+    def get_world_class_for_settings_key(mcs, settings_key: str) -> Optional[Type["World"]]:
+        """Return World class for this settings_key, loading on demand. None if not found or load failed."""
+        return get_registry().get_world_class_for_settings_key(settings_key)
+
+    @classmethod
+    def get_world_sources(mcs) -> List[Any]:
+        """Return the current world source list from the registry owner."""
+        return get_registry().world_sources
+
+    @classmethod
+    def get_failed_world_loads(mcs) -> List[str]:
+        """Return failed world load names tracked by the registry owner."""
+        return get_registry().failed_world_loads
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -89,11 +188,7 @@ class AutoWorldRegister(type):
         new_class = super().__new__(mcs, name, bases, dct)
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
-            if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered in 
-                {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
-                {new_class.__file__}.""")
-            AutoWorldRegister.world_types[dct["game"]] = new_class
+            get_registry().register_world_internal(new_class)
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:

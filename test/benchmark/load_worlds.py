@@ -10,14 +10,12 @@ def run_load_worlds_benchmark():
     import orjson
     orjson.loads("{}")  # orjson runs initialization on first use
 
-    import BaseClasses, Launcher, Fill
-
-    from worlds import world_sources
+    from worlds.AutoWorld import AutoWorldRegister
 
     init_logging("Benchmark Runner")
     logger = logging.getLogger("Benchmark")
 
-    for module in world_sources:
+    for module in AutoWorldRegister.get_world_sources():
         logger.info(f"{module} took {module.time_taken:.4f} seconds.")
 
 
