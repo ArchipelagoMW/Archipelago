@@ -367,7 +367,7 @@ class SM64Options(PerGameCommonOptions):
     bonk_trap_filler_percentage: BonkTrapFillerPercentage
     fire_trap_filler_percentage: FireTrapFillerPercentage
     amp_trap_filler_percentage: AmpTrapFillerPercentage
-    chukya_trap_filler_percentage: ChuckyaTrapFillerPercentage
+    chuckya_trap_filler_percentage: ChuckyaTrapFillerPercentage
     spin_trap_filler_percentage: SpinTrapFillerPercentage
     gust_trap_filler_percentage: GustTrapFillerPercentage
     amount_of_stars: AmountOfStars
