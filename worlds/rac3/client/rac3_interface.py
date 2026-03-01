@@ -651,7 +651,6 @@ class Rac3Interface(GameInterface):
             self._write8(RAC3STATUS.LAST_USED_1, self._read8(RAC3STATUS.LAST_USED_0))
             self._write8(RAC3STATUS.LAST_USED_0, equipable_data[name].ID)
             self._write8(RAC3STATUS.EQUIPPED, equipable_data[name].ID)
-            self._write8(RAC3STATUS.HELD_ITEM, equipable_data[name].ID)
             for slot in QUICK_SELECT_LIST:
                 if not self._read8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS):
                     self._write8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS, equipable_data[name].ID)
