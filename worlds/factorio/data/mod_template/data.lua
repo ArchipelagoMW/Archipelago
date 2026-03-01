@@ -1,4 +1,6 @@
 {% from "macros.lua" import dict_to_lua %}
+
+local constants = require("constants")
 -- TODO: Replace the tinting code with an actual rendered picture of the energy bridge icon.
 -- This tint is so that one is less likely to accidentally mass-produce energy-bridges, then wonder why their rocket is not building.
 function energy_bridge_tint()
@@ -37,6 +39,29 @@ energy_bridge_recipe.energy_required = 1
 energy_bridge_recipe.enabled = {% if energy_link %}true{% else %}false{% endif %}
 energy_bridge_recipe.localised_name = "Archipelago EnergyLink Bridge"
 data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe
+
+local function create_trigger_science_pack(pack)
+    local pack_item = data.raw.tool[pack]
+    local pack_localised_name = pack_item.localised_name or {"item-name."..pack_item.name} or pack_item
+    local pack_trigger = {
+        type           = "technology",
+        name           = "achipellago-trigger-"..pack,
+        localised_name = {"technology-name.crafted-science-pack", pack_localised_name},
+        icon           = pack_item.icon,
+        icons          = pack_item.icons,
+        icon_size      = pack_item.icon_size,
+        hidden         = true,
+        research_trigger = {
+            type = "craft-item",
+            item = pack,
+        },
+    }
+    data:extend{pack_trigger}
+end
+
+for _, pack in pairs(constants.science_packs) do
+    create_trigger_science_pack(pack)
+end
 
 data.raw["map-gen-presets"].default["archipelago"] = {{ dict_to_lua({"default": False, "order": "a", "basic_settings": world_gen["basic"], "advanced_settings": world_gen["advanced"]}) }}
 if mods["science-not-invited"] then
