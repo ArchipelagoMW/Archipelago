@@ -13,6 +13,7 @@ import threading
 import time
 import typing
 import sys
+from asyncio import AbstractEventLoop
 
 import websockets
 from pony.orm import commit, db_session, select
@@ -24,8 +25,10 @@ from MultiServer import (
     server_per_message_deflate_factory,
 )
 from Utils import restricted_loads, cache_argsless
+from NetUtils import GamesPackage
+from apmw.webhost.customserver.gamespackage.cache import DBGamesPackageCache
 from .locker import Locker
-from .models import Command, GameDataPackage, Room, db
+from .models import Command, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -62,18 +65,39 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 class WebHostContext(Context):
     room_id: int
+    video: dict[tuple[int, int], tuple[str, str]]
+    main_loop: AbstractEventLoop
+    static_server_data: StaticServerData
 
-    def __init__(self, static_server_data: dict, logger: logging.Logger):
+    def __init__(
+            self,
+            static_server_data: StaticServerData,
+            games_package_cache: DBGamesPackageCache,
+            logger: logging.Logger,
+    ) -> None:
         # static server data is used during _load_game_data to load required data,
         # without needing to import worlds system, which takes quite a bit of memory
-        self.static_server_data = static_server_data
-        super(WebHostContext, self).__init__("", 0, "", "", 1,
-                                             40, True, "enabled", "enabled",
-                                             "enabled", 0, 2, logger=logger)
-        del self.static_server_data
-        self.main_loop = asyncio.get_running_loop()
-        self.video = {}
+        super(WebHostContext, self).__init__(
+            "",
+            0,
+            "",
+            "",
+            1,
+            40,
+            True,
+            "enabled",
+            "enabled",
+            "enabled",
+            0,
+            2,
+            games_package_cache=games_package_cache,
+            logger=logger,
+        )
         self.tags = ["AP", "WebHost"]
+        self.video = {}
+        self.main_loop = asyncio.get_running_loop()
+        self.static_server_data = static_server_data
+        self.games_package_cache = games_package_cache
 
     def __del__(self):
         try:
@@ -82,12 +106,6 @@ class WebHostContext(Context):
             self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
         except ImportError:
             self.logger.debug("Context destroyed")
-
-    def _load_game_data(self):
-        for key, value in self.static_server_data.items():
-            # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
-            setattr(self, key, value)
-        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
 
     async def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -118,42 +136,14 @@ class WebHostContext(Context):
             self.port = get_random_port()
 
         multidata = self.decompress(room.seed.multidata)
-        game_data_packages = {}
+        return self._load(multidata, True)
 
-        static_gamespackage = self.gamespackage  # this is shared across all rooms
-        static_item_name_groups = self.item_name_groups
-        static_location_name_groups = self.location_name_groups
-        self.gamespackage = {"Archipelago": static_gamespackage.get("Archipelago", {})}  # this may be modified by _load
-        self.item_name_groups = {"Archipelago": static_item_name_groups.get("Archipelago", {})}
-        self.location_name_groups = {"Archipelago": static_location_name_groups.get("Archipelago", {})}
-        missing_checksum = False
-
-        for game in list(multidata.get("datapackage", {})):
-            game_data = multidata["datapackage"][game]
-            if "checksum" in game_data:
-                if static_gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
-                    # non-custom. remove from multidata and use static data
-                    # games package could be dropped from static data once all rooms embed data package
-                    del multidata["datapackage"][game]
-                else:
-                    row = GameDataPackage.get(checksum=game_data["checksum"])
-                    if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                        game_data_packages[game] = restricted_loads(row.data)
-                        continue
-                    else:
-                        self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
-            else:
-                missing_checksum = True  # Game rolled on old AP and will load data package from multidata
-            self.gamespackage[game] = static_gamespackage.get(game, {})
-            self.item_name_groups[game] = static_item_name_groups.get(game, {})
-            self.location_name_groups[game] = static_location_name_groups.get(game, {})
-
-        if not game_data_packages and not missing_checksum:
-            # all static -> use the static dicts directly
-            self.gamespackage = static_gamespackage
-            self.item_name_groups = static_item_name_groups
-            self.location_name_groups = static_location_name_groups
-        return self._load(multidata, game_data_packages, True)
+    def _load_world_data(self):
+        # Use static_server_data, but skip static data package since that is in cache anyway.
+        # Also NOT importing worlds here!
+        # FIXME: does this copy the non_hintable_names (also for games not part of the room)?
+        self.non_hintable_names = collections.defaultdict(frozenset, self.static_server_data["non_hintable_names"])
+        del self.static_server_data  # Not used past this point. Free memory.
 
     def init_save(self, enabled: bool = True):
         self.saving = enabled
@@ -185,33 +175,22 @@ def get_random_port():
     return random.randint(49152, 65535)
 
 
+class StaticServerData(typing.TypedDict, total=True):
+    non_hintable_names: dict[str, typing.AbstractSet[str]]
+    games_package: dict[str, GamesPackage]
+
+
 @cache_argsless
-def get_static_server_data() -> dict:
+def get_static_server_data() -> StaticServerData:
     import worlds
-    data = {
+
+    return {
         "non_hintable_names": {
             world_name: world.hint_blacklist
             for world_name, world in worlds.AutoWorldRegister.world_types.items()
         },
-        "gamespackage": {
-            world_name: {
-                key: value
-                for key, value in game_package.items()
-                if key not in ("item_name_groups", "location_name_groups")
-            }
-            for world_name, game_package in worlds.network_data_package["games"].items()
-        },
-        "item_name_groups": {
-            world_name: world.item_name_groups
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
-        },
-        "location_name_groups": {
-            world_name: world.location_name_groups
-            for world_name, world in worlds.AutoWorldRegister.world_types.items()
-        },
+        "games_package": worlds.network_data_package["games"]
     }
-
-    return data
 
 
 def set_up_logging(room_id) -> logging.Logger:
@@ -245,9 +224,18 @@ def tear_down_logging(room_id):
         del logging.Logger.manager.loggerDict[logger_name]
 
 
-def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
-                       cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
-                       host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+def run_server_process(
+        name: str,
+        ponyconfig: dict[str, typing.Any],
+        static_server_data: StaticServerData,
+        cert_file: typing.Optional[str],
+        cert_key_file: typing.Optional[str],
+        host: str,
+        rooms_to_run: multiprocessing.Queue,
+        rooms_shutting_down: multiprocessing.Queue,
+) -> None:
+    import gc
+
     from setproctitle import setproctitle
 
     setproctitle(name)
@@ -263,14 +251,15 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         resource.setrlimit(resource.RLIMIT_NOFILE, (file_limit, file_limit))
         del resource, file_limit
 
+    # prime the data package cache with static data
+    games_package_cache = DBGamesPackageCache(static_server_data["games_package"])
+
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
 
     if "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded in the custom server.")
-
-    import gc
 
     if not cert_file:
         def get_ssl_context():
@@ -296,7 +285,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         with Locker(f"RoomLocker {room_id}"):
             try:
                 logger = set_up_logging(room_id)
-                ctx = WebHostContext(static_server_data, logger)
+                ctx = WebHostContext(static_server_data, games_package_cache, logger)
                 ctx.load(room_id)
                 ctx.init_save()
                 assert ctx.server is None
