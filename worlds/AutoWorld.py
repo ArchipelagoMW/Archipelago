@@ -434,9 +434,11 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def pre_output(self):
-        """Optional method that is called before output generation.
+        """
+        Optional method that is called before output generation.
         Items and connections are not meant to be moved anymore,
-        anything that would affect logical spheres is forbidden at this point."""
+        anything that would affect logical spheres is forbidden at this point.
+        """
         pass
 
     def generate_output(self, output_directory: str) -> None:
