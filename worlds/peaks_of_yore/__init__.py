@@ -75,6 +75,10 @@ class PeaksOfWorld(World):
         classification = item_id_to_classification[id]
         return PeaksOfYoreItem(name, classification, id, self.player)
 
+    def create_item_prog(self, name: str) -> Item:
+        id = item_name_to_id[name]
+        return PeaksOfYoreItem(name, ItemClassification.progression, id, self.player)
+
     def get_filler_item_name(self) -> str:
         choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
         if self.options.item_traps:
@@ -125,6 +129,40 @@ class PeaksOfWorld(World):
         total_location_count = remaining_items
 
         local_itempool: list[Item] = []
+
+        for item in pool2:
+            amount = item.min_count
+            required_amount = 0
+            starter_amount = 0
+
+            if not item.is_enabled(self.options):
+                continue # don't include this one :P
+
+            if item.is_starter_item(self.options):
+                starter_amount += amount
+
+            if item.is_early(self.options):
+                self.multiworld.early_items[self.player][item.name] = amount
+
+            if item.name in self.checks_in_pool.total_requirements.keys():
+                required_amount = max(amount, self.checks_in_pool.total_requirements[item.name])
+
+            if item.name in self.checks_in_pool.entry_requirements.keys():
+                starter_amount = self.checks_in_pool.entry_requirements[item.name]
+
+            if amount > item.max_count:
+                raise OptionError(f"something has gone very wrong, we somehow tried adding {amount} of {item.name}")
+            for i in range(amount):
+                if starter_amount > 0:
+                    self.multiworld.push_precollected(self.create_item(item.name))
+                    starter_amount -= 1
+                    required_amount -= 1
+                elif required_amount > 0:
+                    self.multiworld.push_precollected(self.create_item_prog(item.name))
+                    required_amount -= 1
+                else:
+                    self.multiworld.push_precollected(self.create_item(item.name))
+
         for item in all_items:
             if item.is_enabled(self.options):
                 if item.is_starter_item(self.options):
