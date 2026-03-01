@@ -1,5 +1,5 @@
 import logging
-from BaseClasses import Region, Entrance, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Region, Entrance, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from rule_builder.cached_world import CachedRuleBuilderWorld
 from .Items import PokepelagoItem, item_table, pokemon_names, GEN_1_TYPES, item_data_table
@@ -28,13 +28,12 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
     topology_present: bool = True
     web = PokepelagoWeb()
 
-    # Pokepelago's tier entrance rules use state.has() on event items ("Caught Pokemon")
-    # that accumulate during the sweep itself. AP's default BFS only checks each entrance
-    # ONCE per sweep cycle - if a tier entrance fails on the first check (because the player
-    # has only 3 caught pokemon at sweep start), it is never re-evaluated even as more
-    # Caught Pokemon events are collected. Setting this to False makes AP re-check every
-    # entrance whenever any region is reached, which is the correct behavior here.
-    # Performance cost is acceptable given the alternative is a permanent deadlock.
+    # Tier entrances use has("Pokemon Unlocks", player, thresh) which depends on a virtual
+    # counter maintained by collect/remove overrides — O(1) per check. AP can't register
+    # item-count rules in indirect_conditions (only region-reachability rules), so
+    # explicit_indirect_conditions=False is needed to re-check the 4 tier entrances whenever
+    # any region becomes newly reachable. With only 4 blocked tier connections, the cost is
+    # O(4 × regions) per sweep, which is fast.
     explicit_indirect_conditions: bool = False
 
     item_name_to_id = item_table
@@ -64,6 +63,8 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         }.get(gen_option, 151)
         self.active_pokemon = [mon for mon in POKEMON_DATA if mon["id"] <= limit]
         self.active_pokemon_names = [mon["name"] for mon in self.active_pokemon]
+        # Fast lookup by name for collect/remove counter updates.
+        self._mon_lookup: dict = {mon["name"]: mon for mon in self.active_pokemon}
 
         # Total new Pokémon guessable (all active minus the 3 precollected starters)
         total_guessable = len(self.active_pokemon) - 3
@@ -83,6 +84,26 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         capped_goal = min(raw_goal, max(valid_milestones))
         self.goal_count = min(valid_milestones, key=lambda m: abs(m - capped_goal))
 
+    def collect(self, state: CollectionState, item: "PokepelagoItem") -> bool:
+        changed = super().collect(state, item)
+        if changed and item.name.endswith(" Unlock"):
+            state.prog_items[self.player]["Pokemon Unlocks"] += 1
+            mon_name = item.name[:-7]  # strip " Unlock"
+            if mon := self._mon_lookup.get(mon_name):
+                for t in mon["types"]:
+                    state.prog_items[self.player][f"{t} Pokemon"] += 1
+        return changed
+
+    def remove(self, state: CollectionState, item: "PokepelagoItem") -> bool:
+        changed = super().remove(state, item)
+        if changed and item.name.endswith(" Unlock"):
+            state.prog_items[self.player]["Pokemon Unlocks"] -= 1
+            mon_name = item.name[:-7]
+            if mon := self._mon_lookup.get(mon_name):
+                for t in mon["types"]:
+                    state.prog_items[self.player][f"{t} Pokemon"] -= 1
+        return changed
+
     def create_item(self, name: str) -> PokepelagoItem:
         data = item_data_table.get(name)
         if data:
@@ -99,18 +120,8 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         return PokepelagoItem(name, ItemClassification.progression, None, self.player)
 
     def create_items(self):
-        # 1. Provide all 3 starters and their required type keys
         starters = ["Bulbasaur", "Charmander", "Squirtle"]
         starter_types = {"Grass", "Poison", "Fire", "Water"}
-
-        for name in starters:
-            self.multiworld.push_precollected(self.create_item(f"{name} Unlock"))
-            self.multiworld.push_precollected(self.create_event_item("Caught Pokemon"))
-            for t in next(m for m in self.active_pokemon if m["name"] == name)["types"]:
-                self.multiworld.push_precollected(self.create_event_item(f"Caught {t} Pokemon"))
-        
-        for p_type in starter_types:
-            self.multiworld.push_precollected(self.create_item(f"{p_type} Type Key"))
 
         # Track items added to the pool by this player specifically.
         # We must NOT use len(self.multiworld.itempool) because that is the global
@@ -118,20 +129,26 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         # their items inflate the count and prevent us from adding our fillers.
         my_items_in_pool = 0
 
+        if self.options.dexsanity.value:
+            # 1a. Dexsanity ON: precollect starter Unlock items and add remaining Unlocks to pool
+            for name in starters:
+                self.multiworld.push_precollected(self.create_item(f"{name} Unlock"))
+
+            for name in self.active_pokemon_names:
+                if name not in starters:
+                    self.multiworld.itempool.append(self.create_item(f"{name} Unlock"))
+                    my_items_in_pool += 1
+
+        # 1b. Precollect starter Type Keys so those types are accessible from the start
+        for p_type in starter_types:
+            self.multiworld.push_precollected(self.create_item(f"{p_type} Type Key"))
+
         # 2. Add remaining Type Keys to the pool if Type Locks are enabled
         if self.options.type_locks.value:
             for p_type in GEN_1_TYPES:
                 if p_type not in starter_types:
                     self.multiworld.itempool.append(self.create_item(f"{p_type} Type Key"))
                     my_items_in_pool += 1
-
-        # 3. Add remaining Pokémon Unlocks to the pool
-        for name in self.active_pokemon_names:
-            if name not in starters:
-                self.multiworld.itempool.append(self.create_item(f"{name} Unlock"))
-                my_items_in_pool += 1
-                
-        print(f"MY ITEMS IN POOL AFTER POKEMON: {my_items_in_pool}")
 
         # 4. Fill remaining locations with useful items/fillers and traps.
         # NOTE: event locations (ID=None, like "Pokepelago Victory") are server-side only and
@@ -154,145 +171,190 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
             my_items_in_pool += 1
 
     def create_regions(self):
-        # Tier thresholds: the number of "Caught Pokemon" required to enter each tier.
-        TIER_THRESHOLDS = {0: 0, 1: 50, 2: 150, 3: 400, 4: 800}
-
-        # 1. Create Tiered Architecture
-        menu_region = Region("Menu", self.player, self.multiworld)
-        tier0 = Region("Tier 0", self.player, self.multiworld)
-        tier1 = Region("Tier 1", self.player, self.multiworld)
-        tier2 = Region("Tier 2", self.player, self.multiworld)
-        tier3 = Region("Tier 3", self.player, self.multiworld)
-        tier4 = Region("Tier 4", self.player, self.multiworld)
-        tiers = [tier0, tier1, tier2, tier3, tier4]
-
-        self.multiworld.regions.extend([menu_region, tier0, tier1, tier2, tier3, tier4])
-
-        # 2. Parallel Connections: Menu -> each Tier directly
-        # All tier entrances originate from Menu so they are evaluated in the same BFS
-        # cycle as other Menu exits. With explicit_indirect_conditions = False, these
-        # entrances are re-evaluated as Caught Pokemon events accumulate during sweep,
-        # progressively unlocking higher tiers. A sequential chain (T0->T1->T2...) would
-        # require indirect conditions to work correctly with event-based rules, and would
-        # not provide meaningful additional pruning benefits over this parallel model.
-        for t, threshold in [(tier0, 0), (tier1, 50), (tier2, 150), (tier3, 400), (tier4, 800)]:
-            ent = Entrance(self.player, f"Menu To {t.name}", menu_region)
-            menu_region.exits.append(ent)
-            ent.connect(t)
-            if threshold > 0:
-                ent.access_rule = lambda state, thresh=threshold: state.has("Caught Pokemon", self.player, thresh)
-
-        # 3. Location Assignment (Milestone and Starting locations)
-        # TYPE_MILESTONE_STEPS [1,2,5,10,20,35,50] distributed evenly across 5 tiers.
-        # Based on index position rather than raw value to ensure a balanced spread.
-        TYPE_STEP_TO_TIER = {1: 0, 2: 0, 5: 1, 10: 1, 20: 2, 35: 3, 50: 4}
-
-        # Compute how many of each type are catchable (excludable starters pre-collected).
-        # A type milestone "Caught N X Pokemon" is only valid if N <= catchable count for X.
         STARTER_NAMES = {"Bulbasaur", "Charmander", "Squirtle"}
+
+        # Compute how many of each type are catchable after subtracting pre-collected starters.
+        # A type milestone "Caught N X Pokemon" is only valid if N <= catchable count for X.
         type_catchable = {}
         for mon in self.active_pokemon:
             for t in mon["types"]:
                 type_catchable[t] = type_catchable.get(t, 0) + 1
-        # Subtract starters (pre-collected, so they don't count as new catches)
         for mon in self.active_pokemon:
             if mon["name"] in STARTER_NAMES:
                 for t in mon["types"]:
                     if t in type_catchable:
                         type_catchable[t] -= 1
 
-        for loc_name, loc_id in self.location_name_to_id.items():
-            if loc_name.startswith("Guess "):
-                # Pokemon Guess locations are handled below in the per-pokemon loop.
-                continue
+        menu_region = Region("Menu", self.player, self.multiworld)
+        self.multiworld.regions.append(menu_region)
 
-            target_region = menu_region  # Default: starting locations go on Menu (no gate).
+        if self.options.dexsanity.value:
+            # --- Dexsanity ON: full tier + per-Pokemon region setup ---
+            TIER_THRESHOLDS = {0: 0, 1: 50, 2: 150, 3: 400, 4: 800}
+            # TYPE_MILESTONE_STEPS [1,2,5,10,20,35,50] distributed evenly across 5 tiers.
+            TYPE_STEP_TO_TIER = {1: 0, 2: 0, 5: 1, 10: 1, 20: 2, 35: 3, 50: 4}
 
-            if loc_name.startswith("Guessed "):
-                count = int(loc_name.split(" ")[1])
-                # Skip milestones beyond the active pokemon pool.
-                if count > len(self.active_pokemon) - 3:
-                    continue
-                if count < 50:        target_region = tier0
-                elif count < 150:     target_region = tier1
-                elif count < 400:     target_region = tier2
-                elif count < 800:     target_region = tier3
-                else:                 target_region = tier4
+            tier0 = Region("Tier 0", self.player, self.multiworld)
+            tier1 = Region("Tier 1", self.player, self.multiworld)
+            tier2 = Region("Tier 2", self.player, self.multiworld)
+            tier3 = Region("Tier 3", self.player, self.multiworld)
+            tier4 = Region("Tier 4", self.player, self.multiworld)
+            tiers = [tier0, tier1, tier2, tier3, tier4]
+            self.multiworld.regions.extend([tier0, tier1, tier2, tier3, tier4])
 
-                # Sanity check: the tier's entrance threshold must not exceed the location's
-                # rule requirement (+3 for starters). If it does, the location is unreachable.
-                tier_idx = tiers.index(target_region)
-                tier_threshold = TIER_THRESHOLDS[tier_idx]
-                rule_requires = count + 3  # +3 for pre-collected starters
-                if tier_threshold > rule_requires:
-                    logging.warning(
-                        f"[Pokepelago] Sanity: '{loc_name}' in Tier {tier_idx} "
-                        f"(entrance needs {tier_threshold} catches) but its rule only needs "
-                        f"{rule_requires} catches. Location may be unreachable — check tier assignment."
-                    )
+            # Parallel connections: Menu -> each Tier directly.
+            # Tier entrances gate access based on how many Pokemon Unlock items the player has.
+            # Using has_group on real items means BFS state is fixed per sweep — no within-sweep
+            # re-evaluation needed, so explicit_indirect_conditions can stay True (default).
+            for t, threshold in [(tier0, 0), (tier1, 50), (tier2, 150), (tier3, 400), (tier4, 800)]:
+                ent = Entrance(self.player, f"Menu To {t.name}", menu_region)
+                menu_region.exits.append(ent)
+                ent.connect(t)
+                if threshold > 0:
+                    ent.access_rule = lambda state, thresh=threshold: state.has("Pokemon Unlocks", self.player, thresh)
 
-            elif loc_name.startswith("Caught "):
-                # Type milestone: "Caught {step} {Type} Pokemon"
-                # Parse: "Caught 10 Fire Pokemon" -> step=10, p_type="Fire"
-                parts = loc_name.split(" ")
-                step = int(parts[1])
-                p_type = parts[2]
-                # Skip if this generation doesn't have enough of this type to reach the step.
-                if step > type_catchable.get(p_type, 0):
-                    continue
-                target_region = tiers[TYPE_STEP_TO_TIER.get(step, 0)]
+            # Assign milestone and starting locations to their target tiers.
+            for loc_name, loc_id in self.location_name_to_id.items():
+                if loc_name.startswith("Guess "):
+                    continue  # Handled in per-Pokemon loop below.
 
-            location = PokepelagoLocation(self.player, loc_name, loc_id, target_region)
-            target_region.locations.append(location)
+                target_region = menu_region  # Default: starting locations on Menu, no gate.
 
-        # 4. Pokemon Regions Assignment
-        # Each Pokemon gets its own sub-region connected from the appropriate tier.
-        # Tiering is by Pokedex ID as a proxy for generation/game-era difficulty.
-        # Starters always land in Tier 0 (unconditionally accessible).
-        for mon in self.active_pokemon:
-            mon_name = mon["name"]
-            mon_region = Region(f"Region {mon_name}", self.player, self.multiworld)
-            self.multiworld.regions.append(mon_region)
+                if loc_name.startswith("Guessed "):
+                    count = int(loc_name.split(" ")[1])
+                    if count > len(self.active_pokemon) - 3:
+                        continue
+                    if count < 50:      target_region = tier0
+                    elif count < 150:   target_region = tier1
+                    elif count < 400:   target_region = tier2
+                    elif count < 800:   target_region = tier3
+                    else:               target_region = tier4
 
-            loc_name = f"Guess {mon_name}"
-            loc_id = self.location_name_to_id[loc_name]
-            location = PokepelagoLocation(self.player, loc_name, loc_id, mon_region)
-            mon_region.locations.append(location)
+                    tier_idx = tiers.index(target_region)
+                    tier_threshold = TIER_THRESHOLDS[tier_idx]
+                    rule_requires = count + 3  # +3 for pre-collected starters
+                    if tier_threshold > rule_requires:
+                        logging.warning(
+                            f"[Pokepelago] Sanity: '{loc_name}' in Tier {tier_idx} "
+                            f"(entrance needs {tier_threshold} catches) but its rule only needs "
+                            f"{rule_requires} catches. Location may be unreachable — check tier assignment."
+                        )
 
-            mon_id = mon["id"]
-            if mon_name in STARTER_NAMES:
-                mon_tier = tier0
-            else:
-                if mon_id < 100:    mon_tier = tier0
-                elif mon_id < 300:  mon_tier = tier1
-                elif mon_id < 600:  mon_tier = tier2
-                elif mon_id < 900:  mon_tier = tier3
-                else:               mon_tier = tier4
+                elif loc_name.startswith("Caught "):
+                    parts = loc_name.split(" ")
+                    step = int(parts[1])
+                    p_type = parts[2]
+                    if step > type_catchable.get(p_type, 0):
+                        continue
+                    tier_idx = TYPE_STEP_TO_TIER.get(step, 0)
+                    if TIER_THRESHOLDS[tier_idx] > len(self.active_pokemon):
+                        continue
+                    target_region = tiers[tier_idx]
 
-            entrance = Entrance(self.player, f"Catch {mon_name}", mon_tier)
-            mon_tier.exits.append(entrance)
-            entrance.connect(mon_region)
+                location = PokepelagoLocation(self.player, loc_name, loc_id, target_region)
+                target_region.locations.append(location)
 
-            # Place proxy event items inside the pokemon's region.
-            # These fire automatically when the player enters the region (i.e., catches the pokemon),
-            # incrementing the "Caught Pokemon" and "Caught {Type} Pokemon" counters used by rules.
-            # We use the standard AP pattern: event Location (address=None) + locked event Item.
-            if mon_name not in STARTER_NAMES:
-                caught_event_loc = PokepelagoLocation(
-                    self.player, f"Caught {mon_name} Event", None, mon_region)
-                caught_event_loc.place_locked_item(self.create_event_item("Caught Pokemon"))
-                mon_region.locations.append(caught_event_loc)
+            # Each Pokemon gets its own sub-region connected from the appropriate tier.
+            # Tiering is by Pokedex ID as a proxy for generation/game-era difficulty.
+            for mon in self.active_pokemon:
+                mon_name = mon["name"]
+                mon_region = Region(f"Region {mon_name}", self.player, self.multiworld)
+                self.multiworld.regions.append(mon_region)
 
-                for t in mon["types"]:
-                    type_event_loc = PokepelagoLocation(
-                        self.player, f"Caught {mon_name} {t} Event", None, mon_region)
-                    type_event_loc.place_locked_item(self.create_event_item(f"Caught {t} Pokemon"))
-                    mon_region.locations.append(type_event_loc)
+                loc_name = f"Guess {mon_name}"
+                loc_id = self.location_name_to_id[loc_name]
+                location = PokepelagoLocation(self.player, loc_name, loc_id, mon_region)
+                mon_region.locations.append(location)
+
+                mon_id = mon["id"]
+                if mon_name in STARTER_NAMES:
+                    mon_tier = tier0
+                else:
+                    if mon_id < 100:    mon_tier = tier0
+                    elif mon_id < 300:  mon_tier = tier1
+                    elif mon_id < 600:  mon_tier = tier2
+                    elif mon_id < 900:  mon_tier = tier3
+                    else:               mon_tier = tier4
+
+                entrance = Entrance(self.player, f"Catch {mon_name}", mon_tier)
+                mon_tier.exits.append(entrance)
+                entrance.connect(mon_region)
+
+        else:
+            # --- Dexsanity OFF: flat milestone-only structure in menu_region ---
+            # No tiers, no per-Pokemon regions. All milestone and starting locations live in
+            # menu_region. Type milestone access rules (via Type Keys) are set in set_rules().
+            for loc_name, loc_id in self.location_name_to_id.items():
+                if loc_name.startswith("Guess "):
+                    continue  # No per-Pokemon locations in this mode.
+
+                if loc_name.startswith("Guessed "):
+                    count = int(loc_name.split(" ")[1])
+                    if count > len(self.active_pokemon) - 3:
+                        continue
+
+                elif loc_name.startswith("Caught "):
+                    parts = loc_name.split(" ")
+                    step = int(parts[1])
+                    p_type = parts[2]
+                    if step > type_catchable.get(p_type, 0):
+                        continue
+
+                location = PokepelagoLocation(self.player, loc_name, loc_id, menu_region)
+                menu_region.locations.append(location)
 
         # Victory event location (ID=None marks it as a server-side event, not a sendable check).
         # The Victory item placed here is what triggers the server's release/goal-completion mechanism.
         victory_location = PokepelagoLocation(self.player, "Pokepelago Victory", None, menu_region)
         menu_region.locations.append(victory_location)
+
+    def pre_fill(self):
+        """Pre-place non-starter Type Keys into starting locations before the main fill.
+
+        With type_locks enabled, Type Keys gate type-milestone locations. If the main fill
+        places a Type Key in a location that itself requires that Type Key, a circular dependency
+        forms. The fill's swap mechanism can resolve it but is extremely slow (O(n³)).
+
+        The fix: put all 14 non-starter Type Keys in the 20 always-accessible starting locations
+        (Menu region, no access rules) before fill_restrictive ever runs. This guarantees no
+        circular dependency and removes Type Keys from the main fill entirely.
+        """
+        if not self.options.type_locks.value or not self.options.dexsanity.value:
+            return
+
+        from .Locations import starting_locations
+        from .data import GEN_1_TYPES
+
+        STARTER_TYPES = {"Grass", "Poison", "Fire", "Water"}
+        non_starter_key_names = {f"{t} Type Key" for t in GEN_1_TYPES if t not in STARTER_TYPES}
+
+        # Pull this player's non-starter Type Keys out of the global item pool.
+        my_keys: list = []
+        remaining: list = []
+        for item in self.multiworld.itempool:
+            if item.player == self.player and item.name in non_starter_key_names:
+                my_keys.append(item)
+            else:
+                remaining.append(item)
+
+        if not my_keys:
+            return
+
+        # Find unfilled starting locations for this player (always reachable, no access rule).
+        safe_locs = [
+            self.multiworld.get_location(name, self.player)
+            for name in starting_locations
+            if self.multiworld.get_location(name, self.player).item is None
+        ]
+
+        if len(safe_locs) < len(my_keys):
+            # Shouldn't happen (20 starting locs, 14 keys), but bail safely if it does.
+            return
+
+        self.multiworld.itempool[:] = remaining
+        self.random.shuffle(safe_locs)
+        for key, loc in zip(my_keys, safe_locs):
+            loc.place_locked_item(key)
 
     def set_rules(self):
         Rules.set_rules(self)
@@ -300,11 +362,16 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         # Canonical Archipelago goal pattern: place a locked "Victory" event item at an event
         # location whose access rule enforces the goal. The server's release/completion mechanism
         # triggers when state.has("Victory") becomes true — can_reach() alone doesn't do this.
-        goal = self.goal_count + 3  # +3 because starters are pre-collected and also count
-        goal_rule = lambda state: state.has("Caught Pokemon", self.player, goal)
-
         victory_location = self.multiworld.get_location("Pokepelago Victory", self.player)
-        victory_location.access_rule = goal_rule
+
+        if self.options.dexsanity.value:
+            # Starters' Unlock items are push_precollected, so has_group("Pokemon Unlocks") already
+            # counts them. goal_count + 3 = goal new catches + 3 pre-collected starters.
+            victory_location.access_rule = lambda state: state.has(
+                "Pokemon Unlocks", self.player, self.goal_count + 3)
+        # Dexsanity OFF: no AP-side access rule. The client drives victory by checking the
+        # goal milestone location when the player has guessed enough Pokemon.
+
         victory_item = self.create_event_item("Victory")
         victory_location.place_locked_item(victory_item)
 
@@ -316,4 +383,5 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
             "type_locks": bool(self.options.type_locks.value),
             "pokemon_generations": self.options.pokemon_generations.value,
             "goal_count": self.goal_count,
+            "dexsanity": bool(self.options.dexsanity.value),
         }

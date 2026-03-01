@@ -2,6 +2,15 @@ from dataclasses import dataclass
 from Options import PerGameCommonOptions, Toggle, Choice, Range
 
 
+class Dexsanity(Toggle):
+    """If enabled, each Pokemon has its own location check ('Guess {Pokemon}') and requires
+    a '{Pokemon} Unlock' item to be received before it can be guessed. Disabling this removes
+    all per-Pokemon locations and Unlock items, leaving only milestone-based progression.
+    Disabling dramatically reduces generation time and item pool size."""
+    display_name = "Dexsanity"
+    default = 1
+
+
 class EnableTypeLocks(Toggle):
     """If true, guessing a Pokémon requires both its specific unlock item and its elemental Type Key."""
     display_name = "Enable Type Locks"
@@ -82,6 +91,7 @@ class TrapChance(Range):
 
 @dataclass
 class PokepelagoOptions(PerGameCommonOptions):
+    dexsanity: Dexsanity
     pokemon_generations: PokemonGenerations
     type_locks: EnableTypeLocks
     starting_pokemon: StartingPokemon
