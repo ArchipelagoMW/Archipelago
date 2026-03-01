@@ -416,12 +416,18 @@ possible_regions: Dict[int, EVNRegionData] = {
         "missions": [
             257, 258, 259, 260, 261, 262, 140, 263, 264, 265, 267, 268, 269, 270, 271, 272, 273, 
             276, 274, 275, 277, 278, 
+            # OTHER Missions (ex: ferry misn) that are unlocked from BH
+            # ex: BH sets b3, which 235 checks
+            235, 
         ],
         "misn_edits": {
+            262: {
+                "available_bits": "(b0 & !b424) & !b1" # removing story string started bit check of 511 - dunno why it is here
+            },
             266: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             },
-        }
+        },
     },
     24: {
         "id": 24,
@@ -430,10 +436,13 @@ possible_regions: Dict[int, EVNRegionData] = {
             257, 258, 259, 260, 261, 262, 140, 263, 264, 265, 266,
         ],
         "misn_edits": {
+            262: {
+                "available_bits": "(b0 & !b424) & !b1" # removing story string started bit check of 511 - dunno why it is here
+            },
             267: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             },
-        }
+        },
     },
     25: { # I don't like this one - don't like that you have to fail
         "id": 25,
