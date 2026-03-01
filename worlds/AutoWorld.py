@@ -425,10 +425,12 @@ class World(metaclass=AutoWorldRegister):
         """
 
     def finalize_multiworld(self) -> None:
-        """Optional Method that is called after fill and progression balancing.
+        """
+        Optional Method that is called after fill and progression balancing.
         This is the last stage of generation where worlds may change logically relevant data,
         such as item placements and connections. To not break assumptions,
-        only ever increase accessibility, never decrease it."""
+        only ever increase accessibility, never decrease it.
+        """
         pass
 
     def pre_output(self):
