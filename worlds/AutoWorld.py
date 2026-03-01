@@ -495,7 +495,9 @@ class World(metaclass=AutoWorldRegister):
 
     def get_filler_item_name(self) -> str:
         """
-        Called when the item pool needs to be filled with additional items to match location count.
+        If core AP removes an item from your item pool, this method is called to choose a replacement item
+        so item count and location count remain equal.
+        For example: plando, item_links and start_inventory_from_pool are features that may cause this.
 
         Any returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
         For most worlds this will be one or more of your filler items, but the classification of these items
