@@ -1,7 +1,6 @@
 from BaseClasses import Region, Entrance, ItemClassification, Tutorial
-from worlds.AutoWorld import WebWorld
-from rule_builder.cached_world import CachedRuleBuilderWorld
-from rule_builder.rules import HasAll
+from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import set_rule
 from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
 from .Locations import PokepelagoLocation, location_table, milestones, starting_locations
 from .Options import PokepelagoOptions, REGION_OPTION_ATTRS
@@ -17,7 +16,7 @@ class PokepelagoWeb(WebWorld):
         ["Appie"]
     )]
 
-class PokepelagoWorld(CachedRuleBuilderWorld):
+class PokepelagoWorld(World):
     """
     Pokepelago: A collection-based world where you catch 'em all by guessing their names.
     Each game region acts as a zone gated by a Region Pass item.
@@ -207,7 +206,7 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
                 mon_name = mon["name"]
                 type_keys = [f"{t} Type Key" for t in mon["types"]]
                 location = self.multiworld.get_location(f"Guess {mon_name}", player)
-                self.set_rule(location, HasAll(*type_keys))
+                set_rule(location, lambda state, tk=type_keys: state.has_all(tk, self.player))
 
         # Victory: require all Region Passes for non-starting regions.
         # This gives AP a meaningful completion condition for sphere calculation.
