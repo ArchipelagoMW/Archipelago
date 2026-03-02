@@ -445,7 +445,11 @@ async def handle_codecave(ctx: 'Context') -> None:
                 string = f"{player_name}'s {item_name}"
             addr = RAC3INSTRUCTION.CODECAVE_START + offset
             format_string = ctx.game_interface.format_color_string(string)
-            ctx.game_interface._write_bytes(addr, format_string[0])
+            # Ensure null terminator at end of byte array
+            byte_array = format_string[0]
+            if not byte_array or byte_array[-1] != 0:
+                byte_array = byte_array + bytes([0])
+            ctx.game_interface._write_bytes(addr, byte_array)
             ctx.game_interface.ship_vendor_string_pointers[loc_key] = addr
-            offset += len(format_string[0]) + 1  # +1 for null terminator
+            offset += len(byte_array)
             ctx.code_cave_setup = True

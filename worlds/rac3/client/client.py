@@ -266,6 +266,7 @@ class Rac3Context(CommonContext):
             # logger.info(f"Received data: {args}")
             self.game_interface.proc_option(self.slot_data)
             self.locations_scouted = self.server_locations
+            self.code_cave_setup = False
             async_start(self.send_msgs([ClientMessage.location_scouts(list(self.server_locations))]))
             # async_start(self.send_msgs([{"cmd": "GetDataPackage", "games": [RAC3OPTION.PROCESSED_LOCATIONS]}]))
 
