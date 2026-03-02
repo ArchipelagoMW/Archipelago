@@ -10,6 +10,7 @@ from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget,
                   FixedPositionMDDropdownMenu, FixedScaleMDSlider)
 from kivy.animation import Animation
 from kivy.clock import Clock
+from kivy.core.text import Label as CoreLabel
 from kivy.core.text.markup import MarkupLabel
 from kivy.core.window import Window
 from kivy.factory import Factory
@@ -17,6 +18,7 @@ from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivy.uix.label import Label
+from kivy.uix.stacklayout import StackLayout
 from kivy.utils import escape_markup
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.behaviors import RotateBehavior
@@ -76,6 +78,18 @@ def validate_url(x):
         return False
 
 
+def truncate_middle(text: str, max_chars: int = 18, ellipsis: str = "...") -> str:
+    """Return text with the middle replaced by ellipsis if it would exceed max_chars."""
+    if len(text) <= max_chars:
+        return text
+    take = max_chars - len(ellipsis)
+    if take < 2:
+        return text[:max_chars] if len(text) > max_chars else text
+    head = (take + 1) // 2
+    tail = take - head
+    return text[:head] + ellipsis + text[-tail:] if tail else text[:head] + ellipsis
+
+
 def filter_tooltip(tooltip):
     if tooltip is None:
         tooltip = "No tooltip available."
@@ -107,9 +121,17 @@ class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTraili
     pass
 
 
-class WorldButton(HoverableToggleButton):
+class WorldButton(HoverableMDButton):
     world_cls: typing.Type[World]
     world_name: str
+
+
+class BorderedBoxLayout(MDBoxLayout):
+    """Horizontal box layout that draws a border around itself (style in KV)."""
+
+
+class WorldRowStarButton(HoverableMDIconButton):
+    """Star icon button for world list row; size fixed in KV so theme does not override."""
 
 
 class OptionRow(MDBoxLayout):
@@ -288,10 +310,26 @@ class VisualListSetCounter(MDDialog):
             self.dropdown.dismiss()
 
 
+# Pill width is ~1/3 of window width (see _make_world_row). Fallback when window not sized yet.
+WORLD_PILL_MIN_WIDTH_DP = 120
+# Font size used for measuring game name width (match button text).
+GAME_PILL_FONT_SIZE = 14
+
+
+def _measure_text_width(text: str, font_size: int = GAME_PILL_FONT_SIZE) -> float:
+    """Return the rendered width in pixels of text with the given font size (for pill labels)."""
+    try:
+        label = CoreLabel(font_size=font_size)
+        extents = label.get_extents(text)
+        return float(extents[0]) if extents else 0.0
+    except Exception:
+        return 0.0
+
+
 class OptionsCreator(ThemedApp):
     base_title: str = "Archipelago Options Creator"
     container: ContainerLayout
-    main_layout: MainLayout
+    screen_manager: typing.Any  # MDScreenManager
     scrollbox: ScrollBox
     main_panel: MainLayout
     player_options: MainLayout
@@ -301,26 +339,178 @@ class OptionsCreator(ThemedApp):
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
-    world_buttons: list[WorldButton]
-    selected_world_button: WorldButton | None
+    favorite_worlds: list[str]
+    options_dropdown_menu: MDDropdownMenu | None = None
 
     def __init__(self):
-        """Initialize the app title, icon, and option state."""
+        """Initialize the app title, icon, option state, and favorites."""
         self.title = self.base_title + " " + Utils.__version__
         self.icon = r"data/icon.png"
         self.current_game = ""
         self.options = {}
-        self.world_buttons = []
-        self.selected_world_button = None
-        self.options_dropdown_menu: MDDropdownMenu | None = None
+        self.favorite_worlds = []
+        self._load_favorites()
+        self.options_dropdown_menu = None
+        self._world_list_cache: dict[str, MDBoxLayout] = {}  # world_name -> row widget, reused across rebuilds
+        self._filter_world_buttons_ev = None  # debounce for search
         super().__init__()
 
-    def filter_world_buttons(self, value: str) -> None:
-        lowered = value.lower().strip()
+    def _load_favorites(self) -> None:
+        """Load favorite world names from persistent storage; keep only valid, installed worlds."""
+        raw = Utils.persistent_load().get("OptionsCreator", {}).get("favorites", [])
+        if not isinstance(raw, list):
+            raw = []
+        valid = []
+        for name in raw:
+            if isinstance(name, str) and name in AutoWorldRegister.world_types:
+                cls = AutoWorldRegister.world_types[name]
+                if not cls.hidden:
+                    valid.append(name)
+        self.favorite_worlds = valid
+        if len(valid) != len(raw):
+            Utils.persistent_store("OptionsCreator", "favorites", self.favorite_worlds)
+
+    def _save_favorites(self) -> None:
+        """Persist favorite world names to persistent storage."""
+        Utils.persistent_store("OptionsCreator", "favorites", self.favorite_worlds)
+
+    def _get_sorted_worlds(self) -> list[tuple[str, typing.Type[World]]]:
+        """Return (world_name, world_cls) sorted by favorites first, then lowercase alphabetical."""
+        items = [
+            (name, cls)
+            for name, cls in AutoWorldRegister.world_types.items()
+            if not cls.hidden
+        ]
+        fav_set = set(self.favorite_worlds)
+
+        def key(item: tuple[str, typing.Type[World]]) -> tuple[int, str]:
+            name, _ = item
+            return (0 if name in fav_set else 1, name.lower())
+
+        return sorted(items, key=key)
+
+    def _build_world_list(self) -> None:
+        """Rebuild the world list: sort (favorites + alpha), filter by search. Reuses cached row widgets when possible."""
+        if not getattr(self, "scrollbox", None) or not getattr(self.scrollbox, "layout", None):
+            return
+        search_lower = (self.world_search_input.text or "").lower().strip()
+        sorted_worlds = self._get_sorted_worlds()
+        filtered = [(n, c) for n, c in sorted_worlds if search_lower in n.lower()]
+        cache = getattr(self, "_world_list_cache", None)
+        if cache is None:
+            self._world_list_cache = cache = {}
         self.scrollbox.layout.clear_widgets()
-        for world_button in self.world_buttons:
-            if lowered in world_button.world_name.lower():
-                self.scrollbox.layout.add_widget(world_button)
+        if not filtered:
+            return
+        for world_name, cls in filtered:
+            if world_name not in cache:
+                cache[world_name] = self._make_world_row(world_name, cls)
+            self.scrollbox.layout.add_widget(cache[world_name])
+
+    def _make_world_row(self, world_name: str, world_cls: typing.Type[World]) -> MDBoxLayout:
+        """Build a horizontal row widget: pill ~1/3 window width (world name, middle-truncated) + star button."""
+        star_width = dp(20)
+        row_spacing = dp(5)  # gap between world button and star (gray "border")
+        row_padding = dp(3)
+        inner_height = dp(36)
+        pill_radius = inner_height / 2  # match container's left rounded edge
+        # Pill width ~1/3 of window, then 10% thinner; fallback to minimum when window not sized yet
+        pill_width = max(dp(WORLD_PILL_MIN_WIDTH_DP), Window.width / 3) * 0.9 * 0.9
+        text_padding_x = dp(14) + dp(10)  # left + right padding for the label
+        available_width = pill_width - text_padding_x
+        row_width = pill_width + star_width + row_spacing + 2 * row_padding
+        row_box = BorderedBoxLayout(
+            orientation="vertical",
+            size_hint_x=None,
+            width=row_width,
+            size_hint_y=None,
+            height=inner_height + 2 * row_padding,
+        )
+        row_box.padding = [row_padding, row_padding, row_padding, row_padding]
+        anchor = MDAnchorLayout(anchor_x="left", anchor_y="center", size_hint_x=1, size_hint_y=1)
+        inner_box = MDBoxLayout(
+            orientation="horizontal",
+            size_hint_x=None,
+            size_hint_y=None,
+            width=pill_width + row_spacing + star_width,
+            height=inner_height,
+            spacing=row_spacing,
+        )
+        text_padding_left = dp(14)
+        text_padding_right = dp(10)
+        text_padding_v = dp(4)
+        # Truncate only if measured text width exceeds available space
+        full_width = _measure_text_width(world_name)
+        if full_width <= available_width:
+            display_text = world_name
+        else:
+            n = len(world_name)
+            while n > 1:
+                candidate = truncate_middle(world_name, n)
+                if _measure_text_width(candidate) <= available_width:
+                    break
+                n -= 1
+            display_text = truncate_middle(world_name, n) if n > 0 else world_name[:1]
+        world_text = MDButtonText(text=display_text, size_hint_x=1, size_hint_y=None, pos_hint={"x": 0, "center_y": 0.5})
+        world_text.padding = [text_padding_left, text_padding_v, text_padding_right, text_padding_v]
+        world_text.bind(
+            texture_size=lambda w, ts: setattr(w, "height", ts[1] + 2 * text_padding_v) if ts[0] and ts[1] else None,
+        )
+        select_btn = WorldButton(world_text)
+        select_btn.world_cls = world_cls
+        select_btn.world_name = world_name
+        select_btn.size_hint_x = None
+        select_btn.size_hint_y = None
+        select_btn.width = pill_width
+        select_btn.height = inner_height
+        select_btn.radius = [pill_radius, 0, 0, pill_radius]  # top-left, top-right, bottom-right, bottom-left
+
+        select_btn.bind(on_release=lambda b, wname=world_name, wcls=world_cls: self._on_select_world(wname, wcls))
+        is_fav = world_name in self.favorite_worlds
+        star_btn = WorldRowStarButton(
+            icon="star" if is_fav else "star-outline",
+            theme_text_color="Custom",
+            text_color=(0.7, 0.7, 0.7, 1) if not is_fav else (1, 0.84, 0, 1),
+        )
+        star_btn.bind(on_release=lambda b, wname=world_name: self._on_toggle_favorite(wname))
+        inner_box.add_widget(select_btn)
+        inner_box.add_widget(star_btn)
+        anchor.add_widget(inner_box)
+        row_box.add_widget(anchor)
+        return row_box
+
+    def _on_select_world(self, world_name: str, world_cls: typing.Type[World]) -> None:
+        """Handle select-area click: set game, build options panel, switch to options editor."""
+        self.current_game = world_cls.game
+        self.create_options_panel()
+        if getattr(self, "screen_manager", None):
+            self.screen_manager.current = "options_editor"
+
+    def _on_toggle_favorite(self, world_name: str) -> None:
+        """Toggle favorite for world_name, persist, and rebuild the world list."""
+        if world_name in self.favorite_worlds:
+            self.favorite_worlds.remove(world_name)
+        else:
+            self.favorite_worlds.append(world_name)
+        self._save_favorites()
+        self._world_list_cache.pop(world_name, None)  # force row refresh so star icon is correct
+        self._build_world_list()
+
+    def go_back_to_game_select(self) -> None:
+        """Reset player name and rebuild world list after returning to game_select (screen/transition handled in KV)."""
+        if getattr(self, "name_input", None) is not None:
+            self.name_input.text = ""
+        self._build_world_list()
+
+    def filter_world_buttons(self, value: str) -> None:
+        """Rebuild the world list (sorted, filtered by search text). Debounced to avoid rebuild on every keystroke."""
+        ev = getattr(self, "_filter_world_buttons_ev", None)
+        if ev is not None:
+            ev.cancel()
+        def _run():
+            self._filter_world_buttons_ev = None
+            self._build_world_list()
+        self._filter_world_buttons_ev = Clock.schedule_once(lambda dt: _run(), 0.15)
 
     def on_export_result(self, text: str | None, level: str = "info") -> None:
         """Re-enable the UI after export and optionally show a result message."""
@@ -495,10 +685,10 @@ class OptionsCreator(ThemedApp):
         if getattr(self, 'pending_import_game', None) is not None:
             self.current_game = self.pending_import_game
             self.pending_import_game = None
-            # Clear search so the switched-to world is visible and its button can be highlighted
             if getattr(self, "world_search_input", None) is not None:
                 self.world_search_input.text = ""
-            self._sync_game_button()
+        if getattr(self, "screen_manager", None):
+            self.screen_manager.current = "options_editor"
         imported_name = getattr(self, 'pending_import_name', None)
         if imported_name is not None:
             self.name_input.text = imported_name
@@ -516,18 +706,6 @@ class OptionsCreator(ThemedApp):
         self.pending_import_game = None
         self._applying_import_or_cache = False
         self._save_options_cache()
-
-    def _sync_game_button(self) -> None:
-        """Set the world button for current_game to selected (down), all others to normal."""
-        if not getattr(self, "scrollbox", None) or not getattr(self.scrollbox, "layout", None):
-            return
-        self.selected_world_button = None
-        for button in self.scrollbox.layout.children:
-            if getattr(button, "world_cls", None):
-                is_current = button.world_cls.game == self.current_game
-                button.state = "down" if is_current else "normal"
-                if is_current:
-                    self.selected_world_button = button
 
     def _save_options_cache(self) -> None:
         """Persist current game, name, and options to a per-game YAML cache file when not mid-import."""
@@ -864,7 +1042,6 @@ class OptionsCreator(ThemedApp):
     def _handle_external_options_page(self, cls: typing.Type[World]) -> None:
         """Unpress world button, set current_game to None, open URL in browser, show snack."""
         self.current_game = "None"
-        self._sync_game_button()
         url = cls.web.options_page
         if validate_url(url):
             webbrowser.open(url)
@@ -885,7 +1062,6 @@ class OptionsCreator(ThemedApp):
 
         if not cls.web.options_page:
             self.current_game = "None"
-            self._sync_game_button()
             self.game_label.text = f"Game: {self.current_game}"
             return
         elif isinstance(cls.web.options_page, str):
@@ -1007,49 +1183,40 @@ class OptionsCreator(ThemedApp):
             ) if not panel.is_open else panel.set_chevron_up(chevron)
 
     def build(self):
-        """Build the root layout, world buttons, option dropdown, and wire bindings."""
+        """Build the root layout, screen manager, world list, option dropdown, and wire bindings."""
         self.set_colors()
         self.container = Builder.load_file(Utils.local_path("data/optionscreator.kv"))
         self.root = self.container
-        self.main_layout = self.container.ids.main
+        self.screen_manager = self.container.ids.screen_manager
         self.scrollbox = self.container.ids.scrollbox
-
-        def world_button_action(world_btn: WorldButton):
-            if self.selected_world_button and self.selected_world_button is not world_btn:
-                self.selected_world_button.state = "normal"
-            world_btn.state = "down"
-            self.selected_world_button = world_btn
-            self.current_game = world_btn.world_cls.game
-            self.create_options_panel()
-
-        for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
-            if cls.hidden:
-                continue
-            world_text = MDButtonText(text=world, size_hint_y=None, width=dp(150),
-                                      pos_hint={"x": 0.03, "center_y": 0.5})
-            world_text.text_size = (world_text.width, None)
-            world_text.bind(width=lambda *x, text=world_text: text.setter('text_size')(text, (text.width, None)),
-                            texture_size=lambda *x, text=world_text: text.setter("height")(text,
-                                                                                           world_text.texture_size[1]))
-            world_button = WorldButton(world_text)
-            world_button.bind(on_release=world_button_action)
-            world_button.world_cls = cls
-            world_button.world_name = world
-            self.world_buttons.append(world_button)
-            self.scrollbox.layout.add_widget(world_button)
+        self.scrollbox.layout.clear_widgets()
+        stack_layout = StackLayout(
+            orientation="lr-tb",
+            size_hint_x=1,
+            size_hint_y=None,
+            spacing=dp(5),
+            padding=[0, 0, 0, dp(2)],
+        )
+        stack_layout.bind(minimum_height=stack_layout.setter("height"))
+        self.scrollbox.layout.add_widget(stack_layout)
+        self.scrollbox.layout = stack_layout
         self.main_panel = self.container.ids.player_layout
         self.player_options = self.container.ids.player_options
         self.game_label = self.container.ids.game
         self.name_input = self.container.ids.player_name
         self.world_search_input = self.container.ids.world_search
         self.option_layout = self.container.ids.options
+
+        self.screen_manager.current = "game_select"
+        self._build_world_list()
+        # Rebuild again after layout so scrollbox has real width and we get correct wrap (not single column)
+        Clock.schedule_once(lambda dt: self._build_world_list(), 0)
         self.world_search_input.bind(text=lambda instance, value: self.filter_world_buttons(value))
 
         trigger = self.container.ids.options_dropdown_trigger
         self.options_dropdown_menu = MDDropdownMenu(
             caller=trigger,
             items=[
-                {"text": "Import from YAML", "on_release": self._menu_import_options, "height": dp(56), "viewclass": "HoverableDropdownItem"},
                 {"text": "Reset to defaults", "on_release": self._menu_reset_to_defaults, "height": dp(56), "viewclass": "HoverableDropdownItem"},
             ],
             md_bg_color=getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOWEST),

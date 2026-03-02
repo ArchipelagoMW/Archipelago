@@ -4,6 +4,24 @@
     theme_width: "Custom"
     radius: ["5dp", "5dp", "5dp", "5dp"]
 
+<WorldRowStarButton>:
+    size_hint_x: None
+    size_hint_y: None
+    theme_text_color: "Custom"
+    theme_width: "Custom"
+    theme_height: "Custom"
+    width: "20dp"
+    height: "36dp"
+
+<BorderedBoxLayout>:
+    canvas.before:
+        Color:
+            rgba: (app.theme_cls.primaryColor[0], app.theme_cls.primaryColor[1], app.theme_cls.primaryColor[2], 0.35)
+        RoundedRectangle:
+            pos: self.x, self.y
+            size: self.width, self.height
+            radius: [(self.height/2, self.height/2), (self.height/2, self.height/2), (self.height/2, self.height/2), (self.height/2, self.height/2)]
+
 <OptionRow>:
     orientation: "vertical"
     size_hint_y: None
@@ -129,99 +147,159 @@
             MDButtonText:
                 text: "Save Changes"
 
+#:import ScreenManager kivy.uix.screenmanager.ScreenManager
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import MDScreen kivymd.uix.screen.MDScreen
+
 ContainerLayout:
     md_bg_color: app.theme_cls.backgroundColor
 
-    MainLayout:
-        id: main
-        cols: 3
-        padding: 3, 5, 0, 3
-        spacing: "2dp"
+    ScreenManager:
+        id: screen_manager
+        transition: NoTransition()
 
-        MDBoxLayout:
-            orientation: "vertical"
-            size_hint_x: None
-            width: "150dp"
-            spacing: "5dp"
-
-            ResizableTextField:
-                id: world_search
-                multiline: False
-                size_hint_y: None
-
-                MDTextFieldHintText:
-                    text: "Search Games"
-
-            ScrollBox:
-                id: scrollbox
-
-        MDDivider:
-            orientation: "vertical"
-            width: "4dp"
-
-        MainLayout:
-            id: player_layout
-            rows: 2
-            spacing: "20dp"
-
+        MDScreen:
+            name: "game_select"
             MDBoxLayout:
-                id: player_options
-                orientation: "horizontal"
-                height: "75dp"
-                size_hint_y: None
-                padding: ["10dp", "30dp", "10dp", 0]
-                spacing: "10dp"
-
-                ResizableTextField:
-                    id: player_name
-                    multiline: False
-
-                    MDTextFieldHintText:
-                        text: "Player Name"
-
-                    MDTextFieldMaxLengthText:
-                        max_text_length: 16
+                orientation: "vertical"
+                padding: 3, 5, 3, 3
+                spacing: 0
 
                 MDBoxLayout:
                     orientation: "vertical"
-                    spacing: "15dp"
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: "80dp"
+                    spacing: 0
+                    padding: 0, 0, 0, 0
 
                     MDLabel:
-                        id: game
-                        text: "Game: None"
-                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        id: game_select_title
+                        text: "Options Creator"
+                        font_style: "Headline"
+                        font_size: "24sp"
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: self.texture_size[1] if self.texture_size else "40dp"
+                        padding: "12dp", 0, 0, 0
+
+                    MDLabel:
+                        id: game_select_hint
+                        text: "Click a world to get started, or import options you already have."
+                        font_style: "Body"
+                        theme_text_color: "Secondary"
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: self.texture_size[1] if self.texture_size else "16dp"
+                        padding: "12dp", 0, 0, 0
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "60dp"
+                    spacing: "5dp"
+                    padding: 0, 0, 0, "5dp"
+
+                    ResizableTextField:
+                        id: world_search
+                        multiline: False
+                        size_hint_x: 1
+                        padding_y: 0
+
+                        MDTextFieldHintText:
+                            text: "Search Games"
+
+                    HoverableMDButton:
+                        id: import_yaml_button
+                        size_hint_x: None
+                        size_hint_y: None
+                        width: "120dp"
+                        height: "60dp"
+                        theme_width: "Custom"
+                        theme_height: "Custom"
+                        on_release: app.import_options(self)
+                        MDButtonText:
+                            text: "Import YAML"
+
+                ScrollBox:
+                    id: scrollbox
+
+        MDScreen:
+            name: "options_editor"
+            MainLayout:
+                id: player_layout
+                rows: 2
+                spacing: "20dp"
+                padding: 3, 5, 3, 3
+
+                MDBoxLayout:
+                    id: player_options
+                    orientation: "horizontal"
+                    height: "75dp"
+                    size_hint_y: None
+                    padding: ["10dp", "30dp", "10dp", 0]
+                    spacing: "10dp"
+
+                    HoverableMDButton:
+                        id: back_button
+                        size_hint_x: None
+                        theme_width: "Custom"
+                        on_release:
+                            app.screen_manager.current = 'game_select'
+                            app.go_back_to_game_select()
+                        MDButtonText:
+                            text: "Back"
+
+                    ResizableTextField:
+                        id: player_name
+                        multiline: False
+
+                        MDTextFieldHintText:
+                            text: "Player Name"
+
+                        MDTextFieldMaxLengthText:
+                            max_text_length: 16
 
                     MDBoxLayout:
-                        orientation: "horizontal"
-                        spacing: "5dp"
-                        size_hint_y: 1
+                        orientation: "vertical"
+                        spacing: "15dp"
 
-                        HoverableMDButton:
+                        MDLabel:
+                            id: game
+                            text: "Game: None"
                             pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                            on_press: app.export_options(self)
-                            theme_width: "Custom"
+
+                        MDBoxLayout:
+                            orientation: "horizontal"
+                            spacing: "5dp"
                             size_hint_y: 1
-                            size_hint_x: 1
 
-                            MDButtonText:
+                            HoverableMDButton:
                                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                                text: "Export Options"
+                                on_press: app.export_options(self)
+                                theme_width: "Custom"
+                                size_hint_y: 1
+                                size_hint_x: 1
 
-                        HoverableMDButton:
-                            id: options_dropdown_trigger
-                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                            theme_width: "Custom"
-                            theme_bg_color: "Custom"
-                            md_bg_color: app.theme_cls.surfaceContainerLowestColor
-                            size_hint_y: 1
-                            size_hint_x: None
-                            width: "48dp"
-                            on_release: app.open_options_dropdown(self)
+                                MDButtonText:
+                                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                    text: "Export Options"
 
-                            MDButtonIcon:
-                                icon: "chevron-down"
+                            HoverableMDButton:
+                                id: options_dropdown_trigger
                                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                theme_width: "Custom"
+                                theme_bg_color: "Custom"
+                                md_bg_color: app.theme_cls.surfaceContainerLowestColor
+                                size_hint_y: 1
+                                size_hint_x: None
+                                width: "48dp"
+                                on_release: app.open_options_dropdown(self)
 
-            MainLayout:
-                cols: 1
-                id: options
+                                MDButtonIcon:
+                                    icon: "chevron-down"
+                                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                MainLayout:
+                    cols: 1
+                    id: options
