@@ -1,5 +1,3 @@
-# Centrally managed Pokémon data for the Pokepelago Archipelago world.
-
 POKEMON_DATA = [
     {"id": 1, "name": "Bulbasaur", "types": ["Grass", "Poison"]},
     {"id": 2, "name": "Ivysaur", "types": ["Grass", "Poison"]},
@@ -1027,50 +1025,3 @@ POKEMON_DATA = [
     {"id": 1024, "name": "Terapagos", "types": ["Normal"]},
     {"id": 1025, "name": "Pecharunt", "types": ["Poison", "Ghost"]},
 ]
-
-GEN_1_TYPES = [
-    "Normal", "Fire", "Water", "Grass", "Electric", "Ice", "Fighting",
-    "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon",
-    "Fairy", "Steel", "Dark"
-]
-
-# Ordered list of all supported game regions (index used for item IDs)
-GAME_REGIONS = [
-    "Kanto", "Johto", "Hoenn", "Sinnoh", "Unova",
-    "Kalos", "Alola", "Galar", "Hisui", "Paldea"
-]
-
-# Inclusive Pokedex ID ranges for each region
-REGION_RANGES = {
-    "Kanto": (1, 151),
-    "Johto": (152, 251),
-    "Hoenn": (252, 386),
-    "Sinnoh": (387, 493),
-    "Unova": (494, 649),
-    "Kalos": (650, 721),
-    "Alola": (722, 809),
-    "Galar": (810, 898),
-    "Hisui": (899, 905),
-    "Paldea": (906, 1025),
-}
-
-# Canonical starters for each region (by name, must match POKEMON_DATA entries)
-# Hisui has no traditional starters (PLA starters come from other region IDs)
-STARTERS_BY_REGION = {
-    "Kanto": ["Bulbasaur", "Charmander", "Squirtle"],
-    "Johto": ["Chikorita", "Cyndaquil", "Totodile"],
-    "Hoenn": ["Treecko", "Torchic", "Mudkip"],
-    "Sinnoh": ["Turtwig", "Chimchar", "Piplup"],
-    "Unova": ["Snivy", "Tepig", "Oshawott"],
-    "Kalos": ["Chespin", "Fennekin", "Froakie"],
-    "Alola": ["Rowlet", "Litten", "Popplio"],
-    "Galar": ["Grookey", "Scorbunny", "Sobble"],
-    "Hisui": [],
-    "Paldea": ["Sprigatito", "Fuecoco", "Quaxly"],
-}
-
-def get_pokemon_region(mon_id: int) -> str:
-    for region_name, (low, high) in REGION_RANGES.items():
-        if low <= mon_id <= high:
-            return region_name
-    return "Unknown"

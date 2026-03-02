@@ -1,12 +1,12 @@
 import re
 
 data_file = r"f:/pythonProjects/ArchipelagoPokepelago/worlds/pokepelago/data.py"
-gen3_file = r"f:/pythonProjects/ArchipelagoPokepelago/worlds/pokepelago/pokemon_data_gen3.txt"
+gen9_file = r"f:/pythonProjects/ArchipelagoPokepelago/worlds/pokepelago/pokemon_data_gen9.txt"
 
 with open(data_file, "r", encoding="utf-8") as f:
     text = f.read()
 
-with open(gen3_file, "r", encoding="utf-8") as f:
+with open(gen9_file, "r", encoding="utf-8") as f:
     new_data = f.read()
 
 # Replace everything from POKEMON_DATA = [ to ]

@@ -2,7 +2,7 @@ import json
 
 # Input file from Client
 json_path = r"f:/pythonProjects/PokepelagoClient/src/data/pokemon_metadata.json"
-output_path = r"f:/pythonProjects/ArchipelagoPokepelago/worlds/pokepelago/pokemon_data_gen3.txt"
+output_path = r"f:/pythonProjects/ArchipelagoPokepelago/worlds/pokepelago/pokemon_data_gen9.txt"
 
 with open(json_path, 'r', encoding='utf-8') as f:
     metadata = json.load(f)
@@ -19,9 +19,9 @@ def format_name(raw_name):
     parts = raw_name.split('-')
     return " ".join(p.capitalize() for p in parts)
 
-# Generation 3 ends at 386 (Deoxys)
+# Generation 9 ends at 1025
 pokemon_list = []
-for i in range(1, 387):
+for i in range(1, 1026):
     str_id = str(i)
     if str_id in metadata:
         mon = metadata[str_id]

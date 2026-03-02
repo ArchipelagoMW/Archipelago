@@ -1,10 +1,10 @@
 from BaseClasses import Region, Entrance, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .Items import PokepelagoItem, item_table, pokemon_names, GEN_1_TYPES, item_data_table
-from .Locations import PokepelagoLocation, location_table, milestones
-from .Options import PokepelagoOptions
-from .data import POKEMON_DATA
-from . import Rules
+from worlds.generic.Rules import set_rule
+from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
+from .Locations import PokepelagoLocation, location_table, milestones, starting_locations
+from .Options import PokepelagoOptions, REGION_OPTION_ATTRS
+from .data import POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region
 
 class PokepelagoWeb(WebWorld):
     tutorials = [Tutorial(
@@ -13,12 +13,14 @@ class PokepelagoWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["stefan"]
+        ["Appie"]
     )]
 
 class PokepelagoWorld(World):
     """
     Pokepelago: A collection-based world where you catch 'em all by guessing their names.
+    Each game region acts as a zone gated by a Region Pass item.
+    Type Keys gate access to Pokemon of that type (creates cross-player dependencies).
     """
     game: str = "Pokepelago"
     options_dataclass = PokepelagoOptions
@@ -28,37 +30,41 @@ class PokepelagoWorld(World):
 
     item_name_to_id = item_table
     location_name_to_id = location_table
-    
-    # We define item groups for each Pokémon type to facilitate milestone logic.
-    # A Pokémon can belong to multiple groups if it has multiple types.
-    item_name_groups = {
-        "Pokemon Unlocks": {f"{name} Unlock" for name in pokemon_names},
-        "Type Unlocks": {f"{p_type} Type Key" for p_type in GEN_1_TYPES},
-        **{f"{p_type} Pokemon": {f"{mon['name']} Unlock" for mon in POKEMON_DATA if p_type in mon['types']} 
-           for p_type in GEN_1_TYPES}
-    }
 
     def generate_early(self):
-        gen_option = self.options.pokemon_generations.value
-        limit = {0: 151, 1: 251, 2: 386}.get(gen_option, 151)
-        self.active_pokemon = [mon for mon in POKEMON_DATA if mon["id"] <= limit]
+        # Build list of active regions in canonical order
+        self.active_regions = [
+            r for r in GAME_REGIONS
+            if getattr(self.options, REGION_OPTION_ATTRS[r]).value
+        ]
+        if not self.active_regions:
+            self.active_regions = ["Kanto"]
+
+        self.starting_region = self.active_regions[0]
+        self.starter_names: set = set(STARTERS_BY_REGION.get(self.starting_region, []))
+
+        # Collect active Pokemon across all selected regions
+        active_ids: set = set()
+        for r in self.active_regions:
+            lo, hi = REGION_RANGES[r]
+            active_ids.update(range(lo, hi + 1))
+
+        self.active_pokemon = [mon for mon in POKEMON_DATA if mon["id"] in active_ids]
         self.active_pokemon_names = [mon["name"] for mon in self.active_pokemon]
+        self._mon_lookup: dict = {mon["name"]: mon for mon in self.active_pokemon}
 
-        # Total new Pokémon guessable (all active minus the 3 precollected starters)
-        total_guessable = len(self.active_pokemon) - 3
-
-        # Determine raw goal count from options
+        # Goal count: number of Pokemon the client needs to catch for victory
+        total = len(self.active_pokemon)
         if self.options.goal_type.value == 0:  # percentage
-            raw_goal = max(1, round(len(self.active_pokemon) * self.options.goal_percentage.value / 100))
+            raw_goal = max(1, round(total * self.options.goal_percentage.value / 100))
         else:  # count
-            raw_goal = min(self.options.goal_count.value, len(self.active_pokemon))
+            raw_goal = min(self.options.goal_count.value, total)
 
-        # The goal is expressed as the number of Pokémon guessed AFTER the starters,
-        # so we snap to the closest available "Guessed X Pokemon" milestone that is
-        # <= total_guessable. The milestones list (from Locations.py) is already sorted.
+        # Snap to closest valid milestone
+        total_guessable = total - len(self.starter_names)
         valid_milestones = [m for m in milestones if m <= total_guessable]
-
-        # Find the closest milestone to raw_goal (but cap at max valid milestone)
+        if not valid_milestones:
+            valid_milestones = [1]
         capped_goal = min(raw_goal, max(valid_milestones))
         self.goal_count = min(valid_milestones, key=lambda m: abs(m - capped_goal))
 
@@ -70,60 +76,59 @@ class PokepelagoWorld(World):
         else:
             classification = ItemClassification.filler
             item_id = item_table.get(name, 0)
-            
         return PokepelagoItem(name, classification, item_id, self.player)
 
     def create_event_item(self, name: str) -> PokepelagoItem:
-        """Create an event item (ID=None) for server-side goal/release tracking."""
         return PokepelagoItem(name, ItemClassification.progression, None, self.player)
 
     def create_items(self):
-        # 1. Provide all 3 starters and their required type keys
-        starters = ["Bulbasaur", "Charmander", "Squirtle"]
-        starter_types = {"Grass", "Poison", "Fire", "Water"}
+        # Determine which types the starters cover
+        starter_types: set = set()
+        for name in self.starter_names:
+            if mon := self._mon_lookup.get(name):
+                starter_types.update(mon["types"])
 
-        for name in starters:
-            self.multiworld.push_precollected(self.create_item(f"{name} Unlock"))
-        
+        my_items_in_pool = 0
+
+        # Pre-collect starter Type Keys so those types are accessible from game start.
+        # These are NOT placed in the pool — they go directly into the player's start inventory.
         for p_type in starter_types:
             self.multiworld.push_precollected(self.create_item(f"{p_type} Type Key"))
 
-        # Track items added to the pool by this player specifically.
-        # We must NOT use len(self.multiworld.itempool) because that is the global
-        # pool shared by ALL players. When other games run create_items() before us,
-        # their items inflate the count and prevent us from adding our fillers.
-        my_items_in_pool = 0
-
-        # 2. Add remaining Type Keys to the pool if Type Locks are enabled
+        # Add non-starter Type Keys to the pool as progression items.
+        # They gate "Guess X" locations (AP access rules), creating real cross-player dependencies.
         if self.options.type_locks.value:
             for p_type in GEN_1_TYPES:
                 if p_type not in starter_types:
                     self.multiworld.itempool.append(self.create_item(f"{p_type} Type Key"))
                     my_items_in_pool += 1
 
-        # 3. Add remaining Pokémon Unlocks to the pool
-        for name in self.active_pokemon_names:
-            if name not in starters:
-                self.multiworld.itempool.append(self.create_item(f"{name} Unlock"))
+        # Region Passes for non-starting regions (the Zone Keys).
+        # Added whenever region_locks=ON, regardless of dexsanity.
+        # Even with dexsanity=OFF, the client respects region locks, so passes must be in the pool.
+        if self.options.region_locks.value:
+            for region in self.active_regions[1:]:
+                self.multiworld.itempool.append(self.create_item(f"{region} Pass"))
                 my_items_in_pool += 1
 
-        # 4. Fill remaining locations with useful items/fillers and traps.
-        # NOTE: event locations (ID=None, like "Pokepelago Victory") are server-side only and
-        # do NOT need a pool item — only real sendable locations need to be filled.
-        total_locations = sum(1 for loc in self.multiworld.get_locations(self.player) if loc.address is not None)
-        useful_fillers = ["Master Ball", "Pokedex", "Pokegear"]
+        # Fill remaining locations with useful items/traps
+        total_locations = sum(
+            1 for loc in self.multiworld.get_locations(self.player) if loc.address is not None
+        )
         trap_fillers = ["Small Shuffle Trap", "Big Shuffle Trap", "Derpy Mon Trap", "Release Trap"]
-        
         trap_chance = self.options.trap_chance.value
-        
+
+        category_names = list(FILLER_ITEM_CATEGORIES.keys())
+        category_weights = [self.options.filler_weights.value.get(cat, 0) for cat in category_names]
+        if sum(category_weights) == 0:
+            category_weights = [1] * len(category_names)
+
         while my_items_in_pool < total_locations:
             if self.random.randint(1, 100) <= trap_chance:
-                # Add a trap
                 filler_name = self.random.choice(trap_fillers)
             else:
-                # Add a useful item
-                filler_name = useful_fillers[my_items_in_pool % len(useful_fillers)]
-                
+                chosen_category = self.random.choices(category_names, weights=category_weights, k=1)[0]
+                filler_name = self.random.choice(FILLER_ITEM_CATEGORIES[chosen_category])
             self.multiworld.itempool.append(self.create_item(filler_name))
             my_items_in_pool += 1
 
@@ -131,68 +136,92 @@ class PokepelagoWorld(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        # All non-guess locations (Milestones, Oak's Lab, etc.) are in Menu
+        # One AP Region per active game region
+        game_regions: dict = {}
+        for region_name in self.active_regions:
+            ap_region = Region(f"{region_name} Region", self.player, self.multiworld)
+            self.multiworld.regions.append(ap_region)
+            game_regions[region_name] = ap_region
+
+            ent = Entrance(self.player, f"Menu To {region_name}", menu_region)
+            menu_region.exits.append(ent)
+            ent.connect(ap_region)
+
+            # Non-starting regions gated by Region Pass (dexsanity=ON only)
+            if (self.options.region_locks.value and self.options.dexsanity.value
+                    and region_name != self.starting_region):
+                pass_name = f"{region_name} Pass"
+                ent.access_rule = lambda state, p=pass_name: state.has(p, self.player)
+
+        # Starting locations and global milestone locations → Menu region (no rules)
+        starting_loc_set = set(starting_locations) if not self.options.include_starting_locations.value else set()
+
         for loc_name, loc_id in self.location_name_to_id.items():
-            if loc_name.startswith("Guess "):
-                continue
-                
+            if loc_name.startswith("Guess ") or loc_name.startswith("Caught "):
+                continue  # Per-Pokemon handled below; type milestones skipped
+
+            if loc_name in starting_loc_set:
+                continue  # Disabled by include_starting_locations option
+
             if loc_name.startswith("Guessed "):
                 count = int(loc_name.split(" ")[1])
-                if count > len(self.active_pokemon) - 3:
-                    continue
-                    
-            if loc_name.startswith("Caught "):
-                parts = loc_name.split(" ")
-                count = int(parts[1])
-                p_type = parts[2]
-                type_max = sum(1 for m in self.active_pokemon if p_type in m["types"])
-                STARTER_NAMES = {"Bulbasaur", "Charmander", "Squirtle"}
-                starters_of_type = sum(1 for m in self.active_pokemon if m["name"] in STARTER_NAMES and p_type in m["types"])
-                if count > (type_max - starters_of_type):
+                if count > len(self.active_pokemon) - len(self.starter_names):
                     continue
 
             location = PokepelagoLocation(self.player, loc_name, loc_id, menu_region)
             menu_region.locations.append(location)
 
-        for mon in self.active_pokemon:
-            mon_name = mon["name"]
-            mon_region = Region(f"Region {mon_name}", self.player, self.multiworld)
-            self.multiworld.regions.append(mon_region)
+        if self.options.dexsanity.value:
+            # Per-Pokemon sub-regions connected from their game region.
+            # No access rules here — type key rules are set in set_rules().
+            for mon in self.active_pokemon:
+                mon_name = mon["name"]
+                mon_region_name = get_pokemon_region(mon["id"])
+                parent_region = game_regions.get(mon_region_name, menu_region)
 
-            loc_name = f"Guess {mon_name}"
-            loc_id = self.location_name_to_id[loc_name]
-            location = PokepelagoLocation(self.player, loc_name, loc_id, mon_region)
-            mon_region.locations.append(location)
+                mon_sub_region = Region(f"Region {mon_name}", self.player, self.multiworld)
+                self.multiworld.regions.append(mon_sub_region)
 
-            entrance = Entrance(self.player, f"Catch {mon_name}", menu_region)
-            menu_region.exits.append(entrance)
-            entrance.connect(mon_region)
+                loc_name = f"Guess {mon_name}"
+                loc_id = self.location_name_to_id[loc_name]
+                location = PokepelagoLocation(self.player, loc_name, loc_id, mon_sub_region)
+                mon_sub_region.locations.append(location)
 
-        # Victory event location (ID=None marks it as a server-side event, not a sendable check).
-        # The Victory item placed here is what triggers the server's release/goal-completion mechanism.
+                entrance = Entrance(self.player, f"Catch {mon_name}", parent_region)
+                parent_region.exits.append(entrance)
+                entrance.connect(mon_sub_region)
+
+        # Victory event location — client sends this check when goal_count Pokemon caught
         victory_location = PokepelagoLocation(self.player, "Pokepelago Victory", None, menu_region)
         menu_region.locations.append(victory_location)
 
     def set_rules(self):
-        Rules.set_rules(self)
+        player = self.player
 
-        # Canonical Archipelago goal pattern: place a locked "Victory" event item at an event
-        # location whose access rule enforces the goal. The server's release/completion mechanism
-        # triggers when state.has("Victory") becomes true — can_reach() alone doesn't do this.
-        use_type_locks = self.options.type_locks.value
-        goal = self.goal_count + 3  # +3 because starters are pre-collected and also count
+        # Type key access rules on "Guess X" locations.
+        # Receiving a Type Key (from any player's game) enables guessing Pokemon of that type.
+        # This creates real AP-tracked cross-player dependencies.
+        if self.options.dexsanity.value and self.options.type_locks.value:
+            for mon in self.active_pokemon:
+                mon_name = mon["name"]
+                type_keys = [f"{t} Type Key" for t in mon["types"]]
+                location = self.multiworld.get_location(f"Guess {mon_name}", player)
+                set_rule(location, lambda state, tk=type_keys: state.has_all(tk, self.player))
 
-        if use_type_locks:
-            goal_rule = lambda state: sum(
-                1 for mon in self.active_pokemon
-                if state.has(f"{mon['name']} Unlock", self.player)
-                and all(state.has(f"{t} Type Key", self.player) for t in mon["types"])
-            ) >= goal
-        else:
-            goal_rule = lambda state: state.has_group("Pokemon Unlocks", self.player, goal)
+        # Victory: require all Region Passes for non-starting regions.
+        # This gives AP a meaningful completion condition for sphere calculation.
+        victory_location = self.multiworld.get_location("Pokepelago Victory", player)
 
-        victory_location = self.multiworld.get_location("Pokepelago Victory", self.player)
-        victory_location.access_rule = goal_rule
+        non_starting = (
+            self.active_regions[1:]
+            if self.options.region_locks.value and self.options.dexsanity.value
+            else []
+        )
+        if non_starting:
+            victory_location.access_rule = lambda state: all(
+                state.has(f"{r} Pass", player) for r in non_starting
+            )
+
         victory_item = self.create_event_item("Victory")
         victory_location.place_locked_item(victory_item)
 
@@ -202,6 +231,10 @@ class PokepelagoWorld(World):
     def fill_slot_data(self) -> dict:
         return {
             "type_locks": bool(self.options.type_locks.value),
-            "pokemon_generations": self.options.pokemon_generations.value,
+            "region_locks": bool(self.options.region_locks.value),
+            "active_regions": {r: list(REGION_RANGES[r]) for r in self.active_regions},
+            "starting_region": self.starting_region,
             "goal_count": self.goal_count,
+            "dexsanity": bool(self.options.dexsanity.value),
+            "starting_locations": bool(self.options.include_starting_locations.value),
         }

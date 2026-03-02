@@ -1,6 +1,7 @@
 {
     "game": "Pokepelago",
-    "world_version": "0.2.1",
+    "minimum_ap_version": "0.6.0",
+    "world_version": "0.3.1",
     "authors": [
         "Appie"
     ]
