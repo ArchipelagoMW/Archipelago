@@ -115,7 +115,7 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
 
     # if one of the subregions gives entry requirements or this one is start
     if result.is_entry or region_data.is_start(opts):
-        logging.warning(f"adding {entry_requirements} to entry reqs for {region_data.name}")
+        logging.debug(f"adding {entry_requirements} to entry reqs for {region_data.name}")
         result = result.set_entry(True)
         for k, v in entry_requirements.items():
             if k not in result.entry_requirements.keys():

@@ -127,11 +127,11 @@ class PeaksOfWorld(World):
     def create_items(self) -> None:
         remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
         total_location_count = remaining_items
-        logging.warning(f"all required items: {self.checks_in_pool.total_requirements}")
-        logging.warning(f"all entry items: {self.checks_in_pool.entry_requirements}")
+        logging.debug(f"all required items: {self.checks_in_pool.total_requirements}")
+        logging.debug(f"all entry items: {self.checks_in_pool.entry_requirements}")
         local_itempool: list[Item] = []
 
-        for item in pool2:
+        for item in all_items:
             amount = item.min_count
             required_amount = 0
             starter_amount = 0
@@ -150,7 +150,7 @@ class PeaksOfWorld(World):
 
             if item.name in self.checks_in_pool.entry_requirements.keys():
                 starter_amount = self.checks_in_pool.entry_requirements[item.name]
-                logging.warning(f"item {item.name} has {starter_amount} starter items")
+                logging.debug(f"item {item.name} has {starter_amount} starter items")
 
             amount = max(required_amount, starter_amount, amount)
             if amount > item.max_count > 0:
@@ -166,8 +166,8 @@ class PeaksOfWorld(World):
                 else:
                     local_itempool.append(self.create_item_prog(item.name))
 
-        logging.warning(f"starter items: {self.multiworld.precollected_items}")
-        logging.warning(f"items: {local_itempool}")
+        logging.debug(f"starter items: {self.multiworld.precollected_items}")
+        logging.debug(f"items: {local_itempool}")
 
         total_itempool: list[Item] = list(local_itempool)
         if len(local_itempool) > remaining_items:
