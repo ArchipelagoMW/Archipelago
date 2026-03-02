@@ -186,7 +186,7 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_all_state(False, True)
+        self.collection_state = world.multiworld.get_all_state(allow_partial_entrances=True)
         self.entrance_lookup = entrance_lookup
 
     @property
