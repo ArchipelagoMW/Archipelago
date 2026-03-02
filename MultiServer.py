@@ -496,7 +496,8 @@ class Context:
 
         self.read_data = {}
         # there might be a better place to put this.
-        self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
+        race_mode = decoded_obj.get("race_mode", 0)
+        self.read_data["race_mode"] = lambda: race_mode
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver}, "
@@ -1301,6 +1302,13 @@ class CommandMeta(type):
             commands.update(base.commands)
         commands.update({command_name[5:]: method for command_name, method in attrs.items() if
                          command_name.startswith("_cmd_")})
+        for command_name, method in commands.items():
+            # wrap async def functions so they run on default asyncio loop
+            if inspect.iscoroutinefunction(method):
+                def _wrapper(self, *args, _method=method, **kwargs):
+                    return async_start(_method(self, *args, **kwargs))
+                functools.update_wrapper(_wrapper, method)
+                commands[command_name] = _wrapper
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 

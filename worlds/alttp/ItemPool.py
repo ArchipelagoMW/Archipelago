@@ -1,8 +1,9 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, MultiWorld
 from Options import OptionError
+from typing import TYPE_CHECKING
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from .Shops import TakeAny, total_shop_slots, set_up_shops, shop_table_by_location, ShopType
@@ -13,6 +14,9 @@ from .Items import item_factory, GetBeemizerItem, trap_replaceable, item_name_gr
 from .Options import small_key_shuffle, compass_shuffle, big_key_shuffle, map_shuffle, TriforcePiecesMode, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
 from .Regions import key_drop_data
+
+if TYPE_CHECKING:
+    from . import ALTTPWorld
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -222,7 +226,7 @@ items_reduction_table = (
 )
 
 
-def generate_itempool(world):
+def generate_itempool(world: "ALTTPWorld"):
     player: int = world.player
     multiworld = world.multiworld
 
@@ -531,7 +535,7 @@ take_any_locations_inverted.sort()
 take_any_locations.sort()
 
 
-def set_up_take_anys(multiworld, world, player):
+def set_up_take_anys(multiworld: MultiWorld, world: "ALTTPWorld", player: int):
     # these are references, do not modify these lists in-place
     if world.options.mode == 'inverted':
         take_any_locs = take_any_locations_inverted
@@ -585,15 +589,15 @@ def set_up_take_anys(multiworld, world, player):
         location.place_locked_item(item_factory("Boss Heart Container", world))
 
 
-def get_pool_core(world, player: int):
-    shuffle = world.worlds[player].options.entrance_shuffle.current_key
-    difficulty = world.worlds[player].options.item_pool.current_key
-    timer = world.worlds[player].options.timer.current_key
-    goal = world.worlds[player].options.goal.current_key
-    mode = world.worlds[player].options.mode.current_key
-    swordless = world.worlds[player].options.swordless
-    retro_bow = world.worlds[player].options.retro_bow
-    logic = world.worlds[player].options.glitches_required
+def get_pool_core(multiworld: MultiWorld, player: int):
+    shuffle = multiworld.worlds[player].options.entrance_shuffle.current_key
+    difficulty = multiworld.worlds[player].options.item_pool.current_key
+    timer = multiworld.worlds[player].options.timer.current_key
+    goal = multiworld.worlds[player].options.goal.current_key
+    mode = multiworld.worlds[player].options.mode.current_key
+    swordless = multiworld.worlds[player].options.swordless
+    retro_bow = multiworld.worlds[player].options.retro_bow
+    logic = multiworld.worlds[player].options.glitches_required
 
     pool = []
     placed_items = {}
@@ -610,13 +614,13 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
-    if logic.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.worlds[player].options.glitch_boots:
+    if logic.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and multiworld.worlds[player].options.glitch_boots:
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
-    want_progressives = world.worlds[player].options.progressive.want_progressives
+    want_progressives = multiworld.worlds[player].options.progressive.want_progressives
 
-    if want_progressives(world.random):
+    if want_progressives(multiworld.random):
         pool.extend(diff.progressiveglove)
     else:
         pool.extend(diff.basicglove)
@@ -640,27 +644,27 @@ def get_pool_core(world, player: int):
     thisbottle = None
     for _ in range(diff.bottle_count):
         if not diff.same_bottle or not thisbottle:
-            thisbottle = world.random.choice(diff.bottles)
+            thisbottle = multiworld.random.choice(diff.bottles)
         pool.append(thisbottle)
 
-    if want_progressives(world.random):
+    if want_progressives(multiworld.random):
         pool.extend(diff.progressiveshield)
     else:
         pool.extend(diff.basicshield)
 
-    if want_progressives(world.random):
+    if want_progressives(multiworld.random):
         pool.extend(diff.progressivearmor)
     else:
         pool.extend(diff.basicarmor)
 
-    if want_progressives(world.random):
+    if want_progressives(multiworld.random):
         pool.extend(diff.progressivemagic)
     else:
         pool.extend(diff.basicmagic)
 
-    if want_progressives(world.random):
+    if want_progressives(multiworld.random):
         pool.extend(diff.progressivebow)
-        world.worlds[player].has_progressive_bows = True
+        multiworld.worlds[player].has_progressive_bows = True
     elif (swordless or logic == 'no_glitches'):
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":
@@ -672,7 +676,7 @@ def get_pool_core(world, player: int):
     if swordless:
         pool.extend(diff.swordless)
     else:
-        progressive_swords = want_progressives(world.random)
+        progressive_swords = want_progressives(multiworld.random)
         pool.extend(diff.progressivesword if progressive_swords else diff.basicsword)
 
     extraitems = total_items_to_place - len(pool) - len(placed_items)
@@ -688,29 +692,29 @@ def get_pool_core(world, player: int):
     additional_pieces_to_place = 0
     if 'triforce_hunt' in goal:
 
-        if world.worlds[player].options.triforce_pieces_mode.value == TriforcePiecesMode.option_extra:
-            treasure_hunt_total = (world.worlds[player].options.triforce_pieces_required.value
-                                   + world.worlds[player].options.triforce_pieces_extra.value)
-        elif world.worlds[player].options.triforce_pieces_mode.value == TriforcePiecesMode.option_percentage:
-            percentage = float(world.worlds[player].options.triforce_pieces_percentage.value) / 100
-            treasure_hunt_total = int(round(world.worlds[player].options.triforce_pieces_required.value * percentage, 0))
+        if multiworld.worlds[player].options.triforce_pieces_mode.value == TriforcePiecesMode.option_extra:
+            treasure_hunt_total = (multiworld.worlds[player].options.triforce_pieces_required.value
+                                   + multiworld.worlds[player].options.triforce_pieces_extra.value)
+        elif multiworld.worlds[player].options.triforce_pieces_mode.value == TriforcePiecesMode.option_percentage:
+            percentage = float(multiworld.worlds[player].options.triforce_pieces_percentage.value) / 100
+            treasure_hunt_total = int(round(multiworld.worlds[player].options.triforce_pieces_required.value * percentage, 0))
         else:  # available
-            treasure_hunt_total = world.worlds[player].options.triforce_pieces_available.value
+            treasure_hunt_total = multiworld.worlds[player].options.triforce_pieces_available.value
 
-        triforce_pieces = min(90, max(treasure_hunt_total, world.worlds[player].options.triforce_pieces_required.value))
+        triforce_pieces = min(90, max(treasure_hunt_total, multiworld.worlds[player].options.triforce_pieces_required.value))
 
         pieces_in_core = min(extraitems, triforce_pieces)
         additional_pieces_to_place = triforce_pieces - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
-        treasure_hunt_required = world.worlds[player].options.triforce_pieces_required.value
+        treasure_hunt_required = multiworld.worlds[player].options.triforce_pieces_required.value
 
     for extra in diff.extras:
         if extraitems >= len(extra):
             pool.extend(extra)
             extraitems -= len(extra)
         elif extraitems > 0:
-            pool.extend(world.random.sample(extra, extraitems))
+            pool.extend(multiworld.random.sample(extra, extraitems))
             break
         else:
             break
@@ -729,25 +733,25 @@ def get_pool_core(world, player: int):
             else:
                 break
 
-    if world.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
+    if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
-            if world.worlds[player].options.key_drop_shuffle:
+            if multiworld.worlds[player].options.key_drop_shuffle:
                 key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
-                key_location = world.random.choice(key_locations)
+                key_location = multiworld.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
                 key_locations += ['Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Boomerang Chest',
                                   'Hyrule Castle - Map Chest']
-                key_location = world.random.choice(key_locations)
+                key_location = multiworld.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
                 key_locations += ['Hyrule Castle - Big Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
-                key_location = world.random.choice(key_locations)
+                key_location = multiworld.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
                 key_locations += ['Sewers - Key Rat Key Drop']
-                key_location = world.random.choice(key_locations)
+                key_location = multiworld.random.choice(key_locations)
                 place_item(key_location, "Small Key (Universal)")
                 pool = pool[:-3]
 
