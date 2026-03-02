@@ -21,16 +21,40 @@ for i, p_type in enumerate(GEN_1_TYPES):
 
 # 3. Add Useful Items
 # These help the player but aren't strictly required to finish the game.
-item_data_table["Master Ball"] = (ITEM_ID_OFFSET + 3001, ItemClassification.useful)
-item_data_table["Pokedex"] = (ITEM_ID_OFFSET + 3002, ItemClassification.useful)
-item_data_table["Pokegear"] = (ITEM_ID_OFFSET + 3003, ItemClassification.useful)
+item_data_table["Master Ball"]  = (ITEM_ID_OFFSET + 3001, ItemClassification.useful)
+item_data_table["Pokedex"]      = (ITEM_ID_OFFSET + 3002, ItemClassification.useful)
+item_data_table["Pokegear"]     = (ITEM_ID_OFFSET + 3003, ItemClassification.useful)
+
+# Pokéballs
+item_data_table["Ultra Ball"]   = (ITEM_ID_OFFSET + 3004, ItemClassification.filler)
+item_data_table["Great Ball"]   = (ITEM_ID_OFFSET + 3005, ItemClassification.filler)
+item_data_table["Net Ball"]     = (ITEM_ID_OFFSET + 3006, ItemClassification.filler)
+item_data_table["Dusk Ball"]    = (ITEM_ID_OFFSET + 3007, ItemClassification.filler)
+item_data_table["Repeat Ball"]  = (ITEM_ID_OFFSET + 3008, ItemClassification.filler)
+item_data_table["Quick Ball"]   = (ITEM_ID_OFFSET + 3009, ItemClassification.filler)
+
+# Medicine
+item_data_table["Full Restore"] = (ITEM_ID_OFFSET + 3010, ItemClassification.filler)
+item_data_table["Max Potion"]   = (ITEM_ID_OFFSET + 3011, ItemClassification.filler)
+item_data_table["Revive"]       = (ITEM_ID_OFFSET + 3012, ItemClassification.filler)
+item_data_table["Max Revive"]   = (ITEM_ID_OFFSET + 3013, ItemClassification.filler)
+item_data_table["Full Heal"]    = (ITEM_ID_OFFSET + 3014, ItemClassification.filler)
+item_data_table["Rare Candy"]   = (ITEM_ID_OFFSET + 3015, ItemClassification.filler)
+
+# Key items / field use
+item_data_table["Repel"]        = (ITEM_ID_OFFSET + 3016, ItemClassification.filler)
+item_data_table["Super Repel"]  = (ITEM_ID_OFFSET + 3017, ItemClassification.filler)
+item_data_table["Escape Rope"]  = (ITEM_ID_OFFSET + 3018, ItemClassification.filler)
+
+# Joke / "nothing" item — purely thematic padding
+item_data_table["Magikarp used Splash - but nothing happened!"] = (ITEM_ID_OFFSET + 3019, ItemClassification.filler)
 
 # 4. Add Traps
 # These are meant to hinder the player.
 item_data_table["Small Shuffle Trap"] = (ITEM_ID_OFFSET + 4001, ItemClassification.trap)
-item_data_table["Big Shuffle Trap"] = (ITEM_ID_OFFSET + 4002, ItemClassification.trap)
-item_data_table["Derpy Mon Trap"] = (ITEM_ID_OFFSET + 4003, ItemClassification.trap)
-item_data_table["Release Trap"] = (ITEM_ID_OFFSET + 4004, ItemClassification.trap)
+item_data_table["Big Shuffle Trap"]   = (ITEM_ID_OFFSET + 4002, ItemClassification.trap)
+item_data_table["Derpy Mon Trap"]     = (ITEM_ID_OFFSET + 4003, ItemClassification.trap)
+item_data_table["Release Trap"]       = (ITEM_ID_OFFSET + 4004, ItemClassification.trap)
 
 # 5. Region Pass items (Progression)
 # One pass per game region. IDs: ITEM_ID_OFFSET + 5000 + region_index (8579000–8579009)
@@ -43,3 +67,14 @@ pokemon_names = [mon["name"] for mon in POKEMON_DATA]
 
 class PokepelagoItem(Item):
     game: str = "Pokepelago"
+
+
+# Maps filler category names (used by FillerWeights option) to the items they contain.
+# Traps are excluded here — they are controlled separately by the trap_chance option.
+FILLER_ITEM_CATEGORIES: dict = {
+    "master_ball": ["Master Ball"],
+    "pokeballs":   ["Ultra Ball", "Great Ball", "Net Ball", "Dusk Ball", "Repeat Ball", "Quick Ball"],
+    "medicine":    ["Full Restore", "Max Potion", "Revive", "Max Revive", "Full Heal", "Rare Candy"],
+    "key_items":   ["Repel", "Super Repel", "Escape Rope", "Pokedex", "Pokegear"],
+    "splash":      ["Magikarp used Splash - but nothing happened!"],
+}

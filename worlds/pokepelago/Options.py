@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, Toggle, Choice, Range
+from Options import PerGameCommonOptions, Toggle, Choice, Range, OptionCounter
 
 
 class Dexsanity(Toggle):
@@ -21,6 +21,14 @@ class RegionLocks(Toggle):
     """If enabled, non-starting regions require a Region Pass item to access.
     Disabling this makes all selected regions freely accessible from the start."""
     display_name = "Region Locks"
+    default = 1
+
+
+class IncludeStartingLocations(Toggle):
+    """If enabled, 8 thematic 'Oak\'s Lab' checks are included as free starting locations
+    (Oak\'s Parcel Delivery, Pokedex Received, etc.). Sent to the multiworld when you begin
+    your adventure. Disable to remove these checks entirely."""
+    display_name = "Include Starting Locations"
     default = 1
 
 
@@ -138,11 +146,36 @@ class TrapChance(Range):
     default = 25
 
 
+class FillerWeights(OptionCounter):
+    """Controls the relative weight of each filler item category.
+    Higher values mean that category appears more often. Set a category to 0 to disable it entirely.
+    Traps are controlled separately by the 'Trap Chance' option.
+    Categories: master_ball, pokeballs, medicine, key_items, splash."""
+    display_name = "Filler Item Weights"
+    valid_keys = frozenset({"master_ball", "pokeballs", "medicine", "key_items", "splash"})
+    default = {
+        "master_ball": 50,
+        "pokeballs":   150,
+        "medicine":    150,
+        "key_items":   100,
+        "splash":      50,
+    }
+
+    @classmethod
+    def from_any(cls, data):
+        if isinstance(data, dict):
+            merged = dict(cls.default)
+            merged.update(data)
+            return cls(merged)
+        return super().from_any(data)
+
+
 @dataclass
 class PokepelagoOptions(PerGameCommonOptions):
     dexsanity: Dexsanity
     type_locks: EnableTypeLocks
     region_locks: RegionLocks
+    include_starting_locations: IncludeStartingLocations
     include_kanto: IncludeKanto
     include_johto: IncludeJohto
     include_hoenn: IncludeHoenn
@@ -157,3 +190,4 @@ class PokepelagoOptions(PerGameCommonOptions):
     goal_percentage: GoalPercentage
     goal_count: GoalCount
     trap_chance: TrapChance
+    filler_weights: FillerWeights

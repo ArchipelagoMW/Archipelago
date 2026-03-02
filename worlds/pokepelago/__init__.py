@@ -2,8 +2,8 @@ from BaseClasses import Region, Entrance, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld
 from rule_builder.cached_world import CachedRuleBuilderWorld
 from rule_builder.rules import HasAll
-from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES
-from .Locations import PokepelagoLocation, location_table, milestones
+from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
+from .Locations import PokepelagoLocation, location_table, milestones, starting_locations
 from .Options import PokepelagoOptions, REGION_OPTION_ATTRS
 from .data import POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region
 
@@ -105,8 +105,9 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
                     my_items_in_pool += 1
 
         # Region Passes for non-starting regions (the Zone Keys).
-        # Only added when dexsanity=ON — that's when regions have "Guess X" locations to gate.
-        if self.options.region_locks.value and self.options.dexsanity.value:
+        # Added whenever region_locks=ON, regardless of dexsanity.
+        # Even with dexsanity=OFF, the client respects region locks, so passes must be in the pool.
+        if self.options.region_locks.value:
             for region in self.active_regions[1:]:
                 self.multiworld.itempool.append(self.create_item(f"{region} Pass"))
                 my_items_in_pool += 1
@@ -115,15 +116,20 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
         total_locations = sum(
             1 for loc in self.multiworld.get_locations(self.player) if loc.address is not None
         )
-        useful_fillers = ["Master Ball", "Pokedex", "Pokegear"]
         trap_fillers = ["Small Shuffle Trap", "Big Shuffle Trap", "Derpy Mon Trap", "Release Trap"]
         trap_chance = self.options.trap_chance.value
+
+        category_names = list(FILLER_ITEM_CATEGORIES.keys())
+        category_weights = [self.options.filler_weights.value.get(cat, 0) for cat in category_names]
+        if sum(category_weights) == 0:
+            category_weights = [1] * len(category_names)
 
         while my_items_in_pool < total_locations:
             if self.random.randint(1, 100) <= trap_chance:
                 filler_name = self.random.choice(trap_fillers)
             else:
-                filler_name = useful_fillers[my_items_in_pool % len(useful_fillers)]
+                chosen_category = self.random.choices(category_names, weights=category_weights, k=1)[0]
+                filler_name = self.random.choice(FILLER_ITEM_CATEGORIES[chosen_category])
             self.multiworld.itempool.append(self.create_item(filler_name))
             my_items_in_pool += 1
 
@@ -149,9 +155,14 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
                 ent.access_rule = lambda state, p=pass_name: state.has(p, self.player)
 
         # Starting locations and global milestone locations → Menu region (no rules)
+        starting_loc_set = set(starting_locations) if not self.options.include_starting_locations.value else set()
+
         for loc_name, loc_id in self.location_name_to_id.items():
             if loc_name.startswith("Guess ") or loc_name.startswith("Caught "):
                 continue  # Per-Pokemon handled below; type milestones skipped
+
+            if loc_name in starting_loc_set:
+                continue  # Disabled by include_starting_locations option
 
             if loc_name.startswith("Guessed "):
                 count = int(loc_name.split(" ")[1])
@@ -226,4 +237,5 @@ class PokepelagoWorld(CachedRuleBuilderWorld):
             "starting_region": self.starting_region,
             "goal_count": self.goal_count,
             "dexsanity": bool(self.options.dexsanity.value),
+            "starting_locations": bool(self.options.include_starting_locations.value),
         }
