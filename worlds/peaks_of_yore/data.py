@@ -35,7 +35,7 @@ class POYItemLocationType(IntEnum):
     TIMEATTACK_HOLDS = 10000
 
 
-class ItemData:
+class ItemDataOld:
     """
     ItemData is an internal class for me to specify items
     is_starter_item, is_enabled and is_early are all called later to determine how to handle the item
@@ -61,7 +61,7 @@ class ItemData:
         self.is_enabled = is_enabled
         self.is_early = is_early
 
-class ItemData2:
+class ItemData:
     name: str
     type: POYItemLocationType
     id: int
@@ -150,13 +150,15 @@ class POYRegion:
     name: str
     entry_requirements: dict[str, int]  # name: count
     enable_requirements: Callable[[PeaksOfYoreOptions], bool]
+    is_start: Callable[[PeaksOfYoreOptions], bool]
     subregions: list[POYRegion]
     locations: list[LocationData]
     is_peak: bool
     is_book: bool
 
     def __init__(self, name: str, entry_requirements=None, subregions=None, locations=None,
-                 enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True, is_book: bool = False):
+                 enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True, is_book: bool = False,
+                 is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False):
         if subregions is None:
             subregions = []
         if entry_requirements is None:
@@ -171,6 +173,7 @@ class POYRegion:
         self.enable_requirements = enable_requirements
         self.is_book = is_book
         self.is_peak = False
+        self.is_start = is_start
 
     def get_all_locations_dict(self) -> dict[str, int]:
         """
@@ -202,6 +205,7 @@ class PeakRegion(POYRegion):
 
     def __init__(self, name: str, peak_id: int, entry_requirements=None, subregions=None, locations=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True,
+                 is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False,
                  generate_time_attack: bool = True, generate_free_solo: bool = False):
         self.peak_id = peak_id
         self.generate_time_attack = generate_time_attack
@@ -210,6 +214,7 @@ class PeakRegion(POYRegion):
         self.prepare_peak_region()
         self.is_peak = True
         self.is_book = False
+        self.is_start = is_start
 
     def prepare_peak_region(self):
         self.entry_requirements.update({self.name: 1})
@@ -400,175 +405,17 @@ class PeakRegion(POYRegion):
 #     ItemData("Trap", 4, ItemClassification.filler, POYItemLocationType.EXTRA),
 # ])
 
-pool2: list[ItemData2] = [
-    # Tools
-    ItemData2("Pipe", 0, ItemClassification.useful, POYItemLocationType.TOOL),
-    ItemData2("Rope Length Upgrade", 1, ItemClassification.useful, POYItemLocationType.TOOL),
-    ItemData2("Barometer", 2, ItemClassification.useful, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.start_with_barometer),
-    ItemData2("Progressive Crampons", 3, ItemClassification.progression, POYItemLocationType.TOOL,
-              min_count=2, max_count=2),
-    # ^2 of these^ (on purpose)
-    ItemData2("Monocular", 4, ItemClassification.filler, POYItemLocationType.TOOL),
-    ItemData2("Phonograph", 5, ItemClassification.filler, POYItemLocationType.TOOL),
-    ItemData2("Pocketwatch", 6, ItemClassification.progression, POYItemLocationType.TOOL),
-    ItemData2("Chalkbag", 7, ItemClassification.useful, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.start_with_chalk),
-    ItemData2("Rope Unlock", 8, ItemClassification.progression, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.rope_unlock_mode == 0,
-             is_early=lambda options: options.rope_unlock_mode == 1),
-    ItemData2("Coffee Unlock", 9, ItemClassification.useful, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.start_with_coffee),
-    ItemData2("Oil Lamp", 10, ItemClassification.progression, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.start_with_oil_lamp),
-    ItemData2("Left Hand", 11, ItemClassification.progression, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.start_with_hands in (0, 1),
-             is_early=lambda options: options.early_hands),
-    ItemData2("Right Hand", 12, ItemClassification.progression, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.start_with_hands in (0, 2),
-             is_early=lambda options: options.early_hands),
-    ItemData2("Ice Axes", 13, ItemClassification.progression, POYItemLocationType.TOOL,
-             min_count=0),
-
-    # Books
-    ItemData2("Fundamentals Book", 0, ItemClassification.progression, POYItemLocationType.BOOK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 0),
-    ItemData2("Intermediate Book", 1, ItemClassification.progression, POYItemLocationType.BOOK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 1),
-    ItemData2("Advanced Book", 2, ItemClassification.progression, POYItemLocationType.BOOK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 2),
-    ItemData2("Expert Book", 3, ItemClassification.progression, POYItemLocationType.BOOK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 3),
-
-    # Fundamental Peaks
-    ItemData2("Greenhorn's Top", 0, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 0),
-    ItemData2("Paltry Peak", 1, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Mill", 2, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Gray Gully", 3, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Lighthouse", 4, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Man Of Sjór", 5, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Giant's Shelf", 6, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Evergreen's End", 7, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("The Twins", 8, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Grove's Skelf", 9, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Land's End", 10, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Hangman's Leap", 11, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Langr", 12, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Aldr Grotto", 13, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Three Brothers", 14, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Walter's Crag", 15, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("The Great Crevice", 16, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Hagger", 17, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Ugsome Storr", 18, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Wuthering Crest", 19, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    # Intermediate Peaks
-    ItemData2("Porter's Boulder", 20, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 1),
-    ItemData2("Jotunn's Thumb", 21, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Skerry", 22, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Hamarr Stone", 23, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Giant's Nose", 24, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Walter's Boulder", 25, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Sundered Sons", 26, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Old Weald's Boulder", 27, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Leaning Spire", 28, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Cromlech", 29, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    # Advanced Peaks
-    ItemData2("Walker's Pillar", 30, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 2),
-    ItemData2("Eldenhorn", 31, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Great Gaol", 32, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("St. Haelga", 33, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    ItemData2("Ymir's Shadow", 34, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0),
-    # Expert Peaks
-    ItemData2("The Great Bulwark", 35, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0, is_starter_item=lambda options: options.starting_book == 3),
-    ItemData2("Solemn Tempest", 36, ItemClassification.progression, POYItemLocationType.PEAK,
-             min_count = 0, is_enabled=lambda options: not options.disable_solemn_tempest),
-
-    # artefacts
-    ItemData2("Old Mill: Hat", 0, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Evergreen's End: Fisherman's Cap", 1, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Old Grove's Skelf: Safety Helmet", 2, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Old Man Of Sjór: Climbing Shoe", 3, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Three Brothers: Shovel", 4, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Giant's Shelf: Sleeping Bag", 5, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Aldr Grotto: Backpack", 6, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Old Langr: Coffee Box", 7, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData2("Wuthering Crest: Coffee Box", 8, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData2("Walker's Pillar: Chalk Box", 9, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData2("Eldenhorn: Chalk Box", 10, ItemClassification.useful, POYItemLocationType.ARTEFACT),
-    ItemData2("Leaning Spire: Intermediate Trophy", 11, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Ymir's Shadow: Advanced Trophy", 12, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("The Great Bulwark: Expert Trophy", 13, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Gray Gully: Picture Piece #1", 14, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Land's End: Picture Piece #2", 15, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("The Great Crevice: Picture Piece #3", 16, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("St. Haelga: Picture Piece #4", 17, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Great Gaol: Picture Frame", 18, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-    ItemData2("Walter's Crag: Fundamentals Trophy", 19, ItemClassification.filler, POYItemLocationType.ARTEFACT),
-
-    # Bird seeds
-    ItemData2("Three Brothers: Bird Seed", 0, ItemClassification.useful, POYItemLocationType.BIRDSEED),
-    ItemData2("Old Skerry: Bird Seed", 1, ItemClassification.useful, POYItemLocationType.BIRDSEED),
-    ItemData2("Great Gaol: Bird Seed", 2, ItemClassification.useful, POYItemLocationType.BIRDSEED),
-    ItemData2("Eldenhorn: Bird Seed", 3, ItemClassification.useful, POYItemLocationType.BIRDSEED),
-
-    # Extra items
-    ItemData2("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
-    ItemData2("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
-    ItemData2("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
-    ItemData2("Extra Seed", 3, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
-    ItemData2("Trap", 4, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
-]
-
-
-all_items: list[ItemData] = [
+pool2: list[ItemData] = [
     # Tools
     ItemData("Pipe", 0, ItemClassification.useful, POYItemLocationType.TOOL),
     ItemData("Rope Length Upgrade", 1, ItemClassification.useful, POYItemLocationType.TOOL),
     ItemData("Barometer", 2, ItemClassification.useful, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_barometer),
     ItemData("Progressive Crampons", 3, ItemClassification.progression, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.starting_book == 3),
-    ItemData("Progressive Crampons", 3, ItemClassification.progression, POYItemLocationType.TOOL),
-    # ^2 of these^ (on purpose)
+             min_count=2, max_count=2),
     ItemData("Monocular", 4, ItemClassification.filler, POYItemLocationType.TOOL),
     ItemData("Phonograph", 5, ItemClassification.filler, POYItemLocationType.TOOL),
-    ItemData("Pocketwatch", 6, ItemClassification.progression, POYItemLocationType.TOOL),
+    ItemData("Pocketwatch", 6, ItemClassification.progression, POYItemLocationType.TOOL, min_count=0),
     ItemData("Chalkbag", 7, ItemClassification.useful, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_chalk),
     ItemData("Rope Unlock", 8, ItemClassification.progression, POYItemLocationType.TOOL,
@@ -585,123 +432,96 @@ all_items: list[ItemData] = [
              is_starter_item=lambda options: options.start_with_hands in (0, 2),
              is_early=lambda options: options.early_hands),
     ItemData("Ice Axes", 13, ItemClassification.progression, POYItemLocationType.TOOL,
-             is_starter_item=lambda options: options.starting_book.needs_ice_axes()),
+             min_count=0),
 
     # Books
     ItemData("Fundamentals Book", 0, ItemClassification.progression, POYItemLocationType.BOOK,
-             is_starter_item=lambda options: options.starting_book == 0,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 0),
+             min_count = 0),
     ItemData("Intermediate Book", 1, ItemClassification.progression, POYItemLocationType.BOOK,
-             is_starter_item=lambda options: options.starting_book == 1,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 0),
+             min_count = 0),
     ItemData("Advanced Book", 2, ItemClassification.progression, POYItemLocationType.BOOK,
-             is_starter_item=lambda options: options.starting_book == 2,
-             is_enabled=lambda options: options.enable_advanced and options.game_mode == 0),
+             min_count = 0),
     ItemData("Expert Book", 3, ItemClassification.progression, POYItemLocationType.BOOK,
-             is_starter_item=lambda options: options.starting_book == 3,
-             is_enabled=lambda options: options.enable_expert and options.game_mode == 0),
+             min_count = 0),
 
     # Fundamental Peaks
     ItemData("Greenhorn's Top", 0, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_starter_item=lambda options: options.starting_book == 0,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Paltry Peak", 1, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Mill", 2, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Gray Gully", 3, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Lighthouse", 4, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Man Of Sjór", 5, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Giant's Shelf", 6, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Evergreen's End", 7, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("The Twins", 8, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Grove's Skelf", 9, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Land's End", 10, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Hangman's Leap", 11, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Langr", 12, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Aldr Grotto", 13, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Three Brothers", 14, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Walter's Crag", 15, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("The Great Crevice", 16, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Hagger", 17, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Ugsome Storr", 18, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     ItemData("Wuthering Crest", 19, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+             min_count = 0),
     # Intermediate Peaks
     ItemData("Porter's Boulder", 20, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_starter_item=lambda options: options.starting_book == 1,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Jotunn's Thumb", 21, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Skerry", 22, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Hamarr Stone", 23, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Giant's Nose", 24, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Walter's Boulder", 25, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Sundered Sons", 26, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Old Weald's Boulder", 27, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Leaning Spire", 28, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     ItemData("Cromlech", 29, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+             min_count = 0),
     # Advanced Peaks
     ItemData("Walker's Pillar", 30, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_starter_item=lambda options: options.starting_book == 2,
-             is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+             min_count = 0),
     ItemData("Eldenhorn", 31, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+             min_count = 0),
     ItemData("Great Gaol", 32, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+             min_count = 0),
     ItemData("St. Haelga", 33, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+             min_count = 0),
     ItemData("Ymir's Shadow", 34, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+             min_count = 0),
     # Expert Peaks
     ItemData("The Great Bulwark", 35, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_starter_item=lambda options: options.starting_book == 3,
-             is_enabled=lambda options: options.enable_expert and options.game_mode == 1),
+             min_count = 0),
     ItemData("Solemn Tempest", 36, ItemClassification.progression, POYItemLocationType.PEAK,
-             is_enabled=lambda options: options.enable_expert and not options.disable_solemn_tempest
-                                        and options.game_mode == 1),
-
-    # ropes
-    ItemData("Walter's Crag: Rope (Co-Climb)", 0, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Walker's Pillar: Rope (Co-Climb)", 1, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Great Gaol: Rope (Encounter)", 2, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("St. Haelga: Rope (Encounter)", 3, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Old Man Of Sjór: Rope", 4, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Hangman's Leap: Rope", 5, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Ugsome Storr: Rope", 6, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Eldenhorn: Rope", 7, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Ymir's Shadow: Rope", 8, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Wuthering Crest: Rope", 9, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Great Gaol: Rope", 10, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Walter's Crag: Rope", 11, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Land's End: Rope", 12, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Evergreen's End: Rope", 13, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("The Great Crevice: Rope", 14, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Old Hagger: Rope", 15, ItemClassification.useful, POYItemLocationType.ROPE),
+             min_count = 0, is_enabled=lambda options: not options.disable_solemn_tempest),
 
     # artefacts
     ItemData("Old Mill: Hat", 0, ItemClassification.filler, POYItemLocationType.ARTEFACT),
@@ -732,11 +552,195 @@ all_items: list[ItemData] = [
     ItemData("Eldenhorn: Bird Seed", 3, ItemClassification.useful, POYItemLocationType.BIRDSEED),
 
     # Extra items
-    ItemData("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA),
-    ItemData("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA),
-    ItemData("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA),
-    ItemData("Extra Seed", 3, ItemClassification.filler, POYItemLocationType.EXTRA),
-    ItemData("Trap", 4, ItemClassification.filler, POYItemLocationType.EXTRA),
+    ItemData("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+    ItemData("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+    ItemData("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+    ItemData("Extra Seed", 3, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+    ItemData("Trap", 4, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+]
+
+
+all_items: list[ItemDataOld] = [
+    # Tools
+    ItemDataOld("Pipe", 0, ItemClassification.useful, POYItemLocationType.TOOL),
+    ItemDataOld("Rope Length Upgrade", 1, ItemClassification.useful, POYItemLocationType.TOOL),
+    ItemDataOld("Barometer", 2, ItemClassification.useful, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.start_with_barometer),
+    ItemDataOld("Progressive Crampons", 3, ItemClassification.progression, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.starting_book == 3),
+    ItemDataOld("Progressive Crampons", 3, ItemClassification.progression, POYItemLocationType.TOOL),
+    # ^2 of these^ (on purpose)
+    ItemDataOld("Monocular", 4, ItemClassification.filler, POYItemLocationType.TOOL),
+    ItemDataOld("Phonograph", 5, ItemClassification.filler, POYItemLocationType.TOOL),
+    ItemDataOld("Pocketwatch", 6, ItemClassification.progression, POYItemLocationType.TOOL),
+    ItemDataOld("Chalkbag", 7, ItemClassification.useful, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.start_with_chalk),
+    ItemDataOld("Rope Unlock", 8, ItemClassification.progression, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.rope_unlock_mode == 0,
+                is_early=lambda options: options.rope_unlock_mode == 1),
+    ItemDataOld("Coffee Unlock", 9, ItemClassification.useful, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.start_with_coffee),
+    ItemDataOld("Oil Lamp", 10, ItemClassification.progression, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.start_with_oil_lamp),
+    ItemDataOld("Left Hand", 11, ItemClassification.progression, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.start_with_hands in (0, 1),
+                is_early=lambda options: options.early_hands),
+    ItemDataOld("Right Hand", 12, ItemClassification.progression, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.start_with_hands in (0, 2),
+                is_early=lambda options: options.early_hands),
+    ItemDataOld("Ice Axes", 13, ItemClassification.progression, POYItemLocationType.TOOL,
+                is_starter_item=lambda options: options.starting_book.needs_ice_axes()),
+
+    # Books
+    ItemDataOld("Fundamentals Book", 0, ItemClassification.progression, POYItemLocationType.BOOK,
+                is_starter_item=lambda options: options.starting_book == 0,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 0),
+    ItemDataOld("Intermediate Book", 1, ItemClassification.progression, POYItemLocationType.BOOK,
+                is_starter_item=lambda options: options.starting_book == 1,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 0),
+    ItemDataOld("Advanced Book", 2, ItemClassification.progression, POYItemLocationType.BOOK,
+                is_starter_item=lambda options: options.starting_book == 2,
+                is_enabled=lambda options: options.enable_advanced and options.game_mode == 0),
+    ItemDataOld("Expert Book", 3, ItemClassification.progression, POYItemLocationType.BOOK,
+                is_starter_item=lambda options: options.starting_book == 3,
+                is_enabled=lambda options: options.enable_expert and options.game_mode == 0),
+
+    # Fundamental Peaks
+    ItemDataOld("Greenhorn's Top", 0, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_starter_item=lambda options: options.starting_book == 0,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Paltry Peak", 1, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Old Mill", 2, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Gray Gully", 3, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Lighthouse", 4, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Old Man Of Sjór", 5, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Giant's Shelf", 6, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Evergreen's End", 7, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("The Twins", 8, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Old Grove's Skelf", 9, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Land's End", 10, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Hangman's Leap", 11, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Old Langr", 12, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Aldr Grotto", 13, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Three Brothers", 14, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Walter's Crag", 15, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("The Great Crevice", 16, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Old Hagger", 17, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Ugsome Storr", 18, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    ItemDataOld("Wuthering Crest", 19, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_fundamental and options.game_mode == 1),
+    # Intermediate Peaks
+    ItemDataOld("Porter's Boulder", 20, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_starter_item=lambda options: options.starting_book == 1,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Jotunn's Thumb", 21, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Old Skerry", 22, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Hamarr Stone", 23, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Giant's Nose", 24, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Walter's Boulder", 25, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Sundered Sons", 26, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Old Weald's Boulder", 27, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Leaning Spire", 28, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    ItemDataOld("Cromlech", 29, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_intermediate and options.game_mode == 1),
+    # Advanced Peaks
+    ItemDataOld("Walker's Pillar", 30, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_starter_item=lambda options: options.starting_book == 2,
+                is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+    ItemDataOld("Eldenhorn", 31, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+    ItemDataOld("Great Gaol", 32, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+    ItemDataOld("St. Haelga", 33, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+    ItemDataOld("Ymir's Shadow", 34, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_advanced and options.game_mode == 1),
+    # Expert Peaks
+    ItemDataOld("The Great Bulwark", 35, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_starter_item=lambda options: options.starting_book == 3,
+                is_enabled=lambda options: options.enable_expert and options.game_mode == 1),
+    ItemDataOld("Solemn Tempest", 36, ItemClassification.progression, POYItemLocationType.PEAK,
+                is_enabled=lambda options: options.enable_expert and not options.disable_solemn_tempest
+                                        and options.game_mode == 1),
+
+    # ropes
+    ItemDataOld("Walter's Crag: Rope (Co-Climb)", 0, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Walker's Pillar: Rope (Co-Climb)", 1, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Great Gaol: Rope (Encounter)", 2, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("St. Haelga: Rope (Encounter)", 3, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Old Man Of Sjór: Rope", 4, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Hangman's Leap: Rope", 5, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Ugsome Storr: Rope", 6, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Eldenhorn: Rope", 7, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Ymir's Shadow: Rope", 8, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Wuthering Crest: Rope", 9, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Great Gaol: Rope", 10, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Walter's Crag: Rope", 11, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Land's End: Rope", 12, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Evergreen's End: Rope", 13, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("The Great Crevice: Rope", 14, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemDataOld("Old Hagger: Rope", 15, ItemClassification.useful, POYItemLocationType.ROPE),
+
+    # artefacts
+    ItemDataOld("Old Mill: Hat", 0, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Evergreen's End: Fisherman's Cap", 1, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Old Grove's Skelf: Safety Helmet", 2, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Old Man Of Sjór: Climbing Shoe", 3, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Three Brothers: Shovel", 4, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Giant's Shelf: Sleeping Bag", 5, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Aldr Grotto: Backpack", 6, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Old Langr: Coffee Box", 7, ItemClassification.useful, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Wuthering Crest: Coffee Box", 8, ItemClassification.useful, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Walker's Pillar: Chalk Box", 9, ItemClassification.useful, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Eldenhorn: Chalk Box", 10, ItemClassification.useful, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Leaning Spire: Intermediate Trophy", 11, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Ymir's Shadow: Advanced Trophy", 12, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("The Great Bulwark: Expert Trophy", 13, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Gray Gully: Picture Piece #1", 14, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Land's End: Picture Piece #2", 15, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("The Great Crevice: Picture Piece #3", 16, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("St. Haelga: Picture Piece #4", 17, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Great Gaol: Picture Frame", 18, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+    ItemDataOld("Walter's Crag: Fundamentals Trophy", 19, ItemClassification.filler, POYItemLocationType.ARTEFACT),
+
+    # Bird seeds
+    ItemDataOld("Three Brothers: Bird Seed", 0, ItemClassification.useful, POYItemLocationType.BIRDSEED),
+    ItemDataOld("Old Skerry: Bird Seed", 1, ItemClassification.useful, POYItemLocationType.BIRDSEED),
+    ItemDataOld("Great Gaol: Bird Seed", 2, ItemClassification.useful, POYItemLocationType.BIRDSEED),
+    ItemDataOld("Eldenhorn: Bird Seed", 3, ItemClassification.useful, POYItemLocationType.BIRDSEED),
+
+    # Extra items
+    ItemDataOld("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA),
+    ItemDataOld("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA),
+    ItemDataOld("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA),
+    ItemDataOld("Extra Seed", 3, ItemClassification.filler, POYItemLocationType.EXTRA),
+    ItemDataOld("Trap", 4, ItemClassification.filler, POYItemLocationType.EXTRA),
 ]
 item_name_to_id: dict[str, int] = {i.name: i.id + i.type for i in all_items}
 
@@ -745,7 +749,7 @@ item_id_to_classification: dict[int, ItemClassification] = {i.id + i.type: i.cla
 # poy_regions defines all the regions, their entry requirements, locations and requirements to be included
 poy_regions: POYRegion = POYRegion("Cabin", subregions=[
     POYRegion("Fundamentals", entry_requirements={"Fundamentals Book": 1}, subregions=[
-        PeakRegion("Greenhorn's Top", 0),
+        PeakRegion("Greenhorn's Top", 0, is_start=lambda options: options.starting_book == 0),
         PeakRegion("Paltry Peak", 1),
         PeakRegion("Old Mill", 2, locations=[
             LocationData("Old Mill: Hat", POYItemLocationType.ARTEFACT, 0)
@@ -807,7 +811,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ]),
     ], enable_requirements=lambda options: options.enable_fundamental, is_book=True),
     POYRegion("Intermediate", entry_requirements={"Intermediate Book": 1}, subregions=[
-        PeakRegion("Porter's Boulder", 20),
+        PeakRegion("Porter's Boulder", 20, is_start=lambda options: options.starting_book == 1),
         PeakRegion("Jotunn's Thumb", 21),
         PeakRegion("Old Skerry", 22, locations=[
             LocationData("Old Skerry: Bird Seed", POYItemLocationType.BIRDSEED, 1),
@@ -826,7 +830,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         PeakRegion("Walker's Pillar", 30, locations=[
             LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
             LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1),
-        ], generate_free_solo=True),
+        ], generate_free_solo=True, is_start=lambda options: options.starting_book == 2),
         PeakRegion("Eldenhorn", 31, locations=[
             LocationData("Eldenhorn: Chalk Box", POYItemLocationType.ARTEFACT, 10),
             LocationData("Eldenhorn: Rope", POYItemLocationType.ROPE, 7),
@@ -851,8 +855,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
     POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Ice Axes": 1, "Expert Book": 1}, subregions=[
         PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
-        ], generate_time_attack=False,
-                   generate_free_solo=True),
+        ], generate_time_attack=False, generate_free_solo=True, is_start=lambda options: options.starting_book == 3),
         PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2},
                    enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
                    generate_free_solo=True),

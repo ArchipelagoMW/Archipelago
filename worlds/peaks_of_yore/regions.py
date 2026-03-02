@@ -1,4 +1,5 @@
 from typing import NamedTuple
+import logging
 
 from BaseClasses import Region, Location
 from .options import *
@@ -17,16 +18,17 @@ class RegionLocationInfo(NamedTuple):
     other_in_pool: list[str]
     total_requirements: dict[str, int]
     entry_requirements: dict[str, int]
+    is_entry: bool
 
     def get_total_location_count(self):
         return (len(self.artefacts_in_pool) + len(self.peaks_in_pool)
                 + len(self.time_attack_in_pool) + len(self.other_in_pool))
 
     def __iadd__(self, other):
-        self.artefacts_in_pool.append(other.artefacts_in_pool)
-        self.peaks_in_pool.append(other.peaks_in_pool)
-        self.time_attack_in_pool.append(other.time_attack_in_pool)
-        self.other_in_pool.append(other.other_in_pool)
+        self.artefacts_in_pool.extend(other.artefacts_in_pool)
+        self.peaks_in_pool.extend(other.peaks_in_pool)
+        self.time_attack_in_pool.extend(other.time_attack_in_pool)
+        self.other_in_pool.extend(other.other_in_pool)
 
         for k,v in other.total_requirements.items():
             if k not in self.total_requirements.keys():
@@ -34,11 +36,22 @@ class RegionLocationInfo(NamedTuple):
             else:
                 self.total_requirements[k] = max(v, self.total_requirements[k])
 
-        self.entry_requirements.update(other.entry_requirements)
+        for k,v in other.entry_requirements.items():
+            if k not in self.entry_requirements.keys():
+                self.entry_requirements[k] = v
+            else:
+                self.entry_requirements[k] = max(v, self.entry_requirements[k])
+
+        return self.set_entry(other.is_entry or self.is_entry)
+
+    def set_entry(self, is_entry: bool):
+        return RegionLocationInfo(self.artefacts_in_pool, self.peaks_in_pool, self.time_attack_in_pool,
+                                  self.other_in_pool, self.total_requirements,
+                                  self.entry_requirements, is_entry)
 
 # IDE was yelling at me and not happy that I called a parameter "options", so have "opts"
 def create_poy_regions(world: World, opts: PeaksOfYoreOptions) -> RegionLocationInfo:
-    result = RegionLocationInfo([], [], [], [], {}, {})
+    result = RegionLocationInfo([], [], [], [], {}, {}, False)
 
     cabin_region = Region("Cabin", world.player, world.multiworld)
     world.multiworld.regions.append(cabin_region)
@@ -54,9 +67,10 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
     """
     Takes a POYRegion, and creates it and its subregions as a subregion of parent_region
     """
-    result = RegionLocationInfo([], [], [], [], {}, {})
+    result = RegionLocationInfo([], [], [], [], {}, {}, False)
     if not region_data.enable_requirements(opts):
         return result
+
     region = Region(region_data.name, world.player, world.multiworld)
     world.multiworld.regions.append(region)
 
@@ -73,8 +87,9 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
         else:
             result.other_in_pool.append(location)
 
+    entry_requirements = dict(region_data.entry_requirements)
+
     if parent_region is not None:
-        entry_requirements = dict(region_data.entry_requirements)
         if (((region_data.is_peak and opts.game_mode == GameMode.option_book_unlock) or
             (region_data.is_book and opts.game_mode == GameMode.option_peak_unlock)) and
             len(entry_requirements) != 0):
@@ -91,4 +106,21 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
 
     for r in region_data.subregions:
         result += recursive_create_region(r, region, world, opts)
+
+    for k, v in entry_requirements.items():
+        if k not in result.total_requirements.keys():
+            result.total_requirements[k] = v
+        else:
+            result.total_requirements[k] = max(result.total_requirements[k], v)
+
+    # if one of the subregions gives entry requirements or this one is start
+    if result.is_entry or region_data.is_start(opts):
+        logging.warning(f"adding {entry_requirements} to entry reqs for {region_data.name}")
+        result = result.set_entry(True)
+        for k, v in entry_requirements.items():
+            if k not in result.entry_requirements.keys():
+                result.entry_requirements[k] = v
+            else:
+                result.entry_requirements[k] = max(v,result.entry_requirements[k])
+
     return result

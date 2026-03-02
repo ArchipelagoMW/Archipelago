@@ -127,7 +127,8 @@ class PeaksOfWorld(World):
     def create_items(self) -> None:
         remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
         total_location_count = remaining_items
-
+        logging.warning(f"all required items: {self.checks_in_pool.total_requirements}")
+        logging.warning(f"all entry items: {self.checks_in_pool.entry_requirements}")
         local_itempool: list[Item] = []
 
         for item in pool2:
@@ -149,8 +150,10 @@ class PeaksOfWorld(World):
 
             if item.name in self.checks_in_pool.entry_requirements.keys():
                 starter_amount = self.checks_in_pool.entry_requirements[item.name]
+                logging.warning(f"item {item.name} has {starter_amount} starter items")
 
-            if amount > item.max_count:
+            amount = max(required_amount, starter_amount, amount)
+            if amount > item.max_count > 0:
                 raise OptionError(f"something has gone very wrong, we somehow tried adding {amount} of {item.name}")
             for i in range(amount):
                 if starter_amount > 0:
@@ -158,21 +161,14 @@ class PeaksOfWorld(World):
                     starter_amount -= 1
                     required_amount -= 1
                 elif required_amount > 0:
-                    self.multiworld.push_precollected(self.create_item_prog(item.name))
+                    local_itempool.append(self.create_item_prog(item.name))
                     required_amount -= 1
                 else:
-                    self.multiworld.push_precollected(self.create_item(item.name))
+                    local_itempool.append(self.create_item_prog(item.name))
 
-        for item in all_items:
-            if item.is_enabled(self.options):
-                if item.is_starter_item(self.options):
-                    logging.debug(f"item {item.name} is starter for player {self.player_name}")
-                    self.multiworld.push_precollected(self.create_item(item.name))
-                else:
-                    local_itempool.append(self.create_item(item.name))
-                    if item.is_early(self.options):
-                        logging.debug(f"item {item.name} is early for player {self.player_name}")
-                        self.multiworld.early_items[self.player][item.name] = 1
+        logging.warning(f"starter items: {self.multiworld.precollected_items}")
+        logging.warning(f"items: {local_itempool}")
+
         total_itempool: list[Item] = list(local_itempool)
         if len(local_itempool) > remaining_items:
             self.random.shuffle(local_itempool)  #
