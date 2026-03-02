@@ -76,7 +76,7 @@ class AquariaWorld(World):
     item_name_groups = {
         "Damage": {ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM,
                    ItemNames.LI_AND_LI_SONG, ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA,
-                   ItemNames.BABY_BLASTER},
+                   ItemNames.BABY_BLASTER, ItemNames.URCHIN_COSTUME},
         "Light": {ItemNames.SUN_FORM, ItemNames.BABY_DUMBO}
     }
     """Grouping item make it easier to find them"""
