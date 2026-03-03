@@ -4,7 +4,7 @@ from enum import IntEnum
 from typing import Callable, NamedTuple
 
 from .options import PeaksOfYoreOptions
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Item, Location
 
 peak_offset: int = 1
 rope_offset: int = 1000
@@ -20,6 +20,14 @@ time_attack_holds_offset: int = 10000
 
 # To whoever is reviewing this, just know that I pray for you
 # I basically rewrote this entire file from scratch, so don't go looking at the differences
+
+class PeaksOfYoreItem(Item):
+    game = "Peaks of Yore"
+
+class PeaksOfYoreLocation(Location):
+    game = "Peaks of Yore"
+
+
 
 class POYItemLocationType(IntEnum):
     PEAK = 1
@@ -87,12 +95,34 @@ class ItemData:
         self.is_early = is_early
         self.is_enabled = is_enabled
 
-class LocationData(NamedTuple):
+class LocationData:
     name: str
     type: POYItemLocationType
     id: int
+    requirements: dict[str, int]
+    enable_override: Callable[[PeaksOfYoreOptions], bool]
+    is_event: bool
+    has_override: bool
 
-    def get_id(self):
+    def __init__(self, name: str, type: POYItemLocationType, loc_id: int, requirements=None,
+                 enable_override: Callable[[PeaksOfYoreOptions], bool] = None, is_event: bool = False):
+        if requirements is None:
+            requirements = {}
+        if enable_override is None:
+            self.has_override = False
+            enable_override = lambda opts: True
+        else:
+            self.has_override = True
+        self.name = name
+        self.type = type
+        self.id = loc_id
+        self.requirements = requirements
+        self.enable_override = enable_override
+        self.is_event = is_event
+
+    def get_id(self) -> int | None:
+        if self.is_event:
+            return None
         return self.id + self.type
 
 class POYRegion:
@@ -111,7 +141,8 @@ class POYRegion:
     is_peak: bool
     is_book: bool
 
-    def __init__(self, name: str, entry_requirements=None, subregions=None, locations=None,
+    def __init__(self, name: str, entry_requirements: dict[str, int]=None, subregions: list[POYRegion]=None,
+                 locations: list[LocationData]=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True, is_book: bool = False,
                  is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False):
         if subregions is None:
@@ -174,6 +205,17 @@ class PeakRegion(POYRegion):
     def prepare_peak_region(self):
         self.entry_requirements.update({self.name: 1})
         self.locations.append(LocationData(self.name, POYItemLocationType.PEAK, self.peak_id))
+
+        for location in self.locations.copy():
+            if location.has_override or len(location.requirements) > 0:
+                # the usage of has_override could be moved to regions.py, but this is kinda easier, and that would allow
+                # for creation of empty regions
+                self.locations.remove(location)
+                # move the location to a subregion so it's access requirements can be fulfilled :)
+                self.subregions.append(POYRegion(self.name + ": " + location.name.split(": ")[-1],
+                                                 location.requirements, locations=[location],
+                                                 enable_requirements=location.enable_override))
+
         if self.generate_free_solo:
             self.subregions.append(POYRegion(
                 self.name + " Free Solo", locations=[
@@ -184,7 +226,8 @@ class PeakRegion(POYRegion):
         if self.generate_time_attack:
             entry_requirements = {"Pocketwatch": 1}
             if self.generate_free_solo:
-                entry_requirements.update({"Progressive Crampons": 1})
+                entry_requirements.update({"Progressive Crampons": 1}) # peaks that can be free soloed are generally
+                # difficult enough to warrant this
             self.subregions.append(POYRegion(
                 self.name + " Time Attack", entry_requirements=entry_requirements,
                 locations=[
@@ -214,7 +257,7 @@ all_items: list[ItemData] = [
              is_early=lambda options: options.rope_unlock_mode == 1),
     ItemData("Coffee Unlock", 9, ItemClassification.useful, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_coffee),
-    ItemData("Oil Lamp", 10, ItemClassification.progression, POYItemLocationType.TOOL,
+    ItemData("Oil Lamp", 10, ItemClassification.useful, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_oil_lamp),
     ItemData("Left Hand", 11, ItemClassification.progression, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_hands in (0, 1),
@@ -222,8 +265,7 @@ all_items: list[ItemData] = [
     ItemData("Right Hand", 12, ItemClassification.progression, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_hands in (0, 2),
              is_early=lambda options: options.early_hands),
-    ItemData("Ice Axes", 13, ItemClassification.progression, POYItemLocationType.TOOL,
-             min_count=0),
+    ItemData("Ice Axes", 13, ItemClassification.useful, POYItemLocationType.TOOL),
 
     # Books
     ItemData("Fundamentals Book", 0, ItemClassification.progression, POYItemLocationType.BOOK,
@@ -343,7 +385,7 @@ all_items: list[ItemData] = [
     ItemData("Eldenhorn: Bird Seed", 3, ItemClassification.useful, POYItemLocationType.BIRDSEED),
 
     # Extra items
-    ItemData("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+    ItemData("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=28, max_count=99999999),
     ItemData("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
     ItemData("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
     ItemData("Extra Seed", 3, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
@@ -387,6 +429,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ]),
         PeakRegion("Hangman's Leap", 11, locations=[
             LocationData("Hangman's Leap: Rope", POYItemLocationType.ROPE, 5),
+            LocationData("Walker Interaction Event", POYItemLocationType.EXTRA, 0, is_event=True),
         ]),
         PeakRegion("Old Langr", 12, locations=[
             LocationData("Old Langr: Coffee Box", POYItemLocationType.ARTEFACT, 7),
@@ -437,7 +480,9 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
     POYRegion("Advanced", entry_requirements={"Advanced Book": 1}, subregions=[
         PeakRegion("Walker's Pillar", 30, locations=[
             LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
-            LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1),
+            LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1,
+                         requirements={"Walker Interaction Event": 1},
+                         enable_override= lambda options: options.enable_fundamental),
         ], generate_free_solo=True, is_start=lambda options: options.starting_book == 2),
         PeakRegion("Eldenhorn", 31, locations=[
             LocationData("Eldenhorn: Chalk Box", POYItemLocationType.ARTEFACT, 10),

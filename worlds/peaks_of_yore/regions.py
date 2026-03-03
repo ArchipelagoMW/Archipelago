@@ -6,11 +6,6 @@ from .options import *
 from worlds.AutoWorld import World
 from .data import *
 
-
-class PeaksOfYoreLocation(Location):
-    game = "Peaks of Yore"
-
-
 class RegionLocationInfo(NamedTuple):
     artefacts_in_pool: list[str]
     peaks_in_pool: list[str]
@@ -75,6 +70,15 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
     world.multiworld.regions.append(region)
 
     locations = region_data.get_locations_dict()
+    events: list[str] = []
+
+    for name, id in locations.copy().items():
+        if id is None:
+            locations.pop(name)
+            events.append(name)
+
+    for name in events:
+        region.add_event(name, location_type=PeaksOfYoreLocation, item_type=PeaksOfYoreItem)
     region.add_locations(locations, PeaksOfYoreLocation)
 
     for location, address in locations.items():

@@ -10,11 +10,6 @@ from .data import *
 
 from .regions import create_poy_regions, RegionLocationInfo
 
-
-class PeaksOfYoreItem(Item):
-    game = "Peaks of Yore"
-
-
 class PeaksOfWeb(WebWorld):
     rich_text_options_doc = True
     theme = "stone"
@@ -32,7 +27,7 @@ class PeaksOfWeb(WebWorld):
 
 def get_error_item_count(item_pool: list[Item], location_info: RegionLocationInfo) -> str:
     prog_list: list[Item] = [i for i in item_pool if i.classification == ItemClassification.progression]
-    msg = "Error: not enough locations to place progression items:\n"
+    msg = "Not enough locations to place progression items:\n"
     msg += f"Found {len(prog_list)} progression items:\n"
 
     newline = " \n"
@@ -104,10 +99,18 @@ class PeaksOfWorld(World):
         if self.options.game_mode == GameMode.option_peak_unlock:
             if self.options.early_hands:
                 if self.options.start_with_hands != StartingHands.option_both:
-                    raise OptionError("peak unlock with early hands is too restrictive of a start")
+                    raise OptionError("peak unlock with early hands is a restrictive start and may not work")
 
             if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
-                raise OptionError("peak unlock with early ropes is too restrictive of a start")
+                raise OptionError("peak unlock with early ropes is a restrictive start and may not work")
+
+        # some hard-coded cases:
+        if self.options.start_with_hands != StartingHands.option_both and self.options.early_hands and \
+                self.options.starting_book == StartingBook.option_advanced and \
+                (self.options.rope_unlock_mode == RopeUnlockMode.option_early) and \
+                (self.options.game_mode == GameMode.option_peak_unlock or self.options.disable_solemn_tempest):
+            raise OptionError("this is a too restrictive start and will not work, consider starting with both hands, "
+                              "or changing the rope unlock mode or hand unlock to something else than early")
 
         if not enabled_books:
             logging.error(f"Player {self.player_name} has not selected any books!")
@@ -146,7 +149,8 @@ class PeaksOfWorld(World):
                 self.multiworld.early_items[self.player][item.name] = amount
 
             if item.name in self.checks_in_pool.total_requirements.keys():
-                required_amount = max(amount, self.checks_in_pool.total_requirements[item.name])
+                required_amount = self.checks_in_pool.total_requirements[item.name]
+                logging.debug(f"item {item.name} requires {required_amount} instance in pool")
 
             if item.name in self.checks_in_pool.entry_requirements.keys():
                 starter_amount = self.checks_in_pool.entry_requirements[item.name]
@@ -157,30 +161,47 @@ class PeaksOfWorld(World):
                 raise OptionError(f"something has gone very wrong, we somehow tried adding {amount} of {item.name}")
             for i in range(amount):
                 if starter_amount > 0:
-                    self.multiworld.push_precollected(self.create_item(item.name))
+                    self.multiworld.push_precollected(self.create_item_prog(item.name))
                     starter_amount -= 1
                     required_amount -= 1
                 elif required_amount > 0:
                     local_itempool.append(self.create_item_prog(item.name))
                     required_amount -= 1
                 else:
-                    local_itempool.append(self.create_item_prog(item.name))
+                    local_itempool.append(self.create_item(item.name))
 
         logging.debug(f"starter items: {self.multiworld.precollected_items}")
         logging.debug(f"items: {local_itempool}")
 
         total_itempool: list[Item] = list(local_itempool)
-        if len(local_itempool) > remaining_items:
-            self.random.shuffle(local_itempool)  #
-            i = 0
-            while len(local_itempool) > remaining_items:  # trim down local item pool to match unfilled locations
-                if i > remaining_items:
-                    raise OptionError(get_error_item_count(total_itempool, self.checks_in_pool))
 
-                if local_itempool[i].classification == ItemClassification.filler:
-                    local_itempool.pop(i)  # removing random non-progression items until itempool isn't overflowing
-                else:
-                    i += 1
+
+        if len(local_itempool) > remaining_items:
+            self.random.shuffle(local_itempool)
+            difference = len(local_itempool) - remaining_items
+            copy = list(local_itempool)
+            for item in copy:
+                if difference == 0:
+                    break
+                if item.classification == ItemClassification.filler:
+                    local_itempool.remove(item)
+                    difference -= 1
+
+
+            if difference > 0:
+                logging.warning(f"Item pool too big, removing useful items :(")
+                copy = list(local_itempool)
+                for item in copy:
+                    if difference == 0:
+                        break
+                    if item.classification != ItemClassification.progression:
+                        local_itempool.remove(item)
+                        difference -= 1
+
+            if difference > 0:
+                logging.debug(f"final pool: {local_itempool}")
+                logging.debug(f"location count: {remaining_items}")
+                raise OptionError(get_error_item_count(total_itempool, self.checks_in_pool))
 
         if len(local_itempool) < remaining_items:  # fill up local item pool to match unfilled locations
             local_itempool += [self.create_filler() for _ in range(remaining_items - len(local_itempool))]
