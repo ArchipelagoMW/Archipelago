@@ -157,7 +157,16 @@ class PokepelagoWorld(World):
         total_locations = sum(
             1 for loc in self.multiworld.get_locations(self.player) if loc.address is not None
         )
-        trap_fillers = ["Small Shuffle Trap", "Big Shuffle Trap", "Derpy Mon Trap", "Release Trap"]
+        trap_key_to_name = {
+            "small_shuffle": "Small Shuffle Trap",
+            "big_shuffle":   "Big Shuffle Trap",
+            "derpy_mon":     "Derpy Mon Trap",
+            "release":       "Release Trap",
+        }
+        trap_names = list(trap_key_to_name.values())
+        raw_trap_weights = [self.options.trap_weights.value.get(k, 0) for k in trap_key_to_name]
+        if sum(raw_trap_weights) == 0:
+            raw_trap_weights = [1] * len(trap_names)
         trap_chance = self.options.trap_chance.value
 
         category_names = list(FILLER_ITEM_CATEGORIES.keys())
@@ -167,7 +176,7 @@ class PokepelagoWorld(World):
 
         while my_items_in_pool < total_locations:
             if self.random.randint(1, 100) <= trap_chance:
-                filler_name = self.random.choice(trap_fillers)
+                filler_name = self.random.choices(trap_names, weights=raw_trap_weights, k=1)[0]
             else:
                 chosen_category = self.random.choices(category_names, weights=category_weights, k=1)[0]
                 filler_name = self.random.choice(FILLER_ITEM_CATEGORIES[chosen_category])

@@ -170,6 +170,29 @@ class FillerWeights(OptionCounter):
         return super().from_any(data)
 
 
+class TrapWeights(OptionCounter):
+    """Controls the relative weight of each trap type when a trap slot is filled.
+    Higher values mean that trap appears more often. Set a trap to 0 to disable it entirely.
+    The overall chance of a trap appearing is controlled by 'Trap Chance'.
+    Traps: small_shuffle, big_shuffle, derpy_mon, release."""
+    display_name = "Trap Weights"
+    valid_keys = frozenset({"small_shuffle", "big_shuffle", "derpy_mon", "release"})
+    default = {
+        "small_shuffle": 100,
+        "big_shuffle":   100,
+        "derpy_mon":     100,
+        "release":       100,
+    }
+
+    @classmethod
+    def from_any(cls, data):
+        if isinstance(data, dict):
+            merged = dict(cls.default)
+            merged.update(data)
+            return cls(merged)
+        return super().from_any(data)
+
+
 @dataclass
 class PokepelagoOptions(PerGameCommonOptions):
     dexsanity: Dexsanity
@@ -190,4 +213,5 @@ class PokepelagoOptions(PerGameCommonOptions):
     goal_percentage: GoalPercentage
     goal_count: GoalCount
     trap_chance: TrapChance
+    trap_weights: TrapWeights
     filler_weights: FillerWeights
