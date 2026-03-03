@@ -1,3 +1,10 @@
-# By default, any additional files inside of the world folder will be packaged into the resulting .apworld archive and can then be read by the world. However, if there are any other files that aren't needed in the resulting .apworld, you can automatically prevent the build component from including them by specifying them in a file called .apignore inside the root of the world folder.
+# Files excluded from the .apworld archive.
+# Uses .gitignore syntax — patterns match relative to the worlds/pokepelago/ folder.
 
-# The .apignore file selects files in the same way as the .gitignore format with patterns separated by line describing which files to ignore.
+# Development utilities, test scripts, and data sources
+_dev/
+
+# Compiled Python bytecode
+__pycache__/
+*.pyc
+*.pyo

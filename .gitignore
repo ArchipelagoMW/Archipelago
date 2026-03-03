@@ -67,6 +67,9 @@ Output Logs/
 /custom_worlds
 p.csv
 prev_data.py
+profile_gen.py
+test_fill.py
+worlds/pokepelago/_dev/
 
 
 # stubgen output
@@ -203,3 +206,6 @@ _speedups.html
 Thumbs.db
 [Dd]esktop.ini
 worlds/pokepelago.apworld
+pokepelago.apworld
+package_apworld.py
+releases/pokepelago-v0.3.2.apworld
