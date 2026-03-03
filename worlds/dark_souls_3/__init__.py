@@ -772,7 +772,7 @@ class DarkSouls3World(World):
         for location in self.yhorm_location.locations:
             self._add_location_rule(location, "Storm Ruler")
 
-        self.multiworld.completion_condition[self.player] = lambda state: self._can_get(state, "KFF: Soul of the Lords")
+        self.multiworld.completion_condition[self.player] = lambda state: self._is_complete(state)
 
     def _add_shop_rules(self) -> None:
         """Adds rules for items unlocked in shops."""
@@ -1324,10 +1324,7 @@ class DarkSouls3World(World):
 
     def _is_complete(self, state: CollectionState) -> bool:
         """Whether the given state has achieved the victory condition."""
-        all(
-            state.can_reach_location(next(boss.locations), self.player)
-            for boss in self._goal_bosses()
-        )
+        return all(self._can_get(state, next(iter(boss.locations))) for boss in self._goal_bosses())
 
     def _has_any_scroll(self, state: CollectionState) -> bool:
         """Returns whether the given state has any scroll item."""
