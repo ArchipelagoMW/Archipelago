@@ -5,12 +5,12 @@ manualChecks = false
 local level_mapping = {}
 local thisWorld = "babapelago" -- name of this world
 
-local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_bird", "text_sun", "text_tile", "text_orb", "text_hedge", "text_cliff"}
+local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_bird", "text_sun", "text_tile", "text_orb", "text_hedge", "text_cliff", "text_cake"}
 local special_noun_checks = {"text_text", "text_empty", "text_all", "text_level", "text_group", "text_cursor", "text_image"}
 local verb_checks = {"text_is", "text_has", "text_make", "text_write"}
 local prop_checks = {"text_you", "text_win", "text_stop", "text_push", "text_sink", "text_defeat", "text_hot", "text_melt", "text_move", "text_open", "text_shut", "text_red", "text_blue", "text_float", "text_weak", "text_tele", "text_pull", "text_shift", "text_up", "text_down", "text_left", "text_right", "text_swap", "text_best", "text_fall", "text_more", "text_word", "text_sleep", "text_end", "text_hide", "text_bonus", "text_done"}
 local condition_checks = {"text_on", "text_facing", "text_lonely", "text_near"}
-local letter_checks = {"text_a", "text_ab", "text_b", "text_ba", "text_c", "text_e", "text_g", "text_h", "text_i", "text_l", "text_m", "text_n", "text_o", "text_r", "text_s", "text_t", "text_v", "text_w"}
+local letter_checks = {"text_a", "text_ab", "text_b", "text_ba", "text_c", "text_e", "text_f", "text_g", "text_h", "text_i", "text_l", "text_m", "text_n", "text_o", "text_r", "text_s", "text_t", "text_u", "text_v", "text_w", "text_x"}
 local other_checks = {"text_and", "text_not"}
 local world_key_list = {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key", "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key"}
 local non_word_items = {
@@ -133,7 +133,7 @@ table.insert(mod_hook_functions.effect_always, function()
 end)
 
 -- Handle win checks
-table.insert(mod_hook_functions.level_win, function()
+table.insert(mod_hook_functions.level_win_after, function()
     MF_setfile("level","AP/AP_CHECKS.data")
     local levelname = generaldata.strings[LEVELNAME]
     levelname = capitalize(levelname)
@@ -819,7 +819,7 @@ function auto_gen_level_name_to_id(level_name_to_id)
         -- hardcoded whoa
         if parent == "283level" then
             table.insert(levels, "327level")
-            table.insert(levelExtra, "Secret")
+            table.insert(levelExtra, "Secret 2")
         end
 
         for i, level in ipairs(levels) do
