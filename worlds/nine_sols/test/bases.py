@@ -76,3 +76,7 @@ class NineSolsTestBase(WorldTestBase):
                     f"location '{location}' was not one of the locations being asserted on, "
                     f"but it requires exactly {item_names} to reach, so it should be"
                 )
+
+    def locationsReachableWith(self, item_names: list[str]):
+        state = self.makeStateWith(item_names)
+        return [location for location in self.multiworld.get_locations() if location.can_reach(state)]
