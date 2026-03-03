@@ -567,6 +567,7 @@ class FactorioBobs(World):
         recipe = GameRecipe(self.modpack.recipe_engine, original.name, DefinitionSource.WORLD,
                             self.get_category(new_ingredients, original.category.name), new_ingredients,
                       custom_products, original.energy)
+        recipe.technologies = original.technologies
         return recipe
 
     def set_custom_technologies(self):
@@ -591,6 +592,8 @@ class FactorioBobs(World):
                                                      index//2 + 2 + ingredients_offset.value,
                                                      return_amount*5, pools, index)
                 new_recipe.productivity = True
+                if pack in self.modpack.recipe_engine.recipes:
+                    new_recipe.technologies = self.modpack.recipe_engine.recipes[pack].technologies
                 self.custom_recipes[pack] = new_recipe
 
         original_rocket_part = self.modpack.recipe_engine.recipes["rocket-part"]
