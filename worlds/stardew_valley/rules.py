@@ -93,6 +93,10 @@ class StardewRuleCollector:
             logger.error(f"""Failed to evaluate indirect connection in: {explain(rule, CollectionState(self.multiworld))}""")
             raise ex
 
+    def set_many_entrances_rules(self, entrance_rules: dict[str, StardewRule]) -> None:
+        for entrance, rule in entrance_rules.items():
+            self.set_entrance_rule(entrance, rule)
+
     def set_island_entrance_rule(self, entrance_name: str, rule: StardewRule) -> None:
         if not self.content.is_enabled(ginger_island_content_pack):
             return
@@ -311,23 +315,45 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
 
     rule_collector.set_entrance_rule(Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
     rule_collector.set_entrance_rule(Entrance.beach_forest_shortcut, logic.received("Forest To Beach Shortcut"))
-    rule_collector.set_many_island_entrances_rules(
-        {
-            entr: logic.received("Mountain Shortcuts")
-            for entr in [
-                LogicEntrance.mountain_shortcut_fence_entrance,
-                LogicEntrance.mountain_shortcut_fence_exit,
-                LogicEntrance.mountain_shortcut_walkway_entrance,
-                LogicEntrance.mountain_shortcut_walkway_exit,
-                LogicEntrance.jojamart_shortcut_cave_entrance,
-                LogicEntrance.jojamart_shortcut_cave_exit,
-                LogicEntrance.town_shortcut_fence_entrance,
-                LogicEntrance.town_shortcut_fence_exit,
-            ]
-        }
-    )
     rule_collector.set_entrance_rule(Entrance.town_tidepools_shortcut, logic.received("Town To Tide Pools Shortcut"))
     rule_collector.set_entrance_rule(Entrance.tidepools_town_shortcut, logic.received("Town To Tide Pools Shortcut"))
+    rule_collector.set_entrance_rule(Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
+    rule_collector.set_entrance_rule(Entrance.backwoods_tunnel_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
+    rule_collector.set_entrance_rule(
+        Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Shortcuts")
+    )
+    rule_collector.set_entrance_rule(
+        Entrance.outside_adventure_guild_to_mountain_lake_shortcut, logic.received("Mountain Shortcuts")
+    )
+    if world_options.include_endgame_locations:
+        rule_collector.set_many_entrances_rules(
+            {
+                entr: logic.received("Mountain Shortcuts")
+                for entr in [
+                    LogicEntrance.mountain_shortcut_fence_entrance,
+                    LogicEntrance.mountain_shortcut_fence_exit,
+                    LogicEntrance.mountain_shortcut_walkway_entrance,
+                    LogicEntrance.mountain_shortcut_walkway_exit,
+                    LogicEntrance.jojamart_shortcut_cave_entrance,
+                    LogicEntrance.jojamart_shortcut_cave_exit,
+                    LogicEntrance.town_shortcut_fence_entrance,
+                    LogicEntrance.town_shortcut_fence_exit,
+                ]
+            }
+        )
+    else:
+        rule_collector.set_many_entrances_rules(
+            {
+                entr: logic.received("Mountain Shortcuts")
+                for entr in [
+                    Entrance.jojamart_mountain_shortcut,
+                    Entrance.mountain_jojamart_shortcut,
+                    Entrance.town_mountain_shortcut,
+                    Entrance.mountain_town_shortcut,
+                ]
+            }
+        )
+
     rule_collector.set_entrance_rule(LogicEntrance.feed_trash_bear, logic.received("Trash Bear Arrival"))
     rule_collector.set_entrance_rule(Entrance.enter_shorts_maze, logic.has(Craftable.staircase))
 
@@ -357,14 +383,6 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     )
     rule_collector.set_entrance_rule(
         Entrance.minecart_town_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
-    )
-    rule_collector.set_entrance_rule(Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
-    rule_collector.set_entrance_rule(Entrance.backwoods_tunnel_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
-    rule_collector.set_entrance_rule(
-        Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Shortcuts")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.outside_adventure_guild_to_mountain_lake_shortcut, logic.received("Mountain Shortcuts")
     )
 
 

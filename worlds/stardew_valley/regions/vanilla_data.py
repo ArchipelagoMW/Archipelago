@@ -118,7 +118,6 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_outside_adventure_guild,  # can't randomize
             Entrance.mountain_lake_to_outside_adventure_guild_shortcut,  # can't randomize
             LogicEntrance.mountain_shortcut_fence_entrance,
-            LogicEntrance.mountain_shortcut_walkway_entrance,
         ),
     ),
     RegionData(
@@ -129,6 +128,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_adventurer_guild,
             Entrance.outside_adventure_guild_to_mountain_lake_shortcut,
             Entrance.outside_adventure_guild_to_mountain,
+            LogicEntrance.mountain_shortcut_walkway_entrance,
         ),
     ),
     RegionData(RegionName.maru_room, (Entrance.maru_room_to_carpenter_shop, Entrance.maru_room_to_mountain)),
