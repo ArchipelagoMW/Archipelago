@@ -17,7 +17,7 @@ from worlds.generic import Rules
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
-from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
+from .FactorioRules import InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule, Rule
 from .RandomGameItems import RandomGameItems
 from .RecipeEngine import GameRecipe, GameItem, DefinitionSource, TechCatalyst, Category, OneItemCatalyst
 from .Shapes import get_shapes
@@ -357,7 +357,7 @@ class FactorioBobs(World):
                                                                            victory_tech_names)
         self.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
-    def get_science_pack_rule(self, complexity: int) -> FactorioRules.Rule:
+    def get_science_pack_rule(self, complexity: int) -> Rule:
         science_pack = self.modpack.ordered_science_packs[complexity-1]
         # science_pack_item: GameItem = self.get_internal_item(science_pack)
         # if complexity in self.additional_logic:
