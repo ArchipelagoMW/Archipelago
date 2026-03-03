@@ -17,7 +17,6 @@ from kivy.factory import Factory
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.behaviors.button import ButtonBehavior
-from kivy.uix.label import Label
 from kivy.uix.stacklayout import StackLayout
 from kivy.utils import escape_markup
 from kivymd.uix.anchorlayout import MDAnchorLayout
@@ -57,8 +56,8 @@ class HoverableDropdownItem(HoverBehavior, MDDropdownTextItem):
 
     def on_enter(self, *args):
         app = ThemedApp.get_running_app()
-        if app and hasattr(app, "theme_cls") and hasattr(self, "md_bg_color"):
-            self.md_bg_color = getattr(app.theme_cls, THEME_SURFACE_CONTAINER_LOW)
+        if app and hasattr(app, "theme_surface_low") and hasattr(self, "md_bg_color"):
+            self.md_bg_color = app.theme_surface_low()
             self.theme_bg_color = "Custom"
 
     def on_leave(self, *args):
@@ -117,6 +116,39 @@ def check_random(value: typing.Any):
     return value
 
 
+def _is_option_counter(option: typing.Type[Option]) -> bool:
+    return issubclass(option, OptionCounter)
+
+
+def _is_option_list(option: typing.Type[Option]) -> bool:
+    return issubclass(option, OptionList)
+
+
+def _is_option_set_list_counter(option: typing.Type[Option]) -> bool:
+    return any(issubclass(option, cls) for cls in (OptionSet, OptionList, OptionCounter))
+
+
+def _set_button_display_text(button: Widget, text: str) -> None:
+    """Set the display text on a button that has an MDButtonText child with id 'text'."""
+    if getattr(button, "text", None) is not None:
+        button.text.text = text
+
+
+def _dropdown_items(
+    text_release_pairs: typing.Iterable[tuple[str, typing.Callable[[], None]]],
+    viewclass: str = "HoverableDropdownItem",
+    height: float | None = None,
+) -> list[dict]:
+    """Build a list of item dicts for FixedPositionMDDropdownMenu / MDDropdownMenu."""
+    result = []
+    for text, on_release in text_release_pairs:
+        item: dict = {"text": text, "on_release": on_release, "viewclass": viewclass}
+        if height is not None:
+            item["height"] = height
+        result.append(item)
+    return result
+
+
 class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTrailingIcon):
     pass
 
@@ -136,6 +168,14 @@ class WorldRowStarButton(HoverableMDIconButton):
 
 class OptionRow(MDBoxLayout):
     """Option row layout: label row (with optional random toggle) and option widget container. Filled in create_option."""
+
+
+class OptionsGroupContent(MDExpansionPanelContent):
+    """Expansion panel content for option groups; styling (padding, spacing, theme) in KV."""
+
+
+class OptionsDropdownMenu(MDDropdownMenu):
+    """Options menu (Reset to defaults, etc.); appearance in KV."""
 
 
 class VisualRange(MDBoxLayout):
@@ -252,7 +292,7 @@ class VisualListSetCounter(MDDialog):
                 show_result_snack("Item must be a valid key for this option.", "warning")
                 return
 
-        if not issubclass(self.option, OptionList):
+        if not _is_option_list(self.option):
             if any(self.input.text == child.text.text for child in self.scrollbox.layout.children):
                 show_result_snack("This value is already in the set.", "warning")
                 return
@@ -266,7 +306,7 @@ class VisualListSetCounter(MDDialog):
 
     def add_set_item(self, key: str, value: int | None = None):
         text = MDListItemSupportingText(text=key, id="value")
-        if issubclass(self.option, OptionCounter):
+        if _is_option_counter(self.option):
             value_txt = CounterItemValue(text=str(value) if value else "1")
             item = MDListItem(text,
                               value_txt,
@@ -315,6 +355,12 @@ WORLD_PILL_MIN_WIDTH_DP = 120
 # Font size used for measuring game name width (match button text).
 GAME_PILL_FONT_SIZE = 14
 
+# Spacing/padding used in world row, dialogs, expansion box, snackbar stack
+SPACING_SMALL = dp(3)
+SPACING_MED = dp(5)
+SPACING_SNACKBAR = dp(8)
+PADDING_SNACKBAR_BOTTOM = dp(24)
+
 
 def _measure_text_width(text: str, font_size: int = GAME_PILL_FONT_SIZE) -> float:
     """Return the rendered width in pixels of text with the given font size (for pill labels)."""
@@ -340,7 +386,7 @@ class OptionsCreator(ThemedApp):
     current_game: str
     options: typing.Dict[str, typing.Any]
     favorite_worlds: list[str]
-    options_dropdown_menu: MDDropdownMenu | None = None
+    options_dropdown_menu: OptionsDropdownMenu | None = None
 
     def __init__(self):
         """Initialize the app title, icon, option state, and favorites."""
@@ -373,6 +419,14 @@ class OptionsCreator(ThemedApp):
     def _save_favorites(self) -> None:
         """Persist favorite world names to persistent storage."""
         Utils.persistent_store("OptionsCreator", "favorites", self.favorite_worlds)
+
+    def theme_surface_low(self):
+        """Return the theme's surface container low color (for dropdowns, list backgrounds)."""
+        return getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOW)
+
+    def theme_surface_lowest(self):
+        """Return the theme's surface container lowest color (for panels, menus)."""
+        return getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOWEST)
 
     def _get_sorted_worlds(self) -> list[tuple[str, typing.Type[World]]]:
         """Return (world_name, world_cls) sorted by favorites first, then lowercase alphabetical."""
@@ -410,8 +464,8 @@ class OptionsCreator(ThemedApp):
     def _make_world_row(self, world_name: str, world_cls: typing.Type[World]) -> MDBoxLayout:
         """Build a horizontal row widget: pill ~1/3 window width (world name, middle-truncated) + star button."""
         star_width = dp(20)
-        row_spacing = dp(5)  # gap between world button and star (gray "border")
-        row_padding = dp(3)
+        row_spacing = SPACING_MED  # gap between world button and star (gray "border")
+        row_padding = SPACING_SMALL
         inner_height = dp(36)
         pill_radius = inner_height / 2  # match container's left rounded edge
         # Pill width ~1/3 of window, then 10% thinner; fallback to minimum when window not sized yet
@@ -618,7 +672,7 @@ class OptionsCreator(ThemedApp):
         """Convert Option instance from from_any() to the value stored in self.options."""
         if issubclass(option, (OptionSet, OptionList)):
             return sorted(opt_instance.value)
-        if issubclass(option, OptionCounter):
+        if _is_option_counter(option):
             return dict(opt_instance.value)
         if issubclass(option, Toggle):
             return bool(opt_instance.value)
@@ -762,24 +816,17 @@ class OptionsCreator(ThemedApp):
                 # but this is much cheaper
                 self.options[name] = int(range_box.range.slider.value)
                 range_box.range.tag.text = str(int(range_box.range.slider.value))
-                set_button_text(range_box.choice, "Custom")
+                _set_button_display_text(range_box.choice, "Custom")
                 self._save_options_cache()
-
-        def set_button_text(button: MDButton, text: str):
-            button.text.text = text
 
         def set_value(text: str, range_box: VisualNamedRange):
             range_box.range.slider.value = min(max(option.special_range_names[text.lower()], option.range_start),
                                                option.range_end)
             range_box.range.tag.text = str(int(range_box.range.slider.value))
-            set_button_text(range_box.choice, text)
+            _set_button_display_text(range_box.choice, text)
             self.options[name] = text.lower()
             range_box.range.slider.dropdown.dismiss()
             self._save_options_cache()
-
-        def open_dropdown(button):
-            # for some reason this fixes an issue causing some to not open
-            box.range.slider.dropdown.open()
 
         range_initial: typing.Any = None
         if initial_value is not None:
@@ -794,12 +841,12 @@ class OptionsCreator(ThemedApp):
                 box.range.slider.value = min(max(option.special_range_names[initial_value.lower()],
                                                 option.range_start), option.range_end)
                 box.range.tag.text = str(int(box.range.slider.value))
-                set_button_text(box.choice, initial_value.title() if isinstance(initial_value, str) else initial_value)
+                _set_button_display_text(box.choice, initial_value.title() if isinstance(initial_value, str) else initial_value)
                 self.options[name] = initial_value.lower()
             elif isinstance(initial_value, int):
                 box.range.slider.value = min(max(initial_value, option.range_start), option.range_end)
                 box.range.tag.text = str(int(box.range.slider.value))
-                set_button_text(box.choice, "Custom")
+                _set_button_display_text(box.choice, "Custom")
                 self.options[name] = initial_value
         elif option.default in option.special_range_names:
             # value can get mismatched in this case
@@ -810,16 +857,13 @@ class OptionsCreator(ThemedApp):
         else:
             self.options[name] = option.default
         box.range.slider.bind(on_touch_move=lambda _, _2: set_to_custom(box))
-        items = [
-            {
-                "text": choice.title(),
-                "on_release": lambda text=choice.title(): set_value(text, box),
-                "viewclass": "HoverableDropdownItem",
-            }
-            for choice in option.special_range_names
-        ]
+        items = _dropdown_items(
+            [(choice.title(), lambda text=choice.title(): set_value(text, box))
+             for choice in option.special_range_names]
+        )
         box.range.slider.dropdown = FixedPositionMDDropdownMenu(caller=box.choice, items=items)
-        box.choice.bind(on_release=open_dropdown)
+        # Binding via lambda fixes an issue where some dropdowns would not open
+        box.choice.bind(on_release=lambda b, bx=box: bx.range.slider.dropdown.open())
         return box
 
     def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str,
@@ -841,36 +885,27 @@ class OptionsCreator(ThemedApp):
 
     def create_choice(self, option: typing.Type[Choice], name: str, initial_value: typing.Any = None):
         """Build a choice button with dropdown for a Choice option and bind selection to self.options[name]."""
-        def set_button_text(button: VisualChoice, text: str):
-            button.text.text = text
-
         def set_value(text, value):
-            set_button_text(main_button, text)
+            _set_button_display_text(main_button, text)
             self.options[name] = value
             dropdown.dismiss()
             self._save_options_cache()
 
-        def open_dropdown(button):
-            # for some reason this fixes an issue causing some to not open
-            dropdown.open()
-
         default_string = isinstance(option.default, str)
         main_button = VisualChoice(option=option, name=name)
-        main_button.bind(on_release=open_dropdown)
+        # Binding via lambda fixes an issue where some dropdowns would not open
+        main_button.bind(on_release=lambda b: dropdown.open())
 
-        items = [
-            {
-                "text": option.get_option_name(choice),
-                "on_release": lambda val=choice: set_value(option.get_option_name(val), option.name_lookup[val]),
-                "viewclass": "HoverableDropdownItem",
-            }
-            for choice in option.name_lookup
-        ]
+        items = _dropdown_items(
+            [(option.get_option_name(choice),
+              lambda val=choice: set_value(option.get_option_name(val), option.name_lookup[val]))
+             for choice in option.name_lookup]
+        )
         dropdown = FixedPositionMDDropdownMenu(caller=main_button, items=items)
         if initial_value is not None:
             self.options[name] = initial_value
             display = option.get_option_name(initial_value) if initial_value in option.name_lookup else str(initial_value)
-            set_button_text(main_button, display)
+            _set_button_display_text(main_button, display)
         else:
             self.options[name] = option.name_lookup[option.default] if not default_string else option.default
         return main_button
@@ -929,7 +964,7 @@ class OptionsCreator(ThemedApp):
 
         def apply_changes(button):
             self.options[name].clear()
-            if issubclass(option, OptionCounter):
+            if _is_option_counter(option):
                 for list_item in dialog.scrollbox.layout.children:
                     self.options[name][getattr(list_item.text, "text")] = int(getattr(list_item.value, "text"))
             else:
@@ -939,21 +974,20 @@ class OptionsCreator(ThemedApp):
             self._save_options_cache()
 
         dialog = VisualListSetCounter(option=option, name=name, valid_keys=valid_keys)
-        dialog.ids.container.spacing = dp(30)
         dialog.scrollbox.layout.theme_bg_color = "Custom"
-        dialog.scrollbox.layout.md_bg_color = getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOW)
-        dialog.scrollbox.layout.spacing = dp(5)
-        dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
+        dialog.scrollbox.layout.md_bg_color = self.theme_surface_low()
+        dialog.scrollbox.layout.spacing = SPACING_MED
+        dialog.scrollbox.layout.padding = [0, SPACING_MED, 0, 0]
 
         if name not in self.options:
             # convert from non-mutable to mutable
             # We use list syntax even for sets, set behavior is enforced through GUI
-            if issubclass(option, OptionCounter):
+            if _is_option_counter(option):
                 self.options[name] = deepcopy(option.default)
             else:
                 self.options[name] = sorted(option.default)
 
-        if issubclass(option, OptionCounter):
+        if _is_option_counter(option):
             for value in sorted(self.options[name]):
                 dialog.add_set_item(value, self.options[name].get(value, None))
         else:
@@ -968,12 +1002,12 @@ class OptionsCreator(ThemedApp):
                                        initial_value: typing.Any = None):
         """Build an 'Edit' button that opens the set/list/counter popup for this option."""
         if initial_value is not None:
-            if issubclass(option, OptionCounter):
+            if _is_option_counter(option):
                 self.options[name] = deepcopy(initial_value)
             else:
                 self.options[name] = sorted(initial_value) if isinstance(initial_value, (list, set)) else list(initial_value)
         else:
-            if issubclass(option, OptionCounter):
+            if _is_option_counter(option):
                 self.options[name] = deepcopy(option.default)
             else:
                 default = option.default
@@ -1002,7 +1036,7 @@ class OptionsCreator(ThemedApp):
             option_base.ids.option_widget_container.add_widget(self.create_choice(option, name, initial_value))
         elif issubclass(option, FreeText):
             option_base.ids.option_widget_container.add_widget(self.create_free_text(option, name, initial_value))
-        elif any(issubclass(option, cls) for cls in (OptionSet, OptionList, OptionCounter)):
+        elif _is_option_set_list_counter(option):
             option_base.ids.option_widget_container.add_widget(
                 self.create_option_set_list_counter(option, name, world, initial_value))
         else:
@@ -1112,7 +1146,7 @@ class OptionsCreator(ThemedApp):
 
             expansion_box = ScrollBox()
             expansion_box.layout.orientation = "vertical"
-            expansion_box.layout.spacing = dp(3)
+            expansion_box.layout.spacing = SPACING_SMALL
             expansion_box.scroll_type = ["bars"]  # vertical scroll bars only
             expansion_box.do_scroll_x = False  # ScrollView defaults do_scroll_x True
             group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
@@ -1134,14 +1168,11 @@ class OptionsCreator(ThemedApp):
                                                                                            item=group_item:
                                                                                            self.tap_expansion_chevron(
                                                                                                item, x)),
-                                                                 md_bg_color=getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOWEST),
+                                                                 md_bg_color=self.theme_surface_lowest(),
                                                                  theme_bg_color="Custom",
                                                                  on_release=lambda x, item=group_item:
                                                                  self.tap_expansion_chevron(item, x)))
-                group_content = MDExpansionPanelContent(orientation="vertical", theme_bg_color="Custom",
-                                                        md_bg_color=getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOWEST),
-                                                        padding=[dp(12), dp(100), dp(12), 0],
-                                                        spacing=dp(3))
+                group_content = OptionsGroupContent()
                 group_item.add_widget(group_header)
                 group_item.add_widget(group_content)
                 for name, option in options:
@@ -1194,7 +1225,7 @@ class OptionsCreator(ThemedApp):
             orientation="lr-tb",
             size_hint_x=1,
             size_hint_y=None,
-            spacing=dp(5),
+            spacing=SPACING_MED,
             padding=[0, 0, 0, dp(2)],
         )
         stack_layout.bind(minimum_height=stack_layout.setter("height"))
@@ -1214,14 +1245,11 @@ class OptionsCreator(ThemedApp):
         self.world_search_input.bind(text=lambda instance, value: self.filter_world_buttons(value))
 
         trigger = self.container.ids.options_dropdown_trigger
-        self.options_dropdown_menu = MDDropdownMenu(
+        self.options_dropdown_menu = OptionsDropdownMenu(
             caller=trigger,
             items=[
                 {"text": "Reset to defaults", "on_release": self._menu_reset_to_defaults, "height": dp(56), "viewclass": "HoverableDropdownItem"},
             ],
-            md_bg_color=getattr(self.theme_cls, THEME_SURFACE_CONTAINER_LOWEST),
-            theme_bg_color="Custom",
-            radius=[dp(5)],
         )
 
         def set_height(instance, value):
@@ -1257,8 +1285,8 @@ def _get_snackbar_stack() -> MDBoxLayout:
             size_hint_x=1,
             size_hint_y=None,
             height=0,
-            padding=[0, 0, 0, dp(24)],
-            spacing=dp(8),
+            padding=[0, 0, 0, PADDING_SNACKBAR_BOTTOM],
+            spacing=SPACING_SNACKBAR,
             pos_hint={"center_x": 0.5, "bottom": 1},
         )
         _snackbar_stack.bind(minimum_height=_snackbar_stack.setter("height"))
@@ -1267,7 +1295,7 @@ def _get_snackbar_stack() -> MDBoxLayout:
 
 
 class ResultSnackbar(MDCard):
-    """Single snackbar: wrapping label (left), close button (right), level-based color, auto-dismiss."""
+    """Single snackbar: wrapping label (left), close button (right), level-based color, auto-dismiss. Layout in KV."""
 
     def __init__(self, text: str, level: str = "info", duration: float = 8, **kwargs):
         if level == "error":
@@ -1279,46 +1307,15 @@ class ResultSnackbar(MDCard):
         kwargs.setdefault("theme_bg_color", "Custom")
         kwargs.setdefault("md_bg_color", bg)
         super().__init__(**kwargs)
-        self.opacity = 0
-        self.size_hint_x = None
-        self.size_hint_y = None
-        self.pos_hint = {"center_x": 0.5}
+        self.ids.message.text = text
         wrap_width = max(int(Window.size[0] * 0.48), dp(250))
         self.width = wrap_width + dp(56)
         self._duration = duration
         self._stack: MDBoxLayout | None = None
-
-        label = Label(
-            text=text,
-            padding=(dp(4), dp(4)),
-            size_hint_x=1,
-            size_hint_y=None,
-            text_size=(wrap_width, None),
-            halign="left",
-            valign="middle",
-        )
-        label.bind(texture_size=lambda w, ts: setattr(w, "height", ts[1]))
-        label_anchor = MDAnchorLayout(anchor_x="left", anchor_y="center", size_hint_x=1, size_hint_y=1)
-        label_anchor.add_widget(label)
-        content_box = MDBoxLayout(orientation="horizontal", size_hint_x=1, size_hint_y=1, padding=[dp(16), dp(8), dp(4), dp(12)])
-        content_box.add_widget(label_anchor)
-
-        close_btn = MDIconButton(
-            icon="close",
-            size_hint_x=None,
-            size_hint_y=None,
-            width=dp(48),
-            height=dp(48),
-        )
-        close_btn.bind(on_release=lambda *a: self.dismiss())
-        btn_anchor = MDAnchorLayout(anchor_x="center", anchor_y="center", size_hint_x=None, width=close_btn.width, size_hint_y=1)
-        btn_anchor.add_widget(close_btn)
-        content_box.add_widget(btn_anchor)
-
-        self.add_widget(content_box)
-        self._label = label
-        self._content_box = content_box
+        self._label = self.ids.message
+        self._content_box = self.ids.content_box
         self.height = 0
+        self._label.bind(texture_size=lambda w, ts: setattr(w, "height", ts[1]) if ts[0] and ts[1] else None)
 
     def _sync_content_height(self, *args: object) -> None:
         if hasattr(self, "_content_box") and self._content_box:
@@ -1339,7 +1336,7 @@ class ResultSnackbar(MDCard):
         anim.start(self)
 
     def _layout_height(self, _dt: float) -> None:
-        extra = dp(30)
+        extra = dp(30)  # vertical padding for snackbar content
         h = self._label.height + extra
         self._content_box.size_hint_y = None
         self.bind(height=self._sync_content_height)
@@ -1356,6 +1353,9 @@ class ResultSnackbar(MDCard):
         self.height = h
         if hasattr(self, "_content_box") and self._content_box:
             self._content_box.height = h
+
+
+Factory.register("ResultSnackbar", ResultSnackbar)
 
 
 def show_result_snack(text: str, level: str = "info") -> None:

@@ -22,6 +22,18 @@
             size: self.width, self.height
             radius: [(self.height/2, self.height/2), (self.height/2, self.height/2), (self.height/2, self.height/2), (self.height/2, self.height/2)]
 
+<OptionsGroupContent>:
+    orientation: "vertical"
+    theme_bg_color: "Custom"
+    md_bg_color: app.theme_cls.surfaceContainerLowestColor
+    padding: [12, 100, 12, 0]
+    spacing: "3dp"
+
+<OptionsDropdownMenu>:
+    theme_bg_color: "Custom"
+    md_bg_color: app.theme_cls.surfaceContainerLowestColor
+    radius: [5, 5, 5, 5]
+
 <OptionRow>:
     orientation: "vertical"
     size_hint_y: None
@@ -106,6 +118,36 @@
 <CounterItemValue>:
     height: "30dp"
 
+<ResultSnackbar>:
+    theme_bg_color: "Custom"
+    opacity: 0
+    size_hint_x: None
+    size_hint_y: None
+    pos_hint: {"center_x": 0.5}
+    height: 0
+    MDBoxLayout:
+        id: content_box
+        orientation: "horizontal"
+        size_hint_x: 1
+        size_hint_y: 1
+        padding: [16, 8, 4, 12]
+        Label:
+            id: message
+            size_hint_x: 1
+            size_hint_y: None
+            padding: [4, 4]
+            text_size: (root.width - 56, None)
+            halign: "left"
+            valign: "middle"
+            height: self.texture_size[1] if self.texture_size else 0
+        MDIconButton:
+            icon: "close"
+            size_hint_x: None
+            size_hint_y: None
+            width: "48dp"
+            height: "48dp"
+            on_release: root.dismiss()
+
 <VisualListSetCounter>:
     id: this
     scrollbox: scrollbox
@@ -121,8 +163,9 @@
         text: "Add or Remove Entries"
 
     MDDialogContentContainer:
+        id: container
         orientation: "vertical"
-        spacing: 10
+        spacing: "30dp"
 
         MDBoxLayout:
             orientation: "horizontal"
