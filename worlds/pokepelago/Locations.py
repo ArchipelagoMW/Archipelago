@@ -37,21 +37,12 @@ for mon in POKEMON_DATA:
         if t in type_counts:
             type_counts[t] += 1
 
-# Starters: Bulbasaur (Grass/Poison), Charmander (Fire), Squirtle (Water).
-starter_type_counts = {
-    "Grass": 1,
-    "Poison": 1,
-    "Fire": 1,
-    "Water": 1
-}
-
+# Type milestone steps — location IDs are defined for the full superset here.
+# Per-game filtering (based on active regions and starters) happens in create_regions().
 TYPE_MILESTONE_STEPS = [1, 2, 5, 10, 20, 35, 50]
-milestone_steps = TYPE_MILESTONE_STEPS
 for p_type in GEN_1_TYPES:
-    # Max NEW catches = Total in type - starters in that type
-    max_new = type_counts[p_type] - starter_type_counts.get(p_type, 0)
-    for step in milestone_steps:
-        if step <= max_new:
+    for step in TYPE_MILESTONE_STEPS:
+        if step <= type_counts[p_type]:
             location_table[f"Caught {step} {p_type} Pokemon"] = LOCATION_ID_OFFSET + 20_000 + (GEN_1_TYPES.index(p_type) * 1000) + step
 
 class PokepelagoLocation(Location):

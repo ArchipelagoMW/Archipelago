@@ -1,8 +1,10 @@
+from collections import Counter
+
 from BaseClasses import Region, Entrance, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
 from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
-from .Locations import PokepelagoLocation, location_table, milestones, starting_locations
+from .Locations import PokepelagoLocation, location_table, milestones, starting_locations, TYPE_MILESTONE_STEPS
 from .Options import PokepelagoOptions, REGION_OPTION_ATTRS
 from .data import POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region
 
@@ -68,6 +70,46 @@ class PokepelagoWorld(World):
         capped_goal = min(raw_goal, max(valid_milestones))
         self.goal_count = min(valid_milestones, key=lambda m: abs(m - capped_goal))
 
+        # ── Pre-compute requirement groups for milestone logic ──
+        # For each non-starter active Pokémon, record (region_pass_needed, type_keys_needed).
+        # Group by these requirements and count how many Pokémon share each requirement set.
+        # This lets milestone rules efficiently check how many Pokémon are logically accessible.
+        region_locks = bool(self.options.region_locks.value)
+        type_locks = bool(self.options.type_locks.value)
+
+        global_req_counter: Counter = Counter()
+        type_req_counters: dict[str, Counter] = {t: Counter() for t in GEN_1_TYPES}
+
+        for mon in self.active_pokemon:
+            if mon["name"] in self.starter_names:
+                continue
+            region = get_pokemon_region(mon["id"])
+            region_req = None
+            if region_locks and region != self.starting_region:
+                region_req = f"{region} Pass"
+            type_reqs: frozenset = frozenset()
+            if type_locks:
+                type_reqs = frozenset(f"{t} Type Key" for t in mon["types"])
+
+            key = (region_req, type_reqs)
+            global_req_counter[key] += 1
+            for t in mon["types"]:
+                if t in type_req_counters:
+                    type_req_counters[t][key] += 1
+
+        # List of (region_req_or_None, frozenset_of_type_keys, pokemon_count)
+        self._milestone_req_groups = [
+            (rr, tr, c) for (rr, tr), c in global_req_counter.items()
+        ]
+        self._type_milestone_req_groups: dict[str, list] = {
+            t: [(rr, tr, c) for (rr, tr), c in counter.items()]
+            for t, counter in type_req_counters.items()
+        }
+        # Max non-starter Pokémon of each type across active regions
+        self._active_type_counts: dict[str, int] = {
+            t: sum(counter.values()) for t, counter in type_req_counters.items()
+        }
+
     def create_item(self, name: str) -> PokepelagoItem:
         data = item_data_table.get(name)
         if data:
@@ -132,6 +174,30 @@ class PokepelagoWorld(World):
             self.multiworld.itempool.append(self.create_item(filler_name))
             my_items_in_pool += 1
 
+    def _make_milestone_rule(self, target_count, req_groups):
+        """Build an access rule that checks whether >= target_count Pokémon are logically accessible.
+
+        req_groups is a list of (region_req, type_reqs_frozenset, pokemon_count) tuples.
+        A group's Pokémon are accessible when:
+          - region_req is None (starting region / no region locks) OR the player has the Region Pass
+          - type_reqs is empty (no type locks) OR the player has ALL required Type Keys
+        """
+        player = self.player
+
+        def rule(state):
+            accessible = 0
+            for region_req, type_reqs, count in req_groups:
+                if region_req and not state.has(region_req, player):
+                    continue
+                if type_reqs and not state.has_all(type_reqs, player):
+                    continue
+                accessible += count
+                if accessible >= target_count:
+                    return True
+            return False
+
+        return rule
+
     def create_regions(self):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
@@ -153,12 +219,13 @@ class PokepelagoWorld(World):
                 pass_name = f"{region_name} Pass"
                 ent.access_rule = lambda state, p=pass_name: state.has(p, self.player)
 
-        # Starting locations and global milestone locations → Menu region (no rules)
+        # Starting locations and global milestone locations → Menu region
+        # Access rules for milestones are applied later in set_rules().
         starting_loc_set = set(starting_locations) if not self.options.include_starting_locations.value else set()
 
         for loc_name, loc_id in self.location_name_to_id.items():
             if loc_name.startswith("Guess ") or loc_name.startswith("Caught "):
-                continue  # Per-Pokemon handled below; type milestones skipped
+                continue  # Per-Pokemon handled below; type milestones handled below
 
             if loc_name in starting_loc_set:
                 continue  # Disabled by include_starting_locations option
@@ -170,6 +237,18 @@ class PokepelagoWorld(World):
 
             location = PokepelagoLocation(self.player, loc_name, loc_id, menu_region)
             menu_region.locations.append(location)
+
+        # Type-specific milestone locations (e.g. "Caught 5 Fire Pokemon")
+        # Only add milestones achievable with the current active Pokémon set.
+        for p_type in GEN_1_TYPES:
+            max_catchable = self._active_type_counts.get(p_type, 0)
+            for step in TYPE_MILESTONE_STEPS:
+                if step <= max_catchable:
+                    loc_name = f"Caught {step} {p_type} Pokemon"
+                    loc_id = self.location_name_to_id.get(loc_name)
+                    if loc_id is not None:
+                        location = PokepelagoLocation(self.player, loc_name, loc_id, menu_region)
+                        menu_region.locations.append(location)
 
         if self.options.dexsanity.value:
             # Per-Pokemon sub-regions connected from their game region.
@@ -208,19 +287,34 @@ class PokepelagoWorld(World):
                 location = self.multiworld.get_location(f"Guess {mon_name}", player)
                 set_rule(location, lambda state, tk=type_keys: state.has_all(tk, self.player))
 
-        # Victory: require all Region Passes for non-starting regions.
-        # This gives AP a meaningful completion condition for sphere calculation.
-        victory_location = self.multiworld.get_location("Pokepelago Victory", player)
+        # ── Milestone access rules ──
+        # "Guessed X Pokemon" milestones require that X non-starter Pokémon are
+        # logically accessible (correct Region Passes + Type Keys).
+        # Without these rules, "Guessed 1000 Pokemon" would be in logic immediately
+        # even when only 151 Pokémon are reachable (starting region only).
+        for loc in self.multiworld.get_locations(player):
+            if loc.address is not None and loc.name.startswith("Guessed "):
+                count = int(loc.name.split(" ")[1])
+                set_rule(loc, self._make_milestone_rule(count, self._milestone_req_groups))
 
-        non_starting = (
-            self.active_regions[1:]
-            if self.options.region_locks.value and self.options.dexsanity.value
-            else []
-        )
-        if non_starting:
-            victory_location.access_rule = lambda state: all(
-                state.has(f"{r} Pass", player) for r in non_starting
-            )
+        # "Caught X {Type} Pokemon" milestones require that X non-starter Pokémon
+        # of the given type are logically accessible.
+        for loc in self.multiworld.get_locations(player):
+            if loc.address is not None and loc.name.startswith("Caught "):
+                parts = loc.name.split(" ")
+                count = int(parts[1])
+                p_type = parts[2]  # All type names are single words
+                groups = self._type_milestone_req_groups.get(p_type, [])
+                if groups:
+                    set_rule(loc, self._make_milestone_rule(count, groups))
+
+        # ── Victory rule ──
+        # Victory requires that goal_count non-starter Pokémon are logically accessible.
+        # This properly accounts for Region Passes AND Type Keys, rather than just
+        # requiring all Region Passes blindly.
+        victory_location = self.multiworld.get_location("Pokepelago Victory", player)
+        set_rule(victory_location,
+                 self._make_milestone_rule(self.goal_count, self._milestone_req_groups))
 
         victory_item = self.create_event_item("Victory")
         victory_location.place_locked_item(victory_item)
