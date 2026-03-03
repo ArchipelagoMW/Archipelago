@@ -276,14 +276,25 @@ class PreventWeakenedPrisonState(Toggle):
 class NineSolsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
 
-    # General Progression
+    # Sol Seals
     shuffle_sol_seals: ShuffleSolSeals
     seals_for_eigong: SealsForEigong
     seals_for_prison: SealsForPrison
-    prevent_weakened_prison_state: PreventWeakenedPrisonState
     seals_for_ethereal: SealsForEthereal
+
+    # Logic & Skips
+    prevent_weakened_prison_state: PreventWeakenedPrisonState
     skip_soulscape_platforming: SkipSoulscapePlatforming
     prevent_annoying_runbacks: PreventAnnoyingRunbacks
+    logic_difficulty: LogicDifficulty
+
+    # Root Nodes
+    first_root_node: FirstRootNode
+
+    # Shuffle Starting Abilities
+    shuffle_grapple: ShuffleGrapple
+    shuffle_wall_climb: ShuffleWallClimb
+    shuffle_ledge_grab: ShuffleLedgeGrab
 
     # Jade Costs
     randomize_jade_costs: RandomizeJadeCosts
@@ -297,12 +308,6 @@ class NineSolsGameOptions(PerGameCommonOptions):
     chiyou_shop_unlock_sol_seals: ChiyouShopUnlockSolSeals
     kuafu_extra_inventory_unlock_sol_seals: KuafuExtraInventoryUnlockSolSeals
 
-    # Additional Randomizations
-    first_root_node: FirstRootNode
-    shuffle_grapple: ShuffleGrapple
-    shuffle_wall_climb: ShuffleWallClimb
-    shuffle_ledge_grab: ShuffleLedgeGrab
     # skill_tree_randomization
     # shop_randomization
-    logic_difficulty: LogicDifficulty
     # entrance_randomization

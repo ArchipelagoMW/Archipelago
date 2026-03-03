@@ -23,14 +23,25 @@ class NineSolsWebWorld(WebWorld):
         )
     ]
     option_groups = [
-        OptionGroup("General Progression", [
+        OptionGroup("Sol Seals", [
             ShuffleSolSeals,
             SealsForEigong,
             SealsForPrison,
-            PreventWeakenedPrisonState,
             SealsForEthereal,
+        ]),
+        OptionGroup("Logic & Skips", [
+            PreventWeakenedPrisonState,
             SkipSoulscapePlatforming,
             PreventAnnoyingRunbacks,
+            LogicDifficulty,
+        ]),
+        OptionGroup("Root Nodes", [
+            FirstRootNode,
+        ]),
+        OptionGroup("Shuffle Starting Abilities", [
+            ShuffleGrapple,
+            ShuffleWallClimb,
+            ShuffleLedgeGrab,
         ]),
         OptionGroup("Jade Cost Randomization", [
             RandomizeJadeCosts,
@@ -43,13 +54,6 @@ class NineSolsWebWorld(WebWorld):
             KuafuShopUnlockSolSeals,
             ChiyouShopUnlockSolSeals,
             KuafuExtraInventoryUnlockSolSeals,
-        ]),
-        OptionGroup("Additional Randomizations", [
-            FirstRootNode,
-            ShuffleGrapple,
-            ShuffleWallClimb,
-            ShuffleLedgeGrab,
-            LogicDifficulty,
         ]),
     ]
 
