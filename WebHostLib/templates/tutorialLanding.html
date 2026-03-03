@@ -22,8 +22,7 @@
                         <a href="{{ url_for("tutorial", game=world_name, file=file_name) }}">{{ file_data.language }}</a>
                         by
                         {% for author in file_data.authors %}
-                            {{ author }}
-                            {% if not loop.last %}, {% endif %}
+                            {{ author }}{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     </li>
                 {% endfor %}
