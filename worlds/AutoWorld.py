@@ -13,7 +13,7 @@ from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, T
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState, Entrance
 from rule_builder.rules import CustomRuleRegister, Rule
-from Utils import Version, tuplize_version, version_tuple
+from Utils import Version
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
@@ -362,10 +362,9 @@ class World(metaclass=AutoWorldRegister):
         multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
-        if item in ("settings", "_manifest"):
+        if item == "settings":
             return getattr(self.__class__, item)
         raise AttributeError
-
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
