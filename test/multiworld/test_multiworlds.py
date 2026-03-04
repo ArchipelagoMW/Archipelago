@@ -61,6 +61,7 @@ class TestAllGamesMultiworld(MultiworldTestBase):
         with self.subTest("filling multiworld", seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            call_all(self.multiworld, "finalize_multiworld")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
 
 
@@ -78,4 +79,5 @@ class TestTwoPlayerMulti(MultiworldTestBase):
         with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            call_all(self.multiworld, "finalize_multiworld")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
