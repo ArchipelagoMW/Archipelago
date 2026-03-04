@@ -118,6 +118,7 @@ for world_source in world_sources:
         game = manifest.get("game")
         if game in AutoWorldRegister.world_types:
             AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+            AutoWorldRegister.world_types[game].platforms = manifest.get("platforms", [])
 
 if apworlds:
     # encapsulation for namespace / gc purposes
@@ -165,6 +166,11 @@ if apworlds:
                            f"Did not load {apworld_source.path} "
                            f"as its maximum core version {apworld.maximum_ap_version} "
                            f"is lower than current core version {version_tuple}.")
+            elif apworld.platforms and sys.platform not in apworld.platforms:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as it is not compatible with current platform {sys.platform}. "
+                           f"Supported platforms: {', '.join(apworld.platforms)}")
             else:
                 core_compatible.append((apworld_source, apworld))
         # load highest version first
@@ -199,6 +205,8 @@ if apworlds:
                     # world could fail to load at this point
                     if apworld.world_version:
                         AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+                    if apworld.platforms:
+                        AutoWorldRegister.world_types[apworld.game].platforms = apworld.platforms
     load_apworlds()
     del load_apworlds
 

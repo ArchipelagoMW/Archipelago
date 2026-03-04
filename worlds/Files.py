@@ -197,6 +197,7 @@ class APWorldContainer(APContainer):
     world_version: "Version | None" = None
     minimum_ap_version: "Version | None" = None
     maximum_ap_version: "Version | None" = None
+    platforms: List[str] = []
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         from Utils import tuplize_version
@@ -205,6 +206,7 @@ class APWorldContainer(APContainer):
         for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
             if version_key in manifest:
                 setattr(self, version_key, tuplize_version(manifest[version_key]))
+        self.platforms = manifest.get("platforms", [])
         return manifest
 
     def get_manifest(self) -> Dict[str, Any]:
@@ -215,6 +217,8 @@ class APWorldContainer(APContainer):
             version = getattr(self, version_key)
             if version:
                 manifest[version_key] = version.as_simple_string()
+        if self.platforms:
+            manifest["platforms"] = self.platforms
         return manifest
 
 

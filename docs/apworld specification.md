@@ -32,6 +32,8 @@ If the APWorld is a folder, the only required field is "game":
 There are also the following optional fields:
 * `minimum_ap_version` and `maximum_ap_version` - which if present will each be compared against the current
   Archipelago version respectively to filter those files from being loaded.
+* `platforms` - a list of strings indicating the `sys.platform`(s) the world can run on.
+  If empty or not set, it is assumed to be any that python itself can run on.
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An APWorld without a world_version is always treated as older than one with a version
   (**Must** use exactly the format `"major.minor.build"`, e.g. `1.0.0`)

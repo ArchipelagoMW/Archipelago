@@ -409,6 +409,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 apworld = APWorldContainer(str(zip_path))
                 apworld.minimum_ap_version = version_tuple
                 apworld.maximum_ap_version = version_tuple
+                apworld.platforms = [sys.platform]
                 apworld.game = worldtype.game
                 manifest.update(apworld.get_manifest())
                 apworld.manifest_path = f"{file_name}/archipelago.json"

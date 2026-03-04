@@ -353,6 +353,8 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
     world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
+    platforms: ClassVar[List[str]] = []
+    """Optional platforms loaded from archipelago.json"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
