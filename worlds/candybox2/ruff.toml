@@ -1,0 +1,22 @@
+line-length = 120
+indent-width = 4
+target-version = "py311"
+
+[lint]
+select = ["B", "C", "E", "F", "W", "I", "N", "Q", "UP", "RET", "RSE", "RUF", "ISC", "PLC", "PLE", "PLW", "T20", "PERF"]
+ignore = [
+    "B011",  # In AP, the use of assert False is essential because we optimise out these statements for release builds.
+    "C901",  # Author disagrees with limiting branch complexity
+    "N818",  # Author agrees with this rule, but Core AP violates this and changing it would be a hassle.
+    "PLC0415",  # In AP, we consider local imports totally fine & necessary
+    "PLC1802",  # Author agrees with this rule, but it literally changes the functionality of the code, which is unsafe.
+    "PLC1901",  # This is just not equivalent
+    "PLE1141",  # Ruff is not meant for error checking. If the code author meant .items(), they will realize soon enough
+    "UP015",  # Explicit is better than implicit, so we'd prefer to keep "r" in open() calls.
+
+    "T201", # We use print to print stuff.
+]
+
+[lint.per-file-ignores]
+# The way options definitions work right now, I am forced to break line length requirements.
+"options.py" = ["E501"]

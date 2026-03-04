@@ -1,0 +1,9 @@
+{
+  "game": "Candy Box 2",
+  "world_version": "0.20251023.1",
+  "minimum_ap_version": "0.6.0",
+  "authors": [
+    "Victor Tran",
+    "Aren Merzoian"
+  ]
+}
