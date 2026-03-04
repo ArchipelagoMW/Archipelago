@@ -21,6 +21,7 @@ import time
 import typing
 import weakref
 import zlib
+from signal import SIGINT, SIGTERM
 
 import ModuleUpdate
 
@@ -2571,6 +2572,8 @@ async def console(ctx: Context):
             input_text = await queue.get()
             queue.task_done()
             ctx.commandprocessor(input_text)
+        except asyncio.exceptions.CancelledError:
+            ctx.logger.info("ConsoleTask cancelled")
         except:
             import traceback
             traceback.print_exc()
@@ -2737,6 +2740,15 @@ async def main(args: argparse.Namespace):
     console_task = asyncio.create_task(console(ctx))
     if ctx.auto_shutdown:
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
+
+    def stop():
+        for remove_signal in [SIGINT, SIGTERM]:
+            asyncio.get_event_loop().remove_signal_handler(remove_signal)
+        ctx.commandprocessor._cmd_exit()
+
+    for signal in [SIGINT, SIGTERM]:
+        asyncio.get_event_loop().add_signal_handler(signal, stop)
+
     await ctx.exit_event.wait()
     console_task.cancel()
     if ctx.shutdown_task:
