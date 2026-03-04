@@ -26,12 +26,25 @@ class GoalOption(OptionSet):
       vanilla, "Ringed City Hidden" is Darkeater Midir in vanilla, and "Ringed
       City End" is Slave Knight Gael in vanilla.
 
-    If multiple bosses are selected, all of them must be defeated in order to
-    achieve your goal. By default, only "Kiln of the First Flame Boss" is
-    selected.
+    There are also several group names that can be used:
+
+    - **All Bosses:** All bosses in the base game and DLC must be beaten to win
+        the game.
+    - **Base Game Bosses:** All bosses in the base game must be beaten, but not
+        any of the DLC bosses.
+    - **DLC Bosses:** All bosses in the DLC must be beaten, but not any of the
+        base game bosses.
+
+    If multiple goals are selected, all of them must be achieved in order to win
+    your game. By default, only "Kiln of the First Flame Boss" is selected.
     """
     display_name = "Goal"
-    valid_keys = {boss.region + " Boss" for boss in all_bosses if boss.flag}
+    valid_keys = {
+        *(boss.region + " Boss" for boss in all_bosses if boss.flag),
+        "All Bosses",
+        "Base Game Bosses",
+        "DLC Bosses",
+    }
     default = frozenset({"Kiln of the First Flame Boss"})
 
     def verify_keys(self) -> None:

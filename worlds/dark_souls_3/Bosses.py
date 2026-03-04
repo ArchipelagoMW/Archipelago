@@ -37,6 +37,15 @@ class DS3BossInfo:
     locations: Set[str] = field(default_factory=set)
     """Additional individual locations that can't be accessed until the boss is dead."""
 
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.name == other.name
+        else:
+            return False
+
+    def __hash__(self):
+        return hash(self.name)
+
 
 # Note: the static randomizer splits up some bosses into separate fights for separate phases, each
 # of which can be individually replaced by Yhorm.

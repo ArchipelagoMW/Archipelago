@@ -1411,16 +1411,30 @@ class DarkSouls3World(World):
             )
         )
 
-    def _goal_bosses(self) -> [DS3BossInfo]:
+    def _goal_bosses(self) -> {DS3BossInfo}:
         """Returns all the bosses that are goals for this run."""
-        result = []
-        for name in self.options.goal:
+        result = set()
+        goal = {*self.options.goal}
+
+        if "All Bosses" in goal:
+            goal.remove("All Bosses")
+            result.update(boss for boss in all_bosses if boss.flag)
+
+        if "Base Game Bosses" in goal:
+            goal.remove("Base Game Bosses")
+            result.update(boss for boss in all_bosses if boss.flag and not boss.dlc)
+
+        if "DLC Bosses" in goal:
+            goal.remove("DLC Bosses")
+            result.update(boss for boss in all_bosses if boss.flag and boss.dlc)
+
+        for name in goal:
             assert name.endswith(" Boss")
             region = name[:-len(" Boss")]
             boss = next(boss for boss in reversed(all_bosses) if boss.region == region)
             assert boss
             assert boss.flag
-            result.append(boss)
+            result.add(boss)
         return result
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
