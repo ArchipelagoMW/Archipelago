@@ -13,7 +13,7 @@ from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, T
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState, Entrance
 from rule_builder.rules import CustomRuleRegister, Rule
-from Utils import Version
+from Utils import Version, tuplize_version, version_tuple
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
@@ -33,6 +33,7 @@ class AutoWorldRegister(type):
     zip_path: Optional[str]
     settings_key: str
     __settings: Any
+    __manifest: Any
 
     @property
     def settings(cls) -> Any:  # actual type is defined in World
@@ -44,6 +45,38 @@ class AutoWorldRegister(type):
             except AttributeError:
                 return None
         return cls.__settings
+
+    @property
+    def _manifest(cls) -> Dict[str, Any]:
+        if cls.__manifest is None:
+            if cls.zip_path:
+                import zipfile
+                from .Files import APWorldContainer
+                container = APWorldContainer(str(cls.zip_path))
+                with zipfile.ZipFile(container.path, "r") as zf:
+                    cls.__manifest = container.read_contents(zf)
+            else:
+                import json
+                import os
+                # look for manifest
+                manifest_path = None
+                world_dir = pathlib.Path(cls.__file__).parent
+                for dirpath, dirnames, filenames in os.walk(world_dir):
+                    for file in filenames:
+                        if file.endswith("archipelago.json"):
+                            manifest_path = os.path.join(dirpath, file)
+                            break
+                    if manifest_path:
+                        break
+
+                if manifest_path:
+                    with open(manifest_path, "r", encoding="utf-8-sig") as f:
+                        cls.__manifest = json.load(f)
+                elif version_tuple < (0, 7, 0):
+                    cls.__manifest = {}
+                else:
+                    raise RuntimeError(f"Could not find manifest for {cls.__name__} in {world_dir}.")
+        return cls.__manifest
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -101,6 +134,7 @@ class AutoWorldRegister(type):
             world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
             new_class.settings_key = world_folder_name + "_options"
         new_class.__settings = None
+        new_class.__manifest = None
         return new_class
 
 
@@ -362,9 +396,14 @@ class World(metaclass=AutoWorldRegister):
         multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
-        if item == "settings":
-            return self.__class__.settings
+        if item in ("settings", "_manifest"):
+            return getattr(self.__class__, item)
         raise AttributeError
+
+    @property
+    def version(self) -> Version:
+        """World version loaded from archipelago.json"""
+        return tuplize_version(self._manifest.get("world_version", "0.0.0"))
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
