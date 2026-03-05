@@ -14,7 +14,7 @@ from worlds.rac3.items import (create_item, create_itempool, get_filler_selectio
 from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
                                    location_groups)
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3.regions import create_regions
+from worlds.rac3.regions import create_regions, every_nanotech, every_10_nanotech, every_20_nanotech, every_5_nanotech
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web
@@ -69,6 +69,7 @@ class RaC3World(World):
 
         starting_weapon_list, starting_planet_list = self.generate_starting_items()
         self.handle_option_errors(starting_planet_list, starting_weapon_list)
+        self.dead_seed_check(starting_planet_list, starting_weapon_list)
         self.place_starting_items(starting_planet_list, starting_weapon_list)
 
     def place_starting_items(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
@@ -115,6 +116,35 @@ class RaC3World(World):
                 and starting_planet_list
                 and self.multiworld.players == 1):
             raise OptionError("Options selected do not allow Ratchet to collect a Clank Pack and advance past Florana")
+    
+    def dead_seed_check(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
+        """Check for option combinations that will result in a dead seed and raise an OptionError to warn the player"""
+        nanotech_milestones = self.options.nanotech_milestones.value
+        nanotech_limitation = self.options.nanotech_limitation.value
+        nanotech_locations = []
+        if nanotech_milestones == 1:  # every 20
+            nanotech_locations = [lvl for lvl in every_20_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
+        elif nanotech_milestones == 2:  # every 10
+            nanotech_locations = [lvl for lvl in every_10_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
+        elif nanotech_milestones == 3:  # every 5
+            nanotech_locations = [lvl for lvl in every_5_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
+        elif nanotech_milestones == 4:  # all
+            nanotech_locations = every_nanotech[:nanotech_limitation - 10] if nanotech_limitation > 10 else []
+
+        no_nanotech_locations = not nanotech_milestones or (nanotech_milestones != 0 and len(nanotech_locations) == 0)
+
+        if (not self.options.intro_skip.value
+                and not self.options.titanium_bolts.value
+                and not self.options.trophies.value
+                and not self.options.weapon_vendors.value
+                and not self.options.ship_vendor.value
+                and not self.options.vr_challenges.value
+                and self.options.skill_points.value < 2
+                and no_nanotech_locations
+                and len(starting_weapon_list) > 1
+                and starting_planet_list
+                and self.multiworld.players == 1):
+            raise OptionError("Options selected do not allow Ratchet to advance past Starship Phoenix")
 
     def generate_starting_items(self):
         """Process player options to generate a list of early placed items, ensuring successful seed generation"""
