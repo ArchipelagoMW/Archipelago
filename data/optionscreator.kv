@@ -131,22 +131,33 @@
         size_hint_x: 1
         size_hint_y: 1
         padding: [16, 8, 4, 12]
-        Label:
-            id: message
+        MDAnchorLayout:
+            anchor_x: "left"
+            anchor_y: "center"
             size_hint_x: 1
-            size_hint_y: None
-            padding: [4, 4]
-            text_size: (root.width - 56, None)
-            halign: "left"
-            valign: "middle"
-            height: self.texture_size[1] if self.texture_size else 0
-        MDIconButton:
-            icon: "close"
+            size_hint_y: 1
+            Label:
+                id: message
+                size_hint_x: None
+                size_hint_y: None
+                width: root.width - 56
+                padding: [4, 4]
+                text_size: (self.width, None)
+                halign: "left"
+                valign: "middle"
+                height: self.texture_size[1] if self.texture_size else 0
+        MDAnchorLayout:
+            anchor_x: "center"
+            anchor_y: "center"
             size_hint_x: None
-            size_hint_y: None
-            width: "48dp"
-            height: "48dp"
-            on_release: root.dismiss()
+            width: "30dp"
+            size_hint_y: 1
+            MDIconButton:
+                icon: "close"
+                size_hint_x: None
+                width: "30dp"
+                height: "30dp"
+                on_release: root.dismiss()
 
 <VisualListSetCounter>:
     id: this
