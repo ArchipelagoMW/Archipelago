@@ -14,7 +14,7 @@ import time
 import typing
 import sys
 
-import more_itertools
+from more_itertools import value_chain, random_permutation
 import psutil
 import websockets
 from pony.orm import commit, db_session, select
@@ -194,9 +194,13 @@ def get_random_port(game_ports: list, host):
         elif int(item) == 0:
             ephemeral_allowed = True
         else:
-            available_ports.append([int(item)])
+            available_ports.append(int(item))
 
-    return get_port_from_list(more_itertools.interleave_randomly(*available_ports), ephemeral_allowed, host)
+    return get_port_from_list(
+        random_permutation(
+            filter(lambda p: p not in get_used_ports(), value_chain(*available_ports)),
+            1024),
+        ephemeral_allowed, host)
 
 def get_ttl_hash(seconds = 1800):
     return round(time.time() / seconds)
@@ -207,7 +211,7 @@ def get_used_ports(ttl = get_ttl_hash()):
 
 def get_port_from_list(available_ports: typing.Iterable[int], ephemeral_allowed: bool, host) -> socket.socket:
     # limit amount of checked ports to 1024
-    for port in itertools.islice(filter(lambda p: p not in get_used_ports(), available_ports), 1024):
+    for port in available_ports:
         sock = get_socket_if_free(host, port)
         if sock is not None: return sock
     else:
