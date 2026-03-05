@@ -183,15 +183,14 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port(game_ports):
-    config_range_list = game_ports.split(",")
+def get_random_port(game_ports: list):
     available_ports = []
     ephemeral_allowed = False
-    for item in config_range_list:
-        if '-' in item:
+    for item in game_ports:
+        if type(item) is str and '-' in item:
             start, end = map(int, item.split('-'))
             available_ports.append(range(start, end+1))
-        elif item == "0":
+        elif int(item) == "0":
             ephemeral_allowed = True
         else:
             available_ports.append([int(item)])
@@ -277,7 +276,7 @@ def tear_down_logging(room_id):
 
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
-                       host: str, game_ports: str, rooms_to_run: multiprocessing.Queue,
+                       host: str, game_ports: list, rooms_to_run: multiprocessing.Queue,
                        rooms_shutting_down: multiprocessing.Queue):
     from setproctitle import setproctitle
 
