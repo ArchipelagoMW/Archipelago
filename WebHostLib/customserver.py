@@ -111,7 +111,7 @@ class WebHostContext(Context):
                 commit()
 
     @db_session
-    def load(self, room_id: int, game_ports: str):
+    def load(self, room_id: int):
         self.room_id = room_id
         room = Room.get(id=room_id)
         if room.last_port:
@@ -328,7 +328,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             try:
                 logger = set_up_logging(room_id)
                 ctx = WebHostContext(static_server_data, logger)
-                ctx.load(room_id, game_ports)
+                ctx.load(room_id)
                 ctx.init_save()
                 assert ctx.server is None
                 if ctx.port == 0:
