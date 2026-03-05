@@ -235,13 +235,36 @@ def get_random_port(game_ports: list[str | int], host: str) -> socket.socket:
 
     raise OSError(98, "No available ports")
 
+def try_processes(p):
+    try:
+        return map(lambda c: c.laddr.port, p.net_connections("tcp4"))
+    except psutil.AccessDenied:
+        return []
 
-_last_used_ports = (frozenset(map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))), round(time.time() / 900))
+def net_connections() -> typing.Iterable[int]:
+    # Don't even try to check if system using AIX
+    if psutil._common.AIX:
+        return []
+
+    try:
+        return map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))
+    # raises AccessDenied when done on macOS
+    except psutil.AccessDenied:
+        # flatten the list of iterables
+        return itertools.chain.from_iterable(map(
+            # get the net connections of the process and then map its ports
+            try_processes,
+            # this method has caching handled by psutil
+            psutil.process_iter(["net_connections"])
+        ))
+
+
+_last_used_ports = (frozenset(net_connections()), round(time.time() / 900))
 def get_used_ports():
     global _last_used_ports
     t_hash = round(time.time() / 900)
     if _last_used_ports[1] != t_hash:
-        _last_used_ports = (frozenset(map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))), t_hash)
+        _last_used_ports = (frozenset(net_connections()), t_hash)
 
     return _last_used_ports[0]
 
