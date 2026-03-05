@@ -197,26 +197,31 @@ def get_random_port(game_ports: list[str | int], host: str):
             available_ports.append(int(item))
 
     return get_port_from_list(
+        # limit amount of checked ports to 1024
         random_permutation(
             filter(lambda p: p not in get_used_ports(), value_chain(*available_ports)),
             1024),
         ephemeral_allowed, host)
 
-def get_ttl_hash(seconds = 1800):
-    return round(time.time() / seconds)
 
-@functools.lru_cache()
-def get_used_ports(ttl = get_ttl_hash()):
-    return frozenset(map(lambda c: c.laddr.port, psutil.net_connections("tcp4")))
+_last_used_ports = (frozenset(map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))), round(time.time() / 900))
+def get_used_ports():
+    global _last_used_ports
+    t_hash = round(time.time() / 900)
+    if _last_used_ports[1] != t_hash:
+        _last_used_ports = (frozenset(map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))), t_hash)
+
+    return _last_used_ports[0]
+
 
 def get_port_from_list(available_ports: typing.Iterable[int], ephemeral_allowed: bool, host) -> socket.socket:
-    # limit amount of checked ports to 1024
     for port in available_ports:
         sock = get_socket_if_free(host, port)
         if sock is not None: return sock
     else:
         if ephemeral_allowed: return socket.create_server((host, 0))
         raise OSError(98, "No available ports")
+
 
 def get_socket_if_free(host, port: int) -> socket.socket | None:
     try:
@@ -358,8 +363,6 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                         functools.partial(server, ctx=ctx),
                         sock=get_random_port(game_ports, ctx.host),
                         ssl=get_ssl_context(),
-                        # In original code, this extension wasn't included when port was 0, should I leave that behavior?
-                        # Or was it a bug?
                         extensions=[server_per_message_deflate_factory],
                     )
                     await ctx.server
