@@ -297,12 +297,16 @@ ContainerLayout:
                     HoverableMDButton:
                         id: back_button
                         size_hint_x: None
+                        size_hint_y: None
+                        width: "120dp"
+                        height: "60dp"
                         theme_width: "Custom"
+                        theme_height: "Custom"
                         on_release:
                             app.screen_manager.current = 'game_select'
                             app.go_back_to_game_select()
                         MDButtonText:
-                            text: "Back"
+                            text: "< Go Back"
 
                     ResizableTextField:
                         id: player_name
