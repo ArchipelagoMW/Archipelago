@@ -15,6 +15,7 @@ import typing
 import sys
 
 import more_itertools
+import psutil
 import websockets
 from pony.orm import commit, db_session, select
 
@@ -197,10 +198,16 @@ def get_random_port(game_ports: list, host):
 
     return get_port_from_list(more_itertools.interleave_randomly(*available_ports), ephemeral_allowed, host)
 
+def get_ttl_hash(seconds = 1800):
+    return round(time.time() / seconds)
+
+@functools.lru_cache()
+def get_used_ports(ttl = get_ttl_hash()):
+    return frozenset(map(lambda c: c.laddr.port, psutil.net_connections("tcp4")))
 
 def get_port_from_list(available_ports: typing.Iterable[int], ephemeral_allowed: bool, host) -> socket.socket:
     # limit amount of checked ports to 1024
-    for port in itertools.islice(available_ports, 1024):
+    for port in itertools.islice(filter(lambda p: p not in get_used_ports(), available_ports), 1024):
         sock = get_socket_if_free(host, port)
         if sock is not None: return sock
     else:
