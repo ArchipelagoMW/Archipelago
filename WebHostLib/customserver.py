@@ -331,6 +331,18 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 ctx.load(room_id)
                 ctx.init_save()
                 assert ctx.server is None
+                if ctx.port != 0:
+                    try:
+                        ctx.server = websockets.serve(
+                            functools.partial(server, ctx=ctx),
+                            ctx.host,
+                            ctx.port,
+                            ssl=get_ssl_context(),
+                            extensions=[server_per_message_deflate_factory],
+                        )
+                        await ctx.server
+                    except OSError:
+                        ctx.port = 0
                 if ctx.port == 0:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx),
@@ -339,15 +351,6 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                         ssl=get_ssl_context(),
                         # In original code, this extension wasn't included when port was 0, should I leave that behavior?
                         # Or was it a bug?
-                        extensions=[server_per_message_deflate_factory],
-                    )
-                    await ctx.server
-                else:
-                    ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx),
-                        ctx.host,
-                        ctx.port,
-                        ssl=get_ssl_context(),
                         extensions=[server_per_message_deflate_factory],
                     )
                     await ctx.server
