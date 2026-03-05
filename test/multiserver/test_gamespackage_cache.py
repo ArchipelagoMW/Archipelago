@@ -6,7 +6,7 @@ from typing_extensions import override
 
 import NetUtils
 from NetUtils import GamesPackage
-from apmw.multiserver.gamespackage.cache import GamesPackageCache
+from apmw.multiserver.gamespackagecache import GamesPackageCache
 
 
 class GamesPackageCacheTest(TestCase):

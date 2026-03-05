@@ -2,7 +2,7 @@ from typing_extensions import override
 
 from NetUtils import GamesPackage
 from Utils import restricted_loads
-from apmw.multiserver.gamespackage.cache import GamesPackageCache, ItemNameGroups, LocationNameGroups
+from apmw.multiserver.gamespackagecache import GamesPackageCache, ItemNameGroups, LocationNameGroups
 
 
 class DBGamesPackageCache(GamesPackageCache):

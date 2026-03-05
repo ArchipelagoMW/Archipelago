@@ -26,7 +26,7 @@ from MultiServer import (
 )
 from Utils import restricted_loads, cache_argsless
 from NetUtils import GamesPackage
-from apmw.webhost.customserver.gamespackage.cache import DBGamesPackageCache
+from apmw.webhost.customserver.gamespackagecache import DBGamesPackageCache
 from .locker import Locker
 from .models import Command, Room, db
 

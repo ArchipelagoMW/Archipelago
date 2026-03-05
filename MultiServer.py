@@ -45,7 +45,7 @@ from Utils import version_tuple, restricted_loads, Version, async_start, get_int
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore, MultiData, Hint, HintStatus, GamesPackage
 from BaseClasses import ItemClassification
-from apmw.multiserver.gamespackage.cache import GamesPackageCache
+from apmw.multiserver.gamespackagecache import GamesPackageCache
 
 
 min_client_version = Version(0, 5, 0)

@@ -7,7 +7,7 @@ from test.multiserver.test_gamespackage_cache import GamesPackageCacheTest
 
 import Utils
 from NetUtils import GamesPackage
-from apmw.webhost.customserver.gamespackage.cache import DBGamesPackageCache
+from apmw.webhost.customserver.gamespackagecache import DBGamesPackageCache
 
 
 class FakeGameDataPackage:
