@@ -787,33 +787,41 @@ class OptionsCreator(ThemedApp):
         except Exception:
             pass
 
-    def create_range(self, option: typing.Type[Range], name: str, initial_value: typing.Any = None):
-        """Build a slider widget for a Range option and bind it to self.options[name]."""
+    def create_range(self, option: typing.Type[Range], name: str, initial_value: typing.Any = None, bind: bool = True):
+        """Build a slider widget for a Range option and bind it to self.options[name] when bind=True.
+        When bind=False (e.g. inner range of NamedRange), only the slider is updated; caller owns self.options[name]."""
         def update_text(range_box: VisualRange):
             self.options[name] = int(range_box.slider.value)
             range_box.tag.text = str(int(range_box.slider.value))
             self._save_options_cache()
 
         box = VisualRange(option=option, name=name)
-        box.slider.bind(on_touch_move=lambda _, _1: update_text(box))
+        if bind:
+            box.slider.bind(value=lambda _, _1: update_text(box))
         if initial_value is not None:
             val = int(initial_value)
             val = min(max(val, option.range_start), option.range_end)
-            self.options[name] = val
             box.slider.value = val
             box.tag.text = str(val)
+            if bind:
+                self.options[name] = val
         else:
-            self.options[name] = option.default
+            box.slider.value = option.default
+            box.tag.text = str(int(option.default))
+            if bind:
+                self.options[name] = option.default
         return box
 
     def create_named_range(self, option: typing.Type[NamedRange], name: str, initial_value: typing.Any = None):
         """Build a NamedRange widget (slider + preset choices) and bind it to self.options[name]."""
         def set_to_custom(range_box: VisualNamedRange):
-            if (not self.options[name] == range_box.range.slider.value) \
-                    and (not self.options[name] in option.special_range_names or
-                         range_box.range.slider.value != option.special_range_names[self.options[name]]):
-                # we should validate the touch here,
-                # but this is much cheaper
+            range_box.range.tag.text = str(int(range_box.range.slider.value))
+            if range_box.range.slider.value in option.special_range_names.values():
+                value = next(key for key, val in option.special_range_names.items()
+                             if val == range_box.range.slider.value)
+                self.options[name] = value
+                _set_button_display_text(range_box.choice, value.title())
+            else:
                 self.options[name] = int(range_box.range.slider.value)
                 range_box.range.tag.text = str(int(range_box.range.slider.value))
                 _set_button_display_text(range_box.choice, "Custom")
@@ -834,7 +842,7 @@ class OptionsCreator(ThemedApp):
                 range_initial = option.special_range_names[initial_value.lower()]
             elif isinstance(initial_value, int):
                 range_initial = initial_value
-        range_widget = self.create_range(option, name, range_initial)
+        range_widget = self.create_range(option, name, range_initial, bind=False)
         box = VisualNamedRange(option=option, name=name, range_widget=range_widget)
         if initial_value is not None:
             if isinstance(initial_value, str) and initial_value.lower() in option.special_range_names:
@@ -848,21 +856,27 @@ class OptionsCreator(ThemedApp):
                 box.range.tag.text = str(int(box.range.slider.value))
                 _set_button_display_text(box.choice, "Custom")
                 self.options[name] = initial_value
-        elif option.default in option.special_range_names:
-            # value can get mismatched in this case
-            box.range.slider.value = min(max(option.special_range_names[option.default], option.range_start),
-                                               option.range_end)
-            box.range.tag.text = str(int(box.range.slider.value))
-            self.options[name] = option.default
         else:
-            self.options[name] = option.default
-        box.range.slider.bind(on_touch_move=lambda _, _2: set_to_custom(box))
+            default: int | str = option.default
+            if default in option.special_range_names:
+                # value can get mismatched in this case
+                box.range.slider.value = min(max(option.special_range_names[default], option.range_start),
+                                               option.range_end)
+                box.range.tag.text = str(int(box.range.slider.value))
+                self.options[name] = option.default
+            elif default in option.special_range_names.values():
+                # Display the preset name on the button when default is a numeric value that has a name
+                name_key = next(key for key, val in option.special_range_names.items() if val == option.default)
+                _set_button_display_text(box.choice, name_key.title())
+                self.options[name] = option.default
+            else:
+                self.options[name] = option.default
+        box.range.slider.bind(value=lambda _, _2: set_to_custom(box))
         items = _dropdown_items(
             [(choice.title(), lambda text=choice.title(): set_value(text, box))
              for choice in option.special_range_names]
         )
         box.range.slider.dropdown = FixedPositionMDDropdownMenu(caller=box.choice, items=items)
-        # Binding via lambda fixes an issue where some dropdowns would not open
         box.choice.bind(on_release=lambda b, bx=box: bx.range.slider.dropdown.open())
         return box
 
@@ -959,8 +973,12 @@ class OptionsCreator(ThemedApp):
         valid_keys = sorted(option.valid_keys)
         if option.verify_item_name:
             valid_keys += list(world.item_name_to_id.keys())
+            if option.convert_name_groups:
+                valid_keys += list(world.item_name_groups.keys())
         if option.verify_location_name:
             valid_keys += list(world.location_name_to_id.keys())
+            if option.convert_name_groups:
+                valid_keys += list(world.location_name_groups.keys())
 
         def apply_changes(button):
             self.options[name].clear()
@@ -1000,7 +1018,8 @@ class OptionsCreator(ThemedApp):
     def create_option_set_list_counter(self, option: typing.Type[OptionList] | typing.Type[OptionSet] |
                                        typing.Type[OptionCounter], name: str, world: typing.Type[World],
                                        initial_value: typing.Any = None):
-        """Build an 'Edit' button that opens the set/list/counter popup for this option."""
+        """Build an 'Edit' button that opens the set/list/counter popup for this option.
+        Sets self.options[name] upfront so OptionList/Set/Counter are exported to YAML even if Edit is never pressed."""
         if initial_value is not None:
             if _is_option_counter(option):
                 self.options[name] = deepcopy(initial_value)
