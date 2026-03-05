@@ -29,7 +29,7 @@ import webbrowser
 import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
-from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, Removed,
+from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList,
                      OptionCounter, Visibility)
 
 
@@ -318,26 +318,28 @@ class OptionsCreator(ThemedApp):
         else:
             self.show_result_snack("Name cannot be longer than 16 characters.")
 
-    def create_range(self, option: typing.Type[Range], name: str):
+    def create_range(self, option: typing.Type[Range], name: str, bind=True):
         def update_text(range_box: VisualRange):
             self.options[name] = int(range_box.slider.value)
             range_box.tag.text = str(int(range_box.slider.value))
             return
 
         box = VisualRange(option=option, name=name)
-        box.slider.bind(on_touch_move=lambda _, _1: update_text(box))
+        if bind:
+            box.slider.bind(value=lambda _, _1: update_text(box))
         self.options[name] = option.default
         return box
 
     def create_named_range(self, option: typing.Type[NamedRange], name: str):
         def set_to_custom(range_box: VisualNamedRange):
-            if (not self.options[name] == range_box.range.slider.value) \
-                    and (not self.options[name] in option.special_range_names or
-                         range_box.range.slider.value != option.special_range_names[self.options[name]]):
-                # we should validate the touch here,
-                # but this is much cheaper
+            range_box.range.tag.text = str(int(range_box.range.slider.value))
+            if range_box.range.slider.value in option.special_range_names.values():
+                value = next(key for key, val in option.special_range_names.items()
+                             if val == range_box.range.slider.value)
+                self.options[name] = value
+                set_button_text(box.choice, value.title())
+            else:
                 self.options[name] = int(range_box.range.slider.value)
-                range_box.range.tag.text = str(int(range_box.range.slider.value))
                 set_button_text(range_box.choice, "Custom")
 
         def set_button_text(button: MDButton, text: str):
@@ -346,7 +348,7 @@ class OptionsCreator(ThemedApp):
         def set_value(text: str, range_box: VisualNamedRange):
             range_box.range.slider.value = min(max(option.special_range_names[text.lower()], option.range_start),
                                                option.range_end)
-            range_box.range.tag.text = str(int(range_box.range.slider.value))
+            range_box.range.tag.text = str(option.special_range_names[text.lower()])
             set_button_text(range_box.choice, text)
             self.options[name] = text.lower()
             range_box.range.slider.dropdown.dismiss()
@@ -355,13 +357,18 @@ class OptionsCreator(ThemedApp):
             # for some reason this fixes an issue causing some to not open
             box.range.slider.dropdown.open()
 
-        box = VisualNamedRange(option=option, name=name, range_widget=self.create_range(option, name))
-        if option.default in option.special_range_names:
+        box = VisualNamedRange(option=option, name=name, range_widget=self.create_range(option, name, bind=False))
+        default: int | str = option.default
+        if default in option.special_range_names:
             # value can get mismatched in this case
-            box.range.slider.value = min(max(option.special_range_names[option.default], option.range_start),
+            box.range.slider.value = min(max(option.special_range_names[default], option.range_start),
                                                option.range_end)
             box.range.tag.text = str(int(box.range.slider.value))
-        box.range.slider.bind(on_touch_move=lambda _, _2: set_to_custom(box))
+        elif default in option.special_range_names.values():
+            # better visual
+            default = next(key for key, val in option.special_range_names.items() if val == option.default)
+            set_button_text(box.choice, default.title())
+        box.range.slider.bind(value=lambda _, _2: set_to_custom(box))
         items = [
             {
                 "text": choice.title(),
@@ -371,7 +378,7 @@ class OptionsCreator(ThemedApp):
         ]
         box.range.slider.dropdown = MDDropdownMenu(caller=box.choice, items=items)
         box.choice.bind(on_release=open_dropdown)
-        self.options[name] = option.default
+        self.options[name] = default
         return box
 
     def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str):
@@ -447,8 +454,12 @@ class OptionsCreator(ThemedApp):
         valid_keys = sorted(option.valid_keys)
         if option.verify_item_name:
             valid_keys += list(world.item_name_to_id.keys())
+            if option.convert_name_groups:
+                valid_keys += list(world.item_name_groups.keys())
         if option.verify_location_name:
             valid_keys += list(world.location_name_to_id.keys())
+            if option.convert_name_groups:
+                valid_keys += list(world.location_name_groups.keys())
 
         if not issubclass(option, OptionCounter):
             def apply_changes(button):
@@ -470,14 +481,6 @@ class OptionsCreator(ThemedApp):
         dialog.scrollbox.layout.spacing = dp(5)
         dialog.scrollbox.layout.padding = [0, dp(5), 0, 0]
 
-        if name not in self.options:
-            # convert from non-mutable to mutable
-            # We use list syntax even for sets, set behavior is enforced through GUI
-            if issubclass(option, OptionCounter):
-                self.options[name] = deepcopy(option.default)
-            else:
-                self.options[name] = sorted(option.default)
-
         if issubclass(option, OptionCounter):
             for value in sorted(self.options[name]):
                 dialog.add_set_item(value, self.options[name].get(value, None))
@@ -491,6 +494,15 @@ class OptionsCreator(ThemedApp):
     def create_option_set_list_counter(self, option: typing.Type[OptionList] | typing.Type[OptionSet] |
                                        typing.Type[OptionCounter], name: str, world: typing.Type[World]):
         main_button = MDButton(MDButtonText(text="Edit"), on_release=lambda x: self.create_popup(option, name, world))
+
+        if name not in self.options:
+            # convert from non-mutable to mutable
+            # We use list syntax even for sets, set behavior is enforced through GUI
+            if issubclass(option, OptionCounter):
+                self.options[name] = deepcopy(option.default)
+            else:
+                self.options[name] = sorted(option.default)
+
         return main_button
 
     def create_option(self, option: typing.Type[Option], name: str, world: typing.Type[World]) -> Widget:

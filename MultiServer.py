@@ -21,6 +21,7 @@ import time
 import typing
 import weakref
 import zlib
+from signal import SIGINT, SIGTERM
 
 import ModuleUpdate
 
@@ -475,7 +476,8 @@ class Context:
     def _load(self, decoded_obj: MultiData, use_embedded_server_options: bool) -> None:
         self.read_data = {}
         # there might be a better place to put this.
-        self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
+        race_mode = decoded_obj.get("race_mode", 0)
+        self.read_data["race_mode"] = lambda: race_mode
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver}, "
@@ -1320,6 +1322,13 @@ class CommandMeta(type):
             commands.update(base.commands)
         commands.update({command_name[5:]: method for command_name, method in attrs.items() if
                          command_name.startswith("_cmd_")})
+        for command_name, method in commands.items():
+            # wrap async def functions so they run on default asyncio loop
+            if inspect.iscoroutinefunction(method):
+                def _wrapper(self, *args, _method=method, **kwargs):
+                    return async_start(_method(self, *args, **kwargs))
+                functools.update_wrapper(_wrapper, method)
+                commands[command_name] = _wrapper
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
@@ -2568,6 +2577,8 @@ async def console(ctx: Context):
             input_text = await queue.get()
             queue.task_done()
             ctx.commandprocessor(input_text)
+        except asyncio.exceptions.CancelledError:
+            ctx.logger.info("ConsoleTask cancelled")
         except:
             import traceback
             traceback.print_exc()
@@ -2734,6 +2745,15 @@ async def main(args: argparse.Namespace):
     console_task = asyncio.create_task(console(ctx))
     if ctx.auto_shutdown:
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
+
+    def stop():
+        for remove_signal in [SIGINT, SIGTERM]:
+            asyncio.get_event_loop().remove_signal_handler(remove_signal)
+        ctx.commandprocessor._cmd_exit()
+
+    for signal in [SIGINT, SIGTERM]:
+        asyncio.get_event_loop().add_signal_handler(signal, stop)
+
     await ctx.exit_event.wait()
     console_task.cancel()
     if ctx.shutdown_task:
