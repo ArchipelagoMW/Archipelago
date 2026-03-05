@@ -132,8 +132,7 @@ class RaC3World(World):
         location_count = len(self.multiworld.get_unfilled_locations(self.player))
         item_count = len(itempool)
         excluded_count = self.get_excluded_count()
-        if excluded_count > location_count - item_count:
-            raise OptionError("Too many locations have been excluded, not enough locations remain to place all items.")
+        location_count -= excluded_count
         if location_count - item_count >= 0:
             filler = [self.create_filler() for _ in range(location_count - item_count)]
             self.multiworld.itempool.extend(filler)
