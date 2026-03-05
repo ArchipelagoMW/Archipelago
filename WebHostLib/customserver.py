@@ -184,12 +184,12 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port(game_ports: list, host):
+def get_random_port(game_ports: list[str | int], host: str):
     available_ports = []
     ephemeral_allowed = False
     for item in game_ports:
-        if type(item) is str and '-' in item:
-            start, end = map(int, item.split('-'))
+        if isinstance(item, str) and "-" in item:
+            start, end = map(int, item.split("-"))
             available_ports.append(range(start, end+1))
         elif int(item) == 0:
             ephemeral_allowed = True
