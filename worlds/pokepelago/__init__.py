@@ -134,7 +134,7 @@ class PokepelagoWorld(World):
 
         # Pre-collect starter Type Keys so those types are accessible from game start.
         # These are NOT placed in the pool — they go directly into the player's start inventory.
-        for p_type in starter_types:
+        for p_type in sorted(starter_types):
             self.multiworld.push_precollected(self.create_item(f"{p_type} Type Key"))
 
         # Add non-starter Type Keys to the pool as progression items.
