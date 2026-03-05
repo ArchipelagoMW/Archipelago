@@ -183,7 +183,7 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port(game_ports: list):
+def get_random_port(game_ports: list, host):
     available_ports = []
     ephemeral_allowed = False
     for item in game_ports:
@@ -195,23 +195,23 @@ def get_random_port(game_ports: list):
         else:
             available_ports.append([int(item)])
 
-    return get_port_from_list(more_itertools.interleave_randomly(*available_ports), ephemeral_allowed)
+    return get_port_from_list(more_itertools.interleave_randomly(*available_ports), ephemeral_allowed, host)
 
 
-def get_port_from_list(available_ports: typing.Iterable[int], ephemeral_allowed: bool) -> int:
+def get_port_from_list(available_ports: typing.Iterable[int], ephemeral_allowed: bool, host) -> socket.socket:
     # limit amount of checked ports to 1024
     for port in itertools.islice(available_ports, 1024):
-        if not is_port_in_use(port):
-            break
+        sock = get_socket_if_free(host, port)
+        if sock is not None: return sock
     else:
-        if ephemeral_allowed: return 0
+        if ephemeral_allowed: return socket.create_server((host, 0))
         raise OSError(98, "No available ports")
-    return port
 
-
-def is_port_in_use(port: int) -> bool:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
+def get_socket_if_free(host, port: int) -> socket.socket | None:
+    try:
+        return socket.create_server((host, port))
+    except OSError:
+        return None
 
 
 @cache_argsless
@@ -345,8 +345,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 if ctx.port == 0:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx),
-                        ctx.host,
-                        get_random_port(game_ports),
+                        sock=get_random_port(game_ports, ctx.host),
                         ssl=get_ssl_context(),
                         # In original code, this extension wasn't included when port was 0, should I leave that behavior?
                         # Or was it a bug?
