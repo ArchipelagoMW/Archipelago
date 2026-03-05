@@ -4,16 +4,17 @@ import asyncio
 import collections
 import datetime
 import functools
+import itertools
 import logging
 import multiprocessing
 import pickle
-import random
 import socket
 import threading
 import time
 import typing
 import sys
 
+import more_itertools
 import websockets
 from pony.orm import commit, db_session, select
 
@@ -116,7 +117,7 @@ class WebHostContext(Context):
         if room.last_port:
             self.port = room.last_port
         else:
-            self.port = get_random_port(game_ports)
+            self.port = 0
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
@@ -185,36 +186,27 @@ class WebHostContext(Context):
 def get_random_port(game_ports):
     config_range_list = game_ports.split(",")
     available_ports = []
+    ephemeral_allowed = False
     for item in config_range_list:
         if '-' in item:
             start, end = map(int, item.split('-'))
-            available_ports.extend(range(start, end+1))
+            available_ports.append(range(start, end+1))
+        elif item == "0":
+            ephemeral_allowed = True
         else:
-            available_ports.append(int(item))
+            available_ports.append([int(item)])
 
-    port = get_port_from_list(available_ports)
-    if port == 0:
-        checked_ports = []
-        while len(set(checked_ports)) < (65535-49152)+1:
-            port = random.randint(49152, 65535)
-            if not is_port_in_use(port):
-                break
-            else:
-                checked_ports.append(port)
-        logging.info(f"Unable to find an available port in custom range. Expanded search to the default ports. Hosting on port {port}.")
-
-    return port
+    return get_port_from_list(more_itertools.interleave_randomly(*available_ports), ephemeral_allowed)
 
 
-def get_port_from_list(available_ports: list) -> int:
-    while available_ports:
-        port = random.choice(available_ports)
-        available_ports.remove(port)
-
+def get_port_from_list(available_ports: typing.Iterable[int], ephemeral_allowed: bool) -> int:
+    # limit amount of checked ports to 1024
+    for port in itertools.islice(available_ports, 1024):
         if not is_port_in_use(port):
             break
     else:
-        port = 0
+        if ephemeral_allowed: return 0
+        raise OSError(98, "No available ports")
     return port
 
 
@@ -339,7 +331,18 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 ctx.load(room_id, game_ports)
                 ctx.init_save()
                 assert ctx.server is None
-                try:
+                if ctx.port == 0:
+                    ctx.server = websockets.serve(
+                        functools.partial(server, ctx=ctx),
+                        ctx.host,
+                        get_random_port(game_ports),
+                        ssl=get_ssl_context(),
+                        # In original code, this extension wasn't included when port was 0, should I leave that behavior?
+                        # Or was it a bug?
+                        extensions=[server_per_message_deflate_factory],
+                    )
+                    await ctx.server
+                else:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx),
                         ctx.host,
@@ -347,11 +350,6 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                         ssl=get_ssl_context(),
                         extensions=[server_per_message_deflate_factory],
                     )
-                    await ctx.server
-                except OSError:  # likely port in use
-                    ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=get_ssl_context())
-
                     await ctx.server
                 port = 0
                 for wssocket in ctx.server.ws_server.sockets:
