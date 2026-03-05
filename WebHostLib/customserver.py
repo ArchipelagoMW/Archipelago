@@ -190,7 +190,7 @@ def get_random_port(game_ports: list):
         if type(item) is str and '-' in item:
             start, end = map(int, item.split('-'))
             available_ports.append(range(start, end+1))
-        elif int(item) == "0":
+        elif int(item) == 0:
             ephemeral_allowed = True
         else:
             available_ports.append([int(item)])
