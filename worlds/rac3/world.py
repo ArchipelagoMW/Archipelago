@@ -132,12 +132,14 @@ class RaC3World(World):
         location_count = len(self.multiworld.get_unfilled_locations(self.player))
         item_count = len(itempool)
         excluded_count = self.get_excluded_count()
-        location_count -= excluded_count
-        if location_count - item_count >= 0:
-            filler = [self.create_filler() for _ in range(location_count - item_count)]
+        filler_count = location_count - item_count
+        if excluded_count > filler_count and self.multiworld.players == 1:
+            self.handle_not_enough_locations(excluded_count - filler_count)
+        if filler_count >= 0:
+            filler = [self.create_filler() for _ in range(filler_count)]
             self.multiworld.itempool.extend(filler)
         else:
-            self.handle_not_enough_locations(item_count - location_count)
+            self.handle_not_enough_locations(-filler_count)
 
     def get_excluded_count(self) -> int:
         """Get the number of unique excluded locations for this player"""
@@ -170,6 +172,10 @@ class RaC3World(World):
             option_list.append(RAC3OPTION.VIDCOMICS)
         if self.options.vr_challenges.value == 0:
             option_list.append(RAC3OPTION.VR_CHALLENGES)
+        if self.options.weapon_vendors.value == 0:
+            option_list.append(RAC3OPTION.WEAPON_VENDORS)
+        if self.options.ship_vendor.value == 0:
+            option_list.append(RAC3OPTION.SHIP_VENDOR)
         if self.options.sewer_crystals.value < 3:
             option_list.append(RAC3OPTION.SEWER_CRYSTALS)
         if self.options.sewer_limitation.value < 20:
