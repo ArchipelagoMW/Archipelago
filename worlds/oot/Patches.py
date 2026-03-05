@@ -38,6 +38,7 @@ AP_JUNK = 0xD5
 
 class OoTContainer(APPatch):
     game: str = 'Ocarina of Time'
+    patch_file_ending = ".apz5"
 
     def __init__(self, patch_data: bytes, base_path: str, output_directory: str,
                  player = None, player_name: str = "", server: str = ""):

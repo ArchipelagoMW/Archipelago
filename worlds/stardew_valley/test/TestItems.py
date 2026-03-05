@@ -1,5 +1,6 @@
-from BaseClasses import MultiWorld, get_seed
-from . import setup_solo_multiworld, SVTestCase, allsanity_no_mods_6_x_x, get_minsanity_options, solo_multiworld
+from BaseClasses import MultiWorld, get_seed, ItemClassification
+from .bases import SVTestCase, solo_multiworld, setup_solo_multiworld
+from .options.presets import get_minsanity_options, allsanity_no_mods_7_x_x
 from .. import StardewValleyWorld
 from ..items import Group, item_table
 from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanity, Goal
@@ -43,15 +44,15 @@ class TestItems(SVTestCase):
         self.assertEqual(len(baby_permutations), 4)
 
     def test_correct_number_of_stardrops(self):
-        allsanity_options = allsanity_no_mods_6_x_x()
+        allsanity_options = allsanity_no_mods_7_x_x()
         with solo_multiworld(allsanity_options) as (multiworld, _):
             stardrop_items = [item for item in multiworld.get_items() if item.name == "Stardrop"]
             self.assertEqual(len(stardrop_items), 7)
 
     def test_no_duplicate_rings(self):
-        allsanity_options = allsanity_no_mods_6_x_x()
+        allsanity_options = allsanity_no_mods_7_x_x()
         with solo_multiworld(allsanity_options) as (multiworld, _):
-            ring_items = [item.name for item in multiworld.get_items() if Group.RING in item_table[item.name].groups]
+            ring_items = [item.name for item in multiworld.get_items() if Group.FILLER_RING in item_table[item.name].groups]
             self.assertEqual(len(ring_items), len(set(ring_items)))
 
     def test_can_start_in_any_season(self):
@@ -69,6 +70,22 @@ class TestItems(SVTestCase):
             self.assertEqual(len(season_items), 3)
             starting_seasons_rolled.add(f"{starting_season_items[0]}")
         self.assertEqual(len(starting_seasons_rolled), 4)
+
+
+class TestStartInventoryFillersAreProperlyExcluded(SVTestCase):
+    def test_given_maximum_one_resource_pack_in_start_inventory_when_create_items_then_item_is_properly_excluded(self):
+        assert item_table[Wallet.key_to_the_town].classification == ItemClassification.useful \
+               and {Group.MAXIMUM_ONE, Group.FILLER_QUALITY_OF_LIFE}.issubset(item_table[Wallet.key_to_the_town].groups), \
+            "'Key to the Town' is no longer suitable to test this usecase."
+
+        options = {
+            "start_inventory": {
+                Wallet.key_to_the_town: 1,
+            }
+        }
+
+        with solo_multiworld(options, world_caching=False) as (multiworld, world):
+            self.assertNotIn(world.create_item(Wallet.key_to_the_town), multiworld.get_items())
 
 
 class TestMetalDetectors(SVTestCase):

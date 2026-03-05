@@ -2,12 +2,12 @@
 
 ## Logiciels nécessaires
 
-- Une copie du jeu Aquaria non-modifiée (disponible sur la majorité des sites de ventes de jeux vidéos en ligne)
+- Une copie du jeu Aquaria non modifiée (disponible sur la majorité des sites de ventes de jeux vidéos en ligne)
 - Le client du Randomizer d'Aquaria [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases/latest)
 
 ## Logiciels optionnels
 
-- De manière optionnel, pour pouvoir envoyer des [commandes](/tutorial/Archipelago/commands/en) comme `!hint`: utilisez le client texte de [la version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+- De manière optionnelle, pour pouvoir envoyer des [commandes](/tutorial/Archipelago/commands/en) comme `!hint`: utilisez le client texte de [la version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 - [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest), pour utiliser avec [PopTracker](https://github.com/black-sliver/PopTracker/releases/latest)
 
 ## Procédures d'installation et d'exécution
@@ -25,7 +25,7 @@ Désarchiver le randomizer d'Aquaria et copier tous les fichiers de l'archive da
 fichier d'archive devrait contenir les fichiers suivants:
 - aquaria_randomizer.exe
 - OpenAL32.dll
-- override (directory)
+- randomizer_files (directory)
 - SDL2.dll
 - usersettings.xml
 - wrap_oal.dll
@@ -34,7 +34,10 @@ fichier d'archive devrait contenir les fichiers suivants:
 S'il y a des conflits entre les fichiers de l'archive zip et les fichiers du jeu original, vous devez utiliser
 les fichiers contenus dans l'archive zip.
 
-Finalement, pour lancer le randomizer, vous devez utiliser la ligne de commande (vous pouvez ouvrir une interface de
+Il y a plusieurs manières de lancer le randomizer. Le plus simple consiste à utiliser le lanceur intégré en
+exécutant simplement le fichier `aquaria_randomizer.exe`.
+
+Il est également possible de lancer le randomizer en utilisant la ligne de commande (vous pouvez ouvrir une interface de
 ligne de commande, entrez l'adresse `cmd` dans la barre d'adresse de l'explorateur de fichier de Windows). Voici
 la ligne de commande à utiliser pour lancer le randomizer:
 
@@ -57,9 +60,12 @@ le mettre exécutable. Vous pouvez mettre le fichier exécutable avec la command
 chmod +x Aquaria_Randomizer-*.AppImage
 ```
 
-ou bien en utilisant l'explorateur graphique de votre système.
+ou bien en utilisant l'explorateur de fichier graphique de votre système (la permission d'exécution est
+généralement dans les propriétés du fichier).
 
-Pour lancer le randomizer, utiliser la commande suivante:
+Pour lancer le randomizer en utilisant le lanceur intégré, seulement exécuter le fichier AppImage.
+
+Vous pouvez également lancer le randomizer en spécifiant les informations de connexion dans les arguments de la ligne de commande:
 
 ```bash
 ./Aquaria_Randomizer-*.AppImage --name VotreNom --server LeServeur:LePort
@@ -83,7 +89,7 @@ avant de déposer le randomizer à l'intérieur permet de vous assurer de garder
 Désarchiver le fichier tar et copier tous les fichiers qu'il contient dans le répertoire du jeu d'origine d'Aquaria. Les
 fichiers extraient du fichier tar devraient être les suivants:
 - aquaria_randomizer
-- override (directory)
+- randomizer_files (directory)
 - usersettings.xml
 - cacert.pem
 
@@ -102,7 +108,10 @@ Notez également que s'il y a des fichiers ".so" dans le répertoire d'Aquaria (
 `libSDL-1.2.so.0` and `libstdc++.so.6`), vous devriez les retirer. Il s'agit de vieille version des librairies qui
 ne sont plus fonctionnelles dans les systèmes modernes et qui pourrait empêcher le randomizer de fonctionner.
 
-Pour lancer le randomizer, utiliser la commande suivante:
+Pour lancer le randomizer en utilisant le lanceur intégré, seulement exécuter le fichier `aquaria_randomizer`.
+
+Vous pouvez également lancer le randomizer en spécifiant les information de connexion dans les arguments de la
+ligne de commande:
 
 ```bash
 ./aquaria_randomizer --name VotreNom --server LeServeur:LePort
@@ -119,6 +128,21 @@ pour vous assurer que votre fichier est exécutable:
 
 ```bash
 chmod +x aquaria_randomizer
+```
+### Steam Deck
+
+Pour installer le randomizer sur la Steam Deck, seulement suivre la procédure pour les fichiers AppImage
+indiquée précédemment.
+
+### Aucun son sur Linux/Steam Deck
+
+Si le jeu fonctionne sans problème, mais qu'il n'y a aucun son, c'est probablement parce que le jeu
+n'arrive pas à utiliser le bon pilote de son. Généralement, le problème est réglé en ajoutant la
+variable d'environnement `ALSOFT_DRIVERS=pulse`. Voici un exemple (peut varier en fonction de la manière
+que le randomizer est lancé):
+
+```bash
+ALSOFT_DRIVERS=pulse ./Aquaria_Randomizer-*.AppImage --name VotreNom --server LeServeur:LePort
 ```
 
 ## Tracking automatique

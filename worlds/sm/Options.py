@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, PerGameCommonOptions, Range, OptionDict, OptionList, OptionSet, Option, Toggle, DefaultOnToggle
+from Options import Choice, PerGameCommonOptions, Range, OptionDict, OptionList, OptionSet, OptionGroup, Toggle, DefaultOnToggle
 from .variaRandomizer.utils.objectives import _goals
 from dataclasses import dataclass
 
@@ -8,8 +8,15 @@ class StartItemsRemovesFromPool(Toggle):
     display_name = "StartItems Removes From Item Pool"
 
 class Preset(Choice):
-    """Choose one of the presets or specify "varia_custom" to use varia_custom_preset option or specify "custom" to use
-    custom_preset option."""
+    """Determines the general difficulty of the item placements by adjusting the list of tricks that logic allows.
+    - Newbie: New to randomizers, but completed Super Metroid 100% and knows basic techniques (Wall Jump, Shinespark, Mid-air Morph)
+    - Casual: Occasional rando player. No hell runs or suitless Maridia, some easy to learn tricks in logic.
+    - Regular: Plays rando regularly. Knows many tricks that open up the game.
+    - Veteran: Experienced rando player. Harder everything, some tougher tricks in logic.
+    - Expert: Knows almost all tricks: full suitless Maridia, Lower Norfair hell runs, etc.
+    - Master: Everything on hardest, all tricks known.
+    In-depth details on each preset can be found on the VARIA website: https://varia.run/presets
+    You may also specify "varia_custom" to use varia_custom_preset option, or specify "custom" to use custom_preset option."""
     display_name = "Preset"
     option_newbie = 0
     option_casual = 1
@@ -46,7 +53,8 @@ class StartLocation(Choice):
     default = 1
 
 class DeathLink(Choice):
-    """When DeathLink is enabled and someone dies, you will die. With survive reserve tanks can save you."""
+    """When DeathLink is enabled and someone else with DeathLink dies, you will die. 
+    If "Enable Survive" is selected, reserve tanks can save you."""
     display_name = "Death Link"
     option_disable = 0
     option_enable = 1
@@ -56,11 +64,13 @@ class DeathLink(Choice):
     default = 0
 
 class RemoteItems(Toggle):
-    """Indicates you get items sent from your own world. This allows coop play of a world."""
-    display_name = "Remote Items"  
+    """Items from your own world are sent via the Archipelago server. This allows co-op play of a world and means that
+    you will not lose items on death or save file loss."""
+    display_name = "Remote Items"
 
 class MaxDifficulty(Choice):
-    """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will
+    """Maximum difficulty of tricks that are allowed from the seed's Preset.
+    Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will
     prevent the Randomizer from placing an item in a location too difficult to reach with the current items."""
     display_name = "Maximum Difficulty"
     option_easy = 0
@@ -73,7 +83,7 @@ class MaxDifficulty(Choice):
     default = 4
 
 class MorphPlacement(Choice):
-    """Influences where the Morphing Ball with be placed."""
+    """Influences where the Morphing Ball will be placed."""
     display_name = "Morph Placement"
     option_early = 0
     option_normal = 1
@@ -85,21 +95,21 @@ class StrictMinors(Toggle):
     display_name = "Strict Minors"
 
 class MissileQty(Range):
-    """The higher the number the higher the probability of choosing missles when placing a minor."""
+    """The higher the number, the higher the probability of choosing Missiles when placing a minor."""
     display_name = "Missile Quantity"
     range_start = 10
     range_end = 90
     default = 30
 
 class SuperQty(Range):
-    """The higher the number the higher the probability of choosing super missles when placing a minor."""
+    """The higher the number, the higher the probability of choosing Super Missiles when placing a minor."""
     display_name = "Super Quantity"
     range_start = 10
     range_end = 90
     default = 20
 
 class PowerBombQty(Range):
-    """The higher the number the higher the probability of choosing power bombs when placing a minor."""
+    """The higher the number, the higher the probability of choosing Power Bombs when placing a minor."""
     display_name = "Power Bomb Quantity"
     range_start = 10
     range_end = 90
@@ -123,7 +133,13 @@ class EnergyQty(Choice):
     default = 3
 
 class AreaRandomization(Choice):
-    """Randomize areas together using bidirectional access portals."""
+    """Randomize areas together using bidirectional access portals.
+    - Off: No change. All rooms are connected the same as in the original game.
+    - Full: All doors connecting areas will be randomized. "Areas" are roughly determined, but generally are regions
+    with different tilesets or music. For example, red Brinstar and green/pink Brinstar are different areas, Crocomire
+    and upper Norfair are different areas, etc.
+    - Light: Keep the same number of transitions between areas as in vanilla. So Crocomire area will always be connected
+    to upper Norfair, there'll always be two transitions between Crateria/blue Brinstar and green/pink Brinstar, etc."""
     display_name = "Area Randomization"
     option_off = 0
     option_light = 1
@@ -136,13 +152,13 @@ class AreaLayout(Toggle):
     display_name = "Area Layout"
 
 class DoorsColorsRando(Toggle):
-    """Randomize the color of Red/Green/Yellow doors. Add four new type of doors which require Ice/Wave/Spazer/Plasma
-    beams to open them."""
+    """Randomize the color of Red/Green/Yellow doors. Add four new types of doors which require Ice/Wave/Spazer/Plasma
+    Beams to open them."""
     display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):
     """When randomizing the color of Red/Green/Yellow doors, some doors can be randomized to Grey. Grey doors will never
-    open, you will have to go around them."""
+    open; you will have to go around them."""
     display_name = "Allow Grey Doors"
 
 class BossRandomization(Toggle):
@@ -169,7 +185,10 @@ class LayoutPatches(DefaultOnToggle):
     display_name = "Layout Patches"
 
 class VariaTweaks(Toggle):
-    """Include minor tweaks for the game to behave 'as it should' in a randomizer context"""
+    """Include minor tweaks for the game to behave 'as it should' in a randomizer context:
+    - Bomb Torizo always activates after picking up its item and does not require Bomb to activate
+    - Wrecked Ship item on the Energy Tank Chozo statue is present before defeating Phantoon
+    - Lower Norfair Chozo statue that lowers the acid toward Gold Torizo does not require Space Jump to activate"""
     display_name = "Varia Tweaks"
 
 class NerfedCharge(Toggle):
@@ -179,7 +198,12 @@ class NerfedCharge(Toggle):
     display_name = "Nerfed Charge"
 
 class GravityBehaviour(Choice):
-    """Modify the heat damage and enemy damage reduction qualities of the Gravity and Varia Suits."""
+    """Modify the heat damage and enemy damage reduction qualities of the Gravity and Varia Suits.
+    - Vanilla: Gravity provides full protection against all environmental damage (heat, spikes, etc.)
+    - Balanced: Removes Gravity environmental protection. Doubles Varia environmental protection. Enemy damage protection
+    is vanilla (50% Varia, 75% Gravity).
+    - Progressive: Gravity provides 50% heat reduction, Varia provides full heat reduction. Each suit adds 50% enemy
+    and environmental reduction, stacking to 75% reduction if you have both."""
     display_name = "Gravity Behaviour"
     option_Vanilla = 0
     option_Balanced = 1
@@ -233,7 +257,7 @@ class RandomMusic(Toggle):
 
 class CustomPreset(OptionDict):
     """
-    see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+    see https://varia.run/presets for detailed info on each preset settings
     knows: each skill (know) has a pair [can use, perceived difficulty using one of 1, 5, 10, 25, 50 or 100 each one
            matching a max_difficulty]
     settings: hard rooms, hellruns and bosses settings
@@ -246,7 +270,7 @@ class CustomPreset(OptionDict):
               }
 
 class VariaCustomPreset(OptionList):
-    """use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets"""
+    """use an entry from the preset list on https://varia.run/presets"""
     display_name = "Varia Custom Preset"  
     default = {}
 
@@ -259,7 +283,7 @@ class EscapeRando(Toggle):
     During the escape sequence:
     - All doors are opened
     - Maridia tube is opened
-    - The Hyper Beam can destroy Bomb , Power Bomb  and Super Missile  blocks and open blue/green gates from both sides
+    - The Hyper Beam can destroy Bomb, Power Bomb and Super Missile blocks and open blue/green gates from both sides
     - All mini bosses are defeated
     - All minor enemies are removed to allow you to move faster and remove lag
 
@@ -281,9 +305,9 @@ class RemoveEscapeEnemies(Toggle):
 class Tourian(Choice):
     """
     Choose endgame Tourian behaviour:
-    Vanilla: regular vanilla Tourian
-    Fast: speed up Tourian to skip Metroids, Zebetites, and all cutscenes (including Mother Brain 3 fight). Golden Four statues are replaced by an invincible Gadora until all objectives are completed.
-    Disabled: skip Tourian entirely, ie. escape sequence is triggered as soon as all objectives are completed.
+    - Vanilla: regular vanilla Tourian
+    - Fast: speed up Tourian to skip Metroids, Zebetites, and all cutscenes (including Mother Brain 3 fight). Golden Four statues are replaced by an invincible Gadora until all objectives are completed.
+    - Disabled: skip Tourian entirely; the escape sequence is triggered as soon as all objectives are completed.
     """
     display_name = "Endgame behavior with Tourian"
     option_Vanilla = 0
@@ -373,10 +397,71 @@ class RelaxedRoundRobinCF(Toggle):
     """
     display_name = "Relaxed round robin Crystal Flash"
 
+sm_option_groups = [
+    OptionGroup("Logic", [
+        Preset,
+        MaxDifficulty,
+        StartLocation,
+        VariaCustomPreset,
+        CustomPreset,
+    ]),
+    OptionGroup("Objectives and Endgame", [
+        Objective,
+        CustomObjective,
+        CustomObjectiveCount,
+        CustomObjectiveList,
+        Tourian,
+        EscapeRando,
+        RemoveEscapeEnemies,
+        Animals,
+    ]),
+    OptionGroup("Areas and Layout", [
+        AreaRandomization,
+        AreaLayout,
+        DoorsColorsRando,
+        AllowGreyDoors,
+        BossRandomization,
+        LayoutPatches,
+    ]),
+    OptionGroup("Item Pool", [
+        MorphPlacement,
+        StrictMinors,
+        MissileQty,
+        SuperQty,
+        PowerBombQty,
+        MinorQty,
+        EnergyQty,
+        FunCombat,
+        FunMovement,
+        FunSuits,
+    ]),
+    OptionGroup("Misc Tweaks", [
+        VariaTweaks,
+        GravityBehaviour,
+        NerfedCharge,
+        SpinJumpRestart,
+        SpeedKeep,
+        InfiniteSpaceJump,
+        RelaxedRoundRobinCF,
+    ]),
+    OptionGroup("Quality of Life", [
+        ElevatorsSpeed,
+        DoorsSpeed,
+        RefillBeforeSave,
+    ]),
+    OptionGroup("Cosmetic", [
+        Hud,
+        HideItems,
+        NoMusic,
+        RandomMusic,
+    ]),
+]
+
 @dataclass
 class SMOptions(PerGameCommonOptions):
     start_inventory_removes_from_pool: StartItemsRemovesFromPool
     preset: Preset
+    max_difficulty: MaxDifficulty
     start_location: StartLocation
     remote_items: RemoteItems
     death_link: DeathLink
@@ -384,7 +469,6 @@ class SMOptions(PerGameCommonOptions):
     #scav_num_locs: "10"
     #scav_randomized: "off"
     #scav_escape: "off"
-    max_difficulty: MaxDifficulty
     #progression_speed": "medium"
     #progression_difficulty": "normal"
     morph_placement: MorphPlacement
