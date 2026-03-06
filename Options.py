@@ -934,6 +934,15 @@ class OptionCounter(OptionDict):
     def __init__(self, value: dict[str, int]) -> None:
         super(OptionCounter, self).__init__(collections.Counter(value))
 
+    @classmethod
+    def from_any(cls, data: typing.Dict[str, typing.Any] | typing.List[str]) -> OptionDict:
+        if type(data) == dict:
+            return cls(data)
+        elif type(data) == list:
+            return cls(collections.Counter(data))
+        else:
+            raise NotImplementedError(f"Can only Convert from dictionary or list, got {type(data)}")
+
     def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
         super(OptionCounter, self).verify(world, player_name, plando_options)
 
