@@ -604,8 +604,8 @@ def macro_zone_4_coins(state, player, coins):
 
 
 def marios_castle_wario(state, player):
-    return ((has_pipe_right(state, player) and has_pipe_left(state, player))
-            or state.has("Mario's Castle Midway Bell", player))
+    return (has_pipe_right(state, player) and 
+           (has_pipe_left(state, player) or state.has("Mario's Castle Midway Bell", player)))
 
 
 def marios_castle_midway_bell(state, player):

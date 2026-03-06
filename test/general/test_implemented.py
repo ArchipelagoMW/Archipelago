@@ -46,6 +46,8 @@ class TestImplemented(unittest.TestCase):
             with self.subTest(game=game_name, seed=multiworld.seed):
                 distribute_items_restrictive(multiworld)
                 call_all(multiworld, "post_fill")
+                call_all(multiworld, "finalize_multiworld")
+                call_all(multiworld, "pre_output")
                 for key, data in multiworld.worlds[1].fill_slot_data().items():
                     self.assertIsInstance(key, str, "keys in slot data must be a string")
                     convert_to_base_types(data)  # only put base data types into slot data
@@ -93,6 +95,7 @@ class TestImplemented(unittest.TestCase):
             with self.subTest(game=game_name, seed=multiworld.seed):
                 distribute_items_restrictive(multiworld)
                 call_all(multiworld, "post_fill")
+                call_all(multiworld, "finalize_multiworld")
 
                 # Note: `multiworld.get_spheres()` iterates a set of locations, so the order that locations are checked
                 # is nondeterministic and may vary between runs with the same seed.
