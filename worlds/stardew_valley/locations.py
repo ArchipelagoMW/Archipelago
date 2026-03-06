@@ -16,7 +16,7 @@ from .mods.mod_data import ModNames
 from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity
+from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, Fishsanity, SkillProgression, Cropsanity
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
@@ -665,8 +665,29 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
 
 def extend_filler_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    i = 1
-    while len(randomized_locations) < 90:
+    number_items_to_add = 0
+    if len(randomized_locations) < 90:
+        number_items_to_add += ((90 - len(randomized_locations)) // 7)+1
+
+    filler_heavy_settings = [options.fishsanity != Fishsanity.option_none,
+                             options.shipsanity != Shipsanity.option_none,
+                             options.cooksanity != Cooksanity.option_none,
+                             options.craftsanity != Craftsanity.option_none,
+                             len(options.eatsanity.value) > 0,
+                             options.museumsanity == Museumsanity.option_all,
+                             options.quest_locations.value > 7]
+    orphan_settings = [len(options.chefsanity.value) > 0,
+                       options.friendsanity != Friendsanity.option_none,
+                       options.skill_progression != SkillProgression.option_vanilla,
+                       options.cropsanity != Cropsanity.option_disabled,
+                       len(options.start_without.value) > 0]
+
+    enabled_filler_heavy_settings = len([val for val in filler_heavy_settings if val])
+    enabled_orphan_settings = len([val for val in orphan_settings if val])
+    if enabled_orphan_settings > enabled_filler_heavy_settings:
+        number_items_to_add += enabled_orphan_settings - enabled_filler_heavy_settings
+
+    for i in range(1, 1+number_items_to_add):
         location_name = f"Traveling Merchant Sunday Item {i}"
         while any(location.name == location_name for location in randomized_locations):
             i += 1
