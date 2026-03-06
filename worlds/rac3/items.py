@@ -204,8 +204,8 @@ def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[s
     ]
     current_planet_list = [planet for planet in current_planet_list if planet not in unreachable]
 
-    # If Rangers are disabled, Aridia and Blackwater City are unreachable
-    if world.options.rangers.value == 0:
+    # If Rangers are disabled or only the optional missions are enabled, Aridia and Blackwater City are unreachable
+    if world.options.rangers.value == 0 or world.options.rangers.value == 2:
         to_remove = {RAC3ITEM.BLACKWATER_CITY}
         if world.options.weapon_vendors.value == 0:
             to_remove.add(RAC3ITEM.ARIDIA)
@@ -216,6 +216,19 @@ def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[s
     # Annihilation Nation is unreachable from the start
     if (world.options.arena.value == 0 or world.options.arena.value == 2) and world.options.weapon_vendors.value == 0:
         to_remove = {RAC3ITEM.ANNIHILATION_NATION}
+        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+    
+    # If you dont start with clank, you cant do leviathan
+    # If you also dont have titanium bolts, you cant get the one before first hypershot node
+    # If you also dont start with hypershot, you cant get the explore the starport rewards
+    if world.options.clank_options.value and not world.options.titanium_bolts.value and (RAC3ITEM.HYPERSHOT not in world.options.start_inventory.value):
+        to_remove = {RAC3ITEM.ZELDRIN_STARPORT}
+        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+    
+    # If titanium bolts are disabled, you cant get the one on marcadia before the ranger
+    # If you also dont have rangers or only the optional rangers, you cant get any of the marcadia locations including LDF
+    if world.options.titanium_bolts.value == 0 and (world.options.rangers.value == 0 or world.options.rangers.value == 2):
+        to_remove = {RAC3ITEM.MARCADIA}
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
 
     return current_planet_list
