@@ -770,6 +770,7 @@ class MyGameState(LogicMixin):
         new_state.mygame_defeatable_enemies = {
             player: enemies.copy() for player, enemies in self.mygame_defeatable_enemies.items()
         }
+        return new_state
 ```
 
 After doing this, you can now access `state.mygame_defeatable_enemies[player]` from your access rules.
