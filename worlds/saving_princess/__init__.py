@@ -23,14 +23,11 @@ components.append(
 
 def get_default_launch_command() -> List[str]:
     """Returns platform-dependant default launch command for Saving Princess"""
-    default_launch_command: List[str]
     if Utils.is_windows:
-        default_launch_command = []
+        return []
     else:
-        default_launch_command = ["/usr/bin/wine"]
-        if shutil.which("wine") == "/usr/local/bin/wine":
-            default_launch_command = ["/usr/local/bin/wine"]
-    return default_launch_command
+        wine_path = shutil.which("wine")
+        return wine_path if wine_path is not None else ["/usr/bin/wine"]
 
 
 class SavingPrincessSettings(Group):
