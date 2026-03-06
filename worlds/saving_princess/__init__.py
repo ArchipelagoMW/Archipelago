@@ -1,3 +1,4 @@
+import shutil
 from typing import ClassVar, Dict, Any, Type, List, Union
 
 import Utils
@@ -20,6 +21,18 @@ components.append(
 )
 
 
+def get_default_launch_command() -> List[str]:
+    """Returns platform-dependant default launch command for Saving Princess"""
+    default_launch_command: List[str]
+    if Utils.is_windows:
+        default_launch_command = []
+    else:
+        default_launch_command = ["/usr/bin/wine"]
+        if shutil.which("wine") == "/usr/local/bin/wine":
+            default_launch_command = ["/usr/local/bin/wine"]
+    return default_launch_command
+
+
 class SavingPrincessSettings(Group):
     class GamePath(UserFilePath):
         """Path to the game executable from which files are extracted"""
@@ -34,7 +47,7 @@ class SavingPrincessSettings(Group):
     class LaunchGame(Bool):
         """Set this to false to never autostart the game"""
 
-    class LaunchCommand(str):
+    class LaunchCommand(List[str]):
         """
         The console command that will be used to launch the game
         The command will be executed with the installation folder as the current directory
@@ -43,8 +56,7 @@ class SavingPrincessSettings(Group):
     exe_path: GamePath = GamePath("Saving Princess.exe")
     install_folder: InstallFolder = InstallFolder("Saving Princess")
     launch_game: Union[LaunchGame, bool] = True
-    launch_command: LaunchCommand = LaunchCommand('"Saving Princess v0_8.exe"' if Utils.is_windows
-                                                  else 'wine "Saving Princess v0_8.exe"')
+    launch_command: LaunchCommand = LaunchCommand(get_default_launch_command())
 
 
 class SavingPrincessWeb(WebWorld):

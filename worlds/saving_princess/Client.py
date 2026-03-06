@@ -16,7 +16,7 @@ import secrets
 import shutil
 import subprocess
 from tkinter import messagebox
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, List
 import urllib
 import urllib.parse
 
@@ -261,7 +261,9 @@ def launch(*args: str) -> Any:
     if SavingPrincessWorld.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.Popen(f"{SavingPrincessWorld.settings.launch_command} {name} {password} {server}")
+            game: str = os.path.join(os.getcwd(), "Saving Princess v0_8.exe")
+            launch_command: List[str] = SavingPrincessWorld.settings.launch_command + [game, name, password, server]
+            subprocess.Popen(launch_command)
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
