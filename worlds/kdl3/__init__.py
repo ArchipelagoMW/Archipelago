@@ -173,20 +173,17 @@ class KDL3World(World):
             for enemy in enemies_to_set:
                 self.copy_abilities[enemy] = self.random.choice(valid_abilities)
         for enemy in enemy_mapping:
-            self.multiworld.get_location(enemy, self.player) \
-                .place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
+            self.get_location(enemy).place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
         # fill animals
         if self.options.animal_randomization != 0:
             spawns = [animal for animal in animal_friend_spawns.keys() if
                       animal not in ["Ripple Field 5 - Animal 2", "Sand Canyon 6 - Animal 1", "Iceberg 4 - Animal 1"]]
-            self.multiworld.get_location("Iceberg 4 - Animal 1", self.player) \
-                .place_locked_item(self.create_item("ChuChu Spawn"))
+            self.get_location("Iceberg 4 - Animal 1").place_locked_item(self.create_item("ChuChu Spawn"))
             # Not having ChuChu here makes the room impossible (since only she has vertical burning)
-            self.multiworld.get_location("Ripple Field 5 - Animal 2", self.player) \
+            self.get_location("Ripple Field 5 - Animal 2") \
                 .place_locked_item(self.create_item("Pitch Spawn"))
             guaranteed_animal = self.random.choice(["Kine Spawn", "Coo Spawn"])
-            self.multiworld.get_location("Sand Canyon 6 - Animal 1", self.player) \
-                .place_locked_item(self.create_item(guaranteed_animal))
+            self.get_location("Sand Canyon 6 - Animal 1").place_locked_item(self.create_item(guaranteed_animal))
             # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-door rando
             if self.options.animal_randomization == 1:
                 animal_pool = [animal_friend_spawns[spawn] for spawn in animal_friend_spawns
@@ -202,7 +199,7 @@ class KDL3World(World):
                 animal_pool.append("Coo Spawn")
             else:
                 animal_pool.append("Kine Spawn")
-            locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
+            locations = [self.get_location(spawn) for spawn in spawns]
             items: List[Item] = [self.create_item(animal) for animal in animal_pool]
             allstate = CollectionState(self.multiworld)
             for item in [*copy_ability_table, *animal_friend_table, *["Heart Star" for _ in range(99)]]:
@@ -232,8 +229,7 @@ class KDL3World(World):
         else:
             animal_friends = animal_friend_spawns.copy()
             for animal in animal_friends:
-                self.multiworld.get_location(animal, self.player) \
-                    .place_locked_item(self.create_item(animal_friends[animal]))
+                self.get_location(animal).place_locked_item(self.create_item(animal_friends[animal]))
 
     def create_items(self) -> None:
         itempool = []
@@ -287,8 +283,8 @@ class KDL3World(World):
         if self.options.open_world:
             for level in self.player_levels:
                 for stage in range(0, 6):
-                    self.multiworld.get_location(location_table[self.player_levels[level][stage]]
-                                                 .replace("Complete", "Stage Completion"), self.player) \
+                    self.get_location(location_table[self.player_levels[level][stage]].replace("Complete",
+                                                                                               "Stage Completion")) \
                         .place_locked_item(KDL3Item(
                             f"{location_name.level_names_inverse[level]} - Stage Completion",
                             ItemClassification.progression, None, self.player))
@@ -298,10 +294,10 @@ class KDL3World(World):
     def generate_basic(self) -> None:
         self.stage_shuffle_enabled = self.options.stage_shuffle > 0
         for level in range(1, 6):
-            self.multiworld.get_location(f"Level {level} Boss - Defeated", self.player) \
+            self.get_location(f"Level {level} Boss - Defeated") \
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Defeated", ItemClassification.progression, None, self.player))
-            self.multiworld.get_location(f"Level {level} Boss - Purified", self.player) \
+            self.get_location(f"Level {level} Boss - Purified") \
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         # this can technically be done at any point before generate_output
@@ -335,7 +331,7 @@ class KDL3World(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(self.rom_name).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.player_name]
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # UT support
@@ -348,12 +344,12 @@ class KDL3World(World):
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         if self.stage_shuffle_enabled:
-            spoiler_handle.write(f"\nLevel Layout ({self.multiworld.get_player_name(self.player)}):\n")
+            spoiler_handle.write(f"\nLevel Layout ({self.player_name}):\n")
             for level in location_name.level_names:
                 for stage, i in zip(self.player_levels[location_name.level_names[level]], range(1, 7)):
                     spoiler_handle.write(f"{level} {i}: {location_table[stage].replace(' - Complete', '')}\n")
         if self.options.animal_randomization:
-            spoiler_handle.write(f"\nAnimal Friends ({self.multiworld.get_player_name(self.player)}):\n")
+            spoiler_handle.write(f"\nAnimal Friends ({self.player_name}):\n")
             for lvl in self.player_levels:
                 for stage in range(6):
                     rooms = [room for room in self.rooms if room.level == lvl and room.stage == stage]
@@ -365,7 +361,7 @@ class KDL3World(World):
                     spoiler_handle.write(f"{location_table[self.player_levels[lvl][stage]].replace(' - Complete','')}"
                                          f": {', '.join(animals)}\n")
         if self.options.copy_ability_randomization:
-            spoiler_handle.write(f"\nCopy Abilities ({self.multiworld.get_player_name(self.player)}):\n")
+            spoiler_handle.write(f"\nCopy Abilities ({self.player_name}):\n")
             for enemy in self.copy_abilities:
                 spoiler_handle.write(f"{enemy}: {self.copy_abilities[enemy].replace('No Ability', 'None').replace(' Ability', '')}\n")
 
@@ -375,8 +371,8 @@ class KDL3World(World):
             level_hint_data = {}
             for level in regions:
                 for stage in range(7):
-                    stage_name = self.multiworld.get_location(self.location_id_to_name[self.player_levels[level][stage]],
-                                                              self.player).name.replace(" - Complete", "")
+                    stage_name = self.get_location(self.location_id_to_name[self.player_levels[level][stage]]
+                                                              ).name.replace(" - Complete", "")
                     stage_regions = [room for room in self.rooms if stage_name in room.name]
                     for region in stage_regions:
                         for location in [location for location in list(region.get_locations()) if location.address]:
