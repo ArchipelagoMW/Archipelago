@@ -129,7 +129,7 @@ class RaC3World(World):
         elif nanotech_milestones == 3:  # every 5
             nanotech_locations = [lvl for lvl in every_5_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
         elif nanotech_milestones == 4:  # all
-            nanotech_locations = every_nanotech[:nanotech_limitation - 10] if nanotech_limitation > 10 else []
+            nanotech_locations = every_nanotech[:nanotech_limitation - 10]
 
         no_nanotech_locations = not nanotech_milestones or (nanotech_milestones != 0 and len(nanotech_locations) == 0)
 
