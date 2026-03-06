@@ -113,7 +113,7 @@ def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: t
 
 
 def set_rules(world: "KDL3World") -> None:
-    goal_location = world.multiworld.get_location(location_name.goals[world.options.goal.value], world.player)
+    goal_location = world.get_location(location_name.goals[world.options.goal.value])
     goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, world.player))
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Love-Love Rod", world.player)
 
