@@ -189,16 +189,21 @@ def install() -> None:
 
     logging.info("Extracting files from cab archive.")
     if Utils.is_windows:
-        subprocess.run(["Extrac32", "/Y", "/E", "saving_princess.cab"])
+        windows_path = os.environ["WINDIR"]
+        extractor_path = f"{windows_path}/System32/Extrac32"
+        subprocess.run([extractor_path, "/Y", "/E", "saving_princess.cab"])  #nosec
     else:
-        if shutil.which("wine") is not None:
-            subprocess.run(["wine", "Extrac32", "/Y", "/E", "saving_princess.cab"])
-        elif shutil.which("7z") is not None:
-            subprocess.run(["7z", "e", "saving_princess.cab"])
-        else:
-            error = "Could not find neither wine nor 7z.\n\nPlease install either the wine or the p7zip package."
-            messagebox.showerror("Missing package!", f"Error: {error}")
-            raise RuntimeError(error)
+        wine_path = shutil.which("wine")
+        extractor_path = wine_path if wine_path is not None else shutil.which("7z")
+        match extractor_path:
+            case "/usr/bin/wine" | "/usr/local/bin/wine":
+                subprocess.run([extractor_path, "Extrac32", "/Y", "/E", "saving_princess.cab"])  #nosec
+            case "/usr/bin/7z" | "/usr/local/bin/7z":
+                subprocess.run([extractor_path, "e", "saving_princess.cab"])  #nosec
+            case _:
+                error = "Could not find neither wine nor 7z.\n\nPlease install either the wine or the p7zip package."
+                messagebox.showerror("Missing package!", f"Error: {error}")
+                raise RuntimeError(error)
     os.remove("saving_princess.cab")  # delete the cab file
 
     shutil.copyfile("data.win", "original_data.win")  # and make a copy of data.win
