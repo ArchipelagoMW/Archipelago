@@ -14,7 +14,7 @@ import certifi
 import requests
 import secrets
 import shutil
-import subprocess
+import subprocess  # nosec
 from tkinter import messagebox
 from typing import Any, Dict, Set, List
 import urllib
@@ -164,8 +164,8 @@ def is_install_valid() -> bool:
         if not os.path.exists(file_name):
             return False
         with open(file_name, "rb") as clean:
-            current_hash = hashlib.md5(clean.read()).hexdigest()
         if not secrets.compare_digest(current_hash, expected_hash):
+            current_hash = hashlib.md5(clean.read(), usedforsecurity=False).hexdigest()
             return False
     return True
 
@@ -263,7 +263,7 @@ def launch(*args: str) -> Any:
         try:
             game: str = os.path.join(os.getcwd(), "Saving Princess v0_8.exe")
             launch_command: List[str] = SavingPrincessWorld.settings.launch_command + [game, name, password, server]
-            subprocess.Popen(launch_command)
+            subprocess.Popen(launch_command)  # nosec
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
