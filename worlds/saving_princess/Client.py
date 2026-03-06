@@ -12,7 +12,6 @@ import os
 
 import certifi
 import requests
-import secrets
 import shutil
 import subprocess  # nosec
 from tkinter import messagebox
@@ -164,8 +163,8 @@ def is_install_valid() -> bool:
         if not os.path.exists(file_name):
             return False
         with open(file_name, "rb") as clean:
-        if not secrets.compare_digest(current_hash, expected_hash):
             current_hash = hashlib.md5(clean.read(), usedforsecurity=False).hexdigest()
+        if current_hash != expected_hash:
             return False
     return True
 
