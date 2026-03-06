@@ -260,7 +260,8 @@ def launch(*args: str) -> Any:
         logging.info("Launching game.")
         try:
             game: str = os.path.join(os.getcwd(), "Saving Princess v0_8.exe")
-            launch_command: List[str] = SavingPrincessWorld.settings.launch_command + [game, name, password, server]
+            launch_command: List[str] = (SavingPrincessWorld.settings.launch_command_with_args
+                                         + [game, name, password, server])
             subprocess.Popen(launch_command)  # nosec
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"

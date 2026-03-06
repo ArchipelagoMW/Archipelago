@@ -44,16 +44,17 @@ class SavingPrincessSettings(Group):
     class LaunchGame(Bool):
         """Set this to false to never autostart the game"""
 
-    class LaunchCommand(List[str]):
+    class LaunchCommandWithArgs(List[str]):
         """
         The console command that will be used to launch the game
         The command will be executed with the installation folder as the current directory
+        Additional items in the list will be passed in as arguments
         """
 
     exe_path: GamePath = GamePath("Saving Princess.exe")
     install_folder: InstallFolder = InstallFolder("Saving Princess")
     launch_game: Union[LaunchGame, bool] = True
-    launch_command: LaunchCommand = LaunchCommand(get_default_launch_command())
+    launch_command_with_args: LaunchCommandWithArgs = LaunchCommandWithArgs(get_default_launch_command())
 
 
 class SavingPrincessWeb(WebWorld):
