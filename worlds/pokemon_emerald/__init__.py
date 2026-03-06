@@ -19,7 +19,7 @@ from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, Location
 from .groups import ITEM_GROUPS, LOCATION_GROUPS
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import (PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_by_category,
-                        set_free_fly, set_legendary_cave_entrances)
+                        set_free_fly, set_legendary_cave_entrances, remove_wild_encounter_locations)
 from .opponents import randomize_opponent_parties
 from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType, PokemonEmeraldOptions,
                       RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement, OPTION_GROUPS)
@@ -495,6 +495,7 @@ class PokemonEmeraldWorld(World):
 
     def connect_entrances(self):
         randomize_wild_encounters(self)
+        remove_wild_encounter_locations(self)
         self.shuffle_badges_hms()
         # For entrance randomization, disconnect entrances here, randomize map, then
         # undo badge/HM placement and re-shuffle them in the new map.
