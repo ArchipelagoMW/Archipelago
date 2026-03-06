@@ -67,6 +67,7 @@ item_name_groups = {
     "Recyclables": set(entry["name"] for entry in items_data if entry["name"].startswith("(Recyclable) ")),
     "Poisons": set(entry["name"] for entry in items_data if entry["name"].startswith("(Poison) ")),
     "Database Entries": set(entry["name"] for entry in items_data if entry["name"].startswith("(Database) ")),
+    "Root Nodes": set(entry["name"] for entry in items_data if entry["name"].endswith(" Root Node")),
 
     "Arrows": arrow_items,
     "Azure Bow": arrow_items,
@@ -131,6 +132,8 @@ def create_items(world: "NineSolsWorld") -> None:
             multiworld.get_location(name, player).place_locked_item(create_item(world, name))
         elif name.startswith("Seal of ") and not options.shuffle_sol_seals:
             continue  # we'll place these as a group later
+        elif name.endswith(" Root Node"):
+            continue  # handled by the node_items code
         elif name == "Grapple":
             if options.shuffle_grapple:
                 g = create_item(world, name)
@@ -177,6 +180,10 @@ def create_items(world: "NineSolsWorld") -> None:
             ["Nuwa's Vital Sanctum", "Seal of Nuwa"],
         ]:
             multiworld.get_location(location, player).place_locked_item(create_item(world, item))
+
+    if world.node_items:
+        for item_name in world.node_items:
+            prog_and_useful_items.append(create_item(world, item_name))
 
     # unique_filler_with_traps = unique_filler
 

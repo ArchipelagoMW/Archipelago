@@ -2098,7 +2098,7 @@
         { "region": "TRC - Upper Levels" }, // from root node level, jump left to the platform above this node
         // right node
         { "region": "TRC - Lower Right Stairwell" }
-    ] }
+    ] },
 //    {
 //        "from": "TRC - Dusk Guardian HQ Upper Levels", "to": "TRC - Dusk Guardian HQ Lower Levels",
 //        "requires": [
@@ -2113,4 +2113,27 @@
 
     // Tianhuo Research Institute
     // nothing for now
+
+    // Root Node Items
+    { "from": "FSP - Root Node", "to": "OW - Root Node & Middle Exits", "requires": [
+        { "item": "Outer Warehouse Root Node" }
+    ] },
+    { "from": "FSP - Root Node", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [
+        { "item": "Factory (Great Hall) Root Node" }
+    ] },
+    { "from": "FSP - Root Node", "to": "AF (Depths) - Root Node", "requires": [
+        { "item": "Apeman Facility (Depths) Root Node" }
+    ] },
+    { "from": "FSP - Root Node", "to": "PR (East) - Root Node", "requires": [
+        { "item": "Power Reservoir (East) Root Node" }
+    ] },
+    { "from": "FSP - Root Node", "to": "Radiant Pagoda - Root Node", "requires": [
+        { "item": "Radiant Pagoda Root Node" }
+    ] },
+    { "from": "FSP - Root Node", "to": "LYR - Root Node", "requires": [
+        { "item": "Lake Yaochi Ruins Root Node" }
+    ] },
+    { "from": "FSP - Root Node", "to": "GoS (East) - Root Node", "requires": [
+        { "item": "Grotto of Scriptures (East) Root Node" }
+    ] }
 ]

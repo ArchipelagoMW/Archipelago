@@ -7,6 +7,7 @@ from .items import NineSolsItem, all_non_event_items_table, item_name_groups, cr
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
 from .ut_map_page.map_page_index import map_page_index
 from .jade_costs import generate_random_jade_costs
+from .node_items import select_node_item_names
 from .options import *
 
 
@@ -37,6 +38,7 @@ class NineSolsWebWorld(WebWorld):
         ]),
         OptionGroup("Root Nodes", [
             FirstRootNode,
+            ShuffleSomeRootNodes,
         ]),
         OptionGroup("Shuffle Starting Abilities", [
             ShuffleGrapple,
@@ -75,6 +77,7 @@ class NineSolsWorld(World):
 
     using_ut: bool
     jade_costs: dict[str, int] | str
+    node_items: list[str]
 
     def __init__(self, multiworld, player):
         super(NineSolsWorld, self).__init__(multiworld, player)
@@ -82,6 +85,7 @@ class NineSolsWorld(World):
         # initial values of instance attributes (*not* class attributes)
         self.jade_costs = 'vanilla'
         self.using_ut = False
+        self.node_items = []
 
     def generate_early(self) -> None:
         if self.options.jade_cost_max < self.options.jade_cost_min:
@@ -93,13 +97,16 @@ class NineSolsWorld(World):
                 if "Nine Sols" in self.multiworld.re_gen_passthrough:
                     self.using_ut = True
                     slot_data = self.multiworld.re_gen_passthrough["Nine Sols"]
+
+                    self.node_items = slot_data.get('node_items', [])  # in normal gen this only affects start inventory, but UT needs this for /next_progression
+                    self.options.first_root_node = FirstRootNode.from_text(slot_data['first_root_node_name'])
+
                     self.options.seals_for_eigong.value = slot_data['seals_for_eigong']
                     self.options.seals_for_prison.value = slot_data['seals_for_prison']
                     self.options.prevent_weakened_prison_state.value = slot_data.get('prevent_weakened_prison_state', 0)
                     self.options.seals_for_ethereal.value = slot_data['seals_for_ethereal']
                     self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
                     self.options.prevent_annoying_runbacks.value = slot_data.get('prevent_annoying_runbacks', 0)
-                    self.options.first_root_node = FirstRootNode.from_text(slot_data['first_root_node_name'])
                     self.options.logic_difficulty.value = slot_data.get('logic_difficulty', 0)
                     self.options.shop_unlocks.value = slot_data.get('shop_unlocks', 0)
                     self.options.shuffle_grapple.value = slot_data.get('shuffle_grapple', 0)
@@ -114,6 +121,9 @@ class NineSolsWorld(World):
         # generate game-specific randomizations separate from AP items/locations
         self.jade_costs = generate_random_jade_costs(self.random, self.options) \
             if self.options.randomize_jade_costs else "vanilla"
+
+        self.node_items = select_node_item_names(self.random, self.options) \
+            if self.options.shuffle_some_root_nodes else []
 
     # members and methods implemented by locations_and_regions.py, locations.jsonc and connections.jsonc
 
@@ -156,7 +166,7 @@ class NineSolsWorld(World):
 
     def fill_slot_data(self):
         slot_data = self.options.as_dict(
-            'skip_soulscape_platforming',  # implemented by client/mod code, and affects logic/trackers
+            'skip_soulscape_platforming',
             'seals_for_eigong',
             'seals_for_prison',
             'seals_for_ethereal',
@@ -172,8 +182,8 @@ class NineSolsWorld(World):
             'prevent_weakened_prison_state',
         )
         slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
-        # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
         slot_data["jade_costs"] = self.jade_costs
+        slot_data["node_items"] = self.node_items
         # APWorld versions are not (yet?) exposed by AP servers, so the client/mod needs us to put it in slot_data
         slot_data["apworld_version"] = self.world_version.as_simple_string()
         return slot_data

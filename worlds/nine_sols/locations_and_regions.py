@@ -3,8 +3,9 @@ import pkgutil
 import typing
 from typing import Any, NamedTuple
 
-from BaseClasses import CollectionState, Location, Region
+from BaseClasses import CollectionState, Location, Region, DEFAULT_COLLECTION_RULE
 from Utils import restricted_loads
+from rule_builder.rules import HasFromListUnique
 from worlds.generic.Rules import set_rule
 from .options import FirstRootNode, LogicDifficulty, NineSolsGameOptions
 from .should_generate import should_generate
@@ -153,7 +154,7 @@ location_name_groups = {
 }
 
 
-root_node_to_region_name: dict[int, str] = {
+first_root_node_to_region_name: dict[int, str] = {
     FirstRootNode.option_apeman_facility_monitoring: "AF (Monitoring) - Root Node",
     FirstRootNode.option_galactic_dock: "Galactic Dock - Root Node & Right Exit",
     FirstRootNode.option_power_reservoir_east: "PR (East) - Root Node",
@@ -247,8 +248,16 @@ def create_regions(world: "NineSolsWorld") -> None:
                 set_rule(mw.get_location(ld["name"], p), rule)
 
     world.origin_region_name = "FSP - Root Node"
-    first_node_region = root_node_to_region_name[options.first_root_node.value]
-    mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
+    first_node_region = first_root_node_to_region_name[options.first_root_node.value]
+
+    # if this is one of the root nodes with a corresponding node item,
+    # then we want to change the logic from has(node item) to just True
+    try:
+        e = mw.get_entrance(world.origin_region_name + " -> " + first_node_region, p)
+        e.access_rule = DEFAULT_COLLECTION_RULE
+    # otherwise, there won't be an existing connection; we can just add a new one with no rule
+    except KeyError:
+        mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
 
 # `logic` can be a location or a connection
 def get_combined_rb_rule(logic: Any, world: "NineSolsWorld") -> Any:  # TODO: proper return type when 0.6.7 is the minimum

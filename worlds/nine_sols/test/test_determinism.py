@@ -42,3 +42,20 @@ class TestJadeCostDeterminism(NineSolsTestBase):
             'Swift Blade Jade': 1,
             'Swift Descent Jade': 3
         })
+
+
+class TestNodeItemDeterminism(NineSolsTestBase):
+    options = {
+        "shuffle_some_root_nodes": True,
+    }
+    seed = 1
+
+    def world_setup(self, *args, **kwargs):
+        super().world_setup(self.seed)
+
+    def test_determinism(self):
+        slot_data = self.world.fill_slot_data()
+        self.assertEqual(slot_data['node_items'], [
+            'Outer Warehouse Root Node',
+            'Lake Yaochi Ruins Root Node'
+        ])

@@ -189,6 +189,14 @@
     { "code": 702, "name": "Grapple", "type": "progression" },
     { "code": 703, "name": "Ledge Grab", "type": "progression" },
 
-    // other
-    { "code": 801, "name": "Progressive Shop Unlock", "type": "progression" }
+    // pseudo-items that tell the rando mod to unlock something
+    { "code": 801, "name": "Progressive Shop Unlock", "type": "progression" },
+    // root node items
+    { "code": 810, "name": "Outer Warehouse Root Node", "type": "progression" },
+    { "code": 811, "name": "Factory (Great Hall) Root Node", "type": "progression" },
+    { "code": 812, "name": "Apeman Facility (Depths) Root Node", "type": "progression" },
+    { "code": 813, "name": "Power Reservoir (East) Root Node", "type": "progression" },
+    { "code": 814, "name": "Radiant Pagoda Root Node", "type": "progression" },
+    { "code": 815, "name": "Lake Yaochi Ruins Root Node", "type": "progression" },
+    { "code": 816, "name": "Grotto of Scriptures (East) Root Node", "type": "progression" }
 ]

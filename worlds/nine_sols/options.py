@@ -271,6 +271,31 @@ class PreventWeakenedPrisonState(Toggle):
     This is a .yaml/generation option because it changes the logic for unlocking Prison."""
 
 
+class ShuffleSomeRootNodes(Toggle):
+    """
+    Creates a few items representing root nodes. When you receive one of these items in-game,
+    the root node will be immediately unlocked so you can teleport to it.
+
+    The idea is to prevent a slot from being blocked early, and then opening up all at once,
+    by ensuring there are multiple paths to each side of the map.
+    In particular, this option will always choose nodes in a different part of the map from your first_root_node.
+
+    If you would rather e.g. use start_inventory or plando on specific node items,
+    currently the following node items are defined:
+        - "Outer Warehouse Root Node"
+        - "Factory (Great Hall) Root Node"
+        - "Apeman Facility (Depths) Root Node"
+        - "Power Reservoir (East) Root Node"
+        - "Radiant Pagoda Root Node"
+        - "Lake Yaochi Ruins Root Node"
+        - "Grotto of Scriptures (East) Root Node"
+    And there is a "Root Nodes" item name group to make e.g. local_items or start_hints easier to apply.
+
+    It is intentional that not every first_root_node choice has a node item, and vice versa.
+    Especially since some first_root_nodes are only viable because they early-place certain items.
+    """
+
+
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
@@ -290,6 +315,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
 
     # Root Nodes
     first_root_node: FirstRootNode
+    shuffle_some_root_nodes: ShuffleSomeRootNodes
 
     # Shuffle Starting Abilities
     shuffle_grapple: ShuffleGrapple
