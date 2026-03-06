@@ -84,12 +84,6 @@ class KDL3World(World):
 
     create_regions = create_levels
 
-    def generate_early(self) -> None:
-        if self.options.total_heart_stars != -1:
-            logger.warning(f"Kirby's Dream Land 3 ({self.player_name}): Use of \"total_heart_stars\" is deprecated. "
-                           f"Please use \"max_heart_stars\" instead.")
-            self.options.max_heart_stars.value = self.options.total_heart_stars.value
-
     def create_item(self, name: str, force_non_progression: bool = False) -> KDL3Item:
         item = item_table[name]
         classification = ItemClassification.filler

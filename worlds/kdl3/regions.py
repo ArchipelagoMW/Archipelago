@@ -103,8 +103,8 @@ def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None
     for level in world.player_levels:
         for stage in range(6):
             proper_stage = world.player_levels[level][stage]
-            stage_name = world.multiworld.get_location(world.location_id_to_name[proper_stage],
-                                                       world.player).name.replace(" - Complete", "")
+            stage_name = world.get_location(
+                world.location_id_to_name[proper_stage]).name.replace(" - Complete", "")
             stage_regions = [rooms[room] for room in rooms if stage_name in rooms[room].name]
             for region in stage_regions:
                 region.level = level
@@ -112,13 +112,13 @@ def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None
             if world.options.open_world or stage == 0:
                 level_regions[level].add_exits([first_rooms[proper_stage].name])
             else:
-                world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][stage - 1]],
-                                              world.player).parent_region.add_exits([first_rooms[proper_stage].name])
+                world.get_location(world.location_id_to_name[world.player_levels[level][stage - 1]]
+                ).parent_region.add_exits([first_rooms[proper_stage].name])
         if world.options.open_world:
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
         else:
-            world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][5]], world.player) \
-                .parent_region.add_exits([first_rooms[0x770200 + level - 1].name])
+            world.get_location(world.location_id_to_name[world.player_levels[level][5]]
+                               ).parent_region.add_exits([first_rooms[0x770200 + level - 1].name])
 
 
 def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, List[int]]:
