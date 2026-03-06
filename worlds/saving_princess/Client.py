@@ -1,4 +1,5 @@
 import argparse
+import ssl
 import zipfile
 from io import BytesIO
 
@@ -8,6 +9,8 @@ import hashlib
 import json
 import logging
 import os
+
+import certifi
 import requests
 import secrets
 import shutil
@@ -90,7 +93,7 @@ def get_timestamp(date: str) -> float:
 
 def send_request(request_url: str) -> UrlResponse:
     """Fetches status code and json response from given url"""
-    response = requests.get(request_url)
+    response = requests.get(request_url, timeout=10)
     if response.status_code == 200:  # success
         try:
             data = response.json()
@@ -129,13 +132,16 @@ def update(target_asset: str, url: str) -> bool:
         if update_available and messagebox.askyesnocancel(f"New {target_asset}",
                                                           "Would you like to install the new version now?"):
             # unzip and patch
-            with urllib.request.urlopen(release_url) as download:
+            if not release_url.lower().startswith("https"):
+                raise ValueError(f'Unexpected scheme for url "{release_url}".')
+            context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
+            with urllib.request.urlopen(release_url, context=context) as download:  # nosec
                 with zipfile.ZipFile(BytesIO(download.read())) as zf:
                     zf.extractall()
             patch_game()
             set_date(target_asset, newest_date)
-    except (ValueError, RuntimeError, urllib.error.HTTPError):
-        update_error = f"Failed to apply update."
+    except (ValueError, RuntimeError, urllib.error.HTTPError, urllib.error.URLError) as e:
+        update_error = f"Failed to apply update:\n{e}"
         messagebox.showerror("Failure", update_error)
         raise RuntimeError(update_error)
     return True
