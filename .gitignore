@@ -70,6 +70,8 @@ prev_data.py
 profile_gen.py
 test_fill.py
 worlds/pokepelago/_dev/
+frontmatter.json
+.frontmatter/
 
 
 # stubgen output
