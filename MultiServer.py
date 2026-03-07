@@ -21,7 +21,7 @@ import time
 import typing
 import weakref
 import zlib
-from signal import SIGINT, SIGTERM
+from signal import SIGINT, SIGTERM, signal
 
 import ModuleUpdate
 
@@ -2742,12 +2742,23 @@ async def main(args: argparse.Namespace):
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
 
     def stop():
-        for remove_signal in [SIGINT, SIGTERM]:
-            asyncio.get_event_loop().remove_signal_handler(remove_signal)
+        try:
+            for remove_signal in [SIGINT, SIGTERM]:
+                asyncio.get_event_loop().remove_signal_handler(remove_signal)
+        except NotImplementedError:
+            pass
         ctx.commandprocessor._cmd_exit()
 
-    for signal in [SIGINT, SIGTERM]:
-        asyncio.get_event_loop().add_signal_handler(signal, stop)
+    def shutdown(signum, frame):
+        stop()
+
+    try:
+        for sig in [SIGINT, SIGTERM]:
+            asyncio.get_event_loop().add_signal_handler(sig, stop)
+    except NotImplementedError:
+        # add_signal_handler is only implemented for UNIX platforms
+        for sig in [SIGINT, SIGTERM]:
+            signal(sig, shutdown)
 
     await ctx.exit_event.wait()
     console_task.cancel()
