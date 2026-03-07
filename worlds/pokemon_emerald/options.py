@@ -129,6 +129,17 @@ class Dexsanity(Toggle):
     display_name = "Dexsanity"
 
 
+class DexsanityEncounterTypes(OptionSet):
+    """
+    Determines which Dexsanity encounter areas are in logic.
+
+    Logic will only consider access to Pokemon at these encounter types, but they may still be found elsewhere.
+    """
+    display_name = "Dexsanity Encounter Types"
+    valid_keys = {"Land", "Water", "Fishing"}
+    default = valid_keys.copy()
+
+
 class Trainersanity(Toggle):
     """
     Defeating a trainer gives you an item.
@@ -854,15 +865,6 @@ class PokemonEmeraldStartInventory(StartInventory):
     They will be in your PC, which you can access from your home or a pokemon center.
     """
 
-class DexsanityEncounterTypes(OptionSet):
-    """
-    Determines which Dexsanity encounter areas are in logic.
-
-    Logic will only consider access to Pokemon at these encounter types, but they may still be found elsewhere.
-    """
-    display_name = "Dexsanity Encounter Types"
-    valid_keys = {"Land", "Water", "Fishing"}
-    default = valid_keys.copy()
 
 @dataclass
 class PokemonEmeraldOptions(PerGameCommonOptions):
