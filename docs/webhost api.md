@@ -285,7 +285,7 @@ Will provide a dict of tracker data with the following keys:
   - A list of checks done by the player as a list of the location id's (`checked_locations`)
   - A list of [Hints](network%20protocol.md#hint) data that player has used or received (`hints`)
   - The time of last activity of the player, formatted in RFC 1123 format (`activity_time`)
-  - The time of last active connection of the player, formatted in RFC 1123 format (`connection_timers`)
+  - The time of last active connection of the player, formatted in RFC 1123 format (`connection_time`)
   - The current [ClientStatus](network%20protocol.md#clientstatus) of the player (`status`)
   - The slot number of that player (`player`)
   - The team number of that player (`team`)

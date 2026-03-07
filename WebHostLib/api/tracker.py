@@ -127,7 +127,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
                 "checked_locations": sorted(tracker_data.get_player_checked_locations(team, player)),
                 "hints": hints[team, player],
                 "activity_time": get_time(activity_timers, (team, player)),
-                "connection_time": get_time(activity_timers, (team, player)),
+                "connection_time": get_time(connection_timers, (team, player)),
                 "status": tracker_data.get_player_client_status(team, player),
                 })
 
