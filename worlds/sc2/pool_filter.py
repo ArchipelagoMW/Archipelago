@@ -3,8 +3,7 @@ from typing import Callable, Dict, List, Set, Tuple, TYPE_CHECKING, Iterable
 
 from BaseClasses import Location, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
-from .item.item_tables import item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns, \
-    spear_of_adun_castable_passives
+from .item.item_tables import item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns
 from .options import RequiredTactics
 
 if TYPE_CHECKING:
@@ -272,7 +271,7 @@ class ValidInventory:
         self.world.random.shuffle(spear_of_adun_actives)
         cull_items_over_maximum(spear_of_adun_actives, self.world.options.spear_of_adun_max_active_abilities.value)
 
-        spear_of_adun_autocasts = [item for item in inventory if item.name in spear_of_adun_castable_passives]
+        spear_of_adun_autocasts = [item for item in inventory if item.name in item_groups.spear_of_adun_passives]
         self.world.random.shuffle(spear_of_adun_autocasts)
         cull_items_over_maximum(spear_of_adun_autocasts, self.world.options.spear_of_adun_max_passive_abilities.value)
 

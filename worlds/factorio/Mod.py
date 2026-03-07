@@ -112,7 +112,7 @@ def generate_mod(world: "Factorio", output_directory: str):
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
     locations = [(location, location.item)
-                 for location in world.science_locations]
+                 for location in world.science_locations + world.craftsanity_locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     versioned_mod_name = mod_name + "_" + Utils.__version__
 

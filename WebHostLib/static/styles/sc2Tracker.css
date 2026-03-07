@@ -241,11 +241,8 @@ input[type="checkbox"]{
 }
 
 /* Hidden items */
-.hidden-class:not(:has(img.acquired)){
+.hidden-class:not(:has(.f:not(.unacquired))), .hidden-item{
   display: none;
-}
-.hidden-item:not(.acquired){
-  display:none;
 }
 
 /* Keys */

@@ -210,8 +210,8 @@ boosts: List[CivVIBoostData] = [
     CivVIBoostData(
         "BOOST_TECH_SQUARE_RIGGING",
         "ERA_RENAISSANCE",
-        ["TECH_GUNPOWDER"],
-        1,
+        ["TECH_GUNPOWDER", "TECH_MILITARY_ENGINEERING", "TECH_MINING"],
+        3,
         "DEFAULT",
     ),
     CivVIBoostData(
@@ -252,15 +252,15 @@ boosts: List[CivVIBoostData] = [
     CivVIBoostData(
         "BOOST_TECH_BALLISTICS",
         "ERA_INDUSTRIAL",
-        ["TECH_SIEGE_TACTICS", "TECH_MILITARY_ENGINEERING"],
-        2,
+        ["TECH_SIEGE_TACTICS", "TECH_MILITARY_ENGINEERING", "TECH_BRONZE_WORKING"],
+        3,
         "DEFAULT",
     ),
     CivVIBoostData(
         "BOOST_TECH_MILITARY_SCIENCE",
         "ERA_INDUSTRIAL",
-        ["TECH_STIRRUPS"],
-        1,
+        ["TECH_BRONZE_WORKING", "TECH_STIRRUPS", "TECH_MINING"],
+        3,
         "DEFAULT",
     ),
     CivVIBoostData(
@@ -301,8 +301,8 @@ boosts: List[CivVIBoostData] = [
     CivVIBoostData(
         "BOOST_TECH_REPLACEABLE_PARTS",
         "ERA_MODERN",
-        ["TECH_MILITARY_SCIENCE"],
-        1,
+        ["TECH_MILITARY_SCIENCE", "TECH_MINING"],
+        2,
         "DEFAULT",
     ),
     CivVIBoostData(
@@ -343,8 +343,8 @@ boosts: List[CivVIBoostData] = [
     CivVIBoostData(
         "BOOST_TECH_ADVANCED_FLIGHT",
         "ERA_ATOMIC",
-        ["TECH_FLIGHT"],
-        1,
+        ["TECH_FLIGHT", "TECH_REFINING", "TECH_MINING"],
+        3,
         "DEFAULT",
     ),
     CivVIBoostData(
@@ -436,8 +436,8 @@ boosts: List[CivVIBoostData] = [
     CivVIBoostData(
         "BOOST_TECH_COMPOSITES",
         "ERA_INFORMATION",
-        ["TECH_COMBUSTION"],
-        1,
+        ["TECH_COMBUSTION", "TECH_REFINING", "TECH_MINING"],
+        3,
         "DEFAULT",
     ),
     CivVIBoostData(
@@ -470,7 +470,7 @@ boosts: List[CivVIBoostData] = [
             "TECH_ELECTRICITY",
             "TECH_NUCLEAR_FISSION",
         ],
-        1,
+        4,
         "DEFAULT",
     ),
     CivVIBoostData(
@@ -651,10 +651,11 @@ boosts: List[CivVIBoostData] = [
     ),
     CivVIBoostData(
         "BOOST_CIVIC_FEUDALISM",
-        "ERA_MEDIEVAL",
+        "ERA_CLASSICAL",
         [],
         0,
         "DEFAULT",
+        True,
     ),
     CivVIBoostData(
         "BOOST_CIVIC_CIVIL_SERVICE",
@@ -662,6 +663,7 @@ boosts: List[CivVIBoostData] = [
         [],
         0,
         "DEFAULT",
+        True,
     ),
     CivVIBoostData(
         "BOOST_CIVIC_MERCENARIES",
@@ -790,6 +792,7 @@ boosts: List[CivVIBoostData] = [
         [],
         0,
         "DEFAULT",
+        True
     ),
     CivVIBoostData(
         "BOOST_CIVIC_CONSERVATION",
@@ -885,6 +888,7 @@ boosts: List[CivVIBoostData] = [
         ["TECH_ROCKETRY"],
         1,
         "DEFAULT",
+        True
     ),
     CivVIBoostData(
         "BOOST_CIVIC_GLOBALIZATION",

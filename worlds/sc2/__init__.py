@@ -12,8 +12,10 @@ from .item.item_tables import (
     get_full_item_list,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents, \
+from .item import (
+    FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents,
     ZergItemType, ProtossItemType, ItemData
+)
 from .locations import (
 	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags,
     get_plando_locations, LocationType, lookup_location_id_to_type
@@ -117,17 +119,48 @@ class SC2World(World):
         data = get_full_item_list()[name]
         return StarcraftItem(name, data.classification, data.code, self.player)
 
-    def create_regions(self):
+    def generate_early(self) -> None:
+        # Do some options validation/recovery here
+        if not self.options.selected_races.value:
+            self.options.selected_races.value = set(options.SelectedRaces.default)
+        if not self.options.enabled_campaigns.value:
+            self.options.enabled_campaigns.value = set(options.EnabledCampaigns.default)
+
+        # Disable campaigns on vanilla-like mission orders if their race is disabled
+        if self.options.mission_order.value in options.static_mission_orders:
+            enabled_campaigns = set(self.options.enabled_campaigns.value)
+            if self.options.enable_race_swap.value == options.EnableRaceSwapVariants.option_disabled:
+                if SC2Race.TERRAN.get_title() not in self.options.selected_races.value:
+                    enabled_campaigns.discard(SC2Campaign.WOL.campaign_name)
+                if SC2Race.ZERG.get_title() not in self.options.selected_races.value:
+                    enabled_campaigns.discard(SC2Campaign.HOTS.campaign_name)
+                if SC2Race.PROTOSS.get_title() not in self.options.selected_races.value:
+                    enabled_campaigns.discard(SC2Campaign.PROPHECY.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.PROLOGUE.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.LOTV.campaign_name)
+            # Epilogue and NCO don't have raceswaps currently
+            if SC2Race.TERRAN.get_title() not in self.options.selected_races.value:
+                enabled_campaigns.discard(SC2Campaign.NCO.campaign_name)
+            if len(self.options.selected_races.value) < 3:
+                enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
+            if not enabled_campaigns:
+                raise OptionError(
+                    "Campaign and race exclusions remove all possible missions from the pool. "
+                    "Either include more campaigns, include more races, or enable race swap."
+                )
+            self.options.enabled_campaigns.value = enabled_campaigns
+
+    def create_regions(self) -> None:
         self.logic = SC2Logic(self)
         self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
         self.logic.nova_used = (
-                MissionFlag.Nova in self.custom_mission_order.get_used_flags()
-                or (
-                        MissionFlag.WoLNova in self.custom_mission_order.get_used_flags()
-                        and self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-                )
+            MissionFlag.Nova in self.custom_mission_order.get_used_flags()
+            or (
+                MissionFlag.WoLNova in self.custom_mission_order.get_used_flags()
+                and self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+            )
         )
 
     def create_items(self) -> None:
@@ -148,7 +181,6 @@ class SC2World(World):
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
         flag_unreleased_items(item_list)
-        flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
         flag_mission_order_required_items(self, item_list)
@@ -209,14 +241,14 @@ class SC2World(World):
         enabled_campaigns = get_enabled_campaigns(self)
         slot_data["plando_locations"] = get_plando_locations(self)
         slot_data["use_nova_nco_fallback"] = (
-                enabled_campaigns == {SC2Campaign.NCO}
-                and self.options.mission_order == MissionOrder.option_vanilla
+            enabled_campaigns == {SC2Campaign.NCO}
+            and self.options.mission_order == MissionOrder.option_vanilla
         )
         if (self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-                or (
-                        self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_auto
-                        and MissionFlag.Nova in self.custom_mission_order.get_used_flags().keys()
-                )
+            or (
+                self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_auto
+                and MissionFlag.Nova in self.custom_mission_order.get_used_flags().keys()
+            )
         ):
             slot_data["use_nova_wol_fallback"] = False
         else:
@@ -225,7 +257,9 @@ class SC2World(World):
         slot_data["custom_mission_order"] = self.custom_mission_order.get_slot_data()
         slot_data["version"] = 4
 
-        if SC2Campaign.HOTS not in enabled_campaigns:
+        if (SC2Campaign.HOTS not in enabled_campaigns
+            or SC2Race.ZERG.get_title() not in self.options.selected_races.value
+        ):
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
         if self.options.mission_order_scouting != MissionOrderScouting.option_none:
@@ -260,8 +294,8 @@ class SC2World(World):
         assert self.logic is not None
         self.logic.total_mission_count = self.custom_mission_order.get_mission_count()
         if (
-                self.options.generic_upgrade_missions > 0
-                and self.options.required_tactics != RequiredTactics.option_no_logic
+            self.options.generic_upgrade_missions > 0
+            and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
             # Attempt to resolve a situation when the option is too high for the mission order rolled
             weapon_armor_item_names = [
@@ -278,8 +312,8 @@ class SC2World(World):
 
             self._fill_needed_items(state_with_kerrigan_levels, weapon_armor_item_names, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
         if (
-                self.options.kerrigan_levels_per_mission_completed > 0
-                and self.options.required_tactics != RequiredTactics.option_no_logic
+            self.options.kerrigan_levels_per_mission_completed > 0
+            and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
             # Attempt to solve being locked by Kerrigan level requirements
             self._fill_needed_items(lambda: self.multiworld.get_all_state(False), [item_names.KERRIGAN_LEVELS_1], 70)
@@ -375,44 +409,66 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     Handles `excluded_items`, `locked_items`, and `start_inventory`
     Returns a list of all possible non-filler items that can be added, with an accompanying flags bitfield.
     """
-    excluded_items = world.options.excluded_items
-    unexcluded_items = world.options.unexcluded_items
-    locked_items = world.options.locked_items
-    start_inventory = world.options.start_inventory
+    excluded_items: dict[str, int] = world.options.excluded_items.value
+    unexcluded_items: dict[str, int] = world.options.unexcluded_items.value
+    locked_items: dict[str, int] = world.options.locked_items.value
+    start_inventory: dict[str, int] = world.options.start_inventory.value
     key_items = world.custom_mission_order.get_items_to_lock()
 
-    def resolve_count(count: Optional[int], max_count: int) -> int:
-        if count == 0:
+    def resolve_exclude(count: int, max_count: int) -> int:
+        if count < 0:
             return max_count
-        if count is None:
-            return 0
-        if max_count == 0:
-            return count
-        return min(count, max_count)
+        return count
+
+    def resolve_count(count: int, max_count: int, negative_value: int | None = None) -> int:
+        """
+        Handles `count` being out of range.
+        * If `count > max_count`, returns `max_count`.
+        * If `count < 0`, returns `negative_value` (returns `max_count` if `negative_value` is unspecified)
+        """
+        if count < 0:
+            if negative_value is None:
+                return max_count
+            return negative_value
+        if max_count and count > max_count:
+            return max_count
+        return count
     
-    auto_excludes = {item_name: 1 for item_name in item_groups.legacy_items}
+    auto_excludes = Counter({item_name: 1 for item_name in item_groups.legacy_items})
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         for item_name in item_groups.overpowered_items:
             auto_excludes[item_name] = 1
+    if world.options.vanilla_items_only.value == VanillaItemsOnly.option_true:
+        for item_name, item_data in item_tables.item_table.items():
+            if item_name in item_groups.terran_original_progressive_upgrades:
+                auto_excludes[item_name] = max(item_data.quantity - 1, auto_excludes.get(item_name, 0))
+            elif item_name in item_groups.vanilla_items:
+                continue
+            elif item_name in item_groups.nova_equipment:
+                continue
+            else:
+                auto_excludes[item_name] = item_data.quantity
+
 
     result: List[FilterItem] = []
     for item_name, item_data in item_tables.item_table.items():
         max_count = item_data.quantity
-        auto_excluded_count = auto_excludes.get(item_name)
+        auto_excluded_count = auto_excludes.get(item_name, 0)
         excluded_count = excluded_items.get(item_name, auto_excluded_count)
-        unexcluded_count = unexcluded_items.get(item_name)
-        locked_count = locked_items.get(item_name)
-        start_count: Optional[int] = start_inventory.get(item_name)
+        unexcluded_count = unexcluded_items.get(item_name, 0)
+        locked_count = locked_items.get(item_name, 0)
+        start_count = start_inventory.get(item_name, 0)
         key_count = key_items.get(item_name, 0)
-        # specifying 0 in the yaml means exclude / lock all
-        # start_inventory doesn't allow specifying 0
-        # not specifying means don't exclude/lock/start
-        excluded_count = resolve_count(excluded_count, max_count)
-        unexcluded_count = resolve_count(unexcluded_count, max_count)
+        # Specifying a negative number in the yaml means exclude / lock / start all.
+        # In the case of excluded/unexcluded, resolve negatives to max_count before subtracting them,
+        # and after subtraction resolve negatives to just 0 (when unexcluded > excluded).
+        excluded_count = resolve_count(
+            resolve_exclude(excluded_count, max_count) - resolve_exclude(unexcluded_count, max_count),
+            max_count,
+            negative_value=0
+        )
         locked_count = resolve_count(locked_count, max_count)
         start_count = resolve_count(start_count, max_count)
-
-        excluded_count = max(0, excluded_count - unexcluded_count)
 
         # Priority: start_inventory >> locked_items >> excluded_items >> unspecified
         if max_count == 0:
@@ -476,8 +532,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                 item.flags |= ItemFilterFlags.FilterExcluded
                 continue
         if not zerg_missions and item.data.race == SC2Race.ZERG:
-            if item.data.type != item_tables.ZergItemType.Ability \
-                    and item.data.type != ZergItemType.Level:
+            if (item.data.type != item_tables.ZergItemType.Ability
+                and item.data.type != ZergItemType.Level
+            ):
                 item.flags |= ItemFilterFlags.FilterExcluded
                 continue
         if not protoss_missions and item.data.race == SC2Race.PROTOSS:
@@ -496,9 +553,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                 item.flags |= ItemFilterFlags.FilterExcluded
         if (not protoss_build_missions
             and item.data.type in (
-                        item_tables.ProtossItemType.Unit,
-                        item_tables.ProtossItemType.Unit_2,
-                        item_tables.ProtossItemType.Building,
+                item_tables.ProtossItemType.Unit,
+                item_tables.ProtossItemType.Unit_2,
+                item_tables.ProtossItemType.Building,
             )
         ):
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
@@ -506,9 +563,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_grant
                 or item.name not in (
-                            item_names.IMMORTAL, item_names.ANNIHILATOR,
-                            item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
-                            item_names.SENTRY, item_names.HIGH_TEMPLAR,
+                    item_names.IMMORTAL, item_names.ANNIHILATOR,
+                    item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
+                    item_names.SENTRY, item_names.HIGH_TEMPLAR,
                 )
             ):
                 item.flags |= ItemFilterFlags.FilterExcluded
@@ -543,15 +600,16 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         mission for mission in missions
         if MissionFlag.Nova in mission.flags
            or (
-                   world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-                   and MissionFlag.WoLNova in mission.flags
+                world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+                and MissionFlag.WoLNova in mission.flags
            )
     ]
 
     kerrigan_is_present = (
-            len(kerrigan_missions) > 0
-            and world.options.kerrigan_presence in kerrigan_unit_available
-            and SC2Campaign.HOTS in get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
+        len(kerrigan_missions) > 0
+        and world.options.kerrigan_presence in kerrigan_unit_available
+        and SC2Campaign.HOTS in get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
+        and SC2Race.ZERG.get_title() in world.options.selected_races.value
     )
 
     # TvX build missions -- check flags
@@ -631,7 +689,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove Spear of Adun passives
-        if item.name in item_tables.spear_of_adun_castable_passives and not soa_passive_presence:
+        if item.name in item_groups.spear_of_adun_passives and not soa_passive_presence:
             item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove matchup-specific items if you don't play that matchup
@@ -834,26 +892,6 @@ def flag_unreleased_items(item_list: List[FilterItem]) -> None:
         if (item.name in unreleased_items
                 and not (ItemFilterFlags.Locked|ItemFilterFlags.StartInventory) & item.flags):
             item.flags |= ItemFilterFlags.Removed
-
-
-def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Excludes items based on item set options (`only_vanilla_items`)"""
-    vanilla_nonprogressive_count = {
-        item_name: 0 for item_name in item_groups.terran_original_progressive_upgrades
-    }
-    if world.options.vanilla_items_only.value == VanillaItemsOnly.option_true:
-        vanilla_items = item_groups.vanilla_items + item_groups.nova_equipment
-        for item in item_list:
-            if ItemFilterFlags.UserExcluded in item.flags:
-                continue
-            if item.name not in vanilla_items:
-                item.flags |= ItemFilterFlags.UserExcluded
-            if item.name in item_groups.terran_original_progressive_upgrades:
-                if vanilla_nonprogressive_count[item.name]:
-                    item.flags |= ItemFilterFlags.UserExcluded
-                vanilla_nonprogressive_count[item.name] += 1
-
-    excluded_count: Dict[str, int] = dict()
 
 
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:

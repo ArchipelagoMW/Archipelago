@@ -58,6 +58,12 @@ class PlayerLocationsTotal(TypedDict):
     total_locations: int
 
 
+class PlayerGame(TypedDict):
+    team: int
+    player: int
+    game: str
+
+
 @api_endpoints.route("/tracker/<suuid:tracker>")
 @cache.memoize(timeout=60)
 def tracker_data(tracker: UUID) -> dict[str, Any]:
@@ -80,7 +86,8 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     """Slot aliases of all players."""
     for team, players in all_players.items():
         for player in players:
-            player_aliases.append({"team": team, "player": player, "alias": tracker_data.get_player_alias(team, player)})
+            player_aliases.append(
+                {"team": team, "player": player, "alias": tracker_data.get_player_alias(team, player)})
 
     player_items_received: list[PlayerItemsReceived] = []
     """Items received by each player."""
@@ -94,7 +101,8 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     for team, players in all_players.items():
         for player in players:
             player_checks_done.append(
-                {"team": team, "player": player, "locations": sorted(tracker_data.get_player_checked_locations(team, player))})
+                {"team": team, "player": player,
+                 "locations": sorted(tracker_data.get_player_checked_locations(team, player))})
 
     total_checks_done: list[TeamTotalChecks] = [
         {"team": team, "checks_done": checks_done}
@@ -144,7 +152,8 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     """The current client status for each player."""
     for team, players in all_players.items():
         for player in players:
-            player_status.append({"team": team, "player": player, "status": tracker_data.get_player_client_status(team, player)})
+            player_status.append(
+                {"team": team, "player": player, "status": tracker_data.get_player_client_status(team, player)})
 
     return {
         "aliases": player_aliases,
@@ -207,11 +216,19 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
             player_locations_total.append(
                 {"team": team, "player": player, "total_locations": len(tracker_data.get_player_locations(player))})
 
+    player_game: list[PlayerGame] = []
+    """The played game per player slot."""
+    for team, players in all_players.items():
+        for player in players:
+            player_game.append({"team": team, "player": player, "game": tracker_data.get_player_game(player)})
+
     return {
         "groups": groups,
         "datapackage": tracker_data._multidata["datapackage"],
         "player_locations_total": player_locations_total,
+        "player_game": player_game,
     }
+
 
 # It should be exceedingly rare that slot data is needed, so it's separated out.
 @api_endpoints.route("/slot_data_tracker/<suuid:tracker>")

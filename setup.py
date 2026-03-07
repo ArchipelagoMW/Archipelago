@@ -146,7 +146,16 @@ def download_SNI() -> None:
 
 signtool: str | None = None
 try:
-    with urllib.request.urlopen('http://192.168.206.4:12345/connector/status') as response:
+    import socket
+
+    sign_host, sign_port = "192.168.206.4", 12345
+    # check if the sign_host is on a local network
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect((sign_host, sign_port))
+    if s.getsockname()[0].rsplit(".", 1)[0] != sign_host.rsplit(".", 1)[0]:
+        raise ConnectionError()  # would go through default route
+    # configure signtool
+    with urllib.request.urlopen(f"http://{sign_host}:{sign_port}/connector/status") as response:
         html = response.read()
     if b"status=OK\n" in html:
         signtool = (r'signtool sign /sha1 6df76fe776b82869a5693ddcb1b04589cffa6faf /fd sha256 /td sha256 '
@@ -385,11 +394,11 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                         manifest = json.load(manifest_file)
 
                     assert "game" in manifest, (
-                        f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                        f"World directory {world_directory} has an archipelago.json manifest file, but it "
                         "does not define a \"game\"."
                     )
                     assert manifest["game"] == worldtype.game, (
-                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the "
                         f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
                     )
                 else:

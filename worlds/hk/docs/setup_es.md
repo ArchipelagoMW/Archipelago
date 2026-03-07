@@ -5,6 +5,10 @@
 * Tener una copia legal de Hollow Knight.
     * Las versiones de Steam, GOG y Xbox Game Pass son compatibles
     * Las versiones de Windows, Mac y Linux (Incluyendo Steam Deck) son compatibles
+ 
+**NO** instales BepInEx, **no** es necesario y es incompatible con varios mods. Archipelago (y la mayoría de los mods)
+usan herramientas más antiguas que BepInEx, que solo están disponibles por medio de instaladores de mods como Lumafly y
+similares, en vez de sitios web como Nexus Mods.
 
 ## Instalación del mod de Archipelago con Lumafly
 1. Ejecuta Lumafly y asegurate de localizar la carpeta de instalación de Hollow Knight

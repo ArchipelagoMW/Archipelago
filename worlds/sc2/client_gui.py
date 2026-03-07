@@ -1,3 +1,4 @@
+import inspect
 from typing import *
 import asyncio
 import logging
@@ -362,13 +363,25 @@ class SC2Manager(GameManager):
 
         text = mission_obj.mission_name
         tooltip: str = ""
-        remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_id)
+        mission_remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_id)
+        remaining_goal_missions_locations_by_mission = [
+            mission_locations for mission_locations, _, _ in [
+                self.sort_unfinished_locations(final_mission_id)
+                for final_mission_id in self.ctx.final_mission_ids
+            ]
+        ]
+        remaining_goal_victory_locations = [
+            location for mission_locations
+            in remaining_goal_missions_locations_by_mission
+            for location in mission_locations
+            if location[0] == LocationType.VICTORY
+        ]
         campaign_locked = campaign_id not in available_campaigns
         layout_locked = layout_id not in available_layouts[campaign_id]
 
         # Map has uncollected locations
         if mission_id in unfinished_missions:
-            if self.any_valuable_locations(remaining_locations):
+            if self.any_valuable_locations(mission_remaining_locations):
                 text = f"[color={COLOR_MISSION_IMPORTANT}]{text}[/color]"
             else:
                 text = f"[color={COLOR_MISSION_UNIMPORTANT}]{text}[/color]"
@@ -428,10 +441,21 @@ class SC2Manager(GameManager):
                 tooltip += "\n\n"
             elif exit_for:
                 tooltip += "\n"
-            if any(location_type == LocationType.VICTORY for (location_type, _, _) in remaining_locations):
+            if any(location_type == LocationType.VICTORY for (location_type, _, _) in mission_remaining_locations):
                 tooltip += f"[color={COLOR_FINAL_MISSION_REMINDER}]Required to beat the world[/color]"
             else:
-                tooltip += "This goal mission is already beaten.\nBeat the remaining goal missions to beat the world."
+                if len(remaining_goal_victory_locations) > 0:
+                    tooltip += inspect.cleandoc("""
+                        This goal mission is already beaten.
+                        Beat the remaining goal missions to beat the world.
+                        """)
+                elif not self.ctx.finished_game:
+                    # All goal locations may have been collected. Beat any goal mission to beat the world then.
+                    tooltip += inspect.cleandoc("""
+                        This is a goal mission.
+                        Beat any goal mission to beat the world.
+                        """
+                    )
 
         # Populate remaining location list
         if remaining_count > 0:
@@ -444,18 +468,18 @@ class SC2Manager(GameManager):
             if self.ctx.mission_order_scouting != MissionOrderScouting.option_none:
                 mission_available =  mission_id in available_missions
 
-                scoutable = self.is_scoutable(remaining_locations, mission_available, layout_locked, campaign_locked)
+                scoutable = self.is_scoutable(mission_remaining_locations, mission_available, layout_locked, campaign_locked)
             else:
                 scoutable = False
 
-            for location_type, location_name, _ in remaining_locations:
+            for location_type, location_name, _ in mission_remaining_locations:
                 if location_type in (LocationType.VICTORY, LocationType.VICTORY_CACHE) and victory_printed:
                     continue
                 if location_type != last_location_type:
                     tooltip += f"\n[color={COLOR_MISSION_IMPORTANT}]{self.get_location_type_title(location_type)}:[/color]"
                     last_location_type = location_type
                 if location_type == LocationType.VICTORY:
-                    victory_count = len([loc for loc in remaining_locations if loc[0] in (LocationType.VICTORY, LocationType.VICTORY_CACHE)])
+                    victory_count = len([loc for loc in mission_remaining_locations if loc[0] in (LocationType.VICTORY, LocationType.VICTORY_CACHE)])
                     victory_loc = location_name.replace(":", f":[color={COLOR_VICTORY_LOCATION}]")
                     if victory_count > 1:
                         victory_loc += f' ({victory_count})'

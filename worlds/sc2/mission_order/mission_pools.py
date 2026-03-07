@@ -56,18 +56,21 @@ class SC2MOGenMissionPools:
     """
     master_list: Set[int]
     difficulty_pools: Dict[Difficulty, Set[int]]
+    exclude_mission_variants_on_pull: bool
     _used_flags: Dict[MissionFlag, int]
     _used_missions: List[SC2Mission]
     _updated_difficulties: Dict[int, Difficulty]
     _flag_ratios: Dict[MissionFlag, float]
     _flag_weights: Dict[MissionFlag, int]
+    _unexcluded_missions: Iterable[SC2Mission]
 
-    def __init__(self) -> None:
+    def __init__(self, exclude_mission_variants_on_pull: bool) -> None:
         self.master_list = {mission.id for mission in SC2Mission}
         self.difficulty_pools = {
             diff: {mission.id for mission in SC2Mission if mission.pool + 1 == diff}
             for diff in Difficulty if diff != Difficulty.RELATIVE
         }
+        self.exclude_mission_variants_on_pull = exclude_mission_variants_on_pull
         self._used_flags = {}
         self._used_missions = []
         self._updated_difficulties = {}
@@ -78,10 +81,24 @@ class SC2MOGenMissionPools:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
         from appearing in the mission order."""
         total_exclusions = [mission.id for mission in excluded if mission not in unexcluded]
+        self._unexcluded_missions = unexcluded
         self.master_list.difference_update(total_exclusions)
 
+    def exclude_mission(self, mission: SC2Mission) -> None:
+        """Excludes a single mission unless it is unexcluded."""
+        if not mission in self._unexcluded_missions:
+            self.master_list.remove(mission.id)
+            self.difficulty_pools[self.get_modified_mission_difficulty(mission)].remove(mission.id)
+
     def get_allowed_mission_count(self) -> int:
-        return len(self.master_list)
+        if self.exclude_mission_variants_on_pull:
+            used_files = set(
+                lookup_id_to_mission[mission].map_file
+                for mission in self.master_list
+            )
+            return len(used_files)
+        else:
+            return len(self.master_list)
     
     def count_allowed_missions(self, campaign: SC2Campaign) -> int:
         allowed_missions = [
@@ -192,6 +209,17 @@ class SC2MOGenMissionPools:
             if flag & mission.flags == flag:
                 self._used_flags.setdefault(flag, 0)
                 self._used_flags[flag] += 1
+        
+        # Exclude race swap variants
+        if self.exclude_mission_variants_on_pull and mission.flags & (MissionFlag.HasRaceSwap|MissionFlag.RaceSwap):
+            variants = [
+                other_mission
+                for other_mission in self.master_list
+                if lookup_id_to_mission[other_mission].map_file == mission.map_file and other_mission != mission.id
+            ]
+            for variant in variants:
+                self.exclude_mission(lookup_id_to_mission[variant])
+
         self._used_missions.append(mission)
 
     def pull_random_mission(self, world: World, slot: 'SC2MOGenMission', *, prefer_close_difficulty: bool = False) -> SC2Mission:
