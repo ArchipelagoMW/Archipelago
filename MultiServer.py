@@ -2746,8 +2746,11 @@ async def main(args: argparse.Namespace):
             asyncio.get_event_loop().remove_signal_handler(remove_signal)
         ctx.commandprocessor._cmd_exit()
 
-    for signal in [SIGINT, SIGTERM]:
-        asyncio.get_event_loop().add_signal_handler(signal, stop)
+    try:
+        for signal in [SIGINT, SIGTERM]:
+            asyncio.get_event_loop().add_signal_handler(signal, stop)
+    except NotImplementedError:
+        pass  # Windows (ProactorEventLoop) does not support add_signal_handler
 
     await ctx.exit_event.wait()
     console_task.cancel()
