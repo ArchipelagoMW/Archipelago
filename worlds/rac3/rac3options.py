@@ -6,6 +6,7 @@ from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
 from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
+from worlds.rac3.options.armor_vendor_options import ArmorVendors
 from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
@@ -79,6 +80,7 @@ class RaC3Options(PerGameCommonOptions):
     holostar_skip: HolostarSkip
     clank_options: ClankOptions
     ship_vendor: ShipVendors
+    armor_vendor: ArmorVendors
 
 
 rac3_option_groups = [
@@ -104,6 +106,7 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Location Options", [
         WeaponVendors,
+        ArmorVendors,
         ShipVendors,
         SkillPoints,
         Trophies,
@@ -159,4 +162,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.INTRO_SKIP,
     RAC3OPTION.CLANK_OPTIONS,
     RAC3OPTION.SHIP_VENDOR,
+    RAC3OPTION.ARMOR_VENDOR,
 ]

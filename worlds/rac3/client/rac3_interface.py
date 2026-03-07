@@ -25,7 +25,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
-from worlds.rac3.constants.locations.vendors import (MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY, WEAPON_VENDOR_LOCATION_TO_ITEM,
+from worlds.rac3.constants.locations.vendors import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM, ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION, ITEM_TO_ARMOR_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY, WEAPON_VENDOR_LOCATION_TO_ITEM,
                                                      WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION)
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
@@ -95,6 +95,7 @@ class Rac3Interface(GameInterface):
         holostar_skip: int
         clank_options: int
         ship_vendor: int
+        armor_vendor: int
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -141,6 +142,7 @@ class Rac3Interface(GameInterface):
     player_actionable: int = 0x8000
     visited_planets: set[str] = set()
     weapon_vendor_items: list[str] = []
+    armor_vendor_items: list[str] = []
     vendor_type: Optional[RAC3VENDORTYPE] = None
     ship_vendor_string_pointers: dict[str, int] = None
 
@@ -244,6 +246,7 @@ class Rac3Interface(GameInterface):
         self.options.holostar_skip = slot_data[RAC3OPTION.HOLOSTAR_SKIP]
         self.options.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
         self.options.ship_vendor = slot_data[RAC3OPTION.SHIP_VENDOR]
+        self.options.armor_vendor = slot_data[RAC3OPTION.ARMOR_VENDOR]
 
     ########################################
     # Called on Game and Server Connection #
@@ -377,6 +380,7 @@ class Rac3Interface(GameInterface):
         self.vendor_type = self.vendor_check()
         self.get_visited_planets()
         self.determine_weapon_vendor_items()
+        self.determine_armor_vendor_items()
         self.vehicle_check()
         self.pause_check()
         self.check_latches()
@@ -402,6 +406,18 @@ class Rac3Interface(GameInterface):
                 else:
                     items_to_sell.append(item)
         self.weapon_vendor_items = items_to_sell
+
+    def determine_armor_vendor_items(self):
+        """Determine which items should be sold by the armor vendor on the Starship Phoenix."""
+        items_to_sell: list[str] = []
+        already_sold = set()
+        for location, item in ARMOR_VENDOR_LOCATION_TO_ITEM.items():
+            if ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION[location] in self.visited_planets and item not in already_sold:
+                if location in self.checked_locations:
+                    already_sold.add(item)
+                else:
+                    items_to_sell.append(item)
+        self.armor_vendor_items = items_to_sell
 
     def vehicle_check(self):
         """
@@ -922,7 +938,7 @@ class Rac3Interface(GameInterface):
         if self.planet not in PLANET_VENDOR_OFFSET.keys():
             return
         vendor_size = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
-        if (self.pause_state_value != RAC3PAUSESTATE.VENDOR):
+        if self.vendor_type is None:
             return
 
         is_pda_vendor = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.IS_PDA_OFFSET))
@@ -955,8 +971,9 @@ class Rac3Interface(GameInterface):
                     new_inventory.extend(
                         [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in gadgetron_weapons])
             case RAC3VENDORTYPE.ARMOR:
-                new_inventory = [RAC3ARMORVENDORSLOTDATA([0xEA92 + armor.ID - 0xF5, 694201337, armor.ID - 0xF5]) for
-                                 armor in armor_data.values()]
+                if not self.options.armor_vendor:
+                    return
+                new_inventory = [ARMOR_VENDOR_INVENTORY[ITEM_TO_ARMOR_VENDOR_LOCATION[item]] for item in self.armor_vendor_items]
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
@@ -1013,6 +1030,12 @@ class Rac3Interface(GameInterface):
     def write_vendor_inventory(self, inventory: list[RAC3VENDORSLOTDATA], vendor_type: RAC3VENDORTYPE):
         """Write a list of vendor slot data objects to the current planet's vendor inventory"""
         self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), len(inventory))
+        # If no items in the inventory, clear memory by writing 0s to 10 slots worth of data
+        if len(inventory) == 0:
+            slot_size = RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]
+            start_address = RAC3STATUS.VENDOR_BASE + PLANET_VENDOR_OFFSET[self.planet]
+            self._write_bytes(start_address, bytes(slot_size*10))
+
         for slot, slot_data in enumerate(inventory):
             for prop in slot_data.get_data():
                 match prop.size:
@@ -1057,7 +1080,7 @@ class Rac3Interface(GameInterface):
             # Bring qwark back to life until Ratchet has met Sasha on the bridge
             if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
-        if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 75:
+        if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 150:
             if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
                 self.vidcomic_2_fix += 1
                 self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
@@ -1203,7 +1226,7 @@ class Rac3Interface(GameInterface):
     def weapon_cycler(self):
         """Interval update function: Check unlock/lock status of weapons"""
         # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
-        if self.pause_state_value == RAC3PAUSESTATE.VENDOR and not self.hovering_over_ammo():
+        if self.vendor_type == RAC3VENDORTYPE.WEAPON and not self.hovering_over_ammo():
             weapons_to_remove = self.weapon_vendor_items
             for name in non_prog_weapon_data.keys():
                 if name in weapons_to_remove:

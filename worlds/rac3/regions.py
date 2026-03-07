@@ -610,5 +610,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.SHIP:
                 if options.ship_vendor.value == 0:
                     return True  # Skip all ship upgrade locations if ship upgrades are disabled
+            case RAC3TAG.ARMOR:
+                if options.armor_vendor.value == 0:
+                    return True  # Skip all armor upgrade locations if armor upgrades are disabled
             # Add more conditions here if needed in the future
     return False

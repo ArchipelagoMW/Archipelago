@@ -138,6 +138,7 @@ class RaC3World(World):
                 and not self.options.trophies.value
                 and not self.options.weapon_vendors.value
                 and not self.options.ship_vendor.value
+                and not self.options.armor_vendor.value
                 and not self.options.vr_challenges.value
                 and self.options.skill_points.value < 2
                 and no_nanotech_locations
@@ -272,6 +273,7 @@ class RaC3World(World):
             RAC3OPTION.HOLOSTAR_SKIP: self.options.holostar_skip.value,
             RAC3OPTION.CLANK_OPTIONS: self.options.clank_options.value,
             RAC3OPTION.SHIP_VENDOR: self.options.ship_vendor.value,
+            RAC3OPTION.ARMOR_VENDOR: self.options.armor_vendor.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

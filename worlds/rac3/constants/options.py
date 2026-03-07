@@ -41,3 +41,4 @@ class RAC3OPTION:
     HOLOSTAR_SKIP = "Holostar Skip"
     CLANK_OPTIONS = "Clank Pack Options"
     SHIP_VENDOR = "Ship Vendor"
+    ARMOR_VENDOR = "Armor Vendor"

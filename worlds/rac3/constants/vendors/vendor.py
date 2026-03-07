@@ -11,6 +11,7 @@ class RAC3VENDOR:
     SUBMENU_OFFSET: int = -0xBC
     MODEL_UPDATE_OFFSET: int = -0xB0
     SLOT_COUNT_OFFSET: int = 0x600
+    NEW_ARMOR_OFFSET: int = 0x628
     VENDOR_TYPE_OFFSET: int = -0xF0
     IS_PDA_OFFSET: int = -0xE4
     SLOT_SIZE: int = 0

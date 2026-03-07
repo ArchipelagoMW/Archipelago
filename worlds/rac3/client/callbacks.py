@@ -12,12 +12,12 @@ from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import RAC3INSTRUCTION
-from worlds.rac3.constants.locations.vendors import ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY
+from worlds.rac3.constants.locations.vendors import ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
-from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET, RAC3REGION
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR
 
@@ -117,7 +117,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
                 logger.error(format_exc())
             # await sleep(3)
 
-        await sleep(0.2)
+        await sleep(0.1)
     logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
 
 
@@ -195,6 +195,8 @@ async def _handle_game_ready(ctx: 'Context') -> None:
 async def update(ctx: 'Context') -> None:
     """Called continuously"""
     ctx.game_interface.early_update()
+    await handle_codecave(ctx)
+
     await handle_intro_skip(ctx)
     # Check received items
     await handle_received_items(ctx)
@@ -213,7 +215,6 @@ async def update(ctx: 'Context') -> None:
     # Check sequence breaks
     await handle_sequence_break(ctx)
     ctx.game_interface.late_update()
-    await handle_codecave(ctx)
     # logger.info(f"Update is called")
 
 
@@ -369,11 +370,19 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
 
 async def handle_vendors(ctx: 'Context') -> None:
     """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
-    if ctx.slot_data is None:
+    if ctx.slot_data is None or ctx.current_planet not in PLANET_VENDOR_OFFSET.keys():
         return
+
+    new_armor = ctx.game_interface._read32(
+                RAC3VENDOR.get_vendor_property_address(ctx.game_interface.planet, RAC3VENDOR.NEW_ARMOR_OFFSET))
+    if new_armor > 0 and new_armor < 5:
+        ctx.game_interface._write8(RAC3INSTRUCTION.CODECAVE_START + new_armor, 1)
+        if new_armor == 4:
+            ctx.game_interface._write8(0x001D54B4, 1) # Infernox skill point
+
     ctx.game_interface.vendor_update()
-    if (ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR 
-        or not ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False)):
+
+    if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR:
         return
     
     vendor_type = RAC3VENDORTYPE(
@@ -401,7 +410,9 @@ async def handle_vendors(ctx: 'Context') -> None:
                             for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
             vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
         case RAC3VENDORTYPE.ARMOR:
-            pass
+            armor_items = ctx.game_interface.armor_vendor_items
+            vendor_locations = [ITEM_TO_ARMOR_VENDOR_LOCATION[item] for item in armor_items if item in ITEM_TO_ARMOR_VENDOR_LOCATION]
+            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
         case RAC3VENDORTYPE.SHIP:
             # ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[ctx.game_interface.UnlockItem[RAC3REGION.SLOT_0].status*3]
             # filtered_ship_keys = [key for key in ship_keys if key not in ctx.game_interface.checked_locations]
@@ -430,7 +441,7 @@ async def handle_codecave(ctx: 'Context') -> None:
     ship_locations = list(SHIP_VENDOR_INVENTORY.keys())
     ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in ship_locations]
     ctx.game_interface.ship_vendor_string_pointers = {}
-    offset = 0
+    offset = 0x10
     for loc_key, ap_code in zip(ship_locations, ap_codes):
         net_item = ctx.locations_info.get(ap_code, None)
         if net_item is not None:

@@ -127,7 +127,7 @@ def set_rules(world: "RaC3World"):
 
         # RAC3VENDOR.PHOENIX_SUCK
         # RAC3VENDOR.PHOENIX_INFECTOR
-        # RAC3VENDOR.PHOENIX_MAGNA_ARMOR
+        #RAC3VENDORLOCATION.PHOENIX_MAGNA_ARMOR
         RAC3VENDORLOCATION.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
         RAC3VENDORLOCATION.PHOENIX_AEGIS_ARMOR:
             lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),

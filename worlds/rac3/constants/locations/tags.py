@@ -18,3 +18,4 @@ class RAC3TAG:
     NOT_IMPLEMENTED = "Not Implemented"
     NGPLUS = "New Game Plus"
     SHIP = "Ship"
+    ARMOR = "Armor"
