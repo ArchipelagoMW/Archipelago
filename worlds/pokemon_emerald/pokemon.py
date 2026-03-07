@@ -264,6 +264,14 @@ def _rename_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slo
 
 
 def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
+    encounter_table = {
+        "LAND": EncounterType.LAND,
+        "WATER": EncounterType.WATER,
+        "FISHING": EncounterType.FISHING,
+    }
+    enabled_encounters = set()
+    for encounter in world.options.dexsanity_encounter_types.value:
+        enabled_encounters.add(encounter_table[encounter])
     if world.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
         return
 
@@ -279,6 +287,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
     }
 
     already_placed = set()
+    whitelist_pokemon = set()
     num_placeable_species = NUM_REAL_SPECIES - len(world.blacklisted_wilds)
 
     priority_species = [data.constants["SPECIES_WAILORD"], data.constants["SPECIES_RELICANTH"]]
@@ -370,6 +379,8 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
 
             # Actually create the new list of slots and encounter table
             new_slots: List[int] = []
+            if encounter_type in enabled_encounters:
+                world.allowed_dexsanity_species.update(table.slots)
             for species_id in table.slots:
                 new_slots.append(species_old_to_new_map[species_id])
 
@@ -380,7 +391,6 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                 _rename_wild_events(world, map_data, new_slots, encounter_type)
 
         map_data.encounters = new_encounters
-
 
 def randomize_abilities(world: "PokemonEmeraldWorld") -> None:
     if world.options.abilities == RandomizeAbilities.option_vanilla:

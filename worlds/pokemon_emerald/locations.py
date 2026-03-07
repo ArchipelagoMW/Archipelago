@@ -3,7 +3,7 @@ Classes and functions related to AP locations for Pokemon Emerald
 """
 from typing import TYPE_CHECKING, Dict, Optional, Set
 
-from BaseClasses import Location, Region
+from BaseClasses import Location, Region, ItemClassification
 
 from .data import BASE_OFFSET, NATIONAL_ID_TO_SPECIES_ID, POKEDEX_OFFSET, LocationCategory, data, EncounterType, \
     OUT_OF_LOGIC_MAPS
@@ -111,7 +111,7 @@ def create_locations_by_category(world: "PokemonEmeraldWorld", regions: Dict[str
                 national_dex_id = int(location_name[-3:])  # Location names are formatted POKEDEX_REWARD_###
 
                 # Don't create this pokedex location if player can't find it in the wild
-                if NATIONAL_ID_TO_SPECIES_ID[national_dex_id] in world.blacklisted_wilds:
+                if NATIONAL_ID_TO_SPECIES_ID[national_dex_id] in world.blacklisted_wilds or NATIONAL_ID_TO_SPECIES_ID[national_dex_id] not in world.allowed_dexsanity_species:
                     continue
 
                 location_id += POKEDEX_OFFSET + national_dex_id
@@ -203,6 +203,7 @@ def remove_wild_encounter_locations(world: "PokemonEmeraldWorld") -> None:
         "FISHING": EncounterType.FISHING,
     }
     enabled_encounters = set()
+    filler_items = [item for item in world.multiworld.itempool if item.classification == ItemClassification.filler]
     for encounter in world.options.dexsanity_encounter_types.value:
         enabled_encounters.add(encounter_table[encounter]) #converts player options to EncounterKey variable using the encounter_table
     in_logic_species = set()
@@ -218,7 +219,7 @@ def remove_wild_encounter_locations(world: "PokemonEmeraldWorld") -> None:
         national_dex_id = int(location.key[-3:]) #grabs the national dex id
         species_id = NATIONAL_ID_TO_SPECIES_ID[national_dex_id] #converts it to the species ID
         if species_id not in in_logic_species:
-            world.multiworld.itempool.remove(location.item) #Removes the location's item from the pool
-            location.parent_region.locations.remove(location) #Removes the location from its region
+            #world.multiworld.itempool.remove(filler_items.pop()) # Removes the location's item from the pool
+            location.parent_region.locations.remove(location) # Removes the location from its region
     #Future Idea would be to iterate through the location list and tag pokedex locations with encounter type and potentially add evolution logic
 

@@ -123,6 +123,7 @@ class PokemonEmeraldWorld(World):
     blacklisted_wilds: Set[int]
     blacklisted_starters: Set[int]
     blacklisted_opponent_pokemon: Set[int]
+    allowed_dexsanity_species: set[int]
     hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
 
@@ -142,6 +143,7 @@ class PokemonEmeraldWorld(World):
         self.blacklisted_wilds = set()
         self.blacklisted_starters = set()
         self.blacklisted_opponent_pokemon = set()
+        self.allowed_dexsanity_species = set()
         self.modified_maps = copy.deepcopy(emerald_data.maps)
         self.modified_species = copy.deepcopy(emerald_data.species)
         self.modified_tmhm_moves = []
@@ -264,7 +266,7 @@ class PokemonEmeraldWorld(World):
     def create_regions(self) -> None:
         from .regions import create_regions
         all_regions = create_regions(self)
-
+        randomize_wild_encounters(self)
         # Categories with progression items always included
         categories = {
             LocationCategory.BADGE,
@@ -288,6 +290,7 @@ class PokemonEmeraldWorld(World):
             categories.add(LocationCategory.TRAINER)
         create_locations_by_category(self, all_regions, categories)
 
+        #remove_wild_encounter_locations(self)
         self.multiworld.regions.extend(all_regions.values())
 
         # Exclude locations which are always locked behind the player's goal
@@ -494,8 +497,8 @@ class PokemonEmeraldWorld(World):
         set_rules(self)
 
     def connect_entrances(self):
-        randomize_wild_encounters(self)
-        remove_wild_encounter_locations(self)
+        #randomize_wild_encounters(self)
+        #remove_wild_encounter_locations(self)
         self.shuffle_badges_hms()
         # For entrance randomization, disconnect entrances here, randomize map, then
         # undo badge/HM placement and re-shuffle them in the new map.

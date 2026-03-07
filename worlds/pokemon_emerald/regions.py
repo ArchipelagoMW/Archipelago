@@ -30,7 +30,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         ],
     }
 
-    def 12wsconnect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
+    def connect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
         """
         Connects the provided region to the corresponding wild encounters for the given parent map.
 
