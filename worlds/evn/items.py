@@ -84,7 +84,7 @@ def get_items() -> Dict[int, EVNItemData]:
 
     ret_bank[STRING_COMPLETE_BIT] = EVNItemData(
         name="Victory",
-        classification=ItemClassification.progression,
+        classification=ItemClassification.progression,  # Odd, changing this to "skip_balancing" made the server think the game was unbeatable.
         code=STRING_COMPLETE_BIT,
     )
 

@@ -34,6 +34,8 @@ misns_to_ignore: List[int] = [
     904,
     609, # drop bear - "haha"...
     610, 
+    # cutoff variants of story line missions
+    820, 821, 822, 823, 824, 825, 826, 860,
 
     # Were these debug missions or something?
 
@@ -45,7 +47,7 @@ misns_to_ignore: List[int] = [
     899, 900, 905, 913,   # silent misn
     880, 881, 883, 884,    # pursuit groups of enemies
     886, 894, 890, 891, 892, 
-    794, # comes from a silent mission. I think this one was supposed to be marked as silent as well... Auroran 12a
+    794, # comes from a silent mission (793's bit). I think this one was supposed to be marked as silent as well... Auroran 12a
     # invisible misn - again, don't seem to have ability to complete
     802, 803, 833, 
     # Krypt mind attack string from Polars32... Could have on success, but I'm unclear what it takes to meet that req...
@@ -56,6 +58,8 @@ misns_to_ignore: List[int] = [
     874, 876, 877, 878, 910, 911, 
     # I don't know how this mission is gained and done...
     625, 
+    # Other
+    133, # derelict decoy - no completion settings
 ]
 
 # Introducing this logic caused the number of available missions to drop below the item count
@@ -163,6 +167,7 @@ class EVNRegionData(TypedDict, total=False):
     missions: List[int]
     #safeties: Dict[int, MisnSafetyLogic] # mission edits req to enforce the storyline
     misn_edits: Dict[int, Dict[str, str]] # The typing was nice, but id was redundant...
+    entrance_rules: Dict[str, int] # ex: "ship": 435, "min_cargo": 10
 
 # NOTE: This is universe and story, but may just become story if I decide to handle side stories more.
 # TODO: With stories that can come from side stories, edit the branches of those side stories. Ex: If Pirate - WB pirate branch needs to be blocked (and auroran too...)
@@ -171,7 +176,8 @@ possible_regions: Dict[int, EVNRegionData] = {
         "id": 0,  # I don't know if we need this one here. It is our default starting region that all story lines start from.
         "name": "Universe",
         "missions": [],  # I would like to dynamically populate this by adding all missions in misn_table not in any other region's list
-        "misn_edits": {}
+        "misn_edits": {},
+        "entrance_rules": {},
     },
     1: {
         "id": 1,
@@ -180,7 +186,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             128, 129, 130, 131, 142, 143, 144, 145, 146, 147, 148, 149, 
             193, 194, 195, 196, 197, 198, 199,
             318, 319, 320, 321, 322,
-            323, 324, 325, 326, 327, 355, 356, 357, 358, 359, 360, 361, 362, 363, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380,
+            323, 324, 325, 326, 327, 355, 356, 357, 358, 359, 360, 361, 
+            362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380,
             402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417,
             649,
             849, 850,
@@ -191,7 +198,10 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "on_refuse": "!b511",
                 "on_abort":  "!b511",
             }
-        }
+        },
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
     },
     2: {
         "id": 2,
@@ -200,7 +210,10 @@ possible_regions: Dict[int, EVNRegionData] = {
             150,
             179, # later in story, but not worth making own node
         ],
-        "misn_edits": {}
+        "misn_edits": {},
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
     },
     3: {
         "id": 3,
@@ -217,7 +230,10 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "on_success": f"!b511", # set same as failure, allowing mission to be redone. Abort is acceptable.
                 "on_refuse": "CHECK_TARGET"
             }
-        }
+        },
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
     },
     4: {
         "id": 4,
@@ -225,7 +241,8 @@ possible_regions: Dict[int, EVNRegionData] = {
         "missions": [
             151, 152, 153, 717,
         ],
-        "misn_edits": {}
+        "misn_edits": {},
+        "entrance_rules": {},
     },
     # Screw it - a path pick feds at end, and b path picks aurorans at end. I don't want to duplicate just for that choice...
     5: {
@@ -238,7 +255,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             154: {
                 "on_success": "b279"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     6: {
         "id": 6,
@@ -250,7 +268,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             154: {
                 "on_success": "b316"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     7: {
         "id": 7,
@@ -261,7 +280,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             #887,
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     8: {
         "id": 8,
@@ -274,7 +294,8 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "refuse_button": "Don't pick this",
                 "on_refuse": "!b315",
             }
-        }
+        },
+        "entrance_rules": {},
     },
     9: {
         "id": 9,
@@ -288,7 +309,8 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "on_success": f"!b315", # set same as failure, allowing mission to be redone. Abort is acceptable.
                 "on_refuse": "CHECK_TARGET",
             }
-        }
+        },
+        "entrance_rules": {},
     },
     10: {
         "id": 10,
@@ -304,7 +326,10 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "on_failure": "!b511 A749 A750 A751 A752",
                 "on_abort": "!b511 A749 A750 A751 A752",
             }
-        }
+        },
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
     },
     11: {
         "id": 11,
@@ -315,7 +340,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             690, 916, 917, 918, # deep into auroran, might cause logic blocks unnecessarily by having here.
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     12: {
         "id": 12,
@@ -324,7 +350,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             656, 657, 658, 
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     13: {
         "id": 13,
@@ -335,7 +362,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             684, # same, but this is a deep mission, might cause logic blocks unnecessarily. If so, will need to create new zones :(
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     14: {
         "id": 14,
@@ -345,17 +373,23 @@ possible_regions: Dict[int, EVNRegionData] = {
             734, 735, 736, 737, 739, # offshoot
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     15: { # A lot of optional quests get locked if you don't do them before mission 13 (670), so marking this as a different zone
         "id": 15,
         "name": "Auroran - Pt 4",
         "missions": [
             670, 671, 672, 673, 674, 857, 675, 676, 677, 
-            741, 742, 743, 744, 745, 746, 747, 748, # offshoot
+            741, 742, 743, 744, 745, 746, 747, # offshoot
+            748, # Awards the thunderforge. Either ignore this one, or add its bit to "OnAccept"
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {
+            "min_ship_str": 400 # for EVN, makes sense in next segment instead, but because mission depth, better for other players to have it push into another sphere here instead.
+            #, "min_checks": 300 # This is an arbitrary sphere pusher.
+        },
     }, 
     16: { # Again, offshoot must be done before this
         "id": 16,
@@ -364,7 +398,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             678, 679, 680, 681, 682, 683, 685, 686, 
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     20: {
         "id": 20,
@@ -379,7 +414,10 @@ possible_regions: Dict[int, EVNRegionData] = {
             645: {
                 "on_success": "b816"
             }
-        }
+        },
+        "entrance_rules": {
+            "min_ship_str": 75  # fighters
+        },
     },
     21: {
         "id": 21,
@@ -396,7 +434,10 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "on_success": "", 
                 "on_refuse": "CHECK_TARGET"
             }
-        }
+        },
+        "entrance_rules": {
+            "min_ship_str": 75  # fighters
+        },
     },
     22: {
         "id": 22,
@@ -411,7 +452,10 @@ possible_regions: Dict[int, EVNRegionData] = {
             645: {
                 "on_success": "b817"
             }
-        }
+        },
+        "entrance_rules": {
+            "min_ship_str": 75  # fighters
+        },
     },
     23: {
         "id": 23,
@@ -431,6 +475,9 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             },
         },
+        "entrance_rules": {
+            "min_ship_str": 105
+        },
     },
     24: {
         "id": 24,
@@ -446,6 +493,9 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             },
         },
+        "entrance_rules": {
+            "min_ship_str": 105
+        },
     },
     25: { # I don't like this one - don't like that you have to fail
         "id": 25,
@@ -457,7 +507,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             279: {
                 "on_success": "!b511"
             },
-        }
+        },
+        "entrance_rules": {},
     },
     26: { 
         "id": 26,
@@ -469,7 +520,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             279: {
                 "on_failure": "!b511"
             },
-        }
+        },
+        "entrance_rules": {},
     }, 
     27: {  # Don't use last two missions so that the player can't be branched into another storyline before starting the intended one.
         "id": 27,
@@ -481,7 +533,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             279: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             },
-        }
+        },
+        "entrance_rules": {},
     }, 
     30: {  
         "id": 30,
@@ -493,7 +546,10 @@ possible_regions: Dict[int, EVNRegionData] = {
             694: {
                 "on_refuse": ""
             },
-        }
+        },
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
     }, 
     31: {  
         "id": 31,
@@ -505,7 +561,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             840: {
                 "on_refuse": ""
             },
-        }
+        },
+        "entrance_rules": {},
     }, 
     32: {  
         "id": 32,
@@ -521,7 +578,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             694: {
                 "on_refuse": ""
             },
-        }
+        },
+        "entrance_rules": {},
     }, 
     33: {  
         "id": 33,
@@ -534,7 +592,8 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "refuse_button": "Don't pick this",
                 "on_refuse": ""
             },
-        }
+        },
+        "entrance_rules": {},
     }, 
     34: {  
         "id": 34,
@@ -549,7 +608,8 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "on_accept": "b435", # force into refusal
                 "on_refuse": "CHECK_TARGET"
             },
-        }
+        },
+        "entrance_rules": {},
     }, 
     40: {  
         "id": 40,
@@ -563,7 +623,10 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "refuse_button": "Don't pick this",
                 "on_refuse": ""
             }
-        }
+        },
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
     }, 
     41: {  
         "id": 41, # TODO: Implement. Requires failing a BH mission which is why I don't like trying to enforce it.
@@ -572,7 +635,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             440,
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     }, 
     42: {  
         "id": 42,
@@ -589,7 +653,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             613: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}" # block the glitecnia version of the mission
             }
-        }
+        },
+        "entrance_rules": {},
     }, 
     43: {  
         "id": 43, # I'm not implementing these for now, but I need them out of the pool (aka: in at least 1 region)
@@ -598,7 +663,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             448, 449,
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     }, 
     44: {  
         "id": 44, # For now, I'm not implementing this one. Again, need them out of the pool.
@@ -607,7 +673,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             575, 576, 590, 592, 591, 593, 594, 595, 596,
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     }, 
     45: {  
         "id": 45, # Not implementing this branch for now, sorry. Need it out of the pool.
@@ -616,7 +683,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             613,
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     }, 
     50: {  # Rebels
         "id": 50, # Too many links, not dealing with this for now. Other ways into rebels.
@@ -626,13 +694,17 @@ possible_regions: Dict[int, EVNRegionData] = {
             611, # technically *to* feds?
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     }, 
     51: {  # Rebels
         "id": 51, # 
         "name": "Rebel - From BH",
         "missions": [
             328, 329, 331, 332, 333, 334, 335, 336, 337, 338, 853,
+            # generic missions unlocked by doing rebel stuff
+            # b 127
+            139, 239, 240, 241, 242, 
         ],
         "misn_edits": {
             611: {
@@ -641,7 +713,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             608: { # due to lockout conditions, cutting off this option. do sigma
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             }
-        }
+        },
+        "entrance_rules": {},
     }, 
     52: {  # Rebels
         "id": 50, # If you want hyper gates, do sigma story line
@@ -650,7 +723,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             608,
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     }, 
     53: {  # Rebels
         "id": 53, 
@@ -665,7 +739,8 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "accept_button": "Must Succeed",
                 "on_failure": ""
             }
-        }
+        },
+        "entrance_rules": {},
     }, 
     54: {  # Rebels
         "id": 54, # Forced fail... bleh
@@ -680,7 +755,8 @@ possible_regions: Dict[int, EVNRegionData] = {
                 "accept_button": "Must FAIL",
                 "on_success": ""
             }
-        }
+        },
+        "entrance_rules": {},
     }, # For these blocking missions - only add the edits. Don't add the mission ID otherwise it'll get assigned an item / check
     100: {
         "id": 100,
@@ -690,7 +766,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             128: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     101: {
         "id": 101,
@@ -700,7 +777,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             150: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     102: {
         "id": 102,
@@ -710,7 +788,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             653: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     103: {
         "id": 103,
@@ -720,7 +799,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             693: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     104: {
         "id": 104,
@@ -730,7 +810,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             428: {
                 "available_bits": f"b{MISSION_BLOCKING_BIT}"
             }
-        }
+        },
+        "entrance_rules": {},
     },
     200: {  # Due to checks vs blocking nature of missions, pulling out some paths of side quests
         "id": 200,
@@ -742,7 +823,8 @@ possible_regions: Dict[int, EVNRegionData] = {
             577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, # second half of United Shipping due to polaris req :(
         ],
         "misn_edits": {
-        }
+        },
+        "entrance_rules": {},
     },
     201: {
         "id": 201,
@@ -761,7 +843,90 @@ possible_regions: Dict[int, EVNRegionData] = {
             756: {
                 "on_abort": ""
             }
-        }
+        },
+        "entrance_rules": {},
+    },
+    300: {
+        "id": 300,
+        "name": "Side Misn String - Sigma",
+        "missions": [
+            555, 556, 
+            # cargo 20
+            897, 898, 
+            # repeating
+            569, 570, 571, 572, 573, 574,
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "min_cargo": 10,
+        },
+    },
+    301: {
+        "id": 301,
+        "name": "Side Misn String - Sigma - Bulk Misns",
+        "missions": [
+            557, 558, 559, 560, 561, 562, 563, 564, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "min_cargo": 300,
+        },
+    },
+    302: {
+        "id": 302,
+        "name": "Side Misn String - Sigma - Large Bulk Misns",
+        "missions": [
+            565, 566, 567, 568, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "min_cargo": 1250,
+        },
+    },
+    310: {
+        "id": 310,
+        "name": "Vellos BBS Misns - Dart",
+        "missions": [
+            281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "ship": 381,
+        },
+    },
+    311: {
+        "id": 311,
+        "name": "Vellos BBS Misns - Arrow",
+        "missions": [
+            293, 294, 295, 296, 297, 298, 299, 301, 302, 303, 304, 305, 
+            418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 
+            475, 476, 477, 478, 479, 480, 481, 482,
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "ship": 382,
+        },
+    },
+    312: {
+        "id": 312,
+        "name": "Vellos BBS Misns - Javelin",
+        "missions": [
+            306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317,
+            483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499,
+            500, 501, 502, 503, 
+            # What are these missions?
+            # 614, 615, 
+        ],
+        "misn_edits": {
+        },
+        "entrance_rules": {
+            "ship": 383,
+        },
     },
 }
 
@@ -772,6 +937,7 @@ class EVNStoryRoute(TypedDict, total=False):
     regions: List[int] # NOTE: ORDER MATTERS. If we need to, we'll reorg to have each define their entrance and exit regions, but for now, will make the assumption that these are in order and connect in that order.
     region_connections: Dict[int, List[int]] # Dict[FromID, ToIDs] - Use 0 for Universe
     final_mission: int | None # The mission ID that we need to assign the victory condition to
+    #region_entrance_rules: Dict[int, Dict[str, int]] # region_id: key_reason - id or count (ex: "ship": 435, "min_cargo": 10)
     
 
 # Dictionary of our possible storylines / region routes
@@ -782,13 +948,19 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Vellos - Standard",
         "option_name": "vellos",
         "regions": [
+            # Universe
             0, # always include universe as our default start!
+            # Block other story strings
             101, 102, 103, 104, 201, # blocking (don't connect)
-            20, 23, 27, # WG + BH
+            # our story line
             1, # Story
+            # Side misn stuff
+            20, 23, 27, # WG + BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
         #"region_connections": { 0: [1, 101, 102, 20] }, # I don't think we need to add the blocking missions
-        "region_connections": { 0: [1, 20, 23, 27] },
+        "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312] },
         "final_mission": 417,
     },
     2: {
@@ -796,12 +968,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Polaris - Standard - Path A",
         "option_name": "polaris",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 102, 103, 104, 201, 
-            20, 23, 27,
+            # our story line
             2, 4, 5, 7, 9,
+            # Side misn stuff
+            20, 23, 27, # WG + BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [2, 20, 23, 27], 2: [4], 4: [5], 5: [7], 7: [9] },
+        "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312], 2: [4], 4: [5], 5: [7], 7: [9] },
         "final_mission": 887,
     },
     3: {    # So, there's 2 starting options, and 2 paths, for 4 combos. May implement all 4, may not.
@@ -809,12 +987,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Polaris - From Vellos - Path B",
         "option_name": "vellos_polaris",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             101, 102, 103, 104, 201,
-            20, 23, 27,
+            # our story line
             3, 4, 6, 7, 8, 
+            # Side misn stuff
+            20, 23, 27, # WG + BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [3, 20, 23, 27], 3: [4], 4: [6], 6: [7], 7: [8] },
+        "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312], 3: [4], 4: [6], 6: [7], 7: [8] },
         "final_mission": 887,
     },
     4: {    # Auroran options
@@ -822,12 +1006,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Auroran",
         "option_name": "auroran",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 103, 104, 201,
-            20, 23, 27,
+            # our story line
             10, 12, 14, 15, 16, 
+            # Side misn stuff
+            20, 23, 27, # WG + BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [10, 20, 23, 27], 10: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312], 10: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
     },
     5: {    # Auroran options
@@ -835,12 +1025,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Auroran - From WG",
         "option_name": "wg_auroran",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 102, 103, 104, 201,
-            23, 27,
+            # our story line
             21, 11, 12, 14, 15, 16, 
+            # Side misn stuff
+            23, 27, # BH 
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [11, 21, 23, 27], 11: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
     },
     6: {    # Auroran options
@@ -848,12 +1044,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Auroran - From Bounty Hunter",
         "option_name": "bh_auroran",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 102, 103, 104, 201,
-            20, 
+            # our story line
             24, 13, 12, 14, 15, 16, 
+            # side misn stuff
+            20, # WG good ending
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 24], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
+        "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
     },
     7: {    # Pirates
@@ -861,12 +1063,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Pirate",
         "option_name": "pirate",
         "regions": [
+            # Universe
             0, # universe
+            # Block other story strings
             100, 101, 102, 104, 201, # blocking other strings (don't connect)
-            20, 23, 27, # WG + BH
+            # our story line
             30, 32, 34, # Story
+            # side misn stuff
+            20, 23, 27, # WG + BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23, 27, 30], 30: [32], 32: [34] },
+        "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
         "final_mission": 712,
     },
     8: {   
@@ -874,12 +1082,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Pirates - From WG",
         "option_name": "wg_pirate",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 102, 103, 104, 201, # blocking
-            23, 27, # BH
+            # our story line
             22, 31, 32, 34, # WG -> Story
+            # side misn stuff
+            23, 27, # BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [22, 23, 27], 22: [31], 31: [32], 32: [34] },
+        "region_connections": { 0: [22, 23, 27, 300, 301, 302, 310, 311, 312], 22: [31], 31: [32], 32: [34] },
         "final_mission": 712,
     },
     9: {   
@@ -887,12 +1101,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Feds",
         "option_name": "feds",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 102, 103, 201, # blocking
-            20, 23, 27, # BH
+            # our story line
             40, 42, # Story
+            # side misn stuff
+            20, 23, 27, # BH
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23, 27, 40], 40: [42] },
+        "region_connections": { 0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312], 40: [42] },
         "final_mission": 474,
     },
     10: {   
@@ -900,12 +1120,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Rebel I - From BH",
         "option_name": "bh_rebel1",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 102, 103, 104, 201, # blocking
-            20, # WG
+            # our story line
             23, 26, 51, 53, # BH -> Story
+            # side misn stuff
+            20, # WG
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23], 23: [26], 26: [51], 51: [53] },
+        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [53] },
         "final_mission": 354,
     },
     11: {   
@@ -913,12 +1139,18 @@ story_routes: Dict[int, EVNStoryRoute] = {
         "name": "Rebel II - From BH",
         "option_name": "bh_rebel2",
         "regions": [
+            # Universe
             0, 
+            # Block other story strings
             100, 101, 102, 103, 104, 201, # blocking
-            20, # WG
+            # our story line
             23, 26, 51, 54, # BH -> Story
+            # side misn stuff
+            20, # WG
+            300, 301, 302, # Sigma
+            310, 311, 312, # vellos ship misns
         ],
-        "region_connections": { 0: [20, 23], 23: [26], 26: [51], 51: [54] },
+        "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [54] },
         "final_mission": 381,
     }
 }

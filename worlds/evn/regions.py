@@ -126,9 +126,11 @@ def connect_regions(world: EVNWorld) -> None:
     chosen_route = world.get_chosen_string()
     #logger.info(f"story routes: {chosen_route["region_connections"]}")
     for fromid, targets in chosen_route["region_connections"].items():
-        from_region = world.get_region(possible_regions[fromid]["name"])
+        from_r_name = possible_regions[fromid]["name"]
+        from_region = world.get_region(from_r_name)
         for toid in targets:
-            from_region.connect(world.get_region(possible_regions[toid]["name"]))
+            to_r_name = possible_regions[toid]["name"]
+            from_region.connect(world.get_region(possible_regions[toid]["name"]), f"{from_r_name} to {to_r_name}")
             #logger.info(f"connected {possible_regions[fromid]["name"]} to {possible_regions[toid]["name"]}")
 
     # Okay, now we can get connecting. For this, we need to create Entrances.

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
+
+from flask_caching import logger
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
@@ -9,8 +11,11 @@ from worlds.generic.Rules import add_rule, set_rule
 #from .logics import story_routes
 #from .locations import ev_location_bank
 from .rezdata.misns import misn_table
+from .rezdata.ships import ship_table #, ShipDict
 #from .locations import loc_type_offset
 from .apdata.offsets import offsets_table as loc_type_offset
+from .logics import possible_regions
+#from .items import ev_item_bank
 
 if TYPE_CHECKING:
     from .world import EVNWorld
@@ -26,6 +31,39 @@ if TYPE_CHECKING:
 #     "Return to Ar'Za Iusia;Polaris 46-887": 887,
 # }
 
+def _ship_id_rule(ship_id: int) -> str:
+    ship_offset = loc_type_offset["ship"]
+    #return ev_item_bank[ship_offset + ship_id]["name"]
+    # apparently can't import items bank when this is run... so we have to manually recreate the name.
+    # I don't like this, because it could change...
+    ship_data = ship_table[ship_id]
+    return ship_data["name"].strip() + ship_data["id"]
+
+def _min_cargo_rule(min_weight: int) -> List[str]:
+    ship_offset = loc_type_offset["ship"]
+    core_list = []
+    for ship_id, ship_data in ship_table.items():
+        ship_cargo = ship_data["cargo"]
+        if int(ship_cargo) >= min_weight:
+            #core_list.append(ship_id)
+            core_list.append(ship_data["name"].strip() + ship_data["id"])
+    # ret_list = []
+    # for ship_id in core_list:
+    #     ret_list.append(ev_item_bank[ship_offset + ship_id]["name"])
+    # return ret_list
+    return core_list
+
+def _min_ship_str_rule(min_str: int) -> List[str]:
+    ship_offset = loc_type_offset["ship"]
+    core_list = []
+    for ship_id, ship_data in ship_table.items():
+        ship_stat = ship_data["strength"]
+        if int(ship_stat) >= min_str:
+            #logger.info(f"Ship str rule, adding {min_str}, {ship_stat}, {ship_data['id']}")
+            core_list.append(ship_data["name"].strip() + ship_data["id"])
+    return core_list
+
+
 def set_all_rules(world: EVNWorld) -> None:
     # In order for AP to generate an item layout that is actually possible for the player to complete,
     # we need to define rules for our Entrances and Locations.
@@ -39,7 +77,7 @@ def set_all_rules(world: EVNWorld) -> None:
 
 def set_all_entrance_rules(world: EVNWorld) -> None:
     #return
-    test = 1
+    #test = 1
     # # First, we need to actually grab our entrances. Luckily, there is a helper method for this.
     # overworld_to_bottom_right_room = world.get_entrance("Overworld to Bottom Right Room")
     # overworld_to_top_left_room = world.get_entrance("Overworld to Top Left Room")
@@ -74,6 +112,33 @@ def set_all_entrance_rules(world: EVNWorld) -> None:
     # if world.options.hammer:
     #     overworld_to_top_middle_room = world.get_entrance("Overworld to Top Middle Room")
     #     set_rule(overworld_to_top_middle_room, lambda state: state.has("Hammer", world.player))
+
+    chosen_route = world.get_chosen_string()
+    for from_id, to_regions in chosen_route["region_connections"].items():
+        from_region = possible_regions[from_id]
+        for to_id in to_regions:
+            to_region = possible_regions[to_id]
+            entrance_name = f"{from_region['name']} to {to_region['name']}"
+            region_entrance = world.get_entrance(entrance_name)
+            for rule_type, rule_value in to_region["entrance_rules"].items():
+                match rule_type:
+                    case "ship":
+                        temp_ship_id = _ship_id_rule(rule_value)
+                        #logger.info(f"Ship rule for: {temp_ship_id}")
+                        set_rule(region_entrance, lambda state: state.has(temp_ship_id, world.player))
+                    case "min_cargo":
+                        temp_list = _min_cargo_rule(rule_value)
+                        set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
+                    case "min_ship_str": # Note: Ship str is arbitrary number designers added, but fits our purposes well enough here
+                        temp_list = _min_ship_str_rule(rule_value)
+                        set_rule(region_entrance, lambda state: state.has_any(temp_list, world.player))
+                    #case "min_checks":
+                        # apparently this doesn't update how we would expect. Advice was to not use it.
+                        # set_rule(region_entrance, lambda state: len(state.locations_checked))
+                        # I don't want to recreate a list of all possible checks, but I can't import the item library either due to cross ref imports
+                        # set_rule(region_entrance, lambda state: state.has_from_list_unique(temp_list, world.player))
+                    #case _:
+                        # do nothing
 
 
 def set_all_location_rules(world: EVNWorld) -> None:
@@ -166,3 +231,4 @@ def set_completion_condition(world: EVNWorld) -> None:
     # In our case, we went for the Victory event design pattern (see create_events() in locations.py).
     # So lets undo what we just did, and instead set the completion condition to:
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+    #world.multiworld.completion_condition[world.player] = lambda state: state.has_all(("Victory"), world.player)

@@ -85,6 +85,14 @@ class EVNWorld(World):
         return story_routes[self.get_chosen_string_id()]
         
 
+    def generate_early(self):
+        #early_weapon = self.random.choice(["Super Shotgun", "Plasma gun"])
+        #self.multiworld.early_items[self.player][early_weapon] = 1
+        # Try to get some Vell-os player ships into pool in sphere 1 because altogether ~75 checks locked behind 'em
+        self.multiworld.early_items[self.player]["Vell-os Dart381"] = 1
+        self.multiworld.early_items[self.player]["Vell-os Arrow382"] = 1
+        self.multiworld.early_items[self.player]["Vell-os Javelin383"] = 1
+
     # Our world class must have certain functions ("steps") that get called during generation.
     # The main ones are: create_regions, set_rules, create_items.
     # For better structure and readability, we put each of these in their own file.
