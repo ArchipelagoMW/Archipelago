@@ -143,7 +143,7 @@ class TrapChance(Range):
     display_name = "Trap Chance"
     range_start = 0
     range_end = 100
-    default = 25
+    default = 5
 
 
 class FillerWeights(OptionCounter):
@@ -178,10 +178,10 @@ class TrapWeights(OptionCounter):
     display_name = "Trap Weights"
     valid_keys = frozenset({"small_shuffle", "big_shuffle", "derpy_mon", "release"})
     default = {
-        "small_shuffle": 100,
-        "big_shuffle":   100,
-        "derpy_mon":     100,
-        "release":       100,
+        "small_shuffle": 10,
+        "big_shuffle":   5,
+        "derpy_mon":     25,
+        "release":       25,
     }
 
     @classmethod
@@ -193,11 +193,121 @@ class TrapWeights(OptionCounter):
         return super().from_any(data)
 
 
+class StarterRegion(Choice):
+    """Which game region your adventure starts in.
+    Determines which Pokémon starters are available and which Type Keys begin pre-collected.
+    'any': a random active region is chosen each seed.
+    Specific region: that region must also be active (include_X: true).
+    If the chosen region is not active, falls back to a random active region."""
+    display_name = "Starter Region"
+    option_any    = 0
+    option_kanto  = 1
+    option_johto  = 2
+    option_hoenn  = 3
+    option_sinnoh = 4
+    option_unova  = 5
+    option_kalos  = 6
+    option_alola  = 7
+    option_galar  = 8
+    option_hisui  = 9
+    option_paldea = 10
+    default = 0
+
+
+class StarterPokemon(Choice):
+    """Which starter Pokémon to begin with in the chosen region.
+    'any': a random starter from the region's list is chosen each seed.
+    'first'/'second'/'third': by position in the region's list.
+    Kanto: first=Bulbasaur, second=Charmander, third=Squirtle.
+    Johto: first=Chikorita, second=Cyndaquil, third=Totodile. Etc.
+    Regions with no starters (Hisui) are unaffected."""
+    display_name = "Starter Pokemon"
+    option_any    = 0
+    option_first  = 1
+    option_second = 2
+    option_third  = 3
+    default = 0
+
+
+class LegendaryLocks(Toggle):
+    """Gate legendary Pokémon behind Gym Badge items.
+    Collect 6 Badges for sub-legendaries (trios, regis, tapus, etc.),
+    7 Badges for box legendaries (version mascots), and
+    8 Badges for mythics (event-only Pokémon like Mew, Celebi, Arceus).
+    8 Gym Badge items are added to the item pool when enabled."""
+    display_name = "Legendary Locks"
+    default = 0
+
+
+class TradeLocks(Toggle):
+    """Require a Link Cable item before guessing trade-evolved Pokémon
+    (Alakazam, Machamp, Golem, Gengar, Scizor, Steelix, Conkeldurr, etc.)."""
+    display_name = "Trade Evolution Lock"
+    default = 0
+
+
+class BabyLocks(Toggle):
+    """Require Daycare item(s) before guessing baby Pokémon
+    (Pichu, Cleffa, Igglybuff, Togepi, Tyrogue, Smoochum, Elekid, Magby, etc.)."""
+    display_name = "Baby Pokemon Lock"
+    default = 0
+
+
+class DaycareCount(Range):
+    """Number of Daycare items required to unlock baby Pokémon.
+    Only used when Baby Pokemon Lock is enabled.
+    Set higher for a more gradual unlock; all copies must be received."""
+    display_name = "Daycare Items Required"
+    range_start = 1
+    range_end = 5
+    default = 1
+
+
+class FossilLocks(Toggle):
+    """Require a Fossil Restorer item before guessing fossil-revived Pokémon
+    (Omanyte, Omastar, Kabuto, Kabutops, Aerodactyl, Lileep, Cranidos, etc.)."""
+    display_name = "Fossil Lock"
+    default = 0
+
+
+class UltraBeastLocks(Toggle):
+    """Require an Ultra Wormhole item before guessing Ultra Beasts
+    (Nihilego through Blacephalon, plus Necrozma which also originates from Ultra Space)."""
+    display_name = "Ultra Beast Lock"
+    default = 0
+
+
+class ParadoxLocks(Toggle):
+    """Require a Time Rift item before guessing Paradox Pokémon
+    (Great Tusk, Roaring Moon, Iron Valiant, etc., plus Koraidon and Miraidon).
+    Only relevant when Paldea or Galar/DLC regions are active."""
+    display_name = "Paradox Lock"
+    default = 0
+
+
+class StoneLocks(Toggle):
+    """Require the matching evolutionary stone item before guessing stone-only evolutions.
+    Each stone type that gates at least one active Pokémon adds one stone item to the pool.
+    Examples: Fire Stone → Arcanine/Ninetales/Flareon, Water Stone → Starmie/Vaporeon/Cloyster."""
+    display_name = "Stone Evolution Lock"
+    default = 0
+
+
+class IncludeShinies(Toggle):
+    """Add Shiny Token filler items to the item pool.
+    Receiving a Shiny Token makes a random Pokémon in your caught list display
+    its shiny sprite. Purely cosmetic — no gameplay effect."""
+    display_name = "Include Shiny Tokens"
+    default = 0
+
+
 @dataclass
 class PokepelagoOptions(PerGameCommonOptions):
     dexsanity: Dexsanity
     type_locks: EnableTypeLocks
     region_locks: RegionLocks
+    starter_region: StarterRegion
+    starter_pokemon: StarterPokemon
     include_starting_locations: IncludeStartingLocations
     include_kanto: IncludeKanto
     include_johto: IncludeJohto
@@ -209,6 +319,15 @@ class PokepelagoOptions(PerGameCommonOptions):
     include_galar: IncludeGalar
     include_hisui: IncludeHisui
     include_paldea: IncludePaldea
+    legendary_locks: LegendaryLocks
+    trade_locks: TradeLocks
+    baby_locks: BabyLocks
+    daycare_count: DaycareCount
+    fossil_locks: FossilLocks
+    ultra_beast_locks: UltraBeastLocks
+    paradox_locks: ParadoxLocks
+    stone_locks: StoneLocks
+    include_shinies: IncludeShinies
     goal_type: GoalType
     goal_percentage: GoalPercentage
     goal_count: GoalCount

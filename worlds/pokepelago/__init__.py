@@ -6,7 +6,10 @@ from worlds.generic.Rules import set_rule
 from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
 from .Locations import PokepelagoLocation, location_table, milestones, starting_locations, TYPE_MILESTONE_STEPS
 from .Options import PokepelagoOptions, REGION_OPTION_ATTRS
-from .data import POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region
+from .data import (POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region,
+                   LEGENDARY_SUB_IDS, LEGENDARY_BOX_IDS, LEGENDARY_MYTHIC_IDS,
+                   BABY_IDS, TRADE_EVO_IDS, FOSSIL_IDS, ULTRA_BEAST_IDS, PARADOX_IDS,
+                   STONE_EVO_GROUPS)
 
 class PokepelagoWeb(WebWorld):
     tutorials = [Tutorial(
@@ -42,8 +45,31 @@ class PokepelagoWorld(World):
         if not self.active_regions:
             self.active_regions = ["Kanto"]
 
-        self.starting_region = self.active_regions[0]
-        self.starter_names: set = set(STARTERS_BY_REGION.get(self.starting_region, []))
+        # Determine starting region from starter_region option (0 = any = random active region).
+        _REGION_BY_IDX = {
+            1: "Kanto", 2: "Johto", 3: "Hoenn", 4: "Sinnoh", 5: "Unova",
+            6: "Kalos", 7: "Alola", 8: "Galar", 9: "Hisui", 10: "Paldea",
+        }
+        sr_value = self.options.starter_region.value
+        chosen_region = _REGION_BY_IDX.get(sr_value)
+        if sr_value == 0 or chosen_region not in self.active_regions:
+            self.starting_region = self.random.choice(self.active_regions)
+        else:
+            self.starting_region = chosen_region
+
+        # Pick a single starter Pokémon; only its Type Keys are pre-collected.
+        starter_list = STARTERS_BY_REGION.get(self.starting_region, [])
+        if starter_list:
+            idx = self.options.starter_pokemon.value
+            if idx == 0:  # any = random
+                chosen = self.random.choice(starter_list)
+            else:
+                chosen = starter_list[min(idx - 1, len(starter_list) - 1)]
+            self.starter_names: set = {chosen}
+            self.chosen_starter: str | None = chosen
+        else:
+            self.starter_names = set()
+            self.chosen_starter = None
 
         # Collect active Pokemon across all selected regions
         active_ids: set = set()
@@ -54,6 +80,19 @@ class PokepelagoWorld(World):
         self.active_pokemon = [mon for mon in POKEMON_DATA if mon["id"] in active_ids]
         self.active_pokemon_names = [mon["name"] for mon in self.active_pokemon]
         self._mon_lookup: dict = {mon["name"]: mon for mon in self.active_pokemon}
+
+        # Pre-compute which active Pokémon fall into each lock category.
+        # Used by _extra_reqs() and create_items() to determine which gate items are needed.
+        self._gl_sub   = active_ids & LEGENDARY_SUB_IDS
+        self._gl_box   = active_ids & LEGENDARY_BOX_IDS
+        self._gl_myth  = active_ids & LEGENDARY_MYTHIC_IDS
+        self._g_baby   = active_ids & BABY_IDS
+        self._g_trade  = active_ids & TRADE_EVO_IDS
+        self._g_fossil = active_ids & FOSSIL_IDS
+        self._g_ub     = active_ids & ULTRA_BEAST_IDS
+        self._g_para   = active_ids & PARADOX_IDS
+        # Only include stone types that have at least one active Pokémon in the pool
+        self._g_stone: dict = {s: active_ids & ids for s, ids in STONE_EVO_GROUPS.items() if active_ids & ids}
 
         # Goal count: number of Pokemon the client needs to catch for victory
         total = len(self.active_pokemon)
@@ -86,24 +125,57 @@ class PokepelagoWorld(World):
             if type_locks:
                 type_reqs = frozenset(f"{t} Type Key" for t in mon["types"])
 
-            key = (region_req, type_reqs)
+            extra_reqs = self._extra_reqs(mon["id"])
+            key = (region_req, type_reqs, extra_reqs)
             global_req_counter[key] += 1
             for t in mon["types"]:
                 if t in type_req_counters:
                     type_req_counters[t][key] += 1
 
-        # List of (region_req_or_None, frozenset_of_type_keys, pokemon_count)
+        # List of (region_req_or_None, frozenset_of_type_keys, extra_reqs_frozenset, pokemon_count)
         self._milestone_req_groups = [
-            (rr, tr, c) for (rr, tr), c in global_req_counter.items()
+            (rr, tr, er, c) for (rr, tr, er), c in global_req_counter.items()
         ]
         self._type_milestone_req_groups: dict[str, list] = {
-            t: [(rr, tr, c) for (rr, tr), c in counter.items()]
+            t: [(rr, tr, er, c) for (rr, tr, er), c in counter.items()]
             for t, counter in type_req_counters.items()
         }
         # Max non-starter Pokémon of each type across active regions
         self._active_type_counts: dict[str, int] = {
             t: sum(counter.values()) for t, counter in type_req_counters.items()
         }
+
+    def _extra_reqs(self, mon_id: int) -> frozenset:
+        """Return extra gate requirements for a Pokémon beyond region/type locks.
+
+        Returns a frozenset of (item_name, required_count) tuples. An empty frozenset
+        means no extra gate applies. Used in milestone rules and access rules.
+        """
+        o = self.options
+        reqs: list = []
+        if o.legendary_locks.value:
+            if mon_id in self._gl_myth:
+                reqs.append(("Gym Badge", 8))
+            elif mon_id in self._gl_box:
+                reqs.append(("Gym Badge", 7))
+            elif mon_id in self._gl_sub:
+                reqs.append(("Gym Badge", 6))
+        if o.trade_locks.value and mon_id in self._g_trade:
+            reqs.append(("Link Cable", 1))
+        if o.baby_locks.value and mon_id in self._g_baby:
+            reqs.append(("Daycare", o.daycare_count.value))
+        if o.fossil_locks.value and mon_id in self._g_fossil:
+            reqs.append(("Fossil Restorer", 1))
+        if o.ultra_beast_locks.value and mon_id in self._g_ub:
+            reqs.append(("Ultra Wormhole", 1))
+        if o.paradox_locks.value and mon_id in self._g_para:
+            reqs.append(("Time Rift", 1))
+        if o.stone_locks.value:
+            for stone, ids in self._g_stone.items():
+                if mon_id in ids:
+                    reqs.append((f"{stone.title()} Stone", 1))
+                    break
+        return frozenset(reqs)
 
     def create_item(self, name: str) -> PokepelagoItem:
         data = item_data_table.get(name)
@@ -148,6 +220,54 @@ class PokepelagoWorld(World):
                 self.multiworld.itempool.append(self.create_item(f"{region} Pass"))
                 my_items_in_pool += 1
 
+        # ── New lock gate items ──────────────────────────────────────────────────
+        o = self.options
+
+        # Legendary gate: 8 progressive Gym Badge items (only if there are active legendaries)
+        if o.legendary_locks.value and (self._gl_sub or self._gl_box or self._gl_myth):
+            for _ in range(8):
+                self.multiworld.itempool.append(self.create_item("Gym Badge"))
+                my_items_in_pool += 1
+
+        # Trade evolution gate: single Link Cable
+        if o.trade_locks.value and self._g_trade:
+            self.multiworld.itempool.append(self.create_item("Link Cable"))
+            my_items_in_pool += 1
+
+        # Baby Pokémon gate: N Daycare items (configurable count)
+        if o.baby_locks.value and self._g_baby:
+            for _ in range(o.daycare_count.value):
+                self.multiworld.itempool.append(self.create_item("Daycare"))
+                my_items_in_pool += 1
+
+        # Fossil Pokémon gate: single Fossil Restorer
+        if o.fossil_locks.value and self._g_fossil:
+            self.multiworld.itempool.append(self.create_item("Fossil Restorer"))
+            my_items_in_pool += 1
+
+        # Ultra Beast gate: single Ultra Wormhole
+        if o.ultra_beast_locks.value and self._g_ub:
+            self.multiworld.itempool.append(self.create_item("Ultra Wormhole"))
+            my_items_in_pool += 1
+
+        # Paradox Pokémon gate: single Time Rift
+        if o.paradox_locks.value and self._g_para:
+            self.multiworld.itempool.append(self.create_item("Time Rift"))
+            my_items_in_pool += 1
+
+        # Stone evolution gates: one item per stone type with active Pokémon in pool
+        if o.stone_locks.value:
+            for stone in self._g_stone:
+                self.multiworld.itempool.append(self.create_item(f"{stone.title()} Stone"))
+                my_items_in_pool += 1
+
+        # Shiny Tokens: cosmetic filler items (~5% of active Pokémon count)
+        if o.include_shinies.value and self.active_pokemon:
+            shiny_count = max(1, len(self.active_pokemon) // 20)
+            for _ in range(shiny_count):
+                self.multiworld.itempool.append(self.create_item("Shiny Token"))
+                my_items_in_pool += 1
+
         # Fill remaining locations with useful items/traps
         total_locations = sum(
             1 for loc in self.multiworld.get_locations(self.player) if loc.address is not None
@@ -181,19 +301,22 @@ class PokepelagoWorld(World):
     def _make_milestone_rule(self, target_count, req_groups):
         """Build an access rule that checks whether >= target_count Pokémon are logically accessible.
 
-        req_groups is a list of (region_req, type_reqs_frozenset, pokemon_count) tuples.
+        req_groups is a list of (region_req, type_reqs_frozenset, extra_reqs_frozenset, count) tuples.
         A group's Pokémon are accessible when:
           - region_req is None (starting region / no region locks) OR the player has the Region Pass
           - type_reqs is empty (no type locks) OR the player has ALL required Type Keys
+          - extra_reqs is empty OR the player meets all (item, min_count) requirements
         """
         player = self.player
 
         def rule(state):
             accessible = 0
-            for region_req, type_reqs, count in req_groups:
+            for region_req, type_reqs, extra_reqs, count in req_groups:
                 if region_req and not state.has(region_req, player):
                     continue
                 if type_reqs and not state.has_all(type_reqs, player):
+                    continue
+                if extra_reqs and not all(state.count(item, player) >= n for item, n in extra_reqs):
                     continue
                 accessible += count
                 if accessible >= target_count:
@@ -291,6 +414,21 @@ class PokepelagoWorld(World):
                 location = self.multiworld.get_location(f"Guess {mon_name}", player)
                 set_rule(location, lambda state, tk=type_keys: state.has_all(tk, self.player))
 
+        # Extra gate access rules (legendary, trade, baby, fossil, UB, paradox, stone).
+        # Applied on top of any existing type key rules — both must be satisfied.
+        if self.options.dexsanity.value:
+            for mon in self.active_pokemon:
+                extra = self._extra_reqs(mon["id"])
+                if not extra:
+                    continue
+                loc = self.multiworld.get_location(f"Guess {mon['name']}", player)
+                prev_rule = loc.access_rule
+                def _make_combined_rule(prev=prev_rule, er=extra, pl=player):
+                    def rule(state):
+                        return prev(state) and all(state.count(item, pl) >= n for item, n in er)
+                    return rule
+                set_rule(loc, _make_combined_rule())
+
         # ── Milestone access rules ──
         # "Guessed X Pokemon" milestones require that X non-starter Pokémon are
         # logically accessible (correct Region Passes + Type Keys).
@@ -327,14 +465,26 @@ class PokepelagoWorld(World):
             lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self) -> dict:
+        o = self.options
         return {
-            "type_locks": bool(self.options.type_locks.value),
-            "region_locks": bool(self.options.region_locks.value),
+            "type_locks": bool(o.type_locks.value),
+            "region_locks": bool(o.region_locks.value),
             "active_regions": {r: list(REGION_RANGES[r]) for r in self.active_regions},
             "starting_region": self.starting_region,
             "goal_count": self.goal_count,
-            "dexsanity": bool(self.options.dexsanity.value),
-            "starting_locations": bool(self.options.include_starting_locations.value),
+            "dexsanity": bool(o.dexsanity.value),
+            "starting_locations": bool(o.include_starting_locations.value),
             "milestones": list(milestones),
-            "starter_count": 8 if self.options.include_starting_locations.value else 0,
+            "starter_count": 8 if o.include_starting_locations.value else 0,
+            # New lock flags
+            "legendary_locks":   bool(o.legendary_locks.value),
+            "trade_locks":       bool(o.trade_locks.value),
+            "baby_locks":        bool(o.baby_locks.value),
+            "daycare_count":     int(o.daycare_count.value),
+            "fossil_locks":      bool(o.fossil_locks.value),
+            "ultra_beast_locks": bool(o.ultra_beast_locks.value),
+            "paradox_locks":     bool(o.paradox_locks.value),
+            "stone_locks":       bool(o.stone_locks.value),
+            "include_shinies":   bool(o.include_shinies.value),
+            "starting_starter":  self.chosen_starter,
         }

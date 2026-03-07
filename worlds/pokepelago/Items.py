@@ -61,6 +61,40 @@ item_data_table["Release Trap"]       = (ITEM_ID_OFFSET + 4004, ItemClassificati
 for _i, _region in enumerate(GAME_REGIONS):
     item_data_table[f"{_region} Pass"] = (ITEM_ID_OFFSET + 5000 + _i, ItemClassification.progression)
 
+# 6. New gate progression items (6xxx range)
+# These implement the new lock option systems: legendary gates, trade evolutions, baby Pokémon,
+# fossil Pokémon, ultra beasts, paradox Pokémon, and stone-only evolutions.
+_GATE_ITEMS = {
+    "Gym Badge":       (ITEM_ID_OFFSET + 6000, ItemClassification.progression),  # progressive: 6/7/8 for legendary tiers
+    "Link Cable":      (ITEM_ID_OFFSET + 6001, ItemClassification.progression),  # trade evolution gate
+    "Daycare":         (ITEM_ID_OFFSET + 6002, ItemClassification.progression),  # baby Pokémon gate (progressive count)
+    "Ultra Wormhole":  (ITEM_ID_OFFSET + 6003, ItemClassification.progression),  # ultra beast gate
+    "Time Rift":       (ITEM_ID_OFFSET + 6004, ItemClassification.progression),  # paradox Pokémon gate
+    "Fossil Restorer": (ITEM_ID_OFFSET + 6005, ItemClassification.progression),  # fossil Pokémon gate
+    # Evolutionary stones (6010–6019) — gate stone-only evolved Pokémon
+    "Fire Stone":      (ITEM_ID_OFFSET + 6010, ItemClassification.progression),
+    "Water Stone":     (ITEM_ID_OFFSET + 6011, ItemClassification.progression),
+    "Thunder Stone":   (ITEM_ID_OFFSET + 6012, ItemClassification.progression),
+    "Leaf Stone":      (ITEM_ID_OFFSET + 6013, ItemClassification.progression),
+    "Moon Stone":      (ITEM_ID_OFFSET + 6014, ItemClassification.progression),
+    "Sun Stone":       (ITEM_ID_OFFSET + 6015, ItemClassification.progression),
+    "Shiny Stone":     (ITEM_ID_OFFSET + 6016, ItemClassification.progression),
+    "Dusk Stone":      (ITEM_ID_OFFSET + 6017, ItemClassification.progression),
+    "Dawn Stone":      (ITEM_ID_OFFSET + 6018, ItemClassification.progression),
+    "Ice Stone":       (ITEM_ID_OFFSET + 6019, ItemClassification.progression),
+    # Cosmetic filler
+    "Shiny Token":     (ITEM_ID_OFFSET + 6020, ItemClassification.filler),
+}
+item_data_table.update(_GATE_ITEMS)
+
+# Offsets exported for reference (client uses ITEM_ID_OFFSET + these to identify items)
+GYM_BADGE_OFFSET = 6000
+STONE_OFFSETS: dict = {
+    "fire": 6010, "water": 6011, "thunder": 6012, "leaf": 6013, "moon": 6014,
+    "sun": 6015, "shiny": 6016, "dusk": 6017, "dawn": 6018, "ice": 6019,
+}
+SHINY_TOKEN_OFFSET = 6020
+
 # For backward compatibility with other files that might still use item_table (name -> id)
 item_table = {name: data[0] for name, data in item_data_table.items()}
 pokemon_names = [mon["name"] for mon in POKEMON_DATA]

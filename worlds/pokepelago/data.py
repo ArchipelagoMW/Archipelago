@@ -1074,3 +1074,113 @@ def get_pokemon_region(mon_id: int) -> str:
         if low <= mon_id <= high:
             return region_name
     return "Unknown"
+
+
+# ── Pokémon categorization sets ───────────────────────────────────────────────
+# Used by the lock options (legendary_locks, trade_locks, etc.) to determine
+# which Pokémon require specific gate items before they can be guessed.
+
+# Legendary tiers (for gym badge gating):
+#   sub  = 6 badges  — legendary trios, regis, lake guardians, etc.
+#   box  = 7 badges  — version mascots
+#   mythic = 8 badges — event-only distribution Pokémon
+LEGENDARY_SUB_IDS: frozenset = frozenset([
+    144, 145, 146,                                          # Kanto bird trio
+    243, 244, 245,                                          # Johto beast trio
+    377, 378, 379, 380, 381,                                # Hoenn regis + eon duo
+    480, 481, 482, 485, 486, 488, 489,                     # Sinnoh lake guardians + others
+    638, 639, 640, 641, 642, 645,                           # Unova swords of justice + forces of nature
+    785, 786, 787, 788,                                     # Alola tapus
+    891, 892,                                               # Galar kubfu / urshifu
+    894, 895, 896, 897,                                     # Galar regis + horses
+    905,                                                    # Hisui enamorus
+    1001, 1002, 1003, 1004,                                 # Paldea ruinous quartet
+])
+
+LEGENDARY_BOX_IDS: frozenset = frozenset([
+    150,                                                    # Mewtwo
+    249, 250,                                               # Lugia, Ho-Oh
+    382, 383, 384,                                          # Kyogre, Groudon, Rayquaza
+    483, 484, 487,                                          # Dialga, Palkia, Giratina
+    643, 644, 646,                                          # Reshiram, Zekrom, Kyurem
+    716, 717, 718,                                          # Xerneas, Yveltal, Zygarde
+    791, 792, 800,                                          # Solgaleo, Lunala, Necrozma
+    888, 889, 890, 898,                                     # Zacian, Zamazenta, Eternatus, Calyrex
+    1007, 1008, 1024,                                       # Koraidon, Miraidon, Terapagos
+])
+
+LEGENDARY_MYTHIC_IDS: frozenset = frozenset([
+    151,                                                    # Mew
+    251,                                                    # Celebi
+    385, 386,                                               # Jirachi, Deoxys
+    490, 491, 492, 493,                                     # Manaphy, Darkrai, Shaymin, Arceus
+    494,                                                    # Victini
+    647, 648, 649,                                          # Keldeo, Meloetta, Genesect
+    719, 720, 721,                                          # Diancie, Hoopa, Volcanion
+    801, 802,                                               # Magearna, Marshadow
+    807, 808, 809,                                          # Zeraora, Meltan, Melmetal
+    893,                                                    # Zarude
+    1025,                                                   # Pecharunt
+])
+
+# Baby Pokémon — require Daycare item(s)
+BABY_IDS: frozenset = frozenset([
+    172, 173, 174, 175,                                     # Pichu, Cleffa, Igglybuff, Togepi
+    236, 238, 239, 240,                                     # Tyrogue, Smoochum, Elekid, Magby
+    298, 360,                                               # Azurill, Wynaut
+    406, 433, 438, 439, 440, 446, 447, 458,                 # Gen 4 babies
+])
+
+# Trade-evolved Pokémon — require Link Cable
+TRADE_EVO_IDS: frozenset = frozenset([
+    65, 68, 76, 94,                                         # Gen 1: Alakazam, Machamp, Golem, Gengar
+    186, 199, 208, 212, 230, 233,                           # Gen 2: Politoed, Slowking, Steelix, Scizor, Kingdra, Porygon2
+    367, 368,                                               # Gen 3: Huntail, Gorebyss
+    464, 466, 467, 474, 477,                                # Gen 4: Rhyperior, Electivire, Magmortar, Porygon-Z, Dusknoir
+    526, 534, 589, 590,                                     # Gen 5: Gigalith, Conkeldurr, Escavalier, Accelgor
+])
+
+# Fossil Pokémon — require Fossil Restorer
+FOSSIL_IDS: frozenset = frozenset([
+    138, 139, 140, 141, 142,                                # Gen 1: Omanyte, Omastar, Kabuto, Kabutops, Aerodactyl
+    345, 346, 347, 348,                                     # Gen 3: Lileep, Cradily, Anorith, Armaldo
+    408, 409, 410, 411,                                     # Gen 4: Cranidos, Rampardos, Shieldon, Bastiodon
+    564, 565, 566, 567,                                     # Gen 5: Tirtouga, Carracosta, Archen, Archeops
+    696, 697, 698, 699,                                     # Gen 6: Tyrunt, Tyrantrum, Amaura, Aurorus
+    880, 881, 882, 883,                                     # Gen 8: Dracozolt, Arctozolt, Dracovish, Arctovish
+])
+
+# Ultra Beasts — require Ultra Wormhole (Necrozma included as it originates from Ultra Space)
+ULTRA_BEAST_IDS: frozenset = frozenset([
+    793, 794, 795, 796, 797, 798, 799,                      # Nihilego → Guzzlord
+    800,                                                    # Necrozma
+    805, 806,                                               # Stakataka, Blacephalon
+])
+
+# Paradox Pokémon — require Time Rift
+# Includes Koraidon/Miraidon (1007/1008) which are also box legendaries.
+# Both gates apply independently when enabled.
+PARADOX_IDS: frozenset = frozenset([
+    984, 985, 986, 987, 988, 989,                           # Past paradox (Scarlet): Great Tusk → Sandy Shocks
+    990, 991, 992, 993, 994, 995,                           # Future paradox (Violet): Iron Treads → Iron Thorns
+    1005, 1006,                                             # Roaring Moon, Iron Valiant
+    1007, 1008,                                             # Koraidon, Miraidon
+    1009, 1010,                                             # Walking Wake, Iron Leaves
+    1020, 1021, 1022, 1023,                                 # Gouging Fire, Raging Bolt, Iron Boulder, Iron Crown
+])
+
+# Stone-only evolutions — require the matching evolutionary stone item.
+# Only Pokémon whose ONLY path to that evolution form is via a specific stone are included.
+# Key = stone item name suffix (e.g. "fire" → "Fire Stone"), value = frozenset of Pokémon IDs.
+STONE_EVO_GROUPS: dict = {
+    "fire":    frozenset([38, 59, 136, 514]),               # Ninetales, Arcanine, Flareon, Simisear
+    "water":   frozenset([62, 91, 121, 134, 272, 516]),     # Poliwrath, Cloyster, Starmie, Vaporeon, Ludicolo, Simipour
+    "thunder": frozenset([26, 135, 604]),                   # Raichu, Jolteon, Eelektross
+    "leaf":    frozenset([45, 71, 103, 275, 512]),          # Vileplume, Victreebel, Exeggutor, Shiftry, Simisage
+    "moon":    frozenset([31, 34, 36, 40, 301, 518]),       # Nidoqueen, Nidoking, Clefable, Wigglytuff, Delcatty, Musharna
+    "sun":     frozenset([182, 192, 547, 549, 695]),        # Bellossom, Sunflora, Whimsicott, Lilligant, Heliolisk
+    "shiny":   frozenset([407, 468, 573, 671]),             # Roserade, Togekiss, Cinccino, Florges
+    "dusk":    frozenset([429, 430, 609, 681]),             # Mismagius, Honchkrow, Chandelure, Aegislash
+    "dawn":    frozenset([475, 478]),                       # Gallade, Froslass
+    "ice":     frozenset([471]),                            # Glaceon
+}
