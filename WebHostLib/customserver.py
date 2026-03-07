@@ -215,25 +215,19 @@ def parse_game_ports(game_ports: tuple[str | int]) -> GameRangePorts:
     return GameRangePorts(parsed_ports, weights, ephemeral_allowed)
 
 
+def weighted_random(ranges: list[range], cum_weights: list[int]):
+    [picked] = random.choices(ranges, cum_weights=cum_weights)
+    return random.randrange(picked.start, picked.stop, picked.step)
+
+
 def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket.socket:
     parsed_ports, weights, ephemeral_allowed = parse_game_ports(game_ports)
-    # try to randomize the order of parsed ports with weights, but don't have duplicates of them
-    port_ranges = list(
-        dict.fromkeys(random.choices(parsed_ports, cum_weights=weights, k=len(parsed_ports)) + parsed_ports)
-    )
-    remaining = 1024
-    for r in port_ranges:
-        random_range = itertools.islice(
-            filter(
-                lambda p: p not in get_used_ports(),
-                map(lambda _: random.randrange(r.start, r.stop, r.step), range(len(r)))
-            ),
-            remaining)
-        port = create_socket_from_port_list(random_range, host)
-        remaining -= len(r)
-
-        if port is not None: return port
-        if remaining <= 0: break
+    for _ in range(1024):
+        port_num = weighted_random(parsed_ports, weights)
+        try:
+            return socket.create_server((host, port_num))
+        except OSError:
+            pass
 
     if ephemeral_allowed:
         return socket.create_server((host, 0))
@@ -274,16 +268,6 @@ def get_used_ports():
         setattr(get_used_ports, "last", last_used_ports)
 
     return last_used_ports[0]
-
-
-def create_socket_from_port_list(available_ports: typing.Iterable[int], host: str) -> socket.socket | None:
-    for port in available_ports:
-        try:
-            return socket.create_server((host, port))
-        except OSError:
-            pass
-
-    return None
 
 
 @cache_argsless
