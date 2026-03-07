@@ -215,7 +215,7 @@ def parse_game_ports(game_ports: tuple[str | int]) -> GameRangePorts:
     return GameRangePorts(parsed_ports, weights, ephemeral_allowed)
 
 
-def weighted_random(ranges: list[range], cum_weights: list[int]):
+def weighted_random(ranges: list[range], cum_weights: list[int]) -> int:
     [picked] = random.choices(ranges, cum_weights=cum_weights)
     return random.randrange(picked.start, picked.stop, picked.step)
 
