@@ -216,7 +216,7 @@ class GauntletLegendsContext(CommonContext):
                         continue
                     item_name = items_by_id[item].item_name
                     if self.current_zone in (0x8, 0xE) and item in spawner_trap_ids:
-                        if len([trap for trap in self.queued_traps if trap[1] != index]) < 1:
+                        if len([trap for trap in self.queued_traps if trap[1] == index]) < 1:
                             self.queued_traps.append((item_name, index, False))
                     await self.give_item(item_name, player)
                     await self.update_item("Compass", 1, player)
@@ -362,7 +362,7 @@ class GauntletLegendsContext(CommonContext):
             await self.scout_locations(self)
 
         active = await self._read_ram_int(PLAYER_KILL, 1)
-        if active != 4:
+        if active != 0x4:
             return []
 
         if len(self.queued_traps) > 0:
