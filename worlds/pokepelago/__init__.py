@@ -216,7 +216,9 @@ class PokepelagoWorld(World):
         # Added whenever region_locks=ON, regardless of dexsanity.
         # Even with dexsanity=OFF, the client respects region locks, so passes must be in the pool.
         if self.options.region_locks.value:
-            for region in self.active_regions[1:]:
+            for region in self.active_regions:
+                if region == self.starting_region:
+                    continue
                 self.multiworld.itempool.append(self.create_item(f"{region} Pass"))
                 my_items_in_pool += 1
 
