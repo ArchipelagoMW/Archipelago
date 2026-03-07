@@ -23,7 +23,7 @@ for mon in POKEMON_DATA:
 # Optimized Tapered milestones: Dense early (for randomizer stepping stones), sparse late (for sphere depth compression).
 GLOBAL_MILESTONES = [1, 2, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 250, 400, 600, 800, 1000]
 # Specific Max-Pokemon milestones (Gen-specific goals)
-goal_milestones = [148, 248, 383, 490, 646, 718, 806, 895, 1022]
+goal_milestones = [151, 251, 386, 493, 649, 721, 809, 898, 905, 1025]
 milestones = sorted(list(set(GLOBAL_MILESTONES + goal_milestones)))
 
 for count in milestones:
