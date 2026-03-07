@@ -224,14 +224,12 @@ def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket
     parsed_ports, weights, ephemeral_allowed = parse_game_ports(game_ports)
     used_ports = get_used_ports()
     i = 1024
-    while True:
+    while i > 0:
         port_num = weighted_random(parsed_ports, weights)
         if port_num in used_ports:
             continue
 
-        i -=1
-        if i == 0:
-            break
+        i -= 0
 
         try:
             return socket.create_server((host, port_num))
