@@ -208,9 +208,8 @@ def parse_game_ports(game_ports: tuple[str | int]):
     return parsed_ports, weights, total_length, ephemeral_allowed
 
 
-def create_random_port_socket(game_ports: list[str | int], host: str) -> socket.socket:
-    # convert to tuple because its hashable
-    parsed_ports, weights, length, ephemeral_allowed = parse_game_ports(tuple(game_ports))
+def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket.socket:
+    parsed_ports, weights, length, ephemeral_allowed = parse_game_ports(game_ports)
     port_ranges = random.choices(parsed_ports, cum_weights=weights, k=len(parsed_ports))
     remaining = 1024
     for r in port_ranges:
@@ -236,7 +235,7 @@ def create_random_port_socket(game_ports: list[str | int], host: str) -> socket.
     raise OSError(98, "No available ports")
 
 
-def try_processes(p: psutil.Process) -> typing.Iterable[int]:
+def try_conns_per_process(p: psutil.Process) -> typing.Iterable[int]:
     try:
         return map(lambda c: c.laddr.port, p.get_active_net_connections("tcp4"))
     except psutil.AccessDenied:
@@ -255,7 +254,7 @@ def get_active_net_connections() -> typing.Iterable[int]:
         # flatten the list of iterables
         return itertools.chain.from_iterable(map(
             # get the net connections of the process and then map its ports
-            try_processes,
+            try_conns_per_process,
             # this method has caching handled by psutil
             psutil.process_iter(["net_connections"])
         ))
@@ -411,7 +410,8 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 if ctx.port == 0:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx),
-                        sock=create_random_port_socket(game_ports, ctx.host),
+                        # convert to tuple because its hashable
+                        sock=create_random_port_socket(tuple(game_ports), ctx.host),
                         ssl=get_ssl_context(),
                         extensions=[server_per_message_deflate_factory],
                     )
