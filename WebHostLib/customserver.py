@@ -219,7 +219,7 @@ def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket
             random_range = itertools.islice(
                 filter(
                     lambda p: p not in get_used_ports(),
-                    map(lambda _: random.randint(r.start, r.stop), range(r_length))
+                    map(lambda _: random.randrange(r.start, r.stop, r.step), range(r_length))
                 ),
                 remaining)
             port = create_socket_from_port_list(random_range, host)
@@ -276,7 +276,7 @@ def create_socket_from_port_list(available_ports: typing.Iterable[int], host: st
         try:
             return socket.create_server((host, port))
         except OSError:
-            _ = None
+            pass
 
     return None
 
