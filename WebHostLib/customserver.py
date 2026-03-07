@@ -184,8 +184,14 @@ class WebHostContext(Context):
         return d
 
 
+class GameRangePorts(typing.NamedTuple):
+    parsed_ports: list[range | list[int]]
+    weights: list[int]
+    ephemeral_allowed: bool
+
+
 @functools.cache
-def parse_game_ports(game_ports: tuple[str | int]):
+def parse_game_ports(game_ports: tuple[str | int]) -> GameRangePorts:
     parsed_ports: list[range | list[int]] = []
     weights = []
     ephemeral_allowed = False
@@ -205,13 +211,15 @@ def parse_game_ports(game_ports: tuple[str | int]):
             weights.append(total_length)
             parsed_ports.append([int(item)])
 
-    return parsed_ports, weights, total_length, ephemeral_allowed
+    return GameRangePorts(parsed_ports, weights, ephemeral_allowed)
 
 
 def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket.socket:
-    parsed_ports, weights, length, ephemeral_allowed = parse_game_ports(game_ports)
+    parsed_ports, weights, ephemeral_allowed = parse_game_ports(game_ports)
     # try to randomize the order of parsed ports with weights, but don't have duplicates of them
-    port_ranges = list(dict.fromkeys(random.choices(parsed_ports, weights=weights, k=len(parsed_ports)) + parsed_ports))
+    port_ranges = list(
+        dict.fromkeys(random.choices(parsed_ports, cum_weights=weights, k=len(parsed_ports)) + parsed_ports)
+    )
     remaining = 1024
     for r in port_ranges:
         r_length = len(r)
