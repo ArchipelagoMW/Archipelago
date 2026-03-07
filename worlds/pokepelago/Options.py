@@ -33,61 +33,61 @@ class IncludeStartingLocations(Toggle):
 
 
 class IncludeKanto(Toggle):
-    """Include Generation 1 Pokémon (Kanto, #1–151)."""
+    """Include Generation 1 Pokémon (Kanto, #1–151, 151 Pokémon)."""
     display_name = "Include Kanto"
     default = 1
 
 
 class IncludeJohto(Toggle):
-    """Include Generation 2 Pokémon (Johto, #152–251)."""
+    """Include Generation 2 Pokémon (Johto, #152–251, +100 Pokémon)."""
     display_name = "Include Johto"
     default = 0
 
 
 class IncludeHoenn(Toggle):
-    """Include Generation 3 Pokémon (Hoenn, #252–386)."""
+    """Include Generation 3 Pokémon (Hoenn, #252–386, +135 Pokémon)."""
     display_name = "Include Hoenn"
     default = 0
 
 
 class IncludeSinnoh(Toggle):
-    """Include Generation 4 Pokémon (Sinnoh, #387–493)."""
+    """Include Generation 4 Pokémon (Sinnoh, #387–493, +107 Pokémon)."""
     display_name = "Include Sinnoh"
     default = 0
 
 
 class IncludeUnova(Toggle):
-    """Include Generation 5 Pokémon (Unova, #494–649)."""
+    """Include Generation 5 Pokémon (Unova, #494–649, +156 Pokémon)."""
     display_name = "Include Unova"
     default = 0
 
 
 class IncludeKalos(Toggle):
-    """Include Generation 6 Pokémon (Kalos, #650–721)."""
+    """Include Generation 6 Pokémon (Kalos, #650–721, +72 Pokémon)."""
     display_name = "Include Kalos"
     default = 0
 
 
 class IncludeAlola(Toggle):
-    """Include Generation 7 Pokémon (Alola, #722–809)."""
+    """Include Generation 7 Pokémon (Alola, #722–809, +88 Pokémon)."""
     display_name = "Include Alola"
     default = 0
 
 
 class IncludeGalar(Toggle):
-    """Include Generation 8 Pokémon (Galar, #810–898)."""
+    """Include Generation 8 Pokémon (Galar, #810–898, +89 Pokémon)."""
     display_name = "Include Galar"
     default = 0
 
 
 class IncludeHisui(Toggle):
-    """Include Hisui-exclusive Pokémon (#899–905). Note: Hisui has no traditional starters."""
+    """Include Hisui-exclusive Pokémon (#899–905, +7 Pokémon). Note: Hisui has no traditional starters."""
     display_name = "Include Hisui"
     default = 0
 
 
 class IncludePaldea(Toggle):
-    """Include Generation 9 Pokémon (Paldea, #906–1025)."""
+    """Include Generation 9 Pokémon (Paldea, #906–1025, +120 Pokémon)."""
     display_name = "Include Paldea"
     default = 0
 
