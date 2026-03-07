@@ -3,15 +3,14 @@ Classes and functions related to AP locations for Pokemon Emerald
 """
 from typing import TYPE_CHECKING, Dict, Optional, Set
 
-from BaseClasses import Location, Region, ItemClassification
+from BaseClasses import Location, Region
 
-from .data import BASE_OFFSET, NATIONAL_ID_TO_SPECIES_ID, POKEDEX_OFFSET, LocationCategory, data, EncounterType, \
-    OUT_OF_LOGIC_MAPS
+from .data import BASE_OFFSET, NATIONAL_ID_TO_SPECIES_ID, POKEDEX_OFFSET, LocationCategory, data
 from .items import offset_item_value
-from .options import (RandomizeWildPokemon, DexsanityEncounterTypes)
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
+
 
 VISITED_EVENT_NAME_TO_ID = {
     "EVENT_VISITED_LITTLEROOT_TOWN": 0,
@@ -193,33 +192,4 @@ def set_legendary_cave_entrances(world: "PokemonEmeraldWorld") -> None:
     marine_cave_location_location = world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player)
     marine_cave_location_location.item = None
     marine_cave_location_location.place_locked_item(world.create_event(marine_cave_location_name))
-
-def remove_wild_encounter_locations(world: "PokemonEmeraldWorld") -> None:
-    if world.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
-        return #Skips if wild encounters are not randomized
-    encounter_table = {
-        "LAND": EncounterType.LAND,
-        "WATER": EncounterType.WATER,
-        "FISHING": EncounterType.FISHING,
-    }
-    enabled_encounters = set()
-    filler_items = [item for item in world.multiworld.itempool if item.classification == ItemClassification.filler]
-    for encounter in world.options.dexsanity_encounter_types.value:
-        enabled_encounters.add(encounter_table[encounter]) #converts player options to EncounterKey variable using the encounter_table
-    in_logic_species = set()
-    for map_name, map_data in world.modified_maps.items():
-        if map_name not in OUT_OF_LOGIC_MAPS:
-            for encounter_type, encounter_data in map_data.encounters.items():
-                if encounter_type in enabled_encounters:
-                    for species_id in encounter_data.slots:
-                        in_logic_species.add(species_id) #Iterates through every enabled encounter slots and adds them to the in_logic list
-    for location in list(world.multiworld.get_locations(world.player)):
-        if location.key is None or not location.key.startswith("POKEDEX_REWARD_"):
-            continue #only iterates through Pokedex Reward locations
-        national_dex_id = int(location.key[-3:]) #grabs the national dex id
-        species_id = NATIONAL_ID_TO_SPECIES_ID[national_dex_id] #converts it to the species ID
-        if species_id not in in_logic_species:
-            #world.multiworld.itempool.remove(filler_items.pop()) # Removes the location's item from the pool
-            location.parent_region.locations.remove(location) # Removes the location from its region
-    #Future Idea would be to iterate through the location list and tag pokedex locations with encounter type and potentially add evolution logic
 

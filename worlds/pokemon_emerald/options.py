@@ -860,8 +860,8 @@ class DexsanityEncounterTypes(OptionSet):
     Removing an encounter type will remove it's location from the multiworld but you can Pokemon can still be randomized into those locations
     """
     display_name = "Dexsanity Encounter Types"
-    valid_keys = {"LAND", "WATER", "FISHING"}
-    default = {"LAND", "WATER"}
+    valid_keys = {"Land", "Water", "Fishing"}
+    default = valid_keys.copy()
 
 @dataclass
 class PokemonEmeraldOptions(PerGameCommonOptions):

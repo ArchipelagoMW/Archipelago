@@ -42,53 +42,53 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         """
         # For each of land, water, and fishing, connect the region if indicated by include_slots
         for i, (encounter_type, subcategories) in enumerate(encounter_categories.items()):
-                if include_slots[i]:
-                    region_name = f"{map_name}_{encounter_type.value}_ENCOUNTERS"
+            if include_slots[i]:
+                region_name = f"{map_name}_{encounter_type.value}_ENCOUNTERS"
 
-                    # If the region hasn't been created yet, create it now
-                    try:
-                        encounter_region = world.multiworld.get_region(region_name, world.player)
-                    except KeyError:
-                        encounter_region = Region(region_name, world.player, world.multiworld)
-                        encounter_slots = data.maps[map_name].encounters[encounter_type].slots
+                # If the region hasn't been created yet, create it now
+                try:
+                    encounter_region = world.multiworld.get_region(region_name, world.player)
+                except KeyError:
+                    encounter_region = Region(region_name, world.player, world.multiworld)
+                    encounter_slots = data.maps[map_name].encounters[encounter_type].slots
 
-                        # Subcategory is for splitting fishing rods; land and water only have one subcategory
-                        for subcategory in subcategories:
-                            # Want to create locations per species, not per slot
-                            # encounter_categories includes info on which slots belong to which subcategory
-                            unique_species = []
-                            for j, species_id in enumerate(encounter_slots):
-                                if j in subcategory[1] and not species_id in unique_species:
-                                    unique_species.append(species_id)
+                    # Subcategory is for splitting fishing rods; land and water only have one subcategory
+                    for subcategory in subcategories:
+                        # Want to create locations per species, not per slot
+                        # encounter_categories includes info on which slots belong to which subcategory
+                        unique_species = []
+                        for j, species_id in enumerate(encounter_slots):
+                            if j in subcategory[1] and not species_id in unique_species:
+                                unique_species.append(species_id)
 
-                            # Create a location for the species
-                            for j, species_id in enumerate(unique_species):
-                                encounter_location = PokemonEmeraldLocation(
-                                    world.player,
-                                    f"{region_name}{'_' + subcategory[0] if subcategory[0] is not None else ''}_{j + 1}",
-                                    None,
-                                    encounter_region
-                                )
-                                encounter_location.show_in_spoiler = False
+                        # Create a location for the species
+                        for j, species_id in enumerate(unique_species):
+                            encounter_location = PokemonEmeraldLocation(
+                                world.player,
+                                f"{region_name}{'_' + subcategory[0] if subcategory[0] is not None else ''}_{j + 1}",
+                                None,
+                                encounter_region
+                            )
+                            encounter_location.show_in_spoiler = False
 
-                                # Add access rule
-                                if subcategory[2] is not None:
-                                    encounter_location.access_rule = subcategory[2]
+                            # Add access rule
+                            if subcategory[2] is not None:
+                                encounter_location.access_rule = subcategory[2]
 
-                                # Fill the location with an event for catching that species
-                                encounter_location.place_locked_item(PokemonEmeraldItem(
-                                    f"CATCH_{data.species[species_id].name}",
-                                    ItemClassification.progression_skip_balancing,
-                                    None,
-                                    world.player
-                                ))
-                                encounter_region.locations.append(encounter_location)
+                            # Fill the location with an event for catching that species
+                            encounter_location.place_locked_item(PokemonEmeraldItem(
+                                f"CATCH_{data.species[species_id].name}",
+                                ItemClassification.progression_skip_balancing,
+                                None,
+                                world.player
+                            ))
+                            encounter_region.locations.append(encounter_location)
 
-                        # Add the new encounter region to the multiworld
-                        world.multiworld.regions.append(encounter_region)
+                    # Add the new encounter region to the multiworld
+                    world.multiworld.regions.append(encounter_region)
 
-                    # Encounter region exists, just connect to it
-                    region.connect(encounter_region, f"{region.name} -> {region_name}")
+                # Encounter region exists, just connect to it
+                region.connect(encounter_region, f"{region.name} -> {region_name}")
 
     regions: Dict[str, Region] = {}
     connections: List[Tuple[str, str, str]] = []
