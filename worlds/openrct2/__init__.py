@@ -1,6 +1,6 @@
 import math
 from typing import TextIO
-from Utils import local_path
+from Utils import local_path, logging
 from random import choice as random_message #I know this looks wrong, but it's only used to randomly select a message for the launcher!
 
 import worlds.LauncherComponents as LauncherComponents
@@ -631,6 +631,7 @@ class OpenRCT2World(World):
         # and make them required for completion, if that's required.
         eligible_rides = [item for item in self.item_table if
                           item in item_info["Rides"] and item not in item_info["non_starters"]]
+        eligible_rides = list(set(eligible_rides)) # Remove duplicates
         self.random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
             count = 0
@@ -757,6 +758,10 @@ class OpenRCT2World(World):
         # print("Here's all the rules!")
         # print(self.multiworld.rules)
         # print(self.options.scenario.value)
+        # print("Here's the objectives!")
+        # print(objectives)
+        if len(objectives["UniqueRides"][0]) != len(set(objectives["UniqueRides"][0])):
+            logging.warning(f"Warning! Duplicate rides in Unique Rides! {objectives["UniqueRides"][0]}")
         if self.options.scenario.value == 31 or self.options.scenario.value == 129 or self.options.scenario.value == 130:
             raise Exception("Invalid scenario selected. What the p*ck past Colby?")
         return slot_data
