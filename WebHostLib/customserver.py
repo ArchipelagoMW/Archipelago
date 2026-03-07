@@ -222,8 +222,17 @@ def weighted_random(ranges: list[range], cum_weights: list[int]):
 
 def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket.socket:
     parsed_ports, weights, ephemeral_allowed = parse_game_ports(game_ports)
-    for _ in range(1024):
+    used_ports = get_used_ports()
+    i = 1024
+    while True:
         port_num = weighted_random(parsed_ports, weights)
+        if port_num in used_ports:
+            continue
+
+        i -=1
+        if i == 0:
+            break
+
         try:
             return socket.create_server((host, port_num))
         except OSError:
@@ -237,7 +246,7 @@ def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket
 
 def try_conns_per_process(p: psutil.Process) -> typing.Iterable[int]:
     try:
-        return map(lambda c: c.laddr.port, p.get_active_net_connections("tcp4"))
+        return map(lambda c: c.laddr.port, p.net_connections("tcp4"))
     except psutil.AccessDenied:
         return []
 
