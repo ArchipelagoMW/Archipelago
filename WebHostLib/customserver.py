@@ -185,14 +185,14 @@ class WebHostContext(Context):
 
 
 class GameRangePorts(typing.NamedTuple):
-    parsed_ports: list[range | list[int]]
+    parsed_ports: list[range]
     weights: list[int]
     ephemeral_allowed: bool
 
 
 @functools.cache
 def parse_game_ports(game_ports: tuple[str | int]) -> GameRangePorts:
-    parsed_ports: list[range | list[int]] = []
+    parsed_ports: list[range] = []
     weights = []
     ephemeral_allowed = False
     total_length = 0
@@ -209,7 +209,8 @@ def parse_game_ports(game_ports: tuple[str | int]) -> GameRangePorts:
         else:
             total_length += 1
             weights.append(total_length)
-            parsed_ports.append([int(item)])
+            num = int(item)
+            parsed_ports.append(range(num, num+1))
 
     return GameRangePorts(parsed_ports, weights, ephemeral_allowed)
 
@@ -222,18 +223,14 @@ def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket
     )
     remaining = 1024
     for r in port_ranges:
-        r_length = len(r)
-        if isinstance(r, range):
-            random_range = itertools.islice(
-                filter(
-                    lambda p: p not in get_used_ports(),
-                    map(lambda _: random.randrange(r.start, r.stop, r.step), range(r_length))
-                ),
-                remaining)
-            port = create_socket_from_port_list(random_range, host)
-        else:
-            port = create_socket_from_port_list(filter(lambda p: p not in get_used_ports(), r), host)
-        remaining -= r_length
+        random_range = itertools.islice(
+            filter(
+                lambda p: p not in get_used_ports(),
+                map(lambda _: random.randrange(r.start, r.stop, r.step), range(len(r)))
+            ),
+            remaining)
+        port = create_socket_from_port_list(random_range, host)
+        remaining -= len(r)
 
         if port is not None: return port
         if remaining <= 0: break
