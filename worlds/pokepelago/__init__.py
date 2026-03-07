@@ -78,8 +78,6 @@ class PokepelagoWorld(World):
         type_req_counters: dict[str, Counter] = {t: Counter() for t in GEN_1_TYPES}
 
         for mon in self.active_pokemon:
-            if mon["name"] in self.starter_names:
-                continue
             region = get_pokemon_region(mon["id"])
             region_req = None
             if region_locks and region != self.starting_region:
@@ -315,7 +313,7 @@ class PokepelagoWorld(World):
                     set_rule(loc, self._make_milestone_rule(count, groups))
 
         # ── Victory rule ──
-        # Victory requires that goal_count non-starter Pokémon are logically accessible.
+        # Victory requires that goal_count Pokémon are logically accessible.
         # This properly accounts for Region Passes AND Type Keys, rather than just
         # requiring all Region Passes blindly.
         victory_location = self.multiworld.get_location("Pokepelago Victory", player)
@@ -337,4 +335,6 @@ class PokepelagoWorld(World):
             "goal_count": self.goal_count,
             "dexsanity": bool(self.options.dexsanity.value),
             "starting_locations": bool(self.options.include_starting_locations.value),
+            "milestones": list(milestones),
+            "starter_count": 8 if self.options.include_starting_locations.value else 0,
         }
