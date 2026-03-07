@@ -8,10 +8,10 @@ from BaseClasses import CollectionState, ItemClassification, Region
 from .data import EncounterType, data
 from .items import PokemonEmeraldItem
 from .locations import PokemonEmeraldLocation
-from .options import DexsanityEncounterTypes
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
+
 
 def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     """

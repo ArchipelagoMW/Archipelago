@@ -192,4 +192,3 @@ def set_legendary_cave_entrances(world: "PokemonEmeraldWorld") -> None:
     marine_cave_location_location = world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player)
     marine_cave_location_location.item = None
     marine_cave_location_location.place_locked_item(world.create_event(marine_cave_location_name))
-

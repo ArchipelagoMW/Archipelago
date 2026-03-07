@@ -266,6 +266,7 @@ class PokemonEmeraldWorld(World):
     def create_regions(self) -> None:
         from .regions import create_regions
         all_regions = create_regions(self)
+
         randomize_wild_encounters(self)
         # Categories with progression items always included
         categories = {
