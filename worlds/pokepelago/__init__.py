@@ -348,14 +348,15 @@ class PokepelagoWorld(World):
 
         # Starting locations and global milestone locations → Menu region
         # Access rules for milestones are applied later in set_rules().
-        starting_loc_set = set(starting_locations) if not self.options.include_starting_locations.value else set()
+        start_loc_count = self.options.starting_location_count.value
+        active_starting_locs = set(starting_locations[:start_loc_count])
 
         for loc_name, loc_id in self.location_name_to_id.items():
             if loc_name.startswith("Guess ") or loc_name.startswith("Caught "):
                 continue  # Per-Pokemon handled below; type milestones handled below
 
-            if loc_name in starting_loc_set:
-                continue  # Disabled by include_starting_locations option
+            if loc_name in starting_locations and loc_name not in active_starting_locs:
+                continue  # Excluded by starting_location_count option
 
             if loc_name.startswith("Guessed "):
                 count = int(loc_name.split(" ")[1])
@@ -473,9 +474,9 @@ class PokepelagoWorld(World):
             "starting_region": self.starting_region,
             "goal_count": self.goal_count,
             "dexsanity": bool(o.dexsanity.value),
-            "starting_locations": bool(o.include_starting_locations.value),
+            "starting_locations": o.starting_location_count.value,
             "milestones": list(milestones),
-            "starter_count": 8 if o.include_starting_locations.value else 0,
+            "starter_count": o.starting_location_count.value,
             # New lock flags
             "legendary_locks":   bool(o.legendary_locks.value),
             "trade_locks":       bool(o.trade_locks.value),

@@ -24,12 +24,14 @@ class RegionLocks(Toggle):
     default = 1
 
 
-class IncludeStartingLocations(Toggle):
-    """If enabled, 8 thematic 'Oak\'s Lab' checks are included as free starting locations
-    (Oak\'s Parcel Delivery, Pokedex Received, etc.). Sent to the multiworld when you begin
-    your adventure. Disable to remove these checks entirely."""
-    display_name = "Include Starting Locations"
-    default = 1
+class StartingLocationCount(Range):
+    """Number of free 'Oak\'s Lab' starting locations to include (0–8).
+    These are immediately accessible checks (Oak\'s Parcel Delivery, Pokedex Received, etc.)
+    that kickstart your adventure. Set to 0 to disable them entirely."""
+    display_name = "Starting Location Count"
+    range_start = 0
+    range_end = 8
+    default = 8
 
 
 class IncludeKanto(Toggle):
@@ -308,7 +310,7 @@ class PokepelagoOptions(PerGameCommonOptions):
     region_locks: RegionLocks
     starter_region: StarterRegion
     starter_pokemon: StarterPokemon
-    include_starting_locations: IncludeStartingLocations
+    starting_location_count: StartingLocationCount
     include_kanto: IncludeKanto
     include_johto: IncludeJohto
     include_hoenn: IncludeHoenn
