@@ -27,7 +27,7 @@ def get_default_launch_command() -> List[str]:
         return []
     else:
         wine_path = shutil.which("wine")
-        return wine_path if wine_path is not None else ["/usr/bin/wine"]
+        return [wine_path] if wine_path is not None else ["/usr/bin/wine"]
 
 
 class SavingPrincessSettings(Group):
