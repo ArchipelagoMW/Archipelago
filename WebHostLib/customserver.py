@@ -358,8 +358,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         del resource, file_limit
 
     # convert to tuple because its hashable
-    if not isinstance(game_ports, tuple):
-        game_ports = tuple(game_ports)
+    game_ports = tuple(game_ports)
 
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
