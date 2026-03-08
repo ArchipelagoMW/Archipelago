@@ -1,17 +1,20 @@
 import importlib
-import importlib.util
+import importlib.abc
+import importlib.machinery
 import logging
 import os
 import sys
-import warnings
 import zipimport
 import time
 import dataclasses
 import json
-from typing import List
+from pathlib import Path
+from types import ModuleType
+from typing import List, Sequence
+from zipfile import BadZipFile
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path, Version, version_tuple, tuplize_version
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -20,14 +23,14 @@ try:
 except OSError:  # can't access/write?
     user_folder = None
 
-__all__ = {
+__all__ = [
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
     "failed_world_loads",
-}
+]
 
 
 failed_world_loads: List[str] = []
@@ -53,21 +56,7 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            if self.is_zip:
-                importer = zipimport.zipimporter(self.resolved_path)
-                spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
-                assert spec, f"{self.path} is not a loadable module"
-                mod = importlib.util.module_from_spec(spec)
-
-                mod.__package__ = f"worlds.{mod.__package__}"
-
-                mod.__name__ = f"worlds.{mod.__name__}"
-                sys.modules[mod.__name__] = mod
-                with warnings.catch_warnings():
-                    warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-                    importer.exec_module(mod)
-            else:
-                importlib.import_module(f".{self.path}", "worlds")
+            importlib.import_module(f".{Path(self.path).stem}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
 
@@ -111,7 +100,6 @@ for world_source in world_sources:
         apworlds.append(world_source)
     else:
         world_source.load()
-
 
 from .AutoWorld import AutoWorldRegister
 
@@ -157,6 +145,15 @@ if apworlds:
                     logging.error(e)
                 else:
                     raise e
+            except BadZipFile as e:
+                err_message = (f"The world source {apworld_source.resolved_path} is not a valid zip. "
+                               "It is likely either corrupted, or was packaged incorrectly.")
+
+                if sys.stdout:
+                    raise RuntimeError(err_message) from e
+                else:
+                    messagebox("Couldn't load worlds", err_message, error=True)
+                    sys.exit(1)
 
             if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
                 fail_world(apworld.game,
@@ -174,6 +171,16 @@ if apworlds:
         core_compatible.sort(
             key=lambda element: element[1].world_version if element[1].world_version else Version(0, 0, 0),
             reverse=True)
+
+        apworld_module_specs = {}
+        class APWorldModuleFinder(importlib.abc.MetaPathFinder):
+            def find_spec(
+                    self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
+            ) -> importlib.machinery.ModuleSpec | None:
+                return apworld_module_specs.get(fullname)
+
+        sys.meta_path.insert(0, APWorldModuleFinder())
+
         for apworld_source, apworld in core_compatible:
             if apworld.game and apworld.game in AutoWorldRegister.world_types:
                 fail_world(apworld.game,
@@ -181,6 +188,12 @@ if apworlds:
                            f"as its game {apworld.game} is already loaded.",
                            add_as_failed_to_load=False)
             else:
+                importer = zipimport.zipimporter(apworld_source.resolved_path)
+                world_name = Path(apworld.path).stem
+
+                spec = importer.find_spec(f"worlds.{world_name}")
+                apworld_module_specs[f"worlds.{world_name}"] = spec
+
                 apworld_source.load()
                 if apworld.game in AutoWorldRegister.world_types:
                     # world could fail to load at this point

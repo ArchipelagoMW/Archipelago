@@ -85,6 +85,7 @@ Currently, the following games are supported:
 * APQuest
 * Satisfactory
 * EarthBound
+* Mega Man 3
 * Gauntlet Legends
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

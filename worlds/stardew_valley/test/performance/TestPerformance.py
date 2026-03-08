@@ -9,10 +9,8 @@ from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
 from ..bases import SVTestCase, setup_multiworld
-from ..options.presets import default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, minimal_locations_maximal_items
-
-assert default_6_x_x
-assert allsanity_no_mods_6_x_x
+from ..options.presets import default_6_x_x, allsanity_no_mods_6_x_x, minimal_locations_maximal_items, allsanity_mods_7_x_x, allsanity_no_mods_7_x_x, \
+    default_7_x_x
 
 default_number_generations = 25
 acceptable_deviation = 4
@@ -99,7 +97,7 @@ class SVPerformanceTestCase(SVTestCase):
         acceptable_average_time = self.acceptable_time_per_player * amount_of_players
         total_time = 0
         all_times = []
-        seeds = [get_seed() for _ in range(self.number_generations)] if not self.fixed_seed else [85635032403287291967] * self.number_generations
+        seeds = [get_seed() for _ in range(self.number_generations)] if not self.fixed_seed else [74898321050311118687] * self.number_generations
 
         for i, seed in enumerate(seeds):
             with self.subTest(f"Seed: {seed}"):
@@ -134,9 +132,37 @@ def size_name(number_players):
     return f"{number_players}-player"
 
 
-class TestDefaultOptions(SVPerformanceTestCase):
+class TestDefaultOptions6xx(SVPerformanceTestCase):
     acceptable_time_per_player = 2
     options = default_6_x_x()
+    results = []
+
+    def test_solo(self):
+        number_players = 1
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    def test_duo(self):
+        number_players = 2
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    @unittest.skip
+    def test_5_player(self):
+        number_players = 5
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    @unittest.skip
+    def test_10_player(self):
+        number_players = 10
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+
+class TestDefaultOptions7xx(SVPerformanceTestCase):
+    acceptable_time_per_player = 2
+    options = default_7_x_x()
     results = []
 
     def test_solo(self):
@@ -187,9 +213,38 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
         self.performance_test_multiworld(multiworld_options)
 
 
-class TestAllsanityWithoutMods(SVPerformanceTestCase):
+class TestAllsanityWithoutMods6xx(SVPerformanceTestCase):
     acceptable_time_per_player = 10
     options = allsanity_no_mods_6_x_x()
+    results = []
+
+    def test_solo(self):
+        number_players = 1
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    @unittest.skip
+    def test_duo(self):
+        number_players = 2
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    @unittest.skip
+    def test_5_player(self):
+        number_players = 5
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    @unittest.skip
+    def test_10_player(self):
+        number_players = 10
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+
+class TestAllsanityWithoutMods7xx(SVPerformanceTestCase):
+    acceptable_time_per_player = 10
+    options = allsanity_no_mods_7_x_x()
     results = []
 
     def test_solo(self):
@@ -215,9 +270,9 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
         self.performance_test_multiworld(multiworld_options)
 
 
-class TestAllsanityWithMods(SVPerformanceTestCase):
+class TestAllsanityWithMods7xx(SVPerformanceTestCase):
     acceptable_time_per_player = 25
-    options = allsanity_mods_6_x_x()
+    options = allsanity_mods_7_x_x()
     results = []
 
     @unittest.skip
