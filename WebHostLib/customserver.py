@@ -227,6 +227,7 @@ def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket
     while i > 0:
         port_num = weighted_random(parsed_ports, weights)
         if port_num in used_ports:
+            used_ports = get_used_ports()
             continue
 
         i -= 0
