@@ -118,7 +118,7 @@ for world_source in world_sources:
         game = manifest.get("game")
         if game in AutoWorldRegister.world_types:
             AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
-            AutoWorldRegister.world_types[game].platforms = manifest.get("platforms", [])
+            AutoWorldRegister.world_types[game].platforms = manifest.get("platforms")
 
 if apworlds:
     # encapsulation for namespace / gc purposes
