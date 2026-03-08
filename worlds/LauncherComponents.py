@@ -289,6 +289,12 @@ if not is_frozen():
             if not worldtype:
                 logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
                 continue
+
+            assert worldtype.platforms != [], (
+                f"World {worldname} has an empty list for platforms. "
+                "Use None or omit the attribute for 'any platform'."
+            )
+
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
