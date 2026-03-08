@@ -57,11 +57,11 @@ def create_regular_locations(world: Schedule1World, data) -> None:
     
     # Load all regions into a dictionary once for efficient access
     regions_dict: Dict[str, any] = {}
-    for region_name in region_names:
+    for region_name in sorted(region_names):
         regions_dict[region_name] = world.get_region(region_name)
     
     # Group locations by region, excluding suppliers if randomized
-    locations_by_region: Dict[str, list[str]] = {region: [] for region in region_names}
+    locations_by_region: Dict[str, list[str]] = {region: [] for region in sorted(region_names)}
     
     for loc_name, loc_data in data.locations.items():
         # Skip supplier locations if randomize_suppliers is enabled
