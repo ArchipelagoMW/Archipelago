@@ -554,7 +554,8 @@ class Rac3Interface(GameInterface):
                 pass
             case RAC3ITEM.BOLTS:
                 bolt = self._read32(RAC3STATUS.BOLTS)
-                new_bolts = bolt + 1000 * randint(1, 100)
+                bolt_pack = max(30000, int(bolt * 0.2))
+                new_bolts = bolt + bolt_pack
                 if new_bolts > 0x7FFFFFFF:
                     new_bolts = 0x7FFFFFFF
                 self._write32(RAC3STATUS.BOLTS, new_bolts)
