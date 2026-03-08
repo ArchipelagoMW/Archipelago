@@ -191,7 +191,7 @@ class GameRangePorts(typing.NamedTuple):
 
 
 @functools.cache
-def parse_game_ports(game_ports: tuple[str | int]) -> GameRangePorts:
+def parse_game_ports(game_ports: tuple[str | int, ...]) -> GameRangePorts:
     parsed_ports: list[range] = []
     weights = []
     ephemeral_allowed = False
@@ -220,10 +220,10 @@ def weighted_random(ranges: list[range], cum_weights: list[int]) -> int:
     return random.randrange(picked.start, picked.stop, picked.step)
 
 
-def create_random_port_socket(game_ports: tuple[str | int], host: str) -> socket.socket:
+def create_random_port_socket(game_ports: tuple[str | int, ...], host: str) -> socket.socket:
     parsed_ports, weights, ephemeral_allowed = parse_game_ports(game_ports)
     used_ports = get_used_ports()
-    i = 1024
+    i = 1024 if len(parsed_ports) > 0 else 0
     while i > 0:
         port_num = weighted_random(parsed_ports, weights)
         if port_num in used_ports:
