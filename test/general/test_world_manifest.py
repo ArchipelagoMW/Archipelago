@@ -2,58 +2,63 @@
 
 import json
 import unittest
+import zipfile
 from pathlib import Path
 from typing import Any, ClassVar
 
 import test
-from Utils import home_path, local_path
-from worlds.AutoWorld import AutoWorldRegister
+from worlds import AutoWorldRegister
 from ..param import classvar_matrix
 
+test_path = Path(test.__file__).resolve().parent
 
-test_path = Path(test.__file__).parent
-worlds_paths = [
-    Path(local_path("worlds")),
-    Path(local_path("custom_worlds")),
-    Path(home_path("worlds")),
-    Path(home_path("custom_worlds")),
+
+def _load_manifest_for_entry(entry: dict) -> dict[str, Any]:
+    """Load archipelago.json for a cache entry (folder or zip). Raises if missing or invalid."""
+    path = Path(entry["path"]).resolve()
+    if entry.get("is_zip"):
+        if not path.is_file():
+            raise FileNotFoundError(f"Manifests are mandatory: {entry['game']!r} apworld missing at {path}")
+        with zipfile.ZipFile(path, "r") as zf:
+            manifest_path = None
+            for info in zf.infolist():
+                if info.filename.endswith("archipelago.json"):
+                    manifest_path = info.filename
+                    break
+            if manifest_path is None:
+                raise FileNotFoundError(
+                    f"Manifests are mandatory: {entry['game']!r} has no archipelago.json inside {path}"
+                )
+            with zf.open(manifest_path, "r") as f:
+                return json.load(f)
+    # Source folder
+    manifest_path = path / "archipelago.json" if not entry.get("manifest_path") else Path(entry["manifest_path"])
+    if not manifest_path.is_file():
+        raise FileNotFoundError(f"Manifests are mandatory: {entry['game']!r} has no archipelago.json at {manifest_path}")
+    with manifest_path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+_entries = AutoWorldRegister.get_world_list(force_rebuild=True)
+_entries_under_test = [
+    e
+    for e in _entries
+    if not Path(e["path"]).resolve().is_relative_to(test_path)
 ]
-
-# Only check source folders for now. Zip validation should probably be in the loader and/or installer.
-source_world_names = [
-    k
-    for k, v in AutoWorldRegister.world_types.items()
-    if not v.zip_path and not Path(v.__file__).is_relative_to(test_path)
-]
+# One test class per game; cache has at most one entry per game.
+source_world_names = list(dict.fromkeys(e["game"] for e in _entries_under_test))
 
 
-def get_source_world_manifest_path(game: str) -> Path | None:
-    """Get path of archipelago.json in the world's root folder from game name."""
-    # TODO: add a feature to AutoWorld that makes this less annoying
-    world_type = AutoWorldRegister.world_types[game]
-    world_type_path = Path(world_type.__file__)
-    for worlds_path in worlds_paths:
-        if world_type_path.is_relative_to(worlds_path):
-            world_root = worlds_path / world_type_path.relative_to(worlds_path).parents[0]
-            manifest_path = world_root / "archipelago.json"
-            return manifest_path if manifest_path.exists() else None
-    assert False, f"{world_type_path} not found in any worlds path"
-
-
-# TODO: remove the filter once manifests are mandatory.
-@classvar_matrix(game=filter(get_source_world_manifest_path, source_world_names))
+@classvar_matrix(game=source_world_names)
 class TestWorldManifest(unittest.TestCase):
     game: ClassVar[str]
     manifest: ClassVar[dict[str, Any]]
 
     @classmethod
     def setUpClass(cls) -> None:
-        world_type = AutoWorldRegister.world_types[cls.game]
-        assert world_type.game == cls.game
-        manifest_path = get_source_world_manifest_path(cls.game)
-        assert manifest_path  # make mypy happy
-        with manifest_path.open("r", encoding="utf-8") as f:
-            cls.manifest = json.load(f)
+        entry = AutoWorldRegister.get_world_entry(game_name=cls.game)
+        assert entry is not None, f"Cache entry for {cls.game!r} not found"
+        cls.manifest = _load_manifest_for_entry(entry)
 
     def test_game(self) -> None:
         """Test that 'game' will be correctly defined when generating APWorld manifest from source."""
@@ -69,7 +74,7 @@ class TestWorldManifest(unittest.TestCase):
         )
 
     def test_world_version(self) -> None:
-        """Test that world_version matches the requirements in apworld specification.md""" 
+        """Test that world_version matches the requirements in apworld specification.md"""
         if "world_version" in self.manifest:
             world_version: str = self.manifest["world_version"]
             self.assertIsInstance(
