@@ -214,8 +214,11 @@ class Wargroove2World(World):
             total_locations += self.get_total_locations_in_level(level)
         locations_remaining = total_locations - len(pool)
         while locations_remaining > 0:
-            # Filling the pool equally with the groove boost
-            pool.append(Wargroove2Item("Groove Boost", self.player))
+            if (self.filler_item_counter % 3) == 0:
+                pool.append(Wargroove2Item("Income Boost", self.player))
+            else:
+                pool.append(Wargroove2Item("Groove Boost", self.player))
+            self.filler_item_counter += 1
             locations_remaining -= 1
 
         self.multiworld.itempool += pool
