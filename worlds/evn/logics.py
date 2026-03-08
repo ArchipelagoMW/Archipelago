@@ -937,6 +937,7 @@ class EVNStoryRoute(TypedDict, total=False):
     regions: List[int] # NOTE: ORDER MATTERS. If we need to, we'll reorg to have each define their entrance and exit regions, but for now, will make the assumption that these are in order and connect in that order.
     region_connections: Dict[int, List[int]] # Dict[FromID, ToIDs] - Use 0 for Universe
     final_mission: int | None # The mission ID that we need to assign the victory condition to
+    use_extended_checks: bool
     #region_entrance_rules: Dict[int, Dict[str, int]] # region_id: key_reason - id or count (ex: "ship": 435, "min_cargo": 10)
     
 
@@ -962,6 +963,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         #"region_connections": { 0: [1, 101, 102, 20] }, # I don't think we need to add the blocking missions
         "region_connections": { 0: [1, 20, 23, 27, 300, 301, 302, 310, 311, 312] },
         "final_mission": 417,
+        "use_extended_checks": False,
     },
     2: {
         "id": 2,
@@ -981,6 +983,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [2, 20, 23, 27, 300, 301, 302, 310, 311, 312], 2: [4], 4: [5], 5: [7], 7: [9] },
         "final_mission": 887,
+        "use_extended_checks": False,
     },
     3: {    # So, there's 2 starting options, and 2 paths, for 4 combos. May implement all 4, may not.
         "id": 3,
@@ -1000,6 +1003,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [3, 20, 23, 27, 300, 301, 302, 310, 311, 312], 3: [4], 4: [6], 6: [7], 7: [8] },
         "final_mission": 887,
+        "use_extended_checks": False,
     },
     4: {    # Auroran options
         "id": 4,
@@ -1019,6 +1023,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [10, 20, 23, 27, 300, 301, 302, 310, 311, 312], 10: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
+        "use_extended_checks": False,
     },
     5: {    # Auroran options
         "id": 5,
@@ -1038,6 +1043,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [21, 23, 27, 300, 301, 302, 310, 311, 312], 21: [11], 11: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
+        "use_extended_checks": False,
     },
     6: {    # Auroran options
         "id": 6,
@@ -1057,6 +1063,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 24, 300, 301, 302, 310, 311, 312], 24: [13], 13: [12], 12: [14], 14: [15], 15: [16] },
         "final_mission": 686,
+        "use_extended_checks": False,
     },
     7: {    # Pirates
         "id": 7,
@@ -1076,6 +1083,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 27, 30, 300, 301, 302, 310, 311, 312], 30: [32], 32: [34] },
         "final_mission": 712,
+        "use_extended_checks": True,
     },
     8: {   
         "id": 8,
@@ -1095,6 +1103,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [22, 23, 27, 300, 301, 302, 310, 311, 312], 22: [31], 31: [32], 32: [34] },
         "final_mission": 712,
+        "use_extended_checks": False,
     },
     9: {   
         "id": 9,
@@ -1114,6 +1123,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 27, 40, 300, 301, 302, 310, 311, 312], 40: [42] },
         "final_mission": 474,
+        "use_extended_checks": False,
     },
     10: {   
         "id": 10,
@@ -1133,6 +1143,7 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [53] },
         "final_mission": 354,
+        "use_extended_checks": False,
     },
     11: {   
         "id": 11,
@@ -1152,5 +1163,6 @@ story_routes: Dict[int, EVNStoryRoute] = {
         ],
         "region_connections": { 0: [20, 23, 300, 301, 302, 310, 311, 312], 23: [26], 26: [51], 51: [54] },
         "final_mission": 381,
+        "use_extended_checks": False,
     }
 }

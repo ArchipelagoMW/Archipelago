@@ -164,5 +164,165 @@ cust_desc_table: Dict[int, DescDict] = {
         "movie_file": "",
         "flags": "0x0000",
         "end_of_resource": "EOR"
+    },
+    3342: {
+        "resource_type": "desc",
+        "id": "3342",
+        "name": "Unlock 5k (ext)",
+        "text": "[player_name]'s [item_name]", # we'll overwrite, just leave blank. But I left this as template example.
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3343: {
+        "resource_type": "desc",
+        "id": "3343",
+        "name": "Unlock 10k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3344: {
+        "resource_type": "desc",
+        "id": "3344",
+        "name": "Unlock 15k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3345: {
+        "resource_type": "desc",
+        "id": "3345",
+        "name": "Unlock 25k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3346: {
+        "resource_type": "desc",
+        "id": "3346",
+        "name": "Unlock 50k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3347: {
+        "resource_type": "desc",
+        "id": "3347",
+        "name": "Unlock 75k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3348: {
+        "resource_type": "desc",
+        "id": "3348",
+        "name": "Unlock 100k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3349: {
+        "resource_type": "desc",
+        "id": "3349",
+        "name": "Unlock 125k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3350: {
+        "resource_type": "desc",
+        "id": "3350",
+        "name": "Unlock 150k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3351: {
+        "resource_type": "desc",
+        "id": "3351",
+        "name": "Unlock 175k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3352: {
+        "resource_type": "desc",
+        "id": "3352",
+        "name": "Unlock 200k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3353: {
+        "resource_type": "desc",
+        "id": "3353",
+        "name": "Unlock 250k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3354: {
+        "resource_type": "desc",
+        "id": "3354",
+        "name": "Unlock 500k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3355: {
+        "resource_type": "desc",
+        "id": "3355",
+        "name": "Unlock 750k (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3356: {
+        "resource_type": "desc",
+        "id": "3356",
+        "name": "Unlock 1M (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
+    },
+    3357: {
+        "resource_type": "desc",
+        "id": "3357",
+        "name": "Unlock 5M (ext)",
+        "text": "", 
+        "graphics": "0",
+        "movie_file": "",
+        "flags": "0x0000",
+        "end_of_resource": "EOR"
     }
 }

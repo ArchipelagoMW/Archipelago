@@ -177,6 +177,7 @@ class EVNWorld(World):
 
         #chosen_route = story_routes[self.options.chosen_string.value]
         chosen_route = self.get_chosen_string()
+        use_extended = chosen_route["use_extended_checks"]
 
         # first, the column headers
         for column in misns.misn_columns.keys():
@@ -364,6 +365,10 @@ class EVNWorld(World):
         # then, custom outfit checks
         # these are used as LOCATIONS not ITEMS, even though they are in game items.
         # meaning, use locations.ev_location_bank not items.ev_item_bank.
+        # I kinda hate having to check this, but haven't figured out a better way yet
+        our_multiworld_locations = [l.name for l in self.multiworld.get_locations(self.player)]
+        # NOTE: This is because we may NOT have created the extended custom location checks!
+
         for coutf in cust_outf_table.keys():
             temp_coutf = cust_outf_table[coutf]
             for column in outfits.outf_columns.keys():
@@ -387,10 +392,19 @@ class EVNWorld(World):
                             output_file_string += default_val
                     else:
                         #logger.info(f"Outf blocked (must have been ignored): {target_id} for outf {temp_coutf['name']}")
-                        output_file_string += f'"b{MISSION_BLOCKING_BIT}"'
+                        #output_file_string += f'"b{MISSION_BLOCKING_BIT}"' # Don't set that! will make bad misns available!
+                        output_file_string += f'""' # honestly, could just drop the else block
+                elif (column == "buy_random"):
+                    if target_id in locations.ev_location_bank and locations.ev_location_bank[target_id]["name"] in our_multiworld_locations:
+                        output_file_string += default_val
+                    else:
+                        output_file_string += f'0\t' # don't show the item
                 elif (column == "short_name"):
-                    mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
-                    output_file_string += f'"{temp_coutf["name"]}\\\\n- {mwloc.player} -"\t'
+                    if target_id in locations.ev_location_bank and locations.ev_location_bank[target_id]["name"] in our_multiworld_locations:
+                        mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
+                        output_file_string += f'"{temp_coutf["name"]}\\\\n- {mwloc.player} -"\t'
+                    else:
+                        output_file_string += default_val
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"
@@ -416,7 +430,7 @@ class EVNWorld(World):
                 if column == "text":
                     #logger.info(f'trying to find desc for {target_id}, and I am player {self.player}')
                     # We need to inject our special bit here as well, so the client can know when to unlock the outf.
-                    if target_id in locations.ev_location_bank:
+                    if target_id in locations.ev_location_bank and locations.ev_location_bank[target_id]["name"] in our_multiworld_locations:
                         mwloc = self.multiworld.get_location(locations.ev_location_bank[target_id]["name"], self.player) # should be the populated items for my seed now (post shuffle and fill)
                         output_file_string += f'"{temp_desc["name"]} will unlock {mwloc.item.name}"\t' # I don't know how to get the player name yet. mwloc.player is just my player id, becuase it it is my check.
                     else:

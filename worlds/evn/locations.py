@@ -165,12 +165,17 @@ def create_universe_locations(world: EVNWorld) -> None:
     misn_offset = loc_type_offset["misn"]
     coutf_offset = loc_type_offset["outf_cks"]
 
+    chosen_route = world.get_chosen_string()
+
     # Check if location used by any story regions
     for key, loc in ev_location_bank.items():
         loc_found = False
 
         # cust outf - shortcut it (was added later)
         if key > coutf_offset: # misn is 2k but outf_cks is 4k, so we know here this is an okay check
+            if not chosen_route["use_extended_checks"] and "(ext)" in loc["name"]:
+                #logger.info(f'skipping cust outf {key}')
+                continue
             universe.add_locations(
                 get_location_names_with_ids(world, [loc["name"]])
                 , EVNLocation
