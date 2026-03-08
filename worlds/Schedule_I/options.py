@@ -224,6 +224,7 @@ class RandomizeSewerKey(DefaultOnToggle):
     """
     Determines if the Sewer Key will be added into the item pool.
     If enabled, Jen Herd will no longer sell sewer key.
+    Buying the sewer key from Jen Herd is a check no matter if this option is toggled on or off.
     """
     display_name = "Randomize Sewer Key"
 
