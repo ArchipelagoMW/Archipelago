@@ -14,7 +14,7 @@ from . import items, locations, regions, rules, web_world
 from . import options as evn_options  # rename due to a name conflict with World.options
 from .logics import story_routes, possible_regions, EVNStoryRoute, MISSION_BLOCKING_BIT
 
-from .rezdata import misns, ships, outfits, desc, chars
+from .rezdata import misns, ships, outfits, desc, chars, crons
 from .apdata.offsets import offsets_table
 from .apdata.customoutf import cust_outf_table
 from .apdata.customdesc import cust_desc_table
@@ -454,6 +454,24 @@ class EVNWorld(World):
                 current_val = temp_char[column]
                 default_val = current_val + "\t"
                 col_anno = chars.CharDict.__annotations__[column]
+                if col_anno == str:
+                    default_val = f'"{current_val}"\t'
+
+                output_file_string += default_val
+            output_file_string += "\r\n"
+
+        # Crons
+        output_file_string += "\r\n"
+        for column in crons.cron_columns.keys():
+            output_file_string += f'"{crons.cron_columns[column]}"\t'
+        output_file_string += "\r\n"
+        # then, the data
+        for item in crons.cron_table.keys():
+            temp_char = crons.cron_table[item]
+            for column in crons.cron_columns.keys():
+                current_val = temp_char[column]
+                default_val = current_val + "\t"
+                col_anno = crons.CronDict.__annotations__[column]
                 if col_anno == str:
                     default_val = f'"{current_val}"\t'
 
