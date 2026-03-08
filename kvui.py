@@ -113,6 +113,10 @@ else:
 remove_between_brackets = re.compile(r"\[.*?]")
 
 
+def kv_unescape(text: str) -> str:
+    return text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
+
+
 class ThemedApp(MDApp):
     def set_colors(self):
         text_colors = KivyJSONtoTextParser.TextColors()
@@ -430,7 +434,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                     if input_text is not None:
                         cmdinput.text = input_text
 
-                Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                Clipboard.copy(kv_unescape(text))
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -544,8 +548,8 @@ class AutocompleteHintInput(ResizableTextField):
 
             def on_press(text):
                 split_text = MarkupLabel(text=text).markup
-                self.set_text(self, "".join(text_frag for text_frag in split_text
-                                            if not text_frag.startswith("[")))
+                self.set_text(self, kv_unescape("".join(text_frag for text_frag in split_text
+                                                if not text_frag.startswith("["))))
                 self.dropdown.dismiss()
                 self.focus = True
 
@@ -652,7 +656,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                                     else "", ". (", self.status_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
                     text = "".join(part for part in temp if not part.startswith("["))
-                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                    Clipboard.copy(kv_unescape(text))
                     return self.parent.select_with_touch(self.index, touch)
         else:
             parent = self.parent
