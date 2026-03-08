@@ -39,6 +39,7 @@ class MuseDashCollections:
         "Tsukuyomi Ni Naru Replaced",
         "Heart Message feat. Aoi Tokimori Secret",
         "Meow Rock feat. Chun Ge, Yuan Shen",
+        "Stra Stella Secret",
     ]
 
     song_items = SONG_DATA
