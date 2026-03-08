@@ -85,7 +85,7 @@ char_table: Dict[int, CharDict] = {
     128: {
         "resource_type": "char",
         "id": "128",
-        "name": ".Trader",
+        "name": "Trader",
         "cash": "25000",
         "ship_type": "128",
         "system_1": "128",
@@ -122,7 +122,7 @@ char_table: Dict[int, CharDict] = {
     129: {
         "resource_type": "char",
         "id": "129",
-        "name": ".Head Start",
+        "name": "Head Start",
         "cash": "500000",
         "ship_type": "165", # mod starbridge
         "system_1": "128",
