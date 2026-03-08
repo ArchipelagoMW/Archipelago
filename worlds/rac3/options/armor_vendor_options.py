@@ -8,7 +8,11 @@ class ArmorVendors(Choice):
     Disabled: No armor vendor items are locations.
     Enabled: Armor vendor items are added as locations.
 
-    Note: Each planet you have will put the next 3 items in the armor vendor in order of how they would appear in the vanilla game.
+    Visiting the planet associated with the armor will put it in the armor vendor.
+    Magnaplate: Starship Phoenix
+    Adamantite: Aquatos
+    Aegis Mark V: Zeldrin Starport
+    Infernox: Koros
     """
     display_name = RAC3OPTION.ARMOR_VENDOR
     option_disabled = 0
