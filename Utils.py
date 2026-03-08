@@ -23,6 +23,7 @@ from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 from pathspec import PathSpec, GitIgnoreSpec
+from typing_extensions import deprecated
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -315,6 +316,7 @@ def get_public_ipv6() -> str:
     return ip
 
 
+@deprecated("Utils.get_options() is deprecated. Use the settings API instead.")
 def get_options() -> Settings:
     deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
@@ -1003,6 +1005,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
 
 
 def deprecate(message: str, add_stacklevels: int = 0):
+    """also use typing_extensions.deprecated wherever you use this"""
     if __debug__:
         raise Exception(message)
     warnings.warn(message, stacklevel=2 + add_stacklevels)
@@ -1067,6 +1070,7 @@ def _extend_freeze_support() -> None:
     multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
+@deprecated("Use multiprocessing.freeze_support() instead")
 def freeze_support() -> None:
     """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
