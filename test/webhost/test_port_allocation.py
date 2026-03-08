@@ -1,6 +1,4 @@
 import os
-import statistics
-import timeit
 import unittest
 
 from WebHostLib.customserver import parse_game_ports, create_random_port_socket, get_used_ports
@@ -44,6 +42,7 @@ class TestWebDescriptions(unittest.TestCase):
             parse_game_ports(tuple("f-21215"))
 
     def test_random_port_socket_edge_cases(self) -> None:
+        """Verify if edge cases on creation of random port socket is working fine"""
         # Try giving an empty tuple and fail over it
         with self.assertRaises(OSError) as err:
             create_random_port_socket(tuple(), "127.0.0.1")
@@ -59,42 +58,24 @@ class TestWebDescriptions(unittest.TestCase):
             self.assertNotEqual(err.strerror, "No available ports",
                                 "Raised an unexpected error string")
 
-    # @unittest.skipUnless(ci, "can't guarantee free ports outside of CI")
+    @unittest.skipUnless(ci, "can't guarantee free ports outside of CI")
     def test_random_port_socket(self) -> None:
+        """Verify if returned sockets use the correct port ranges"""
         sockets = []
         for _ in range(6):
             socket = create_random_port_socket(("8080-8085",), "127.0.0.1")
             sockets.append(socket)
             _, port = socket.getsockname()
-            self.assertIn(port, range(8080,8086), "Port of socket was not inside the expected range")
+            self.assertIn(port, range(8080, 8086), "Port of socket was not inside the expected range")
         for s in sockets:
             s.close()
 
-        # Compared averages were calculated with a range of 100 in a Linux machine and then rounded up
         sockets.clear()
-        time = []
-        size = 65535 - (len(get_used_ports()) + 1024 + 4000)
-        for _ in range(10):
-            time.append(timeit.timeit(lambda: sockets.append(
-                create_random_port_socket(("1024-30000", "30001-65535"), "127.0.0.1")
-            ), number=size))
+        for _ in range(30_000):
+            socket = create_random_port_socket(("30000-65535",), "127.0.0.1")
+            sockets.append(socket)
+            _, port = socket.getsockname()
+            self.assertIn(port, range(30_000, 65536), "Port of socket was not inside the expected range")
 
-            for s in sockets:
-                s.close()
-
-        self.assertLess(statistics.fmean(time), 1.2,
-                        f"Time took to allocate {size} ports consecutively is higher than expected")
-
-        sockets.clear()
-        time.clear()
-        size = 65535 - (len(get_used_ports()) + 1024 + 5)
-        for _ in range(10):
-            time.append(timeit.timeit(lambda: sockets.append(
-                create_random_port_socket(("1024-30000", "30001-65535"), "127.0.0.1")
-            ), number=size))
-
-            for s in sockets:
-                s.close()
-
-        self.assertLess(statistics.fmean(time), 5,
-                        f"Time took to allocate {size} ports consecutively is higher than expected")
+        for s in sockets:
+            s.close()

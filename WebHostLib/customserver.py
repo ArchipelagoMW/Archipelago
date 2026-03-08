@@ -210,7 +210,7 @@ def parse_game_ports(game_ports: tuple[str | int, ...]) -> GameRangePorts:
             total_length += 1
             weights.append(total_length)
             num = int(item)
-            parsed_ports.append(range(num, num+1))
+            parsed_ports.append(range(num, num + 1))
 
     return GameRangePorts(parsed_ports, weights, ephemeral_allowed)
 
@@ -492,7 +492,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
 
         def run(self):
             while 1:
-                next_room = rooms_to_run.get(block=True,  timeout=None)
+                next_room = rooms_to_run.get(block=True, timeout=None)
                 gc.collect()
                 task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
                 self._tasks.append(task)
