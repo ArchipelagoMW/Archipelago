@@ -1644,7 +1644,8 @@ class Rac3Interface(GameInterface):
                     self.notification_merge_count = merge_count
                     msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
                     if not self.message_display:
-                        self.notification_time = current_time + 3
+                        if self.notification_time < current_time:
+                            self.notification_time = current_time + 3
                         display_time = int((self.notification_time - current_time) * 120)
                         self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
                     else:
