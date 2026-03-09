@@ -170,7 +170,7 @@ class FFMQWorld(World):
                 else:
                     error_text = f"Failed to fetch map shuffle data for FFMQ player {world.player}"
                     for error in errors:
-                        error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
+                        error_text += f"\n{error[0]} - {error[1]}"
 
                     if fuzzer:
                         error_text += "\nPlease set up a local FFMQRWebAPI to fuzz FFMQ so as to not flood the public" \
