@@ -636,7 +636,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
     parrot_express_rule = logic.received(Transportation.parrot_express)
     parrot_express_to_dig_site_rule = dig_site_rule & parrot_express_rule
     for parrot in parrots:
-        if "Dig Site" in parrot:
+        if parrot.endswith("Dig Site"):
             entrance_rules[parrot] = parrot_express_to_dig_site_rule
         else:
             entrance_rules[parrot] = parrot_express_rule
