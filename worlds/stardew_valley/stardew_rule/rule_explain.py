@@ -22,25 +22,28 @@ def access_graph(multiworld: MultiWorld, player: int):
     stardew = multiworld.get_region("Stardew Valley", player)
     source_graph: dict[str, set[str]] = dict()
     dest_graph: dict[str, set[str]] = dict()
+    checked_regions: set[str] = set()
     for region in multiworld.get_regions(player):
         source_graph[region.name] = set()
         dest_graph[region.name] = set()
-    to_check = collections.deque([stardew])
+    to_check = collections.deque([(set(), stardew)])
     while len(to_check) > 0:
-        checking_region = to_check.popleft()
+        path, checking_region = to_check.popleft()
+        print(f"checking region {checking_region}")
+        if checking_region in checked_regions:
+            continue
+        checked_regions.add(checking_region.name)
         for exit in checking_region.exits:
-            if "Minecart" in exit.name or "Parrot Express" in exit.name:
-                source_graph[exit.connected_region.name].add(checking_region.name)
-                dest_graph[checking_region.name].add(exit.connected_region.name)
-                continue
+            # if "Minecart" in exit.name or "Parrot Express" in exit.name:
+            #     source_graph[exit.connected_region.name].add(checking_region.name)
+            #     dest_graph[checking_region.name].add(exit.connected_region.name)
+            #     continue
             assert exit.connected_region is not None, f"All exits should be connected, error at {exit}"
-            if (
-                checking_region.name not in source_graph[exit.connected_region.name]
-                and exit.connected_region.name not in source_graph[checking_region.name]
-            ):
+
+            if exit.connected_region.name not in path:
                 source_graph[exit.connected_region.name].add(checking_region.name)
                 dest_graph[checking_region.name].add(exit.connected_region.name)
-                to_check.append(exit.connected_region)
+                to_check.append((path | {exit.connected_region.name}, exit.connected_region))
 
     print("\n".join(f"{v} -> {k} -> {dest_graph[k]}" for k, v in sorted(source_graph.items(), key=lambda x: x[0])))
     return source_graph
