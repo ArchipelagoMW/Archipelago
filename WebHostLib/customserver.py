@@ -269,7 +269,7 @@ def get_active_net_connections() -> typing.Iterable[int]:
 
 
 def get_used_ports():
-    last_used_ports: tuple[frozenset[int], float] = getattr(get_used_ports, "last", None)
+    last_used_ports: tuple[frozenset[int], float] | None = getattr(get_used_ports, "last", None)
     t_hash = round(time.time() / 90)  # cache for 90 seconds
     if last_used_ports is None or last_used_ports[1] != t_hash:
         last_used_ports = (frozenset(get_active_net_connections()), t_hash)
