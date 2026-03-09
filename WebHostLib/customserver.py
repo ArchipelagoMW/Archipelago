@@ -245,7 +245,7 @@ def create_random_port_socket(game_ports: tuple[str | int, ...], host: str) -> s
 
 def try_conns_per_process(p: psutil.Process) -> typing.Iterable[int]:
     try:
-        return map(lambda c: c.laddr.port, p.net_connections("tcp4"))
+        return (c.laddr.port for c in p.net_connections("tcp4"))
     except psutil.AccessDenied:
         return ()
 
@@ -256,7 +256,7 @@ def get_active_net_connections() -> typing.Iterable[int]:
         return ()
 
     try:
-        return map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))
+        return (c.laddr.port for c in psutil.net_connections("tcp4"))
     # raises AccessDenied when done on macOS
     except psutil.AccessDenied:
         # flatten the list of iterables
