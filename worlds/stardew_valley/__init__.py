@@ -553,14 +553,12 @@ class StardewValleyWorld(World):
                 rev_random = reverse_connection_name(random) or random
                 ex = exits[original]
                 entr = entrances[rev_random]
-                print(f"connecting {ex} and {entr}")
 
                 target = entr.connected_region
                 assert target is not None, f"Entrance {entr} didn't have a connected region yet"
                 target.entrances.remove(entr)
 
                 ex.connect(target)
-                print(f"connected {ex.parent_region} to {ex.connected_region} using {ex}")
 
             import Utils
 

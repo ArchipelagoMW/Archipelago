@@ -47,13 +47,13 @@ def access_graph(multiworld: MultiWorld, player: int):
                 seen.add(neighbor.name)
                 to_check.append(neighbor)
 
-    print("\n".join(f"{srcs} -> {name} -> {dest_graph[name]}" for name, srcs in sorted(source_graph.items())))
-
     return source_graph
 
 
 region_graph: dict[str, set[str]] | None = None
 path_cache: dict[str, list[list[str]]] = {}
+
+SubRule = StardewRule | tuple[StardewRule, frozenset[str]]
 
 
 def all_simple_paths_to_origin(start: str) -> list[list[str]]:
@@ -113,10 +113,11 @@ class RuleExplanation:
     state: CollectionState = field(repr=False, hash=False)
     expected: bool | None
     mode: ExplainMode
-    sub_rules: Iterable[StardewRule] = field(default_factory=list)
-    more_explanations: List[StardewRule] = field(default_factory=list, repr=False, hash=False)
-    explored_rules_key: Set[Tuple[str, str]] = field(default_factory=set, repr=False, hash=False)
+    sub_rules: Iterable[SubRule] = field(default_factory=list)
+    more_explanations: list[StardewRule] = field(default_factory=list, repr=False, hash=False)
+    explored_rules_key: set[tuple[str, str]] = field(default_factory=set, repr=False, hash=False)
     current_rule_explored: bool = False
+    blocked_regions: frozenset[str] = field(default_factory=frozenset, repr=False, hash=False)
 
     def __post_init__(self):
         checkpoint = _rule_key(self.rule)
@@ -163,9 +164,19 @@ class RuleExplanation:
         if rule_key is not None:
             self.explored_rules_key.add(rule_key)
 
+        def unpack(sub_rule: SubRule) -> tuple[StardewRule, frozenset[str]]:
+            if isinstance(sub_rule, tuple):
+                return sub_rule
+            return sub_rule, frozenset()
+
         if self.mode == ExplainMode.CLIENT:
             sub_explanations = []
-            for sub_rule in self.sub_rules:
+            for sub_rule_like in self.sub_rules:
+                sub_rule, extra_blocked_regions = unpack(sub_rule_like)
+                merged_blocked_regions = (
+                    self.blocked_regions | extra_blocked_regions if isinstance(sub_rule, Reach) else frozenset()
+                )
+
                 if isinstance(sub_rule, Reach) and sub_rule.resolution_hint == "Entrance":
                     sub_explanations.append(
                         MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode)
@@ -185,14 +196,25 @@ class RuleExplanation:
                             self.mode,
                             self.more_explanations,
                             self.explored_rules_key,
+                            merged_blocked_regions,
                         )
                     )
 
             return sub_explanations
 
         return [
-            _explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key)
-            for sub_rule in self.sub_rules
+            _explain(
+                sub_rule,
+                self.state,
+                self.expected,
+                self.mode,
+                self.more_explanations,
+                self.explored_rules_key,
+                (self.blocked_regions | extra_blocked_regions) if isinstance(sub_rule, Reach) else frozenset(),
+            )
+            for sub_rule, extra_blocked_regions in (
+                sr if isinstance(sr, tuple) else (sr, frozenset()) for sr in self.sub_rules
+            )
         ]
 
 
@@ -212,6 +234,7 @@ class CountSubRuleExplanation(RuleExplanation):
             explored_rules_key=expl.explored_rules_key,
             current_rule_explored=expl.current_rule_explored,
             count=count,
+            blocked_regions=expl.blocked_regions,
         )
 
     def summary(self, depth=0) -> str:
@@ -235,7 +258,15 @@ class CountExplanation(RuleExplanation):
 
         return [
             CountSubRuleExplanation.from_explanation(
-                _explain(rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key),
+                _explain(
+                    rule,
+                    self.state,
+                    self.expected,
+                    self.mode,
+                    self.more_explanations,
+                    self.explored_rules_key,
+                    self.blocked_regions if isinstance(rule, Reach) else frozenset(),
+                ),
                 count,
             )
             for rule, count in self.rule.counter.items()
@@ -246,7 +277,9 @@ def explain(
     rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE
 ) -> RuleExplanation:
     if isinstance(rule, StardewRule):
-        return _explain(rule, state, expected, mode, more_explanations=list(), explored_spots=set())
+        return _explain(
+            rule, state, expected, mode, more_explanations=list(), explored_spots=set(), blocked_regions=frozenset()
+        )
     else:
         return f"Value of rule {str(rule)} was not {str(expected)} in {str(state)}"  # noqa
 
@@ -259,9 +292,16 @@ def _explain(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: Set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return RuleExplanation(
-        rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots
+        rule,
+        state,
+        expected,
+        mode,
+        more_explanations=more_explanations,
+        explored_rules_key=explored_spots,
+        blocked_regions=blocked_regions,
     )
 
 
@@ -273,6 +313,7 @@ def _(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: Set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return RuleExplanation(
         rule,
@@ -282,6 +323,7 @@ def _(
         rule.original_rules,
         more_explanations=more_explanations,
         explored_rules_key=explored_spots,
+        blocked_regions=blocked_regions,
     )
 
 
@@ -293,9 +335,17 @@ def _(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: Set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return CountExplanation(
-        rule, state, expected, mode, rule.rules, more_explanations=more_explanations, explored_rules_key=explored_spots
+        rule,
+        state,
+        expected,
+        mode,
+        rule.rules,
+        more_explanations=more_explanations,
+        explored_rules_key=explored_spots,
+        blocked_regions=blocked_regions,
     )
 
 
@@ -307,6 +357,7 @@ def _(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: Set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     try:
         return RuleExplanation(
@@ -317,10 +368,17 @@ def _(
             [rule.other_rules[rule.item]],
             more_explanations=more_explanations,
             explored_rules_key=explored_spots,
+            blocked_regions=blocked_regions,
         )
     except KeyError:
         return RuleExplanation(
-            rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots
+            rule,
+            state,
+            expected,
+            mode,
+            more_explanations=more_explanations,
+            explored_rules_key=explored_spots,
+            blocked_regions=blocked_regions,
         )
 
 
@@ -332,6 +390,7 @@ def _(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: Set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return RuleExplanation(
         rule,
@@ -341,6 +400,7 @@ def _(
         [Received(i, rule.player, 1) for i in rule.items],
         more_explanations=more_explanations,
         explored_rules_key=explored_spots,
+        blocked_regions=blocked_regions,
     )
 
 
@@ -352,8 +412,9 @@ def _(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
-    access_rules: list[StardewRule] = []
+    access_rules: list[SubRule] = []
     if rule.resolution_hint == "Location":
         spot = state.multiworld.get_location(rule.spot, rule.player)
         assert isinstance(
@@ -368,25 +429,32 @@ def _(
         spot = state.multiworld.get_entrance(rule.spot, rule.player)
         assert isinstance(
             spot.parent_region, Region
-        ), f"Spot of location should have a parent region, problem in {spot.name}"
+        ), f"Spot of entrance should have a parent region, problem in {spot.name}"
 
         if isinstance(spot.access_rule, StardewRule) and spot.access_rule is not true_:
             access_rules.append(spot.access_rule)
-        access_rules.append(Reach(spot.parent_region.name, "Region", rule.player))
+
+        newly_blocked = frozenset()
+        if spot.connected_region is not None:
+            newly_blocked = frozenset({spot.connected_region.name})
+
+        access_rules.append((Reach(spot.parent_region.name, "Region", rule.player), newly_blocked))
     else:
         spot = state.multiworld.get_region(rule.spot, rule.player)
 
         global region_graph
         if region_graph is None:
+            path_cache.clear()
             region_graph = access_graph(state.multiworld, rule.player)
 
         paths = all_simple_paths_to_origin(spot.name)
 
-        # Keep only immediate parents that appear in at least one loop-free path
         valid_parent_regions: set[str] = set()
         for path in paths:
             if len(path) >= 2:
                 valid_parent_regions.add(path[1])
+
+        valid_parent_regions -= blocked_regions
 
         for entrance in spot.entrances:
             assert isinstance(
@@ -397,7 +465,13 @@ def _(
                 access_rules.append(Reach(entrance.name, "Entrance", rule.player))
     if len(access_rules) == 0:
         return RuleExplanation(
-            rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots
+            rule,
+            state,
+            expected,
+            mode,
+            more_explanations=more_explanations,
+            explored_rules_key=explored_spots,
+            blocked_regions=blocked_regions,
         )
 
     return RuleExplanation(
@@ -408,6 +482,7 @@ def _(
         access_rules,
         more_explanations=more_explanations,
         explored_rules_key=explored_spots,
+        blocked_regions=blocked_regions,
     )
 
 
@@ -419,6 +494,7 @@ def _(
     mode: ExplainMode,
     more_explanations: list[StardewRule],
     explored_spots: Set[Tuple[str, str]],
+    blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     access_rules = None
     if rule.event:
@@ -433,7 +509,13 @@ def _(
 
     if not access_rules:
         return RuleExplanation(
-            rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots
+            rule,
+            state,
+            expected,
+            mode,
+            more_explanations=more_explanations,
+            explored_rules_key=explored_spots,
+            blocked_regions=blocked_regions,
         )
 
     return RuleExplanation(
@@ -444,6 +526,7 @@ def _(
         access_rules,
         more_explanations=more_explanations,
         explored_rules_key=explored_spots,
+        blocked_regions=blocked_regions,
     )
 
 
