@@ -20,36 +20,64 @@ class ExplainMode(enum.Enum):
 
 def access_graph(multiworld: MultiWorld, player: int):
     stardew = multiworld.get_region("Stardew Valley", player)
-    source_graph: dict[str, set[str]] = dict()
-    dest_graph: dict[str, set[str]] = dict()
-    checked_regions: set[str] = set()
+
+    source_graph: dict[str, set[str]] = {}
+    dest_graph: dict[str, set[str]] = {}
+
     for region in multiworld.get_regions(player):
-        source_graph[region.name] = set()
-        dest_graph[region.name] = set()
-    to_check = collections.deque([(set(), stardew)])
-    while len(to_check) > 0:
-        path, checking_region = to_check.popleft()
-        print(f"checking region {checking_region}")
-        if checking_region in checked_regions:
-            continue
-        checked_regions.add(checking_region.name)
+        source_graph[region.name] = set()  # incoming
+        dest_graph[region.name] = set()  # outgoing
+
+    to_check = collections.deque([stardew])
+    seen = {stardew.name}
+
+    while to_check:
+        checking_region = to_check.popleft()
+
         for exit in checking_region.exits:
-            # if "Minecart" in exit.name or "Parrot Express" in exit.name:
-            #     source_graph[exit.connected_region.name].add(checking_region.name)
-            #     dest_graph[checking_region.name].add(exit.connected_region.name)
-            #     continue
             assert exit.connected_region is not None, f"All exits should be connected, error at {exit}"
+            neighbor = exit.connected_region
 
-            if exit.connected_region.name not in path:
-                source_graph[exit.connected_region.name].add(checking_region.name)
-                dest_graph[checking_region.name].add(exit.connected_region.name)
-                to_check.append((path | {exit.connected_region.name}, exit.connected_region))
+            # Always record the directed edge
+            dest_graph[checking_region.name].add(neighbor.name)
+            source_graph[neighbor.name].add(checking_region.name)
 
-    print("\n".join(f"{v} -> {k} -> {dest_graph[k]}" for k, v in sorted(source_graph.items(), key=lambda x: x[0])))
+            # Traverse each region once to collect its exits
+            if neighbor.name not in seen:
+                seen.add(neighbor.name)
+                to_check.append(neighbor)
+
+    print("\n".join(f"{srcs} -> {name} -> {dest_graph[name]}" for name, srcs in sorted(source_graph.items())))
+
     return source_graph
 
 
 region_graph: dict[str, set[str]] | None = None
+path_cache: dict[str, list[list[str]]] = {}
+
+
+def all_simple_paths_to_origin(start: str) -> list[list[str]]:
+    if path_cache.get(start) is not None:
+        return path_cache[start]
+    results: list[list[str]] = []
+
+    def dfs(current: str, path: list[str], visited: set[str]):
+        assert region_graph is not None
+        if current == "Stardew Valley":
+            results.append(path.copy())
+            return
+
+        for parent in region_graph[current]:
+            if parent not in visited:
+                visited.add(parent)
+                path.append(parent)
+                dfs(parent, path, visited)
+                path.pop()
+                visited.remove(parent)
+
+    dfs(start, [start], {start})
+    path_cache[start] = results
+    return results
 
 
 @dataclass
@@ -352,16 +380,21 @@ def _(
         if region_graph is None:
             region_graph = access_graph(state.multiworld, rule.player)
 
+        paths = all_simple_paths_to_origin(spot.name)
+
+        # Keep only immediate parents that appear in at least one loop-free path
+        valid_parent_regions: set[str] = set()
+        for path in paths:
+            if len(path) >= 2:
+                valid_parent_regions.add(path[1])
+
         for entrance in spot.entrances:
             assert isinstance(
                 entrance.parent_region, Region
             ), f"Entrance to region should have a parent region, problem is {entrance.name}"
 
-            if entrance.parent_region.name not in region_graph[spot.name]:
-                continue
-
-            access_rules.append(Reach(entrance.name, "Entrance", rule.player))
-
+            if entrance.parent_region.name in valid_parent_regions:
+                access_rules.append(Reach(entrance.name, "Entrance", rule.player))
     if len(access_rules) == 0:
         return RuleExplanation(
             rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots
