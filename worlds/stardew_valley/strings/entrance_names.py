@@ -271,6 +271,8 @@ class Entrance:
     professor_snail_cave_to_cave_entrance = "Professor Snail Cave to Dig Site"
     island_north_to_volcano = "Island North to Volcano Entrance"
     volcano_to_island_north = "Volcano Entrance to Island North"
+    volcano_to_volcano_side = "Volcano Entrance to Volcano River"
+    volcano_side_to_volcano = "Volcano River to Volcano Entrance"
     volcano_to_secret_beach = "Volcano River to Secret Beach"
     secret_beach_to_volcano = "Secret Beach to Volcano River"
     talk_to_island_trader = "Talk to Island Trader"
