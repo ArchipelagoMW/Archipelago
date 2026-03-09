@@ -193,7 +193,7 @@ class GameRangePorts(typing.NamedTuple):
 @functools.cache
 def parse_game_ports(game_ports: tuple[str | int, ...]) -> GameRangePorts:
     parsed_ports: list[range] = []
-    weights = []
+    weights: list[int] = []
     ephemeral_allowed = False
     total_length = 0
 
@@ -247,13 +247,13 @@ def try_conns_per_process(p: psutil.Process) -> typing.Iterable[int]:
     try:
         return map(lambda c: c.laddr.port, p.net_connections("tcp4"))
     except psutil.AccessDenied:
-        return []
+        return ()
 
 
 def get_active_net_connections() -> typing.Iterable[int]:
     # Don't even try to check if system using AIX
-    if psutil._common.AIX:
-        return []
+    if psutil.AIX:
+        return ()
 
     try:
         return map(lambda c: c.laddr.port, psutil.net_connections("tcp4"))
