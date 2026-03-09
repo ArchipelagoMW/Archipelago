@@ -259,7 +259,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Geode.artifact_trove: self.has(Geode.omni) & self.region.can_reach(Region.desert),
             Geode.frozen: self.mine.can_mine_in_the_mines_floor_41_80(),
             Geode.geode: self.mine.can_mine_in_the_mines_floor_1_40(),
-            Geode.golden_coconut: self.region.can_reach(Region.island_north),
+            Geode.golden_coconut: self.region.can_reach(Region.island_north) & self.skill.has_level(Skill.foraging, 1),
             Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120(),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.lava_eel, 9, Geode.magma) but it makes a logic loop
             Geode.omni: self.count(2, *(self.mine.can_mine_in_the_mines_floor_81_120(), self.region.can_reach_all((Region.desert, Region.oasis, Region.sewer)), self.tool.has_pan(ToolMaterial.iron), (self.region.can_reach_all((Region.island_west, Region.island_north,)) & self.has(Consumable.treasure_totem)))),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.octopus, 9, Geode.omni) but it makes a logic loop
             Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
