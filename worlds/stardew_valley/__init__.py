@@ -560,12 +560,6 @@ class StardewValleyWorld(World):
 
                 ex.connect(target)
 
-            import Utils
-
-            Utils.visualize_regions(
-                self.get_region("Stardew Valley"), "region_map.puml", show_entrance_names=True, show_locations=False
-            )
-
     def generate_basic(self):
         pass
 
