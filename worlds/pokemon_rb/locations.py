@@ -2824,10 +2824,11 @@ class PokemonRBLocation(Location):
 location_groups = defaultdict(list)
 for location in location_data:
     if not location.event:
-        if "-" in location.name:
-            location_groups[location.name.split(" -")[0]].append(location.name)
-            if location.name[-1] == "F" and location.name[-2].isdigit():
-                location_groups[" ".join(location.name.split(" -")[0].split(" ")[0:-1])].append(location.name)
+        group, sep, _ = location.name.partition(" - ")
+        if sep:
+            location_groups[group].append(location.name)
+            if group[-1] == "F" and group[-2].isdigit():
+                location_groups[" ".join(group.split(" ")[:-1])].append(location.name)
         if isinstance(location.original_item, str):
             for item_group in item_table[location.original_item].groups:
                 if not item_group.startswith("HM0"):  # these are intended as aliases, not for using as actual groups

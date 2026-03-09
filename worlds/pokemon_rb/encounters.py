@@ -16,7 +16,7 @@ non_randomized_catch_em_all_candidate_slots = [
 def get_encounter_slots(world, types):
     encounter_slots = deepcopy([location for location in location_data if location.type in types])
 
-    i = [True, False][world.options.game_version.value]
+    i = not world.options.game_version.value
     for location in encounter_slots:
         if isinstance(location.original_item, list):
             if world.options.catch_em_all and not world.options.randomize_pokemon_locations and location.name in (

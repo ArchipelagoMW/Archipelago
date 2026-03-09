@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from Options import (PerGameCommonOptions, Toggle, Choice, Range, NamedRange, FreeText, TextChoice, DeathLink,
-                     ItemsAccessibility, OptionList, Visibility)
+                     ItemsAccessibility, OptionSet, Visibility)
 
 
 class GameVersion(Choice):
@@ -915,7 +915,7 @@ class RandomizeMapMusic(Choice):
     option_chaos = 3
 
 
-class DebugOptions(OptionList):
+class DebugOptions(OptionSet):
     """Debug options.
     SelectInvFull: Hold select to have AddItemToInventory fail and report inventory full when holding SELECT
     (AddItemToInventory is not called when obtaining non-inventory items like AP_ITEM, badges, traps, etc.)
