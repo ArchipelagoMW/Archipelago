@@ -245,7 +245,7 @@ def _rename_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slo
             for r, sc in _encounter_subcategory_ranges[encounter_type].items()
             if i in r
         )
-        subcategory_species = []
+        subcategory_species: list[int] = []
         for k in subcategory_range:
             if new_slots[k] not in subcategory_species:
                 subcategory_species.append(new_slots[k])
@@ -278,7 +278,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
         RandomizeWildPokemon.option_match_base_stats_and_type,
     }
 
-    already_placed = set()
+    already_placed: set[int] = set()
     num_placeable_species = NUM_REAL_SPECIES - len(world.blacklisted_wilds)
 
     priority_species = [data.constants["SPECIES_WAILORD"], data.constants["SPECIES_RELICANTH"]]
@@ -349,7 +349,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                             if len(merged_blacklist) < NUM_REAL_SPECIES:
                                 break
                         else:
-                            raise RuntimeError("This should never happen")
+                            merged_blacklist = set()
 
                         candidates = [
                             species
@@ -365,7 +365,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
                     species_old_to_new_map[species_id] = new_species_id
 
                     if world.options.dexsanity and encounter_type != EncounterType.ROCK_SMASH \
-                            and map_name not in OUT_OF_LOGIC_MAPS:
+                            and map_name not in OUT_OF_LOGIC_MAPS and new_species_id not in world.blacklisted_wilds:
                         already_placed.add(new_species_id)
 
             # Actually create the new list of slots and encounter table
