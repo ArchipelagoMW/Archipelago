@@ -232,11 +232,11 @@ This block will attempt to place all items in the Claw item group into any locat
 item groups, as shown here, is strongly recommended to avoid creation of unintended items.
 
 For example, the Claw item group for Hollow Knight includes Mantis_Claw, Left_Mantis_Claw, and Right_Mantis_Claw.
-Depending on a specific yaml setting, the Generator will create either one Mantis_Claw item, or one each of the
-Left_Mantis_Claw and Right_Mantis_Claw items. If the example block is used without the `true` setting to tell the
-Generator to use only the items from this list that are already in the item pool, the Generator will create the 
-missing item(s) in addition to using the intended item(s), resulting in placement of all three: Mantis_Claw, 
-Left_Mantis_Claw and Right_Mantis_Claw.
+Depending on a different yaml setting, the Generator will create either one Mantis_Claw item, or one each of the
+Left_Mantis_Claw and Right_Mantis_Claw items. By default, the Generator will create any missing item(s) in addition
+to using the intended item(s), resulting in placement of all three items from the item group: Mantis_Claw,
+Left_Mantis_Claw and Right_Mantis_Claw. Use of the true value, as shown in the example, restricts the Generator to
+using only the items from the item group that are already present in the item pool.
 
 ## Boss Plando
 
