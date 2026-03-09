@@ -430,6 +430,23 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
 
+    def finalize_multiworld(self) -> None:
+        """
+        Optional Method that is called after fill and progression balancing.
+        This is the last stage of generation where worlds may change logically relevant data,
+        such as item placements and connections. To not break assumptions,
+        only ever increase accessibility, never decrease it.
+        """
+        pass
+
+    def pre_output(self):
+        """
+        Optional method that is called before output generation.
+        Items and connections are not meant to be moved anymore,
+        anything that would affect logical spheres is forbidden at this point.
+        """
+        pass
+
     def generate_output(self, output_directory: str) -> None:
         """
         This method gets called from a threadpool, do not use multiworld.random here.
