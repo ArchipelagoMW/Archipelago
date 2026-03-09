@@ -10,20 +10,11 @@ class TestPortAllocating(unittest.TestCase):
     def test_parse_game_ports(self) -> None:
         """Ensure that game ports with ranges are parsed correctly"""
         val = parse_game_ports(("1000-2000", "2000-5000", "1000-2000", 20, 40, "20", "0"))
-        self.assertEqual(len(val.parsed_ports), 6, "Parsed port ranges is not the expected length")
-        self.assertEqual(len(val.weights), 6, "Parsed weights are not the expected length")
 
-        self.assertEqual(val.parsed_ports[0], range(1000, 2001), "The first range wasn't parsed correctly")
-        self.assertEqual(val.parsed_ports[1], range(2000, 5001), "The second range wasn't parsed correctly")
-        self.assertEqual(val.parsed_ports[0], val.parsed_ports[2],
-                         "The first and third range are not the same when they should be")
-        self.assertEqual(val.parsed_ports[3], range(20, 21), "The fourth range wasn't parsed correctly")
-        self.assertEqual(val.parsed_ports[4], range(40, 41), "The fifth range was not parsed correctly")
-        self.assertEqual(val.parsed_ports[3], val.parsed_ports[5],
-                         "The fourth and last range are not the same when they should be")
-
+        self.assertListEqual(val.parsed_ports,
+                             [range(1000, 2001), range(2000, 5001), range(1000, 2001), range(20, 21), range(40, 41),
+                              range(20, 21)], "The parsed game ports are not the expected values")
         self.assertTrue(val.ephemeral_allowed, "The ephemeral allowed flag is not set even though it was passed")
-
         self.assertListEqual(val.weights, [1001, 4002, 5003, 5004, 5005, 5006],
                              "Cumulative weights are not the expected value")
 
@@ -36,9 +27,8 @@ class TestPortAllocating(unittest.TestCase):
         self.assertTrue(val.ephemeral_allowed, "List with just 0 is not allowing ephemeral ports")
 
         val = parse_game_ports((1,))
-        self.assertEqual(val.parsed_ports, [range(1,2)], "Parsed ports doesn't contain the expected values")
+        self.assertEqual(val.parsed_ports, [range(1, 2)], "Parsed ports doesn't contain the expected values")
         self.assertFalse(val.ephemeral_allowed, "List with just single port returned that ephemeral is allowed")
-
 
     def test_parse_game_port_errors(self) -> None:
         """Ensure that game ports with incorrect values raise the expected error"""
