@@ -14,6 +14,8 @@ def reverse_connection_name(name: str) -> str | None:
         return Entrance.boat_from_ginger_island
     if name == Entrance.boat_from_ginger_island:
         return Entrance.boat_to_ginger_island
+    if name == Entrance.volcano_5_to_island_north:
+        return Entrance.volcano_5_to_island_north
     try:
         origin, destination = name.split(connector_keyword)
     except ValueError:
