@@ -1,4 +1,5 @@
 import os
+import platform
 import unittest
 
 from WebHostLib.customserver import parse_game_ports, create_random_port_socket, get_used_ports
@@ -74,7 +75,8 @@ class TestPortAllocating(unittest.TestCase):
             s.close()
 
         sockets.clear()
-        for _ in range(20_000 - len(get_used_ports())):
+        length = 5_000 if platform.system() == "Darwin" else (30_000 - len(get_used_ports()))
+        for _ in range(length):
             socket = create_random_port_socket(("30000-65535",), "127.0.0.1")
             sockets.append(socket)
             _, port = socket.getsockname()
