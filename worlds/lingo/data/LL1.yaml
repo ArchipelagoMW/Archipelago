@@ -4470,6 +4470,10 @@
             panel: SEVEN (1)
           - room: Outside The Initiated
             panel: SEVEN (2)
+      First Eight:
+        event: True
+        panels:
+          - EIGHT
       Nines:
         id:
           - Count Up Room Area Doors/Door_nine_hider
@@ -4612,7 +4616,7 @@
         enter_only: True
         orientation: east
         required_door:
-          door: Eights
+          door: First Eight
     progression:
       Progressive Number Hunt:
         panel_doors:

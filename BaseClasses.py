@@ -727,6 +727,7 @@ class CollectionState():
     advancements: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
+    """Internal cache for Advancement Locations already checked by this CollectionState. Not for use in logic."""
     stale: Dict[int, bool]
     allow_partial_entrances: bool
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
