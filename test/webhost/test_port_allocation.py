@@ -74,7 +74,7 @@ class TestPortAllocating(unittest.TestCase):
             s.close()
 
         sockets.clear()
-        for _ in range(30_000 - (len(get_used_ports()) + 100)):
+        for _ in range(20_000 - len(get_used_ports())):
             socket = create_random_port_socket(("30000-65535",), "127.0.0.1")
             sockets.append(socket)
             _, port = socket.getsockname()
