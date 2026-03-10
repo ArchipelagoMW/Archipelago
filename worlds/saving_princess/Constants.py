@@ -1,12 +1,16 @@
+from typing import List
 GAME_NAME: str = "Saving Princess"
 BASE_ID: int = 0x53565052494E  # SVPRIN
+CLIENT_VERSION: List[int] = [1, 1, 0]
+
 
 # client installation data
 CLIENT_NAME = f"{GAME_NAME.replace(' ', '')}Client"
 GAME_HASH = "35a111d0149fae1f04b7b3fea42c5319"
 PATCH_NAME = "saving_princess_basepatch.bsdiff4"
 DOWNLOAD_NAME = "saving_princess_archipelago.zip"
-DOWNLOAD_URL = "https://api.github.com/repos/LeonarthCG/saving-princess-archipelago/releases"
+DOWNLOAD_URL = (f"https://api.github.com/repos/LeonarthCG/saving-princess-archipelago/releases/"
+                f"tags/saving-princess-basepatch-{'.'.join(map(str, CLIENT_VERSION))}")
 
 # item names
 ITEM_WEAPON_CHARGE: str = "Powered Blaster"

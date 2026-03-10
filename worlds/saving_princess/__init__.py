@@ -82,7 +82,7 @@ class SavingPrincessWorld(World):
     """  # Excerpt from itch
     game = GAME_NAME
     web = SavingPrincessWeb()
-    required_client_version = (0, 5, 0)
+    required_client_version = tuple(CLIENT_VERSION)
 
     topology_present = False
 
