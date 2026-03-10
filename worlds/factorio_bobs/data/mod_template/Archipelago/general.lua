@@ -12,10 +12,14 @@ general.goal = {{ goal }} -- 0 = rocket and 1 == satelite
 general.silo = {{ silo }} -- 0 = normal silo, 1 = random recipe, 2 = spawned at the start of the game.
 
 
--- mod setting names
+-- mod settings
 general.mod_setting_names = {}
 general.mod_setting_names.death_link = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 general.mod_setting_names.energy_link = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_defaults = {}
+general.mod_setting_defaults.death_link = {% if death_link %}true{% else %}false{% endif %}
+general.mod_setting_defaults.energy_link = {% if energy_link %}true{% else %}false{% endif %}
+
 
 -- energy_link
 general.energy_link = {}
@@ -30,16 +34,16 @@ general.science_packs.allowed = {{ variable_to_lua(allowed_science_packs) }}
 
 -- free samples
 general.free_samples = {}
-general.free_samples.quality = "{{ free_sample_quality_name }}"
+general.free_samples.quality = "{{free_sample_quality_name}}"
 
-general.free_samples.get_black_list = function ()--returns a big list of all items. false / nil is whitelist and true is blacklisted.
+function general.free_samples.get_black_list()--returns a big list of all items. false / nil is whitelist and true is blacklisted.
     return {{ variable_to_lua(free_sample_blacklist) }}
 end
 
 
 --technologies
 general.technologies = {}
-general.technologies.hide_from_player = function () -- returns a list of all the technologies to disable research of and hide.
+function general.technologies.hide_from_player() -- returns a list of all the technologies to disable research of and hide.
     --has an test in data-final-fixes that will throw out the name of the place it is erroring at.
     return {
     {%- for original_tech_name in base_tech_table -%}
@@ -59,7 +63,7 @@ general.recipes.type = "scale" --scale means that is gets x lower to y higher.
 {% elif recipe_time_range %}
 general.recipes.type = "range" --means new values from x to y.
 {% endif %}
-general.recipes.time_adjustments = function ()
+function general.recipes.time_adjustments()
     return {
         {% if recipe_time_scale %}
         {%- for recipe_name, recipe in recipes.items() %}
@@ -77,7 +81,7 @@ general.recipes.time_adjustments = function ()
     }
 end
 
-general.recipes.tool_tips = function ()
+function general.recipes.tool_tips()
     return {
         {%- for recipe_name, recipe in recipes.items() %}
         ["{{recipe_name}}"] = {
@@ -92,7 +96,7 @@ general.recipes.tool_tips = function ()
     }
 end
 
-general.recipes.custom_recipes = function ()
+function general.recipes.custom_recipes()
     return {
         {%- for recipe_name, recipe in recipes.items() %}
         {%- if recipe.source.value == 2 %}

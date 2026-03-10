@@ -8,7 +8,7 @@ local technology = data.raw.technology
 
 
 local progressives
-local get_progressives = function()
+local function get_progressives()
     if progressives == nil then
         progressives = general.technologies.progressive() or {}
         for name, list in pairs(progressives) do
@@ -127,7 +127,7 @@ local function get_factorio_icons(icons, item_name, this_world)
     return icons
 end
 
-library.get_icons = function(location_information)
+function library.get_icons(location_information)
     local icons = {}
     if location_information.revealed then
         if technology[location_information.item_name] or get_progressives()[location_information.item_name] then

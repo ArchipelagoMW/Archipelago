@@ -106,7 +106,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
             data_final_template = template_env.get_template("data-final-fixes.lua")
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
-            settings_final_template = template_env.get_template(r"settings-final-fixes.lua")
+            settings_final_template = template_env.get_template(r"Archipelago/settings-final-fixes.lua")
             general_template = template_env.get_template(r"Archipelago/general.lua")
             locations_template = template_env.get_template(r"Archipelago/locations.lua")
             custom_recipes_template = template_env.get_template(r"Archipelago/custom_recipes.lua")
@@ -207,9 +207,9 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     #                                  data_final_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
                                       control_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
-                                      settings_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings-final-fixes.lua",
+    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
+    #                                  settings_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/settings-final-fixes.lua",
                                       settings_final_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/general.lua",
                                       general_template.render(**template_data)))
