@@ -42,13 +42,14 @@ from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .regions.entrance_rando import get_target_groups
-from .rules import set_rules
+from .rules import set_rules, update_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.ap_option_names import (
     EntranceRandomizerBehaviourOptionName, StartWithoutOptionName)
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
+from .strings.quest_names import Quest
 from .strings.region_names import Region as RegionNames
 
 logger = logging.getLogger(__name__)
@@ -186,8 +187,6 @@ class StardewValleyWorld(World):
         passthrough_data = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY)
         if passthrough_data is None:
             self.seed = self.random.getrandbits(64)
-        elif isinstance(passthrough_data, int):
-            self.seed = passthrough_data
         else:
             self.seed = passthrough_data["seed"]
             self.randomized_entrances = passthrough_data["randomized_entrances"]
@@ -559,6 +558,8 @@ class StardewValleyWorld(World):
                 target.entrances.remove(entr)
 
                 ex.connect(target)
+        self.logic.quest.update_cutscene_rules(self.randomized_entrances)
+        update_rules(self)
 
     def generate_basic(self):
         pass

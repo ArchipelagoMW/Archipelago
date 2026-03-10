@@ -115,6 +115,19 @@ class StardewRuleCollector:
     def set_location_rule(self, location_name: str, rule: StardewRule) -> None:
         _set_rule(self.multiworld.get_location(location_name, self.player), rule)
 
+def update_rules(world):
+    world_options = world.options
+    world_content = world.content
+    rule_collector = StardewRuleCollector(world.multiworld, world.player, world_content)
+    logic = world.logic
+    bundle_rooms: List[BundleRoom] = world.modified_bundles
+    trash_bear_requests: Dict[str, List[str]] = world.trash_bear_requests
+
+    all_location_names = set(location.name for location in world.multiworld.get_locations(world.player))
+
+    # This overrides all of the story quests, most of which won't have a changed rule
+    # But I think the lack of code duplication is worth the bit of extra compute
+    set_story_quests_rules(all_location_names, logic, rule_collector, world_options)
 
 def set_rules(world):
     world_options = world.options
