@@ -1030,7 +1030,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if CV64_US_10_HASH != basemd5.hexdigest():
-            raise Exception("Supplied Base Rom does not match known MD5 for Castlevania 64 US 1.0."
+            raise Exception("Supplied Base Rom does not match known MD5 for Castlevania 64 US 1.0. "
                             "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes

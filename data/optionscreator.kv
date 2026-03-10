@@ -6,12 +6,12 @@
     tag: tag
     MDLabel:
         id: tag
-        text: str(this.option.default) if this.option.default != "random" else this.option.range_start
+        text: str(this.option.default) if not isinstance(this.option.default, str) else str(this.option.range_start)
     MDSlider:
         id: slider
         min: this.option.range_start
         max: this.option.range_end
-        value: min(max(this.option.default, this.option.range_start), this.option.range_end) if this.option.default != "random" else this.option.range_start
+        value: min(max(this.option.default, this.option.range_start), this.option.range_end) if not isinstance(this.option.default, str) else this.option.range_start
         step: 1
         step_point_size: 0
         MDSliderHandle:
@@ -23,7 +23,7 @@
     text: text
     MDButtonText:
         id: text
-        text: this.option.get_option_name(this.option.default if this.option.default != "random" else list(this.option.options.values())[0])
+        text: this.option.get_option_name(this.option.default if not isinstance(this.option.default, str) else list(this.option.options.values())[0])
         theme_text_color: "Primary"
 
 <VisualNamedRange>:
@@ -38,7 +38,7 @@
         text: text
         MDButtonText:
             id: text
-            text: this.option.special_range_names.get(list(this.option.special_range_names.values()).index(this.option.default)) if this.option.default in this.option.special_range_names else "Custom"
+            text: this.option.default.title() if this.option.default in this.option.special_range_names else "Custom"
 
 <VisualFreeText>:
     multiline: False

@@ -1,8 +1,9 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from Options import Choice, ItemLinks, PlandoConnections, PlandoItems, PlandoTexts
+from Options import Choice, TextChoice, ItemLinks, OptionSet, PlandoConnections, PlandoItems, PlandoTexts
 from Utils import restricted_dumps
+
 from worlds.AutoWorld import AutoWorldRegister
 
 
@@ -14,6 +15,29 @@ class TestOptions(unittest.TestCase):
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
                         self.assertTrue(option.__doc__)
+
+    def test_option_defaults(self):
+        """Test that defaults for submitted options are valid."""
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            if not world_type.hidden:
+                for option_key, option in world_type.options_dataclass.type_hints.items():
+                    with self.subTest(game=gamename, option=option_key):
+                        if issubclass(option, TextChoice):
+                            self.assertTrue(option.default in option.name_lookup,
+                                f"Default value {option.default} for TextChoice option {option.__name__} in"
+                                f" {gamename} does not resolve to a listed value!"
+                            )
+                        # Standard "can default generate" test
+                        err_raised = None
+                        try:
+                            option.from_any(option.default)
+                        except Exception as ex:
+                            err_raised = ex
+                        self.assertIsNone(err_raised,
+                            f"Default value {option.default} for option {option.__name__} in {gamename}"
+                            f" is not valid! Exception: {err_raised}"
+                        )
+
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
@@ -81,6 +105,19 @@ class TestOptions(unittest.TestCase):
                         restricted_dumps(option.from_any(option.default))
                         if issubclass(option, Choice) and option.default in option.name_lookup:
                             restricted_dumps(option.from_text(option.name_lookup[option.default]))
+
+    def test_option_set_keys_random(self):
+        """Tests that option sets do not contain 'random' and its variants as valid keys"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            if game_name not in ("Archipelago", "Sudoku", "Super Metroid"):
+                for option_key, option in world_type.options_dataclass.type_hints.items():
+                    if issubclass(option, OptionSet):
+                        with self.subTest(game=game_name, option=option_key):
+                            self.assertFalse(any(random_key in option.valid_keys for random_key in ("random",
+                                                                                                    "random-high",
+                                                                                                    "random-low")))
+                            for key in option.valid_keys:
+                                self.assertFalse("random-range" in key)
     
     def test_pickle_dumps_plando(self):
         """Test that plando options using containers of a custom type can be pickled"""

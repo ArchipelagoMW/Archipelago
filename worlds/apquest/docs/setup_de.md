@@ -2,7 +2,7 @@
 
 ## Benötigte Software
 
-- [Archipelago](github.com/ArchipelagoMW/Archipelago/releases/latest)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 - Die [APQuest-apworld](https://github.com/NewSoupVi/Archipelago/releases), 
   falls diese nicht mit deiner Version von Archipelago gebündelt ist.
 
@@ -11,16 +11,16 @@
 Zuerst brauchst du einen Raum, mit dem du dich verbinden kannst.
 Dafür musst du oder jemand den du kennst ein Spiel generieren.  
 Dieser Schritt wird hier nicht erklärt, aber du kannst den
-[Archipelago Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup_en#generating-a-game) lesen.
+[Archipelago Setup Guide](/tutorial/Archipelago/setup_en#generating-a-game) lesen.
 
-Du musst außerdem [Archipelago](github.com/ArchipelagoMW/Archipelago/releases/latest) installiert haben
+Du musst außerdem [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest) installiert haben
 und die [APQuest apworld](https://github.com/NewSoupVi/Archipelago/releases) darin installieren.
 
 Von hier ist es einfach, dich mit deinem Slot zu verbinden.
 
 ### Webhost-Raum
 
-Wenn dein Raum auf einem WebHost läuft (z.B. [archipelago.gg](archipelago.gg))
+Wenn dein Raum auf einem WebHost läuft (z.B. [archipelago.gg](https://archipelago.gg))
 kannst du einfach auf deinen Namen in der Spielerliste klicken.  
 Dies öffnet den Archipelago Launcher, welcher dich dann fragt,
 ob du den Text Client oder den APQuest Client öffnen willst.  
