@@ -1,5 +1,5 @@
 import shutil
-from typing import ClassVar, Dict, Any, Type, List, Union
+from typing import ClassVar, Dict, Any, Type, List, Union, Optional
 
 import Utils
 from BaseClasses import Tutorial, ItemClassification as ItemClass
@@ -123,6 +123,9 @@ class SavingPrincessWorld(World):
     has_extra_goodies: bool = False
     music_table: List[int]
 
+    trap_chance: int
+    filler_list: List[str]
+    trap_list: List[str]
 
     arctic_door: DoorType
     volcanic_door: DoorType
@@ -168,13 +171,17 @@ class SavingPrincessWorld(World):
                 self.music_table[song_id] = song_id
                 self.music_table[song_index] = t
 
+        # make a list of items that can be filler and items that can be traps
+        self.filler_list = list(Items.item_dict_filler.keys())
+        self.trap_list = ([TRAP_ITEM_ICE] * self.options.ice_weight
+                          + [TRAP_ITEM_SHAKES] * self.options.shake_weight
+                          + [TRAP_ITEM_NINJA] * self.options.ninja_weight)
+
     def create_regions(self) -> None:
         from .Regions import create_regions
         create_regions(self.multiworld, self.player, self.is_pool_expanded, self.has_battle_log)
 
     def create_items(self) -> None:
-        items_made: int = 0
-
         # now, for each item
         item_dict = Items.item_dict_expanded if self.is_pool_expanded else Items.item_dict_base
         if self.has_extra_goodies:
@@ -182,36 +189,37 @@ class SavingPrincessWorld(World):
         for item_name, item_data in item_dict.items():
             # create count copies of the item
             for i in range(item_data.count):
-                self.multiworld.itempool.append(self.create_item(item_name))
-            items_made += item_data.count
+                self.add_item(item_name)
             # and create count_extra useful copies of the item
-            original_item_class: ItemClass = item_data.item_class
-            item_data.item_class = ItemClass.useful
             for i in range(item_data.count_extra):
-                self.multiworld.itempool.append(self.create_item(item_name))
-            item_data.item_class = original_item_class
-            items_made += item_data.count_extra
+                self.add_item(item_name, ItemClass.useful)
 
-        # get the number of unfilled locations, that is, locations for items - items generated
-        location_count = len(Locations.location_dict_base)
-        if self.is_pool_expanded:
-            location_count = len(Locations.location_dict_expanded)
-        junk_count: int = location_count - items_made
-
-        # and generate as many junk items as unfilled locations
+        # generate as many junk items as unfilled locations
+        junk_count: int = len(self.multiworld.get_unfilled_locations(self.player))
         for i in range(junk_count):
-            self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
+            self.add_item(self.get_filler_item_name())
 
     def create_item(self, name: str) -> Items.SavingPrincessItem:
         return Items.item_dict[name].create_item(self.player)
 
+    def create_item_with_class(self, name: str, classification: ItemClass) -> Items.SavingPrincessItem:
+        item: Items.SavingPrincessItem = self.create_item(name)
+        item.classification = classification
+        return item
+
+    def add_item(self, name: str, classification: Optional[ItemClass] = None):
+        if classification is None:
+            self.multiworld.itempool.append(self.create_item(name))
+        else:
+            self.multiworld.itempool.append(self.create_item_with_class(name, classification))
+
     def get_filler_item_name(self) -> str:
-        filler_list = list(Items.item_dict_filler.keys())
         # check if this is going to be a trap
-        if self.random.randint(0, 99) < self.options.trap_chance:
-            filler_list = list(Items.item_dict_traps.keys())
-        # and return one of the names at random
-        return self.random.choice(filler_list)
+        if len(self.trap_list) > 0 and self.random.randint(0, 99) < self.options.trap_chance:
+            return self.random.choice(self.trap_list)
+        # not a trap, return filler
+        else:
+            return self.random.choice(self.filler_list)
 
     def set_rules(self):
         from .Rules import set_rules
@@ -224,6 +232,11 @@ class SavingPrincessWorld(World):
             "final_locks",
             "expanded_pool",
             "battle_log",
+            # trap weights
+            "ice_weight",
+            "shake_weight",
+            "ninja_weight",
+            # gameplay options
             "instant_saving",
             "sprint_availability",
             "cliff_weapon_upgrade",

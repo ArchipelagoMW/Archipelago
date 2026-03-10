@@ -168,6 +168,10 @@ class SavingPrincessOptions(PerGameCommonOptions):
     battle_log: BattleLog
     blast_doors: BlastDoors
     trap_chance: TrapChance
+    # trap weight
+    ice_weight: IceTrapWeight
+    shake_weight: ShakeTrapWeight
+    ninja_weight: NinjaTrapWeight
     # gameplay options
     death_link: DeathLink
     instant_saving: InstantSaving
@@ -187,6 +191,11 @@ groups = [
         BattleLog,
         BlastDoors,
         TrapChance,
+    ]),
+    OptionGroup("Trap Weights", [
+        IceTrapWeight,
+        ShakeTrapWeight,
+        NinjaTrapWeight,
     ]),
     OptionGroup("Gameplay Options", [
         DeathLink,
