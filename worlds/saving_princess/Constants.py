@@ -1,7 +1,17 @@
+from enum import Enum
 from typing import List
+
 GAME_NAME: str = "Saving Princess"
 BASE_ID: int = 0x53565052494E  # SVPRIN
 CLIENT_VERSION: List[int] = [1, 1, 0]
+
+
+class DoorType(Enum):
+    DOOR_TYPE_NONE = 0
+    DOOR_TYPE_POWER = 1
+    DOOR_TYPE_FIRE = 2
+    DOOR_TYPE_ICE = 3
+    DOOR_TYPE_VOLT = 4
 
 
 # client installation data

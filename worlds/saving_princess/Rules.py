@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from BaseClasses import CollectionState, Location, Entrance
 from worlds.generic.Rules import set_rule
 from .Constants import *
+
 if TYPE_CHECKING:
     from . import SavingPrincessWorld
 
@@ -48,21 +49,37 @@ def set_rules(world: "SavingPrincessWorld"):
         if world.is_pool_expanded:
             # in expanded, the final area requires all the boss keys
             return (
-                    state.has_all(
-                        {EP_ITEM_GUARD_GONE, EP_ITEM_CLIFF_GONE, EP_ITEM_ACE_GONE, EP_ITEM_SNAKE_GONE},
-                        world.player
+                    state.has_from_list_unique(
+                        [EP_ITEM_GUARD_GONE, EP_ITEM_CLIFF_GONE, EP_ITEM_ACE_GONE, EP_ITEM_SNAKE_GONE],
+                        world.player,
+                        world.final_locks
                     ) and super_nice_check(state)
             )
         else:
             # in base pool, check that the main area bosses can be defeated
-            return state.has_all(
-                        {EVENT_ITEM_GUARD_GONE, EVENT_ITEM_CLIFF_GONE, EVENT_ITEM_ACE_GONE, EVENT_ITEM_SNAKE_GONE},
-                        world.player
-                    ) and super_nice_check(state)
+            return state.has_from_list_unique(
+                [EVENT_ITEM_GUARD_GONE, EVENT_ITEM_CLIFF_GONE, EVENT_ITEM_ACE_GONE, EVENT_ITEM_SNAKE_GONE],
+                world.player,
+                world.final_locks
+            ) and super_nice_check(state)
 
     def is_power_on(state: CollectionState) -> bool:
         # in expanded pool, the power item is what determines this, else it happens when the generator is powered
         return state.has(EP_ITEM_POWER_ON if world.is_pool_expanded else EVENT_ITEM_POWER_ON, world.player)
+
+    # return the required special weapon to open a door of the given type
+    def door_to_weapon(door_type: DoorType) -> Optional[str]:
+        match door_type:
+            case DoorType.DOOR_TYPE_NONE:
+                return None
+            case DoorType.DOOR_TYPE_POWER:
+                return ITEM_WEAPON_CHARGE
+            case DoorType.DOOR_TYPE_FIRE:
+                return ITEM_WEAPON_FIRE
+            case DoorType.DOOR_TYPE_ICE:
+                return ITEM_WEAPON_ICE
+            case DoorType.DOOR_TYPE_VOLT:
+                return ITEM_WEAPON_VOLT
 
     # set the location rules
     # this is behind the blast door to arctic
@@ -99,8 +116,15 @@ def set_rules(world: "SavingPrincessWorld"):
         set_rule(get_location(location_name), lambda state: nice_check(state))
 
     # set the basic access rules for the regions, these are all behind blast doors
-    for region_name in [REGION_VOLCANIC, REGION_ARCTIC, REGION_SWAMP]:
-        set_rule(get_region_entrance(region_name), lambda state: state.has(ITEM_WEAPON_CHARGE, world.player))
+    weapon_needed: Optional[str] = door_to_weapon(world.volcanic_door)
+    if weapon_needed:
+        set_rule(get_region_entrance(REGION_VOLCANIC), lambda state: state.has(weapon_needed, world.player))
+    weapon_needed = door_to_weapon(world.arctic_door)
+    if weapon_needed:
+        set_rule(get_region_entrance(REGION_ARCTIC), lambda state: state.has(weapon_needed, world.player))
+    weapon_needed = door_to_weapon(world.swamp_door)
+    if weapon_needed:
+        set_rule(get_region_entrance(REGION_SWAMP), lambda state: state.has(weapon_needed, world.player))
 
     # now for the final area regions, which have different rules based on if ep is on
     set_rule(get_region_entrance(REGION_ELECTRICAL), lambda state: is_gate_unlocked(state))

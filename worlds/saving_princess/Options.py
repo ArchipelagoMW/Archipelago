@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Dict, Any
 
 from Options import PerGameCommonOptions, DeathLink, StartInventoryPool, Choice, DefaultOnToggle, Range, Toggle, \
     OptionGroup
@@ -119,6 +118,23 @@ class BattleLog(Choice):
     option_enabled = 1
     option_extra_goodies = 2
     default = option_extra_goodies
+    rich_text_doc = True
+
+
+class BlastDoors(Choice):
+    """
+    Determines the type of each of the three blast doors found in the hub.
+    - Vanilla: All blast doors require the Powered Blaster.
+    - Random without repeats: Each blast door requires a different randomly selected special weapon to open.
+    - Fully random: Each blast door requires a randomly selected special weapon to open.
+    - Remove blast doors: There are no blast doors, so no special weapons are required to open them.
+    """
+    display_name = "Randomize Blast Doors"
+    option_vanilla = 0
+    option_random_without_repeats = 1
+    option_fully_random = 2
+    option_remove_blast_doors = 3
+    default = option_random_without_repeats
     rich_text_doc = True
 
 @dataclass

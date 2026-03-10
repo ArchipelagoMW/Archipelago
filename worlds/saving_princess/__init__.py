@@ -122,6 +122,11 @@ class SavingPrincessWorld(World):
     has_extra_goodies: bool = False
     music_table: List[int]
 
+
+    arctic_door: DoorType
+    volcanic_door: DoorType
+    swamp_door: DoorType
+
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
@@ -129,6 +134,28 @@ class SavingPrincessWorld(World):
         self.is_pool_expanded = self.options.expanded_pool > 0
         self.has_battle_log = self.options.battle_log > 0
         self.has_extra_goodies = self.options.battle_log == Options.BattleLog.option_extra_goodies
+
+        door_types: List[DoorType] = [
+            DoorType.DOOR_TYPE_POWER, DoorType.DOOR_TYPE_FIRE, DoorType.DOOR_TYPE_ICE, DoorType.DOOR_TYPE_VOLT]
+        match self.options.blast_doors:
+            case self.options.blast_doors.option_vanilla:
+                self.arctic_door = DoorType.DOOR_TYPE_POWER
+                self.volcanic_door = DoorType.DOOR_TYPE_POWER
+                self.swamp_door = DoorType.DOOR_TYPE_POWER
+            case self.options.blast_doors.option_random_without_repeats:
+                self.random.shuffle(door_types)
+                self.arctic_door = door_types[0]
+                self.volcanic_door = door_types[1]
+                self.swamp_door = door_types[2]
+            case self.options.blast_doors.option_fully_random:
+                self.arctic_door = self.random.choice(door_types)
+                self.volcanic_door = self.random.choice(door_types)
+                self.swamp_door = self.random.choice(door_types)
+            case self.options.blast_doors.option_remove_blast_doors:
+                self.arctic_door = DoorType.DOOR_TYPE_NONE
+                self.volcanic_door = DoorType.DOOR_TYPE_NONE
+                self.swamp_door = DoorType.DOOR_TYPE_NONE
+
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)
             # find zzz and purple and swap them back to their original positions
@@ -199,5 +226,8 @@ class SavingPrincessWorld(World):
             "shake_intensity",
             "iframes_duration",
         )
+        slot_data["arctic_door"] = self.arctic_door
+        slot_data["volcanic_door"] = self.volcanic_door
+        slot_data["swamp_door ="] = self.swamp_door
         slot_data["music_table"] = self.music_table
         return slot_data
