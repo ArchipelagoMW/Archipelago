@@ -4,14 +4,24 @@ from Options import PerGameCommonOptions, DeathLink, StartInventoryPool, Choice,
     OptionGroup
 
 
-class ExpandedPool(DefaultOnToggle):
+class ExpandedPool(Choice):
     """
-    Determines if places other than chests and special weapons will be locations.
-    This includes boss fights as well as powering the tesla orb and completing the console login.
-    In Expanded Pool, system power is instead restored when receiving the System Power item.
-    Similarly, the final area door will open once the four Key items, one for each main area, have been found.
+    Determines if clearing boss fights, powering the tesla orb and completing the console login will be checks.
+    In Expanded Pool, system power is restored by the System Power item instead of by powering the tesla orb.
+    Similarly, the final area door will open once enough of the four Key items, one for each main area, have been found.
+    The number of Key items required is determined by the Final Area Locks option.
+
+    Finally, if coop is selected, expanded pool locations will sync across players playing the same slot:
+    - Boss kills will result in that boss being defeated for everyone playing that slot.
+    - Checking the console at the start of the game will check it for all players on that slot.
+    - Powering the tesla orb will do so for all players on that slot.
     """
     display_name = "Expanded Item Pool"
+    option_disabled = 0
+    option_enabled = 1
+    option_coop = 2
+    default = option_enabled
+    rich_text_doc = True
 
 
 class InstantSaving(DefaultOnToggle):
@@ -143,6 +153,7 @@ class SavingPrincessOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     expanded_pool: ExpandedPool
     battle_log: BattleLog
+    blast_doors: BlastDoors
     trap_chance: TrapChance
     # gameplay options
     death_link: DeathLink
@@ -160,6 +171,7 @@ groups = [
     OptionGroup("Generation Options", [
         ExpandedPool,
         BattleLog,
+        BlastDoors,
         TrapChance,
     ]),
     OptionGroup("Gameplay Options", [
@@ -178,7 +190,7 @@ groups = [
 
 presets = {
     "Vanilla-like": {
-        "expanded_pool": False,
+        "expanded_pool": ExpandedPool.option_disabled,
         "battle_log_checks": BattleLog.option_disabled,
         "trap_chance": 0,
 
@@ -191,7 +203,7 @@ presets = {
         "shake_intensity": 100,
     },
     "Easy": {
-        "expanded_pool": True,
+        "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_extra_goodies,
         "trap_chance": 0,
 
@@ -202,7 +214,7 @@ presets = {
         "iframes_duration": 200,
     },
     "Hard": {
-        "expanded_pool": True,
+        "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_enabled,
         "trap_chance": 100,
 
