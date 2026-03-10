@@ -458,7 +458,6 @@ def set_dangerous_mine_rules(logic, rule_collector: StardewRuleCollector, conten
 
 def set_farm_buildings_entrance_rules(logic, rule_collector: StardewRuleCollector):
     rule_collector.set_entrance_rule(Entrance.downstairs_to_cellar, logic.building.has_building(Building.cellar))
-    rule_collector.set_entrance_rule(Entrance.cellar_to_downstairs, logic.building.has_building(Building.cellar))
     rule_collector.set_entrance_rule(
         Entrance.enter_greenhouse, logic.received("Greenhouse")
     )
