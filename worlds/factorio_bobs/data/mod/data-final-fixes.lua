@@ -1,5 +1,8 @@
 
-local archipelago = require("Archipelago")
+local general = require("Archipelago/general")
+require("Archipelago/locations")
+require("Archipelago/custom_recipes")
+
 data.raw["item"]["rocket-part"].hidden = false
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
     {
@@ -47,7 +50,7 @@ data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
 }
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes_off_when_no_fluid_recipe = true
 
-if archipelago.silo == 2 then
+if general.silo == 2 then
     data.raw["recipe"]["rocket-silo"].enabled = true
     technologies["rocket-silo"].enabled = false
     technologies["rocket-silo"].visible_when_disabled = false
@@ -73,33 +76,7 @@ end
 
 -- add all science packs to all labs
 for lab in pairs(data.raw["lab"]) do
-    data.raw["lab"][lab].inputs = archipelago.science_packs.ordered
-end
-
-function add_normal_custom_recipe(name, category, energy, ingredients, products, productivity)
-    if data.raw["recipe"][name] then
-        recipe = data.raw["recipe"][name]
-        recipe.category = category
-        recipe.energy_required = energy
-        recipe.ingredients = ingredients
-        recipe.results = products
-        if productivity then
-            recipe.allow_productivity = productivity
-        end
-    else
-        if productivity == nil then
-            productivity = true -- enable productivity if new recipe and unspecified
-        end
-        data.raw["recipe"][name] = {
-            type = "recipe",
-            name = name,
-            category = category,
-            energy_required = energy,
-            ingredients = ingredients,
-            results = products,
-            allow_productivity = productivity
-        }
-    end
+    data.raw["lab"][lab].inputs = general.science_packs.ordered
 end
 
 function add_custom_tooltip_field(item, localised_name, localised_string, show_in_tooltip, order)
@@ -120,17 +97,15 @@ function add_custom_tooltip_field(item, localised_name, localised_string, show_i
     end
 end
 
-for name, info in pairs(archipelago.recipes.custom_recipes()) do
-    --could even be changed to the function taking all the entire dict and working from there.
-    add_normal_custom_recipe(info.name, info.category, info.energy, info.ingredients, info.products, info.productivity)
-end
-
-for _, name in pairs(archipelago.recipes.enable_productivity()) do
+for _, name in pairs(general.recipes.enable_productivity()) do
+    if data.raw["recipe"][name] == nil then
+        error(name .." could not be found. This should be a recipe that is present at this point in the loading stage. This recipe is present in the list of recipes that get their productivity enabled.")
+    end
     data.raw["recipe"][name].allow_productivity = true
 end
 
 
-for name, info in pairs(archipelago.recipes.tool_tips()) do
+for name, info in pairs(general.recipes.tool_tips()) do
     if data.raw["recipe"][name] then
         for _, category in pairs(info.catergories) do
             add_custom_tooltip_field(data.raw["recipe"][name], {"","recipe_unlock"}, {"",category}, false, 200)
@@ -183,89 +158,25 @@ local function set_energy(recipe_name, energy)
     end
 end
 
-if archipelago.recipes.type == "scale" then
-    for name, adjustment in pairs(archipelago.recipes.time_adjustments()) do
+if general.recipes.type == "scale" then
+    for name, adjustment in pairs(general.recipes.time_adjustments()) do
         adjust_energy(name, adjustment)
     end
 end
-if archipelago.recipes.type == "range" then
-    for name, adjustment in pairs(archipelago.recipes.time_adjustments()) do
+if general.recipes.type == "range" then
+    for name, adjustment in pairs(general.recipes.time_adjustments()) do
         set_energy(name, adjustment)
     end
 end
 
 local technologies = data.raw["technology"]
 
-local template_tech = { --making one from scratch, ensure that absolutely nothing can go wrong.
-    type = "technology",
-    --name = "this-is-required" --this should be getting overwritten at every AP location. if it does not this is a good as any error to notify us.
-    --all other values either are default or are overwritten.
-}
-
--- I will assume these functions need to be replaced by my multi icon functions later on.
-local function set_ap_icon(tech)
-    tech.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
-    tech.icons = nil
-    tech.icon_size = 128
-end
-
-local function set_ap_unimportant_icon(tech)
-    tech.icon = "__{{ mod_name }}__/graphics/icons/ap_unimportant.png"
-    tech.icons = nil
-    tech.icon_size = 128
-end
-
-local function copy_factorio_icon(tech, tech_sources)
-    tech.icon = table.deepcopy(technologies[tech_sources[1]].icon)
-    tech.icons = table.deepcopy(technologies[tech_sources[1]].icons)
-    tech.icon_size = table.deepcopy(technologies[tech_sources[1]].icon_size)
-end
--- end of the functions that will need to be replaced
-
-for _, name in pairs(archipelago.technologies.hide_from_player()) do
+for _, name in pairs(general.technologies.hide_from_player()) do
+    if technologies[name] == nil then
+        error(name .." could not be found. This should be a technology that is present at this point in the loading stage. This is present in the list of technologies that need to be hidden from the player, but not in the game.")
+    end
     technologies[name].hidden = true
     technologies[name].hidden_in_factoriopedia = false
     technologies[name].unit = nil
     technologies[name].research_trigger = {type = "scripted", localised_description = {"technology-description.ap-technology-script-trigger"}}
 end
-
-archipelago.technologies.progressive = archipelago.technologies.progressive()
-
-for name, info in pairs(archipelago.technologies.locations()) do
-    local new_location = table.deepcopy(template_tech)
-    new_location.name = info.name
-    new_location.unit = info.unit
-    new_location.unit.time = 10
-    if info.information.revealed then
-        new_location.localised_name = {"technology-name.ap-technology-full", info.information.player_name, info.information.item_name, info.location_name}
-        if info.information.type == "filler" or info.information.type == "unknown" then
-            new_location.localised_description  = {"technology-description.ap-technology-full",  {info.information.item_name}, {info.information.player_name}, ""}
-        end
-        new_location.localised_description  = {"technology-description.ap-technology-full",  {info.information.item_name}, {info.information.player_name}, {"technology-description.ap-technology-item-" .. info.information.type}}
-        if archipelago.technologies.progressive[info.information.item_name] then
-            copy_factorio_icon(new_location, archipelago.technologies.progressive[info.information.item_name])
-        elseif technologies[info.information.item_name] then
-            copy_factorio_icon(new_location, {info.information.item_name})
-        elseif info.information.type == "advancement" then
-            set_ap_icon(new_location)
-        else
-            set_ap_unimportant_icon(new_location)
-        end
-    else
-        new_location.localised_name = {"technology-name.ap-technology-hidden", info.location_name}
-        if info.information.type == "filler" or info.information.type == "unknown" then
-            new_location.localised_description  = {"technology-description.ap-technology-hidden", ""}
-        else
-            new_location.localised_description  = {"technology-description.ap-technology-hidden", {"technology-description.ap-technology-item-" .. info.information.type}}
-        end
-        if info.information.type == "advancement" or info.information.type == "unknown" then
-            set_ap_icon(new_location)
-        else
-            set_ap_unimportant_icon(new_location)
-        end
-    end
-    new_location.prerequisites = info.prerequisites
-    data:extend({new_location})
-end
-
-
