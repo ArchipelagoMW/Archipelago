@@ -77,7 +77,19 @@ self.set_completion_rule(rule)
 
 ### Restricting options
 
-Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. Rules that pass the options check will be resolved as normal, and those that fail will be resolved as `False`.
+Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. When resolved, if no filters are provided or all of them pass then the rule will resolve as normal. Otherwise, the rule will be replaced with `True` or `False` depending on what `filtered_resolution` is set to, which defaults to `False`.
+
+```python
+rule1 = Has(
+    "Fast Travel Spell",
+    options=[OptionFilter(RandoFastTravel, RandoFastTravel.option_true)],
+)
+rule2 = Has(
+    "Starting Party Member",
+    options=[OptionFilter(RandoParty, 1)],  # option attributes are suggested but any value works
+    filtered_resolution=True,
+)
+```
 
 If you want a comparison that isn't equals, you can specify with the `operator` argument. The following operators are allowed:
 
@@ -90,9 +102,12 @@ If you want a comparison that isn't equals, you can specify with the `operator` 
 - `in`: `option_value in filter_value`
 - `contains`: `filter_value in option_value` (note reversed operands)
 
-By default rules that are excluded by their options will default to `False`. If you want to default to `True` instead, you can specify `filtered_resolution=True` on your rule.
+```python
+rule1 = Has("Movement Ability", options=[OptionFilter(SkipsLevel, SkipsLevel.option_hard, operator="lt")])
+rule2 = Has("Item", options=[OptionFilter(ChoiceOption, [1, 5], operator="in")])
+```
 
-To check if the player can reach a switch, or if they've received the switch item if switches are randomized:
+To check if the player has received the switch item if switches are randomized, or if they can reach the switch when not randomized:
 
 ```python
 rule = (
@@ -110,12 +125,6 @@ rule = (
 )
 ```
 
-To filter for multiple choices:
-
-```python
-rule = Has("Item", options=[OptionFilter(ChoiceOption, [1, 5], operator="in")])
-```
-
 If you would like to provide option filters when reusing or composing rules, you can use the `Filtered` helper rule:
 
 ```python
@@ -127,7 +136,7 @@ rule = (
 )
 ```
 
-You can also use the & and | operators to apply options to rules:
+For convenience, you can also use the `&` and `|` operators to apply options to rules:
 
 ```python
 common_rule = Has("A")
@@ -136,7 +145,7 @@ common_rule_only_on_easy = common_rule & easy_filter
 common_rule_skipped_on_easy = common_rule | easy_filter
 ```
 
-To easily bypass a requirement based on option choices:
+Combining the above, you can easily bypass a requirement based on option choices:
 
 ```python
 rule = Has("Some Upgrade") | OptionFilter(CombatDifficulty, CombatDifficulty.option_medium, operator="ge")
