@@ -91,27 +91,18 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
         else:
             result.other_in_pool.append(location)
 
-    entry_requirements = dict(region_data.entry_requirements)
+    entry_reqs_dict: dict[str, int] = region_data.entry_requirements.evaluate_items(opts)
 
     if parent_region is not None:
-        if (((region_data.is_peak and opts.game_mode == GameMode.option_book_unlock) or
-            (region_data.is_book and opts.game_mode == GameMode.option_peak_unlock)) and
-            len(entry_requirements) != 0):
-            # if region is peak and unlock is book or region is book and unlock is peak,
-            # remove the last entry requirement, which is only useful in the other gamemode
-            # i.e. the requirement to unlock a peak before being able to enter it's region should be removed if playing
-            # book unlock mode
-            # WARNING: I'll probably want to change this as this assumes that any other "normal" requirements are placed
-            #   before, which can easily lead to problems
-            entry_requirements.popitem()
-
-        parent_region.connect(region, region_data.name + " Connection", lambda state: state.has_all_counts(
-            entry_requirements, world.player))
+        # Conditional requirements make me able to not have to pop anything here! :))))
+        parent_region.connect(region, region_data.name + " Connection",
+                              lambda state: region_data.entry_requirements.can_reach(opts, state, world)
+                              )
 
     for r in region_data.subregions:
         result += recursive_create_region(r, region, world, opts)
 
-    for k, v in entry_requirements.items():
+    for k, v in entry_reqs_dict.items():
         if k not in result.total_requirements.keys():
             result.total_requirements[k] = v
         else:
@@ -119,9 +110,9 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
 
     # if one of the subregions gives entry requirements or this one is start
     if result.is_entry or region_data.is_start(opts):
-        logging.debug(f"adding {entry_requirements} to entry reqs for {region_data.name}")
+        logging.debug(f"adding {entry_reqs_dict} to entry reqs for {region_data.name}")
         result = result.set_entry(True)
-        for k, v in entry_requirements.items():
+        for k, v in entry_reqs_dict.items():
             if k not in result.entry_requirements.keys():
                 result.entry_requirements[k] = v
             else:

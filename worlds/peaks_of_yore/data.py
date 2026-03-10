@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import math
 from enum import IntEnum
 from typing import Callable, NamedTuple
 
-from .options import PeaksOfYoreOptions, RequirementsDifficulty
-from BaseClasses import ItemClassification, Item, Location
+from .options import PeaksOfYoreOptions, RequirementsDifficulty, GameMode
+from BaseClasses import ItemClassification, Item, Location, CollectionState, MultiWorld
+from worlds.AutoWorld import World
 
 peak_offset: int = 1
 rope_offset: int = 1000
@@ -99,15 +101,15 @@ class LocationData:
     name: str
     type: POYItemLocationType
     id: int
-    requirements: dict[str, int]
+    requirements: Requirements
     enable_override: Callable[[PeaksOfYoreOptions], bool]
     is_event: bool
     has_override: bool
 
-    def __init__(self, name: str, type: POYItemLocationType, loc_id: int, requirements=None,
+    def __init__(self, name: str, type: POYItemLocationType, loc_id: int, requirements: Requirements=None,
                  enable_override: Callable[[PeaksOfYoreOptions], bool] = None, is_event: bool = False):
         if requirements is None:
-            requirements = {}
+            requirements = SimpleRequirements({})
         if enable_override is None:
             self.has_override = False
             enable_override = lambda opts: True
@@ -126,38 +128,133 @@ class LocationData:
         return self.id + self.type
 
 class Requirements:
-    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
-        pass
+    """
+    Requirements is a class to help me specify requirements, difficulties and/or different possible sets of requirements
+    can_reach is used by generation logic to check if the requirements are satisfied
+    evaluate_items gives **a possible** set of items necessary to satisfy the requirements
+    (used to define starting items/what items are marked as progression)
 
+    start_priority is used by AnyRequirements to determine what set of items is to be used to start with
+    """
+    start_priority: int
+    def __init__(self, start_priority: int = 0):
+        self.start_priority = start_priority
+
+    def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
+        return state.has_all_counts(self.evaluate_items(opts), world.player)
+
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        return {}
+
+    def is_empty(self) -> bool:
+        return True
+
+# SimpleRequirements, LeveledRequirements and AllRequirements use default can_reach implementation
 class SimpleRequirements(Requirements):
-
     requirements: dict[str, int]
 
-    def __init__(self, requirements: dict[str, int]):
-        self.entry_requirements = requirements
+    def __init__(self, requirements: dict[str, int], start_priority:int = 0):
+        super().__init__(start_priority)
+        self.requirements = requirements
 
-    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
         return self.requirements
+
+    def is_empty(self) -> bool:
+        return self.requirements == {}
 
 class LeveledRequirements(Requirements):
     requirements: dict[RequirementsDifficulty, Requirements]
-    def __init__(self, requirements: dict[RequirementsDifficulty, Requirements]):
+
+    def __init__(self, requirements: dict[RequirementsDifficulty, Requirements], start_priority:int = 0):
+        super().__init__(start_priority)
         self.entry_requirements = requirements
 
-    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
-        return self.requirements[opts.requirements_difficulty].evaluate(opts)
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        return self.requirements[opts.requirements_difficulty].evaluate_items(opts)
+
+    def is_empty(self) -> bool:
+        return all(reqs.is_empty() for reqs in self.requirements.values())
 
 class AllRequirements(Requirements):
     requirements: list[Requirements]
 
-    def __init__(self, requirements: list[Requirements]):
+    def __init__(self, requirements: list[Requirements], start_priority: int = 0):
+        super().__init__(start_priority)
         self.requirements = requirements
 
-    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
         final: dict[str, int] = {}
         for requirement in self.requirements:
-            final.update(requirement.evaluate(opts))
+            items: dict[str, int] = requirement.evaluate_items(opts)
+            for item in items.keys():
+                if item not in final:
+                    final[item] = items[item]
+                else:
+                    final[item] = max(final[item], items[item])
         return final
+
+    def is_empty(self) -> bool:
+        return all(reqs.is_empty() for reqs in self.requirements)
+
+class AnyRequirements(Requirements):
+    requirements: list[Requirements]
+
+    def __init__(self, requirements: list[Requirements], start_priority: int = 0):
+        super().__init__(start_priority)
+        self.requirements = requirements
+
+    def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
+        return all(state.has_all_counts(reqs.evaluate_items(opts), world.player) for reqs in self.requirements)
+
+    # returns first set of items with highest priority
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        prior: int = 0
+        req_list: list[Requirements] = []
+        for reqs in self.requirements:
+            if reqs.start_priority > prior:
+                prior = reqs.start_priority
+                req_list = []
+            if reqs.start_priority == prior:
+                req_list.append(reqs)
+
+        if len(req_list) == 0:
+            return {}
+        return req_list[0].evaluate_items(opts)
+
+    def is_empty(self) -> bool:
+        return all(reqs.is_empty() for reqs in self.requirements)
+
+# Default can_reach again :)
+class ConditionalRequirements(Requirements):
+    requirements: Requirements
+    condition: Callable[[PeaksOfYoreOptions], bool]
+
+    def __init__(self, requirements: Requirements, condition: Callable[[PeaksOfYoreOptions], bool], start_priority:int = 0):
+        super().__init__(start_priority)
+        self.requirements = requirements
+        self.condition = condition
+
+    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        return self.requirements.evaluate_items(opts) if self.condition(opts) else {}
+
+    def is_empty(self) -> bool:
+        return self.requirements.is_empty()
+
+def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
+    # this assumes that the change to make extra ropes worth 2 has been made!!
+    # requires either ropecount ropes, or ropecount * .75 ropes + rope length upgrade
+    item_count: int = math.ceil(rope_count/2)
+    min_item_count: int = math.ceil(item_count*0.75)
+    short_rope_addition: int = item_count-min_item_count
+    return AllRequirements([
+        SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count}),
+        AnyRequirements([
+            SimpleRequirements({"Extra Rope": short_rope_addition}, 200),   # base case: has required rope count
+            SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
+        ])
+    ], start_priority)
+
 
 class POYRegion:
     """
@@ -167,7 +264,7 @@ class POYRegion:
     e.g. not including the time attack regions if Time Attack is disabled
     """
     name: str
-    entry_requirements: dict[str, int]  # name: count
+    entry_requirements: Requirements
     enable_requirements: Callable[[PeaksOfYoreOptions], bool]
     is_start: Callable[[PeaksOfYoreOptions], bool]
     subregions: list[POYRegion]
@@ -175,14 +272,14 @@ class POYRegion:
     is_peak: bool
     is_book: bool
 
-    def __init__(self, name: str, entry_requirements: dict[str, int]=None, subregions: list[POYRegion]=None,
+    def __init__(self, name: str, entry_requirements: Requirements=None, subregions: list[POYRegion]=None,
                  locations: list[LocationData]=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True, is_book: bool = False,
                  is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False):
         if subregions is None:
             subregions = []
         if entry_requirements is None:
-            entry_requirements = {}
+            entry_requirements = SimpleRequirements({})
         if locations is None:
             locations = []
 
@@ -222,25 +319,30 @@ class PeakRegion(POYRegion):
     peak_id: int
     generate_time_attack: bool
 
-    def __init__(self, name: str, peak_id: int, entry_requirements=None, subregions=None, locations=None,
+    def __init__(self, name: str, peak_id: int, entry_requirements: Requirements=None, subregions=None, locations=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True,
                  is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False,
                  generate_time_attack: bool = True, generate_free_solo: bool = False):
         self.peak_id = peak_id
         self.generate_time_attack = generate_time_attack
         self.generate_free_solo = generate_free_solo
-        super(PeakRegion, self).__init__(name, entry_requirements, subregions, locations, enable_requirements)
+        super().__init__(name, entry_requirements, subregions, locations, enable_requirements)
         self.prepare_peak_region()
         self.is_peak = True
         self.is_book = False
         self.is_start = is_start
 
     def prepare_peak_region(self):
-        self.entry_requirements.update({self.name: 1})
+        # add a ConditionalRequirement to the peak
+        self.entry_requirements = AllRequirements([self.entry_requirements,
+                                                   ConditionalRequirements(
+                                                       SimpleRequirements({self.name: 1}),
+                                                       condition = lambda opts: opts.game_mode == GameMode.option_peak_unlock
+                                                   )])
         self.locations.append(LocationData(self.name, POYItemLocationType.PEAK, self.peak_id))
 
         for location in self.locations.copy():
-            if location.has_override or len(location.requirements) > 0:
+            if location.has_override or not location.requirements.is_empty():
                 # the usage of has_override could be moved to regions.py, but this is kinda easier, and that would allow
                 # for creation of empty regions
                 self.locations.remove(location)
@@ -257,18 +359,35 @@ class PeakRegion(POYRegion):
             ))
 
         if self.generate_time_attack:
-            entry_requirements = {"Pocketwatch": 1}
+            ta_entry_requirements: Requirements = SimpleRequirements({"Pocketwatch": 1})
             if self.generate_free_solo:
-                entry_requirements.update({"Progressive Crampons": 1}) # peaks that can be free soloed are generally
+                ta_entry_requirements = AllRequirements([ta_entry_requirements, SimpleRequirements({"Progressive Crampons": 1})])
                 # difficult enough to warrant this
             self.subregions.append(POYRegion(
-                self.name + " Time Attack", entry_requirements=entry_requirements,
+                self.name + " Time Attack", entry_requirements=ta_entry_requirements,
                 locations=[
                     LocationData(self.name + ": Time Record", POYItemLocationType.TIMEATTACK_TIME, self.peak_id),
                     LocationData(self.name + ": Ropes Record", POYItemLocationType.TIMEATTACK_ROPES, self.peak_id),
                     LocationData(self.name + ": Holds Record", POYItemLocationType.TIMEATTACK_HOLDS, self.peak_id),
                 ], enable_requirements=lambda options: options.include_time_attack))
 
+class BookRegion(POYRegion):
+    """
+    Similar to PeakRegion, BookRegion is a descendant of POYRegion, that will (semi) automatically be set up as a book.
+    """
+    def __init__(self, name: str, entry_requirements: Requirements=None, subregions: list[POYRegion]=None,
+                 enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True):
+        super().__init__(name, entry_requirements, subregions, None, enable_requirements)
+        self.is_peak = False
+        self.is_book = True
+        self.prepare_book_region()
+
+    def prepare_book_region(self):
+        conditional = ConditionalRequirements(SimpleRequirements({f"{self.name} Book": 1}), lambda opts: opts.game_mode == GameMode.option_book_unlock)
+        if self.entry_requirements.is_empty():
+            self.entry_requirements = conditional
+        else:
+            self.entry_requirements = AllRequirements([self.entry_requirements, conditional])
 
 # All of the items in the randomiser are defined here, with functions to define whether they are not enabled,
 # starter items, or early
@@ -416,11 +535,13 @@ all_items: list[ItemData] = [
     ItemData("Old Skerry: Bird Seed", 1, ItemClassification.useful, POYItemLocationType.BIRDSEED),
     ItemData("Great Gaol: Bird Seed", 2, ItemClassification.useful, POYItemLocationType.BIRDSEED),
     ItemData("Eldenhorn: Bird Seed", 3, ItemClassification.useful, POYItemLocationType.BIRDSEED),
+    ItemData("Ymir's Shadow: Bird Seed", 4, ItemClassification.useful, POYItemLocationType.BIRDSEED),
 
     # Extra items
-    ItemData("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=28, max_count=99999999),
-    ItemData("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
-    ItemData("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
+    ItemData("Extra Rope", 0, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=21, max_count=99999999),
+    # 21 extra ropes adds up to 42 total ropes, which is the normal max
+    ItemData("Extra Chalk", 1, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=3, max_count=99999999),
+    ItemData("Extra Coffee", 2, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=3, max_count=99999999),
     ItemData("Extra Seed", 3, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
     ItemData("Trap", 4, ItemClassification.filler, POYItemLocationType.EXTRA, min_count=0, max_count=99999999),
 ]
@@ -431,7 +552,7 @@ item_id_to_classification: dict[int, ItemClassification] = {i.id + i.type: i.cla
 
 # poy_regions defines all the regions, their entry requirements, locations and requirements to be included
 poy_regions: POYRegion = POYRegion("Cabin", subregions=[
-    POYRegion("Fundamentals", entry_requirements={"Fundamentals Book": 1}, subregions=[
+    BookRegion("Fundamentals", subregions=[
         PeakRegion("Greenhorn's Top", 0, is_start=lambda options: options.starting_book == 0),
         PeakRegion("Paltry Peak", 1),
         PeakRegion("Old Mill", 2, locations=[
@@ -467,7 +588,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         PeakRegion("Old Langr", 12, locations=[
             LocationData("Old Langr: Coffee Box", POYItemLocationType.ARTEFACT, 7),
         ]),
-        PeakRegion("Aldr Grotto", 13, entry_requirements={"Oil Lamp": 1}, locations=[
+        PeakRegion("Aldr Grotto", 13, entry_requirements=SimpleRequirements({"Oil Lamp": 1}), locations=[
             LocationData("Aldr Grotto: Backpack", POYItemLocationType.ARTEFACT, 6),
         ]),
         PeakRegion("Three Brothers", 14, locations=[
@@ -493,8 +614,8 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Wuthering Crest: Coffee Box", POYItemLocationType.ARTEFACT, 8),
             LocationData("Wuthering Crest: Rope", POYItemLocationType.ROPE, 9),
         ]),
-    ], enable_requirements=lambda options: options.enable_fundamental, is_book=True),
-    POYRegion("Intermediate", entry_requirements={"Intermediate Book": 1}, subregions=[
+    ], enable_requirements=lambda options: options.enable_fundamental),
+    BookRegion("Intermediate", subregions=[
         PeakRegion("Porter's Boulder", 20, is_start=lambda options: options.starting_book == 1),
         PeakRegion("Jotunn's Thumb", 21),
         PeakRegion("Old Skerry", 22, locations=[
@@ -509,12 +630,12 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Leaning Spire: Intermediate Trophy", POYItemLocationType.ARTEFACT, 11),
         ]),
         PeakRegion("Cromlech", 29),
-    ], enable_requirements=lambda options: options.enable_intermediate, is_book=True),
-    POYRegion("Advanced", entry_requirements={"Advanced Book": 1}, subregions=[
+    ], enable_requirements=lambda options: options.enable_intermediate),
+    BookRegion("Advanced", subregions=[
         PeakRegion("Walker's Pillar", 30, locations=[
             LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
             LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1,
-                         requirements={"Walker Interaction Event": 1},
+                         requirements=SimpleRequirements({"Walker Interaction Event": 1}),
                          enable_override= lambda options: options.enable_fundamental),
         ], generate_free_solo=True, is_start=lambda options: options.starting_book == 2),
         PeakRegion("Eldenhorn", 31, locations=[
@@ -523,7 +644,8 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Eldenhorn: Bird Seed", POYItemLocationType.BIRDSEED, 3),
         ], generate_free_solo=True),
         PeakRegion("Great Gaol", 32, locations=[
-            LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18),
+            LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
+                         requirements=get_rope_requirement(1)),
             LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
             LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
             LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
@@ -533,18 +655,21 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("St. Haelga: Picture Piece #4", POYItemLocationType.ARTEFACT, 17),
         ], generate_free_solo=True),
         PeakRegion("Ymir's Shadow", 34, locations=[
-            LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12),
+            LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
+                         requirements=AnyRequirements([get_rope_requirement(1, 200),
+                                                       SimpleRequirements({"Progressive Crampons": 2})])
+                         ),
             LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
         ], generate_free_solo=True),
-    ], enable_requirements=lambda options: options.enable_advanced, is_book=True),
-    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Ice Axes": 1, "Expert Book": 1}, subregions=[
+    ], enable_requirements=lambda options: options.enable_advanced),
+    BookRegion("Expert", entry_requirements=SimpleRequirements({"Progressive Crampons": 1, "Ice Axes": 1}), subregions=[
         PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
         ], generate_time_attack=False, generate_free_solo=True, is_start=lambda options: options.starting_book == 3),
-        PeakRegion("Solemn Tempest", 36, entry_requirements={"Progressive Crampons": 2},
+        PeakRegion("Solemn Tempest", 36, entry_requirements=SimpleRequirements({"Progressive Crampons": 2}),
                    enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
                    generate_free_solo=True),
-    ], enable_requirements=lambda options: options.enable_expert, is_book=True),
+    ], enable_requirements=lambda options: options.enable_expert),
 ])
 all_locations_to_ids: dict[str, int] = poy_regions.get_all_locations_dict()
