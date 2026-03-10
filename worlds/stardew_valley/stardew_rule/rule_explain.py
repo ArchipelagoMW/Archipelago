@@ -277,9 +277,11 @@ def explain(
     rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE
 ) -> RuleExplanation:
     if isinstance(rule, StardewRule):
-        return _explain(
+        combined = _explain(
             rule, state, expected, mode, more_explanations=list(), explored_spots=set(), blocked_regions=frozenset()
         )
+        print(combined)
+        return combined
     else:
         return f"Value of rule {str(rule)} was not {str(expected)} in {str(state)}"  # noqa
 
@@ -320,7 +322,7 @@ def _(
         state,
         expected,
         mode,
-        rule.original_rules,
+        rule.simple_rules,
         more_explanations=more_explanations,
         explored_rules_key=explored_spots,
         blocked_regions=blocked_regions,
@@ -541,8 +543,23 @@ def _(rule: Reach) -> Tuple[str, str]:
 
 
 @_rule_key.register
+def _(rule: Has) -> tuple[str, str]:
+    return rule.item, "Has"
+
+
+@_rule_key.register
 def _(rule: Received) -> Optional[Tuple[str, str]]:
     if not rule.event:
         return None
 
     return rule.item, "Logic Event"
+
+
+@_rule_key.register
+def _(rule: AggregatingStardewRule) -> tuple[str, str]:
+    return str(rule), "Aggregating"
+
+
+@_rule_key.register
+def _(rule: Count) -> tuple[str, str]:
+    return str(rule.rules), str(rule.count)

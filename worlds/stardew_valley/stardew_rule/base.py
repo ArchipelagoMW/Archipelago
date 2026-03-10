@@ -150,6 +150,12 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
         return RepeatableChain(self.combinable_rules.values(), self.simplification_state.original_simplifiable_rules)
 
     @property
+    def simple_rules(self):
+        return RepeatableChain(
+            set(self.combinable_rules.values()), set(self.simplification_state.original_simplifiable_rules)
+        )
+
+    @property
     def current_rules(self):
         if self.simplification_state.rules_to_simplify is None:
             return self.original_rules
@@ -289,7 +295,7 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
             return self.short_circuit_evaluation(simplified)
 
     def __str__(self):
-        return f"({self.symbol.join(str(rule) for rule in self.original_rules)})"
+        return f"({self.symbol.join(str(rule) for rule in self.simple_rules)})"
 
     def __repr__(self):
         return f"({self.symbol.join(repr(rule) for rule in self.original_rules)})"
