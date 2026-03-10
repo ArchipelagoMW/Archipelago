@@ -2,11 +2,14 @@ from typing import List
 
 from BaseClasses import ItemClassification, Item
 from .bases import SVTestBase
-from .. import location_table, options, items
+from .. import location_table, options, items, StartWithoutOptionName
+from ..content.content_packs import vanilla_content_pack_names
 from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
-    Booksanity, Walnutsanity
+    Booksanity, Walnutsanity, Secretsanity, Moviesanity
+from ..options.options import IncludeEndgameLocations, Eatsanity
+from ..strings.ap_names.transport_names import Transportation
 from ..strings.region_names import Region
 
 
@@ -17,7 +20,7 @@ def get_all_permanent_progression_items() -> List[ItemData]:
         item
         for item in item_data.all_items
         if ItemClassification.progression in item.classification
-        if item.mod_name is None
+        if item.content_packs.issubset(vanilla_content_pack_names)
         if item.name not in {event.name for event in item_data.events}
         if item.name not in {deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED]}
         if item.name not in {season.name for season in items.items_by_group[Group.SEASON]}
@@ -35,10 +38,14 @@ class TestBaseItemGeneration(SVTestBase):
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
-        Chefsanity.internal_name: Chefsanity.option_all,
+        Chefsanity.internal_name: Chefsanity.preset_all,
         Craftsanity.internal_name: Craftsanity.option_all,
         Booksanity.internal_name: Booksanity.option_all,
         Walnutsanity.internal_name: Walnutsanity.preset_all,
+        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
+        Eatsanity.internal_name: Eatsanity.preset_all,
+        Secretsanity.internal_name: Secretsanity.preset_all,
+        IncludeEndgameLocations.internal_name: IncludeEndgameLocations.option_true,
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -78,10 +85,14 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
-        Chefsanity.internal_name: Chefsanity.option_all,
+        Chefsanity.internal_name: Chefsanity.preset_all,
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
         Booksanity.internal_name: Booksanity.option_all,
+        Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
+        Eatsanity.internal_name: Eatsanity.preset_all,
+        Secretsanity.internal_name: Secretsanity.preset_all,
+        IncludeEndgameLocations.internal_name: IncludeEndgameLocations.option_true,
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
@@ -122,6 +133,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
 
 class TestProgressiveElevator(SVTestBase):
     options = {
+        options.StartWithout: frozenset({StartWithoutOptionName.landslide}),
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
@@ -140,12 +152,13 @@ class TestProgressiveElevator(SVTestBase):
         self.assert_can_reach_region(Region.mines_floor_120)
 
     def generate_items_for_mine_115(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
         elevators = [self.get_item_by_name("Progressive Mine Elevator")] * 21
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
-        return [*combat_levels, *mining_levels, *elevators, *pickaxes, *swords]
+        return [landslide, *combat_levels, *mining_levels, *elevators, *pickaxes, *swords]
 
     def generate_items_for_extra_mine_levels(self, weapon_name: str) -> List[Item]:
         last_pickaxe = self.get_item_by_name("Progressive Pickaxe")
@@ -159,9 +172,11 @@ class TestProgressiveElevator(SVTestBase):
 
 class TestSkullCavernLogic(SVTestBase):
     options = {
+        options.StartWithout: frozenset({StartWithoutOptionName.landslide}),
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
     }
 
     def test_given_access_to_floor_115_when_find_more_tools_then_has_access_to_skull_cavern_25(self):
@@ -189,41 +204,42 @@ class TestSkullCavernLogic(SVTestBase):
         self.assert_can_reach_region(Region.skull_cavern_75)
 
     def generate_items_for_mine_115(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
-        bus = self.get_item_by_name("Bus Repair")
+        bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
+        return [landslide, *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
 
     def generate_items_for_skull_50(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 3
         swords = [self.get_item_by_name("Progressive Sword")] * 4
         combat_levels = [self.get_item_by_name("Combat Level")] * 6
         mining_levels = [self.get_item_by_name("Mining Level")] * 6
-        bus = self.get_item_by_name("Bus Repair")
+        bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
+        farm_house = self.get_item_by_name("Progressive House")
+        return [landslide, *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
 
     def generate_items_for_skull_100(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 4
         swords = [self.get_item_by_name("Progressive Sword")] * 5
         combat_levels = [self.get_item_by_name("Combat Level")] * 8
         mining_levels = [self.get_item_by_name("Mining Level")] * 8
-        bus = self.get_item_by_name("Bus Repair")
+        bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
+        farm_house = self.get_item_by_name("Progressive House")
+        return [landslide, *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
 
 
 class TestShipsanityNone(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_none
     }
-
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
 
     def test_no_shipsanity_locations(self):
         for location in self.get_real_locations():
@@ -325,6 +341,34 @@ class TestShipsanityFish(SVTestBase):
         self.assertIn("Shipsanity: Ms. Angler", location_names)
         self.assertIn("Shipsanity: Radioactive Carp", location_names)
         self.assertIn("Shipsanity: Son of Crimsonfish", location_names)
+
+
+class TestShipsanityCropsAndFish(SVTestBase):
+    options = {
+        Shipsanity.internal_name: Shipsanity.option_crops_and_fish,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi
+    }
+
+    def test_only_crops_and_fish_shipsanity_locations(self):
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
+                with self.subTest(location.name):
+                    is_fish = LocationTags.SHIPSANITY_FISH in location_table[location.name].tags
+                    is_crop = LocationTags.SHIPSANITY_CROP in location_table[location.name].tags
+                    self.assertTrue(is_fish or is_crop)
+
+    def test_include_specific_shipsanity_locations(self):
+        location_names = [location.name for location in self.multiworld.get_locations(self.player)]
+        self.assertIn("Shipsanity: Blue Discus", location_names)
+        self.assertIn("Shipsanity: Glacierfish Jr.", location_names)
+        self.assertIn("Shipsanity: Perch", location_names)
+        self.assertIn("Shipsanity: Powdermelon", location_names)
+        self.assertIn("Shipsanity: Starfruit", location_names)
+        self.assertIn("Shipsanity: Taro Root", location_names)
+        self.assertNotIn("Shipsanity: Iron Bar", location_names)
+        self.assertNotIn("Shipsanity: Wine", location_names)
+        self.assertNotIn("Shipsanity: Tea Set", location_names)
 
 
 class TestShipsanityFishExcludeIsland(SVTestBase):

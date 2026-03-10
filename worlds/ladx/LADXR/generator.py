@@ -442,7 +442,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                 color[channel] = color[channel] * 31 // 0xbc
 
     if ladxr_settings.warps != 'vanilla':
-        patches.core.addWarpImprovements(rom, ladxr_settings.warps == 'improved_additional')
+        patches.core.addWarpImprovements(rom, ladxr_settings.warps == 'improvedadditional')
 
     palette = ladxr_settings.palette
     if palette != 'normal':
