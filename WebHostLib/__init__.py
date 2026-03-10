@@ -11,6 +11,7 @@ from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
 from Utils import title_sorted, get_file_safe_name
+from .cli import CLI
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -64,6 +65,7 @@ app.config["ASSET_RIGHTS"] = False
 
 cache = Cache()
 Compress(app)
+CLI(app)
 
 
 def to_python(value: str) -> uuid.UUID:
