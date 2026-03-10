@@ -45,7 +45,6 @@ def create_player_randomization_flag(
         flag |= RandomizationFlag.MASTERY_CAVE
     if include_endgame:
         flag |= RandomizationFlag.ENDGAME
-    print(f"flag is {flag:b}")
     return flag
 
 
