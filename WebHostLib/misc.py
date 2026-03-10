@@ -9,7 +9,7 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit, db_session
 from werkzeug.utils import secure_filename
 
-from worlds.AutoWorld import AutoWorldRegister, World
+from worlds.AutoWorld import WebWorldRegister, WebWorld, WorldType
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
@@ -26,9 +26,9 @@ class WebWorldTheme(StrEnum):
     STONE = "stone"
 
 def get_world_theme(game_name: str) -> str:
-    if game_name not in AutoWorldRegister.world_types:
+    if game_name not in WebWorldRegister.web_worlds:
         return "grass"
-    chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
+    chosen_theme = WebWorldRegister.web_worlds[game_name].theme
     available_themes = [theme.value for theme in WebWorldTheme]
     if chosen_theme not in available_themes:
         warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
@@ -36,12 +36,13 @@ def get_world_theme(game_name: str) -> str:
     return chosen_theme
 
 
-def get_visible_worlds() -> dict[str, type(World)]:
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            worlds[game] = world
-    return worlds
+def get_visible_worlds(world_type: WorldType | None = None) -> dict[str, type(WebWorld)]:
+    web_worlds = {}
+    for game, web_world in WebWorldRegister.web_worlds.items():
+        if not web_world.hidden:
+            if world_type is None or web_world.world_type == world_type:
+                web_worlds[game] = web_world
+    return web_worlds
 
 
 @app.errorhandler(404)
@@ -82,7 +83,21 @@ def game_info(game, lang):
 @cache.cached()
 def games():
     """List of supported games"""
-    return render_template("supportedGames.html", worlds=get_visible_worlds())
+    return render_template("supportedGames.html", worlds=get_visible_worlds(WorldType.GAME))
+
+
+@app.route('/hint_games')
+@cache.cached()
+def hint_games():
+    """List of supported hint games"""
+    return render_template("hintGames.html", worlds=get_visible_worlds(WorldType.HINT_GAME))
+
+
+@app.route('/tools')
+@cache.cached()
+def tools():
+    """List of supported tools"""
+    return render_template("tools.html", worlds=get_visible_worlds(WorldType.TOOL))
 
 
 @app.route('/tutorial/<string:game>/<string:file>')
@@ -118,10 +133,10 @@ def tutorial_redirect(game: str, file: str, lang: str):
 @cache.cached()
 def tutorial_landing():
     tutorials = {}
-    worlds = AutoWorldRegister.world_types
-    for world_name, world_type in worlds.items():
+    worlds = WebWorldRegister.web_worlds
+    for world_name, web_world in worlds.items():
         current_world = tutorials[world_name] = {}
-        for tutorial in world_type.web.tutorials:
+        for tutorial in web_world.tutorials:
             current_tutorial = current_world.setdefault(tutorial.tutorial_name, {
                 "description": tutorial.description, "files": {}})
             current_tutorial["files"][secure_filename(tutorial.file_name).rsplit(".", 1)[0]] = {
@@ -293,8 +308,8 @@ def get_datapackage():
 @cache.cached()
 def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
+    for game, web_world in WebWorldRegister.web_worlds.items():
+        if not web_world.hidden:
+            has_settings: bool = isinstance(web_world.options_page, bool) and web_world.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })
     return render_template("siteMap.html", games=available_games)

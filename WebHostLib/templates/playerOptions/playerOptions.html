@@ -59,7 +59,7 @@
                     </label>
                     <select id="game-options-preset" name="game-options-preset" disabled>
                         <option value="default">Default</option>
-                        {% for preset_name in world.web.options_presets %}
+                        {% for preset_name in world.options_presets %}
                             <option value="{{ preset_name }}">{{ preset_name }}</option>
                         {% endfor %}
                         <option value="custom" hidden>Custom</option>

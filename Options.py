@@ -177,7 +177,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     If this is False, the docstring is instead interpreted as plain text, and
     displayed as-is on the WebHost with whitespace preserved.
 
-    If this is None, it inherits the value of `WebWorld.rich_text_options_doc`. For
+    If this is None, it inherits the value of `World.rich_text_options_doc`. For
     backwards compatibility, this defaults to False, but worlds are encouraged to
     set it to True and use reStructuredText for their Option documentation.
 
@@ -1752,7 +1752,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
     """Generates and returns a dictionary for the option groups of a specified world."""
     option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
 
-    ordered_groups = {group.name: group.options for group in world.web.option_groups}
+    ordered_groups = {group.name: group.options for group in world.option_groups}
 
     # add a default option group for uncategorized options to get thrown into
     if "Game Options" not in ordered_groups:

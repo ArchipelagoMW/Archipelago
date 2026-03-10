@@ -95,15 +95,15 @@ user hovers over the yellow "(?)" icon, and included in the YAML templates gener
 The WebHost can display Option documentation either as plain text with all whitespace preserved (other than the base
 indentation), or as HTML generated from the standard Python [reStructuredText] format. Although plain text is the
 default for backwards compatibility, world authors are encouraged to write their Option documentation as
-reStructuredText and enable rich text rendering by setting `WebWorld.rich_text_options_doc = True`.
+reStructuredText and enable rich text rendering by setting `World.rich_text_options_doc = True`.
 
 [reStructuredText]: https://docutils.sourceforge.io/rst.html
 
 ```python
-from worlds.AutoWorld import WebWorld
+from worlds.AutoWorld import World
 
 
-class ExampleWebWorld(WebWorld):
+class ExampleWorld(World):
     # Render all this world's options as rich text.
     rich_text_options_doc = True
 ```
@@ -147,7 +147,7 @@ class HiddenChoiceOption(Choice):
 ```
 
 ### Option Groups
-Options may be categorized into groups for display on the WebHost. Option groups are displayed in the order specified
+Options may be categorized into groups for display. Option groups are displayed in the order specified
 by your world on the player-options and weighted-options pages. In the generated template files, there will be a comment
 with the group name at the beginning of each group of options. The `start_collapsed` Boolean only affects how the groups
 appear on the WebHost, with the grouping being collapsed when this is `True`.
@@ -163,11 +163,11 @@ Location Options" group can also be moved to a different position in the group o
 be first, regardless of where it is in your list.
 
 ```python
-from worlds.AutoWorld import WebWorld
+from worlds.AutoWorld import World
 from Options import OptionGroup
 from . import Options
 
-class MyWorldWeb(WebWorld):
+class MyWorld(World):
     option_groups = [
         OptionGroup("Color Options", [
             Options.ColorblindMode,
