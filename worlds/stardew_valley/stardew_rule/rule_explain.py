@@ -50,7 +50,7 @@ def access_graph(multiworld: MultiWorld, player: int):
     for region in multiworld.get_regions(player):
         assert (
             source_graph.get(region.name) is not None
-        ), f"All regions should be in source graph: {region.name} is missing. {source_graph} {dest_graph}"
+        ), f"#{region.name} is missing\nsg = {source_graph}\ndg = {dest_graph}"
     return source_graph
 
 
@@ -70,8 +70,6 @@ def all_simple_paths_to_origin(start: str) -> list[list[str]]:
         if current in ["Stardew Valley", "Farmhouse"]:
             results.append(path.copy())
             return
-
-        assert region_graph.get(current) is not None, f"Missing in region graph: {current}, {region_graph}"
 
         for parent in region_graph.get(current, []):
             if parent not in visited:
