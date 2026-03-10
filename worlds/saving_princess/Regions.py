@@ -64,13 +64,40 @@ region_dict: Dict[str, List[str]] = {
         EP_LOCATION_ELECTRICAL_FINAL_BOSS,
         EVENT_LOCATION_VICTORY,
     ],
+    REGION_BATTLE_LOG: [
+        BL_LOCATION_CRAB,
+        BL_LOCATION_TURRET,
+        BL_LOCATION_GUARD,
+        BL_LOCATION_BLUE_CRAB,
+        BL_LOCATION_ROLLER,
+        BL_LOCATION_BEETLE,
+        BL_LOCATION_CAVE_MINIBOSS,
+        BL_LOCATION_CAVE_BOSS,
+        BL_LOCATION_GOLD_CRAB,
+        BL_LOCATION_FLY,
+        BL_LOCATION_HOPPER,
+        BL_LOCATION_FIRE_GUARD,
+        BL_LOCATION_VOLCANIC_BOSS,
+        BL_LOCATION_BAT,
+        BL_LOCATION_FLEA_EGG,
+        BL_LOCATION_FLEA,
+        BL_LOCATION_ARCTIC_BOSS,
+        BL_LOCATION_MIDGE,
+        BL_LOCATION_SWAMP_BOSS,
+        BL_LOCATION_NINJA_FIGHT,
+        BL_LOCATION_ELECTRICAL_MINIBOSS,
+        BL_LOCATION_ELECTRICAL_BOSS,
+        BL_LOCATION_ELECTRICAL_FINAL_BOSS,
+    ]
 }
 
 
-def set_region_locations(region: Region, location_names: List[str], is_pool_expanded: bool):
+def set_region_locations(region: Region, location_names: List[str], is_pool_expanded: bool, has_battle_logs: bool):
     location_pool = {**Locations.location_dict_base, **Locations.location_dict_events}
     if is_pool_expanded:
         location_pool = {**Locations.location_dict_expanded, **Locations.location_dict_event_expanded}
+    if has_battle_logs:
+        location_pool.update(Locations.location_dict_battle_log)
     region.locations = [
         Locations.SavingPrincessLocation(
             region.player,
@@ -81,10 +108,13 @@ def set_region_locations(region: Region, location_names: List[str], is_pool_expa
     ]
 
 
-def create_regions(multiworld: MultiWorld, player: int, is_pool_expanded: bool):
+def create_regions(multiworld: MultiWorld, player: int, is_pool_expanded: bool, has_battle_logs: bool):
     for region_name, location_names in region_dict.items():
+        # battle log region only exists if battle log checks are on
+        if not has_battle_logs and region_name == REGION_BATTLE_LOG:
+            continue
         region = Region(region_name, player, multiworld)
-        set_region_locations(region, location_names, is_pool_expanded)
+        set_region_locations(region, location_names, is_pool_expanded, has_battle_logs)
         multiworld.regions.append(region)
     connect_regions(multiworld, player)
 
@@ -98,7 +128,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connection.connect(hub)
 
     # now add an entrance from every other region to hub
-    for region_name in [REGION_CAVE, REGION_VOLCANIC, REGION_ARCTIC, REGION_SWAMP, REGION_ELECTRICAL]:
+    for region_name in region_dict.keys() - {REGION_MENU, REGION_HUB}:
         connection = Entrance(player, f"{region_name} entrance", hub)
         hub.exits.append(connection)
         connection.connect(multiworld.get_region(region_name, player))

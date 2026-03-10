@@ -62,6 +62,32 @@ location_dict_expanded: Dict[str, LocData] = {
     EP_LOCATION_ELECTRICAL_FINAL_BOSS:  LocData(35),
 }
 
+location_dict_battle_log: Dict[str, LocData] = {
+    BL_LOCATION_CRAB: LocData(36),
+    BL_LOCATION_TURRET: LocData(37),
+    BL_LOCATION_GUARD: LocData(38),
+    BL_LOCATION_BLUE_CRAB: LocData(39),
+    BL_LOCATION_ROLLER: LocData(40),
+    BL_LOCATION_BEETLE: LocData(41),
+    BL_LOCATION_CAVE_MINIBOSS: LocData(42),
+    BL_LOCATION_CAVE_BOSS: LocData(43),
+    BL_LOCATION_GOLD_CRAB: LocData(44),
+    BL_LOCATION_FLY: LocData(45),
+    BL_LOCATION_HOPPER: LocData(46),
+    BL_LOCATION_FIRE_GUARD: LocData(47),
+    BL_LOCATION_VOLCANIC_BOSS: LocData(48),
+    BL_LOCATION_BAT: LocData(49),
+    BL_LOCATION_FLEA_EGG: LocData(50),
+    BL_LOCATION_FLEA: LocData(51),
+    BL_LOCATION_ARCTIC_BOSS: LocData(52),
+    BL_LOCATION_MIDGE: LocData(53),
+    BL_LOCATION_SWAMP_BOSS: LocData(54),
+    BL_LOCATION_NINJA_FIGHT: LocData(55),
+    BL_LOCATION_ELECTRICAL_MINIBOSS: LocData(56),
+    BL_LOCATION_ELECTRICAL_BOSS: LocData(57),
+    BL_LOCATION_ELECTRICAL_FINAL_BOSS: LocData(58),
+}
+
 location_dict_event_expanded: Dict[str, LocData] = {
     EVENT_LOCATION_VICTORY: LocData(),
 }
@@ -78,5 +104,6 @@ location_dict_events: Dict[str, LocData] = {
 
 location_dict: Dict[str, LocData] = {
     **location_dict_expanded,
+    **location_dict_battle_log,
     **location_dict_events,
 }

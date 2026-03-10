@@ -126,7 +126,61 @@ def set_rules(world: "SavingPrincessWorld"):
         power_item = world.create_item(EVENT_ITEM_POWER_ON)
         get_location(EVENT_LOCATION_POWER_ON).place_locked_item(power_item)
 
-    # and, finally, set the victory event
+    # set the victory event
     victory_item = world.create_item(EVENT_ITEM_VICTORY)
     get_location(EVENT_LOCATION_VICTORY).place_locked_item(victory_item)
     world.multiworld.completion_condition[world.player] = lambda state: state.has(EVENT_ITEM_VICTORY, world.player)
+
+    # if we have battle log locations on, set their rules
+    if not world.has_battle_log:
+        return
+    # hub
+    set_rule(get_location(BL_LOCATION_GUARD),
+             lambda state: state.can_reach_location(LOCATION_HUB_AMMO, world.player))
+    # cave
+    set_rule(get_location(BL_LOCATION_ROLLER),
+             lambda state: state.can_reach_location(LOCATION_CAVE_WEAPON, world.player))
+    if world.is_pool_expanded:
+        set_rule(get_location(BL_LOCATION_CAVE_BOSS),
+                 lambda state: state.can_reach_location(EP_LOCATION_CAVE_BOSS, world.player))
+    else:
+        set_rule(get_location(BL_LOCATION_CAVE_BOSS),
+                 lambda state: state.has(EVENT_ITEM_GUARD_GONE, world.player))
+    # volcanic
+    region = world.get_region(REGION_VOLCANIC)
+    set_rule(get_location(BL_LOCATION_GOLD_CRAB),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_FLY),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_HOPPER),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_FIRE_GUARD),  # this enemy is immune to fire
+             lambda state: state.can_reach(region, world.player)
+             and state.has_any({ITEM_WEAPON_CHARGE, ITEM_WEAPON_ICE, ITEM_WEAPON_VOLT}, world.player))
+    set_rule(get_location(BL_LOCATION_VOLCANIC_BOSS),
+             lambda state: state.can_reach_location(LOCATION_VOLCANIC_WEAPON, world.player))
+    # arctic
+    region = world.get_region(REGION_ARCTIC)
+    set_rule(get_location(BL_LOCATION_BAT),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_FLEA_EGG),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_FLEA),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_ARCTIC_BOSS),
+             lambda state: state.can_reach_location(LOCATION_ARCTIC_WEAPON, world.player))
+    # swamp
+    set_rule(get_location(BL_LOCATION_MIDGE),
+             lambda state: state.can_reach_region(REGION_SWAMP, world.player))
+    set_rule(get_location(BL_LOCATION_SWAMP_BOSS),
+             lambda state: state.can_reach_location(LOCATION_SWAMP_SPECIAL, world.player))
+    # electrical
+    region = world.get_region(REGION_ELECTRICAL)
+    set_rule(get_location(BL_LOCATION_NINJA_FIGHT),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_ELECTRICAL_MINIBOSS),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_ELECTRICAL_BOSS),
+             lambda state: state.can_reach_region(REGION_ELECTRICAL_POWERED, world.player))
+    set_rule(get_location(BL_LOCATION_ELECTRICAL_FINAL_BOSS),
+             lambda state: state.has(EVENT_ITEM_VICTORY, world.player))

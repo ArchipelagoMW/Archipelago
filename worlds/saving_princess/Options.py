@@ -106,11 +106,27 @@ class MusicShuffle(Toggle):
     display_name = "Music Shuffle"
 
 
+
+class BattleLog(Choice):
+    """
+    Determines if defeating each enemy type for the first time counts as a check.
+    If extra goodies is selected, new items (5 of each) are added to the pool to help fill these new locations:
+    - Armor Up, which increases Portia's iframes by 20%.
+    - Weapon Up, which decreases enemy iframes by 10% and increases weapon damage by 20%.
+    """
+    display_name = "Battle Log Checks"
+    option_disabled = 0
+    option_enabled = 1
+    option_extra_goodies = 2
+    default = option_extra_goodies
+    rich_text_doc = True
+
 @dataclass
 class SavingPrincessOptions(PerGameCommonOptions):
     # generation options
     start_inventory_from_pool: StartInventoryPool
     expanded_pool: ExpandedPool
+    battle_log: BattleLog
     trap_chance: TrapChance
     # gameplay options
     death_link: DeathLink
@@ -127,6 +143,7 @@ class SavingPrincessOptions(PerGameCommonOptions):
 groups = [
     OptionGroup("Generation Options", [
         ExpandedPool,
+        BattleLog,
         TrapChance,
     ]),
     OptionGroup("Gameplay Options", [
@@ -146,38 +163,37 @@ groups = [
 presets = {
     "Vanilla-like": {
         "expanded_pool": False,
+        "battle_log_checks": BattleLog.option_disabled,
         "trap_chance": 0,
-        "death_link": False,
+
         "instant_saving": False,
         "sprint_availability": SprintAvailability.option_never_available,
         "cliff_weapon_upgrade": CliffWeaponUpgrade.option_vanilla,
         "ace_weapon_upgrade": AceWeaponUpgrade.option_vanilla,
         "iframes_duration": 100,
+
         "shake_intensity": 100,
-        "music_shuffle": False,
     },
     "Easy": {
         "expanded_pool": True,
+        "battle_log_checks": BattleLog.option_extra_goodies,
         "trap_chance": 0,
-        "death_link": False,
+
         "instant_saving": True,
         "sprint_availability": SprintAvailability.option_always_available,
         "cliff_weapon_upgrade": CliffWeaponUpgrade.option_never_upgraded,
         "ace_weapon_upgrade": AceWeaponUpgrade.option_always_upgraded,
         "iframes_duration": 200,
-        "shake_intensity": 50,
-        "music_shuffle": False,
     },
     "Hard": {
         "expanded_pool": True,
+        "battle_log_checks": BattleLog.option_enabled,
         "trap_chance": 100,
-        "death_link": True,
+
         "instant_saving": True,
         "sprint_availability": SprintAvailability.option_never_available,
         "cliff_weapon_upgrade": CliffWeaponUpgrade.option_always_upgraded,
         "ace_weapon_upgrade": AceWeaponUpgrade.option_never_upgraded,
         "iframes_duration": 50,
-        "shake_intensity": 100,
-        "music_shuffle": False,
     }
 }

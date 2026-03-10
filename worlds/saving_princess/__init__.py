@@ -118,6 +118,8 @@ class SavingPrincessWorld(World):
     settings: ClassVar[SavingPrincessSettings]
 
     is_pool_expanded: bool = False
+    has_battle_log: bool = False
+    has_extra_goodies: bool = False
     music_table: List[int]
 
     def generate_early(self) -> None:
@@ -125,6 +127,8 @@ class SavingPrincessWorld(World):
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
         self.music_table = list(range(16))
         self.is_pool_expanded = self.options.expanded_pool > 0
+        self.has_battle_log = self.options.battle_log > 0
+        self.has_extra_goodies = self.options.battle_log == Options.BattleLog.option_extra_goodies
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)
             # find zzz and purple and swap them back to their original positions
@@ -136,13 +140,15 @@ class SavingPrincessWorld(World):
 
     def create_regions(self) -> None:
         from .Regions import create_regions
-        create_regions(self.multiworld, self.player, self.is_pool_expanded)
+        create_regions(self.multiworld, self.player, self.is_pool_expanded, self.has_battle_log)
 
     def create_items(self) -> None:
         items_made: int = 0
 
         # now, for each item
         item_dict = Items.item_dict_expanded if self.is_pool_expanded else Items.item_dict_base
+        if self.has_extra_goodies:
+            item_dict.update(Items.item_dict_battle_log)
         for item_name, item_data in item_dict.items():
             # create count copies of the item
             for i in range(item_data.count):
@@ -185,6 +191,7 @@ class SavingPrincessWorld(World):
         slot_data = self.options.as_dict(
             "death_link",
             "expanded_pool",
+            "battle_log",
             "instant_saving",
             "sprint_availability",
             "cliff_weapon_upgrade",
