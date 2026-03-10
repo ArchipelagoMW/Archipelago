@@ -46,8 +46,8 @@ which is the correct way to package your `.apworld` as a world developer. Do not
 
 ### "Build APWorlds" Launcher Component
 
-In the Archipelago Launcher, there is a "Build APWorlds" component that will package all world folders to `.apworld`,
-and add `archipelago.json` manifest files to them.  
+In the Archipelago Launcher (on [source only](/docs/running%20from%20source.md)), there is a "Build APWorlds"
+component that will package all world folders to `.apworld`, and add `archipelago.json` manifest files to them.  
 These .apworld files will be output to `build/apworlds` (relative to the Archipelago root directory).  
 The `archipelago.json` file in each .apworld will automatically include the appropriate
 `version` and `compatible_version`.  
