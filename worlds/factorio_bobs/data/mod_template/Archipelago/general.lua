@@ -35,6 +35,7 @@ general.science_packs.allowed = {{ variable_to_lua(allowed_science_packs) }}
 -- free samples
 general.free_samples = {}
 general.free_samples.quality = "{{free_sample_quality_name}}"
+general.free_samples.state = {{ free_samples }} --0 means no samples, 1 means single craft, and 2 means half a stack, 3 means full stack.
 
 function general.free_samples.get_black_list()--returns a big list of all items. false / nil is whitelist and true is blacklisted.
     return {{ variable_to_lua(free_sample_blacklist) }}

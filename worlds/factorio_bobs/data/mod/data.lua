@@ -1,5 +1,5 @@
 
-local general = require("Archipelago.general")
+local general = require("Archipelago/general")
 
 
 -- TODO: Replace the tinting code with an actual rendered picture of the energy bridge icon.
