@@ -117,6 +117,7 @@ class Region:
     fish_shop = "Willy's Fish Shop"
     boat_tunnel = "Boat Tunnel"
     tide_pools = "Tide Pools"
+    tide_pools_shortcut = "Tide Pools Shortcut"
     bathhouse_entrance = "Bathhouse Entrance"
     mens_locker_room = "Men's Locker Room"
     womens_locker_room = "Women's Locker Room"

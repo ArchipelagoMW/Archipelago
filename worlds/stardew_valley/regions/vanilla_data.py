@@ -309,7 +309,8 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.movie_theater),
     RegionData(RegionName.fish_shop, (Entrance.willy_fish_shop_to_beach,)),
     RegionData(RegionName.elliott_house, (Entrance.leave_elliott_house,)),
-    RegionData(RegionName.tide_pools, (Entrance.tidepools_town_shortcut, Entrance.leave_tide_pools)),
+    RegionData(RegionName.tide_pools, (Entrance.enter_tide_pools_shortcut, Entrance.leave_tide_pools)),
+    RegionData(RegionName.tide_pools_shortcut, (Entrance.leave_tide_pools_shortcut, Entrance.tidepools_town_shortcut)),
     RegionData(
         RegionName.bathhouse_entrance,
         (Entrance.leave_bathhouse_entrance, Entrance.enter_mens_locker_room, Entrance.enter_womens_locker_room),
@@ -1423,7 +1424,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(
         Entrance.town_tidepools_shortcut,
-        RegionName.tide_pools,
+        RegionName.tide_pools_shortcut,
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
@@ -1433,6 +1434,8 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
+    ConnectionData(Entrance.enter_tide_pools_shortcut, RegionName.tide_pools_shortcut),
+    ConnectionData(Entrance.leave_tide_pools_shortcut, RegionName.tide_pools),
     ConnectionData(
         Entrance.forest_beach_shortcut,
         RegionName.beach,
