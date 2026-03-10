@@ -6,7 +6,7 @@ from BaseClasses import Tutorial, ItemClassification as ItemClass
 from Options import PerGameCommonOptions, OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
+from worlds.LauncherComponents import components, Component, icon_paths, launch_subprocess, Type as ComponentType
 from . import Options, Items, Locations
 from .Constants import *
 
@@ -17,8 +17,19 @@ def launch_client(*args: str):
 
 
 components.append(
-    Component(f"{GAME_NAME} Client", game_name=GAME_NAME, func=launch_client, component_type=ComponentType.CLIENT, supports_uri=True)
+    Component(
+        f"{GAME_NAME} Client",
+        game_name=GAME_NAME,
+        func=launch_client,
+        component_type=ComponentType.CLIENT,
+        supports_uri=True,
+        icon="Saving Princess",
+        description="Launch Saving Princess.\nAlso fetches and installs mod updates.",
+    )
 )
+
+icon_paths["Saving Princess"] = f"ap:{__name__}/icon.png"
+
 
 
 def get_default_launch_command() -> List[str]:
