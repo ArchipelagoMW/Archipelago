@@ -107,6 +107,16 @@ class TrapChance(Range):
     default = 50
 
 
+class TrapLink(Toggle):
+    """
+    When you receive a trap, everyone who enabled trap link does. Of course, the reverse is true too.
+    Games with trap link enabled will try to convert the trap to an equivalent one.
+
+    If you receive a trap link that would be converted to a trap with a weight of 0, the trap link will be ignored.
+    """
+    display_name = "Trap Link"
+
+
 class MusicShuffle(Toggle):
     """
     Enables music shuffling.
@@ -159,6 +169,38 @@ class BlastDoors(Choice):
     default = option_random_without_repeats
     rich_text_doc = True
 
+
+class TrapWeight(Choice):
+    """
+    Relative likelihood of this type of trap to be selected for the pool.
+    For example, a trap with a weight of 4 will be twice as likely to be included as a trap with a weight of 2.
+
+    Setting a trap's weight to 0 will prevent it from ever appearing, including as a result of Trap Link.
+
+    Effect of this trap:
+    """
+    option_low = 1
+    option_medium = 2
+    option_high = 4
+    option_disabled = 0
+    default = 3
+
+
+class IceTrapWeight(Choice):
+    __doc__ = TrapWeight.__doc__ + "\nFreezes Portia in place for a few seconds."
+    display_name = "Ice Trap Weight"
+
+
+class ShakeTrapWeight(Choice):
+    __doc__ = TrapWeight.__doc__ + "\n\nMakes the screen shake with (harmless) explosions for a few seconds."
+    display_name = "Shake Trap Weight"
+
+
+class NinjaTrapWeight(Choice):
+    __doc__ = TrapWeight.__doc__ + "\n\nSpawns the ninja to fight you."
+    display_name = "Ninja Trap Weight"
+
+
 @dataclass
 class SavingPrincessOptions(PerGameCommonOptions):
     # generation options
@@ -173,12 +215,14 @@ class SavingPrincessOptions(PerGameCommonOptions):
     shake_weight: ShakeTrapWeight
     ninja_weight: NinjaTrapWeight
     # gameplay options
-    death_link: DeathLink
     instant_saving: InstantSaving
     sprint_availability: SprintAvailability
     cliff_weapon_upgrade: CliffWeaponUpgrade
     ace_weapon_upgrade: AceWeaponUpgrade
     iframes_duration: IFramesDuration
+    # link options
+    death_link: DeathLink
+    trap_link: TrapLink
     # aesthetic options
     shake_intensity: ScreenShakeIntensity
     music_shuffle: MusicShuffle
@@ -198,12 +242,15 @@ groups = [
         NinjaTrapWeight,
     ]),
     OptionGroup("Gameplay Options", [
-        DeathLink,
         InstantSaving,
         SprintAvailability,
         CliffWeaponUpgrade,
         AceWeaponUpgrade,
         IFramesDuration,
+    ]),
+    OptionGroup("Link Options", [
+        DeathLink,
+        TrapLink,
     ]),
     OptionGroup("Aesthetic Options", [
         ScreenShakeIntensity,
@@ -216,6 +263,7 @@ presets = {
         "final_area_locks": 4,
         "expanded_pool": ExpandedPool.option_disabled,
         "battle_log_checks": BattleLog.option_disabled,
+        "blast_doors": BlastDoors.option_vanilla,
         "trap_chance": 0,
 
         "instant_saving": False,
@@ -230,6 +278,7 @@ presets = {
         "final_area_locks": 2,
         "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_extra_goodies,
+        "blast_doors": BlastDoors.option_random_without_repeats,
         "trap_chance": 0,
 
         "instant_saving": True,
@@ -242,6 +291,7 @@ presets = {
         "final_area_locks": 4,
         "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_enabled,
+        "blast_doors": BlastDoors.option_fully_random,
         "trap_chance": 100,
 
         "instant_saving": True,

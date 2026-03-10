@@ -31,6 +31,14 @@ components.append(
 icon_paths["Saving Princess"] = f"ap:{__name__}/icon.png"
 
 
+def get_default_launch_command() -> List[str]:
+    """Returns platform-dependant default launch command for Saving Princess"""
+    if Utils.is_windows:
+        return []
+    else:
+        wine_path = shutil.which("wine")
+        return [wine_path] if wine_path is not None else ["/usr/bin/wine"]
+
 
 def get_default_launch_command() -> List[str]:
     """Returns platform-dependant default launch command for Saving Princess"""
@@ -227,7 +235,6 @@ class SavingPrincessWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
-            "death_link",
             # generation options
             "final_locks",
             "expanded_pool",
@@ -241,8 +248,12 @@ class SavingPrincessWorld(World):
             "sprint_availability",
             "cliff_weapon_upgrade",
             "ace_weapon_upgrade",
-            "shake_intensity",
             "iframes_duration",
+            # link options
+            "death_link",
+            "trap_link",
+            # aesthetic options
+            "shake_intensity",
         )
         slot_data["arctic_door"] = self.arctic_door
         slot_data["volcanic_door"] = self.volcanic_door
