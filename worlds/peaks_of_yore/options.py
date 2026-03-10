@@ -118,6 +118,14 @@ class RopeUnlockMode(Choice):
     option_normal = 2
     default = 1
 
+class RequirementsDifficulty(Choice):
+    """
+
+    """
+    option_possible = 0,
+    option_difficult = 1
+    default = 0
+
 class EnableFundamental(DefaultOnToggle):
     """Enables Fundamentals book, items and collectibles"""
     display_name = "Fundamental Peaks"
@@ -156,7 +164,8 @@ poy_option_groups = [
         StartWithOilLamp,
         RopeUnlockMode,
         StartingHands,
-        EarlyHands
+        EarlyHands,
+        RequirementsDifficulty
     ]),
     OptionGroup("Peaks", [
         EnableFundamental,
@@ -218,3 +227,4 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     include_free_solo: IncludeFreeSolo
     include_time_attack: IncludeTimeAttack
     start_inventory_from_pool: StartInventoryPool
+    requirements_difficulty: RequirementsDifficulty

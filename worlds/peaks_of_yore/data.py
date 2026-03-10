@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import IntEnum
 from typing import Callable, NamedTuple
 
-from .options import PeaksOfYoreOptions
+from .options import PeaksOfYoreOptions, RequirementsDifficulty
 from BaseClasses import ItemClassification, Item, Location
 
 peak_offset: int = 1
@@ -125,6 +125,40 @@ class LocationData:
             return None
         return self.id + self.type
 
+class Requirements:
+    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        pass
+
+class SimpleRequirements(Requirements):
+
+    requirements: dict[str, int]
+
+    def __init__(self, requirements: dict[str, int]):
+        self.entry_requirements = requirements
+
+    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        return self.requirements
+
+class LeveledRequirements(Requirements):
+    requirements: dict[RequirementsDifficulty, Requirements]
+    def __init__(self, requirements: dict[RequirementsDifficulty, Requirements]):
+        self.entry_requirements = requirements
+
+    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        return self.requirements[opts.requirements_difficulty].evaluate(opts)
+
+class AllRequirements(Requirements):
+    requirements: list[Requirements]
+
+    def __init__(self, requirements: list[Requirements]):
+        self.requirements = requirements
+
+    def evaluate(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
+        final: dict[str, int] = {}
+        for requirement in self.requirements:
+            final.update(requirement.evaluate(opts))
+        return final
+
 class POYRegion:
     """
     POYRegion is used later to define Regions, allowing me to define the regions in this file
@@ -177,7 +211,6 @@ class POYRegion:
         {name: id}
         """
         return {i.name: i.get_id() for i in self.locations}
-
 
 class PeakRegion(POYRegion):
     """
