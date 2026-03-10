@@ -81,13 +81,14 @@ Every rule allows you to specify which options it's applicable for. You can prov
 
 If you want a comparison that isn't equals, you can specify with the `operator` argument. The following operators are allowed:
 
-- `eq`: `==`
-- `ne`: `!=`
-- `gt`: `>`
-- `lt`: `<`
-- `ge`: `>=`
-- `le`: `<=`
-- `contains`: `in`
+- `eq`: `option_value == filter_value`
+- `ne`: `option_value != filter_value`
+- `gt`: `option_value > filter_value`
+- `lt`: `option_value < filter_value`
+- `ge`: `option_value >= filter_value`
+- `le`: `option_value <= filter_value`
+- `in`: `option_value in filter_value`
+- `contains`: `filter_value in option_value` (note reversed operands)
 
 By default rules that are excluded by their options will default to `False`. If you want to default to `True` instead, you can specify `filtered_resolution=True` on your rule.
 
@@ -109,6 +110,12 @@ rule = (
 )
 ```
 
+To filter for multiple choices:
+
+```python
+rule = Has("Item", options=[OptionFilter(ChoiceOption, [1, 5], operator="in")])
+```
+
 If you would like to provide option filters when reusing or composing rules, you can use the `Filtered` helper rule:
 
 ```python
@@ -127,6 +134,12 @@ common_rule = Has("A")
 easy_filter = [OptionFilter(Difficulty, Difficulty.option_easy)]
 common_rule_only_on_easy = common_rule & easy_filter
 common_rule_skipped_on_easy = common_rule | easy_filter
+```
+
+To easily bypass a requirement based on option choices:
+
+```python
+rule = Has("Some Upgrade") | OptionFilter(CombatDifficulty, CombatDifficulty.option_medium, operator="ge")
 ```
 
 ## Enabling caching
