@@ -1,5 +1,5 @@
 import shutil
-from typing import ClassVar, Dict, Any, Type, List, Union, Optional
+from typing import ClassVar, Dict, Any, Type, Union, Optional
 
 import Utils
 from BaseClasses import Tutorial, ItemClassification as ItemClass
@@ -29,15 +29,6 @@ components.append(
 )
 
 icon_paths["Saving Princess"] = f"ap:{__name__}/icon.png"
-
-
-def get_default_launch_command() -> List[str]:
-    """Returns platform-dependant default launch command for Saving Princess"""
-    if Utils.is_windows:
-        return []
-    else:
-        wine_path = shutil.which("wine")
-        return [wine_path] if wine_path is not None else ["/usr/bin/wine"]
 
 
 def get_default_launch_command() -> List[str]:

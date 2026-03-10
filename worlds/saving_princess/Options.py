@@ -125,7 +125,6 @@ class MusicShuffle(Toggle):
     display_name = "Music Shuffle"
 
 
-
 class FinalLockCount(Range):
     """
     Determines how many area bosses defeated or keys collected are needed to enter the final area.
@@ -179,24 +178,24 @@ class TrapWeight(Choice):
 
     Effect of this trap:
     """
-    option_low = 1
-    option_medium = 2
-    option_high = 4
     option_disabled = 0
-    default = 3
+    option_low = 1
+    option_normal = 2
+    option_high = 4
+    default = option_normal
 
 
-class IceTrapWeight(Choice):
+class IceTrapWeight(TrapWeight):
     __doc__ = TrapWeight.__doc__ + "\nFreezes Portia in place for a few seconds."
     display_name = "Ice Trap Weight"
 
 
-class ShakeTrapWeight(Choice):
+class ShakeTrapWeight(TrapWeight):
     __doc__ = TrapWeight.__doc__ + "\n\nMakes the screen shake with (harmless) explosions for a few seconds."
     display_name = "Shake Trap Weight"
 
 
-class NinjaTrapWeight(Choice):
+class NinjaTrapWeight(TrapWeight):
     __doc__ = TrapWeight.__doc__ + "\n\nSpawns the ninja to fight you."
     display_name = "Ninja Trap Weight"
 

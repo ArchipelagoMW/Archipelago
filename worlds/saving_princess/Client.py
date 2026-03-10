@@ -196,14 +196,14 @@ def install() -> None:
     if Utils.is_windows:
         windows_path = os.environ["WINDIR"]
         extractor_path = f"{windows_path}/System32/Extrac32"
-        subprocess.run([extractor_path, "/Y", "/E", "saving_princess.cab"])  #nosec
+        subprocess.run([extractor_path, "/Y", "/E", "saving_princess.cab"])  # nosec
     else:
         wine_path = shutil.which("wine")
         p7zip_path = shutil.which("7z")
         if wine_path is not None:
-            subprocess.run([wine_path, "Extrac32", "/Y", "/E", "saving_princess.cab"])  #nosec
+            subprocess.run([wine_path, "Extrac32", "/Y", "/E", "saving_princess.cab"])  # nosec
         elif p7zip_path is not None:
-            subprocess.run([p7zip_path, "e", "saving_princess.cab"])  #nosec
+            subprocess.run([p7zip_path, "e", "saving_princess.cab"])  # nosec
         else:
             error = "Could not find neither wine nor 7z.\n\nPlease install either the wine or the p7zip package."
             messagebox.showerror("Missing package!", f"Error: {error}")
