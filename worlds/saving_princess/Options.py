@@ -116,6 +116,18 @@ class MusicShuffle(Toggle):
 
 
 
+class FinalLockCount(Range):
+    """
+    Determines how many area bosses defeated or keys collected are needed to enter the final area.
+    If Expanded Pool is disabled, area bosses will need to be defeated, like in vanilla.
+    If Expanded Pool is enabled, keys will be needed instead.
+    """
+    display_name = "Final Area Locks"
+    range_start = 0
+    range_end = 4
+    default = 2
+
+
 class BattleLog(Choice):
     """
     Determines if defeating each enemy type for the first time counts as a check.
@@ -151,6 +163,7 @@ class BlastDoors(Choice):
 class SavingPrincessOptions(PerGameCommonOptions):
     # generation options
     start_inventory_from_pool: StartInventoryPool
+    final_locks: FinalLockCount
     expanded_pool: ExpandedPool
     battle_log: BattleLog
     blast_doors: BlastDoors
@@ -169,6 +182,7 @@ class SavingPrincessOptions(PerGameCommonOptions):
 
 groups = [
     OptionGroup("Generation Options", [
+        FinalLockCount,
         ExpandedPool,
         BattleLog,
         BlastDoors,
@@ -190,6 +204,7 @@ groups = [
 
 presets = {
     "Vanilla-like": {
+        "final_area_locks": 4,
         "expanded_pool": ExpandedPool.option_disabled,
         "battle_log_checks": BattleLog.option_disabled,
         "trap_chance": 0,
@@ -203,6 +218,7 @@ presets = {
         "shake_intensity": 100,
     },
     "Easy": {
+        "final_area_locks": 2,
         "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_extra_goodies,
         "trap_chance": 0,
@@ -214,6 +230,7 @@ presets = {
         "iframes_duration": 200,
     },
     "Hard": {
+        "final_area_locks": 4,
         "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_enabled,
         "trap_chance": 100,

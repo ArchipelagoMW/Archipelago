@@ -117,6 +117,7 @@ class SavingPrincessWorld(World):
     settings_key = "saving_princess_settings"
     settings: ClassVar[SavingPrincessSettings]
 
+    final_locks: int = 0
     is_pool_expanded: bool = False
     has_battle_log: bool = False
     has_extra_goodies: bool = False
@@ -130,7 +131,8 @@ class SavingPrincessWorld(World):
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
-        self.music_table = list(range(16))
+
+        self.final_locks = self.options.final_locks.value
         self.is_pool_expanded = self.options.expanded_pool > 0
         self.has_battle_log = self.options.battle_log > 0
         self.has_extra_goodies = self.options.battle_log == Options.BattleLog.option_extra_goodies
@@ -156,6 +158,7 @@ class SavingPrincessWorld(World):
                 self.volcanic_door = DoorType.DOOR_TYPE_NONE
                 self.swamp_door = DoorType.DOOR_TYPE_NONE
 
+        self.music_table = list(range(16))
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)
             # find zzz and purple and swap them back to their original positions
@@ -217,6 +220,8 @@ class SavingPrincessWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
             "death_link",
+            # generation options
+            "final_locks",
             "expanded_pool",
             "battle_log",
             "instant_saving",
