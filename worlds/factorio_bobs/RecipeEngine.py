@@ -227,14 +227,20 @@ class RecipeEngine:
                 item = self.get_item_from_entity(name)
                 for category in categories:
                     self.get_category(category).machines.add(item)
+            del raw_settings["missed_machines"]
 
         if "invalid_ingredients" in raw_settings:
             for ingredient in raw_settings["invalid_ingredients"]:
                 self.custom_invalid.add(self.get_game_item(ingredient, DefinitionSource.CUSTOM))
+            del raw_settings["invalid_ingredients"]
 
         if "excluded_first_pool" in raw_settings:
             for ingredient in raw_settings["excluded_first_pool"]:
                 self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_first_pool = False
+            del raw_settings["excluded_first_pool"]
+
+        for key in raw_settings.keys():
+            self.modpack.logger.error(f"Unknown key in recipeEngineSettings.json: {key}")
 
 
     def __remove_bad_items(self):
