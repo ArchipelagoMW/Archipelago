@@ -131,7 +131,7 @@ class RequirementsDifficulty(Choice):
     they MIGHT. (You are not guaranteed to get crampons before having to do Tempest)
     """
     display_name = "Requirements Difficulty"
-    option_normal = 0,
+    option_normal = 0
     option_difficult = 1
     option_free_solo = 2
     default = 0
