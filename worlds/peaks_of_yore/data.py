@@ -253,14 +253,14 @@ def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
             SimpleRequirements({"Extra Rope": short_rope_addition}, 200),   # base case: has required rope count
             SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
         ])
-    ], start_priority)
+    ], start_priority=start_priority)
 
 
 class POYRegion:
     """
     POYRegion is used later to define Regions, allowing me to define the regions in this file
-    with entry_requirements being a dict of item: count, to define entty requirements
-    enable_reqirements is called later in regions.py to determine whether to include the region based on the user's options
+    with entry_requirements being a dict of item: count, to define entry requirements
+    enable_requirements is called later in regions.py to determine whether to include the region based on the user's options
     e.g. not including the time attack regions if Time Attack is disabled
     """
     name: str

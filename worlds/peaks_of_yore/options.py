@@ -120,10 +120,20 @@ class RopeUnlockMode(Choice):
 
 class RequirementsDifficulty(Choice):
     """
+    Choose how lenient the generation is with required items.
 
+    - **Normal**: Easiest, generation will not require you to do insane things
+    - **Difficult**: Generation will be slightly less strict than Normal, might require you to climb some harder peaks with less items
+    - **Free Solo**: Generation will only require the bare minimum of items (eg. Just Ice axes on Tempest)
+
+    Note: required by generation does not mean that it is enforced upon the player.
+    For example: no crampons requirement on Tempest does not mean that crampons WILL be placed after tempest, just that
+    they MIGHT. (You are not guaranteed to get crampons before having to do Tempest)
     """
-    option_possible = 0,
+    display_name = "Requirements Difficulty"
+    option_normal = 0,
     option_difficult = 1
+    option_free_solo = 2
     default = 0
 
 class EnableFundamental(DefaultOnToggle):
