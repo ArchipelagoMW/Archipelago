@@ -129,6 +129,10 @@ find `DarkSoulsIII.exe` or to launch it properly. If this is happening to you, m
 * There is no `dinput8.dll` file in your DS3 game directory. This is the old way of installing mods,
   and it can interfere with the new ModEngine2 workflow.
 
+* You're not using any other mods for DS3. While it's possible to use the Archipelago mod along with
+  other mods, support isn't guaranteed, and mod conflicts are a likely source of problems when
+  loading the game.
+
 If you've checked all of these, you can also try:
 
 * Running `launch-ds3.bat` as an administrator.
