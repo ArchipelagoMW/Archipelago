@@ -127,6 +127,71 @@ class TestDeterminism(unittest.TestCase):
             "dexsanity": 1,
         })
 
+    def test_explicit_starter_region_and_pokemon(self):
+        """Explicit starter_region + starter_pokemon — precollected types must be stable."""
+        self._assert_deterministic({
+            "include_kanto": 1,
+            "include_johto": 1,
+            "type_locks": 1,
+            "region_locks": 1,
+            "dexsanity": 1,
+            "starter_region": 1,   # Kanto
+            "starter_pokemon": 1,  # Bulbasaur → Grass + Poison pre-collected
+        })
+
+    def test_all_new_locks(self):
+        """All new gate locks enabled — more items in pool, precollected order must be stable."""
+        self._assert_deterministic({
+            "include_kanto": 1,
+            "include_johto": 1,
+            "type_locks": 1,
+            "region_locks": 1,
+            "dexsanity": 1,
+            "starter_region": 1,  # Kanto
+            "legendary_locks": 1,
+            "trade_locks": 1,
+            "baby_locks": 1,
+            "fossil_locks": 1,
+            "stone_locks": 1,
+        })
+
+    def test_hisui_paldea_no_starters(self):
+        """Hisui + Paldea only — Hisui has no starters, so no Type Keys pre-collected from
+        there. Paldea starters determine precollected items; order must be stable."""
+        self._assert_deterministic({
+            "include_kanto": 0,
+            "include_hisui": 1,
+            "include_paldea": 1,
+            "type_locks": 1,
+            "region_locks": 1,
+            "dexsanity": 1,
+        })
+
+    def test_all_regions_all_locks(self):
+        """All ten regions + all new locks — maximum complexity, full determinism check."""
+        self._assert_deterministic({
+            "include_kanto": 1,
+            "include_johto": 1,
+            "include_hoenn": 1,
+            "include_sinnoh": 1,
+            "include_unova": 1,
+            "include_kalos": 1,
+            "include_alola": 1,
+            "include_galar": 1,
+            "include_hisui": 1,
+            "include_paldea": 1,
+            "type_locks": 1,
+            "region_locks": 1,
+            "dexsanity": 1,
+            "legendary_locks": 1,
+            "trade_locks": 1,
+            "baby_locks": 1,
+            "fossil_locks": 1,
+            "ultra_beast_locks": 1,
+            "paradox_locks": 1,
+            "stone_locks": 1,
+        })
+
 
 if __name__ == "__main__":
     unittest.main()
