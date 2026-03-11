@@ -285,7 +285,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Get](#Get)
 * [Set](#Set)
 * [SetNotify](#SetNotify)
-* [UnsetNotify](#UnsetNotify)
+* [SetUnnotify](#SetUnnotify)
 
 ### Connect
 Sent by the client to initiate a connection to an Archipelago game session.
@@ -497,12 +497,12 @@ Used to register your current session for receiving all [SetReply](#SetReply) pa
 | ------ | ----- | ------ |
 | keys | list\[str\] | Keys to receive all [SetReply](#SetReply) packages for. |
 
-### UnsetNotify
-Used to unregister your current session from receiving any [SetReply](#SetReply) packages of certain keys.
+### SetUnnotify
+Used to unregister your current session from receiving automatic [SetReply](#SetReply) packages of certain keys.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| keys | list\[str\] | Keys to no longer receive any [SetReply](#SetReply) packages for. |
+| keys | list\[str\] | Keys to no longer receive automatic [SetReply](#SetReply) packages for. |
 
 ## Appendix
 

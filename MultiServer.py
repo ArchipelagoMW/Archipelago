@@ -2202,10 +2202,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for key in args["keys"]:
                 ctx.stored_data_notification_clients[key].add(client)
 
-        elif cmd == "UnsetNotify":
+        elif cmd == "SetUnnotify":
             if "keys" not in args or type(args["keys"]) != list:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": 'UnsetNotify', "original_cmd": cmd}])
+                                              "text": 'SetUnnotify', "original_cmd": cmd}])
                 return
             for key in args["keys"]:
                 ctx.stored_data_notification_clients[key].discard(client)
