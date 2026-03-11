@@ -196,7 +196,7 @@ class MessengerRules:
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
-                        self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
+                            self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) and self.can_dboost(state),
             "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
@@ -488,7 +488,7 @@ class MessengerHardRules(MessengerRules):
 
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has("Second Wind", self.player)  # who really needs meditation
-
+    
     def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return super().can_destroy_projectiles(state) or self.has_windmill(state)
 

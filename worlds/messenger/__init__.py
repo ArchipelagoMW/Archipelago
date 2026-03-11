@@ -295,7 +295,6 @@ class MessengerWorld(World):
 
         elif logic == Logic.option_hard:
             MessengerHardRules(self).set_messenger_rules()
-
         else:
             raise ValueError(f"Somehow you have a logic option that's currently invalid."
                              f" {logic} for {self.multiworld.get_player_name(self.player)}")
