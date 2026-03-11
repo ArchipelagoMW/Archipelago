@@ -1,7 +1,7 @@
 
 local library = {}
 
-library.get_any_stack_size = function(name)
+function library.get_any_stack_size (name)
     local item = prototypes.item[name]
     if item ~= nil then
         return item.stack_size
@@ -16,7 +16,7 @@ end
 
 -- from https://stackoverflow.com/a/40180465
 -- split("a,b,c", ",") => {"a", "b", "c"}
-library.split = function(s, sep)
+function library.split (s, sep)
     local fields = {}
 
     sep = sep or " "
@@ -26,11 +26,11 @@ library.split = function(s, sep)
     return fields
 end
 
-library.random_offset_position = function(position, offset)
+function library.random_offset_position (position, offset)
     return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-offset, offset)}
 end
 
-library.fire_entity_at_players = function(entity_name, speed)
+function library.fire_entity_at_players (entity_name, speed)
     local entities = {}
     for _, player in ipairs(game.forces["player"].players) do
         if player.character ~= nil then
@@ -40,7 +40,7 @@ library.fire_entity_at_players = function(entity_name, speed)
     return library.fire_entity_at_entities(entity_name, entities, speed)
 end
 
-library.fire_entity_at_entities = function(entity_name, entities, speed)
+function library.fire_entity_at_entities (entity_name, entities, speed)
     for _, current_entity in ipairs(entities) do
         local target = current_entity
         if target.health == nil then
@@ -56,7 +56,7 @@ local teleport_requests = {}
 local teleport_attempts = {}
 local max_attempts = 100
 
-library.attempt_teleport_player = function(player, attempt)
+function library.attempt_teleport_player (player, attempt)
     -- global attempt storage as metadata can't be stored
     if attempt == nil then
         attempt = teleport_attempts[player.index]
@@ -98,7 +98,7 @@ library.attempt_teleport_player = function(player, attempt)
     end
 end
 
-library.handle_teleport_attempt = function(event)
+function library.handle_teleport_attempt (event)
     for player_index, path_id in pairs(teleport_requests) do
         -- Check if the event matches the stored path_id
         if path_id == event.id then
@@ -121,7 +121,7 @@ library.handle_teleport_attempt = function(event)
 end
 
 
-library.spill_character_inventory = function(character)
+function library.spill_character_inventory (character)
     if not (character and character.valid) then
         return false
     end
@@ -156,6 +156,10 @@ library.spill_character_inventory = function(character)
             end
         end
     end
+end
+
+function library.dump_info()
+    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
 end
 
 return library

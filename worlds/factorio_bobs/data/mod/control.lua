@@ -37,5 +37,5 @@ for name, lib in pairs(libs) do
     end
 end
 if error_message ~= nil then
-    error(error_message, 1)
+    error(error_message)
 end

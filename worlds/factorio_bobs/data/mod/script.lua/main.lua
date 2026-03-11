@@ -7,15 +7,15 @@ local SLOT_NAME = "{{ slot_name }}"
 local SEED_NAME = "{{ seed_name }}"
 local TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 local GOAL = {{ goal }}
-local ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+--local ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 local ARCHIPELAGO_ENERGY_LINK_SETTING = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
 local ENERGY_LINK_EFFICIENCY = 0.75
 
-if settings.global[general.mod_setting_names.death_link].value then
-    DEATH_LINK = 1
-else
-    DEATH_LINK = 0
-end
+--if settings.global[general.mod_setting_names.death_link].value then
+--    DEATH_LINK = 1
+--else
+--    DEATH_LINK = 0
+--end
 
 if settings.global[general.mod_setting_names.energy_link].value then
     ENERGY_INCREMENT = 10000000
@@ -24,120 +24,8 @@ else
 end
 
 
-CURRENTLY_DEATH_LOCK = 0
+--CURRENTLY_DEATH_LOCK = 0
 
-{% if chunk_shuffle %}
-LAST_POSITIONS = {}
-GENERATOR = nil
-NORTH = 1
-EAST = 2
-SOUTH = 3
-WEST = 4
-ER_COLOR = {1, 1, 1, 0.2}
-ER_SEED = {{ random.randint(4294967295, 2*4294967295)}}
-CURRENTLY_MOVING = false
-ER_FRAMES = {}
-CHUNK_OFFSET = {
-[NORTH] = {0, 1},
-[EAST] = {1, 0},
-[SOUTH] = {0, -1},
-[WEST] = {-1, 0}
-}
-
-
-function on_player_changed_position(event)
-    if CURRENTLY_MOVING == true then
-        return
-    end
-    local player_id = event.player_index
-    local player = game.get_player(player_id)
-    local character = player.character -- can be nil, such as spectators
-
-    if character == nil then
-        return
-    end
-    local last_position = LAST_POSITIONS[player_id]
-    if last_position == nil then
-        LAST_POSITIONS[player_id] = character.position
-        return
-    end
-
-    last_x_chunk = math.floor(last_position.x / 32)
-    current_x_chunk = math.floor(character.position.x / 32)
-    last_y_chunk = math.floor(last_position.y / 32)
-    current_y_chunk = math.floor(character.position.y / 32)
-    if (ER_FRAMES[player_id] ~= nil and rendering.is_valid(ER_FRAMES[player_id])) then
-        rendering.destroy(ER_FRAMES[player_id])
-    end
-    ER_FRAMES[player_id] = rendering.draw_rectangle{
-        color=ER_COLOR, width=1, filled=false, left_top = {current_x_chunk*32, current_y_chunk*32},
-        right_bottom={current_x_chunk*32+32, current_y_chunk*32+32}, players={player}, time_to_live=60,
-        draw_on_ground= true, only_in_alt_mode = true, surface=character.surface}
-    if current_x_chunk == last_x_chunk and current_y_chunk == last_y_chunk then -- nothing needs doing
-        return
-    end
-    if ((last_position.x - character.position.x) ^ 2 + (last_position.y - character.position.y) ^ 2) > 4000 then
-        -- distance too high, death or other teleport took place
-        LAST_POSITIONS[player_id] = character.position
-        return
-    end
-    -- we'll need a deterministic random state
-    if GENERATOR == nil or not GENERATOR.valid then
-        GENERATOR = game.create_random_generator()
-    end
-
-    -- sufficiently random pattern
-    GENERATOR.re_seed((ER_SEED + (last_x_chunk * 1730000000) + (last_y_chunk * 97000)) % 4294967295)
-    -- we now need all 4 exit directions deterministically shuffled to the 4 outgoing directions.
-    local exit_table = {
-    [1] = 1,
-    [2] = 2,
-    [3] = 3,
-    [4] = 4
-    }
-    exit_table = fisher_yates_shuffle(exit_table)
-    if current_x_chunk > last_x_chunk then -- going right/east
-        outbound_direction = EAST
-    elseif current_x_chunk < last_x_chunk then -- going left/west
-        outbound_direction = WEST
-    end
-
-    if current_y_chunk > last_y_chunk then -- going down/south
-        outbound_direction = SOUTH
-    elseif current_y_chunk < last_y_chunk then -- going up/north
-        outbound_direction = NORTH
-    end
-    local target_direction = exit_table[outbound_direction]
-
-    local target_position = {(CHUNK_OFFSET[target_direction][1] + last_x_chunk) * 32 + 16,
-                             (CHUNK_OFFSET[target_direction][2] + last_y_chunk) * 32 + 16}
-    target_position = character.surface.find_non_colliding_position(character.prototype.name,
-                                                                    target_position, 32, 0.5)
-    if target_position ~= nil then
-        rendering.draw_circle{color = ER_COLOR, radius = 1, filled = true,
-                              target = {character.position.x, character.position.y}, surface = character.surface,
-                              time_to_live = 300, draw_on_ground = true}
-        rendering.draw_line{color = ER_COLOR, width = 3, gap_length = 0.5, dash_length = 0.5,
-                            from = {character.position.x, character.position.y}, to = target_position,
-                            surface = character.surface,
-                            time_to_live = 300, draw_on_ground = true}
-        CURRENTLY_MOVING = true -- prevent recursive event
-        character.teleport(target_position)
-        CURRENTLY_MOVING = false
-    end
-    LAST_POSITIONS[player_id] = character.position
-end
-
-function fisher_yates_shuffle(tbl)
-    for i = #tbl, 2, -1 do
-        local j = GENERATOR(i)
-        tbl[i], tbl[j] = tbl[j], tbl[i]
-    end
-    return tbl
-end
-
-script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
-{% endif %}
 -- Handle the pathfinding result of teleport traps
 script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
 
@@ -300,7 +188,7 @@ function on_force_created(event)
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
-    data["death_link_tick"] = 0
+    --data["death_link_tick"] = 0
     data["energy"] = 0
     data["energy_bridges"] = 0
     storage.forcedata[event.force] = data
@@ -321,38 +209,38 @@ function on_force_destroyed(event)
     storage.forcedata[event.force.name] = nil
 end
 
-function on_runtime_mod_setting_changed(event)
-    local force
-    if event.player_index == nil then
-        force = game.forces.player
-    else
-        force = game.players[event.player_index].force
-    end
-
-    if event.setting == ARCHIPELAGO_DEATH_LINK_SETTING then
-        if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
-            DEATH_LINK = 1
-        else
-            DEATH_LINK = 0
-        end
-        if force ~= nil then
-            dumpInfo(force)
-        end
-    end
-    if event.setting == ARCHIPELAGO_ENERGY_LINK_SETTING then
-        if settings.global[ARCHIPELAGO_ENERGY_LINK_SETTING].value then
-            ENERGY_INCREMENT = 10000000
-            force.recipes["ap-energy-bridge"].enabled=true
-        else
-            ENERGY_INCREMENT = 0
-            force.recipes["ap-energy-bridge"].enabled=false
-        end
-        if force ~= nil then
-            dumpInfo(force)
-        end
-    end
-end
-script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
+--function on_runtime_mod_setting_changed(event)
+--    local force
+--    if event.player_index == nil then
+--        force = game.forces.player
+--    else
+--        force = game.players[event.player_index].force
+--    end
+--
+--    if event.setting == ARCHIPELAGO_DEATH_LINK_SETTING then
+--        if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
+--            DEATH_LINK = 1
+--        else
+--            DEATH_LINK = 0
+--        end
+--        if force ~= nil then
+--            dumpInfo(force)
+--        end
+--    end
+--    if event.setting == ARCHIPELAGO_ENERGY_LINK_SETTING then
+--        if settings.global[ARCHIPELAGO_ENERGY_LINK_SETTING].value then
+--            ENERGY_INCREMENT = 10000000
+--            force.recipes["ap-energy-bridge"].enabled=true
+--        else
+--            ENERGY_INCREMENT = 0
+--            force.recipes["ap-energy-bridge"].enabled=false
+--        end
+--        if force ~= nil then
+--            dumpInfo(force)
+--        end
+--    end
+--end
+--script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 
 -- Initialize player data, either from them joining the game or them already being part of the game when the mod was
 -- added.`
@@ -572,10 +460,10 @@ script.on_event(defines.events.on_research_finished, function(event)
     end
 end)
 
-
-function dumpInfo(force)
-    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
-end
+--this function is now in the lib.lua
+--function dumpInfo(force)
+--    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
+--end
 
 
 function chain_lookup(table, ...)
@@ -588,17 +476,17 @@ function chain_lookup(table, ...)
     return table
 end
 
-function kill_players(force)
-    CURRENTLY_DEATH_LOCK = 1
-    local current_character = nil
-    for _, player in ipairs(force.players) do
-        current_character = player.character
-        if current_character ~= nil then
-            current_character.die()
-        end
-    end
-    CURRENTLY_DEATH_LOCK = 0
-end
+--function kill_players(force)
+--    CURRENTLY_DEATH_LOCK = 1
+--    local current_character = nil
+--    for _, player in ipairs(force.players) do
+--        current_character = player.character
+--        if current_character ~= nil then
+--            current_character.die()
+--        end
+--    end
+--    CURRENTLY_DEATH_LOCK = 0
+--end
 
 function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
     local prototype = prototypes.entity[name]
@@ -703,19 +591,19 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
 end
 
 
-script.on_event(defines.events.on_entity_died, function(event)
-    if DEATH_LINK == 0 then
-        return
-    end
-    if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
-        return
-    end
-
-    local force = event.entity.force
-    storage.forcedata[force.name].death_link_tick = game.tick
-    dumpInfo(force)
-    kill_players(force)
-end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
+--script.on_event(defines.events.on_entity_died, function(event)
+--    if DEATH_LINK == 0 then
+--        return
+--    end
+--    if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
+--        return
+--    end
+--
+--    local force = event.entity.force
+--    storage.forcedata[force.name].death_link_tick = game.tick
+--    dumpInfo(force)
+--    kill_players(force)
+--end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
 
 
 -- add / commands
@@ -869,12 +757,12 @@ end)
 {% endif -%}
 
 
-commands.add_command("ap-deathlink", "Kill all players", function(call)
-    local force = game.forces["player"]
-    local source = call.parameter or "Archipelago"
-    kill_players(force)
-    game.print("Death was granted by " .. source)
-end)
+--commands.add_command("ap-deathlink", "Kill all players", function(call)
+--    local force = game.forces["player"]
+--    local source = call.parameter or "Archipelago"
+--    kill_players(force)
+--    game.print("Death was granted by " .. source)
+--end)
 
 commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
     local change = tonumber(call.parameter or "0")
