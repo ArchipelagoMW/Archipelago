@@ -55,33 +55,53 @@ def access_graph(multiworld: MultiWorld, player: int):
 
 
 region_graph: dict[str, set[str]] | None = None
-path_cache: dict[str, list[list[str]]] = {}
+valid_parent_cache: dict[str, set[str]] = {}
 
 SubRule = StardewRule | tuple[StardewRule, frozenset[str]]
 
 
-def all_simple_paths_to_origin(start: str) -> list[list[str]]:
-    if path_cache.get(start) is not None:
-        return path_cache[start]
-    results: list[list[str]] = []
+def _is_origin(region_name: str) -> bool:
+    return region_name in {"Stardew Valley", "Farmhouse"}
 
-    def dfs(current: str, path: list[str], visited: set[str]):
-        assert region_graph is not None
-        if current in ["Stardew Valley", "Farmhouse"]:
-            results.append(path.copy())
-            return
 
-        for parent in region_graph.get(current, []):
-            if parent not in visited:
-                visited.add(parent)
-                path.append(parent)
-                dfs(parent, path, visited)
-                path.pop()
-                visited.remove(parent)
+def _has_path_to_origin(start: str, visited: set[str]) -> bool:
+    assert region_graph is not None
 
-    dfs(start, [start], {start})
-    path_cache[start] = results
-    return results
+    if _is_origin(start):
+        return True
+
+    for parent in region_graph.get(start, ()):
+        if parent in visited:
+            continue
+
+        visited.add(parent)
+        if _has_path_to_origin(parent, visited):
+            visited.remove(parent)
+            return True
+        visited.remove(parent)
+
+    return False
+
+
+def valid_parents_to_origin(region: str) -> set[str]:
+    cached = valid_parent_cache.get(region)
+    if cached is not None:
+        return cached
+
+    assert region_graph is not None
+    result: set[str] = set()
+
+    for parent in region_graph.get(region, ()):
+        if parent == region:
+            continue
+        if _is_origin(parent):
+            result.add(parent)
+            continue
+        if _has_path_to_origin(parent, {region, parent}):
+            result.add(parent)
+
+    valid_parent_cache[region] = result
+    return result
 
 
 @dataclass
@@ -445,21 +465,16 @@ def _(
             newly_blocked = frozenset({spot.connected_region.name})
 
         access_rules.append((Reach(spot.parent_region.name, "Region", rule.player), newly_blocked))
+
     else:
         spot = state.multiworld.get_region(rule.spot, rule.player)
 
         global region_graph
         if region_graph is None:
-            path_cache.clear()
+            valid_parent_cache.clear()
             region_graph = access_graph(state.multiworld, rule.player)
 
-        paths = all_simple_paths_to_origin(spot.name)
-
-        valid_parent_regions: set[str] = set()
-        for path in paths:
-            if len(path) >= 2:
-                valid_parent_regions.add(path[1])
-
+        valid_parent_regions = set(valid_parents_to_origin(spot.name))
         valid_parent_regions -= blocked_regions
 
         for entrance in spot.entrances:
