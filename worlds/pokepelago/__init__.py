@@ -101,10 +101,7 @@ class PokepelagoWorld(World):
         else:  # count
             raw_goal = min(self.options.goal_count.value, total)
 
-        # Snap to closest valid milestone; always include total so 100% goals resolve exactly
-        valid_milestones = sorted(set([m for m in milestones if m <= total] + [total]))
-        capped_goal = min(raw_goal, total)
-        self.goal_count = min(valid_milestones, key=lambda m: abs(m - capped_goal))
+        self.goal_count = min(raw_goal, total)
 
         # ── Pre-compute requirement groups for milestone logic ──
         # For each non-starter active Pokémon, record (region_pass_needed, type_keys_needed).
