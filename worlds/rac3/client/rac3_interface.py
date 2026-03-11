@@ -17,7 +17,7 @@ from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION
                                                  RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
-from worlds.rac3.constants.data.vendorslot import RAC3ARMORVENDORSLOTDATA, RAC3SHIPVENDORSLOTDATA, RAC3VENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA
+from worlds.rac3.constants.data.vendorslot import RAC3ARMORVENDORSLOTDATA, RAC3SHIPVENDORSLOTDATA, RAC3SKINVENDORSLOTDATA, RAC3VENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import RAC3INSTRUCTION
@@ -1012,6 +1012,9 @@ class Rac3Interface(GameInterface):
             case RAC3VENDORTYPE.SHIP:
                 data = RAC3SHIPVENDORSLOTDATA(
                     [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SHIPVENDORSLOTDATA().get_data()])
+            case RAC3VENDORTYPE.SKIN:
+                    data = RAC3SKINVENDORSLOTDATA(
+                        [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SKINVENDORSLOTDATA().get_data()])
             case _:
                 raise NotImplementedError(f'Reading vendor type {vendor_type.name} has not been implemented yet')
         return data

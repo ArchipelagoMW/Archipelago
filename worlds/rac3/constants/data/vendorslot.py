@@ -1,7 +1,7 @@
 """This module provides data structures for individual items occupying a vendor slot"""
 from dataclasses import dataclass
 
-from worlds.rac3.constants.vendors.vendor import RAC3ARMORVENDOR, RAC3SHIPVENDOR, RAC3WEAPONVENDOR
+from worlds.rac3.constants.vendors.vendor import RAC3ARMORVENDOR, RAC3SHIPVENDOR, RAC3SKINVENDOR, RAC3WEAPONVENDOR
 
 
 @dataclass
@@ -122,4 +122,19 @@ class RAC3SHIPVENDORSLOTDATA(RAC3VENDORSLOTDATA):
         """return a list containing the data of each property this item has"""
         return [self.icon_id, self.cost, self.highlighted_part, self.color_id,
                 self.ship_config, self.unlock_id, self.item_name_ptr, self.icon_color, self.is_equipped]
+
+class RAC3SKINVENDORSLOTDATA(RAC3VENDORSLOTDATA):
+    cost: RAC3VENDORSLOTDATA.Property
+    skin_id: RAC3VENDORSLOTDATA.Property
+    description_string_id: RAC3VENDORSLOTDATA.Property
+
+    def __init__(self, values_list: list[int] = None):
+        values = [0, 0, 0] if values_list is None else values_list
+        self.cost = self.Property('Cost', values[0], 0, RAC3SKINVENDOR.ITEM_COST_SIZE, RAC3SKINVENDOR.ITEM_COST_OFFSET)
+        self.skin_id = self.Property('Skin ID', values[1], 2, RAC3SKINVENDOR.ITEM_SKIN_ID_SIZE, RAC3SKINVENDOR.ITEM_SKIN_ID_OFFSET)
+        self.description_string_id = self.Property('Description String ID', values[2], 2, RAC3SKINVENDOR.ITEM_DESCRIPTION_STRING_ID_SIZE, RAC3SKINVENDOR.ITEM_DESCRIPTION_STRING_ID_OFFSET)
+
+    def get_data(self) -> list[RAC3VENDORSLOTDATA.Property]:
+        """return a list containing the data of each property this item has"""
+        return [self.cost, self.skin_id, self.description_string_id]
 

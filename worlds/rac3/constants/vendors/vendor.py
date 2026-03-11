@@ -20,6 +20,7 @@ class RAC3VENDOR:
         RAC3VENDORTYPE.WEAPON: 0x14,
         RAC3VENDORTYPE.ARMOR: 0x10,
         RAC3VENDORTYPE.SHIP: 0x24,
+        RAC3VENDORTYPE.SKIN: 0xF,
     }
 
     @staticmethod
@@ -90,3 +91,14 @@ class RAC3SHIPVENDOR(RAC3VENDOR):
     ITEM_ICON_COLOR_SIZE: int = 4
     ITEM_IS_EQUIPPED_OFFSET: int = 0x20 
     ITEM_IS_EQUIPPED_SIZE: int = 1
+
+class RAC3SKINVENDOR(RAC3VENDOR):
+    """Struct for Skin Vendor data, with skin-specific slot size and offsets"""
+    SLOT_SIZE: int = 0xF
+
+    ITEM_COST_OFFSET: int = 0x04
+    ITEM_COST_SIZE: int = 4
+    ITEM_SKIN_ID_OFFSET: int = 0x08
+    ITEM_SKIN_ID_SIZE: int = 4
+    ITEM_DESCRIPTION_STRING_ID_OFFSET: int = 0x0C
+    ITEM_DESCRIPTION_STRING_ID_SIZE: int = 4
