@@ -6,10 +6,11 @@ from ..Regions import sm64_entrances_to_level, sm64_level_to_entrances
 class StarCostAccessTestBase(SM64TestBase):
     run_default_tests = False
     options = {
+        "progressive_keys": Options.ProgressiveKeys.option_false,
+        "enable_locked_paintings": Options.EnableLockedPaintings.option_false,
         # Test for access would mean access to entrance/painting,
         # not level itself for the sake of entrance rando.
         "area_rando": Options.AreaRandomizer.option_Courses_and_Secrets,
-        "progressive_keys": Options.ProgressiveKeys.option_false
     }
 
     def test_BoB_entrance_access(self):

@@ -1,13 +1,15 @@
 from .bases import SM64TestBase
 from .. import Options
 from ..Locations import loc100Coin_table, location_table
-from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets, valid_move_randomizer_start_courses
+from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets, \
+    valid_move_randomizer_start_courses
 
 valid_move_randomizer_start_entrances = {
     level: entrance
     for (level, entrance) in sm64_entrances_to_level.items()
     if level in valid_move_randomizer_start_courses
 }
+
 
 # Coin Star Logic
 class EnableCoinStarsTestBase(SM64TestBase):
@@ -21,7 +23,8 @@ class EnableCoinStarsTestBase(SM64TestBase):
         for loc in loc100Coin_table:
             # Use subtest to force all locations to be tested
             with self.subTest("Location created", location=loc):
-                assert loc in possible_locations
+                self.assertIn(loc, possible_locations)
+
 
 class DisableCoinStarsTestBase(SM64TestBase):
     options = {
@@ -34,7 +37,8 @@ class DisableCoinStarsTestBase(SM64TestBase):
         for loc in loc100Coin_table:
             # Use subtest to force all locations to be tested
             with self.subTest("Location not created", location=loc):
-                assert loc not in possible_locations
+                self.assertNotIn(loc, possible_locations)
+
 
 class VanillaCoinStarsTestBase(SM64TestBase):
     options = {
@@ -47,7 +51,7 @@ class VanillaCoinStarsTestBase(SM64TestBase):
         for loc in loc100Coin_table:
             # Use subtest to force all locations to be tested
             with self.subTest("Location created", location=loc):
-                assert loc in possible_locations
+                self.assertIn(loc, possible_locations)
 
     # Vanilla Coin Stars should give the player their own Power Stars
     def test_items_in_coin_star_locations(self):
@@ -55,7 +59,7 @@ class VanillaCoinStarsTestBase(SM64TestBase):
             # Use subtest to force all locations to be tested
             with self.subTest("Location created", location=loc):
                 item_in_loc = self.world.get_location(loc).item
-                assert item_in_loc.name == "Power Star"
+                self.assertEqual(item_in_loc.name, "Power Star")
                 # By default, these test bases are single player multiworld.
                 # In any other case, we should test that they belong to their respective worlds.
 
@@ -65,6 +69,7 @@ class ExclamationBoxesOnTestBase(SM64TestBase):
     options = {
         "exclamation_boxes": Options.ExclamationBoxes.option_true,
     }
+
 
 class ExclamationBoxesOffTestBase(SM64TestBase):
     options = {
@@ -79,23 +84,26 @@ class ExclamationBoxesOffTestBase(SM64TestBase):
             # Use subtest to force all locations to be tested
             with self.subTest("Location has own 1Up Mushroom.", location=loc):
                 item_in_loc = self.world.get_location(loc).item
-                assert item_in_loc.name == "1Up Mushroom"
+                self.assertEqual(item_in_loc.name, "1Up Mushroom")
                 # By default, these test bases are single player multiworld.
                 # In any other case, we should test that they belong to their respective worlds.
+
 
 # Entrance Randomizer
 class EntranceRandoOffTestBase(SM64TestBase):
     options = {
         "area_rando": Options.AreaRandomizer.option_Off
     }
+
     # Ensure entrance rando disabled
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
-        assert self.world.area_connections[bob_level_id] == bob_level_id
+        self.assertEqual(self.world.area_connections[bob_level_id], bob_level_id)
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
-        assert self.world.area_connections[bitfs_level_id] == bitfs_level_id
+        self.assertEqual(self.world.area_connections[bitfs_level_id], bitfs_level_id)
+
 
 class EntranceRandoCourseTestBase(SM64TestBase):
     options = {
@@ -105,13 +113,14 @@ class EntranceRandoCourseTestBase(SM64TestBase):
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
         # BoB goes to a painting, not a secret
-        assert self.world.area_connections[bob_level_id] not in sm64_level_to_secrets.keys()
-        assert self.world.area_connections[bob_level_id] in sm64_level_to_paintings.keys()
+        self.assertNotIn(self.world.area_connections[bob_level_id], sm64_level_to_secrets.keys())
+        self.assertIn(self.world.area_connections[bob_level_id], sm64_level_to_paintings.keys())
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         # BitFS is a secret (aka not a course), unaffected by Course Only entrance rando.
-        assert self.world.area_connections[bitfs_level_id] == bitfs_level_id
+        self.assertEqual(self.world.area_connections[bitfs_level_id], bitfs_level_id)
+
 
 class EntranceRandoSeparateTestBase(SM64TestBase):
     options = {
@@ -121,16 +130,17 @@ class EntranceRandoSeparateTestBase(SM64TestBase):
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
         # BoB goes to a painting, not a secret
-        assert self.world.area_connections[bob_level_id] not in sm64_level_to_secrets.keys()
-        assert self.world.area_connections[bob_level_id] in sm64_level_to_paintings.keys()
+        self.assertNotIn(self.world.area_connections[bob_level_id], sm64_level_to_secrets.keys())
+        self.assertIn(self.world.area_connections[bob_level_id], sm64_level_to_paintings.keys())
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         # BitFS goes to a secret, not a painting
-        assert self.world.area_connections[bitfs_level_id] in sm64_level_to_secrets.keys()
-        assert self.world.area_connections[bitfs_level_id] not in sm64_level_to_paintings.keys()
+        self.assertIn(self.world.area_connections[bitfs_level_id], sm64_level_to_secrets.keys())
+        self.assertNotIn(self.world.area_connections[bitfs_level_id], sm64_level_to_paintings.keys())
         # BitFS does not go to DDD
-        assert self.world.area_connections[bitfs_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
+        self.assertIsNot(self.world.area_connections[bitfs_level_id], sm64_entrances_to_level["Dire, Dire Docks"])
+
 
 class EntranceRandoAllTestBase(SM64TestBase):
     options = {
@@ -140,7 +150,7 @@ class EntranceRandoAllTestBase(SM64TestBase):
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         # BitFS does not go to DDD
-        assert self.world.area_connections[bitfs_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
+        self.assertIsNot(self.world.area_connections[bitfs_level_id], sm64_entrances_to_level["Dire, Dire Docks"])
 
 
 # Completion Type
@@ -149,11 +159,11 @@ class CompletionLastBowserTestBase(SM64TestBase):
         "completion_type": Options.CompletionType.option_Last_Bowser_Stage
     }
 
+
 class CompletionAllBowserTestBase(SM64TestBase):
     options = {
         "completion_type": Options.CompletionType.option_All_Bowser_Stages
     }
-
 
 
 # Option Combos
@@ -185,20 +195,21 @@ class CourseEntrancesMoveTestBase(SM64TestBase):
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
         # BoB goes to a course, not a secret.
-        assert self.world.area_connections[bob_level_id] not in sm64_level_to_secrets.keys()
-        assert self.world.area_connections[bob_level_id] in sm64_level_to_paintings.keys()
+        self.assertNotIn(self.world.area_connections[bob_level_id], sm64_level_to_secrets.keys())
+        self.assertIn(self.world.area_connections[bob_level_id], sm64_level_to_paintings.keys())
         # BoB goes to level with at least one star without a movement rule.
-        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_entrances.values()
+        self.assertIn(self.world.area_connections[bob_level_id], valid_move_randomizer_start_entrances.values())
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         # BitFS is a secret (aka not a course), unaffected by Course Only entrance rando.
-        assert self.world.area_connections[bitfs_level_id] == bitfs_level_id
+        self.assertEqual(self.world.area_connections[bitfs_level_id], bitfs_level_id)
 
     def test_WF_entrance(self):
         wf_level_id = sm64_entrances_to_level["Whomp's Fortress"]
         # WF goes to level with at least one star without a movement rule.
-        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_entrances.values()
+        self.assertIn(self.world.area_connections[wf_level_id], valid_move_randomizer_start_entrances.values())
+
 
 class SeparateEntrancesMoveTestBase(SM64TestBase):
     options = {
@@ -209,20 +220,20 @@ class SeparateEntrancesMoveTestBase(SM64TestBase):
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
         # BoB goes to a course, not a secret.
-        assert self.world.area_connections[bob_level_id] not in sm64_level_to_secrets.keys()
-        assert self.world.area_connections[bob_level_id] in sm64_level_to_paintings.keys()
+        self.assertNotIn(self.world.area_connections[bob_level_id], sm64_level_to_secrets.keys())
+        self.assertIn(self.world.area_connections[bob_level_id], sm64_level_to_paintings.keys())
         # BoB goes to level with at least one star without a movement rule.
-        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_entrances.values()
+        self.assertIn(self.world.area_connections[bob_level_id], valid_move_randomizer_start_entrances.values())
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         # BitFS does not go to DDD.
-        assert self.world.area_connections[bitfs_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
+        self.assertIsNot(self.world.area_connections[bitfs_level_id], sm64_entrances_to_level["Dire, Dire Docks"])
 
     def test_WF_entrance(self):
         wf_level_id = sm64_entrances_to_level["Whomp's Fortress"]
         # WF goes to level with at least one star without a movement rule.
-        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_entrances.values()
+        self.assertIn(self.world.area_connections[wf_level_id], valid_move_randomizer_start_entrances.values())
 
 
 class AllEntrancesMoveTestBase(SM64TestBase):
@@ -234,26 +245,27 @@ class AllEntrancesMoveTestBase(SM64TestBase):
     def test_BoB_entrance(self):
         bob_level_id = sm64_entrances_to_level["Bob-omb Battlefield"]
         # BoB goes to level with at least one star without a movement rule.
-        assert self.world.area_connections[bob_level_id] in valid_move_randomizer_start_entrances.values()
+        self.assertIn(self.world.area_connections[bob_level_id], valid_move_randomizer_start_entrances.values())
 
     def test_BitFS_entrance(self):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         # BitFS does not go to DDD.
-        assert self.world.area_connections[bitfs_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
+        self.assertIsNot(self.world.area_connections[bitfs_level_id], sm64_entrances_to_level["Dire, Dire Docks"])
 
     def test_WF_entrance(self):
         wf_level_id = sm64_entrances_to_level["Whomp's Fortress"]
         # WF goes to level with at least one star without a movement rule.
-        assert self.world.area_connections[wf_level_id] in valid_move_randomizer_start_entrances.values()
+        self.assertIn(self.world.area_connections[wf_level_id], valid_move_randomizer_start_entrances.values())
 
     def test_CotMC_entrance(self):
         cotmc_level_id = sm64_entrances_to_level["Cavern of the Metal Cap"]
         # CotMC does not go to HMC.
-        assert self.world.area_connections[cotmc_level_id] != sm64_entrances_to_level["Hazy Maze Cave"]
+        self.assertIsNot(self.world.area_connections[cotmc_level_id], sm64_entrances_to_level["Hazy Maze Cave"])
         # If BitFS -> HMC, CotMC does not go to DDD.
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         if self.world.area_connections[bitfs_level_id] == sm64_entrances_to_level["Hazy Maze Cave"]:
-            assert self.world.area_connections[cotmc_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
+            self.assertIsNot(self.world.area_connections[cotmc_level_id], sm64_entrances_to_level["Dire, Dire Docks"])
+
 
 # No Strict Requirements
 class NoStrictRequirementsTestBase(SM64TestBase):
