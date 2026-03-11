@@ -15,11 +15,12 @@ from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTE
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
-from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules, GLITCHED_ITEM
+from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
-from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections, TRACKER_PACK_CONFIG
+from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections, TRACKER_PACK_CONFIG, GLITCHED_ITEM, \
+    add_glitched_rules
 
 components.append(
     Component(
@@ -290,7 +291,7 @@ class MessengerWorld(World):
             MessengerRules(self).set_messenger_rules()
 
             if hasattr(self.multiworld, "re_gen_passthrough"):
-                MessengerHardRules(self).add_glitched_rules()
+                add_glitched_rules(self, MessengerHardRules(self))
 
         elif logic == Logic.option_hard:
             MessengerHardRules(self).set_messenger_rules()

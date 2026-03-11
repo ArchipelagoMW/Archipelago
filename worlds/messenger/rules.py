@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, CollectionRule, DEFAULT_COLLECTION_RULE
+from BaseClasses import CollectionState, CollectionRule
 from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
-
-GLITCHED_ITEM = "Glitched Item"
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -375,37 +373,6 @@ class MessengerRules:
         multiworld.completion_condition[self.player] = lambda state: state.has("Do the Thing!", self.player)
         if self.world.options.accessibility:  # not locations accessibility
             set_self_locking_items(self.world)
-
-    def add_glitched_rules(self) -> None:
-        multiworld = self.world.multiworld
-
-        for entrance in multiworld.get_entrances(self.player):
-            try:
-                rule = self.connection_rules[entrance.name]
-            except KeyError:
-                rule = DEFAULT_COLLECTION_RULE
-
-            if entrance.access_rule == rule:
-                continue
-
-            def glitch_aware_rule(state: CollectionState, glitched_rule=rule, previous_rule=entrance.access_rule) -> bool:
-                return (state.has(GLITCHED_ITEM, self.player) and glitched_rule(state)) or previous_rule(state)
-
-            entrance.access_rule = glitch_aware_rule
-
-        for loc in multiworld.get_locations(self.player):
-            try:
-                rule = self.location_rules[loc.name]
-            except KeyError:
-                rule = DEFAULT_COLLECTION_RULE
-
-            if loc.access_rule == rule:
-                continue
-
-            def glitch_aware_rule(state: CollectionState, glitched_rule=rule, previous_rule=loc.access_rule) -> bool:
-                return (state.has(GLITCHED_ITEM, self.player) and glitched_rule(state)) or previous_rule(state)
-
-            loc.access_rule = glitch_aware_rule
 
 
 class MessengerHardRules(MessengerRules):

@@ -1,14 +1,20 @@
-from typing import Any
+from typing import TYPE_CHECKING
 
+from BaseClasses import DEFAULT_COLLECTION_RULE, CollectionState
 from Options import PlandoConnection
 from .connections import RANDOMIZED_CONNECTIONS
 from .portals import REGION_ORDER, SHOP_POINTS, CHECKPOINTS
+from .rules import MessengerHardRules
 from .transitions import TRANSITIONS
 
+if TYPE_CHECKING:
+    from . import MessengerWorld
+
 REVERSED_RANDOMIZED_CONNECTIONS = {v: k for k, v in RANDOMIZED_CONNECTIONS.items()}
+GLITCHED_ITEM = "Glitched Item"
 
 
-def handle_auto_tabbing(data: Any) -> int:
+def handle_auto_tabbing(data: str) -> int:
     match data:
         case "Level_01_NinjaVillage":
             return 1
@@ -93,3 +99,36 @@ def reverse_transitions_into_plando_connections(transitions: list[list[int]]) ->
         plando_connections.append(connection)
 
     return plando_connections
+
+
+def add_glitched_rules(world: "MessengerWorld", hard_logic: MessengerHardRules) -> None:
+    multiworld = world.multiworld
+
+    for entrance in multiworld.get_entrances(world.player):
+
+        try:
+            rule = hard_logic.connection_rules[entrance.name]
+        except KeyError:
+            rule = DEFAULT_COLLECTION_RULE
+
+        if entrance.access_rule == rule:
+            continue
+
+        def glitch_aware_rule(state: CollectionState, glitched_rule=rule, previous_rule=entrance.access_rule) -> bool:
+            return (state.has(GLITCHED_ITEM, world.player) and glitched_rule(state)) or previous_rule(state)
+
+        entrance.access_rule = glitch_aware_rule
+
+    for loc in multiworld.get_locations(world.player):
+        try:
+            rule = hard_logic.location_rules[loc.name]
+        except KeyError:
+            rule = DEFAULT_COLLECTION_RULE
+
+        if loc.access_rule == rule:
+            continue
+
+        def glitch_aware_rule(state: CollectionState, glitched_rule=rule, previous_rule=loc.access_rule) -> bool:
+            return (state.has(GLITCHED_ITEM, world.player) and glitched_rule(state)) or previous_rule(state)
+
+        loc.access_rule = glitch_aware_rule
