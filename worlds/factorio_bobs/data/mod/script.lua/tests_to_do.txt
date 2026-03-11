@@ -1,0 +1,15 @@
+
+Death_link:
+
+Single player:
+    test if dying sends a Death_link.
+    Test if a death_link kills the player.
+
+    Switch the setting and test those two again.
+
+    kill a different enemy to see if their death causes a deathlink.
+
+Multiplayer:
+    get two people in a world and test if a death kills both players.
+    
+    start world, swap deathlink setting, get a second player, test if the second player also has the correct setting state. (Should desync on death if not.)
