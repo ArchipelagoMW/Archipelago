@@ -2,9 +2,9 @@ local handler = require("event_handler")
 
 -- used the build in event handler in the core to assigned the events.
 local libs = {
-    death_link = require("scripts/death_link.lua"),
-    energy_link = require("scripts/energy_link.lua"),
-    item_handling = require("scripts/item_handling.lua"),
+    death_link = require("scripts/death_link"),
+    energy_link = require("scripts/energy_link"),
+    item_handling = require("scripts/item_handling"),
     --trap_handling = require("scripts/trap_handling.lua"), --does not yet exist
     --main = require("scripts/main.lua"), --will probably be removed.
     --tech_obscurity = require("scripts/tech-obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
