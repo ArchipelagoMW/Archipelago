@@ -129,6 +129,11 @@ class FactorioModpack(BaseModpack):
                 self.__forced_locations[location] = index
             for index, location in enumerate(raw_settings["forced_locations"]["end"], start=1):
                 self.__forced_locations[location] = -index
+            del raw_settings["forced_locations"]
+
+        for key in raw_settings.keys():
+            self.logger.error(f"Unknown key in worldSettings.json: {key}")
+
 
     @property
     def required_technologies(self) -> dict[str, FrozenSet[Technology]]:
@@ -233,8 +238,9 @@ class FactorioModpack(BaseModpack):
                     case _:
                         defaults["additional_logic"][int(complexity)] = {"and": rules}
             del default_raw["additional_logic"]
+
         for key in default_raw.keys():
-            self.logger.error(f"Unknown key in default options file: {key}")
+            self.logger.error(f"Unknown key in defaultOptions.json: {key}")
         return defaults
 
     @cached_property
