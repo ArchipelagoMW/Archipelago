@@ -313,7 +313,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             SpecialItem.lucky_purple_shorts: self.special_items.has_purple_shorts(),
-            SpecialItem.trimmed_purple_shorts: self.has(SpecialItem.lucky_purple_shorts) & self.has(Machine.sewing_machine),
+            SpecialItem.trimmed_purple_shorts: self.has(SpecialItem.lucky_purple_shorts) & self.has(MetalBar.gold) & self.has(Machine.sewing_machine),
             SpecialItem.far_away_stone: self.special_items.has_far_away_stone(),
             SpecialItem.solid_gold_lewis: self.special_items.has_solid_gold_lewis(),
             SpecialItem.advanced_tv_remote: self.special_items.has_advanced_tv_remote(),
