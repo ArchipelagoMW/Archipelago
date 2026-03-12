@@ -1721,7 +1721,11 @@ class Rac3Interface(GameInterface):
                     break
             if not matched:
                 # Insert the ASCII value of the character
-                result.append(ord(msg[i]))
+                msg_ordinal = ord(msg[i])
+                if msg_ordinal < 0 or msg_ordinal > 256:
+                    # Replace unsupported characters with a question mark
+                    msg_ordinal = ord('?')
+                result.append(msg_ordinal)
                 i += 1
         color_byte_count += 1  # Count the null terminator
         return bytes(result), color_byte_count

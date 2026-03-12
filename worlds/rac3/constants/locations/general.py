@@ -146,6 +146,6 @@ class RAC3LOCATION:
     HIDEOUT_FIND_QWARK = "Qwarks Hideout: Find Qwark"
     HIDEOUT_PDA = "Qwarks Hideout: PDA Vendor"
     HIDEOUT_QWARK = "Qwarks Hideout: Find Qwark"
-    KOROS_BASE = "Koros: Fire the Canon"
+    KOROS_BASE = "Koros: Fire the Cannon"
     COMMAND_CENTER_NEFARIOUS = "Command Center: Dr. Nefarious Defeated!"
     COMMAND_CENTER_BIOBLITERATOR = "Command Center: Biobliterator Defeated!"
