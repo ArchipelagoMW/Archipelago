@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Tuple
+from typing import Optional, Dict
 
 from BaseClasses import Item, ItemClassification as ItemClass
 
@@ -82,6 +82,7 @@ item_dict_traps: Dict[str, ItemData] = {
     TRAP_ITEM_ICE: ItemData(ItemClass.trap, 17),
     TRAP_ITEM_SHAKES: ItemData(ItemClass.trap, 18),
     TRAP_ITEM_NINJA: ItemData(ItemClass.trap, 19),
+    TRAP_ITEM_TEXT: ItemData(ItemClass.trap, 20),
 }
 
 item_dict_events: Dict[str, ItemData] = {

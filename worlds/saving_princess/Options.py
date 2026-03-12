@@ -164,7 +164,9 @@ class BlastDoors(Choice):
     display_name = "Randomize Blast Doors"
     option_vanilla = 0
     option_random_without_repeats = 1
-    option_fully_random = 2
+    option_random_uniform = 2
+    option_fully_random = 3
+    option_remove_blast_doors = 4
     default = option_random_without_repeats
     rich_text_doc = True
 
@@ -200,6 +202,11 @@ class NinjaTrapWeight(TrapWeight):
     display_name = "Ninja Trap Weight"
 
 
+class TextTrapWeight(TrapWeight):
+    __doc__ = TrapWeight.__doc__ + "\n\nDisplays a bunch of text."
+    display_name = "Text Trap Weight"
+
+
 @dataclass
 class SavingPrincessOptions(PerGameCommonOptions):
     # generation options
@@ -213,6 +220,7 @@ class SavingPrincessOptions(PerGameCommonOptions):
     ice_weight: IceTrapWeight
     shake_weight: ShakeTrapWeight
     ninja_weight: NinjaTrapWeight
+    text_weight: TextTrapWeight
     # gameplay options
     instant_saving: InstantSaving
     sprint_availability: SprintAvailability
@@ -239,6 +247,7 @@ groups = [
         IceTrapWeight,
         ShakeTrapWeight,
         NinjaTrapWeight,
+        TextTrapWeight,
     ]),
     OptionGroup("Gameplay Options", [
         InstantSaving,

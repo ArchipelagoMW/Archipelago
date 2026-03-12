@@ -15,7 +15,7 @@ import requests
 import shutil
 import subprocess  # nosec
 from tkinter import messagebox
-from typing import Any, Dict, Set, List
+from typing import Any, Dict, Set
 import urllib
 import urllib.parse
 

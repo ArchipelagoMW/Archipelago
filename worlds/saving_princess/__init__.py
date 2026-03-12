@@ -179,7 +179,8 @@ class SavingPrincessWorld(World):
         self.filler_list = list(Items.item_dict_filler.keys())
         self.trap_list = ([TRAP_ITEM_ICE] * self.options.ice_weight
                           + [TRAP_ITEM_SHAKES] * self.options.shake_weight
-                          + [TRAP_ITEM_NINJA] * self.options.ninja_weight)
+                          + [TRAP_ITEM_NINJA] * self.options.ninja_weight
+                          + [TRAP_ITEM_TEXT] * self.options.text_weight)
 
     def create_regions(self) -> None:
         from .Regions import create_regions
@@ -239,6 +240,7 @@ class SavingPrincessWorld(World):
             "ice_weight",
             "shake_weight",
             "ninja_weight",
+            "text_weight",
             # gameplay options
             "instant_saving",
             "sprint_availability",

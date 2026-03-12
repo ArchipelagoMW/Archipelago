@@ -49,6 +49,7 @@ FILLER_ITEM_ACTIVE_CAMO: str = "Active Camouflage"
 TRAP_ITEM_ICE: str = "Ice Trap"
 TRAP_ITEM_SHAKES: str = "Shake Trap"
 TRAP_ITEM_NINJA: str = "Ninja Trap"
+TRAP_ITEM_TEXT: str = "Text Trap"
 
 EVENT_ITEM_GUARD_GONE: str = "Guard neutralized"
 EVENT_ITEM_CLIFF_GONE: str = "Cliff neutralized"
