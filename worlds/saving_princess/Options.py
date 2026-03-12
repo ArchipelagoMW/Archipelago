@@ -268,7 +268,7 @@ groups = [
 
 presets = {
     "Vanilla-like": {
-        "final_area_locks": 4,
+        "final_locks": 4,
         "expanded_pool": ExpandedPool.option_disabled,
         "battle_log_checks": BattleLog.option_disabled,
         "blast_doors": BlastDoors.option_vanilla,
@@ -283,7 +283,7 @@ presets = {
         "shake_intensity": 100,
     },
     "Easy": {
-        "final_area_locks": 2,
+        "final_locks": 2,
         "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_extra_goodies,
         "blast_doors": BlastDoors.option_random_without_repeats,
@@ -296,7 +296,7 @@ presets = {
         "iframes_duration": 200,
     },
     "Hard": {
-        "final_area_locks": 4,
+        "final_locks": 4,
         "expanded_pool": ExpandedPool.option_enabled,
         "battle_log_checks": BattleLog.option_enabled,
         "blast_doors": BlastDoors.option_fully_random,
