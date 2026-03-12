@@ -151,6 +151,11 @@ class SavingPrincessWorld(World):
                 self.arctic_door = door_types[0]
                 self.volcanic_door = door_types[1]
                 self.swamp_door = door_types[2]
+            case self.options.blast_doors.option_random_uniform:
+                door_type: DoorType = self.random.choice(door_types)
+                self.arctic_door = door_type
+                self.volcanic_door = door_type
+                self.swamp_door = door_type
             case self.options.blast_doors.option_fully_random:
                 self.arctic_door = self.random.choice(door_types)
                 self.volcanic_door = self.random.choice(door_types)

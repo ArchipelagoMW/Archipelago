@@ -157,6 +157,7 @@ class BlastDoors(Choice):
     Determines the type of each of the three blast doors found in the hub.
     - Vanilla: All blast doors require the Powered Blaster.
     - Random without repeats: Each blast door requires a different randomly selected special weapon to open.
+    - Random uniform: All blast doors require the same randomly selected special weapon to open.
     - Fully random: Each blast door requires a randomly selected special weapon to open.
     - Remove blast doors: There are no blast doors, so no special weapons are required to open them.
     """
@@ -164,7 +165,6 @@ class BlastDoors(Choice):
     option_vanilla = 0
     option_random_without_repeats = 1
     option_fully_random = 2
-    option_remove_blast_doors = 3
     default = option_random_without_repeats
     rich_text_doc = True
 
