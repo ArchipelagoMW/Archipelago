@@ -517,7 +517,14 @@ class GeneralOptions(Group):
         """
         # created on demand, so marked as optional
 
+    class LogRetentionDays(int):
+        """
+        The number of days to retain logs before deleting old log files
+        0 -> Log files will not be automatically deleted
+        """
+
     output_path: OutputPath = OutputPath("output")
+    log_retention_days: LogRetentionDays = 7
 
 
 class ServerOptions(Group):
