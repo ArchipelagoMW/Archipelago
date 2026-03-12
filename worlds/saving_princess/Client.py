@@ -114,7 +114,10 @@ def update(target_asset: str, url: str) -> bool:
         response = send_request(url)
         if response.response_code == 403:  # rate limit exceeded
             return False
-        assets = response.data[0]["assets"]
+        if 0 in response.data:
+            assets = response.data[0]["assets"]
+        else:
+            assets = response.data["assets"]
         for asset in assets:
             if target_asset in asset["name"]:
                 newest_date: str = asset["updated_at"]
