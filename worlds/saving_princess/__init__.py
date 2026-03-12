@@ -121,17 +121,21 @@ class SavingPrincessWorld(World):
     is_pool_expanded: bool = False
     has_battle_log: bool = False
     has_extra_goodies: bool = False
-    music_table: List[int]
+    music_table: List[int] = []
 
-    trap_chance: int
-    filler_list: List[str]
-    trap_list: List[str]
+    trap_chance: int = 0
+    filler_list: List[str] = list(Items.item_dict_filler.keys())
+    trap_list: List[str] = []
 
-    arctic_door: DoorType
-    volcanic_door: DoorType
-    swamp_door: DoorType
+    arctic_door: DoorType = DoorType.DOOR_TYPE_POWER
+    volcanic_door: DoorType = DoorType.DOOR_TYPE_POWER
+    swamp_door: DoorType = DoorType.DOOR_TYPE_POWER
+
+    item_pool: List[Items.SavingPrincessItem] = []
 
     def generate_early(self) -> None:
+        self.item_pool = []
+
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
 
@@ -177,7 +181,6 @@ class SavingPrincessWorld(World):
                 self.music_table[song_index] = t
 
         # make a list of items that can be filler and items that can be traps
-        self.filler_list = list(Items.item_dict_filler.keys())
         self.trap_list = ([TRAP_ITEM_ICE] * self.options.ice_weight
                           + [TRAP_ITEM_SHAKES] * self.options.shake_weight
                           + [TRAP_ITEM_NINJA] * self.options.ninja_weight
