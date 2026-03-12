@@ -270,7 +270,7 @@ presets = {
     "Vanilla-like": {
         "final_locks": 4,
         "expanded_pool": ExpandedPool.option_disabled,
-        "battle_log_checks": BattleLog.option_disabled,
+        "battle_log": BattleLog.option_disabled,
         "blast_doors": BlastDoors.option_vanilla,
         "trap_chance": 0,
 
@@ -285,7 +285,7 @@ presets = {
     "Easy": {
         "final_locks": 2,
         "expanded_pool": ExpandedPool.option_enabled,
-        "battle_log_checks": BattleLog.option_extra_goodies,
+        "battle_log": BattleLog.option_extra_goodies,
         "blast_doors": BlastDoors.option_random_without_repeats,
         "trap_chance": 0,
 
@@ -298,7 +298,7 @@ presets = {
     "Hard": {
         "final_locks": 4,
         "expanded_pool": ExpandedPool.option_enabled,
-        "battle_log_checks": BattleLog.option_enabled,
+        "battle_log": BattleLog.option_enabled,
         "blast_doors": BlastDoors.option_fully_random,
         "trap_chance": 100,
 
