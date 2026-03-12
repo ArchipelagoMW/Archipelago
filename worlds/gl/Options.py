@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DeathLinkMixin, DefaultOnToggle, \
-    OptionSet
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DefaultOnToggle, \
+    OptionSet, DeathLink
 
 
 class IncludedAreas(OptionSet):
@@ -99,7 +99,7 @@ class MaxDifficulty(Range):
     default = 4
 
 
-class InstantMaxDifficulty(Toggle):
+class InstantMaxDifficulty(DefaultOnToggle):
     """
     All stages will load with their max difficulty on the first run through.
     By default, stages increase in difficulty by 1 at a set interval that changes per zone.
@@ -170,8 +170,8 @@ class UnlockCharacterOne(Choice):
     option_none = 0
     option_minotaur = 1
     option_falconess = 2
-    option_tigress = 3
-    option_jackal = 4
+    option_jackal = 3
+    option_tigress = 4
     option_sumner = 5
     default = 0
 
@@ -186,8 +186,8 @@ class UnlockCharacterTwo(Choice):
     option_none = 0
     option_minotaur = 1
     option_falconess = 2
-    option_tigress = 3
-    option_jackal = 4
+    option_jackal = 3
+    option_tigress = 4
     option_sumner = 5
     default = 0
 
@@ -202,8 +202,8 @@ class UnlockCharacterThree(Choice):
     option_none = 0
     option_minotaur = 1
     option_falconess = 2
-    option_tigress = 3
-    option_jackal = 4
+    option_jackal = 3
+    option_tigress = 4
     option_sumner = 5
     default = 0
 
@@ -218,14 +218,15 @@ class UnlockCharacterFour(Choice):
     option_none = 0
     option_minotaur = 1
     option_falconess = 2
-    option_tigress = 3
-    option_jackal = 4
+    option_jackal = 3
+    option_tigress = 4
     option_sumner = 5
     default = 0
 
 
 @dataclass
-class GLOptions(DeathLinkMixin, PerGameCommonOptions):
+class GLOptions(PerGameCommonOptions):
+    death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
     included_areas: IncludedAreas
     chests_barrels: ChestBarrels

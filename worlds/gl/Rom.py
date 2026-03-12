@@ -413,9 +413,7 @@ class GLPatchExtension(APPatchExtension):
         rom[0xFFFFE2] = options["max"]
         rom[0xFFFFE4] = options["keys"]
         rom[0xFFFFE5] = options["speed"]
-        characters = options["characters"].copy()
-        characters.reverse()
-        rom[0xFFFFE8:0xFFFFEC] = characters
+        rom[0xFFFFE8:0xFFFFEC] = options["characters"]
         return bytes(rom)
 
 
@@ -453,7 +451,6 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
                        world.options.unlock_character_three.value, world.options.unlock_character_four.value]
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
-    patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
 
     # Write level files
     for i, level in enumerate(level_locations.values()):

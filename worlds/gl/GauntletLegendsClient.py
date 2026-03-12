@@ -1,4 +1,5 @@
 import asyncio
+import Utils
 import settings
 import os
 import re
@@ -67,17 +68,20 @@ class RetroSocket:
             b = b""
             for s in data[2:]:
                 if "-1" in s:
-                    raise Exception("Client tried to read from an invalid address or ROM is not open.")
+                    raise Exception("Client tried to read from an invalid address or ROM is not open...")
                 b += bytes.fromhex(s)
             return b
         except asyncio.TimeoutError:
-            logger.error("Timeout while waiting for socket response")
+            logger.error("Timeout while waiting for socket response...")
+            await asyncio.sleep(2)
             return None
         except ConnectionResetError:
-            logger.error("The connection was reset.")
+            logger.error("The connection was reset...")
+            await asyncio.sleep(2)
             return None
         except OSError as e:
             logger.error(f"Socket error during read: {e}")
+            await asyncio.sleep(2)
             return None
 
     async def status(self) -> str:
@@ -120,7 +124,6 @@ class GauntletLegendsContext(CommonContext):
         self.deathlink_pending: bool = False
         self.deathlink_enabled: bool = False
         self.deathlink_triggered: bool = False
-        self.ignore_deathlink: bool = False
         self.gl_sync_task = None
         self.glslotdata = None
         self.socket = RetroSocket()
@@ -147,8 +150,8 @@ class GauntletLegendsContext(CommonContext):
         self.queued_traps: list[tuple[str, int, bool]] = []
 
     def on_deathlink(self, data: dict):
-        self.deathlink_pending = True
         super().on_deathlink(data)
+        self.deathlink_pending = True
 
     async def update_stage(self):
         self.zone = await self._read_ram_int(ZONE_ID, 1)
@@ -196,7 +199,8 @@ class GauntletLegendsContext(CommonContext):
         if cmd in {"Connected"}:
             self.glslotdata = args["slot_data"]
             self.deathlink_enabled = bool(self.glslotdata["death_link"])
-            self.update_death_link(self.deathlink_enabled)
+            if self.deathlink_enabled:
+                Utils.async_start(self.update_death_link(self.deathlink_enabled))
         elif cmd == "LocationInfo":
             self.location_scouts = args["locations"]
         elif cmd == "RoomInfo":
@@ -206,13 +210,13 @@ class GauntletLegendsContext(CommonContext):
     # Also adds starting items based on a few yaml options
     async def handle_items(self):
         self.players = list(await self._read_ram(MOD_PLAYERS_LIST, 4))
-        players = [player for player in self.players if player != 0]
-        for player in players:
+        self.players = [player for player in self.players if player != 0]
+        for player in self.players:
             compass = await self._read_ram_int(MOD_COMPASS_COUNT + (2 * player_compass_index[player]), 2)
             if compass - 1 < len(self.items_received):
                 for index in range(compass - 1, len(self.items_received)):
                     item = self.items_received[index].item
-                    if player != players[0] and item in spawner_trap_ids:
+                    if player != self.players[0] and item in spawner_trap_ids:
                         continue
                     item_name = items_by_id[item].item_name
                     if self.current_zone in (0x8, 0xE) and item in spawner_trap_ids:
@@ -246,10 +250,12 @@ class GauntletLegendsContext(CommonContext):
         self.socket.send(message_format(WRITE, param_format(address, data)))
 
     async def dead(self) -> bool:
-        val = await self._read_ram_int(PLAYER_KILL, 1)
-        if (val & 0xF) == 0x1:
-            self.ignore_deathlink = True
-        return ((val & 0xF) == 0x8) or ((val & 0xF) == 0x1)
+        val = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (self.players[0] - 1)), 1)
+        return (val & 0xF) == 0x8
+
+    async def dead_or_menu(self) -> bool:
+        val = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (self.players[0] - 1)), 1)
+        return (val & 0xF) == 0x8 or (val & 0xF) == 0x1
 
     async def get_seed_name(self) -> str:
         seed_name = await self._read_ram(0xD07F0, 0x10)
@@ -346,7 +352,7 @@ class GauntletLegendsContext(CommonContext):
 
         zone_or_level_changed = self.zone != self.current_zone or self.level != self.current_level
         if zone_or_level_changed:
-            if self.current_level & 0x8 == 0x8 and self.level_id != 0x58 and not await self.dead():
+            if self.current_level & 0x8 == 0x8 and self.level_id != 0x58 and not await self.dead_or_menu():
                 await self.check_locations([loc.id for loc in level_locations[self.level_id]
                                             if "Mirror Shard" in loc.name or "Skorne" in loc.name])
             self.current_zone = self.zone
@@ -361,7 +367,7 @@ class GauntletLegendsContext(CommonContext):
         if not self.scouted:
             await self.scout_locations(self)
 
-        active = await self._read_ram_int(PLAYER_KILL, 1)
+        active = await self._read_ram_int(PLAYER_KILL + (0x1F0 * (self.players[0] - 1)), 1)
         if active != 0x4:
             return []
 
@@ -432,20 +438,21 @@ class GauntletLegendsContext(CommonContext):
     async def die(self):
         """Trigger deathlink death with character-specific death sound."""
         self.deathlink_triggered = True
-        char = await self._read_ram_int(PLAYER_CLASS, 1)
-        color = await self._read_ram_int(PLAYER_COLOR, 1)
+        for player in self.players:
+            char = await self._read_ram_int(PLAYER_CLASS + (0x1F0 * (player - 1)), 1)
+            color = await self._read_ram_int(PLAYER_COLOR + (0x1F0 * (player - 1)), 1)
 
-        # Play death sound
-        sound_data = (int.to_bytes(colors[color], 4, "little") +
-                      int.to_bytes(sounds[char], 4, "little") +
-                      int.to_bytes(0xBB, 4, "little"))
-        await self._write_ram(SOUND_ADDRESS, sound_data)
-        await self._write_ram(SOUND_START, int.to_bytes(0xE00AE718, 4, "little"))
-        await asyncio.sleep(2)
+            # Play death sound
+            sound_data = (int.to_bytes(colors[color], 4, "little") +
+                          int.to_bytes(sounds[char], 4, "little") +
+                          int.to_bytes(0xBB, 4, "little"))
+            await self._write_ram(SOUND_ADDRESS, sound_data)
+            await self._write_ram(SOUND_START, int.to_bytes(0xE00AE718, 4, "little"))
+            await asyncio.sleep(2)
 
-        # Stop sound and kill player
-        await self._write_ram(SOUND_START, int.to_bytes(0x0, 4, "little"))
-        await self._write_ram(PLAYER_KILL, int.to_bytes(0x7, 1, "little"))
+            # Stop sound and kill player
+            await self._write_ram(SOUND_START, int.to_bytes(0x0, 4, "little"))
+            await self._write_ram(PLAYER_KILL + (0x1F0 * (player - 1)), int.to_bytes(0x7, 1, "little"))
 
     def make_gui(self):
         ui = super().make_gui()
@@ -491,19 +498,25 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
 
             await ctx.handle_items()
             checking = await ctx.location_loop()
-            dead = await ctx.dead()
 
-            if dead and not ctx.ignore_deathlink and not ctx.deathlink_triggered:
-                await ctx.send_death(f"{ctx.player_names[ctx.slot]} ran out of food.")
-            ctx.deathlink_triggered = False
+            if ctx.deathlink_pending and ctx.deathlink_enabled:
+                ctx.deathlink_pending = False
+                ctx.deathlink_triggered = True
+                await ctx.die()
+            else:
+                player_state = await ctx._read_ram_int(PLAYER_KILL + (0x1F0 * (ctx.players[0] - 1)), 1)
+                dead = (player_state & 0xF) == 0x8
+                alive = (player_state & 0xF) == 0x4
+                if dead and ctx.deathlink_enabled and not ctx.deathlink_triggered:
+                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} ran out of food.")
+                    ctx.deathlink_triggered = True
+
+                if alive:
+                    ctx.deathlink_triggered = False
 
             if checking:
                 ctx.locations_checked += checking
                 await ctx.check_locations(checking)
-
-            if ctx.deathlink_pending and ctx.deathlink_enabled:
-                ctx.deathlink_pending = False
-                await ctx.die()
 
             if not ctx.finished_game and await ctx.check_goal():
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
