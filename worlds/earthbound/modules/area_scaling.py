@@ -1,4 +1,3 @@
-from ..modules.enemy_data import combat_regions
 from ..Options import MagicantMode
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -481,48 +480,41 @@ def calculate_scaling(world: "EarthBoundWorld") -> None:
                     item_regions[location.item.name] = []
                 item_regions[location.item.name].append(location.parent_region.name)
 
-            # TODO; all areas have levels now, so I can skip the combat regions check
-            if location.player == world.player and location.parent_region.name in combat_regions and (
-                    location.parent_region.name not in regions_that_were_already_scaled):
+            if location.player == world.player and (location.parent_region.name not in regions_that_were_already_scaled):
                 last_region = location.parent_region.name
             
             regions_that_were_already_scaled.append(last_region)
 
             if location.item.player == world.player and location.item.name == "Ness" and not scaled_chars["Ness"]:
-                if location.parent_region.name in combat_regions and (location.player == world.player) and (
-                        location.name not in locations_with_item_requirements):
+                if (location.name not in locations_with_item_requirements):
                     world.Ness_region = location.parent_region.name
                 else:
                     world.Ness_region = last_region
                 scaled_chars["Ness"] = True
 
             if location.item.player == world.player and location.item.name == "Paula" and not scaled_chars["Paula"]:
-                if location.parent_region.name in combat_regions and (location.player == world.player) and (
-                        location.name not in locations_with_item_requirements):
+                if (location.player == world.player) and (location.name not in locations_with_item_requirements):
                     world.Paula_region = location.parent_region.name
                 else:
                     world.Paula_region = last_region
                 scaled_chars["Paula"] = True
 
             if location.item.player == world.player and location.item.name == "Jeff" and not scaled_chars["Jeff"]:
-                if location.parent_region.name in combat_regions and (location.player == world.player) and (
-                        location.name not in locations_with_item_requirements):
+                if (location.player == world.player) and (location.name not in locations_with_item_requirements):
                     world.Jeff_region = location.parent_region.name
                 else:
                     world.Jeff_region = last_region
                 scaled_chars["Jeff"] = True
 
             if location.item.player == world.player and location.item.name == "Poo" and not scaled_chars["Poo"]:
-                if location.parent_region.name in combat_regions and (location.player == world.player) and (
-                        location.name not in locations_with_item_requirements):
+                if (location.player == world.player) and (location.name not in locations_with_item_requirements):
                     world.Poo_region = location.parent_region.name
                 else:
                     world.Poo_region = last_region
                 scaled_chars["Poo"] = True
 
             if location.item.player == world.player and location.item.name == "Franklin Badge" and not badge_scaled:
-                if location.parent_region.name in combat_regions and (location.player == world.player) and (
-                        location.name not in locations_with_item_requirements):
+                if (location.player == world.player) and (location.name not in locations_with_item_requirements):
                     world.Badge_region = location.parent_region.name
                 else:
                     world.Badge_region = last_region

@@ -26,7 +26,7 @@
 ### Windows Setup
 
 1. Download and install Archipelago from the link above, making sure to install the most recent version.
-2. During generation/patching, you will be asked to locate your base ROM file. This is your EarthBound ROM file.
+2. During patching, you will be asked to locate your base ROM file. This is your EarthBound ROM file.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
