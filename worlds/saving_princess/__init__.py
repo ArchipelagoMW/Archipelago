@@ -9,6 +9,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, icon_paths, launch_subprocess, Type as ComponentType
 from . import Options, Items, Locations
 from .Constants import *
+from .Locations import location_dict, location_dict_events, location_dict_event_expanded
 
 
 def launch_client(*args: str):
@@ -84,7 +85,7 @@ class SavingPrincessWeb(WebWorld):
 
 
 class SavingPrincessWorld(World):
-    """ 
+    """
     Explore a space station crawling with rogue machines and even rival bounty hunters
     with the same objective as you - but with far, far different intentions!
 
@@ -199,10 +200,13 @@ class SavingPrincessWorld(World):
             for i in range(item_data.count_extra):
                 self.add_item(item_name, ItemClass.useful)
 
-        # generate as many junk items as unfilled locations
-        junk_count: int = len(self.multiworld.get_unfilled_locations(self.player))
+        event_count: int = len(location_dict_event_expanded) if self.is_pool_expanded else len(location_dict_events)
+        # total locations - event locations - already created items = items left to create
+        junk_count: int = len(self.multiworld.get_unfilled_locations(self.player)) - event_count - len(self.item_pool)
         for i in range(junk_count):
             self.add_item(self.get_filler_item_name())
+
+        self.multiworld.itempool += self.item_pool
 
     def create_item(self, name: str) -> Items.SavingPrincessItem:
         return Items.item_dict[name].create_item(self.player)
@@ -214,9 +218,9 @@ class SavingPrincessWorld(World):
 
     def add_item(self, name: str, classification: Optional[ItemClass] = None):
         if classification is None:
-            self.multiworld.itempool.append(self.create_item(name))
+            self.item_pool.append(self.create_item(name))
         else:
-            self.multiworld.itempool.append(self.create_item_with_class(name, classification))
+            self.item_pool.append(self.create_item_with_class(name, classification))
 
     def get_filler_item_name(self) -> str:
         # check if this is going to be a trap
