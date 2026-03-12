@@ -82,8 +82,10 @@ def set_rules(world: "SavingPrincessWorld"):
                 return ITEM_WEAPON_VOLT
 
     # set the location rules
-    # this is behind the blast door to arctic
-    set_rule(get_location(LOCATION_HUB_AMMO), lambda state: state.has(ITEM_WEAPON_CHARGE, world.player))
+    # this is behind either a frozen door or the ventilation pipes, it is also past a big guard enemy
+    set_rule(get_location(LOCATION_ARCTIC_RELOAD),
+             lambda state: state.has_any([ITEM_WEAPON_CHARGE, ITEM_WEAPON_FIRE], world.player)
+             and state.has(ITEM_MAX_AMMO, world.player))
     # these are behind frozen doors
     for location_name in [LOCATION_ARCTIC_HEALTH, LOCATION_JACKET]:
         set_rule(get_location(location_name), lambda state: state.has(ITEM_WEAPON_FIRE, world.player))
@@ -105,6 +107,8 @@ def set_rules(world: "SavingPrincessWorld"):
         get_location(EP_LOCATION_CAVE_BOSS if world.is_pool_expanded else EVENT_LOCATION_GUARD_GONE),
         lambda state: state.has(ITEM_MAX_AMMO, world.player)
     )
+    # same for this one
+    set_rule(get_location(LOCATION_VOLCANIC_HEALTH), lambda state: state.has(ITEM_MAX_AMMO, world.player))
 
     # guarantee some upgrades to be found before bosses
     boss_locations = [LOCATION_VOLCANIC_WEAPON, LOCATION_ARCTIC_WEAPON, LOCATION_SWAMP_SPECIAL]
@@ -166,10 +170,12 @@ def set_rules(world: "SavingPrincessWorld"):
              lambda state: state.can_reach_location(LOCATION_CAVE_WEAPON, world.player))
     if world.is_pool_expanded:
         set_rule(get_location(BL_LOCATION_CAVE_BOSS),
-                 lambda state: state.can_reach_location(EP_LOCATION_CAVE_BOSS, world.player))
+                 lambda state: state.can_reach_location(EP_LOCATION_CAVE_BOSS, world.player)
+                 or state.can_reach_location(LOCATION_ARCTIC_RELOAD, world.player))
     else:
         set_rule(get_location(BL_LOCATION_CAVE_BOSS),
-                 lambda state: state.has(EVENT_ITEM_GUARD_GONE, world.player))
+                 lambda state: state.has(EVENT_ITEM_GUARD_GONE, world.player)
+                 or state.can_reach_location(LOCATION_ARCTIC_RELOAD, world.player))
     # volcanic
     region = world.get_region(REGION_VOLCANIC)
     set_rule(get_location(BL_LOCATION_GOLD_CRAB),
@@ -188,7 +194,8 @@ def set_rules(world: "SavingPrincessWorld"):
     set_rule(get_location(BL_LOCATION_BAT),
              lambda state: state.can_reach(region, world.player))
     set_rule(get_location(BL_LOCATION_FLEA_EGG),
-             lambda state: state.can_reach(region, world.player))
+             lambda state: state.can_reach(region, world.player)
+             and state.has_any([ITEM_WEAPON_CHARGE, ITEM_WEAPON_FIRE], world.player))
     set_rule(get_location(BL_LOCATION_FLEA),
              lambda state: state.can_reach(region, world.player))
     set_rule(get_location(BL_LOCATION_ARCTIC_BOSS),
@@ -201,6 +208,8 @@ def set_rules(world: "SavingPrincessWorld"):
     # electrical
     region = world.get_region(REGION_ELECTRICAL)
     set_rule(get_location(BL_LOCATION_NINJA_FIGHT),
+             lambda state: state.can_reach(region, world.player))
+    set_rule(get_location(BL_LOCATION_ELECTRIC_ORB),
              lambda state: state.can_reach(region, world.player))
     set_rule(get_location(BL_LOCATION_ELECTRICAL_MINIBOSS),
              lambda state: state.can_reach(region, world.player))

@@ -120,6 +120,7 @@ BL_LOCATION_NINJA_FIGHT: str = "Battle Log: Ninja"
 BL_LOCATION_ELECTRICAL_MINIBOSS: str = "Battle Log: Generator"
 BL_LOCATION_ELECTRICAL_BOSS: str = "Battle Log: Malakhov"
 BL_LOCATION_ELECTRICAL_FINAL_BOSS: str = "Battle Log: BRAINOS"
+BL_LOCATION_ELECTRIC_ORB: str = "Battle Log: Electric Orb"
 
 EVENT_LOCATION_GUARD_GONE: str = "Cave status"
 EVENT_LOCATION_CLIFF_GONE: str = "Volcanic status"

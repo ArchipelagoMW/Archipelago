@@ -253,8 +253,8 @@ class SavingPrincessWorld(World):
             # aesthetic options
             "shake_intensity",
         )
-        slot_data["arctic_door"] = self.arctic_door
-        slot_data["volcanic_door"] = self.volcanic_door
-        slot_data["swamp_door ="] = self.swamp_door
+        slot_data["arctic_door"] = self.arctic_door.value
+        slot_data["volcanic_door"] = self.volcanic_door.value
+        slot_data["swamp_door"] = self.swamp_door.value
         slot_data["music_table"] = self.music_table
         return slot_data

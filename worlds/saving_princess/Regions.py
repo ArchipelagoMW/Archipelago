@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict
 
 from BaseClasses import MultiWorld, Region, Entrance
 
@@ -26,6 +26,7 @@ region_dict: Dict[str, List[str]] = {
         EVENT_LOCATION_CLIFF_GONE,
     ],
     REGION_ARCTIC: [
+        LOCATION_HUB_AMMO,  # this is in hub, but past the cave that leads to arctic
         LOCATION_ARCTIC_AMMO,
         LOCATION_ARCTIC_RELOAD,
         LOCATION_ARCTIC_HEALTH,
@@ -35,7 +36,6 @@ region_dict: Dict[str, List[str]] = {
         EVENT_LOCATION_ACE_GONE,
     ],
     REGION_HUB: [
-        LOCATION_HUB_AMMO,
         LOCATION_HUB_HEALTH,
         LOCATION_HUB_RELOAD,
         EP_LOCATION_HUB_CONSOLE,
@@ -88,6 +88,7 @@ region_dict: Dict[str, List[str]] = {
         BL_LOCATION_ELECTRICAL_MINIBOSS,
         BL_LOCATION_ELECTRICAL_BOSS,
         BL_LOCATION_ELECTRICAL_FINAL_BOSS,
+        BL_LOCATION_ELECTRIC_ORB,
     ]
 }
 
@@ -116,10 +117,10 @@ def create_regions(multiworld: MultiWorld, player: int, is_pool_expanded: bool, 
         region = Region(region_name, player, multiworld)
         set_region_locations(region, location_names, is_pool_expanded, has_battle_logs)
         multiworld.regions.append(region)
-    connect_regions(multiworld, player)
+    connect_regions(multiworld, player, has_battle_logs)
 
 
-def connect_regions(multiworld: MultiWorld, player: int):
+def connect_regions(multiworld: MultiWorld, player: int, has_battle_logs):
     # and add a connection from the menu to the hub region
     menu = multiworld.get_region(REGION_MENU, player)
     hub = multiworld.get_region(REGION_HUB, player)
@@ -128,7 +129,10 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connection.connect(hub)
 
     # now add an entrance from every other region to hub
-    for region_name in region_dict.keys() - {REGION_MENU, REGION_HUB}:
+    for region_name in region_dict.keys() - {REGION_MENU, REGION_HUB, REGION_ELECTRICAL_POWERED}:
+        # battle log region only exists if battle log checks are on
+        if not has_battle_logs and region_name == REGION_BATTLE_LOG:
+            continue
         connection = Entrance(player, f"{region_name} entrance", hub)
         hub.exits.append(connection)
         connection.connect(multiworld.get_region(region_name, player))

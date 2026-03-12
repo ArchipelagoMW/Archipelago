@@ -86,6 +86,7 @@ location_dict_battle_log: Dict[str, LocData] = {
     BL_LOCATION_ELECTRICAL_MINIBOSS: LocData(56),
     BL_LOCATION_ELECTRICAL_BOSS: LocData(57),
     BL_LOCATION_ELECTRICAL_FINAL_BOSS: LocData(58),
+    BL_LOCATION_ELECTRIC_ORB: LocData(59),
 }
 
 location_dict_event_expanded: Dict[str, LocData] = {
