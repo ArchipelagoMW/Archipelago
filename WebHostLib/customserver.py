@@ -80,7 +80,6 @@ class WebHostContext(Context):
 
     def __del__(self):
         try:
-            import psutil
             from Utils import format_SI_prefix
             self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
         except ImportError:
@@ -185,55 +184,47 @@ class WebHostContext(Context):
 
 
 class GameRangePorts(typing.NamedTuple):
-    parsed_ports: list[range]
-    weights: list[int]
+    valid_ports: list[int]
     ephemeral_allowed: bool
 
 
 @functools.cache
 def parse_game_ports(game_ports: tuple[str | int, ...]) -> GameRangePorts:
-    parsed_ports: list[range] = []
-    weights: list[int] = []
+    valid_ports: list[int] = []
     ephemeral_allowed = False
-    total_length = 0
 
     for item in game_ports:
         if isinstance(item, str) and "-" in item:
             start, end = map(int, item.split("-"))
             x = range(start, end + 1)
-            total_length += len(x)
-            weights.append(total_length)
-            parsed_ports.append(x)
+            valid_ports.extend(x)
         elif int(item) == 0:
             ephemeral_allowed = True
         else:
-            total_length += 1
-            weights.append(total_length)
-            num = int(item)
-            parsed_ports.append(range(num, num + 1))
+            valid_ports.append(int(item))
 
-    return GameRangePorts(parsed_ports, weights, ephemeral_allowed)
+    random.shuffle(valid_ports)
+    return GameRangePorts(valid_ports, ephemeral_allowed)
 
 
-def weighted_random(ranges: list[range], cum_weights: list[int]) -> int:
-    [picked] = random.choices(ranges, cum_weights=cum_weights)
-    return random.randrange(picked.start, picked.stop, picked.step)
+next_port_index = 0
 
 
 def create_random_port_socket(game_ports: tuple[str | int, ...], host: str) -> socket.socket:
-    parsed_ports, weights, ephemeral_allowed = parse_game_ports(game_ports)
+    global next_port_index
+    valid_ports, ephemeral_allowed = parse_game_ports(game_ports)
     used_ports = get_used_ports()
-    i = 1024 if len(parsed_ports) > 0 else 0
-    while i > 0:
-        port_num = weighted_random(parsed_ports, weights)
-        if port_num in used_ports:
-            used_ports = get_used_ports()
+
+    next_index = next_port_index
+    for i, port in enumerate(itertools.chain(valid_ports[next_index:], valid_ports[:next_index])):
+        if port in used_ports:
             continue
 
-        i -= 0
-
         try:
-            return socket.create_server((host, port_num))
+            res = socket.create_server((host, port))
+            next_index = (next_index + i + 1) % len(valid_ports)
+            next_port_index = next_index
+            return res
         except OSError:
             pass
 
