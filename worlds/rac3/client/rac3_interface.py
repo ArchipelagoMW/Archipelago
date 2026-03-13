@@ -132,6 +132,7 @@ class Rac3Interface(GameInterface):
     one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
+    last_in_ship_time: float = 0.0
     nanotech_exp: int = 0
     homewarping: bool = False
     checked_locations: set[str] = set()
@@ -139,7 +140,6 @@ class Rac3Interface(GameInterface):
     clank_disabled_trap: bool = False
     unfreeze_packs: bool = False
     vidcomic_2_fix: int = 0
-    player_actionable: int = 0x8000
     visited_planets: set[str] = set()
     weapon_vendor_items: list[str] = []
     armor_vendor_items: list[str] = []
@@ -375,13 +375,13 @@ class Rac3Interface(GameInterface):
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
         self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
-        self.player_actionable = self._read16(RAC3STATUS.PLAYER_ACTIONABLE)
         self.pda_vendor = self.find_pda_vendor()
         self.vendor_type = self.vendor_check()
         self.get_visited_planets()
         self.determine_weapon_vendor_items()
         self.determine_armor_vendor_items()
         self.vehicle_check()
+        self.ship_check()
         self.pause_check()
         self.check_latches()
 
@@ -419,6 +419,14 @@ class Rac3Interface(GameInterface):
                     items_to_sell.append(item)
         self.armor_vendor_items = items_to_sell
 
+    def ship_check(self):
+        """
+        Updates the last_in_ship_time to address the short moment where everything is 0 while gadgets spawn
+        """
+        current_time = time.time()
+        if self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE:
+            self.last_in_ship_time = current_time
+    
     def vehicle_check(self):
         """
         Updates the last_in_vehicle_time when the player is in a vehicle.
@@ -1166,8 +1174,7 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if ((self.player_actionable == 0x8000 and self.pause_state_value in [RAC3PAUSESTATE.PLANET_CHANGE,
-                                                                             RAC3PAUSESTATE.UNPAUSED])
+        if ((time.time() - self.last_in_ship_time) < 1
                 or self.is_reloading
                 or self.self_respawning
                 or self.action_2 == 0x09):
