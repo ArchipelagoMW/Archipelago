@@ -1752,23 +1752,16 @@
         "modern_id": 376
     },
     "Jen Heard Sewer Key Purchase": {
-        "region": "Overworld",
+        "region": "Uptown",
         "requirements": {"randomize_customers" : {"has" : "Jen Heard Unlocked"}},
         "tags": ["Sewer"],
         "modern_id": 403
     },
-    "Enter Sewer": {
-        "region": "Overworld",
+    "Sewer Office Key Pad": {
+        "region": "Uptown",
         "requirements": {"randomize_customers" : {"has" : "Jen Heard Unlocked"},
                          "randomize_sewer_key": {"has" : "Sewer Key"}},
         "tags": ["Sewer"],
         "modern_id": 404
-    },
-    "Sewer Office Key Pad": {
-        "region": "Overworld",
-        "requirements": {"randomize_customers" : {"has" : "Jen Heard Unlocked"},
-                         "randomize_sewer_key": {"has" : "Sewer Key"}},
-        "tags": ["Sewer"],
-        "modern_id": 405
     }
 } 

@@ -606,7 +606,8 @@
         "modern_id": 123
     },
     "Jen Heard Unlocked": {
-        "classification": {"default" : ["PROGRESSION_SKIP_BALANCING", "USEFUL"]},
+        "classification": {"default" : ["PROGRESSION_SKIP_BALANCING", "USEFUL"],
+                           "randomize_sewer_key" : ["PROGRESSION", "USEFUL"]},
         "tags": ["Uptown", "Customer"],
         "modern_id": 124
     },

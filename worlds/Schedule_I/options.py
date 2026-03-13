@@ -181,7 +181,7 @@ class RandomizeDrugMakingProperties(DefaultOnToggle):
     Determines if drug making properties will be added into the item pool.
     Purchasing drug making properties become checks, but you do not purchase them.
     Realtor will have AP items instead of drug making properties if this is enabled.
-    This does not include ones you must purchase through missions or the sewer office.
+    This does not include ones you must purchase through missions.
     """
     display_name = "Randomize drug making Properties"
 
