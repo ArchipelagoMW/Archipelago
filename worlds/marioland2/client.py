@@ -5,13 +5,14 @@ from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 
+from .music_data import overworld_music_data, misc_music_tracks
 from .rom_addresses import rom_addresses
 
 logger = logging.getLogger("Client")
 
 BANK_EXCHANGE_RATE = 20000000000
 
-overworld_music = (0x05, 0x06, 0x0D, 0x0E, 0x10, 0x12, 0x1B, 0x1C, 0x1E)
+overworld_music = [music_data.track for music_data in overworld_music_data.values()]
 
 class MarioLand2Client(BizHawkClient):
     system = ("GB", "SGB")
@@ -230,7 +231,7 @@ class MarioLand2Client(BizHawkClient):
             self.locations_array = locations_checked
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
-        if music == 0x18:
+        if music == misc_music_tracks["Ending"]:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 
