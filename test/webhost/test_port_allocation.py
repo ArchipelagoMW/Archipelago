@@ -12,23 +12,21 @@ class TestPortAllocating(unittest.TestCase):
         """Ensure that game ports with ranges are parsed correctly"""
         val = parse_game_ports(("1000-2000", "2000-5000", "1000-2000", 20, 40, "20", "0"))
 
-        self.assertListEqual(val.parsed_ports,
-                             [range(1000, 2001), range(2000, 5001), range(1000, 2001), range(20, 21), range(40, 41),
-                              range(20, 21)], "The parsed game ports are not the expected values")
+        self.assertCountEqual(val.valid_ports,
+                             [*range(1000,2001), *range(2000, 5001), *range(1000, 2001), 20, 40, 20],
+                             "The parsed game ports are not the expected length")
         self.assertTrue(val.ephemeral_allowed, "The ephemeral allowed flag is not set even though it was passed")
-        self.assertListEqual(val.weights, [1001, 4002, 5003, 5004, 5005, 5006],
-                             "Cumulative weights are not the expected value")
 
         val = parse_game_ports(())
-        self.assertListEqual(val.parsed_ports, [], "Empty list of game port returned something")
+        self.assertListEqual(val.valid_ports, [], "Empty list of game port returned something")
         self.assertFalse(val.ephemeral_allowed, "Empty list returned that ephemeral is allowed")
 
         val = parse_game_ports((0,))
-        self.assertListEqual(val.parsed_ports, [], "Empty list of ranges returned something")
+        self.assertListEqual(val.valid_ports, [], "Empty list of ranges returned something")
         self.assertTrue(val.ephemeral_allowed, "List with just 0 is not allowing ephemeral ports")
 
         val = parse_game_ports((1,))
-        self.assertEqual(val.parsed_ports, [range(1, 2)], "Parsed ports doesn't contain the expected values")
+        self.assertListEqual(val.valid_ports, [1], "Valid ports doesn't contain the expected values")
         self.assertFalse(val.ephemeral_allowed, "List with just single port returned that ephemeral is allowed")
 
     def test_parse_game_port_errors(self) -> None:
