@@ -691,6 +691,13 @@ class DarkSouls3World(World):
             self._can_get(state, "FK: Soul of the Blood of the Wolf")
         ))
 
+        #Yoel dies spawning the Hollow's Ashes after entering the Catacombs, so require Abyss Watchers
+        self._add_location_rule([
+            "FS: Ring of Sacrifice - Yuria shop"
+        ], lambda state: (
+            self._can_get(state, "FK: Soul of the Blood of the Wolf")
+        ))
+        
         self._add_location_rule([
             "CKG: Drakeblood Helm - tomb, after killing AP mausoleum NPC",
             "CKG: Drakeblood Armor - tomb, after killing AP mausoleum NPC",
