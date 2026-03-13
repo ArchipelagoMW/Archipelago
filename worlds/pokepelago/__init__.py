@@ -4,7 +4,8 @@ from BaseClasses import Region, Entrance, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
 from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
-from .Locations import PokepelagoLocation, location_table, milestones, starting_locations, TYPE_MILESTONE_STEPS
+from .Locations import (PokepelagoLocation, location_table, milestones, starting_locations,
+                        TYPE_MILESTONE_STEPS, DEXSANITY_OFF_EXTRA_STEPS)
 from .Options import PokepelagoOptions, pokepelago_option_groups
 from .data import (POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region,
                    LEGENDARY_SUB_IDS, LEGENDARY_BOX_IDS, LEGENDARY_MYTHIC_IDS,
@@ -58,6 +59,14 @@ class PokepelagoWorld(World):
             ]
             if not self.active_regions:
                 self.active_regions = ["Kanto"]
+
+        # Hisui-only: force starting locations to ensure enough ungated slots.
+        # Hisui has only 7 pokemon and no starters — too few milestone locations
+        # for progression items without extra ungated seed locations.
+        if self.active_regions == ["Hisui"]:
+            self.options.starting_location_count.value = max(
+                self.options.starting_location_count.value, 5
+            )
 
         # Determine starting region from starter_region option (0 = any = random active region).
         _REGION_BY_IDX = {
@@ -391,15 +400,22 @@ class PokepelagoWorld(World):
                 count = int(loc_name.split(" ")[1])
                 if count > len(self.active_pokemon) - len(self.starter_names):
                     continue
+                # Extra early milestones (3, 4) only when dexsanity is off
+                if count in DEXSANITY_OFF_EXTRA_STEPS and self.options.dexsanity.value:
+                    continue
 
             location = PokepelagoLocation(self.player, loc_name, loc_id, menu_region)
             menu_region.locations.append(location)
 
         # Type-specific milestone locations (e.g. "Caught 5 Fire Pokemon")
         # Only add milestones achievable with the current active Pokémon set.
+        # Extra early steps (3, 4) only included when dexsanity is off.
+        type_steps = TYPE_MILESTONE_STEPS
+        if not self.options.dexsanity.value:
+            type_steps = sorted(set(TYPE_MILESTONE_STEPS + DEXSANITY_OFF_EXTRA_STEPS))
         for p_type in GEN_1_TYPES:
             max_catchable = self._active_type_counts.get(p_type, 0)
-            for step in TYPE_MILESTONE_STEPS:
+            for step in type_steps:
                 if step <= max_catchable:
                     loc_name = f"Caught {step} {p_type} Pokemon"
                     loc_id = self.location_name_to_id.get(loc_name)

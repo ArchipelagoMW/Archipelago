@@ -8,11 +8,57 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    uses: Eijebong/ap-actions/.github/workflows/release-apworld.yml@main
-    with:
-      ap-version: '0.6.6'
-      python-version: '3.12'
-      apworld-path: 'worlds/pokepelago'
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create apworld
+        id: apworld
+        uses: Eijebong/ap-actions/package-apworld@main
+        with:
+          path: worlds/pokepelago
+          ap-version: '0.6.6'
+          python-version: '3.12'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apworld
+          path: ${{ steps.apworld.outputs.apworld }}
+
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Eijebong/ap-actions/generate-template@main
+        id: template
+        with:
+          apworld-path: worlds/pokepelago
+          ap-version: '0.6.6'
+          python-version: '3.12'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: template
+          path: ${{ steps.template.outputs.template }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [package, template]
     permissions:
       contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: apworld
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: template
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: '*'
+          allowUpdates: true
+          generateReleaseNotes: true
+          prerelease: false
+          immutableCreate: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true

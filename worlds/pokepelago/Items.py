@@ -25,27 +25,6 @@ item_data_table["Master Ball"]  = (ITEM_ID_OFFSET + 3001, ItemClassification.use
 item_data_table["Pokedex"]      = (ITEM_ID_OFFSET + 3002, ItemClassification.useful)
 item_data_table["Pokegear"]     = (ITEM_ID_OFFSET + 3003, ItemClassification.useful)
 
-# Pokéballs
-item_data_table["Ultra Ball"]   = (ITEM_ID_OFFSET + 3004, ItemClassification.filler)
-item_data_table["Great Ball"]   = (ITEM_ID_OFFSET + 3005, ItemClassification.filler)
-item_data_table["Net Ball"]     = (ITEM_ID_OFFSET + 3006, ItemClassification.filler)
-item_data_table["Dusk Ball"]    = (ITEM_ID_OFFSET + 3007, ItemClassification.filler)
-item_data_table["Repeat Ball"]  = (ITEM_ID_OFFSET + 3008, ItemClassification.filler)
-item_data_table["Quick Ball"]   = (ITEM_ID_OFFSET + 3009, ItemClassification.filler)
-
-# Medicine
-item_data_table["Full Restore"] = (ITEM_ID_OFFSET + 3010, ItemClassification.filler)
-item_data_table["Max Potion"]   = (ITEM_ID_OFFSET + 3011, ItemClassification.filler)
-item_data_table["Revive"]       = (ITEM_ID_OFFSET + 3012, ItemClassification.filler)
-item_data_table["Max Revive"]   = (ITEM_ID_OFFSET + 3013, ItemClassification.filler)
-item_data_table["Full Heal"]    = (ITEM_ID_OFFSET + 3014, ItemClassification.filler)
-item_data_table["Rare Candy"]   = (ITEM_ID_OFFSET + 3015, ItemClassification.filler)
-
-# Key items / field use
-item_data_table["Repel"]        = (ITEM_ID_OFFSET + 3016, ItemClassification.filler)
-item_data_table["Super Repel"]  = (ITEM_ID_OFFSET + 3017, ItemClassification.filler)
-item_data_table["Escape Rope"]  = (ITEM_ID_OFFSET + 3018, ItemClassification.filler)
-
 # Joke / "nothing" item — purely thematic padding
 item_data_table["Magikarp used Splash - but nothing happened!"] = (ITEM_ID_OFFSET + 3019, ItemClassification.filler)
 

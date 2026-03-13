@@ -215,3 +215,5 @@ fuzzer/
 fuzz.py
 hooks/
 run_fuzz.sh
+/fuzz_output/
+/fuzz_results/

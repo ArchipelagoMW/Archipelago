@@ -22,9 +22,11 @@ for mon in POKEMON_DATA:
 # 3. Global Milestone Locations (Rewards for total catches)
 # Optimized Tapered milestones: Dense early (for randomizer stepping stones), sparse late (for sphere depth compression).
 GLOBAL_MILESTONES = [1, 2, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 250, 400, 600, 800, 1000]
+# Extra early milestones added when dexsanity=OFF to ensure enough locations for progression items.
+DEXSANITY_OFF_EXTRA_STEPS = [3, 4]
 # Specific Max-Pokemon milestones (Gen-specific goals)
 goal_milestones = [151, 251, 386, 493, 649, 721, 809, 898, 905, 1025]
-milestones = sorted(list(set(GLOBAL_MILESTONES + goal_milestones)))
+milestones = sorted(list(set(GLOBAL_MILESTONES + DEXSANITY_OFF_EXTRA_STEPS + goal_milestones)))
 
 for count in milestones:
     location_table[f"Guessed {count} Pokemon"] = LOCATION_ID_OFFSET + 10_000 + count
@@ -40,8 +42,9 @@ for mon in POKEMON_DATA:
 # Type milestone steps — location IDs are defined for the full superset here.
 # Per-game filtering (based on active regions and starters) happens in create_regions().
 TYPE_MILESTONE_STEPS = [1, 2, 5, 10, 20, 35, 50]
+ALL_TYPE_MILESTONE_STEPS = sorted(set(TYPE_MILESTONE_STEPS + DEXSANITY_OFF_EXTRA_STEPS))
 for p_type in GEN_1_TYPES:
-    for step in TYPE_MILESTONE_STEPS:
+    for step in ALL_TYPE_MILESTONE_STEPS:
         if step <= type_counts[p_type]:
             location_table[f"Caught {step} {p_type} Pokemon"] = LOCATION_ID_OFFSET + 20_000 + (GEN_1_TYPES.index(p_type) * 1000) + step
 
