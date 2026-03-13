@@ -1135,7 +1135,7 @@ class Rac3Interface(GameInterface):
     def cutscene_gadget_fix(self):
         """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
         gets checked"""
-        if bool(self._read8(RAC3STATUS.HIDE_WEAPON)):
+        if bool(self._read8(RAC3STATUS.HIDE_WEAPON)) and self.action not in [0x17, 0x18, 0x19, 0x1A, 0x1B, 0x37]:
             match self.planet:
                 case RAC3REGION.MARCADIA:
                     self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
