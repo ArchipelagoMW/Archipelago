@@ -962,6 +962,8 @@ class Rac3Interface(GameInterface):
                     megacorp_weapons = [item for item in self.weapon_vendor_items if item in MEGACORP_WEAPONS]
                     new_inventory.extend(
                         [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in megacorp_weapons])
+                    # Add the memory card item
+                    new_inventory.append(RAC3WEAPONVENDORSLOTDATA([0, 0, 0x0CDB, 0, 0, 0, 1]))
                 else:
                     # Only show gadgetron weapons, keep current inventory up to all_ammo
                     for slot_data in current_inventory:
@@ -971,10 +973,16 @@ class Rac3Interface(GameInterface):
                     gadgetron_weapons = [item for item in self.weapon_vendor_items if item not in MEGACORP_WEAPONS]
                     new_inventory.extend(
                         [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in gadgetron_weapons])
+                    if self.planet == RAC3REGION.STARSHIP_PHOENIX:
+                        # add memory card item
+                        new_inventory.append(RAC3WEAPONVENDORSLOTDATA([0, 0, 0x0CDB, 0, 0, 0, 1]))
             case RAC3VENDORTYPE.ARMOR:
                 if not self.options.armor_vendor:
                     return
                 new_inventory = [ARMOR_VENDOR_INVENTORY[ITEM_TO_ARMOR_VENDOR_LOCATION[item]] for item in self.armor_vendor_items]
+                # Patch out the check that prevents buying weaker armor
+                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR) == 0x1062001A:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR, 0)
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
