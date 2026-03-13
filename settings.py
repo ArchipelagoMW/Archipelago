@@ -608,6 +608,16 @@ class ServerOptions(Group):
         """log all server traffic, mostly for dev use"""
         OFF = 0
         ON = 1
+    
+    class DisableLimitCommands(Bool):
+        """Disallow commands relating to server limits."""
+    
+    class LimitMaxIntBits(int):
+        """limit allowed number of integer bits per data storage value"""
+    class LimitMaxListLen(int):
+        """limit allowed number of elements per data storage value"""
+    class LimitMaxStringLen(int):
+        """limit allowed number of string characters per data storage value"""
 
     host: str | None = None
     port: int = 38281
@@ -628,7 +638,10 @@ class ServerOptions(Group):
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
     log_network: LogNetwork = LogNetwork(0)
-
+    disable_limit_commands: DisableLimitCommands | bool = False
+    limit_max_int_bits: LimitMaxIntBits = LimitMaxIntBits(128)
+    limit_max_list_len: LimitMaxListLen = LimitMaxListLen(1 * 1024 * 1024)
+    limit_max_string_len: LimitMaxStringLen = LimitMaxStringLen(1 * 1024 * 1024)
 
 class GeneratorOptions(Group):
     """Options for Generation"""
