@@ -211,3 +211,7 @@ worlds/pokepelago.apworld
 pokepelago.apworld
 package_apworld.py
 releases/pokepelago-v0.3.2.apworld
+fuzzer/
+fuzz.py
+hooks/
+run_fuzz.sh

@@ -83,7 +83,7 @@ _GATE_ITEMS = {
     "Dawn Stone":      (ITEM_ID_OFFSET + 6018, ItemClassification.progression),
     "Ice Stone":       (ITEM_ID_OFFSET + 6019, ItemClassification.progression),
     # Cosmetic filler
-    "Shiny Token":     (ITEM_ID_OFFSET + 6020, ItemClassification.filler),
+    "Shiny Charm":     (ITEM_ID_OFFSET + 6020, ItemClassification.filler),
 }
 item_data_table.update(_GATE_ITEMS)
 

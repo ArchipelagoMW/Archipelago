@@ -1,0 +1,19 @@
+name: Pokepelago Fuzz
+
+on:
+  push:
+    paths: ['worlds/pokepelago/**']
+  pull_request:
+    paths: ['worlds/pokepelago/**']
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Eijebong/ap-actions/fuzz@main
+        with:
+          ap-version: '0.6.6'
+          python-version: '3.12'
+          apworld-path: 'worlds/pokepelago'
+          runs: 500
+          yamls-per-run: 1

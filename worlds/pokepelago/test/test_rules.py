@@ -24,7 +24,7 @@ class TestTypeKeyRules(WorldTestBase):
     """Kanto only, dexsanity + type_locks on, Charmander as starter (Fire type pre-collected)."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
+        "regions": {"Kanto"},
         "type_locks": 1,
         "region_locks": 0,
         "dexsanity": 1,
@@ -84,8 +84,7 @@ class TestRegionPassRules(WorldTestBase):
     """Kanto + Johto, dexsanity + region_locks on, starting from Kanto."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
-        "include_johto": 1,
+        "regions": {"Kanto", "Johto"},
         "type_locks": 0,
         "region_locks": 1,
         "dexsanity": 1,
@@ -129,7 +128,7 @@ class TestMilestoneRules(WorldTestBase):
     """Kanto only, all locks on — milestone rules should require accessible Pokemon."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
+        "regions": {"Kanto"},
         "type_locks": 1,
         "region_locks": 1,
         "dexsanity": 1,
@@ -162,7 +161,7 @@ class TestVictoryRule(WorldTestBase):
     """Kanto only, all locks on — victory requires goal_count Pokemon accessible."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
+        "regions": {"Kanto"},
         "type_locks": 1,
         "region_locks": 1,
         "dexsanity": 1,
@@ -188,7 +187,7 @@ class TestLegendaryLocks(WorldTestBase):
     """Kanto with legendary_locks on — box legendaries require 7 Gym Badges."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
+        "regions": {"Kanto"},
         "legendary_locks": 1,
         "type_locks": 0,
         "region_locks": 0,
@@ -222,7 +221,7 @@ class TestTradeLocks(WorldTestBase):
     """Kanto with trade_locks on — trade evolutions require Link Cable."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
+        "regions": {"Kanto"},
         "trade_locks": 1,
         "type_locks": 0,
         "region_locks": 0,
@@ -254,7 +253,7 @@ class TestFossilLocks(WorldTestBase):
     """Kanto with fossil_locks on — fossil Pokemon require Fossil Restorer."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 1,
+        "regions": {"Kanto"},
         "fossil_locks": 1,
         "type_locks": 0,
         "region_locks": 0,
@@ -286,8 +285,7 @@ class TestUltraBeastLocks(WorldTestBase):
     """Alola with ultra_beast_locks on — Ultra Beasts require Ultra Wormhole."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 0,
-        "include_alola": 1,
+        "regions": {"Alola"},
         "ultra_beast_locks": 1,
         "type_locks": 0,
         "region_locks": 0,
@@ -319,8 +317,7 @@ class TestParadoxLocks(WorldTestBase):
     """Paldea with paradox_locks on — Paradox Pokemon require Time Rift."""
     game = "Pokepelago"
     options = {
-        "include_kanto": 0,
-        "include_paldea": 1,
+        "regions": {"Paldea"},
         "paradox_locks": 1,
         "type_locks": 0,
         "region_locks": 0,

@@ -1,0 +1,18 @@
+name: Pokepelago Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    uses: Eijebong/ap-actions/.github/workflows/release-apworld.yml@main
+    with:
+      ap-version: '0.6.6'
+      python-version: '3.12'
+      apworld-path: 'worlds/pokepelago'
+    permissions:
+      contents: write

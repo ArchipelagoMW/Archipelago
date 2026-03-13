@@ -5,13 +5,14 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
 from .Items import PokepelagoItem, item_table, item_data_table, GEN_1_TYPES, FILLER_ITEM_CATEGORIES
 from .Locations import PokepelagoLocation, location_table, milestones, starting_locations, TYPE_MILESTONE_STEPS
-from .Options import PokepelagoOptions, REGION_OPTION_ATTRS
+from .Options import PokepelagoOptions, pokepelago_option_groups
 from .data import (POKEMON_DATA, GAME_REGIONS, REGION_RANGES, STARTERS_BY_REGION, get_pokemon_region,
                    LEGENDARY_SUB_IDS, LEGENDARY_BOX_IDS, LEGENDARY_MYTHIC_IDS,
                    BABY_IDS, TRADE_EVO_IDS, FOSSIL_IDS, ULTRA_BEAST_IDS, PARADOX_IDS,
                    STONE_EVO_GROUPS)
 
 class PokepelagoWeb(WebWorld):
+    option_groups = pokepelago_option_groups
     tutorials = [Tutorial(
         "Pokepelago Setup Guide",
         "A guide to setting up the Pokepelago Archipelago world.",
@@ -38,12 +39,25 @@ class PokepelagoWorld(World):
 
     def generate_early(self):
         # Build list of active regions in canonical order
-        self.active_regions = [
-            r for r in GAME_REGIONS
-            if getattr(self.options, REGION_OPTION_ATTRS[r]).value
-        ]
-        if not self.active_regions:
-            self.active_regions = ["Kanto"]
+        rrc = self.options.random_region_count.value
+        if rrc == -1:  # "random" — random count + random selection
+            count = self.random.randint(1, len(GAME_REGIONS))
+            self.active_regions = sorted(
+                self.random.sample(list(GAME_REGIONS), count),
+                key=GAME_REGIONS.index
+            )
+        elif rrc > 0:  # 1-10 — specific count, random selection
+            count = min(rrc, len(GAME_REGIONS))
+            self.active_regions = sorted(
+                self.random.sample(list(GAME_REGIONS), count),
+                key=GAME_REGIONS.index
+            )
+        else:  # 0 / "disabled" — use manual Regions option
+            self.active_regions = [
+                r for r in GAME_REGIONS if r in self.options.regions.value
+            ]
+            if not self.active_regions:
+                self.active_regions = ["Kanto"]
 
         # Determine starting region from starter_region option (0 = any = random active region).
         _REGION_BY_IDX = {
@@ -68,8 +82,18 @@ class PokepelagoWorld(World):
             self.starter_names: set = {chosen}
             self.chosen_starter: str | None = chosen
         else:
-            self.starter_names = set()
-            self.chosen_starter = None
+            # No starters defined for this region (e.g. Hisui).
+            # Pick the first Pokémon in the region as a virtual starter so its
+            # Type Keys get pre-collected — without this, zero locations are
+            # accessible from the start and the fill algorithm deadlocks.
+            lo, hi = REGION_RANGES[self.starting_region]
+            fallback = next((m for m in POKEMON_DATA if lo <= m["id"] <= hi), None)
+            if fallback:
+                self.starter_names = {fallback["name"]}
+                self.chosen_starter = fallback["name"]
+            else:
+                self.starter_names = set()
+                self.chosen_starter = None
 
         # Collect active Pokemon across all selected regions
         active_ids: set = set()
@@ -194,6 +218,11 @@ class PokepelagoWorld(World):
             if mon := self._mon_lookup.get(name):
                 starter_types.update(mon["types"])
 
+        # Types actually present in the active Pokémon pool
+        active_types: set = set()
+        for mon in self.active_pokemon:
+            active_types.update(mon["types"])
+
         my_items_in_pool = 0
 
         # Pre-collect starter Type Keys so those types are accessible from game start.
@@ -202,10 +231,10 @@ class PokepelagoWorld(World):
             self.multiworld.push_precollected(self.create_item(f"{p_type} Type Key"))
 
         # Add non-starter Type Keys to the pool as progression items.
-        # They gate "Guess X" locations (AP access rules), creating real cross-player dependencies.
+        # Only add keys for types that actually appear in the active Pokémon set.
         if self.options.type_locks.value:
             for p_type in GEN_1_TYPES:
-                if p_type not in starter_types:
+                if p_type not in starter_types and p_type in active_types:
                     self.multiworld.itempool.append(self.create_item(f"{p_type} Type Key"))
                     my_items_in_pool += 1
 
@@ -260,11 +289,12 @@ class PokepelagoWorld(World):
                 self.multiworld.itempool.append(self.create_item(f"{stone.title()} Stone"))
                 my_items_in_pool += 1
 
-        # Shiny Tokens: cosmetic filler items (~5% of active Pokémon count)
+        # Shiny Charms: cosmetic filler items (~5% of active Pokémon count)
+        self.shiny_count = 0
         if o.include_shinies.value and self.active_pokemon:
-            shiny_count = max(1, len(self.active_pokemon) // 20)
-            for _ in range(shiny_count):
-                self.multiworld.itempool.append(self.create_item("Shiny Token"))
+            self.shiny_count = max(1, len(self.active_pokemon) // 20)
+            for _ in range(self.shiny_count):
+                self.multiworld.itempool.append(self.create_item("Shiny Charm"))
                 my_items_in_pool += 1
 
         # Fill remaining locations with useful items/traps
@@ -486,5 +516,7 @@ class PokepelagoWorld(World):
             "paradox_locks":     bool(o.paradox_locks.value),
             "stone_locks":       bool(o.stone_locks.value),
             "include_shinies":   bool(o.include_shinies.value),
+            "shiny_count":       self.shiny_count,
             "starting_starter":  self.chosen_starter,
+            "random_region_count": int(o.random_region_count.value),
         }

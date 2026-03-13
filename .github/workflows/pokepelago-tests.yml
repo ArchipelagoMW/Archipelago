@@ -1,0 +1,17 @@
+name: Pokepelago Tests
+
+on:
+  push:
+    paths: ['worlds/pokepelago/**']
+  pull_request:
+    paths: ['worlds/pokepelago/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Eijebong/ap-actions/ap-tests@main
+        with:
+          ap-version: '0.6.6'
+          python-version: '3.12'
+          apworld-path: 'worlds/pokepelago'

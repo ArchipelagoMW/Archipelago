@@ -91,8 +91,7 @@ class TestDeterminism(unittest.TestCase):
         """Kanto only, type_locks=on — starter types (Grass/Poison/Fire/Water) must be
         pre-collected in consistent order regardless of PYTHONHASHSEED."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_johto": 0,
+            "regions": ["Kanto"],
             "type_locks": 1,
             "dexsanity": 0,
         })
@@ -100,9 +99,7 @@ class TestDeterminism(unittest.TestCase):
     def test_multi_region_type_locks(self):
         """Multiple regions with type_locks=on — larger starter_types set."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_hoenn": 1,
-            "include_sinnoh": 1,
+            "regions": ["Kanto", "Hoenn", "Sinnoh"],
             "type_locks": 1,
             "dexsanity": 0,
         })
@@ -110,8 +107,7 @@ class TestDeterminism(unittest.TestCase):
     def test_type_locks_off(self):
         """type_locks=off — starter Type Keys are still pre-collected unconditionally."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_johto": 1,
+            "regions": ["Kanto", "Johto"],
             "type_locks": 0,
             "region_locks": 0,
             "dexsanity": 0,
@@ -120,8 +116,7 @@ class TestDeterminism(unittest.TestCase):
     def test_all_locks_dexsanity(self):
         """All locks on with dexsanity — the fullest feature set."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_johto": 1,
+            "regions": ["Kanto", "Johto"],
             "type_locks": 1,
             "region_locks": 1,
             "dexsanity": 1,
@@ -130,8 +125,7 @@ class TestDeterminism(unittest.TestCase):
     def test_explicit_starter_region_and_pokemon(self):
         """Explicit starter_region + starter_pokemon — precollected types must be stable."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_johto": 1,
+            "regions": ["Kanto", "Johto"],
             "type_locks": 1,
             "region_locks": 1,
             "dexsanity": 1,
@@ -142,8 +136,7 @@ class TestDeterminism(unittest.TestCase):
     def test_all_new_locks(self):
         """All new gate locks enabled — more items in pool, precollected order must be stable."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_johto": 1,
+            "regions": ["Kanto", "Johto"],
             "type_locks": 1,
             "region_locks": 1,
             "dexsanity": 1,
@@ -159,9 +152,7 @@ class TestDeterminism(unittest.TestCase):
         """Hisui + Paldea only — Hisui has no starters, so no Type Keys pre-collected from
         there. Paldea starters determine precollected items; order must be stable."""
         self._assert_deterministic({
-            "include_kanto": 0,
-            "include_hisui": 1,
-            "include_paldea": 1,
+            "regions": ["Hisui", "Paldea"],
             "type_locks": 1,
             "region_locks": 1,
             "dexsanity": 1,
@@ -170,16 +161,8 @@ class TestDeterminism(unittest.TestCase):
     def test_all_regions_all_locks(self):
         """All ten regions + all new locks — maximum complexity, full determinism check."""
         self._assert_deterministic({
-            "include_kanto": 1,
-            "include_johto": 1,
-            "include_hoenn": 1,
-            "include_sinnoh": 1,
-            "include_unova": 1,
-            "include_kalos": 1,
-            "include_alola": 1,
-            "include_galar": 1,
-            "include_hisui": 1,
-            "include_paldea": 1,
+            "regions": ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova",
+                        "Kalos", "Alola", "Galar", "Hisui", "Paldea"],
             "type_locks": 1,
             "region_locks": 1,
             "dexsanity": 1,

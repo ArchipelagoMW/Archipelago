@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, Toggle, Choice, Range, OptionCounter
+from Options import PerGameCommonOptions, Toggle, Choice, Range, NamedRange, OptionCounter, OptionSet, OptionGroup
+from .data import GAME_REGIONS
 
 
 class Dexsanity(Toggle):
@@ -34,79 +35,25 @@ class StartingLocationCount(Range):
     default = 8
 
 
-class IncludeKanto(Toggle):
-    """Include Generation 1 Pokemon (Kanto, #1-151, 151 Pokemon)."""
-    display_name = "Include Kanto"
-    default = 1
+class Regions(OptionSet):
+    """Which game regions to include. Each region adds its Pokemon to the pool.
+    At least one region is always active (defaults to Kanto if empty).
+    Valid regions: Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Hisui, Paldea."""
+    display_name = "Regions"
+    valid_keys = frozenset(GAME_REGIONS)
+    default = frozenset({"Kanto"})
 
 
-class IncludeJohto(Toggle):
-    """Include Generation 2 Pokemon (Johto, #152-251, +100 Pokemon)."""
-    display_name = "Include Johto"
+class RandomRegionCount(NamedRange):
+    """Override the Regions option with a random selection.
+    Set to 0 (or disabled) to use the manual Regions list.
+    Set to 1-10 to randomly pick that many regions.
+    Set to random to also randomize how many regions are picked."""
+    display_name = "Random Region Count"
+    range_start = 0
+    range_end = 10
+    special_range_names = {"disabled": 0, "random": -1}
     default = 0
-
-
-class IncludeHoenn(Toggle):
-    """Include Generation 3 Pokemon (Hoenn, #252-386, +135 Pokemon)."""
-    display_name = "Include Hoenn"
-    default = 0
-
-
-class IncludeSinnoh(Toggle):
-    """Include Generation 4 Pokemon (Sinnoh, #387-493, +107 Pokemon)."""
-    display_name = "Include Sinnoh"
-    default = 0
-
-
-class IncludeUnova(Toggle):
-    """Include Generation 5 Pokemon (Unova, #494-649, +156 Pokemon)."""
-    display_name = "Include Unova"
-    default = 0
-
-
-class IncludeKalos(Toggle):
-    """Include Generation 6 Pokemon (Kalos, #650-721, +72 Pokemon)."""
-    display_name = "Include Kalos"
-    default = 0
-
-
-class IncludeAlola(Toggle):
-    """Include Generation 7 Pokemon (Alola, #722-809, +88 Pokemon)."""
-    display_name = "Include Alola"
-    default = 0
-
-
-class IncludeGalar(Toggle):
-    """Include Generation 8 Pokemon (Galar, #810-898, +89 Pokemon)."""
-    display_name = "Include Galar"
-    default = 0
-
-
-class IncludeHisui(Toggle):
-    """Include Hisui-exclusive Pokemon (#899-905, +7 Pokemon). Note: Hisui has no traditional starters."""
-    display_name = "Include Hisui"
-    default = 0
-
-
-class IncludePaldea(Toggle):
-    """Include Generation 9 Pokemon (Paldea, #906-1025, +120 Pokemon)."""
-    display_name = "Include Paldea"
-    default = 0
-
-
-# Maps region name to the PokepelagoOptions attribute for that region's toggle
-REGION_OPTION_ATTRS = {
-    "Kanto": "include_kanto",
-    "Johto": "include_johto",
-    "Hoenn": "include_hoenn",
-    "Sinnoh": "include_sinnoh",
-    "Unova": "include_unova",
-    "Kalos": "include_kalos",
-    "Alola": "include_alola",
-    "Galar": "include_galar",
-    "Hisui": "include_hisui",
-    "Paldea": "include_paldea",
-}
 
 
 class GoalType(Choice):
@@ -296,11 +243,11 @@ class StoneLocks(Toggle):
 
 
 class IncludeShinies(Toggle):
-    """Add Shiny Token filler items to the item pool.
-    Receiving a Shiny Token makes a random Pokemon in your caught list display
+    """Add Shiny Charm filler items to the item pool.
+    Receiving a Shiny Charm makes a random Pokemon in your caught list display
     its shiny sprite. Purely cosmetic — no gameplay effect."""
-    display_name = "Include Shiny Tokens"
-    default = 0
+    display_name = "Include Shiny Charms"
+    default = 1
 
 
 @dataclass
@@ -308,19 +255,11 @@ class PokepelagoOptions(PerGameCommonOptions):
     dexsanity: Dexsanity
     type_locks: EnableTypeLocks
     region_locks: RegionLocks
+    regions: Regions
+    random_region_count: RandomRegionCount
     starter_region: StarterRegion
     starter_pokemon: StarterPokemon
     starting_location_count: StartingLocationCount
-    include_kanto: IncludeKanto
-    include_johto: IncludeJohto
-    include_hoenn: IncludeHoenn
-    include_sinnoh: IncludeSinnoh
-    include_unova: IncludeUnova
-    include_kalos: IncludeKalos
-    include_alola: IncludeAlola
-    include_galar: IncludeGalar
-    include_hisui: IncludeHisui
-    include_paldea: IncludePaldea
     legendary_locks: LegendaryLocks
     trade_locks: TradeLocks
     baby_locks: BabyLocks
@@ -336,3 +275,11 @@ class PokepelagoOptions(PerGameCommonOptions):
     trap_chance: TrapChance
     trap_weights: TrapWeights
     filler_weights: FillerWeights
+
+
+pokepelago_option_groups: list[OptionGroup] = [
+    OptionGroup("Regions", [Regions, RandomRegionCount, RegionLocks, StarterRegion, StarterPokemon]),
+    OptionGroup("Lock Gates", [EnableTypeLocks, LegendaryLocks, TradeLocks, BabyLocks, DaycareCount,
+                               FossilLocks, UltraBeastLocks, ParadoxLocks, StoneLocks], start_collapsed=True),
+    OptionGroup("Items", [IncludeShinies, TrapChance, TrapWeights, FillerWeights], start_collapsed=True),
+]

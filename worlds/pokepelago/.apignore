@@ -1,8 +1,11 @@
 # Files excluded from the .apworld archive.
 # Uses .gitignore syntax — patterns match relative to the worlds/pokepelago/ folder.
 
-# Development utilities, test scripts, and data sources
+# Development utilities and data sources
 _dev/
+
+# Tests (run by CI via ap-actions, not needed in .apworld)
+test/
 
 # Compiled Python bytecode
 __pycache__/
