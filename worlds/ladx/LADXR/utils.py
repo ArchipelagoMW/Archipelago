@@ -1,6 +1,11 @@
+import unicodedata
 from typing import Optional
 
 from .locations.items import *
+
+class Error(Exception):
+    pass
+
 
 _NAMES = {
     SWORD: "Sword",
@@ -139,15 +144,135 @@ _NAMES = {
     MESSAGE: "A Special Message From Our Sponsors"
 }
 
+_PREFILTER = {
+    'à': '<agrave>',
+    'â': '<acirc>',
+    'ä': '<auml>',
+    'è': '<egrave>',
+    'é': '<eacute>',
+    'ê': '<ecirc>',
+    'ù': '<ugrave>',
+    'û': '<ucirc>',
+    'ü': '<uuml>',
+    'ô': '<ocirc>',
+    'ö': '<ouml>',
+    'ç': '<ccedil>',
+    'î': '<icirc>',
+    'ß': '<szlig>',
+    'ẞ': '<szlig>',
+    'Ä': '<Auml>',
+    'Ö': '<Ouml>',
+    'Ü': '<Uuml>',
+    'Ø': 'O',
+    'ø': 'o',
+    'Æ': 'AE',
+    'æ': 'ae',
+    'Œ': 'OE',
+    'œ': 'oe',
+    'Ł': 'L',
+    'ł': 'l',
+    'Đ': 'D',
+    'đ': 'd',
+    '“': '<dquote>',
+    '”': '<dquote>',
+    '"': '<dquote>',
+    '‘': "'",
+    '’': "'",
+    '–': '-',
+    '—': '-',
+    '…': '...',
+    '©': '(c)',
+    '№': 'No.',
+    '§': 'S',
+    '×': 'x',
+    '°': 'deg',
+    '{': '(',
+    '}': ')',
+    '[': '(',
+    ']': ')',
+    '💀': '<master>',
+    '👦': '<link>',
+    '👧': '<marin>',
+    '👨': '<tarkin>',
+    '🎀': '<ribbon>',
+    '🥫': '<dogfood>',
+    '🍌': '<bananas>',
+    '🍍': '<pineapple>',
+    '🌺': '<hibiscus>',
+    '🧹': '<broom>',
+    '🪝': '<hook>',
+    '✉️': '<letter>',
+    '🔎': '<glass>',
+    '⬆️': '<arrowU>',
+    '⬇️': '<arrowD>',
+    '⬅️': '<arrowL>',
+    '➡️': '<arrowR>',
+}
+
+_CHARACTERS = {
+    b"'":  b"^",
+    b'<agrave>': b'\x80',
+    b'<acirc>' : b'\x81',
+    b'<auml>'  : b'\x82',
+    b'<egrave>': b'\x83',
+    b'<eacute>': b'\x84',
+    b'<ecirc>' : b'\x85',
+    b'<ugrave>': b'\x86',
+    b'<ucirc>' : b'\x87',
+    b'<uuml>'  : b'\x88',
+    b'<ocirc>' : b'\x89',
+    b'<ouml>'  : b'\x8A',
+    b'<ccedil>': b'\x8B',
+    b'<icirc>' : b'\x8C',
+    b'<szlig>' : b'\x8D',
+    b'<Auml>'  : b'\x8E',
+    b'<Ouml>'  : b'\x8F',
+    b'<Uuml>'  : b'\x90',
+    b'<dquote>': b'\x91',
+    b'<bigA>'  : b'\xD0',
+    b'<bigB>'  : b'\xD1',
+    b'<bigC>'  : b'\xD2',
+    b'<bigD>'  : b'\xD3',
+    b'<bigE>'  : b'\xD4',
+    b'<bigF>'  : b'\xD5',
+    b'<foot>'  : b'\xDA',
+    b'<master>': b'\xDC',
+    b'<link>'  : b'\xDD',
+    b'<marin>' : b'\xDE',
+    b'<tarkin>': b'\xDF',
+    b'<yoshi>' : b'\xE0',
+    b'<ribbon>': b'\xE1',
+    b'<dogfood>':b'\xE2',
+    b'<bananas>': b'\xE3',
+    b'<stick>' : b'\xE4',
+    b'<honeycomb>': b'\xE5',
+    b'<pineapple>': b'\xE6',
+    b'<hibiscus>': b'\xE7',
+    b'<broom>' : b'\xE8',
+    b'<hook>'  : b'\xE9',
+    b'<necklace>':b'\xEA',
+    b'<scale>' : b'\xEB',
+    b'<glass>' : b'\xEC',
+    b'<letter>': b'\xED',
+    b'<dpad>'  : b'\xEE',
+    b'<arrowU>': b'\xF0',
+    b'<arrowD>': b'\xF1',
+    b'<arrowL>': b'\xF2',
+    b'<arrowR>': b'\xF3',
+}
 
 def setReplacementName(key: str, value: str) -> None:
     _NAMES[key] = value
 
 
-def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None) -> bytes:
-    instr = instr.format(**_NAMES)
-    s = instr.encode("ascii", errors="replace")
-    s = s.replace(b"'", b"^")
+def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None, skip_names: bool = False) -> bytes:
+    if not skip_names:
+        instr = instr.format(**_NAMES)
+    for character, replacement in _PREFILTER.items():
+        instr = instr.replace(character, replacement)
+    s = unicodedata.normalize("NFKD", instr).encode("ascii", "ignore")
+    for character, encodedCharacter in _CHARACTERS.items():
+        s = s.replace(character, encodedCharacter)
 
     def padLine(line: bytes) -> bytes:
         return line + b' ' * (16 - len(line))
@@ -169,12 +294,12 @@ def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None) -
         if result_line:
             result += padLine(result_line)
     if ask is not None:
-        askbytes = ask.encode("ascii", errors="replace")
+        askbytes = ask.encode("ascii")
         result = result.rstrip()
-        while len(result) % 32 != 16:
+        while len(result) % 16 != 0:
             result += b' '
         return result + b'    ' + askbytes + b'\xfe'
-    return result.rstrip() + b'\xff'
+    return result.replace(b'_', b' ').rstrip() + b'\xff'
 
 
 def tileDataToString(data: bytes, key: str = " 123") -> str:

@@ -13,7 +13,7 @@ def generate_name(l, i):
         name = l[i]
     else:
         name = f"player {i}"
-    name = name[:16]
+    name = formatText(name, skip_names=True).decode('latin1')[:-1][:16]
     assert(len(name) <= 16)
     return 'db "' + name + '"' + ', $ff' * (17 - len(name)) + '\n'
 
