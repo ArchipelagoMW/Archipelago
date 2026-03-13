@@ -7,7 +7,7 @@ all_random = {
     "game_language": "random",
     "goal": "random",
     "goal_speed": "random",
-    "total_heart_stars": "random",
+    "max_heart_stars": "random",
     "heart_stars_required": "random",
     "filler_percentage": "random",
     "trap_percentage": "random",
@@ -34,7 +34,7 @@ all_random = {
 beginner = {
     "goal": "zero",
     "goal_speed": "normal",
-    "total_heart_stars": 50,
+    "max_heart_stars": 50,
     "heart_stars_required": 30,
     "filler_percentage": 25,
     "trap_percentage": 0,
