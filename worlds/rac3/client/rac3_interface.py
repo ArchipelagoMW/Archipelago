@@ -589,7 +589,8 @@ class Rac3Interface(GameInterface):
                 valid_weapons = []
                 for weapon_name, weapon_data in non_prog_weapon_data.items():
                     if self.UnlockItem[weapon_name].status:
-                        level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL
+                        level = max(RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL, 
+                                    self.weapon_level_from_xp(weapon_name))
                         if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 5 and not self.ryno)):
@@ -655,7 +656,7 @@ class Rac3Interface(GameInterface):
         weapon_data = non_prog_weapon_data[weapon_name]
         current_id = self._read8(weapon_data.LEVEL_ADDRESS)
         current_name = ITEM_NAME_FROM_ID[current_id]
-        current_level = RAC3_ITEM_DATA_TABLE[current_name].LEVEL
+        current_level = max(RAC3_ITEM_DATA_TABLE[current_name].LEVEL, self.weapon_level_from_xp(weapon_name))
         if current_level < 5:
             target_level = current_level + 1
             target_id = UPGRADE_DICT[weapon_name][target_level - 1]
@@ -668,6 +669,18 @@ class Rac3Interface(GameInterface):
             self._write8(weapon_data.LEVEL_ADDRESS, target_id)
             if target_ammo:
                 self._write32(weapon_data.AMMO_ADDRESS, target_ammo)
+
+    def weapon_level_from_xp(self, weapon_name: str) -> int:
+        """Returns the weapon level based on the current xp"""
+        current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
+        level_from_xp = 1
+        for lvl in range(5):
+            target_id = UPGRADE_DICT[weapon_name][lvl]
+            target_name = ITEM_NAME_FROM_ID[target_id]
+            xp_threshold = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+            if current_xp >= xp_threshold:
+                level_from_xp = lvl + 1
+        return level_from_xp
 
     def update_equip(self, name: str):
         """Equip the most recently collected weapon/gadget, update recent uses"""
@@ -1414,6 +1427,8 @@ class Rac3Interface(GameInterface):
                 target_level = self.UnlockItem[weapon_name].status
                 if not target_level:
                     continue
+                if target_level > 5: # TODO: change limit to 8 if NG+ weapons are added
+                    target_level = 5
                 if self.vendor_type == RAC3VENDORTYPE.WEAPON:
                     cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
                     slot_data = self.read_vendor_slot_data(RAC3VENDORTYPE.WEAPON, cursor_pos)
@@ -1438,15 +1453,7 @@ class Rac3Interface(GameInterface):
                     if slot_data.item_id.value == RAC3_ITEM_DATA_TABLE[weapon_name].ID and not self.hovering_over_ammo():
                         self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, RAC3_ITEM_DATA_TABLE[weapon_name].ID)
                     else:
-                        current_xp = self._read32(non_prog_weapon_data[weapon_name].XP_ADDRESS)
-                        restore_level = 1
-                        for lvl in range(1, 6):
-                            target_id = UPGRADE_DICT[weapon_name][lvl - 1]
-                            target_name = ITEM_NAME_FROM_ID[target_id]
-                            xp_threshold = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
-                            if current_xp >= xp_threshold:
-                                restore_level = lvl
-                        restore_id = UPGRADE_DICT[weapon_name][restore_level - 1]
+                        restore_id = UPGRADE_DICT[weapon_name][self.weapon_level_from_xp(weapon_name) - 1]
                         self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, restore_id)
             
 
