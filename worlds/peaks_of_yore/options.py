@@ -1,5 +1,3 @@
-import logging
-
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, PerGameCommonOptions, StartInventoryPool, OptionGroup, \
     TextChoice, T, OptionError
 from dataclasses import dataclass
@@ -135,7 +133,6 @@ class StartingBook(Choice):
         return "Expert Book"
 
     def get_start_peak_id(self) -> int:
-        logging.warning(f"get_start_peak_id: {self.value}")
         if self.value == self.option_fundamentals:
             return PeakChoice.option_greenhorns_top
         elif self.value == self.option_intermediate:

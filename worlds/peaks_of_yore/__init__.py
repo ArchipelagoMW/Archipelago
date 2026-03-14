@@ -140,7 +140,7 @@ class PeaksOfWorld(World):
                 raise OptionError(f"selected finish peak {PeakGoal.get_option_name(self.options.peak_goal)}'s book {goal_peak_book} is not enabled ")
 
             if self.options.peak_goal.value == StartingPeak.option_solemn_tempest and self.options.disable_solemn_tempest:
-                raise OptionError("solemn tempest is selected as starting peak but solemn tempest is not enabled")
+                raise OptionError("solemn tempest is selected as target peak but solemn tempest is not enabled")
 
     def create_regions(self) -> None:
         self.checks_in_pool = create_poy_regions(self, self.options)
