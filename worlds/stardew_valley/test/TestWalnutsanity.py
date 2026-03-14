@@ -94,9 +94,14 @@ class TestWalnutsanityPuzzles(SVWalnutsanityTestBase):
     }
 
     def test_field_office_locations_require_professor_snail(self):
-        location_names = ["Walnutsanity: Complete Large Animal Collection", "Walnutsanity: Complete Snake Collection",
-                          "Walnutsanity: Complete Mummified Frog Collection", "Walnutsanity: Complete Mummified Bat Collection",
-                          "Walnutsanity: Purple Flowers Island Survey", "Walnutsanity: Purple Starfish Island Survey", ]
+        location_names = [
+            "Walnutsanity: Complete Large Animal Collection",
+            "Walnutsanity: Complete Snake Collection",
+            "Walnutsanity: Complete Mummified Frog Collection",
+            "Walnutsanity: Complete Mummified Bat Collection",
+            "Walnutsanity: Purple Flowers Island Survey",
+            "Walnutsanity: Purple Starfish Island Survey",
+        ]
         self.collect("Wizard Invitation")
         self.collect("Island Obelisk")
         self.collect("Island North Turtle")
@@ -109,6 +114,7 @@ class TestWalnutsanityPuzzles(SVWalnutsanityTestBase):
         self.collect("Progressive Watering Can")
         self.collect("Progressive Pickaxe", 4)
         self.collect("Progressive Sword", 5)
+        self.collect("Foraging Level", 1)
         self.collect("Combat Level", 10)
         self.collect("Mining Level", 10)
         for location in location_names:
