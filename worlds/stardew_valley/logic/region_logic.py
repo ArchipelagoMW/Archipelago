@@ -21,9 +21,6 @@ class RegionLogic(BaseLogic):
 
         return Reach(region_name, "Region", self.player)
 
-    def can_reach_entrance(self, entrance_name: str) -> StardewRule:
-        return Reach(entrance_name, "Entrance", self.player)
-
     def can_reach_any(self, *region_names: str) -> StardewRule:
         return self.logic.or_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
@@ -39,3 +36,7 @@ class RegionLogic(BaseLogic):
     @cache_self1
     def can_reach_location(self, location_name: str) -> StardewRule:
         return Reach(location_name, "Location", self.player)
+
+    # @cache_self1
+    # def can_reach_entrance(self, entrance_name: str) -> StardewRule:
+    #     return Reach(entrance_name, "Entrance", self.player)
