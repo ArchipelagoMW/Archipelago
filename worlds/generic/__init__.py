@@ -28,7 +28,7 @@ class GenericWeb(WebWorld):
                         'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
     other_games = Tutorial('Other Games and Tools',
                            'A guide to additional games and tools that can be used with Archipelago.',
-                           'English', 'other_en.md', 'other/en', ['EmilyV'])
+                           'English', 'other_en.md', 'other/en', ['Berserker'])
     tutorials = [setup, mac, commands, advanced_settings, triggers, plando, other_games]
 
 
