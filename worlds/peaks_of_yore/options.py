@@ -77,7 +77,7 @@ class Goal(Choice):
     option_time_attack = 3
     option_all = 4
     option_peak = 5
-    default = 5
+    default = 0
 
 class PeakGoal(PeakChoice):
     """
