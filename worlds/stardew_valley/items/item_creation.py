@@ -109,7 +109,6 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_arcade_machine_items(item_factory, options, items)
     create_movement_buffs(item_factory, options, items)
     create_traveling_merchant_items(item_factory, items)
-    items.append(item_factory("Return Scepter"))
     create_seasons(item_factory, options, items)
     create_seeds(item_factory, content, items)
     create_friendsanity_items(item_factory, options, content, items, random)
