@@ -21,7 +21,7 @@ Both servers feature an **#apworld-index** channel. These channels are repositor
 These community-developed tools are frequently used alongside Archipelago to improve the player experience.
 
 ### PopTracker
-**[PopTracker](https://github.com/black-sliver/PopTracker)** is a universal multi-platform tracking application designed for randomizers. It supports many Archipelago games through tracker packs, providing both manual and automatic autotracking capabilities by connecting directly to an Archipelago server.
+**[PopTracker](https://github.com/black-sliver/PopTracker)** is a universal multi-platform tracking application designed for randomizers. It supports many Archipelago games through tracker packs, providing both manual and automatic tracking capabilities by connecting directly to an Archipelago server or a console/emulator.
 
 ## APSudoku
 
