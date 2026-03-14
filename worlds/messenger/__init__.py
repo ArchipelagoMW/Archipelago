@@ -1,27 +1,38 @@
 import logging
 from typing import Any, ClassVar, TextIO
 
-from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, MultiWorld, Tutorial, \
+    PlandoOptions
 from Options import Accessibility
 from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components
+from worlds.LauncherComponents import Component, Type, components, icon_paths
 from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
-from .transitions import shuffle_transitions
+from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
+from .transitions import disconnect_entrances, shuffle_transitions
+from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections
 
 components.append(
-    Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
+    Component(
+        "The Messenger",
+        component_type=Type.CLIENT,
+        func=launch_game,
+        game_name="The Messenger",
+        supports_uri=True,
+        icon="The Messenger",
+        description="Launch The Messenger.\nInstalls and checks for updates for the randomizer.")
 )
+
+icon_paths["The Messenger"] = f"ap:{__name__}/assets/component_icon.png"
 
 
 class MessengerSettings(Group):
@@ -35,6 +46,7 @@ class MessengerSettings(Group):
 
 class MessengerWeb(WebWorld):
     theme = "ocean"
+    rich_text_options_doc = True
 
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
@@ -46,8 +58,17 @@ class MessengerWeb(WebWorld):
         "setup/en",
         ["alwaysintreble"],
     )
+    plando_en = Tutorial(
+        "The Messenger Plando Guide",
+        "A guide detailing The Messenger's various supported plando options.",
+        "English",
+        "plando_en.md",
+        "plando/en",
+        ["alwaysintreble"],
+    )
 
-    tutorials = [tut_en]
+    tutorials = [tut_en, plando_en]
+    option_groups = option_groups
 
 
 class MessengerWorld(World):
@@ -132,6 +153,10 @@ class MessengerWorld(World):
     reachable_locs: bool = False
     filler: dict[str, int]
 
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        return slot_data
+
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
             self.total_seals = self.options.total_seals.value
@@ -168,6 +193,11 @@ class MessengerWorld(World):
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
         self.transitions = []
+
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            slot_data = self.multiworld.re_gen_passthrough.get(self.game)
+            if slot_data:
+                self.starting_portals = slot_data["starting_portals"]
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -258,9 +288,21 @@ class MessengerWorld(World):
         #     MessengerOOBRules(self).set_messenger_rules()
 
     def connect_entrances(self) -> None:
+        if self.options.shuffle_transitions:
+            disconnect_entrances(self)
+            keep_entrance_logic = False
+
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            slot_data = self.multiworld.re_gen_passthrough.get(self.game)
+            if slot_data:
+                self.multiworld.plando_options |= PlandoOptions.connections
+                self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
+                self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
+                keep_entrance_logic = True
+
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
-        attempts = 5
+        attempts = 20
         if self.options.shuffle_portals:
             self.portal_mapping = []
             self.spoiler_portal_mapping = {}
@@ -274,7 +316,7 @@ class MessengerWorld(World):
                 raise RuntimeError("Unable to generate valid portal output.")
 
         if self.options.shuffle_transitions:
-            shuffle_transitions(self)
+            shuffle_transitions(self, keep_entrance_logic)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
@@ -416,13 +458,13 @@ class MessengerWorld(World):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
+            state.add_item("Shards", self.player, int(item.name.strip("Time Shard ()")))
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
+            state.remove_item("Shards", self.player, int(item.name.strip("Time Shard ()")))
         return change
 
     @classmethod
@@ -442,7 +484,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
-    
+
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)

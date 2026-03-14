@@ -41,7 +41,7 @@ class CVCotMWeb(WebWorld):
 
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Archipleago Castlevania: Circle of the Moon randomizer on your computer and "
+        "A guide to setting up the Archipelago Castlevania: Circle of the Moon randomizer on your computer and "
         "connecting it to a multiworld.",
         "English",
         "setup_en.md",
@@ -211,7 +211,8 @@ class CVCotMWorld(World):
                 "ignore_cleansing": self.options.ignore_cleansing.value,
                 "skip_tutorials": self.options.skip_tutorials.value,
                 "required_last_keys": self.required_last_keys,
-                "completion_goal": self.options.completion_goal.value}
+                "completion_goal": self.options.completion_goal.value,
+                "nerf_roc_wing": self.options.nerf_roc_wing.value}
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(FILLER_ITEM_NAMES)

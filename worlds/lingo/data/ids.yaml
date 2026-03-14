@@ -727,11 +727,12 @@ panels:
     WANDER: 444975
   Art Gallery:
     EIGHT: 444976
+    ORDER: 444981
+  Art Gallery (First Floor):
     EON: 444977
     TRUSTWORTHY: 444978
     FREE: 444979
     OUR: 444980
-    ORDER: 444981
   Art Gallery (Second Floor):
     HOUSE: 444982
     PATH: 444983
@@ -1382,8 +1383,6 @@ doors:
   Art Gallery:
     Second Floor:
       item: 444558
-    First Floor Puzzles:
-      location: 445256
     Third Floor:
       item: 444559
     Fourth Floor:
@@ -1393,6 +1392,9 @@ doors:
     Exit:
       item: 444562
       location: 444981
+  Art Gallery (First Floor):
+    Puzzles:
+      location: 445256
   Art Gallery (Second Floor):
     Puzzles:
       location: 445257

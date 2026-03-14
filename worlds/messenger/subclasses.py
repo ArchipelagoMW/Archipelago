@@ -1,8 +1,7 @@
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, Location, Region
-from entrance_rando import ERPlacementState
+from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
 from .regions import LOCATIONS, MEGA_SHARDS
 from .shop import FIGURINES, SHOP_ITEMS
 
@@ -10,25 +9,8 @@ if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-class MessengerEntrance(Entrance):
-    world: "MessengerWorld | None" = None
-
-    def can_connect_to(self, other: Entrance, dead_end: bool, state: "ERPlacementState") -> bool:
-        can_connect = super().can_connect_to(other, dead_end, state)
-        world: MessengerWorld = getattr(self, "world", None)
-        if not world or world.reachable_locs or not can_connect:
-            return can_connect
-        empty_state = CollectionState(world.multiworld, True)
-        self.connected_region = other.connected_region
-        empty_state.update_reachable_regions(world.player)
-        world.reachable_locs = any(loc.can_reach(empty_state) and not loc.is_event for loc in world.get_locations())
-        self.connected_region = None
-        return world.reachable_locs and (not state.coupled or self.name != other.name)
-
-
 class MessengerRegion(Region):
     parent: str | None
-    entrance_type = MessengerEntrance
 
     def __init__(self, name: str, world: "MessengerWorld", parent: str | None = None) -> None:
         super().__init__(name, world.player, world.multiworld)

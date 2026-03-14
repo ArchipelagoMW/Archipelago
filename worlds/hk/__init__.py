@@ -154,7 +154,17 @@ class HKWeb(WebWorld):
         ["JoaoVictor-FA"]
     )
 
-    tutorials = [setup_en, setup_pt_br]
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["GreenMarco", "Panto UwUr"]
+    )
+
+    tutorials = [setup_en, setup_pt_br, setup_es]
+    game_info_languages = ["en", "es"]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
@@ -179,7 +189,7 @@ class HKWorld(World):
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
-    cached_filler_items = {}
+    cached_filler_items: typing.List[str]
     grub_count: int
     grub_player_count: typing.Dict[int, int]
 
@@ -191,6 +201,7 @@ class HKWorld(World):
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
+        self.cached_filler_items = []
 
     def generate_early(self):
         options = self.options
@@ -218,6 +229,11 @@ class HKWorld(World):
         wp = self.options.WhitePalace
         if wp <= WhitePalace.option_nopathofpain:
             exclusions.update(path_of_pain_locations)
+            exclusions.update((
+                "Soul_Totem-Path_of_Pain",
+                "Lore_Tablet-Path_of_Pain_Entrance",
+                "Journal_Entry-Seal_of_Binding",
+                ))
         if wp <= WhitePalace.option_kingfragment:
             exclusions.update(white_palace_checks)
         if wp == WhitePalace.option_exclude:
@@ -226,6 +242,9 @@ class HKWorld(World):
                 # If charms are randomized, this will be junk-filled -- so transitions and events are not progression
                 exclusions.update(white_palace_transitions)
                 exclusions.update(white_palace_events)
+            exclusions.update(item_name_groups["PalaceJournal"])
+            exclusions.update(item_name_groups["PalaceLore"])
+            exclusions.update(item_name_groups["PalaceTotem"])
         return exclusions
 
     def create_regions(self):
@@ -681,7 +700,7 @@ class HKWorld(World):
         return f"{base}_{i}"
 
     def get_filler_item_name(self) -> str:
-        if self.player not in self.cached_filler_items:
+        if not self.cached_filler_items:
             fillers = ["One_Geo", "Soul_Refill"]
             exclusions = self.white_palace_exclusions()
             for group in (
@@ -691,8 +710,8 @@ class HKWorld(World):
                 if getattr(self.options, group):
                     fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
                                    exclusions)
-            self.cached_filler_items[self.player] = fillers
-        return self.random.choice(self.cached_filler_items[self.player])
+            self.cached_filler_items = fillers
+        return self.random.choice(self.cached_filler_items)
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, location_names=None) -> Region:

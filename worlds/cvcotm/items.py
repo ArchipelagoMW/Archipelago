@@ -110,7 +110,7 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, 
 
     # If Halve DSS Cards Placed is on, determine which cards we will exclude here.
     if world.options.halve_dss_cards_placed:
-        excluded_cards = list(ACTION_CARDS.union(ATTRIBUTE_CARDS))
+        excluded_cards = sorted(ACTION_CARDS.union(ATTRIBUTE_CARDS))
 
         has_freeze_action = False
         has_freeze_attr = False
