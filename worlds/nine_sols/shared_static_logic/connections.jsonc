@@ -462,11 +462,12 @@
             { "item": "Tai-Chi Kick" },
             [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
         ] } ],
-        "medium_requires": [
-            { "item": "Ledge Grab" } // and swift runner, and either AD or T-dash
-            // while there's no qi source in this region, if you can get here then you must have passed through
-            // either Lower Left Vents or Root Node, and both of those regions have enemies to parry
-        ]
+        // while there's no qi source in this region, if you can get here then you must have passed through
+        // either Lower Left Vents or Root Node, and both of those regions have enemies to parry
+        "medium_requires": [ { "anyOf": [
+            { "item": "Ledge Grab" }, // { "item": "Swift Runner" } ], and T-dash or AD
+            { "item": "Air Dash" } // AD *and* T-dash works without LG or SR; T-dash likes to "snap up" onto ledges
+        ] } ]
         // no LS logic: bow hover into LS vault with AD setup works, but is redundant with medium logic
     },
     {
