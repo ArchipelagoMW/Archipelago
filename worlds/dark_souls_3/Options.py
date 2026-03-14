@@ -218,10 +218,11 @@ class RandomizeEnemiesOption(DefaultOnToggle):
 
 
 class SimpleEarlyBossesOption(DefaultOnToggle):
-    """Avoid replacing Iudex Gundyr and Vordt with late bosses.
+    """Avoid replacing Iudex Gundyr and Vordt with difficult bosses.
 
-    This excludes all bosses after Dancer of the Boreal Valley from these two boss fights. Disable
-    it for a chance at a much harder early game.
+    This limits these fights to bosses that are known to scale gracefully for low-level fights.
+    This doesn't necessarily mean that those bosses will be from the early game, just that they're
+    not too difficult when scaled down.
 
     This is ignored unless enemies are randomized.
     """

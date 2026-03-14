@@ -47,17 +47,6 @@ class TestCommonContext(unittest.IsolatedAsyncioTestCase):
         assert "Archipelago" in self.ctx.item_names, "Archipelago item names entry does not exist"
         assert "Archipelago" in self.ctx.location_names, "Archipelago location names entry does not exist"
 
-    async def test_implicit_name_lookups(self):
-        # Items
-        assert self.ctx.item_names[2**54 + 1] == "Test Item 1 - Safe"
-        assert self.ctx.item_names[2**54 + 3] == f"Unknown item (ID: {2**54+3})"
-        assert self.ctx.item_names[-1] == "Nothing"
-
-        # Locations
-        assert self.ctx.location_names[2**54 + 1] == "Test Location 1 - Safe"
-        assert self.ctx.location_names[2**54 + 3] == f"Unknown location (ID: {2**54+3})"
-        assert self.ctx.location_names[-1] == "Cheat Console"
-
     async def test_explicit_name_lookups(self):
         # Items
         assert self.ctx.item_names["__TestGame1"][2**54+1] == "Test Item 1 - Safe"

@@ -1,19 +1,5 @@
-from typing import Union
-
-from .magic_logic import MagicLogicMixin
-from ...logic.action_logic import ActionLogicMixin
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
-from ...logic.building_logic import BuildingLogicMixin
-from ...logic.cooking_logic import CookingLogicMixin
-from ...logic.crafting_logic import CraftingLogicMixin
-from ...logic.fishing_logic import FishingLogicMixin
-from ...logic.has_logic import HasLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogicMixin
-from ...logic.tool_logic import ToolLogicMixin
-from ...mods.mod_data import ModNames
-from ...stardew_rule import StardewRule, False_, True_, And
+from ...stardew_rule import StardewRule, True_, And
 from ...strings.building_names import Building
 from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.geode_names import Geode
@@ -30,8 +16,7 @@ class ModSkillLogicMixin(BaseLogicMixin):
         self.skill = ModSkillLogic(*args, **kwargs)
 
 
-class ModSkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, ActionLogicMixin, RelationshipLogicMixin, BuildingLogicMixin,
-ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicLogicMixin]]):
+class ModSkillLogic(BaseLogic):
     def has_mod_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
@@ -42,25 +27,29 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
         return self.can_earn_mod_skill_level(skill, level)
 
     def can_earn_mod_skill_level(self, skill: str, level: int) -> StardewRule:
-        if ModNames.luck_skill in self.options.mods and skill == ModSkill.luck:
+        if not skill in self.content.skills:
+            return self.logic.false_
+
+        if skill == ModSkill.luck:
             return self.can_earn_luck_skill_level(level)
-        if ModNames.magic in self.options.mods and skill == ModSkill.magic:
+        if skill == ModSkill.magic:
             return self.can_earn_magic_skill_level(level)
-        if ModNames.socializing_skill in self.options.mods and skill == ModSkill.socializing:
+        if skill == ModSkill.socializing:
             return self.can_earn_socializing_skill_level(level)
-        if ModNames.archaeology in self.options.mods and skill == ModSkill.archaeology:
+        if skill == ModSkill.archaeology:
             return self.can_earn_archaeology_skill_level(level)
-        if ModNames.cooking_skill in self.options.mods and skill == ModSkill.cooking:
+        if skill == ModSkill.cooking:
             return self.can_earn_cooking_skill_level(level)
-        if ModNames.binning_skill in self.options.mods and skill == ModSkill.binning:
+        if skill == ModSkill.binning:
             return self.can_earn_binning_skill_level(level)
-        return False_()
+
+        return self.logic.false_
 
     def can_earn_luck_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
-            return self.logic.fishing.can_fish_chests() | self.logic.action.can_open_geode(Geode.magma)
+            return self.logic.fishing.can_fish_chests | self.logic.action.can_open_geode(Geode.magma)
         if level >= 3:
-            return self.logic.fishing.can_fish_chests() | self.logic.action.can_open_geode(Geode.geode)
+            return self.logic.fishing.can_fish_chests | self.logic.action.can_open_geode(Geode.geode)
         return True_()  # You can literally wake up and or get them by opening starting chests.
 
     def can_earn_magic_skill_level(self, level: int) -> StardewRule:
@@ -85,17 +74,17 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicL
         shifter_rule = True_()
         preservation_rule = True_()
         if self.content.features.skill_progression.is_progressive:
-            shifter_rule = self.logic.has(ModCraftable.water_shifter)
+            shifter_rule = self.logic.has(ModCraftable.water_sifter)
             preservation_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
-        if level >= 8:
-            tool_rule = self.logic.tool.has_tool(Tool.pan, ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)
+        if level > 8:
+            tool_rule = self.logic.tool.has_pan(ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)
             return tool_rule & shifter_rule & preservation_rule
-        if level >= 5:
-            tool_rule = self.logic.tool.has_tool(Tool.pan, ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)
-            return tool_rule & shifter_rule
+        if level > 6:
+            tool_rule = self.logic.tool.has_pan(ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)
+            return tool_rule & preservation_rule
         if level >= 3:
-            return self.logic.tool.has_tool(Tool.pan, ToolMaterial.iron) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
-        return self.logic.tool.has_tool(Tool.pan, ToolMaterial.copper) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)
+            return self.logic.tool.has_pan(ToolMaterial.iron) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
+        return self.logic.tool.has_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)
 
     def can_earn_cooking_skill_level(self, level: int) -> StardewRule:
         if level >= 6:

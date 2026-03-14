@@ -214,20 +214,17 @@ class WitnessPlayerItems:
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
         #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._multiworld.plando_items[self._player_id]:
-            if plando_setting.get("from_pool", True):
-                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
-                    if isinstance(plando_setting[item_setting_key], str):
-                        output -= {plando_setting[item_setting_key]}
-                    elif isinstance(plando_setting[item_setting_key], dict):
-                        output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
-                    else:
-                        # Assume this is some other kind of iterable.
-                        for inner_item in plando_setting[item_setting_key]:
-                            if isinstance(inner_item, str):
-                                output -= {inner_item}
-                            elif isinstance(inner_item, dict):
-                                output -= {item for item, weight in inner_item.items() if weight}
+        for plando_setting in self._world.options.plando_items:
+            if plando_setting.from_pool:
+                if isinstance(plando_setting.items, dict):
+                    output -= {item for item, weight in plando_setting.items.items() if weight}
+                else:
+                    # Assume this is some other kind of iterable.
+                    for inner_item in plando_setting.items:
+                        if isinstance(inner_item, str):
+                            output -= {inner_item}
+                        elif isinstance(inner_item, dict):
+                            output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(output)

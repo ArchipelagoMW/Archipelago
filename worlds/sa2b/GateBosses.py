@@ -1,6 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
+from Options import OptionError
 from worlds.AutoWorld import World
 
 from .Names import LocationName
@@ -99,8 +100,9 @@ def get_gate_bosses(world: World):
                     pass
 
                 if boss in plando_bosses:
-                    # TODO: Raise error here. Duplicates not allowed
-                    pass
+                    raise OptionError(f"Invalid input for option `plando_bosses`: "
+                                      f"No Duplicate Bosses permitted ({boss}) - for "
+                                      f"{world.player_name}")
 
                 plando_bosses[boss_num] = boss
 
@@ -108,13 +110,14 @@ def get_gate_bosses(world: World):
                     available_bosses.remove(boss)
 
     for x in range(world.options.number_of_level_gates):
-        if ("king boom boo" not in selected_bosses) and ("king boom boo" not in available_bosses) and ((x + 1) / world.options.number_of_level_gates) > 0.5:
-            available_bosses.extend(gate_bosses_with_requirements_table)
+        if (10 not in selected_bosses) and (king_boom_boo not in available_bosses) and ((x + 1) / world.options.number_of_level_gates) > 0.5:
+            available_bosses.extend(gate_bosses_with_requirements_table.keys())
             world.random.shuffle(available_bosses)
 
         chosen_boss = available_bosses[0]
         if plando_bosses[x] != "None":
-            available_bosses.append(plando_bosses[x])
+            if plando_bosses[x] not in available_bosses:
+                available_bosses.append(plando_bosses[x])
             chosen_boss = plando_bosses[x]
 
         selected_bosses.append(all_gate_bosses_table[chosen_boss])

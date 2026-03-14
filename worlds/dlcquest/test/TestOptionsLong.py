@@ -1,10 +1,11 @@
+import unittest
 from typing import Dict
 
 from BaseClasses import MultiWorld
 from Options import NamedRange
-from .option_names import options_to_include
-from .checks.world_checks import assert_can_win, assert_same_number_items_locations
 from . import DLCQuestTestBase, setup_dlc_quest_solo_multiworld
+from .checks.world_checks import assert_can_win, assert_same_number_items_locations
+from .option_names import options_to_include
 
 
 def basic_checks(tester: DLCQuestTestBase, multiworld: MultiWorld):
@@ -38,6 +39,8 @@ class TestGenerateDynamicOptions(DLCQuestTestBase):
                             basic_checks(self, multiworld)
 
     def test_given_option_truple_when_generate_then_basic_checks(self):
+        if self.skip_long_tests:
+            raise unittest.SkipTest("Long tests disabled")
         num_options = len(options_to_include)
         for option1_index in range(0, num_options):
             for option2_index in range(option1_index + 1, num_options):
@@ -59,6 +62,8 @@ class TestGenerateDynamicOptions(DLCQuestTestBase):
                                     basic_checks(self, multiworld)
 
     def test_given_option_quartet_when_generate_then_basic_checks(self):
+        if self.skip_long_tests:
+            raise unittest.SkipTest("Long tests disabled")
         num_options = len(options_to_include)
         for option1_index in range(0, num_options):
             for option2_index in range(option1_index + 1, num_options):

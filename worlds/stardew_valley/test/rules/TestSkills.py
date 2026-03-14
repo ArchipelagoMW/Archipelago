@@ -1,7 +1,7 @@
+from ..bases import SVTestBase
 from ... import HasProgressionPercent, StardewLogic
-from ...options import ToolProgression, SkillProgression, Mods
+from ...options import ToolProgression, SkillProgression, Mods, all_mods_except_invalid_combinations
 from ...strings.skill_names import all_skills, all_vanilla_skills, Skill
-from ...test import SVTestBase
 
 
 class TestSkillProgressionVanilla(SVTestBase):
@@ -25,7 +25,7 @@ class TestSkillProgressionVanilla(SVTestBase):
 class TestSkillProgressionProgressive(SVTestBase):
     options = {
         SkillProgression.internal_name: SkillProgression.option_progressive,
-        Mods.internal_name: frozenset(Mods.valid_keys),
+        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
     }
 
     def test_all_skill_levels_require_previous_level(self):
@@ -34,15 +34,14 @@ class TestSkillProgressionProgressive(SVTestBase):
             self.remove_by_name(f"{skill} Level")
 
             for level in range(1, 11):
-                location_name = f"Level {level} {skill}"
-                location = self.multiworld.get_location(location_name, self.player)
+                location = f"Level {level} {skill}"
 
-                with self.subTest(location_name):
+                with self.subTest(location):
                     if level > 1:
-                        self.assert_cannot_reach_location(location, self.multiworld.state)
+                        self.assert_cannot_reach_location(location)
                         self.collect(f"{skill} Level")
 
-                    self.assert_can_reach_location(location, self.multiworld.state)
+                    self.assert_can_reach_location(location)
 
             self.reset_collection_state()
 
@@ -87,8 +86,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
 
         for skill in all_vanilla_skills:
             with self.subTest(skill):
-                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
-                self.assert_can_reach_location(location, self.multiworld.state)
+                self.assert_can_reach_location(f"{skill} Mastery")
 
         self.reset_collection_state()
 
@@ -98,8 +96,7 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
                 self.collect_everything()
                 self.remove_one_by_name(f"{skill} Level")
 
-                location = self.multiworld.get_location(f"{skill} Mastery", self.player)
-                self.assert_cannot_reach_location(location, self.multiworld.state)
+                self.assert_cannot_reach_location(f"{skill} Mastery")
 
                 self.reset_collection_state()
 
@@ -107,7 +104,6 @@ class TestSkillProgressionProgressiveWithMasteryWithoutMods(SVTestBase):
         self.collect_everything()
 
         self.remove_one_by_name(f"Progressive Pickaxe")
-        location = self.multiworld.get_location("Mining Mastery", self.player)
-        self.assert_cannot_reach_location(location, self.multiworld.state)
+        self.assert_cannot_reach_location("Mining Mastery")
 
         self.reset_collection_state()

@@ -1,7 +1,7 @@
 from BaseClasses import Region, Entrance, ItemClassification, Location, LocationProgressType
 from .Types import ChapterIndex, Difficulty, HatInTimeLocation, HatInTimeItem
 from .Locations import location_table, storybook_pages, event_locs, is_location_valid, \
-    shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
+    shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard, director_tokens
 from typing import TYPE_CHECKING, List, Dict, Optional
 from .Rules import set_rift_rules, get_difficulty
 from .Options import ActRandomizer, EndGoal
@@ -243,7 +243,7 @@ guaranteed_first_acts = [
     "Time Rift - Mafia of Cooks",
     "Time Rift - Dead Bird Studio",
     "Time Rift - Sleepy Subcon",
-    "Time Rift - Alpine Skyline"
+    "Time Rift - Alpine Skyline",
     "Time Rift - Tour",
     "Time Rift - Rumbi Factory",
 ]
@@ -857,6 +857,9 @@ def create_region(world: "HatInTimeWorld", name: str) -> Region:
 
         if data.region == name:
             if key in storybook_pages.keys() and not world.options.ShuffleStorybookPages:
+                continue
+
+            if key in director_tokens.keys() and not world.options.ShuffleDirectorTokens:
                 continue
 
             location = HatInTimeLocation(world.player, key, data.id, reg)

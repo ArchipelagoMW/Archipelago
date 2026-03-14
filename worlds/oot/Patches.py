@@ -38,6 +38,7 @@ AP_JUNK = 0xD5
 
 class OoTContainer(APPatch):
     game: str = 'Ocarina of Time'
+    patch_file_ending = ".apz5"
 
     def __init__(self, patch_data: bytes, base_path: str, output_directory: str,
                  player = None, player_name: str = "", server: str = ""):
@@ -271,7 +272,7 @@ def patch_rom(world, rom):
         world_str = ""
     rom.write_bytes(rom.sym('WORLD_STRING_TXT'), makebytes(world_str, 12))
 
-    time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M") + " UTC"
+    time_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M") + " UTC"
     rom.write_bytes(rom.sym('TIME_STRING_TXT'), makebytes(time_str, 25))
 
     rom.write_byte(rom.sym('CFG_SHOW_SETTING_INFO'), 0x01)

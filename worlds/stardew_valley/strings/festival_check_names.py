@@ -16,7 +16,7 @@ class FestivalCheck:
     lupini_the_serpent = "Lupini: The Serpent"
     lupini_three_trees = "Lupini: Three Trees"
     lupini_tropical_fish = "Lupini: 'Tropical Fish #173'"
-    mermaid_pearl = "Mermaid Pearl"
+    mermaid_show = "Mermaid Show"
     moonlight_jellies = "Dance of the Moonlight Jellies"
     rarecrow_1 = "Rarecrow #1 (Turnip Head)"
     rarecrow_2 = "Rarecrow #2 (Witch)"

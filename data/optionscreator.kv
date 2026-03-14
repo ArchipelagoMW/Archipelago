@@ -1,0 +1,174 @@
+<VisualRange>:
+    id: this
+    spacing: 15
+    orientation: "horizontal"
+    slider: slider
+    tag: tag
+    MDLabel:
+        id: tag
+        text: str(this.option.default) if not isinstance(this.option.default, str) else str(this.option.range_start)
+    MDSlider:
+        id: slider
+        min: this.option.range_start
+        max: this.option.range_end
+        value: min(max(this.option.default, this.option.range_start), this.option.range_end) if not isinstance(this.option.default, str) else this.option.range_start
+        step: 1
+        step_point_size: 0
+        MDSliderHandle:
+
+        MDSliderValueLabel:
+
+<VisualChoice>:
+    id: this
+    text: text
+    MDButtonText:
+        id: text
+        text: this.option.get_option_name(this.option.default if not isinstance(this.option.default, str) else list(this.option.options.values())[0])
+        theme_text_color: "Primary"
+
+<VisualNamedRange>:
+    id: this
+    orientation: "horizontal"
+    spacing: "10dp"
+    padding: (0, 0, "10dp", 0)
+    choice: choice
+
+    MDButton:
+        id: choice
+        text: text
+        MDButtonText:
+            id: text
+            text: this.option.default.title() if this.option.default in this.option.special_range_names else "Custom"
+
+<VisualFreeText>:
+    multiline: False
+    font_size: "15sp"
+    text: self.option.default if isinstance(self.option.default, str) else ""
+    theme_height: "Custom"
+    height: "30dp"
+
+
+<VisualTextChoice>:
+    id: this
+    orientation: "horizontal"
+    spacing: "5dp"
+    padding: (0, 0, "10dp", 0)
+
+<VisualToggle>:
+    id: this
+    button: button
+    MDIconButton:
+        id: button
+        icon: "checkbox-outline" if this.option.default else "checkbox-blank-outline"
+
+<VisualListSetEntry@ResizableTextField>:
+    height: "20dp"
+
+<CounterItemValue>:
+    height: "30dp"
+
+<VisualListSetCounter>:
+    id: this
+    scrollbox: scrollbox
+    add: add
+    save: save
+    input: input
+    focus_behavior: False
+
+    MDDialogHeadlineText:
+        text: getattr(this.option, "display_name", this.name)
+
+    MDDialogSupportingText:
+        text: "Add or Remove Entries"
+
+    MDDialogContentContainer:
+        orientation: "vertical"
+        spacing: 10
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            VisualListSetEntry:
+                id: input
+                height: "20dp"
+
+            MDIconButton:
+                id: add
+                icon: "plus"
+                theme_height: "Custom"
+                height: "20dp"
+                on_press: root.validate_add(input)
+
+        ScrollBox:
+            id: scrollbox
+            size_hint_y: None
+            adapt_minimum: False
+
+        MDButton:
+            id: save
+            MDButtonText:
+                text: "Save Changes"
+
+ContainerLayout:
+    md_bg_color: app.theme_cls.backgroundColor
+
+    MainLayout:
+        id: main
+        cols: 3
+        padding: 3, 5, 0, 3
+        spacing: "2dp"
+
+        ScrollBox:
+            id: scrollbox
+            size_hint_x: None
+            width: "150dp"
+
+        MDDivider:
+            orientation: "vertical"
+            width: "4dp"
+
+        MainLayout:
+            id: player_layout
+            rows: 2
+            spacing: "20dp"
+
+            MDBoxLayout:
+                id: player_options
+                orientation: "horizontal"
+                height: "75dp"
+                size_hint_y: None
+                padding: ["10dp", "30dp", "10dp", 0]
+                spacing: "10dp"
+
+                ResizableTextField:
+                    id: player_name
+                    multiline: False
+
+                    MDTextFieldHintText:
+                        text: "Player Name"
+
+                    MDTextFieldMaxLengthText:
+                        max_text_length: 16
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: "15dp"
+
+                    MDLabel:
+                        id: game
+                        text: "Game: None"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                    MDButton:
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_press: app.export_options(self)
+                        theme_width: "Custom"
+                        size_hint_y: 1
+                        size_hint_x: 1
+
+                        MDButtonText:
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            text: "Export Options"
+
+            MainLayout:
+                cols: 1
+                id: options

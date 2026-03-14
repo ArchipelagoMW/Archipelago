@@ -9,7 +9,7 @@ from collections import Counter
 from typing import TYPE_CHECKING, Any
 from typing import Dict, Generator, Iterable, List, Set, Tuple, Union, final
 
-from s2clientprotocol import sc2api_pb2 as sc_pb
+from .proto import sc2api_pb2 as sc_pb
 
 from .constants import (
     IS_PLACEHOLDER,
