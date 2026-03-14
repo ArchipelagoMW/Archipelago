@@ -6,7 +6,7 @@ from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSou
     FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource, SkillCraftsanitySource, ShopWithKnownRecipeSource
 from ..options import Craftsanity, SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_
-from ..strings.region_names import Region
+from ..strings.building_names import Building
 
 
 class CraftingLogicMixin(BaseLogicMixin):
@@ -78,7 +78,7 @@ class CraftingLogic(BaseLogic):
             return self.logic.special_order.can_complete_special_order(recipe.source.special_order)
         if isinstance(recipe.source, LogicSource):
             if recipe.source.logic_rule == "Cellar":
-                return self.logic.region.can_reach(Region.cellar)
+                return self.logic.building.has_building(Building.cellar)
 
         return False_()
 
