@@ -24,6 +24,7 @@ class TimespinnerLogic:
         self.flag_eye_spy = bool(options and options.eye_spy)
         self.flag_unchained_keys = bool(options and options.unchained_keys)
         self.flag_prism_break = bool(options and options.prism_break)
+        self.flag_find_the_flame = bool(options and options.find_the_flame)
 
         if precalculated_weights:
             if self.flag_unchained_keys:
@@ -90,6 +91,12 @@ class TimespinnerLogic:
     def can_break_walls(self, state: CollectionState) -> bool:
         if self.flag_eye_spy:
             return state.has('Oculus Ring', self.player)
+        else:
+            return True
+
+    def can_break_lanterns(self, state: CollectionState) -> bool:
+        if self.flag_find_the_flame:
+            return state.has('Cube of Bodie', self.player)
         else:
             return True
 

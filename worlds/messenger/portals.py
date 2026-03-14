@@ -292,12 +292,10 @@ def disconnect_portals(world: "MessengerWorld") -> None:
 
 
 def validate_portals(world: "MessengerWorld") -> bool:
-    if world.options.shuffle_transitions:
-        return True
-    new_state = CollectionState(world.multiworld)
+    new_state = CollectionState(world.multiworld, True)
     new_state.update_reachable_regions(world.player)
     reachable_locs = 0
-    for loc in world.multiworld.get_locations(world.player):
+    for loc in world.get_locations():
         reachable_locs += loc.can_reach(new_state)
         if reachable_locs > 5:
             return True
@@ -308,4 +306,4 @@ def add_closed_portal_reqs(world: "MessengerWorld") -> None:
     closed_portals = [entrance for entrance in PORTALS if f"{entrance} Portal" not in world.starting_portals]
     for portal in closed_portals:
         tower_exit = world.multiworld.get_entrance(f"ToTHQ {portal} Portal", world.player)
-        tower_exit.access_rule = lambda state: state.has(portal, world.player)
+        tower_exit.access_rule = lambda state, portal_item=portal: state.has(portal_item, world.player)

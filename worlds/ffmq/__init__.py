@@ -43,6 +43,7 @@ class FFMQWebWorld(WebWorld):
         )
     
     tutorials = [setup_en, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class FFMQWorld(World):
@@ -156,15 +157,17 @@ class FFMQWorld(World):
         if "Progressive" in item.name:
             i = item.code - 256
             if remove:
+                if state.has(self.item_id_to_name[i+2], self.player):
+                    return self.item_id_to_name[i+2]
                 if state.has(self.item_id_to_name[i+1], self.player):
-                    if state.has(self.item_id_to_name[i+2], self.player):
-                        return self.item_id_to_name[i+2]
                     return self.item_id_to_name[i+1]
                 return self.item_id_to_name[i]
-
+            
+            if state.has(self.item_id_to_name[i+2], self.player):
+                return self.item_id_to_name[i+2]
+            if state.has(self.item_id_to_name[i+1], self.player):
+                return self.item_id_to_name[i+2]
             if state.has(self.item_id_to_name[i], self.player):
-                if state.has(self.item_id_to_name[i+1], self.player):
-                    return self.item_id_to_name[i+2]
                 return self.item_id_to_name[i+1]
             return self.item_id_to_name[i]
         return item.name

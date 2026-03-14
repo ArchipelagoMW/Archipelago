@@ -23,7 +23,7 @@ clear it.
 
 1. Create your options file (YAML). You can make one on the
 [Mega Man 2 options page](../../../games/Mega%20Man%202/player-options).
-2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
+2. Follow the general Archipelago instructions for [generating a game](/tutorial/Archipelago/setup_en#generating-a-game).
 This will generate an output file for you. Your patch file will have the `.apmm2` file extension.
 3. Open `ArchipelagoLauncher.exe`
 4. Select "Open Patch" on the left side and select your patch file.

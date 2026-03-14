@@ -477,7 +477,7 @@ function main()
         elseif (curstate == STATE_UNINITIALIZED) then
             -- If we're uninitialized, attempt to make the connection.
             if (frame % 120 == 0) then
-                server:settimeout(2)
+                server:settimeout(120)
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print('Initial Connection Made')

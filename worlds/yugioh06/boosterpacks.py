@@ -423,7 +423,7 @@ booster_contents: Dict[str, List[str]] = {
         "Kaiser Glider",
         "Horus the Black Flame Dragon LV6",
         "Luster Dragon",
-        "Luster Dragon #2"
+        "Luster Dragon #2",
         "Spear Dragon",
         "Armed Dragon LV3",
         "Armed Dragon LV5",
@@ -634,7 +634,7 @@ booster_contents: Dict[str, List[str]] = {
         "Mystic Swordsman LV6",
         "Horus the Black Flame Dragon LV6",
         "Horus the Black Flame Dragon LV4",
-        "Armed Dragon LV3"
+        "Armed Dragon LV3",
         "Armed Dragon LV5",
         "Silent Swordsman Lv3",
         "Silent Swordsman Lv5",
@@ -750,7 +750,7 @@ booster_contents: Dict[str, List[str]] = {
         "Formation Union",
         "Princess Pikeru",
         "Skull Zoma",
-        "Metal Reflect Slime"
+        "Metal Reflect Slime",
         "Level Up!",
         "Howling Insect",
         "Tribute Doll",

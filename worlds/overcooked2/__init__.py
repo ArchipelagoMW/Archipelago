@@ -173,7 +173,7 @@ class Overcooked2World(World):
         game_item_count = len(self.itempool)
         game_progression_count = 0
         for item in self.itempool:
-            if item.classification == ItemClassification.progression:
+            if item.advancement:
                 game_progression_count += 1
         game_progression_density = game_progression_count/game_item_count
 
@@ -189,7 +189,7 @@ class Overcooked2World(World):
         total_progression_count = 0
 
         for item in self.multiworld.itempool:
-            if item.classification == ItemClassification.progression:
+            if item.advancement:
                 total_progression_count += 1
         total_progression_density = total_progression_count/total_item_count
 

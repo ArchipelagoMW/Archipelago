@@ -1,5 +1,6 @@
 {% extends 'pageWrapper.html' %}
 {% import "macros.html" as macros %}
+{% set show_footer = True %}
 
 {% block head %}
     <title>Page Not Found (404)</title>
@@ -13,5 +14,4 @@
         The page you're looking for doesn&apos;t exist.<br />
         <a href="/">Click here to return to safety.</a>
     </div>
-    {% include 'islandFooter.html' %}
 {% endblock %}

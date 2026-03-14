@@ -289,7 +289,7 @@ class KirbyFlavorPreset(Choice):
     option_lime = 12
     option_lavender = 13
     option_miku = 14
-    option_custom = 15
+    option_custom = -1
     default = 0
 
     @classmethod
@@ -297,7 +297,7 @@ class KirbyFlavorPreset(Choice):
         text = text.lower()
         if text == "random":
             choice_list = list(cls.name_lookup)
-            choice_list.remove(14)
+            choice_list.remove(-1)
             return cls(random.choice(choice_list))
         return super().from_text(text)
 
@@ -347,7 +347,7 @@ class GooeyFlavorPreset(Choice):
     option_orange = 11
     option_lime = 12
     option_lavender = 13
-    option_custom = 14
+    option_custom = -1
     default = 0
 
     @classmethod
@@ -355,7 +355,7 @@ class GooeyFlavorPreset(Choice):
         text = text.lower()
         if text == "random":
             choice_list = list(cls.name_lookup)
-            choice_list.remove(14)
+            choice_list.remove(-1)
             return cls(random.choice(choice_list))
         return super().from_text(text)
 

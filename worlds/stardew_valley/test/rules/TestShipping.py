@@ -1,6 +1,7 @@
+from ..bases import SVTestBase
+from ... import StartWithoutOptionName
 from ...locations import LocationTags, location_table
-from ...options import BuildingProgression, Shipsanity
-from ...test import SVTestBase
+from ...options import BuildingProgression, Shipsanity, StartWithout
 
 
 class TestShipsanityNone(SVTestBase):
@@ -62,6 +63,7 @@ class TestShipsanityFullShipmentWithFish(SVTestBase):
 
 class TestShipsanityEverything(SVTestBase):
     options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.buildings}),
         Shipsanity.internal_name: Shipsanity.option_everything,
         BuildingProgression.internal_name: BuildingProgression.option_progressive
     }
@@ -76,10 +78,8 @@ class TestShipsanityEverything(SVTestBase):
 
         for location in shipsanity_locations:
             with self.subTest(location.name):
-                self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
+                self.assert_cannot_reach_location(location.name)
 
                 self.collect(bin_item)
-                shipsanity_rule = self.world.logic.region.can_reach_location(location.name)
-                self.assert_rule_true(shipsanity_rule, self.multiworld.state)
-
-                self.remove(bin_item)
+                self.assert_can_reach_location(location.name)
+            self.remove(bin_item)
