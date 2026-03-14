@@ -7,8 +7,8 @@ from random import Random
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 import entrance_rando
-from BaseClasses import (CollectionState, Item, ItemClassification, Location,
-                         MultiWorld, Region, Tutorial)
+from BaseClasses import (CollectionState, Entrance, Item, ItemClassification,
+                         Location, MultiWorld, Region, Tutorial)
 from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
@@ -42,14 +42,16 @@ from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .regions.entrance_rando import get_target_groups
-from .rules import set_rules, update_rules
+from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.ap_option_names import (
     EntranceRandomizerBehaviourOptionName, StartWithoutOptionName)
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
+from .strings.entrance_names import Entrance as EntranceNames
 from .strings.goal_names import Goal as GoalName
 from .strings.quest_names import Quest
+from .strings.region_names import LogicRegion
 from .strings.region_names import Region as RegionNames
 
 logger = logging.getLogger(__name__)
@@ -524,6 +526,36 @@ class StardewValleyWorld(World):
         set_rules(self)
 
     def connect_entrances(self) -> None:
+        if self.options.entrance_randomization.value < EntranceRandomization.option_overworld:
+            self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(
+                LogicRegion.bus_stop_cutscene
+            )
+            self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(
+                LogicRegion.town_cutscene
+            )
+
+        def connect_cutscene_regions_as_well(
+            state: entrance_rando.ERPlacementState, placed_exits: list[Entrance], placed_entrances: list[Entrance]
+        ):
+            additional_sweep_needed = False
+            for ex, entr in zip(placed_exits, placed_entrances):
+                if entr.name == EntranceNames.farm_to_bus_stop:
+                    assert ex.connected_region is not None
+                    ex.connected_region.entrances.remove(ex)
+                    new_region = self.get_region(LogicRegion.bus_stop_cutscene)
+                    ex.connected_region = new_region
+                    new_region.entrances.append(ex)
+                    additional_sweep_needed = True
+                elif entr.name == EntranceNames.bus_stop_to_town:
+                    assert ex.connected_region is not None
+                    ex.connected_region.entrances.remove(ex)
+                    new_region = self.get_region(LogicRegion.town_cutscene)
+                    ex.connected_region = new_region
+                    new_region.entrances.append(ex)
+                    additional_sweep_needed = True
+
+            return additional_sweep_needed
+
         if self.randomized_entrances is None:
             target_groups = get_target_groups(self.options.entrance_randomization_behaviour)
 
@@ -532,6 +564,7 @@ class StardewValleyWorld(World):
                 coupled=EntranceRandomizerBehaviourOptionName.decoupled
                 not in self.options.entrance_randomization_behaviour,
                 target_group_lookup=target_groups,
+                on_connect=connect_cutscene_regions_as_well,
             )
             self.randomized_entrances = prepare_mod_data(placement)
         else:
@@ -558,8 +591,6 @@ class StardewValleyWorld(World):
                 target.entrances.remove(entr)
 
                 ex.connect(target)
-        self.logic.quest.update_cutscene_rules(self.randomized_entrances)
-        update_rules(self)
 
     def generate_basic(self):
         pass

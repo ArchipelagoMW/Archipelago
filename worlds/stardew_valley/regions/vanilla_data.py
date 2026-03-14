@@ -66,6 +66,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.minecart_bus_stop_to_town,
         ),
     ),
+    RegionData(LogicRegion.bus_stop_cutscene, (Entrance.bus_stop_cutscene_to_bus_stop,)),
     RegionData(
         RegionName.forest,
         (
@@ -141,6 +142,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         ),
     ),
     RegionData(RegionName.bus_tunnel, (Entrance.bus_tunnel_to_tunnel_entrance,)),
+    RegionData(LogicRegion.town_cutscene, (Entrance.town_cutscene_to_town,)),
     RegionData(
         RegionName.town,
         (
@@ -544,6 +546,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.OVERWORLD,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
+    ConnectionData(Entrance.bus_stop_cutscene_to_bus_stop, RegionName.bus_stop),
     ConnectionData(
         Entrance.bus_stop_to_farm,
         RegionName.farm,
@@ -722,6 +725,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
         flag=RandomizationFlag.OVERWORLD,
         group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
+    ConnectionData(Entrance.town_cutscene_to_town, RegionName.town),
     ConnectionData(
         Entrance.town_to_bus_stop,
         RegionName.bus_stop,

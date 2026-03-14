@@ -242,6 +242,8 @@ class LogicRegion:
     town_fence_shortcut = "Fence For Shortcut to Mountain"
     mountain_walkway_shortcut = "Mountian Walkway to Jojamart Shortcut"
     mountain_fence_shortcut = "Mountain Behind Fence Shortcut"
+    bus_stop_cutscene = "Bus Stop Cutscene"
+    town_cutscene = "Town Cutscene"
 
 
 class DeepWoodsRegion:
