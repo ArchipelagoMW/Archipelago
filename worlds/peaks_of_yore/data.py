@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import math
 from enum import IntEnum
-from typing import Callable, NamedTuple
+from typing import Callable
 
 from .options import PeaksOfYoreOptions, RequirementsDifficulty, GameMode
-from BaseClasses import ItemClassification, Item, Location, CollectionState, MultiWorld
+from BaseClasses import ItemClassification, Item, Location, CollectionState
 from worlds.AutoWorld import World
 
 peak_offset: int = 1
@@ -29,8 +29,6 @@ class PeaksOfYoreItem(Item):
 class PeaksOfYoreLocation(Location):
     game = "Peaks of Yore"
 
-
-
 class POYItemLocationType(IntEnum):
     PEAK = 1
     ROPE = 1000
@@ -43,7 +41,6 @@ class POYItemLocationType(IntEnum):
     TIMEATTACK_TIME = 8000
     TIMEATTACK_ROPES = 9000
     TIMEATTACK_HOLDS = 10000
-
 
 class ItemDataOld:
     """
@@ -255,7 +252,6 @@ def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
         ])
     ], start_priority=start_priority)
 
-
 class POYRegion:
     """
     POYRegion is used later to define Regions, allowing me to define the regions in this file
@@ -321,7 +317,6 @@ class PeakRegion(POYRegion):
 
     def __init__(self, name: str, peak_id: int, entry_requirements: Requirements=None, subregions=None, locations=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True,
-                 is_start: Callable[[PeaksOfYoreOptions], bool] = lambda opts: False,
                  generate_time_attack: bool = True, generate_free_solo: bool = False):
         self.peak_id = peak_id
         self.generate_time_attack = generate_time_attack
@@ -330,7 +325,9 @@ class PeakRegion(POYRegion):
         self.prepare_peak_region()
         self.is_peak = True
         self.is_book = False
-        self.is_start = is_start
+        self.is_start = lambda opts: (opts.starting_peak.value == self.peak_id
+                                      if opts.game_mode == GameMode.option_peak_unlock
+                                      else opts.starting_book.get_start_peak_id() == self.peak_id)
 
     def prepare_peak_region(self):
         # add a ConditionalRequirement to the peak
@@ -553,7 +550,7 @@ item_id_to_classification: dict[int, ItemClassification] = {i.id + i.type: i.cla
 # poy_regions defines all the regions, their entry requirements, locations and requirements to be included
 poy_regions: POYRegion = POYRegion("Cabin", subregions=[
     BookRegion("Fundamentals", subregions=[
-        PeakRegion("Greenhorn's Top", 0, is_start=lambda options: options.starting_book == 0),
+        PeakRegion("Greenhorn's Top", 0),
         PeakRegion("Paltry Peak", 1),
         PeakRegion("Old Mill", 2, locations=[
             LocationData("Old Mill: Hat", POYItemLocationType.ARTEFACT, 0)
@@ -616,7 +613,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ]),
     ], enable_requirements=lambda options: options.enable_fundamental),
     BookRegion("Intermediate", subregions=[
-        PeakRegion("Porter's Boulder", 20, is_start=lambda options: options.starting_book == 1),
+        PeakRegion("Porter's Boulder", 20),
         PeakRegion("Jotunn's Thumb", 21),
         PeakRegion("Old Skerry", 22, locations=[
             LocationData("Old Skerry: Bird Seed", POYItemLocationType.BIRDSEED, 1),
@@ -637,7 +634,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1,
                          requirements=SimpleRequirements({"Walker Interaction Event": 1}),
                          enable_override= lambda options: options.enable_fundamental),
-        ], generate_free_solo=True, is_start=lambda options: options.starting_book == 2),
+        ], generate_free_solo=True),
         PeakRegion("Eldenhorn", 31, locations=[
             LocationData("Eldenhorn: Chalk Box", POYItemLocationType.ARTEFACT, 10),
             LocationData("Eldenhorn: Rope", POYItemLocationType.ROPE, 7),
@@ -666,10 +663,11 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
     BookRegion("Expert", entry_requirements=SimpleRequirements({"Progressive Crampons": 1, "Ice Axes": 1}), subregions=[
         PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
-        ], generate_time_attack=False, generate_free_solo=True, is_start=lambda options: options.starting_book == 3),
+        ], generate_time_attack=False, generate_free_solo=True),
         PeakRegion("Solemn Tempest", 36, entry_requirements=SimpleRequirements({"Progressive Crampons": 2}),
                    enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
                    generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_expert),
 ])
 all_locations_to_ids: dict[str, int] = poy_regions.get_all_locations_dict()
+ids_to_locations: dict[int, str] = {v: k for k, v in all_locations_to_ids.items()}

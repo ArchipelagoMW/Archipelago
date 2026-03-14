@@ -5,8 +5,9 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, Item
 from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups, \
-    poy_option_presets, GameMode
+    poy_option_presets, GameMode, PeakGoal, StartingPeak
 from .data import *
+from rule_builder.rules import *
 
 from .regions import create_poy_regions, RegionLocationInfo
 
@@ -124,6 +125,23 @@ class PeaksOfWorld(World):
 
         self.options.starting_book.value = book_names.index(start_book)
 
+        if self.options.game_mode == GameMode.option_peak_unlock:
+            starting_peak_book = book_names[self.options.starting_peak.get_peak_book_option()]
+            if not starting_book_options[starting_peak_book]:
+                self.options.starting_peak.value = self.options.starting_book.get_start_peak_id()
+                logging.warning(f"setting start peak to {self.options.starting_book.get_start_peak_id()}")
+
+            if self.options.starting_peak.value == StartingPeak.option_solemn_tempest and self.options.disable_solemn_tempest:
+                raise OptionError("solemn tempest is selected as starting peak but solemn tempest is not enabled")
+
+        if self.options.goal == Goal.option_peak:
+            goal_peak_book = book_names[self.options.peak_goal.get_peak_book_option()]
+            if not starting_book_options[goal_peak_book]:
+                raise OptionError(f"selected finish peak {PeakGoal.get_option_name(self.options.peak_goal)}'s book {goal_peak_book} is not enabled ")
+
+            if self.options.peak_goal.value == StartingPeak.option_solemn_tempest and self.options.disable_solemn_tempest:
+                raise OptionError("solemn tempest is selected as starting peak but solemn tempest is not enabled")
+
     def create_regions(self) -> None:
         self.checks_in_pool = create_poy_regions(self, self.options)
 
@@ -230,6 +248,9 @@ class PeaksOfWorld(World):
         elif self.options.goal.value == Goal.option_all:
             self.multiworld.completion_condition[self.player] = lambda state: all(
                 state.can_reach_location(loc.name, self.player) for loc in self.multiworld.get_locations(self.player))
+
+        elif self.options.goal.value == Goal.option_peak:
+            self.set_completion_rule(CanReachLocation(ids_to_locations[self.options.peak_goal.get_location_id()]))
 
     def fill_slot_data(self) -> dict[str, Any]:
         data_dict = self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps",
