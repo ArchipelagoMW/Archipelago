@@ -20,15 +20,28 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
 
     downloads = []
     for slot in sorted(room.seed.slots):
-        if slot.data and not supports_apdeltapatch(slot.game):
+        # logic adapted from WebHostLib/templates/macros.html#list_patches_room
+        if slot.data and slot.game == "VVVVVV" and len(room.seed.slots) == 1:
             slot_download = {
-                "slot": slot.player_id,
+                "slot": slot.id,
+                "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
+            }
+            downloads.append(slot_download)
+        elif slot.data and slot.game == "Super Mario 64" and len(room.seed.slots) == 1:
+            slot_download = {
+                "slot": slot.id,
+                "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
+            }
+            downloads.append(slot_download)
+        elif slot.data and slot.game == "Factorio" and len(room.seed.slots) == 1:
+            slot_download = {
+                "slot": slot.id,
                 "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
             }
             downloads.append(slot_download)
         elif slot.data:
             slot_download = {
-                "slot": slot.player_id,
+                "slot": slot.id,
                 "download": url_for("download_patch", patch_id=slot.id, room_id=room.id)
             }
             downloads.append(slot_download)
