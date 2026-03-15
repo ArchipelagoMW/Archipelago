@@ -1,6 +1,1 @@
-{
-    "game": "Banjo-Tooie",
-	"authors": [ "jjjj12212", "g0goTBC", "Austin" ],
-    "minimum_ap_version": "0.6.4",
-    "world_version": "4.11.4"
-}
+{"game": "Banjo-Tooie", "authors": ["jjjj12212", "g0goTBC", "Austin"], "minimum_ap_version": "0.6.7", "world_version": "4.11.5", "compatible_version": 7, "version": 7}

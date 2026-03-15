@@ -5,11 +5,11 @@ import time
 
 from Options import OptionError
 import typing
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Set
 import warnings, settings
 from dataclasses import asdict
 
-from .Hints import HintData, generate_hints
+from .Hints import HintData, choose_hinted_locations, generate_hint_data
 from .Items import BanjoTooieItem, ItemData, all_item_table, all_group_table, progressive_ability_breakdown
 from .Locations import LocationData, all_location_table, MTLoc_Table, GMLoc_table, WWLoc_table, \
     JRLoc_table, TLLoc_table, GILoc_table, HPLoc_table, CCLoc_table, MumboTokenGames_table, \
@@ -205,7 +205,10 @@ class BanjoTooieWorld(World):
         self.loading_zones = {}
         self.jamjars_siloname_costs = {}
         self.jamjars_silo_costs = {}
+
+        self.hinted_locations: Set[Location] = set()
         self.hints: dict[int, HintData] = {}
+
         super(BanjoTooieWorld, self).__init__(world, player)
 
     def create_item(self, name: str) -> Item:
@@ -592,8 +595,8 @@ class BanjoTooieWorld(World):
         if not self.options.randomize_notes.value \
                 and not self.options.randomize_signposts.value and not self.options.nestsanity.value \
                 and self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none:
-            raise OptionError("Your options are too restrictive for Randomize BK Moves.\n"
-                "Try randomizing notes, signs or nestsanity")
+                raise OptionError("Your options are too restrictive for Randomize BK Moves."
+                    "Try randomizing notes, signs or nestsanity")
         if self.options.victory_condition.value == VictoryCondition.option_token_hunt:
             if self.options.token_hunt_length.value > self.options.tokens_in_pool.value:
                 self.options.token_hunt_length.value = self.options.tokens_in_pool.value
@@ -1030,13 +1033,13 @@ class BanjoTooieWorld(World):
                     hint_data.text
                 ))
 
+    def finalize_multiworld(self):
+        choose_hinted_locations(self)
+
+    def pre_output(self):
+        generate_hint_data(self)
+
     def fill_slot_data(self) -> Dict[str, Any]:
-        t0 = time.time()
-        generate_hints(self)
-        t1 = time.time()
-        total = t1-t0
-        if total >= 1:
-            logging.info(f"Took {total:.4f} seconds in BanjoTooieWorld.generate_hints for player {self.player}, named {self.multiworld.player_name[self.player]}.")
         btoptions = {option_name: option.value for option_name, option in self.options.__dict__.items()}
 
         # plando_items not serialisable, so we can't include it in slot_data.
