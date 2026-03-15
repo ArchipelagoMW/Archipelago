@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Range, PerGameCommonOptions, Toggle
+from Options import Range, PerGameCommonOptions, Toggle, FreeText
 
 
 class LocationsPerWeather(Range):
@@ -43,6 +43,12 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
+class DeathLinkGroup(FreeText):
+    """If DeathLink is enabled, only players with a matching Group name will be linked.
+    An empty group name will link with games that don't support groups."""
+    display_name = "Death Link Group"
+
+
 @dataclass
 class BKSim_Options(PerGameCommonOptions):
     locs_per_weather: LocationsPerWeather
@@ -50,6 +56,7 @@ class BKSim_Options(PerGameCommonOptions):
     speed_per_upgrade: SpeedPerUpgrade
     extra_filler_rate: ExtraFillerRate
     death_link: DeathLink
+    death_link_group: DeathLinkGroup
 
 
 options_presets = {

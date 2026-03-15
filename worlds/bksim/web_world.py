@@ -14,3 +14,4 @@ class BKSimWebWorld(WebWorld):
         ["Emily"]
     )
     tutorials = [setup_en]
+    rich_text_options_doc = True

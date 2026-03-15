@@ -42,6 +42,7 @@ class BKSimWorld(World):
             'StartDistance': self.options.start_distance.value,
             'SpeedPerUpgrade': self.options.speed_per_upgrade.value,
             'DeathLink': self.options.death_link.value,
+            'DeathLinkGroup': self.options.death_link_group.value,
         }
 
     def get_region(self, region_name: str) -> Region:
