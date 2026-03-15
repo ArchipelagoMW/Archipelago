@@ -7,8 +7,8 @@
 # Brief:
 #   Main library functions and custom world class.
 
-import json
 import logging
+import orjson
 import typing
 from collections.abc import Iterable
 from copy import deepcopy
@@ -132,7 +132,7 @@ class AutoLoadJsonData(AutoWorldRegister):
             pkg_name, file_name = import_data
             json_data = get_data(pkg_name, file_name)
             assert json_data is not None
-            json_data = json.loads(json_data.decode("utf-8"))
+            json_data = orjson.loads(json_data.decode("utf-8"))
 
             dct["item_table"] = {int(idx): ItemData(obj) for (idx, obj) in json_data["item_table"].items()}
             dct["location_table"] = {int(idx): LocationData(obj) for (idx, obj) in json_data["location_table"].items()}
@@ -375,7 +375,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
         # Now we can make the actual Regions, and while we're at it, the locations too.
         for region_data in self.constructed_region_list:
             region = Region(region_data.name, self.player, self.multiworld)
-            region.add_locations(locations_by_region[region_data.name])
+            region.add_locations(locations_by_region[region_data.name], location_type)
             self.multiworld.regions.append(region)
 
         # With all regions made, we can now make connections...
@@ -549,6 +549,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
         # Fill in options guaranteed to exist.
         slot_data = self.options.as_dict(
             "death_link",
+            "energy_link",
             "difficulty",
             "reset_level_on_death",
             "random_monsters",

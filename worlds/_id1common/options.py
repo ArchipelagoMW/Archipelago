@@ -22,6 +22,7 @@ from Options import (
     PerGameCommonOptions,
     Range,
     StartInventoryPool,
+    TextChoice,
     Toggle,
 )
 
@@ -202,6 +203,25 @@ class CheckSanity(Toggle):
     display_name = "Check Sanity"
 
 
+class EnergyLink(TextChoice):
+    """Enables using the server's EnergyLink pool to obtain powerups.
+
+    When enabled, items sent to you that would have no mechanical effect are instead converted into energy.
+    You can then spend that energy at any later time to refill your ammo or give yourself powerups.
+
+    Optionally, you can set this option to an arbitrary string.
+    This will restict your EnergyLink pool to only other players that use the same string.
+    """
+    display_name = "Energy Link"
+    option_false = 0
+    alias_off = 0
+    alias_no = 0
+    option_true = 1
+    alias_on = 1
+    alias_yes = 1
+    default = 1
+
+
 ######################
 # Difficulty options #
 ######################
@@ -369,6 +389,7 @@ class BagOfHoldingCount(BackpackCount):
 class id1CommonOptions(PerGameCommonOptions):  # noqa: N801
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
+    energy_link: EnergyLink
 
     # Global goal settings
     goal: Goal

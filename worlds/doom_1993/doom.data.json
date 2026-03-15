@@ -24,6 +24,7 @@
 	{
 		"Ammos": 
 		[
+			"Ammo refill",
 			"Box of bullets",
 			"Box of rockets",
 			"Box of shotgun shells",
@@ -1959,6 +1960,12 @@
 			"classification": 1,
 			"doom_type": -2,
 			"exmx": [ 4, 9 ]
+		},
+		"65000": 
+		{
+			"_name": "Ammo refill",
+			"classification": 2,
+			"doom_type": 65000
 		},
 		"65001": 
 		{

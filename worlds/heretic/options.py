@@ -381,6 +381,7 @@ HereticOptionGroups = [
         id1Options.AllowDeathLogic,
         id1Options.ResetLevelOnDeath,
         BaseOptions.DeathLink,
+        id1Options.EnergyLink,
     ]),
     BaseOptions.OptionGroup("Randomizer Options", [
         BaseOptions.ProgressionBalancing,

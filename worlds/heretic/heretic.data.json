@@ -28,6 +28,7 @@
 	{
 		"Ammos": 
 		[
+			"Ammo Refill",
 			"Crystal Geode",
 			"Energy Orb",
 			"Greater Runes",
@@ -2727,6 +2728,12 @@
 			"classification": 1,
 			"doom_type": -2,
 			"exmx": [ 6, 2 ]
+		},
+		"65000": 
+		{
+			"_name": "Ammo Refill",
+			"classification": 2,
+			"doom_type": 65000
 		},
 		"65001": 
 		{
@@ -10894,7 +10901,7 @@
 			"_name": "Foetid Manse (E5M7) - Ethereal Crossbow",
 			"doom_type": 2001,
 			"exmx": [ 5, 7 ],
-			"region": "Foetid Manse (E5M7) @ Green River"
+			"region": "Foetid Manse (E5M7) @ Main"
 		},
 		"507008": 
 		{
