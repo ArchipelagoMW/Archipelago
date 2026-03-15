@@ -363,7 +363,7 @@ class World(metaclass=AutoWorldRegister):
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
-            return self.__class__.settings
+            return getattr(self.__class__, item)
         raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
