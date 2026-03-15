@@ -1,7 +1,7 @@
 from .bases import NineSolsTestBase
 
 
-class TestVanillaLogic(NineSolsTestBase):
+class TestVanillaShopUnlocks(NineSolsTestBase):
     options = {
         "shop_unlocks": "vanilla_like_locations",
         "shuffle_grapple": True,
@@ -13,7 +13,7 @@ class TestVanillaLogic(NineSolsTestBase):
         self.assertEqual(0, len([x for x in self.multiworld.get_items() if x.name == "Progressive Shop Unlock"]))
 
 
-class TestSolSealsLogic(NineSolsTestBase):
+class TestSolSealsShopUnlocks(NineSolsTestBase):
     options = {
         "shop_unlocks": "sol_seals",
         "shuffle_grapple": True,
@@ -25,7 +25,7 @@ class TestSolSealsLogic(NineSolsTestBase):
         self.assertEqual(0, len([x for x in self.multiworld.get_items() if x.name == "Progressive Shop Unlock"]))
 
 
-class TestUnlockItemsLogic(NineSolsTestBase):
+class TestUnlockItemsShopUnlocks(NineSolsTestBase):
     options = {
         "shop_unlocks": "unlock_items",
         "shuffle_grapple": True,
@@ -35,3 +35,19 @@ class TestUnlockItemsLogic(NineSolsTestBase):
 
     def test_default(self):
         self.assertEqual(3, len([x for x in self.multiworld.get_items() if x.name == "Progressive Shop Unlock"]))
+
+
+class TestShopRando(NineSolsTestBase):
+    options = {
+        "randomize_shops": True,
+    }
+
+    def test_default(self):
+        items = self.multiworld.get_items()
+        self.assertEqual(0, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
+        self.assertEqual(3, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
+
+        sphere1 = [loc.name for loc in self.multiworld.get_reachable_locations()]
+        self.assertIn("3D Printer: 1st Low Cost Purchase", sphere1)
+        self.assertNotIn("3D Printer: 1st Medium Cost Purchase", sphere1)
+
