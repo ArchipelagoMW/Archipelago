@@ -45,6 +45,7 @@ EnemizerCLI/
 /SNI/
 /sni-*/
 /appimagetool*
+/VC_redist.x64.exe
 /host.yaml
 /options.yaml
 /config.yaml
@@ -65,6 +66,8 @@ Output Logs/
 /datapackage
 /datapackage_export.json
 /custom_worlds
+# stubgen output
+/out/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
