@@ -16,9 +16,12 @@
     { "code": 15, "name": "Cloud Leap", "type": "progression_skip_balancing" }, // CL tends to show up too early and blow the game wide open
     { "code": 16, "name": "Super Mutant Buster", "type": "progression" },
 
-    { "code": 21, "name": "Arrow: Cloud Piercer", "type": "progression_if_medium_logic" },
-    { "code": 22, "name": "Arrow: Thunder Buster", "type": "progression_if_medium_logic" },
-    { "code": 23, "name": "Arrow: Shadow Hunter", "type": "progression_if_medium_logic" },
+    { "category": "!shop", "code": 21, "name": "Arrow: Cloud Piercer", "type": "progression_if_medium_logic" },
+    { "category": "!shop", "code": 22, "name": "Arrow: Thunder Buster", "type": "progression_if_medium_logic" },
+    { "category": "!shop", "code": 23, "name": "Arrow: Shadow Hunter", "type": "progression_if_medium_logic" },
+    { "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "type": "progression_if_medium_logic" },
+    { "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "type": "progression_if_medium_logic" },
+    { "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "type": "progression_if_medium_logic" },
 
     // "Material"s
     { "code": 31, "name": "Herb Catalyst", "type": "useful" },
@@ -27,11 +30,18 @@
     // "Equipment"
     { "code": 41, "name": "Pipe Vial", "type": "useful" },
     { "code": 42, "name": "Computing Unit", "type": "useful" },
+    { "category": "shop", "code": 43, "name": "Azure Sand Magazine", "type": "useful" },
 
     // "Key Item"s that are really just upgrades
     { "code": 51, "name": "Tao Fruit", "type": "useful" },
     { "code": 52, "name": "Greater Tao Fruit", "type": "useful" },
     { "code": 53, "name": "Twin Tao Fruit", "type": "useful" },
+
+    // other "Status" menu upgrades
+    { "category": "shop", "code": 61, "name": "Pipe Upgrade", "type": "useful" },
+    { "category": "shop", "code": 62, "name": "Transmute Unto Wealth", "type": "useful" },
+    { "category": "shop", "code": 63, "name": "Transmute Unto Life", "type": "useful" },
+    { "category": "shop", "code": 64, "name": "Transmute Unto Qi", "type": "useful" },
 
     // progression "Artifact"s gifted to Shuanshuan
     { "code": 101, "name": "(Artifact) Ancient Sheet Music", "type": "weak_progression" },
@@ -103,8 +113,7 @@
     { "code": 310, "name": "Avarice Jade", "type": "useful" },
     { "code": 311, "name": "Revival Jade", "type": "useful" },
     { "code": 312, "name": "Swift Descent Jade", "type": "useful" },
-    { "code": 313, "name": "Mob Quell Jade - Yin", "type": "useful" },
-    //{ "code": 314, "name": "Mob Quell Jade - Yang", "type": "useful" }, // shop item
+    { "code": 313, "name": "Mob Quell Jade - Yin", "type": "useful" }, // 314 unused because I forgot Mob Quell Yang was a shop jade
     { "code": 315, "name": "Focus Jade", "type": "useful" },
     { "code": 316, "name": "Swift Blade Jade", "type": "useful" },
     { "code": 317, "name": "Breather Jade", "type": "useful" },
@@ -112,6 +121,16 @@
     { "code": 319, "name": "Qi Blade Jade", "type": "useful" },
     { "code": 320, "name": "Divine Hand Jade", "type": "useful" },
     { "code": 321, "name": "Cultivation Jade", "type": "useful" },
+    // Chiyou shop jades
+    { "category": "shop", "code": 331, "name": "Recovery Jade", "type": "useful" },
+    { "category": "shop", "code": 332, "name": "Health Thief Jade", "type": "useful" },
+    { "category": "shop", "code": 333, "name": "Last Stand Jade", "type": "useful" },
+    { "category": "shop", "code": 334, "name": "Quick Dose Jade", "type": "useful" },
+    { "category": "shop", "code": 335, "name": "Reciprocation Jade", "type": "useful" },
+    // 3D printer jades
+    { "category": "shop", "code": 341, "name": "Ricochet Jade", "type": "useful" },
+    { "category": "shop", "code": 342, "name": "Medical Jade", "type": "useful" },
+    { "category": "shop", "code": 343, "name": "Mob Quell Jade - Yang", "type": "useful" },
 
     { "code": 401, "name": "(Poison) Medicinal Citrine", "type": "useful" },
     { "code": 402, "name": "(Poison) Golden Yinglong Egg", "type": "useful" },
@@ -121,6 +140,14 @@
     { "code": 405, "name": "(Poison) Plantago Frog", "type": "useful" },
     { "code": 406, "name": "(Poison) Oriander", "type": "useful" },
     { "code": 407, "name": "(Poison) Turtle Scorpion", "type": "useful" },
+    // Chiyou shop poisons
+    { "category": "shop", "code": 411, "name": "(Poison) Ball of Flavor", "type": "useful" },
+    { "category": "shop", "code": 412, "name": "(Poison) Dragon's Whip", "type": "useful" },
+    { "category": "shop", "code": 413, "name": "(Poison) Necroceps", "type": "useful" },
+    { "category": "shop", "code": 414, "name": "(Poison) Guiseng", "type": "useful" },
+    { "category": "shop", "code": 415, "name": "(Poison) Thunder Centipede", "type": "useful" },
+    { "category": "shop", "code": 416, "name": "(Poison) Wall-climbing Gecko", "type": "useful" },
+    { "category": "shop", "code": 417, "name": "(Poison) Gutwrench Fruit", "type": "useful" },
 
     { "code": 502, "name": "(Database) Apeman Surveillance Footage", "type": "filler" },
     { "code": 503, "name": "(Database) Council Digital Signage", "type": "filler" },

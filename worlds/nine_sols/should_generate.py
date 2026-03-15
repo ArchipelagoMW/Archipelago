@@ -8,10 +8,15 @@ if typing.TYPE_CHECKING:
 def should_generate(category: str | None, world: "NineSolsWorld") -> bool:
     if category is None:  # this item/location/connection gets generated no matter what the player options are
         return True
+    elif category.startswith('!'):
+        # only support the simplest possible negation; if we need more, give the json real option-checking features
+        return not should_generate(category[1:], world)
     elif '&' in category:
         return all(should_generate(c, world) for c in category.split('&'))
     elif '|' in category:
         return any(should_generate(c, world) for c in category.split('|'))
     elif category == "medium_logic":
         return world.options.logic_difficulty >= LogicDifficulty.option_medium or world.using_ut
+    elif category == "shop":
+        return False  # world.options.randomize_shops # TODO
     raise ValueError(f'Invalid category: {category}')
