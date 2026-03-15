@@ -18,5 +18,5 @@ def should_generate(category: str | None, world: "NineSolsWorld") -> bool:
     elif category == "medium_logic":
         return world.options.logic_difficulty >= LogicDifficulty.option_medium or world.using_ut
     elif category == "shop":
-        return False  # world.options.randomize_shops # TODO
+        return world.options.randomize_shops.value == 1
     raise ValueError(f'Invalid category: {category}')

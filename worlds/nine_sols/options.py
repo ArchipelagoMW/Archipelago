@@ -296,6 +296,16 @@ class ShuffleSomeRootNodes(Toggle):
     """
 
 
+class RandomizeShops(Toggle):
+    """
+    Randomizes (most of) the content in Kuafu's shop, Chiyou's shop, and the 3D printer in Four Seasons Pavilion.
+    Shop purchases become new AP locations, and the vanilla shop items are added to the AP item pool.
+
+    TODO: enumerate special cases (progressive arrows? alt currencies becoming progression?)
+    TODO: describe logic
+    """
+
+
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
@@ -334,6 +344,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     chiyou_shop_unlock_sol_seals: ChiyouShopUnlockSolSeals
     kuafu_extra_inventory_unlock_sol_seals: KuafuExtraInventoryUnlockSolSeals
 
+    # Additional Randomizations
+    randomize_shops: RandomizeShops
     # skill_tree_randomization
-    # shop_randomization
     # entrance_randomization

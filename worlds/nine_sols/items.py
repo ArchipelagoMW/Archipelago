@@ -1,3 +1,4 @@
+import json
 import typing
 from typing import NamedTuple
 
@@ -19,6 +20,7 @@ class NineSolsItemData(NamedTuple):
     code: int | None = None
     type: str = None
     category: str | None = None
+    count: int | typing.Any = 1
 
 
 item_types_default_map = {
@@ -39,6 +41,7 @@ for items_data_entry in items_data:
         code=(items_data_entry["code"] if "code" in items_data_entry else None),
         type=items_data_entry["type"],
         category=(items_data_entry["category"] if "category" in items_data_entry else None),
+        count=(items_data_entry["count"] if "count" in items_data_entry else 1),
     )
 
 all_non_event_items_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
@@ -91,18 +94,6 @@ def create_item(world: "NineSolsWorld", name: str) -> NineSolsItem:
         return NineSolsItem(name, ItemClassification.progression, None, world.player)
     return NineSolsItem(name, get_item_classification(name, world), item_data_table[name].code, world.player)
 
-
-# All progression and useful item types have a hardcoded number of instances regardless of options.
-# It's almost always 1, so we only have to write down the number in this map when it's not 1.
-repeated_prog_useful_items = {
-    "Herb Catalyst": 8,
-    "Pipe Vial": 2,  # with shop items, 5(???)
-    "Tao Fruit": 13,
-    "Greater Tao Fruit": 4,
-    "Computing Unit": 4,  # with shop items, 8
-    "Dark Steel": 6,
-    "(Artifact) GM Fertilizer": 2,
-}
 
 # I doubt I counted these correctly, but they should be close enough to "feel right".
 repeatable_filler_weights = {
@@ -162,10 +153,15 @@ def create_items(world: "NineSolsWorld") -> None:
             if name not in repeatable_filler_weights:
                 unique_filler.append(create_item(world, name))
         elif classification != ItemClassification.trap:
-            instances = 1
-            if name in repeated_prog_useful_items:
-                instances = repeated_prog_useful_items[name]
-            for _ in range(0, instances):
+            count = item.count
+            if isinstance(count, dict):
+                if "option" in count:
+                    option_name = count["option"]
+                    option_str_value = getattr(options, option_name).current_key
+                    count = count[option_str_value]
+                else:
+                    raise ValueError("Unable to evaluate item count: " + json.dumps(count))
+            for _ in range(0, count):
                 prog_and_useful_items.append(create_item(world, name))
 
     if not options.shuffle_sol_seals:

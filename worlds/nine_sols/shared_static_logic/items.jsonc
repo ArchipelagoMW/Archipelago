@@ -19,22 +19,22 @@
     { "category": "!shop", "code": 21, "name": "Arrow: Cloud Piercer", "type": "progression_if_medium_logic" },
     { "category": "!shop", "code": 22, "name": "Arrow: Thunder Buster", "type": "progression_if_medium_logic" },
     { "category": "!shop", "code": 23, "name": "Arrow: Shadow Hunter", "type": "progression_if_medium_logic" },
-    { "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "type": "progression_if_medium_logic" },
-    { "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "type": "progression_if_medium_logic" },
-    { "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "type": "progression_if_medium_logic" },
+    { "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "type": "progression_if_medium_logic", "count": 3 },
+    { "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "type": "progression_if_medium_logic", "count": 3 },
+    { "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "type": "progression_if_medium_logic", "count": 3 },
 
     // "Material"s
-    { "code": 31, "name": "Herb Catalyst", "type": "useful" },
-    { "code": 32, "name": "Dark Steel", "type": "progression_if_medium_logic" },
+    { "code": 31, "name": "Herb Catalyst", "type": "useful", "count": 8 },
+    { "code": 32, "name": "Dark Steel", "type": "progression_if_medium_logic", "count": 6 },
 
     // "Equipment"
-    { "code": 41, "name": "Pipe Vial", "type": "useful" },
-    { "code": 42, "name": "Computing Unit", "type": "useful" },
-    { "category": "shop", "code": 43, "name": "Azure Sand Magazine", "type": "useful" },
+    { "code": 41, "name": "Pipe Vial", "type": "useful", "count": { "option": "randomize_shops", "true": 6, "false": 2 } },
+    { "code": 42, "name": "Computing Unit", "type": "useful", "count": { "option": "randomize_shops", "true": 8, "false": 4 } },
+    { "category": "shop", "code": 43, "name": "Azure Sand Magazine", "type": "useful", "count": 3 },
 
     // "Key Item"s that are really just upgrades
-    { "code": 51, "name": "Tao Fruit", "type": "useful" },
-    { "code": 52, "name": "Greater Tao Fruit", "type": "useful" },
+    { "code": 51, "name": "Tao Fruit", "type": "useful", "count": 13 },
+    { "code": 52, "name": "Greater Tao Fruit", "type": "useful", "count": 4 },
     { "code": 53, "name": "Twin Tao Fruit", "type": "useful" },
 
     // other "Status" menu upgrades
@@ -48,7 +48,7 @@
     { "code": 102, "name": "(Artifact) Kunlun Immortal Portrait", "type": "progression" },
     { "code": 103, "name": "(Artifact) The Four Treasures of the Study", "type": "progression" },
     { "code": 104, "name": "(Artifact) Unknown Seed", "type": "progression" },
-    { "code": 105, "name": "(Artifact) GM Fertilizer", "type": "progression" },
+    { "code": 105, "name": "(Artifact) GM Fertilizer", "type": "progression", "count": 2 },
 
     // progression "Artifact"s created by Shuanshuan
     { "code": 111, "name": "(Artifact) Portrait of Yi", "type": "progression" },
