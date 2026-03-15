@@ -9,7 +9,7 @@ from threading import Event, Thread
 from typing import Any
 from uuid import UUID
 
-from pony.orm import db_session, select, commit, PrimaryKey
+from pony.orm import db_session, select, commit, PrimaryKey, desc
 
 from Utils import restricted_loads, utcnow
 from .locker import Locker, AlreadyRunningException
@@ -129,7 +129,8 @@ def autohost(config: dict):
                     with db_session:
                         rooms = select(
                             room for room in Room if
-                            room.last_activity >= utcnow() - timedelta(days=3))
+                            room.last_activity >= utcnow() - timedelta(
+                                seconds=config["MAX_ROOM_TIMEOUT"])).order_by(desc(Room.last_port))
                         for room in rooms:
                             # we have to filter twice, as the per-room timeout can't currently be PonyORM transpiled.
                             if room.last_activity >= utcnow() - timedelta(seconds=room.timeout + 5):
