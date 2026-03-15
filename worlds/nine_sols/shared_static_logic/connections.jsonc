@@ -2136,5 +2136,37 @@
     ] },
     { "from": "FSP - Root Node", "to": "GoS (East) - Root Node", "requires": [
         { "item": "Grotto of Scriptures (East) Root Node" }
-    ] }
+    ] },
+
+    // Shop logic
+    { "from": "FSP - Root Node", "to": "FSP - Kuafu's Shop", "requires": [ { "item": "Event - Kuafu in FSP" } ] },
+    { "from": "FSP - Root Node", "to": "FSP - Chiyou's Shop", "requires": [ { "item": "Event - Chiyou in FSP" } ] },
+    { "from": "FSP - Root Node", "to": "FSP - Kuafu's Extra Inventory", "requires": [ { "item": "Event - Kuafu Extra Shop Inventory" } ] },
+
+    {
+        "from": "FSP - Root Node", "to": "FSP - Shops (Medium Cost)",
+        // we don't have a good way of expressing "any 2 of these 3 regions"
+        "requires": [ { "anyOf": [
+            [ { "region": "Factory (GH) - Lower Levels & Root Node" }, { "region": "GoS (Entry) - Root Node" } ],
+            [ { "region": "Factory (GH) - Lower Levels & Root Node" }, { "region": "PR (Central) - Root Node" } ],
+            [ { "region": "GoS (Entry) - Root Node" }, { "region": "PR (Central) - Root Node" } ]
+        ] } ]
+    },
+    {
+        "from": "FSP - Root Node", "to": "FSP - Shops (High Cost)",
+        "requires": [
+            { "region": "Factory (GH) - Lower Levels & Root Node" },
+            { "region": "GoS (Entry) - Root Node" },
+            { "region": "PR (Central) - Root Node" }
+        ]
+    },
+
+    {
+        "from": "FSP - Shops (Medium Cost)", "to": "FSP - Chiyou's Shop (Medium Cost)",
+        "requires": [ { "item": "Event - Chiyou in FSP" } ]
+    },
+    {
+        "from": "FSP - Shops (High Cost)", "to": "FSP - Chiyou's Shop (High Cost)",
+        "requires": [ { "item": "Event - Chiyou in FSP" } ]
+    }
 ]

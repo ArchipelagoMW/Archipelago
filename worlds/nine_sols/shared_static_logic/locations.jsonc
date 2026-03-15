@@ -130,11 +130,11 @@
     // Four Seasons Pavilion
     {
         "address": 501, "name": "FSP: Kuafu's 1st Gift",
-        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" } ]
+        "region": "FSP - Kuafu's Shop", "requires": []
     },
     {
         "address": 502, "name": "FSP: Kuafu's 2nd Gift",
-        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" } ]
+        "region": "FSP - Kuafu's Shop", "requires": []
     },
     {
         "address": 503, "name": "FSP: Decode the Ancient Sheet Music",
@@ -152,10 +152,7 @@
     },
     {
         "address": 505, "name": "FSP: Give Yi's Portrait to Chiyou",
-        "region": "FSP - Root Node", "requires": [
-            { "item": "Event - Chiyou in FSP" },
-            { "item": "(Artifact) Portrait of Yi" }
-        ]
+        "region": "FSP - Chiyou's Shop", "requires": [ { "item": "(Artifact) Portrait of Yi" } ]
     },
     {
         "address": 506, "name": "FSP: Receive Peach Blossom Village Quest",
@@ -206,11 +203,11 @@
     },
     {
         "address": 514, "name": "FSP: Give Kuafu the Homing Darts",
-        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" }, { "item": "Homing Darts" } ]
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Homing Darts" } ]
     },
     {
         "address": 515, "name": "FSP: Give Kuafu the Thunderburst Bomb",
-        "region": "FSP - Root Node", "requires": [ { "item": "Event - Kuafu in FSP" }, { "item": "Thunderburst Bomb" } ]
+        "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Thunderburst Bomb" } ]
     },
 
     // Events
@@ -305,24 +302,44 @@
     // Trick Events
     {
         "category": "medium_logic", "address": null, "name": "Trick - Bow Hover",
-        "region": "FSP - Root Node", "requires": [ { "anyOf": [
-            { "item": "Arrow: Cloud Piercer" },
-            { "item": "Arrow: Thunder Buster" },
-            { "item": "Arrow: Shadow Hunter" }
-        ] } ]
+        "region": "FSP - Root Node", "requires": [
+            {
+                "option": "randomize_shops",
+                "true": [ { "anyOf": [
+                    { "item": "Progressive Cloud Piercer" },
+                    { "item": "Progressive Thunder Buster" },
+                    { "item": "Progressive Shadow Hunter" }
+                ] } ],
+                "false": [ { "anyOf": [
+                    { "item": "Arrow: Cloud Piercer" },
+                    { "item": "Arrow: Thunder Buster" },
+                    { "item": "Arrow: Shadow Hunter" }
+                ] } ]
+            }
+        ]
     },
     {
         "category": "medium_logic", "address": null, "name": "Trick - Break CS Barrier With Bow",
         "region": "FSP - Root Node", "requires": [
-            { "item": "Arrow: Cloud Piercer" },
-            { "item": "Dark Steel" }, // just 1 to afford Cloud Piercer S
-            { "item": "Event - Kuafu in FSP" } // so you can actually buy S from him
+            {
+                "option": "randomize_shops",
+                "true": [ { "item": "Progressive Cloud Piercer", "count": 2 } ],
+                "false": [
+                    { "region": "FSP - Kuafu's Shop" }, // so you can actually buy S from him
+                    { "item": "Arrow: Cloud Piercer" },
+                    { "item": "Dark Steel" } // just 1 to afford Cloud Piercer S
+                ]
+            }
         ]
     },
     {
         "category": "medium_logic", "address": null, "name": "Trick - Break One-Way Barrier With Bow",
         "region": "FSP - Root Node", "requires": [
-            { "item": "Arrow: Thunder Buster" }
+            {
+                "option": "randomize_shops",
+                "true": [ { "item": "Progressive Thunder Buster" } ],
+                "false": [ { "item": "Arrow: Thunder Buster" } ]
+            }
         ]
     },
 
@@ -1787,8 +1804,180 @@
     {
         "address": 3914, "name": "TRC: Examine Dusk Guardian HQ Screen",
         "region": "TRC - Dusk Guardian HQ Upper Levels", "requires": []
-    }
+    },
 
     // Tianhuo Research Institute
     // nothing for now
+
+    // Shop Randomization
+    {
+         "category": "shop", "address": 4001, "name": "Kuafu's Shop: 1st Normal Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4002, "name": "Kuafu's Shop: 2nd Normal Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4003, "name": "Kuafu's Extra Inventory: 1st Normal Purchase",
+         "region": "FSP - Kuafu's Extra Inventory", "requires": []
+    },
+    {
+         "category": "shop", "address": 4004, "name": "Kuafu's Shop: 1st Dark Steel Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Dark Steel", "count": 1 } ]
+    },
+    {
+         "category": "shop", "address": 4005, "name": "Kuafu's Shop: 2nd Dark Steel Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Dark Steel", "count": 2 } ]
+    },
+    {
+         "category": "shop", "address": 4006, "name": "Kuafu's Shop: 3rd Dark Steel Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Dark Steel", "count": 3 } ]
+    },
+    {
+         "category": "shop", "address": 4007, "name": "Kuafu's Extra Inventory: 1st Dark Steel Purchase",
+         "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "item": "Dark Steel", "count": 4 } ]
+    },
+    {
+         "category": "shop", "address": 4008, "name": "Kuafu's Extra Inventory: 2nd Dark Steel Purchase",
+         "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "item": "Dark Steel", "count": 5 } ]
+    },
+    {
+         "category": "shop", "address": 4009, "name": "Kuafu's Extra Inventory: 3rd Dark Steel Purchase",
+         "region": "FSP - Kuafu's Extra Inventory", "requires": [ { "item": "Dark Steel", "count": 6 } ]
+    },
+    {
+         "category": "shop", "address": 4010, "name": "Kuafu's Shop: 1st Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 1 } ]
+    },
+    {
+         "category": "shop", "address": 4011, "name": "Kuafu's Shop: 2nd Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 2 } ]
+    },
+    {
+         "category": "shop", "address": 4012, "name": "Kuafu's Shop: 3rd Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 3 } ]
+    },
+    {
+         "category": "shop", "address": 4013, "name": "Kuafu's Shop: 4th Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 4 } ]
+    },
+    {
+         "category": "shop", "address": 4014, "name": "Kuafu's Shop: 5th Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 5 } ]
+    },
+    {
+         "category": "shop", "address": 4015, "name": "Kuafu's Shop: 6th Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 6 } ]
+    },
+    {
+         "category": "shop", "address": 4016, "name": "Kuafu's Shop: 7th Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 7 } ]
+    },
+    {
+         "category": "shop", "address": 4017, "name": "Kuafu's Shop: 8th Herb Catalyst Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": [ { "item": "Herb Catalyst", "count": 8 } ]
+    },
+    {
+         "category": "shop", "address": 4018, "name": "Kuafu's Shop: 3rd Normal Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4019, "name": "Kuafu's Shop: 4th Normal Purchase",
+         "region": "FSP - Kuafu's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4020, "name": "Kuafu's Extra Inventory: 2nd Normal Purchase",
+         "region": "FSP - Kuafu's Extra Inventory", "requires": []
+    },
+
+    {
+         "category": "shop", "address": 4101, "name": "Chiyou's Shop: 1st Low Cost Purchase",
+         "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4102, "name": "Chiyou's Shop: 2nd Low Cost Purchase",
+         "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4103, "name": "Chiyou's Shop: 3rd Low Cost Purchase",
+         "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4104, "name": "Chiyou's Shop: 4th Low Cost Purchase",
+         "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4105, "name": "Chiyou's Shop: 1st Medium Cost Purchase",
+         "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4106, "name": "Chiyou's Shop: 2nd Medium Cost Purchase",
+         "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4107, "name": "Chiyou's Shop: 3rd Medium Cost Purchase",
+         "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4108, "name": "Chiyou's Shop: 4th Medium Cost Purchase",
+         "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4109, "name": "Chiyou's Shop: 5th Medium Cost Purchase",
+         "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4110, "name": "Chiyou's Shop: 6th Medium Cost Purchase",
+         "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4111, "name": "Chiyou's Shop: 1st High Cost Purchase",
+         "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4112, "name": "Chiyou's Shop: 2nd High Cost Purchase",
+         "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4113, "name": "Chiyou's Shop: 3rd High Cost Purchase",
+         "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4114, "name": "Chiyou's Shop: 4th High Cost Purchase",
+         "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4115, "name": "Chiyou's Shop: 5th High Cost Purchase",
+         "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
+    },
+
+    {
+         "category": "shop", "address": 4201, "name": "3D Printer: 1st Low Cost Purchase",
+         "region": "FSP - Root Node", "requires": []
+    },
+    {
+         "category": "shop", "address": 4202, "name": "3D Printer: 2nd Low Cost Purchase",
+         "region": "FSP - Root Node", "requires": []
+    },
+    {
+         "category": "shop", "address": 4203, "name": "3D Printer: 3rd Low Cost Purchase",
+         "region": "FSP - Root Node", "requires": []
+    },
+    {
+         "category": "shop", "address": 4204, "name": "3D Printer: 4th Low Cost Purchase",
+         "region": "FSP - Root Node", "requires": []
+    },
+    {
+         "category": "shop", "address": 4205, "name": "3D Printer: 1st Medium Cost Purchase",
+         "region": "FSP - Shops (Medium Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4206, "name": "3D Printer: 1st High Cost Purchase",
+         "region": "FSP - Shops (High Cost)", "requires": []
+    },
+    {
+         "category": "shop", "address": 4207, "name": "3D Printer: 2nd High Cost Purchase",
+         "region": "FSP - Shops (High Cost)", "requires": []
+    }
 ]
