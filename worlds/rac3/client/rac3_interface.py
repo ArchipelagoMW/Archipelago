@@ -1148,16 +1148,21 @@ class Rac3Interface(GameInterface):
         if bool(self._read8(RAC3STATUS.HIDE_WEAPON)) and self.action not in [0x17, 0x18, 0x19, 0x1A, 0x1B, 0x37]:
             match self.planet:
                 case RAC3REGION.MARCADIA:
-                    self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
+                    if RAC3LOCATION.MARCADIA_REFRACTOR not in self.checked_locations:
+                        self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
                 case RAC3REGION.DAXX:
-                    self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
+                    if RAC3LOCATION.DAXX_CHARGE_BOOTS not in self.checked_locations:
+                        self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
                 case RAC3REGION.ZELDRIN_STARPORT:
-                    self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
-                    self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
+                    if RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER not in self.checked_locations:
+                        self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
+                        self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
                 case RAC3REGION.CRASH_SITE:
-                    self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
+                    if RAC3LOCATION.CRASH_SITE_NANO_PAK not in self.checked_locations:
+                        self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
                 case RAC3REGION.QWARKS_HIDEOUT:
-                    self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
+                    if RAC3LOCATION.HIDEOUT_PDA not in self.checked_locations:
+                        self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
 
     def gadget_cycler(self):
         """Cycles through each gadget and updates their state"""
