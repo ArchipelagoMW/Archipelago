@@ -1,24 +1,33 @@
-# Other Games and Tools
+# Other Games And Tools
 
-This guide provides information on additional community resources, tools, and games that function with Archipelago.
+This page provides information and links regarding various tools that may be of use with Archipelago, including additional playable games not supported by this website.
 
-## Community Resources
+You should only download and use files from sources you trust; sources listed here are not officially vetted for safety, so use your own judgement and caution.
 
-The Archipelago community is active across several platforms where you can find support, new games, and tools.
+## Discord
 
-### Discord Servers
-Archipelago has two primary Discord servers for community interaction, game support, and hosting public games:
-- **[Archipelago Official Discord](https://discord.gg/8Z65BR2)**: The main hub for the community, including general discussion, support, and public multiworld hosting.
-- **[Archipelago After Dark Discord](https://discord.gg/fqvNCCRsu4)**: An adults-only server for 18+ and unrated content.
+Currently, Discord is the primary hub for Archipelago; whether it be finding people to play with, developing new game implementations, or finding new playable games.
 
-Both servers feature an **#apworld-index** channel. These channels are repositories for "APWorlds" — additional game implementations that can be easily added to your Archipelago installation to support more games.
+The [Archipelago Official Discord](https://discord.gg/8Z65BR2) is the main hub, while the [Archipelago After Dark Discord](https://discord.gg/fqvNCCRsu4) houses additional games that may be unrated or 18+ in some territories.
 
-### Documentation
-- **[Archipelago Wiki](https://archipelago.miraheze.org/)**: A community-maintained wiki.
+The `#apworld-index` channels in each of these servers contain lists of playable games which should be easily downloadable and playable with an Archipelago installation.
 
-## Community Tools
+## Wiki
 
-These community-developed tools are frequently used alongside Archipelago to improve the player experience.
+The community-maintained [Archipelago Wiki](https://archipelago.miraheze.org/) has information on many games as well, and acts as a great discord-free source of information.
+
+## Hint Games
+
+Hint Games are a special type of game which are not included as part of the multiworld generation process. Instead, they can log in to an ongoing multiworld, connecting to a slot designated for any game. Rather than earning items for other games in the multiworld, a Hint Game will allow you to earn hints for the slot you are connected to.
+
+Hint Games can be found from sources such as the Discord and the [Hint Game Category](https://archipelago.miraheze.org/wiki/Category:Hint_games) of the wiki, as detailed above.
+
+## Notable Tools
+
+### Options Creator
+
+The Options Creator is included in the Archipelago installation, and is accessible from the Archipelago Launcher. Using this simple GUI tool, you can easily create randomization options for any installed '.apworld'- perfect when using custom worlds you've installed that don't have options pages on the website.
 
 ### PopTracker
-**[PopTracker](https://github.com/black-sliver/PopTracker)** is a universal multi-platform tracking application designed for randomizers. It supports many Archipelago games through tracker packs, providing both manual and automatic autotracking capabilities by connecting directly to an Archipelago server.
+
+[PopTracker](https://github.com/black-sliver/PopTracker) is a popular tool in Randomizer communities, which many games support via custom PopTracker Packs. Many Archipelago packs include the ability to directly connect to your slot for auto-tracking capabilities. (Check each game's setup guide to see if it has PopTracker compatibility!)
