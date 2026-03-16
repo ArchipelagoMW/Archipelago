@@ -427,14 +427,14 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
             else:
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
-                text = "".join(part for part in temp if not part.startswith("["))
+                text = kv_unescape("".join(part for part in temp if not part.startswith("[")))
                 cmdinput = MDApp.get_running_app().textinput
                 if not cmdinput.text:
                     input_text = get_input_text_from_response(text, MDApp.get_running_app().last_autofillable_command)
                     if input_text is not None:
                         cmdinput.text = input_text
 
-                Clipboard.copy(kv_unescape(text))
+                Clipboard.copy(text)
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -547,9 +547,7 @@ class AutocompleteHintInput(ResizableTextField):
             item_names = ctx.item_names._game_store[ctx.game].values()
 
             def on_press(text):
-                split_text = MarkupLabel(text=text).markup
-                self.set_text(self, kv_unescape("".join(text_frag for text_frag in split_text
-                                                if not text_frag.startswith("["))))
+                self.set_text(self, text)
                 self.dropdown.dismiss()
                 self.focus = True
 
@@ -560,11 +558,13 @@ class AutocompleteHintInput(ResizableTextField):
                 except ValueError:
                     pass  # substring not found
                 else:
-                    text = escape_markup(item_name)
-                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    prefix = escape_markup(item_name[:index])
+                    matching = escape_markup(item_name[index:index+len(value)])
+                    postfix = escape_markup(item_name[index+len(value):])
+                    text = f"{prefix}[b]{matching}[/b]{postfix}"
                     self.dropdown.items.append({
                         "text": text,
-                        "on_release": lambda txt=text: on_press(txt),
+                        "on_release": lambda txt=item_name: on_press(txt),
                         "markup": True
                     })
             if not self.dropdown.parent:
