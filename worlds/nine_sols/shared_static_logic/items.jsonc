@@ -16,20 +16,58 @@
     { "code": 15, "name": "Cloud Leap", "type": "progression_skip_balancing" }, // CL tends to show up too early and blow the game wide open
     { "code": 16, "name": "Super Mutant Buster", "type": "progression" },
 
-    { "category": "!shop", "code": 21, "name": "Arrow: Cloud Piercer", "type": "progression_if_medium_logic" },
-    { "category": "!shop", "code": 22, "name": "Arrow: Thunder Buster", "type": "progression_if_medium_logic" },
-    { "category": "!shop", "code": 23, "name": "Arrow: Shadow Hunter", "type": "progression_if_medium_logic" },
-    { "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "type": "progression_if_medium_logic", "count": 3 },
-    { "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "type": "progression_if_medium_logic", "count": 3 },
-    { "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "type": "progression_if_medium_logic", "count": 3 },
+    {
+        "category": "!shop", "code": 21, "name": "Arrow: Cloud Piercer",
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
+    {
+        "category": "!shop", "code": 22, "name": "Arrow: Thunder Buster",
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
+    {
+        "category": "!shop", "code": 23, "name": "Arrow: Shadow Hunter",
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
+    {
+        "category": "shop", "code": 24, "name": "Progressive Cloud Piercer", "count": 3,
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
+    {
+        "category": "shop", "code": 25, "name": "Progressive Thunder Buster", "count": 3,
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
+    {
+        "category": "shop", "code": 26, "name": "Progressive Shadow Hunter", "count": 3,
+        "type": { "option": "logic_difficulty", "vanilla": "useful", "default": "progression" }
+    },
 
     // "Material"s
-    { "code": 31, "name": "Herb Catalyst", "type": "useful", "count": 8 },
-    { "code": 32, "name": "Dark Steel", "type": "progression_if_medium_logic", "count": 6 },
+    {
+        "code": 31, "name": "Herb Catalyst", "count": 8,
+        "type": { "option": "randomize_shops", "true": "progression", "false": "useful" }
+    },
+    {
+        "code": 32, "name": "Dark Steel", "count": 6,
+        "type": {
+            "option": "randomize_shops",
+            "true": "progression",
+            "false": {
+                "option": "logic_difficulty",
+                "vanilla": "useful",
+                "default": "progression"
+            }
+        }
+    },
 
     // "Equipment"
-    { "code": 41, "name": "Pipe Vial", "type": "useful", "count": { "option": "randomize_shops", "true": 6, "false": 2 } },
-    { "code": 42, "name": "Computing Unit", "type": "useful", "count": { "option": "randomize_shops", "true": 8, "false": 4 } },
+    {
+        "code": 41, "name": "Pipe Vial", "type": "useful",
+        "count": { "option": "randomize_shops", "true": 6, "false": 2 }
+    },
+    {
+        "code": 42, "name": "Computing Unit", "type": "useful",
+        "count": { "option": "randomize_shops", "true": 8, "false": 4 }
+    },
     { "category": "shop", "code": 43, "name": "Azure Sand Magazine", "type": "useful", "count": 3 },
 
     // "Key Item"s that are really just upgrades

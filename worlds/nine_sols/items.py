@@ -18,21 +18,10 @@ class NineSolsItem(Item):
 class NineSolsItemData(NamedTuple):
     name: str = None
     code: int | None = None
-    type: str = None
+    type: str | typing.Any = None
     category: str | None = None
     count: int | typing.Any = 1
 
-
-item_types_default_map = {
-    "progression": ItemClassification.progression,
-    "useful": ItemClassification.useful,
-    "filler": ItemClassification.filler,
-    "trap": ItemClassification.trap,
-    "progression_skip_balancing": ItemClassification.progression_skip_balancing,
-    # most of our skip_balancing/deprioritized use cases are just "low value" progression where both flags make sense
-    "weak_progression": ItemClassification.progression_deprioritized_skip_balancing,
-    "progression_if_medium_logic": ItemClassification.useful,
-}
 
 item_data_table: dict[str, NineSolsItemData] = {}
 for items_data_entry in items_data:
@@ -49,7 +38,7 @@ all_non_event_items_table = {name: data.code for name, data in item_data_table.i
 item_names: set[str] = set(entry["name"] for entry in items_data)
 
 prog_items = set(entry["name"] for entry in items_data
-                 if "progression" in entry["type"] and entry["code"] is not None)
+                 if "progression" in str(entry["type"]) and entry["code"] is not None)
 
 arrow_items = set(entry["name"] for entry in items_data
                  if entry["name"].startswith("Arrow: "))
@@ -79,14 +68,24 @@ item_name_groups = {
 
 def get_item_classification(name: str, world: "NineSolsWorld") -> ItemClassification:
     item_type = item_data_table[name].type
-    classification = item_types_default_map[item_type]
 
-    if item_type == "progression_if_medium_logic":
-        classification = ItemClassification.useful
-        if world.options.logic_difficulty >= LogicDifficulty.option_medium or world.using_ut:
-            classification = ItemClassification.progression
+    while isinstance(item_type, dict):
+        option_name = item_type["option"]
+        option_str_value = getattr(world.options, option_name).current_key
+        if option_str_value in item_type:
+            item_type = item_type[option_str_value]
+        elif "default" in item_type:
+            item_type = item_type["default"]
+        else:
+            raise ValueError(f"Item type {item_type} could not be evaluated for {option_name}->{option_str_value}")
 
-    return classification
+    if isinstance(item_type, str):
+        # most of our skip_balancing/deprioritized use cases are just "low value" progression where both flags make sense
+        if item_type == "weak_progression":
+            return ItemClassification.progression_deprioritized_skip_balancing
+        return ItemClassification[item_type]
+    else:
+        raise ValueError(f"Unknown item type: {item_type}")
 
 
 def create_item(world: "NineSolsWorld", name: str) -> NineSolsItem:
