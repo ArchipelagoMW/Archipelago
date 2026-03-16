@@ -1660,11 +1660,11 @@ class SC2Logic:
         Created mainly for engine of destruction start, but works for other missions with no-build starts.
         """
         return state.has_any((
-                item_names.ZEALOT_WHIRLWIND,
-                item_names.SENTRY_DOUBLE_SHIELD_RECHARGE,
-                item_names.SLAYER_PHASE_BLINK,
-                item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
-                item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION,
+            item_names.ZEALOT_WHIRLWIND,
+            item_names.SENTRY_DOUBLE_SHIELD_RECHARGE,
+            item_names.SLAYER_PHASE_BLINK,
+            item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
+            item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION,
         ), self.player)
 
     # Mission-specific rules
