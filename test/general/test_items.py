@@ -82,13 +82,17 @@ class TestBase(unittest.TestCase):
                 )
 
     def test_items_in_datapackage(self):
-        """Test that any created items in the itempool are in the datapackage"""
+        """Test that any (non-event) items in the itempool, a mw location, or precollected are in the datapackage"""
         archipelago = AutoWorldRegister.world_types["Archipelago"]
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
-                for item in multiworld.itempool:
-                    self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+                for item in multiworld.get_items():  # itempool and pre-placed items
+                    if not item.is_event:
+                        self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+                for itemList in multiworld.precollected_items.values():
+                    for item in itemList:
+                        self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
 
     def test_item_links(self) -> None:
         """
