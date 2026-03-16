@@ -1643,57 +1643,58 @@ class Rac3Interface(GameInterface):
         if self.notification_queue:
             if not self.notification_time:
                 self.notification_time = current_time + 3
-            if not tyhrranoid_game and not self.pause_state:
-                if self.notification_time < current_time and not self.message_display:
-                    # Pop the number of messages that were displayed last cycle
-                    for _ in range(self.notification_merge_count):
-                        if self.notification_queue:
-                            self.notification_queue.pop(0)
-                    self.write_messagebox_theme()
-                    logger.debug(f'notification queue: {len(self.notification_queue)}')
-                    self.notification_time = current_time + 3
-                if self.notification_queue:
-                    # Merge up to 3 notifications of the same theme, but do not exceed 225 chars
-                    merged_message, theme = self.notification_queue[0]
-                    merge_count = 1
-                    total_length = len(merged_message)
-                    for i in range(1, min(3, len(self.notification_queue))):
-                        next_message, next_theme = self.notification_queue[i]
-                        # +2 for the '\n' separator
-                        add_length = 2 + len(next_message)
-                        if next_theme == theme and (total_length + add_length) <= 225:
-                            merged_message += "\\n" + next_message
-                            total_length += add_length
-                            merge_count += 1
-                        else:
-                            break
-                    self.notification_merge_count = merge_count
-                    msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
-                    if not self.message_display:
-                        if self.notification_time < current_time:
-                            self.notification_time = current_time + 3
-                        display_time = int((self.notification_time - current_time) * 120)
-                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
+            if tyhrranoid_game or self.pause_state:
+                return
+            if self.notification_time < current_time and not self.message_display:
+                # Pop the number of messages that were displayed last cycle
+                for _ in range(self.notification_merge_count):
+                    if self.notification_queue:
+                        self.notification_queue.pop(0)
+                self.write_messagebox_theme()
+                logger.debug(f'notification queue: {len(self.notification_queue)}')
+                self.notification_time = current_time + 3
+            if self.notification_queue:
+                # Merge up to 3 notifications of the same theme, but do not exceed 225 chars
+                merged_message, theme = self.notification_queue[0]
+                merge_count = 1
+                total_length = len(merged_message)
+                for i in range(1, min(3, len(self.notification_queue))):
+                    next_message, next_theme = self.notification_queue[i]
+                    # +2 for the '\n' separator
+                    add_length = 2 + len(next_message)
+                    if next_theme == theme and (total_length + add_length) <= 225:
+                        merged_message += "\\n" + next_message
+                        total_length += add_length
+                        merge_count += 1
                     else:
-                        write_message = b''
-                        for line in msg_list:
-                            write_message += line
-                        read_message = self._read_bytes(RAC3MESSAGEBOX.MESSAGE, len(write_message))
-                        if read_message != write_message:
-                            # Give the player a bit more time to read the new appended line in case it was about to
-                            # expire
-                            self.notification_time += 0.75
+                        break
+                self.notification_merge_count = merge_count
+                msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
+                if not self.message_display:
+                    if self.notification_time < current_time:
+                        self.notification_time = current_time + 3
+                    display_time = int((self.notification_time - current_time) * 120)
+                    self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
+                else:
+                    write_message = b''
+                    for line in msg_list:
+                        write_message += line
+                    read_message = self._read_bytes(RAC3MESSAGEBOX.MESSAGE, len(write_message))
+                    if read_message != write_message:
+                        # Give the player a bit more time to read the new appended line in case it was about to
+                        # expire
+                        self.notification_time += 0.75
+                        display_time = int((self.notification_time - current_time) * 120)
+                        # A lot of messages can cause this value to go negative and if so, set a minimum display
+                        # time
+                        if display_time < 0:
+                            self.notification_time = current_time + 1
                             display_time = int((self.notification_time - current_time) * 120)
-                            # A lot of messages can cause this value to go negative and if so, set a minimum display
-                            # time
-                            if display_time < 0:
-                                self.notification_time = current_time + 1
-                                display_time = int((self.notification_time - current_time) * 120)
-                            self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
-                            logger.debug('Warning: Incorrect Display message detected')
-                            logger.debug(f'Message: {merged_message}')
-                            logger.debug(f'{read_message}')
-                            logger.debug(f'{write_message}')
+                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
+                        logger.debug('Warning: Incorrect Display message detected')
+                        logger.debug(f'Message: {merged_message}')
+                        logger.debug(f'{read_message}')
+                        logger.debug(f'{write_message}')
         else:
             self.notification_time = None
             self.notification_merge_count = 1
