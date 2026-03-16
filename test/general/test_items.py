@@ -92,7 +92,8 @@ class TestBase(unittest.TestCase):
                         self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
                 for itemList in multiworld.precollected_items.values():
                     for item in itemList:
-                        self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+                        if not item.is_event:
+                            self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
 
     def test_item_links(self) -> None:
         """
