@@ -88,12 +88,11 @@ class TestBase(unittest.TestCase):
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 chain_map = ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id)
-                for item in multiworld.get_items():  # itempool and pre-placed items
-                    if not item.is_event:
-                        # these games have too many pre-existing failures to enumerate the individual items
-                        if world_type.game == "Ocarina of Time" or world_type.game == "A Link to the Past":
-                            continue
-                        self.assertIn(item.name, chain_map)
+                # these games have too many pre-existing failures to enumerate the individual items
+                if world_type.game not in ["Ocarina of Time", "A Link to the Past"]:
+                    for item in multiworld.get_items():  # itempool and pre-placed items
+                        if not item.is_event:
+                            self.assertIn(item.name, chain_map)
                 for itemList in multiworld.precollected_items.values():
                     for item in itemList:
                         if not item.is_event:
