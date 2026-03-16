@@ -167,7 +167,7 @@ class Rac3Interface(GameInterface):
 
     def _read_float(self, address: int):
         return super()._read_float(self.address_convert(address))
-    
+
     def _read_string(self, address, n):
         return super()._read_string(self.address_convert(address), n)
 
@@ -426,7 +426,7 @@ class Rac3Interface(GameInterface):
         current_time = time.time()
         if self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE:
             self.last_in_ship_time = current_time
-    
+
     def vehicle_check(self):
         """
         Updates the last_in_vehicle_time when the player is in a vehicle.
@@ -589,7 +589,7 @@ class Rac3Interface(GameInterface):
                 valid_weapons = []
                 for weapon_name, weapon_data in non_prog_weapon_data.items():
                     if self.UnlockItem[weapon_name].status:
-                        level = max(RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL, 
+                        level = max(RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL,
                                     self.weapon_level_from_xp(weapon_name))
                         if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
@@ -948,10 +948,10 @@ class Rac3Interface(GameInterface):
     ###################
 
     def vendor_check(self):
+        """Returns the current vendor type if the vendor is open, else None"""
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
-            vendor_type = RAC3VENDORTYPE(self._read8(
+            return RAC3VENDORTYPE(self._read8(
                 RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
-            return vendor_type
         return None
 
     def vendor_update(self):
@@ -1414,7 +1414,7 @@ class Rac3Interface(GameInterface):
     def weapon_exp_cycler(self):
         """
         Synchronize weapon experience and level with the player's item collection and vendor state.
-        
+
         - If progressive weapons are enabled, set each weapon's level and XP threshold based on the number of collected upgrades.
         - If the player is in a weapon vendor and not hovering over ammo, force the vendor slot weapon to level 1.
         - For the RY3N0 weapon, cap the level at 4 if the ryno flag is set.
@@ -1455,7 +1455,6 @@ class Rac3Interface(GameInterface):
                     else:
                         restore_id = UPGRADE_DICT[weapon_name][self.weapon_level_from_xp(weapon_name) - 1]
                         self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, restore_id)
-            
 
     def verify_quick_select_and_last_used(self):
         """Check each slot in quick select and held item history, reset if that item has not been collected yet."""
@@ -1713,7 +1712,7 @@ class Rac3Interface(GameInterface):
         # Write each line to memory, update string pointers
         longest_line_length = 0
         message_list: list[bytes] = []
-        for idx, line in enumerate(lines):
+        for _idx, line in enumerate(lines):
             # Convert to bytes, add null terminator
             line_bytes, line_color_byte_count = self.format_color_string(line)
             line_bytes += b'\x00'
