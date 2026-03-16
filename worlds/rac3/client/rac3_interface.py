@@ -957,20 +957,18 @@ class Rac3Interface(GameInterface):
     def vendor_update(self):
         """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
         # Only update vendor if on a known planet with a vendor
-        if self.planet not in PLANET_VENDOR_OFFSET.keys():
-            return
-        vendor_size = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
-        if self.vendor_type is None:
+        if self.planet not in PLANET_VENDOR_OFFSET.keys() or self.vendor_type is None:
             return
 
+        vendor_size = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
         is_pda_vendor = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.IS_PDA_OFFSET))
+
         if is_pda_vendor:
             return
-        vendor_type = RAC3VENDORTYPE(
-            self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
-        current_inventory = [self.read_vendor_slot_data(vendor_type, slot) for slot in range(vendor_size)]
+
+        current_inventory = [self.read_vendor_slot_data(self.vendor_type, slot) for slot in range(vendor_size)]
         new_inventory = []
-        match vendor_type:
+        match self.vendor_type:
             case RAC3VENDORTYPE.WEAPON:
                 if not self.options.weapon_vendors:
                     return
@@ -1017,9 +1015,9 @@ class Rac3Interface(GameInterface):
                 # Undo the cosmetic overwrite from buying ship vendor items
                 self.add_cosmetics()
             case _:
-                logger.debug(f'Vendor cycler does not support vendor type {vendor_type} yet')
+                logger.debug(f'Vendor cycler does not support vendor type {self.vendor_type} yet')
                 return
-        self.write_vendor_inventory(new_inventory, vendor_type)
+        self.write_vendor_inventory(new_inventory, self.vendor_type)
         cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
         if len(new_inventory) == 0:
             self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET), 0)
