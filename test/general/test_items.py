@@ -87,16 +87,17 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
+                chain_map = ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id)
                 for item in multiworld.get_items():  # itempool and pre-placed items
                     if not item.is_event:
                         # these games have too many pre-existing failures to enumerate the individual items
                         if world_type.game == "Ocarina of Time" or world_type.game == "A Link to the Past":
                             continue
-                        self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+                        self.assertIn(item.name, chain_map)
                 for itemList in multiworld.precollected_items.values():
                     for item in itemList:
                         if not item.is_event:
-                            self.assertIn(item.name, ChainMap(world_type.item_name_to_id, archipelago.item_name_to_id))
+                            self.assertIn(item.name, chain_map)
 
     def test_item_links(self) -> None:
         """
