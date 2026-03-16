@@ -126,6 +126,7 @@ class Rac3Interface(GameInterface):
     inside_hacker_puzzle: bool = False
     notification_queue: list[tuple] = []
     notification_time: float | None = None
+    notification_paused_remaining: float = 0
     notification_merge_count: int = 1
     message_display: bool = False
     ship_slot_limit: int = 0
@@ -880,8 +881,11 @@ class Rac3Interface(GameInterface):
                 if not (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status):
                     logger.info('You do not have the items required to leave this planet through your ship. If you are'
                                 ' stuck, hold L2 + R2 + L1 + R1 + SELECT to warp back to the phoenix')
+                    self.notification_queue.append((f'You do not have the items required\\nto leave this planet through your ship.\\n\\n'
+                                f'Hold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT{RAC3TEXTFORMATSTRING.NORMAL}\\nto warp back to the {RAC3TEXTFORMATSTRING.GREEN}Starship Phoenix{RAC3TEXTFORMATSTRING.NORMAL}.', RAC3BOXTHEME.WARNING))
             case RAC3REGION.PHOENIX_ASSAULT:
                 logger.info("If you want to travel to the regular phoenix, hold L2 + R2 + L1 + R1 + SELECT")
+                self.notification_queue.append((f"If you want to travel to the regular phoenix\\nHold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT", RAC3BOXTHEME.WARNING))
 
     ##################
     # Player Respawn #
@@ -1126,7 +1130,6 @@ class Rac3Interface(GameInterface):
 
     def late_update(self):
         """Ran at the end of the main loop to update any memory values based on collection state"""
-        self.cutscene_gadget_fix()
         self.gadget_cycler()
         self.planet_cycler()
         self.weapon_cycler()
@@ -1141,28 +1144,6 @@ class Rac3Interface(GameInterface):
         self.health_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
-
-    def cutscene_gadget_fix(self):
-        """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
-        gets checked"""
-        if bool(self._read8(RAC3STATUS.HIDE_WEAPON)) and self.action not in [0x17, 0x18, 0x19, 0x1A, 0x1B, 0x37]:
-            match self.planet:
-                case RAC3REGION.MARCADIA:
-                    if RAC3LOCATION.MARCADIA_REFRACTOR not in self.checked_locations:
-                        self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
-                case RAC3REGION.DAXX:
-                    if RAC3LOCATION.DAXX_CHARGE_BOOTS not in self.checked_locations:
-                        self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
-                case RAC3REGION.ZELDRIN_STARPORT:
-                    if RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER not in self.checked_locations:
-                        self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
-                        self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
-                case RAC3REGION.CRASH_SITE:
-                    if RAC3LOCATION.CRASH_SITE_NANO_PAK not in self.checked_locations:
-                        self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
-                case RAC3REGION.QWARKS_HIDEOUT:
-                    if RAC3LOCATION.HIDEOUT_PDA not in self.checked_locations:
-                        self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
 
     def gadget_cycler(self):
         """Cycles through each gadget and updates their state"""
@@ -1189,7 +1170,7 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if ((time.time() - self.last_in_ship_time) < 1
+        if ((time.time() - self.last_in_ship_time) < 1.5
                 or self.is_reloading
                 or self.self_respawning
                 or self.action_2 == 0x09):
@@ -1638,12 +1619,18 @@ class Rac3Interface(GameInterface):
         """Handle the current displayed pop-up message notification, and message queue"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
-        self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
-                      int(self.inside_hacker_puzzle))  # Hide message box during hacker puzzle
+        paused = self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT or (current_time - self.last_in_ship_time) < 1
+        self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED, 
+                      int(self.inside_hacker_puzzle or paused))
         if self.notification_queue:
             if not self.notification_time:
                 self.notification_time = current_time + 3
-            if tyhrranoid_game or self.pause_state:
+            if tyhrranoid_game or paused:
+                if self.notification_paused_remaining:
+                    # Pause the notification timer
+                    self.notification_time = current_time + self.notification_paused_remaining
+                else:
+                    self.notification_time = current_time + 3
                 return
             if self.notification_time < current_time and not self.message_display:
                 # Pop the number of messages that were displayed last cycle
@@ -1695,6 +1682,7 @@ class Rac3Interface(GameInterface):
                         logger.debug(f'Message: {merged_message}')
                         logger.debug(f'{read_message}')
                         logger.debug(f'{write_message}')
+                    self.notification_paused_remaining = max(0, self.notification_time - current_time)
         else:
             self.notification_time = None
             self.notification_merge_count = 1
