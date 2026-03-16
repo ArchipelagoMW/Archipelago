@@ -750,7 +750,8 @@ class OpenRCT2World(World):
         # print(self.location_prices)
         slot_data = self.options.as_dict("difficulty", "scenario_length", "scenario", "death_link", "randomization_range",
         "stat_rerolls", "randomize_park_values", "ignore_ride_stat_changes", "visibility", "preferred_intensity", 
-        "all_rides_and_scenery_base", "all_rides_and_scenery_expansion", "fireworks", "awards", "exclude_safest_park")
+        "all_rides_and_scenery_base", "all_rides_and_scenery_expansion", "fireworks", "awards", "exclude_safest_park",
+        "land_price", "construction_rights_price", "land_discounts", "construction_rights_discounts")
         slot_data["objectives"] = objectives
         slot_data["rules"] = self.rules
         slot_data["seed"] = seed

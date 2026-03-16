@@ -50,9 +50,16 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
     if ("Merry Go Round" not in openRCT2_items): # Necessary to not break the Best Gentle Rides location
         openRCT2_items.append("Merry Go Round")
 
-    if options.monopoly_mode.value:
-        for each in range(20):
+    for each in range(options.land_discounts.value):
+        openRCT2_items.append("Land Discount")
+    
+    for each in range (options.construction_rights_discounts.value):
+        openRCT2_items.append("Construction Rights Discount")
+
+    if options.monopoly_mode.value: #Need at least 20 for Monopoly mode.
+        while openRCT2_items.count("Land Discount") < 20:
             openRCT2_items.append("Land Discount")
+        while openRCT2_items.count("Construction Rights Discount") < 20:
             openRCT2_items.append("Construction Rights Discount")
                       
     if options.include_gamespeed_items.value:
