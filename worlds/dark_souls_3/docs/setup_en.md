@@ -124,7 +124,8 @@ find `DarkSoulsIII.exe` or to launch it properly. If this is happening to you, m
 
 * Steam is not running in administrator mode. To fix this, right-click `steam.exe` (by default this
   is in `C:\Program Files\Steam`), select "Properties", open the "Compatiblity" tab, and uncheck
-  "Run this program as an administrator".
+  "Run this program as an administrator". Try opening `steam.exe` directly from this folder if you were
+  using other means such as the taskbar.
 
 * There is no `dinput8.dll` file in your DS3 game directory. This is the old way of installing mods,
   and it can interfere with the new ModEngine2 workflow.
