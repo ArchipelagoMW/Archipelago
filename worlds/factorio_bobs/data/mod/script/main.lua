@@ -8,8 +8,8 @@ local SEED_NAME = "{{ seed_name }}"
 local TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 local GOAL = {{ goal }}
 --local ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-local ARCHIPELAGO_ENERGY_LINK_SETTING = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
-local ENERGY_LINK_EFFICIENCY = 0.75
+--local ARCHIPELAGO_ENERGY_LINK_SETTING = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
+--local ENERGY_LINK_EFFICIENCY = 0.75
 
 --if settings.global[general.mod_setting_names.death_link].value then
 --    DEATH_LINK = 1
@@ -17,11 +17,11 @@ local ENERGY_LINK_EFFICIENCY = 0.75
 --    DEATH_LINK = 0
 --end
 
-if settings.global[general.mod_setting_names.energy_link].value then
-    ENERGY_INCREMENT = 10000000
-else
-    ENERGY_INCREMENT = 0
-end
+--if settings.global[general.mod_setting_names.energy_link].value then
+--    ENERGY_INCREMENT = 10000000
+--else
+--    ENERGY_INCREMENT = 0
+--end
 
 
 --CURRENTLY_DEATH_LOCK = 0
@@ -29,154 +29,156 @@ end
 -- Handle the pathfinding result of teleport traps
 script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
 
-function count_energy_bridges()
-    local count = 0
-    for i, bridge in pairs(storage.energy_link_bridges) do
-        if validate_energy_link_bridge(i, bridge) then
-            count = count + 1 + (bridge.quality.level * 0.3)
-        end
-    end
-    return count
-end
+--function count_energy_bridges()
+--    local count = 0
+--    for i, bridge in pairs(storage.energy_link_bridges) do
+--        if validate_energy_link_bridge(i, bridge) then
+--            count = count + 1 + (bridge.quality.level * 0.3)
+--        end
+--    end
+--    return count
+--end
 
-function get_energy_increment(bridge)
-    return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
-end
+--function get_energy_increment(bridge)
+--    return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
+--end
 
-function on_check_energy_link(event)
-    --- assuming 1 MJ increment and 5MJ battery:
-    --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
-    if event.tick % 60 == 30 and ENERGY_INCREMENT then
-        local force = "player"
-        local bridges = storage.energy_link_bridges
-        local bridgecount = count_energy_bridges()
-        storage.forcedata[force].energy_bridges = bridgecount
-        if storage.forcedata[force].energy == nil then
-            storage.forcedata[force].energy = 0
-        end
-        if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
-            for i, bridge in pairs(bridges) do
-                if validate_energy_link_bridge(i, bridge) then
-                    energy_increment = get_energy_increment(bridge)
-                    if bridge.energy > energy_increment*3 then
-                        storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * ENERGY_LINK_EFFICIENCY)
-                        bridge.energy = bridge.energy - energy_increment
-                    end
-                end
-            end
-        end
-        for i, bridge in pairs(bridges) do
-            if validate_energy_link_bridge(i, bridge) then
-                energy_increment = get_energy_increment(bridge)
-                if storage.forcedata[force].energy < energy_increment and bridge.quality.level == 0 then
-                    break
-                end
-                if bridge.energy < energy_increment*2 and storage.forcedata[force].energy > energy_increment then
-                    storage.forcedata[force].energy = storage.forcedata[force].energy - energy_increment
-                    bridge.energy = bridge.energy + energy_increment
-                end
-            end
-        end
-    end
-end
-function string_starts_with(str, start)
-    return str:sub(1, #start) == start
-end
-function validate_energy_link_bridge(unit_number, entity)
-    if not entity then
-        if storage.energy_link_bridges[unit_number] == nil then return false end
-        storage.energy_link_bridges[unit_number] = nil
-        return false
-    end
-    if not entity.valid then
-        if storage.energy_link_bridges[unit_number] == nil then return false end
-        storage.energy_link_bridges[unit_number] = nil
-        return false
-    end
-    return true
-end
-function on_energy_bridge_constructed(entity)
-    if entity and entity.valid then
-        if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
-            storage.energy_link_bridges[entity.unit_number] = entity
-        end
-    end
-end
-function on_energy_bridge_removed(entity)
-    if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
-        if storage.energy_link_bridges[entity.unit_number] == nil then return end
-        storage.energy_link_bridges[entity.unit_number] = nil
-    end
-end
-if (ENERGY_INCREMENT) then
-    script.on_event(defines.events.on_tick, on_check_energy_link)
+--function on_check_energy_link(event)
+--    --- assuming 1 MJ increment and 5MJ battery:
+--    --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
+--    if event.tick % 60 == 30 and ENERGY_INCREMENT then
+--        local force = "player"
+--        local bridges = storage.energy_link_bridges
+--        local bridgecount = count_energy_bridges()
+--        storage.forcedata[force].energy_bridges = bridgecount
+--        if storage.forcedata[force].energy == nil then
+--            storage.forcedata[force].energy = 0
+--        end
+--        if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
+--            for i, bridge in pairs(bridges) do
+--                if validate_energy_link_bridge(i, bridge) then
+--                    energy_increment = get_energy_increment(bridge)
+--                    if bridge.energy > energy_increment*3 then
+--                        storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * ENERGY_LINK_EFFICIENCY)
+--                        bridge.energy = bridge.energy - energy_increment
+--                    end
+--                end
+--            end
+--        end
+--        for i, bridge in pairs(bridges) do
+--            if validate_energy_link_bridge(i, bridge) then
+--                energy_increment = get_energy_increment(bridge)
+--                if storage.forcedata[force].energy < energy_increment and bridge.quality.level == 0 then
+--                    break
+--                end
+--                if bridge.energy < energy_increment*2 and storage.forcedata[force].energy > energy_increment then
+--                    storage.forcedata[force].energy = storage.forcedata[force].energy - energy_increment
+--                    bridge.energy = bridge.energy + energy_increment
+--                end
+--            end
+--        end
+--    end
+--end
 
-    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
-    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
-    script.on_event({defines.events.on_entity_cloned}, function(event) on_energy_bridge_constructed(event.destination) end)
+--function string_starts_with(str, start)
+--    return str:sub(1, #start) == start
+--end
 
-    script.on_event({defines.events.script_raised_revive}, function(event) on_energy_bridge_constructed(event.entity) end)
-    script.on_event({defines.events.script_raised_built}, function(event) on_energy_bridge_constructed(event.entity) end)
+--function validate_energy_link_bridge(unit_number, entity)
+--    if not entity then
+--        if storage.energy_link_bridges[unit_number] == nil then return false end
+--        storage.energy_link_bridges[unit_number] = nil
+--        return false
+--    end
+--    if not entity.valid then
+--        if storage.energy_link_bridges[unit_number] == nil then return false end
+--        storage.energy_link_bridges[unit_number] = nil
+--        return false
+--    end
+--    return true
+--end
+--function on_energy_bridge_constructed(entity)
+--    if entity and entity.valid then
+--        if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+--            storage.energy_link_bridges[entity.unit_number] = entity
+--        end
+--    end
+--end
+--function on_energy_bridge_removed(entity)
+--    if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+--        if storage.energy_link_bridges[entity.unit_number] == nil then return end
+--        storage.energy_link_bridges[entity.unit_number] = nil
+--    end
+--end
+--if (ENERGY_INCREMENT) then
+--    script.on_event(defines.events.on_tick, on_check_energy_link)
+--
+--    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
+--    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
+--    script.on_event({defines.events.on_entity_cloned}, function(event) on_energy_bridge_constructed(event.destination) end)
+--
+--    script.on_event({defines.events.script_raised_revive}, function(event) on_energy_bridge_constructed(event.entity) end)
+--    script.on_event({defines.events.script_raised_built}, function(event) on_energy_bridge_constructed(event.entity) end)
+--
+--    script.on_event({defines.events.on_entity_died}, function(event) on_energy_bridge_removed(event.entity) end)
+--    script.on_event({defines.events.on_player_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
+--    script.on_event({defines.events.on_robot_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
+--end
 
-    script.on_event({defines.events.on_entity_died}, function(event) on_energy_bridge_removed(event.entity) end)
-    script.on_event({defines.events.on_player_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
-    script.on_event({defines.events.on_robot_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
-end
-
-{% if not imported_blueprints -%}
-function set_permissions()
-    local group = game.permissions.get_group("Default")
-    group.set_allows_action(defines.input_action.open_blueprint_library_gui, false)
-    group.set_allows_action(defines.input_action.import_blueprint, false)
-    group.set_allows_action(defines.input_action.import_blueprint_string, false)
-    group.set_allows_action(defines.input_action.import_blueprints_filtered, false)
-end
-{%- endif %}
+--{% if not imported_blueprints -%}
+--function set_permissions()
+--    local group = game.permissions.get_group("Default")
+--    group.set_allows_action(defines.input_action.open_blueprint_library_gui, false)
+--    group.set_allows_action(defines.input_action.import_blueprint, false)
+--    group.set_allows_action(defines.input_action.import_blueprint_string, false)
+--    group.set_allows_action(defines.input_action.import_blueprints_filtered, false)
+--end
+--{%- endif %}
 
 
-function check_spawn_silo(force)
-    if force.players and #force.players > 0 and force.get_entity_count("rocket-silo") < 1 then
-        local surface = game.get_surface(1)
-        local spawn_position = force.get_spawn_position(surface)
-        spawn_entity(surface, force, "rocket-silo", spawn_position.x, spawn_position.y, 80, true, true)
-        spawn_entity(surface, force, "cargo-landing-pad", spawn_position.x, spawn_position.y, 80, true, true)
-    end
-end
-
-function check_despawn_silo(force)
-    if not force.players or #force.players < 1 then
-        if force.get_entity_count("rocket-silo") > 0 then
-            local surface = game.get_surface(1)
-            local spawn_position = force.get_spawn_position(surface)
-            local x1 = spawn_position.x - 41
-            local x2 = spawn_position.x + 41
-            local y1 = spawn_position.y - 41
-            local y2 = spawn_position.y + 41
-            local silos = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
-                                                         name = "rocket-silo",
-                                                         force = force}
-            for i, silo in ipairs(silos) do
-                silo.destructible = true
-                silo.destroy()
-            end
-        end
-        if force.get_entity_count("cargo-landing-pad") > 0 then
-            local surface = game.get_surface(1)
-            local spawn_position = force.get_spawn_position(surface)
-            local x1 = spawn_position.x - 41
-            local x2 = spawn_position.x + 41
-            local y1 = spawn_position.y - 41
-            local y2 = spawn_position.y + 41
-            local pads = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
-                                                        name = "cargo-landing-pad",
-                                                        force = force}
-            for i, pad in ipairs(pads) do
-                pad.destructible = true
-                pad.destroy()
-            end
-        end
-    end
-end
+--function check_spawn_silo(force)
+--    if force.players and #force.players > 0 and force.get_entity_count("rocket-silo") < 1 then
+--        local surface = game.get_surface(1)
+--        local spawn_position = force.get_spawn_position(surface)
+--        spawn_entity(surface, force, "rocket-silo", spawn_position.x, spawn_position.y, 80, true, true)
+--        spawn_entity(surface, force, "cargo-landing-pad", spawn_position.x, spawn_position.y, 80, true, true)
+--    end
+--end
+--
+--function check_despawn_silo(force)
+--    if not force.players or #force.players < 1 then
+--        if force.get_entity_count("rocket-silo") > 0 then
+--            local surface = game.get_surface(1)
+--            local spawn_position = force.get_spawn_position(surface)
+--            local x1 = spawn_position.x - 41
+--            local x2 = spawn_position.x + 41
+--            local y1 = spawn_position.y - 41
+--            local y2 = spawn_position.y + 41
+--            local silos = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
+--                                                         name = "rocket-silo",
+--                                                         force = force}
+--            for i, silo in ipairs(silos) do
+--                silo.destructible = true
+--                silo.destroy()
+--            end
+--        end
+--        if force.get_entity_count("cargo-landing-pad") > 0 then
+--            local surface = game.get_surface(1)
+--            local spawn_position = force.get_spawn_position(surface)
+--            local x1 = spawn_position.x - 41
+--            local x2 = spawn_position.x + 41
+--            local y1 = spawn_position.y - 41
+--            local y2 = spawn_position.y + 41
+--            local pads = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
+--                                                        name = "cargo-landing-pad",
+--                                                        force = force}
+--            for i, pad in ipairs(pads) do
+--                pad.destructible = true
+--                pad.destroy()
+--            end
+--        end
+--    end
+--end
 
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
@@ -187,14 +189,15 @@ function on_force_created(event)
     end
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
-    data["victory"] = 0
+    --data["victory"] = 0
     --data["death_link_tick"] = 0
-    data["energy"] = 0
-    data["energy_bridges"] = 0
-    storage.forcedata[event.force] = data
-{%- if silo == 2 %}
-    check_spawn_silo(force)
-{%- endif %}
+    --data["energy"] = 0
+    --data["energy_bridges"] = 0
+    --storage.forcedata[event.force] = data
+--{%- if silo == 2 %}
+--    check_spawn_silo(force)
+--{%- endif %}
+--Cosmic: this will either need to go in miscellaneous or item_handling.
 {%- for tech_name in removed_technologies %}
     force.technologies["{{ tech_name }}"].researched = true
 {%- endfor %}
@@ -202,12 +205,12 @@ end
 script.on_event(defines.events.on_force_created, on_force_created)
 
 -- Destroy force data.  This doesn't appear to be currently possible with the Factorio API, but here for completeness.
-function on_force_destroyed(event)
-{%- if silo == 2 %}
-    check_despawn_silo(event.force)
-{%- endif %}
-    storage.forcedata[event.force.name] = nil
-end
+--function on_force_destroyed(event)
+--{%- if silo == 2 %}
+--    check_despawn_silo(event.force)
+--{%- endif %}
+--    storage.forcedata[event.force.name] = nil
+--end
 
 --function on_runtime_mod_setting_changed(event)
 --    local force
@@ -249,56 +252,57 @@ function on_player_created(event)
     -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
     -- For now, they will (probably) always be on the 'player' force when this event fires.
     local data = {}
-    if settings.global[ARCHIPELAGO_ENERGY_LINK_SETTING].value then
-        player.force.recipes["ap-energy-bridge"].enabled=true
-    else
-        player.force.recipes["ap-energy-bridge"].enabled=false
-    end
+    --if settings.global[ARCHIPELAGO_ENERGY_LINK_SETTING].value then
+    --    player.force.recipes["ap-energy-bridge"].enabled=true
+    --else
+    --    player.force.recipes["ap-energy-bridge"].enabled=false
+    --end
     data['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
     storage.playerdata[player.index] = data
     update_player(player.index)  -- Attempt to send pending free samples, if relevant.
-{%- if silo == 2 %}
-    check_spawn_silo(game.players[event.player_index].force)
-{%- endif %}
+--{%- if silo == 2 %}
+--    check_spawn_silo(game.players[event.player_index].force)
+--{%- endif %}
     dumpInfo(player.force)
 end
 script.on_event(defines.events.on_player_created, on_player_created)
 
 -- Create/destroy silo for force if player switched force
-function on_player_changed_force(event)
-{%- if silo == 2 %}
-    check_despawn_silo(event.force)
-    check_spawn_silo(game.players[event.player_index].force)
-{%- endif %}
-end
-script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
+-- Cosmic: ensure that the despawning only happens if the force has no more players.
+--function on_player_changed_force(event)
+--{%- if silo == 2 %}
+--    check_despawn_silo(event.force)
+--    check_spawn_silo(game.players[event.player_index].force)
+--{%- endif %}
+--end
+--script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
 
 function on_player_removed(event)
     storage.playerdata[event.player_index] = nil
 end
 script.on_event(defines.events.on_player_removed, on_player_removed)
 
-function on_rocket_launched(event)
-    if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
-        satellite_count = 0
-        cargo_pod = event.rocket.cargo_pod
-        if cargo_pod then
-            satellite_count = cargo_pod.get_item_count("satellite")
-        end
-        if satellite_count > 0 or GOAL == 0 then
-            storage.forcedata[event.rocket.force.name]['victory'] = 1
-            dumpInfo(event.rocket.force)
-            game.set_game_state
-            {
-                game_finished = true,
-                player_won = true,
-                can_continue = true,
-                victorious_force = event.rocket.force
-            }
-        end
-    end
-end
-script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
+--function on_rocket_launched(event)
+--    if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
+--        satellite_count = 0
+--        cargo_pod = event.rocket.cargo_pod
+--        if cargo_pod then
+--            satellite_count = cargo_pod.get_item_count("satellite")
+--        end
+--        if satellite_count > 0 or GOAL == 0 then
+--            storage.forcedata[event.rocket.force.name]['victory'] = 1
+--            dumpInfo(event.rocket.force)
+--            game.set_game_state
+--            {
+--                game_finished = true,
+--                player_won = true,
+--                can_continue = true,
+--                victorious_force = event.rocket.force
+--            }
+--        end
+--    end
+--end
+--script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
 -- Updates a player, attempting to send them any pending samples (if relevant)
 function update_player(index)
@@ -764,15 +768,15 @@ end)
 --    game.print("Death was granted by " .. source)
 --end)
 
-commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
-    local change = tonumber(call.parameter or "0")
-    local force = "player"
-    storage.forcedata[force].energy = storage.forcedata[force].energy + change
-end)
-
-commands.add_command("energy-link", "Print the status of the Archipelago energy link.", function(call)
-    log("Player command energy-link") -- notifies client
-end)
+--commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
+--    local change = tonumber(call.parameter or "0")
+--    local force = "player"
+--    storage.forcedata[force].energy = storage.forcedata[force].energy + change
+--end)
+--
+--commands.add_command("energy-link", "Print the status of the Archipelago energy link.", function(call)
+--    log("Player command energy-link") -- notifies client
+--end)
 
 commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
     log("Player command toggle-ap-send-filter") -- notifies client

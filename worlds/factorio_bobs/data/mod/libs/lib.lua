@@ -162,4 +162,8 @@ function library.dump_info()
     log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
 end
 
+function library.string_starts_with(str, start)
+    return str:sub(1, #start) == start
+end
+
 return library

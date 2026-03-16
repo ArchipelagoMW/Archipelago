@@ -3,7 +3,7 @@ local general = require("Archipelago.general")
 local library = require("libs/lib")
 
 local death_link_setting = settings.global[general.mod_setting_names.death_link]
-if settings.global[general.mod_setting_names.death_link].value then
+if death_link_setting.value then
     DEATH_LINK = 1
 else
     DEATH_LINK = 0
@@ -59,9 +59,7 @@ end
 
 local function on_force_created(event)
     local force = event.force
-    local data = {}
-    data["death_link_tick"] = 0
-    storage.forcedata[force.name] = data
+    storage.forcedata[force.name]["death_link_tick"] = storage.forcedata[force.name]["death_link_tick"] or 0
 end
 
 local function on_init()
@@ -83,8 +81,8 @@ end)
 local lib = {}
 lib.events = {
     [defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed,
-    --[defines.events.on_research_finished] = on_research_finished,
     [defines.events.on_force_created] = on_force_created,
+    --[defines.events.on_force_reset] = on_force_created, --currently unneeded.
     [defines.events.on_player_created] = on_player_created,
 }
 lib.filtered_events{

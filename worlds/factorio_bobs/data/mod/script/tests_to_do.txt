@@ -13,3 +13,33 @@ Multiplayer:
     get two people in a world and test if a death kills both players.
     
     start world, swap deathlink setting, get a second player, test if the second player also has the correct setting state. (Should desync on death if not.)
+
+Energy_link:
+
+Single player:
+    Generate a world with energy link active.
+    build a energy link.
+    send energy.
+    recieve energy.
+    send and recieve energy.
+
+    Switch the setting and test sending an recieving energy.
+
+    regenerate a world without energy link and test all the above again.
+
+Multiplayer:    
+    start world, swap energy_link setting, get a second player, test if the second player also has the correct setting state. (Should desync on energy transfer if not.)
+
+miscellaneous:
+
+Single player:
+    silo on spawn
+    silo random recipe
+    cheats on  (check if the cheat spawns a silo.)
+    cheats off (check if nothing happens.)
+    fill the area and check if the silo fails to spawn.
+    create a new force and see if the silo spawns.
+    swap the player to the new force and see if the silo spawns.
+
+    test both victory conditions.
+

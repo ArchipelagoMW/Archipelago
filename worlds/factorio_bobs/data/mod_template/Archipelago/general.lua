@@ -7,10 +7,12 @@ local general = {}
 --general information
 general.slot_name = "{{ slot_name }}" -- actual name: "factorio1" will not Alias.
 general.slot_id = {{ slot_player }} -- int for which player this slot belongs to.
+general.seed_name = "{{ seed_name }}"
 general.mod_name = "{{ mod_name }}" -- exact name of this mod. "AP-91831735932242911797-P1-factorio1_0.6.6.zip"
 general.goal = {{ goal }} -- 0 = rocket and 1 == satelite
 general.silo = {{ silo }} -- 0 = normal silo, 1 = random recipe, 2 = spawned at the start of the game.
-
+general.allow_import_blueprints = {% if imported_blueprints %}true{% else %}false{% endif %}
+general.allow_cheats =  {% if allow_cheats %}true{% else %}false{% endif %}
 
 -- mod settings
 general.mod_setting_names = {}
