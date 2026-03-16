@@ -83,6 +83,7 @@ class TestBase(unittest.TestCase):
 
     def test_items_in_datapackage(self):
         """Test that any (non-event) items in the itempool, a mw location, or precollected are in the datapackage"""
+        # pre-fill items are out of scope for now
         archipelago = AutoWorldRegister.world_types["Archipelago"]
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
