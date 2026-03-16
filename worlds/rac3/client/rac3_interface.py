@@ -960,12 +960,11 @@ class Rac3Interface(GameInterface):
         if self.planet not in PLANET_VENDOR_OFFSET.keys() or self.vendor_type is None:
             return
 
-        vendor_size = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
         is_pda_vendor = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.IS_PDA_OFFSET))
-
         if is_pda_vendor:
             return
 
+        vendor_size = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
         current_inventory = [self.read_vendor_slot_data(self.vendor_type, slot) for slot in range(vendor_size)]
         new_inventory = []
         match self.vendor_type:
@@ -1027,7 +1026,7 @@ class Rac3Interface(GameInterface):
 
     def read_vendor_slot_data(self, vendor_type: RAC3VENDORTYPE,
                               slot: int) -> RAC3WEAPONVENDORSLOTDATA | RAC3ARMORVENDORSLOTDATA | RAC3SHIPVENDORSLOTDATA:
-        """returns the data for a given slot in the vendor inventory"""
+        """Returns the data for a given slot in the vendor inventory"""
         self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET))
         match vendor_type:
             case RAC3VENDORTYPE.WEAPON:
@@ -1040,8 +1039,8 @@ class Rac3Interface(GameInterface):
                 data = RAC3SHIPVENDORSLOTDATA(
                     [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SHIPVENDORSLOTDATA().get_data()])
             case RAC3VENDORTYPE.SKIN:
-                    data = RAC3SKINVENDORSLOTDATA(
-                        [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SKINVENDORSLOTDATA().get_data()])
+                data = RAC3SKINVENDORSLOTDATA(
+                    [self.read_vendor_prop(prop, slot, vendor_type) for prop in RAC3SKINVENDORSLOTDATA().get_data()])
             case _:
                 raise NotImplementedError(f'Reading vendor type {vendor_type.name} has not been implemented yet')
         return data
@@ -1639,7 +1638,7 @@ class Rac3Interface(GameInterface):
         if self.notification_queue:
             if not self.notification_time:
                 self.notification_time = current_time + 3
-            if not tyhrranoid_game:
+            if not tyhrranoid_game and not self.pause_state:
                 if self.notification_time < current_time and not self.message_display:
                     # Pop the number of messages that were displayed last cycle
                     for _ in range(self.notification_merge_count):
@@ -1678,7 +1677,7 @@ class Rac3Interface(GameInterface):
                         if read_message != write_message:
                             # Give the player a bit more time to read the new appended line in case it was about to
                             # expire
-                            self.notification_time += 1
+                            self.notification_time += 0.75
                             display_time = int((self.notification_time - current_time) * 120)
                             # A lot of messages can cause this value to go negative and if so, set a minimum display
                             # time
