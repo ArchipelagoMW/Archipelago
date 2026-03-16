@@ -209,7 +209,7 @@ def launch(exe, in_terminal=False):
             subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
             return
         elif is_linux:
-            terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+            terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm') or which('konsole')
             if terminal:
                 subprocess.Popen([terminal, '-e', shlex.join(exe)])
                 return
