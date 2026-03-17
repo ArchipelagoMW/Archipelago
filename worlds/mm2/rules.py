@@ -128,8 +128,8 @@ HasCrashBomber: Rule = Has(names.crash_bomber)
 STATIC_LOCATION_RULES: dict[str, Rule] = {
     names.wily_4: HasCrashBomber,
     names.wily_stage_4: HasCrashBomber,
-    names.wily_5: CanDefeatEnoughRBMs,
-    names.wily_stage_5: CanDefeatEnoughRBMs
+    names.wily_5: CanDefeatEnoughRBMs(),
+    names.wily_stage_5: CanDefeatEnoughRBMs(),
 }
 
 STATIC_1UP_RULES: dict[str, Rule] = {
