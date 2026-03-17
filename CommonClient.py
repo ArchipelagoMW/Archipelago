@@ -341,6 +341,8 @@ class CommonContext:
     """Name used in Connect packet"""
     seed_name: str | None
     """Seed name that will be validated on opening a socket if present"""
+    death_link_group: str
+    """Group to use when participating in DeathLink"""
 
     # locations
     locations_checked: set[int]
@@ -399,6 +401,7 @@ class CommonContext:
         self.slot = None
         self.auth = None
         self.seed_name = None
+        self.death_link_group = ""
 
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
@@ -740,7 +743,7 @@ class CommonContext:
             logger.info("DeathLink: Sending death to your friends...")
             self.last_death_link = time.time()
             await self.send_msgs([{
-                "cmd": "Bounce", "tags": ["DeathLink"],
+                "cmd": "Bounce", "tags": ["DeathLink" + self.death_link_group],
                 "data": {
                     "time": self.last_death_link,
                     "source": self.player_names[self.slot],
@@ -752,11 +755,22 @@ class CommonContext:
         """Helper function to set Death Link connection tag on/off and update the connection if already connected."""
         old_tags = self.tags.copy()
         if death_link:
-            self.tags.add("DeathLink")
+            self.tags.add("DeathLink" + self.death_link_group)
         else:
-            self.tags -= {"DeathLink"}
+            self.tags -= {"DeathLink" + self.death_link_group}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+
+    async def update_death_link_group(self, group_name: str):
+        """Helper function to change the Death Link group, updating the connection tag as needed if already connected."""
+        death_link: bool = ("DeathLink" + self.death_link_group) in self.tags
+        if death_link:
+            self.tags -= {"DeathLink" + self.death_link_group}
+        self.death_link_group = group_name
+        if death_link:
+            self.tags.add("DeathLink" + self.death_link_group)
+            if self.server and not self.server.socket.closed:
+                await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     def gui_error(self, title: str, text: typing.Union[Exception, str]) -> typing.Optional["kvui.MessageBox"]:
         """Displays an error messagebox in the loaded Kivy UI. Override if using a different UI framework"""
@@ -1089,7 +1103,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == "Bounced":
         tags = args.get("tags", [])
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
+        if ("DeathLink" + ctx.death_link_group) in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
 
     elif cmd == "Retrieved":
