@@ -31,3 +31,7 @@ The Options Creator is included in the Archipelago installation, and is accessib
 ### PopTracker
 
 [PopTracker](https://github.com/black-sliver/PopTracker) is a popular tool in Randomizer communities, which many games support via custom PopTracker Packs. Many Archipelago packs include the ability to directly connect to your slot for auto-tracking capabilities. (Check each game's setup guide to see if it has PopTracker compatibility!)
+
+### Universal Tracker
+
+[Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases) is a custom tracker client that uses your .yaml files from generation (as well as the .apworld files) to attempt to provide a view of what items are currently in-logic or not, using the actual generation logic. Specific steps may need to be taken depending on the game, or the use of randomness in your yaml. Support for UT can be found in the [#universal-tracker](https://discord.com/channels/731205301247803413/1367270230635839539) channel of the Archipelago Official Discord.
