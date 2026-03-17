@@ -78,7 +78,7 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
     @override
     def _instantiate(self, world: "MM2World") -> Rule.Resolved:
         return self.Resolved(tuple([(key, tuple(val)) for key, val in sorted(world.wily_5_weapons.items())]), world.options.wily_5_requirement.value,
-                             player=world.player, caching_enabled=True)
+                             player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False))
 
     class Resolved(Rule.Resolved):
         boss_requirements: tuple[tuple[int, tuple[int, ...]], ...]
