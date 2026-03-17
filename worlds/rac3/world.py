@@ -116,7 +116,7 @@ class RaC3World(World):
                 and starting_planet_list
                 and self.multiworld.players == 1):
             raise OptionError("Options selected do not allow Ratchet to collect a Clank Pack and advance past Florana")
-    
+
     def dead_seed_check(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
         """Check for option combinations that will result in a dead seed and raise an OptionError to warn the player"""
         nanotech_milestones = self.options.nanotech_milestones.value

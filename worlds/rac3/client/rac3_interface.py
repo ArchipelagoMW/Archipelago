@@ -1620,7 +1620,7 @@ class Rac3Interface(GameInterface):
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
         paused = (self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) or (current_time - self.last_in_ship_time) < 1
-        self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED, 
+        self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
                       int(self.inside_hacker_puzzle or paused))
         if self.notification_queue:
             if not self.notification_time:

@@ -195,7 +195,7 @@ class Pine:
     def write_string(self, address: int, value: str) -> None:
         data = value.encode("ascii") + b'\x00'
         self.write_bytes(address, data)
-    
+
     def read_string(self, address: int, n: int) -> str:
         data = self.read_bytes(address, n)
         return data.split(b'\x00', 1)[0].decode("ascii")
