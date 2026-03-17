@@ -297,7 +297,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Material.stone: self.ability.can_mine_stone(),
             Material.wood: self.ability.can_chop_trees(),
             Meal.ice_cream: (self.season.has(Season.summer) & self.money.can_spend_at(Region.town, 250)) | self.money.can_spend_at(Region.oasis, 240),
-            Meal.strange_bun: self.relationship.has_hearts(NPC.shane, 7) & self.has(Ingredient.wheat_flour) & self.has(Fish.periwinkle) & self.has(ArtisanGood.void_mayonnaise),
             MetalBar.copper: self.can_smelt(Ore.copper),
             MetalBar.gold: self.can_smelt(Ore.gold),
             MetalBar.iridium: self.can_smelt(Ore.iridium),
