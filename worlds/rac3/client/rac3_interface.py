@@ -1619,7 +1619,7 @@ class Rac3Interface(GameInterface):
         """Handle the current displayed pop-up message notification, and message queue"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
-        paused = self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT or (current_time - self.last_in_ship_time) < 1
+        paused = (self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) or (current_time - self.last_in_ship_time) < 1
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED, 
                       int(self.inside_hacker_puzzle or paused))
         if self.notification_queue:
@@ -1638,7 +1638,7 @@ class Rac3Interface(GameInterface):
                     if self.notification_queue:
                         self.notification_queue.pop(0)
                 self.write_messagebox_theme()
-                logger.debug(f'notification queue: {len(self.notification_queue)}')
+                logger.debug(f"notification queue: {len(self.notification_queue)}")
                 self.notification_time = current_time + 3
             if self.notification_queue:
                 # Merge up to 3 notifications of the same theme, but do not exceed 225 chars
@@ -1670,7 +1670,8 @@ class Rac3Interface(GameInterface):
                     if read_message != write_message:
                         # Give the player a bit more time to read the new appended line in case it was about to
                         # expire
-                        self.notification_time += 0.75
+                        if self.notification_time - self.current_game < 1.5:
+                            self.notification_time = current_time + 1.5
                         display_time = int((self.notification_time - current_time) * 120)
                         # A lot of messages can cause this value to go negative and if so, set a minimum display
                         # time
@@ -1678,10 +1679,10 @@ class Rac3Interface(GameInterface):
                             self.notification_time = current_time + 1
                             display_time = int((self.notification_time - current_time) * 120)
                         self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
-                        logger.debug('Warning: Incorrect Display message detected')
-                        logger.debug(f'Message: {merged_message}')
-                        logger.debug(f'{read_message}')
-                        logger.debug(f'{write_message}')
+                        logger.debug("Warning: Incorrect Display message detected")
+                        logger.debug(f"Message: {merged_message}")
+                        logger.debug(f"{read_message}")
+                        logger.debug(f"{write_message}")
                     self.notification_paused_remaining = max(0, self.notification_time - current_time)
         else:
             self.notification_time = None
