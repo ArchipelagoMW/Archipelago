@@ -34,7 +34,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
     version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
     if version_dots >= 3:
         logger.warning("\nYou are using a development build of the RaC3 Archipelago Randomizer!\n"
-                        "There may be bugs present that have not been tested fully.\n"
+                        "There may be bugs present and features that have not been tested fully.\n"
                         "These builds are meant for testing and bug reporting purposes "
                         "and should not be used for normal play!\n")
     connected_to_game: bool = False
