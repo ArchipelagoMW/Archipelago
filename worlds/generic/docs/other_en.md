@@ -26,7 +26,7 @@ Hint Games can be found from sources such as the Discord and the [Hint Game Cate
 
 ### Options Creator
 
-The Options Creator is included in the Archipelago installation, and is accessible from the Archipelago Launcher. Using this simple GUI tool, you can easily create randomization options for any installed '.apworld'- perfect when using custom worlds you've installed that don't have options pages on the website.
+The Options Creator is included in the Archipelago installation, and is accessible from the Archipelago Launcher. Using this simple GUI tool, you can easily create randomization options for any installed `.apworld` - perfect when using custom worlds you've installed that don't have options pages on the website.
 
 ### PopTracker
 
