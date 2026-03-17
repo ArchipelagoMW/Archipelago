@@ -30,7 +30,7 @@ The Options Creator is included in the Archipelago installation, and is accessib
 
 ### PopTracker
 
-[PopTracker](https://github.com/black-sliver/PopTracker) is a popular tool in Randomizer communities, which many games support via custom PopTracker Packs. Many Archipelago packs include the ability to directly connect to your slot for auto-tracking capabilities. (Check each game's setup guide to see if it has PopTracker compatibility!)
+[PopTracker](https://github.com/black-sliver/PopTracker) is a popular tool in Randomizer communities, which many games support via custom PopTracker Packs. Many Archipelago packs include the ability to directly connect to your slot for auto-tracking capabilities. (Check each game's setup guide or Discord channel to see if it has PopTracker compatibility!)
 
 ### Universal Tracker
 
