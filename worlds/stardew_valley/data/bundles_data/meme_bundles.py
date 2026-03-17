@@ -257,7 +257,7 @@ algorerhythm_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.algor
 red_fish_items = [red_mullet, red_snapper, lava_eel, crimsonfish]
 blue_fish_items = [anchovy, tuna, sardine, bream, squid, ice_pip, albacore, blue_discus, midnight_squid, spook_fish, glacierfish]
 other_fish = [pufferfish, largemouth_bass, smallmouth_bass, rainbow_trout, walleye, perch, carp, catfish, pike, sunfish, herring, eel, octopus, sea_cucumber,
-              super_cucumber, ghostfish, stonefish, sandfish, scorpion_carp, flounder, midnight_carp, tigerseye, bullhead, tilapia, chub, dorado, shad,
+              super_cucumber, ghostfish, stonefish, sandfish, scorpion_carp, flounder, midnight_carp, bullhead, tilapia, chub, dorado, shad, tiger_trout,
               lingcod, halibut, slimejack, stingray, goby, blobfish, angler, legend, mutant_carp]
 dr_seuss_items = [other_fish, [fish.as_amount(2) for fish in other_fish], red_fish_items, blue_fish_items]
 dr_seuss_bundle = FixedPriceDeepBundleTemplate(CCRoom.crafts_room, MemeBundleName.dr_seuss, dr_seuss_items, 4, 4)
