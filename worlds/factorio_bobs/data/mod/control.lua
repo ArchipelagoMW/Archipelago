@@ -11,21 +11,67 @@ local libs = {
     --tech_obscurity = require("scripts/tech-obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
 }
 
-local error_message = nil
+local on_entity_died_filter = {}
+local on_entity_died_functions = {}
+for name, lib in pairs(libs) do
+    if lib.on_entity_died then
+        for filter, name in pairs(lib.on_entity_died) do
+            table.insert(on_entity_died_filter, {filter = filter, [filter] = name})
+        end
+        on_entity_died_functions[name] = lib.on_entity_died_function
+    end
+end
+
+log(" control is having the following as the filter: "..serpent.line(on_entity_died_filter))
+
+local function on_entity_died(event)
+    for _, action in pairs(on_entity_died_functions) do
+        action(event)
+    end
+end
+
+script.on_event(defines.events.on_entity_died, on_entity_died, on_entity_died_filter) --register events with filter.
+
+local dupes = false
+local all_events = {}
+local filtered_events = {}
 for name, lib in pairs(libs) do
     handler.add_lib(lib)
     if lib.filtered_events then
         for event, data in pairs(lib.filtered_events) do
             script.on_event(event, data[1], data[2]) --register events with filter.
+            if all_events[event] then
+                dupes = true
+            end
+            all_events[event] = true
+            filtered_events[event] = true
+        end
+    end
+    if lib.events then
+        for event, data in pairs(lib.events) do
+            if filtered_events[event] then
+                dupes = true
+            end
+            all_events[event] = true
+        end
+    end
+end
 
+
+if dupes then
+    local error_message = ""
+    for name, lib in pairs(libs) do
+        if lib.filtered_events then
             --test to see if an filtered event has a duplicate.
             for no_dupe, error_handling in pairs(libs) do
-                for testing, _ in pairs(error_handling.events) do
-                    if testing == event then
-                        error_message = error_message..event.." from "..name.." has a duplicate normal event in "..no_dupe..".\n"
+                if error_handling.events then
+                    for testing, _ in pairs(error_handling.events) do
+                        if testing == event then
+                            error_message = error_message..event.." from "..name.." has a duplicate normal event in "..no_dupe..".\n"
+                        end
                     end
                 end
-                if no_dupe ~= name then
+                if no_dupe ~= name and error_handling.filtered_events then
                     for testing, _ in pairs(error_handling.filtered_events) do
                         if testing == event then
                             error_message = error_message..event.." from "..name.." has a duplicate filtered event in "..no_dupe..".\n"
@@ -33,10 +79,10 @@ for name, lib in pairs(libs) do
                     end
                 end
             end
-            --end of testing for duplicates.
         end
     end
+    if error_message ~= "" then
+        error(error_message)
+    end
 end
-if error_message ~= nil then
-    error(error_message)
-end
+

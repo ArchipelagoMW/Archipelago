@@ -26,7 +26,7 @@ local function on_runtime_mod_setting_changed(event)
             force.recipes["ap-energy-bridge"].enabled=false
         end
         if force ~= nil then
-            library.dumpInfo()
+            library.dump_info()
         end
     end
 end
@@ -192,7 +192,13 @@ lib.events = {
     [defines.events.on_player_mined_entity] = on_entity_died,
     [defines.events.on_robot_mined_entity] = on_entity_died,
 }
+
+lib.on_entity_died = {name = "ap-energy-bridge"} --a list of all names that need to be filtered for the on_entity_died event
+lib.on_entity_died_function = on_entity_died --a list of all names that need to be filtered for the on_entity_died event
+
+log("Energy link is adding the following to the on_entity_died filter: "..serpent.line(lib.on_entity_died))
+
 lib.on_init = on_init
-lib.on_configuration_changed = on_configuration_changed
+--lib.on_configuration_changed = on_configuration_changed
 
 return lib

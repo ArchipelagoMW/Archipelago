@@ -33,13 +33,19 @@ Multiplayer:
 miscellaneous:
 
 Single player:
+
     silo on spawn
     silo random recipe
+
     cheats on  (check if the cheat spawns a silo.)
     cheats off (check if nothing happens.)
+
     fill the area and check if the silo fails to spawn.
     create a new force and see if the silo spawns.
+
     swap the player to the new force and see if the silo spawns.
+
+    test if the blue print permissions get set propperly
 
     test both victory conditions.
 

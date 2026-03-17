@@ -190,7 +190,7 @@ local function on_player_created(event)
     if general.silo == 2 then
         check_spawn_silo(game.players[event.player_index].force)
     end
-    dumpInfo(player.force)
+    library.dump_info()
 end
 
 local function on_player_changed_force(event)

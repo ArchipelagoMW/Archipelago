@@ -2,6 +2,7 @@
 
 local general = require("Archipelago.general")
 local library = require("libs/lib")
+local util = require("util")
 
 
 TRAP_TABLE = {
@@ -131,9 +132,9 @@ end
 local function on_player_created(event)
     local player = game.players[event.player_index]
     storage.playerdata[player.index] = storage.playerdata[player.index] or {}
-    storage.playerdata[player.index]['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
+    storage.playerdata[player.index]['pending_samples'] = util.table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
     update_player(player.index)  -- Attempt to send pending free samples, if relevant.
-    dumpInfo(player.force)
+    library.dump_info()
 end
 
 local function on_player_removed(event)
@@ -144,7 +145,7 @@ end
 local function on_force_created(event)
     local force = event.force
     storage.forcedata[force.name] = storage.forcedata[force.name] or {}
-    storage.forcedata[force.name]['earned_samples'] = general.earned_samples.starting_items()
+    storage.forcedata[force.name]["earned_samples"] = general.free_samples.get_starter_items()
 end
 
 -- hook into researches done
@@ -156,7 +157,7 @@ local function on_research_finished(event)
     end
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
         -- check if it came from the server anyway, then we don't need to double send.
-        dumpInfo(technology.force) --is sendable
+        library.dump_info() --is sendable
     else
         if general.free_samples.state == 0 then
             return  -- Nothing else to do
@@ -191,10 +192,6 @@ end
 
 
 local function on_init()
-    if general.allow_impored_blueprints == false then
-        set_permissions()
-    end
-    
     storage.playerdata = storage.playerdata or {}
     storage.forcedata = storage.forcedata or {}
 

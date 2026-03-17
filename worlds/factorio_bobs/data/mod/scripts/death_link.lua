@@ -25,7 +25,7 @@ local function on_runtime_mod_setting_changed(event)
             DEATH_LINK = 0
         end
         if force ~= nil then
-            library.dumpInfo()
+            library.dump_info()
         end
     end
 end
@@ -44,6 +44,7 @@ local function kill_players(force)
 end
 
 local function on_entity_died(event)
+    if not event.entity.player then return end--detect if a player is connected to this entity. If it is that means a deathlink is in order.
     if DEATH_LINK == 0 then
         return
     end
@@ -53,7 +54,7 @@ local function on_entity_died(event)
 
     local force = event.entity.force
     storage.forcedata[force.name].death_link_tick = game.tick
-    dumpInfo(force)
+    library.dump_info()
     kill_players(force)
 end
 
@@ -86,9 +87,15 @@ lib.events = {
     --[defines.events.on_force_reset] = on_force_created, --currently unneeded.
     [defines.events.on_player_created] = on_player_created,
 }
-lib.filtered_events{
-    [defines.events.on_entity_died] = {on_entity_died, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}} }
+lib.filtered_events = {
+    --[defines.events.on_entity_died] = {on_entity_died, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}} --replaced with the one below.
 }
+lib.on_entity_died = {type = "character"} --a list of all names that need to be filtered for the on_entity_died event
+lib.on_entity_died_function = on_entity_died --a list of all names that need to be filtered for the on_entity_died event
+
+log(" Death link is adding the following to the on_entity_died filter: "..serpent.line(lib.on_entity_died))
+
 lib.on_init = on_init
+--lib.on_configuration_changed = on_configuration_changed
 
 return lib
