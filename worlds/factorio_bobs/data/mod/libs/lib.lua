@@ -120,7 +120,6 @@ function library.handle_teleport_attempt (event)
     end
 end
 
-
 function library.spill_character_inventory (character)
     if not (character and character.valid) then
         return false
@@ -158,12 +157,25 @@ function library.spill_character_inventory (character)
     end
 end
 
+local last_dump = 0
 function library.dump_info()
+    if last_dump == game.tick then return end --prevent multiple calls in the same game tick.
     log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
+    last_dump = game.tick
 end
 
 function library.string_starts_with(str, start)
     return str:sub(1, #start) == start
+end
+
+
+function library.is_valid_ap_force(force)
+    for _, force_name in pairs(general.player_forces) do
+        if force.name == force_name then
+            return true
+        end
+    end
+    return false
 end
 
 return library

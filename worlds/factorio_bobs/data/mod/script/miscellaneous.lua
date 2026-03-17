@@ -159,9 +159,17 @@ end
 
 local function on_force_created(event)
     local force = event.force
-    storage.forcedata[event.force]["victory"] = storage.forcedata[event.force]["victory"] or 0
+    storage.forcedata[force.name] = storage.forcedata[force.name] or {}
+    storage.forcedata[force.name]["victory"] = storage.forcedata[force.name]["victory"] or 0
     if general.silo == 2 then
         check_spawn_silo(force)
+    end
+    for _, name in pairs(general.technologies.removed_technologies()) do
+        if force.technologies[name] then
+            force.technologies[name].researched = true
+        else
+            log("Recoverable Error: No technology found for name "..name.." in removed_technologies")
+        end
     end
 end
 
@@ -285,6 +293,27 @@ commands.add_command("ap-spawn-silo", "Attempts to spawn a silo and cargo landin
     end
 end)
 
+commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
+    rcon.print(helpers.table_to_json({
+        ["slot_name"] = general.slot_name,
+        ["seed_name"] = general.seed_name,
+        ["death_link"] = DEATH_LINK,
+        ["energy_link"] = ENERGY_INCREMENT
+    }))
+end)
+
+commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
+    game.print(call.parameter)
+end)
+
+commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
+    log("Player command toggle-ap-send-filter") -- notifies client
+end)
+
+commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
+    log("Player command toggle-ap-chat") -- notifies client
+end)
+
 local lib = {}
 lib.events = {
     [defines.events.on_forces_merging] = on_forces_merging,
@@ -295,6 +324,7 @@ lib.events = {
     [defines.events.on_player_changed_force] = on_player_changed_force,
     [defines.events.on_player_removed] = on_player_removed,
     [defines.events.on_rocket_launched] = on_rocket_launched,
+    --[defines.events.on_surface_created] = on_surface_created,
     --[defines.events.on_surface_created] = on_surface_created,
 }
 lib.on_init = on_init

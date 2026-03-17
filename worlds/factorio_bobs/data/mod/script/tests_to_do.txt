@@ -43,3 +43,5 @@ Single player:
 
     test both victory conditions.
 
+    make a removed technology that does not exist (but does get put in the list) and watch if the Log file contains an error.
+

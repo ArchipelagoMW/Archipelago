@@ -1,12 +1,16 @@
 
+
+-- FILE NOT IS USE, USED FOR TRANSCRIBIN PURUSSES
+
+
 local general = require("Archipelago.general")
-local library = require("libs/lib")
-local util = require("util")
+--local library = require("libs/lib")
+--local util = require("util")
 
 local SLOT_NAME = "{{ slot_name }}"
 local SEED_NAME = "{{ seed_name }}"
-local TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
-local GOAL = {{ goal }}
+--local TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
+--local GOAL = {{ goal }}
 --local ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 --local ARCHIPELAGO_ENERGY_LINK_SETTING = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
 --local ENERGY_LINK_EFFICIENCY = 0.75
@@ -27,7 +31,7 @@ local GOAL = {{ goal }}
 --CURRENTLY_DEATH_LOCK = 0
 
 -- Handle the pathfinding result of teleport traps
-script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
+--script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
 
 --function count_energy_bridges()
 --    local count = 0
@@ -182,13 +186,13 @@ script.on_event(defines.events.on_script_path_request_finished, handle_teleport_
 
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
-function on_force_created(event)
-    local force = event.force
-    if type(event.force) == "string" then  -- should be of type LuaForce
-        force = game.forces[force]
-    end
-    local data = {}
-    data['earned_samples'] = {{ dict_to_lua(starting_items) }}
+--function on_force_created(event)
+--    local force = event.force
+--    if type(event.force) == "string" then  -- should be of type LuaForce
+--        force = game.forces[force]
+--    end
+--    local data = {}
+--    data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     --data["victory"] = 0
     --data["death_link_tick"] = 0
     --data["energy"] = 0
@@ -198,11 +202,11 @@ function on_force_created(event)
 --    check_spawn_silo(force)
 --{%- endif %}
 --Cosmic: this will either need to go in miscellaneous or item_handling.
-{%- for tech_name in removed_technologies %}
-    force.technologies["{{ tech_name }}"].researched = true
-{%- endfor %}
-end
-script.on_event(defines.events.on_force_created, on_force_created)
+--{%- for tech_name in removed_technologies %}
+--    force.technologies["{{ tech_name }}"].researched = true
+--{%- endfor %}
+--end
+--script.on_event(defines.events.on_force_created, on_force_created)
 
 -- Destroy force data.  This doesn't appear to be currently possible with the Factorio API, but here for completeness.
 --function on_force_destroyed(event)
@@ -247,25 +251,25 @@ script.on_event(defines.events.on_force_created, on_force_created)
 
 -- Initialize player data, either from them joining the game or them already being part of the game when the mod was
 -- added.`
-function on_player_created(event)
-    local player = game.players[event.player_index]
-    -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
-    -- For now, they will (probably) always be on the 'player' force when this event fires.
-    local data = {}
-    --if settings.global[ARCHIPELAGO_ENERGY_LINK_SETTING].value then
-    --    player.force.recipes["ap-energy-bridge"].enabled=true
-    --else
-    --    player.force.recipes["ap-energy-bridge"].enabled=false
-    --end
-    data['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
-    storage.playerdata[player.index] = data
-    update_player(player.index)  -- Attempt to send pending free samples, if relevant.
---{%- if silo == 2 %}
---    check_spawn_silo(game.players[event.player_index].force)
---{%- endif %}
-    dumpInfo(player.force)
-end
-script.on_event(defines.events.on_player_created, on_player_created)
+--function on_player_created(event)
+--    local player = game.players[event.player_index]
+--    -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
+--    -- For now, they will (probably) always be on the 'player' force when this event fires.
+--    local data = {}
+--    --if settings.global[ARCHIPELAGO_ENERGY_LINK_SETTING].value then
+--    --    player.force.recipes["ap-energy-bridge"].enabled=true
+--    --else
+--    --    player.force.recipes["ap-energy-bridge"].enabled=false
+--    --end
+--    data['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
+--    storage.playerdata[player.index] = data
+--    update_player(player.index)  -- Attempt to send pending free samples, if relevant.
+----{%- if silo == 2 %}
+----    check_spawn_silo(game.players[event.player_index].force)
+----{%- endif %}
+--    dumpInfo(player.force)
+--end
+--script.on_event(defines.events.on_player_created, on_player_created)
 
 -- Create/destroy silo for force if player switched force
 -- Cosmic: ensure that the despawning only happens if the force has no more players.
@@ -277,10 +281,10 @@ script.on_event(defines.events.on_player_created, on_player_created)
 --end
 --script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
 
-function on_player_removed(event)
-    storage.playerdata[event.player_index] = nil
-end
-script.on_event(defines.events.on_player_removed, on_player_removed)
+--function on_player_removed(event)
+--    storage.playerdata[event.player_index] = nil
+--end
+--script.on_event(defines.events.on_player_removed, on_player_removed)
 
 --function on_rocket_launched(event)
 --    if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
@@ -305,164 +309,164 @@ script.on_event(defines.events.on_player_removed, on_player_removed)
 --script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
 -- Updates a player, attempting to send them any pending samples (if relevant)
-function update_player(index)
-    local player = game.players[index]
-    if not player or not player.valid then     -- Do nothing if we reference an invalid player somehow
-        return
-    end
-    local character = player.character or player.cutscene_character
-    if not character or not character.valid then
-        return
-    end
-    local data = storage.playerdata[index]
-    local samples = data['pending_samples']
-    local sent
-    --player.print(serpent.block(data['pending_samples']))
-    local stack = {}
-
-    for name, count in pairs(samples) do
-        stack.name = name
-        stack.count = count
-        if script.active_mods["quality"] then
-            stack.quality = general.free_samples.quality
-        end
-        if prototypes.item[name] and prototypes.item[name].subgroup == "science-pack" then
-            samples[name] = nil -- remove science-pack from the list
-        elseif stack.count > 0 and prototypes.item[name] then
-            if character.can_insert(stack) then
-                sent = character.insert(stack)
-            else
-                sent = 0
-            end
-            if sent > 0 then
-                player.print("Received " .. sent .. "x [item=" .. name .. ",quality="..general.free_samples.quality.."]")
-                data.suppress_full_inventory_message = false
-            end
-            if sent ~= count then               -- Couldn't full send.
-                if not data.suppress_full_inventory_message then
-                    player.print("Additional items will be sent when inventory space is available.", {r=1, g=1, b=0.25})
-                end
-                data.suppress_full_inventory_message = true -- Avoid spamming them with repeated full inventory messages.
-                samples[name] = count - sent    -- Buffer the remaining items
-                break                           -- Stop trying to send other things
-            else
-                samples[name] = nil             -- Remove from the list
-            end
-        elseif stack.count > 0 then
-            player.print("Unable to receive " .. count .. "x [item=" .. name .. "] as this item does not exist.")
-            samples[name] = nil
-        end
-    end
-
-end
+--function update_player(index)
+--    local player = game.players[index]
+--    if not player or not player.valid then     -- Do nothing if we reference an invalid player somehow
+--        return
+--    end
+--    local character = player.character or player.cutscene_character
+--    if not character or not character.valid then
+--        return
+--    end
+--    local data = storage.playerdata[index]
+--    local samples = data['pending_samples']
+--    local sent
+--    --player.print(serpent.block(data['pending_samples']))
+--    local stack = {}
+--
+--    for name, count in pairs(samples) do
+--        stack.name = name
+--        stack.count = count
+--        if script.active_mods["quality"] then
+--            stack.quality = general.free_samples.quality
+--        end
+--        if prototypes.item[name] and prototypes.item[name].subgroup == "science-pack" then
+--            samples[name] = nil -- remove science-pack from the list
+--        elseif stack.count > 0 and prototypes.item[name] then
+--            if character.can_insert(stack) then
+--                sent = character.insert(stack)
+--            else
+--                sent = 0
+--            end
+--            if sent > 0 then
+--                player.print("Received " .. sent .. "x [item=" .. name .. ",quality="..general.free_samples.quality.."]")
+--                data.suppress_full_inventory_message = false
+--            end
+--            if sent ~= count then               -- Couldn't full send.
+--                if not data.suppress_full_inventory_message then
+--                    player.print("Additional items will be sent when inventory space is available.", {r=1, g=1, b=0.25})
+--                end
+--                data.suppress_full_inventory_message = true -- Avoid spamming them with repeated full inventory messages.
+--                samples[name] = count - sent    -- Buffer the remaining items
+--                break                           -- Stop trying to send other things
+--            else
+--                samples[name] = nil             -- Remove from the list
+--            end
+--        elseif stack.count > 0 then
+--            player.print("Unable to receive " .. count .. "x [item=" .. name .. "] as this item does not exist.")
+--            samples[name] = nil
+--        end
+--    end
+--
+--end
 
 -- Update players upon them connecting, since updates while they're offline are suppressed.
-script.on_event(defines.events.on_player_joined_game, function(event) update_player(event.player_index) end)
+--script.on_event(defines.events.on_player_joined_game, function(event) update_player(event.player_index) end)
+--
+--function update_player_event(event)
+--    update_player(event.player_index)
+--end
+--
+--script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
+--
+---- Update players when the cutscene is cancelled or finished.  (needed for skins_factored)
+--script.on_event(defines.events.on_cutscene_cancelled, update_player_event)
+--script.on_event(defines.events.on_cutscene_finished, update_player_event)
 
-function update_player_event(event)
-    update_player(event.player_index)
-end
+--function add_samples(force, name, count)
+--    local function add_to_table(t)
+--        if count <= 0 then
+--            -- Fixes a bug with single craft, if a recipe gives 0 of a given item.
+--            return
+--        end
+--        t[name] = (t[name] or 0) + count
+--    end
+--    if prototypes.item[name] then
+--        count = math.min(count, prototypes.item[name].stack_size)
+--        -- check if been given before
+--        if storage.forcedata[force.name]['earned_samples'][name] ~= nil then
+--            count = count - storage.forcedata[force.name]['earned_samples'][name]
+--            if count <= 0 then
+--                return
+--            end
+--        end
+--        -- Add to storage table of earned samples for future new players
+--        add_to_table(storage.forcedata[force.name]['earned_samples'])
+--        -- Add to existing players
+--        for _, player in pairs(force.players) do
+--            add_to_table(storage.playerdata[player.index]['pending_samples'])
+--            update_player(player.index)
+--        end
+--    end
+--end
 
-script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
-
--- Update players when the cutscene is cancelled or finished.  (needed for skins_factored)
-script.on_event(defines.events.on_cutscene_cancelled, update_player_event)
-script.on_event(defines.events.on_cutscene_finished, update_player_event)
-
-function add_samples(force, name, count)
-    local function add_to_table(t)
-        if count <= 0 then
-            -- Fixes a bug with single craft, if a recipe gives 0 of a given item.
-            return
-        end
-        t[name] = (t[name] or 0) + count
-    end
-    if prototypes.item[name] then
-        count = math.min(count, prototypes.item[name].stack_size)
-        -- check if been given before
-        if storage.forcedata[force.name]['earned_samples'][name] ~= nil then
-            count = count - storage.forcedata[force.name]['earned_samples'][name]
-            if count <= 0 then
-                return
-            end
-        end
-        -- Add to storage table of earned samples for future new players
-        add_to_table(storage.forcedata[force.name]['earned_samples'])
-        -- Add to existing players
-        for _, player in pairs(force.players) do
-            add_to_table(storage.playerdata[player.index]['pending_samples'])
-            update_player(player.index)
-        end
-    end
-end
-
-script.on_init(function()
-    {% if not imported_blueprints %}set_permissions(){% endif %}
-    storage.forcedata = {}
-    storage.playerdata = {}
-    storage.energy_link_bridges = {}
+--script.on_init(function()
+    --{% if not imported_blueprints %}set_permissions(){% endif %}
+    --storage.forcedata = {}
+    --storage.playerdata = {}
+    --storage.energy_link_bridges = {}
     -- Fire dummy events for all currently existing forces.
-    local e = {}
-    for name, _ in pairs(game.forces) do
-        e.force = name
-        on_force_created(e)
-    end
-    e.force = nil
+    --local e = {}
+    --for name, _ in pairs(game.forces) do
+    --    e.force = name
+    --    on_force_created(e)
+    --end
+    --e.force = nil
 
     -- Fire dummy events for all currently existing players.
-    for index, _ in pairs(game.players) do
-        e.player_index = index
-        on_player_created(e)
-    end
+    --for index, _ in pairs(game.players) do
+    --    e.player_index = index
+    --    on_player_created(e)
+    --end
 
-    if remote.interfaces["silo_script"] then
-        remote.call("silo_script", "set_no_victory", true)
-    end
-end)
+    --if remote.interfaces["silo_script"] then
+    --    remote.call("silo_script", "set_no_victory", true)
+    --end
+--end)
 
 -- hook into researches done
-script.on_event(defines.events.on_research_finished, function(event)
-    local technology = event.research
-    if string.find(technology.force.name, "EE_TESTFORCE") == 1 then
-        --Don't acknowledge AP research as an Editor Extensions test force
-        --Also no need for free samples in the Editor extensions testing surfaces, as these testing surfaces
-        --are worked on exclusively in editor mode.
-        return
-    end
-    if technology.researched and string.find(technology.name, "ap%-") == 1 then
-        -- check if it came from the server anyway, then we don't need to double send.
-        dumpInfo(technology.force) --is sendable
-    else
-        if general.free_samples.state == 0 then
-            return  -- Nothing else to do
-        end
-        if not technology.prototype.effects then
-            return  -- No technology effects, so nothing to do.
-        end
-        for _, effect in pairs(technology.prototype.effects) do
-            if effect.type == "unlock-recipe" then
-                local recipe = prototypes.recipe[effect.recipe]
-                for _, result in pairs(recipe.products) do
-                    if result.type == "item" and result.amount then
-                        local name = result.name
-                        if general.free_samples.get_black_list()[name] ~= true then
-                            local count
-                            if general.free_samples.state == 1 then
-                                count = result.amount
-                            else
-                                count = get_any_stack_size(result.name)
-                                if general.free_samples.state == 2 then
-                                    count = math.ceil(count / 2)
-                                end
-                            end
-                            add_samples(technology.force, name, count)
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
+--script.on_event(defines.events.on_research_finished, function(event)
+--    local technology = event.research
+--    if string.find(technology.force.name, "EE_TESTFORCE") == 1 then
+--        --Don't acknowledge AP research as an Editor Extensions test force
+--        --Also no need for free samples in the Editor extensions testing surfaces, as these testing surfaces
+--        --are worked on exclusively in editor mode.
+--        return
+--    end
+--    if technology.researched and string.find(technology.name, "ap%-") == 1 then
+--        -- check if it came from the server anyway, then we don't need to double send.
+--        dumpInfo(technology.force) --is sendable
+--    else
+--        if general.free_samples.state == 0 then
+--            return  -- Nothing else to do
+--        end
+--        if not technology.prototype.effects then
+--            return  -- No technology effects, so nothing to do.
+--        end
+--        for _, effect in pairs(technology.prototype.effects) do
+--            if effect.type == "unlock-recipe" then
+--                local recipe = prototypes.recipe[effect.recipe]
+--                for _, result in pairs(recipe.products) do
+--                    if result.type == "item" and result.amount then
+--                        local name = result.name
+--                        if general.free_samples.get_black_list()[name] ~= true then
+--                            local count
+--                            if general.free_samples.state == 1 then
+--                                count = result.amount
+--                            else
+--                                count = get_any_stack_size(result.name)
+--                                if general.free_samples.state == 2 then
+--                                    count = math.ceil(count / 2)
+--                                end
+--                            end
+--                            add_samples(technology.force, name, count)
+--                        end
+--                    end
+--                end
+--            end
+--        end
+--    end
+--end)
 
 --this function is now in the lib.lua
 --function dumpInfo(force)
@@ -470,15 +474,15 @@ end)
 --end
 
 
-function chain_lookup(table, ...)
-    for _, k in ipairs{...} do
-        table = table[k]
-        if not table then
+--function chain_lookup(table, ...)
+--    for _, k in ipairs{...} do
+--        table = table[k]
+--        if not table then
             return nil
-        end
-    end
-    return table
-end
+--        end
+--    end
+--    return table
+--end
 
 --function kill_players(force)
 --    CURRENTLY_DEATH_LOCK = 1
@@ -492,107 +496,107 @@ end
 --    CURRENTLY_DEATH_LOCK = 0
 --end
 
-function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
-    local prototype = prototypes.entity[name]
-    local args = {  -- For can_place_entity and place_entity
-        name = prototype.name,
-        position = {x = x, y = y},
-        force = force.name,
-        build_check_type = defines.build_check_type.blueprint_ghost,
-        forced = true
-    }
-
-    local box = prototype.selection_box
-    local dims = {
-        w = box.right_bottom.x - box.left_top.x,
-        h = box.right_bottom.y - box.left_top.y
-    }
-    local entity_radius = math.ceil(math.max(dims.w, dims.h) / math.sqrt(2) / 2)
-    local bounds = {
-        xmin = math.ceil(x - radius - box.left_top.x),
-        xmax = math.floor(x + radius - box.right_bottom.x),
-        ymin = math.ceil(y - radius - box.left_top.y),
-        ymax = math.floor(y + radius - box.right_bottom.y)
-    }
-
-    local new_entity = nil
-    local attempts = 1000
-    for i = 1,attempts do  -- Try multiple times
-        -- Find a position
-        if (randomize and i < attempts-3) or (not randomize and i ~= 1) then
-            args.position.x = math.random(bounds.xmin, bounds.xmax)
-            args.position.y = math.random(bounds.ymin, bounds.ymax)
-        elseif randomize then
-            args.position.x = x + (i + 3 - attempts) * dims.w
-            args.position.y = y + (i + 3 - attempts) * dims.h
-        end
-        -- Generate required chunks
-        local x1 = args.position.x + box.left_top.x
-        local x2 = args.position.x + box.right_bottom.x
-        local y1 = args.position.y + box.left_top.y
-        local y2 = args.position.y + box.right_bottom.y
-        if not surface.is_chunk_generated({x = x1, y = y1}) or
-           not surface.is_chunk_generated({x = x2, y = y1}) or
-           not surface.is_chunk_generated({x = x1, y = y2}) or
-           not surface.is_chunk_generated({x = x2, y = y2}) then
-            surface.request_to_generate_chunks(args.position, entity_radius)
-            surface.force_generate_chunk_requests()
-        end
-        -- Try to place entity
-        if surface.can_place_entity(args) then
-            -- Can hypothetically place this entity here.  Destroy everything underneath it.
-            local collision_area = {
-                {
-                    args.position.x + prototype.collision_box.left_top.x,
-                    args.position.y + prototype.collision_box.left_top.y
-                },
-                {
-                    args.position.x + prototype.collision_box.right_bottom.x,
-                    args.position.y + prototype.collision_box.right_bottom.y
-                }
-            }
-            local entities = surface.find_entities_filtered {
-                area = collision_area,
-                collision_mask = prototype.collision_mask.layers
-            }
-            local can_place = true
-            for _, entity in pairs(entities) do
-                if entity.force and entity.force.name ~= 'neutral' then
-                    can_place = false
-                    break
-                end
-            end
-            local allow_placement_on_resources = not avoid_ores or i > attempts/2
-            if can_place and not allow_placement_on_resources then
-                local resources = surface.find_entities_filtered {
-                    area = collision_area,
-                    type = 'resource'
-                }
-                can_place = (next(resources) == nil)
-            end
-            if can_place then
-                for _, entity in pairs(entities) do
-                    entity.destroy({do_cliff_correction=true, raise_destroy=true})
-                end
-                args.build_check_type = defines.build_check_type.script
-                args.create_build_effect_smoke = false
-                if script.active_mods["quality"] then
-                    args.quality = general.free_samples.quality
-                end
-                new_entity = surface.create_entity(args)
-                if new_entity then
-                    new_entity.destructible = false
-                    new_entity.minable = false
-                    new_entity.rotatable = false
-                    break
-                end
-            end
-        end
-    end
-    if new_entity == nil then
-        force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
-    end
-end
+--function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
+--    local prototype = prototypes.entity[name]
+--    local args = {  -- For can_place_entity and place_entity
+--        name = prototype.name,
+--        position = {x = x, y = y},
+--        force = force.name,
+--        build_check_type = defines.build_check_type.blueprint_ghost,
+--        forced = true
+--    }
+--
+--    local box = prototype.selection_box
+--    local dims = {
+--        w = box.right_bottom.x - box.left_top.x,
+--        h = box.right_bottom.y - box.left_top.y
+--    }
+--    local entity_radius = math.ceil(math.max(dims.w, dims.h) / math.sqrt(2) / 2)
+--    local bounds = {
+--        xmin = math.ceil(x - radius - box.left_top.x),
+--        xmax = math.floor(x + radius - box.right_bottom.x),
+--        ymin = math.ceil(y - radius - box.left_top.y),
+--        ymax = math.floor(y + radius - box.right_bottom.y)
+--    }
+--
+--    local new_entity = nil
+--    local attempts = 1000
+--    for i = 1,attempts do  -- Try multiple times
+--        -- Find a position
+--        if (randomize and i < attempts-3) or (not randomize and i ~= 1) then
+--            args.position.x = math.random(bounds.xmin, bounds.xmax)
+--            args.position.y = math.random(bounds.ymin, bounds.ymax)
+--        elseif randomize then
+--            args.position.x = x + (i + 3 - attempts) * dims.w
+--            args.position.y = y + (i + 3 - attempts) * dims.h
+--        end
+--        -- Generate required chunks
+--        local x1 = args.position.x + box.left_top.x
+--        local x2 = args.position.x + box.right_bottom.x
+--        local y1 = args.position.y + box.left_top.y
+--        local y2 = args.position.y + box.right_bottom.y
+--        if not surface.is_chunk_generated({x = x1, y = y1}) or
+--           not surface.is_chunk_generated({x = x2, y = y1}) or
+--           not surface.is_chunk_generated({x = x1, y = y2}) or
+--           not surface.is_chunk_generated({x = x2, y = y2}) then
+--            surface.request_to_generate_chunks(args.position, entity_radius)
+--            surface.force_generate_chunk_requests()
+--        end
+--        -- Try to place entity
+--        if surface.can_place_entity(args) then
+--            -- Can hypothetically place this entity here.  Destroy everything underneath it.
+--            local collision_area = {
+--                {
+--                    args.position.x + prototype.collision_box.left_top.x,
+--                    args.position.y + prototype.collision_box.left_top.y
+--                },
+--                {
+--                    args.position.x + prototype.collision_box.right_bottom.x,
+--                    args.position.y + prototype.collision_box.right_bottom.y
+--                }
+--            }
+--            local entities = surface.find_entities_filtered {
+--                area = collision_area,
+--                collision_mask = prototype.collision_mask.layers
+--            }
+--            local can_place = true
+--            for _, entity in pairs(entities) do
+--                if entity.force and entity.force.name ~= 'neutral' then
+--                    can_place = false
+--                    break
+--                end
+--            end
+--            local allow_placement_on_resources = not avoid_ores or i > attempts/2
+--            if can_place and not allow_placement_on_resources then
+--                local resources = surface.find_entities_filtered {
+--                    area = collision_area,
+--                    type = 'resource'
+--                }
+--                can_place = (next(resources) == nil)
+--            end
+--            if can_place then
+--                for _, entity in pairs(entities) do
+--                    entity.destroy({do_cliff_correction=true, raise_destroy=true})
+--                end
+--                args.build_check_type = defines.build_check_type.script
+--                args.create_build_effect_smoke = false
+--                if script.active_mods["quality"] then
+--                    args.quality = general.free_samples.quality
+--                end
+--                new_entity = surface.create_entity(args)
+--                if new_entity then
+--                    new_entity.destructible = false
+--                    new_entity.minable = false
+--                    new_entity.rotatable = false
+--                    break
+--                end
+--            end
+--        end
+--    end
+--    if new_entity == nil then
+--        force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
+--    end
+--end
 
 
 --script.on_event(defines.events.on_entity_died, function(event)
@@ -611,154 +615,154 @@ end
 
 
 -- add / commands
-commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
-    local force
-    if call.player_index == nil then
-        force = game.forces.player
-    else
-        force = game.players[call.player_index].force
-    end
-    local research_done = {}
-    local forcedata = chain_lookup(storage, "forcedata", force.name)
-    local data_collection = {
-        ["research_done"] = research_done,
-        ["victory"] = chain_lookup(forcedata, "victory"),
-        ["death_link_tick"] = chain_lookup(forcedata, "death_link_tick"),
-        ["death_link"] = DEATH_LINK,
-        ["energy"] = chain_lookup(forcedata, "energy"),
-        ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
-        ["multiplayer"] = #game.players > 1,
-    }
+--commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
+--    local force
+--    if call.player_index == nil then
+--        force = game.forces.player
+--    else
+--        force = game.players[call.player_index].force
+--    end
+--    local research_done = {}
+--    local forcedata = chain_lookup(storage, "forcedata", force.name)
+--    local data_collection = {
+--        ["research_done"] = research_done,
+--        ["victory"] = chain_lookup(forcedata, "victory"),
+--        ["death_link_tick"] = chain_lookup(forcedata, "death_link_tick"),
+--        ["death_link"] = DEATH_LINK,
+--        ["energy"] = chain_lookup(forcedata, "energy"),
+--        ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
+--        ["multiplayer"] = #game.players > 1,
+--    }
+--
+--    for tech_name, tech in pairs(force.technologies) do
+--        if tech.researched and string.find(tech_name, "ap%-") == 1 then
+--            research_done[tech_name] = tech.researched
+--        end
+--    end
+--    rcon.print(helpers.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
+--end)
 
-    for tech_name, tech in pairs(force.technologies) do
-        if tech.researched and string.find(tech_name, "ap%-") == 1 then
-            research_done[tech_name] = tech.researched
-        end
-    end
-    rcon.print(helpers.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
-end)
+--commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
+--    game.print(call.parameter)
+--end)
 
-commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
-    game.print(call.parameter)
-end)
+--TRAP_TABLE = {
+--["Attack Trap"] = function ()
+--    game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
+--end,
+--["Evolution Trap"] = function ()
+--    local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
+--        (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
+--    game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
+--    game.print({"", "New evolution factor:", new_factor})
+--end,
+--["Teleport Trap"] = function()
+--    for _, player in ipairs(game.forces["player"].players) do
+--        if player.character then
+--            attempt_teleport_player(player, 1)
+--        end
+--    end
+--end,
+--["Grenade Trap"] = function ()
+--    fire_entity_at_players("grenade", 0.1)
+--end,
+--["Cluster Grenade Trap"] = function ()
+--    fire_entity_at_players("cluster-grenade", 0.1)
+--end,
+--["Artillery Trap"] = function ()
+--    fire_entity_at_players("artillery-projectile", 1)
+--end,
+--["Atomic Rocket Trap"] = function ()
+--    fire_entity_at_players("atomic-rocket", 0.1)
+--end,
+--["Atomic Cliff Remover Trap"] = function ()
+--    local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
+--
+--    if #cliffs > 0 then
+--        fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
+--    end
+--end,
+--["Inventory Spill Trap"] = function ()
+--    for _, player in ipairs(game.forces["player"].players) do
+--        spill_character_inventory(player.character)
+--    end
+--end,
+--}
 
-TRAP_TABLE = {
-["Attack Trap"] = function ()
-    game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
-end,
-["Evolution Trap"] = function ()
-    local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
-        (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
-    game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
-    game.print({"", "New evolution factor:", new_factor})
-end,
-["Teleport Trap"] = function()
-    for _, player in ipairs(game.forces["player"].players) do
-        if player.character then
-            attempt_teleport_player(player, 1)
-        end
-    end
-end,
-["Grenade Trap"] = function ()
-    fire_entity_at_players("grenade", 0.1)
-end,
-["Cluster Grenade Trap"] = function ()
-    fire_entity_at_players("cluster-grenade", 0.1)
-end,
-["Artillery Trap"] = function ()
-    fire_entity_at_players("artillery-projectile", 1)
-end,
-["Atomic Rocket Trap"] = function ()
-    fire_entity_at_players("atomic-rocket", 0.1)
-end,
-["Atomic Cliff Remover Trap"] = function ()
-    local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
-
-    if #cliffs > 0 then
-        fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
-    end
-end,
-["Inventory Spill Trap"] = function ()
-    for _, player in ipairs(game.forces["player"].players) do
-        spill_character_inventory(player.character)
-    end
-end,
-}
-
-commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
-    if storage.index_sync == nil then
-        storage.index_sync = {}
-    end
-    local tech
-    local force = game.forces["player"]
-    if call.parameter == nil then
-        game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
-        return
-    end
-    chunks = split(call.parameter, "\t")
-    local item_name = chunks[1]
-    local index = chunks[2]
-    local source = chunks[3] or "Archipelago"
-    if index == nil then
-        game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
-        return
-    elseif index == -1 then -- for coop sync and restoring from an older savegame
-        tech = force.technologies[item_name]
-        if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
-            game.play_sound({path="utility/research_completed"})
-            tech.researched = true
-        end
-        return
-    elseif progressive_technologies[item_name] ~= nil then
-        if storage.index_sync[index] ~= item_name then -- not yet received prog item
-            storage.index_sync[index] = item_name
-            local tech_stack = progressive_technologies[item_name]
-            for _, item_name in ipairs(tech_stack) do
-                tech = force.technologies[item_name]
-                if tech.researched ~= true then
-                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
-                    game.play_sound({path="utility/research_completed"})
-                    tech.researched = true
-                    return
-                end
-            end
-        end
-    elseif force.technologies[item_name] ~= nil then
-        tech = force.technologies[item_name]
-        if tech ~= nil and storage.index_sync[index] ~= tech then
-            storage.index_sync[index] = tech
-            game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
-            game.play_sound({path="utility/research_completed"})
-            tech.researched = true
-        end
-    elseif TRAP_TABLE[item_name] ~= nil then
-        if storage.index_sync[index] ~= item_name then -- not yet received trap
-            storage.index_sync[index] = item_name
-            game.print({"", "Received ", item_name, " from ", source})
-            TRAP_TABLE[item_name]()
-        end
-    else
-        game.print("Unknown Item " .. item_name)
-    end
-end)
-
-
-commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    rcon.print(helpers.table_to_json({
-        ["slot_name"] = SLOT_NAME,
-        ["seed_name"] = SEED_NAME,
-        ["death_link"] = DEATH_LINK,
-        ["energy_link"] = ENERGY_INCREMENT
-    }))
-end)
+--commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
+--    if storage.index_sync == nil then
+--        storage.index_sync = {}
+--    end
+--    local tech
+--    local force = game.forces["player"]
+--    if call.parameter == nil then
+--        game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
+--        return
+--    end
+--    chunks = split(call.parameter, "\t")
+--    local item_name = chunks[1]
+--    local index = chunks[2]
+--    local source = chunks[3] or "Archipelago"
+--    if index == nil then
+--        game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
+--        return
+--    elseif index == -1 then -- for coop sync and restoring from an older savegame
+--        tech = force.technologies[item_name]
+--        if tech.researched ~= true then
+--            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
+--            game.play_sound({path="utility/research_completed"})
+--            tech.researched = true
+--        end
+--        return
+--    elseif progressive_technologies[item_name] ~= nil then
+--        if storage.index_sync[index] ~= item_name then -- not yet received prog item
+--            storage.index_sync[index] = item_name
+--            local tech_stack = progressive_technologies[item_name]
+--            for _, item_name in ipairs(tech_stack) do
+--                tech = force.technologies[item_name]
+--                if tech.researched ~= true then
+--                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+--                    game.play_sound({path="utility/research_completed"})
+--                    tech.researched = true
+--                    return
+--                end
+--            end
+--        end
+--    elseif force.technologies[item_name] ~= nil then
+--        tech = force.technologies[item_name]
+--        if tech ~= nil and storage.index_sync[index] ~= tech then
+--            storage.index_sync[index] = tech
+--            game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+--            game.play_sound({path="utility/research_completed"})
+--            tech.researched = true
+--        end
+--    elseif TRAP_TABLE[item_name] ~= nil then
+--        if storage.index_sync[index] ~= item_name then -- not yet received trap
+--            storage.index_sync[index] = item_name
+--            game.print({"", "Received ", item_name, " from ", source})
+--            TRAP_TABLE[item_name]()
+--        end
+--    else
+--        game.print("Unknown Item " .. item_name)
+--    end
+--end)
 
 
-{% if allow_cheats -%}
-commands.add_command("ap-spawn-silo", "Attempts to spawn a silo and cargo landing pad around 0,0", function(call)
-    spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
-end)
-{% endif -%}
+--commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
+--    rcon.print(helpers.table_to_json({
+--        ["slot_name"] = SLOT_NAME,
+--        ["seed_name"] = SEED_NAME,
+--        ["death_link"] = DEATH_LINK,
+--        ["energy_link"] = ENERGY_INCREMENT
+--    }))
+--end)
+
+
+--{% if allow_cheats -%}
+--commands.add_command("ap-spawn-silo", "Attempts to spawn a silo and cargo landing pad around 0,0", function(call)
+--    spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
+--end)
+--{% endif -%}
 
 
 --commands.add_command("ap-deathlink", "Kill all players", function(call)
@@ -778,13 +782,13 @@ end)
 --    log("Player command energy-link") -- notifies client
 --end)
 
-commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
-    log("Player command toggle-ap-send-filter") -- notifies client
-end)
+--commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
+--    log("Player command toggle-ap-send-filter") -- notifies client
+--end)
 
-commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
-    log("Player command toggle-ap-chat") -- notifies client
-end)
+--commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
+--    log("Player command toggle-ap-chat") -- notifies client
+--end)
 
 -- data
-progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}
+--progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}

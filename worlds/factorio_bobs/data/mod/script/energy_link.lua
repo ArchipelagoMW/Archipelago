@@ -124,6 +124,7 @@ end
 
 local function on_force_created(event)
     local force = event.force
+    storage.forcedata[force.name] = storage.forcedata[force.name] or {}
     storage.forcedata[force.name]["energy"] = storage.forcedata[force.name]["energy"] or 0
     storage.forcedata[force.name]["energy_bridges"] = storage.forcedata[force.name]["energy_bridges"] or 0
     if energy_link_setting.value then

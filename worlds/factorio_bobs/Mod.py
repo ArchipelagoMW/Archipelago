@@ -205,8 +205,8 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     #                                  data_template.render(**template_data)))
     #mod.writing_tasks.append(lambda: (versioned_mod_name + "/data-final-fixes.lua",
     #                                  data_final_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
-                                      control_template.render(**template_data)))
+    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
+    #                                  control_template.render(**template_data)))
     #mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
     #                                  settings_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/settings-final-fixes.lua",

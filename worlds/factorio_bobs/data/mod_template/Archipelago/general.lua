@@ -13,6 +13,7 @@ general.goal = {{ goal }} -- 0 = rocket and 1 == satelite
 general.silo = {{ silo }} -- 0 = normal silo, 1 = random recipe, 2 = spawned at the start of the game.
 general.allow_import_blueprints = {% if imported_blueprints %}true{% else %}false{% endif %}
 general.allow_cheats =  {% if allow_cheats %}true{% else %}false{% endif %}
+general.player_forces = {"player", "team-1", "team-2", "team-3", "team-4"} --possibly add a modpack setting that allow for adding more forces on the players side.
 
 -- mod settings
 general.mod_setting_names = {}
@@ -38,6 +39,9 @@ general.science_packs.allowed = {{ variable_to_lua(allowed_science_packs) }}
 general.free_samples = {}
 general.free_samples.quality = "{{free_sample_quality_name}}"
 general.free_samples.state = {{ free_samples }} --0 means no samples, 1 means single craft, and 2 means half a stack, 3 means full stack.
+function general.free_samples.get_starter_tems ()
+    return {{ dict_to_lua(starting_items) }}
+end
 
 function general.free_samples.get_black_list()--returns a big list of all items. false / nil is whitelist and true is blacklisted.
     return {{ variable_to_lua(free_sample_blacklist) }}
@@ -54,9 +58,12 @@ function general.technologies.hide_from_player() -- returns a list of all the te
     {% endfor %}
     }
 end
-general.technologies.progressive = function ()
+function general.technologies.progressive ()
     --has an test in final-fixes that will throw out the name of the place it is erroring at.
     return {{ variable_to_lua(progressive_technology_table) }}
+end
+function general.technologies.removed_technologies ()
+    return {{ variable_to_lua(removed_technologies) }}
 end
 
 --recipes
@@ -138,5 +145,9 @@ end
 
 --map generation
 general.map_preset = {{ dict_to_lua({"default": False, "order": "a", "basic_settings": world_gen_settings["basic"], "advanced_settings": world_gen_settings["advanced"]}) }}
+
+--traps
+general.traps = {}
+general.traps.evo_increase = {{ evolution_trap_increase }} / 100
 
 return general

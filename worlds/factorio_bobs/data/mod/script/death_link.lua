@@ -59,6 +59,7 @@ end
 
 local function on_force_created(event)
     local force = event.force
+    storage.forcedata[force.name] = storage.forcedata[force.name] or {}
     storage.forcedata[force.name]["death_link_tick"] = storage.forcedata[force.name]["death_link_tick"] or 0
 end
 
