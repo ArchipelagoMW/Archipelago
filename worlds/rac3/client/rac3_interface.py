@@ -1670,7 +1670,7 @@ class Rac3Interface(GameInterface):
                     if read_message != write_message:
                         # Give the player a bit more time to read the new appended line in case it was about to
                         # expire
-                        if self.notification_time - self.current_game < 1.5:
+                        if self.notification_time - current_time < 1.5:
                             self.notification_time = current_time + 1.5
                         display_time = int((self.notification_time - current_time) * 120)
                         # A lot of messages can cause this value to go negative and if so, set a minimum display
@@ -1827,3 +1827,11 @@ class Rac3Interface(GameInterface):
         logger.info(f'Sewer Crystals Inventory: {self._read32(RAC3STATUS.CRYSTALS_CURRENT)}')
         logger.info(f'Sewer Crystals Traded: {self._read32(RAC3STATUS.CRYSTALS_TRADED)}')
         logger.info(f'Ship Slot Limit: {self.ship_slot_limit}')
+        if self.planet != RAC3REGION.QWARKS_HIDEOUT:
+            pda_vendor_str = "N/A"
+        else:
+            pda_vendor_str = hex(self.pda_vendor) if self.pda_vendor else "Not Found"
+        logger.info(f'PDA Vendor Address: {pda_vendor_str}')
+        logger.info(f'Meet Sasha Bridge: {RAC3LOCATION.PHOENIX_MEET_SASHA in self.checked_locations}')
+        logger.info(f'No Tyhrraguise Phoenix: {bool(RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations and self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status)}')
+        logger.info(f'Visited Planets: {[planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]}')
