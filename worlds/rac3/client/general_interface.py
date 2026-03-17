@@ -13,6 +13,7 @@ class GameInterface:
     current_game: Optional[str] = None
     game_id_error: Optional[str] = None
     is_connecting: bool = False
+    emulator_connected: bool = False
     pcsx2_interface: Pine = Pine()
 
     def __init__(self) -> None:
@@ -32,7 +33,7 @@ class GameInterface:
 
     def _read_float(self, address: int):
         return unpack('f', self.pcsx2_interface.read_bytes(address, 4))[0]
-    
+
     def _read_string(self, address: int, n: int):
         return self.pcsx2_interface.read_string(address, n)
 
@@ -65,22 +66,27 @@ class GameInterface:
             self.pcsx2_interface.connect()
             self.is_connecting = False
             if not self.pcsx2_interface.is_connected():
+                self.emulator_connected = False
                 logger.debug('No Connection to PCSX2 Emulator')
                 return
             logger.info('Connected to PCSX2 Emulator')
+            self.emulator_connected = True
         self.current_game = None
         try:
             self.verify_game_version()
         except RuntimeError:
             logger.warning('PCSX2 Emulator is unreachable')
+            self.emulator_connected = False
         except ConnectionError as error:
             logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
+            self.emulator_connected = False
 
     def disconnect_from_game(self):
         """Remove connection to PCSX Emulator"""
         self.pcsx2_interface.disconnect()
         self.current_game = None
         logger.info("Disconnected from PCSX2 Emulator")
+        self.emulator_connected = False
 
     def verify_game_version(self) -> bool:
         """Verify that the current game loaded in the PCSX connection has a valid game ID for Ratchet and Clank 3"""

@@ -80,6 +80,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
                     logger.info("Connection to game lost")
                 elif ctx.last_pine_message is None:
                     message = "Not connected to the PCSX2 instance"
+                    ctx.game_interface.emulator_connected = False
                     logger.info(message)
                     ctx.last_pine_message = message
                 ctx.game_interface.connect_to_game()
@@ -88,9 +89,15 @@ async def pcsx2_sync_task(ctx: 'Context'):
                         connection_retry_attempts += 1
 
                     retry_wait = connection_retry_attempts * 10
-                    logger.warning(
-                        f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check '
-                        f'your PINE settings both global and game specific, and restart PCSX2 if you changed them.')
+                    if ctx.game_interface.emulator_connected:
+                        retry_wait = 10
+                        logger.warning(
+                            f"Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nEmulator "
+                            f"already connected. Please launch RaC3.")
+                    else:
+                        logger.warning(
+                            f"Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check "
+                            f"your PINE settings both global and game specific, and restart PCSX2 if you changed them.")
                     await sleep(retry_wait)
                 else:
                     connection_retry_attempts = 0
