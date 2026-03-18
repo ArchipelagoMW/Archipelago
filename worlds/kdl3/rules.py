@@ -276,7 +276,7 @@ def set_rules(world: "KDL3World") -> None:
                      lambda state: can_reach_ice(state, world.player))
         for i in [19, *list(range(25, 30))]:
             set_rule(world.get_location(f"Cloudy Park 6 - Star {i}"),
-                     lambda state: can_reach_ice(state, world.player))
+                     lambda state: can_reach_burning(state, world.player))
         for i in range(1, 4):
             set_rule(world.get_location(f"Iceberg 4 - Star {i}"), lambda state: can_reach_burning(state, world.player))
     # copy ability access edge cases
