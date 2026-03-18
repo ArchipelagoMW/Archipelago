@@ -268,7 +268,7 @@ class PokemonEmeraldWorld(World):
         # blacklist Latios to remove its dexsanity location
         if self.options.goal == Goal.option_legendary_hunt and self.options.dexsanity \
                 and "Latios" in self.options.allowed_legendary_hunt_encounters.value \
-                and "Latios" not in self.options.wild_encounter_blacklist.value:
+                and emerald_data.constants["SPECIES_LATIOS"] not in self.blacklisted_wilds:
             self.allowed_dexsanity_species.add(emerald_data.constants["SPECIES_LATIOS"])
 
     def create_regions(self) -> None:
