@@ -241,7 +241,7 @@ refresh_components: Callable[[], None] | None = None
 
 def run_gui(launch_components: list[Component], args: Any) -> None:
     from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
-    from kivy.properties import ObjectProperty
+    from kivy.properties import ObjectProperty, BooleanProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivymd.uix.button import MDIconButton, MDButton
@@ -271,13 +271,14 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
         current_filter: Sequence[str | Type] | None
+        compact: bool = BooleanProperty(False)
 
-        def __init__(self, ctx=None, components=None, args=None):
+        def __init__(self, ctx=None, launch_components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
-            self.launch_components = components
+            self.launch_components = launch_components
             self.launch_args = args
             self.cards = []
             self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
@@ -294,6 +295,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                             else:
                                 filters.append(Type[filter])
                         self.current_filter = filters
+                if "compact" in persistent["launcher"]:
+                    self.compact = persistent["launcher"]["compact"]
             super().__init__()
 
         def set_favorite(self, caller):
@@ -440,9 +443,13 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             Utils.persistent_store("launcher", "favorites", self.favorites)
             Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
                                                                    for filter in self.current_filter))
+            Utils.persistent_store("launcher", "compact", self.compact)
             super().on_stop()
 
-    Launcher(components=launch_components, args=args).run()
+        def toggle_compact(self):
+            self.compact = not self.compact
+
+    Launcher(launch_components=launch_components, args=args).run()
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed
