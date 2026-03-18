@@ -140,6 +140,15 @@ MDFloatLayout:
 
             MDNavigationDrawerDivider:
 
+            MDBoxLayout:
+                orientation: "horizontal"
+                # MDIconButton:
+                    # icon: "cog"
+                MDIconButton:
+                    icon: "alert" if app.failed_worlds else ""
+                    disabled: not app.failed_worlds
+                    on_release: app.display_failed()
+
 
         MDGridLayout:
             id: main_layout

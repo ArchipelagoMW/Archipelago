@@ -36,6 +36,7 @@ if __name__ == "__main__":
     init_logging('Launcher')
 
 from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
+from worlds import failed_world_loads
 
 
 def open_host_yaml():
@@ -271,6 +272,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
         current_filter: Sequence[str | Type] | None
+        failed_worlds: bool = bool(failed_world_loads)
 
         def __init__(self, ctx=None, components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -412,6 +414,13 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 button.component.func()
             else:
                 launch(get_exe(button.component), button.component.cli)
+
+        def display_failed(self):
+            if not self.failed_worlds:
+                return
+            from kivymd.uix.dialog import MDDialog
+            dialog = MDDialog()
+            dialog.open()
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
