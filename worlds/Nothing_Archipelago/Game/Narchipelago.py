@@ -1,7 +1,7 @@
 from websockets.sync.client import connect
 from enum import Enum, auto
 from ap_packets import *
-from nothing import *
+#from nothing import *
 import random
 import json
 import sys

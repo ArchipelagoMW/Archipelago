@@ -1,0 +1,1 @@
+from .world import NothingWorld as NothingWorld

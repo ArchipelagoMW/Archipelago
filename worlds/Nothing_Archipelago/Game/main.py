@@ -1,4 +1,4 @@
-from settings import *
+import pygame, sys
 from Level import Level
 from ui import UI
 from os.path import join
@@ -9,25 +9,27 @@ from nothingarch import archipelagoUI
 class Game:
     def __init__(self):
         pygame.init()
-        
-        self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT),pygame.SCALED | pygame.FULLSCREEN)
-        
-        pygame.display.set_caption('Nothing_Archipelago')
-        
-        self.clock = pygame.time.Clock()
+        self.display_surface = pygame.display.set_mode((1920, 1080),pygame.SCALED | pygame.FULLSCREEN)
         self.import_assets()
 
         self.ui = UI(self.font,self.font2,self.font3, self.uiframes)
         self.data = Data(self.ui)
-        self.archui = archipelagoUI(self.font)
+
+        
+        
+        pygame.display.set_caption('Nothing_Archipelago')
+        
+        self.clock = pygame.time.Clock()
+        
+        self.archui = archipelagoUI(self.font,self.data)
         self.current_stage = Level(self.data,self.audio_files)
         
 
     def import_assets(self):
         
-        self.font = pygame.font.Font(join('graphics', 'ui', 'runescape_uf.ttf'), int((WINDOW_WIDTH+WINDOW_HEIGHT)/75))
-        self.font2 = pygame.font.Font(join('graphics', 'ui', 'runescape_uf.ttf'), int((WINDOW_WIDTH+WINDOW_HEIGHT)/10))
-        self.font3 = pygame.font.Font(join('graphics', 'ui', 'runescape_uf.ttf'), int((WINDOW_WIDTH+WINDOW_HEIGHT)/25))
+        self.font = pygame.font.Font(join('graphics', 'ui', 'runescape_uf.ttf'), int((1920+1080)/75))
+        self.font2 = pygame.font.Font(join('graphics', 'ui', 'runescape_uf.ttf'), int((1920+1080)/10))
+        self.font3 = pygame.font.Font(join('graphics', 'ui', 'runescape_uf.ttf'), int((1920+1080)/25))
         self.uiframes = {
             'gear' : import_image('graphics', 'ui', 'gear')
         }
@@ -134,6 +136,17 @@ class Game:
                         self.data.inputs[self.data.activeinput] = self.data.inputs[self.data.activeinput] [:-1]
                     else:
                         self.data.inputs[self.data.activeinput] += event.unicode
+                elif event.type == pygame.KEYDOWN and self.data.playingstate == 0:
+                    if event.key == pygame.K_0:
+                        self.data.devcount = 1
+                    elif event.key == pygame.K_1 and self.data.devcount >= 1:
+                        self.data.devcount = 2
+                    elif event.key == pygame.K_2 and self.data.devcount >= 2:
+                        self.data.devcount = 3
+                    elif event.key == pygame.K_3 and self.data.devcount >= 3:
+                        self.data.devcount = 4
+                    elif event.key == pygame.K_4 and self.data.devcount >= 4:
+                        self.data.devcount = 5
 
             if (self.data.shop[0][0][2] == 1 and (self.data.playingstate == 1 or self.data.playingstate == 3)) or self.data.forcestatechange == 1:
                 self.current_stage.changegamestate()

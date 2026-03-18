@@ -1,5 +1,6 @@
-from settings import *
+import pygame
 from random import randint
+
 
 class Level:
     def __init__(self,data,audio_files):
@@ -42,7 +43,7 @@ class Level:
                 if self.data.points == 0:
                     self.data.points = 1
             else:
-                self.data.currenttime += dt+1
+                self.data.currenttime += dt * self.data.timescale
         else:
             self.data.currenttime = 0
 

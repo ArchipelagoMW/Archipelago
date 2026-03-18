@@ -1,13 +1,17 @@
-from settings import *
+import numpy
+
 class Data:
     def __init__(self,ui):
         self.ui = ui
-        self.milestoneint = 60
+        self.milestoneint = 1
         self.archipelagoactive = False
         self.goal = 600
         self._milestonesforce = 1
-        self._points = 40
-        self.timecapint = 600
+        self._points = 0
+        self.timecapint = 1
+
+        self.WINDOW_WIDTH = 1920
+        self.WINDOW_HEIGHT = 1080
 
         self.activeinput = 3
         self.inputs = [0 for _ in range(4)]
@@ -16,6 +20,10 @@ class Data:
         self.inputs[2] = "Slot Name"
         self.inputs[3] = ""
         
+        self.devcount = 0
+        self.timescale = 1
+        self.devmode = 0
+
         self.connected = 0
         self._maxtime = 0
         self._currenttime = 0
@@ -74,7 +82,7 @@ class Data:
         self.names[7][3] = "Sound2   : "
         self.names[8][3] = "Sound2   : "
         self.names[9][3] = "Sound10 : "
-        self.colors =[[0 for _ in range (2)] for _ in range (10)]
+        self.colors =[[0 for _ in range (2)] for _ in range (11)]
         self.colors[0][0] = (100,100,100)
         self.colors[0][1] = (255,255,255)
         self.colors[1][0] = (0,0,255)
@@ -95,6 +103,8 @@ class Data:
         self.colors[8][1] = (255,255,255)
         self.colors[9][0] = (0,140,140)
         self.colors[9][1] = (255,255,255)
+        self.colors[10][0] = (0,0,0)
+        self.colors[10][1] = (40,200,40)
         for x in range(86400):
             self._milestones[x,0] = (x+1)*self.milestoneint
             self._milestones[x,2] = x+1

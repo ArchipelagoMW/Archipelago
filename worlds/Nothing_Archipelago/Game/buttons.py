@@ -1,4 +1,4 @@
-from settings import * 
+import pygame
 
 
 class Button:
