@@ -1,6 +1,8 @@
 """Pytest fixtures for Kirby AM client and world testing."""
 import json
+import logging
 import pytest
+from itertools import count
 from pathlib import Path
 from typing import Any, Dict, Generator
 from unittest.mock import AsyncMock, Mock
@@ -9,6 +11,11 @@ from ..data import data
 
 
 FIXTURE_DATA_DIR = Path(__file__).resolve().parent / "data"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+TEST_OUTPUT_DIR = REPO_ROOT / "test-output" / "kirbyam"
+TEST_LOG_FILE = TEST_OUTPUT_DIR / "pytest-kirbyam.log"
+TEST_LOGGER = logging.getLogger("worlds.kirbyam.test")
+_IO_SEQUENCE = count(1)
 
 
 def _load_fixture_json(filename: str) -> dict[str, Any]:
@@ -17,6 +24,64 @@ def _load_fixture_json(filename: str) -> dict[str, Any]:
     if not isinstance(loaded, dict):
         raise TypeError(f"Fixture file {filename} must contain a JSON object")
     return loaded
+
+
+def _format_payload(payload: Any) -> Any:
+    if isinstance(payload, bytes):
+        return payload.hex()
+    if isinstance(payload, list):
+        return [_format_payload(value) for value in payload]
+    if isinstance(payload, tuple):
+        return tuple(_format_payload(value) for value in payload)
+    if isinstance(payload, dict):
+        return {key: _format_payload(value) for key, value in payload.items()}
+    return payload
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    TEST_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    handler = logging.FileHandler(TEST_LOG_FILE, mode="w", encoding="utf-8")
+    handler.setFormatter(logging.Formatter(
+        "%(asctime)s %(levelname)s [%(name)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    ))
+    handler.setLevel(logging.DEBUG)
+
+    root_logger = logging.getLogger()
+    root_logger.addHandler(handler)
+    root_logger.setLevel(logging.DEBUG)
+
+    config._kirbyam_test_log_handler = handler  # type: ignore[attr-defined]
+    TEST_LOGGER.info("KirbyAM pytest logging initialized. output=%s", TEST_LOG_FILE)
+
+
+def pytest_unconfigure(config: pytest.Config) -> None:
+    handler = getattr(config, "_kirbyam_test_log_handler", None)
+    if handler is None:
+        return
+    logging.getLogger().removeHandler(handler)
+    handler.close()
+
+
+def pytest_runtest_setup(item: pytest.Item) -> None:
+    TEST_LOGGER.info("START test=%s", item.nodeid)
+
+
+def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item | None) -> None:
+    del nextitem
+    TEST_LOGGER.info("END test=%s", item.nodeid)
+
+
+@pytest.fixture(scope="session")
+def kirbyam_test_log_dir() -> Path:
+    return TEST_OUTPUT_DIR
+
+
+@pytest.fixture(scope="session")
+def kirbyam_test_log_file(kirbyam_test_log_dir: Path) -> Path:
+    del kirbyam_test_log_dir
+    return TEST_LOG_FILE
 
 
 @pytest.fixture
@@ -50,7 +115,22 @@ def mock_bizhawk_context() -> Mock:
     ctx.slot = 1
     ctx.team = 0
     ctx.auth = "test_auth_token"
-    ctx.send_msgs = AsyncMock()  # Mock the async send_msgs method
+
+    async def send_msgs_side_effect(messages):
+        request_id = next(_IO_SEQUENCE)
+        TEST_LOGGER.debug("ap.send_msgs[%s] request=%s", request_id, _format_payload(messages))
+        TEST_LOGGER.debug("ap.send_msgs[%s] response=accepted", request_id)
+        return None
+
+    ctx.send_msgs = AsyncMock(side_effect=send_msgs_side_effect)  # Mock the async send_msgs method
+    TEST_LOGGER.debug(
+        "client.context created slot=%s team=%s address=%s checked_locations=%s items_received=%s",
+        ctx.slot,
+        ctx.team,
+        ctx.address,
+        sorted(ctx.checked_locations),
+        ctx.items_received,
+    )
     return ctx
 
 
@@ -88,11 +168,14 @@ def mock_bizhawk_read(mock_ram_read_write: Dict[int, bytes]):
     """
     async def read_func(bizhawk_ctx, reads):
         """Mock BizHawk read: takes list of (addr, size, bus) tuples."""
+        request_id = next(_IO_SEQUENCE)
+        TEST_LOGGER.debug("bizhawk.read[%s] request=%s", request_id, _format_payload(reads))
         results = []
         for addr, size, bus in reads:
             # Return stored value or zeros if not set
             value = mock_ram_read_write.get(addr, b'\x00' * size)
             results.append(value[:size].ljust(size, b'\x00'))
+        TEST_LOGGER.debug("bizhawk.read[%s] response=%s", request_id, _format_payload(results))
         return results
     
     return read_func
@@ -107,8 +190,11 @@ def mock_bizhawk_write(mock_ram_read_write: Dict[int, bytes]):
     """
     async def write_func(bizhawk_ctx, writes):
         """Mock BizHawk write: takes list of (addr, value, bus) tuples."""
+        request_id = next(_IO_SEQUENCE)
+        TEST_LOGGER.debug("bizhawk.write[%s] request=%s", request_id, _format_payload(writes))
         for addr, value, bus in writes:
             mock_ram_read_write[addr] = value
+        TEST_LOGGER.debug("bizhawk.write[%s] response=stored", request_id)
         return None
     
     return write_func

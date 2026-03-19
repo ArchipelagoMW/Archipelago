@@ -117,6 +117,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+/test-output/
 
 
 # Flask stuff:
