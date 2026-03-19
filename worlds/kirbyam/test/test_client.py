@@ -134,6 +134,29 @@ async def test_location_check_sent_on_new_shard(mock_bizhawk_context):
         ])
 
 
+@pytest.mark.asyncio
+async def test_location_check_resent_when_server_missing_location(mock_bizhawk_context):
+    """RAM-derived checks should be resent if server checked_locations is missing them."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    first_loc = data.locations["SHARD_1"].location_id
+    second_loc = data.locations["SHARD_2"].location_id
+    # Simulate server knowing only shard 1 while RAM reports shards 1+2.
+    mock_bizhawk_context.checked_locations = {first_loc}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+
+        mock_read.return_value = [(0x03).to_bytes(4, 'little')]
+
+        await client._poll_locations(mock_bizhawk_context)
+
+        mock_send.assert_awaited_once_with([
+            {"cmd": "LocationChecks", "locations": [second_loc]}
+        ])
+
+
 def test_client_initialization():
     """Test client state is properly initialized."""
     client = KirbyAmClient()

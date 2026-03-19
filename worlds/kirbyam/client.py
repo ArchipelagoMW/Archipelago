@@ -161,9 +161,9 @@ class KirbyAmClient(BizHawkClient):
         Behavior:
         - Reads shard_bitfield_native from native RAM when available
         - Falls back to shard_bitfield transport mirror for compatibility
-        - Each bit (0-31) represents one location/shard
-        - New bits tracked in _checked_location_bits
-        - Sends LocationChecks for all newly set bits
+        - Each mapped bit can correspond to one or more AP location ids
+        - RAM state is authoritative for local checks
+        - Sends LocationChecks for any RAM-derived checks missing from server checked state
         """
         read_size = 1
         shard_addr = self._native_addr("shard_bitfield_native")
@@ -178,15 +178,18 @@ class KirbyAmClient(BizHawkClient):
         # Track only mapped bits so reserved bits do not pollute checked state.
         mapped_bits = sorted(self._location_ids_by_bit.keys())
 
-        newly_checked = []
+        mapped_checked_locations: set[int] = set()
         for bit in mapped_bits:
             if (shard_bits >> bit) & 1:
-                if bit not in self._checked_location_bits:
-                    self._checked_location_bits.add(bit)
-                    newly_checked.extend(self._location_ids_by_bit.get(bit, []))
+                self._checked_location_bits.add(bit)
+                mapped_checked_locations.update(self._location_ids_by_bit.get(bit, []))
 
-        if newly_checked:
-            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": newly_checked}])
+        # Reconnect-safe behavior: if server state is missing RAM-derived checks,
+        # resend them until the server acknowledges and reflects them.
+        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+
+        if missing_on_server:
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
 
     # --------------------------
     # Item delivery (mailbox protocol)
