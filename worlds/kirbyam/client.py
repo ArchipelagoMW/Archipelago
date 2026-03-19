@@ -124,7 +124,15 @@ class KirbyAmClient(BizHawkClient):
 
     @staticmethod
     def _transport_addr(key: str) -> Optional[int]:
-        return data.transport_ram_addresses.get(key) or data.ram_addresses.get(key)
+        if key in data.transport_ram_addresses:
+            return data.transport_ram_addresses[key]
+        return data.ram_addresses.get(key)
+
+    @staticmethod
+    def _native_addr(key: str) -> Optional[int]:
+        if key in data.native_ram_addresses:
+            return data.native_ram_addresses[key]
+        return None
 
     async def _persist_u32(self, ctx: "BizHawkClientContext", key: str, value: int) -> None:
         """Persist a 32-bit value to RAM by address key."""
@@ -226,12 +234,15 @@ class KirbyAmClient(BizHawkClient):
         Primary location polling: read shard bitfield and map set bits to locations.
         
         Behavior:
-        - Reads shard_bitfield from 0x0202C000 (AP mailbox mirror)
+        - Reads shard_bitfield_native from native RAM when available
+        - Falls back to shard_bitfield transport mirror for compatibility
         - Each bit (0-31) represents one location/shard
         - New bits tracked in _checked_location_bits
         - Sends LocationChecks for all newly set bits
         """
-        shard_addr = self._transport_addr("shard_bitfield")
+        shard_addr = self._native_addr("shard_bitfield_native")
+        if shard_addr is None:
+            shard_addr = self._transport_addr("shard_bitfield")
         if shard_addr is None:
             return
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(shard_addr, 4, "System Bus")]))[0]

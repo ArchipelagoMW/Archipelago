@@ -12,6 +12,7 @@ Usage:
     python validate_addresses.py --verbose
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -21,10 +22,10 @@ from typing import Dict, Tuple, List, Optional
 class AddressValidator:
     """Validates address definitions and usage."""
     
-    def __init__(self, repo_root: Optional[Path] = None):
+    def __init__(self, repo_root: Optional[Path] = None, strict_native_usage: bool = False):
         """Initialize validator with paths."""
         if repo_root is None:
-            # worlds/kirbyam/tools/validate_addresses.py -> go up 3 levels to kirbyam
+            # worlds/kirbyam/tools/validate_addresses.py -> go up 2 levels to kirbyam
             repo_root = Path(__file__).parent.parent
         
         self.repo_root = repo_root
@@ -33,6 +34,7 @@ class AddressValidator:
         self.addresses: Dict[str, Dict[str, str]] = {}
         self.grouped_ram_sections: Dict[str, Dict[str, str]] = {}
         self.client_code: str = ""
+        self.strict_native_usage = strict_native_usage
         
     def load_addresses(self) -> bool:
         """Load addresses.json."""
@@ -100,7 +102,9 @@ class AddressValidator:
                 if f'"{name}"' in self.client_code or f"'{name}'" in self.client_code:
                     print(f"  ✓ {name:30s} = {addr}")
                 else:
-                    if section == "ram.native" or name in informational_unused:
+                    if section == "ram.native" and not self.strict_native_usage:
+                        print(f"  • {name:30s} = {addr} (unused by current client path)")
+                    elif name in informational_unused:
                         print(f"  • {name:30s} = {addr} (unused by current client path)")
                     else:
                         issue = f"Address '{name}' ({section}) not used in client.py"
@@ -183,5 +187,13 @@ class AddressValidator:
 
 
 if __name__ == "__main__":
-    validator = AddressValidator()
+    parser = argparse.ArgumentParser(description="Validate Kirby AM address definitions and usage")
+    parser.add_argument(
+        "--strict-native-usage",
+        action="store_true",
+        help="Fail validation when ram.native addresses are defined but unused",
+    )
+    args = parser.parse_args()
+
+    validator = AddressValidator(strict_native_usage=args.strict_native_usage)
     sys.exit(validator.run())
