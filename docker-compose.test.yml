@@ -1,0 +1,17 @@
+services:
+  kirbyam-test-server:
+    build:
+      context: .
+    image: archipelago-test
+    pull_policy: never
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - KIRBYAM_TEST_SERVER_HOST=0.0.0.0
+      - KIRBYAM_TEST_SERVER_PORT=38281
+    volumes:
+      - ./output:/app/output
+    entrypoint: python worlds/kirbyam/test/server/start_test_server.py
+    command: --output-dir /app/output
+    ports:
+      - "38281:38281"
