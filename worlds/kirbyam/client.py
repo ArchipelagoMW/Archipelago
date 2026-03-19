@@ -1,3 +1,4 @@
+import os
 from typing import TYPE_CHECKING, List, Optional, Set
 
 import worlds._bizhawk as bizhawk
@@ -11,10 +12,11 @@ if TYPE_CHECKING:
 
 EXPECTED_ROM_NAME_PREFIX = "kirby amazing mirror"  # loosen while you iterate
 
-# Temporary development aid:
+# DEBUG: Temporary development aid.
 # Simulate the player earning one new location every N emulated frames.
-# Set to 0 to disable simulation and fall back to RAM-driven polling (your long-term plan).
-SIMULATED_LOCATION_EVERY_N_FRAMES = 10000
+# Set KIRBYAM_DEBUG_SIMULATION=1 to enable simulation (falls back to RAM-driven polling by default).
+# TODO: Remove simulated location mode entirely once real ROM polling is verified to work correctly.
+SIMULATED_LOCATION_EVERY_N_FRAMES = 10000 if os.getenv("KIRBYAM_DEBUG_SIMULATION") else 0
 
 
 class KirbyAmClient(BizHawkClient):
@@ -90,7 +92,7 @@ class KirbyAmClient(BizHawkClient):
             await self._load_persistent_state(ctx)
             self._ram_state_loaded = True
 
-        # Location checks
+        # Location checks (real RAM polling; simulation gated behind debug flag)
         if SIMULATED_LOCATION_EVERY_N_FRAMES > 0:
             await self._simulate_locations(ctx)
         else:
