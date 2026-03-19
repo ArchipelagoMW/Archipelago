@@ -31,6 +31,7 @@ class AddressValidator:
         self.addresses_file = repo_root / "data" / "addresses.json"
         self.client_file = repo_root / "client.py"
         self.addresses: Dict[str, Dict[str, str]] = {}
+        self.grouped_ram_sections: Dict[str, Dict[str, str]] = {}
         self.client_code: str = ""
         
     def load_addresses(self) -> bool:
@@ -39,7 +40,26 @@ class AddressValidator:
             with open(self.addresses_file) as f:
                 data = json.load(f)
                 self.addresses = data
-                print(f"✓ Loaded {sum(len(v) for v in self.addresses.values())} addresses")
+                ram = self.addresses.get("ram", {}) if isinstance(self.addresses, dict) else {}
+                if isinstance(ram, dict):
+                    transport = ram.get("transport")
+                    native = ram.get("native")
+                    if isinstance(transport, dict) or isinstance(native, dict):
+                        self.grouped_ram_sections = {
+                            "ram.transport": transport if isinstance(transport, dict) else {},
+                            "ram.native": native if isinstance(native, dict) else {},
+                        }
+                    else:
+                        self.grouped_ram_sections = {"ram": ram}
+
+                total = 0
+                for section in self.grouped_ram_sections.values():
+                    total += len(section)
+                rom = self.addresses.get("rom", {}) if isinstance(self.addresses, dict) else {}
+                if isinstance(rom, dict):
+                    total += len(rom)
+
+                print(f"✓ Loaded {total} addresses")
                 return True
         except Exception as e:
             print(f"✗ Failed to load addresses: {e}")
@@ -59,19 +79,33 @@ class AddressValidator:
     def validate_usage(self) -> List[str]:
         """Check that addresses are used in client code."""
         issues = []
+        informational_unused = {
+            "debug_item_counter",
+            "debug_last_item_id",
+            "debug_last_from",
+        }
         
         print("\n--- Address Usage Validation ---")
         
-        for section, addrs in self.addresses.items():
+        sections: Dict[str, Dict[str, str]] = {}
+        sections.update(self.grouped_ram_sections)
+        rom = self.addresses.get("rom", {}) if isinstance(self.addresses, dict) else {}
+        if isinstance(rom, dict):
+            sections["rom"] = rom
+
+        for section, addrs in sections.items():
             print(f"\n{section}:")
             for name, addr in addrs.items():
                 # Search for address key usage in client
                 if f'"{name}"' in self.client_code or f"'{name}'" in self.client_code:
                     print(f"  ✓ {name:30s} = {addr}")
                 else:
-                    issue = f"Address '{name}' ({section}) not used in client.py"
-                    issues.append(issue)
-                    print(f"  ⚠ {name:30s} = {addr} (NOT USED)")
+                    if section == "ram.native" or name in informational_unused:
+                        print(f"  • {name:30s} = {addr} (unused by current client path)")
+                    else:
+                        issue = f"Address '{name}' ({section}) not used in client.py"
+                        issues.append(issue)
+                        print(f"  ⚠ {name:30s} = {addr} (NOT USED)")
         
         return issues
     
@@ -84,7 +118,13 @@ class AddressValidator:
         # Extract numeric values and check for overlap
         ranges: List[Tuple[str, int, int]] = []
         
-        for section, addrs in self.addresses.items():
+        sections: Dict[str, Dict[str, str]] = {}
+        sections.update(self.grouped_ram_sections)
+        rom = self.addresses.get("rom", {}) if isinstance(self.addresses, dict) else {}
+        if isinstance(rom, dict):
+            sections["rom"] = rom
+
+        for section, addrs in sections.items():
             for name, addr_str in addrs.items():
                 try:
                     addr = int(addr_str, 16)
