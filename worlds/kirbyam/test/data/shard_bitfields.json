@@ -1,0 +1,71 @@
+{
+  "description": "Pre-generated bitfield patterns for location-check polling tests.",
+  "address_ranges": [
+    {
+      "name": "native_shard_flags",
+      "start": "0x02038970",
+      "end": "0x02038970",
+      "bus": "System Bus",
+      "notes": "Native candidate/integrated shard progression source for POC polling."
+    },
+    {
+      "name": "transport_shard_bitfield",
+      "start": "0x0202C000",
+      "end": "0x0202C003",
+      "bus": "System Bus",
+      "notes": "Fallback transport mirror bitfield."
+    }
+  ],
+  "timing_assumptions": {
+    "bit_flip_visibility": "Within one watcher tick",
+    "notes": "Test vectors represent stable bitfields read atomically by bizhawk.read."
+  },
+  "scenarios": {
+    "empty": {
+      "bitfield": 0,
+      "set_bits": []
+    },
+    "shard_1": {
+      "bitfield": 1,
+      "set_bits": [0]
+    },
+    "shard_1_2": {
+      "bitfield": 3,
+      "set_bits": [0, 1]
+    },
+    "shard_1_2_3": {
+      "bitfield": 7,
+      "set_bits": [0, 1, 2]
+    },
+    "shard_1_to_4": {
+      "bitfield": 15,
+      "set_bits": [0, 1, 2, 3]
+    },
+    "all_8_shards": {
+      "bitfield": 255,
+      "set_bits": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+    "reserved_high_bit": {
+      "bitfield": 2147483649,
+      "set_bits": [0, 31],
+      "notes": "Bit 31 is intentionally reserved/unmapped for validation."
+    }
+  },
+  "transitions": [
+    {
+      "from": "empty",
+      "to": "shard_1",
+      "expected_new_bits": [0]
+    },
+    {
+      "from": "shard_1",
+      "to": "shard_1_2",
+      "expected_new_bits": [1]
+    },
+    {
+      "from": "shard_1_2",
+      "to": "shard_1_2_3",
+      "expected_new_bits": [2]
+    }
+  ]
+}

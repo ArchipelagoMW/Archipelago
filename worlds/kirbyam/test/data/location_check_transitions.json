@@ -1,0 +1,30 @@
+{
+  "description": "Scenario mapping for expected location checks from shard bitfield transitions.",
+  "location_keys": [
+    "SHARD_1",
+    "SHARD_2",
+    "SHARD_3",
+    "SHARD_4",
+    "SHARD_5",
+    "SHARD_6",
+    "SHARD_7",
+    "SHARD_8"
+  ],
+  "timing_assumptions": {
+    "server_ack_lag": "LocationChecks may require resend until server checked_locations catches up",
+    "notes": "Transitions model client-side resend behavior under reconnect lag."
+  },
+  "transitions": [
+    {
+      "name": "first_shard_collected",
+      "bitfield": "shard_1",
+      "expected_location_keys": ["SHARD_1"]
+    },
+    {
+      "name": "second_shard_missing_on_server",
+      "bitfield": "shard_1_2",
+      "server_checked_location_keys": ["SHARD_1"],
+      "expected_location_keys": ["SHARD_2"]
+    }
+  ]
+}

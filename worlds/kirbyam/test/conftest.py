@@ -1,7 +1,22 @@
 """Pytest fixtures for Kirby AM client and world testing."""
+import json
 import pytest
-from typing import Dict, Generator
+from pathlib import Path
+from typing import Any, Dict, Generator
 from unittest.mock import AsyncMock, Mock
+
+from ..data import data
+
+
+FIXTURE_DATA_DIR = Path(__file__).resolve().parent / "data"
+
+
+def _load_fixture_json(filename: str) -> dict[str, Any]:
+    with (FIXTURE_DATA_DIR / filename).open("r", encoding="utf-8") as fixture_file:
+        loaded = json.load(fixture_file)
+    if not isinstance(loaded, dict):
+        raise TypeError(f"Fixture file {filename} must contain a JSON object")
+    return loaded
 
 
 @pytest.fixture
@@ -48,17 +63,16 @@ def mock_ram_read_write() -> Generator[Dict[str, bytes], None, None]:
     Returns dict mapping address (int) -> bytes value.
     """
     ram_state: Dict[int, bytes] = {}
-    
-    # AP Mailbox region (0x0202C000-0x0202C028)
-    ram_state[0x0202C000] = (0).to_bytes(4, 'little')  # shard_bitfield
-    ram_state[0x0202C004] = (0).to_bytes(4, 'little')  # incoming_item_flag
-    ram_state[0x0202C008] = (0).to_bytes(4, 'little')  # incoming_item_id
-    ram_state[0x0202C00C] = (0).to_bytes(4, 'little')  # incoming_item_player
-    ram_state[0x0202C010] = (0).to_bytes(4, 'little')  # debug_item_counter
-    ram_state[0x0202C014] = (0).to_bytes(4, 'little')  # debug_last_item_id
-    ram_state[0x0202C018] = (0).to_bytes(4, 'little')  # debug_last_from
-    ram_state[0x0202C01C] = (0).to_bytes(4, 'little')  # frame_counter
-    ram_state[0x0202C020] = (0).to_bytes(4, 'little')  # delivered_item_index
+    baseline = _load_fixture_json("ram_mailbox_baseline.json")
+    baseline_u32 = baseline.get("ram_u32", {})
+    if not isinstance(baseline_u32, dict):
+        raise TypeError("ram_mailbox_baseline.json ram_u32 must be an object")
+    for addr_text, value in baseline_u32.items():
+        if not isinstance(addr_text, str):
+            continue
+        if not isinstance(value, int):
+            continue
+        ram_state[int(addr_text, 16)] = int(value).to_bytes(4, "little", signed=False)
     
     yield ram_state
 
@@ -111,18 +125,22 @@ def shard_bitfield_fixtures() -> Dict[str, int]:
     - shard_2_3: shards 1 and 2 (0x03)
     - all_8_shards: all 8 mirror shards (0xFF)
     """
-    return {
-        "empty": 0x00,
-        "shard_1": 0x01,
-        "shard_1_2": 0x03,
-        "shard_1_2_3": 0x07,
-        "shard_1_to_4": 0x0F,
-        "all_8_shards": 0xFF,
-    }
+    payload = _load_fixture_json("shard_bitfields.json")
+    scenarios = payload.get("scenarios", {})
+    if not isinstance(scenarios, dict):
+        raise TypeError("shard_bitfields.json scenarios must be an object")
+    result: Dict[str, int] = {}
+    for scenario_name, scenario_data in scenarios.items():
+        if not isinstance(scenario_name, str) or not isinstance(scenario_data, dict):
+            continue
+        bitfield = scenario_data.get("bitfield")
+        if isinstance(bitfield, int):
+            result[scenario_name] = bitfield
+    return result
 
 
 @pytest.fixture
-def item_delivery_fixtures() -> Dict[str, Dict[str, int]]:
+def item_delivery_fixtures() -> Dict[str, Dict[str, Any]]:
     """
     Pre-generated item delivery sequences for testing item handling.
     
@@ -131,24 +149,23 @@ def item_delivery_fixtures() -> Dict[str, Dict[str, int]]:
     - player_id: slot ID to credit
     - expected_state_change: what should happen in client
     """
-    base_offset = 3860000
-    return {
-        "1_up": {
-            "item_id": base_offset + 1,
-            "player_id": 1,
-            "description": "1-Up item",
-        },
-        "shard_1": {
-            "item_id": base_offset + 2,
-            "player_id": 1,
-            "description": "Mirror Shard 1",
-        },
-        "shard_8": {
-            "item_id": base_offset + 9,
-            "player_id": 1,
-            "description": "Mirror Shard 8",
-        },
-    }
+    payload = _load_fixture_json("item_delivery_sequences.json")
+    scenarios = payload.get("scenarios", {})
+    if not isinstance(scenarios, dict):
+        raise TypeError("item_delivery_sequences.json scenarios must be an object")
+    result: Dict[str, Dict[str, int]] = {}
+    for scenario_name, scenario_data in scenarios.items():
+        if not isinstance(scenario_name, str) or not isinstance(scenario_data, dict):
+            continue
+        item_id = scenario_data.get("item_id")
+        player_id = scenario_data.get("player_id")
+        if isinstance(item_id, int) and isinstance(player_id, int):
+            result[scenario_name] = {
+                "item_id": item_id,
+                "player_id": player_id,
+                "description": str(scenario_data.get("description", scenario_name)),
+            }
+    return result
 
 
 @pytest.fixture
@@ -158,14 +175,16 @@ def location_check_fixtures() -> Dict[str, int]:
     
     Maps friendly names to location IDs used in LocationChecks commands.
     """
-    base_offset = 3860100  # Base offset for Kirby AM locations
-    return {
-        "shard_1": base_offset + 1,
-        "shard_2": base_offset + 2,
-        "shard_3": base_offset + 3,
-        "shard_4": base_offset + 4,
-        "shard_5": base_offset + 5,
-        "shard_6": base_offset + 6,
-        "shard_7": base_offset + 7,
-        "shard_8": base_offset + 8,
-    }
+    payload = _load_fixture_json("location_check_transitions.json")
+    location_keys = payload.get("location_keys", [])
+    if not isinstance(location_keys, list):
+        raise TypeError("location_check_transitions.json location_keys must be a list")
+    result: Dict[str, int] = {}
+    for loc_key in location_keys:
+        if not isinstance(loc_key, str):
+            continue
+        loc_data = data.locations.get(loc_key)
+        if loc_data is None:
+            continue
+        result[loc_key.lower()] = loc_data.location_id
+    return result

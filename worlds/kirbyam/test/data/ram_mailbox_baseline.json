@@ -1,0 +1,39 @@
+{
+  "description": "Baseline AP mailbox and transport RAM image used by client tests.",
+  "address_ranges": [
+    {
+      "name": "ap_mailbox_transport",
+      "start": "0x0202C000",
+      "end": "0x0202C020",
+      "bus": "System Bus",
+      "notes": "Transport mirror block used by client mailbox protocol and shard fallback polling."
+    }
+  ],
+  "timing_assumptions": {
+    "watcher_timeout_seconds": 0.125,
+    "mailbox_poll_interval": "Each watcher tick",
+    "notes": "RAM snapshot models a single watcher tick before writes."
+  },
+  "ram_u32": {
+    "0x0202C000": 0,
+    "0x0202C004": 0,
+    "0x0202C008": 0,
+    "0x0202C00C": 0,
+    "0x0202C010": 0,
+    "0x0202C014": 0,
+    "0x0202C018": 0,
+    "0x0202C01C": 0,
+    "0x0202C020": 0
+  },
+  "fields": {
+    "0x0202C000": "shard_bitfield_transport",
+    "0x0202C004": "incoming_item_flag",
+    "0x0202C008": "incoming_item_id",
+    "0x0202C00C": "incoming_item_player",
+    "0x0202C010": "debug_item_counter",
+    "0x0202C014": "debug_last_item_id",
+    "0x0202C018": "debug_last_from",
+    "0x0202C01C": "frame_counter",
+    "0x0202C020": "delivered_item_index"
+  }
+}

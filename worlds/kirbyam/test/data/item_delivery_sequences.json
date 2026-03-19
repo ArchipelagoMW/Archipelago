@@ -1,0 +1,62 @@
+{
+  "description": "Reusable item-delivery vectors for mailbox protocol tests.",
+  "address_ranges": [
+    {
+      "name": "mailbox_write_window",
+      "start": "0x0202C008",
+      "end": "0x0202C010",
+      "bus": "System Bus",
+      "notes": "Client writes item_id/player_id and then toggles incoming_item_flag."
+    },
+    {
+      "name": "delivery_progress_counter",
+      "start": "0x0202C010",
+      "end": "0x0202C020",
+      "bus": "System Bus",
+      "notes": "ROM ack/debug state used for delivery cursor resync."
+    }
+  ],
+  "timing_assumptions": {
+    "ack_semantics": "ROM clears incoming_item_flag to 0 after item apply",
+    "resync_semantics": "debug_item_counter is authoritative when present"
+  },
+  "scenarios": {
+    "1_up": {
+      "item_id": 3860001,
+      "player_id": 1,
+      "description": "1-Up item"
+    },
+    "shard_1": {
+      "item_id": 3860002,
+      "player_id": 1,
+      "description": "Mirror Shard 1"
+    },
+    "shard_8": {
+      "item_id": 3860009,
+      "player_id": 1,
+      "description": "Mirror Shard 8"
+    }
+  },
+  "transitions": [
+    {
+      "name": "mailbox_write",
+      "pre": {
+        "incoming_item_flag": 0,
+        "delivered_item_index": 0
+      },
+      "post": {
+        "incoming_item_flag": 1
+      }
+    },
+    {
+      "name": "rom_ack",
+      "pre": {
+        "incoming_item_flag": 1
+      },
+      "post": {
+        "incoming_item_flag": 0,
+        "delivered_item_index_increment": 1
+      }
+    }
+  ]
+}
