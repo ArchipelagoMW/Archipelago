@@ -1,9 +1,9 @@
 from BaseClasses import MultiWorld
 
 
-def link_undertale_areas(world: MultiWorld, player: int):
+def link_undertale_areas(multiworld: MultiWorld, player: int):
     for (exit, region) in mandatory_connections:
-        world.get_entrance(exit, player).connect(world.get_region(region, player))
+        multiworld.get_entrance(exit, player).connect(multiworld.get_region(region, player))
 
 
 # (Region name, list of exits)

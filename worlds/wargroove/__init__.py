@@ -143,8 +143,8 @@ class WargrooveWorld(World):
         return self.multiworld.random.choice(["Commander Defense Boost", "Income Boost"])
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)
