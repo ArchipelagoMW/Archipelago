@@ -59,6 +59,15 @@ Compose launches the bootstrap script, which automatically selects the newest `.
    - test items are delivered to client
    - server-client logs can be correlated with `test-output/kirbyam/` logs
 
+## ROM Patch Validation (Issue 121)
+
+For the canonical USA KirbyAM base ROM used by this integration, `patch_rom.py` expects a 16 MB image (`0x1000000` bytes).
+
+Expected behavior:
+
+- No ROM-size warning for the configured USA baseline ROM whose MD5 matches `KirbyAmProcedurePatch.hash`
+- A warning only when the selected ROM size differs from that baseline expectation
+
 ## Shutdown
 
 - Local script: stop with `Ctrl+C`

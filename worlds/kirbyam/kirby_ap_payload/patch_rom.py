@@ -1,9 +1,21 @@
+import os
+import sys
+
+_SCRIPT_DIR = os.path.realpath(os.path.dirname(__file__))
+_WORLD_DIR = os.path.realpath(os.path.dirname(_SCRIPT_DIR))
+
+# When patch_rom.py is executed from worlds/kirbyam/kirby_ap_payload, Python can
+# still see the parent world directory early enough for worlds/kirbyam/types.py
+# to shadow stdlib types during stdlib imports. Remove that parent world path.
+for path_entry in list(sys.path):
+    resolved = os.path.realpath(path_entry or os.getcwd())
+    if resolved == _WORLD_DIR:
+        sys.path.remove(path_entry)
+
 import argparse
 import hashlib
 import importlib.util
-import os
 import subprocess
-import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -15,6 +27,7 @@ BL_BYTES = bytes.fromhex("0B F0 B3 FC")
 
 ROM_PATH_TMP = "rom_path.tmp"
 INTERMEDIARY_ROM = "baseline_patched.tmp.gba"
+EXPECTED_BASE_ROM_SIZE = 0x1000000
 
 
 # ----------------------------
@@ -147,6 +160,12 @@ def md5_file(path: str, chunk_size: int = 1024 * 1024) -> str:
                 break
             h.update(b)
     return h.hexdigest()
+
+
+def get_rom_size_warning(rom_size: int, expected_size: int = EXPECTED_BASE_ROM_SIZE) -> str | None:
+    if rom_size == expected_size:
+        return None
+    return f"Warning: ROM size is {rom_size:#x}, expected {expected_size:#x}. Proceeding anyway."
 
 
 def load_expected_rom_md5_from_rom_py() -> str:
@@ -405,9 +424,9 @@ def main():
     except FileNotFoundError as e:
         raise SystemExit(f"Error: input ROM not found: {in_path}") from e
 
-    # Basic size sanity for a 4MB ROM
-    if len(rom) != 0x400000:
-        print(f"Warning: ROM size is {len(rom):#x}, expected 0x400000. Proceeding anyway.")
+    warning = get_rom_size_warning(len(rom))
+    if warning is not None:
+        print(warning)
 
     # 4) Insert payload
     rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
