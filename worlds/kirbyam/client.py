@@ -1,9 +1,10 @@
-from typing import TYPE_CHECKING, List, Optional, Set, Tuple, Any, Dict
+from typing import TYPE_CHECKING, Optional
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import data
+from .types import KirbyAmBizHawkClientContext
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -118,14 +119,14 @@ class KirbyAmClient(BizHawkClient):
             return data.native_ram_addresses[key]
         return None
 
-    async def _persist_u32(self, ctx: "BizHawkClientContext", key: str, value: int) -> None:
+    async def _persist_u32(self, ctx: KirbyAmBizHawkClientContext, key: str, value: int) -> None:
         """Persist a 32-bit value to RAM by address key."""
         addr = self._transport_addr(key)
         if addr is None:
             return
         await bizhawk.write(ctx.bizhawk_ctx, [(addr, int(value & 0xFFFFFFFF).to_bytes(4, "little"), "System Bus")])
 
-    async def _load_persistent_state(self, ctx: "BizHawkClientContext") -> None:
+    async def _load_persistent_state(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
         Best-effort load of persistent state from our reserved mailbox RAM block.
         If addresses are missing, this simply does nothing.
@@ -154,7 +155,7 @@ class KirbyAmClient(BizHawkClient):
     # Location checking
     # --------------------------
 
-    async def _poll_locations(self, ctx: "BizHawkClientContext") -> None:
+    async def _poll_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
         Primary location polling: read shard bitfield and map set bits to locations.
         
@@ -195,7 +196,7 @@ class KirbyAmClient(BizHawkClient):
     # Item delivery (mailbox protocol)
     # --------------------------
 
-    async def _deliver_items(self, ctx: "BizHawkClientContext") -> None:
+    async def _deliver_items(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
         Deliver items via mailbox protocol.
         
@@ -278,7 +279,7 @@ class KirbyAmClient(BizHawkClient):
     # Temporary completion condition
     # --------------------------
 
-    async def _maybe_report_goal(self, ctx: "BizHawkClientContext") -> None:
+    async def _maybe_report_goal(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
         Temporary goal reporting: mark finished when all locations are checked.
         

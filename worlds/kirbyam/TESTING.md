@@ -64,6 +64,14 @@ Compose launches the bootstrap script, which automatically selects the newest `.
 - Local script: stop with `Ctrl+C`
 - Compose: `docker compose -f docker-compose.test.yml down`
 
+## Type Checking (Issue 145)
+
+Run focused mypy validation for the KirbyAM client typing surface:
+
+- `python -m mypy worlds/kirbyam/client.py --follow-imports=skip --ignore-missing-imports`
+
+The client's expected BizHawk context shape is documented in `worlds/kirbyam/types.py` as `KirbyAmBizHawkClientContext`.
+
 ## Notes
 
 - This setup is intentionally minimal for integration testing and is not a production deployment path.
