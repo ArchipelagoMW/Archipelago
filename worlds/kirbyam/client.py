@@ -119,6 +119,24 @@ class KirbyAmClient(BizHawkClient):
             return data.native_ram_addresses[key]
         return None
 
+    @staticmethod
+    def _coerce_u32(value: object) -> int | None:
+        try:
+            parsed = int(value)
+        except (TypeError, ValueError):
+            return None
+        if 0 <= parsed <= 0xFFFFFFFF:
+            return parsed
+        return None
+
+    @classmethod
+    def _extract_delivery_item_fields(cls, network_item: object) -> tuple[int, int] | None:
+        item_value = cls._coerce_u32(getattr(network_item, "item", None))
+        player_value = cls._coerce_u32(getattr(network_item, "player", None))
+        if item_value is None or player_value is None:
+            return None
+        return item_value, player_value
+
     async def _persist_u32(self, ctx: KirbyAmBizHawkClientContext, key: str, value: int) -> None:
         """Persist a 32-bit value to RAM by address key."""
         addr = self._transport_addr(key)
@@ -265,15 +283,32 @@ class KirbyAmClient(BizHawkClient):
         if self._delivered_item_index >= len(ctx.items_received):
             return
 
-        itm = ctx.items_received[self._delivered_item_index]
+        from CommonClient import logger
 
-        # Write item and mark mailbox full
-        await bizhawk.write(ctx.bizhawk_ctx, [
-            (id_addr, int(itm.item).to_bytes(4, "little"), "System Bus"),
-            (player_addr, int(itm.player).to_bytes(4, "little"), "System Bus"),
-            (flag_addr, (1).to_bytes(4, "little"), "System Bus"),
-        ])
-        self._delivery_pending = True
+        while self._delivered_item_index < len(ctx.items_received):
+            itm = ctx.items_received[self._delivered_item_index]
+            item_fields = self._extract_delivery_item_fields(itm)
+            if item_fields is None:
+                logger.warning(
+                    "KirbyAM: Skipping malformed ReceivedItems entry at index %s: %r",
+                    self._delivered_item_index,
+                    itm,
+                )
+                self._delivered_item_index += 1
+                self._delivery_pending = False
+                await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+                continue
+
+            item_id, player_id = item_fields
+
+            # Write item and mark mailbox full
+            await bizhawk.write(ctx.bizhawk_ctx, [
+                (id_addr, item_id.to_bytes(4, "little"), "System Bus"),
+                (player_addr, player_id.to_bytes(4, "little"), "System Bus"),
+                (flag_addr, (1).to_bytes(4, "little"), "System Bus"),
+            ])
+            self._delivery_pending = True
+            return
 
     # --------------------------
     # Temporary completion condition

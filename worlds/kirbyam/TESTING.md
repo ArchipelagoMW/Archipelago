@@ -72,6 +72,19 @@ Run focused mypy validation for the KirbyAM client typing surface:
 
 The client's expected BizHawk context shape is documented in `worlds/kirbyam/types.py` as `KirbyAmBizHawkClientContext`.
 
+## Protocol Fuzzing (Issue 150)
+
+Run targeted protocol-fuzzing coverage for malformed `ReceivedItems` payloads and unexpected command sequences:
+
+- `python -m pytest worlds/kirbyam/test/test_fuzzer.py worlds/kirbyam/test/test_client.py`
+
+The fuzz suite is implemented in `worlds/kirbyam/test/fuzzer.py` and reports scenario coverage as:
+
+- `passed_cases / total_cases`
+- `coverage_percent`
+
+The suite includes malformed and out-of-range item payload cases and verifies graceful handling (warnings + skip) without client crashes.
+
 ## Notes
 
 - This setup is intentionally minimal for integration testing and is not a production deployment path.

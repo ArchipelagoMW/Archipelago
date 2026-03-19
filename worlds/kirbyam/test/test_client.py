@@ -1,5 +1,6 @@
 """Integration tests for client polling and delivery logic."""
 import pytest
+import logging
 from unittest.mock import AsyncMock, Mock, patch
 
 from ..data import data
@@ -257,3 +258,33 @@ async def test_deliver_items_waits_when_rom_counter_ahead_but_items_partial(mock
         assert persisted == [
             (data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), "System Bus")
         ]
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_skips_malformed_entries_and_logs_warning(mock_bizhawk_context, caplog):
+    """Malformed ReceivedItems entries should be skipped, logged, and not crash delivery."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [
+        Mock(item="bad", player=1),
+        Mock(item=3860001, player=1),
+    ]
+
+    caplog.set_level(logging.WARNING, logger="Archipelago")
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        assert client._delivery_pending is True
+        assert client._delivered_item_index == 1
+        written = mock_write.await_args.args[1]
+        assert written[0][1] == int(3860001).to_bytes(4, 'little')
+
+    assert "Skipping malformed ReceivedItems entry" in caplog.text
