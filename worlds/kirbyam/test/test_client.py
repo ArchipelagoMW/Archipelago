@@ -1,6 +1,6 @@
 """Integration tests for client polling and delivery logic."""
 import pytest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 from ..data import data
 from ..client import KirbyAmClient
@@ -143,3 +143,94 @@ def test_client_initialization():
     assert client._delivered_item_index == 0
     assert client._delivery_pending is False
     assert client._goal_reported is False
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_resyncs_after_save_loss(mock_bizhawk_context):
+    """If ROM counter regresses, client should rewind delivery cursor and resend."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivered_item_index = 3
+    client._delivery_pending = False
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+        Mock(item=3860002, player=1),
+        Mock(item=3860003, player=1),
+        Mock(item=3860004, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        # mailbox empty, ROM says only one item was actually applied
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (1).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        assert client._delivered_item_index == 1
+        assert client._delivery_pending is True
+        written = mock_write.await_args.args[1]
+        assert written[0][1] == int(3860002).to_bytes(4, 'little')
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_resyncs_forward_after_reconnect(mock_bizhawk_context):
+    """If ROM counter is ahead, client should fast-forward and deliver next missing item."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivered_item_index = 0
+    client._delivery_pending = False
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+        Mock(item=3860002, player=1),
+        Mock(item=3860003, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        # mailbox empty, ROM says first two items were already applied
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (2).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        assert client._delivered_item_index == 2
+        assert client._delivery_pending is True
+        written = mock_write.await_args.args[1]
+        assert written[0][1] == int(3860003).to_bytes(4, 'little')
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_waits_when_rom_counter_ahead_but_items_partial(mock_bizhawk_context):
+    """Do not write items while ReceivedItems list is still behind ROM counter."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivered_item_index = 0
+    client._delivery_pending = False
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (2).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        assert client._delivered_item_index == len(mock_bizhawk_context.items_received)
+        assert client._delivery_pending is False
+        mock_write.assert_awaited_once()
+        persisted = mock_write.await_args.args[1]
+        assert persisted == [
+            (data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), "System Bus")
+        ]

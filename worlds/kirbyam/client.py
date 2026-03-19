@@ -208,19 +208,48 @@ class KirbyAmClient(BizHawkClient):
         - Otherwise: wait
         """
         flag_addr = self._transport_addr("incoming_item_flag")
+        counter_addr = self._transport_addr("debug_item_counter")
         id_addr = self._transport_addr("incoming_item_id")
         player_addr = self._transport_addr("incoming_item_player")
         if flag_addr is None or id_addr is None or player_addr is None:
             return
 
-        raw_flag = (await bizhawk.read(ctx.bizhawk_ctx, [(flag_addr, 4, "System Bus")]))[0]
-        flag = self._u32_le(raw_flag)
+        reads: list[tuple[int, int, str]] = [(flag_addr, 4, "System Bus")]
+        if counter_addr is not None:
+            reads.append((counter_addr, 4, "System Bus"))
+        raw_values = await bizhawk.read(ctx.bizhawk_ctx, reads)
+
+        flag = self._u32_le(raw_values[0])
+        rom_received_count: Optional[int] = None
+        if counter_addr is not None and len(raw_values) > 1:
+            rom_received_count = self._u32_le(raw_values[1])
+
+        # Auto-resync delivery cursor if ROM item state moved backward (save-loss)
+        # or forward (reconnect after stale client state).
+        if rom_received_count is not None:
+            if rom_received_count > len(ctx.items_received):
+                if self._delivered_item_index != len(ctx.items_received):
+                    self._delivered_item_index = len(ctx.items_received)
+                    await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+                self._delivery_pending = False
+                return
+            if rom_received_count < self._delivered_item_index:
+                self._delivered_item_index = rom_received_count
+                self._delivery_pending = False
+                await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+            elif rom_received_count > self._delivered_item_index and rom_received_count <= len(ctx.items_received):
+                self._delivered_item_index = rom_received_count
+                self._delivery_pending = False
+                await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
 
         # If an item is pending, wait for ROM to clear the flag (ACK)
         if self._delivery_pending:
             if flag == 0:
                 self._delivery_pending = False
-                self._delivered_item_index += 1
+                if rom_received_count is not None and rom_received_count <= len(ctx.items_received):
+                    self._delivered_item_index = rom_received_count
+                else:
+                    self._delivered_item_index += 1
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
             return
 
