@@ -63,6 +63,9 @@ def is_location_valid(world: "HatInTimeWorld", location: str) -> bool:
     if not world.options.ShuffleStorybookPages and location in storybook_pages.keys():
         return False
 
+    if not world.options.ShuffleDirectorTokens and location in director_tokens.keys():
+        return False
+
     if not world.options.ShuffleActContracts and location in contract_locations.keys():
         return False
 
@@ -566,6 +569,34 @@ storybook_pages = {
     "Rumbi Factory - Page: Last Area": LocData(2000345883, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
 }
 
+director_tokens = {
+    "Murder on the Owl Express - Conductor Token: Cafeteria": LocData(2001104767, "Murder on the Owl Express"),
+    "Murder on the Owl Express - Conductor Token: Recreational Room": LocData(2001104768, "Murder on the Owl Express"),
+    "Picture Perfect - DJ Grooves Token: Cardboard Puppy": LocData(2001203990, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Card Guessing Game": LocData(2001203991, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Back Alley": LocData(2001203992, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Cooking Show": LocData(2001203993, "Picture Perfect"),
+    "Picture Perfect - DJ Grooves Token: Pon Cluster": LocData(2001203987, "Picture Perfect"),
+    "Train Rush - Time Bonus: 1st Room": LocData(2001305235, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Falling Platform": LocData(2001305189, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Acid Crates": LocData(2001305186, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Balloon": LocData(2001305239, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Ring of Fire": LocData(2001305237, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Blue Panels": LocData(2001305236, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Sinking Lava Platform": LocData(2001305234, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Lava Panels 1": LocData(2001305193, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Lava Panels 2": LocData(2001305190, "Train Rush", hookshot=True),
+    "Train Rush - Time Bonus: Lava Panels 3": LocData(2001305238, "Train Rush", hookshot=True),
+    "The Big Parade - DJ Grooves Token (1/8)": LocData(2001400000, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (2/8)": LocData(2001400001, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (3/8)": LocData(2001400002, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (4/8)": LocData(2001400003, "The Big Parade"),
+    "The Big Parade - DJ Grooves Token (5/8)": LocData(2001400004, "The Big Parade", hit_type=HitType.umbrella),
+    "The Big Parade - DJ Grooves Token (6/8)": LocData(2001400005, "The Big Parade", hit_type=HitType.umbrella),
+    "The Big Parade - DJ Grooves Token (7/8)": LocData(2001400006, "The Big Parade", hit_type=HitType.umbrella),
+    "The Big Parade - DJ Grooves Token (8/8)": LocData(2001400007, "The Big Parade", hit_type=HitType.umbrella),
+}
+
 shop_locations = {
     "Badge Seller - Item 1": LocData(2000301003, "Badge Seller"),
     "Badge Seller - Item 2": LocData(2000301004, "Badge Seller"),
@@ -1050,6 +1081,7 @@ location_table = {
     **ahit_locations,
     **act_completions,
     **storybook_pages,
+    **director_tokens,
     **contract_locations,
     **shop_locations,
 }
