@@ -38,10 +38,10 @@ jobs:
     steps:
       - name: 'Remove labels'
         run: |-
-          gh pr edit "$PR_URL" --remove-label 'waiting-on: peer-review' \
-            --remove-label 'waiting-on: core-review' \
-            --remove-label 'waiting-on: world-maintainer' \
-            --remove-label 'waiting-on: author'
+          gh pr edit "$PR_URL" --remove-label 'waiting-on: peer-review' || true
+          gh pr edit "$PR_URL" --remove-label 'waiting-on: core-review' || true
+          gh pr edit "$PR_URL" --remove-label 'waiting-on: world-maintainer' || true
+          gh pr edit "$PR_URL" --remove-label 'waiting-on: author' || true
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
