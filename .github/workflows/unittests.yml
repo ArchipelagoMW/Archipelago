@@ -64,7 +64,7 @@ jobs:
         python Launcher.py --update_settings  # make sure host.yaml exists for tests
     - name: Unittests
       run: |
-        pytest -n auto
+        pytest worlds/kirbyam/test -n auto --dist worksteal
 
   hosting:
     runs-on: ${{ matrix.os }}
