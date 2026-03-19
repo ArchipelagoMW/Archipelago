@@ -309,8 +309,10 @@ class MessengerWorld(World):
             slot_data = self.multiworld.re_gen_passthrough.get(self.game)
             if slot_data:
                 self.multiworld.plando_options |= PlandoOptions.connections
-                self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
-                self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
+                if slot_data["portal_exits"]:
+                    self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
+                if slot_data["transitions"]:
+                    self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
                 keep_entrance_logic = True
 
         add_closed_portal_reqs(self)
