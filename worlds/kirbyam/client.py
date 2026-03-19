@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, List, Optional, Set
+from typing import TYPE_CHECKING, List, Optional, Set, Tuple, Any, Dict
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -8,15 +8,23 @@ from .data import data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
+    from worlds.generic.shared_utils import NetworkItem
 
 
 EXPECTED_ROM_NAME_PREFIX = "kirby amazing mirror"  # loosen while you iterate
+
+
+def _env_flag(name: str) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return False
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 # DEBUG: Temporary development aid.
 # Simulate the player earning one new location every N emulated frames.
 # Set KIRBYAM_DEBUG_SIMULATION=1 to enable simulation (falls back to RAM-driven polling by default).
 # TODO: Remove simulated location mode entirely once real ROM polling is verified to work correctly.
-SIMULATED_LOCATION_EVERY_N_FRAMES = 10000 if os.getenv("KIRBYAM_DEBUG_SIMULATION") else 0
+SIMULATED_LOCATION_EVERY_N_FRAMES = 10000 if _env_flag("KIRBYAM_DEBUG_SIMULATION") else 0
 
 
 class KirbyAmClient(BizHawkClient):
@@ -48,6 +56,7 @@ class KirbyAmClient(BizHawkClient):
         self._goal_reported: bool = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+        """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
         from CommonClient import logger
 
         try:
@@ -83,6 +92,7 @@ class KirbyAmClient(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        """Main watcher loop: polls locations, delivers items, reports goal."""
         # Only run when connected and slot_data is ready
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
@@ -113,6 +123,7 @@ class KirbyAmClient(BizHawkClient):
         return int.from_bytes(b, "little")
 
     async def _persist_u32(self, ctx: "BizHawkClientContext", key: str, value: int) -> None:
+        """Persist a 32-bit value to RAM by address key."""
         addr = data.ram_addresses.get(key)
         if addr is None:
             return
@@ -160,12 +171,15 @@ class KirbyAmClient(BizHawkClient):
 
     async def _simulate_locations(self, ctx: "BizHawkClientContext") -> None:
         """
-        Temporary: send one new LocationChecks every N emulated frames.
-
-        - Uses frame_counter if present.
-        - Deterministic ordering: ascending location_id.
-        - Reconnect safe: skips any location already in ctx.checked_locations.
-        - Persists last_simulated_frame and the cursor (stored in sim_next_index).
+        Development fallback: send one new LocationChecks every N emulated frames.
+        
+        Behavior:
+        - Uses frame_counter from addresses.json if present
+        - Deterministic ordering: ascending location_id
+        - Reconnect-safe: skips already checked locations
+        - Persists last_simulated_frame and cursor (sim_next_index)
+        
+        NOTE: Disabled by default. Set KIRBYAM_DEBUG_SIMULATION=1 to enable.
         """
         if not self._all_location_ids_sorted:
             return
@@ -205,7 +219,13 @@ class KirbyAmClient(BizHawkClient):
 
     async def _poll_locations(self, ctx: "BizHawkClientContext") -> None:
         """
-        Long-term plan: read a shard bitfield and map set bits to locations.
+        Primary location polling: read shard bitfield and map set bits to locations.
+        
+        Behavior:
+        - Reads shard_bitfield from 0x0202C000 (AP mailbox mirror)
+        - Each bit (0-31) represents one location/shard
+        - New bits tracked in _checked_location_bits
+        - Sends LocationChecks for all newly set bits
         """
         shard_addr = data.ram_addresses["shard_bitfield"]
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(shard_addr, 4, "System Bus")]))[0]
@@ -229,10 +249,18 @@ class KirbyAmClient(BizHawkClient):
 
     async def _deliver_items(self, ctx: "BizHawkClientContext") -> None:
         """
-        Mailbox protocol:
-        - Client writes item_id + player + flag=1
-        - ROM consumes and clears flag back to 0
-        We only advance delivered_item_index once we observe the flag was cleared (ACK).
+        Deliver items via mailbox protocol.
+        
+        Protocol:
+        1. Client writes item_id + player to mailbox
+        2. Client sets flag=1 to signal ROM
+        3. ROM reads mailbox, applies item, clears flag=0 (ACK)
+        4. Client observes flag=0, advances index
+        
+        State machine:
+        - If _delivery_pending: wait for ROM to ACK (flag -> 0)
+        - If flag=0 and items available: write next item (set flag -> 1)
+        - Otherwise: wait
         """
         flag_addr = data.ram_addresses["incoming_item_flag"]
         id_addr = data.ram_addresses["incoming_item_id"]
@@ -273,7 +301,14 @@ class KirbyAmClient(BizHawkClient):
 
     async def _maybe_report_goal(self, ctx: "BizHawkClientContext") -> None:
         """
-        Temporary development goal: mark finished when all locations in data.locations are checked.
+        Temporary goal reporting: mark finished when all locations are checked.
+        
+        Current Implementation (PLACEHOLDER):
+        - Reports goal once all location IDs in data.locations checked
+        
+        TODO:
+        - Replace with actual Dark Mind defeat signal from ROM
+        - See issue #38 for final implementation
         """
         if self._goal_reported:
             return
