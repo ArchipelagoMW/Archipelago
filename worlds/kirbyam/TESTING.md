@@ -105,3 +105,16 @@ The suite includes malformed and out-of-range item payload cases and verifies gr
 
 - This setup is intentionally minimal for integration testing and is not a production deployment path.
 - For broader deployment containers, refer to `deploy/docker-compose.yml`.
+
+## APWorld CI and Release Workflow (Issue 123)
+
+The repository includes a dedicated GitHub Actions workflow at `.github/workflows/kirbyam-apworld.yml`.
+
+Behavior:
+
+- On pull requests touching `worlds/kirbyam/**`, and on pushes to `main`, it builds `kirbyam.apworld` and uploads it as a workflow artifact.
+- On tags matching `kirbyam-v*`, it also creates/updates a draft GitHub release with the built `.apworld` asset attached.
+
+Tag format for release builds:
+
+- `kirbyam-v0.1.0`

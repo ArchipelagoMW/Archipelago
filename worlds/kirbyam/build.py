@@ -14,10 +14,18 @@ Key requirements:
 
 from __future__ import annotations
 
+import os
+import sys
+
+# When this script is executed from worlds/kirbyam, Python prepends that folder
+# to sys.path. That folder contains types.py, which can shadow stdlib types.
+_SCRIPT_DIR = os.path.realpath(os.path.dirname(__file__))
+if sys.path and os.path.realpath(sys.path[0]) == _SCRIPT_DIR:
+    sys.path.pop(0)
+
 import argparse
 import json
 import subprocess
-import sys
 import zipfile
 from pathlib import Path
 from typing import Any
