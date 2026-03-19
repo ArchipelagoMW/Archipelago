@@ -2,6 +2,14 @@
 
 ## Quick Reference: Known Candidates
 
+Policy references:
+- `worlds/kirbyam/docs/notes.md`
+- `worlds/kirbyam/data/native_address_policy.json`
+
+Note: Address statuses (`candidate`, `integrated`, `verified`) and expected widths
+in this guide are intended to match `native_address_policy.json`. If there is a
+mismatch, treat the registry as authoritative and update this guide.
+
 From `KirbyAM Data.xlsx` and cheat codes:
 
 ```

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "baseline": {
+    "rom": "Kirby & The Amazing Mirror (USA).gba",
+    "scope": "POC",
+    "note": "USA ROM only for policy and validation in this phase"
+  },
+  "domains": {
+    "transport": {
+      "description": "AP mailbox/client-ROM contract addresses",
+      "source": "worlds/kirbyam/data/addresses.json#ram.transport"
+    },
+    "native": {
+      "description": "In-game progression/check/goal signals",
+      "source": "worlds/kirbyam/data/addresses.json#ram.native"
+    }
+  },
+  "signals": {
+    "shard_progression": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "shard_bitfield_native",
+          "address": "0x02038970",
+          "width": "u8",
+          "source": "Workbook + cheat cross-reference + ROM payload integration",
+          "verification": "Integrated and used by polling path; pending repeatable BizHawk confirmation per promotion_criteria"
+        }
+      ]
+    },
+    "dungeon_boss_defeat": {
+      "status": "candidate",
+      "entries": [
+        {
+          "name": "boss_mirror_table_region",
+          "base_address": "0x02028C14",
+          "offset": "TBD",
+          "width": "TBD",
+          "source": "Protocol reverse-engineering candidate",
+          "verification": "Needs live memory observation before production use"
+        }
+      ]
+    },
+    "final_boss_defeat": {
+      "status": "candidate",
+      "entries": [
+        {
+          "name": "dark_mind_defeat_flag",
+          "base_address": "0x02028C14",
+          "offset": "TBD",
+          "width": "TBD",
+          "source": "Protocol reverse-engineering candidate",
+          "verification": "Needs live memory observation before production use"
+        }
+      ]
+    }
+  },
+  "promotion_criteria": [
+    "Observed on USA ROM in BizHawk during real gameplay action",
+    "Before/after memory transition captured with exact address and width",
+    "Reproduced consistently in at least 3 independent attempts",
+    "Persistence behavior validated as applicable (room transition/save reload)",
+    "No AP mailbox transport field is used as native game-state source of truth",
+    "ADDRESS_VERIFICATION_MATRIX.md and this registry updated together"
+  ]
+}
