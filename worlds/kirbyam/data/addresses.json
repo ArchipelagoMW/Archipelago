@@ -1,16 +1,21 @@
 {
   "ram": {
-    "shard_bitfield": "0x0202C000",
-    "incoming_item_flag": "0x0202C004",
-    "incoming_item_id": "0x0202C008",
-    "incoming_item_player": "0x0202C00C",
-    "debug_item_counter": "0x0202C010",
-    "debug_last_item_id": "0x0202C014",
-    "debug_last_from": "0x0202C018",
-    "frame_counter": "0x0202C01C",
-    "delivered_item_index": "0x0202C020",
-    "sim_last_frame": "0x0202C024",
-    "sim_next_index": "0x0202C028"
+    "transport": {
+      "shard_bitfield": "0x0202C000",
+      "incoming_item_flag": "0x0202C004",
+      "incoming_item_id": "0x0202C008",
+      "incoming_item_player": "0x0202C00C",
+      "debug_item_counter": "0x0202C010",
+      "debug_last_item_id": "0x0202C014",
+      "debug_last_from": "0x0202C018",
+      "frame_counter": "0x0202C01C",
+      "delivered_item_index": "0x0202C020",
+      "sim_last_frame": "0x0202C024",
+      "sim_next_index": "0x0202C028"
+    },
+    "native": {
+      "shard_bitfield_native": "0x02038970"
+    }
   },
   "rom": {
     "gArchipelagoInfo": "0x08F00000"

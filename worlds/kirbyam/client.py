@@ -122,9 +122,13 @@ class KirbyAmClient(BizHawkClient):
     def _u32_le(b: bytes) -> int:
         return int.from_bytes(b, "little")
 
+    @staticmethod
+    def _transport_addr(key: str) -> Optional[int]:
+        return data.transport_ram_addresses.get(key) or data.ram_addresses.get(key)
+
     async def _persist_u32(self, ctx: "BizHawkClientContext", key: str, value: int) -> None:
         """Persist a 32-bit value to RAM by address key."""
-        addr = data.ram_addresses.get(key)
+        addr = self._transport_addr(key)
         if addr is None:
             return
         await bizhawk.write(ctx.bizhawk_ctx, [(addr, int(value & 0xFFFFFFFF).to_bytes(4, "little"), "System Bus")])
@@ -142,7 +146,7 @@ class KirbyAmClient(BizHawkClient):
         # - sim_last_frame
         # - sim_next_index  (we will treat this as "simulated next location index cursor")
         for key in ("delivered_item_index", "sim_last_frame", "sim_next_index"):
-            addr = data.ram_addresses.get(key)
+            addr = self._transport_addr(key)
             if addr is not None:
                 reads.append((addr, 4, "System Bus"))
                 keys_in_order.append(key)
@@ -184,7 +188,7 @@ class KirbyAmClient(BizHawkClient):
         if not self._all_location_ids_sorted:
             return
 
-        frame_addr = data.ram_addresses.get("frame_counter")
+        frame_addr = self._transport_addr("frame_counter")
         if frame_addr is None:
             current_frame = (self._last_simulated_frame + 1) & 0xFFFFFFFF
         else:
@@ -227,7 +231,9 @@ class KirbyAmClient(BizHawkClient):
         - New bits tracked in _checked_location_bits
         - Sends LocationChecks for all newly set bits
         """
-        shard_addr = data.ram_addresses["shard_bitfield"]
+        shard_addr = self._transport_addr("shard_bitfield")
+        if shard_addr is None:
+            return
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(shard_addr, 4, "System Bus")]))[0]
         shard_bits = self._u32_le(raw)
 
@@ -262,9 +268,11 @@ class KirbyAmClient(BizHawkClient):
         - If flag=0 and items available: write next item (set flag -> 1)
         - Otherwise: wait
         """
-        flag_addr = data.ram_addresses["incoming_item_flag"]
-        id_addr = data.ram_addresses["incoming_item_id"]
-        player_addr = data.ram_addresses["incoming_item_player"]
+        flag_addr = self._transport_addr("incoming_item_flag")
+        id_addr = self._transport_addr("incoming_item_id")
+        player_addr = self._transport_addr("incoming_item_player")
+        if flag_addr is None or id_addr is None or player_addr is None:
+            return
 
         raw_flag = (await bizhawk.read(ctx.bizhawk_ctx, [(flag_addr, 4, "System Bus")]))[0]
         flag = self._u32_le(raw_flag)

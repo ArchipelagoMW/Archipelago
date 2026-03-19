@@ -180,6 +180,8 @@ class KirbyAmData:
     Central loaded data container.
     """
     ram_addresses: dict[str, int]
+    transport_ram_addresses: dict[str, int]
+    native_ram_addresses: dict[str, int]
     rom_addresses: dict[str, int]
 
     regions: dict[str, RegionData]
@@ -191,6 +193,8 @@ class KirbyAmData:
 
     def __init__(self) -> None:
         self.ram_addresses = {}
+        self.transport_ram_addresses = {}
+        self.native_ram_addresses = {}
         self.rom_addresses = {}
         self.regions = {}
         self.locations = {}
@@ -213,14 +217,36 @@ def _classification_from_string(s: str) -> ItemClassification:
 
 
 def _init() -> None:
-    # Optional addresses.json (recommended; this is where your shard bitfield belongs)
+    # Optional addresses.json.
+    # Supports both old flat schema:
+    #   {"ram": {"key": "0x..."}, "rom": {...}}
+    # and new grouped schema:
+    #   {"ram": {"transport": {...}, "native": {...}}, "rom": {...}}
     addresses_json = _maybe_load_json_data("addresses.json")
     if isinstance(addresses_json, dict):
         ram = addresses_json.get("ram", {})
         rom = addresses_json.get("rom", {})
+
+        def _load_addr_map(src: dict[str, Any], dst: dict[str, int]) -> None:
+            for k, v in src.items():
+                dst[k] = _parse_int(v)
+
         if isinstance(ram, dict):
-            for k, v in ram.items():
-                data.ram_addresses[k] = _parse_int(v)
+            transport = ram.get("transport")
+            native = ram.get("native")
+            if isinstance(transport, dict) or isinstance(native, dict):
+                if isinstance(transport, dict):
+                    _load_addr_map(transport, data.transport_ram_addresses)
+                if isinstance(native, dict):
+                    _load_addr_map(native, data.native_ram_addresses)
+            else:
+                # Backward compatibility with flat ram schema.
+                _load_addr_map(ram, data.transport_ram_addresses)
+
+            # Preserve legacy access path while introducing grouped maps.
+            data.ram_addresses.update(data.transport_ram_addresses)
+            data.ram_addresses.update(data.native_ram_addresses)
+
         if isinstance(rom, dict):
             for k, v in rom.items():
                 data.rom_addresses[k] = _parse_int(v)
