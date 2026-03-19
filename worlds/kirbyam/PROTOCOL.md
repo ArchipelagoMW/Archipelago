@@ -13,11 +13,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
   0x02000000 - 0x02040000   EWRAM Region (256 KB)
     ├─ 0x02000000 - 0x0202BFFF   Native game state
-    ├─ 0x0202C000 - 0x0202C02B   AP Mailbox (reserved, 44 bytes)
-    └─ 0x0202C02C - 0x02040000   Rest of RAM (unused by AP)
+        ├─ 0x0202C000 - 0x0202C023   AP Mailbox (reserved, 36 bytes)
+        └─ 0x0202C024 - 0x02040000   Rest of RAM (unused by AP)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C02B)
+### AP Mailbox Block (0x0202C000 - 0x0202C023)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -32,10 +32,8 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x18   | 0x0202C018 | 4B | debug_last_from       | u32  | ROM → Client | Last player ID (debug only) |
 | 0x1C   | 0x0202C01C | 4B | frame_counter         | u32  | ROM → Client | Monotonic frame count (incremented every hook call) |
 | 0x20   | 0x0202C020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
-| 0x24   | 0x0202C024 | 4B | sim_last_frame        | u32  | Client ↔ ROM | Last frame simulation ran (debug persistence) |
-| 0x28   | 0x0202C028 | 4B | sim_next_index        | u32  | Client ↔ ROM | Next location cursor for simulation (debug persistence) |
 
-**Total: 44 bytes (0x0202C000 - 0x0202C02B, with padding)**
+**Total: 36 bytes (0x0202C000 - 0x0202C023)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -79,10 +77,13 @@ Server → Client: ConnectionRefused | Connected
 **Active State:** Every frame (or periodic)
 
 ```python
-# Read shard_bitfield from 0x0202C000
-bitfield = RAM[0x0202C000] as u32
+# Prefer native shard bitfield, fallback to mailbox mirror
+if has_address("shard_bitfield_native"):
+    bitfield = RAM[0x02038970] as u8  # native shard_bitfield_native (bits 0-7)
+else:
+    bitfield = RAM[0x0202C000] as u32  # transport mailbox mirror
 
-# For each set bit in the 32-bit mailbox mirror:
+# For each set bit in the 32-bit shard bitfield:
 for bit in range(32):
     if (bitfield >> bit) & 1:
         if bit not previously seen and bit maps to a known location:

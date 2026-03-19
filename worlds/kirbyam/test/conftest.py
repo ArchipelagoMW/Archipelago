@@ -59,8 +59,6 @@ def mock_ram_read_write() -> Generator[Dict[str, bytes], None, None]:
     ram_state[0x0202C018] = (0).to_bytes(4, 'little')  # debug_last_from
     ram_state[0x0202C01C] = (0).to_bytes(4, 'little')  # frame_counter
     ram_state[0x0202C020] = (0).to_bytes(4, 'little')  # delivered_item_index
-    ram_state[0x0202C024] = (0).to_bytes(4, 'little')  # sim_last_frame
-    ram_state[0x0202C028] = (0).to_bytes(4, 'little')  # sim_next_index
     
     yield ram_state
 

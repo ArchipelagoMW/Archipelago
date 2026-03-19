@@ -85,6 +85,7 @@ class AddressValidator:
             "debug_item_counter",
             "debug_last_item_id",
             "debug_last_from",
+            "frame_counter",
         }
         
         print("\n--- Address Usage Validation ---")

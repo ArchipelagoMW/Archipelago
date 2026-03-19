@@ -47,13 +47,13 @@ async def test_poll_locations_prefers_native_shard_address(mock_bizhawk_context)
     with patch.dict(data.native_ram_addresses, {"shard_bitfield_native": 0x02038970}, clear=False), \
          patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
+        mock_read.return_value = [(0x01).to_bytes(1, 'little')]
 
         await client._poll_locations(mock_bizhawk_context)
 
         mock_read.assert_awaited_once_with(
             mock_bizhawk_context.bizhawk_ctx,
-            [(0x02038970, 4, 'System Bus')]
+            [(0x02038970, 1, 'System Bus')]
         )
 
 
@@ -92,6 +92,24 @@ async def test_poll_locations_multiple_shards(mock_bizhawk_context, shard_bitfie
         assert 0 in client._checked_location_bits
         assert 1 in client._checked_location_bits
         assert 2 in client._checked_location_bits
+
+
+@pytest.mark.asyncio
+async def test_poll_locations_ignores_unmapped_reserved_bits(mock_bizhawk_context):
+    """Test reserved/high bits are ignored when they do not map to any location."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        # Bits 0 and 31 set; only bit 0 maps to current shard locations.
+        mock_read.return_value = [(0x80000001).to_bytes(4, 'little')]
+
+        await client._poll_locations(mock_bizhawk_context)
+
+        assert 0 in client._checked_location_bits
+        assert 31 not in client._checked_location_bits
 
 
 @pytest.mark.asyncio
