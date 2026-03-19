@@ -415,11 +415,37 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             else:
                 launch(get_exe(button.component), button.component.cli)
 
+        @staticmethod
+        def copy_to_clipboard(text):
+            from kivy.core.clipboard import Clipboard
+            Clipboard.copy(text)
+            MDSnackbar(MDSnackbarText(text="Copied to clipboard."), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
+
         def display_failed(self):
+            """Display a dialog showing the exceptions produced by any world that failed to load during
+            initialization."""
             if not self.failed_worlds:
                 return
-            from kivymd.uix.dialog import MDDialog
-            dialog = MDDialog()
+            from kivymd.uix.dialog import MDDialog, MDDialogIcon, MDDialogHeadlineText, MDDialogContentContainer
+            from kivymd.uix.divider import MDDivider
+            from kivymd.uix.list import MDListItem, MDListItemHeadlineText, MDListItemSupportingText
+            entries = []
+            for world, reason in failed_world_loads.items():
+                entries.append(MDListItem(
+                    MDListItemHeadlineText(text=world),
+                    MDListItemSupportingText(text=reason),
+                    on_release=lambda x, r=reason: self.copy_to_clipboard(r)
+                ))
+            dialog = MDDialog(
+                MDDialogIcon(icon="alert"),
+                MDDialogHeadlineText(text="Failed World Loads"),
+                MDDialogContentContainer(
+                    MDDivider(),
+                    *entries,
+                    orientation="vertical",
+                )
+            )
             dialog.open()
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
