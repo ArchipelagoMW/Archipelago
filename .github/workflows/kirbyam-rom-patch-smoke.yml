@@ -1,0 +1,64 @@
+name: KirbyAM ROM Patch Smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/kirbyam-rom-patch-smoke.yml"
+      - "worlds/kirbyam/**"
+  pull_request:
+    paths:
+      - ".github/workflows/kirbyam-rom-patch-smoke.yml"
+      - "worlds/kirbyam/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  patch-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make gcc-arm-none-eabi binutils-arm-none-eabi
+          python -m pip install --upgrade pip
+          python -m pip install bsdiff4
+
+      - name: Create deterministic dummy base ROM for CI smoke
+        run: |
+            truncate -s 2097152 worlds/kirbyam/kirby_ap_payload/kirby.gba
+
+      - name: Build payload and generate ROM patch
+        run: |
+          cd worlds/kirbyam
+          python build.py --source-type arg --rom "$(pwd)/kirby_ap_payload/kirby.gba"
+
+      - name: Validate expected outputs exist
+        run: |
+          test -f worlds/kirbyam/data/base_patch.bsdiff4
+          test -f worlds/kirbyam/kirbyam.apworld
+          test -f worlds/kirbyam/kirby_ap_payload/payload.bin
+
+      - name: Upload KirbyAM patch smoke artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirbyam-rom-patch-smoke-artifacts
+          path: |
+            worlds/kirbyam/data/base_patch.bsdiff4
+            worlds/kirbyam/kirbyam.apworld
+            worlds/kirbyam/kirby_ap_payload/payload.bin
+            worlds/kirbyam/kirby_ap_payload/patch_rom.log
+          if-no-files-found: error
+          retention-days: 14

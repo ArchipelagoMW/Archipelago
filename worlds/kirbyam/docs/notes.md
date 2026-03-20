@@ -71,6 +71,26 @@ Current proof-of-concept shard bit mapping:
 - Verification workflow: `worlds/kirbyam/docs/BIZHAWK_TESTING_GUIDE.md`
 - Native signal status registry: `worlds/kirbyam/data/native_address_policy.json`
 
+## Issue #232: Automated ROM Patch Rebuild Smoke in CI
+
+### Problem
+KirbyAM CI previously built `.apworld` artifacts with `--skip-patch`, which did not automatically exercise the ROM payload build + bsdiff patch generation path.
+
+### Solution
+Added workflow `.github/workflows/kirbyam-rom-patch-smoke.yml` to run on KirbyAM changes and execute end-to-end patch generation steps:
+- Install ARM toolchain + Python dependency `bsdiff4`
+- Build payload via `make`
+- Generate `worlds/kirbyam/data/base_patch.bsdiff4` through `worlds/kirbyam/build.py`
+- Upload key outputs (`base_patch.bsdiff4`, `kirbyam.apworld`, `payload.bin`, `patch_rom.log`) as artifacts
+
+### CI ROM Input Policy
+To avoid distributing copyrighted ROM data in CI, this workflow uses a deterministic dummy 16 MiB `kirby.gba` file only for pipeline validation.
+
+Implications:
+- CI smoke proves that payload compilation and patch-file generation mechanics are functional.
+- CI smoke does **not** validate runtime correctness against a real clean USA ROM image.
+- Release-quality patch validation against a real clean ROM remains a local/manual maintainer responsibility.
+
 ## Issue #109: Reset-Safe Mirror Shard Grant Handling
 
 ### Problem
