@@ -357,9 +357,6 @@ class PeakRegion(POYRegion):
 
         if self.generate_time_attack:
             ta_entry_requirements: Requirements = SimpleRequirements({"Pocketwatch": 1})
-            if self.generate_free_solo:
-                ta_entry_requirements = AllRequirements([ta_entry_requirements, SimpleRequirements({"Progressive Crampons": 1})])
-                # difficult enough to warrant this
             self.subregions.append(POYRegion(
                 self.name + " Time Attack", entry_requirements=ta_entry_requirements,
                 locations=[
