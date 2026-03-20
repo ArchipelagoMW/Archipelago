@@ -122,8 +122,36 @@ The repository includes a dedicated GitHub Actions workflow at `.github/workflow
 Behavior:
 
 - On pull requests touching `worlds/kirbyam/**`, and on pushes to `main`, it builds `kirbyam.apworld` and uploads it as a workflow artifact.
-- On tags matching `kirbyam-v*`, it also creates/updates a draft GitHub release with the built `.apworld` asset attached.
+- On valid tags matching `kirbyam-vMAJOR.MINOR.PATCH`, it also creates or updates a draft GitHub release with the built `.apworld` asset attached.
+- The release workflow never publishes releases for branch pushes or pull requests.
+- If a tag begins with `kirbyam-v` but does not match the required three-part version format, the metadata step fails fast instead of publishing a malformed release.
+- Re-running the same release workflow updates the existing draft release asset for that tag instead of creating a second release.
 
 Tag format for release builds:
 
-- `kirbyam-v0.1.0`
+- Valid: `kirbyam-v0.0.1`
+- Valid: `kirbyam-v1.2.3`
+- Invalid: `kirbyam-0.0.1`
+- Invalid: `v0.0.1`
+- Invalid: `kirbyam-v0.0`
+- Invalid: `kirbyam-v0.0.1-beta`
+
+Maintainer release steps:
+
+1. Merge the intended release changes into `main`.
+2. Create an annotated tag such as `kirbyam-v0.0.1` on the release commit.
+3. Push the tag to `origin`.
+4. Wait for `.github/workflows/kirbyam-apworld.yml` to finish.
+5. Open the draft GitHub release and verify:
+   - release title is `KirbyAM APWorld v0.0.1`
+   - attached asset name is `kirbyam-0.0.1.apworld`
+   - the asset downloads and loads as an APWorld
+6. Publish the draft release manually when ready.
+
+Release validation checklist:
+
+- Confirm `worlds/kirbyam/archipelago.json` has the intended `world_version`.
+- Run `python -m pytest worlds/kirbyam/test/test_release_metadata.py` locally.
+- Run `python build.py --skip-patch` from `worlds/kirbyam/` and confirm `kirbyam.apworld` is produced.
+- Push a valid `kirbyam-vMAJOR.MINOR.PATCH` tag and confirm a draft release is created or updated.
+- Confirm a non-tag branch push only uploads artifacts and does not create a release.

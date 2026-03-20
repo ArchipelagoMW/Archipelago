@@ -155,6 +155,25 @@ This document defines the project management workflow for the Kirby & The Amazin
 4. Delete feature branch
 ```
 
+### 8. KirbyAM APWorld Draft Release
+
+Use tag-driven draft releases for APWorld publication.
+
+```
+1. Confirm worlds/kirbyam/archipelago.json has the intended world_version
+2. Create annotated tag: kirbyam-vMAJOR.MINOR.PATCH
+3. Push the tag to origin
+4. Verify the KirbyAM APWorld workflow created or updated a draft release
+5. Confirm asset name: kirbyam-<version>.apworld
+6. Publish the draft manually when maintainer validation is complete
+```
+
+Tag rules:
+
+- Canonical format: `kirbyam-vMAJOR.MINOR.PATCH`
+- Branch pushes and pull requests must not publish releases
+- Malformed `kirbyam-v*` tags should be treated as operator error and rejected by workflow validation
+
 ## Project Board Organization
 
 ### Columns

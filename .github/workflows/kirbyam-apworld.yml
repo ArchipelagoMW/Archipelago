@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/kirbyam-apworld.yml"
+      - ".github/scripts/kirbyam_release_metadata.py"
       - "worlds/kirbyam/**"
   workflow_dispatch:
 
@@ -22,6 +23,8 @@ jobs:
       apworld_name: ${{ steps.package.outputs.apworld_name }}
       release_name: ${{ steps.meta.outputs.release_name }}
       release_tag: ${{ steps.meta.outputs.release_tag }}
+      release_enabled: ${{ steps.meta.outputs.release_enabled }}
+      version: ${{ steps.meta.outputs.version }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -35,6 +38,13 @@ jobs:
         run: |
           python --version
 
+      - name: Prepare release metadata
+        id: meta
+        run: |
+          python .github/scripts/kirbyam_release_metadata.py \
+            --github-ref "${GITHUB_REF}" \
+            --github-output "${GITHUB_OUTPUT}"
+
       - name: Build kirbyam.apworld
         working-directory: worlds/kirbyam
         run: |
@@ -44,24 +54,6 @@ jobs:
             exit 1
           fi
           ls -lh kirbyam.apworld
-
-      - name: Prepare release metadata
-        id: meta
-        shell: bash
-        run: |
-          APWORLD_NAME="kirbyam.apworld"
-          if [[ "${GITHUB_REF}" == refs/tags/kirbyam-v* ]]; then
-            VERSION="${GITHUB_REF#refs/tags/kirbyam-v}"
-            APWORLD_NAME="kirbyam-${VERSION}.apworld"
-            RELEASE_NAME="KirbyAM APWorld v${VERSION}"
-            RELEASE_TAG="${GITHUB_REF#refs/tags/}"
-          else
-            RELEASE_NAME=""
-            RELEASE_TAG=""
-          fi
-          echo "apworld_name=${APWORLD_NAME}" >> "${GITHUB_OUTPUT}"
-          echo "release_name=${RELEASE_NAME}" >> "${GITHUB_OUTPUT}"
-          echo "release_tag=${RELEASE_TAG}" >> "${GITHUB_OUTPUT}"
 
       - name: Stage artifact
         id: package
@@ -81,7 +73,7 @@ jobs:
           retention-days: 14
 
   release-apworld:
-    if: startsWith(github.ref, 'refs/tags/kirbyam-v')
+    if: needs.build-apworld.outputs.release_enabled == 'true'
     runs-on: ubuntu-latest
     needs: build-apworld
     permissions:
@@ -101,5 +93,6 @@ jobs:
           draft: true
           prerelease: false
           files: dist/${{ needs.build-apworld.outputs.apworld_name }}
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
