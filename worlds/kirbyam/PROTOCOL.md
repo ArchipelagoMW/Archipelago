@@ -116,14 +116,21 @@ delivered_item_index += 1
 
 ### 4. Goal Reporting
 
-**Temp Implementation:**
+**Current Implementation:**
+```python
+# World rules use goal events at REGION_DIMENSION_MIRROR/MAIN:
+# - EVENT_DEFEAT_DARK_MIND for Goal=Dark Mind
+# - EVENT_100_PERCENT for Goal=100%
+```
+
+**Client StatusUpdate (temporary):**
 ```python
 # Check completion based on all locations checked
 if all(loc_id in checked_locations for loc_id in all_location_ids):
     send StatusUpdate(status=CLIENT_GOAL)
 ```
 
-**TODO:** Replace with actual Dark Mind defeat signal from native game state (TBD address).
+**TODO:** Replace client-side StatusUpdate trigger with an actual native Dark Mind defeat signal once the address is live-mapped and integrated.
 
 ## ROM Payload Contract
 

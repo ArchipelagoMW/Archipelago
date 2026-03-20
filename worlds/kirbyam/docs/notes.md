@@ -106,3 +106,16 @@ Future BizHawk validation should confirm:
 3. Reset/power-cycle emulator
 4. Verify shard persists after reload
 5. Verify save file is not corrupted
+
+## Issue #38: Goal Location for Dark Mind
+
+### Problem
+Completion logic was still tied directly to "all shard items collected" and did not require goal events, even though goal events were defined in the Dimension Mirror region.
+
+### Solution
+Rule wiring now uses goal events for completion:
+- Goal=Dark Mind -> requires `EVENT_DEFEAT_DARK_MIND`
+- Goal=100% -> requires `EVENT_100_PERCENT`
+- Goal=DEBUG -> remains always complete for testing
+
+Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated goal location/event.
