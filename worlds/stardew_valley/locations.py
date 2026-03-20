@@ -695,7 +695,7 @@ def extend_filler_locations(randomized_locations: List[LocationData], options: S
     if number_locations_to_add_per_day <= 0:
         return
 
-    existing_traveling_merchant_locations = [location.name for location in randomized_locations if location.name.startswith("Traveling Merchant ")]
+    existing_traveling_merchant_locations = [location.name for location in randomized_locations if location.name.startswith("Traveling Merchant Sunday Item ")]
     start_num_to_add = 1
     while any(location_name == f"Traveling Merchant Sunday Item {start_num_to_add}" for location_name in existing_traveling_merchant_locations):
         start_num_to_add += 1
