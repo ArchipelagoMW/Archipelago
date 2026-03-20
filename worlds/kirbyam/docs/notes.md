@@ -117,9 +117,22 @@ Goal handling now uses explicit goal locations:
 - Goal=Dark Mind -> requires `Defeat Dark Mind`
 - Goal=100% -> requires `100% Save File`
 - Goal locations live in `REGION_DIMENSION_MIRROR/MAIN` and are locked progression events, not randomized pool entries
-- The BizHawk client now reports the selected goal location after all non-goal locations are checked, then sends goal status after the server acknowledges that goal location
+- The BizHawk client reports the selected goal location from native AI-state polling (`ai_kirby_state_native`), then sends goal status after the server acknowledges that goal location
 
 Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated AP goal location instead of an auto-collected region event.
+
+## Issue #194: Native Dark Mind Goal Detection via AI State
+
+### Problem
+Goal completion used temporary client-side aggregation logic instead of native game-state semantics.
+
+### Solution
+Integrated native AI-state goal polling from `ai_kirby_state_native` (`0x0203AD2C`):
+- Goal=Dark Mind: trigger selected goal location when value is `9999`
+- Goal=100%: trigger selected goal location when value is `10000`
+- In Dark Mind mode, `10000` is treated as post-clear progression and is not used as first-clear trigger
+
+Client continues to send `CLIENT_GOAL` only after server acknowledgement of the selected goal location check, preserving idempotent AP completion reporting.
 
 ## Issue #110: Boss Defeat Address Identification Beyond Shards
 

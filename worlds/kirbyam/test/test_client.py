@@ -291,38 +291,134 @@ async def test_deliver_items_skips_malformed_entries_and_logs_warning(mock_bizha
 
 
 @pytest.mark.asyncio
-async def test_goal_location_checked_before_goal_status(mock_bizhawk_context):
-    """The client should report the selected goal location before sending CLIENT_GOAL."""
+async def test_goal_dark_mind_native_signal_reports_location_then_goal_status(mock_bizhawk_context):
+    """Dark Mind goal should use native 9999 signal and report status after server ack."""
     from NetUtils import ClientStatus
 
     client = KirbyAmClient()
     client.initialize_client()
 
     dark_mind_goal_id = data.locations["GOAL_DARK_MIND"].location_id
-    non_goal_location_ids = sorted(
-        loc.location_id
-        for key, loc in data.locations.items()
-        if key != "GOAL_DARK_MIND" and key != "GOAL_100_PERCENT"
-    )
-
     mock_bizhawk_context.slot_data["goal"] = 0
-    mock_bizhawk_context.checked_locations = set(non_goal_location_ids)
+    mock_bizhawk_context.checked_locations = set()
 
-    await client._maybe_report_goal(mock_bizhawk_context)
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
 
-    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
-        {"cmd": "LocationChecks", "locations": [dark_mind_goal_id]}
-    ])
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+        mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+            {"cmd": "LocationChecks", "locations": [dark_mind_goal_id]}
+        ])
 
     mock_bizhawk_context.send_msgs.reset_mock()
     mock_bizhawk_context.checked_locations.add(dark_mind_goal_id)
 
-    await client._maybe_report_goal(mock_bizhawk_context)
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+
+        await client._maybe_report_goal(mock_bizhawk_context)
 
     mock_bizhawk_context.send_msgs.assert_awaited_once_with([
         {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
     ])
     assert client._goal_reported is True
+
+
+@pytest.mark.asyncio
+async def test_goal_100_percent_uses_native_10000_signal(mock_bizhawk_context):
+    """100% goal should trigger on native 10000 signal."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    goal_id = data.locations["GOAL_100_PERCENT"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 1
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(10000).to_bytes(4, 'little')]
+
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [goal_id]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_goal_dark_mind_does_not_trigger_on_10000(mock_bizhawk_context):
+    """Dark Mind goal mode must not treat 10000 as first-clear trigger."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot_data["goal"] = 0
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(10000).to_bytes(4, 'little')]
+
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_goal_native_signal_missing_falls_back_to_noop(mock_bizhawk_context):
+    """If native goal signal address is unavailable, goal reporting should no-op safely."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+    mock_bizhawk_context.send_msgs.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_goal_location_check_sent_once_before_ack(mock_bizhawk_context):
+    """Native signal should not spam duplicate goal location checks before server acknowledgement."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    goal_id = data.locations["GOAL_DARK_MIND"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 0
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+        await client._maybe_report_goal(mock_bizhawk_context)
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [goal_id]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_goal_location_uses_locations_checked_for_reconnect_safe_dedup(mock_bizhawk_context):
+    """Goal location checks should dedupe via ctx.locations_checked when available."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    goal_id = data.locations["GOAL_DARK_MIND"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.locations_checked = set()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+
+        await client._maybe_report_goal(mock_bizhawk_context)
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    assert goal_id in mock_bizhawk_context.locations_checked
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [goal_id]}
+    ])
 
 
 @pytest.mark.asyncio

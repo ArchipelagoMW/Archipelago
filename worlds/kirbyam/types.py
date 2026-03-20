@@ -23,6 +23,7 @@ class KirbyAmBizHawkClientContext(Protocol):
     server: Any
     slot_data: dict[str, Any] | None
     checked_locations: set[int]
+    locations_checked: set[int]
     items_received: list[KirbyAmNetworkItem]
 
     auth: str | None

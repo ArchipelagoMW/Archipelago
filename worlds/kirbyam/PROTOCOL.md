@@ -116,25 +116,31 @@ delivered_item_index += 1
 
 ### 4. Goal Reporting
 
-**Current Implementation:**
+**Current Implementation (native AI-state polling):**
 ```python
 # World rules use explicit goal locations in REGION_DIMENSION_MIRROR/MAIN:
 # - Defeat Dark Mind for Goal=Dark Mind
 # - 100% Save File for Goal=100%
+
+# Native signal source:
+# ai_kirby_state_native @ 0x0203AD2C (u32)
+# - Goal=Dark Mind: trigger selected goal location check on value 9999
+# - Goal=100%: trigger selected goal location check on value 10000
+#
+# Note: 10000 is post-clear progression for Dark Mind mode and must not be
+# treated as first-clear trigger when Goal=Dark Mind.
 ```
 
-**Client StatusUpdate (temporary):**
+**Client StatusUpdate:**
 ```python
-# Report the selected goal location once every non-goal location is checked,
-# then send CLIENT_GOAL after the server acknowledges the goal location check.
-if all(loc_id in checked_locations for loc_id in non_goal_location_ids):
+# Report selected goal location when native signal is active,
+# then send CLIENT_GOAL after server acknowledges that location check.
+if native_signal_active_for_selected_goal:
     send LocationChecks([goal_location_id])
 
-if goal_location_id in checked_locations and all(loc_id in checked_locations for loc_id in all_location_ids):
+if goal_location_id in checked_locations:
     send StatusUpdate(status=CLIENT_GOAL)
 ```
-
-**TODO:** Replace client-side goal-location reporting with actual native Dark Mind / 100% signals once those addresses are live-mapped and integrated.
 
 ## ROM Payload Contract
 

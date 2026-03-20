@@ -42,15 +42,26 @@
       ]
     },
     "final_boss_defeat": {
-      "status": "candidate",
+      "status": "integrated",
       "entries": [
         {
-          "name": "dark_mind_defeat_flag",
-          "base_address": "0x02028C14",
-          "offset": "TBD",
-          "width": "TBD",
-          "source": "Protocol reverse-engineering candidate",
-          "verification": "Needs live memory observation before production use"
+          "name": "ai_kirby_state_native",
+          "address": "0x0203AD2C",
+          "width": "u32",
+          "source": "Live-mapped AI state candidate integrated for goal mode polling",
+          "verification": "Integrated with semantics: 9999 = Dark Mind clear trigger, 10000 = 100% progression signal"
+        }
+      ]
+    },
+    "full_clear_completion": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "ai_kirby_state_native",
+          "address": "0x0203AD2C",
+          "width": "u32",
+          "source": "Live-mapped AI state candidate integrated for goal mode polling",
+          "verification": "Integrated with semantics: 10000 used for Goal=100% completion signal"
         }
       ]
     }

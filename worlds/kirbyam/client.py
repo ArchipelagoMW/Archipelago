@@ -14,6 +14,9 @@ if TYPE_CHECKING:
 
 EXPECTED_ROM_NAME_PREFIX = "kirby amazing mirror"  # loosen while you iterate
 _BOSS_MIRROR_TABLE_PROBE_BYTES = 32
+_AI_STATE_ADDR_WIDTH = 4
+_GOAL_STATE_DARK_MIND_CLEAR = 9999
+_GOAL_STATE_FULL_CLEAR = 10000
 
 
 class KirbyAmClient(BizHawkClient):
@@ -54,6 +57,8 @@ class KirbyAmClient(BizHawkClient):
 
         # Goal reporting
         self._goal_reported: bool = False
+        self._goal_location_reported: bool = False
+        self._native_goal_signal_seen: bool = False
 
         # Boss candidate probing state
         self._last_boss_probe_snapshot: bytes | None = None
@@ -115,7 +120,7 @@ class KirbyAmClient(BizHawkClient):
         # Item delivery (mailbox protocol)
         await self._deliver_items(ctx)
 
-        # Temporary goal reporting
+        # Goal reporting
         await self._maybe_report_goal(ctx)
 
     # --------------------------
@@ -387,19 +392,36 @@ class KirbyAmClient(BizHawkClient):
             return
 
     # --------------------------
-    # Temporary completion condition
+    # Goal completion condition
     # --------------------------
+
+    async def _native_goal_signal_active(self, ctx: KirbyAmBizHawkClientContext, slot_goal: int) -> bool:
+        """Return whether native goal signal is active for the selected goal mode."""
+        ai_state_addr = self._native_addr("ai_kirby_state_native")
+        if ai_state_addr is None:
+            return False
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
+        ai_state = self._u32_le(raw)
+
+        if slot_goal == Goal.option_dark_mind:
+            # Dark Mind clear is anchored to 9999. The 10000 state is post-clear progression
+            # and should not be used as the first-clear trigger for this goal mode.
+            return ai_state == _GOAL_STATE_DARK_MIND_CLEAR
+
+        if slot_goal == Goal.option_100:
+            return ai_state == _GOAL_STATE_FULL_CLEAR
+
+        return False
 
     async def _maybe_report_goal(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
-        Temporary goal reporting: mark finished when all locations are checked.
-        
-        Current Implementation (PLACEHOLDER):
-        - Reports goal once all location IDs in data.locations checked
-        
-        TODO:
-        - Replace with actual Dark Mind defeat signal from ROM
-        - See issue #38 for final implementation
+        Goal reporting from native signal polling.
+
+        Behavior:
+        - Reports selected goal location when the corresponding native signal is active.
+        - Sends CLIENT_GOAL once server acknowledges the selected goal location.
+        - Falls back to no-op when native addresses are unavailable.
         """
         if self._goal_reported:
             return
@@ -417,13 +439,30 @@ class KirbyAmClient(BizHawkClient):
         if goal_location_id is None:
             return
 
-        if goal_location_id not in ctx.checked_locations:
-            if all(loc_id in ctx.checked_locations for loc_id in self._non_goal_location_ids_sorted):
-                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [goal_location_id]}])
+        if not self._native_goal_signal_seen:
+            self._native_goal_signal_seen = await self._native_goal_signal_active(ctx, slot_goal)
+
+        if not self._native_goal_signal_seen:
             return
 
-        required_completion_ids = [*self._non_goal_location_ids_sorted, goal_location_id]
-        if all(loc_id in ctx.checked_locations for loc_id in required_completion_ids):
+        if goal_location_id not in ctx.checked_locations:
+            locations_checked = getattr(ctx, "locations_checked", None)
+            if not isinstance(locations_checked, set):
+                locations_checked = None
+
+            # Prefer reconnect-safe tracking when available.
+            if locations_checked is not None:
+                if goal_location_id in locations_checked:
+                    return
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [goal_location_id]}])
+                locations_checked.add(goal_location_id)
+            else:
+                if not self._goal_location_reported:
+                    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [goal_location_id]}])
+                    self._goal_location_reported = True
+            return
+
+        if goal_location_id in ctx.checked_locations:
             from NetUtils import ClientStatus
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             self._goal_reported = True
