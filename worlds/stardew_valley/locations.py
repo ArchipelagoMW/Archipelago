@@ -1,6 +1,7 @@
 import csv
 import enum
 import logging
+import math
 from dataclasses import dataclass
 from random import Random
 from typing import Optional, Dict, Protocol, List, Iterable
@@ -665,38 +666,45 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
 
 def extend_filler_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    number_items_to_add = 0
-    if len(randomized_locations) < 90:
-        number_items_to_add += ((90 - len(randomized_locations)) // 7)+1
+    number_locations_to_add_per_day = 0
+    min_number_locations = 90  # Under 90 locations we can run out of rooms for the mandatory core items
+    if len(randomized_locations) < min_number_locations:
+        number_locations_to_add = min_number_locations - len(randomized_locations)
+        number_locations_to_add_per_day += math.ceil(number_locations_to_add / 7)
 
+    # These settings generate a lot of empty locations, so they can absorb a lot of items
     filler_heavy_settings = [options.fishsanity != Fishsanity.option_none,
                              options.shipsanity != Shipsanity.option_none,
                              options.cooksanity != Cooksanity.option_none,
                              options.craftsanity != Craftsanity.option_none,
                              len(options.eatsanity.value) > 0,
                              options.museumsanity == Museumsanity.option_all,
-                             options.quest_locations.value > 7]
+                             options.quest_locations.value >= 0]
+    # These settings generate orphan items and can cause too many items, if enabled without a complementary of the filler heavy settings
     orphan_settings = [len(options.chefsanity.value) > 0,
                        options.friendsanity != Friendsanity.option_none,
-                       options.skill_progression != SkillProgression.option_vanilla,
+                       options.skill_progression == SkillProgression.option_progressive_with_masteries,
                        options.cropsanity != Cropsanity.option_disabled,
                        len(options.start_without.value) > 0]
 
     enabled_filler_heavy_settings = len([val for val in filler_heavy_settings if val])
     enabled_orphan_settings = len([val for val in orphan_settings if val])
     if enabled_orphan_settings > enabled_filler_heavy_settings:
-        number_items_to_add += enabled_orphan_settings - enabled_filler_heavy_settings
+        number_locations_to_add_per_day += enabled_orphan_settings - enabled_filler_heavy_settings
 
-    for i in range(1, 1+number_items_to_add):
-        location_name = f"Traveling Merchant Sunday Item {i}"
-        while any(location.name == location_name for location in randomized_locations):
-            i += 1
-            location_name = f"Traveling Merchant Sunday Item {i}"
+    if number_locations_to_add_per_day <= 0:
+        return
+
+    existing_traveling_merchant_locations = [location.name for location in randomized_locations if location.name.startswith("Traveling Merchant ")]
+    start_num_to_add = 1
+    while any(location_name == f"Traveling Merchant Sunday Item {start_num_to_add}" for location_name in existing_traveling_merchant_locations):
+        start_num_to_add += 1
+
+    for i in range(start_num_to_add, start_num_to_add+number_locations_to_add_per_day):
         logger.debug(f"Player too few locations, adding Traveling Merchant Items #{i}")
         for day in days:
             location_name = f"Traveling Merchant {day} Item {i}"
             randomized_locations.append(location_table[location_name])
-
 
 
 def create_locations(location_collector: StardewLocationCollector,

@@ -25,8 +25,7 @@ class TestCountsPerSetting(SVTestCase):
 
         for name in option_mins_and_maxes:
             values = option_mins_and_maxes[name]
-            is_list = not isinstance(values, str) and isinstance(values, list)
-            if not is_list:
+            if not isinstance(values, list):
                 continue
             with self.subTest(f"{name}"):
                 highest_variance_items = -1
