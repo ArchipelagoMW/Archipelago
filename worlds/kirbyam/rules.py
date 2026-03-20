@@ -7,9 +7,13 @@ Current rules:
   - Access to the Dimension Mirror region requires collecting all 8 Mirror Shards
     (implemented as 8 progression items).
   - Completion conditions:
-            * Dark Mind: collect EVENT_DEFEAT_DARK_MIND.
-            * 100%: collect EVENT_100_PERCENT.
-      * DEBUG: always completable.
+        * Dark Mind: collect EVENT_DEFEAT_DARK_MIND.
+        * 100%: collect EVENT_100_PERCENT.
+        * DEBUG: always completable.
+
+NOTE: EVENT_DEFEAT_DARK_MIND and EVENT_100_PERCENT are currently synthetic goal
+events hosted in the Dimension Mirror region. Until a native Dark Mind/100%
+signal is integrated from game memory, these goals remain progression placeholders.
 """
 
 from __future__ import annotations
