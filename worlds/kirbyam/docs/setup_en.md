@@ -45,11 +45,21 @@ you can re-open it from the launcher.
 2. Ensure EmuHawk is running the patched ROM.
 3. In EmuHawk, go to `Tools > Lua Console`. This window must stay open while playing.
 4. In the Lua Console window, go to `Script > Open Script…`.
-5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
+5. Navigate to your Archipelago install folder and open `data/lua/connector_kirbyam_bizhawk.lua`.
 6. The emulator and client will eventually connect to each other. The BizHawk Client window should indicate that it
 connected and recognized Kirby & The Amazing Mirror.
 7. To connect the client to the server, enter your room's address and port (e.g. `archipelago.gg:38281`) into the
 top text field of the client and click Connect.
+
+Healthy startup indicators:
+- Lua Console prints `[KirbyAM Connector] ROM validation OK: ...`
+- Lua Console prints `[KirbyAM Connector] Starting generic BizHawk transport bridge for KirbyAM.`
+- BizHawk Client recognizes Kirby & The Amazing Mirror without repeated disconnect spam
+
+First troubleshooting checks:
+- Confirm BizHawk is running a Kirby & The Amazing Mirror GBA ROM before launching the connector
+- If the Lua Console reports the wrong ROM/system, reload the correct ROM and rerun `connector_kirbyam_bizhawk.lua`
+- If the connector starts but the BizHawk Client does not attach, verify the Lua Console window remains open
 
 You should now be able to receive and send items. You'll need to do these steps every time you want to reconnect. It is
 perfectly safe to make progress offline; everything will re-sync when you reconnect.

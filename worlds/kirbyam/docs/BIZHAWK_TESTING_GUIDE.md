@@ -1,5 +1,19 @@
 # BizHawk Testing Guide for Address Verification
 
+## Connector Smoke Test (Issue #51)
+
+Before gameplay/address verification, confirm the KirbyAM-specific BizHawk connector comes up cleanly:
+
+1. Launch BizHawk with the Kirby & The Amazing Mirror USA ROM.
+2. Open `Tools -> Lua Console`.
+3. Run `data/lua/connector_kirbyam_bizhawk.lua`.
+4. Confirm Lua Console shows:
+   - `[KirbyAM Connector] ROM validation OK: ...`
+   - `[KirbyAM Connector] Starting generic BizHawk transport bridge for KirbyAM.`
+5. Start the Archipelago BizHawk Client and confirm the connection stabilizes without repeated attach/detach churn.
+
+If this smoke test fails, fix connector startup/ROM context problems before trusting address-verification results.
+
 ## Quick Reference: Known Candidates
 
 Policy references:
