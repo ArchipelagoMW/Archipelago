@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 from dataclasses import dataclass
@@ -63,6 +64,24 @@ def build_release_metadata(github_ref: str) -> ReleaseMetadata:
     )
 
 
+def inject_world_version(manifest_path: Path, world_version: str) -> bool:
+    """Inject world_version into a world manifest JSON file.
+
+    Returns True when a write occurred, False when no change was needed.
+    """
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("world_version") == world_version:
+        return False
+
+    manifest["world_version"] = world_version
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    return True
+
+
 def write_github_output(metadata: ReleaseMetadata, output_path: Path) -> None:
     lines = [
         f"apworld_name={metadata.apworld_name}",
@@ -84,12 +103,28 @@ def parse_args() -> argparse.Namespace:
         default=os.environ.get("GITHUB_OUTPUT"),
         help="Path to the GitHub Actions output file.",
     )
+    parser.add_argument(
+        "--world-manifest",
+        type=Path,
+        help="Optional world manifest path to receive tag-derived world_version on release builds.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     metadata = build_release_metadata(args.github_ref)
+
+    if args.world_manifest and metadata.release_enabled:
+        updated = inject_world_version(args.world_manifest, metadata.version)
+        if updated:
+            print(
+                f"Injected world_version={metadata.version} into {args.world_manifest}",
+            )
+        else:
+            print(
+                f"world_version already set to {metadata.version} in {args.world_manifest}",
+            )
 
     if args.github_output:
         write_github_output(metadata, Path(args.github_output))

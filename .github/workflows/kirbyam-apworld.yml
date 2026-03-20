@@ -43,6 +43,7 @@ jobs:
         run: |
           python .github/scripts/kirbyam_release_metadata.py \
             --github-ref "${GITHUB_REF}" \
+            --world-manifest "worlds/kirbyam/archipelago.json" \
             --github-output "${GITHUB_OUTPUT}"
 
       - name: Build kirbyam.apworld

@@ -160,7 +160,7 @@ This document defines the project management workflow for the Kirby & The Amazin
 Use tag-driven draft releases for APWorld publication.
 
 ```
-1. Confirm worlds/kirbyam/archipelago.json has the intended world_version
+1. Use a canonical tag: kirbyam-vMAJOR.MINOR.PATCH (workflow injects this semver into world_version during release builds)
 2. Create annotated tag: kirbyam-vMAJOR.MINOR.PATCH
 3. Push the tag to origin
 4. Verify the KirbyAM APWorld workflow created or updated a draft release

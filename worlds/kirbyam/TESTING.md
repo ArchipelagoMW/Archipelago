@@ -150,7 +150,7 @@ Maintainer release steps:
 
 Release validation checklist:
 
-- Confirm `worlds/kirbyam/archipelago.json` has the intended `world_version`.
+- Confirm release tag uses canonical format `kirbyam-vMAJOR.MINOR.PATCH`; the workflow injects this semver into `worlds/kirbyam/archipelago.json` during tagged release builds.
 - Run `python -m pytest worlds/kirbyam/test/test_release_metadata.py` locally.
 - Run `python build.py --skip-patch` from `worlds/kirbyam/` and confirm `kirbyam.apworld` is produced.
 - Push a valid `kirbyam-vMAJOR.MINOR.PATCH` tag and confirm a draft release is created or updated.
