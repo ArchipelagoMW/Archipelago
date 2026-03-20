@@ -158,6 +158,26 @@ async def test_location_check_resent_when_server_missing_location(mock_bizhawk_c
         ])
 
 
+@pytest.mark.asyncio
+async def test_no_location_checks_sent_when_all_already_server_acknowledged(mock_bizhawk_context):
+    """No LocationChecks message should be sent when all RAM-derived checks are already on the server."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    shard1 = data.locations["SHARD_1"].location_id
+    shard2 = data.locations["SHARD_2"].location_id
+    mock_bizhawk_context.checked_locations = {shard1, shard2}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+
+        mock_read.return_value = [(0x03).to_bytes(4, 'little')]  # bits 0 and 1 set
+
+        await client._poll_locations(mock_bizhawk_context)
+
+        mock_send.assert_not_awaited()
+
+
 def test_client_initialization():
     """Test client state is properly initialized."""
     client = KirbyAmClient()

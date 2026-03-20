@@ -83,15 +83,28 @@ if has_address("shard_bitfield_native"):
 else:
     bitfield = RAM[0x0202C000] as u32  # transport mailbox mirror
 
-# For each set bit in the 32-bit shard bitfield:
-for bit in range(32):
+# Collect all locations whose corresponding bit is set in the bitfield.
+# Only consider bits that map to a known location; reserved/unmapped bits are ignored.
+mapped_checked = set()
+for bit in mapped_location_bits:  # only explicitly mapped bits
     if (bitfield >> bit) & 1:
-        if bit not previously seen and bit maps to a known location:
-            location_id = 3860100 + bit + 1
-            send LocationChecks([location_id])
+        mapped_checked.add(location_id_for_bit(bit))
+
+# Level-based, reconnect-safe resend:
+# Send only checks that RAM reports as collected but the server has not acknowledged.
+# This means checks are re-sent on reconnect until the server reflects them back,
+# preventing permanent loss from dropped or early-session message failures.
+missing_on_server = sorted(mapped_checked - server_checked_locations)
+if missing_on_server:
+    send LocationChecks(missing_on_server)
 ```
 
 Bits 8-31 are reserved for future expansion and must be ignored until they are assigned to concrete location mappings.
+
+**Behavior notes:**
+- Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
+- No checks are sent for bits already in `server_checked_locations`.
+- No checks are sent for reserved/unmapped bits even when set.
 
 ### 3. Item Delivery (Mailbox Protocol)
 

@@ -157,3 +157,29 @@ This change is instrumentation groundwork for Issue #110 address identification.
 It does not yet convert boss candidate transitions into authoritative AP location
 checks or implement shard-undo behavior until concrete verified mappings are
 confirmed through manual BizHawk validation.
+
+## Issue #53: Native Location Polling — Level-Based Reconnect-Safe Model
+
+### Problem
+Location checks were previously described in protocol docs using an edge-based
+model ("if bit not previously seen") which could miss checks on reconnect.
+The acceptance criteria also required explicit documentation of the level-based
+contract and a test for the no-duplicate-send case.
+
+### Resolution
+The `_poll_locations` implementation uses a **level-based** model: on each poll,
+it reads the current shard bitfield state, maps set bits to AP location IDs, and
+sends only those checks that RAM reports as set but the server has not yet
+acknowledged. This naturally handles reconnect resend without any edge tracking.
+
+Key behaviors documented and tested:
+- Native `shard_bitfield_native` (0x02038970) is preferred; transport mirror
+  (`shard_bitfield`) is used as fallback when the native address is absent.
+- Only bits with explicit location mappings produce checks; reserved/unmapped bits
+  are filtered out.
+- No `LocationChecks` is sent when all RAM-derived checks are already reflected in
+  `server.checked_locations`.
+- Missing checks are resent until the server acknowledges them (reconnect-safe).
+
+PROTOCOL.md was updated to replace the old edge-based pseudocode with the actual
+level-based contract description.
