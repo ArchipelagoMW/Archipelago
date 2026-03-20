@@ -4,6 +4,7 @@ Archipelago World definition for Kirby & The Amazing Mirror
 import base64
 import os
 import pkgutil
+import time
 from typing import TYPE_CHECKING, Any, ClassVar, Dict, List
 
 import settings
@@ -13,6 +14,15 @@ from worlds.AutoWorld import WebWorld, World
 from .client import KirbyAmClient  # type: ignore  # Required to register BizHawk client
 from .data import LocationCategory
 from .data import data as kirby_data
+from .generation_logging import (
+    generation_stage,
+    log_generation_complete,
+    log_generation_error,
+    log_generation_start,
+    log_items_created,
+    log_regions_created,
+    logger,
+)
 from .groups import ITEM_GROUPS, LOCATION_GROUPS
 from .items import KirbyAmItem, create_item_label_to_code_map, get_item_classification
 from .locations import KirbyAmLocation, create_location_label_to_id_map
@@ -86,6 +96,9 @@ class KirbyAmWorld(World):
     # Per-seed auth token used by BizHawk client connection
     auth: bytes
 
+    # Track generation timing
+    _generation_start_time: float
+
     # Generation stages
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -101,79 +114,106 @@ class KirbyAmWorld(World):
 
     # Pre-generation adjustments
     def generate_early(self) -> None:
-        # If shards are shuffled as items, they must be local to the ROM unless you implement remote shard handling.
-        if self.options.shards.value == RandomizeShards.option_shuffle:
-            self.options.local_items.value.update(self.item_name_groups.get("Shard", set()))
+        # Track generation start
+        self._generation_start_time = time.time()
+        log_generation_start(self.player, self.player_name, self.options.as_dict("goal", "shards"))
+
+        with generation_stage("generate_early", self.player, self.player_name):
+            # If shards are shuffled as items, they must be local to the ROM unless you implement remote shard handling.
+            if self.options.shards.value == RandomizeShards.option_shuffle:
+                self.logger.debug("Shards are shuffled; marking them as local items.")
+                self.options.local_items.value.update(self.item_name_groups.get("Shard", set()))
+                logger.info(f"[P{self.player}] Shards marked as local items (shuffle mode)")
+            else:
+                logger.info(f"[P{self.player}] Shards mode: {self.options.shards.current_key}")
 
     # Create world regions
     def create_regions(self) -> None:
-        from .regions import create_regions as create_regions_impl
+        with generation_stage("create_regions", self.player, self.player_name):
+            from .regions import create_regions as create_regions_impl
 
-        regions_by_name = create_regions_impl(self)
+            regions_by_name = create_regions_impl(self)
 
-        # Most create_regions implementations already append to multiworld.regions.
-        # To avoid double-adding, only add missing ones here.
-        existing = {(r.name, r.player) for r in self.multiworld.regions}
-        for r in regions_by_name.values():
-            if (r.name, r.player) not in existing:
-                self.multiworld.regions.append(r)
+            # Most create_regions implementations already append to multiworld.regions.
+            # To avoid double-adding, only add missing ones here.
+            existing = {(r.name, r.player) for r in self.multiworld.regions}
+            for r in regions_by_name.values():
+                if (r.name, r.player) not in existing:
+                    self.multiworld.regions.append(r)
+
+            # Log region creation
+            fillable_locations = len([
+                loc for loc in self.multiworld.get_locations(self.player)
+                if isinstance(loc, KirbyAmLocation) and loc.address is not None
+            ])
+            log_regions_created(self.player, len(regions_by_name), fillable_locations)
 
     def create_items(self) -> None:
-        # Create items for all fillable locations (address != None).
-        fill_locations: list[KirbyAmLocation] = [
-            loc for loc in self.multiworld.get_locations(self.player)
-            if isinstance(loc, KirbyAmLocation) and loc.address is not None
-        ]
+        with generation_stage("create_items", self.player, self.player_name):
+            # Create items for all fillable locations (address != None).
+            fill_locations: list[KirbyAmLocation] = [
+                loc for loc in self.multiworld.get_locations(self.player)
+                if isinstance(loc, KirbyAmLocation) and loc.address is not None
+            ]
 
-        # Filter categories that should not be randomized into the pool.
-        filtered_categories = set()
-        if self.options.shards.value in {RandomizeShards.option_vanilla, RandomizeShards.option_shuffle}:
-            filtered_categories.add(LocationCategory.SHARD)
+            # Filter categories that should not be randomized into the pool.
+            filtered_categories = set()
+            if self.options.shards.value in {RandomizeShards.option_vanilla, RandomizeShards.option_shuffle}:
+                filtered_categories.add(LocationCategory.SHARD)
 
-        # Build the default item pool from each location's default item.
-        itempool: list[KirbyAmItem] = []
-        for loc in fill_locations:
-            if loc.key is None:
-                continue
-            loc_meta = kirby_data.locations.get(loc.key)
-            if loc_meta is None:
-                continue
-
-            if loc_meta.category in filtered_categories:
-                continue
-
-            # During early iteration it's easy to have a location without a default_item.
-            # Avoid hard crashes and fall back to the world's configured filler.
-            if loc.default_item_code is None:
-                self.logger.warning(
-                    "Location '%s' has no default_item; using filler '%s' instead.",
-                    loc.name,
-                    self.get_filler_item_name(),
-                )
-                itempool.append(self.create_item(self.get_filler_item_name()))
-            else:
-                itempool.append(self.create_item_by_code(loc.default_item_code))
-
-        # Add to AP pool
-        self.multiworld.itempool += itempool
-
-        # If shards are vanilla, convert shard locations to events so logic can see them without randomization.
-        if self.options.shards.value == RandomizeShards.option_vanilla:
-            for loc in self.multiworld.get_locations(self.player):
-                if not isinstance(loc, KirbyAmLocation) or loc.key is None:
+            # Build the default item pool from each location's default item.
+            itempool: list[KirbyAmItem] = []
+            shard_count = 0
+            for loc in fill_locations:
+                if loc.key is None:
                     continue
                 loc_meta = kirby_data.locations.get(loc.key)
-                if loc_meta and loc_meta.category == LocationCategory.SHARD:
-                    if loc.default_item_code is None:
-                        self.logger.warning(
-                            "Shard location '%s' is missing default_item; leaving it randomized.",
-                            loc.name,
-                        )
+                if loc_meta is None:
+                    continue
+
+                if loc_meta.category in filtered_categories:
+                    if loc_meta.category == LocationCategory.SHARD:
+                        shard_count += 1
+                    continue
+
+                # During early iteration it's easy to have a location without a default_item.
+                # Avoid hard crashes and fall back to the world's configured filler.
+                if loc.default_item_code is None:
+                    self.logger.warning(
+                        "Location '%s' has no default_item; using filler '%s' instead.",
+                        loc.name,
+                        self.get_filler_item_name(),
+                    )
+                    itempool.append(self.create_item(self.get_filler_item_name()))
+                else:
+                    itempool.append(self.create_item_by_code(loc.default_item_code))
+
+            # Add to AP pool
+            self.multiworld.itempool += itempool
+
+            # Log item creation (pool size as total; shards counted separately)
+            log_items_created(self.player, len(itempool), shard_count, len(itempool))
+
+            # If shards are vanilla, convert shard locations to events so logic can see them without randomization.
+            if self.options.shards.value == RandomizeShards.option_vanilla:
+                event_count = 0
+                for loc in self.multiworld.get_locations(self.player):
+                    if not isinstance(loc, KirbyAmLocation) or loc.key is None:
                         continue
-                    # Lock the vanilla shard item here as an event.
-                    loc.place_locked_item(self.create_event(self.item_id_to_name[loc.default_item_code]))
-                    loc.progress_type = LocationProgressType.DEFAULT
-                    loc.address = None
+                    loc_meta = kirby_data.locations.get(loc.key)
+                    if loc_meta and loc_meta.category == LocationCategory.SHARD:
+                        if loc.default_item_code is None:
+                            self.logger.warning(
+                                "Shard location '%s' is missing default_item; leaving it randomized.",
+                                loc.name,
+                            )
+                            continue
+                        # Lock the vanilla shard item here as an event.
+                        loc.place_locked_item(self.create_event(self.item_id_to_name[loc.default_item_code]))
+                        loc.progress_type = LocationProgressType.DEFAULT
+                        loc.address = None
+                        event_count += 1
+                logger.debug(f"[P{self.player}] Converted {event_count} shard locations to events (vanilla mode)")
 
     # Set world rules
     def set_rules(self) -> None:
@@ -186,23 +226,30 @@ class KirbyAmWorld(World):
         self.auth = self.random.randbytes(16)
 
     def generate_output(self, output_directory: str) -> None:
+        try:
+            # Load base patch data from package resources
+            patch_data = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
+            if patch_data is None:
+                raise FileNotFoundError(
+                    "Missing resource 'data/base_patch.bsdiff4' in the kirbyam package/apworld. "
+                    "Ensure it is included when packaging."
+                )
 
-        # Load base patch data from package resources
-        patch_data = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
-        if patch_data is None:
-            raise FileNotFoundError(
-                "Missing resource 'data/base_patch.bsdiff4' in the kirbyam package/apworld. "
-                "Ensure it is included when packaging."
-            )
+            # Create procedure patch
+            patch = KirbyAmProcedurePatch(player=self.player, player_name=self.player_name)
+            patch.write_file("base_patch.bsdiff4", patch_data)
+            write_tokens(self, patch)
 
-        # Create procedure patch
-        patch = KirbyAmProcedurePatch(player=self.player, player_name=self.player_name)
-        patch.write_file("base_patch.bsdiff4", patch_data)
-        write_tokens(self, patch)
+            # Write the patch file
+            out_file_name = self.multiworld.get_out_file_name_base(self.player)
+            patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
-        # Write the patch file
-        out_file_name = self.multiworld.get_out_file_name_base(self.player)
-        patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
+            if hasattr(self, "_generation_start_time"):
+                elapsed = time.time() - self._generation_start_time
+                log_generation_complete(self.player, self.player_name, elapsed)
+        except Exception as exc:
+            log_generation_error(self.player, self.player_name, str(exc))
+            raise
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None:
         # Register auth token -> player name mapping for BizHawk
