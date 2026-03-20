@@ -94,6 +94,78 @@
                 }]
             },
             {
+                "name": "Kuafu's Shop",
+                "sections": [
+                    { "name": "Kuafu's Shop: 1st Normal Purchase" },
+                    { "name": "Kuafu's Shop: 2nd Normal Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 1st Normal Purchase" },
+                    { "name": "Kuafu's Shop: 1st Dark Steel Purchase" },
+                    { "name": "Kuafu's Shop: 2nd Dark Steel Purchase" },
+                    { "name": "Kuafu's Shop: 3rd Dark Steel Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 1st Dark Steel Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 2nd Dark Steel Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 3rd Dark Steel Purchase" },
+                    { "name": "Kuafu's Shop: 1st Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 2nd Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 3rd Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 4th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 5th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 6th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 7th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 8th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 3rd Normal Purchase" },
+                    { "name": "Kuafu's Shop: 4th Normal Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 2nd Normal Purchase" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 852,
+                    "y": 215
+                }]
+            },
+            {
+                "name": "3D Printer",
+                "sections": [
+                    { "name": "3D Printer: 1st Low Cost Purchase" },
+                    { "name": "3D Printer: 2nd Low Cost Purchase" },
+                    { "name": "3D Printer: 3rd Low Cost Purchase" },
+                    { "name": "3D Printer: 4th Low Cost Purchase" },
+                    { "name": "3D Printer: 1st Medium Cost Purchase" },
+                    { "name": "3D Printer: 1st High Cost Purchase" },
+                    { "name": "3D Printer: 2nd High Cost Purchase" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 877,
+                    "y": 215
+                }]
+            },
+            {
+                "name": "Chiyou's Shop",
+                "sections": [
+                    { "name": "Chiyou's Shop: 1st Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 2nd Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 3rd Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 4th Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 1st Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 2nd Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 3rd Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 4th Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 5th Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 6th Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 1st High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 2nd High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 3rd High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 4th High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 5th High Cost Purchase" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 902,
+                    "y": 215
+                }]
+            },
+            {
                 "name": "Cortex Center",
                 "sections": [
                     { "name": "Cortex Center: Defeat Lady Ethereal" },
@@ -1366,11 +1438,71 @@
                 "map_locations": [{ "map": "four_seasons_pavilion", "x": 160, "y": 185 }]
             },
             {
+                "name": "Kuafu's Shop",
+                "sections": [
+                    { "name": "Kuafu's Shop: 1st Normal Purchase" },
+                    { "name": "Kuafu's Shop: 2nd Normal Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 1st Normal Purchase" },
+                    { "name": "Kuafu's Shop: 1st Dark Steel Purchase" },
+                    { "name": "Kuafu's Shop: 2nd Dark Steel Purchase" },
+                    { "name": "Kuafu's Shop: 3rd Dark Steel Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 1st Dark Steel Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 2nd Dark Steel Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 3rd Dark Steel Purchase" },
+                    { "name": "Kuafu's Shop: 1st Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 2nd Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 3rd Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 4th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 5th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 6th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 7th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 8th Herb Catalyst Purchase" },
+                    { "name": "Kuafu's Shop: 3rd Normal Purchase" },
+                    { "name": "Kuafu's Shop: 4th Normal Purchase" },
+                    { "name": "Kuafu's Extra Inventory: 2nd Normal Purchase" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 160, "y": 160 }]
+            },
+            {
+                "name": "3D Printer",
+                "sections": [
+                    { "name": "3D Printer: 1st Low Cost Purchase" },
+                    { "name": "3D Printer: 2nd Low Cost Purchase" },
+                    { "name": "3D Printer: 3rd Low Cost Purchase" },
+                    { "name": "3D Printer: 4th Low Cost Purchase" },
+                    { "name": "3D Printer: 1st Medium Cost Purchase" },
+                    { "name": "3D Printer: 1st High Cost Purchase" },
+                    { "name": "3D Printer: 2nd High Cost Purchase" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 350, "y": 185 }]
+            },
+            {
                 "name": "Chiyou", "sections": [
                     { "name": "FSP: Give Yi's Portrait to Chiyou" },
                     { "name": "FSP: Give Shuanshuan's Book to Chiyou" }
                 ],
                 "map_locations": [{ "map": "four_seasons_pavilion", "x": 385, "y": 185 }]
+            },
+            {
+                "name": "Chiyou's Shop",
+                "sections": [
+                    { "name": "Chiyou's Shop: 1st Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 2nd Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 3rd Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 4th Low Cost Purchase" },
+                    { "name": "Chiyou's Shop: 1st Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 2nd Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 3rd Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 4th Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 5th Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 6th Medium Cost Purchase" },
+                    { "name": "Chiyou's Shop: 1st High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 2nd High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 3rd High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 4th High Cost Purchase" },
+                    { "name": "Chiyou's Shop: 5th High Cost Purchase" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 385, "y": 160 }]
             },
             {
                 "name": "Reveal the Kunlun Immortal Portrait's Secret", "sections": [{ "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret" }],
