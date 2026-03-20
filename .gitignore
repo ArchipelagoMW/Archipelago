@@ -66,6 +66,7 @@ Output Logs/
 /datapackage
 /datapackage_export.json
 /custom_worlds
+.tmp_dependency_analysis.ps1
 # stubgen output
 /out/
 

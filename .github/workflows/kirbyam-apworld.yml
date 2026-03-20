@@ -85,6 +85,45 @@ jobs:
           name: ${{ needs.build-apworld.outputs.apworld_name }}
           path: dist
 
+      - name: Prune existing release assets to .apworld only
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const tag = `${{ needs.build-apworld.outputs.release_tag }}`;
+            const expected = `${{ needs.build-apworld.outputs.apworld_name }}`;
+
+            let release;
+            try {
+              const response = await github.rest.repos.getReleaseByTag({ owner, repo, tag });
+              release = response.data;
+            } catch (error) {
+              if (error.status === 404) {
+                core.info(`No existing release for ${tag}; nothing to prune.`);
+                return;
+              }
+              throw error;
+            }
+
+            const assets = await github.paginate(github.rest.repos.listReleaseAssets, {
+              owner,
+              repo,
+              release_id: release.id,
+              per_page: 100,
+            });
+
+            for (const asset of assets) {
+              if (asset.name !== expected) {
+                core.info(`Deleting prior release asset: ${asset.name}`);
+                await github.rest.repos.deleteReleaseAsset({
+                  owner,
+                  repo,
+                  asset_id: asset.id,
+                });
+              }
+            }
+
       - name: Publish release asset
         uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
