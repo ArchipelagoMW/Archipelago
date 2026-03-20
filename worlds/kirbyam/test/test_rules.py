@@ -83,7 +83,7 @@ def test_dark_mind_goal_requires_dark_mind_event() -> None:
 
     completion_fn = _get_completion_fn(world)
     assert not completion_fn(_FakeState())
-    assert completion_fn(_FakeState({"EVENT_DEFEAT_DARK_MIND"}))
+    assert completion_fn(_FakeState({"Defeat Dark Mind"}))
 
 
 def test_100_percent_goal_requires_100_percent_event() -> None:
@@ -91,8 +91,8 @@ def test_100_percent_goal_requires_100_percent_event() -> None:
     set_rules(world)
 
     completion_fn = _get_completion_fn(world)
-    assert not completion_fn(_FakeState({"EVENT_DEFEAT_DARK_MIND"}))
-    assert completion_fn(_FakeState({"EVENT_100_PERCENT"}))
+    assert not completion_fn(_FakeState({"Defeat Dark Mind"}))
+    assert completion_fn(_FakeState({"100% Save File"}))
 
 
 def test_debug_goal_is_always_complete() -> None:
@@ -111,5 +111,5 @@ def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> N
 
     applied_names = [call.args[0].name for call in mock_set_rule.call_args_list]
     assert "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
-    assert "EVENT_DEFEAT_DARK_MIND" in applied_names
-    assert "EVENT_100_PERCENT" in applied_names
+    assert "Defeat Dark Mind" in applied_names
+    assert "100% Save File" in applied_names

@@ -110,12 +110,13 @@ Future BizHawk validation should confirm:
 ## Issue #38: Goal Location for Dark Mind
 
 ### Problem
-Completion logic was still tied directly to "all shard items collected" and did not require goal events, even though goal events were defined in the Dimension Mirror region.
+Completion logic was still tied directly to "all shard items collected" and used auto-collected Dimension Mirror events, so the selected goal was not represented as a real AP location.
 
 ### Solution
-Rule wiring now uses goal events for completion:
-- Goal=Dark Mind -> requires `EVENT_DEFEAT_DARK_MIND`
-- Goal=100% -> requires `EVENT_100_PERCENT`
-- Goal=DEBUG -> remains always complete for testing
+Goal handling now uses explicit goal locations:
+- Goal=Dark Mind -> requires `Defeat Dark Mind`
+- Goal=100% -> requires `100% Save File`
+- Goal locations live in `REGION_DIMENSION_MIRROR/MAIN` and are locked progression events, not randomized pool entries
+- The BizHawk client now reports the selected goal location after all non-goal locations are checked, then sends goal status after the server acknowledges that goal location
 
-Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated goal location/event.
+Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated AP goal location instead of an auto-collected region event.

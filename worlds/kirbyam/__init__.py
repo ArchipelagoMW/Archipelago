@@ -157,7 +157,7 @@ class KirbyAmWorld(World):
             ]
 
             # Filter categories that should not be randomized into the pool.
-            filtered_categories = set()
+            filtered_categories = {LocationCategory.GOAL}
             if self.options.shards.value in {RandomizeShards.option_vanilla, RandomizeShards.option_shuffle}:
                 filtered_categories.add(LocationCategory.SHARD)
 
@@ -191,8 +191,19 @@ class KirbyAmWorld(World):
             # Add to AP pool
             self.multiworld.itempool += itempool
 
+            goal_event_count = 0
+            for loc in self.multiworld.get_locations(self.player):
+                if not isinstance(loc, KirbyAmLocation) or loc.key is None:
+                    continue
+                loc_meta = kirby_data.locations.get(loc.key)
+                if loc_meta and loc_meta.category == LocationCategory.GOAL:
+                    loc.place_locked_item(self.create_event(loc.name))
+                    loc.progress_type = LocationProgressType.DEFAULT
+                    goal_event_count += 1
+
             # Log item creation (pool size as total; shards counted separately)
             log_items_created(self.player, len(itempool), shard_count, len(itempool))
+            logger.debug(f"[P{self.player}] Converted {goal_event_count} goal locations to locked events")
 
             # If shards are vanilla, convert shard locations to events so logic can see them without randomization.
             if self.options.shards.value == RandomizeShards.option_vanilla:

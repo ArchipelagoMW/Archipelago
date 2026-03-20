@@ -288,3 +288,38 @@ async def test_deliver_items_skips_malformed_entries_and_logs_warning(mock_bizha
         assert written[0][1] == int(3860001).to_bytes(4, 'little')
 
     assert "Skipping malformed ReceivedItems entry" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_goal_location_checked_before_goal_status(mock_bizhawk_context):
+    """The client should report the selected goal location before sending CLIENT_GOAL."""
+    from NetUtils import ClientStatus
+
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    dark_mind_goal_id = data.locations["GOAL_DARK_MIND"].location_id
+    non_goal_location_ids = sorted(
+        loc.location_id
+        for key, loc in data.locations.items()
+        if key != "GOAL_DARK_MIND" and key != "GOAL_100_PERCENT"
+    )
+
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = set(non_goal_location_ids)
+
+    await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [dark_mind_goal_id]}
+    ])
+
+    mock_bizhawk_context.send_msgs.reset_mock()
+    mock_bizhawk_context.checked_locations.add(dark_mind_goal_id)
+
+    await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+    ])
+    assert client._goal_reported is True

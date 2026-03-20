@@ -4,6 +4,7 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import data
+from .options import Goal
 from .types import KirbyAmBizHawkClientContext
 
 if TYPE_CHECKING:
@@ -31,6 +32,16 @@ class KirbyAmClient(BizHawkClient):
         self._all_location_ids_sorted: list[int] = [
             loc.location_id for loc in sorted(data.locations.values(), key=lambda l: l.location_id)
         ]
+        self._goal_location_ids_by_option: dict[int, int] = {}
+        self._non_goal_location_ids_sorted: list[int] = []
+        for loc in sorted(data.locations.values(), key=lambda l: l.location_id):
+            if loc.category.name == "GOAL":
+                if loc.name == "GOAL_DARK_MIND":
+                    self._goal_location_ids_by_option[Goal.option_dark_mind] = loc.location_id
+                elif loc.name == "GOAL_100_PERCENT":
+                    self._goal_location_ids_by_option[Goal.option_100] = loc.location_id
+            else:
+                self._non_goal_location_ids_sorted.append(loc.location_id)
         self._location_ids_by_bit: dict[int, list[int]] = {}
         for loc in data.locations.values():
             if loc.bit_index is None:
@@ -331,7 +342,23 @@ class KirbyAmClient(BizHawkClient):
         if not self._all_location_ids_sorted:
             return
 
-        if all(loc_id in ctx.checked_locations for loc_id in self._all_location_ids_sorted):
+        slot_goal_raw = ctx.slot_data.get("goal", Goal.option_dark_mind)
+        try:
+            slot_goal = int(slot_goal_raw)
+        except (TypeError, ValueError):
+            slot_goal = Goal.option_dark_mind
+
+        goal_location_id = self._goal_location_ids_by_option.get(slot_goal)
+        if goal_location_id is None:
+            return
+
+        if goal_location_id not in ctx.checked_locations:
+            if all(loc_id in ctx.checked_locations for loc_id in self._non_goal_location_ids_sorted):
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [goal_location_id]}])
+            return
+
+        required_completion_ids = [*self._non_goal_location_ids_sorted, goal_location_id]
+        if all(loc_id in ctx.checked_locations for loc_id in required_completion_ids):
             from NetUtils import ClientStatus
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             self._goal_reported = True
