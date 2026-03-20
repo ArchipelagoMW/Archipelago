@@ -17,6 +17,7 @@ _BOSS_MIRROR_TABLE_PROBE_BYTES = 32
 _AI_STATE_ADDR_WIDTH = 4
 _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
+_MAILBOX_ACK_TIMEOUT_FRAMES = 30
 
 
 class KirbyAmClient(BizHawkClient):
@@ -31,6 +32,7 @@ class KirbyAmClient(BizHawkClient):
         # Item delivery state
         self._delivered_item_index: int = 0
         self._delivery_pending: bool = False  # True after writing mailbox until ROM clears flag
+        self._delivery_pending_frame: int | None = None
 
         # Deterministic location ordering
         self._all_location_ids_sorted: list[int] = [
@@ -317,15 +319,25 @@ class KirbyAmClient(BizHawkClient):
         if flag_addr is None or id_addr is None or player_addr is None:
             return
 
+        from CommonClient import logger
+
+        frame_addr = self._transport_addr("frame_counter")
         reads: list[tuple[int, int, str]] = [(flag_addr, 4, "System Bus")]
         if counter_addr is not None:
             reads.append((counter_addr, 4, "System Bus"))
+        if frame_addr is not None:
+            reads.append((frame_addr, 4, "System Bus"))
         raw_values = await bizhawk.read(ctx.bizhawk_ctx, reads)
 
         flag = self._u32_le(raw_values[0])
+        next_read_index = 1
         rom_received_count: Optional[int] = None
-        if counter_addr is not None and len(raw_values) > 1:
-            rom_received_count = self._u32_le(raw_values[1])
+        if counter_addr is not None and len(raw_values) > next_read_index:
+            rom_received_count = self._u32_le(raw_values[next_read_index])
+            next_read_index += 1
+        current_frame: Optional[int] = None
+        if frame_addr is not None and len(raw_values) > next_read_index:
+            current_frame = self._u32_le(raw_values[next_read_index])
 
         # Auto-resync delivery cursor if ROM item state moved backward (save-loss)
         # or forward (reconnect after stale client state).
@@ -335,25 +347,63 @@ class KirbyAmClient(BizHawkClient):
                     self._delivered_item_index = len(ctx.items_received)
                     await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 self._delivery_pending = False
+                self._delivery_pending_frame = None
                 return
             if rom_received_count < self._delivered_item_index:
+                logger.info(
+                    "KirbyAM: ROM item counter regressed from %s to %s; rewinding delivery cursor",
+                    self._delivered_item_index,
+                    rom_received_count,
+                )
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
+                self._delivery_pending_frame = None
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
             elif rom_received_count > self._delivered_item_index and rom_received_count <= len(ctx.items_received):
+                logger.info(
+                    "KirbyAM: ROM item counter advanced from %s to %s; fast-forwarding delivery cursor",
+                    self._delivered_item_index,
+                    rom_received_count,
+                )
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
+                self._delivery_pending_frame = None
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+                if flag != 0:
+                    logger.warning(
+                        "KirbyAM: Clearing stale mailbox flag after fast-forward to item index %s",
+                        self._delivered_item_index,
+                    )
+                    await bizhawk.write(ctx.bizhawk_ctx, [
+                        (flag_addr, (0).to_bytes(4, "little"), "System Bus"),
+                    ])
 
         # If an item is pending, wait for ROM to clear the flag (ACK)
         if self._delivery_pending:
             if flag == 0:
+                logger.info("KirbyAM: Mailbox ACK observed at item index %s", self._delivered_item_index)
                 self._delivery_pending = False
+                self._delivery_pending_frame = None
                 if rom_received_count is not None and rom_received_count <= len(ctx.items_received):
                     self._delivered_item_index = rom_received_count
                 else:
                     self._delivered_item_index += 1
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+                return
+
+            if current_frame is not None and self._delivery_pending_frame is not None:
+                elapsed_frames = (current_frame - self._delivery_pending_frame) & 0xFFFFFFFF
+                if elapsed_frames >= _MAILBOX_ACK_TIMEOUT_FRAMES:
+                    logger.warning(
+                        "KirbyAM: Mailbox ACK timeout after %s frames at item index %s; clearing flag and retrying",
+                        elapsed_frames,
+                        self._delivered_item_index,
+                    )
+                    await bizhawk.write(ctx.bizhawk_ctx, [
+                        (flag_addr, (0).to_bytes(4, "little"), "System Bus"),
+                    ])
+                    self._delivery_pending = False
+                    self._delivery_pending_frame = None
             return
 
         # No pending item; mailbox must be empty to write
@@ -363,8 +413,6 @@ class KirbyAmClient(BizHawkClient):
         # Nothing to deliver
         if self._delivered_item_index >= len(ctx.items_received):
             return
-
-        from CommonClient import logger
 
         while self._delivered_item_index < len(ctx.items_received):
             itm = ctx.items_received[self._delivered_item_index]
@@ -382,13 +430,19 @@ class KirbyAmClient(BizHawkClient):
 
             item_id, player_id = item_fields
 
-            # Write item and mark mailbox full
+            logger.info(
+                "KirbyAM: Writing mailbox item index %s (item=%s, player=%s)",
+                self._delivered_item_index,
+                item_id,
+                player_id,
+            )
             await bizhawk.write(ctx.bizhawk_ctx, [
                 (id_addr, item_id.to_bytes(4, "little"), "System Bus"),
                 (player_addr, player_id.to_bytes(4, "little"), "System Bus"),
                 (flag_addr, (1).to_bytes(4, "little"), "System Bus"),
             ])
             self._delivery_pending = True
+            self._delivery_pending_frame = current_frame
             return
 
     # --------------------------

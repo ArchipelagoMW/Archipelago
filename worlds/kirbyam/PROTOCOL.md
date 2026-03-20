@@ -179,7 +179,7 @@ if goal_location_id in checked_locations:
 
 - **Corrupt item_id?** Log warning, skip to next index
 - **Out-of-range player_id?** Log warning, still mark as delivered
-- **Flag stuck HIGH?** After N frames (e.g., 30), clear client-side and advance (ROM crash recovery)
+- **Flag stuck HIGH?** After N frames (e.g., 30), warn, clear mailbox flag client-side, and retry the same delivery index conservatively
 - **Bitfield bit flickers?** De-duplicate: only check new transitions (bit 0 → 1), ignore 1 → 0
 
 ### ROM Payload Resilience

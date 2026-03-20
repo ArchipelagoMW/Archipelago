@@ -14,6 +14,16 @@ Before gameplay/address verification, confirm the KirbyAM-specific BizHawk conne
 
 If this smoke test fails, fix connector startup/ROM context problems before trusting address-verification results.
 
+## Mailbox Recovery Check (Issue #54)
+
+When validating AP item receipt behavior in BizHawk, also watch for mailbox timeout recovery:
+
+- Normal path: item write -> ROM clears `incoming_item_flag` -> client logs ACK and advances cursor.
+- Recovery path: if `incoming_item_flag` remains high for roughly 30 frames with no ACK, client logs a timeout warning, clears the flag, and retries the same delivery index conservatively.
+- Counter reconciliation remains authoritative when `debug_item_counter` proves the ROM has already applied the item.
+
+This behavior is intended to avoid deadlock while still preferring exactly-once ROM outcomes.
+
 ## Quick Reference: Known Candidates
 
 Policy references:

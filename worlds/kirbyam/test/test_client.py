@@ -166,6 +166,7 @@ def test_client_initialization():
     assert client._checked_location_bits == set()
     assert client._delivered_item_index == 0
     assert client._delivery_pending is False
+    assert client._delivery_pending_frame is None
     assert client._goal_reported is False
 
 
@@ -271,7 +272,7 @@ async def test_deliver_items_skips_malformed_entries_and_logs_warning(mock_bizha
         Mock(item=3860001, player=1),
     ]
 
-    caplog.set_level(logging.WARNING, logger="Archipelago")
+    caplog.set_level(logging.WARNING, logger="Client")
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
@@ -288,6 +289,67 @@ async def test_deliver_items_skips_malformed_entries_and_logs_warning(mock_bizha
         assert written[0][1] == int(3860001).to_bytes(4, 'little')
 
     assert "Skipping malformed ReceivedItems entry" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_clears_stuck_mailbox_after_timeout(mock_bizhawk_context, caplog):
+    """A stuck mailbox flag should time out, clear, and keep the same item index for retry."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivery_pending = True
+    client._delivery_pending_frame = 100
+    client._delivered_item_index = 0
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+    ]
+
+    caplog.set_level(logging.WARNING, logger="Client")
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (1).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+            (131).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        mock_write.assert_awaited_once_with(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(data.transport_ram_addresses["incoming_item_flag"], (0).to_bytes(4, 'little'), 'System Bus')]
+        )
+        assert client._delivery_pending is False
+        assert client._delivery_pending_frame is None
+        assert client._delivered_item_index == 0
+
+    assert "Mailbox ACK timeout" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_records_pending_frame_when_writing(mock_bizhawk_context):
+    """Writing a mailbox item should capture the current frame for timeout tracking."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+            (1234).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        mock_write.assert_awaited_once()
+        assert client._delivery_pending is True
+        assert client._delivery_pending_frame == 1234
 
 
 @pytest.mark.asyncio
