@@ -33,8 +33,9 @@ Current high-level status:
 | Signal type | Candidate | Integrated | Verified |
 | --- | --- | --- | --- |
 | Shard progression | Yes | Yes | Not yet policy-promoted |
-| Dungeon boss defeat | Yes | No | No |
-| Final boss defeat | Yes | No | No |
+| Dungeon boss defeat | Yes | Yes (probe-only) | No |
+| Final boss defeat | Yes | Yes | No |
+| 100% completion | Yes | Yes | No |
 
 Detailed signal registry: `worlds/kirbyam/data/native_address_policy.json`
 

@@ -11,9 +11,9 @@ Current rules:
         * 100%: collect 100% Save File.
         * DEBUG: always completable.
 
-NOTE: Dark Mind and 100% are currently modeled as explicit AP goal locations.
-The client reports those locations using placeholder logic until native game
-signals are integrated for final boss defeat and full completion.
+NOTE: Dark Mind and 100% are modeled as explicit AP goal locations.
+The client reports these goal locations from native AI-state signals and sends
+CLIENT_GOAL after server acknowledgement of the selected goal location check.
 """
 
 from __future__ import annotations
