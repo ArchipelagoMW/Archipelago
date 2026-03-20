@@ -568,7 +568,10 @@ class Context:
                 data = self.games_package_cache.get(game_name, data_package[game_name])
             else:
                 # NOTE: we still allow uploading a game without datapackage. Once that is changed, we could drop this.
-                data = self.games_package_cache.get_static(game_name)
+                try:
+                    data = self.games_package_cache.get_static(game_name)
+                except KeyError:
+                    raise Exception(f"Data package for {game_name} missing from Multidata") from None
             (
                 self.reduced_games_package[game_name],
                 self.item_name_groups[game_name],
