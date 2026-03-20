@@ -144,7 +144,7 @@ Maintainer release steps:
 4. Wait for `.github/workflows/kirbyam-apworld.yml` to finish.
 5. Open the draft GitHub release and verify:
    - release title is `KirbyAM APWorld v0.0.1`
-   - attached asset name is `kirbyam-0.0.1.apworld`
+   - attached asset name is `kirbyam.apworld`
    - the asset downloads and loads as an APWorld
 6. Publish the draft release manually when ready.
 

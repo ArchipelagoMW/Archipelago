@@ -23,7 +23,7 @@ def test_build_release_metadata_for_valid_tag_ref() -> None:
     assert metadata.version == "0.0.1"
     assert metadata.release_tag == "kirbyam-v0.0.1"
     assert metadata.release_name == "KirbyAM APWorld v0.0.1"
-    assert metadata.apworld_name == "kirbyam-0.0.1.apworld"
+    assert metadata.apworld_name == "kirbyam.apworld"
 
 
 def test_build_release_metadata_for_branch_ref_disables_release() -> None:
