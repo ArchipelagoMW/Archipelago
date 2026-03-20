@@ -62,5 +62,17 @@
     "default_item": "SHARD_8",
     "bit_index": 7,
     "category": "SHARD"
+  },
+  "GOAL_DARK_MIND": {
+    "label": "Defeat Dark Mind",
+    "parent_region": "REGION_DIMENSION_MIRROR/MAIN",
+    "tags": ["Goal", "MAP_DIMENSION_MIRROR"],
+    "category": "GOAL"
+  },
+  "GOAL_100_PERCENT": {
+    "label": "100% Save File",
+    "parent_region": "REGION_DIMENSION_MIRROR/MAIN",
+    "tags": ["Goal", "MAP_DIMENSION_MIRROR"],
+    "category": "GOAL"
   }
 }

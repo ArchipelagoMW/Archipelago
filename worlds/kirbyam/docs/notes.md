@@ -106,3 +106,17 @@ Future BizHawk validation should confirm:
 3. Reset/power-cycle emulator
 4. Verify shard persists after reload
 5. Verify save file is not corrupted
+
+## Issue #38: Goal Location for Dark Mind
+
+### Problem
+Completion logic was still tied directly to "all shard items collected" and used auto-collected Dimension Mirror events, so the selected goal was not represented as a real AP location.
+
+### Solution
+Goal handling now uses explicit goal locations:
+- Goal=Dark Mind -> requires `Defeat Dark Mind`
+- Goal=100% -> requires `100% Save File`
+- Goal locations live in `REGION_DIMENSION_MIRROR/MAIN` and are locked progression events, not randomized pool entries
+- The BizHawk client now reports the selected goal location after all non-goal locations are checked, then sends goal status after the server acknowledges that goal location
+
+Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated AP goal location instead of an auto-collected region event.

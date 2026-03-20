@@ -73,12 +73,8 @@
   },
 
   "REGION_DIMENSION_MIRROR/MAIN": {
-    "locations": [],
-    "events": [
-      "EVENT_DEFEAT_DARK_MIND",
-      "EVENT_100_PERCENT",
-      "EVENT_DEBUG_LOCATION"
-    ],
+    "locations": ["GOAL_DARK_MIND", "GOAL_100_PERCENT"],
+    "events": ["EVENT_DEBUG_LOCATION"],
     "exits": ["REGION_GAME_START"],
     "warps": []
   }

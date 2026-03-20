@@ -116,14 +116,25 @@ delivered_item_index += 1
 
 ### 4. Goal Reporting
 
-**Temp Implementation:**
+**Current Implementation:**
 ```python
-# Check completion based on all locations checked
-if all(loc_id in checked_locations for loc_id in all_location_ids):
+# World rules use explicit goal locations in REGION_DIMENSION_MIRROR/MAIN:
+# - Defeat Dark Mind for Goal=Dark Mind
+# - 100% Save File for Goal=100%
+```
+
+**Client StatusUpdate (temporary):**
+```python
+# Report the selected goal location once every non-goal location is checked,
+# then send CLIENT_GOAL after the server acknowledges the goal location check.
+if all(loc_id in checked_locations for loc_id in non_goal_location_ids):
+    send LocationChecks([goal_location_id])
+
+if goal_location_id in checked_locations and all(loc_id in checked_locations for loc_id in all_location_ids):
     send StatusUpdate(status=CLIENT_GOAL)
 ```
 
-**TODO:** Replace with actual Dark Mind defeat signal from native game state (TBD address).
+**TODO:** Replace client-side goal-location reporting with actual native Dark Mind / 100% signals once those addresses are live-mapped and integrated.
 
 ## ROM Payload Contract
 
