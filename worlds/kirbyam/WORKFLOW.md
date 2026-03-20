@@ -164,7 +164,7 @@ Use tag-driven draft releases for APWorld publication.
 2. Create annotated tag: kirbyam-vMAJOR.MINOR.PATCH
 3. Push the tag to origin
 4. Verify the KirbyAM APWorld workflow created or updated a draft release
-5. Confirm asset name: kirbyam-<version>.apworld
+5. Confirm asset name: kirbyam.apworld
 6. Publish the draft manually when maintainer validation is complete
 ```
 

@@ -42,7 +42,7 @@ def build_release_metadata(github_ref: str) -> ReleaseMetadata:
     if match:
         version = match.group("version")
         return ReleaseMetadata(
-            apworld_name=f"kirbyam-{version}.apworld",
+            apworld_name="kirbyam.apworld",
             release_name=f"KirbyAM APWorld v{version}",
             release_tag=ref_name,
             version=version,
