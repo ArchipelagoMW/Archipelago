@@ -18,19 +18,16 @@ signal is integrated from game memory, these goals remain progression placeholde
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 
+from .generation_logging import logger
 from .options import Goal
 
 if TYPE_CHECKING:
     from . import KirbyAmWorld
-
-
-logger = logging.getLogger("Archipelago")
 
 
 _SHARD_ITEM_LABELS = [
@@ -50,6 +47,8 @@ def _has_all_shards(state: CollectionState, player: int) -> bool:
 
 
 def set_rules(world: KirbyAmWorld) -> None:
+    shard_gate_rule = lambda state: _has_all_shards(state, world.player)
+
     # Completion condition
     if world.options.goal.value == Goal.option_debug:
         logger.debug("[P%s] Goal mode DEBUG: completion always true", world.player)
@@ -79,7 +78,15 @@ def set_rules(world: KirbyAmWorld) -> None:
     entrance_name = "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN"
     try:
         entrance = world.multiworld.get_entrance(entrance_name, world.player)
-        set_rule(entrance, lambda state: _has_all_shards(state, world.player))
+        set_rule(entrance, shard_gate_rule)
     except Exception:
         # If the entrance doesn't exist yet (during early iteration), don't block generation.
         pass
+
+    for goal_event_name in ("EVENT_DEFEAT_DARK_MIND", "EVENT_100_PERCENT"):
+        try:
+            goal_location = world.multiworld.get_location(goal_event_name, world.player)
+            set_rule(goal_location, shard_gate_rule)
+        except Exception:
+            # If the goal event location is not present yet, remain tolerant during iteration.
+            pass

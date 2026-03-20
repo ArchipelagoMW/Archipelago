@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from unittest.mock import patch
 
 from ..options import Goal
 from ..rules import set_rules
@@ -21,12 +22,35 @@ class _FakeOptions:
         return _GoalValue(self.goal_value)
 
 
+class _FakeEntrance:
+    def __init__(self, name: str, player: int) -> None:
+        self.name = name
+        self.player = player
+
+
+class _FakeLocation:
+    def __init__(self, name: str, player: int) -> None:
+        self.name = name
+        self.player = player
+
+
 class _FakeMultiWorld:
     def __init__(self) -> None:
         self.completion_condition: dict[int, object] = {}
+        self.entrances: dict[tuple[str, int], _FakeEntrance] = {}
+        self.locations: dict[tuple[str, int], _FakeLocation] = {}
 
-    def get_entrance(self, _name: str, _player: int):
-        raise KeyError("Entrance map is not required for completion rule tests")
+    def get_entrance(self, name: str, player: int):
+        key = (name, player)
+        if key not in self.entrances:
+            self.entrances[key] = _FakeEntrance(name, player)
+        return self.entrances[key]
+
+    def get_location(self, name: str, player: int):
+        key = (name, player)
+        if key not in self.locations:
+            self.locations[key] = _FakeLocation(name, player)
+        return self.locations[key]
 
 
 class _FakeState:
@@ -77,3 +101,15 @@ def test_debug_goal_is_always_complete() -> None:
 
     completion_fn = _get_completion_fn(world)
     assert completion_fn(_FakeState())
+
+
+def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> None:
+    world = _FakeWorld(Goal.option_dark_mind)
+
+    with patch("worlds.kirbyam.rules.set_rule") as mock_set_rule:
+        set_rules(world)
+
+    applied_names = [call.args[0].name for call in mock_set_rule.call_args_list]
+    assert "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
+    assert "EVENT_DEFEAT_DARK_MIND" in applied_names
+    assert "EVENT_100_PERCENT" in applied_names
