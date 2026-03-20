@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 
 EXPECTED_ROM_NAME_PREFIX = "kirby amazing mirror"  # loosen while you iterate
+_BOSS_MIRROR_TABLE_PROBE_BYTES = 32
 
 
 class KirbyAmClient(BizHawkClient):
@@ -53,6 +54,10 @@ class KirbyAmClient(BizHawkClient):
 
         # Goal reporting
         self._goal_reported: bool = False
+
+        # Boss candidate probing state
+        self._last_boss_probe_snapshot: bytes | None = None
+        self._boss_probe_stream_marker: int | None = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
@@ -103,6 +108,9 @@ class KirbyAmClient(BizHawkClient):
 
         # Location checks (real RAM polling)
         await self._poll_locations(ctx)
+
+        # Candidate discovery for non-shard boss defeat signals.
+        await self._probe_boss_defeat_candidates(ctx)
 
         # Item delivery (mailbox protocol)
         await self._deliver_items(ctx)
@@ -220,6 +228,63 @@ class KirbyAmClient(BizHawkClient):
 
         if missing_on_server:
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+
+    async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Probe native candidate boss table bytes and log rising-edge bit transitions.
+
+        This is intentionally observational: it does not send AP location checks yet.
+        The logs are meant to support live BizHawk address verification for Issue #110.
+        """
+        base_addr = self._native_addr("boss_mirror_table_native")
+        if base_addr is None:
+            return
+
+        # Re-baseline on BizHawk reconnect by tracking the stream object identity.
+        stream_marker = id(getattr(ctx.bizhawk_ctx, "streams", None))
+        if self._boss_probe_stream_marker is None:
+            self._boss_probe_stream_marker = stream_marker
+        elif stream_marker != self._boss_probe_stream_marker:
+            self._boss_probe_stream_marker = stream_marker
+            self._last_boss_probe_snapshot = None
+
+        raw = (await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [(base_addr, _BOSS_MIRROR_TABLE_PROBE_BYTES, "System Bus")],
+        ))[0]
+
+        if self._last_boss_probe_snapshot is None:
+            self._last_boss_probe_snapshot = raw
+            return
+
+        old = self._last_boss_probe_snapshot
+        self._last_boss_probe_snapshot = raw
+
+        # Pad to equal width defensively if emulator returned an unexpected size.
+        width = max(len(old), len(raw))
+        old = old.ljust(width, b"\x00")
+        raw = raw.ljust(width, b"\x00")
+
+        rising_edges: list[str] = []
+        for byte_index in range(width):
+            prev_byte = old[byte_index]
+            new_byte = raw[byte_index]
+            rising_mask = (~prev_byte & 0xFF) & new_byte
+            if rising_mask == 0:
+                continue
+
+            for bit in range(8):
+                if (rising_mask >> bit) & 1:
+                    absolute_addr = base_addr + byte_index
+                    rising_edges.append(f"0x{absolute_addr:08X}[bit{bit}]")
+
+        if rising_edges:
+            from CommonClient import logger
+
+            logger.info(
+                "KirbyAM boss candidate probe detected rising bits: %s",
+                ", ".join(rising_edges),
+            )
 
     # --------------------------
     # Item delivery (mailbox protocol)

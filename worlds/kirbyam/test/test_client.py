@@ -323,3 +323,68 @@ async def test_goal_location_checked_before_goal_status(mock_bizhawk_context):
         {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
     ])
     assert client._goal_reported is True
+
+
+@pytest.mark.asyncio
+async def test_probe_boss_candidates_no_address_no_read(mock_bizhawk_context):
+    """Boss probe should no-op when native candidate address is not configured."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+
+        mock_read.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_probe_boss_candidates_logs_rising_edges(mock_bizhawk_context):
+    """Boss probe should log rising bit transitions for candidate mapping."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"boss_mirror_table_native": 0x02028C14}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        # First probe establishes baseline with all zeros.
+        mock_read.return_value = [bytes(32)]
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+
+        # Second probe sets one bit at first byte (bit 3).
+        payload = bytearray(32)
+        payload[0] = 0x08
+        mock_read.return_value = [bytes(payload)]
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+
+        assert mock_logger.info.called
+        logged_args = mock_logger.info.call_args.args
+        assert "KirbyAM boss candidate probe detected rising bits" in logged_args[0]
+        assert "0x02028C14[bit3]" in logged_args[1]
+
+
+@pytest.mark.asyncio
+async def test_probe_boss_candidates_resets_baseline_on_stream_change(mock_bizhawk_context):
+    """Changing BizHawk stream identity should re-baseline probe snapshots."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    first_stream = object()
+    second_stream = object()
+    mock_bizhawk_context.bizhawk_ctx.streams = first_stream
+
+    with patch.dict(data.native_ram_addresses, {"boss_mirror_table_native": 0x02028C14}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        # Baseline with first stream.
+        mock_read.return_value = [bytes(32)]
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+
+        # Switch stream identity and present non-zero state; should be treated as new baseline.
+        mock_bizhawk_context.bizhawk_ctx.streams = second_stream
+        payload = bytearray(32)
+        payload[0] = 0x08
+        mock_read.return_value = [bytes(payload)]
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+
+        mock_logger.info.assert_not_called()

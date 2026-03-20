@@ -120,3 +120,26 @@ Goal handling now uses explicit goal locations:
 - The BizHawk client now reports the selected goal location after all non-goal locations are checked, then sends goal status after the server acknowledges that goal location
 
 Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated AP goal location instead of an auto-collected region event.
+
+## Issue #110: Boss Defeat Address Identification Beyond Shards
+
+### Problem
+Dungeon/final boss defeat native addresses beyond shard bitfields were still candidate-only and not instrumented in client logs, making live mapping work slower and less repeatable.
+
+### Solution
+Added observational boss-candidate probing in `worlds/kirbyam/client.py`:
+- Reads `boss_mirror_table_native` from `addresses.json` (`0x02028C14`)
+- Captures a 32-byte snapshot each poll
+- Logs only rising-edge bit transitions (0 -> 1) with absolute address + bit index
+- Does not send AP location checks yet (probe-only, safe for production)
+
+### Validation
+- Tests in `worlds/kirbyam/test/test_client.py` verify:
+  - probe is skipped when native address is missing
+  - rising-edge transitions produce expected log entries
+
+### Scope note
+This change is instrumentation groundwork for Issue #110 address identification.
+It does not yet convert boss candidate transitions into authoritative AP location
+checks or implement shard-undo behavior until concrete verified mappings are
+confirmed through manual BizHawk validation.

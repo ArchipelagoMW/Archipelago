@@ -14,9 +14,26 @@ From `KirbyAM Data.xlsx` and cheat codes:
 
 ```
 EWRAM Mailbox / Game State Region:
-0x02038970 - Mirror Shards Bitfield (candidate) ← START HERE
+0x02038970 - Mirror Shards Bitfield (integrated) ← START HERE
 0x02038960-0x0203896A - Chest/Switch blocks (supporting)
+0x02028C14 - Boss/Mirror candidate table base (integrated probe)
 ```
+
+## Integrated Probe Logging (Issue #110)
+
+The KirbyAM BizHawk client now includes observational probing for boss candidate
+bits at `boss_mirror_table_native` (`0x02028C14`, width `32` bytes).
+
+Behavior:
+- Baseline snapshot is captured on the first poll after probe/client handler initialization.
+- BizHawk reconnects trigger probe re-baselining automatically via stream-identity change detection.
+- Only rising-edge transitions (`0 -> 1`) are logged.
+- Log format includes absolute address and bit index, for example:
+   - `0x02028C14[bit3]`
+- No AP location checks are sent from this probe yet.
+
+Use this during boss fights to collect repeatable candidate transitions before
+promoting any specific address/bit mapping into production logic.
 
 ## Step-by-Step: Verify First Address (Mirror Shards)
 

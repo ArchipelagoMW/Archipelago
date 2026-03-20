@@ -12,7 +12,8 @@
       "delivered_item_index": "0x0202C020"
     },
     "native": {
-      "shard_bitfield_native": "0x02038970"
+      "shard_bitfield_native": "0x02038970",
+      "boss_mirror_table_native": "0x02028C14"
     }
   },
   "rom": {
