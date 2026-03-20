@@ -17,56 +17,56 @@
   },
 
   "REGION_MUSTARD_MOUNTAIN/MAIN": {
-    "locations": ["SHARD_1"],
+    "locations": ["SHARD_1", "BOSS_DEFEAT_1"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_MOONLIGHT_MANSION/MAIN": {
-    "locations": ["SHARD_2"],
+    "locations": ["SHARD_2", "BOSS_DEFEAT_2"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_CANDY_CONSTELLATION/MAIN": {
-    "locations": ["SHARD_3"],
+    "locations": ["SHARD_3", "BOSS_DEFEAT_3"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_OLIVE_OCEAN/MAIN": {
-    "locations": ["SHARD_4"],
+    "locations": ["SHARD_4", "BOSS_DEFEAT_4"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_PEPPERMINT_PALACE/MAIN": {
-    "locations": ["SHARD_5"],
+    "locations": ["SHARD_5", "BOSS_DEFEAT_5"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_CABBAGE_CAVERN/MAIN": {
-    "locations": ["SHARD_6"],
+    "locations": ["SHARD_6", "BOSS_DEFEAT_6"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_CARROT_CASTLE/MAIN": {
-    "locations": ["SHARD_7"],
+    "locations": ["SHARD_7", "BOSS_DEFEAT_7"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []
   },
 
   "REGION_RADISH_RUINS/MAIN": {
-    "locations": ["SHARD_8"],
+    "locations": ["SHARD_8", "BOSS_DEFEAT_8"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": []

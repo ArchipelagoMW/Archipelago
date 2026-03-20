@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import data
+from .data import LocationCategory, data
 from .options import Goal
 from .types import KirbyAmBizHawkClientContext
 
@@ -48,11 +48,19 @@ class KirbyAmClient(BizHawkClient):
                     self._goal_location_ids_by_option[Goal.option_100] = loc.location_id
             else:
                 self._non_goal_location_ids_sorted.append(loc.location_id)
+        # Shard bitfield → location IDs (SHARD category only; BOSS_DEFEAT uses separate bitfield)
         self._location_ids_by_bit: dict[int, list[int]] = {}
         for loc in data.locations.values():
-            if loc.bit_index is None:
+            if loc.bit_index is None or loc.category != LocationCategory.SHARD:
                 continue
             self._location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+
+        # Boss defeat bitfield → location IDs (BOSS_DEFEAT category; polled from boss_defeat_flags)
+        self._boss_location_ids_by_bit: dict[int, list[int]] = {}
+        for loc in data.locations.values():
+            if loc.bit_index is None or loc.category != LocationCategory.BOSS_DEFEAT:
+                continue
+            self._boss_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
         # One-time RAM state load
         self._ram_state_loaded: bool = False
@@ -115,6 +123,9 @@ class KirbyAmClient(BizHawkClient):
 
         # Location checks (real RAM polling)
         await self._poll_locations(ctx)
+
+        # Boss defeat location polling via transport register
+        await self._poll_boss_defeat_locations(ctx)
 
         # Candidate discovery for non-shard boss defeat signals.
         await self._probe_boss_defeat_candidates(ctx)
@@ -233,6 +244,29 @@ class KirbyAmClient(BizHawkClient):
         # resend them until the server acknowledges and reflects them.
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
 
+        if missing_on_server:
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+
+    async def _poll_boss_defeat_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Read boss_defeat_flags transport bitfield and map set bits to boss-defeat locations.
+
+        This mirrors shard polling semantics: RAM-derived checks are resent until the
+        server acknowledges them in ctx.checked_locations.
+        """
+        boss_addr = data.transport_ram_addresses.get("boss_defeat_flags")
+        if boss_addr is None:
+            return
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(boss_addr, 4, "System Bus")]))[0]
+        boss_bits = self._u32_le(raw)
+
+        mapped_checked_locations: set[int] = set()
+        for bit in sorted(self._boss_location_ids_by_bit.keys()):
+            if (boss_bits >> bit) & 1:
+                mapped_checked_locations.update(self._boss_location_ids_by_bit.get(bit, []))
+
+        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         if missing_on_server:
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
 

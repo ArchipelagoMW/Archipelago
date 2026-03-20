@@ -617,3 +617,84 @@ async def test_game_watcher_skips_all_work_when_slot_data_is_none(mock_bizhawk_c
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
         await client.game_watcher(mock_bizhawk_context)
         mock_read.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_poll_boss_defeat_sends_location_checks_for_set_bits(mock_bizhawk_context):
+    """Boss defeat transport register with a set bit should produce a LocationChecks send."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0202C024}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # Bit 0 set — Mustard Mountain boss defeated
+        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
+
+        await client._poll_boss_defeat_locations(mock_bizhawk_context)
+
+        mock_send.assert_awaited_once_with([
+            {"cmd": "LocationChecks", "locations": [boss1_loc]}
+        ])
+
+
+@pytest.mark.asyncio
+async def test_poll_boss_defeat_skips_already_server_acknowledged(mock_bizhawk_context):
+    """No LocationChecks sent when boss defeat bit is set but server already acknowledged it."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    mock_bizhawk_context.checked_locations = {boss1_loc}
+
+    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0202C024}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
+
+        await client._poll_boss_defeat_locations(mock_bizhawk_context)
+
+        mock_send.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_poll_boss_defeat_skips_when_address_missing(mock_bizhawk_context):
+    """When boss_defeat_flags address is not in addresses.json the method should no-op."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    native_backup = dict(data.transport_ram_addresses)
+    transport_without_boss = {k: v for k, v in data.transport_ram_addresses.items() if k != "boss_defeat_flags"}
+
+    with patch.dict(data.transport_ram_addresses, transport_without_boss, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        await client._poll_boss_defeat_locations(mock_bizhawk_context)
+        mock_read.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_shard_poll_does_not_trigger_boss_defeat_locations(mock_bizhawk_context):
+    """Shard bitfield polling must not send boss-defeat location checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # bit 0 set in shard bitfield
+        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
+
+        await client._poll_locations(mock_bizhawk_context)
+
+        # Should only send SHARD_1, not BOSS_DEFEAT_1
+        calls = mock_send.await_args_list
+        assert len(calls) == 1
+        sent_locations = calls[0].args[0][0]["locations"]
+        assert boss1_loc not in sent_locations

@@ -73,7 +73,7 @@ def _parse_int(value: Any) -> int:
 class LocationCategory(IntEnum):
     SHARD = 0
     GOAL = 1
-    # Add more as you define them, e.g. BOSS = 1, CHEST = 2, etc.
+    BOSS_DEFEAT = 2
 
 
 class ItemData(NamedTuple):

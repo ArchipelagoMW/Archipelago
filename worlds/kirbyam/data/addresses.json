@@ -9,7 +9,8 @@
       "debug_last_item_id": "0x0202C014",
       "debug_last_from": "0x0202C018",
       "frame_counter": "0x0202C01C",
-      "delivered_item_index": "0x0202C020"
+      "delivered_item_index": "0x0202C020",
+      "boss_defeat_flags": "0x0202C024"
     },
     "native": {
       "shard_bitfield_native": "0x02038970",

@@ -17,6 +17,12 @@
 
 // Shard State Registers
 #define AP_SHARD_BITFIELD       (*(volatile uint32_t*)(AP_BASE + 0x00u))
+// Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
+// Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
+// Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
+// TODO: Call ap_set_boss_defeat_flag(boss_index) from the hook at sub_0801D948 (ROM addr 0x0801D948)
+//       once the exact patch-site byte offset is confirmed via Issue #110 address verification.
+#define AP_BOSS_DEFEAT_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x24u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 
@@ -60,6 +66,18 @@ static void persist_shard_to_sram(uint8_t new_shard_bitfield) {
     SRAM_CHECKSUM_3 = (uint8_t)(SRAM_CHECKSUM_1 + SRAM_CHECKSUM_2); // Derived checksum
 }
 
+
+// Issue #35: Set the boss-defeat flag for <boss_index> (0–7) in the transport register.
+// This function is the intended hook target for sub_0801D948 (ROM address 0x0801D948):
+//   intercept the CollectShard(var->unk218) call site, call this instead, and let AP
+//   item delivery (SHARD_N) grant the actual shard progression.
+// Until the ROM hook is installed, AP_BOSS_DEFEAT_FLAGS stays at zero; the Python
+// client will receive no boss-defeat checks but will not regress any existing behavior.
+static void ap_set_boss_defeat_flag(uint32_t boss_index) {
+    if (boss_index < 8u) {
+        AP_BOSS_DEFEAT_FLAGS |= (1u << boss_index);
+    }
+}
 
 static void ap_apply_item(uint32_t ap_item_id) {
     // 1_UP = BASE+1

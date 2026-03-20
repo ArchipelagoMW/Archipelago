@@ -209,3 +209,56 @@ self-correcting behavior of each subsystem.
 
 BIZHAWK_TESTING_GUIDE.md now includes a "Reconnect Lifecycle Check" section
 with step-by-step instructions for validating both BizHawk and server reconnect.
+
+## Issue #35: Boss-Defeat Locations with Shard-Delivery Decoupling
+
+### Problem
+After a boss is defeated in Kirby & The Amazing Mirror, the game calls
+`sub_0801D948` (ROM address `0x0801D948`) which calls `CollectShard(var->unk218)`
+to grant the area shard directly to save-state. In AP randomizer play the shard
+should come through the AP delivery pipeline (SHARD_N item) rather than as a
+direct grant, and the boss defeat itself should be a distinct AP location check.
+
+### Solution
+Implemented the AP-side transport infrastructure for boss-defeat locations:
+
+**Transport register**
+- Added `boss_defeat_flags` at `0x0202C024` (u32, bits 0–7), extending the
+  mailbox from 36 to 40 bytes.
+- Bit N is set by `ap_set_boss_defeat_flag(N)` in the ROM payload when area
+  boss N is defeated.
+
+**ROM payload**
+- Added `AP_BOSS_DEFEAT_FLAGS` macro in `ap_payload.c`.
+- Added `ap_set_boss_defeat_flag(uint32_t boss_index)` stub with a TODO comment
+  directing the caller to install the hook at `sub_0801D948` (ROM address
+  `0x0801D948`, the function that calls `CollectShard(var->unk218)` after a boss
+  collection cutscene). Until the hook is installed the register stays at zero;
+  shard polling and delivery are unaffected.
+
+**Locations**
+- Added 8 `BOSS_DEFEAT_N` locations (bit_index 0–7) to `locations.json`, one per
+  area, in the matching area region.
+- Added `BOSS_DEFEAT = 2` to `LocationCategory` enum in `data.py`.
+
+**Client**
+- `_location_ids_by_bit` is now filtered to `SHARD` category only.
+- New `_boss_location_ids_by_bit` maps BOSS_DEFEAT category locations.
+- New `_poll_boss_defeat_locations()` reads `boss_defeat_flags` and sends
+  AP location checks for set bits, level-based and reconnect-safe.
+
+### Evidence trail
+- **Claim**: beating a boss runs `sub_0801D948` which calls `CollectShard(var->unk218)`.
+- **Source**: `d:\kirbyam-extras\katam\src\code_0801C6F8.c` lines 703–705;
+  `CollectShard` definition at `d:\kirbyam-extras\katam\src\treasures.c` line 41.
+- **Adaptation**: ROM hook (replacing the `BL CollectShard` with `BL ap_set_boss_defeat_flag`)
+  is deferred pending patch-site byte verification via Issue #110. The transport
+  register, AP locations, and client polling are fully wired so no client-side
+  change is required when the hook is eventually installed.
+- **Validation**: 2 new tests (boss defeat send + no-resend), 29+ tests passing.
+
+### Remaining work (post-#35)
+- Install the `sub_0801D948` ROM hook in `patch_rom.py` once the exact BL
+  instruction byte offset inside the function is confirmed via live BizHawk
+  inspection.  That step decouples the shard grant and enables real boss-defeat
+  location checks in gameplay.

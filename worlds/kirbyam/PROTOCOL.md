@@ -13,11 +13,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
   0x02000000 - 0x02040000   EWRAM Region (256 KB)
     ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0202C000 - 0x0202C023   AP Mailbox (reserved, 36 bytes)
-        └─ 0x0202C024 - 0x02040000   Rest of RAM (unused by AP)
+        ├─ 0x0202C000 - 0x0202C027   AP Mailbox (reserved, 40 bytes)
+        └─ 0x0202C028 - 0x02040000   Rest of RAM (unused by AP)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C023)
+### AP Mailbox Block (0x0202C000 - 0x0202C027)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -33,7 +33,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x1C   | 0x0202C01C | 4B | frame_counter         | u32  | ROM → Client | Monotonic frame count (incremented every hook call) |
 | 0x20   | 0x0202C020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
 
-**Total: 36 bytes (0x0202C000 - 0x0202C023)**
+| 0x24   | 0x0202C024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated (same bit ordering as shard_bitfield) |
+
+**Total: 40 bytes (0x0202C000 - 0x0202C027)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -60,7 +62,8 @@ All location IDs use **BASE_OFFSET = 3860100**.
 | Location Type | ID Range | Description |
 |---------------|----------|-------------|
 | SHARD_1 .. SHARD_8 | 3860101 - 3860108 | Mirror shard check locations (8 items) |
-| *TBD*         | 3860109+ | Chest locations, boss defeats, etc. |
+| BOSS_DEFEAT_1 .. BOSS_DEFEAT_8 | auto-assigned | Area boss defeat locations (8 locations) |
+| *TBD*         | — | Chest locations, door locations, etc. |
 
 ## Client Protocol
 
