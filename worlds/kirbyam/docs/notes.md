@@ -183,3 +183,29 @@ Key behaviors documented and tested:
 
 PROTOCOL.md was updated to replace the old edge-based pseudocode with the actual
 level-based contract description.
+
+## Issue #52: AP Connection and Reconnection Lifecycle
+
+### Problem
+The connection section of PROTOCOL.md only described the initial handshake.
+There was no documentation of which preconditions the watcher checks before
+running, how each subsystem self-corrects on reconnect, or how to manually
+verify reconnect behavior in BizHawk.
+
+### Resolution
+No new code was required; all reconnect-safe semantics were already implemented
+across prior issues (#53, #54, #110). This issue formalized the contract:
+
+- **Watcher gating**: `game_watcher` checks `ctx.server` (not None, socket open)
+  and `ctx.slot_data` (not None) before any RAM reads or message sends.
+- **Location resync**: level-based polling from #53 handles reconnect naturally.
+- **Item delivery resync**: cursor-reconciliation from #54 handles both rewind
+  (ROM counter behind) and fast-forward (ROM counter ahead) cases.
+- **Goal reporting**: idempotent; already-reported goals are never re-sent.
+- **Boss probe**: re-baselines snapshot on BizHawk stream-identity change.
+
+PROTOCOL.md Section 1 was updated to document reconnect preconditions and the
+self-correcting behavior of each subsystem.
+
+BIZHAWK_TESTING_GUIDE.md now includes a "Reconnect Lifecycle Check" section
+with step-by-step instructions for validating both BizHawk and server reconnect.

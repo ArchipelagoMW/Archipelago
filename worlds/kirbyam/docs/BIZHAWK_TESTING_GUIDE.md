@@ -24,6 +24,35 @@ When validating AP item receipt behavior in BizHawk, also watch for mailbox time
 
 This behavior is intended to avoid deadlock while still preferring exactly-once ROM outcomes.
 
+## Reconnect Lifecycle Check (Issue #52)
+
+Validate that both BizHawk and AP server reconnect scenarios work correctly:
+
+### BizHawk disconnect/reconnect
+1. Connect AP client + patched ROM normally.
+2. Trigger at least one shard location check (collect a shard in-game) and receive at least one AP item.
+3. Close and re-open BizHawk (or restart the Lua script).
+4. Confirm:
+   - Shard check is **not resent** as a duplicate (already in server `checked_locations`).
+   - When RAM-derived checks are present but server is missing them (e.g., server also restarted), the client **does** resend them.
+   - Item delivery cursor resumes from the correct index (no re-delivery of already-applied items).
+   - No mailbox deadlock: `incoming_item_flag` is clear after normal reattach.
+
+### AP server disconnect/reconnect
+1. Connect AP client + patched ROM normally.
+2. Trigger at least one new location check.
+3. Disconnect the AP server (or stop the AP server process briefly).
+4. Reconnect.
+5. Confirm:
+   - Checks that were acknowledged before disconnect are **not resent**.
+   - Checks collected while disconnected are resent on reconnect until acknowledged.
+   - Goal reporting remains idempotent if goal was already sent before disconnect.
+
+### Expected log indicators
+- Normal resend: no output except standard location-check messages.
+- Cursor resync: `KirbyAM: ROM item counter ... fast-forward delivery cursor` or rewind message.
+- Boss probe: no false positive edge-detection log on reconnect (probe re-baselines cleanly).
+
 ## Quick Reference: Known Candidates
 
 Policy references:

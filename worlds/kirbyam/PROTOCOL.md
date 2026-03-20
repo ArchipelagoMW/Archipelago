@@ -72,6 +72,26 @@ Server → Client: ConnectionRefused | Connected
                  (with items_received, checked_locations, slot_data)
 ```
 
+**Preconditions before gameplay watchers run:**
+- `ctx.server` is not `None` and the socket is open.
+- `ctx.slot_data` is not `None` (world-specific config was received).
+
+Both conditions are checked at the top of `game_watcher`. If either fails,
+no RAM reads, location sends, item writes, or goal reports occur.
+
+**On initial (or re-)connection, the following resync occurs automatically:**
+
+| State | Resync behavior |
+|---|---|
+| Location checks | Level-based poll resends any RAM-derived checks missing from `checked_locations`. |
+| Item delivery | Cursor is reconciled against ROM's `debug_item_counter`; delivery resumes from the correct index. |
+| Goal reporting | Idempotent: goal location and CLIENT_GOAL are skipped when already reflected in `checked_locations`. |
+| Boss probe | Probe snapshot re-baselines on BizHawk stream-identity change (reconnect safe). |
+
+No explicit reconnect-event handler is required because all gameplay watchers
+implement level-based or cursor-reconciliation semantics that self-correct every
+poll cycle.
+
 ### 2. Location Polling
 
 **Active State:** Every frame (or periodic)
