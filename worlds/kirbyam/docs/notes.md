@@ -338,3 +338,26 @@ Added client tests for:
 - This is the Phase 1 foundation contract.
 - In-game unsafe-state policy matrix (boss/travel windows and chaos options)
   remains scoped to Issue #223.
+
+## Issue #58: Eliminate Duplicate LocationChecks from Client Polling
+
+### Problem
+Duplicate-prevention semantics were implemented in polling logic, but observability
+was limited. It was hard to tell from logs whether a send occurred because the
+server was missing RAM-derived checks or was correctly suppressed by dedupe.
+
+### Solution
+Expanded `_poll_locations()` diagnostics while preserving existing level-based,
+reconnect-safe behavior:
+
+- Log resend reason when RAM-derived checks are missing from server state.
+- Log dedupe suppression when all RAM-derived checks are already acknowledged.
+- Apply the same resend/dedupe diagnostics pattern to boss-defeat polling.
+- Make diagnostics transition-based so unchanged states do not spam logs each tick.
+
+This keeps canonical dedupe boundaries at AP location ID level while making
+reconnect behavior easier to debug.
+
+### Validation
+- Added tests that assert resend logging and dedupe suppression logging.
+- Full client test file passes after update.

@@ -152,6 +152,9 @@ Bits 8-31 are reserved for future expansion and must be ignored until they are a
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
+- Client logs resend reasons when RAM-derived checks are missing on server and logs dedupe suppression when all RAM-derived checks are already acknowledged.
+- Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
+- Boss-defeat polling follows the same level-based resend/dedupe diagnostic contract.
 
 ### 3. Item Delivery (Mailbox Protocol)
 

@@ -78,6 +78,10 @@ class KirbyAmClient(BizHawkClient):
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
 
+        # Poll diagnostics de-duplication (avoid per-tick log spam)
+        self._last_shard_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+        self._last_boss_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
         from CommonClient import logger
@@ -294,9 +298,34 @@ class KirbyAmClient(BizHawkClient):
         # Reconnect-safe behavior: if server state is missing RAM-derived checks,
         # resend them until the server acknowledges and reflects them.
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
 
         if missing_on_server:
+            from CommonClient import logger
+
+            shard_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
+            if shard_log_state != self._last_shard_poll_log:
+                logger.info(
+                    "KirbyAM: resending RAM-derived LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                )
+                self._last_shard_poll_log = shard_log_state
+
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+        elif mapped_checked_locations:
+            from CommonClient import logger
+
+            shard_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
+            if shard_log_state != self._last_shard_poll_log:
+                logger.debug(
+                    "KirbyAM: dedupe suppressed LocationChecks (all RAM-derived checks already acknowledged: %s)",
+                    already_acknowledged,
+                )
+                self._last_shard_poll_log = shard_log_state
+
+        else:
+            self._last_shard_poll_log = None
 
     async def _poll_boss_defeat_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
@@ -318,8 +347,32 @@ class KirbyAmClient(BizHawkClient):
                 mapped_checked_locations.update(self._boss_location_ids_by_bit.get(bit, []))
 
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
+            from CommonClient import logger
+
+            boss_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
+            if boss_log_state != self._last_boss_poll_log:
+                logger.info(
+                    "KirbyAM: resending boss-defeat LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                )
+                self._last_boss_poll_log = boss_log_state
+
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+        elif mapped_checked_locations:
+            from CommonClient import logger
+
+            boss_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
+            if boss_log_state != self._last_boss_poll_log:
+                logger.debug(
+                    "KirbyAM: dedupe suppressed boss-defeat LocationChecks (all RAM-derived checks already acknowledged: %s)",
+                    already_acknowledged,
+                )
+                self._last_boss_poll_log = boss_log_state
+        else:
+            self._last_boss_poll_log = None
 
     async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
