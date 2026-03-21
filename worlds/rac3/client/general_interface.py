@@ -134,8 +134,8 @@ class GameInterface:
                 case RAC3VERSION.EU_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: EU release')
-                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                   'inconsistencies found')
+                    logger.warning('WARNING: PAL support is currently in beta, but the game is completable, '
+                                   'please inform apworld devs of any inconsistencies found')
                 case _:
                     self.current_game = None
                     logger.info('Unknown game version detected')
