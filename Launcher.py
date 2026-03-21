@@ -209,7 +209,12 @@ def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
         elif is_linux:
             terminal = which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
             if terminal:
-                subprocess.Popen([terminal, "-e", shlex.join(exe)])
+                # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
+                ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
+                lib_path_setter = f"LD_LIBRARY_PATH={shlex.quote(ld_lib_path)}" if ld_lib_path else ""
+                env = env_cleared_lib_path()
+
+                subprocess.Popen([terminal, "-e", lib_path_setter + shlex.join(exe)], env=env)
                 return True
         elif is_macos:
             terminal = [which("open"), "-W", "-a", "Terminal.app"]
