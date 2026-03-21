@@ -1048,7 +1048,7 @@
             },
             {
                 "name": "Vents", "sections": [{ "name": "Central Hall: Vents" }],
-                "map_locations": [{ "map": "central_hall", "x": 252, "y": 185 }]
+                "map_locations": [{ "map": "central_hall", "x": 255, "y": 210 }]
             }
         ]
     },
