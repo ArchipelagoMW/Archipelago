@@ -655,6 +655,84 @@ async def test_receive_notification_honors_slot_data_toggle(mock_bizhawk_context
     mock_display.assert_not_awaited()
 
 
+@pytest.mark.asyncio
+async def test_receive_notification_not_emitted_for_malformed_skipped_item(mock_bizhawk_context):
+    """Malformed ReceivedItems entries should be skipped without receive notification output."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [Mock(item="bad", player=2)]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    mock_display.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_receive_notification_reconnect_replay_dedupes_on_rewind(mock_bizhawk_context):
+    """Replayed ACK for an already-notified index should not emit another receive notification."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=2),
+        Mock(item=3860002, player=2),
+    ]
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    client._notified_receive_indices.add(1)
+    client._delivery_pending = True
+    client._delivery_pending_item_index = 1
+    client._delivered_item_index = 1
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (1).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    mock_display.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_receive_notification_not_emitted_on_fast_forward_only(mock_bizhawk_context):
+    """Fast-forward cursor reconciliation without ACK should not emit receive notifications."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    client._delivered_item_index = 0
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=2),
+        Mock(item=3860002, player=2),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (2).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    mock_display.assert_not_awaited()
+
+
 def test_send_notification_dedupes_outgoing_printjson_events(mock_bizhawk_context):
     """Outgoing ItemSend PrintJSON should notify once and dedupe reconnect echoes."""
     client = KirbyAmClient()

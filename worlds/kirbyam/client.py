@@ -157,6 +157,8 @@ class KirbyAmClient(BizHawkClient):
 
     @staticmethod
     def _player_name(ctx: "BizHawkClientContext", player_id: int) -> str:
+        if player_id == 0:
+            return "Archipelago"
         player_names = getattr(ctx, "player_names", None)
         if isinstance(player_names, dict):
             value = player_names.get(player_id)
@@ -177,6 +179,8 @@ class KirbyAmClient(BizHawkClient):
         return f"Item {item_id}"
 
     async def _emit_receive_notification(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
+        # ACK-gated + index-deduped to avoid replay spam during reconnect
+        # rewind/fast-forward reconciliation.
         if not self._receive_notifications_enabled:
             return
         if delivered_index in self._notified_receive_indices:

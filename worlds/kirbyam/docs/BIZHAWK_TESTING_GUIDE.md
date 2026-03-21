@@ -88,6 +88,11 @@ Expected behavior:
 - Send notification trigger: local-sender `PrintJSON` ItemSend packet.
 - Reconnect-safe dedupe prevents repeats for previously shown events.
 
+Issue #73 receive-focused checks:
+- Skipped malformed items should not produce receive notification text.
+- Cursor fast-forward/rewind reconciliation should not replay old receive notifications.
+- New ACK-completed deliveries after reconnect should still notify exactly once.
+
 ## Unsafe Delivery Candidate Research (Issue #223)
 
 Issue #223 is currently in research-first mode. Do not assume miniboss or travel

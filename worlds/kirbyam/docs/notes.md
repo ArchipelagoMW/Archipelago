@@ -233,6 +233,26 @@ notification contract, which made receive/send events opaque in normal play.
   - verify readable receive/send notifications
   - verify reconnect does not replay old notifications
 
+## Issue #73: Receive Notifications (Exactly-Once Per Delivered Item)
+
+### Problem
+Receive notifications needed explicit per-item delivery guarantees tied to the
+actual mailbox ACK path, not just generic packet flow.
+
+### Implementation
+- Receive notifications are emitted from ACK-completed delivery indexes.
+- Notification content resolves item and sender names when available.
+- Exactly-once receive behavior is enforced by delivered-index dedupe.
+- Malformed skipped entries emit no receive notification.
+- Cursor reconciliation (rewind/fast-forward) alone emits no receive notification.
+
+### Validation
+- Added targeted tests for:
+  - ACK-triggered receive notification exactly once per index
+  - malformed-entry skip suppression
+  - reconnect replay dedupe on rewound indexes
+  - no notification on fast-forward-only reconciliation
+
 ## Issue #44: Final Boss Access Rules (Dimension Mirror Sequence)
 
 ### Problem

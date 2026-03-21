@@ -207,6 +207,11 @@ Reconnect-safe dedupe:
 - Send dedupe key: `(item_id, sender_id, receiver_id, location_id)`.
 - Dedupe state is session-local and suppresses reconnect replay spam.
 
+Receive-specific contract (Issue #73):
+- Receive notification is emitted only after mailbox ACK for the pending index.
+- Malformed/skipped `ReceivedItems` entries do not emit notifications.
+- Cursor fast-forward/rewind reconciliation alone does not emit notifications.
+
 Optional slot-data toggles (default: enabled when absent):
 - `enable_receive_notifications`
 - `enable_send_notifications`
