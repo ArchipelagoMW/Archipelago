@@ -113,7 +113,11 @@ class KH2World(World):
                 "AutoFormLogic",
                 "LevelDepth",
                 "DonaldGoofyStatsanity",
-                "CorSkipToggle"
+                "CorSkipToggle",
+                "SuperBosses",
+                "Cups",
+                "AtlanticaToggle",
+                "SummonLevelLocationToggle",
         )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
@@ -249,6 +253,8 @@ class KH2World(World):
         # hitlist
         if self.options.Goal not in ["lucky_emblem_hunt", "three_proofs"]:
             self.random_super_boss_list.extend(exclusion_table["Hitlist"])
+            if self.options.CasualBounties:
+                self.random_super_boss_list.extend(exclusion_table["HitlistCasual"])
             self.bounties_amount = self.options.BountyAmount.value
             self.bounties_required = self.options.BountyRequired.value
 
@@ -483,6 +489,20 @@ class KH2World(World):
         for location in self.options.exclude_locations.value:
             if location in self.random_super_boss_list:
                 self.random_super_boss_list.remove(location)
+
+        if self.options.LevelDepth == "level_1":
+            if LocationName.Lvl50 in self.random_super_boss_list:
+                self.random_super_boss_list.remove(LocationName.Lvl50)
+            if LocationName.Lvl99 in self.random_super_boss_list:
+                self.random_super_boss_list.remove(LocationName.Lvl99)
+
+        # We only want the bounty corresponding to our max level, remove the other level bounty
+        if self.options.LevelDepth in ["level_50", "level_50_sanity"] and LocationName.Lvl99 in self.random_super_boss_list:
+            self.random_super_boss_list.remove(LocationName.Lvl99)
+
+        # We only want the bounty corresponding to our max level, remove the other level bounty
+        if self.options.LevelDepth in ["level_99", "level_99_sanity"] and LocationName.Lvl50 in self.random_super_boss_list:
+            self.random_super_boss_list.remove(LocationName.Lvl50)
 
         if not self.options.SummonLevelLocationToggle and LocationName.Summonlvl7 in self.random_super_boss_list:
             self.random_super_boss_list.remove(LocationName.Summonlvl7)

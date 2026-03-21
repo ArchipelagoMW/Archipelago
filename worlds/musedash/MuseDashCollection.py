@@ -28,6 +28,7 @@ class MuseDashCollections:
         "Miku in Museland",  # Paid DLC not included in Muse Plus
         "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
         "MSR Anthology_Vol.02", # Goes away January 26, 2026. 
+        "MD-level Tactical Training Blu-ray", # Goes away December 27, 2025. 
     ]
 
     REMOVED_SONGS = [
@@ -38,6 +39,7 @@ class MuseDashCollections:
         "Tsukuyomi Ni Naru Replaced",
         "Heart Message feat. Aoi Tokimori Secret",
         "Meow Rock feat. Chun Ge, Yuan Shen",
+        "Stra Stella Secret",
     ]
 
     song_items = SONG_DATA
