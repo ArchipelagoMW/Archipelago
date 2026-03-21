@@ -8,8 +8,7 @@ You can read about the changes [here](https://github.com/Taoshix/Archipelago-RaC
 
 All game region versions are able to be played at various levels of compatibility:
 - **US (Black Label `SCUS-97353` + Greatest Hits `SCUS-97518`):** Fully Supported
-- **PAL (EU/AUS `SCES-52456`):** Intro skip, Home Warp, and Ship Warp are not supported. The game will crash if you try to 
-use these, disable intro skip and do not use the button combos for warping.
+- **PAL (EU/AUS `SCES-52456`):** Mostly Supported. One HP Challenge patches on Annihilation Nation wont work
 - **Japanese (`SCPS-15084` + The Best release `SCPS-19309`):** No Information, Please provide feedback (previously 
 supported but got removed)
 - **Korean (`SCKA-20037`):** No Information, Please provide feedback
