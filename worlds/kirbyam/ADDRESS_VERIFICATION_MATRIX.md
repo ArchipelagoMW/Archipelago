@@ -148,13 +148,67 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 ## 3. FINAL BOSS: DARK MIND
 
-### Dark Mind Defeat Flag
-- **Candidate Address**: TBD
-- **Expected Behavior**: Flag value / bitfield changes when Dark Mind defeated
-- **Status**: ⬜ Not Started
+### Dark Meta Knight (Dimension Mirror Encounter)
+- **Candidate Address**: TBD — no dedicated flag mapped yet; presence inferred from
+  `boss_mirror_table_native` probe region (`0x02028C14+`). Distinct from the
+  Radish Ruins disguise fight (covered separately under Issue #43).
+- **Object ID**: `OBJ_DARK_META_KNIGHT = 0x4E` (same type used for disguise fight;
+  the Dimension Mirror encounter is differentiated by map/room context).
+- **Expected Behavior**: A flag or bit in the boss table should set when the
+  Dimension Mirror Dark Meta Knight fight is completed — distinct from the Radish
+  Ruins occurrence. Must be verified against both encounters.
+- **AP Role**: This is a required event in `REGION_DIMENSION_MIRROR/MAIN`. The
+  `Defeat Dark Mind` goal location is gated behind this event.
+- **Status**: ⬜ Not Started — candidate address unresolved; awaiting live BizHawk
+  mapping during the Dimension Mirror sequence.
 - **Verified Address**: 
 - **Confidence**: 🔴 Low
-- **Testing Notes**: Should only be set after final boss defeated in final area.
+- **Testing Notes**: Trigger the DMK fight via Dimension Mirror (after collecting
+  all 8 shards), not the Radish Ruins route. Record pre/post boss-table bytes.
+
+| Phase | Step | Expected | Observed | ✅ |
+|-------|------|----------|----------|---|
+| Before | Check boss table bytes at `0x02028C14+` | (record hex) | | |
+| Engage | Enter Dimension Mirror, find DMK room | N/A | N/A | |
+| Defeat | Deal final hit to Dark Meta Knight | N/A | N/A | |
+| After | Check boss table for new bit set | Changed bit | | |
+| Reset | Load save | Value persists | | |
+
+---
+
+### Dark Mind (All Forms as a Unit)
+- **Candidate Address**: `ai_kirby_state_native` at `0x0203AD2C` (u32) —
+  `integrated` status; value `9999` fires on Dark Mind clear trigger.
+- **Object IDs (from katam decomp)**:
+  - `OBJ_DARK_MIND_FORM_1 = 0x4F`
+  - `OBJ_DARK_MIND_FORM_2 = 0x50`
+  - `OBJ_DARK_MIND_FORM_3_TRIGGER = 0x51`
+- **Expected Behavior**: `ai_kirby_state_native` transitions to `9999` after all
+  three Dark Mind forms are defeated. The native signal fires once per playthrough
+  per save slot (not per form individually). Note: `10000` is the subsequent
+  100%-completion progression signal and must NOT be used as a Dark Mind trigger.
+- **AP Role**: The `Defeat Dark Mind` goal location fires on the `9999` native
+  signal. The `100% Save File` goal fires on `10000`. Both are in
+  `REGION_DIMENSION_MIRROR/MAIN` and require all 8 shards; `Defeat Dark Mind`
+  additionally requires the Dark Meta Knight (Dimension Mirror) event.
+- **Status**: ⬜ Integrated (pending live verification) — currently used in
+  production client for Dark Mind goal detection. Promotion to `verified`
+  requires 3+ BizHawk observations with pre/post capture and persistence check.
+- **Verified Address**: `0x0203AD2C` (integrated; unverified)
+- **Confidence**: 🟡 Medium (integrated from protocol reverse-engineering; no
+  confirmed live captures on record)
+- **Testing Notes**: Observe `ai_kirby_state_native` in BizHawk before entering
+  the final boss sequence, during each form, and after the final hit. Confirm
+  value reaches `9999` and stays there through a save/reload cycle.
+
+| Phase | Step | Expected ai_state | Observed | ✅ |
+|-------|------|-------------------|----------|---|
+| Before Dark Mind | Check `0x0203AD2C` | Not 9999 | | |
+| Form 1 defeat | Beat Dark Mind Form 1 | Not 9999 yet | | |
+| Form 2 defeat | Beat Dark Mind Form 2 | Not 9999 yet | | |
+| Form 3 defeat | Beat Dark Mind Form 3 | `9999` | | |
+| Post-clear | Continue post-clear | `10000` (100% signal) | | |
+| Reload | Load save | `9999` persists | | |
 
 ---
 
@@ -202,7 +256,9 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 |--------|------|---------|-----|------------|--------|
 | Mirror Shard 1 | Bitfield | TBD | 0 | 🔴 | ⬜ |
 | Crepe Defeated | Flag/Bitfield | TBD | ? | 🔴 | ⬜ |
-| Dark Mind Defeated | Flag/Bitfield | TBD | ? | 🔴 | ⬜ |
+| Dark Meta Knight (Dimension Mirror) | Flag/Bitfield | TBD (boss table `0x02028C14+`) | ? | 🔴 | ⬜ |
+| Dark Mind Defeated (all forms) | ai_kirby_state | `0x0203AD2C` → `9999` | n/a | 🟡 | Integrated |
+| 100% Completion Signal | ai_kirby_state | `0x0203AD2C` → `10000` | n/a | 🟡 | Integrated |
 | ... | ... | ... | ... | ... | ... |
 
 ---

@@ -74,7 +74,7 @@
 
   "REGION_DIMENSION_MIRROR/MAIN": {
     "locations": ["GOAL_DARK_MIND", "GOAL_100_PERCENT"],
-    "events": ["EVENT_DEBUG_LOCATION"],
+    "events": ["EVENT_DEBUG_LOCATION", "Defeat Dark Meta Knight (Dimension Mirror)"],
     "exits": ["REGION_GAME_START"],
     "warps": []
   }

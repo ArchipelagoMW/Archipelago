@@ -6,6 +6,11 @@ client/ROM integration are still in flux.
 Current rules:
   - Access to the Dimension Mirror region requires collecting all 8 Mirror Shards
     (implemented as 8 progression items).
+  - Within the Dimension Mirror:
+      * Defeat Dark Meta Knight (Dimension Mirror) is an event available once
+        the region is entered (no additional items required beyond the shards gate).
+      * Defeat Dark Mind goal location requires: all 8 shards + DMK event.
+      * 100% Save File goal location requires: all 8 shards (shard gate only).
   - Completion conditions:
         * Dark Mind: collect Defeat Dark Mind.
         * 100%: collect 100% Save File.
@@ -45,6 +50,8 @@ _GOAL_LOCATION_LABELS = {
     Goal.option_dark_mind: "Defeat Dark Mind",
     Goal.option_100: "100% Save File",
 }
+
+_DMK_DIMENSION_MIRROR_EVENT = "Defeat Dark Meta Knight (Dimension Mirror)"
 
 
 def _has_all_shards(state: CollectionState, player: int) -> bool:
@@ -89,7 +96,15 @@ def set_rules(world: KirbyAmWorld) -> None:
     for goal_location_name in _GOAL_LOCATION_LABELS.values():
         try:
             goal_location = world.multiworld.get_location(goal_location_name, world.player)
-            set_rule(goal_location, shard_gate_rule)
+            if goal_location_name == "Defeat Dark Mind":
+                # Sequenced after Dark Meta Knight within the Dimension Mirror.
+                dmk_rule = lambda state: (
+                    _has_all_shards(state, world.player)
+                    and state.has(_DMK_DIMENSION_MIRROR_EVENT, world.player)
+                )
+                set_rule(goal_location, dmk_rule)
+            else:
+                set_rule(goal_location, shard_gate_rule)
         except KeyError:
             logger.warning(
                 "[P%s] Goal location %s not found; shard gate not applied to this goal",

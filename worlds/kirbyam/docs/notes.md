@@ -172,10 +172,59 @@ Integrated native AI-state goal polling from `ai_kirby_state_native` (`0x0203AD2
 
 Client continues to send `CLIENT_GOAL` only after server acknowledgement of the selected goal location check, preserving idempotent AP completion reporting.
 
-## Issue #110: Boss Defeat Address Identification Beyond Shards
+## Issue #44: Final Boss Access Rules (Dimension Mirror Sequence)
 
 ### Problem
-Dungeon/final boss defeat native addresses beyond shard bitfields were still candidate-only and not instrumented in client logs, making live mapping work slower and less repeatable.
+`REGION_DIMENSION_MIRROR/MAIN` modeled the final-boss area as a flat region with
+no internal sequencing: both goal locations (`Defeat Dark Mind`, `100% Save File`)
+were peers with no representation of the Dark Meta Knight prerequisite encounter.
+The `ADDRESS_VERIFICATION_MATRIX.md` also lacked entries for the Dimension Mirror
+boss encounters.
+
+### Solution
+
+`areas.json` now includes a `Defeat Dark Meta Knight (Dimension Mirror)` event
+in `REGION_DIMENSION_MIRROR/MAIN`. This event:
+- Is accessible once the region is entered (which requires all 8 shards).
+- Represents the in-sequence Dark Meta Knight rematch, distinct from the Radish
+  Ruins disguise fight (tracked separately under #43).
+- Provides the prerequisite event item that gates `Defeat Dark Mind`.
+
+`rules.py` now enforces:
+- `Defeat Dark Mind` goal location: requires all 8 shards **and** `Defeat Dark
+  Meta Knight (Dimension Mirror)` event.
+- `100% Save File` goal location: requires all 8 shards only (the 100%
+  completion signal incorporates full clear semantics independently).
+
+### `ai_kirby_state_native` Value Semantics (Address: `0x0203AD2C`, u32)
+
+**Source**: Live-mapped AI state candidate integrated for goal mode polling
+(from `native_address_policy.json`, entries `final_boss_defeat` and
+`full_clear_completion`).
+
+**Current status**: `integrated` — used in production code; not yet `verified`
+(no confirmed 3-observation BizHawk evidence with pre/post capture on record).
+
+| Value | Meaning | Used by goal mode |
+|---|---|---|
+| `300` | Normal gameplay-active | Gameplay gate (Issue #56) |
+| `9999` | Dark Mind clear trigger | `dark_mind` goal |
+| `10000` | 100% completion signal | `100` goal |
+
+**On 9999 vs 10000 in dark_mind mode**: `10000` is post-clear progression and
+must NOT be used as the first-clear trigger for `dark_mind`. The client
+explicitly rejects `10000` when in `dark_mind` goal mode.
+
+**Promotion criteria (integrated → verified)**:
+1. Capture pre-action ai_kirby_state value in BizHawk memory viewer.
+2. Complete the final boss sequence and capture post-action value.
+3. Record frame-count and confirm value persists through at least one save/reload.
+4. Repeat 3 times for each of `9999` (Dark Mind) and `10000` (100%) signals.
+
+Until promoted, treat both values as valid for production use but flag for
+follow-up verification in any regression investigation.
+
+## Issue #110: Boss Defeat Address Identification Beyond Shards
 
 ### Solution
 Added observational boss-candidate probing in `worlds/kirbyam/client.py`:

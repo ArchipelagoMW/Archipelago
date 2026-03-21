@@ -32,6 +32,7 @@ class _FakeLocation:
     def __init__(self, name: str, player: int) -> None:
         self.name = name
         self.player = player
+        self.access_rule = lambda _state: True  # set_rule writes here
 
 
 class _FakeMultiWorld:
@@ -113,3 +114,77 @@ def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> N
     assert "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
     assert "Defeat Dark Mind" in applied_names
     assert "100% Save File" in applied_names
+
+
+ALL_SHARDS = {
+    "Mustard Mountain - Mirror Shard",
+    "Moonlight Mansion - Mirror Shard",
+    "Candy Constellation - Mirror Shard",
+    "Olive Ocean - Mirror Shard",
+    "Peppermint Palace - Mirror Shard",
+    "Cabbage Cavern - Mirror Shard",
+    "Carrot Castle - Mirror Shard",
+    "Radish Ruins - Mirror Shard",
+}
+_DMK_EVENT = "Defeat Dark Meta Knight (Dimension Mirror)"
+
+
+def test_defeat_dark_mind_requires_dmk_event() -> None:
+    """Defeat Dark Mind goal location must be blocked without the DMK event."""
+    world = _FakeWorld(Goal.option_dark_mind)
+    set_rules(world)
+
+    dm_location = world.multiworld.get_location("Defeat Dark Mind", world.player)
+    assert callable(dm_location.access_rule)
+
+    # All shards but no DMK event: blocked.
+    assert not dm_location.access_rule(_FakeState(ALL_SHARDS))
+
+    # All shards + DMK event: accessible.
+    assert dm_location.access_rule(_FakeState(ALL_SHARDS | {_DMK_EVENT}))
+
+
+def test_defeat_dark_mind_blocked_without_shards() -> None:
+    """Defeat Dark Mind goal location requires all 8 shards even with DMK event."""
+    world = _FakeWorld(Goal.option_dark_mind)
+    set_rules(world)
+
+    dm_location = world.multiworld.get_location("Defeat Dark Mind", world.player)
+    assert callable(dm_location.access_rule)
+
+    # DMK event with partial shards: blocked.
+    partial_shards = set(list(ALL_SHARDS)[:7])
+    assert not dm_location.access_rule(_FakeState(partial_shards | {_DMK_EVENT}))
+
+    # No shards and no DMK: blocked.
+    assert not dm_location.access_rule(_FakeState({_DMK_EVENT}))
+
+
+def test_100_percent_goal_does_not_require_dmk_event() -> None:
+    """100% Save File goal location requires only shards, not the DMK event."""
+    world = _FakeWorld(Goal.option_100)
+    set_rules(world)
+
+    pct_location = world.multiworld.get_location("100% Save File", world.player)
+    assert callable(pct_location.access_rule)
+
+    # All shards, no DMK event: accessible (100% has independent logic).
+    assert pct_location.access_rule(_FakeState(ALL_SHARDS))
+
+    # Partial shards: blocked.
+    partial = set(list(ALL_SHARDS)[:7])
+    assert not pct_location.access_rule(_FakeState(partial))
+
+
+def test_dmk_event_present_in_dimension_mirror_region() -> None:
+    """areas.json must declare the Defeat Dark Meta Knight (Dimension Mirror) event."""
+    from ..data import load_json_data
+
+    regions = load_json_data("regions/areas.json")
+    dim_region = regions.get("REGION_DIMENSION_MIRROR/MAIN", {})
+    assert dim_region, "REGION_DIMENSION_MIRROR/MAIN must exist in areas.json"
+    events = dim_region.get("events", [])
+    assert _DMK_EVENT in events, (
+        f"{_DMK_EVENT!r} event must be declared in REGION_DIMENSION_MIRROR/MAIN events in areas.json"
+    )
+
