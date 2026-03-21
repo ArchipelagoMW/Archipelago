@@ -99,18 +99,17 @@ class WitnessWorld(World):
     def _get_slot_data(self) -> Dict[str, Any]:
         return {
             "seed": self.options.puzzle_randomization_seed.value,
-            "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
-            "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
-            "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
+            "victory_location": self.player_logic.VICTORY_LOCATION,
+            "item_id_to_door_ids": static_witness_items.get_item_to_door_mappings(),
             "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
-            "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
-            "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
-            "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
+            "doors_that_shouldnt_be_locked": list(self.player_logic.FORBIDDEN_DOORS),
+            "disabled_entities": list(self.player_logic.COMPLETELY_DISABLED_ENTITIES),
+            "hunt_entities": list(self.player_logic.HUNT_ENTITIES),
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
-            "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
+            "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_IDS,
+            "precompleted_puzzles": list(self.player_logic.EXCLUDED_ENTITIES),
             "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
 
@@ -157,9 +156,7 @@ class WitnessWorld(World):
     def generate_early(self) -> None:
         disabled_locations = self.options.exclude_locations.value
 
-        self.player_logic = WitnessPlayerLogic(
-            self, disabled_locations, self.options.start_inventory.value
-        )
+        self.player_logic = WitnessPlayerLogic(self, disabled_locations, self.options.start_inventory.value)
 
         self.player_locations: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player_logic)
         self.player_items: WitnessPlayerItems = WitnessPlayerItems(
@@ -351,7 +348,7 @@ class WitnessWorld(World):
 
             for item_name, hint in laser_hints.items():
                 item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
-                self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
+                self.laser_ids_to_hints[item_def.panel_entity_ids[0]] = make_compact_hint_data(hint, self.player)
                 already_hinted_locations.add(cast_not_none(hint.location))
 
         # Audio Log Hints
@@ -448,9 +445,9 @@ def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlaye
             location_obj = WitnessLocation(world.player, location, loc_id, ret)
 
             if location in static_witness_logic.ENTITIES_BY_NAME:
-                entity_hex = static_witness_logic.ENTITIES_BY_NAME[location]["entity_hex"]
+                entity_id = static_witness_logic.ENTITIES_BY_NAME[location].entity_id
 
-                if entity_hex in world.player_logic.EXCLUDED_ENTITIES:
+                if entity_id in world.player_logic.EXCLUDED_ENTITIES:
                     location_obj.progress_type = LocationProgressType.EXCLUDED
 
             ret.locations.append(location_obj)
