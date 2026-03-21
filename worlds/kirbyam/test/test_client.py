@@ -763,6 +763,71 @@ def test_send_notification_dedupes_outgoing_printjson_events(mock_bizhawk_contex
     assert display_args[1] == "Sent Mirror Shard to PlayerTwo"
 
 
+def test_send_notification_ignores_unrelated_itemsend_traffic(mock_bizhawk_context):
+    """ItemSend traffic not sent by local slot should not emit local send notifications."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot = 1
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    unrelated_payload = {
+        "type": "ItemSend",
+        "item": Mock(item=3860001, player=3, location=123),
+        "receiving": 2,
+    }
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display, \
+         patch('worlds.kirbyam.client.Utils.async_start') as mock_async_start:
+        mock_async_start.side_effect = lambda coro: coro.close()
+        client.on_package(mock_bizhawk_context, "PrintJSON", unrelated_payload)
+
+    assert mock_async_start.call_count == 0
+    assert mock_display.call_count == 0
+
+
+def test_send_notification_rate_limit_suppresses_burst(mock_bizhawk_context):
+    """Burst sends should be rate-limited with summary notification when window rolls over."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot = 1
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display, \
+         patch('worlds.kirbyam.client.Utils.async_start') as mock_async_start, \
+         patch('worlds.kirbyam.client.time.monotonic') as mock_monotonic:
+        mock_async_start.side_effect = lambda coro: coro.close()
+
+        # First 6 sends inside same 2s window: 5 visible + 1 suppressed.
+        mock_monotonic.return_value = 100.0
+        for idx in range(6):
+            payload = {
+                "type": "ItemSend",
+                "item": Mock(item=3860000 + idx, player=1, location=200 + idx),
+                "receiving": 2,
+            }
+            client.on_package(mock_bizhawk_context, "PrintJSON", payload)
+
+        # Advance time to roll window and flush suppression summary.
+        mock_monotonic.return_value = 103.0
+        payload = {
+            "type": "ItemSend",
+            "item": Mock(item=3860999, player=1, location=999),
+            "receiving": 2,
+        }
+        client.on_package(mock_bizhawk_context, "PrintJSON", payload)
+
+    # 5 visible in first window, 1 summary on rollover, 1 visible after rollover.
+    assert mock_async_start.call_count == 7
+    summary_call = mock_display.call_args_list[-2].args
+    assert summary_call[1] == "Suppressed 1 send notifications"
+
+
 @pytest.mark.asyncio
 async def test_probe_boss_candidates_logs_rising_edges(mock_bizhawk_context):
     """Boss probe should log rising bit transitions for candidate mapping."""

@@ -253,6 +253,27 @@ actual mailbox ACK path, not just generic packet flow.
   - reconnect replay dedupe on rewound indexes
   - no notification on fast-forward-only reconciliation
 
+## Issue #74: Send Notifications (Local Outgoing ItemSend Events)
+
+### Problem
+Send notifications needed explicit local-sender filtering and burst handling so
+high-traffic ItemSend scenarios do not spam the player.
+
+### Implementation
+- Send notifications are emitted from `PrintJSON` `ItemSend` packets only when
+  local slot is the sender.
+- Non-local ItemSend traffic is ignored.
+- Dedupe remains key-based on `(item_id, sender_id, receiver_id, location_id)`.
+- Added burst rate-limit policy:
+  - max 5 send notifications per 2-second window
+  - excess sends are suppressed
+  - suppression summary is displayed when window rolls over
+
+### Validation
+- Added targeted tests for:
+  - unrelated ItemSend suppression
+  - burst-rate limiting + suppression summary behavior
+
 ## Issue #44: Final Boss Access Rules (Dimension Mirror Sequence)
 
 ### Problem

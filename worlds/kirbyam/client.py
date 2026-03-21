@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
+import time
 import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -24,6 +25,8 @@ _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
     ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
     ("mirra_encounters_native", "mirra_encounters"),
 )
+_SEND_NOTIFY_WINDOW_SECONDS = 2.0
+_SEND_NOTIFY_MAX_PER_WINDOW = 5
 
 
 class KirbyAmClient(BizHawkClient):
@@ -95,6 +98,9 @@ class KirbyAmClient(BizHawkClient):
         self._send_notifications_enabled: bool = True
         self._notified_receive_indices: set[int] = set()
         self._notified_send_keys: set[tuple[int, int, int, int]] = set()
+        self._send_notify_window_start: float = 0.0
+        self._send_notify_window_count: int = 0
+        self._send_notify_window_suppressed: int = 0
 
         # Research-first unsafe-delivery candidate probing state (Issue #223)
         self._unsafe_delivery_probe_stream_marker: object = None
@@ -244,6 +250,34 @@ class KirbyAmClient(BizHawkClient):
         message = f"Sent {item_name} to {receiver_name}"
 
         from CommonClient import logger
+
+        now = time.monotonic()
+        if self._send_notify_window_start == 0.0:
+            self._send_notify_window_start = now
+
+        elapsed = now - self._send_notify_window_start
+        if elapsed >= _SEND_NOTIFY_WINDOW_SECONDS:
+            if self._send_notify_window_suppressed > 0:
+                summary = f"Suppressed {self._send_notify_window_suppressed} send notifications"
+                logger.info(
+                    "KirbyAM: send notification burst suppression summary (suppressed=%s)",
+                    self._send_notify_window_suppressed,
+                )
+                Utils.async_start(bizhawk.display_message(ctx.bizhawk_ctx, summary))
+            self._send_notify_window_start = now
+            self._send_notify_window_count = 0
+            self._send_notify_window_suppressed = 0
+
+        if self._send_notify_window_count >= _SEND_NOTIFY_MAX_PER_WINDOW:
+            self._send_notify_window_suppressed += 1
+            logger.debug(
+                "KirbyAM: send notification suppressed by rate limit (item=%s, receiver=%s)",
+                item_name,
+                receiver_name,
+            )
+            return
+
+        self._send_notify_window_count += 1
 
         logger.info(
             "KirbyAM: send notification queued (item=%s, receiver=%s)",

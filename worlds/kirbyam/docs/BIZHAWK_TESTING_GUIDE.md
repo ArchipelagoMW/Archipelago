@@ -23,6 +23,7 @@
 | `KirbyAM: ROM item counter advanced from X to Y; fast-forwarding delivery cursor` | ROM is ahead of client cursor; cursor fast-forwarded. |
 | `KirbyAM: receive notification queued (index=N, item=..., sender=...)` | Receive notification was queued after mailbox ACK for delivered index `N`. |
 | `KirbyAM: send notification queued (item=..., receiver=...)` | Outgoing ItemSend notification was queued for local sender traffic. |
+| `KirbyAM: send notification burst suppression summary (suppressed=N)` | A send burst exceeded policy; `N` notifications were suppressed in the previous window. |
 | `KirbyAM: native goal signal seen (goal_option=N)` | Native ai_kirby_state value matched the selected goal condition for the first time. |
 | `KirbyAM: sending goal location check (location_id=N)` | Goal location check sent to server. |
 | `KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=N)` | Server acknowledged goal location; CLIENT_GOAL status sent. |
@@ -92,6 +93,12 @@ Issue #73 receive-focused checks:
 - Skipped malformed items should not produce receive notification text.
 - Cursor fast-forward/rewind reconciliation should not replay old receive notifications.
 - New ACK-completed deliveries after reconnect should still notify exactly once.
+
+Issue #74 send-focused checks:
+- Only local-sender ItemSend events should emit send notification text.
+- ItemSend traffic between other players should not emit local send notifications.
+- During rapid send bursts, notifications should rate-limit (max 5 per 2s) and
+   later report a suppression summary message.
 
 ## Unsafe Delivery Candidate Research (Issue #223)
 

@@ -220,6 +220,15 @@ Notification rendering is non-blocking for gameplay protocol behavior.
 Delivery, location checks, and goal reporting continue even if notification
 rendering fails.
 
+Send-specific contract (Issue #74):
+- Send notifications emit only for `PrintJSON` `ItemSend` packets where local
+    slot is the sender.
+- Unrelated ItemSend packets between other players are ignored.
+- Burst rate limit policy:
+    - at most 5 send notifications per 2-second window
+    - additional sends in the same window are suppressed
+    - a summary message reports suppressed count when the window rolls over
+
 ### 4. Goal Reporting
 
 **Current Implementation (native AI-state polling):**
