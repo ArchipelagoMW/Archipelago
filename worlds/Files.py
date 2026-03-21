@@ -221,6 +221,7 @@ class APWorldContainer(APContainer):
 class APPlayerContainer(APContainer):
     """A zipfile containing at least archipelago.json meant for a player"""
     game: ClassVar[Optional[str]] = None
+    world_version: "Version | None" = None
     patch_file_ending: str = ""
 
     player: Optional[int]
@@ -235,10 +236,13 @@ class APPlayerContainer(APContainer):
         self.server = server
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        from Utils import tuplize_version
         manifest = super().read_contents(opened_zipfile)
         self.player = manifest["player"]
         self.server = manifest["server"]
         self.player_name = manifest["player_name"]
+        if "world_version" in manifest:
+            self.world_version = tuplize_version(manifest["world_version"])
         return manifest
 
     def get_manifest(self) -> Dict[str, Any]:
@@ -250,6 +254,9 @@ class APPlayerContainer(APContainer):
             "game": self.game,
             "patch_file_ending": self.patch_file_ending,
         })
+        if self.game:
+            from .AutoWorld import AutoWorldRegister
+            manifest["world_version"] = AutoWorldRegister.world_types[self.game].world_version.as_simple_string()
         return manifest
 
 
@@ -280,6 +287,22 @@ class APAutoPatchInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
     @abc.abstractmethod
     def patch(self, target: str) -> None:
         """ create the output file with the file name `target` """
+
+    def verify_version(self) -> None:
+        """
+        Verify compatibility between a game's currently installed
+        world version and the version used for generation.
+        Warns the user or raises an IncompatiblePatchError if the versions are too different.
+        """
+        from Utils import messagebox
+        from .AutoWorld import AutoWorldRegister
+        game_version = AutoWorldRegister.world_types[self.game].world_version if self.game else None
+        if game_version and self.world_version and game_version != self.world_version:
+            info_msg = "This patch was generated with " \
+                       f"{self.game} version {self.world_version.as_simple_string()}, " \
+                       f"but its currently installed version is {game_version.as_simple_string()}. " \
+                       "You may encounter errors while patching or connecting."
+            messagebox("APWorld version mismatch", info_msg, False)
 
 
 class APProcedurePatch(APAutoPatchInterface):
@@ -343,7 +366,6 @@ class APProcedurePatch(APAutoPatchInterface):
         self.files[file_name] = file
 
     def patch(self, target: str) -> None:
-        self.read()
         base_data = self.get_source_data_with_cache()
         patch_extender = AutoPatchExtensionRegister.get_handler(self.game)
         assert not isinstance(self.procedure, str), f"{type(self)} must define procedures"
