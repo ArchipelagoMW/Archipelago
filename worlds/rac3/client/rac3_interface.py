@@ -40,7 +40,7 @@ from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR
-from worlds.rac3.constants.version import GAME_ID_TO_VERSION
+from worlds.rac3.constants.version import GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION
 
 
 class Rac3Interface(GameInterface):
@@ -190,22 +190,16 @@ class Rac3Interface(GameInterface):
     def _write_string(self, address: int, value: str):
         return super()._write_string(self.address_convert(address), value)
 
-    @staticmethod
-    def address_convert(address: int):
+    def address_convert(self, address: int):
         """Address conversion from str to int, and for version correction (with US/JP/EU)"""
         _addr = address
         if isinstance(address, str):
             _addr = int(address, 0)
-        if 0x001BBB00 <= _addr <= 0x001BBBFF:  # T-Bolt
-            _addr += 0
-        elif 0x001D545C <= _addr <= 0x001D5553:  # Current Location + VidComic
-            _addr += 0
-        elif 0x00100000 <= _addr <= 0x00100050:  # DummyEXP
-            _addr += 0
-        elif 0x001D4C00 <= _addr <= 0x001D4CFF:  # Equipped Items
-            _addr += 0
-        else:
-            pass
+        if (0x001d6a90 <= _addr <= 0x00300000
+            and self.planet in PAL_SHIFTED_PLANETS
+            and self.current_game == RAC3VERSION.EU_ID):
+                _addr += -0x80
+        
         return _addr
 
     ###############################
@@ -1003,8 +997,10 @@ class Rac3Interface(GameInterface):
                     return
                 new_inventory = [ARMOR_VENDOR_INVENTORY[ITEM_TO_ARMOR_VENDOR_LOCATION[item]] for item in self.armor_vendor_items]
                 # Patch out the check that prevents buying weaker armor
-                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR) == 0x1062001A:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR, 0)
+                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC) == 0x1062001A:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC, 0)
+                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL) == 0x1062001A:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL, 0)
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
