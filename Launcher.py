@@ -31,6 +31,10 @@ import settings
 import Utils
 from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
                    user_path)
+
+if __name__ == "__main__":
+    init_logging('Launcher')
+
 from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
@@ -218,12 +222,17 @@ def launch(exe, in_terminal=False):
 
 def create_shortcut(button: Any, component: Component) -> None:
     from pyshortcuts import make_shortcut
-    script = sys.argv[0]
-    wkdir = Utils.local_path()
+    env = os.environ
+    if "APPIMAGE" in env:
+        script = env["ARGV0"]
+        wkdir = None # defaults to ~ on Linux
+    else:
+        script = sys.argv[0]
+        wkdir = Utils.local_path()
 
     script = f"{script} \"{component.display_name}\""
     make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
-                  startmenu=False, terminal=False, working_dir=wkdir)
+                  startmenu=False, terminal=False, working_dir=wkdir, noexe=Utils.is_frozen())
     button.menu.dismiss()
 
 
@@ -488,7 +497,6 @@ def main(args: argparse.Namespace | dict | None = None):
 
 
 if __name__ == '__main__':
-    init_logging('Launcher')
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(

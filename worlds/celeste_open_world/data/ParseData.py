@@ -18,8 +18,8 @@ if __name__ == "__main__":
     for level in level_data["levels"]:
         level_str = (f"    \"{level['name']}\": Level(\"{level['name']}\", "
                      f"\"{level['display_name']}\", "
-                     f"[room for _, room in all_rooms.items() if room.level_name == \"{level['name']}\"], "
-                     f"[room_con for _, room_con in all_room_connections.items() if room_con.level_name == \"{level['name']}\"]),"
+                     f"rooms_by_level[\"{level['name']}\"], "
+                     f"room_cons_by_level[\"{level['name']}\"]),"
                     )
 
         all_levels.append(level_str)
@@ -31,8 +31,8 @@ if __name__ == "__main__":
 
             room_str = (f"    \"{room_full_name}\": Room(\"{level['name']}\", "
                          f"\"{room_full_name}\", \"{room_full_display_name}\", "
-                         f"[reg for _, reg in all_regions.items() if reg.room_name == \"{room_full_name}\"], "
-                         f"[door for _, door in all_doors.items() if door.room_name == \"{room_full_name}\"]"
+                         f"regions_by_room[\"{room_full_name}\"], "
+                         f"doors_by_room[\"{room_full_name}\"]"
                         )
 
             if "checkpoint" in room and room["checkpoint"] != "":
@@ -47,8 +47,8 @@ if __name__ == "__main__":
 
                 region_str = (f"    \"{region_full_name}\": PreRegion(\"{region_full_name}\", "
                               f"\"{room_full_name}\", "
-                              f"[reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == \"{region_full_name}\"], "
-                              f"[loc for _, loc in all_locations.items() if loc.region_name == \"{region_full_name}\"]),"
+                              f"connections_by_region[\"{region_full_name}\"], "
+                              f"locations_by_region[\"{region_full_name}\"]),"
                              )
 
                 all_regions.append(region_str)
@@ -150,6 +150,7 @@ if __name__ == "__main__":
     print("")
     print("from ..Levels import Level, Room, PreRegion, LevelLocation, RegionConnection, RoomConnection, Door, DoorDirection, LocationType")
     print("from ..Names import ItemName")
+    print(f"from collections import defaultdict")
     print("")
     print("all_doors: dict[str, Door] = {")
     for line in all_doors:
@@ -166,6 +167,15 @@ if __name__ == "__main__":
         print(line)
     print("}")
     print("")
+    print("connections_by_region: defaultdict[str, list[RegionConnection]] = defaultdict(lambda: [])")
+    print("locations_by_region: defaultdict[str, list[LevelLocation]] = defaultdict(lambda: [])")
+    print("")
+    print("for _, connection in all_region_connections.items():")
+    print("    connections_by_region[connection.source_name].append(connection)")
+    print("")
+    print("for _, location in all_locations.items():")
+    print("    locations_by_region[location.region_name].append(location)")
+    print("")
     print("all_regions: dict[str, PreRegion] = {")
     for line in all_regions:
         print(line)
@@ -176,10 +186,28 @@ if __name__ == "__main__":
         print(line)
     print("}")
     print("")
+    print("regions_by_room: defaultdict[str, list[PreRegion]] = defaultdict(lambda: [])")
+    print("doors_by_room: defaultdict[str, list[Door]] = defaultdict(lambda: [])")
+    print("")
+    print("for _, region in all_regions.items():")
+    print("    regions_by_room[region.room_name].append(region)")
+    print("")
+    print("for _, door in all_doors.items():")
+    print("    doors_by_room[door.room_name].append(door)")
+    print("")
     print("all_rooms: dict[str, Room] = {")
     for line in all_rooms:
         print(line)
     print("}")
+    print("")
+    print("rooms_by_level: defaultdict[str, list[Room]] = defaultdict(lambda: [])")
+    print("room_cons_by_level: defaultdict[str, list[RoomConnection]] = defaultdict(lambda: [])")
+    print("")
+    print("for _, room in all_rooms.items():")
+    print("    rooms_by_level[room.level_name].append(room)")
+    print("")
+    print("for _, room_con in all_room_connections.items():")
+    print("    room_cons_by_level[room_con.level_name].append(room_con)")
     print("")
     print("all_levels: dict[str, Level] = {")
     for line in all_levels:
