@@ -696,9 +696,7 @@ def extend_filler_locations(randomized_locations: List[LocationData], options: S
         return
 
     existing_traveling_merchant_locations = [location.name for location in randomized_locations if location.name.startswith("Traveling Merchant Sunday Item ")]
-    start_num_to_add = 1
-    while any(location_name == f"Traveling Merchant Sunday Item {start_num_to_add}" for location_name in existing_traveling_merchant_locations):
-        start_num_to_add += 1
+    start_num_to_add = len(existing_traveling_merchant_locations) + 1
 
     for i in range(start_num_to_add, start_num_to_add+number_locations_to_add_per_day):
         logger.debug(f"Player too few locations, adding Traveling Merchant Items #{i}")
