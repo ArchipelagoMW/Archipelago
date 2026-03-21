@@ -46,7 +46,7 @@ jobs:
             --world-manifest "worlds/kirbyam/archipelago.json" \
             --github-output "${GITHUB_OUTPUT}"
 
-      - name: Build kirbyam.apworld
+      - name: Build kirbyam.apworld from committed patch data
         working-directory: worlds/kirbyam
         run: |
           python build.py --skip-patch
@@ -54,7 +54,12 @@ jobs:
             echo "kirbyam.apworld was not created" >&2
             exit 1
           fi
-          ls -lh kirbyam.apworld
+          if [ ! -s data/base_patch.bsdiff4 ]; then
+            echo "Committed data/base_patch.bsdiff4 is missing or empty" >&2
+            exit 1
+          fi
+          ls -lh kirbyam.apworld data/base_patch.bsdiff4
+          sha256sum kirbyam.apworld data/base_patch.bsdiff4
 
       - name: Stage artifact
         id: package
@@ -86,53 +91,66 @@ jobs:
           name: ${{ needs.build-apworld.outputs.apworld_name }}
           path: dist
 
-      - name: Prune existing release assets to .apworld only
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const tag = `${{ needs.build-apworld.outputs.release_tag }}`;
-            const expected = `${{ needs.build-apworld.outputs.apworld_name }}`;
-
-            let release;
-            try {
-              const response = await github.rest.repos.getReleaseByTag({ owner, repo, tag });
-              release = response.data;
-            } catch (error) {
-              if (error.status === 404) {
-                core.info(`No existing release for ${tag}; nothing to prune.`);
-                return;
-              }
-              throw error;
-            }
-
-            const assets = await github.paginate(github.rest.repos.listReleaseAssets, {
-              owner,
-              repo,
-              release_id: release.id,
-              per_page: 100,
-            });
-
-            for (const asset of assets) {
-              if (asset.name !== expected) {
-                core.info(`Deleting prior release asset: ${asset.name}`);
-                await github.rest.repos.deleteReleaseAsset({
-                  owner,
-                  repo,
-                  asset_id: asset.id,
-                });
-              }
-            }
-
-      - name: Publish release asset
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
-        with:
-          tag_name: ${{ needs.build-apworld.outputs.release_tag }}
-          name: ${{ needs.build-apworld.outputs.release_name }}
-          draft: true
-          prerelease: false
-          files: dist/${{ needs.build-apworld.outputs.apworld_name }}
-          fail_on_unmatched_files: true
+      - name: Ensure tagged release exists
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
+          RELEASE_NAME: ${{ needs.build-apworld.outputs.release_name }}
+        run: |
+          if gh release view "${RELEASE_TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            echo "Release ${RELEASE_TAG} already exists; preserving existing body/state."
+          else
+            gh api \
+              -X POST \
+              "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
+              -f tag_name="${RELEASE_TAG}" \
+              -f target_commitish="${GITHUB_SHA}" \
+              --jq '.body' > release_notes.md
+
+            gh release create "${RELEASE_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "${RELEASE_NAME}" \
+              --draft \
+              --notes-file release_notes.md
+          fi
+
+      - name: Prune non-APWorld assets from tagged release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
+          APWORLD_NAME: ${{ needs.build-apworld.outputs.apworld_name }}
+        run: |
+          gh release view "${RELEASE_TAG}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --json assets \
+            --jq '.assets[].name' | while IFS= read -r asset_name; do
+              if [ -n "${asset_name}" ] && [ "${asset_name}" != "${APWORLD_NAME}" ]; then
+                echo "Deleting prior release asset: ${asset_name}"
+                gh release delete-asset "${RELEASE_TAG}" "${asset_name}" --repo "${GITHUB_REPOSITORY}" --yes
+              fi
+            done
+
+      - name: Upload APWorld to tagged release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
+          APWORLD_NAME: ${{ needs.build-apworld.outputs.apworld_name }}
+        run: |
+          gh release upload "${RELEASE_TAG}" "dist/${APWORLD_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --clobber
+
+      - name: Verify release asset publication
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
+          APWORLD_NAME: ${{ needs.build-apworld.outputs.apworld_name }}
+        run: |
+          gh release view "${RELEASE_TAG}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --json assets \
+            --jq '.assets[].name' | grep -Fx "${APWORLD_NAME}"

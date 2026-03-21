@@ -84,12 +84,29 @@ Added workflow `.github/workflows/kirbyam-rom-patch-smoke.yml` to run on KirbyAM
 - Upload key outputs (`base_patch.bsdiff4`, `kirbyam.apworld`, `payload.bin`, `patch_rom.log`) as artifacts
 
 ### CI ROM Input Policy
-To avoid distributing copyrighted ROM data in CI, this workflow uses a deterministic dummy 16 MiB `kirby.gba` file only for pipeline validation.
+To avoid distributing copyrighted ROM data in CI, this workflow uses a deterministic dummy 2 MiB `kirby.gba` file only for pipeline validation.
 
 Implications:
 - CI smoke proves that payload compilation and patch-file generation mechanics are functional.
 - CI smoke does **not** validate runtime correctness against a real clean USA ROM image.
 - Release-quality patch validation against a real clean ROM remains a local/manual maintainer responsibility.
+
+## Issue #239: Release Asset Publication and Patched APWorld Packaging
+
+### Problem
+Tag-driven KirbyAM releases drifted from the actual shipping contract in two ways:
+- the release build used `python build.py --skip-patch`, so `kirbyam.apworld` could be published without a refreshed `base_patch.bsdiff4`
+- the release upload step could target a stray `untagged-*` draft release instead of the visible `kirbyam-v*` release, leaving the tagged release with no attached asset
+
+### Solution
+Updated `.github/workflows/kirbyam-apworld.yml` so valid `kirbyam-v*` tags now:
+- package the committed `worlds/kirbyam/data/base_patch.bsdiff4` with `python build.py --skip-patch`
+- ensure the matching tagged GitHub release exists, prune stale non-APWorld assets, and upload `kirbyam.apworld` directly to that tagged release via `gh release upload --clobber`
+
+### Release ROM Input Policy
+- Branch, PR, and tag artifact builds all use `--skip-patch` for packaging and release publication.
+- Maintainers refresh `worlds/kirbyam/data/base_patch.bsdiff4` locally from the clean USA ROM, then commit that artifact before creating the release tag.
+- Release builds fail fast if the committed `base_patch.bsdiff4` is missing or empty, rather than silently publishing an unpatched APWorld.
 
 ## Issue #109: Reset-Safe Mirror Shard Grant Handling
 
