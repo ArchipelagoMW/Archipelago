@@ -90,6 +90,10 @@ When runtime gate classifies non-gameplay:
 - Continue mailbox ACK/recovery handling for already-pending deliveries.
 - Continue goal polling (goal signal can occur in post-clear non-gameplay states).
 
+Issue #223 status note:
+- In-game unsafe delivery windows (major boss, miniboss, cannon travel, warp-star travel) are not yet part of the enforced protocol contract.
+- Current client behavior is research-first: only observational candidate probing is allowed until stable native signals or hook points are verified.
+
 ### Runtime Gameplay-Active Gate (Issue #56)
 
 Primary signal:
@@ -176,6 +180,10 @@ delivered_item_index += 1
 1. **Idle** (flag == 0): wait
 2. **Pending** (flag == 1): ROM is processing, poll for flag == 0
 3. **Acknowledged** (flag cleared): advance index, return to Idle
+
+Research-first note for Issue #223:
+- Delivery remains gated only by the gameplay-active contract from Issue #56.
+- Candidate miniboss/travel probes must not suppress delivery until their semantics are repeatably verified.
 
 ### 4. Goal Reporting
 

@@ -361,3 +361,30 @@ reconnect behavior easier to debug.
 ### Validation
 - Added tests that assert resend logging and dedupe suppression logging.
 - Full client test file passes after update.
+
+## Issue #223: In-Gameplay Unsafe-State Delivery Policy (Research-First Mode)
+
+### Problem
+Issue #223 needs delivery gating during major boss, miniboss, cannon, and warp-star
+windows, but the current codebase does not yet have verified stable native signals
+for all of those states.
+
+### Research-First Resolution Strategy
+Instead of enforcing speculative behavior, the client now supports research-only
+observational probes for optional unsafe-delivery candidates:
+
+- existing boss-table probe remains the only integrated major-boss candidate path
+- optional miniboss counters can be observed if future native addresses are mapped
+  for `shadow_kirby_encounters_native` and `mirra_encounters_native`
+- cannon and warp-star travel remain documented as hook-required candidates, not
+  polling-based production signals
+
+### Enforcement Boundary
+- Gameplay-active gating from Issue #56 remains the only enforced delivery gate.
+- Issue #223 policy must not suppress in-game delivery until concrete signals or
+  hook points are verified and documented.
+
+### Validation
+- Added client tests for optional unsafe-delivery probes: no-address no-op,
+  change logging, and reconnect re-baselining.
+- Updated native signal policy notes and BizHawk guide with a research workflow.

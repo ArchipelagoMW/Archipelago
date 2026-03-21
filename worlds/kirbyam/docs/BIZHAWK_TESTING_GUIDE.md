@@ -22,6 +22,37 @@ Expected signal source for this gate:
 - ai_kirby_state_native at 0x0203AD2C (u32)
 - gameplay-active only when value == 300
 
+## Unsafe Delivery Candidate Research (Issue #223)
+
+Issue #223 is currently in research-first mode. Do not assume miniboss or travel
+signals are production-safe yet.
+
+### Current candidate categories
+1. Major boss fight candidates
+   - existing `boss_mirror_table_native` probe logs rising-edge bits
+2. Miniboss encounter counters
+   - candidate symbols: `gShadowKirbyEncounters`, `gMirraEncounters`
+3. Travel windows
+   - cannon and warp-star flows currently look like transient object/task state,
+     so they likely need hook-based instrumentation rather than memory polling
+
+### Research workflow
+1. Connect AP + BizHawk with client logs visible.
+2. Trigger one candidate event at a time:
+   - Shadow Kirby encounter/defeat
+   - Mirra encounter/defeat
+   - Cannon launch travel
+   - Warp-star travel
+3. Watch for observational log entries only; no delivery policy should change yet.
+4. Record exact before/after values or hook points.
+5. Repeat three times for consistency.
+6. Promote only signals that are stable across repeats and reconnects.
+
+### Expected current outcome
+- Boss candidate logs may appear.
+- Miniboss counters will only log if concrete native addresses are added later.
+- Cannon/warp-star windows currently require additional hook research before enforcement.
+
 ## Connector Smoke Test (Issue #51)
 
 Before gameplay/address verification, confirm the KirbyAM-specific BizHawk connector comes up cleanly:

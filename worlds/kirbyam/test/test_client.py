@@ -578,6 +578,80 @@ async def test_probe_boss_candidates_resets_baseline_on_stream_change(mock_bizha
 
 
 @pytest.mark.asyncio
+async def test_probe_unsafe_delivery_candidates_no_addresses_no_read(mock_bizhawk_context):
+    """Unsafe-delivery candidate probe should no-op when no optional addresses are configured."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        await client._probe_unsafe_delivery_candidates(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_probe_unsafe_delivery_candidates_logs_counter_changes(mock_bizhawk_context):
+    """Configured unsafe-delivery candidate counters should log when values change."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(
+        data.native_ram_addresses,
+        {
+            "shadow_kirby_encounters_native": 0x020229D0,
+            "mirra_encounters_native": 0x020229D8,
+        },
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+        await client._probe_unsafe_delivery_candidates(mock_bizhawk_context)
+
+        mock_read.return_value = [
+            (1).to_bytes(4, 'little'),
+            (2).to_bytes(4, 'little'),
+        ]
+        await client._probe_unsafe_delivery_candidates(mock_bizhawk_context)
+
+    assert mock_logger.info.call_count == 2
+    first_args = mock_logger.info.call_args_list[0].args
+    second_args = mock_logger.info.call_args_list[1].args
+    assert "unsafe-delivery candidate probe" in first_args[0]
+    assert first_args[1:] == ("shadow_kirby_encounters", 0, 1)
+    assert second_args[1:] == ("mirra_encounters", 0, 2)
+
+
+@pytest.mark.asyncio
+async def test_probe_unsafe_delivery_candidates_rebaseline_on_stream_change(mock_bizhawk_context):
+    """Unsafe-delivery candidate probe should re-baseline on BizHawk reconnect."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    first_stream = object()
+    second_stream = object()
+    mock_bizhawk_context.bizhawk_ctx.streams = first_stream
+
+    with patch.dict(
+        data.native_ram_addresses,
+        {"shadow_kirby_encounters_native": 0x020229D0},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [(0).to_bytes(4, 'little')]
+        await client._probe_unsafe_delivery_candidates(mock_bizhawk_context)
+
+        mock_bizhawk_context.bizhawk_ctx.streams = second_stream
+        mock_read.return_value = [(3).to_bytes(4, 'little')]
+        await client._probe_unsafe_delivery_candidates(mock_bizhawk_context)
+
+    mock_logger.info.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
     """game_watcher should do nothing when ctx.server is None (AP not connected)."""
     client = KirbyAmClient()
@@ -723,6 +797,7 @@ async def test_game_watcher_defers_polling_and_new_writes_when_non_gameplay(mock
          patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
+            patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
          patch.object(client, '_maybe_report_goal', new_callable=AsyncMock) as mock_goal:
         mock_gate.return_value = (False, "non_gameplay_cutscene", 200)
@@ -733,6 +808,7 @@ async def test_game_watcher_defers_polling_and_new_writes_when_non_gameplay(mock
     mock_poll_locations.assert_not_awaited()
     mock_poll_boss.assert_not_awaited()
     mock_probe.assert_not_awaited()
+    mock_probe_unsafe.assert_not_awaited()
     mock_deliver.assert_awaited_once_with(mock_bizhawk_context, allow_new_writes=False)
     mock_goal.assert_awaited_once_with(mock_bizhawk_context, ai_state_override=200)
 

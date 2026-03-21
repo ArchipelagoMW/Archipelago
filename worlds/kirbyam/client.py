@@ -19,6 +19,10 @@ _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
 _MAILBOX_ACK_TIMEOUT_FRAMES = 30
 _AI_STATE_NORMAL = 300
+_OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
+    ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
+    ("mirra_encounters_native", "mirra_encounters"),
+)
 
 
 class KirbyAmClient(BizHawkClient):
@@ -81,6 +85,10 @@ class KirbyAmClient(BizHawkClient):
         # Poll diagnostics de-duplication (avoid per-tick log spam)
         self._last_shard_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_boss_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+
+        # Research-first unsafe-delivery candidate probing state (Issue #223)
+        self._unsafe_delivery_probe_stream_marker: int | None = None
+        self._last_unsafe_delivery_counter_values: dict[str, int] = {}
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
@@ -160,6 +168,9 @@ class KirbyAmClient(BizHawkClient):
 
         # Candidate discovery for non-shard boss defeat signals.
         await self._probe_boss_defeat_candidates(ctx)
+
+        # Research-first observational probes for in-game unsafe delivery windows.
+        await self._probe_unsafe_delivery_candidates(ctx)
 
         # Item delivery (mailbox protocol)
         await self._deliver_items(ctx)
@@ -429,6 +440,51 @@ class KirbyAmClient(BizHawkClient):
             logger.info(
                 "KirbyAM boss candidate probe detected rising bits: %s",
                 ", ".join(rising_edges),
+            )
+
+    async def _probe_unsafe_delivery_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Observe optional native counters relevant to Issue #223 unsafe delivery windows.
+
+        This is research-only scaffolding. It does not block delivery and only logs
+        counter changes for candidate miniboss signals when addresses are configured.
+        """
+        reads: list[tuple[int, int, str]] = []
+        labels: list[str] = []
+        for key, label in _OPTIONAL_UNSAFE_DELIVERY_COUNTERS:
+            addr = self._native_addr(key)
+            if addr is None:
+                continue
+            reads.append((addr, 4, "System Bus"))
+            labels.append(label)
+
+        if not reads:
+            return
+
+        stream_marker = id(getattr(ctx.bizhawk_ctx, "streams", None))
+        if self._unsafe_delivery_probe_stream_marker is None:
+            self._unsafe_delivery_probe_stream_marker = stream_marker
+        elif stream_marker != self._unsafe_delivery_probe_stream_marker:
+            self._unsafe_delivery_probe_stream_marker = stream_marker
+            self._last_unsafe_delivery_counter_values = {}
+
+        raw_values = await bizhawk.read(ctx.bizhawk_ctx, reads)
+
+        from CommonClient import logger
+
+        for label, raw in zip(labels, raw_values):
+            current_value = self._u32_le(raw)
+            previous_value = self._last_unsafe_delivery_counter_values.get(label)
+            self._last_unsafe_delivery_counter_values[label] = current_value
+
+            if previous_value is None or current_value == previous_value:
+                continue
+
+            logger.info(
+                "KirbyAM unsafe-delivery candidate probe: %s changed %s -> %s",
+                label,
+                previous_value,
+                current_value,
             )
 
     # --------------------------

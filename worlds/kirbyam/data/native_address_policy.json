@@ -64,6 +64,44 @@
           "verification": "Integrated with semantics: 10000 used for Goal=100% completion signal"
         }
       ]
+    },
+    "miniboss_encounters": {
+      "status": "candidate",
+      "entries": [
+        {
+          "name": "shadow_kirby_encounters_native",
+          "address": "unresolved",
+          "width": "u32",
+          "source": "katam linker symbol gShadowKirbyEncounters",
+          "verification": "Candidate only; observational client probe support exists when an address is mapped, but no production address is verified yet"
+        },
+        {
+          "name": "mirra_encounters_native",
+          "address": "unresolved",
+          "width": "u32",
+          "source": "katam linker symbol gMirraEncounters",
+          "verification": "Candidate only; observational client probe support exists when an address is mapped, but no production address is verified yet"
+        }
+      ]
+    },
+    "travel_windows": {
+      "status": "candidate",
+      "entries": [
+        {
+          "name": "cannon_travel_window",
+          "address": "hook-required",
+          "width": "transient object state",
+          "source": "katam cannon_fuse object/task flow",
+          "verification": "No stable global memory signal confirmed; likely requires hook-based instrumentation rather than polling"
+        },
+        {
+          "name": "warp_star_travel_window",
+          "address": "hook-required",
+          "width": "transient object state",
+          "source": "katam warp_star object/task flow",
+          "verification": "No stable global memory signal confirmed; likely requires hook-based instrumentation rather than polling"
+        }
+      ]
     }
   },
   "promotion_criteria": [
