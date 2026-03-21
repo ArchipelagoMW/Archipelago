@@ -6,6 +6,7 @@ class TestDefaultWorld(NineSolsTestBase):
 
     def test_default_world(self):
         self.assertEqual(self.getLocationCount(), 324)  # 318 default locations + 6 events
+        self.assertEqual(self.getNonEventLocationCount(), 318)
 
         slot_data = self.world.fill_slot_data()
         self.assertEqual(slot_data['skip_soulscape_platforming'], 0)

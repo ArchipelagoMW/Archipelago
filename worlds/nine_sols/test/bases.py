@@ -13,6 +13,9 @@ class NineSolsTestBase(WorldTestBase):
     def getLocationCount(self) -> int:
         return sum(1 for _ in self.multiworld.get_locations(1))
 
+    def getNonEventLocationCount(self) -> int:
+        return sum(1 for location in self.multiworld.get_locations(1) if not location.is_event)
+
     def isReachableWith(self, location_name: str, item_names: list[str]) -> bool:
         state = self.makeStateWith(item_names)
         return state.can_reach_location(location_name, 1)

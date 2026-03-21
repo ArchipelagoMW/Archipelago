@@ -43,6 +43,8 @@ class TestShopRando(NineSolsTestBase):
     }
 
     def test_default(self):
+        self.assertEqual(self.getNonEventLocationCount(), 360)
+
         items = self.multiworld.get_items()
         self.assertEqual(0, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
         self.assertEqual(3, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
