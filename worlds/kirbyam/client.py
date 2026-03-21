@@ -109,7 +109,7 @@ class KirbyAmClient(BizHawkClient):
         ctx.watcher_timeout = 0.125
 
         self.initialize_client()
-        logger.info("Kirby client validated ROM.")
+        logger.info("KirbyAM: ROM validated.")
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -439,8 +439,8 @@ class KirbyAmClient(BizHawkClient):
         if rising_edges:
             from CommonClient import logger
 
-            logger.info(
-                "KirbyAM boss candidate probe detected rising bits: %s",
+            logger.debug(
+                "KirbyAM: boss candidate probe rising bits: %s",
                 ", ".join(rising_edges),
             )
 
@@ -482,8 +482,8 @@ class KirbyAmClient(BizHawkClient):
             if previous_value is None or current_value == previous_value:
                 continue
 
-            logger.info(
-                "KirbyAM unsafe-delivery candidate probe: %s changed %s -> %s",
+            logger.debug(
+                "KirbyAM: unsafe-delivery candidate probe: %s changed %s -> %s",
                 label,
                 previous_value,
                 current_value,
@@ -711,6 +711,12 @@ class KirbyAmClient(BizHawkClient):
                 slot_goal,
                 ai_state_override=ai_state_override,
             )
+            if self._native_goal_signal_seen:
+                from CommonClient import logger
+                logger.info(
+                    "KirbyAM: native goal signal seen (goal_option=%s)",
+                    slot_goal,
+                )
 
         if not self._native_goal_signal_seen:
             return
@@ -724,15 +730,27 @@ class KirbyAmClient(BizHawkClient):
             if locations_checked is not None:
                 if goal_location_id in locations_checked:
                     return
+                from CommonClient import logger
+                logger.info(
+                    "KirbyAM: sending goal location check (location_id=%s)",
+                    goal_location_id,
+                )
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [goal_location_id]}])
                 locations_checked.add(goal_location_id)
             else:
                 if not self._goal_location_reported:
+                    from CommonClient import logger
+                    logger.info(
+                        "KirbyAM: sending goal location check (location_id=%s)",
+                        goal_location_id,
+                    )
                     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [goal_location_id]}])
                     self._goal_location_reported = True
             return
 
         if goal_location_id in ctx.checked_locations:
+            from CommonClient import logger
             from NetUtils import ClientStatus
+            logger.info("KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=%s)", slot_goal)
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             self._goal_reported = True

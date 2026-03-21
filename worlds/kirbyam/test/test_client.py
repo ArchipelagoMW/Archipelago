@@ -526,6 +526,79 @@ async def test_probe_boss_candidates_no_address_no_read(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
+async def test_goal_reporting_logs_native_signal_seen(mock_bizhawk_context):
+    """Info log should fire exactly once when native goal signal is first observed."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    signal_calls = [
+        c for c in mock_logger.info.call_args_list
+        if "native goal signal seen" in c.args[0]
+    ]
+    assert len(signal_calls) == 1
+    assert signal_calls[0].args[1:] == (0,)  # goal_option=0
+
+
+@pytest.mark.asyncio
+async def test_goal_reporting_logs_location_check_sent(mock_bizhawk_context):
+    """Info log should fire when goal location check is sent to server."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    goal_id = data.locations["GOAL_DARK_MIND"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    check_calls = [
+        c for c in mock_logger.info.call_args_list
+        if "sending goal location check" in c.args[0]
+    ]
+    assert len(check_calls) == 1
+    assert check_calls[0].args[1:] == (goal_id,)
+
+
+@pytest.mark.asyncio
+async def test_goal_reporting_logs_client_goal_status(mock_bizhawk_context):
+    """Info log should fire when CLIENT_GOAL status is sent."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    goal_id = data.locations["GOAL_DARK_MIND"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = {goal_id}
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+        # Prime the native signal so it was "seen" before this call.
+        client._native_goal_signal_seen = True
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    complete_calls = [
+        c for c in mock_logger.info.call_args_list
+        if "goal complete" in c.args[0]
+    ]
+    assert len(complete_calls) == 1
+    assert complete_calls[0].args[1:] == (0,)  # goal_option=0
+
+
+@pytest.mark.asyncio
 async def test_probe_boss_candidates_logs_rising_edges(mock_bizhawk_context):
     """Boss probe should log rising bit transitions for candidate mapping."""
     client = KirbyAmClient()
@@ -544,9 +617,9 @@ async def test_probe_boss_candidates_logs_rising_edges(mock_bizhawk_context):
         mock_read.return_value = [bytes(payload)]
         await client._probe_boss_defeat_candidates(mock_bizhawk_context)
 
-        assert mock_logger.info.called
-        logged_args = mock_logger.info.call_args.args
-        assert "KirbyAM boss candidate probe detected rising bits" in logged_args[0]
+        assert mock_logger.debug.called
+        logged_args = mock_logger.debug.call_args.args
+        assert "KirbyAM: boss candidate probe rising bits" in logged_args[0]
         assert "0x02028C14[bit3]" in logged_args[1]
 
 
@@ -617,9 +690,9 @@ async def test_probe_unsafe_delivery_candidates_logs_counter_changes(mock_bizhaw
         ]
         await client._probe_unsafe_delivery_candidates(mock_bizhawk_context)
 
-    assert mock_logger.info.call_count == 2
-    first_args = mock_logger.info.call_args_list[0].args
-    second_args = mock_logger.info.call_args_list[1].args
+    assert mock_logger.debug.call_count == 2
+    first_args = mock_logger.debug.call_args_list[0].args
+    second_args = mock_logger.debug.call_args_list[1].args
     assert "unsafe-delivery candidate probe" in first_args[0]
     assert first_args[1:] == ("shadow_kirby_encounters", 0, 1)
     assert second_args[1:] == ("mirra_encounters", 0, 2)

@@ -1,5 +1,52 @@
 # BizHawk Testing Guide for Address Verification
 
+## Client Log Reference
+
+### Log levels
+- **info** — key lifecycle and protocol transitions; always visible in a normal session.
+- **debug** — verbose diagnostics; only shown when debug logging is enabled.
+- **warning** — unexpected but recoverable conditions; always visible.
+
+### Key info-level messages
+
+| Message pattern | Meaning |
+|---|---|
+| `KirbyAM: ROM validated.` | ROM name matched expected prefix; client initialized. |
+| `KirbyAM: deferring location polling/new item writes (...)` | Non-gameplay state detected; polling suspended. Fires once per state transition. |
+| `KirbyAM: gameplay-active state restored; resuming normal watcher flow` | Returned to gameplay-active state. |
+| `KirbyAM: resending RAM-derived LocationChecks missing on server (missing=..., acked=...)` | Shard bits found in RAM but not yet acknowledged by server; resending. |
+| `KirbyAM: resending boss-defeat LocationChecks missing on server (missing=..., acked=...)` | Boss-defeat bits found in RAM but not yet acknowledged by server; resending. |
+| `KirbyAM: Writing mailbox item index N (item=..., player=...)` | Beginning delivery of the Nth received item. |
+| `KirbyAM: Mailbox ACK observed at item index N` | ROM cleared the flag; delivery confirmed. |
+| `KirbyAM: ROM item counter regressed from X to Y; rewinding delivery cursor` | ROM reported fewer items received than expected; cursor rewound. |
+| `KirbyAM: ROM item counter advanced from X to Y; fast-forwarding delivery cursor` | ROM is ahead of client cursor; cursor fast-forwarded. |
+| `KirbyAM: native goal signal seen (goal_option=N)` | Native ai_kirby_state value matched the selected goal condition for the first time. |
+| `KirbyAM: sending goal location check (location_id=N)` | Goal location check sent to server. |
+| `KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=N)` | Server acknowledged goal location; CLIENT_GOAL status sent. |
+
+### Key warning-level messages
+
+| Message pattern | Meaning |
+|---|---|
+| `KirbyAM: Mailbox ACK timeout after N frames at item index M; clearing flag and retrying` | ROM did not clear flag within ~30 frames; flag force-cleared and delivery retried. |
+| `KirbyAM: Clearing stale mailbox flag after fast-forward to item index N` | Residual flag found after cursor fast-forward; cleared proactively. |
+| `KirbyAM: Skipping malformed ReceivedItems entry at index N` | A received item entry had invalid fields; skipped and cursor advanced. |
+
+### Debug-level diagnostics
+Enable debug logging in your AP client to see these:
+- `dedupe suppressed LocationChecks` — shard/boss checks already acknowledged (per-tick spam suppressed at info level).
+- `KirbyAM: boss candidate probe rising bits: ...` — rising-edge transitions detected in the boss mirror table probe. Useful during boss fights for address mapping.
+- `KirbyAM: unsafe-delivery candidate probe: X changed Y -> Z` — miniboss counter candidate changed. Research-only probe (Issue #223).
+
+### How to enable debug logging
+Pass `--loglevel debug` when launching the BizHawk client, or set the log level in `host.yaml`:
+```yaml
+# host.yaml
+log_level: debug
+```
+
+---
+
 ## Gameplay-Active Gating Check (Issue #56)
 
 Validate that non-gameplay states defer location polling and new mailbox writes.
@@ -104,7 +151,7 @@ Validate that both BizHawk and AP server reconnect scenarios work correctly:
 ### Expected log indicators
 - Normal resend: no output except standard location-check messages.
 - Cursor resync: `KirbyAM: ROM item counter ... fast-forward delivery cursor` or rewind message.
-- Boss probe: no false positive edge-detection log on reconnect (probe re-baselines cleanly).
+- Boss probe: no false positive rising-bit log on reconnect (probe re-baselines cleanly).
 
 ## Quick Reference: Known Candidates
 
@@ -134,12 +181,12 @@ Behavior:
 - Baseline snapshot is captured on the first poll after probe/client handler initialization.
 - BizHawk reconnects trigger probe re-baselining automatically via stream-identity change detection.
 - Only rising-edge transitions (`0 -> 1`) are logged.
-- Log format includes absolute address and bit index, for example:
-   - `0x02028C14[bit3]`
+- Log format (debug level): `KirbyAM: boss candidate probe rising bits: 0x02028C14[bit3]`
 - No AP location checks are sent from this probe yet.
 
 Use this during boss fights to collect repeatable candidate transitions before
-promoting any specific address/bit mapping into production logic.
+promoting any specific address/bit mapping into production logic. Enable debug
+logging to see these events.
 
 ## Step-by-Step: Verify First Address (Mirror Shards)
 
