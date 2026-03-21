@@ -195,6 +195,44 @@ Reconnect windows can temporarily expose partial AP context state (for example, 
 - Added tests for watcher no-op when socket is missing or closed.
 - Added test that reconnect-entry resets transient state and only logs readiness once per session-ready transition.
 
+## Issue #83: In-Game Notification Pipeline (Receive + Send)
+
+### Problem
+KirbyAM processed delivery and ItemSend traffic without a dedicated player-facing
+notification contract, which made receive/send events opaque in normal play.
+
+### Solution
+- Added a KirbyAM notification pipeline with two event sources:
+  - Receive notifications on mailbox ACK completion for delivered indexes.
+  - Send notifications from `PrintJSON` `ItemSend` packets when local slot is
+    the sender.
+- Added reconnect-safe dedupe state:
+  - Receive dedupe by delivered index.
+  - Send dedupe by `(item_id, sender_id, receiver_id, location_id)` tuple.
+- Added optional slot-data toggles (default enabled):
+  - `enable_receive_notifications`
+  - `enable_send_notifications`
+- Phase 1 display path uses BizHawk `display_message`.
+
+### #73 Implementation-Ready Criteria (Receive)
+- Notification must trigger only after mailbox ACK for a newly delivered index.
+- Notification content must include item + sender context when resolvable.
+- Reconnect/resync must not replay already shown receive notifications.
+
+### #74 Implementation-Ready Criteria (Send)
+- Notification must trigger only when local slot is ItemSend sender.
+- Unrelated ItemSend packets must not notify locally.
+- Reconnect replay/echoes must dedupe and avoid spam.
+
+### Test Plan Baseline
+- Automated:
+  - receive notification trigger + dedupe tests
+  - send `PrintJSON` local-sender trigger + dedupe tests
+  - toggle-off suppression tests
+- Manual BizHawk:
+  - verify readable receive/send notifications
+  - verify reconnect does not replay old notifications
+
 ## Issue #44: Final Boss Access Rules (Dimension Mirror Sequence)
 
 ### Problem

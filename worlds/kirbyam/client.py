@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
+import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
@@ -38,6 +39,7 @@ class KirbyAmClient(BizHawkClient):
         self._delivered_item_index: int = 0
         self._delivery_pending: bool = False  # True after writing mailbox until ROM clears flag
         self._delivery_pending_frame: int | None = None
+        self._delivery_pending_item_index: int | None = None
 
         # Deterministic location ordering
         self._all_location_ids_sorted: list[int] = [
@@ -87,6 +89,13 @@ class KirbyAmClient(BizHawkClient):
         self._last_shard_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_boss_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
+        # Notification pipeline state (Issue #83)
+        self._notification_settings_loaded: bool = False
+        self._receive_notifications_enabled: bool = True
+        self._send_notifications_enabled: bool = True
+        self._notified_receive_indices: set[int] = set()
+        self._notified_send_keys: set[tuple[int, int, int, int]] = set()
+
         # Research-first unsafe-delivery candidate probing state (Issue #223)
         self._unsafe_delivery_probe_stream_marker: object = None
         self._last_unsafe_delivery_counter_values: dict[str, int] = {}
@@ -116,6 +125,128 @@ class KirbyAmClient(BizHawkClient):
         self._boss_probe_stream_marker = None
         self._unsafe_delivery_probe_stream_marker = None
         self._last_unsafe_delivery_counter_values = {}
+
+    @staticmethod
+    def _coerce_bool(value: object, default: bool) -> bool:
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            lowered = value.strip().lower()
+            if lowered in {"1", "true", "yes", "on"}:
+                return True
+            if lowered in {"0", "false", "no", "off"}:
+                return False
+        return default
+
+    def _load_notification_settings(self, ctx: "BizHawkClientContext") -> None:
+        if self._notification_settings_loaded:
+            return
+
+        slot_data = getattr(ctx, "slot_data", None)
+        if isinstance(slot_data, dict):
+            self._receive_notifications_enabled = self._coerce_bool(
+                slot_data.get("enable_receive_notifications", True),
+                True,
+            )
+            self._send_notifications_enabled = self._coerce_bool(
+                slot_data.get("enable_send_notifications", True),
+                True,
+            )
+
+        self._notification_settings_loaded = True
+
+    @staticmethod
+    def _player_name(ctx: "BizHawkClientContext", player_id: int) -> str:
+        player_names = getattr(ctx, "player_names", None)
+        if isinstance(player_names, dict):
+            value = player_names.get(player_id)
+            if isinstance(value, str) and value:
+                return value
+        return f"Player {player_id}"
+
+    @staticmethod
+    def _item_name(ctx: "BizHawkClientContext", item_id: int, item_player: int) -> str:
+        lookup = getattr(ctx, "item_names", None)
+        if lookup is not None:
+            try:
+                resolved = lookup.lookup_in_slot(item_id, item_player)
+                if isinstance(resolved, str) and resolved:
+                    return resolved
+            except Exception:
+                pass
+        return f"Item {item_id}"
+
+    async def _emit_receive_notification(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
+        if not self._receive_notifications_enabled:
+            return
+        if delivered_index in self._notified_receive_indices:
+            return
+        if delivered_index < 0 or delivered_index >= len(ctx.items_received):
+            return
+
+        item = ctx.items_received[delivered_index]
+        item_fields = self._extract_delivery_item_fields(item)
+        if item_fields is None:
+            return
+
+        self._notified_receive_indices.add(delivered_index)
+        item_id, player_id = item_fields
+        item_name = self._item_name(ctx, item_id, player_id)
+        sender_name = self._player_name(ctx, player_id)
+        message = f"Received {item_name} from {sender_name}"
+
+        from CommonClient import logger
+
+        logger.info(
+            "KirbyAM: receive notification queued (index=%s, item=%s, sender=%s)",
+            delivered_index,
+            item_name,
+            sender_name,
+        )
+        try:
+            await bizhawk.display_message(ctx.bizhawk_ctx, message)
+        except Exception:
+            logger.warning(
+                "KirbyAM: failed to emit receive notification (index=%s)",
+                delivered_index,
+            )
+
+    def _maybe_emit_send_notification(self, ctx: "BizHawkClientContext", args: dict) -> None:
+        if not self._send_notifications_enabled:
+            return
+        if args.get("type") != "ItemSend":
+            return
+
+        item = args.get("item")
+        if item is None:
+            return
+
+        item_id = self._coerce_u32(getattr(item, "item", None))
+        sender_id = self._coerce_u32(getattr(item, "player", None))
+        receiver_id = self._coerce_u32(args.get("receiving"))
+        location_id = self._coerce_u32(getattr(item, "location", None))
+        if item_id is None or sender_id is None or receiver_id is None:
+            return
+        if sender_id != getattr(ctx, "slot", None):
+            return
+
+        send_key = (item_id, sender_id, receiver_id, location_id if location_id is not None else 0xFFFFFFFF)
+        if send_key in self._notified_send_keys:
+            return
+        self._notified_send_keys.add(send_key)
+
+        item_name = self._item_name(ctx, item_id, sender_id)
+        receiver_name = self._player_name(ctx, receiver_id)
+        message = f"Sent {item_name} to {receiver_name}"
+
+        from CommonClient import logger
+
+        logger.info(
+            "KirbyAM: send notification queued (item=%s, receiver=%s)",
+            item_name,
+            receiver_name,
+        )
+        Utils.async_start(bizhawk.display_message(ctx.bizhawk_ctx, message))
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
@@ -161,6 +292,8 @@ class KirbyAmClient(BizHawkClient):
         if not self._server_session_ready(ctx):
             self._watcher_server_ready = False
             return
+
+        self._load_notification_settings(ctx)
 
         if not self._watcher_server_ready:
             logger.info("KirbyAM: AP session ready; reconnect-safe reconciliation active")
@@ -577,6 +710,7 @@ class KirbyAmClient(BizHawkClient):
                     await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_item_index = None
                 return
             if rom_received_count < self._delivered_item_index:
                 logger.info(
@@ -587,6 +721,7 @@ class KirbyAmClient(BizHawkClient):
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_item_index = None
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
             elif rom_received_count > self._delivered_item_index and rom_received_count <= len(ctx.items_received):
                 logger.info(
@@ -597,6 +732,7 @@ class KirbyAmClient(BizHawkClient):
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_item_index = None
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 if flag != 0:
                     logger.warning(
@@ -610,14 +746,19 @@ class KirbyAmClient(BizHawkClient):
         # If an item is pending, wait for ROM to clear the flag (ACK)
         if self._delivery_pending:
             if flag == 0:
+                delivered_index = self._delivery_pending_item_index
+                if delivered_index is None:
+                    delivered_index = self._delivered_item_index
                 logger.info("KirbyAM: Mailbox ACK observed at item index %s", self._delivered_item_index)
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_item_index = None
                 if rom_received_count is not None and rom_received_count <= len(ctx.items_received):
                     self._delivered_item_index = rom_received_count
                 else:
                     self._delivered_item_index += 1
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
+                await self._emit_receive_notification(ctx, delivered_index)
                 return
 
             if current_frame is not None and self._delivery_pending_frame is not None:
@@ -633,6 +774,7 @@ class KirbyAmClient(BizHawkClient):
                     ])
                     self._delivery_pending = False
                     self._delivery_pending_frame = None
+                    self._delivery_pending_item_index = None
             return
 
         # No pending item; mailbox must be empty to write
@@ -658,6 +800,7 @@ class KirbyAmClient(BizHawkClient):
                 )
                 self._delivered_item_index += 1
                 self._delivery_pending = False
+                self._delivery_pending_item_index = None
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 continue
 
@@ -676,6 +819,7 @@ class KirbyAmClient(BizHawkClient):
             ])
             self._delivery_pending = True
             self._delivery_pending_frame = current_frame
+            self._delivery_pending_item_index = self._delivered_item_index
             return
 
     # --------------------------
@@ -787,3 +931,9 @@ class KirbyAmClient(BizHawkClient):
             logger.info("KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=%s)", slot_goal)
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             self._goal_reported = True
+
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+        if not self._notification_settings_loaded:
+            self._load_notification_settings(ctx)
+        if cmd == "PrintJSON":
+            self._maybe_emit_send_notification(ctx, args)

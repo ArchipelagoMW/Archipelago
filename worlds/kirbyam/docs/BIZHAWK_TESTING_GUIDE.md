@@ -21,6 +21,8 @@
 | `KirbyAM: Mailbox ACK observed at item index N` | ROM cleared the flag; delivery confirmed. |
 | `KirbyAM: ROM item counter regressed from X to Y; rewinding delivery cursor` | ROM reported fewer items received than expected; cursor rewound. |
 | `KirbyAM: ROM item counter advanced from X to Y; fast-forwarding delivery cursor` | ROM is ahead of client cursor; cursor fast-forwarded. |
+| `KirbyAM: receive notification queued (index=N, item=..., sender=...)` | Receive notification was queued after mailbox ACK for delivered index `N`. |
+| `KirbyAM: send notification queued (item=..., receiver=...)` | Outgoing ItemSend notification was queued for local sender traffic. |
 | `KirbyAM: native goal signal seen (goal_option=N)` | Native ai_kirby_state value matched the selected goal condition for the first time. |
 | `KirbyAM: sending goal location check (location_id=N)` | Goal location check sent to server. |
 | `KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=N)` | Server acknowledged goal location; CLIENT_GOAL status sent. |
@@ -69,6 +71,22 @@ Validate that non-gameplay states defer location polling and new mailbox writes.
 Expected signal source for this gate:
 - ai_kirby_state_native at 0x0203AD2C (u32)
 - gameplay-active only when value == 300
+
+## Notification Pipeline Check (Issue #83)
+
+Validate receive/send notifications and reconnect dedupe behavior.
+
+1. Connect AP + BizHawk session with logs visible.
+2. Receive at least one remote item and confirm notification text appears once.
+3. Trigger at least one outgoing ItemSend (local check sending to another player) and confirm send text appears once.
+4. Disconnect/reconnect AP client session.
+5. Confirm previously shown receive/send notifications are not replay-spammed after reconnect.
+6. Trigger one new receive and one new send event; confirm both still notify.
+
+Expected behavior:
+- Receive notification trigger: mailbox ACK for newly delivered index.
+- Send notification trigger: local-sender `PrintJSON` ItemSend packet.
+- Reconnect-safe dedupe prevents repeats for previously shown events.
 
 ## Unsafe Delivery Candidate Research (Issue #223)
 

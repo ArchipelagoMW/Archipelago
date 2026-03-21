@@ -187,6 +187,34 @@ Research-first note for Issue #223:
 - Delivery remains gated only by the gameplay-active contract from Issue #56.
 - Candidate miniboss/travel probes must not suppress delivery until their semantics are repeatably verified.
 
+### 3.1 Player Notification Pipeline (Issue #83)
+
+KirbyAM now defines a player-facing notification pipeline for item traffic,
+using BizHawk text rendering for Phase 1.
+
+Event sources:
+- Receive notifications: emitted on mailbox ACK completion for a delivered
+    `ctx.items_received` index.
+- Send notifications: emitted from `PrintJSON` packets when `type == "ItemSend"`
+    and the local slot is the sender.
+
+Display strategy:
+- Phase 1: BizHawk connector text path (`display_message`).
+- Phase 2 (future): native ROM/UI display only after stable hooks are verified.
+
+Reconnect-safe dedupe:
+- Receive dedupe key: delivered index.
+- Send dedupe key: `(item_id, sender_id, receiver_id, location_id)`.
+- Dedupe state is session-local and suppresses reconnect replay spam.
+
+Optional slot-data toggles (default: enabled when absent):
+- `enable_receive_notifications`
+- `enable_send_notifications`
+
+Notification rendering is non-blocking for gameplay protocol behavior.
+Delivery, location checks, and goal reporting continue even if notification
+rendering fails.
+
 ### 4. Goal Reporting
 
 **Current Implementation (native AI-state polling):**

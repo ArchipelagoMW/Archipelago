@@ -599,6 +599,93 @@ async def test_goal_reporting_logs_client_goal_status(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
+async def test_receive_notification_emits_once_per_delivery_index(mock_bizhawk_context):
+    """Receive notification should fire on ACK once per delivered item index."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [Mock(item=3860001, player=2)]
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    client._delivery_pending = True
+    client._delivery_pending_item_index = 0
+    client._delivered_item_index = 0
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+        # Simulate an ACK replay for the same pending index; should dedupe.
+        client._delivery_pending = True
+        client._delivery_pending_item_index = 0
+        client._delivered_item_index = 0
+        await client._deliver_items(mock_bizhawk_context)
+
+    mock_display.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        "Received Mirror Shard from PlayerTwo",
+    )
+
+
+@pytest.mark.asyncio
+async def test_receive_notification_honors_slot_data_toggle(mock_bizhawk_context):
+    """Receive notifications should be suppressible by slot-data toggle."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot_data["enable_receive_notifications"] = False
+    mock_bizhawk_context.items_received = [Mock(item=3860001, player=2)]
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    client._load_notification_settings(mock_bizhawk_context)
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        await client._emit_receive_notification(mock_bizhawk_context, 0)
+
+    mock_display.assert_not_awaited()
+
+
+def test_send_notification_dedupes_outgoing_printjson_events(mock_bizhawk_context):
+    """Outgoing ItemSend PrintJSON should notify once and dedupe reconnect echoes."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot = 1
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    item_payload = Mock(item=3860001, player=1, location=123)
+    printjson_payload = {
+        "type": "ItemSend",
+        "item": item_payload,
+        "receiving": 2,
+    }
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display, \
+         patch('worlds.kirbyam.client.Utils.async_start') as mock_async_start:
+        mock_async_start.side_effect = lambda coro: coro.close()
+
+        client.on_package(mock_bizhawk_context, "PrintJSON", printjson_payload)
+        client.on_package(mock_bizhawk_context, "PrintJSON", printjson_payload)
+
+    assert mock_async_start.call_count == 1
+    assert mock_display.call_count == 1
+    display_args = mock_display.call_args.args
+    assert display_args[1] == "Sent Mirror Shard to PlayerTwo"
+
+
+@pytest.mark.asyncio
 async def test_probe_boss_candidates_logs_rising_edges(mock_bizhawk_context):
     """Boss probe should log rising bit transitions for candidate mapping."""
     client = KirbyAmClient()
