@@ -116,10 +116,12 @@ Fail-open behavior:
 | Item delivery | Cursor is reconciled against ROM's `debug_item_counter`; delivery resumes from the correct index. |
 | Goal reporting | Idempotent: goal location and CLIENT_GOAL are skipped when already reflected in `checked_locations`. |
 | Boss probe | Probe snapshot re-baselines on BizHawk stream-identity change (reconnect safe). |
+| Watcher transient state | On first tick after AP session becomes ready (`server/socket/slot_data`), reconnect diagnostics/probe caches are reset to clean baselines. |
 
-No explicit reconnect-event handler is required because all gameplay watchers
-implement level-based or cursor-reconciliation semantics that self-correct every
-poll cycle.
+The watcher includes an AP session-readiness transition hook that resets
+transient diagnostics/probe caches exactly once per reconnect. Core gameplay
+state still converges through level-based polling and cursor reconciliation on
+every watcher tick.
 
 ### 2. Location Polling
 

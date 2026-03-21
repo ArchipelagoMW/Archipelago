@@ -748,14 +748,12 @@ async def test_game_watcher_skips_when_slot_data_is_none(mock_bizhawk_context):
         mock_read.assert_not_awaited()
 
 
-
 @pytest.mark.asyncio
-async def test_game_watcher_skips_all_work_when_server_is_none(mock_bizhawk_context):
-    """game_watcher must do nothing and read no RAM when server is not connected."""
+async def test_game_watcher_skips_when_server_socket_is_missing(mock_bizhawk_context):
+    """game_watcher should do nothing when ctx.server.socket is temporarily unavailable."""
     client = KirbyAmClient()
     client.initialize_client()
-
-    mock_bizhawk_context.server = None
+    mock_bizhawk_context.server.socket = None
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
         await client.game_watcher(mock_bizhawk_context)
@@ -763,16 +761,65 @@ async def test_game_watcher_skips_all_work_when_server_is_none(mock_bizhawk_cont
 
 
 @pytest.mark.asyncio
-async def test_game_watcher_skips_all_work_when_slot_data_is_none(mock_bizhawk_context):
-    """game_watcher must do nothing and read no RAM when slot_data is not yet available."""
+async def test_game_watcher_skips_when_server_socket_is_closed(mock_bizhawk_context):
+    """game_watcher should do nothing when AP socket is closed."""
     client = KirbyAmClient()
     client.initialize_client()
-
-    mock_bizhawk_context.slot_data = None
+    mock_bizhawk_context.server.socket.closed = True
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
         await client.game_watcher(mock_bizhawk_context)
         mock_read.assert_not_awaited()
+
+
+
+@pytest.mark.asyncio
+async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_bizhawk_context):
+    """First watcher tick after AP session readiness should reset transient reconnect state and log once."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    client._last_runtime_gate_reason = "non_gameplay_cutscene"
+    client._last_shard_poll_log = ("resend", (1,), ())
+    client._last_boss_poll_log = ("resend", (2,), ())
+    client._last_boss_probe_snapshot = bytes(32)
+    client._boss_probe_stream_marker = object()
+    client._unsafe_delivery_probe_stream_marker = object()
+    client._last_unsafe_delivery_counter_values = {"shadow_kirby_encounters": 2}
+
+    with patch('CommonClient.logger') as mock_logger, \
+         patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
+         patch.object(client, '_load_persistent_state', new_callable=AsyncMock) as mock_load, \
+         patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
+         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
+         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
+         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
+         patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
+         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock) as mock_goal:
+        mock_gate.return_value = (True, "gameplay_active", 300)
+
+        await client.game_watcher(mock_bizhawk_context)
+
+        assert client._watcher_server_ready is True
+        assert client._last_runtime_gate_reason is None
+        assert client._last_shard_poll_log is None
+        assert client._last_boss_poll_log is None
+        assert client._last_boss_probe_snapshot is None
+        assert client._boss_probe_stream_marker is None
+        assert client._unsafe_delivery_probe_stream_marker is None
+        assert client._last_unsafe_delivery_counter_values == {}
+        mock_logger.info.assert_any_call("KirbyAM: AP session ready; reconnect-safe reconciliation active")
+        mock_load.assert_awaited_once()
+        mock_poll_locations.assert_awaited_once()
+        mock_poll_boss.assert_awaited_once()
+        mock_probe.assert_awaited_once()
+        mock_probe_unsafe.assert_awaited_once()
+        mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
+        mock_goal.assert_awaited_once_with(mock_bizhawk_context, ai_state_override=300)
+
+        mock_logger.info.reset_mock()
+        await client.game_watcher(mock_bizhawk_context)
+        assert not mock_logger.info.called
 
 
 @pytest.mark.asyncio

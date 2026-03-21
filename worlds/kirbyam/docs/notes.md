@@ -172,6 +172,29 @@ Integrated native AI-state goal polling from `ai_kirby_state_native` (`0x0203AD2
 
 Client continues to send `CLIENT_GOAL` only after server acknowledgement of the selected goal location check, preserving idempotent AP completion reporting.
 
+## Issue #62: Deterministic Disconnect/Reconnect Resynchronization
+
+### Problem
+Reconnect windows can temporarily expose partial AP context state (for example, `ctx.server` exists but `ctx.server.socket` is not yet present). The watcher precondition needed to be explicit and tolerant of those partial states so reconnect behavior remains deterministic.
+
+### Solution
+- Added `_server_session_ready(...)` guard in the KirbyAM client watcher to require:
+  - `ctx.server` exists
+  - `ctx.server.socket` exists
+  - socket is not closed
+  - `ctx.slot_data` is present
+- Added reconnect-entry transition handling:
+  - on first watcher tick after AP session readiness, reset transient diagnostics/probe caches once
+  - emit info log: `KirbyAM: AP session ready; reconnect-safe reconciliation active`
+- Preserved existing reconnect convergence semantics:
+  - level-based location resend against `checked_locations`
+  - delivery cursor reconciliation against ROM `debug_item_counter`
+  - idempotent goal-location + `CLIENT_GOAL` sequencing
+
+### Validation
+- Added tests for watcher no-op when socket is missing or closed.
+- Added test that reconnect-entry resets transient state and only logs readiness once per session-ready transition.
+
 ## Issue #44: Final Boss Access Rules (Dimension Mirror Sequence)
 
 ### Problem

@@ -81,6 +81,7 @@ class KirbyAmClient(BizHawkClient):
 
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
+        self._watcher_server_ready: bool = False
 
         # Poll diagnostics de-duplication (avoid per-tick log spam)
         self._last_shard_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
@@ -89,6 +90,32 @@ class KirbyAmClient(BizHawkClient):
         # Research-first unsafe-delivery candidate probing state (Issue #223)
         self._unsafe_delivery_probe_stream_marker: object = None
         self._last_unsafe_delivery_counter_values: dict[str, int] = {}
+
+    @staticmethod
+    def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
+        """Return whether AP connection and slot data are ready for watcher work."""
+        server = getattr(ctx, "server", None)
+        if server is None:
+            return False
+
+        socket = getattr(server, "socket", None)
+        if socket is None:
+            return False
+
+        if getattr(socket, "closed", True):
+            return False
+
+        return getattr(ctx, "slot_data", None) is not None
+
+    def _reset_reconnect_transient_state(self) -> None:
+        """Reset transient watcher diagnostics/probes so reconnect starts from clean baselines."""
+        self._last_runtime_gate_reason = None
+        self._last_shard_poll_log = None
+        self._last_boss_poll_log = None
+        self._last_boss_probe_snapshot = None
+        self._boss_probe_stream_marker = None
+        self._unsafe_delivery_probe_stream_marker = None
+        self._last_unsafe_delivery_counter_values = {}
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
@@ -131,8 +158,14 @@ class KirbyAmClient(BizHawkClient):
         from CommonClient import logger
 
         # Only run when connected and slot_data is ready
-        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
+        if not self._server_session_ready(ctx):
+            self._watcher_server_ready = False
             return
+
+        if not self._watcher_server_ready:
+            logger.info("KirbyAM: AP session ready; reconnect-safe reconciliation active")
+            self._watcher_server_ready = True
+            self._reset_reconnect_transient_state()
 
         # Load persisted state from RAM once per session (after bizhawk_ctx is valid)
         if not self._ram_state_loaded:
