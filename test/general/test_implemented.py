@@ -11,7 +11,7 @@ class TestImplemented(unittest.TestCase):
     def test_completion_condition(self):
         """Ensure a completion condition is set that has requirements."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden and game_name not in {"Sudoku"}:
+            if not world_type.hidden:
                 with self.subTest(game_name):
                     multiworld = setup_solo_multiworld(world_type)
                     self.assertFalse(multiworld.completion_condition[1](multiworld.state))
@@ -59,7 +59,7 @@ class TestImplemented(unittest.TestCase):
     def test_prefill_items(self):
         """Test that every world can reach every location from allstate before pre_fill."""
         for gamename, world_type in AutoWorldRegister.world_types.items():
-            if gamename not in ("Archipelago", "Sudoku", "Final Fantasy", "Test Game"):
+            if gamename not in ("Archipelago", "Final Fantasy", "Test Game"):
                 with self.subTest(gamename):
                     multiworld = setup_solo_multiworld(world_type, ("generate_early", "create_regions", "create_items",
                                                                     "set_rules", "connect_entrances", "generate_basic"))
