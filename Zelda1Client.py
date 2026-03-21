@@ -289,7 +289,7 @@ async def nes_sync_task(ctx: ZeldaContext):
                     if not ctx.auth:
                         ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
                         if ctx.auth == '':
-                            logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate"
+                            logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate "
                                         "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)

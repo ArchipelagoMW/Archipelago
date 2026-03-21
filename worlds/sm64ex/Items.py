@@ -49,10 +49,25 @@ cannon_item_data_table: dict[str, SM64ItemData] = {
     "Cannon Unlock RR": SM64ItemData(sm64ex_base_id + 214),
 }
 
+painting_unlock_item_data_table: dict[str, SM64ItemData] = {
+    "Painting Unlock WF": SM64ItemData(sm64ex_base_id + 231),
+    "Painting Unlock JRB": SM64ItemData(sm64ex_base_id + 232),
+    "Painting Unlock CCM": SM64ItemData(sm64ex_base_id + 233),
+    "Painting Unlock LLL": SM64ItemData(sm64ex_base_id + 236),
+    "Painting Unlock SSL": SM64ItemData(sm64ex_base_id + 237),
+    "Painting Unlock DDD": SM64ItemData(sm64ex_base_id + 238),
+    "Painting Unlock SL": SM64ItemData(sm64ex_base_id + 239),
+    "Painting Unlock WDW": SM64ItemData(sm64ex_base_id + 240),
+    "Painting Unlock TTM": SM64ItemData(sm64ex_base_id + 241),
+    "Painting Unlock THI": SM64ItemData(sm64ex_base_id + 242),
+    "Painting Unlock TTC": SM64ItemData(sm64ex_base_id + 243),
+}
+
 item_data_table = {
     **generic_item_data_table,
     **action_item_data_table,
-    **cannon_item_data_table
+    **cannon_item_data_table,
+    **painting_unlock_item_data_table
 }
 
 item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}

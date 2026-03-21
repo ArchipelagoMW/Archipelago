@@ -88,6 +88,7 @@ class TestIDs(unittest.TestCase):
                 multiworld = setup_solo_multiworld(world_type)
                 distribute_items_restrictive(multiworld)
                 call_all(multiworld, "post_fill")
+                call_all(multiworld, "finalize_multiworld")
                 datapackage = world_type.get_data_package_data()
                 for item_group, item_names in datapackage["item_name_groups"].items():
                     self.assertIsInstance(item_group, str,

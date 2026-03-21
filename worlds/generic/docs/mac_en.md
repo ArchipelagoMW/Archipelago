@@ -29,7 +29,7 @@ It is generally recommended that you use a virtual environment to run python bas
 4. If the patching process needs a rom, but cannot find it, it will ask you to navigate to your legally obtained rom.
 5. Your client should now be running and rom created (where applicable).
 ## Additional Steps for SNES Games
-1. If using RetroArch, the instructions to set up your emulator [here in the Link to the Past setup guide](https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/multiworld/en) also work on the macOS version of RetroArch.
+1. If using RetroArch, the instructions to set up your emulator [here in the Link to the Past setup guide](/tutorial/A%20Link%20to%20the%20Past/multiworld/en) also work on the macOS version of RetroArch.
 2. Double click on the SNI tar.gz download to extract the files to an SNI directory. If it isn't already, rename this directory to SNI to make some steps easier.
 3. Move the SNI directory out of the downloads directory, preferably into the Archipelago directory created earlier.
 4. If the SNI directory is correctly named and moved into the Archipelago directory, it should auto run with the SNI client. If it doesn't automatically run, open up the SNI directory and run the SNI executable file manually.
