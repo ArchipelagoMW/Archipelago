@@ -29,8 +29,8 @@ if __name__ == "__main__":
 
 import settings
 import Utils
-from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
-                   user_path)
+from Utils import (env_cleared_lib_path, init_logging, is_frozen, is_linux, is_macos, is_windows, local_path,
+                   messagebox, open_filename, user_path)
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -52,10 +52,7 @@ def open_host_yaml():
         webbrowser.open(file)
         return
 
-    env = os.environ
-    if "LD_LIBRARY_PATH" in env:
-        env = env.copy()
-        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    env = env_cleared_lib_path()
     subprocess.Popen([exe, file], env=env)
 
 def open_patch():
@@ -106,10 +103,7 @@ def open_folder(folder_path):
         return
 
     if exe:
-        env = os.environ
-        if "LD_LIBRARY_PATH" in env:
-            env = env.copy()
-            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        env = env_cleared_lib_path()
         subprocess.Popen([exe, folder_path], env=env)
     else:
         logging.warning(f"No file browser available to open {folder_path}")
