@@ -77,7 +77,7 @@ class KirbyAmClient(BizHawkClient):
 
         # Boss candidate probing state
         self._last_boss_probe_snapshot: bytes | None = None
-        self._boss_probe_stream_marker: int | None = None
+        self._boss_probe_stream_marker: object = None
 
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
@@ -87,7 +87,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_boss_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
         # Research-first unsafe-delivery candidate probing state (Issue #223)
-        self._unsafe_delivery_probe_stream_marker: int | None = None
+        self._unsafe_delivery_probe_stream_marker: object = None
         self._last_unsafe_delivery_counter_values: dict[str, int] = {}
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
@@ -397,10 +397,12 @@ class KirbyAmClient(BizHawkClient):
             return
 
         # Re-baseline on BizHawk reconnect by tracking the stream object identity.
-        stream_marker = id(getattr(ctx.bizhawk_ctx, "streams", None))
+        # Use direct object reference (not id()) to prevent false negatives when CPython
+        # reuses an integer ID for a newly allocated stream after the old one is GC'd.
+        stream_marker = getattr(ctx.bizhawk_ctx, "streams", None)
         if self._boss_probe_stream_marker is None:
             self._boss_probe_stream_marker = stream_marker
-        elif stream_marker != self._boss_probe_stream_marker:
+        elif stream_marker is not self._boss_probe_stream_marker:
             self._boss_probe_stream_marker = stream_marker
             self._last_boss_probe_snapshot = None
 
@@ -461,10 +463,10 @@ class KirbyAmClient(BizHawkClient):
         if not reads:
             return
 
-        stream_marker = id(getattr(ctx.bizhawk_ctx, "streams", None))
+        stream_marker = getattr(ctx.bizhawk_ctx, "streams", None)
         if self._unsafe_delivery_probe_stream_marker is None:
             self._unsafe_delivery_probe_stream_marker = stream_marker
-        elif stream_marker != self._unsafe_delivery_probe_stream_marker:
+        elif stream_marker is not self._unsafe_delivery_probe_stream_marker:
             self._unsafe_delivery_probe_stream_marker = stream_marker
             self._last_unsafe_delivery_counter_values = {}
 
