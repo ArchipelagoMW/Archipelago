@@ -18,6 +18,7 @@ _AI_STATE_ADDR_WIDTH = 4
 _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
 _MAILBOX_ACK_TIMEOUT_FRAMES = 30
+_AI_STATE_NORMAL = 300
 
 
 class KirbyAmClient(BizHawkClient):
@@ -74,6 +75,9 @@ class KirbyAmClient(BizHawkClient):
         self._last_boss_probe_snapshot: bytes | None = None
         self._boss_probe_stream_marker: int | None = None
 
+        # Runtime gameplay-state gate tracking
+        self._last_runtime_gate_reason: str | None = None
+
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
         from CommonClient import logger
@@ -112,6 +116,8 @@ class KirbyAmClient(BizHawkClient):
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         """Main watcher loop: polls locations, delivers items, reports goal."""
+        from CommonClient import logger
+
         # Only run when connected and slot_data is ready
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
@@ -120,6 +126,27 @@ class KirbyAmClient(BizHawkClient):
         if not self._ram_state_loaded:
             await self._load_persistent_state(ctx)
             self._ram_state_loaded = True
+
+        gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
+        if not gameplay_active:
+            if self._last_runtime_gate_reason != defer_reason:
+                logger.info(
+                    "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
+                    defer_reason,
+                    ai_state if ai_state is not None else "unavailable",
+                )
+                self._last_runtime_gate_reason = defer_reason
+
+            # Preserve mailbox ACK handling while deferring new writes.
+            await self._deliver_items(ctx, allow_new_writes=False)
+            # Goal detection remains active because native goal signals may only
+            # be observable in post-clear non-gameplay phases.
+            await self._maybe_report_goal(ctx, ai_state_override=ai_state)
+            return
+
+        if self._last_runtime_gate_reason is not None:
+            logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
+            self._last_runtime_gate_reason = None
 
         # Location checks (real RAM polling)
         await self._poll_locations(ctx)
@@ -134,7 +161,31 @@ class KirbyAmClient(BizHawkClient):
         await self._deliver_items(ctx)
 
         # Goal reporting
-        await self._maybe_report_goal(ctx)
+        await self._maybe_report_goal(ctx, ai_state_override=ai_state)
+
+    async def _runtime_gameplay_state(self, ctx: KirbyAmBizHawkClientContext) -> tuple[bool, str, int | None]:
+        """
+        Classify whether gameplay-active polling/delivery is safe for this frame.
+
+        POC contract for Issue #56:
+        - gameplay-active when ai_kirby_state_native == 300
+        - non-gameplay for all other known states
+        - fail open when native address is unavailable
+        """
+        ai_state_addr = self._native_addr("ai_kirby_state_native")
+        if ai_state_addr is None:
+            return True, "gate_signal_unavailable", None
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
+        ai_state = self._u32_le(raw)
+
+        if ai_state == _AI_STATE_NORMAL:
+            return True, "gameplay_active", ai_state
+        if ai_state < 200:
+            return False, "non_gameplay_tutorial_or_menu", ai_state
+        if ai_state < _AI_STATE_NORMAL:
+            return False, "non_gameplay_cutscene", ai_state
+        return False, "non_gameplay_post_normal", ai_state
 
     # --------------------------
     # Helpers / persistence
@@ -331,7 +382,7 @@ class KirbyAmClient(BizHawkClient):
     # Item delivery (mailbox protocol)
     # --------------------------
 
-    async def _deliver_items(self, ctx: KirbyAmBizHawkClientContext) -> None:
+    async def _deliver_items(self, ctx: KirbyAmBizHawkClientContext, allow_new_writes: bool = True) -> None:
         """
         Deliver items via mailbox protocol.
         
@@ -444,6 +495,10 @@ class KirbyAmClient(BizHawkClient):
         if flag != 0:
             return
 
+        # Gameplay-state gate can defer new writes while still allowing ACK/recovery handling.
+        if not allow_new_writes:
+            return
+
         # Nothing to deliver
         if self._delivered_item_index >= len(ctx.items_received):
             return
@@ -483,14 +538,22 @@ class KirbyAmClient(BizHawkClient):
     # Goal completion condition
     # --------------------------
 
-    async def _native_goal_signal_active(self, ctx: KirbyAmBizHawkClientContext, slot_goal: int) -> bool:
+    async def _native_goal_signal_active(
+        self,
+        ctx: KirbyAmBizHawkClientContext,
+        slot_goal: int,
+        ai_state_override: int | None = None,
+    ) -> bool:
         """Return whether native goal signal is active for the selected goal mode."""
-        ai_state_addr = self._native_addr("ai_kirby_state_native")
-        if ai_state_addr is None:
-            return False
+        if ai_state_override is not None:
+            ai_state = ai_state_override
+        else:
+            ai_state_addr = self._native_addr("ai_kirby_state_native")
+            if ai_state_addr is None:
+                return False
 
-        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
-        ai_state = self._u32_le(raw)
+            raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
+            ai_state = self._u32_le(raw)
 
         if slot_goal == Goal.option_dark_mind:
             # Dark Mind clear is anchored to 9999. The 10000 state is post-clear progression
@@ -502,7 +565,11 @@ class KirbyAmClient(BizHawkClient):
 
         return False
 
-    async def _maybe_report_goal(self, ctx: KirbyAmBizHawkClientContext) -> None:
+    async def _maybe_report_goal(
+        self,
+        ctx: KirbyAmBizHawkClientContext,
+        ai_state_override: int | None = None,
+    ) -> None:
         """
         Goal reporting from native signal polling.
 
@@ -528,7 +595,11 @@ class KirbyAmClient(BizHawkClient):
             return
 
         if not self._native_goal_signal_seen:
-            self._native_goal_signal_seen = await self._native_goal_signal_active(ctx, slot_goal)
+            self._native_goal_signal_seen = await self._native_goal_signal_active(
+                ctx,
+                slot_goal,
+                ai_state_override=ai_state_override,
+            )
 
         if not self._native_goal_signal_seen:
             return

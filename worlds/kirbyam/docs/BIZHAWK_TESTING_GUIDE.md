@@ -1,5 +1,27 @@
 # BizHawk Testing Guide for Address Verification
 
+## Gameplay-Active Gating Check (Issue #56)
+
+Validate that non-gameplay states defer location polling and new mailbox writes.
+
+1. Start connected AP + BizHawk session with KirbyAM client logs visible.
+2. Enter normal gameplay movement and confirm no defer log is shown.
+3. Open pause/menu or trigger cutscene transition.
+4. Confirm log entry appears once per state transition:
+   - KirbyAM: deferring location polling/new item writes (...)
+5. While still non-gameplay, verify:
+   - no new LocationChecks are sent
+   - no new incoming_item writes are started
+   - existing pending mailbox ACK/recovery still progresses when applicable
+6. Return to active gameplay.
+7. Confirm resume log appears:
+   - KirbyAM: gameplay-active state restored; resuming normal watcher flow
+8. Repeat at least three transitions (gameplay -> non-gameplay -> gameplay) for consistency.
+
+Expected signal source for this gate:
+- ai_kirby_state_native at 0x0203AD2C (u32)
+- gameplay-active only when value == 300
+
 ## Connector Smoke Test (Issue #51)
 
 Before gameplay/address verification, confirm the KirbyAM-specific BizHawk connector comes up cleanly:

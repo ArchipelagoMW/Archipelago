@@ -620,6 +620,140 @@ async def test_game_watcher_skips_all_work_when_slot_data_is_none(mock_bizhawk_c
 
 
 @pytest.mark.asyncio
+async def test_runtime_gameplay_state_active_on_normal_state(mock_bizhawk_context):
+    """AI state 300 should be treated as gameplay-active."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(300).to_bytes(4, 'little')]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is True
+    assert reason == "gameplay_active"
+    assert ai_state == 300
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_non_gameplay_on_cutscene_state(mock_bizhawk_context):
+    """AI state 200 should defer gameplay polling/delivery as non-gameplay."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(200).to_bytes(4, 'little')]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is False
+    assert reason == "non_gameplay_cutscene"
+    assert ai_state == 200
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_non_gameplay_on_tutorial_or_menu_state(mock_bizhawk_context):
+    """AI state below cutscene threshold should be classified as tutorial/menu non-gameplay."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(100).to_bytes(4, 'little')]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is False
+    assert reason == "non_gameplay_tutorial_or_menu"
+    assert ai_state == 100
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_non_gameplay_on_post_normal_state(mock_bizhawk_context):
+    """AI state above normal gameplay should be classified as non-gameplay post-normal."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is False
+    assert reason == "non_gameplay_post_normal"
+    assert ai_state == 9999
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_fail_open_when_signal_unavailable(mock_bizhawk_context):
+    """Missing ai_kirby_state_native should fail open for compatibility."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is True
+    assert reason == "gate_signal_unavailable"
+    assert ai_state is None
+    mock_read.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_game_watcher_defers_polling_and_new_writes_when_non_gameplay(mock_bizhawk_context):
+    """In non-gameplay state, watcher defers location/boss polling and new mailbox writes."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
+         patch.object(client, '_load_persistent_state', new_callable=AsyncMock) as mock_load, \
+         patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
+         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
+         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
+         patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
+         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock) as mock_goal:
+        mock_gate.return_value = (False, "non_gameplay_cutscene", 200)
+
+        await client.game_watcher(mock_bizhawk_context)
+
+    mock_load.assert_awaited_once()
+    mock_poll_locations.assert_not_awaited()
+    mock_poll_boss.assert_not_awaited()
+    mock_probe.assert_not_awaited()
+    mock_deliver.assert_awaited_once_with(mock_bizhawk_context, allow_new_writes=False)
+    mock_goal.assert_awaited_once_with(mock_bizhawk_context, ai_state_override=200)
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_defers_new_write_when_gated(mock_bizhawk_context):
+    """Delivery gating should preserve state and avoid writing a new mailbox item."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+            (100).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context, allow_new_writes=False)
+
+    assert client._delivery_pending is False
+    assert client._delivered_item_index == 0
+    mock_write.assert_not_awaited()
+
+
+@pytest.mark.asyncio
 async def test_poll_boss_defeat_sends_location_checks_for_set_bits(mock_bizhawk_context):
     """Boss defeat transport register with a set bit should produce a LocationChecks send."""
     client = KirbyAmClient()

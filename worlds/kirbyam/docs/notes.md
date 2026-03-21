@@ -299,3 +299,42 @@ Implemented the AP-side transport infrastructure for boss-defeat locations:
   instruction byte offset inside the function is confirmed via live BizHawk
   inspection.  That step decouples the shard grant and enables real boss-defeat
   location checks in gameplay.
+
+## Issue #56: Gameplay-Active Foundation Gate for Polling and Delivery
+
+### Problem
+Watcher logic previously ran location polling and new mailbox delivery attempts
+without an explicit runtime gameplay-active gate. That allowed protocol work to
+continue in menu/cutscene/post-clear phases where state may be unstable.
+
+### Solution
+Implemented a runtime gate in `KirbyAmClient.game_watcher` based on
+`ai_kirby_state_native` (`0x0203AD2C`, u32):
+
+- gameplay-active when `ai_state == 300`
+- defer polling/write behavior for all other bands
+
+When non-gameplay is detected, watcher now:
+- defers shard and boss-defeat location polling
+- defers new mailbox item writes
+- continues mailbox ACK/recovery handling for already-pending item deliveries
+- continues goal polling to avoid missing post-clear native goal states
+
+### Logging
+Added reason-coded transition logs:
+- `KirbyAM: deferring location polling/new item writes (...)`
+- `KirbyAM: gameplay-active state restored; resuming normal watcher flow`
+
+Logs are transition-based to reduce per-tick spam.
+
+### Tests
+Added client tests for:
+- gameplay-active classification on AI state 300
+- non-gameplay classification on cutscene-band state
+- watcher deferral behavior while non-gameplay
+- mailbox write deferral while gated
+
+### Scope Notes
+- This is the Phase 1 foundation contract.
+- In-game unsafe-state policy matrix (boss/travel windows and chaos options)
+  remains scoped to Issue #223.

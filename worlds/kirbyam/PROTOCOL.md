@@ -44,6 +44,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
+| 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
 
 ## Item ID Ranges
 
@@ -78,9 +79,30 @@ Server → Client: ConnectionRefused | Connected
 **Preconditions before gameplay watchers run:**
 - `ctx.server` is not `None` and the socket is open.
 - `ctx.slot_data` is not `None` (world-specific config was received).
+- Runtime gameplay-active gate classifies `ai_kirby_state_native` before polling/delivery.
 
 Both conditions are checked at the top of `game_watcher`. If either fails,
 no RAM reads, location sends, item writes, or goal reports occur.
+
+When runtime gate classifies non-gameplay:
+- Defer location polling and boss-defeat polling.
+- Defer new mailbox item writes.
+- Continue mailbox ACK/recovery handling for already-pending deliveries.
+- Continue goal polling (goal signal can occur in post-clear non-gameplay states).
+
+### Runtime Gameplay-Active Gate (Issue #56)
+
+Primary signal:
+- `ai_kirby_state_native` (`0x0203AD2C`, u32)
+
+POC classification contract:
+- Gameplay-active: `ai_state == 300`
+- Non-gameplay tutorial/menu: `ai_state < 200`
+- Non-gameplay cutscene band: `200 <= ai_state < 300`
+- Non-gameplay post-normal band: `ai_state > 300`
+
+Fail-open behavior:
+- If `ai_kirby_state_native` is unavailable in address mappings, watcher defaults to gameplay-active behavior for compatibility.
 
 **On initial (or re-)connection, the following resync occurs automatically:**
 
@@ -100,6 +122,8 @@ poll cycle.
 **Active State:** Every frame (or periodic)
 
 ```python
+# Run only when gameplay-active gate is true.
+
 # Prefer native shard bitfield, fallback to mailbox mirror
 if has_address("shard_bitfield_native"):
     bitfield = RAM[0x02038970] as u8  # native shard_bitfield_native (bits 0-7)
