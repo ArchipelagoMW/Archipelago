@@ -1576,7 +1576,7 @@ class PlandoItem:
     locations: list[str]
     world: int | str | bool | None | typing.Iterable[str] | set[int] = False
     from_pool: bool = True
-    force: bool | typing.Literal["silent"] = "silent"
+    force: bool | typing.Literal["silent"] = True
     count: int | bool | dict[str, int] = False
     percentage: int = 100
 
@@ -1631,7 +1631,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                             raise OptionError(f"Plando `location` has to be string or list, not {type(locations)}")
                     world = item.get("world", False)
                     from_pool = item.get("from_pool", True)
-                    force = item.get("force", "silent")
+                    force = item.get("force", True)
                     if not isinstance(from_pool, bool):
                         raise OptionError(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
                     if not (isinstance(force, bool) or force == "silent"):
