@@ -382,6 +382,109 @@ async def test_deliver_items_records_pending_frame_when_writing(mock_bizhawk_con
 
 
 @pytest.mark.asyncio
+async def test_deliver_items_ack_clears_pending_and_advances_cursor(mock_bizhawk_context):
+    """ROM ACK should clear pending state, persist cursor, and emit receive notification once."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivery_pending = True
+    client._delivery_pending_item_index = 0
+    client._delivered_item_index = 0
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+    ]
+
+    with patch.dict(data.transport_ram_addresses, {"debug_item_counter": None}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write, \
+         patch.object(client, '_emit_receive_notification', new_callable=AsyncMock) as mock_emit:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (250).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert client._delivery_pending is False
+    assert client._delivery_pending_frame is None
+    assert client._delivery_pending_item_index is None
+    assert client._delivered_item_index == 1
+    mock_write.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        [(data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), 'System Bus')]
+    )
+    mock_emit.assert_awaited_once_with(mock_bizhawk_context, 0)
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_fast_forward_clears_stale_mailbox_flag(mock_bizhawk_context):
+    """Fast-forward reconciliation should clear a stale mailbox flag before returning."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivered_item_index = 0
+    client._delivery_pending = False
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+        Mock(item=3860002, player=1),
+        Mock(item=3860003, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (1).to_bytes(4, 'little'),
+            (2).to_bytes(4, 'little'),
+            (900).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert client._delivered_item_index == 2
+    assert client._delivery_pending is False
+    assert client._delivery_pending_item_index is None
+    assert client._delivery_pending_frame is None
+
+    written_batches = [call.args[1] for call in mock_write.await_args_list]
+    assert [
+        (data.transport_ram_addresses["delivered_item_index"], (2).to_bytes(4, 'little'), 'System Bus')
+    ] in written_batches
+    assert [
+        (data.transport_ram_addresses["incoming_item_flag"], (0).to_bytes(4, 'little'), 'System Bus')
+    ] in written_batches
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_skips_entry_missing_player_and_continues(mock_bizhawk_context, caplog):
+    """Entries missing required fields should be skipped and delivery should continue."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001),
+        Mock(item=3860002, player=1),
+    ]
+
+    caplog.set_level(logging.WARNING, logger="Client")
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+            (777).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert client._delivered_item_index == 1
+    assert client._delivery_pending is True
+    written = mock_write.await_args.args[1]
+    assert written[0][1] == int(3860002).to_bytes(4, 'little')
+    assert "Skipping malformed ReceivedItems entry" in caplog.text
+
+
+@pytest.mark.asyncio
 async def test_goal_dark_mind_native_signal_reports_location_then_goal_status(mock_bizhawk_context):
     """Dark Mind goal should use native 9999 signal and report status after server ack."""
     from NetUtils import ClientStatus
@@ -1243,7 +1346,6 @@ async def test_poll_boss_defeat_skips_when_address_missing(mock_bizhawk_context)
     client = KirbyAmClient()
     client.initialize_client()
 
-    native_backup = dict(data.transport_ram_addresses)
     transport_without_boss = {k: v for k, v in data.transport_ram_addresses.items() if k != "boss_defeat_flags"}
 
     with patch.dict(data.transport_ram_addresses, transport_without_boss, clear=True), \

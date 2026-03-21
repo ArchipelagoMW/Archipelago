@@ -274,6 +274,26 @@ high-traffic ItemSend scenarios do not spam the player.
   - unrelated ItemSend suppression
   - burst-rate limiting + suppression summary behavior
 
+## Issue #46: Expanded Protocol Regression Coverage (Mailbox/Reconnect/Goal)
+
+### Problem
+Core client protocol paths had partial coverage but still lacked explicit tests
+for mailbox ACK cursor advancement, stale-flag recovery during reconnect
+fast-forward, and malformed delivery-entry shape variants.
+
+### Solution
+Expanded `worlds/kirbyam/test/test_client.py` with focused deterministic tests
+covering:
+- mailbox ACK sequencing: pending -> ACK observed -> cursor persist + receive
+  notification trigger
+- reconnect fast-forward recovery when mailbox flag is stale (clear-on-reconcile)
+- malformed `ReceivedItems` entries missing required fields (for example,
+  missing `player`) while continuing delivery of subsequent valid entries
+
+### Validation
+- Targeted KirbyAM client tests pass locally after coverage additions.
+- Full KirbyAM test suite pass confirms fixture stability and non-flaky behavior.
+
 ## Issue #44: Final Boss Access Rules (Dimension Mirror Sequence)
 
 ### Problem

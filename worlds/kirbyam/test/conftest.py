@@ -135,7 +135,7 @@ def mock_bizhawk_context() -> Mock:
 
 
 @pytest.fixture
-def mock_ram_read_write() -> Generator[Dict[str, bytes], None, None]:
+def mock_ram_read_write() -> Generator[Dict[int, bytes], None, None]:
     """
     Create a mock RAM state for reads/writes during tests.
     
