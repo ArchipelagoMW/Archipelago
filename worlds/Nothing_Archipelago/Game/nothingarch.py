@@ -17,7 +17,7 @@ class archipelagoUI:
         text_surf = self.font.render("Archipelago Connected",False,data.colors[data.colorselect][1])
         text_rect = text_surf.get_frect(topleft = (0,data.WINDOW_HEIGHT))
         self.display_surface.blit(text_surf, text_rect)
-        self.archipelago.run()
+        self.archipelago.run(data)
     
     def serverinputs(self,data):
         self.addressbutton.updatec("Address : " + data.inputs[0],data.WINDOW_WIDTH/2,data.WINDOW_HEIGHT/2-80,data.colors[data.colorselect][1],0)

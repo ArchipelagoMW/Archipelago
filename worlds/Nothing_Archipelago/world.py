@@ -15,7 +15,7 @@ class NothingWorld(World):
 
     web = web_world.NothingWebWorld()
 
-    options_dataclass = Nothing_options_options.NothingOptions
+    options_dataclass = Nothing_options.NothingOptions
     options: Nothing_options.NothingOptions
 
     location_name_to_id = locations.LOCATION_NAME_TO_ID
@@ -40,4 +40,7 @@ class NothingWorld(World):
         return items.get_random_filler_item_name(self)
     
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return self.options.as_dict("test")
+        return self.options.as_dict(
+            "goal","shop_upgrades","shop_colors","shop_music","shop_sounds","giftcoins",
+            "milestone_interval","timecap_interval","Starting_coin_count","Death_link",
+            "Death_link_mercy","Time_dilation")

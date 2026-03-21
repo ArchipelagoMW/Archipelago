@@ -9,6 +9,7 @@ class Data:
         self._milestonesforce = 1
         self._points = 0
         self.timecapint = 1
+        self.randoopts = [False for _ in range (4)]
 
         self.WINDOW_WIDTH = 1920
         self.WINDOW_HEIGHT = 1080
@@ -23,6 +24,8 @@ class Data:
         self.devcount = 0
         self.timescale = 1
         self.devmode = 0
+        self.giftcoins = 0
+        self.spentcoins = 0
 
         self.connected = 0
         self._maxtime = 0
@@ -40,6 +43,9 @@ class Data:
         self.goalled = False
         self.leave = 0
         self._milestones = numpy.zeros((86400,4))
+        self.checked_locations_player: list[int] = []
+        self.checked_locations: list[int] = []
+        self.missing_locations: list[int] = []
         
         self.names = [[0 for _ in range(4)] for _ in range (10)]
         self.names[0][0] = "Auto-restart      : "
@@ -108,7 +114,7 @@ class Data:
         for x in range(86400):
             self._milestones[x,0] = (x+1)*self.milestoneint
             self._milestones[x,2] = x+1
-        self._shop = [[[0 for _ in range (4)] for _ in range (10)] for _ in range (4)]
+        self._shop = [[[0 for _ in range (4)] for _ in range (10)] for _ in range (5)]
         self._shop[1][0][1] = 1
         self._shop[1][0][2] = 1
         for x in range (4):
@@ -117,6 +123,7 @@ class Data:
                     self._shop[x][y][3] = 1
                 else:
                     self._shop[x][y][3] = 2
+                self._shop[x][y][4] = 86400+(x*10)+(y+1)
         self._shop[0][8][3] = ""
         self._shop[0][9][3] = ""
         

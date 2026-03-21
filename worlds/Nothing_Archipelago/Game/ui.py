@@ -165,9 +165,14 @@ class UI:
         if self.shopbutton1.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][0][3] and data.shop[data.shopstate][0][1] == 0:
                 data.points -= data.shop[data.shopstate][0][3]
+                data.spentcoins += data.shop[data.shopstate][0][3]
                 data.shop[data.shopstate][0][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][0][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][0][4])
+                    if data.shop[data.shopstate][0][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][0][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][0][2] == 1:
                     data.colorselect = 0
             elif data.shopstate == 2 and data.shop[data.shopstate][0][2] == 1:
@@ -176,9 +181,14 @@ class UI:
         if self.shopbutton2.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][1][3] and data.shop[data.shopstate][1][1] == 0:
                 data.points -= data.shop[data.shopstate][1][3]
+                data.spentcoins += data.shop[data.shopstate][1][3]
                 data.shop[data.shopstate][1][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][1][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][1][4])
+                    if data.shop[data.shopstate][1][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][1][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][1][2] == 1:
                     data.colorselect = 1
             elif data.shopstate == 2 and data.shop[data.shopstate][1][2] == 1:
@@ -187,9 +197,14 @@ class UI:
         if self.shopbutton3.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][2][3] and data.shop[data.shopstate][2][1] == 0:
                 data.points -= data.shop[data.shopstate][2][3]
+                data.spentcoins += data.shop[data.shopstate][2][3]
                 data.shop[data.shopstate][2][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate]  == False:
                     data.shop[data.shopstate][2][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][2][4])
+                    if data.shop[data.shopstate][2][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][2][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][2][2] == 1:
                     data.colorselect = 2
             elif data.shopstate == 2 and data.shop[data.shopstate][2][2] == 1:
@@ -198,9 +213,14 @@ class UI:
         if self.shopbutton4.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][3][3] and data.shop[data.shopstate][3][1] == 0:
                 data.points -= data.shop[data.shopstate][3][3]
+                data.spentcoins += data.shop[data.shopstate][3][3]
                 data.shop[data.shopstate][3][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][3][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][3][4])
+                    if data.shop[data.shopstate][3][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][3][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][3][2] == 1:
                     data.colorselect = 3
             elif data.shopstate == 2 and data.shop[data.shopstate][3][2] == 1:
@@ -209,9 +229,14 @@ class UI:
         if self.shopbutton5.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][4][3] and data.shop[data.shopstate][4][1] == 0:
                 data.points -= data.shop[data.shopstate][4][3]
+                data.spentcoins += data.shop[data.shopstate][4][3]
                 data.shop[data.shopstate][4][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][4][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][4][4])
+                    if data.shop[data.shopstate][4][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][4][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][4][2] == 1:
                     data.colorselect = 4
             elif data.shopstate == 2 and data.shop[data.shopstate][4][2] == 1:
@@ -220,9 +245,14 @@ class UI:
         if self.shopbutton6.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][5][3] and data.shop[data.shopstate][5][1] == 0:
                 data.points -= data.shop[data.shopstate][5][3]
+                data.spentcoins += data.shop[data.shopstate][5][3]
                 data.shop[data.shopstate][5][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][5][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][5][4])
+                    if data.shop[data.shopstate][5][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][5][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][5][2] == 1:
                     data.colorselect = 5
             elif data.shopstate == 2 and data.shop[data.shopstate][5][2] == 1:
@@ -231,9 +261,14 @@ class UI:
         if self.shopbutton7.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][6][3] and data.shop[data.shopstate][6][1] == 0:
                 data.points -= data.shop[data.shopstate][6][3]
+                data.spentcoins += data.shop[data.shopstate][6][3]
                 data.shop[data.shopstate][6][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][6][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][6][4])
+                    if data.shop[data.shopstate][6][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][6][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][6][2] == 1:
                     data.colorselect = 6
             elif data.shopstate == 2 and data.shop[data.shopstate][6][2] == 1:
@@ -242,9 +277,14 @@ class UI:
         if self.shopbutton8.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][7][3] and data.shop[data.shopstate][7][1] == 0:
                 data.points -= data.shop[data.shopstate][7][3]
+                data.spentcoins += data.shop[data.shopstate][7][3]
                 data.shop[data.shopstate][7][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][7][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][7][4])
+                    if data.shop[data.shopstate][7][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][7][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][7][2] == 1:
                     data.colorselect = 7
             elif data.shopstate == 2 and data.shop[data.shopstate][7][2] == 1:
@@ -253,9 +293,14 @@ class UI:
         if self.shopbutton9.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][8][3] and data.shop[data.shopstate][8][1] == 0:
                 data.points -= data.shop[data.shopstate][8][3]
+                data.spentcoins += data.shop[data.shopstate][8][3]
                 data.shop[data.shopstate][8][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False  or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][8][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][8][4])
+                    if data.shop[data.shopstate][8][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][8][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][8][2] == 1:
                     data.colorselect = 8
             elif data.shopstate == 2 and data.shop[data.shopstate][8][2] == 1:
@@ -264,9 +309,14 @@ class UI:
         if self.shopbutton10.draw(self.display_surface):
             if data.points >= data.shop[data.shopstate][9][3] and data.shop[data.shopstate][9][1] == 0:
                 data.points -= data.shop[data.shopstate][9][3]
+                data.spentcoins += data.shop[data.shopstate][9][3]
                 data.shop[data.shopstate][9][1] = 1
-                if data.archipelagoactive == False:
+                if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][9][2] = 1
+                else:
+                    data.checked_locations_player.append(data.shop[data.shopstate][9][4])
+                    if data.shop[data.shopstate][9][4] in data.missing_locations:
+                        data.missing_locations.remove(data.shop[data.shopstate][9][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][9][2] == 1:
                     data.colorselect = 9
             elif data.shopstate == 2 and data.shop[data.shopstate][9][2] == 1:
@@ -423,7 +473,11 @@ class UI:
             data.milestones[test,1] = 1
             data.milestones[test,0] = 0
             if data.archipelagoactive == False:
-                 data.timecaps += 1
+                data.timecaps += 1
+            else:
+                data.checked_locations_player.append(data.milestones[test,2])
+                if data.milestones[test,2] in data.missing_locations:
+                        data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
             self.milestone1button.value = 0
             self.delta = 0
@@ -432,7 +486,11 @@ class UI:
             data.milestones[test,1] = 1
             data.milestones[test,0] = 0
             if data.archipelagoactive == False:
-                 data.timecaps += 1
+                data.timecaps += 1
+            else:
+                data.checked_locations_player.append(data.milestones[test,2])
+                if data.milestones[test,2] in data.missing_locations:
+                        data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
             self.milestone2button.value = 0
             self.delta = 0
@@ -441,7 +499,11 @@ class UI:
             data.milestones[test,1] = 1
             data.milestones[test,0] = 0
             if data.archipelagoactive == False:
-                 data.timecaps += 1
+                data.timecaps += 1
+            else:
+                data.checked_locations_player.append(data.milestones[test,2])
+                if data.milestones[test,2] in data.missing_locations:
+                        data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
             self.milestone3button.value = 0
             self.delta = 0
@@ -450,7 +512,11 @@ class UI:
             data.milestones[test,1] = 1
             data.milestones[test,0] = 0
             if data.archipelagoactive == False:
-                 data.timecaps += 1
+                data.timecaps += 1
+            else:
+                data.checked_locations_player.append(data.milestones[test,2])
+                if data.milestones[test,2] in data.missing_locations:
+                        data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
             self.milestone4button.value = 0
             self.delta = 0
@@ -459,7 +525,11 @@ class UI:
             data.milestones[test,1] = 1
             data.milestones[test,0] = 0
             if data.archipelagoactive == False:
-                 data.timecaps += 1
+                data.timecaps += 1
+            else:
+                data.checked_locations_player.append(data.milestones[test,2])
+                if data.milestones[test,2] in data.missing_locations:
+                        data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
             self.milestone5button.value = 0
             self.delta = 0

@@ -22,7 +22,7 @@ class Archipelago:
         self.password = password
         self.status: APStatus = APStatus.DISCONNECTED
         self.wss = wss
-
+        self.needsync = 0
         self.uuid: int = random.randint(1000000000, 9999999999)
 
         self.ap_version: dict[str, int | str] = {
@@ -99,6 +99,7 @@ class Archipelago:
                     self.checked_locations = cmd.checked_locations
                     self.missing_locations = cmd.missing_locations
 
+                    self.needsync = 1
                     self.players = cmd.players
                     
                     # Send some packets at start of connection
@@ -107,19 +108,10 @@ class Archipelago:
                     packet = OutLocationChecks(locations=cmd.checked_locations)
                     packets_to_send.append(packet)
 
-                    packet = OutSetNotify(keys=[f'_read_hints_{self.team_id}_{self.slot_id}'])
-                    packets_to_send.append(packet)
-
-                    packet = OutGet(keys=[f'_read_hints_{self.team_id}_{self.slot_id}'])
-                    packets_to_send.append(packet)
-
                     packet = OutSetNotify(keys=[f'Nothing_Archipelago_Settings'])
                     packets_to_send.append(packet)
 
                     packet = OutGet(keys=[f'Nothing_Archipelago_Settings'])
-                    packets_to_send.append(packet)
-
-                    packet = OutLocationScouts(locations=cmd.checked_locations+cmd.missing_locations)
                     packets_to_send.append(packet)
 
                     for packet in packets_to_send:
@@ -147,32 +139,17 @@ class Archipelago:
                     # What do we want to do when bounced?
                 case IncAPCommands.RoomUpdate:
                     cmd = IncRoomUpdate(frame, PacketDirection.Incoming)
+                    self.needsync = 1
                     if cmd.checked_locations:
                         self.checked_locations = cmd.checked_locations
                 case _ as cmd_name:
                     print(f'- Unknown Command Received: {cmd_name}')
 
-    def hint_item(self) -> None:
-        if self.status in [APStatus.CONNECTED, APStatus.PLAYING] and self.hints_to_give > 0:
-            valid_items: list[APNetworkItem] = []
-        
-            for network_item in self.network_items:
-                if network_item.type in [APNetworkItemType.PROGRESSION, APNetworkItemType.USEFUL] and network_item.location_id in self.missing_locations and network_item.player_id == self.slot_id:
-                    valid_items.append(network_item)
 
-            if len(valid_items) == 0:
-                return
-
-            item: APNetworkItem = valid_items[random.randint(0, len(valid_items) - 1)]
-
-            req = OutLocationScouts([item.location_id], 1)
-            self.queued_requests.append(req.response)
-
-            self.hints_to_give -= 1
-
-    def run(self) -> None:
+    def run(self,data) -> None:
         if self.status == APStatus.CONNECTING or self.status == APStatus.CONNECTED or self.status == APStatus.PLAYING:
-            self.hint_item()
+            if self.needsync:
+                self.sync_locations(data)
 
             if len(self.queued_requests) > 0:
                 queued_cmds: list[str] = []
@@ -185,4 +162,114 @@ class Archipelago:
             recieved_data = self.__receive_data()
             if len(recieved_data) > 0:
                 self.process_data(recieved_data)
+            
+            self.updateloctions(data)
+            self.updateitems(data)
+
+    def sync_locations(self,data):
+        self.needsync = 0
+        data.checked_locations_player = self.checked_locations
+        for location in data.check_locations_player:
+            if location <= 86400:
+                data.milestones[location-1,1] = 1
+                data.milestones[location-1,0] = 0
+            else:
+                data.spentcoins += data.shop[((location-86401)//10)%10][(location-86401)%10][3]
+                data.shop[((location-86401)//10)%10][(location-86401)%10][1] = 1
+            
+
+    def updateloctions(self,data) -> None:
+        packets_to_send: list[APPacket] = []
+        if data.checked_locations == data.checked_locations_player:
+            return
+        else:
+            data.checked_locations = data.check_locations_player
+            self.checked_locations = data.checked_locations
+            self.missing_locations = data.missing_locations
+            packet = OutLocationChecks(locations=self.checked_locations)
+            packets_to_send.append(packet)
+
+
+        for packet in packets_to_send:
+            self.queued_requests.append(packet.response)
+
+
+    def updateitems(self,data) -> None:
+        digitcount = 0
+        data.timecaps = 1
+        data.giftcoins = 0
+        for network_item in self.network_items:
+            if network_item.item_id == 1:
+                data.shop[0][0][2] = 1
+            elif network_item.item_id == 2:
+                data.shop[0][1][2] = 1
+            elif network_item.item_id == 3:
+                data.shop[0][2+digitcount][2] = 1
+                digitcount +=1
+            elif network_item.item_id == 4:
+                data.timecaps += 1
+                data.timecap = data.timecaps * data.timecapint
+            elif network_item.item_id == 5:
+                giftcoins += 1
+            elif network_item.item_id == 11:
+                data.shop[2][0][2] = 1
+            elif network_item.item_id == 12:
+                data.shop[2][1][2] = 1
+            elif network_item.item_id == 13:
+                data.shop[2][2][2] = 1
+            elif network_item.item_id == 14:
+                data.shop[2][3][2] = 1
+            elif network_item.item_id == 15:
+                data.shop[2][4][2] = 1
+            elif network_item.item_id == 16:
+                data.shop[2][5][2] = 1
+            elif network_item.item_id == 17:
+                data.shop[2][6][2] = 1
+            elif network_item.item_id == 18:
+                data.shop[2][7][2] = 1
+            elif network_item.item_id == 19:
+                data.shop[2][8][2] = 1
+            elif network_item.item_id == 20:
+                data.shop[2][9][2] = 1
+            elif network_item.item_id == 21:
+                data.shop[1][0][2] = 1
+            elif network_item.item_id == 22:
+                data.shop[1][1][2] = 1
+            elif network_item.item_id == 23:
+                data.shop[1][2][2] = 1
+            elif network_item.item_id == 24:
+                data.shop[1][3][2] = 1
+            elif network_item.item_id == 25:
+                data.shop[1][4][2] = 1
+            elif network_item.item_id == 26:
+                data.shop[1][5][2] = 1
+            elif network_item.item_id == 27:
+                data.shop[1][6][2] = 1
+            elif network_item.item_id == 28:
+                data.shop[1][7][2] = 1
+            elif network_item.item_id == 29:
+                data.shop[1][8][2] = 1
+            elif network_item.item_id == 30:
+                data.shop[1][9][2] = 1
+            elif network_item.item_id == 32:
+                data.shop[3][1][2] = 1
+            elif network_item.item_id == 33:
+                data.shop[3][2][2] = 1
+            elif network_item.item_id == 34:
+                data.shop[3][3][2] = 1
+            elif network_item.item_id == 35:
+                data.shop[3][4][2] = 1
+            elif network_item.item_id == 36:
+                data.shop[3][5][2] = 1
+            elif network_item.item_id == 37:
+                data.shop[3][6][2] = 1
+            elif network_item.item_id == 38:
+                data.shop[3][7][2] = 1
+            elif network_item.item_id == 39:
+                data.shop[3][8][2] = 1
+            elif network_item.item_id == 40:
+                data.shop[3][9][2] = 1
+        
+        if data.giftcoins > data.spentcoins:
+            data.points += data.giftcoins - data.spentcoins
 
