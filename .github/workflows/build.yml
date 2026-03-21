@@ -21,6 +21,7 @@ on:
   workflow_dispatch:
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   ENEMIZER_VERSION: 7.1
   # NOTE: since appimage/appimagetool and appimage/type2-runtime does not have tags anymore,
   #       we check the sha256 and require manual intervention if it was updated.
@@ -41,9 +42,9 @@ jobs:
     runs-on: windows-latest
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -129,14 +130,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '~3.12.7'
           check-latest: true

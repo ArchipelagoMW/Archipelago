@@ -28,12 +28,15 @@ on:
       - 'requirements.txt'
       - '.github/workflows/scan-build.yml'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   scan-build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Install newer Clang
@@ -45,7 +48,7 @@ jobs:
       run: |
         sudo apt install clang-tools-19
     - name: Get a recent python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
     - name: Install dependencies

@@ -559,3 +559,25 @@ observational probes for optional unsafe-delivery candidates:
 - Added client tests for optional unsafe-delivery probes: no-address no-op,
   change logging, and reconnect re-baselining.
 - Updated native signal policy notes and BizHawk guide with a research workflow.
+
+## Issue #238: GitHub Actions Node 24 Migration (JavaScript Actions)
+
+### Problem
+GitHub Actions runner support for Node 20 is deprecated and will force JavaScript
+actions to Node 24 by default. Existing workflows still referenced
+`actions/checkout@v4` and `actions/setup-python@v5`.
+
+### Solution
+Updated all affected workflows to current major versions:
+- `actions/checkout@v4` -> `actions/checkout@v6`
+- `actions/setup-python@v5` -> `actions/setup-python@v6`
+- `actions/labeler@v5` -> `actions/labeler@v6`
+
+Added temporary workflow-level early opt-in for migration confidence:
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true`
+
+### Follow-up
+- Keep the temporary Node 24 force toggle in place through initial migration
+  confidence checks, then remove it after runner defaults are confirmed stable.
+- Track action hardening (full commit SHA pinning) as a separate follow-up once
+  the major-version migration is verified.

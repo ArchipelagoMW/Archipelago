@@ -8,6 +8,7 @@ on:
       - 'v?[0-9]+.[0-9]+.[0-9]*'
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   ENEMIZER_VERSION: 7.1
   # NOTE: since appimage/appimagetool and appimage/type2-runtime does not have tags anymore,
   #       we check the sha256 and require manual intervention if it was updated.
@@ -48,9 +49,9 @@ jobs:
         shell: bash
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -114,14 +115,14 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '~3.12.7'
           check-latest: true
