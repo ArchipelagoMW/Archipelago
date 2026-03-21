@@ -1563,6 +1563,8 @@ class Rac3Interface(GameInterface):
         if self.pda_vendor and self._read16(self.pda_vendor + 0xB2) == target_moby_id:
             return self.pda_vendor
         table_start = RAC3STATUS.HIDEOUT_MOBY_TABLE_START
+        if self.current_game == RAC3VERSION.EU_ID:
+            table_start = 0x01D2AAC0
         moby_offset = 0
         current_id = 0
         for traversal in range(1, 10001):
@@ -1820,8 +1822,8 @@ class Rac3Interface(GameInterface):
         logger.info(f'AP World Version: {RAC3OPTION.VERSION_NUMBER}')
         logger.info(f'Game Version: {GAME_ID_TO_VERSION.get(self.current_game, "Unknown")} ({self.current_game})')
         logger.info(f'Current planet Tracked: {self.planet}')
-        logger.info(f'Sewer Crystals Inventory: {self._read32(RAC3STATUS.CRYSTALS_CURRENT)}')
-        logger.info(f'Sewer Crystals Traded: {self._read32(RAC3STATUS.CRYSTALS_TRADED)}')
+        logger.info(f'Sewer Crystals Inventory: {self._read8(RAC3STATUS.CRYSTALS_CURRENT)}')
+        logger.info(f'Sewer Crystals Traded: {self._read8(RAC3STATUS.CRYSTALS_TRADED)}')
         logger.info(f'Ship Slot Limit: {self.ship_slot_limit}')
         if self.planet != RAC3REGION.QWARKS_HIDEOUT:
             pda_vendor_str = "N/A"
