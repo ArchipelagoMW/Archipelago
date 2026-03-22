@@ -1908,47 +1908,51 @@
          "region": "FSP - Chiyou's Shop", "requires": []
     },
     {
-         "category": "shop", "address": 4105, "name": "Chiyou's Shop: 1st Medium Cost Purchase",
+         "category": "shop", "address": 4105, "name": "Chiyou's Shop: 5th Low Cost Purchase",
+         "region": "FSP - Chiyou's Shop", "requires": []
+    },
+    {
+         "category": "shop", "address": 4111, "name": "Chiyou's Shop: 1st Medium Cost Purchase",
          "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4106, "name": "Chiyou's Shop: 2nd Medium Cost Purchase",
+         "category": "shop", "address": 4112, "name": "Chiyou's Shop: 2nd Medium Cost Purchase",
          "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4107, "name": "Chiyou's Shop: 3rd Medium Cost Purchase",
+         "category": "shop", "address": 4113, "name": "Chiyou's Shop: 3rd Medium Cost Purchase",
          "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4108, "name": "Chiyou's Shop: 4th Medium Cost Purchase",
+         "category": "shop", "address": 4114, "name": "Chiyou's Shop: 4th Medium Cost Purchase",
          "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4109, "name": "Chiyou's Shop: 5th Medium Cost Purchase",
+         "category": "shop", "address": 4115, "name": "Chiyou's Shop: 5th Medium Cost Purchase",
          "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4110, "name": "Chiyou's Shop: 6th Medium Cost Purchase",
+         "category": "shop", "address": 4116, "name": "Chiyou's Shop: 6th Medium Cost Purchase",
          "region": "FSP - Chiyou's Shop (Medium Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4111, "name": "Chiyou's Shop: 1st High Cost Purchase",
+         "category": "shop", "address": 4121, "name": "Chiyou's Shop: 1st High Cost Purchase",
          "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4112, "name": "Chiyou's Shop: 2nd High Cost Purchase",
+         "category": "shop", "address": 4122, "name": "Chiyou's Shop: 2nd High Cost Purchase",
          "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4113, "name": "Chiyou's Shop: 3rd High Cost Purchase",
+         "category": "shop", "address": 4123, "name": "Chiyou's Shop: 3rd High Cost Purchase",
          "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4114, "name": "Chiyou's Shop: 4th High Cost Purchase",
+         "category": "shop", "address": 4124, "name": "Chiyou's Shop: 4th High Cost Purchase",
          "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
     },
     {
-         "category": "shop", "address": 4115, "name": "Chiyou's Shop: 5th High Cost Purchase",
+         "category": "shop", "address": 4125, "name": "Chiyou's Shop: 5th High Cost Purchase",
          "region": "FSP - Chiyou's Shop (High Cost)", "requires": []
     },
 
