@@ -23,6 +23,7 @@ class Archipelago:
         self.status: APStatus = APStatus.DISCONNECTED
         self.wss = wss
         self.needsync = 0
+        self.setup = 0
         self.uuid: int = random.randint(1000000000, 9999999999)
 
         self.ap_version: dict[str, int | str] = {
@@ -42,6 +43,7 @@ class Archipelago:
 
         self.players: list[APNetworkPlayer] = []
 
+        self.slot_data = {}
         self.team_id: int = -1
         self.slot_id: int = -1
 
@@ -95,23 +97,19 @@ class Archipelago:
 
                     self.team_id = cmd.team
                     self.slot_id = cmd.slot
+                    self.slot_data = cmd.slot_data
 
                     self.checked_locations = cmd.checked_locations
                     self.missing_locations = cmd.missing_locations
 
                     self.needsync = 1
+                    self.setup = 1
                     self.players = cmd.players
                     
                     # Send some packets at start of connection
                     packets_to_send: list[APPacket] = []
                     
                     packet = OutLocationChecks(locations=cmd.checked_locations)
-                    packets_to_send.append(packet)
-
-                    packet = OutSetNotify(keys=[f'Nothing_Archipelago_Settings'])
-                    packets_to_send.append(packet)
-
-                    packet = OutGet(keys=[f'Nothing_Archipelago_Settings'])
                     packets_to_send.append(packet)
 
                     for packet in packets_to_send:
@@ -148,6 +146,8 @@ class Archipelago:
 
     def run(self,data) -> None:
         if self.status == APStatus.CONNECTING or self.status == APStatus.CONNECTED or self.status == APStatus.PLAYING:
+            if self.setup == 1:
+                self.update_config(data)            
             if self.needsync:
                 self.sync_locations(data)
 
@@ -165,6 +165,28 @@ class Archipelago:
             
             self.updateloctions(data)
             self.updateitems(data)
+
+    def update_config(self,data):
+        data.goal = self.slot_data["goal"]
+        data.inputs[0] = self.slot_data["shop_upgrades"]
+        data.inputs[1] = self.slot_data["shop_colors"]
+        data.inputs[2] = self.slot_data["shop_music"]
+        data.inputs[3] = self.slot_data["shop_sounds"]
+
+        data.milestoneint = self.slot_data["milestone_interval"]
+        data.timecapint = self.slot_data["timecap_interval"]
+
+        data.deathlink = self.slot_data["Death_link"]
+        data.deathlinkmercy = self.slot_data["Death_link_mercy"]
+        data.timescale = self.slot_data["Time_dilation"]
+
+        for x in range(86400):
+            data.milestones[x,0] = (x+1)*data.milestoneint
+            data.milestones[x,2] = x+1
+        data.timecap = data.timecapint * data.timecaps
+
+
+
 
     def sync_locations(self,data):
         self.needsync = 0

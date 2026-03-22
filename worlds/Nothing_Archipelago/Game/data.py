@@ -27,6 +27,10 @@ class Data:
         self.giftcoins = 0
         self.spentcoins = 0
 
+        self.deathlink = False
+        self.deathlinkcount = 0
+        self.deathlinkmercy = 1
+
         self.connected = 0
         self._maxtime = 0
         self._currenttime = 0
