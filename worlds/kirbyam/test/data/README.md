@@ -12,6 +12,9 @@ This directory contains reusable, pre-generated fixture datasets for unit and in
   - Item delivery examples and mailbox ack transitions.
 - `location_check_transitions.json`
   - Expected location-check behavior for shard progression and resend scenarios.
+- `snapshots/`
+  - Committed golden snapshots for deterministic outputs (slot_data and
+    enemy mapping artifacts).
 
 ## Address Ranges
 

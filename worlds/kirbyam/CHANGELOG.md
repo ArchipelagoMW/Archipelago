@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add golden snapshot tests for deterministic slot_data and enemy randomization mapping outputs, with committed JSON fixtures and an explicit snapshot update workflow.
 - Remove `worlds/kirbyam/kirbyam.apworld` from source control; add `*.apworld` to `.gitignore` to prevent re-committing the build artifact.
 - Add release integrity checks: changelog section verification and `--changelog` gate in the release metadata script and CI.
 - Wire `death_link` option into KirbyAM slot-data and runtime DeathLink tag synchronization.

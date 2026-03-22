@@ -18,6 +18,7 @@ def test_fixture_data_files_exist() -> None:
         "shard_bitfields.json",
         "item_delivery_sequences.json",
         "location_check_transitions.json",
+        "snapshots",
         "README.md",
     }
     existing = {p.name for p in data_dir.iterdir()}

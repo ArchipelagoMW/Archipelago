@@ -546,6 +546,37 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #311: Golden Snapshot Tests for slot_data and Generated Artifacts
+
+### Problem
+The test suite had contract and behavior checks, but no committed golden
+snapshots for deterministic outputs. That made it harder to review exact payload
+or mapping drift in PRs.
+
+### Solution
+- Added `worlds/kirbyam/test/test_snapshot_outputs.py` with two snapshot tests:
+  - representative `slot_data` payload emitted from `KirbyAmWorld.fill_slot_data`
+  - deterministic generated enemy mapping artifacts for fixed seeds
+- Added committed snapshot fixtures in
+  `worlds/kirbyam/test/data/snapshots/`:
+  - `slot_data_representative.json`
+  - `enemy_mapping_seed_20260322.json`
+- Added snapshot fixture update guidance in
+  `worlds/kirbyam/test/data/snapshots/README.md`.
+- Updated `worlds/kirbyam/test/test_fixture_data.py` to assert the
+  `snapshots/` fixture directory exists.
+
+### Snapshot update workflow
+1. Set `KIRBYAM_UPDATE_SNAPSHOTS=1`.
+2. Run `pytest worlds/kirbyam/test/test_snapshot_outputs.py`.
+3. Review generated diff under `worlds/kirbyam/test/data/snapshots/`.
+4. Unset `KIRBYAM_UPDATE_SNAPSHOTS` and rerun tests in strict mode.
+
+### Validation
+- `pytest worlds/kirbyam/test/test_snapshot_outputs.py`
+- `pytest worlds/kirbyam/test/test_fixture_data.py`
+- `pytest worlds/kirbyam/test/test_slot_data_contract.py`
+
 ## Issue #313: Remove Circular Committed kirbyam.apworld Artifact
 
 ### Problem

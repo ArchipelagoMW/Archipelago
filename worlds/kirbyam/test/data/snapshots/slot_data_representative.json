@@ -1,0 +1,49 @@
+{
+  "death_link": true,
+  "enemy_copy_ability_policy": {
+    "allowed_abilities": [
+      "Burning",
+      "Cutter",
+      "Fire",
+      "Hammer",
+      "Laser",
+      "Mini",
+      "Missile",
+      "Needle",
+      "Parasol",
+      "Sleep",
+      "Spark",
+      "Stone",
+      "Sword",
+      "Tornado",
+      "UFO"
+    ],
+    "mapping_style": "per_enemy_type",
+    "mode": 1,
+    "randomize_boss_spawned_ability_grants": true,
+    "randomize_miniboss_ability_grants": false,
+    "seed": 7437834127177459305
+  },
+  "enemy_copy_ability_randomization": 1,
+  "enemy_copy_ability_whitelist": [
+    "Burning",
+    "Cutter",
+    "Fire",
+    "Hammer",
+    "Laser",
+    "Mini",
+    "Missile",
+    "Needle",
+    "Parasol",
+    "Sleep",
+    "Spark",
+    "Stone",
+    "Sword",
+    "Tornado",
+    "UFO"
+  ],
+  "goal": 0,
+  "randomize_boss_spawned_ability_grants": true,
+  "randomize_miniboss_ability_grants": false,
+  "shards": 2
+}
