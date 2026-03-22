@@ -546,6 +546,20 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #307: Release Integrity Checks (Changelog/Tag/Apworld Coherence)
+
+### Problem
+No automated check verified that a CHANGELOG section existed for the tagged release version, creating risk that a tag could be pushed without a matching changelog entry.
+
+### Solution
+- Added `check_changelog_has_version(changelog_path, version)` to `.github/scripts/kirbyam_release_metadata.py`. Raises `ValueError` with a clear message if the `## v{version}` heading is absent.
+- Added `--changelog` argument to the same script; when provided and `release_enabled` is True, the check is run before metadata outputs are written.
+- Updated `kirbyam-apworld.yml` CI step to pass `--changelog worlds/kirbyam/CHANGELOG.md`, so release tags that lack a changelog section fail the CI step explicitly.
+- Added 8 new tests in `worlds/kirbyam/test/test_release_metadata.py` covering: section-found, section-missing, Unreleased not treated as version, partial-match guard, real-CHANGELOG smoke, main integration (pass and fail), and branch-ref skip.
+
+### Validation
+- `pytest worlds/kirbyam/test/test_release_metadata.py` — 16 passed.
+
 ## Issue #300: slot_data Protocol Contract Parity Tests
 
 ### Problem

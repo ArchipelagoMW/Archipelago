@@ -47,6 +47,7 @@ jobs:
           python .github/scripts/kirbyam_release_metadata.py \
             --github-ref "${GITHUB_REF}" \
             --world-manifest "worlds/kirbyam/archipelago.json" \
+            --changelog "worlds/kirbyam/CHANGELOG.md" \
             --github-output "${GITHUB_OUTPUT}"
 
       - name: Build kirbyam.apworld from committed patch data

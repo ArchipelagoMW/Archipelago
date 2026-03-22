@@ -64,6 +64,23 @@ def build_release_metadata(github_ref: str) -> ReleaseMetadata:
     )
 
 
+def check_changelog_has_version(changelog_path: Path, version: str) -> None:
+    """Raise ValueError if the changelog does not contain a section for version.
+
+    Looks for a heading of the exact form ``## v{version}`` anywhere in the
+    file.  Raises with a descriptive message so the CI step fails clearly.
+    """
+    text = changelog_path.read_text(encoding="utf-8")
+    heading = f"## v{version}"
+    for line in text.splitlines():
+        if line.strip() == heading:
+            return
+    raise ValueError(
+        f"CHANGELOG.md does not contain a section for v{version}. "
+        f"Add a '## v{version}' heading before tagging the release."
+    )
+
+
 def inject_world_version(manifest_path: Path, world_version: str) -> bool:
     """Inject world_version into a world manifest JSON file.
 
@@ -108,12 +125,21 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional world manifest path to receive tag-derived world_version on release builds.",
     )
+    parser.add_argument(
+        "--changelog",
+        type=Path,
+        help="Optional path to CHANGELOG.md; on release builds, verified to contain a section for the release version.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     metadata = build_release_metadata(args.github_ref)
+
+    if args.changelog and metadata.release_enabled:
+        check_changelog_has_version(args.changelog, metadata.version)
+        print(f"CHANGELOG.md contains section for v{metadata.version}")
 
     if args.world_manifest and metadata.release_enabled:
         updated = inject_world_version(args.world_manifest, metadata.version)
