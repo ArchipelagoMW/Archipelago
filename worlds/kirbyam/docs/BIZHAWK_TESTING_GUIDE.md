@@ -461,6 +461,29 @@ For each signal, copy this template:
 - [ ] Status: ✅ Verified / ⚠️ Needs work / ❌ Rejected
 ```
 
+### Machine-Checkable Result Comment Template
+
+When reporting manual results on a GitHub issue, paste this block into a
+comment and fill all fields exactly once:
+
+```text
+<!-- MANUAL_TEST_RESULT:START -->
+RESULT_SCHEMA_VERSION: 1
+TEST_CASE_ID: case-001
+STATUS: PASS
+BUILD_REF: <commit/pr/tag>
+PLATFORM: <windows/linux/macos>
+BIZHAWK_VERSION: <version>
+ROM_REGION: USA
+EXPECTED_RESULT: <short expected outcome>
+OBSERVED_RESULT: <short observed outcome>
+EVIDENCE: <link/screenshot/log excerpt>
+NOTES: <optional>
+<!-- MANUAL_TEST_RESULT:END -->
+```
+
+Allowed `STATUS` values: `PASS`, `FAIL`, `BLOCKED`.
+
 ---
 
 ## Troubleshooting

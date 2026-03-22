@@ -1,0 +1,100 @@
+name: Manual Testing Checklist
+description: Use this template for non-technical, step-by-step manual verification with machine-checkable results.
+title: "Manual testing: "
+labels:
+  - manual-testing
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is designed for regular testers and machine parsing.
+        Keep steps simple, and paste at least one completed result block in a comment.
+
+  - type: input
+    id: feature
+    attributes:
+      label: Feature or issue being tested
+      description: Example: "Issue #319 DeathLink HP signal promotion"
+      placeholder: "Issue #<number> <short title>"
+    validations:
+      required: true
+
+  - type: input
+    id: build_ref
+    attributes:
+      label: Build or commit under test
+      description: Git commit SHA, PR number, or build tag
+      placeholder: "PR #123 / commit abc1234"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Test environment
+      description: Keep this non-technical and explicit
+      value: |
+        - Platform:
+        - BizHawk version:
+        - ROM region/version:
+        - Save file used:
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Step-by-step checklist
+      description: Write clear steps for non-technical testers
+      value: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What should happen if the test passes
+      value: |
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: pass_fail_criteria
+    attributes:
+      label: Pass/fail criteria
+      description: Keep criteria objective and easy to verify
+      value: |
+        - PASS if:
+        - FAIL if:
+    validations:
+      required: true
+
+  - type: textarea
+    id: machine_checkable_result_comment_template
+    attributes:
+      label: Machine-checkable result comment template
+      description: Testers must paste and fill this in an issue comment after testing
+      value: |
+        <!-- MANUAL_TEST_RESULT:START -->
+        RESULT_SCHEMA_VERSION: 1
+        TEST_CASE_ID: case-001
+        STATUS: PASS
+        BUILD_REF: <commit/pr/tag>
+        PLATFORM: <windows/linux/macos>
+        BIZHAWK_VERSION: <version>
+        ROM_REGION: USA
+        EXPECTED_RESULT: <short expected outcome>
+        OBSERVED_RESULT: <short observed outcome>
+        EVIDENCE: <link/screenshot/log excerpt>
+        NOTES: <optional>
+        <!-- MANUAL_TEST_RESULT:END -->
+
+        Allowed STATUS values: PASS, FAIL, BLOCKED
+    validations:
+      required: true

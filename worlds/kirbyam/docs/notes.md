@@ -546,6 +546,37 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #312: Standardize Manual Test Templates into Machine-Checkable Checklists
+
+### Problem
+Manual testing issues were readable, but result comments were not standardized
+enough for reliable parsing/reporting.
+
+### Solution
+- Added a dedicated GitHub issue template:
+  `.github/ISSUE_TEMPLATE/manual_testing_checklist.yaml`
+  with required fields and a structured result-comment block.
+- Added parser utility:
+  `.github/scripts/manual_test_checklist_parser.py`
+  that extracts and validates manual test result blocks from issue comments.
+- Added parser tests:
+  `worlds/kirbyam/test/test_manual_test_checklist_parser.py`.
+- Added manual result block guidance to
+  `worlds/kirbyam/docs/BIZHAWK_TESTING_GUIDE.md`.
+
+### Result block contract
+- Delimiters:
+  `<!-- MANUAL_TEST_RESULT:START -->` and
+  `<!-- MANUAL_TEST_RESULT:END -->`
+- Required fields:
+  `RESULT_SCHEMA_VERSION`, `TEST_CASE_ID`, `STATUS`, `BUILD_REF`, `PLATFORM`,
+  `BIZHAWK_VERSION`, `ROM_REGION`, `EXPECTED_RESULT`, `OBSERVED_RESULT`,
+  `EVIDENCE`, `NOTES`
+- Allowed status values: `PASS`, `FAIL`, `BLOCKED`
+
+### Validation
+- Targeted pytest on the new parser test module.
+
 ## Issue #311: Golden Snapshot Tests for slot_data and Generated Artifacts
 
 ### Problem
