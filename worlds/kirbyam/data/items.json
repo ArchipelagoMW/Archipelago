@@ -2,7 +2,19 @@
   "1_UP": {
     "label": "1 Up",
     "classification": "FILLER",
-    "tags": ["Filler"]
+    "tags": ["Filler", "Life"]
+  },
+  "2_UP": {
+    "label": "2 Up",
+    "classification": "FILLER",
+    "item_id": 3860022,
+    "tags": ["Filler", "Life"]
+  },
+  "3_UP": {
+    "label": "3 Up",
+    "classification": "FILLER",
+    "item_id": 3860023,
+    "tags": ["Filler", "Life"]
   },
   "SHARD_1": {
     "label": "Mustard Mountain - Mirror Shard",

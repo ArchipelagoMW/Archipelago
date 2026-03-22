@@ -656,3 +656,30 @@ future major chest logic can consume them directly.
 This issue only establishes naming and evidence scaffolding. Ability items are
 still absent from the pool, so all five helpers intentionally resolve to true
 until a later issue introduces actual ability acquisition logic.
+
+## Issue #41: Multi-Item Filler Pool (Phase 1)
+
+### Problem
+KirbyAM filler fallback still always returned `1 Up`, so any future randomized
+non-progression location without an explicit default item would collapse into a
+single repeated reward.
+
+### Solution
+Expanded the shipped filler catalog to a conservative extra-life family:
+- `1 Up`
+- `2 Up`
+- `3 Up`
+
+Generation now uses a deterministic weighted filler table in
+`KirbyAmWorld.get_filler_item_name()`:
+- `1 Up`: weight 6
+- `2 Up`: weight 3
+- `3 Up`: weight 1
+
+ROM payload support was extended so each filler item grants the matching number
+of lives and saturates safely at 255 lives.
+
+### Deliberate Scope Limit
+Health-restore and battery-style consumables were considered during issue
+research, but they remain deferred until their native apply semantics are
+verified well enough to ship without risky mailbox-side side effects.

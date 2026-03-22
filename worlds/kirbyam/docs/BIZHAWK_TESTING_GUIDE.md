@@ -155,6 +155,27 @@ When validating AP item receipt behavior in BizHawk, also watch for mailbox time
 
 This behavior is intended to avoid deadlock while still preferring exactly-once ROM outcomes.
 
+## Multi-Filler Receipt Smoke (Issue #41)
+
+Validate that each shipped filler item can be received and applied safely.
+
+1. Connect a patched KirbyAM ROM to Archipelago with BizHawk logs visible.
+2. Deliver each filler item at least once through the mailbox path:
+   - `1 Up` (`3860001`)
+   - `2 Up` (`3860022`)
+   - `3 Up` (`3860023`)
+3. After each delivery, confirm:
+   - mailbox ACK completes normally
+   - `debug_last_item_id` matches the delivered filler
+   - Kirby's life count increases by the expected amount
+   - life count saturates safely instead of overflowing at high values
+4. Repeat one filler delivery after an AP reconnect and confirm the same ACK path still succeeds.
+5. Confirm shard delivery behavior is unchanged after the filler smoke passes.
+
+Expected current scope:
+- filler effects only grant lives
+- no health-restore or battery-side effects are expected in the current payload
+
 ## Reconnect Lifecycle Check (Issue #52)
 
 Validate that both BizHawk and AP server reconnect scenarios work correctly:

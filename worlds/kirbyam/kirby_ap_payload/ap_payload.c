@@ -79,16 +79,37 @@ static void ap_set_boss_defeat_flag(uint32_t boss_index) {
     }
 }
 
+static void ap_grant_lives(uint8_t amount) {
+    uint8_t lives = KIRBY_LIVES;
+
+    if (lives >= 255u) {
+        return;
+    }
+
+    if ((uint16_t)lives + amount > 255u) {
+        KIRBY_LIVES = 255u;
+        return;
+    }
+
+    KIRBY_LIVES = (uint8_t)(lives + amount);
+}
+
 static void ap_apply_item(uint32_t ap_item_id) {
     // 1_UP = BASE+1
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 1u)) {
+        ap_grant_lives(1u);
+        return;
+    }
 
-        uint8_t lives = KIRBY_LIVES;
+    // 2_UP = BASE+22
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 22u)) {
+        ap_grant_lives(2u);
+        return;
+    }
 
-        if (lives < 255u) {
-            KIRBY_LIVES = (uint8_t)(lives + 1u);
-        }
-
+    // 3_UP = BASE+23
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 23u)) {
+        ap_grant_lives(3u);
         return;
     }
 

@@ -100,6 +100,12 @@ class KirbyAmWorld(World):
     _generation_start_time: float
 
     # Generation stages
+    _FILLER_ITEM_WEIGHTS: ClassVar[tuple[tuple[str, int], ...]] = (
+        ("1 Up", 6),
+        ("2 Up", 3),
+        ("3 Up", 1),
+    )
+
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         # If you don't have sanity_check.py yet, comment these out for now.
@@ -109,8 +115,8 @@ class KirbyAmWorld(World):
 
     # Filler item name
     def get_filler_item_name(self) -> str:
-        # Keep simple until you define your filler set.
-        return "1 Up"
+        filler_names, filler_weights = zip(*self._FILLER_ITEM_WEIGHTS)
+        return self.random.choices(filler_names, weights=filler_weights, k=1)[0]
 
     # Pre-generation adjustments
     def generate_early(self) -> None:
@@ -179,12 +185,13 @@ class KirbyAmWorld(World):
                 # During early iteration it's easy to have a location without a default_item.
                 # Avoid hard crashes and fall back to the world's configured filler.
                 if loc.default_item_code is None:
+                    filler_name = self.get_filler_item_name()
                     self.logger.warning(
                         "Location '%s' has no default_item; using filler '%s' instead.",
                         loc.name,
-                        self.get_filler_item_name(),
+                        filler_name,
                     )
-                    itempool.append(self.create_item(self.get_filler_item_name()))
+                    itempool.append(self.create_item(filler_name))
                 else:
                     itempool.append(self.create_item_by_code(loc.default_item_code))
 

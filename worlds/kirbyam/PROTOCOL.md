@@ -56,7 +56,21 @@ All item IDs use **BASE_OFFSET = 3860000** for safety (avoids collision with Arc
 | SHARD_1 .. SHARD_8 | 3860002 - 3860009 | Mirror shards (8 items) |
 | MAP_MUSTARD_MOUNTAIN .. MAP_RADISH_RUINS | 3860010 - 3860017 | Useful map rewards |
 | VITALITY_COUNTER_1 .. VITALITY_COUNTER_4 | 3860018 - 3860021 | Useful vitality rewards |
-| *Reserved*        | 3860022+ | Future items (doors, abilities, etc.) |
+| 2_UP, 3_UP        | 3860022 - 3860023 | Weighted filler extra-life rewards |
+| *Reserved*        | 3860024+ | Future items (doors, abilities, consumables, etc.) |
+
+### Current filler effect contract
+
+Phase 1 filler delivery remains intentionally conservative:
+
+| Item | Effect |
+|------|--------|
+| `1 Up` | Grant 1 life, saturating at 255 |
+| `2 Up` | Grant 2 lives, saturating at 255 |
+| `3 Up` | Grant 3 lives, saturating at 255 |
+
+Health-restoring and battery-style consumables remain out of the shipped payload
+contract until their native apply semantics are verified on the USA ROM.
 
 ## Location ID Ranges
 
