@@ -1,7 +1,9 @@
 \# Kirby \& The Amazing Mirror
 
 
+
 \## Where is the options page?
+
 
 
 You can read through all the options and generate a YAML here.
@@ -55,4 +57,12 @@ You will not see an indicator in the game, instead you'll see you received an it
 Yes, the client and connector are only necessary for sending and receiving items. If you're playing a solo game, you
 don't need to play online unless you want the rest of Archipelago's functionality (like hints). If
 you're playing a multiworld game, the client will sync your game with the server the next time you connect.
+
+
+
+\## Acknowledgements
+
+
+
+\[jiangzhengwenjz](https://github.com/jiangzhengwenjz) — creator of the \[Kirby \& The Amazing Mirror disassembly](https://github.com/jiangzhengwenjz/katam), which was instrumental in understanding ROM internals for this integration.
 
