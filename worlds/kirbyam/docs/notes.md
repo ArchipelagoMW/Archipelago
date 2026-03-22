@@ -62,7 +62,9 @@ Do not mix these two domains:
 2. Native game-state addresses
 - Purpose: in-game progression/check/goal state.
 - Source of truth: `worlds/kirbyam/data/native_address_policy.json` and `ram.native` in `worlds/kirbyam/data/addresses.json`.
-- Current integrated native signal: `shard_bitfield_native` at `0x02038970`.
+- Current integrated native signals:
+  - `shard_bitfield_native` at `0x02038970`
+  - `big_chest_bitfield_native` at `0x0203897C`
 
 Rule: AP transport fields must never be treated as native gameplay truth.
 
@@ -77,6 +79,7 @@ Current high-level status:
 | Signal type | Candidate | Integrated | Verified |
 | --- | --- | --- | --- |
 | Shard progression | Yes | Yes | Not yet policy-promoted |
+| Major chest checks | Yes | Yes | No |
 | Dungeon boss defeat | Yes | Yes (probe-only) | No |
 | Final boss defeat | Yes | Yes | No |
 | 100% completion | Yes | Yes | No |

@@ -79,6 +79,7 @@ class LocationCategory(IntEnum):
     SHARD = 0
     GOAL = 1
     BOSS_DEFEAT = 2
+    MAJOR_CHEST = 9
 
 
 class ItemData(NamedTuple):

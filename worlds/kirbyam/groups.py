@@ -30,6 +30,7 @@ _LOCATION_GROUP_MAPS: dict[str, set[str]] = {
 _LOCATION_CATEGORY_TO_GROUP_NAME = {
     LocationCategory.SHARD: "Mirror Shards",
     LocationCategory.GOAL: "Goals",
+    LocationCategory.MAJOR_CHEST: "Major Chests",
 }
 
 # Pre-create category groups and map/area groups so they are always present during build.

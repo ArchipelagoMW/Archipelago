@@ -13,6 +13,7 @@ Policy references:
 
 Systematically verify all memory addresses needed for the POC:
 - **8 Mirror Shards** (location checks)
+- **9 Major Chests** (area big-chest checks, bits 1–9)
 - **7 Area Bosses** (dungeon defeats)
 - **1 Final Boss** (Dark Mind defeat)
 
@@ -70,7 +71,38 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 ---
 
-## 2. AREA BOSSES (7 Total by Mirror)
+## 2. MAJOR CHESTS (Phase 1)
+
+### Candidate Address: `0x0203897C` (Big Chest Area Bitfield)
+- **Type**: 32-bit bitfield (bit N = `AreaId` N)
+- **Source**: `gTreasures.bigChestField` derived from the `shard_bitfield_native` anchor
+- **Expected Behavior**:
+  - Bit flips from `0→1` when the area's major chest reward is claimed
+  - Persists after room change and save/reload
+  - The client polls all defined MAJOR_CHEST bits dynamically; currently `1`–`9` (all playable areas)
+
+| Location | Bit | Status | Verified Address | Notes |
+|----------|-----|--------|------------------|-------|
+| Rainbow Route - Big Chest | 1 | ⬜ | | |
+| Moonlight Mansion - Big Chest | 2 | ⬜ | | |
+| Cabbage Cavern - Big Chest | 3 | ⬜ | | |
+| Mustard Mountain - Big Chest | 4 | ⬜ | | |
+| Carrot Castle - Big Chest | 5 | ⬜ | | |
+| Olive Ocean - Big Chest | 6 | ⬜ | | |
+| Peppermint Palace - Big Chest | 7 | ⬜ | | |
+| Radish Ruins - Big Chest | 8 | ⬜ | | |
+| Candy Constellation - Big Chest | 9 | ⬜ | | |
+
+**Testing Steps for Each Major Chest**:
+1. Observe `0x0203897C` before opening the chest
+2. Claim the chest reward in-game
+3. Confirm the mapped area bit flips to `1`
+4. Reconnect the AP client and confirm the corresponding LocationCheck is not replayed after server acknowledgement
+5. Save and reset; verify the bit persists
+
+---
+
+## 3. AREA BOSSES (7 Total by Mirror)
 
 > **NOTE**: In KAtAM, each mirror has a boss. Start with Moonlight Mansion (Crepe).
 
@@ -146,7 +178,7 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 ---
 
-## 3. FINAL BOSS: DARK MIND
+## 4. FINAL BOSS: DARK MIND
 
 ### Dark Meta Knight (Dimension Mirror Encounter)
 - **Candidate Address**: TBD — no dedicated flag mapped yet; presence inferred from
@@ -212,12 +244,13 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 ---
 
-## 4. CANDIDATE ADDRESS SOURCES
+## 5. CANDIDATE ADDRESS SOURCES
 
 ### From Workbook (KirbyAM Data.xlsx)
 | Signal | Workbook Address | Status | Notes |
 |--------|------------------|--------|-------|
 | Mirror Shards Bitfield | `0x02038970` | Integrated (pending live verification) | Tracked in `addresses.json` as `shard_bitfield_native` |
+| Major Chest Bitfield | `0x0203897C` | Integrated (pending live verification) | Tracked in `addresses.json` as `big_chest_bitfield_native`; Phase 1 polls bits 3, 6, 7 |
 | Chest/Switch Blocks | `0x02038960`–`0x0203896A` | TBD | Supporting data |
 | Boss/Mirror table region | `0x02028C14+` | Candidate | Candidate source from protocol reverse-engineering; needs live confirmation |
 | Dark Mind signal | `0x02028C14+` (offset TBD) | Candidate | Needs live mapping and confirmation |
@@ -227,11 +260,13 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 ---
 
-## 5. VERIFICATION CHECKLIST
+## 6. VERIFICATION CHECKLIST
 
 - [x] At least one shard progression address is integrated for current POC path (`0x02038970`)
+- [x] At least one major chest address is integrated for current POC path (`0x0203897C`)
 - [x] At least one dungeon boss signal candidate is documented (`0x02028C14+` region)
 - [x] At least one final boss signal candidate is documented (`0x02028C14+` region, offset TBD)
+- [ ] Live verification complete for major chest candidate(s)
 - [ ] Live verification complete for dungeon boss candidate(s)
 - [ ] Live verification complete for final boss candidate(s)
 - [ ] Address conflicts checked (no overlaps)
@@ -242,19 +277,20 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 ---
 
-## 6. NOTES & OBSERVATIONS
+## 7. NOTES & OBSERVATIONS
 
 (To be filled in during testing)
 
 ---
 
-## 7. SUMMARY TABLE (For Documentation)
+## 8. SUMMARY TABLE (For Documentation)
 
 *To be completed once all verifications done*
 
 | Signal | Type | Address | Bit | Confidence | Status |
 |--------|------|---------|-----|------------|--------|
 | Mirror Shard 1 | Bitfield | TBD | 0 | 🔴 | ⬜ |
+| Cabbage Cavern - Big Chest | Bitfield | `0x0203897C` | 3 | 🟡 | Integrated |
 | Crepe Defeated | Flag/Bitfield | TBD | ? | 🔴 | ⬜ |
 | Dark Meta Knight (Dimension Mirror) | Flag/Bitfield | TBD (boss table `0x02028C14+`) | ? | 🔴 | ⬜ |
 | Dark Mind Defeated (all forms) | ai_kirby_state | `0x0203AD2C` → `9999` | n/a | 🟡 | Integrated |

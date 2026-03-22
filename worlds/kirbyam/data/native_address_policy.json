@@ -28,6 +28,18 @@
         }
       ]
     },
+    "major_chest_checks": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "big_chest_bitfield_native",
+          "address": "0x0203897C",
+          "width": "u32",
+          "source": "gTreasures layout cross-reference + shard_bitfield_native anchor + live client integration",
+          "verification": "Integrated and used by polling path for Cabbage Cavern, Olive Ocean, and Peppermint Palace major chests; pending repeatable BizHawk confirmation per promotion_criteria"
+        }
+      ]
+    },
     "dungeon_boss_defeat": {
       "status": "integrated",
       "entries": [

@@ -16,6 +16,7 @@
 | `KirbyAM: deferring location polling/new item writes (...)` | Non-gameplay state detected; polling suspended. Fires once per state transition. |
 | `KirbyAM: gameplay-active state restored; resuming normal watcher flow` | Returned to gameplay-active state. |
 | `KirbyAM: resending RAM-derived LocationChecks missing on server (missing=..., acked=...)` | Shard bits found in RAM but not yet acknowledged by server; resending. |
+| `KirbyAM: resending major-chest LocationChecks missing on server (missing=..., acked=...)` | Big-chest area bits found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: resending boss-defeat LocationChecks missing on server (missing=..., acked=...)` | Boss-defeat bits found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: Writing mailbox item index N (item=..., player=...)` | Beginning delivery of the Nth received item. |
 | `KirbyAM: Mailbox ACK observed at item index N` | ROM cleared the flag; delivery confirmed. |
@@ -39,6 +40,7 @@
 ### Debug-level diagnostics
 Enable debug logging in your AP client to see these:
 - `dedupe suppressed LocationChecks` — shard/boss checks already acknowledged (per-tick spam suppressed at info level).
+- `dedupe suppressed major-chest LocationChecks` — major-chest checks already acknowledged (per-tick spam suppressed at info level).
 - `KirbyAM: boss candidate probe rising bits: ...` — rising-edge transitions detected in the boss mirror table probe. Useful during boss fights for address mapping.
 - `KirbyAM: unsafe-delivery candidate probe: X changed Y -> Z` — miniboss counter candidate changed. Research-only probe (Issue #223).
 
@@ -72,6 +74,39 @@ Validate that non-gameplay states defer location polling and new mailbox writes.
 Expected signal source for this gate:
 - ai_kirby_state_native at 0x0203AD2C (u32)
 - gameplay-active only when value == 300
+
+## Major Chest Checks (All Areas)
+
+Validate that the native big-chest area bitfield drives the currently shipped major-chest locations.
+
+1. Connect AP + BizHawk session with KirbyAM client logs visible.
+2. Open BizHawk Memory Viewer and watch `0x0203897C` as a 32-bit value.
+3. Open one of the currently integrated big chests (repeat for each):
+   - Rainbow Route (`bit 1`)
+   - Moonlight Mansion (`bit 2`)
+   - Cabbage Cavern (`bit 3`)
+   - Mustard Mountain (`bit 4`)
+   - Carrot Castle (`bit 5`)
+   - Olive Ocean (`bit 6`)
+   - Peppermint Palace (`bit 7`)
+   - Radish Ruins (`bit 8`)
+   - Candy Constellation (`bit 9`)
+4. Confirm the corresponding bit flips from `0` to `1` when the chest reward is claimed.
+5. Confirm the client logs a resend only if the server has not yet acknowledged the mapped location:
+   - `KirbyAM: resending major-chest LocationChecks missing on server (...)`
+6. Reconnect the AP client and confirm already-acknowledged major-chest checks are not replay-spammed.
+7. Save/reload or change rooms and confirm the bit remains set.
+
+Expected current mapping:
+- `bit 1` -> `MAJOR_CHEST_RAINBOW_ROUTE`
+- `bit 2` -> `MAJOR_CHEST_MOONLIGHT_MANSION`
+- `bit 3` -> `MAJOR_CHEST_CABBAGE_CAVERN`
+- `bit 4` -> `MAJOR_CHEST_MUSTARD_MOUNTAIN`
+- `bit 5` -> `MAJOR_CHEST_CARROT_CASTLE`
+- `bit 6` -> `MAJOR_CHEST_OLIVE_OCEAN`
+- `bit 7` -> `MAJOR_CHEST_PEPPERMINT_PALACE`
+- `bit 8` -> `MAJOR_CHEST_RADISH_RUINS`
+- `bit 9` -> `MAJOR_CHEST_CANDY_CONSTELLATION`
 
 ## Notification Pipeline Check (Issue #83)
 

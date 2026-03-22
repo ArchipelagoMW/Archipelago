@@ -56,6 +56,12 @@
     "classification": "PROGRESSION",
     "tags": ["Shard", "Unique"]
   },
+  "MAP_RAINBOW_ROUTE": {
+    "label": "Map - Rainbow Route",
+    "classification": "USEFUL",
+    "item_id": 3860024,
+    "tags": ["Map", "Useful"]
+  },
   "MAP_MUSTARD_MOUNTAIN": {
     "label": "Map - Mustard Mountain",
     "classification": "USEFUL",

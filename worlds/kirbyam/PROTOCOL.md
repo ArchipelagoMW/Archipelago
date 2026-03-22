@@ -40,8 +40,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 ### Native Game State (Referenced but not Managed by AP)
 
 | Addr     | Size | Name                    | Description |
-|----------|------|-------------------------|-------------|
+|----------|------|-------------------------|-----------|
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
+| 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. Derived from shard_bitfield_native 0x02038970 (shardField = gTreasures+0x10, bigChestField = gTreasures+0x1C). The client polls all defined MAJOR_CHEST bits dynamically; currently 1–9 (all playable areas). |
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
@@ -74,13 +75,22 @@ contract until their native apply semantics are verified on the USA ROM.
 
 ## Location ID Ranges
 
-All location IDs use **BASE_OFFSET = 3860100**.
+All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3,960,000).
 
 | Location Type | ID Range | Description |
 |---------------|----------|-------------|
-| SHARD_1 .. SHARD_8 | 3860101 - 3860108 | Mirror shard check locations (8 items) |
+| SHARD_1 .. SHARD_8 | auto-assigned | Mirror shard check locations (8 locations) |
 | BOSS_DEFEAT_1 .. BOSS_DEFEAT_8 | auto-assigned | Area boss defeat locations (8 locations) |
-| *TBD*         | — | Chest locations, door locations, etc. |
+| MAJOR_CHEST_CABBAGE_CAVERN | 3960200 | Cabbage Cavern big chest (bit 3, gTreasures.bigChestField) |
+| MAJOR_CHEST_OLIVE_OCEAN | 3960201 | Olive Ocean big chest (bit 6, gTreasures.bigChestField) |
+| MAJOR_CHEST_PEPPERMINT_PALACE | 3960202 | Peppermint Palace big chest (bit 7, gTreasures.bigChestField) |
+| MAJOR_CHEST_RAINBOW_ROUTE | 3960203 | Rainbow Route big chest (bit 1, gTreasures.bigChestField) |
+| MAJOR_CHEST_MOONLIGHT_MANSION | 3960204 | Moonlight Mansion big chest (bit 2, gTreasures.bigChestField) |
+| MAJOR_CHEST_MUSTARD_MOUNTAIN | 3960205 | Mustard Mountain big chest (bit 4, gTreasures.bigChestField) |
+| MAJOR_CHEST_CARROT_CASTLE | 3960206 | Carrot Castle big chest (bit 5, gTreasures.bigChestField) |
+| MAJOR_CHEST_RADISH_RUINS | 3960207 | Radish Ruins big chest (bit 8, gTreasures.bigChestField) |
+| MAJOR_CHEST_CANDY_CONSTELLATION | 3960208 | Candy Constellation big chest (bit 9, gTreasures.bigChestField) |
+| *Reserved*    | 3960209+ | Future location families |
 
 ## Client Protocol
 

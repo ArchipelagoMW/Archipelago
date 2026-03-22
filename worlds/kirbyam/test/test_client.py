@@ -187,6 +187,109 @@ async def test_no_location_checks_sent_when_all_already_server_acknowledged(mock
         assert mock_logger.debug.call_args.args[1] == [shard1, shard2]
 
 
+@pytest.mark.asyncio
+async def test_poll_major_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
+    """Set big-chest bits should map to major-chest LocationChecks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    cabbage = data.locations["MAJOR_CHEST_CABBAGE_CAVERN"].location_id
+    olive = data.locations["MAJOR_CHEST_OLIVE_OCEAN"].location_id
+    peppermint = data.locations["MAJOR_CHEST_PEPPERMINT_PALACE"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.native_ram_addresses, {"big_chest_bitfield_native": 0x0203897C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # Bits 3, 6, 7 set => Cabbage, Olive, Peppermint major chests.
+        mock_read.return_value = [((1 << 3) | (1 << 6) | (1 << 7)).to_bytes(4, 'little')]
+
+        await client._poll_major_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [cabbage, olive, peppermint]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_major_chest_skips_already_server_acknowledged(mock_bizhawk_context):
+    """No major-chest resend when server already acknowledges all mapped checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    olive = data.locations["MAJOR_CHEST_OLIVE_OCEAN"].location_id
+    mock_bizhawk_context.checked_locations = {olive}
+
+    with patch.dict(data.native_ram_addresses, {"big_chest_bitfield_native": 0x0203897C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [((1 << 6)).to_bytes(4, 'little')]
+
+        await client._poll_major_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+    assert mock_logger.debug.called
+    assert "dedupe suppressed major-chest LocationChecks" in mock_logger.debug.call_args.args[0]
+    assert mock_logger.debug.call_args.args[1] == [olive]
+
+
+@pytest.mark.asyncio
+async def test_poll_major_chest_skips_when_address_missing(mock_bizhawk_context):
+    """Missing native big chest address should no-op safely."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        await client._poll_major_chest_locations(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+    mock_send.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_shard_poll_does_not_trigger_major_chest_locations(mock_bizhawk_context):
+    """Shard polling should not emit major-chest location IDs."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.checked_locations = set()
+    major_chest_ids = {
+        loc.location_id
+        for loc in data.locations.values()
+        if loc.category.name == "MAJOR_CHEST"
+    }
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.return_value = [(0x03).to_bytes(4, 'little')]  # shard bits 0 and 1
+
+        await client._poll_locations(mock_bizhawk_context)
+
+    sent_locations = set(mock_send.await_args.args[0][0]["locations"])
+    assert sent_locations.isdisjoint(major_chest_ids)
+
+
+def test_major_chest_data_sanity():
+    """Major-chest entries should have explicit unique IDs and unique mapped bits."""
+    major_chests = [
+        loc for loc in data.locations.values()
+        if loc.category.name == "MAJOR_CHEST"
+    ]
+
+    assert major_chests
+
+    ids = [loc.location_id for loc in major_chests]
+    assert all(loc_id is not None for loc_id in ids)
+    assert len(ids) == len(set(ids))
+
+    bits = [loc.bit_index for loc in major_chests]
+    assert all(bit is not None for bit in bits)
+    assert len(bits) == len(set(bits))
+
+
 def test_client_initialization():
     """Test client state is properly initialized."""
     client = KirbyAmClient()
@@ -1115,6 +1218,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
     client._last_runtime_gate_reason = "non_gameplay_cutscene"
     client._last_shard_poll_log = ("resend", (1,), ())
     client._last_boss_poll_log = ("resend", (2,), ())
+    client._last_major_chest_poll_log = ("resend", (3,), ())
     client._last_boss_probe_snapshot = bytes(32)
     client._boss_probe_stream_marker = object()
     client._unsafe_delivery_probe_stream_marker = object()
@@ -1125,6 +1229,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock) as mock_load, \
          patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
+            patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major_chests, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
@@ -1137,6 +1242,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._last_runtime_gate_reason is None
         assert client._last_shard_poll_log is None
         assert client._last_boss_poll_log is None
+        assert client._last_major_chest_poll_log is None
         assert client._last_boss_probe_snapshot is None
         assert client._boss_probe_stream_marker is None
         assert client._unsafe_delivery_probe_stream_marker is None
@@ -1145,6 +1251,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         mock_load.assert_awaited_once()
         mock_poll_locations.assert_awaited_once()
         mock_poll_boss.assert_awaited_once()
+        mock_poll_major_chests.assert_awaited_once()
         mock_probe.assert_awaited_once()
         mock_probe_unsafe.assert_awaited_once()
         mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
