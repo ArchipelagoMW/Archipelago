@@ -47,8 +47,8 @@ def create_location_array():
         "Nothing Theme Purple": 86439,
         "Nothing Theme Cyan": 86440
     }
-    for i in range(1, int(math.ceil(NothingWorld.options.goal/NothingWorld.options.milestone_interval))):
-        LOCATION_NAMES_TO_ID["Nothing Milestone " + str(i+1)] = i+1
+    for i in range(86400):
+        LOCATION_NAMES_TO_ID.update({("Nothing Milestone " + str(i+1)): i+1})
 
     return LOCATION_NAMES_TO_ID
     
@@ -57,7 +57,7 @@ LOCATION_NAME_TO_ID = create_location_array()
 
 
 class Nothing_Archipelago_Location(Location):
-    game = "Nothing_Archipelago"
+    game = "nothing_archipelago"
 
 def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
     return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
@@ -69,8 +69,8 @@ def create_all_locations(world: NothingWorld) -> None:
 def create_regular_locations(world: NothingWorld) -> None:
     start = world.get_region("start")
     start_locations_intermediate = [] 
-    for i in range(1, int(math.ceil(world.options.goal/world.options.milestone_interval))):
-        start_locations_intermediate.append["Nothing Milestone " + str(i+1)]
+    for i in range(int(math.ceil(world.options.goal/world.options.milestone_interval))):
+        start_locations_intermediate.append("Nothing Milestone " + str(i+1))
 
     
     start_locations = get_location_names_with_ids(start_locations_intermediate)
@@ -142,11 +142,11 @@ def create_regular_locations(world: NothingWorld) -> None:
         shopdigits = world.get_region("shopdigits")
         shopdigits.add_locations(shopdigits_locations, Nothing_Archipelago_Location)
 
-    if (world.options.giftcoins or world.options.goal > 1200):
+    if (world.options.gift_coins or world.options.goal > 1200):
         if world.options.shop_upgrades:
             shopups = world.get_region("shopups")
             shopups.add_locations(shopupgrades_locations,Nothing_Archipelago_Location)
-        if world.option.shop_colors:
+        if world.options.shop_colors:
             shopcolors = world.get_region("shopcolors")
             shopcolors.add_locations(shopcolor_locations,Nothing_Archipelago_Location)
         if world.options.shop_music:

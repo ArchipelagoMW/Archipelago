@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from typing import Any
 
 from worlds.AutoWorld import World
@@ -11,7 +12,7 @@ class NothingWorld(World):
     good games need at least 86400 check (*not really)
     """
 
-    game = "Nothing_Archipelago"
+    game = "nothing_archipelago"
 
     web = web_world.NothingWebWorld()
 
@@ -33,7 +34,7 @@ class NothingWorld(World):
     def create_items(self) -> None:
         items.create_all_items(self)
 
-    def create_item(self, name) -> items.NothingItem:
+    def create_item(self, name) -> items.Nothing_Archipelago_Item:
         return items.create_item_with_correct_classification(self, name)
     
     def get_filler_item_name(self) -> str:
@@ -41,6 +42,6 @@ class NothingWorld(World):
     
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
-            "goal","shop_upgrades","shop_colors","shop_music","shop_sounds","giftcoins",
+            "goal","shop_upgrades","shop_colors","shop_music","shop_sounds","gift_coins",
             "milestone_interval","timecap_interval","Starting_coin_count","Death_link",
             "Death_link_mercy","Time_dilation")

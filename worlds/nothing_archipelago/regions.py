@@ -17,24 +17,24 @@ def create_all_regions(world: NothingWorld) -> None:
     regions = [start]
 
     if world.options.shop_upgrades:
-        if (world.options.giftcoins or world.options.goal > 1200):
+        if (world.options.gift_coins or world.options.goal > 1200):
             shopups = Region("shopups", world.player, world.multiworld)
             regions.append(shopups)
         shopdigits = Region("shopdigits", world.player, world.multiworld)
         regions.append(shopdigits)
 
     if world.options.shop_colors:
-        if (world.options.giftcoins or world.options.goal > 1200):
+        if (world.options.gift_coins or world.options.goal > 1200):
             shopcolors = Region("shopcolors", world.player, world.multiworld)
             regions.append(shopcolors)
 
     if world.options.shop_music:
-        if (world.options.giftcoins or world.options.goal > 1200):
+        if (world.options.gift_coins or world.options.goal > 1200):
             shopmusic = Region("shopmusic", world.player, world.multiworld)
             regions.append(shopmusic)
 
     if world.options.shop_sounds:
-        if (world.options.giftcoins or world.options.goal > 1200):
+        if (world.options.gift_coins or world.options.goal > 1200):
             shopsounds = Region("shopsounds", world.player, world.multiworld)
             regions.append(shopsounds)
 
@@ -47,7 +47,7 @@ def connect_regions(world: NothingWorld) -> None:
         shopdigits = world.get_region("shopdigits")
         start.connect(shopdigits, "Start to shopdigits")
 
-    if (world.options.giftcoins or world.options.goal > 1200): 
+    if (world.options.gift_coins or world.options.goal > 1200): 
         if world.options.shop_upgrades:   
             shopups = world.get_region("shopups")
             start.connect(shopups, "Start to shopupgrades")

@@ -33,7 +33,7 @@ class Archipelago:
             'class': 'Version'
         }
 
-        self.client_name_tag: str = "Nothing_Archipelago"
+        self.client_name_tag: str = "nothing_archipelago"
 
         self.queued_requests: list = []
         

@@ -209,7 +209,7 @@ class TimeDilation(Range):
 
 
 @dataclass
-class Nothingoptions(PerGameCommonOptions):
+class NothingOptions(PerGameCommonOptions):
     goal: Goal
     shop_upgrades: shopupgrades
     shop_colors: shopcolors
@@ -246,7 +246,7 @@ option_presets = {
         "shop_colors": True,
         "shop_music": True,
         "shop_sounds": True,
-        "giftcoins": True,
+        "gift_coins": True,
         "milestone_interval": 120,
         "timecap_interval": 120,
         "Starting_coin_count": 10,
@@ -260,7 +260,7 @@ option_presets = {
         "shop_colors": True,
         "shop_music": True,
         "shop_sounds": True,
-        "giftcoins": True,
+        "gift_coins": True,
         "milestone_interval": 1,
         "timecap_interval": 1,
         "Starting_coin_count": 0,

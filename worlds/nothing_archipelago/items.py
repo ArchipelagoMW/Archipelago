@@ -83,7 +83,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
 
 
 class Nothing_Archipelago_Item(Item):
-    game = "Nothing_Archipelago"
+    game = "nothing_archipelago"
 
 def get_random_filler_item_name(world: NothingWorld) -> str:
     return "Nothing Item Gifted Coin"
@@ -95,7 +95,7 @@ def create_item_with_correct_classification(world: NothingWorld, name: str) -> N
 
 def create_all_items(world: NothingWorld) -> None:
     itempool: list[Item] = []
-    for _ in range(int(math.ceil(NothingWorld.options.goal/NothingWorld.options.milestone_interval))):
+    for _ in range(int(math.ceil(world.options.goal/world.options.milestone_interval))):
         itempool.append(world.create_item("Nothing Item Progressive Time Cap"))
     
     if world.options.shop_upgrades:
@@ -106,11 +106,11 @@ def create_all_items(world: NothingWorld) -> None:
         itempool.append(world.create_item("Nothing Item Timer Digit"))
         itempool.append(world.create_item("Nothing Item Timer Digit"))
 
-    if (world.options.giftcoins or world.options.goal > 1200):
+    if (world.options.gift_coins or world.options.goal > 1200):
         if world.options.shop_upgrades:
             itempool.append(world.create_item("Nothing Item Auto Milestone Collector"))
             itempool.append(world.create_item("Nothing Item Auto Timer Restart"))
-        if world.option.shop_colors:
+        if world.options.shop_colors:
             itempool.append(world.create_item("Nothing Item Theme Blue"))
             itempool.append(world.create_item("Nothing Item Theme Green"))
             itempool.append(world.create_item("Nothing Item Theme Pink"))
@@ -151,7 +151,7 @@ def create_all_items(world: NothingWorld) -> None:
 
     world.multiworld.itempool += itempool
 
-    if world.options.giftcoins and world.options.starting_coin_count > 0:
-        for i in range(world.options.starting_coin_count):
+    if world.options.gift_coins and world.options.Starting_coin_count > 0:
+        for i in range(world.options.Starting_coin_count):
             world.push_precollected(world.create_item("Nothing Item Gifted Coin"))
     

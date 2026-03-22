@@ -17,7 +17,7 @@ class Game:
 
         
         
-        pygame.display.set_caption('Nothing_Archipelago')
+        pygame.display.set_caption('nothing_archipelago')
         
         self.clock = pygame.time.Clock()
         

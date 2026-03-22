@@ -3,7 +3,7 @@ from worlds.AutoWorld import WebWorld
 from .options import option_groups, option_presets
 
 class NothingWebWorld(WebWorld):
-    game = "Nothing_Archipelago"
+    game = "nothing_archipelago"
     theme= "ice"
     setup_en = Tutorial(
         "Multiword Setup Guide",
