@@ -66,7 +66,10 @@ class RandomizeMiniBossAbilityGrants(Toggle):
 
 
 class KirbyAmDeathLink(DeathLink):
-    __doc__ = (DeathLink.__doc__ or "") + "\n\n    NOT READY YET: In Kirby & The Amazing Mirror, dying sets your current health to zero."
+    __doc__ = (DeathLink.__doc__ or "") + (
+        "\n\n    KirbyAM DeathLink uses native Kirby HP semantics: incoming DeathLink queues a gameplay-gated"
+        " local defeat, and local alive-to-dead transitions send one outgoing DeathLink event."
+    )
 
 
 @dataclass

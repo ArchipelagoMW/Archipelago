@@ -546,6 +546,29 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #82: DeathLink End-to-End Closure
+
+### Problem
+After #76 and #75 landed, the remaining parent-level gaps were contract cleanup
+and manual validation guidance: the option surface still claimed DeathLink was
+not ready, and the BizHawk guide did not define an end-to-end smoke pass.
+
+### Solution
+- Updated the DeathLink option description to describe the shipped behavior.
+- Added a BizHawk DeathLink smoke checklist covering:
+  - tag sync state
+  - incoming receive/apply
+  - gameplay-gated deferred application
+  - outgoing send exactly once per death
+  - echo suppression
+  - reconnect safety
+
+### Validation
+- Touched files remain diagnostics-clean in VS Code.
+- Manual BizHawk validation remains the authoritative next step for parent-issue
+  closure because local pytest execution on this machine is blocked by the repo
+  Python-version gate (`3.11.9` through `3.13.x`, current interpreter `3.14`).
+
 
 ## Issue #56: Gameplay-Active Foundation Gate for Polling and Delivery
 

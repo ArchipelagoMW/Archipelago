@@ -135,6 +135,54 @@ Issue #74 send-focused checks:
 - During rapid send bursts, notifications should rate-limit (max 5 per 2s) and
    later report a suppression summary message.
 
+## DeathLink Smoke Check (Issue #82)
+
+Validate the shipped end-to-end DeathLink contract across AP tag sync, incoming
+receive/apply, outgoing send, and reconnect safety.
+
+### Setup
+1. Generate a seed with DeathLink enabled for at least two connected players.
+2. Launch the KirbyAM BizHawk client with logs visible.
+3. Confirm the client logs one of these on connect:
+   - `KirbyAM: DeathLink enabled`
+   - `KirbyAM: DeathLink disabled`
+4. If DeathLink is disabled in slot-data, confirm no incoming kill apply or
+   outgoing send occurs during the remaining checks.
+
+### Incoming DeathLink
+1. Put Kirby in normal gameplay (not menu/cutscene/transition).
+2. Trigger a DeathLink from another player.
+3. Confirm one local defeat occurs.
+4. Confirm the client logs:
+   - `KirbyAM: applied incoming DeathLink (hp_addr=0x02020FE0)`
+5. Repeat while Kirby is already dead and confirm no extra HP write loop or
+   repeated forced-death behavior occurs.
+
+### Gameplay gate safety
+1. Open a menu or trigger a non-gameplay transition.
+2. Trigger a DeathLink from another player during that state.
+3. Confirm no immediate death occurs during the non-gameplay window.
+4. Return to gameplay-active state and confirm the queued DeathLink applies once.
+
+### Outgoing DeathLink
+1. Restore Kirby to a live gameplay state.
+2. Take one normal in-game death locally.
+3. Confirm exactly one outgoing DeathLink is observed by the linked player.
+4. Confirm repeated frames while already dead do not send duplicates.
+
+### Echo suppression and reconnect
+1. Trigger an incoming DeathLink and confirm the resulting forced death does not
+   immediately echo back as a second outgoing DeathLink.
+2. Reconnect the AP client after a recent DeathLink event.
+3. Confirm the client does not replay a stale forced death on reconnect.
+4. Take one fresh local death after reconnect and confirm outgoing DeathLink
+   still works normally.
+
+### Native address reference
+- `kirby_hp_native`: `0x02020FE0` (`s8`)
+- Evidence: `gKirbys = 0x02020EE0` from `katam/linker.ld`, with `hp` field in
+  `katam/include/kirby.h`
+
 ## Unsafe Delivery Candidate Research (Issue #223)
 
 Issue #223 is currently in research-first mode. Do not assume miniboss or travel
