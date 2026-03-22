@@ -3,7 +3,6 @@ Looks through data object to double-check it makes sense. Will fail for missing 
 duplicate claims and give warnings for unused and unignored locations or warps.
 """
 import logging
-from typing import List
 
 
 def validate_group_maps() -> bool:
@@ -71,18 +70,21 @@ def validate_regions() -> bool:
         if location_name not in claimed_locations:
             warn(f"Kirby & The Amazing Mirror: Location [{location_name}] was not claimed by any region")
 
-    # Optional: Validate that bitfield indices (if present) are unique.
-    bit_to_loc: dict[int, str] = {}
+    # Optional: Validate that bitfield indices (if present) are unique within
+    # their location category/bitfield domain.
+    bit_to_loc_by_category: dict[str, dict[int, str]] = {}
     for loc_key, loc in data.locations.items():
         if loc.bit_index is None:
             continue
-        if loc.bit_index in bit_to_loc and bit_to_loc[loc.bit_index] != loc_key:
+        category_name = getattr(loc.category, "name", str(loc.category))
+        category_bit_map = bit_to_loc_by_category.setdefault(category_name, {})
+        if loc.bit_index in category_bit_map and category_bit_map[loc.bit_index] != loc_key:
             error(
-                "Kirby & The Amazing Mirror: bit_index %s is assigned to multiple locations (%s, %s)"
-                % (loc.bit_index, bit_to_loc[loc.bit_index], loc_key)
+                "Kirby & The Amazing Mirror: category %s bit_index %s is assigned to multiple locations (%s, %s)"
+                % (category_name, loc.bit_index, category_bit_map[loc.bit_index], loc_key)
             )
         else:
-            bit_to_loc[loc.bit_index] = loc_key
+            category_bit_map[loc.bit_index] = loc_key
 
     warn_messages.sort()
     error_messages.sort()

@@ -1,5 +1,32 @@
 # Kirby & The Amazing Mirror (GBA) - Address Policy Notes
 
+## Issue #290: Generation Failure from Global bit_index Collision Check
+
+### Problem
+KirbyAM generation failed in `stage_assert_generate` because `validate_regions()` treated
+all location `bit_index` values as one global namespace. That rule incorrectly rejected
+valid cross-category reuse such as:
+- SHARD bit `0`
+- BOSS_DEFEAT bit `0`
+
+These locations are polled from different bitfield domains, so shared numeric bit indices
+across categories are expected and valid.
+
+### Solution
+Updated `worlds/kirbyam/sanity_check.py` so bit-index uniqueness is enforced per location
+category instead of globally.
+
+The validator now:
+- allows cross-category bit index reuse
+- still fails on duplicate bit indices inside the same category
+- logs category-specific collision messages for easier triage
+
+### Validation
+- Added `worlds/kirbyam/test/test_sanity_check.py`.
+- New tests verify:
+  - cross-category bit index reuse passes validation
+  - same-category bit index collisions fail validation
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.
