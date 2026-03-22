@@ -116,6 +116,7 @@ class NineSolsWorld(World):
                     self.options.chiyou_shop_unlock_sol_seals.value = slot_data.get('chiyou_shop_unlock_sol_seals', 0)
                     self.options.kuafu_extra_inventory_unlock_sol_seals.value = (
                         slot_data.get('kuafu_extra_inventory_unlock_sol_seals', 0))
+                    self.options.chiyou_shop_unlock_sol_seals.value = slot_data.get('randomize_shops', 0)
             return
 
         # generate game-specific randomizations separate from AP items/locations
@@ -180,6 +181,7 @@ class NineSolsWorld(World):
             'kuafu_extra_inventory_unlock_sol_seals',
             'prevent_annoying_runbacks',
             'prevent_weakened_prison_state',
+            'randomize_shops',
         )
         slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
         slot_data["jade_costs"] = self.jade_costs
