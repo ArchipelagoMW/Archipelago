@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- No unreleased changes recorded yet.
+- Wire `death_link` option into KirbyAM slot-data and runtime DeathLink tag synchronization.
 
 ## v0.0.6
 

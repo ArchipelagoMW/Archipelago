@@ -133,7 +133,7 @@ class KirbyAmWorld(World):
     def generate_early(self) -> None:
         # Track generation start
         self._generation_start_time = time.time()
-        log_generation_start(self.player, self.player_name, self.options.as_dict("goal", "shards"))
+        log_generation_start(self.player, self.player_name, self.options.as_dict("goal", "shards", "death_link"))
 
         with generation_stage("generate_early", self.player, self.player_name):
             # If shards are shuffled as items, they must be local to the ROM unless you implement remote shard handling.
@@ -338,9 +338,11 @@ class KirbyAmWorld(World):
         slot_data = self.options.as_dict(
             "goal",
             "shards",
+            "death_link",
             "enemy_copy_ability_randomization",
             "randomize_boss_spawned_ability_grants",
             "randomize_miniboss_ability_grants",
+            toggles_as_bools=True,
         )
         policy = getattr(self, "_enemy_copy_ability_policy", None)
         assert policy is not None, (

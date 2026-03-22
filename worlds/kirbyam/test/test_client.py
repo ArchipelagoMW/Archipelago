@@ -1374,6 +1374,57 @@ async def test_game_watcher_defers_polling_and_new_writes_when_non_gameplay(mock
 
 
 @pytest.mark.asyncio
+async def test_game_watcher_syncs_death_link_enabled_from_slot_data(mock_bizhawk_context):
+    """DeathLink tag state should be enabled when slot_data.death_link is true."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["death_link"] = 1
+
+    with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
+         patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
+         patch.object(client, '_poll_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
+         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
+         patch.object(client, '_deliver_items', new_callable=AsyncMock), \
+         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock):
+        mock_gate.return_value = (True, "gameplay_active", 300)
+        await client.game_watcher(mock_bizhawk_context)
+
+    mock_bizhawk_context.update_death_link.assert_awaited_once_with(True)
+
+
+@pytest.mark.asyncio
+async def test_game_watcher_death_link_sync_is_deduped_until_value_changes(mock_bizhawk_context):
+    """DeathLink tag update should not repeat every frame when slot_data value is unchanged."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["death_link"] = False
+
+    with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
+         patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
+         patch.object(client, '_poll_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
+         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
+         patch.object(client, '_deliver_items', new_callable=AsyncMock), \
+         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock):
+        mock_gate.return_value = (True, "gameplay_active", 300)
+        await client.game_watcher(mock_bizhawk_context)
+        await client.game_watcher(mock_bizhawk_context)
+
+        # Change slot_data runtime value and ensure one additional sync call.
+        mock_bizhawk_context.slot_data["death_link"] = True
+        await client.game_watcher(mock_bizhawk_context)
+
+    assert mock_bizhawk_context.update_death_link.await_count == 2
+    mock_bizhawk_context.update_death_link.assert_any_await(False)
+    mock_bizhawk_context.update_death_link.assert_any_await(True)
+
+
+@pytest.mark.asyncio
 async def test_deliver_items_defers_new_write_when_gated(mock_bizhawk_context):
     """Delivery gating should preserve state and avoid writing a new mailbox item."""
     client = KirbyAmClient()

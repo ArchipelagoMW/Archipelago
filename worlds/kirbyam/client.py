@@ -111,6 +111,9 @@ class KirbyAmClient(BizHawkClient):
         self._send_notify_window_count: int = 0
         self._send_notify_window_suppressed: int = 0
 
+        # DeathLink runtime tag synchronization state
+        self._death_link_enabled: bool | None = None
+
         # Research-first unsafe-delivery candidate probing state (Issue #223)
         self._unsafe_delivery_probe_stream_marker: object = None
         self._last_unsafe_delivery_counter_values: dict[str, int] = {}
@@ -146,6 +149,10 @@ class KirbyAmClient(BizHawkClient):
     def _coerce_bool(value: object, default: bool) -> bool:
         if isinstance(value, bool):
             return value
+        if isinstance(value, int):
+            if value in {0, 1}:
+                return bool(value)
+            return default
         if isinstance(value, str):
             lowered = value.strip().lower()
             if lowered in {"1", "true", "yes", "on"}:
@@ -339,9 +346,11 @@ class KirbyAmClient(BizHawkClient):
         # Only run when connected and slot_data is ready
         if not self._server_session_ready(ctx):
             self._watcher_server_ready = False
+            self._death_link_enabled = None
             return
 
         self._load_notification_settings(ctx)
+        await self._sync_death_link_setting(ctx)
 
         if not self._watcher_server_ready:
             logger.info("KirbyAM: AP session ready; reconnect-safe reconciliation active")
@@ -394,6 +403,22 @@ class KirbyAmClient(BizHawkClient):
 
         # Goal reporting
         await self._maybe_report_goal(ctx, ai_state_override=ai_state)
+
+    async def _sync_death_link_setting(self, ctx: "BizHawkClientContext") -> None:
+        """Mirror slot_data death_link into AP DeathLink tag state with de-dupe."""
+        from CommonClient import logger
+
+        slot_data = getattr(ctx, "slot_data", None)
+        enabled = False
+        if isinstance(slot_data, dict):
+            enabled = self._coerce_bool(slot_data.get("death_link", False), False)
+
+        if self._death_link_enabled is enabled:
+            return
+
+        await ctx.update_death_link(enabled)
+        self._death_link_enabled = enabled
+        logger.info("KirbyAM: DeathLink %s", "enabled" if enabled else "disabled")
 
     async def _runtime_gameplay_state(self, ctx: KirbyAmBizHawkClientContext) -> tuple[bool, str, int | None]:
         """

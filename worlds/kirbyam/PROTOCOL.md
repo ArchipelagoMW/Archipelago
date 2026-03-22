@@ -104,6 +104,7 @@ Server → Client: ConnectionRefused | Connected
 `slot_data` currently includes:
 - `goal` (int): selected goal option.
 - `shards` (int): shard randomization mode.
+- `death_link` (bool): enables/disables AP DeathLink tag synchronization in the client.
 - `enemy_copy_ability_randomization` (int): enemy copy-ability mode (`0=vanilla`, `1=shuffled`, `2=completely_random`).
 - `randomize_boss_spawned_ability_grants` (bool): include/exclude ability-granting boss-spawned objects.
 - `randomize_miniboss_ability_grants` (bool): include/exclude mini-boss ability grants.
