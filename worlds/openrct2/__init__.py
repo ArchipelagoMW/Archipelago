@@ -105,7 +105,13 @@ class OpenRCT2World(World):
         "Thrill Rides": item_info["Thrill Rides"],
         "Water Rides": item_info["Water Rides"],
         "Rides": item_info["Rides"],
-        "Tracked Rides": item_info["tracked_rides"]
+        "Tracked Rides": item_info["tracked_rides"],
+        "Food Stalls": item_info["food stalls"],
+        "Drink Stalls": item_info["drink stalls"],
+        "Souvenir Stalls": item_info["souvenir stalls"],
+        "Scenery with Benches": item_info["scenery_with_benches"],
+        "Scenery with Bins": item_info["scenery_with_bins"],
+        "Scenery with Signs": item_info["scenery_with_signs"]
     }
 
     def __init__(self, multiworld, player: int):
@@ -170,13 +176,6 @@ class OpenRCT2World(World):
 
 
     def create_regions(self) -> None:
-
-        #Okay, I've gotta go to church, so here's my plan when I work on this. First, I need to check how many awards
-        # we're including. Take that number and subtract it from the logic length since it'll no longer be a 
-        # traditional item in the unlock shop. After populating all the other regions, make a new set of regions for
-        #awards. These will have awards you can normally get, and awards that have prereqs. Also, figure out how to
-        #force those locations to not have progression items, only useful, possibly filler. Good luck. Also, comment
-        #everything to not hurt future Colbys little brain.
         
         logic_length = (len(self.item_table)) #Used to calculate the number of levels of the unlock shop
 
@@ -278,8 +277,8 @@ class OpenRCT2World(World):
             elif count == 5:  # 31 total items, we want 18 rides, food, drinks, toilets, and some rules if applicable
                 num_rides = 18
                 add_rule(region_entrance, lambda state: state.has("Toilets", self.player, 1))
-                add_rule(region_entrance, lambda state: state.has("Drink Stall", self.player, 1))
-                add_rule(region_entrance, lambda state: state.has("Food Stall", self.player))
+                add_rule(region_entrance, lambda state: state.has_group("Drink Stalls", self.player, 1))
+                add_rule(region_entrance, lambda state: state.has_group("Food Stalls", self.player, 1))
                 if self.rules[2] == 1:  # If high construction can be disabled
                     add_rule(region_entrance, lambda state: state.has("Allow High Construction", self.player, 1))
                 if self.rules[3] == 1:  # landscape
@@ -290,6 +289,11 @@ class OpenRCT2World(World):
                     add_rule(region_entrance, lambda state: state.has("Cash Machine", self.player, 1))
                 if "First Aid" in self.item_table:
                     add_rule(region_entrance, lambda state: state.has("First Aid", self.player, 1))
+            elif count == 6: # 39 total items, we want to make sure players have benches and bins at this point
+                add_rule(region_entrance, lambda state: state.has_group("Scenery with Benches", self.player, 1))
+                add_rule(region_entrance, lambda state: state.has_group("Scenery with Bins", self.player, 1))
+            elif count == 7: # 47 total items, we want to make sure players have path signs at this point
+                add_rule(region_entrance, lambda state: state.has_group("Scenery with Signs", self.player, 1))
             num_rides = min(num_rides, total_rides)
             add_rule(region_entrance, lambda state, num_rides=num_rides: state.has_group("Rides", self.player, num_rides))
             count += 1
@@ -312,7 +316,6 @@ class OpenRCT2World(World):
             OpenRCT2Location(self.player, "Most Confusing Layout in the Multiverse", 
             self.location_name_to_id["Most Confusing Layout in the Multiverse"], negative_awards_region)
             ]
-            #Alrighty future Colby, you've gotta ensure every location in the region only has traps. I couldn't figure it out before bed. HAVE FUN!
             for location in negative_awards_region.locations:
                 add_item_rule(location, lambda item: item.trap)
                 location.progress_type = LocationProgressType.EXCLUDED # Can't have those pesky progression traps here.
@@ -349,10 +352,11 @@ class OpenRCT2World(World):
             add_rule(self.multiworld.get_location("Best Roller Coasters in the Multiverse", self.player), 
             lambda state: state.has_group("Roller Coasters", self.player, 6))
             add_rule(self.multiworld.get_location("Best Food in the Multiverse", self.player), 
-            lambda state: state.has("Food Stall", self.player, 4))
+            lambda state: state.has_group("Food Stalls", self.player, 4))
             add_rule(self.multiworld.get_location("Best Toilets in the Multiverse", self.player), 
             lambda state: state.has("Toilets", self.player, 1))
             #This is going to bite me in the butt when I discover a scenario that only has 1 water ride
+            #Future Colby update: It bit me in the butt
             add_rule(self.multiworld.get_location("Best Water Rides in the Multiverse", self.player), 
             lambda state: state.has_group("Water Rides", self.player, 1))
             add_rule(self.multiworld.get_location("Best Custom Designed Rides in the Multiverse", self.player), 
@@ -771,7 +775,11 @@ class OpenRCT2World(World):
 
     def create_item(self, item: str) -> OpenRCT2Item:
         classification = ItemClassification.useful
-        if item in item_info["Rides"] or item in item_info["progression_rules"] or item in item_info["stalls"]:
+        progressive_items = [
+            "Rides", "progression_rules", "stalls", "food stalls", "drink stalls",
+            "souvenir stalls", "scenery_with_benches", "scenery_with_bins", "scenery_with_signs"
+        ]
+        if any(item in item_info[key] for key in progressive_items):
             classification = ItemClassification.progression
         if item in item_info["filler_items"]:
             classification = ItemClassification.filler
