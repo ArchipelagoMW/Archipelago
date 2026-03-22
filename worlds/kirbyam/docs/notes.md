@@ -518,6 +518,35 @@ Implemented the AP-side transport infrastructure for boss-defeat locations:
   inspection.  That step decouples the shard grant and enables real boss-defeat
   location checks in gameplay.
 
+## Issue #75: DeathLink Runtime Receive/Apply and Local Death Send
+
+### Problem
+KirbyAM had DeathLink tag synchronization wired from slot-data, but runtime
+behavior was incomplete: incoming DeathLink events were not applied to gameplay,
+and local alive->dead transitions were not sent.
+
+### Solution
+Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
+- Queue incoming `Bounced` packets tagged `DeathLink`.
+- Apply incoming DeathLink only while gameplay-active by writing
+  `kirby_hp_native` to zero.
+- Detect local alive->dead transitions from `kirby_hp_native` and send one
+  outgoing DeathLink per transition.
+- Suppress immediate outgoing echo after applying incoming DeathLink.
+
+### Address evidence
+- `d:\kirbyam-extras\katam\linker.ld`: `gKirbys = 0x02020EE0`
+- `d:\kirbyam-extras\katam\include\kirby.h`: `struct Kirby` contains `s8 hp`
+- Selected native signal address: `kirby_hp_native = 0x02020FE0`
+
+### Validation
+- Added DeathLink runtime tests in `worlds/kirbyam/test/test_client.py`:
+  - incoming queue behavior
+  - incoming HP-zero apply behavior
+  - local alive->dead send exactly once
+  - incoming-apply echo suppression
+
+
 ## Issue #56: Gameplay-Active Foundation Gate for Polling and Delivery
 
 ### Problem

@@ -124,6 +124,7 @@ def mock_bizhawk_context() -> Mock:
 
     ctx.send_msgs = AsyncMock(side_effect=send_msgs_side_effect)  # Mock the async send_msgs method
     ctx.update_death_link = AsyncMock(return_value=None)
+    ctx.send_death = AsyncMock(return_value=None)
     TEST_LOGGER.debug(
         "client.context created slot=%s team=%s address=%s checked_locations=%s items_received=%s",
         ctx.slot,

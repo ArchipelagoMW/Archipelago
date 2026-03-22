@@ -77,6 +77,18 @@
         }
       ]
     },
+    "death_link_runtime": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "kirby_hp_native",
+          "address": "0x02020FE0",
+          "width": "s8",
+          "source": "katam include/kirby.h (struct Kirby hp field) + katam linker.ld (gKirbys base 0x02020EE0)",
+          "verification": "Integrated for runtime DeathLink receive/apply (HP->0) and local alive->dead transition detection; pending repeatable BizHawk confirmation per promotion_criteria"
+        }
+      ]
+    },
     "miniboss_encounters": {
       "status": "candidate",
       "entries": [

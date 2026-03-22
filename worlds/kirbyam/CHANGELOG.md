@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Wire `death_link` option into KirbyAM slot-data and runtime DeathLink tag synchronization.
+- Add DeathLink runtime receive/apply flow via native Kirby HP (`0x02020FE0`) and local alive->dead outgoing send handling.
 
 ## v0.0.6
 

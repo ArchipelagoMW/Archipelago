@@ -21,6 +21,8 @@ _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
 _MAILBOX_ACK_TIMEOUT_FRAMES = 30
 _AI_STATE_NORMAL = 300
+_KIRBY_HP_ADDR_KEY = "kirby_hp_native"
+_KIRBY_HP_READ_WIDTH = 1
 _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
     ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
     ("mirra_encounters_native", "mirra_encounters"),
@@ -113,6 +115,10 @@ class KirbyAmClient(BizHawkClient):
 
         # DeathLink runtime tag synchronization state
         self._death_link_enabled: bool | None = None
+        self._incoming_death_link_pending: bool = False
+        self._last_incoming_death_link_time: float | None = None
+        self._last_local_alive_state: bool | None = None
+        self._suppress_next_local_death_send: bool = False
 
         # Research-first unsafe-delivery candidate probing state (Issue #223)
         self._unsafe_delivery_probe_stream_marker: object = None
@@ -144,6 +150,10 @@ class KirbyAmClient(BizHawkClient):
         self._boss_probe_stream_marker = None
         self._unsafe_delivery_probe_stream_marker = None
         self._last_unsafe_delivery_counter_values = {}
+        self._incoming_death_link_pending = False
+        self._last_incoming_death_link_time = None
+        self._last_local_alive_state = None
+        self._suppress_next_local_death_send = False
 
     @staticmethod
     def _coerce_bool(value: object, default: bool) -> bool:
@@ -347,6 +357,10 @@ class KirbyAmClient(BizHawkClient):
         if not self._server_session_ready(ctx):
             self._watcher_server_ready = False
             self._death_link_enabled = None
+            self._incoming_death_link_pending = False
+            self._last_incoming_death_link_time = None
+            self._last_local_alive_state = None
+            self._suppress_next_local_death_send = False
             return
 
         self._load_notification_settings(ctx)
@@ -383,6 +397,9 @@ class KirbyAmClient(BizHawkClient):
             logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
             self._last_runtime_gate_reason = None
 
+        await self._apply_pending_death_link(ctx)
+        await self._poll_and_send_local_death_link(ctx)
+
         # Location checks (real RAM polling)
         await self._poll_locations(ctx)
 
@@ -418,7 +435,100 @@ class KirbyAmClient(BizHawkClient):
 
         await ctx.update_death_link(enabled)
         self._death_link_enabled = enabled
+        if not enabled:
+            self._incoming_death_link_pending = False
+            self._last_incoming_death_link_time = None
+            self._last_local_alive_state = None
+            self._suppress_next_local_death_send = False
         logger.info("KirbyAM: DeathLink %s", "enabled" if enabled else "disabled")
+
+    @staticmethod
+    def _s8(value: bytes) -> int:
+        if not value:
+            return 0
+        return int.from_bytes(value[:1], "little", signed=True)
+
+    def _queue_incoming_death_link(self, args: dict) -> None:
+        """Queue an incoming DeathLink event for safe application during gameplay-active ticks."""
+        if self._death_link_enabled is not True:
+            return
+
+        tags = args.get("tags")
+        if not isinstance(tags, (list, tuple, set)) or "DeathLink" not in tags:
+            return
+
+        payload = args.get("data")
+        if not isinstance(payload, dict):
+            return
+
+        event_time_raw = payload.get("time")
+        event_time: float | None = None
+        if isinstance(event_time_raw, (int, float)):
+            event_time = float(event_time_raw)
+        elif isinstance(event_time_raw, str):
+            try:
+                event_time = float(event_time_raw)
+            except ValueError:
+                event_time = None
+
+        if (
+            event_time is not None
+            and self._last_incoming_death_link_time is not None
+            and event_time <= self._last_incoming_death_link_time
+        ):
+            return
+
+        if event_time is not None:
+            self._last_incoming_death_link_time = event_time
+        self._incoming_death_link_pending = True
+
+    async def _apply_pending_death_link(self, ctx: "BizHawkClientContext") -> None:
+        """Apply queued DeathLink by zeroing Kirby HP once gameplay is active."""
+        if self._death_link_enabled is not True or not self._incoming_death_link_pending:
+            return
+
+        hp_addr = self._native_addr(_KIRBY_HP_ADDR_KEY)
+        if hp_addr is None:
+            return
+
+        current_hp_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(hp_addr, _KIRBY_HP_READ_WIDTH, "System Bus")]))[0]
+        current_hp = self._s8(current_hp_raw)
+        if current_hp <= 0:
+            self._incoming_death_link_pending = False
+            self._last_local_alive_state = False
+            return
+
+        from CommonClient import logger
+
+        await bizhawk.write(ctx.bizhawk_ctx, [(hp_addr, (0).to_bytes(1, "little"), "System Bus")])
+        self._incoming_death_link_pending = False
+        self._suppress_next_local_death_send = True
+        logger.info("KirbyAM: applied incoming DeathLink (hp_addr=0x%08X)", hp_addr)
+
+    async def _poll_and_send_local_death_link(self, ctx: "BizHawkClientContext") -> None:
+        """Send DeathLink once per alive->dead transition, with loop suppression for received links."""
+        if self._death_link_enabled is not True:
+            return
+
+        hp_addr = self._native_addr(_KIRBY_HP_ADDR_KEY)
+        if hp_addr is None:
+            return
+
+        hp_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(hp_addr, _KIRBY_HP_READ_WIDTH, "System Bus")]))[0]
+        hp_value = self._s8(hp_raw)
+        alive_now = hp_value > 0
+
+        if self._last_local_alive_state is None:
+            self._last_local_alive_state = alive_now
+            return
+
+        if self._last_local_alive_state and not alive_now:
+            if self._suppress_next_local_death_send:
+                self._suppress_next_local_death_send = False
+            else:
+                await ctx.send_death("Kirby was defeated.")
+
+        self._last_local_alive_state = alive_now
 
     async def _runtime_gameplay_state(self, ctx: KirbyAmBizHawkClientContext) -> tuple[bool, str, int | None]:
         """
@@ -1066,5 +1176,7 @@ class KirbyAmClient(BizHawkClient):
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if not self._notification_settings_loaded:
             self._load_notification_settings(ctx)
+        if cmd == "Bounced":
+            self._queue_incoming_death_link(args)
         if cmd == "PrintJSON":
             self._maybe_emit_send_notification(ctx, args)

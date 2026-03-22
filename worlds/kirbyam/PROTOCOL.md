@@ -46,6 +46,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
+| 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
 
 ## Item ID Ranges
 
@@ -110,6 +111,12 @@ Server → Client: ConnectionRefused | Connected
 - `randomize_miniboss_ability_grants` (bool): include/exclude mini-boss ability grants.
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Crash` and `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
+
+DeathLink runtime behavior contract:
+- Incoming DeathLink packets (`Bounced` with `DeathLink` tag) are queued and only applied when gameplay-active gate is true.
+- Application writes `kirby_hp_native` to `0` to trigger local defeat.
+- Outgoing DeathLink uses alive->dead transitions on `kirby_hp_native` and sends once per transition.
+- Incoming-application echo suppression prevents immediate re-broadcast loops.
 ```
 
 **Preconditions before gameplay watchers run:**

@@ -37,3 +37,6 @@ class KirbyAmBizHawkClientContext(Protocol):
 
     async def update_death_link(self, death_link: bool) -> None:
         ...
+
+    async def send_death(self, death_text: str = "") -> None:
+        ...
