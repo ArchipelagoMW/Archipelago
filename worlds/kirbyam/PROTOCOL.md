@@ -100,6 +100,15 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 Client → Server: Connect with game="Kirby & The Amazing Mirror", slot="<player>"
 Server → Client: ConnectionRefused | Connected
                  (with items_received, checked_locations, slot_data)
+
+`slot_data` currently includes:
+- `goal` (int): selected goal option.
+- `shards` (int): shard randomization mode.
+- `enemy_copy_ability_randomization` (int): enemy copy-ability mode (`0=vanilla`, `1=shuffled`, `2=completely_random`).
+- `randomize_boss_spawned_ability_grants` (bool): include/exclude ability-granting boss-spawned objects.
+- `randomize_miniboss_ability_grants` (bool): include/exclude mini-boss ability grants.
+- `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Crash` and `Wait`).
+- `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
 ```
 
 **Preconditions before gameplay watchers run:**

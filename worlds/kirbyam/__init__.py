@@ -12,6 +12,10 @@ from BaseClasses import ItemClassification, LocationProgressType, MultiWorld, Tu
 from worlds.AutoWorld import WebWorld, World
 
 from .client import KirbyAmClient  # type: ignore  # Required to register BizHawk client
+from .ability_randomization import (
+    VALID_ENEMY_COPY_ABILITIES,
+    build_enemy_copy_ability_policy,
+)
 from .data import LocationCategory
 from .data import data as kirby_data
 from .generation_logging import (
@@ -26,7 +30,13 @@ from .generation_logging import (
 from .groups import ITEM_GROUPS, LOCATION_GROUPS
 from .items import KirbyAmItem, create_item_label_to_code_map, get_item_classification
 from .locations import KirbyAmLocation, create_location_label_to_id_map
-from .options import OPTION_GROUPS, Goal, KirbyAmOptions, RandomizeShards
+from .options import (
+    OPTION_GROUPS,
+    EnemyCopyAbilityRandomization,
+    Goal,
+    KirbyAmOptions,
+    RandomizeShards,
+)
 from .rom import KirbyAmProcedurePatch, write_tokens
 
 if TYPE_CHECKING:
@@ -98,6 +108,7 @@ class KirbyAmWorld(World):
 
     # Track generation timing
     _generation_start_time: float
+    _enemy_copy_ability_policy: dict[str, Any]
 
     # Generation stages
     _FILLER_ITEM_WEIGHTS: ClassVar[tuple[tuple[str, int], ...]] = (
@@ -132,6 +143,39 @@ class KirbyAmWorld(World):
                 logger.info(f"[P{self.player}] Shards marked as local items (shuffle mode)")
             else:
                 logger.info(f"[P{self.player}] Shards mode: {self.options.shards.current_key}")
+
+            mode = int(self.options.enemy_copy_ability_randomization.value)
+            randomize_boss_spawned = bool(self.options.randomize_boss_spawned_ability_grants.value)
+            randomize_miniboss = bool(self.options.randomize_miniboss_ability_grants.value)
+            self._enemy_copy_ability_policy = build_enemy_copy_ability_policy(
+                self.random,
+                mode,
+                randomize_boss_spawned,
+                randomize_miniboss,
+            )
+            if mode == EnemyCopyAbilityRandomization.option_vanilla:
+                logger.info(
+                    "[P%s] Enemy copy-ability randomization: vanilla (%s whitelist entries)",
+                    self.player,
+                    len(VALID_ENEMY_COPY_ABILITIES),
+                )
+            elif mode == EnemyCopyAbilityRandomization.option_shuffled:
+                logger.info(
+                    "[P%s] Enemy copy-ability randomization: shuffled (%s whitelist entries)",
+                    self.player,
+                    len(VALID_ENEMY_COPY_ABILITIES),
+                )
+            else:
+                logger.info(
+                    "[P%s] Enemy copy-ability randomization: completely_random (%s whitelist entries)",
+                    self.player,
+                    len(VALID_ENEMY_COPY_ABILITIES),
+                )
+                logger.debug(
+                    "[P%s] Enemy copy-ability policy: %s",
+                    self.player,
+                    self._enemy_copy_ability_policy,
+                )
 
     # Create world regions
     def create_regions(self) -> None:
@@ -291,10 +335,21 @@ class KirbyAmWorld(World):
     # Helper method to fill slot data
     def fill_slot_data(self) -> dict[str, Any]:
         # Slot data needed by client. Keep minimal while you iterate.
-        return self.options.as_dict(
+        slot_data = self.options.as_dict(
             "goal",
             "shards",
+            "enemy_copy_ability_randomization",
+            "randomize_boss_spawned_ability_grants",
+            "randomize_miniboss_ability_grants",
         )
+        policy = getattr(self, "_enemy_copy_ability_policy", None)
+        assert policy is not None, (
+            "Enemy copy ability policy must be initialized before fill_slot_data is called."
+        )
+        allowed_abilities = policy.get("allowed_abilities", VALID_ENEMY_COPY_ABILITIES)
+        slot_data["enemy_copy_ability_whitelist"] = list(allowed_abilities)
+        slot_data["enemy_copy_ability_policy"] = dict(policy)
+        return slot_data
 
     # Helper methods to create items and events
     def create_item(self, name: str) -> KirbyAmItem:

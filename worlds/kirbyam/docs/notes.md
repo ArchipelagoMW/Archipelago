@@ -704,6 +704,35 @@ This issue only establishes naming and evidence scaffolding. Ability items are
 still absent from the pool, so all five helpers intentionally resolve to true
 until a later issue introduces actual ability acquisition logic.
 
+## Issue #111: Enemy Copy-Ability Randomization with Whitelist
+
+### Problem
+Enemy copy abilities were still fully vanilla/static, and there was no
+seed-deterministic mapping artifact that downstream client/payload work could
+consume safely. We also needed a conservative whitelist boundary so generation
+never emits unknown or invalid ability names.
+
+### Solution
+Added deterministic enemy copy-ability policy generation in
+`worlds/kirbyam/ability_randomization.py` with three modes:
+- `vanilla`: identity mapping
+- `shuffled`: deterministic per-enemy-type assignment
+- `completely_random`: deterministic per-grant-event assignment
+
+The validated whitelist explicitly excludes `Crash` and `Wait`.
+
+The world now emits the following slot-data contract:
+- `enemy_copy_ability_randomization`
+- `randomize_boss_spawned_ability_grants`
+- `randomize_miniboss_ability_grants`
+- `enemy_copy_ability_whitelist`
+- `enemy_copy_ability_policy`
+
+### Deliberate Scope Limit
+This issue establishes generation-time mapping and protocol exposure only. It
+does not patch statue randomization paths (#209) and does not yet introduce
+ability-item ownership gating (#84).
+
 ## Issue #41: Multi-Item Filler Pool (Phase 1)
 
 ### Problem
