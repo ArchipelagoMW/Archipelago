@@ -546,6 +546,21 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #313: Remove Circular Committed kirbyam.apworld Artifact
+
+### Problem
+`worlds/kirbyam/kirbyam.apworld` was tracked in git as a 10 MB renamed ZIP of the `worlds/kirbyam/` directory itself, creating circular/redundant storage. CI already rebuilds the artifact fresh on every run via `build.py --skip-patch`, so the committed copy was never consumed by CI.
+
+### Solution
+- Removed `worlds/kirbyam/kirbyam.apworld` from git tracking via `git rm --cached`.
+- Added `*.apworld` to `worlds/kirbyam/.gitignore` to prevent it from being accidentally re-committed.
+- Updated the `kirbyam-apworld.yml` CI step name from "Build kirbyam.apworld from committed patch data" to "Build kirbyam.apworld from source" (no logic change — CI was already building fresh).
+- `kirbyam-rom-patch-smoke.yml` was already correct: it calls `build.py` before checking for the artifact.
+
+### Validation
+- `git ls-files '*.apworld'` returns empty after the change.
+- CI workflows untouched in logic; the step in `kirbyam-apworld.yml` still builds and validates the artifact.
+
 ## Issue #307: Release Integrity Checks (Changelog/Tag/Apworld Coherence)
 
 ### Problem

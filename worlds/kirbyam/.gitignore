@@ -3,5 +3,6 @@
 *.bin
 *.gba
 *.log
+*.apworld
 kirby_ap_payload/.vscode/*
 kirby_ap_payload/.idea/*

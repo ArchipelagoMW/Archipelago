@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove `worlds/kirbyam/kirbyam.apworld` from source control; add `*.apworld` to `.gitignore` to prevent re-committing the build artifact.
 - Add release integrity checks: changelog section verification and `--changelog` gate in the release metadata script and CI.
 - Wire `death_link` option into KirbyAM slot-data and runtime DeathLink tag synchronization.
 - Add DeathLink runtime receive/apply flow via native Kirby HP (`0x02020FE0`) and local alive->dead outgoing send handling.

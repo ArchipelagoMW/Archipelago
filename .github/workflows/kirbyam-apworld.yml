@@ -50,7 +50,7 @@ jobs:
             --changelog "worlds/kirbyam/CHANGELOG.md" \
             --github-output "${GITHUB_OUTPUT}"
 
-      - name: Build kirbyam.apworld from committed patch data
+      - name: Build kirbyam.apworld from source
         working-directory: worlds/kirbyam
         run: |
           python build.py --skip-patch
