@@ -363,7 +363,7 @@ class World(metaclass=AutoWorldRegister):
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
-            return self.__class__.settings
+            return getattr(self.__class__, item)
         raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
@@ -429,6 +429,23 @@ class World(metaclass=AutoWorldRegister):
         Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
+
+    def finalize_multiworld(self) -> None:
+        """
+        Optional Method that is called after fill and progression balancing.
+        This is the last stage of generation where worlds may change logically relevant data,
+        such as item placements and connections. To not break assumptions,
+        only ever increase accessibility, never decrease it.
+        """
+        pass
+
+    def pre_output(self):
+        """
+        Optional method that is called before output generation.
+        Items and connections are not meant to be moved anymore,
+        anything that would affect logical spheres is forbidden at this point.
+        """
+        pass
 
     def generate_output(self, output_directory: str) -> None:
         """

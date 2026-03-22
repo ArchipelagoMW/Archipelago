@@ -123,6 +123,7 @@ class TestBase(unittest.TestCase):
             call_all(multiworld, "pre_fill")
             distribute_items_restrictive(multiworld)
             call_all(multiworld, "post_fill")
+            call_all(multiworld, "finalize_multiworld")
             self.assertTrue(multiworld.can_beat_game(CollectionState(multiworld)), f"seed = {multiworld.seed}")
 
         for game_name, world_type in AutoWorldRegister.world_types.items():
