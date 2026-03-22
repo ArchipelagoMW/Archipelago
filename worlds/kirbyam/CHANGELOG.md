@@ -5,6 +5,7 @@
 - Wire `death_link` option into KirbyAM slot-data and runtime DeathLink tag synchronization.
 - Add DeathLink runtime receive/apply flow via native Kirby HP (`0x02020FE0`) and local alive->dead outgoing send handling.
 - Add end-to-end DeathLink manual validation guidance and remove stale not-ready option wording.
+- Add slot_data contract parity tests to prevent drift between PROTOCOL.md and emitted world slot_data fields.
 
 ## v0.0.6
 

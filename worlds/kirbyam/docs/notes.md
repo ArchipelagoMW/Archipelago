@@ -546,6 +546,24 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #300: slot_data Protocol Contract Parity Tests
+
+### Problem
+`slot_data` fields are defined in both implementation (`fill_slot_data`) and
+protocol docs (`PROTOCOL.md`). Without a parity gate, those can drift silently.
+
+### Solution
+Added `worlds/kirbyam/test/test_slot_data_contract.py` with contract tests that:
+- parse documented `slot_data` keys from `PROTOCOL.md`
+- emit slot_data via `KirbyAmWorld.fill_slot_data(...)`
+- assert exact key parity between documentation and emitted payload
+- assert enemy randomization contract field shapes are present
+
+### Validation
+- Targeted local pytest run on the new contract tests.
+- These tests are part of the standard KirbyAM test suite and therefore covered
+  by existing CI test jobs.
+
 ## Issue #82: DeathLink End-to-End Closure
 
 ### Problem
