@@ -78,6 +78,7 @@
   "BOSS_DEFEAT_1": {
     "label": "Mustard Mountain - Boss Defeat",
     "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "default_item": "MAP_MUSTARD_MOUNTAIN",
     "tags": ["Boss"],
     "bit_index": 0,
     "category": "BOSS_DEFEAT"
@@ -85,6 +86,7 @@
   "BOSS_DEFEAT_2": {
     "label": "Moonlight Mansion - Boss Defeat",
     "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "default_item": "MAP_MOONLIGHT_MANSION",
     "tags": ["Boss"],
     "bit_index": 1,
     "category": "BOSS_DEFEAT"
@@ -92,6 +94,7 @@
   "BOSS_DEFEAT_3": {
     "label": "Candy Constellation - Boss Defeat",
     "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "default_item": "MAP_CANDY_CONSTELLATION",
     "tags": ["Boss"],
     "bit_index": 2,
     "category": "BOSS_DEFEAT"
@@ -99,6 +102,7 @@
   "BOSS_DEFEAT_4": {
     "label": "Olive Ocean - Boss Defeat",
     "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "default_item": "MAP_OLIVE_OCEAN",
     "tags": ["Boss"],
     "bit_index": 3,
     "category": "BOSS_DEFEAT"
@@ -106,6 +110,7 @@
   "BOSS_DEFEAT_5": {
     "label": "Peppermint Palace - Boss Defeat",
     "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "default_item": "VITALITY_COUNTER_1",
     "tags": ["Boss"],
     "bit_index": 4,
     "category": "BOSS_DEFEAT"
@@ -113,6 +118,7 @@
   "BOSS_DEFEAT_6": {
     "label": "Cabbage Cavern - Boss Defeat",
     "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "default_item": "VITALITY_COUNTER_2",
     "tags": ["Boss"],
     "bit_index": 5,
     "category": "BOSS_DEFEAT"
@@ -120,6 +126,7 @@
   "BOSS_DEFEAT_7": {
     "label": "Carrot Castle - Boss Defeat",
     "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "default_item": "VITALITY_COUNTER_3",
     "tags": ["Boss"],
     "bit_index": 6,
     "category": "BOSS_DEFEAT"
@@ -127,6 +134,7 @@
   "BOSS_DEFEAT_8": {
     "label": "Radish Ruins - Boss Defeat",
     "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "default_item": "VITALITY_COUNTER_4",
     "tags": ["Boss"],
     "bit_index": 7,
     "category": "BOSS_DEFEAT"

@@ -43,5 +43,77 @@
     "label": "Radish Ruins - Mirror Shard",
     "classification": "PROGRESSION",
     "tags": ["Shard", "Unique"]
+  },
+  "MAP_MUSTARD_MOUNTAIN": {
+    "label": "Map - Mustard Mountain",
+    "classification": "USEFUL",
+    "item_id": 3860010,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_MOONLIGHT_MANSION": {
+    "label": "Map - Moonlight Mansion",
+    "classification": "USEFUL",
+    "item_id": 3860011,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_CANDY_CONSTELLATION": {
+    "label": "Map - Candy Constellation",
+    "classification": "USEFUL",
+    "item_id": 3860012,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_OLIVE_OCEAN": {
+    "label": "Map - Olive Ocean",
+    "classification": "USEFUL",
+    "item_id": 3860013,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_PEPPERMINT_PALACE": {
+    "label": "Map - Peppermint Palace",
+    "classification": "USEFUL",
+    "item_id": 3860014,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_CABBAGE_CAVERN": {
+    "label": "Map - Cabbage Cavern",
+    "classification": "USEFUL",
+    "item_id": 3860015,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_CARROT_CASTLE": {
+    "label": "Map - Carrot Castle",
+    "classification": "USEFUL",
+    "item_id": 3860016,
+    "tags": ["Map", "Useful"]
+  },
+  "MAP_RADISH_RUINS": {
+    "label": "Map - Radish Ruins",
+    "classification": "USEFUL",
+    "item_id": 3860017,
+    "tags": ["Map", "Useful"]
+  },
+  "VITALITY_COUNTER_1": {
+    "label": "Vitality Counter I",
+    "classification": "USEFUL",
+    "item_id": 3860018,
+    "tags": ["Vitality", "Useful"]
+  },
+  "VITALITY_COUNTER_2": {
+    "label": "Vitality Counter II",
+    "classification": "USEFUL",
+    "item_id": 3860019,
+    "tags": ["Vitality", "Useful"]
+  },
+  "VITALITY_COUNTER_3": {
+    "label": "Vitality Counter III",
+    "classification": "USEFUL",
+    "item_id": 3860020,
+    "tags": ["Vitality", "Useful"]
+  },
+  "VITALITY_COUNTER_4": {
+    "label": "Vitality Counter IV",
+    "classification": "USEFUL",
+    "item_id": 3860021,
+    "tags": ["Vitality", "Useful"]
   }
 }

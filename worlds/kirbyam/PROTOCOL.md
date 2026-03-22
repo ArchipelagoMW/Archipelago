@@ -54,7 +54,9 @@ All item IDs use **BASE_OFFSET = 3860000** for safety (avoids collision with Arc
 |-------------------|----------|-------------|
 | 1_UP              | 3860001  | Single extra life |
 | SHARD_1 .. SHARD_8 | 3860002 - 3860009 | Mirror shards (8 items) |
-| *Reserved*        | 3860010+ | Future items (doors, abilities, etc.) |
+| MAP_MUSTARD_MOUNTAIN .. MAP_RADISH_RUINS | 3860010 - 3860017 | Useful map rewards |
+| VITALITY_COUNTER_1 .. VITALITY_COUNTER_4 | 3860018 - 3860021 | Useful vitality rewards |
+| *Reserved*        | 3860022+ | Future items (doors, abilities, etc.) |
 
 ## Location ID Ranges
 

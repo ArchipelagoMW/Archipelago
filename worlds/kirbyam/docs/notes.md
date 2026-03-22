@@ -581,3 +581,42 @@ Added temporary workflow-level early opt-in for migration confidence:
   confidence checks, then remove it after runner defaults are confirmed stable.
 - Track action hardening (full commit SHA pinning) as a separate follow-up once
   the major-version migration is verified.
+
+## Issue #119: Useful, Non-Filler Item Tier (Maps + Vitality)
+
+### Problem
+KirbyAM's non-progression pool was dominated by low-value filler (`1 Up`) while
+progression remained concentrated in mirror shards.
+
+### Solution
+Added a first-pass useful item tier without introducing new progression rules:
+- map useful items:
+  - `Map - Mustard Mountain`
+  - `Map - Moonlight Mansion`
+  - `Map - Candy Constellation`
+  - `Map - Olive Ocean`
+  - `Map - Peppermint Palace`
+  - `Map - Cabbage Cavern`
+  - `Map - Carrot Castle`
+  - `Map - Radish Ruins`
+- vitality useful items:
+  - `Vitality Counter I`
+  - `Vitality Counter II`
+  - `Vitality Counter III`
+  - `Vitality Counter IV`
+
+Pool composition wiring for practical quantities:
+- `BOSS_DEFEAT_1..8` locations now have explicit `default_item` values that map
+  to the new useful item set (4 map + 4 vitality).
+
+Generation behavior retained:
+- progression logic remains shard/goal-based and unchanged.
+- no new progression gates were introduced by these useful items.
+
+### Logging and Validation
+- Added generation-time item pool classification summary logging for
+  useful/filler/progression counts.
+- Added tests to validate:
+  - useful catalog contains both map and vitality categories
+  - boss-defeat default pool is composed of useful items and includes both
+    categories
