@@ -27,6 +27,23 @@ The validator now:
   - cross-category bit index reuse passes validation
   - same-category bit index collisions fail validation
 
+## Issue #292: VS Code Build Tasks Must Use Payload Directory CWD
+
+### Problem
+The `Build payload` and `Patch Kirby ROM` VS Code tasks relied on implicit working
+directory behavior. Running from repository root could fail because `make` and
+`patch_rom.py` expect `worlds/kirbyam/kirby_ap_payload` as the current directory.
+
+### Solution
+Added explicit `options.cwd` values to task definitions:
+- root workspace tasks now run from `${workspaceFolder}/worlds/kirbyam/kirby_ap_payload`
+- payload-local workspace tasks now run from `${workspaceFolder}`
+
+### Validation
+- Root `Build payload` task now resolves the payload `Makefile` deterministically.
+- Root `Patch Kirby ROM` task now resolves `patch_rom.py` and local ROM filenames
+  without depending on active editor file location.
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.
