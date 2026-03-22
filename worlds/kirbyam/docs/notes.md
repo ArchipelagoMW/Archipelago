@@ -564,6 +564,30 @@ Added `worlds/kirbyam/test/test_slot_data_contract.py` with contract tests that:
 - These tests are part of the standard KirbyAM test suite and therefore covered
   by existing CI test jobs.
 
+## Issue #302: Reconnect Chaos Tests for BizHawk Client Idempotency
+
+### Problem
+Reconnect behavior is safety-critical for live sessions but prior coverage was
+mostly per-subsystem unit checks rather than stateful multi-cycle chaos tests.
+
+### Solution
+Added dedicated reconnect chaos tests in
+`worlds/kirbyam/test/test_reconnect_chaos.py` that simulate repeated
+connect/disconnect cycles during:
+- location polling
+- mailbox item delivery
+- goal reporting
+
+The tests assert:
+- no duplicate location sends after server acknowledgement
+- item delivery resumes correctly after reconnect without replaying already-
+  pending first-item writes
+- goal location/status flow remains idempotent across reconnect cycles
+
+### Validation
+- Targeted local pytest for `test_reconnect_chaos.py`.
+- Additional local run including existing reconnect-related client tests.
+
 ## Issue #82: DeathLink End-to-End Closure
 
 ### Problem
