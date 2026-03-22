@@ -28,6 +28,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 
+from .data import data
 from .generation_logging import logger
 from .options import Goal
 
@@ -52,10 +53,69 @@ _GOAL_LOCATION_LABELS = {
 }
 
 _DMK_DIMENSION_MIRROR_EVENT = "Defeat Dark Meta Knight (Dimension Mirror)"
+_ABILITY_GATE_STATUS_VALUES = frozenset({"confirmed", "semantic_candidate", "unconfirmed"})
+
+# These gates intentionally default to True until ability items/statues become
+# part of the item pool. The names match the planned logic categories from #37.
+_ABILITY_GATE_PLACEHOLDER_SOURCES = {
+    "CanCutRopes": frozenset({"Cutter", "Sword", "Cupid", "Smash", "Master"}),
+    "CanBreakBlocks": frozenset({"Hammer", "Stone", "Throw", "Burning", "Missile", "UFO", "Smash", "Master"}),
+    "CanUseMini": frozenset({"Mini"}),
+    "CanLightFuses": frozenset({"Fire", "Burning", "Bomb", "Laser", "UFO", "Master"}),
+    "CanPoundPegs": frozenset({"Hammer", "Stone", "Smash", "Master"}),
+}
 
 
 def _has_all_shards(state: CollectionState, player: int) -> bool:
     return state.has_from_list_unique(_SHARD_ITEM_LABELS, player, len(_SHARD_ITEM_LABELS))
+
+
+def _allow_pending_ability_gate(_state: CollectionState, _player: int, _gate_name: str) -> bool:
+    return True
+
+
+def can_cut_ropes(state: CollectionState, player: int) -> bool:
+    return _allow_pending_ability_gate(state, player, "CanCutRopes")
+
+
+def can_break_blocks(state: CollectionState, player: int) -> bool:
+    return _allow_pending_ability_gate(state, player, "CanBreakBlocks")
+
+
+def can_use_mini(state: CollectionState, player: int) -> bool:
+    return _allow_pending_ability_gate(state, player, "CanUseMini")
+
+
+def can_light_fuses(state: CollectionState, player: int) -> bool:
+    return _allow_pending_ability_gate(state, player, "CanLightFuses")
+
+
+def can_pound_pegs(state: CollectionState, player: int) -> bool:
+    return _allow_pending_ability_gate(state, player, "CanPoundPegs")
+
+
+CanCutRopes = can_cut_ropes
+CanBreakBlocks = can_break_blocks
+CanUseMini = can_use_mini
+CanLightFuses = can_light_fuses
+CanPoundPegs = can_pound_pegs
+
+
+ABILITY_GATE_RULES = {
+    "CanCutRopes": can_cut_ropes,
+    "CanBreakBlocks": can_break_blocks,
+    "CanUseMini": can_use_mini,
+    "CanLightFuses": can_light_fuses,
+    "CanPoundPegs": can_pound_pegs,
+}
+
+
+def get_region_ability_gate_annotations() -> dict[str, dict[str, dict[str, object]]]:
+    annotations: dict[str, dict[str, dict[str, object]]] = {}
+    for region_name, region_data in data.regions.items():
+        if region_data.ability_gates:
+            annotations[region_name] = region_data.ability_gates
+    return annotations
 
 
 def set_rules(world: KirbyAmWorld) -> None:

@@ -5,8 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from unittest.mock import patch
 
+from ..data import data
 from ..options import Goal
-from ..rules import set_rules
+from ..rules import ABILITY_GATE_RULES, _ABILITY_GATE_STATUS_VALUES, get_region_ability_gate_annotations, set_rules
 
 
 @dataclass
@@ -187,4 +188,40 @@ def test_dmk_event_present_in_dimension_mirror_region() -> None:
     assert _DMK_EVENT in events, (
         f"{_DMK_EVENT!r} event must be declared in REGION_DIMENSION_MIRROR/MAIN events in areas.json"
     )
+
+
+def test_ability_gate_helpers_default_true_without_ability_items() -> None:
+    state = _FakeState()
+
+    for gate_name, gate_rule in ABILITY_GATE_RULES.items():
+        assert gate_rule(state, 1), f"{gate_name} should default to True until ability items exist"
+
+
+def test_region_ability_gate_annotations_load_for_future_big_chest_rollout() -> None:
+    annotations = get_region_ability_gate_annotations()
+
+    expected_regions = {
+        "REGION_MUSTARD_MOUNTAIN/MAIN",
+        "REGION_MOONLIGHT_MANSION/MAIN",
+        "REGION_CANDY_CONSTELLATION/MAIN",
+        "REGION_OLIVE_OCEAN/MAIN",
+        "REGION_CABBAGE_CAVERN/MAIN",
+        "REGION_CARROT_CASTLE/MAIN",
+        "REGION_RADISH_RUINS/MAIN",
+    }
+    assert expected_regions.issubset(annotations)
+
+    for region_name in expected_regions:
+        region_annotations = annotations[region_name]
+        assert region_annotations == data.regions[region_name].ability_gates
+        for gate_name, gate_annotation in region_annotations.items():
+            assert gate_name in ABILITY_GATE_RULES
+            assert gate_annotation["status"] in _ABILITY_GATE_STATUS_VALUES
+            assert gate_annotation["applies_to"] == ["future_major_chest_locations"]
+            assert gate_annotation["evidence"]
+
+    assert annotations["REGION_OLIVE_OCEAN/MAIN"]["CanBreakBlocks"]["status"] == "confirmed"
+    assert annotations["REGION_OLIVE_OCEAN/MAIN"]["CanPoundPegs"]["status"] == "confirmed"
+    assert annotations["REGION_CABBAGE_CAVERN/MAIN"]["CanBreakBlocks"]["status"] == "confirmed"
+    assert annotations["REGION_CABBAGE_CAVERN/MAIN"]["CanUseMini"]["status"] == "semantic_candidate"
 

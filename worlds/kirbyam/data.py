@@ -10,6 +10,7 @@ import pkgutil
 from dataclasses import dataclass
 from enum import IntEnum
 from importlib import resources
+from pathlib import Path
 from typing import Any, Dict, FrozenSet, List, NamedTuple, Optional, Set, Tuple, Union
 
 import orjson
@@ -34,6 +35,10 @@ def _list_data_files(subdir: str) -> list[str]:
 
     Returns file names only (not full paths).
     """
+    source_dir = Path(__file__).with_name("data") / subdir
+    if source_dir.is_dir():
+        return sorted(path.name for path in source_dir.iterdir() if path.is_file())
+
     try:
         base = resources.files(__name__).joinpath("data", subdir)
         if not base.is_dir():
@@ -112,6 +117,7 @@ class RegionData:
     warps: list[str]
     locations: list[str]
     events: list[EventData]
+    ability_gates: dict[str, dict[str, Any]]
 
     def __init__(self, name: str) -> None:
         self.name = name
@@ -119,6 +125,7 @@ class RegionData:
         self.warps = []
         self.locations = []
         self.events = []
+        self.ability_gates = {}
 
 
 class Warp:
@@ -413,6 +420,11 @@ def _init() -> None:
         for ev in region_def.get("events", []):
             if isinstance(ev, str):
                 region.events.append(EventData(ev, region_name))
+
+        # Ability-gate annotations for future chest/transition rollout.
+        for gate_name, gate_def in region_def.get("ability_gates", {}).items():
+            if isinstance(gate_name, str) and isinstance(gate_def, dict):
+                region.ability_gates[gate_name] = dict(gate_def)
 
         # Warps (encoded strings, optional)
         for encoded_warp in region_def.get("warps", []):

@@ -620,3 +620,39 @@ Generation behavior retained:
   - useful catalog contains both map and vitality categories
   - boss-defeat default pool is composed of useful items and includes both
     categories
+
+## Issue #37: Ability-Related Location Logic Stubs
+
+### Problem
+Phase 2 major chest rollout needs stable logic categories for copy-ability gates,
+but the current AP item pool does not yet randomize ability items or ability
+statues. That meant future chest routing had nowhere to record verified gate
+evidence without accidentally blocking current generation.
+
+### Solution
+Added five placeholder ability-gate helpers in `worlds/kirbyam/rules.py`:
+- `CanCutRopes`
+- `CanBreakBlocks`
+- `CanUseMini`
+- `CanLightFuses`
+- `CanPoundPegs`
+
+Current contract:
+- every helper defaults to `True`
+- current shard/goal logic remains unchanged
+- no new progression restrictions are enforced in shipped seeds yet
+
+Added structured `ability_gates` annotations to
+`worlds/kirbyam/data/regions/areas.json` and preserved them in `RegionData` so
+future major chest logic can consume them directly.
+
+### Evidence Status Policy
+- `confirmed`: explicit object evidence already seen in room analysis
+- `semantic_candidate`: geometry/transition evidence suggests the gate, but live
+  verification is still needed
+- `unconfirmed`: unresolved semantic hint tracked for later review only
+
+### Seed-Safe Scope
+This issue only establishes naming and evidence scaffolding. Ability items are
+still absent from the pool, so all five helpers intentionally resolve to true
+until a later issue introduces actual ability acquisition logic.
