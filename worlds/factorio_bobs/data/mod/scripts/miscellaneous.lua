@@ -1,5 +1,5 @@
 
-local general = require("Archipelago.general")
+local general = require("Archipelago/general")
 local library = require("libs/lib")
 
 

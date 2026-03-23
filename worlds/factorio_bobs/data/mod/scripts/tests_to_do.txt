@@ -51,3 +51,13 @@ Single player:
 
     make a removed technology that does not exist (but does get put in the list) and watch if the Log file contains an error.
 
+
+Item handling:
+
+Single player:
+
+    send an Item
+    recieve an Item
+    recieve an trap
+
+    get some samples

@@ -58,7 +58,7 @@ function general.technologies.hide_from_player() -- returns a list of all the te
     {% endfor %}
     }
 end
-function general.technologies.progressive ()
+function general.technologies.progressive()
     --has an test in final-fixes that will throw out the name of the place it is erroring at.
     return {{ variable_to_lua(progressive_technology_table) }}
 end

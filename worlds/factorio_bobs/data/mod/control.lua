@@ -22,8 +22,6 @@ for name, lib in pairs(libs) do
     end
 end
 
-log(" control is having the following as the filter: "..serpent.line(on_entity_died_filter))
-
 local function on_entity_died(event)
     for _, action in pairs(on_entity_died_functions) do
         action(event)

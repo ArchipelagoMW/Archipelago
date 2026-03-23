@@ -1,5 +1,5 @@
 
-local general = require("Archipelago.general")
+local general = require("Archipelago/general")
 local library = require("libs/lib")
 
 local death_link_setting = settings.global[general.mod_setting_names.death_link]
@@ -92,8 +92,6 @@ lib.filtered_events = {
 }
 lib.on_entity_died = {type = "character"} --a list of all names that need to be filtered for the on_entity_died event
 lib.on_entity_died_function = on_entity_died --a list of all names that need to be filtered for the on_entity_died event
-
-log(" Death link is adding the following to the on_entity_died filter: "..serpent.line(lib.on_entity_died))
 
 lib.on_init = on_init
 --lib.on_configuration_changed = on_configuration_changed

@@ -1,4 +1,5 @@
 
+local general = require("Archipelago/general")
 local library = {}
 
 function library.get_any_stack_size (name)
@@ -167,7 +168,6 @@ end
 function library.string_starts_with(str, start)
     return str:sub(1, #start) == start
 end
-
 
 function library.is_valid_ap_force(force)
     for _, force_name in pairs(general.player_forces) do
