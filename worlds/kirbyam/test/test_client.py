@@ -26,6 +26,22 @@ async def test_validate_rom_accepts_patched_kirby_header(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
+async def test_validate_rom_reads_auth_from_rom_domain_offset(mock_bizhawk_context):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x01' + (b'\x00' * 15)],
+        ]
+
+        assert await client.validate_rom(mock_bizhawk_context) is True
+
+    auth_addr = data.rom_addresses["gArchipelagoInfo"]
+    assert mock_read.await_args_list[1].args[1] == [(auth_addr, 16, "ROM")]
+
+
+@pytest.mark.asyncio
 async def test_validate_rom_rejects_unpatched_kirby_rom(mock_bizhawk_context, caplog):
     client = KirbyAmClient()
     mock_bizhawk_context.rom_hash = KirbyAmProcedurePatch.hash
