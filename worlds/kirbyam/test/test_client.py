@@ -87,6 +87,25 @@ async def test_validate_rom_rejects_empty_patch_metadata(mock_bizhawk_context, c
 
 
 @pytest.mark.asyncio
+async def test_validate_rom_rejects_empty_patch_metadata_logs_once(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x00' * 16],
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x00' * 16],
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    assert caplog.text.count("KirbyAM patch metadata was missing") == 1
+
+
+@pytest.mark.asyncio
 async def test_poll_locations_empty_bitfield(mock_bizhawk_context):
     """Test _poll_locations with no shards collected."""
     client = KirbyAmClient()

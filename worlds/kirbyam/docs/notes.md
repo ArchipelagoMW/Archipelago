@@ -142,6 +142,31 @@ This PR establishes the mutation-testing workflow only. Baseline mutation score 
 2. Investigate surviving mutants for test gap patterns
 3. Optionally create CI workflow for periodic automated mutation scoring
 
+## Issue #353: Open Patch Base-ROM Reprompt and Metadata Error Spam
+
+### Problem
+KirbyAM Open Patch could launch BizHawk using a stale/invalid configured base ROM path
+without forcing a replacement prompt when the file existed but failed ROM hash validation.
+
+When the resulting loaded ROM had an all-zero `gArchipelagoInfo` auth block, the client
+logged the same metadata-missing error repeatedly, creating log spam during validation retries.
+
+### Solution
+- Added KirbyAM-specific preflight validation in BizHawk Open Patch flow:
+  - validates configured base ROM for `.apkirbyam` before patching
+  - prompts for ROM re-selection in GUI mode on hash/path mismatch
+  - saves replacement path and revalidates before continuing
+- Added duplicate-log suppression in KirbyAM ROM validation:
+  - metadata-missing error now logs once per persistent failure condition
+  - repeated retries no longer flood logs with identical messages
+
+### Validation
+- Added `worlds/kirbyam/test/test_bizhawk_patch_preflight.py`
+  - non-Kirby patch: no-op preflight
+  - Kirby patch hash mismatch: browse/save/revalidate path exercised
+- Added `worlds/kirbyam/test/test_client.py::test_validate_rom_rejects_empty_patch_metadata_logs_once`
+  - repeated empty-metadata validation attempts emit one user-facing error
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.
