@@ -9,8 +9,7 @@ import logging
 
 from typing_extensions import override
 
-from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Item, CollectionState, Entrance, Tutorial
+from BaseClasses import LocationProgressType, MultiWorld, Item, CollectionState, Entrance, Tutorial
 
 from .gen_data import GenData
 from .logic import ZillionLogicCache
@@ -19,12 +18,13 @@ from .options import ZillionOptions, validate, z_option_groups
 from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
-from .item import ZillionItem
+from .item import ZillionItem, get_classification
 from .patch import ZillionPatch
 
 from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
+from zilliandomizer.map_gen.region_maker import DEAD_END_SUFFIX
 from zilliandomizer.options import Chars
 
 from worlds.AutoWorld import World, WebWorld
@@ -59,7 +59,7 @@ class ZillionWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["beauxq"]
+        ["beauxq"],
     )]
 
     option_groups = z_option_groups
@@ -119,8 +119,13 @@ class ZillionWorld(World):
     """
     my_locations: list[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
-    slot_data_ready: threading.Event
-    """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
+    finalized_gen_data: GenData | None
+    """ Finalized generation data needed by `generate_output` and by `fill_slot_data`. """
+    item_locations_finalization_lock: threading.Lock
+    """
+    This lock is used in `generate_output` and `fill_slot_data` to ensure synchronized access to `finalized_gen_data`,
+    so that whichever is run first can finalize the item locations while the other waits.
+    """
     logic_cache: ZillionLogicCache | None = None
 
     def __init__(self, world: MultiWorld, player: int) -> None:
@@ -128,7 +133,8 @@ class ZillionWorld(World):
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
-        self.slot_data_ready = threading.Event()
+        self.finalized_gen_data = None
+        self.item_locations_finalization_lock = threading.Lock()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -162,11 +168,12 @@ class ZillionWorld(World):
     def create_regions(self) -> None:
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
-        p = self.player
-        logic_cache = ZillionLogicCache(p, self.zz_system.randomizer, self.id_to_zz_item)
+        player = self.player
+        logic_cache = ZillionLogicCache(player, self.zz_system.randomizer, self.id_to_zz_item)
         self.logic_cache = logic_cache
         w = self.multiworld
         self.my_locations = []
+        dead_end_locations: list[ZillionLocation] = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
         # low probability that place_canister_gun_reqs() results in empty 1st sphere
@@ -185,7 +192,7 @@ class ZillionWorld(World):
         all_regions: dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
-            all_regions[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
+            all_regions[here_name] = ZillionRegion(zz_r, here_name, here_name, player, w)
             self.multiworld.regions.append(all_regions[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
@@ -219,15 +226,32 @@ class ZillionWorld(World):
                     here.locations.append(loc)
                     self.my_locations.append(loc)
 
+                    if ((
+                        zz_here.name.endswith(DEAD_END_SUFFIX)
+                    ) or (
+                        (self.options.map_gen.value != self.options.map_gen.option_full) and
+                        (loc.name in self.options.priority_dead_ends.vanilla_dead_ends)
+                    ) or (
+                        loc.name in self.options.priority_dead_ends.always_dead_ends
+                    )):
+                        dead_end_locations.append(loc)
+
             for zz_dest in zz_here.connections.keys():
                 dest_name = "Menu" if zz_dest.name == "start" else zz_reg_name_to_reg_name(zz_dest.name)
                 dest = all_regions[dest_name]
-                exit_ = Entrance(p, f"{here_name} to {dest_name}", here)
+                exit_ = Entrance(player, f"{here_name} to {dest_name}", here)
                 here.exits.append(exit_)
                 exit_.connect(dest)
 
                 queue.append(zz_dest)
             done.add(here.name)
+        if self.options.priority_dead_ends.value:
+            self.options.priority_locations.value |= {loc.name for loc in dead_end_locations}
+
+        # main location name is an alias
+        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations["main"].name]
+        self.multiworld.get_location(main_loc_name, player).place_locked_item(self.create_item("Win"))
+        self.multiworld.completion_condition[player] = lambda state: state.has("Win", player)
 
     @override
     def create_items(self) -> None:
@@ -252,17 +276,6 @@ class ZillionWorld(World):
                 # One of the 3 rescues will not be in the pool and its zz_item will be 'empty'.
                 self.logger.debug(f"Zillion Items: {item_name}  1")
                 self.multiworld.itempool.append(self.create_item(item_name))
-
-    @override
-    def generate_basic(self) -> None:
-        assert self.zz_system.randomizer, "generate_early hasn't been called"
-        # main location name is an alias
-        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations["main"].name]
-
-        self.multiworld.get_location(main_loc_name, self.player)\
-            .place_locked_item(self.create_item("Win"))
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Win", self.player)
 
     @staticmethod
     def stage_generate_basic(multiworld: MultiWorld, *args: Any) -> None:  # noqa: ANN401
@@ -305,6 +318,19 @@ class ZillionWorld(World):
 
         self.zz_system.post_fill()
 
+    def finalize_item_locations_thread_safe(self) -> GenData:
+        """
+        Call self.finalize_item_locations() and cache the result in a thread-safe manner so that either
+        `generate_output` or `fill_slot_data` can finalize item locations without concern for which of the two functions
+        is called first.
+        """
+        # The lock is acquired when entering the context manager and released when exiting the context manager.
+        with self.item_locations_finalization_lock:
+            # If generation data has yet to be finalized, finalize it.
+            if self.finalized_gen_data is None:
+                self.finalized_gen_data = self.finalize_item_locations()
+        return self.finalized_gen_data
+
     def finalize_item_locations(self) -> GenData:
         """
         sync zilliandomizer item locations with AP item locations
@@ -333,7 +359,7 @@ class ZillionWorld(World):
                 z_loc.zz_loc.item = multi_item
                 multi_items[z_loc.zz_loc.name] = (
                     z_loc.item.name,
-                    self.multiworld.get_player_name(z_loc.item.player)
+                    self.multiworld.get_player_name(z_loc.item.player),
                 )
         # debug_zz_loc_ids.sort()
         # for name, id_ in debug_zz_loc_ids.items():
@@ -363,12 +389,7 @@ class ZillionWorld(World):
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use multiworld.random here.
         If you need any last-second randomization, use self.random instead."""
-        try:
-            gen_data = self.finalize_item_locations()
-        except BaseException:
-            raise
-        finally:
-            self.slot_data_ready.set()
+        gen_data = self.finalize_item_locations_thread_safe()
 
         out_file_base = self.multiworld.get_out_file_name_base(self.player)
 
@@ -392,9 +413,7 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        self.slot_data_ready.wait()
-        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
-        game = self.zz_system.get_game()
+        game = self.finalize_item_locations_thread_safe().zz_game
         return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
 
     # end of ordered Main.py calls
@@ -410,12 +429,8 @@ class ZillionWorld(World):
             self.logger.warning("warning: called `create_item` without calling `generate_early` first")
         assert self.id_to_zz_item, "failed to get item maps"
 
-        classification = ItemClassification.filler
         zz_item = self.id_to_zz_item[item_id]
-        if zz_item.required:
-            classification = ItemClassification.progression
-            if not zz_item.is_progression:
-                classification = ItemClassification.progression_skip_balancing
+        classification = get_classification(name, zz_item, self._item_counts)
 
         z_item = ZillionItem(name, classification, item_id, self.player, zz_item)
         return z_item

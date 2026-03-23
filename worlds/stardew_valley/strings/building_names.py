@@ -14,9 +14,20 @@ class Building:
     stable = "Stable"
     well = "Well"
     shipping_bin = "Shipping Bin"
+    farm_house = "Farm House"
     kitchen = "Kitchen"
     kids_room = "Kids Room"
     cellar = "Cellar"
+    pet_bowl = "Pet Bowl"
+
+
+class WizardBuilding:
+    earth_obelisk = "Earth Obelisk"
+    water_obelisk = "Water Obelisk"
+    desert_obelisk = "Desert Obelisk"
+    island_obelisk = "Island Obelisk"
+    junimo_hut = "Junimo Hut"
+    gold_clock = "Gold Clock"
 
 
 class ModBuilding:

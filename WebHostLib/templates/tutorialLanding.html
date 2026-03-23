@@ -3,14 +3,32 @@
 {% block head %}
     {% include 'header/grassHeader.html' %}
     <title>Archipelago Guides</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tutorialLanding.css") }}" />
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tutorialLanding.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tutorialLanding.css") }}"/>
 {% endblock %}
 
 {% block body %}
-    <div id="tutorial-landing" class="markdown" data-game="{{ game }}" data-file="{{ file }}" data-lang="{{ lang }}">
-        <h1 id="page-title">Archipelago Guides</h1>
-        <p id="loading">Loading...</p>
+    <div id="tutorial-landing" class="markdown">
+    <h1>Archipelago Guides</h1>
+    {% for world_name, world_type in worlds.items() %}
+        <h2 id="{{ world_type.game | urlencode }}">{{ world_type.game }}</h2>
+        {% for tutorial_name, tutorial_data in tutorials[world_name].items() %}
+            <h3>{{ tutorial_name }}</h3>
+            <p>{{ tutorial_data.description }}</p>
+            <p>This guide is available in the following languages:</p>
+            <ul>
+                {% for file_name, file_data in tutorial_data.files.items() %}
+                    <li>
+                        <a href="{{ url_for("tutorial", game=world_name, file=file_name) }}">{{ file_data.language }}</a>
+                        by
+                        {% for author in file_data.authors %}
+                            {{ author }}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% endfor %}
     </div>
-{%  endblock %}
+{% endblock %}

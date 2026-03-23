@@ -7,4 +7,3 @@ class Sapling:
     pomegranate = "Pomegranate Sapling"
     banana = "Banana Sapling"
     mango = "Mango Sapling"
-    tea = "Tea Sapling"

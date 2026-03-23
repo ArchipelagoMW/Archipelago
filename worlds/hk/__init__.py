@@ -7,21 +7,21 @@ import itertools
 import operator
 from collections import defaultdict, Counter
 
-logger = logging.getLogger("Hollow Knight")
-
-from .Items import item_table, lookup_type_to_names, item_name_groups
-from .Regions import create_regions
+from .Items import item_table, item_name_groups
 from .Rules import set_rules, cost_terms, _hk_can_beat_thk, _hk_siblings_ending, _hk_can_beat_radiance
 from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
     shop_to_option, HKOptions, GrubHuntGoal
-from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
+from .ExtractedData import locations, starts, multi_locations, event_names, item_effects, connectors, \
+    vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, CollectionState
+from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, \
+    CollectionState
 from worlds.AutoWorld import World, LogicMixin, WebWorld
 
 from settings import Group, Bool
+
+logger = logging.getLogger("Hollow Knight")
 
 
 class HollowKnightSettings(Group):
@@ -154,13 +154,23 @@ class HKWeb(WebWorld):
         ["JoaoVictor-FA"]
     )
 
-    tutorials = [setup_en, setup_pt_br]
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["GreenMarco", "Panto UwUr"]
+    )
+
+    tutorials = [setup_en, setup_pt_br, setup_es]
+    game_info_languages = ["en", "es"]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
 
 class HKWorld(World):
-    """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
+    """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface,
     searching for riches, or glory, or answers to old secrets.
 
     As the enigmatic Knight, you’ll traverse the depths, unravel its mysteries and conquer its evils.
@@ -179,7 +189,7 @@ class HKWorld(World):
 
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
-    cached_filler_items = {}
+    cached_filler_items: typing.List[str]
     grub_count: int
     grub_player_count: typing.Dict[int, int]
 
@@ -191,6 +201,7 @@ class HKWorld(World):
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
+        self.cached_filler_items = []
 
     def generate_early(self):
         options = self.options
@@ -209,7 +220,7 @@ class HKWorld(World):
         # defaulting so completion condition isn't incorrect before pre_fill
         self.grub_count = (
             46 if options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]
-            else options.GrubHuntGoal
+            else options.GrubHuntGoal.value
             )
         self.grub_player_count = {self.player: self.grub_count}
 
@@ -218,6 +229,11 @@ class HKWorld(World):
         wp = self.options.WhitePalace
         if wp <= WhitePalace.option_nopathofpain:
             exclusions.update(path_of_pain_locations)
+            exclusions.update((
+                "Soul_Totem-Path_of_Pain",
+                "Lore_Tablet-Path_of_Pain_Entrance",
+                "Journal_Entry-Seal_of_Binding",
+                ))
         if wp <= WhitePalace.option_kingfragment:
             exclusions.update(white_palace_checks)
         if wp == WhitePalace.option_exclude:
@@ -226,12 +242,14 @@ class HKWorld(World):
                 # If charms are randomized, this will be junk-filled -- so transitions and events are not progression
                 exclusions.update(white_palace_transitions)
                 exclusions.update(white_palace_events)
+            exclusions.update(item_name_groups["PalaceJournal"])
+            exclusions.update(item_name_groups["PalaceLore"])
+            exclusions.update(item_name_groups["PalaceTotem"])
         return exclusions
 
     def create_regions(self):
         menu_region: Region = create_region(self.multiworld, self.player, 'Menu')
         self.multiworld.regions.append(menu_region)
-        # wp_exclusions = self.white_palace_exclusions()
 
         # check for any goal that godhome events are relevant to
         all_event_names = event_names.copy()
@@ -241,21 +259,17 @@ class HKWorld(World):
 
         # Link regions
         for event_name in sorted(all_event_names):
-            #if event_name in wp_exclusions:
-            #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
             loc.place_locked_item(HKItem(event_name,
-                                         True, #event_name not in wp_exclusions,
+                                         True,
                                          None, "Event", self.player))
             menu_region.locations.append(loc)
         for entry_transition, exit_transition in connectors.items():
-            #if entry_transition in wp_exclusions:
-            #    continue
             if exit_transition:
                 # if door logic fulfilled -> award vanilla target as event
                 loc = HKLocation(self.player, entry_transition, None, menu_region)
                 loc.place_locked_item(HKItem(exit_transition,
-                                             True, #exit_transition not in wp_exclusions,
+                                             True,
                                              None, "Event", self.player))
                 menu_region.locations.append(loc)
 
@@ -292,7 +306,10 @@ class HKWorld(World):
             if item_name in junk_replace:
                 item_name = self.get_filler_item_name()
 
-            item = self.create_item(item_name) if not vanilla or location_name == "Start" or self.options.AddUnshuffledLocations else self.create_event(item_name)
+            item = (self.create_item(item_name)
+                    if not vanilla or location_name == "Start" or self.options.AddUnshuffledLocations
+                    else self.create_event(item_name)
+                    )
 
             if location_name == "Start":
                 if item_name in randomized_starting_items:
@@ -347,8 +364,8 @@ class HKWorld(World):
             randomized = True
             _add("Elevator_Pass", "Elevator_Pass", randomized)
 
-        for shop, locations in self.created_multi_locations.items():
-            for _ in range(len(locations), getattr(self.options, shop_to_option[shop]).value):
+        for shop, shop_locations in self.created_multi_locations.items():
+            for _ in range(len(shop_locations), getattr(self.options, shop_to_option[shop]).value):
                 self.create_location(shop)
                 unfilled_locations += 1
 
@@ -358,7 +375,7 @@ class HKWorld(World):
 
         # Add additional shop items, as needed.
         if additional_shop_items > 0:
-            shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
+            shops = [shop for shop, shop_locations in self.created_multi_locations.items() if len(shop_locations) < 16]
             if not self.options.EggShopSlots:  # No eggshop, so don't place items there
                 shops.remove('Egg_Shop')
 
@@ -380,8 +397,8 @@ class HKWorld(World):
         self.sort_shops_by_cost()
 
     def sort_shops_by_cost(self):
-        for shop, locations in self.created_multi_locations.items():
-            randomized_locations = list(loc for loc in locations if not loc.vanilla)
+        for shop, shop_locations in self.created_multi_locations.items():
+            randomized_locations = [loc for loc in shop_locations if not loc.vanilla]
             prices = sorted(
                 (loc.costs for loc in randomized_locations),
                 key=lambda costs: (len(costs),) + tuple(costs.values())
@@ -405,7 +422,7 @@ class HKWorld(World):
             return {k: v for k, v in weights.items() if v}
 
         random = self.random
-        hybrid_chance = getattr(self.options, f"CostSanityHybridChance").value
+        hybrid_chance = getattr(self.options, "CostSanityHybridChance").value
         weights = {
             data.term: getattr(self.options, f"CostSanity{data.option}Weight").value
             for data in cost_terms.values()
@@ -493,7 +510,11 @@ class HKWorld(World):
         worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.Goal in ["any", "grub_hunt"]]
         if worlds:
             grubs = [item for item in multiworld.get_items() if item.name == "Grub"]
-        all_grub_players = [world.player for world in worlds if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]]
+        all_grub_players = [
+            world.player
+            for world in worlds
+            if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]
+            ]
 
         if all_grub_players:
             group_lookup = defaultdict(set)
@@ -668,8 +689,8 @@ class HKWorld(World):
                 ):
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
             else:
-                for shop_name, locations in hk_world.created_multi_locations.items():
-                    for loc in locations:
+                for shop_name, shop_locations in hk_world.created_multi_locations.items():
+                    for loc in shop_locations:
                         spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
 
     def get_multi_location_name(self, base: str, i: typing.Optional[int]) -> str:
@@ -679,7 +700,7 @@ class HKWorld(World):
         return f"{base}_{i}"
 
     def get_filler_item_name(self) -> str:
-        if self.player not in self.cached_filler_items:
+        if not self.cached_filler_items:
             fillers = ["One_Geo", "Soul_Refill"]
             exclusions = self.white_palace_exclusions()
             for group in (
@@ -689,8 +710,8 @@ class HKWorld(World):
                 if getattr(self.options, group):
                     fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
                                    exclusions)
-            self.cached_filler_items[self.player] = fillers
-        return self.random.choice(self.cached_filler_items[self.player])
+            self.cached_filler_items = fillers
+        return self.random.choice(self.cached_filler_items)
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, location_names=None) -> Region:

@@ -1,7 +1,4 @@
-from typing import Union
-
 from .base_logic import BaseLogic, BaseLogicMixin
-from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import True_
 from ..strings.calendar_names import Weekday
 
@@ -12,7 +9,7 @@ class TravelingMerchantLogicMixin(BaseLogicMixin):
         self.traveling_merchant = TravelingMerchantLogic(*args, **kwargs)
 
 
-class TravelingMerchantLogic(BaseLogic[Union[TravelingMerchantLogicMixin, ReceivedLogicMixin]]):
+class TravelingMerchantLogic(BaseLogic):
 
     def has_days(self, number_days: int = 1):
         if number_days <= 0:

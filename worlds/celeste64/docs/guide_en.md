@@ -12,6 +12,12 @@
 
 1. Download the above release and extract it.
 
+## Installation Procedures (Linux and Steam Deck)
+
+1. Download the above release and extract it.
+
+2. Add Celeste64.exe to Steam as a Non-Steam Game. In the properties for it on Steam, set it to use Proton as the compatibility tool. Launch the game through Steam in order to run it.
+
 ## Joining a MultiWorld Game
 
 1. Before launching the game, edit the `AP.json` file in the root of the Celeste 64 install.
@@ -33,5 +39,3 @@ An Example `AP.json` file:
 	"Password": ""
 }
 ```
-
-

@@ -68,7 +68,7 @@ class Setting:
 
 
 class Settings:
-    def __init__(self, ap_options):
+    def __init__(self, settings_dict):
         self.__all = [
             Setting('seed', 'Main', '<', 'Seed', placeholder='Leave empty for random seed', default="", multiworld=False,
                 description="""For multiple people to generate the same randomization result, enter the generated seed number here.
@@ -162,8 +162,8 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
 [Hero] Switch version hero mode, double damage, no heart/fairy drops.
 [One hit KO] You die on a single hit, always."""),
             Setting('steal', 'Gameplay', 't', 'Stealing from the shop',
-                options=[('always', 'a', 'Always'), ('never', 'n', 'Never'), ('default', '', 'Normal')], default='default',
-                description="""Effects when you can steal from the shop. Stealing is bad and never in logic.
+                options=[('inlogic', 'a', 'In logic'), ('disabled', 'n', 'Disabled'), ('outoflogic', '', 'Out of logic')], default='outoflogic',
+                description="""Effects when you can steal from the shop and if it is in logic.
 [Normal] requires the sword before you can steal.
 [Always] you can always steal from the shop
 [Never] you can never steal from the shop."""),
@@ -178,6 +178,14 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
                 description='Replaces the hints from owl statues with additional randomized items'),
             Setting('superweapons', 'Special', 'q', 'Enable super weapons', default=False,
                 description='All items will be more powerful, faster, harder, bigger stronger. You name it.'),
+            Setting('trendygame', 'Special', 'a', 'Trendy Game', description="",
+                options=[('easy', 'e', 'Easy'), ('normal', 'n', 'Normal'), ('hard', 'h', 'Hard'), ('harder', 'r', 'Harder'), ('hardest', 't', 'Hardest'), ('impossible', 'i', 'Impossible')], default='normal'),
+            Setting('warps', 'Special', 'a', 'Warps', description="",
+                options=[('vanilla', 'v', 'Vanilla'), ('improved', 'i', 'Improved'), ('improvedadditional', 'a', 'Improved Additional')], default='vanilla'),
+            Setting('shufflenightmarekeys', 'Special', 'a', 'Shuffle Nightmare Keys', description="",
+                options=[('originaldungeon', '0', 'Original Dungeon'), ('owndungeons', '1', 'Own Dungeons'), ('ownworld', '2', 'Own World'), ('anyworld', '3', 'Any World'), ('differentworld', '4', 'Different World')], default="originaldungeon"),
+            Setting('shufflesmallkeys', 'Special', 'a', 'Shuffle Small Keys', description="",
+                options=[('originaldungeon', '0', 'Original Dungeon'), ('owndungeons', '1', 'Own Dungeons'), ('ownworld', '2', 'Own World'), ('anyworld', '3', 'Any World'), ('differentworld', '4', 'Different World')], default="originaldungeon"),
             Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
                 description='Adds that the select button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.',
                 aesthetic=True),
@@ -192,7 +200,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
             Setting('nagmessages', 'User options', 'S', 'Show nag messages', default=False,
                 description='Enables the nag messages normally shown when touching stones and crystals',
                 aesthetic=True),
-            Setting('gfxmod', 'User options', 'c', 'Graphics', default='',
+            Setting('gfxmod', 'User options', 'c', 'Graphics', default=False,
                 description='Generally affects at least Link\'s sprite, but can alter any graphics in the game',
                 aesthetic=True),
             Setting('linkspalette', 'User options', 'C', "Link's color",
@@ -202,25 +210,31 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
 [Normal] color of link depends on the tunic.
 [Green/Yellow/Red/Blue] forces link into one of these colors.
 [?? A/B/C/D] colors of link are usually inverted and color depends on the area you are in."""),
+            Setting('palette', 'User options', 'a', 'Palette', description="",
+                options=[('normal', 'n', 'Normal'), ('1bit', '1', '1 Bit'), ('2bit', '2', '2 Bit'), ('greyscale', 'g', 'Greyscale'), ('pink', 'p', 'Pink'), ('inverted', 'i', 'Inverted')], default='normal', aesthetic=True),
             Setting('music', 'User options', 'M', 'Music', options=[('', '', 'Default'), ('random', 'r', 'Random'), ('off', 'o', 'Disable')], default='',
                 description="""
 [Random] Randomizes overworld and dungeon music'
 [Disable] no music in the whole game""",
                 aesthetic=True),
+            Setting('musicchange', 'User options', 'a', 'Music Change Condition', description="",
+                options=[('always', 'a', 'Always'), ('sword', 's', 'Sword')], default='always', aesthetic=True),
+            Setting('bootscontrols', 'User options', 'a', 'Boots Controls', description="",
+                options=[('vanilla', 'v', 'Vanilla'), ('bracelet', 'p', 'Bracelet'), ('pressa', 'a', 'Press A'), ('pressb', 'b', 'Press B')], default='vanilla', aesthetic=True),
+            Setting('foreignitemicons', 'User options', 'a', 'Foreign Item Icons', description="",
+                options=[('guessbyname', 'g', 'Guess By Name'), ('indicateprogression', 'p', 'Indicate Progression')], default="guessbyname", aesthetic=True),
+            Setting('aptitlescreen', 'User options', 'a', 'AP Title Screen', description="", default=True),
+            Setting('textshuffle', 'User options', 'a', 'Text Shuffle', description="", default=False),
         ]
         self.__by_key = {s.key: s for s in self.__all}
 
-        # Make sure all short keys are unique
-        short_keys = set()
-        for s in self.__all:
-            assert s.short_key not in short_keys, s.label
-            short_keys.add(s.short_key)
-            self.ap_options = ap_options
+        # don't worry about unique short keys for AP
+        #short_keys = set()
+        #for s in self.__all:
+        #    assert s.short_key not in short_keys, s.label
+        #    short_keys.add(s.short_key)
 
-        for option in self.ap_options.values():
-            if not hasattr(option, 'to_ladxr_option'):
-                continue
-            name, value = option.to_ladxr_option(self.ap_options)
+        for name, value in settings_dict.items():
             if value == "true":
                 value = 1
             elif value == "false":
@@ -286,7 +300,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
         if self.goal in ("bingo", "bingo-full"):
             req("overworld", "normal", "Bingo goal does not work with dungeondive")
             req("accessibility", "all", "Bingo goal needs 'all' accessibility")
-            dis("steal", "never", "default", "With bingo goal, stealing should be allowed")
+            dis("steal", "disabled", "default", "With bingo goal, stealing should be allowed")
             dis("boss", "random", "shuffle", "With bingo goal, bosses need to be on normal or shuffle")
             dis("miniboss", "random", "shuffle", "With bingo goal, minibosses need to be on normal or shuffle")
         if self.overworld == "dungeondive":

@@ -1,21 +1,18 @@
 import functools
-from typing import Union, Any, Iterable
+from typing import Any, Iterable
 
-from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .grind_logic import GrindLogicMixin
-from .harvesting_logic import HarvestingLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .requirement_logic import RequirementLogicMixin
-from .tool_logic import ToolLogicMixin
+from .tailoring_logic import TailoringSource
+from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
-from ..data.game_item import GenericSource, ItemSource, GameItem, CustomRuleSource, CompoundSource
+from ..data.fish_data import FishingSource
+from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, AllRegionsSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
-from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
+from ..data.monster_data import MonsterSource
+from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
+from ..strings.skill_names import Skill
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -24,25 +21,23 @@ class SourceLogicMixin(BaseLogicMixin):
         self.source = SourceLogic(*args, **kwargs)
 
 
-class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogicMixin, HarvestingLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-                                  ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
+class SourceLogic(BaseLogic):
 
     def has_access_to_item(self, item: GameItem):
         rules = []
 
         if self.content.features.cropsanity.is_included(item):
-            rules.append(self.logic.received(item.name))
+            unlock_rule = self.logic.received(item.name)
+            if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
+                return unlock_rule
+            rules.append(unlock_rule)
 
         rules.append(self.logic.source.has_access_to_any(item.sources))
         return self.logic.and_(*rules)
 
-    def has_access_to_any(self, sources: Iterable[ItemSource]):
+    def has_access_to_any(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
-
-    def has_access_to_all(self, sources: Iterable[ItemSource]):
-        return self.logic.and_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
-                                 for source in sources))
 
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):
@@ -50,15 +45,15 @@ class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogic
 
     @has_access_to.register
     def _(self, source: GenericSource):
-        return self.logic.region.can_reach_any(source.regions) if source.regions else self.logic.true_
+        return self.logic.region.can_reach_any(*source.regions) if source.regions else self.logic.true_
+
+    @has_access_to.register
+    def _(self, source: AllRegionsSource):
+        return self.logic.region.can_reach_all(*source.regions) if source.regions else self.logic.true_
 
     @has_access_to.register
     def _(self, source: CustomRuleSource):
         return source.create_rule(self.logic)
-
-    @has_access_to.register
-    def _(self, source: CompoundSource):
-        return self.logic.source.has_access_to_all(source.sources)
 
     @has_access_to.register
     def _(self, source: ForagingSource):
@@ -82,12 +77,24 @@ class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogic
         return self.logic.money.can_shop_from(source)
 
     @has_access_to.register
+    def _(self, source: HatMouseSource):
+        return self.logic.money.can_shop_from_hat_mouse(source)
+
+    @has_access_to.register
     def _(self, source: HarvestFruitTreeSource):
         return self.logic.harvesting.can_harvest_tree_from(source)
 
     @has_access_to.register
     def _(self, source: HarvestCropSource):
         return self.logic.harvesting.can_harvest_crop_from(source)
+
+    @has_access_to.register
+    def _(self, source: IncubatorSource):
+        return self.logic.animal.can_incubate(source.egg_item)
+
+    @has_access_to.register
+    def _(self, source: OstrichIncubatorSource):
+        return self.logic.animal.can_ostrich_incubate(source.egg_item)
 
     @has_access_to.register
     def _(self, source: MachineSource):
@@ -112,3 +119,15 @@ class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogic
     @has_access_to.register
     def _(self, source: ArtifactSpotSource):
         return self.logic.grind.can_grind_artifact_spots(source.amount)
+
+    @has_access_to.register
+    def _(self, source: MonsterSource):
+        return self.logic.monster.can_kill_any(source.monsters, source.amount_tier)
+
+    @has_access_to.register
+    def _(self, source: TailoringSource):
+        return self.logic.tailoring.can_tailor(*source.tailoring_items)
+
+    @has_access_to.register
+    def _(self, source: FishingSource):
+        return self.logic.fishing.can_fish_at(source.region) & self.logic.skill.has_level(Skill.fishing, source.fishing_level) & self.logic.tool.has_fishing_rod(source.minimum_rod)

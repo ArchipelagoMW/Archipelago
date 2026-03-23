@@ -2034,7 +2034,7 @@ new_game_extras = [
     0x24090000,  # ADDIU T1, R0, 0x0000  <- Starting Ice Traps
     0xA1099BE2,  # SB    T1, 0x9BE2 (T0)
     0x240C0000,  # ADDIU T4, R0, 0x0000
-    0x240D0022,  # ADDIU T5, R0, 0x0022
+    0x240D0023,  # ADDIU T5, R0, 0x0023
     0x11AC0007,  # BEQ   T5, T4, [forward 0x07]
     0x3C0A8040,  # LUI   T2, 0x8040
     0x014C5021,  # ADDU  T2, T2, T4
@@ -2892,4 +2892,19 @@ dog_bite_ice_trap_fix = [
     0x3C090F00,  # LUI   T1, 0x0F00
     0x25291CB8,  # ADDIU T1, T1, 0x1CB8
     0x01200008   # JR    T1
+]
+
+shimmy_speed_modifier = [
+    # Increases the player's speed while shimmying as long as they are not holding down Z. If they are holding Z, it
+    # will be the normal speed, allowing it to still be used to set up any tricks that might require the normal speed
+    # (like Left Tower Skip).
+    0x3C088038,  # LUI   T0, 0x8038
+    0x91087D7E,  # LBU   T0, 0x7D7E (T0)
+    0x31090020,  # ANDI  T1, T0, 0x0020
+    0x3C0A800A,  # LUI   T2, 0x800A
+    0x240B005A,  # ADDIU T3, R0, 0x005A
+    0x55200001,  # BNEZL T1,     [forward 0x01]
+    0x240B0032,  # ADDIU T3, R0, 0x0032
+    0xA14B3641,  # SB    T3, 0x3641 (T2)
+    0x0800B7C3   # J     0x8002DF0C
 ]

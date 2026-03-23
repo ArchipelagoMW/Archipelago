@@ -1,15 +1,13 @@
 import dataclasses
-import os
-import typing
 import math
+import os
 import threading
+import typing
 
+import settings
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
-import Patch
-import settings
 from worlds.AutoWorld import WebWorld, World
-
 from .Client import DKC3SNIClient
 from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
 from .Levels import level_list

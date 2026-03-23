@@ -238,13 +238,11 @@ class AdventureWorld(World):
 
     def create_regions(self) -> None:
         create_regions(self.options, self.multiworld, self.player, self.dragon_rooms)
-
-    set_rules = set_rules
-
-    def generate_basic(self) -> None:
         self.multiworld.get_location("Chalice Home", self.player).place_locked_item(
             self.create_event("Victory", ItemClassification.progression))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+    set_rules = set_rules
 
     def pre_fill(self):
         # Place empty items in filler locations here, to limit

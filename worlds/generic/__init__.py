@@ -1,9 +1,10 @@
 from typing import NamedTuple, Union
+from typing_extensions import deprecated
 import logging
 
 from BaseClasses import Item, Tutorial, ItemClassification
 
-from ..AutoWorld import World, WebWorld
+from ..AutoWorld import InvalidItemError, World, WebWorld
 from NetUtils import SlotType
 
 
@@ -16,7 +17,7 @@ class GenericWeb(WebWorld):
                         'A guide detailing the commands available to the user when participating in an Archipelago session.',
                         'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
     mac = Tutorial('Archipelago Setup Guide for Mac', 'A guide detailing how to run Archipelago clients on macOS.', 
-                   'English', 'mac_en.md','mac/en', ['Bicoloursnake'])
+                   'English', 'mac_en.md','mac/en', ['Bicoloursnake', 'silasary'])
     plando = Tutorial('Archipelago Plando Guide', 'A guide to understanding and using plando for your game.',
                       'English', 'plando_en.md', 'plando/en', ['alwaysintreble', 'Alchav'])
     setup = Tutorial('Getting Started',
@@ -25,7 +26,10 @@ class GenericWeb(WebWorld):
                      'English', 'setup_en.md', 'setup/en', ['alwaysintreble'])
     triggers = Tutorial('Archipelago Triggers Guide', 'A guide to setting up and using triggers in your game settings.',
                         'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
-    tutorials = [setup, mac, commands, advanced_settings, triggers, plando]
+    other_games = Tutorial('Other Games and Tools',
+                           'A guide to additional games and tools that can be used with Archipelago.',
+                           'English', 'other_en.md', 'other/en', ['Berserker'])
+    tutorials = [setup, mac, commands, advanced_settings, triggers, plando, other_games]
 
 
 class GenericWorld(World):
@@ -47,9 +51,10 @@ class GenericWorld(World):
     def create_item(self, name: str) -> Item:
         if name == "Nothing":
             return Item(name, ItemClassification.filler, -1, self.player)
-        raise KeyError(name)
+        raise InvalidItemError(name)
 
-
+@deprecated("worlds.generic.PlandoItem is deprecated and will be removed in the next version. "
+            "Use Options.PlandoItem(s) instead.")
 class PlandoItem(NamedTuple):
     item: str
     location: str

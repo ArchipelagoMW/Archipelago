@@ -47,13 +47,39 @@ class TestIDs(unittest.TestCase):
         """Test that a game doesn't have item id overlap within its own datapackage"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
-                self.assertEqual(len(world_type.item_id_to_name), len(world_type.item_name_to_id))
+                len_item_id_to_name = len(world_type.item_id_to_name)
+                len_item_name_to_id = len(world_type.item_name_to_id)
+
+                if len_item_id_to_name != len_item_name_to_id:
+                    self.assertCountEqual(
+                        world_type.item_id_to_name.values(), 
+                        world_type.item_name_to_id.keys(),
+                        "\nThese items have overlapping ids with other items in its own world")
+                    self.assertCountEqual(
+                        world_type.item_id_to_name.keys(), 
+                        world_type.item_name_to_id.values(),
+                        "\nThese items have overlapping names with other items in its own world")
+                    
+                self.assertEqual(len_item_id_to_name, len_item_name_to_id)
 
     def test_duplicate_location_ids(self):
         """Test that a game doesn't have location id overlap within its own datapackage"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
-                self.assertEqual(len(world_type.location_id_to_name), len(world_type.location_name_to_id))
+                len_location_id_to_name = len(world_type.location_id_to_name)
+                len_location_name_to_id = len(world_type.location_name_to_id)
+
+                if len_location_id_to_name != len_location_name_to_id:
+                    self.assertCountEqual(
+                        world_type.location_id_to_name.values(), 
+                        world_type.location_name_to_id.keys(),
+                        "\nThese locations have overlapping ids with other locations in its own world")
+                    self.assertCountEqual(
+                        world_type.location_id_to_name.keys(), 
+                        world_type.location_name_to_id.values(),
+                        "\nThese locations have overlapping names with other locations in its own world")
+
+                self.assertEqual(len_location_id_to_name, len_location_name_to_id)
 
     def test_postgen_datapackage(self):
         """Generates a solo multiworld and checks that the datapackage is still valid"""
@@ -62,6 +88,7 @@ class TestIDs(unittest.TestCase):
                 multiworld = setup_solo_multiworld(world_type)
                 distribute_items_restrictive(multiworld)
                 call_all(multiworld, "post_fill")
+                call_all(multiworld, "finalize_multiworld")
                 datapackage = world_type.get_data_package_data()
                 for item_group, item_names in datapackage["item_name_groups"].items():
                     self.assertIsInstance(item_group, str,

@@ -30,7 +30,7 @@ används tillsammans med
 1. Skapa din konfigurationsfil (YAML). Du kan göra en via att använda
 [Pokémon Emerald options hemsida](../../../games/Pokemon%20Emerald/player-options).
 2. Följ de allmänna Archipelago instruktionerna för att
-[Generera ett spel](../../Archipelago/setup/en#generating-a-game).
+[Generera ett spel](/tutorial/Archipelago/setup_en#generating-a-game).
 Detta kommer generera en fil för dig. Din patchfil kommer ha `.apemerald` som sitt filnamnstillägg.
 3. Öppna `ArchipelagoLauncher.exe`
 4. Välj "Open Patch" på vänstra sidan, och välj din patchfil.

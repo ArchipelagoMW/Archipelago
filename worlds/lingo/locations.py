@@ -35,8 +35,6 @@ LOCATIONS_BY_GROUP: Dict[str, List[str]] = {}
 
 
 def load_location_data():
-    global ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
-
     for room_name, panels in PANELS_BY_ROOM.items():
         for panel_name, panel in panels.items():
             location_name = f"{room_name} - {panel_name}" if panel.location_name is None else panel.location_name

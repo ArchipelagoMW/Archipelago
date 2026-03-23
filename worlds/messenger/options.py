@@ -2,8 +2,12 @@ from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
+from Options import (
+    Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, OptionGroup,
+    PerGameCommonOptions,
+    PlandoConnections, Range, StartInventoryPool, Toggle,
+)
+from . import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
@@ -15,40 +19,42 @@ class MessengerAccessibility(ItemsAccessibility):
 
 class PortalPlando(PlandoConnections):
     """
-    Plando connections to be used with portal shuffle. Direction is ignored.
-    List of valid connections can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/portals.py#L12.
-    The entering Portal should *not* have "Portal" appended.
-    For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
-    Example:
-    - entrance: Riviere Turquoise
-      exit: Wingsuit
-    - entrance: Sunken Shrine
-      exit: Sunny Day
-    - entrance: Searing Crags
-      exit: Glacial Peak Portal
+    Plando connections to be used with portal shuffle.
+    Documentation on using this can be found in The Messenger plando guide.
     """
+    display_name = "Portal Plando Connections"
     portals = [f"{portal} Portal" for portal in PORTALS]
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
     checkpoints = [point for points in CHECKPOINTS.values() for point in points]
-    portal_entrances = PORTALS
-    portal_exits = portals + shop_points + checkpoints
-    entrances = portal_entrances
-    exits = portal_exits
+
+    entrances = frozenset(PORTALS)
+    exits = frozenset(portals + shop_points + checkpoints)
 
 
-# for back compatibility. To later be replaced with transition plando
-class HiddenPortalPlando(PortalPlando):
-    visibility = Visibility.none
-    entrances = PortalPlando.entrances
-    exits = PortalPlando.exits
+class TransitionPlando(PlandoConnections):
+    """
+    Plando connections to be used with transition shuffle.
+    Documentation on using this can be found in The Messenger plando guide.
+    """
+    display_name = "Transition Plando Connections"
+    entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
+    exits = frozenset(RANDOMIZED_CONNECTIONS.values())
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        if entrance != "Glacial Peak - Left" and entrance.lower() in cls.exits:
+            return exit.lower() in cls.entrances
+        return exit.lower() not in cls.entrances
 
 
 class Logic(Choice):
     """
     The level of logic to use when determining what locations in your world are accessible.
 
-    Normal: Can require damage boosts, but otherwise approachable for someone who has beaten the game.
-    Hard: Expects more knowledge and tighter execution. Has leashing, normal clips and much tighter d-boosting in logic.
+    **Normal:** Can require damage boosts, but otherwise approachable for someone who has beaten the game.
+
+    **Hard:** Expects more knowledge and tighter execution.
+    Has leashing, normal clips and much tighter d-boosting in logic.
     """
     display_name = "Logic Level"
     option_normal = 0
@@ -75,7 +81,10 @@ class EarlyMed(Toggle):
 
 
 class AvailablePortals(Range):
-    """Number of portals that are available from the start. Autumn Hills, Howling Grotto, and Glacial Peak are always available. If portal outputs are not randomized, Searing Crags will also be available."""
+    """
+    Number of portals that are available from the start. Autumn Hills, Howling Grotto, and Glacial Peak are always
+    available. If portal outputs are not randomized, Searing Crags will also be available.
+    """
     display_name = "Available Starting Portals"
     range_start = 3
     range_end = 6
@@ -88,10 +97,14 @@ class ShufflePortals(Choice):
     Entering a portal from its vanilla area will always lead to HQ, and will unlock it if relevant.
     Supports plando.
 
-    None: Portals will take you where they're supposed to.
-    Shops: Portals can lead to any area except Music Box and Elemental Skylands, with each portal output guaranteed to not overlap with another portal's. Will only put you at a portal or a shop.
-    Checkpoints: Like Shops except checkpoints without shops are also valid drop points.
-    Anywhere: Like Checkpoints except it's possible for multiple portals to output to the same map.
+    **None:** Portals will take you where they're supposed to.
+
+    **Shops:** Portals can lead to any area except Music Box and Elemental Skylands, with each portal output guaranteed
+    to not overlap with another portal's. Will only put you at a portal or a shop.
+
+    **Checkpoints:** Like Shops except checkpoints without shops are also valid drop points.
+
+    **Anywhere:** Like Checkpoints except it's possible for multiple portals to output to the same map.
     """
     display_name = "Shuffle Portal Outputs"
     option_none = 0
@@ -106,9 +119,11 @@ class ShuffleTransitions(Choice):
     Whether the transitions between the levels should be randomized.
     Supports plando.
     
-    None: Level transitions lead where they should.
-    Coupled: Returning through a transition will take you from whence you came.
-    Decoupled: Any level transition can take you to any other level transition.
+    **None:** Level transitions lead where they should.
+
+    **Coupled:** Returning through a transition will take you from whence you came.
+
+    **Decoupled:** Any level transition can take you to any other level transition.
     """
     display_name = "Shuffle Level Transitions"
     option_none = 0
@@ -118,7 +133,10 @@ class ShuffleTransitions(Choice):
 
 
 class Goal(Choice):
-    """Requirement to finish the game. To win with the power seal hunt goal, you must enter the Music Box through the shop chest."""
+    """
+    Requirement to finish the game.
+    To win with the power seal hunt goal, you must enter the Music Box through the shop chest.
+    """
     display_name = "Goal"
     option_open_music_box = 0
     option_power_seal_hunt = 1
@@ -130,7 +148,10 @@ class MusicBox(DefaultOnToggle):
 
 
 class NotesNeeded(Range):
-    """How many notes are needed to access the Music Box."""
+    """
+    How many notes need to be found in order to access the Music Box.
+    6 are always needed to enter, so this places the others in your start inventory.
+    """
     display_name = "Notes Needed"
     range_start = 1
     range_end = 6
@@ -226,7 +247,7 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     early_meditation: EarlyMed
     available_portals: AvailablePortals
     shuffle_portals: ShufflePortals
-    # shuffle_transitions: ShuffleTransitions
+    shuffle_transitions: ShuffleTransitions
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded
@@ -236,4 +257,36 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
     portal_plando: PortalPlando
-    plando_connections: HiddenPortalPlando
+    plando_connections: TransitionPlando
+
+
+option_groups = [
+    OptionGroup(
+        "Difficulty",
+        [
+            EarlyMed,
+            Logic,
+            LimitedMovement,
+        ],
+    ),
+    OptionGroup(
+        "Goal",
+        [
+            Goal,
+            MusicBox,
+            NotesNeeded,
+            AmountSeals,
+            RequiredSeals,
+        ],
+    ),
+    OptionGroup(
+        "Entrances",
+        [
+            AvailablePortals,
+            ShufflePortals,
+            ShuffleTransitions,
+            PortalPlando,
+            TransitionPlando,
+        ],
+    ),
+]

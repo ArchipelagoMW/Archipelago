@@ -11,7 +11,7 @@ on:
       - '**.hh?'
       - '**.hpp'
       - '**.hxx'
-      - '**.CMakeLists'
+      - '**/CMakeLists.txt'
       - '.github/workflows/ctest.yml'
   pull_request:
     paths:
@@ -21,7 +21,7 @@ on:
       - '**.hh?'
       - '**.hpp'
       - '**.hxx'
-      - '**.CMakeLists'
+      - '**/CMakeLists.txt'
       - '.github/workflows/ctest.yml'
 
 jobs:
@@ -36,9 +36,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: ilammy/msvc-dev-cmd@v1
+    - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
       if: startsWith(matrix.os,'windows')
-    - uses: Bacondish2023/setup-googletest@v1
+    - uses: Bacondish2023/setup-googletest@49065d1f7a6d21f6134864dd65980fe5dbe06c73
       with:
         build-type: 'Release'
     - name: Build tests

@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from BaseClasses import MultiWorld
 from .world_assert import get_all_item_names, get_all_location_names
-from ... import StardewValleyWorld, options, item_table, Group, location_table, ExcludeGingerIsland
+from ... import StardewValleyWorld, options, item_table, Group, location_table
 from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
 
@@ -49,7 +49,7 @@ class OptionAssertMixin(TestCase):
 
     def assert_can_reach_island_if_should(self, multiworld: MultiWorld):
         stardew_options = get_stardew_options(multiworld)
-        include_island = stardew_options.exclude_ginger_island.value == ExcludeGingerIsland.option_false
+        include_island = stardew_options.exclude_ginger_island.value == options.ExcludeGingerIsland.option_false
         if include_island:
             self.assert_can_reach_island(multiworld)
         else:

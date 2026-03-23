@@ -75,6 +75,27 @@
 #inventory-table img.acquired.green{ /*32CD32*/
     filter: hue-rotate(84deg) saturate(10) brightness(0.7);
 }
+#inventory-table img.acquired.hotpink{ /*FF69B4*/
+    filter: sepia(100%) hue-rotate(300deg) saturate(10);
+}
+#inventory-table img.acquired.lightsalmon{ /*FFA07A*/
+    filter: sepia(100%) hue-rotate(347deg) saturate(10);
+}
+#inventory-table img.acquired.crimson{ /*DB143B*/
+    filter: sepia(100%) hue-rotate(318deg) saturate(10) brightness(0.86);
+}
+
+#inventory-table span{
+    color: #B4B4A0;
+    font-size: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    filter: grayscale(100%) contrast(75%) brightness(30%);
+}
+
+#inventory-table span.acquired{
+    filter: none;
+}
 
 #inventory-table div.image-stack{
     display: grid;

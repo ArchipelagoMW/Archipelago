@@ -2,11 +2,11 @@ import unittest
 
 from BaseClasses import CollectionState
 from worlds.AutoWorld import AutoWorldRegister
-from . import setup_solo_multiworld
+from . import setup_solo_multiworld, gen_steps
 
 
 class TestBase(unittest.TestCase):
-    gen_steps = ["generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill"]
+    gen_steps = gen_steps
 
     default_settings_unreachable_regions = {
         "A Link to the Past": {

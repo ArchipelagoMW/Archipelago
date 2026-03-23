@@ -2,7 +2,7 @@
 # the file are consistent. It also checks that the panel and door IDs mentioned
 # all exist in the map file.
 #
-# Usage: validate_config.rb [config file] [map file]
+# Usage: validate_config.rb [config file] [ids path] [map file]
 
 require 'set'
 require 'yaml'
@@ -50,7 +50,7 @@ directives = Set["entrances", "panels", "doors", "panel_doors", "paintings", "su
 panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt", "location_name"]
 door_directives = Set["id", "painting_id", "panels", "item_name", "item_group", "location_name", "skip_location", "skip_item", "door_group", "include_reduce", "event", "warp_id"]
 panel_door_directives = Set["panels", "item_name", "panel_group"]
-painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
+painting_directives = Set["id", "display_name", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
 non_counting = 0
 
@@ -312,6 +312,10 @@ config.each do |room_name, room|
     if painting["disable"] then
       # We're good.
       next
+    end
+
+    unless painting.include? "display_name" then
+        puts "#{room_name} - #{painting["id"] || "painting"} :::: Missing display name"
     end
 
     if painting.include?("orientation") then

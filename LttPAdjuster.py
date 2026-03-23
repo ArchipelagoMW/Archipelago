@@ -32,17 +32,23 @@ GAME_ALTTP = "A Link to the Past"
 WINDOW_MIN_HEIGHT = 525
 WINDOW_MIN_WIDTH = 425
 
+
 class AdjusterWorld(object):
+    class AdjusterSubWorld(object):
+        def __init__(self, random):
+            self.random = random
+
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
-        self.per_slot_randoms = {1: random}
+        self.worlds = {1: self.AdjusterSubWorld(random)}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
+
 
 # See argparse.BooleanOptionalAction
 class BooleanOptionalActionWithDisable(argparse.Action):
@@ -359,10 +365,10 @@ def run_sprite_update():
     logging.info("Done updating sprites")
 
 
-def update_sprites(task, on_finish=None):
+def update_sprites(task, on_finish=None, repository_url: str = "https://alttpr.com/sprites"):
     resultmessage = ""
     successful = True
-    sprite_dir = user_path("data", "sprites", "alttpr")
+    sprite_dir = user_path("data", "sprites", "alttp", "remote")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
 
@@ -372,11 +378,11 @@ def update_sprites(task, on_finish=None):
             on_finish(successful, resultmessage)
 
     try:
-        task.update_status("Downloading alttpr sprites list")
-        with urlopen('https://alttpr.com/sprites', context=ctx) as response:
+        task.update_status("Downloading remote sprites list")
+        with urlopen(repository_url, context=ctx) as response:
             sprites_arr = json.loads(response.read().decode("utf-8"))
     except Exception as e:
-        resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        resultmessage = "Error getting list of remote sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
         successful = False
         task.queue_event(finished)
         return
@@ -384,13 +390,13 @@ def update_sprites(task, on_finish=None):
     try:
         task.update_status("Determining needed sprites")
         current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
-        alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
+        remote_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
                           for sprite in sprites_arr if sprite["author"] != "Nintendo"]
-        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in remote_sprites if
                           filename not in current_sprites]
 
-        alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
-        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
+        remote_filenames = [filename for (_, filename) in remote_sprites]
+        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in remote_filenames]
     except Exception as e:
         resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (
         type(e).__name__, e)
@@ -442,7 +448,7 @@ def update_sprites(task, on_finish=None):
                 successful = False
 
     if successful:
-        resultmessage = "alttpr sprites updated successfully"
+        resultmessage = "Remote sprites updated successfully"
 
     task.queue_event(finished)
 
@@ -863,7 +869,7 @@ class SpriteSelector():
         def open_custom_sprite_dir(_evt):
             open_file(self.custom_sprite_dir)
 
-        alttpr_frametitle = Label(self.window, text='ALTTPR Sprites')
+        remote_frametitle = Label(self.window, text='Remote Sprites')
 
         custom_frametitle = Frame(self.window)
         title_text = Label(custom_frametitle, text="Custom Sprites")
@@ -872,8 +878,8 @@ class SpriteSelector():
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_custom_sprite_dir)
 
-        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir,
-                          'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
+        self.icon_section(remote_frametitle, self.remote_sprite_dir,
+                          'Remote sprites not found. Click "Update remote sprites" to download them.')
         self.icon_section(custom_frametitle, self.custom_sprite_dir,
                           'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
         if not randomOnEvent:
@@ -886,11 +892,18 @@ class SpriteSelector():
             button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
             button.pack(side=RIGHT, padx=(5, 0))
 
-        button = Button(frame, text="Update alttpr sprites", command=self.update_alttpr_sprites)
+        button = Button(frame, text="Update remote sprites", command=self.update_remote_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
+
+        repository_label = Label(frame, text='Sprite Repository:')
+        self.repository_url = StringVar(frame, "https://alttpr.com/sprites")
+        repository_entry = Entry(frame, textvariable=self.repository_url)
         
+        repository_entry.pack(side=RIGHT, expand=True, fill=BOTH, pady=1)
+        repository_label.pack(side=RIGHT, expand=False, padx=(0, 5))
+
         button = Button(frame, text="Do not adjust sprite",command=self.use_default_sprite)
-        button.pack(side=LEFT,padx=(0,5))
+        button.pack(side=LEFT, padx=(0, 5))
 
         button = Button(frame, text="Default Link sprite", command=self.use_default_link_sprite)
         button.pack(side=LEFT, padx=(0, 5))
@@ -1050,7 +1063,7 @@ class SpriteSelector():
         for i, button in enumerate(frame.buttons):
             button.grid(row=i // self.spritesPerRow, column=i % self.spritesPerRow)
 
-    def update_alttpr_sprites(self):
+    def update_remote_sprites(self):
         # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
         self.window.destroy()
         self.parent.update()
@@ -1063,7 +1076,8 @@ class SpriteSelector():
                 messagebox.showerror("Sprite Updater", resultmessage)
             SpriteSelector(self.parent, self.callback, self.adjuster)
 
-        BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites", on_finish)
+        BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites",
+                               on_finish, self.repository_url.get())
 
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename(
@@ -1153,12 +1167,13 @@ class SpriteSelector():
             os.makedirs(self.custom_sprite_dir)
 
     @property
-    def alttpr_sprite_dir(self):
-        return user_path("data", "sprites", "alttpr")
+    def remote_sprite_dir(self):
+        return user_path("data", "sprites", "alttp", "remote")
 
     @property
     def custom_sprite_dir(self):
-        return user_path("data", "sprites", "custom")
+        return user_path("data", "sprites", "alttp", "custom")
+
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
