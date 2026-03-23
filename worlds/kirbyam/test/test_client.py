@@ -29,19 +29,26 @@ async def test_validate_rom_accepts_patched_kirby_header(mock_bizhawk_context):
 async def test_validate_rom_reads_auth_from_rom_domain_offset(mock_bizhawk_context):
     client = KirbyAmClient()
 
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.side_effect = [
-            [b'AGB KIRBY AM', b'B8KE', b'01'],
-            [b'\x01' + (b'\x00' * 15)],
-        ]
+    original_auth_addr = data.rom_addresses.get("gArchipelagoInfo")
+    data.rom_addresses["gArchipelagoInfo"] = 0x08F00000
+    try:
+        with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+            mock_read.side_effect = [
+                [b'AGB KIRBY AM', b'B8KE', b'01'],
+                [b'\x01' + (b'\x00' * 15)],
+            ]
 
-        assert await client.validate_rom(mock_bizhawk_context) is True
+            assert await client.validate_rom(mock_bizhawk_context) is True
 
-    auth_addr = data.rom_addresses["gArchipelagoInfo"]
-    assert any(
-        call.args[1] == [(auth_addr, 16, "ROM")]
-        for call in mock_read.await_args_list
-    )
+        mock_read.assert_any_await(
+            mock_bizhawk_context.bizhawk_ctx,
+            [(0x00F00000, 16, "ROM")],
+        )
+    finally:
+        if original_auth_addr is None:
+            data.rom_addresses.pop("gArchipelagoInfo", None)
+        else:
+            data.rom_addresses["gArchipelagoInfo"] = original_auth_addr
 
 
 @pytest.mark.asyncio
