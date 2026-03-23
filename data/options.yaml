@@ -76,8 +76,11 @@ requires:
     {{- range_option(option, option_val) -}}
 
     {%- elif option.options -%}
+    {%- set excluded_choices = option.template_excluded_choices if option.template_excluded_choices is defined else [] -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
+    {%- if sub_option_name not in excluded_choices and suboption_option_id not in excluded_choices %}
     {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val or sub_option_name == option_val %}50{% else %}0{% endif %}
+    {%- endif -%}
     {%- endfor -%}
   
     {%- if option.name_lookup[option_val] not in option.options and option_val not in option.options %}
