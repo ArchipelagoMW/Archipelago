@@ -218,10 +218,11 @@ class RequirementsDifficulty(Choice):
     they MIGHT. (You are not guaranteed to get crampons before having to do Tempest)
     """
     display_name = "Requirements Difficulty"
-    option_normal = 0
-    option_difficult = 1
-    option_free_solo = 2
-    default = 0
+    option_easy = 0
+    option_normal = 1
+    option_difficult = 2
+    option_free_solo = 3
+    default = 1
 
 class EnableFundamental(DefaultOnToggle):
     """Enables Fundamentals book, items and collectibles"""

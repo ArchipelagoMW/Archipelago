@@ -170,19 +170,6 @@ class SimpleRequirements(Requirements):
     def is_empty(self) -> bool:
         return self.requirements == {}
 
-class LeveledRequirements(Requirements):
-    requirements: dict[RequirementsDifficulty, Requirements]
-
-    def __init__(self, requirements: dict[RequirementsDifficulty, Requirements], start_priority:int = 0):
-        super().__init__(start_priority)
-        self.entry_requirements = requirements
-
-    def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
-        return self.requirements[opts.requirements_difficulty].evaluate_items(opts)
-
-    def is_empty(self) -> bool:
-        return all(reqs.is_empty() for reqs in self.requirements.values())
-
 class AllRequirements(Requirements):
     requirements: list[Requirements]
 
@@ -245,7 +232,7 @@ class ConditionalRequirements(Requirements):
     requirements: Requirements
     condition: Callable[[PeaksOfYoreOptions], bool]
 
-    def __init__(self, requirements: Requirements, condition: Callable[[PeaksOfYoreOptions], bool], start_priority:int = 0):
+    def __init__(self, requirements: Requirements, condition: Callable[[PeaksOfYoreOptions], bool], start_priority: int = 0):
         super().__init__(start_priority)
         self.requirements = requirements
         self.condition = condition
@@ -255,6 +242,10 @@ class ConditionalRequirements(Requirements):
 
     def is_empty(self) -> bool:
         return self.requirements.is_empty()
+
+class LeveledRequirements(ConditionalRequirements):
+    def __init__(self, difficulty: RequirementsDifficulty, requirements: Requirements, start_priority: int = 0):
+        super().__init__(requirements,  lambda opts: opts.requirements_difficulty == difficulty, start_priority)
 
 def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
     # this assumes that the change to make extra ropes worth 2 has been made!!
