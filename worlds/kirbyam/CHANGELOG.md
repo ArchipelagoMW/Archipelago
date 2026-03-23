@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.8
+
 - Fix BizHawk handler detection by validating the KirbyAM USA GBA header and patched auth block instead of an unrelated ROM offset.
 - Fix the ROM mailbox hook to return without clobbering live game registers, preventing corrupted startup state such as Player 1 starting with 99 lives.
 - Add negative-path tests for build.py and patch_rom.py covering missing ROM paths, missing payload outputs, missing data directory, and invalid CLI argument combinations.
