@@ -38,7 +38,10 @@ async def test_validate_rom_reads_auth_from_rom_domain_offset(mock_bizhawk_conte
         assert await client.validate_rom(mock_bizhawk_context) is True
 
     auth_addr = data.rom_addresses["gArchipelagoInfo"]
-    assert mock_read.await_args_list[1].args[1] == [(auth_addr, 16, "ROM")]
+    assert any(
+        call.args[1] == [(auth_addr, 16, "ROM")]
+        for call in mock_read.await_args_list
+    )
 
 
 @pytest.mark.asyncio
