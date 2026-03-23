@@ -948,8 +948,11 @@ class Rac3Interface(GameInterface):
     def vendor_check(self):
         """Returns the current vendor type if the vendor is open, else None"""
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR and self.planet in PLANET_VENDOR_OFFSET.keys():
-            return RAC3VENDORTYPE(self._read8(
-                RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+            try:
+                return RAC3VENDORTYPE(self._read8(
+                    RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+            except ValueError:
+                return None
         return None
 
     def vendor_update(self):
@@ -1166,7 +1169,7 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if ((time.time() - self.last_in_ship_time) < 1.5
+        if ((time.time() - self.last_in_ship_time) < 1.25
                 or self.is_reloading
                 or self.self_respawning
                 or self.action_2 == 0x09):
