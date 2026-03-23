@@ -394,9 +394,7 @@ async def handle_vendors(ctx: 'Context') -> None:
     if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR:
         return
 
-    vendor_type = RAC3VENDORTYPE(
-            ctx.game_interface._read8(
-                RAC3VENDOR.get_vendor_property_address(ctx.game_interface.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+    vendor_type = ctx.game_interface.vendor_type
     vendor_location_apcodes = []
     match vendor_type:
         case RAC3VENDORTYPE.WEAPON:
