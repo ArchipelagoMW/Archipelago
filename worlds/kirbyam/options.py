@@ -11,14 +11,15 @@ class Goal(Choice):
     Determines what your goal is to consider the game beaten.
 
     - Dark Mind: Defeat Dark Mind and beat the game
-    - 100% Save File: NOT READY --- Achieve 100% completion of the save file
-    - DEBUG: A goal for testing purposes
+    - 100% Save File: Reserved for future player-template exposure
+    - DEBUG: Testing-only goal
     """
     display_name = "Goal"
     default = 0
     option_dark_mind = 0
     option_100 = 1
     option_debug = 2
+    template_excluded_choices = frozenset({"100", "debug"})
 
 
 class RandomizeShards(Choice):
