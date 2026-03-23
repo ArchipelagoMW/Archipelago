@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.7
+
 - Fix host upload crash (`TypeError: an integer is required`) by converting goal locations to addressless runtime events during item generation.
 - Add a structured manual-testing issue template and parser-backed machine-checkable result block format for issue comments.
 - Add golden snapshot tests for deterministic slot_data and enemy randomization mapping outputs, with committed JSON fixtures and an explicit snapshot update workflow.
