@@ -19,6 +19,11 @@ The DS3 client download includes an example YAML file which includes
 documentation for every option Dark Souls III supports. Use this to customize
 your experience.
 
+**Note:** Some options in this YAML may not yet be available on the
+archipelago.gg version of the Dark Souls III apworld, which is limited by the
+Archipelago core code review/release cycle. For the absolute latest features,
+use the `dark_souls_3.apworld` that's bundled with the client.
+
 ## What does randomization do to this game?
 
 1. All item locations are randomized, including those in the overworld, in
@@ -55,10 +60,10 @@ Dark Souls III:
 
 Dark Souls III has about 1500 item locations, which is a lot of checks for a
 single run! But you don't necessarily need to check all of them. Locations that
-you can potentially miss, such as rewards for failable quests or soul
+you can miss permanently, such as rewards for failable quests or soul
 transposition items, will _never_ have items required for any game to progress.
-The following types of locations are also guaranteed not to contain progression
-items by default:
+The following types of locations also won't contain progression items by
+default:
 
 * **Hidden:** Locations that are particularly difficult to find, such as behind
   illusory walls, down hidden drops, and so on. Does not include large locations
@@ -147,14 +152,20 @@ send out into the multiworld:
 ```yaml
 Dark Souls III:
   local_items:
-  - Shields
   - Armor
-  - Rings
-  - Spells
   - Miscellaneous
   - Small Souls
   - Upgrade
 ```
+
+**Warning:** Because Archipelago places local items before placing progression
+items, marking too many items as local can mean there's not enough room for all
+the progression you need which can cause generation to fail. If you're getting a
+lot of failures, try reducing the number of local items. Also consider adding
+your 👍 to [this pull request] which would allow *locations* to be marked as
+local instead of items!
+
+[this pull request]: https://github.com/ArchipelagoMW/Archipelago/pull/3758
 
 ## Where can I learn more about Dark Souls III locations?
 
@@ -184,10 +195,11 @@ categories and even remove annoying enemy types outright.
 Version 4.0.0 of the Dark Souls III Archipelago client has a number of
 substantial differences with the older 3.x.x versions. Improvements include:
 
-* It's built on Mod Engine 3, which is more reliable and actively maintained.
+* It's built on Mod Engine 3, which is more reliable than Mod Engine 2 and
+  is actively maintained.
 
 * There's now a dedicated in-game Archipelago overlay which displays the
-  Archipelago message log and allows the player to change their connection
+  Archipelago message log and allows the player to change their room URL
   settings in-game.
 
 * There's better protection against issues like collecting items while
@@ -211,6 +223,7 @@ one that's included with Archipelago by default.
   items in that shop, so that your teammates can see which items you can buy for
   them.
  
-In general, 3.x.x YAMLs *are* compatible with 4.0.0. However, the `auto_equip`
-and `lock_equip` options have been removed, and if they're set in your YAML they
-will no longer have any effect.
+In general, 3.x.x YAMLs and multiworlds that use the 3.x.x apworld *are*
+compatible with 4.0.0. However, the `auto_equip` and `lock_equip` options have
+been removed, and if they're set in your YAML they will no longer have any
+effect.

@@ -1666,7 +1666,7 @@ class DarkSouls3World(World):
             # This is checked by the static randomizer, which will surface an
             # error to the user if its version doesn't fall into the allowed
             # range.
-            "versions": ">=4.0.0-alpha.9 <5.0.0",
+            "versions": ">=4.0.0 <5.0.0",
         }
 
         return slot_data

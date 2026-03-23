@@ -12,7 +12,7 @@
 - [Dark Souls III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
 - [Dark Souls III AP Client]
 
-[Dark Souls III AP Client]: https://github.com/fswap/ds3-archipelago/releases/latest
+[Dark Souls III AP Client]: https://github.com/fswap/from-software-archipelago-clients/releases?q=Dark+Souls+III&expanded=true
 
 ## Optional Software
 
@@ -20,9 +20,10 @@
 
 ## Setting Up
 
-First, download the client from the link above (`DS3.Archipelago.*.zip`). It doesn't need to go
-into any particular directory; it'll automatically locate _Dark Souls III_ in your Steam
-installation folder.
+First, download the client from the link above (`DS3.Archipelago.*.zip`). It doesn't need to go into
+any particular directory; it'll automatically locate _Dark Souls III_ in your Steam installation
+folder. (Avoid saving it to your desktop on Windows because Microsoft OneDrive can make it
+malfunction.
 
 Version 4.0.0 of the randomizer _only_ supports the latest version of _Dark Souls III_, 1.15.2. This
 is the latest version, so you don't need to do any downpatching!
@@ -96,7 +97,7 @@ spawning in places they can't be killed, and, in a few rare cases, enemies spawn
 crash the game when they load. These bugs should be [reported upstream], but unfortunately the
 Archipelago devs can't help much with them.
 
-[thefifthmatt's DS3 enemy randomizer]: https://www.nexusmods.com/darksouls3/mods/484
+[thefifthmatt's DS3 enemy randomizer]: https://www.nexusmods.com/darksouls3/mods/361
 [reported upstream]: https://github.com/thefifthmatt/SoulsRandomizers/issues
 
 If you're running into an enemy randomizer bug that's severely affecting your run, you can re-run

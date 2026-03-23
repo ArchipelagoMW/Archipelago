@@ -3158,6 +3158,9 @@ location_name_groups["Archdragon Peak"] = (
     location_name_groups["Archdragon Peak (Through Fort)"]
     .union(location_name_groups["Archdragon Peak (After Fort)"])
 )
+del location_name_groups["Archdragon Peak (Through Fort)"]
+del location_name_groups["Archdragon Peak (After Fort)"]
+
 location_name_groups["Painted World of Ariandel"] = (
     location_name_groups["Painted World of Ariandel (Before Contraption)"]
     .union(location_name_groups["Painted World of Ariandel (After Contraption)"])
