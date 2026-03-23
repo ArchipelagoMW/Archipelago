@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add a repeat-run flaky-test detection mode for reconnect-sensitive KirbyAM tests, with CI workflow support and run-index failure reporting.
 ## v0.0.8
 
 - Fix BizHawk handler detection by validating the KirbyAM USA GBA header and patched auth block instead of an unrelated ROM offset.

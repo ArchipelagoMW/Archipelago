@@ -1,0 +1,58 @@
+name: kirbyam-flaky-detection
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: "Number of repeated runs"
+        required: false
+        default: "20"
+      pytest_arg:
+        description: "Optional extra pytest arg (example: -k reconnect)"
+        required: false
+        default: ""
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  flaky-detection:
+    name: KirbyAM flaky detection
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ci-requirements.txt
+          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+          python Launcher.py --update_settings
+
+      - name: Run flaky detection mode
+        env:
+          INPUT_RUNS: ${{ github.event.inputs.runs }}
+          INPUT_PYTEST_ARG: ${{ github.event.inputs.pytest_arg }}
+        run: |
+          CMD=(python worlds/kirbyam/test/flaky_detection_runner.py --runs "$INPUT_RUNS" --json-out test-output/kirbyam/flaky-detection-summary.json --junit-dir test-output/kirbyam/flaky-junit)
+          if [ -n "$INPUT_PYTEST_ARG" ]; then
+            CMD+=(--pytest-arg "$INPUT_PYTEST_ARG")
+          fi
+          echo "Running: ${CMD[*]}"
+          "${CMD[@]}"
+
+      - name: Upload flaky detection artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirbyam-flaky-detection
+          path: |
+            test-output/kirbyam/flaky-detection-summary.json
+            test-output/kirbyam/flaky-junit/**
+          if-no-files-found: warn

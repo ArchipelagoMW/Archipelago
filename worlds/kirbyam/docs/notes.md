@@ -44,6 +44,47 @@ Added explicit `options.cwd` values to task definitions:
 - Root `Patch Kirby ROM` task now resolves `patch_rom.py` and local ROM filenames
   without depending on active editor file location.
 
+## Issue #310: Flaky-Test Detection Mode for Reconnect-Sensitive Tests
+
+### Problem
+Reconnect and timing-sensitive tests can fail intermittently, but single-pass CI
+runs do not reliably expose those failures.
+
+### Solution
+Added a repeat-run flaky detection mode that can be executed both locally and in
+CI:
+
+- Local runner: `worlds/kirbyam/test/flaky_detection_runner.py`
+  - Repeats selected reconnect-sensitive pytest targets for `N` runs.
+  - Emits per-run JUnit XML.
+  - Aggregates failures by test name with explicit run indices.
+  - Exits non-zero when any run fails.
+- CI entry point: `.github/workflows/kirbyam-flaky-detection.yml`
+  - Triggered via `workflow_dispatch`.
+  - Accepts configurable run count and optional extra pytest arg.
+  - Uploads JSON summary + JUnit artifacts for triage.
+
+### Local usage
+
+```bash
+python worlds/kirbyam/test/flaky_detection_runner.py --runs 20
+```
+
+Optional output and args:
+
+```bash
+python worlds/kirbyam/test/flaky_detection_runner.py \
+  --runs 30 \
+  --json-out test-output/kirbyam/flaky-detection-summary.json \
+  --junit-dir test-output/kirbyam/flaky-junit \
+  --pytest-arg -k reconnect
+```
+
+### Validation
+- Added `worlds/kirbyam/test/test_flaky_detection_runner.py`.
+- Tests cover argument validation, default target selection, JUnit failure extraction,
+  and malformed XML handling.
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.
