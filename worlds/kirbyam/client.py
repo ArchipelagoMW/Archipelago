@@ -14,7 +14,10 @@ if TYPE_CHECKING:
     from worlds.generic.shared_utils import NetworkItem
 
 
-EXPECTED_ROM_NAME_PREFIX = "kirby amazing mirror"  # loosen while you iterate
+EXPECTED_ROM_HEADER_TITLE = "agb kirby am"
+EXPECTED_ROM_GAME_CODE = "b8ke"
+EXPECTED_ROM_MAKER_CODE = "01"
+_AUTH_TOKEN_SIZE = 16
 _BOSS_MIRROR_TABLE_PROBE_BYTES = 32
 _AI_STATE_ADDR_WIDTH = 4
 _GOAL_STATE_DARK_MIND_CLEAR = 9999
@@ -316,13 +319,66 @@ class KirbyAmClient(BizHawkClient):
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
         from CommonClient import logger
+        from .rom import KirbyAmProcedurePatch
+
+        auth_addr = data.rom_addresses.get("gArchipelagoInfo")
+        if auth_addr is None:
+            logger.error("KirbyAM: missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
+            return False
+
+        rom_hash = getattr(ctx, "rom_hash", None)
+        if isinstance(rom_hash, str) and rom_hash.lower() == KirbyAmProcedurePatch.hash.lower():
+            logger.info(
+                "ERROR: You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
+                "Generate a patch file and use it to create a patched ROM before opening the BizHawk client."
+            )
+            return False
 
         try:
-            rom_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(0x108, 32, "ROM")]))[0]
-            rom_name = bytes([b for b in rom_name_bytes if b != 0]).decode("ascii", errors="ignore").lower()
-            if not rom_name.startswith(EXPECTED_ROM_NAME_PREFIX):
+            title_bytes, game_code_bytes, maker_code_bytes = await bizhawk.read(
+                ctx.bizhawk_ctx,
+                [
+                    (0xA0, 12, "ROM"),
+                    (0xAC, 4, "ROM"),
+                    (0xB0, 2, "ROM"),
+                ],
+            )
+            rom_title = bytes(title_bytes).decode("ascii", errors="ignore").rstrip("\0").lower()
+            game_code = bytes(game_code_bytes).decode("ascii", errors="ignore").rstrip("\0").lower()
+            maker_code = bytes(maker_code_bytes).decode("ascii", errors="ignore").rstrip("\0")
+            if (
+                rom_title != EXPECTED_ROM_HEADER_TITLE
+                or game_code != EXPECTED_ROM_GAME_CODE
+                or maker_code != EXPECTED_ROM_MAKER_CODE
+            ):
+                logger.info(
+                    "KirbyAM: ROM validation failed (title=%r, game_code=%r, maker=%r)",
+                    rom_title,
+                    game_code,
+                    maker_code,
+                )
                 return False
-        except Exception:
+        except bizhawk.RequestFailedError as exc:
+            logger.info("KirbyAM: ROM header read failed during validation: %s", exc)
+            return False
+        except Exception as exc:
+            logger.error("KirbyAM: unexpected error during ROM header validation", exc_info=exc)
+            return False
+
+        try:
+            auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
+        except bizhawk.RequestFailedError as exc:
+            logger.info("KirbyAM: ROM auth read failed during validation: %s", exc)
+            return False
+        except Exception as exc:
+            logger.error("KirbyAM: unexpected error during ROM auth validation", exc_info=exc)
+            return False
+
+        if not any(auth_raw):
+            logger.info(
+                "ERROR: KirbyAM patch metadata was missing from the loaded ROM. "
+                "Regenerate the patch and recreate the patched ROM before opening the BizHawk client."
+            )
             return False
 
         # Minimal AP settings
@@ -346,7 +402,7 @@ class KirbyAmClient(BizHawkClient):
         if auth_addr is None:
             raise Exception("Missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
 
-        auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, 16, "ROM")]))[0]
+        auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:

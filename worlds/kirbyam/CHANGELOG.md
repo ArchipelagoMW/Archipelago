@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix BizHawk handler detection by validating the KirbyAM USA GBA header and patched auth block instead of an unrelated ROM offset.
+
 ## v0.0.7
 
 - Fix host upload crash (`TypeError: an integer is required`) by converting goal locations to addressless runtime events during item generation.
