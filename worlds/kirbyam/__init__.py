@@ -261,6 +261,10 @@ class KirbyAmWorld(World):
                 if loc_meta and loc_meta.category == LocationCategory.GOAL:
                     loc.place_locked_item(self.create_event(loc.name))
                     loc.progress_type = LocationProgressType.DEFAULT
+                    # Goal checks are runtime events, not host-fillable AP locations.
+                    # Keep address=None so multidata does not serialize a None item
+                    # for a numeric location entry (host LocationStore requires ints).
+                    loc.address = None
                     goal_event_count += 1
 
             # Log item creation (pool size as total; shards counted separately)

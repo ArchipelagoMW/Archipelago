@@ -546,6 +546,28 @@ Implemented full runtime DeathLink flow in `worlds/kirbyam/client.py`:
   - local alive->dead send exactly once
   - incoming-apply echo suppression
 
+## Issue #333: Host Upload Crash (`TypeError: an integer is required`)
+
+### Problem
+Uploading KirbyAM seeds to `archipelago.gg` failed while loading room multidata:
+`_speedups.LocationStore.init` raised `TypeError: an integer is required`.
+
+### Root cause
+Goal locations were converted to locked event items (`item.code is None`) in
+`create_items()`, but their AP location address remained numeric. During host
+load, `LocationStore` attempted to deserialize these numeric location entries
+with a non-integer item value, causing the crash.
+
+### Solution
+- When converting goal locations to runtime events, set `loc.address = None`.
+  This keeps goal checks as event-only (non-host-fillable) locations and avoids
+  serializing `None` item codes into numeric location entries.
+- Added regression test in `test_item_pool.py` ensuring goal locations become
+  addressless events.
+
+### Validation
+- Targeted pytest for `test_item_pool.py`, including the new regression test.
+
 ## Issue #312: Standardize Manual Test Templates into Machine-Checkable Checklists
 
 ### Problem

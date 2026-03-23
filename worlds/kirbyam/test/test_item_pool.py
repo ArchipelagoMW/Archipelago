@@ -1,10 +1,13 @@
 import random
 from pathlib import Path
+from types import SimpleNamespace
 
 from BaseClasses import ItemClassification
 
 from .. import KirbyAmWorld
 from ..data import LocationCategory, data
+from ..locations import KirbyAmLocation
+from ..options import RandomizeShards
 
 
 def test_useful_item_catalog_includes_map_and_vitality() -> None:
@@ -68,3 +71,41 @@ def test_payload_supports_weighted_life_fillers() -> None:
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 23u" in payload
     assert "ap_grant_lives(2u)" in payload
     assert "ap_grant_lives(3u)" in payload
+
+
+def test_goal_locations_are_converted_to_addressless_events() -> None:
+    goal_key, goal_meta = next(
+        (key, meta) for key, meta in data.locations.items() if meta.category == LocationCategory.GOAL
+    )
+    goal_location = KirbyAmLocation(
+        1,
+        goal_meta.label,
+        goal_meta.location_id,
+        None,
+        key=goal_key,
+        default_item_code=goal_meta.default_item,
+    )
+
+    class _DummyMultiWorld:
+        def __init__(self, locations):
+            self._locations = locations
+            self.itempool = []
+
+        def get_locations(self, player):
+            return self._locations
+
+        def get_player_name(self, player):
+            return "KirbyAM-Test"
+
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.player = 1
+    world.multiworld = _DummyMultiWorld([goal_location])
+    world.options = SimpleNamespace(
+        shards=SimpleNamespace(value=RandomizeShards.option_completely_random)
+    )
+
+    world.create_items()
+
+    assert goal_location.item is not None
+    assert goal_location.item.code is None
+    assert goal_location.address is None
