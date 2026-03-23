@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from . import KirbyAmWorld
 
 
+_DEBUG_EVENT_PREFIX = "EVENT_DEBUG_"
+
+
 def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
     """
     Create Regions from JSON, add event Locations, and connect Regions via exits and warps.
@@ -41,6 +44,8 @@ def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
             )
 
         for event_data in region_data.events:
+            if event_data.name.startswith(_DEBUG_EVENT_PREFIX):
+                continue
             loc = KirbyAmLocation(world.player, event_data.name, None, region)
             loc.place_locked_item(
                 KirbyAmItem(event_data.name, ItemClassification.progression, None, world.player)
