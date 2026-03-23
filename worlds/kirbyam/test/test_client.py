@@ -8,6 +8,59 @@ from ..client import KirbyAmClient
 
 
 @pytest.mark.asyncio
+async def test_validate_rom_accepts_patched_kirby_header(mock_bizhawk_context):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [
+            b'AGB KIRBY AM',
+            b'B8KE',
+            b'01',
+            b'\x01' + (b'\x00' * 15),
+        ]
+
+        assert await client.validate_rom(mock_bizhawk_context) is True
+        assert mock_bizhawk_context.game == client.game
+        assert mock_bizhawk_context.want_slot_data is True
+
+
+@pytest.mark.asyncio
+async def test_validate_rom_rejects_unpatched_kirby_rom(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [
+            b'AGB KIRBY AM',
+            b'B8KE',
+            b'01',
+            b'\x00' * 16,
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    assert "unpatched Kirby & The Amazing Mirror ROM" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_validate_rom_rejects_non_kirby_header(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [
+            b'POKEMON EMER',
+            b'BPEE',
+            b'01',
+            b'\x01' + (b'\x00' * 15),
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    assert "ROM validation failed" in caplog.text
+
+
+@pytest.mark.asyncio
 async def test_poll_locations_empty_bitfield(mock_bizhawk_context):
     """Test _poll_locations with no shards collected."""
     client = KirbyAmClient()
