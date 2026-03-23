@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import Mock
 
 from ..bases import skip_long_tests, SVTestBase
-from ..options.presets import allsanity_mods_6_x_x
+from ..options.presets import allsanity_mods_7_x_x
 from ..options.utils import fill_namespace_with_default
 from ... import STARDEW_VALLEY
 from ...options import FarmType, BundleRandomization, EntranceRandomization
@@ -10,7 +10,7 @@ from ...options import FarmType, BundleRandomization, EntranceRandomization
 
 @unittest.skipIf(skip_long_tests(), "Long tests disabled")
 class TestUniversalTrackerGenerationIsStable(SVTestBase):
-    options = allsanity_mods_6_x_x()
+    options = allsanity_mods_7_x_x()
     options.update({
         EntranceRandomization.internal_name: EntranceRandomization.option_buildings,
         BundleRandomization.internal_name: BundleRandomization.option_shuffled,

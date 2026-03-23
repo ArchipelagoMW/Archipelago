@@ -31,6 +31,10 @@ import settings
 import Utils
 from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
                    user_path)
+
+if __name__ == "__main__":
+    init_logging('Launcher')
+
 from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
@@ -493,7 +497,6 @@ def main(args: argparse.Namespace | dict | None = None):
 
 
 if __name__ == '__main__':
-    init_logging('Launcher')
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
