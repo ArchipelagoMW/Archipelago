@@ -53,7 +53,8 @@ async def test_validate_rom_rejects_missing_auth_block_read(mock_bizhawk_context
         with caplog.at_level(logging.INFO):
             assert await client.validate_rom(mock_bizhawk_context) is False
 
-    assert "unpatched Kirby & The Amazing Mirror ROM" in caplog.text
+    assert "unpatched Kirby & The Amazing Mirror ROM" not in caplog.text
+    assert "ROM auth read failed during validation" in caplog.text
 
 
 @pytest.mark.asyncio

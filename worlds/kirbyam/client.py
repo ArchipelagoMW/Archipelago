@@ -349,16 +349,20 @@ class KirbyAmClient(BizHawkClient):
                     maker_code,
                 )
                 return False
-        except Exception:
+        except bizhawk.RequestFailedError as exc:
+            logger.info("KirbyAM: ROM header read failed during validation: %s", exc)
+            return False
+        except Exception as exc:
+            logger.error("KirbyAM: unexpected error during ROM header validation", exc_info=exc)
             return False
 
         try:
             auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
-        except Exception:
-            logger.info(
-                "ERROR: You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
-                "Generate a patch file and use it to create a patched ROM before opening the BizHawk client."
-            )
+        except bizhawk.RequestFailedError as exc:
+            logger.info("KirbyAM: ROM auth read failed during validation: %s", exc)
+            return False
+        except Exception as exc:
+            logger.error("KirbyAM: unexpected error during ROM auth validation", exc_info=exc)
             return False
 
         if not any(auth_raw):
