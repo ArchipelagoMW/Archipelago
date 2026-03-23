@@ -3,6 +3,8 @@ import pytest
 import logging
 from unittest.mock import AsyncMock, Mock, patch
 
+import worlds._bizhawk as bizhawk
+
 from ..data import data
 from ..client import KirbyAmClient
 
@@ -12,11 +14,9 @@ async def test_validate_rom_accepts_patched_kirby_header(mock_bizhawk_context):
     client = KirbyAmClient()
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [
-            b'AGB KIRBY AM',
-            b'B8KE',
-            b'01',
-            b'\x01' + (b'\x00' * 15),
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x01' + (b'\x00' * 15)],
         ]
 
         assert await client.validate_rom(mock_bizhawk_context) is True
@@ -29,11 +29,25 @@ async def test_validate_rom_rejects_unpatched_kirby_rom(mock_bizhawk_context, ca
     client = KirbyAmClient()
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [
-            b'AGB KIRBY AM',
-            b'B8KE',
-            b'01',
-            b'\x00' * 16,
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x00' * 16],
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    assert "unpatched Kirby & The Amazing Mirror ROM" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_validate_rom_rejects_missing_auth_block_read(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            bizhawk.RequestFailedError("Connection closed"),
         ]
 
         with caplog.at_level(logging.INFO):
@@ -47,11 +61,8 @@ async def test_validate_rom_rejects_non_kirby_header(mock_bizhawk_context, caplo
     client = KirbyAmClient()
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [
-            b'POKEMON EMER',
-            b'BPEE',
-            b'01',
-            b'\x01' + (b'\x00' * 15),
+        mock_read.side_effect = [
+            [b'POKEMON EMER', b'BPEE', b'01'],
         ]
 
         with caplog.at_level(logging.INFO):

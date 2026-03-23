@@ -326,13 +326,12 @@ class KirbyAmClient(BizHawkClient):
             return False
 
         try:
-            title_bytes, game_code_bytes, maker_code_bytes, auth_raw = await bizhawk.read(
+            title_bytes, game_code_bytes, maker_code_bytes = await bizhawk.read(
                 ctx.bizhawk_ctx,
                 [
                     (0xA0, 12, "ROM"),
                     (0xAC, 4, "ROM"),
                     (0xB0, 2, "ROM"),
-                    (auth_addr, _AUTH_TOKEN_SIZE, "ROM"),
                 ],
             )
             rom_title = bytes(title_bytes).decode("ascii", errors="ignore").rstrip("\0").lower()
@@ -350,14 +349,23 @@ class KirbyAmClient(BizHawkClient):
                     maker_code,
                 )
                 return False
-
-            if not any(auth_raw):
-                logger.info(
-                    "ERROR: You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
-                    "Generate a patch file and use it to create a patched ROM before opening the BizHawk client."
-                )
-                return False
         except Exception:
+            return False
+
+        try:
+            auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
+        except Exception:
+            logger.info(
+                "ERROR: You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
+                "Generate a patch file and use it to create a patched ROM before opening the BizHawk client."
+            )
+            return False
+
+        if not any(auth_raw):
+            logger.info(
+                "ERROR: You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
+                "Generate a patch file and use it to create a patched ROM before opening the BizHawk client."
+            )
             return False
 
         # Minimal AP settings
