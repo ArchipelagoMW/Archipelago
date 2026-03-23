@@ -1,5 +1,6 @@
 """Test reset-safe mirror shard grant handling (Issue #109)."""
 
+import re
 import sys
 import os
 import importlib.util
@@ -81,6 +82,31 @@ def test_issue_109_addresses_documented():
     assert "0x18" in content or "24" in content, "SRAM offset 0x18 should be defined"
     assert "0x1A" in content or "26" in content, "SRAM offset 0x1A should be defined"
     assert "0x1C" in content or "28" in content, "SRAM offset 0x1C should be defined"
+
+
+def test_ap_hook_returns_without_clobbering_r4():
+    """Verify the payload hook keeps LR on the stack instead of using r4 as a temp."""
+    hook_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_hook.s")
+    assert os.path.exists(hook_path), "ap_hook.s should exist in kirby_ap_payload"
+
+    with open(hook_path, 'r') as f:
+        content = f.read()
+
+    # Strip // line comments so comment text cannot trigger false positives/negatives.
+    code_only = re.sub(r'//[^\n]*', '', content)
+    # Normalize runs of spaces/tabs to a single space.
+    normalized = re.sub(r'[ \t]+', ' ', code_only)
+
+    assert re.search(r'\bpush\s*\{r0-r3,\s*lr\}', normalized), \
+        "Hook should save r0-r3 and lr"
+    assert re.search(r'\bpop\s*\{r0-r3\}', normalized), \
+        "Hook should restore r0-r3 before replaying instructions"
+    assert re.search(r'\bpop\s*\{pc\}', normalized), \
+        "Hook should return by popping the saved lr into pc"
+    assert not re.search(r'\bpop\s*\{[^}]*\br4\b[^}]*\}', normalized, re.IGNORECASE), \
+        "Hook must not use r4 as a temporary restore register"
+    assert not re.search(r'\bmov\s+lr\s*,\s*r4\b', normalized, re.IGNORECASE), \
+        "Hook must not rebuild lr through r4"
 
 
 if __name__ == "__main__":

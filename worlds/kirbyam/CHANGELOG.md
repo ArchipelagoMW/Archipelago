@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Fix BizHawk handler detection by validating the KirbyAM USA GBA header and patched auth block instead of an unrelated ROM offset.
+- Fix the ROM mailbox hook to return without clobbering live game registers, preventing corrupted startup state such as Player 1 starting with 99 lives.
 
 ## v0.0.7
 
