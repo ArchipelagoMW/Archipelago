@@ -7,6 +7,7 @@ import worlds._bizhawk as bizhawk
 
 from ..data import data
 from ..client import KirbyAmClient
+from ..rom import KirbyAmProcedurePatch
 
 
 @pytest.mark.asyncio
@@ -27,16 +28,13 @@ async def test_validate_rom_accepts_patched_kirby_header(mock_bizhawk_context):
 @pytest.mark.asyncio
 async def test_validate_rom_rejects_unpatched_kirby_rom(mock_bizhawk_context, caplog):
     client = KirbyAmClient()
+    mock_bizhawk_context.rom_hash = KirbyAmProcedurePatch.hash
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.side_effect = [
-            [b'AGB KIRBY AM', b'B8KE', b'01'],
-            [b'\x00' * 16],
-        ]
-
         with caplog.at_level(logging.INFO):
             assert await client.validate_rom(mock_bizhawk_context) is False
 
+    mock_read.assert_not_awaited()
     assert "unpatched Kirby & The Amazing Mirror ROM" in caplog.text
 
 
@@ -70,6 +68,22 @@ async def test_validate_rom_rejects_non_kirby_header(mock_bizhawk_context, caplo
             assert await client.validate_rom(mock_bizhawk_context) is False
 
     assert "ROM validation failed" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_validate_rom_rejects_empty_patch_metadata(mock_bizhawk_context, caplog):
+    client = KirbyAmClient()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [b'AGB KIRBY AM', b'B8KE', b'01'],
+            [b'\x00' * 16],
+        ]
+
+        with caplog.at_level(logging.INFO):
+            assert await client.validate_rom(mock_bizhawk_context) is False
+
+    assert "KirbyAM patch metadata was missing" in caplog.text
 
 
 @pytest.mark.asyncio
