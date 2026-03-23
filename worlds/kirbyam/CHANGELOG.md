@@ -1,6 +1,6 @@
 # KirbyAM APWorld Changelog
 
-## v0.0.10
+## Unreleased
 
 - Fix KirbyAM Open Patch preflight to revalidate configured base ROM for `.apkirbyam` and reprompt in GUI mode when hash/path checks fail.
 - Reduce BizHawk client log spam by suppressing duplicate "patch metadata missing" validation errors during repeated retries.
