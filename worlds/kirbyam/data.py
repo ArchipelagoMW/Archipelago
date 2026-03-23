@@ -75,6 +75,25 @@ def _parse_int(value: Any) -> int:
     raise TypeError(f"Expected int/str for integer field, got {type(value)}")
 
 
+def _normalize_gba_rom_address(value: int) -> int:
+    """
+    Convert a GBA cartridge bus address to a ROM file/domain offset.
+
+    BizHawk's ROM domain APIs expect zero-based offsets, while reverse-engineering notes
+    and payload symbols are typically expressed as mapped bus addresses.
+
+    The GBA exposes cartridge ROM in two mirrored windows:
+    - 0x08000000..0x09FFFFFF (waitstate 0)
+    - 0x0A000000..0x0BFFFFFF (waitstate 1)
+    Both map to the same underlying ROM bytes and are normalized to zero-based offsets.
+    """
+    if 0x08000000 <= value < 0x0A000000:
+        return value - 0x08000000
+    if 0x0A000000 <= value < 0x0C000000:
+        return value - 0x0A000000
+    return value
+
+
 class LocationCategory(IntEnum):
     SHARD = 0
     GOAL = 1
@@ -258,7 +277,7 @@ def _init() -> None:
 
         if isinstance(rom, dict):
             for k, v in rom.items():
-                data.rom_addresses[k] = _parse_int(v)
+                data.rom_addresses[k] = _normalize_gba_rom_address(_parse_int(v))
 
     # Load items.json
     # Expected forms:

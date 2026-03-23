@@ -34,6 +34,14 @@ _SEND_NOTIFY_WINDOW_SECONDS = 2.0
 _SEND_NOTIFY_MAX_PER_WINDOW = 5
 
 
+def _normalize_gba_rom_address(value: int) -> int:
+    if 0x08000000 <= value < 0x0A000000:
+        return value - 0x08000000
+    if 0x0A000000 <= value < 0x0C000000:
+        return value - 0x0A000000
+    return value
+
+
 class KirbyAmClient(BizHawkClient):
     game = "Kirby & The Amazing Mirror"
     system = "GBA"
@@ -329,6 +337,7 @@ class KirbyAmClient(BizHawkClient):
         if auth_addr is None:
             logger.error("KirbyAM: missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
             return _fail("missing_auth_address")
+        auth_addr = _normalize_gba_rom_address(auth_addr)
 
         rom_hash = getattr(ctx, "rom_hash", None)
         if isinstance(rom_hash, str) and rom_hash.lower() == KirbyAmProcedurePatch.hash.lower():
@@ -408,6 +417,7 @@ class KirbyAmClient(BizHawkClient):
         auth_addr = data.rom_addresses.get("gArchipelagoInfo")
         if auth_addr is None:
             raise Exception("Missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
+        auth_addr = _normalize_gba_rom_address(auth_addr)
 
         auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
