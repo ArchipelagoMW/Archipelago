@@ -15,7 +15,11 @@ for path_entry in list(sys.path):
 import argparse
 import hashlib
 import importlib.util
+import multiprocessing as mp
+import shutil
 import subprocess
+import tempfile
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -28,6 +32,8 @@ BL_BYTES = bytes.fromhex("0B F0 B3 FC")
 ROM_PATH_TMP = "rom_path.tmp"
 INTERMEDIARY_ROM = "baseline_patched.tmp.gba"
 EXPECTED_BASE_ROM_SIZE = 0x1000000
+BSDIFF_TIMEOUT_SECONDS = int(os.environ.get("KIRBYAM_BSDIFF_TIMEOUT_SECONDS", "0"))
+BSDIFF_HEARTBEAT_SECONDS = int(os.environ.get("KIRBYAM_BSDIFF_HEARTBEAT_SECONDS", "30"))
 
 
 # ----------------------------
@@ -149,6 +155,130 @@ def safe_unlink(path: str) -> None:
         return
     except Exception as e:
         print(f"Warning: failed to delete intermediary ROM '{path}': {e}")
+
+
+def _lock_pid_from_file(lock_path: Path) -> int | None:
+    try:
+        text = lock_path.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        return None
+    except Exception:
+        return None
+
+    for line in text.splitlines():
+        if line.startswith("pid="):
+            raw = line.split("=", 1)[1].strip()
+            if raw.isdigit():
+                return int(raw)
+    return None
+
+
+def _pid_is_running(pid: int) -> bool:
+    if pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
+
+
+def acquire_run_lock(lock_path: Path) -> None:
+    try:
+        # O_EXCL guarantees only one patch_rom.py run can hold the lock at a time.
+        fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(f"pid={os.getpid()}\n")
+            f.write(f"started={datetime.now().isoformat(timespec='seconds')}\n")
+        return
+    except FileExistsError:
+        existing_pid = _lock_pid_from_file(lock_path)
+        if existing_pid is not None and not _pid_is_running(existing_pid):
+            print(f"Stale lock detected for exited pid={existing_pid}; reclaiming lock.")
+            try:
+                lock_path.unlink()
+            except Exception as e:
+                raise SystemExit(
+                    f"Error: found stale lock but failed to remove it: {lock_path}\n{e}"
+                ) from e
+            return acquire_run_lock(lock_path)
+
+        raise SystemExit(
+            f"Error: another patch generation appears to be running (lock file exists): {lock_path}\n"
+            "If no patch job is active, delete the lock file and retry."
+        )
+
+
+def release_run_lock(lock_path: Path) -> None:
+    try:
+        lock_path.unlink()
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        print(f"Warning: failed to remove lock file '{lock_path}': {e}")
+
+
+def _bsdiff_worker(in_path: str, intermediary_rom: str, tmp_patch_path: str, result_queue: mp.Queue) -> None:
+    try:
+        bsdiff4 = require_bsdiff4()
+        bsdiff4.file_diff(in_path, intermediary_rom, tmp_patch_path)
+        result_queue.put("")
+    except Exception as e:  # pragma: no cover - exercised only on worker failure
+        result_queue.put(str(e))
+
+
+def generate_bsdiff_with_timeout(in_path: str, intermediary_rom: str, patch_path: str) -> None:
+    with tempfile.TemporaryDirectory(prefix="kirbyam-bsdiff-") as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        local_in = tmpdir_path / "clean_base.gba"
+        local_out = tmpdir_path / "patched_base.gba"
+        local_patch = tmpdir_path / "base_patch.bsdiff4"
+
+        print(f"Preparing local temp workspace for bsdiff: {tmpdir_path}")
+        shutil.copy2(in_path, local_in)
+        shutil.copy2(intermediary_rom, local_out)
+
+        result_queue: mp.Queue = mp.Queue()
+        proc = mp.Process(
+            target=_bsdiff_worker,
+            args=(str(local_in), str(local_out), str(local_patch), result_queue),
+            daemon=True,
+        )
+        proc.start()
+
+        start = time.monotonic()
+        last_heartbeat = start
+
+        while proc.is_alive():
+            now = time.monotonic()
+            elapsed = int(now - start)
+            if BSDIFF_TIMEOUT_SECONDS > 0 and elapsed >= BSDIFF_TIMEOUT_SECONDS:
+                proc.terminate()
+                proc.join(timeout=5)
+                raise SystemExit(
+                    "Error: bsdiff generation timed out.\n"
+                    f"Elapsed: {elapsed}s, timeout: {BSDIFF_TIMEOUT_SECONDS}s\n"
+                    "You can raise the timeout with KIRBYAM_BSDIFF_TIMEOUT_SECONDS, "
+                    "or investigate system load/IO contention."
+                )
+
+            if BSDIFF_HEARTBEAT_SECONDS > 0 and now - last_heartbeat >= BSDIFF_HEARTBEAT_SECONDS:
+                print(f"BSdiff still running... {elapsed}s elapsed")
+                last_heartbeat = now
+
+            proc.join(timeout=1)
+
+        proc.join(timeout=5)
+
+        worker_error = ""
+        if not result_queue.empty():
+            worker_error = result_queue.get_nowait()
+
+        if proc.exitcode not in (0, None) or worker_error:
+            msg = worker_error or f"worker exited with code {proc.exitcode}"
+            raise SystemExit(f"Error generating bsdiff patch '{patch_path}': {msg}")
+
+        shutil.move(local_patch, patch_path)
 
 
 def md5_file(path: str, chunk_size: int = 1024 * 1024) -> str:
@@ -378,6 +508,9 @@ def main():
 
     print("Patch output (fixed):", Path(patch_path).resolve())
 
+    lock_path = Path(patch_path).with_suffix(Path(patch_path).suffix + ".lock")
+    acquire_run_lock(lock_path)
+
     source_type = args["source_type"]
     legacy_ignored_out = args.get("legacy_ignored_out")
     hash_debug = bool(args.get("hash_debug"))
@@ -402,74 +535,73 @@ def main():
         print("      Your canonical clean ROM is 'kirby.gba'.")
         print("      For consistency, consider using a file named 'kirby.gba' as the clean base.")
 
-    # 1) Build step: make clean; make
-    run_make()
-
-    # 2) Load payload
     try:
-        with open("payload.bin", "rb") as f:
-            payload = f.read()
-    except FileNotFoundError as e:
-        raise SystemExit(
-            "Error: payload.bin not found. Ensure your build produces payload.bin in the current directory."
-        ) from e
+        # 1) Build step: make clean; make
+        run_make()
 
-    if len(payload) > 0x16A0:
-        raise SystemExit(f"payload.bin too large: {len(payload)} bytes (max 0x16A0)")
-
-    # 3) Load ROM
-    try:
-        with open(in_path, "rb") as f:
-            rom = bytearray(f.read())
-    except FileNotFoundError as e:
-        raise SystemExit(f"Error: input ROM not found: {in_path}") from e
-
-    warning = get_rom_size_warning(len(rom))
-    if warning is not None:
-        print(warning)
-
-    # 4) Insert payload
-    rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
-
-    # 5) Patch hook site with BL
-    rom[HOOK_OFFSET:HOOK_OFFSET + 4] = BL_BYTES
-
-    # 6) Write the intermediary patched ROM
-    with open(INTERMEDIARY_ROM, "wb") as f:
-        f.write(rom)
-
-    # Optional: hash debug of intermediary patched ROM
-    if hash_debug:
+        # 2) Load payload
         try:
-            patched_md5 = md5_file(INTERMEDIARY_ROM)
-            print("")
-            print("=== HASH DEBUG (PATCHED ROM OUTPUT) ===")
-            print(f"Computed MD5 (expected base ROM):               {load_expected_rom_md5_from_rom_py()}")
-            print(f"Computed MD5 (intermediary patched ROM output): {patched_md5}")
-            print("Note: These are expected to differ (patched ROM is modified).")
-            print("=== HASH DEBUG END ===")
-            print("")
-        except Exception as e:
-            print(f"Warning: failed to compute intermediary patched ROM MD5: {e}")
+            with open("payload.bin", "rb") as f:
+                payload = f.read()
+        except FileNotFoundError as e:
+            raise SystemExit(
+                "Error: payload.bin not found. Ensure your build produces payload.bin in the current directory."
+            ) from e
 
+        if len(payload) > 0x16A0:
+            raise SystemExit(f"payload.bin too large: {len(payload)} bytes (max 0x16A0)")
 
-    print("Intermediary patched ROM written:", INTERMEDIARY_ROM)
-    print("Payload inserted at file offset:", hex(PAYLOAD_OFFSET))
-    print("Hook patched at file offset:", hex(HOOK_OFFSET), "with bytes:", BL_BYTES.hex(" "))
+        # 3) Load ROM
+        try:
+            with open(in_path, "rb") as f:
+                rom = bytearray(f.read())
+        except FileNotFoundError as e:
+            raise SystemExit(f"Error: input ROM not found: {in_path}") from e
 
-    # 7) Generate base_patch.bsdiff4: clean base -> intermediary patched ROM
-    bsdiff4 = require_bsdiff4()
-    try:
-        bsdiff4.file_diff(in_path, INTERMEDIARY_ROM, patch_path)
-    except Exception as e:
-        raise SystemExit(f"Error generating bsdiff patch '{patch_path}': {e}") from e
+        warning = get_rom_size_warning(len(rom))
+        if warning is not None:
+            print(warning)
 
-    print("BSdiff patch generated:", patch_path)
-    print("Patch source (clean):", in_path)
-    print("Patch target (baseline):", INTERMEDIARY_ROM)
+        # 4) Insert payload
+        rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
 
-    # 8) Delete intermediary ROM now that patch exists
-    safe_unlink(INTERMEDIARY_ROM)
+        # 5) Patch hook site with BL
+        rom[HOOK_OFFSET:HOOK_OFFSET + 4] = BL_BYTES
+
+        # 6) Write the intermediary patched ROM
+        with open(INTERMEDIARY_ROM, "wb") as f:
+            f.write(rom)
+
+        # Optional: hash debug of intermediary patched ROM
+        if hash_debug:
+            try:
+                patched_md5 = md5_file(INTERMEDIARY_ROM)
+                print("")
+                print("=== HASH DEBUG (PATCHED ROM OUTPUT) ===")
+                print(f"Computed MD5 (expected base ROM):               {load_expected_rom_md5_from_rom_py()}")
+                print(f"Computed MD5 (intermediary patched ROM output): {patched_md5}")
+                print("Note: These are expected to differ (patched ROM is modified).")
+                print("=== HASH DEBUG END ===")
+                print("")
+            except Exception as e:
+                print(f"Warning: failed to compute intermediary patched ROM MD5: {e}")
+
+        print("Intermediary patched ROM written:", INTERMEDIARY_ROM)
+        print("Payload inserted at file offset:", hex(PAYLOAD_OFFSET))
+        print("Hook patched at file offset:", hex(HOOK_OFFSET), "with bytes:", BL_BYTES.hex(" "))
+
+        # 7) Generate base_patch.bsdiff4: clean base -> intermediary patched ROM
+        print("Starting bsdiff generation...")
+        generate_bsdiff_with_timeout(in_path, INTERMEDIARY_ROM, patch_path)
+
+        print("BSdiff patch generated:", patch_path)
+        print("Patch source (clean):", in_path)
+        print("Patch target (baseline):", INTERMEDIARY_ROM)
+
+        # 8) Delete intermediary ROM now that patch exists
+        safe_unlink(INTERMEDIARY_ROM)
+    finally:
+        release_run_lock(lock_path)
 
 
 if __name__ == "__main__":
