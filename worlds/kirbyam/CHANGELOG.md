@@ -4,6 +4,7 @@
 
 - Add critical-module coverage gates for protocol/runtime-sensitive KirbyAM modules, enforced in CI with versioned per-module thresholds.
 - Add a repeat-run flaky-test detection mode for reconnect-sensitive KirbyAM tests, with CI workflow support and run-index failure reporting.
+- Introduce mutation testing evaluation workflow for logic-heavy KirbyAM modules (ability randomization, data loading) using Cosmic Ray, with documentation and repeatable local baseline capture process.
 ## v0.0.8
 
 - Fix BizHawk handler detection by validating the KirbyAM USA GBA header and patched auth block instead of an unrelated ROM offset.

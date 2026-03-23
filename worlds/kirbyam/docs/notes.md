@@ -114,6 +114,34 @@ python worlds/kirbyam/test/flaky_detection_runner.py \
 - Tests cover argument validation, default target selection, JUnit failure extraction,
   and malformed XML handling.
 
+## Issue #309: Mutation Testing Evaluation for Logic-Heavy Modules
+
+### Problem
+KirbyAM has logic-heavy modules (ability randomization, data mapping) where weak test assertions could allow regressions to slip past CI.
+
+### Solution
+Implemented repeatable mutation testing workflow using Cosmic Ray:
+
+- Configuration: `worlds/kirbyam/test/mutation.cosmic.toml`
+  - Targets `ability_randomization.py` and `data.py`
+  - Focuses on test-backed modules with deterministic, verifiable behavior
+- Documentation: `worlds/kirbyam/docs/MUTATION_TESTING.md`
+  - Local usage: baseline, init, exec, report cycle
+  - CI integration roadmap for automated mutation scoring
+
+### Validation
+- Cosmic Ray baseline passes on unmutated code
+- Session initialization detects 100+ mutation opportunities across target modules
+- Per-operator mutation categories documented in cr-report output
+
+### Baseline Mutation Score
+This PR establishes the mutation-testing workflow only. Baseline mutation score capture will be performed in a follow-up task and documented once the first full local run has been completed.
+
+### Next Steps (In Follow-Up PRs)
+1. Run full mutation execution to capture baseline score (tracked in issue comment once PR merges)
+2. Investigate surviving mutants for test gap patterns
+3. Optionally create CI workflow for periodic automated mutation scoring
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.

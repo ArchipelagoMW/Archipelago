@@ -1,0 +1,1 @@
+cosmic-ray>=8.0  # Mutation testing framework for evaluating test strength in logic-heavy modules

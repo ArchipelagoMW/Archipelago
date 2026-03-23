@@ -1,0 +1,8 @@
+[cosmic-ray]
+module-path = ["worlds/kirbyam/ability_randomization.py", "worlds/kirbyam/data.py"]
+timeout = 20.0
+excluded-modules = ["**/test/**"]
+test-command = "python -m pytest worlds/kirbyam/test/test_enemy_copy_ability_randomization.py worlds/kirbyam/test/test_fixture_data.py -q"
+
+[cosmic-ray.distributor]
+name = "local"
