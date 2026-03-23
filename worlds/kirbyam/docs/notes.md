@@ -2,6 +2,35 @@
 
 ## Issue #290: Generation Failure from Global bit_index Collision Check
 
+## Issue #308: Critical-Module Coverage Gates
+
+### Problem
+Global test coverage can look healthy while coverage of protocol/runtime-critical
+KirbyAM modules regresses unnoticed.
+
+### Solution
+Added module-level coverage gates for critical files:
+
+- Threshold definitions (versioned):
+  `worlds/kirbyam/test/critical_module_coverage_thresholds.json`
+- Gate evaluator:
+  `worlds/kirbyam/test/critical_module_coverage_gate.py`
+- CI enforcement in `.github/workflows/unittests.yml`:
+  - Runs once on `ubuntu-latest` / Python `3.13`
+  - Generates coverage JSON from KirbyAM tests
+  - Fails CI if any critical module falls below its threshold
+
+Current gated modules:
+- `worlds/kirbyam/client.py`
+- `worlds/kirbyam/data.py`
+- `worlds/kirbyam/generation_logging.py`
+- `worlds/kirbyam/ability_randomization.py`
+- `worlds/kirbyam/rules.py`
+
+### Validation
+- Added `worlds/kirbyam/test/test_critical_module_coverage_gate.py`.
+- Tests cover pass/fail behavior for threshold misses and missing module entries.
+
 ### Problem
 KirbyAM generation failed in `stage_assert_generate` because `validate_regions()` treated
 all location `bit_index` values as one global namespace. That rule incorrectly rejected

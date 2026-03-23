@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add critical-module coverage gates for protocol/runtime-sensitive KirbyAM modules, enforced in CI with versioned per-module thresholds.
 - Add a repeat-run flaky-test detection mode for reconnect-sensitive KirbyAM tests, with CI workflow support and run-index failure reporting.
 ## v0.0.8
 

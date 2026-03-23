@@ -68,6 +68,13 @@ jobs:
     - name: Unittests
       run: |
         pytest worlds/kirbyam/test -n auto --dist worksteal
+    - name: KirbyAM critical-module coverage gates
+      if: matrix.os == 'ubuntu-latest' && matrix.python.version == '3.13'
+      run: |
+        pytest worlds/kirbyam/test -q --cov=worlds.kirbyam --cov-report=json:test-output/kirbyam/coverage.json
+        python worlds/kirbyam/test/critical_module_coverage_gate.py \
+          --coverage-json test-output/kirbyam/coverage.json \
+          --thresholds-json worlds/kirbyam/test/critical_module_coverage_thresholds.json
     - name: Upload KirbyAM test logs on failure
       if: failure()
       uses: actions/upload-artifact@v4
