@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld

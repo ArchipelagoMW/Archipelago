@@ -146,6 +146,16 @@ class Requirements:
     def is_empty(self) -> bool:
         return True
 
+    def __and__(self, other): # &
+        if not isinstance(other, Requirements):
+            return NotImplemented
+        return AllRequirements([self, other])
+
+    def __or__(self, other):
+        if not isinstance(other, Requirements):
+            return NotImplemented
+        return AnyRequirements([self, other])
+
 # SimpleRequirements, LeveledRequirements and AllRequirements use default can_reach implementation
 class SimpleRequirements(Requirements):
     requirements: dict[str, int]
@@ -178,7 +188,11 @@ class AllRequirements(Requirements):
 
     def __init__(self, requirements: list[Requirements], start_priority: int = 0):
         super().__init__(start_priority)
-        self.requirements = requirements
+        for req in requirements:
+            if isinstance(req, AllRequirements):
+                self.requirements.extend(req.requirements)
+            else:
+                self.requirements.append(req)
 
     def evaluate_items(self, opts: PeaksOfYoreOptions) -> dict[str, int]:
         final: dict[str, int] = {}
@@ -199,7 +213,11 @@ class AnyRequirements(Requirements):
 
     def __init__(self, requirements: list[Requirements], start_priority: int = 0):
         super().__init__(start_priority)
-        self.requirements = requirements
+        for req in requirements:
+            if isinstance(req, AnyRequirements):
+                self.requirements.extend(req.requirements)
+            else:
+                self.requirements.append(req)
 
     def can_reach(self, opts: PeaksOfYoreOptions, state: CollectionState, world: World) -> bool:
         return all(state.has_all_counts(reqs.evaluate_items(opts), world.player) for reqs in self.requirements)
@@ -244,13 +262,11 @@ def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
     item_count: int = math.ceil(rope_count/2)
     min_item_count: int = math.ceil(item_count*0.75)
     short_rope_addition: int = item_count-min_item_count
-    return AllRequirements([
-        SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count}),
-        AnyRequirements([
-            SimpleRequirements({"Extra Rope": short_rope_addition}, 200),   # base case: has required rope count
-            SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
-        ])
-    ], start_priority=start_priority)
+    return (SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
+        & (
+            SimpleRequirements({"Extra Rope": short_rope_addition}, 200)   # base case: has required rope count
+            | SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
+        ))
 
 class POYRegion:
     """
@@ -331,11 +347,11 @@ class PeakRegion(POYRegion):
 
     def prepare_peak_region(self):
         # add a ConditionalRequirement to the peak
-        self.entry_requirements = AllRequirements([self.entry_requirements,
-                                                   ConditionalRequirements(
-                                                       SimpleRequirements({self.name: 1}),
-                                                       condition = lambda opts: opts.game_mode == GameMode.option_peak_unlock
-                                                   )])
+        self.entry_requirements = (self.entry_requirements
+                                   & ConditionalRequirements(
+                                      SimpleRequirements({self.name: 1}),
+                                      condition = lambda opts: opts.game_mode == GameMode.option_peak_unlock
+                                  ))
         self.locations.append(LocationData(self.name, POYItemLocationType.PEAK, self.peak_id))
 
         for location in self.locations.copy():
@@ -381,8 +397,7 @@ class BookRegion(POYRegion):
         if self.entry_requirements.is_empty():
             self.entry_requirements = conditional
         else:
-            self.entry_requirements = AllRequirements([self.entry_requirements, conditional])
-
+            self.entry_requirements = self.entry_requirements & conditional
 # All of the items in the randomiser are defined here, with functions to define whether they are not enabled,
 # starter items, or early
 all_items: list[ItemData] = [
@@ -650,8 +665,8 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ], generate_free_solo=True),
         PeakRegion("Ymir's Shadow", 34, locations=[
             LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
-                         requirements=AnyRequirements([get_rope_requirement(1, 200),
-                                                       SimpleRequirements({"Progressive Crampons": 2})])
+                         requirements=get_rope_requirement(1, 200)
+                                      | SimpleRequirements({"Progressive Crampons": 2})
                          ),
             LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
