@@ -81,7 +81,7 @@ class StardewWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Kaito Kid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"],
+        ["Kaito Kid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)", "itepastra"],
     )
 
     setup_fr = Tutorial(
