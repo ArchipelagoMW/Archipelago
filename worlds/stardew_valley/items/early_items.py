@@ -81,6 +81,8 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     early_forced.extend(random.sample(early_candidates, len(early_candidates) // early_candidate_rate))
 
+    # When the farmhouse is shuffled too much, the odds of a tiny sphere 1 become large,
+    # which means the early_items are likely to lead to fill errors
     if ((EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in options.entrance_randomization_behaviour and options.entrance_randomization.value >= 3)
             or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in options.entrance_randomization_behaviour):
         early_forced = []
