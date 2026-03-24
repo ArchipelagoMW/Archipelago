@@ -75,7 +75,7 @@ local function on_check_energy_link(event)
                 if validate_energy_link_bridge(i, bridge) then
                     local energy_increment = get_energy_increment(bridge)
                     if bridge.energy > energy_increment*3 then
-                        storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * ENERGY_LINK_EFFICIENCY)
+                        storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * general.energy_link.efficiency)
                         bridge.energy = bridge.energy - energy_increment
                     end
                 end

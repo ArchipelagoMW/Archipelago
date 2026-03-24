@@ -44,7 +44,11 @@ local function kill_players(force)
 end
 
 local function on_entity_died(event)
+    log("activating death link check.")
+    game.print("activating death link check.")
     if not event.entity.player then return end--detect if a player is connected to this entity. If it is that means a deathlink is in order.
+    log("past the player detection.")
+    game.print("past the player detection.")
     if DEATH_LINK == 0 then
         return
     end
@@ -56,6 +60,8 @@ local function on_entity_died(event)
     storage.forcedata[force.name].death_link_tick = game.tick
     library.dump_info()
     kill_players(force)
+    log("Finished and send the deathlink to the client....")
+    game.print("Finished and send the deathlink to the client....")
 end
 
 local function on_force_created(event)

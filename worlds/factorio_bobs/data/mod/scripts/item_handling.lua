@@ -176,7 +176,7 @@ local function on_research_finished(event)
                             if general.free_samples.state == 1 then
                                 count = result.amount
                             else
-                                count = get_any_stack_size(result.name)
+                                count = library.get_any_stack_size(result.name)
                                 if general.free_samples.state == 2 then
                                     count = math.ceil(count / 2)
                                 end

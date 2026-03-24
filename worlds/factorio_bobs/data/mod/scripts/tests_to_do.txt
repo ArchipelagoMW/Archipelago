@@ -56,8 +56,8 @@ Item handling:
 
 Single player:
 
-    send an Item
-    recieve an Item
+OK  send an Item
+OK  recieve an Item
     recieve an trap
 
-    get some samples
+OK  get some samples
