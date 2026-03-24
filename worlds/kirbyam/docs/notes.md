@@ -1271,3 +1271,55 @@ AP-delivered vitality items now apply native persistent vitality semantics in pa
 ### Validation
 - Added/updated tests for vitality chest location data, client polling, item pool sizing,
   patch callsite constants, and payload vitality signaling/apply behavior.
+
+## Issue #380: Fix Boss-Defeat Hook — Preserve Native Shard State to Prevent White Screen
+
+### Problem
+After defeating the Moonlight Mansion boss and watching the shard-to-hub-mirror cutscene, the
+game soft-locked with a permanently white screen (audio still playing).
+
+### Root Cause
+`sub_0801D584` (state machine step in `code_0801C6F8.c`) sets BG palette entry 0 to `RGB_WHITE`
+as the intended cutscene flash effect, then transitions through `sub_0801D8C8` (32-frame wait) to
+`sub_0801D948`. The subsequent cleanup function `sub_08039670` (ROM 0x08039670) CpuSets 64 KB of
+tile VRAM from `0x06000000` to zero but does **not** restore palette. After `TaskDestroy`, palette
+entry 0 remains white permanently — the screen never recovers.
+
+In the original game, `sub_0801D948` calls `CollectShard(var->unk218)` first, updating
+`gTreasures.shardField`. The post-cutscene state machine transitions correctly because native shard
+state is valid.
+
+The AP-patched version replaced `BL CollectShard` (at file offset `0x001D950`, 8 bytes into
+`sub_0801D948`) with `BL ap_on_boss_defeat_collect_shard`. The old hook only set the AP
+boss-defeat transport flag and returned without updating `gTreasures.shardField`. The
+post-cutscene state machine encountered stale shard state and could not complete the screen
+transition — permanent white screen.
+
+**Evidence**:
+- `d:\kirbyam-extras\katam\src\code_0801C6F8.c` lines 703-705: `sub_0801D948` calls
+  `CollectShard(var->unk218)` then saves, calls `sub_080027A8`, `sub_08039670`, `TaskDestroy`.
+- `d:\kirbyam-extras\katam\src\code_0801C6F8.c` lines 533-547: `sub_0801D584` sets palette white,
+  transitions → `sub_0801D8C8` → `sub_0801D948`.
+- `d:\kirbyam-extras\katam\asm\code_08032E98.s` line 13579: `sub_08039670` does CpuSet fill to
+  `0x06000000` (VRAM), not palette (`0x05000000`/`0x05004000`).
+
+### Fix
+`ap_on_boss_defeat_collect_shard` now replicates native `CollectShard` semantics in addition to
+setting the AP boss-defeat transport flag:
+- `KIRBY_SHARD_FLAGS |= (1u << boss_index)` — EWRAM shard bitfield
+- `AP_SHARD_BITFIELD |= (1u << boss_index)` — AP mirror bitfield
+- `persist_shard_to_sram(new_shard_flags)` — SRAM persistence for reset safety
+
+AP `SHARD_N` item delivery performs the same `KIRBY_SHARD_FLAGS` write, making both paths
+idempotent — no double-grant effect.
+
+Hook callsite: `BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D950` (8 bytes into `sub_0801D948`,
+ROM addr `0x0801D948`).
+
+### Validation
+- `test_boss_collect_shard_call_offset_matches_verified_hook_site` in `test_patch_rom.py`:
+  pins `BOSS_COLLECT_SHARD_CALL_OFFSET == 0x001D950`.
+- `test_boss_defeat_hook_preserves_native_shard_state` in `test_reset_safe_shards.py`:
+  asserts AP flag write, `KIRBY_SHARD_FLAGS` update, and `persist_shard_to_sram` call all
+  present in `ap_on_boss_defeat_collect_shard`.
+- ROM patch rebuild required after this payload change.

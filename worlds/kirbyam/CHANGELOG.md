@@ -7,6 +7,7 @@
 - Split KirbyAM major-chest AP checks from native area-map ownership so opening a big chest no longer grants the map immediately; the native map now unlocks only when the corresponding AP map item is received.
 - Add dedicated vitality chest AP location family and transport register (`vitality_chest_flags` at `0x0202C02C`), plus payload interception so native vitality chest rewards become AP checks.
 - Apply AP-delivered vitality items through native persistent vitality state (`gTreasures.unk20`) and immediate HP/max HP sync for the active Kirby.
+- Fix boss-defeat hook (`ap_on_boss_defeat_collect_shard`) to preserve native shard state by updating `KIRBY_SHARD_FLAGS`, mirroring to `AP_SHARD_BITFIELD`, and calling `persist_shard_to_sram`; prevents permanent white-screen soft-lock after the Moonlight Mansion boss shard-to-hub-mirror cutscene.
 
 ## v0.0.10
 

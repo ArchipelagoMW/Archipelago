@@ -20,8 +20,7 @@
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
-// TODO: Call ap_set_boss_defeat_flag(boss_index) from the hook at sub_0801D948 (ROM addr 0x0801D948)
-//       once the exact patch-site byte offset is confirmed via Issue #110 address verification.
+// Hook site: BL CollectShard inside sub_0801D948 (ROM addr 0x0801D948, callsite file offset 0x001D950).
 #define AP_BOSS_DEFEAT_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x24u))
 #define AP_MAJOR_CHEST_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x28u))
 #define AP_VITALITY_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x2Cu))
@@ -128,10 +127,25 @@ static void ap_unlock_area_map(uint32_t area_id) {
 }
 
 // Hook target for the original boss shard grant call. The game passes the boss's
-// shard index in r0; record the boss defeat for AP and intentionally do not grant
-// native shard progression here.
+// shard index in r0 (same value passed to CollectShard(var->unk218) in sub_0801D948).
+// Records the AP boss-defeat transport flag for client polling AND replicates the
+// native CollectShard behavior (writing KIRBY_SHARD_FLAGS + SRAM persistence) so
+// that the post-cutscene state machine can continue the screen transition correctly.
+// AP SHARD_N delivery (ap_apply_item) performs the same KIRBY_SHARD_FLAGS write,
+// making native and AP grants idempotent when both occur on the same shard index.
+// Fixes Issue #380: native shard state left stale caused a permanent white screen
+// after the shard-to-hub-mirror cutscene.
 __attribute__((used)) void ap_on_boss_defeat_collect_shard(uint32_t boss_index) {
     ap_set_boss_defeat_flag(boss_index);
+    // Replicate CollectShard(boss_index): update native EWRAM shard bitfield and
+    // persist to SRAM so the game's post-cutscene transition sees valid shard state.
+    if (boss_index < 8u) {
+        uint8_t mask = (uint8_t)(1u << boss_index);
+        uint8_t new_shard_flags = (uint8_t)(KIRBY_SHARD_FLAGS | mask);
+        KIRBY_SHARD_FLAGS = new_shard_flags;
+        AP_SHARD_BITFIELD |= (uint32_t)mask;
+        persist_shard_to_sram(new_shard_flags);
+    }
 }
 
 // Hook target for native big chest reward collection. The game passes the area ID

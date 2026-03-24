@@ -112,6 +112,44 @@ def test_issue_109_addresses_documented():
     assert "0x1C" in content or "28" in content, "SRAM offset 0x1C should be defined"
 
 
+def test_boss_defeat_hook_preserves_native_shard_state():
+    """Verify ap_on_boss_defeat_collect_shard records AP flag AND updates native shard state.
+
+    Issue #380: suppressing native CollectShard left gTreasures.shardField stale,
+    causing the post-cutscene game-state machine to leave the screen permanently
+    white.  The hook must replicate CollectShard semantics (write KIRBY_SHARD_FLAGS
+    and persist to SRAM) in addition to setting the AP boss-defeat transport flag.
+    Source: d:\\kirbyam-extras\\katam\\src\\code_0801C6F8.c (sub_0801D948 / sub_0801D584).
+    """
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, "r") as f:
+        content = f.read()
+
+    # The hook must still record the AP boss-defeat flag.
+    # Restrict all checks to the ap_on_boss_defeat_collect_shard body so the
+    # test cannot pass by matching the same strings in ap_apply_item or any
+    # other function.
+    match = re.search(
+        r"void\s+ap_on_boss_defeat_collect_shard[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert match is not None, "ap_on_boss_defeat_collect_shard definition must exist in ap_payload.c"
+    hook_body = match.group(0)
+
+    assert "ap_set_boss_defeat_flag(boss_index)" in hook_body, \
+        "Boss hook must call ap_set_boss_defeat_flag to signal the AP location check"
+
+    # The hook must also replicate CollectShard: write the native EWRAM shard bitfield.
+    assert "KIRBY_SHARD_FLAGS = new_shard_flags" in hook_body, \
+        "Boss hook must write KIRBY_SHARD_FLAGS so post-cutscene state machine sees valid shard state"
+
+    # The hook must persist to SRAM (same as the AP shard-grant path).
+    assert "persist_shard_to_sram(new_shard_flags)" in hook_body, \
+        "Boss hook must persist shard flags to SRAM for reset-safe behaviour"
+
+
 def test_ap_hook_preserves_register_context_without_r4_temp_restore():
     """Verify the hook preserves full context and does not rebuild LR through r4."""
     hook_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_hook.s")

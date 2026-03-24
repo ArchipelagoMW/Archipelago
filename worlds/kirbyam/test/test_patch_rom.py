@@ -31,6 +31,13 @@ def test_thumb_bl_bytes_matches_existing_main_hook_patch() -> None:
     assert patch_rom.thumb_bl_bytes(0x08152696, 0x0815E000) == bytes.fromhex("0B F0 B3 FC")
 
 
+def test_boss_collect_shard_call_offset_matches_verified_hook_site() -> None:
+    # sub_0801D948 at ROM addr 0x0801D948 (file offset 0x1D948); BL CollectShard
+    # is 8 bytes into the function (after push/mov/load prologue) → 0x1D948 + 8.
+    # Source: d:\kirbyam-extras\katam\src\code_0801C6F8.c line 703-705.
+    assert patch_rom.BOSS_COLLECT_SHARD_CALL_OFFSET == 0x001D950
+
+
 def test_big_chest_collect_call_offset_matches_verified_hook_site() -> None:
     assert patch_rom.BIG_CHEST_COLLECT_CALL_OFFSET == 0x0000B144
 
