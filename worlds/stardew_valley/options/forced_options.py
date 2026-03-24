@@ -32,10 +32,7 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         world_options.bundle_price.value = options.BundlePrice.option_very_expensive
         message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
         logger.warning(message)
-    if (
-        not settings.allow_chaos_er
-        and EntranceRandomizerBehaviourOptionName.chaos in world_options.entrance_randomization_behaviour
-    ):
+    if (not settings.allow_chaos_er and EntranceRandomizerBehaviourOptionName.chaos in world_options.entrance_randomization_behaviour):
         world_options.entrance_randomization.value = options.EntranceRandomization.option_buildings
         message = f"Chaos Entrance Randomization {message_template} Replaced with 'Buildings'"
         logger.warning(message)
