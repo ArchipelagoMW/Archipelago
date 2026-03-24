@@ -230,6 +230,7 @@ class EntranceRandomizationBehaviour(OptionSet):
     - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside
     """
 
+    default = frozenset({EntranceRandomizerBehaviourOptionName.same_type})
     internal_name = "er_behaviour"
     display_name = "Entrance Randomizer Behaviour"
     valid_keys = frozenset(
@@ -242,6 +243,10 @@ class EntranceRandomizationBehaviour(OptionSet):
             EntranceRandomizerBehaviourOptionName.same_type,
         }
     )
+
+    preset_easy = frozenset({EntranceRandomizerBehaviourOptionName.same_type})
+    preset_normal = frozenset({EntranceRandomizerBehaviourOptionName.same_type, EntranceRandomizerBehaviourOptionName.shuffle_farmhouse})
+    preset_hard = frozenset({EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere})
 
 
 class StartWithout(OptionSet):
