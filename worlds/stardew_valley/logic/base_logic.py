@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import typing
-from typing import Collection, Dict
+from typing import Dict, Collection
 
 from ..content.game_content import StardewContent
 from ..options import StardewValleyOptions
