@@ -60,7 +60,6 @@ pytest worlds/kirbyam/test -q
 | `KirbyAM: AP session ready; reconnect-safe reconciliation active` | First watcher tick after AP server/socket/slot_data readiness; transient reconnect caches were reset. |
 | `KirbyAM: deferring location polling/new item writes (...)` | Non-gameplay state detected; polling suspended. Fires once per state transition. |
 | `KirbyAM: gameplay-active state restored; resuming normal watcher flow` | Returned to gameplay-active state. |
-| `KirbyAM: resending RAM-derived LocationChecks missing on server (missing=..., acked=...)` | Shard bits found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: resending major-chest LocationChecks missing on server (missing=..., acked=...)` | Big-chest area bits found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: resending boss-defeat LocationChecks missing on server (missing=..., acked=...)` | Boss-defeat bits found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: Writing mailbox item index N (item=..., player=...)` | Beginning delivery of the Nth received item. |
@@ -84,8 +83,9 @@ pytest worlds/kirbyam/test -q
 
 ### Debug-level diagnostics
 Enable debug logging in your AP client to see these:
-- `dedupe suppressed LocationChecks` — shard/boss checks already acknowledged (per-tick spam suppressed at info level).
+- `KirbyAM: dedupe suppressed boss-defeat LocationChecks (...)` — boss-defeat checks already acknowledged (per-tick spam suppressed at info level).
 - `dedupe suppressed major-chest LocationChecks` — major-chest checks already acknowledged (per-tick spam suppressed at info level).
+- `dedupe suppressed vitality-chest LocationChecks` — vitality-chest checks already acknowledged (per-tick spam suppressed at info level).
 - `KirbyAM: boss candidate probe rising bits: ...` — rising-edge transitions detected in the boss mirror table probe. Useful during boss fights for address mapping.
 - `KirbyAM: unsafe-delivery candidate probe: X changed Y -> Z` — miniboss counter candidate changed. Research-only probe (Issue #223).
 
@@ -119,6 +119,13 @@ Validate that non-gameplay states defer location polling and new mailbox writes.
 Expected signal source for this gate:
 - ai_kirby_state_native at 0x0203AD2C (u32)
 - gameplay-active only when value == 300
+
+## Moonlight Mansion AP Check Contract (Issue #379)
+
+Current shipped behavior is transport-flag based, not shard-check based:
+- `BOSS_DEFEAT_2` is emitted from `boss_defeat_flags` bit `1` (`0x0202C024`).
+- `MAJOR_CHEST_MOONLIGHT_MANSION` is emitted from `major_chest_flags` bit `2` (`0x0202C028`).
+- Mirror shard collection is progression-state only and does not directly emit AP `LocationChecks`.
 
 ## Major Chest Checks (All Areas)
 
@@ -333,11 +340,11 @@ Validate that both BizHawk and AP server reconnect scenarios work correctly:
 
 ### BizHawk disconnect/reconnect
 1. Connect AP client + patched ROM normally.
-2. Trigger at least one shard location check (collect a shard in-game) and receive at least one AP item.
+2. Trigger at least one boss-defeat or major-chest location check and receive at least one AP item.
 3. Close and re-open BizHawk (or restart the Lua script).
 4. Confirm:
-   - Shard check is **not resent** as a duplicate (already in server `checked_locations`).
-   - When RAM-derived checks are present but server is missing them (e.g., server also restarted), the client **does** resend them.
+   - The acknowledged boss/major check is **not resent** as a duplicate (already in server `checked_locations`).
+   - When boss-defeat/major-chest/vitality transport checks are present in RAM but server is missing them (e.g., server also restarted), the client **does** resend them.
    - Item delivery cursor resumes from the correct index (no re-delivery of already-applied items).
    - No mailbox deadlock: `incoming_item_flag` is clear after normal reattach.
 
