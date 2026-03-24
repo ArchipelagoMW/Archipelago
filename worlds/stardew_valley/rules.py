@@ -377,30 +377,13 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_mens_locker_room, logic.wallet.has_mens_locker_key())
     rule_collector.set_entrance_rule(Entrance.enter_womens_locker_room, logic.wallet.has_womens_locker_key())
 
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_bus_stop_to_mines, logic.received_all("Minecarts Repair", "Landslide Removed")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_bus_stop_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
-    )
-    rule_collector.set_entrance_rule(Entrance.minecart_bus_stop_to_town, logic.received("Minecarts Repair"))
-    rule_collector.set_entrance_rule(Entrance.minecart_mines_to_bus_stop, logic.received("Minecarts Repair"))
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_mines_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
-    )
-    rule_collector.set_entrance_rule(Entrance.minecart_mines_to_town, logic.received("Minecarts Repair"))
-    rule_collector.set_entrance_rule(Entrance.minecart_quarry_to_bus_stop, logic.received("Minecarts Repair"))
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_quarry_to_mines, logic.received_all("Minecarts Repair", "Landslide Removed")
-    )
-    rule_collector.set_entrance_rule(Entrance.minecart_quarry_to_town, logic.received("Minecarts Repair"))
-    rule_collector.set_entrance_rule(Entrance.minecart_town_to_bus_stop, logic.received("Minecarts Repair"))
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_town_to_mines, logic.received_all("Minecarts Repair", "Landslide Removed")
-    )
-    rule_collector.set_entrance_rule(
-        Entrance.minecart_town_to_quarry, logic.received_all("Minecarts Repair", "Bridge Repair")
-    )
+    rule_collector.set_many_entrances_rule(
+        [Entrance.minecart_bus_stop_to_town, Entrance.minecart_mines_to_town, Entrance.minecart_quarry_to_town, Entrance.minecart_town_to_bus_stop,
+         Entrance.minecart_mines_to_bus_stop, Entrance.minecart_quarry_to_bus_stop], logic.received("Minecarts Repair"))
+    rule_collector.set_many_entrances_rule([Entrance.minecart_town_to_mines, Entrance.minecart_quarry_to_mines, Entrance.minecart_bus_stop_to_mines],
+                                           logic.received_all("Minecarts Repair", "Landslide Removed"))
+    rule_collector.set_many_entrances_rule([Entrance.minecart_town_to_quarry, Entrance.minecart_mines_to_quarry, Entrance.minecart_bus_stop_to_quarry],
+                                           logic.received_all("Minecarts Repair", "Bridge Repair"))
 
 
 def set_bookseller_rules(logic, rule_collector):
