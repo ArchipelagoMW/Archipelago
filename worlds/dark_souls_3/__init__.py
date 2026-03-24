@@ -66,6 +66,9 @@ class DarkSouls3World(World):
     This is used to determine where the Storm Ruler can be placed.
     """
 
+    goal_bosses: Set[DS3BossInfo] = set()
+    """The set of bosses that must be beaten for the player to win their run."""
+
     all_excluded_locations: Set[str] = set()
     """This is the same value as `self.options.exclude_locations.value` initially, but if
     `options.exclude_locations` gets cleared due to `excluded_locations: allow_useful` this still
@@ -90,11 +93,12 @@ class DarkSouls3World(World):
     def generate_early(self) -> None:
         self.created_regions = set()
         self.all_excluded_locations.update(self.options.exclude_locations.value)
+        self._compute_goal_bosses()
 
         if not self.options.enable_dlc:
-            dlc_bosses = [boss.region for boss in self._goal_bosses() if boss.dlc]
+            dlc_bosses = [boss.region for boss in self.goal_bosses if boss.dlc]
             if dlc_bosses:
-                raise Exception(
+                raise OptionError(
                     "DS3 options error: you chose to disable DLC but require the player to beat " +
                     ",".join(dlc_bosses)
                 )
@@ -1324,7 +1328,10 @@ class DarkSouls3World(World):
 
     def _is_complete(self, state: CollectionState) -> bool:
         """Whether the given state has achieved the victory condition."""
-        return all(self._can_get(state, next(iter(boss.locations))) for boss in self._goal_bosses())
+        # Don't use any() because it's been benchmarked to be slower.
+        for boss in self._goal_bosses:
+            if self._can_get(state, next(iter(boss.locations))): return True
+        return False
 
     def _has_any_scroll(self, state: CollectionState) -> bool:
         """Returns whether the given state has any scroll item."""
@@ -1411,22 +1418,21 @@ class DarkSouls3World(World):
             )
         )
 
-    def _goal_bosses(self) -> {DS3BossInfo}:
-        """Returns all the bosses that are goals for this run."""
-        result = set()
+    def _compute_goal_bosses(self):
+        """Initializes the value of `self.goal_bosses`."""
         goal = {*self.options.goal}
 
         if "All Bosses" in goal:
             goal.remove("All Bosses")
-            result.update(boss for boss in all_bosses if boss.flag)
+            self.goal_bosses.update(boss for boss in all_bosses if boss.flag)
 
         if "Base Game Bosses" in goal:
             goal.remove("Base Game Bosses")
-            result.update(boss for boss in all_bosses if boss.flag and not boss.dlc)
+            self.goal_bosses.update(boss for boss in all_bosses if boss.flag and not boss.dlc)
 
         if "DLC Bosses" in goal:
             goal.remove("DLC Bosses")
-            result.update(boss for boss in all_bosses if boss.flag and boss.dlc)
+            self.goal_bosses.update(boss for boss in all_bosses if boss.flag and boss.dlc)
 
         for name in goal:
             assert name.endswith(" Boss")
@@ -1434,8 +1440,7 @@ class DarkSouls3World(World):
             boss = next(boss for boss in reversed(all_bosses) if boss.region == region)
             assert boss
             assert boss.flag
-            result.add(boss)
-        return result
+            self.goal_bosses.add(boss)
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         text = ""
@@ -1650,7 +1655,7 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
-            "goal": [boss.flag for boss in self._goal_bosses()],
+            "goal": [boss.flag for boss in self._goal_bosses],
             # Reserializing here is silly, but it's easier for the static randomizer.
             "random_enemy_preset": json.dumps(self.options.random_enemy_preset.value),
             "yhorm": f"{self.yhorm_location.name} {self.yhorm_location.id}",

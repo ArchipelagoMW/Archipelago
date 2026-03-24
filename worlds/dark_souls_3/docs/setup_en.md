@@ -23,7 +23,7 @@
 First, download the client from the link above (`DS3.Archipelago.*.zip`). It doesn't need to go into
 any particular directory; it'll automatically locate _Dark Souls III_ in your Steam installation
 folder. (Avoid saving it to your desktop on Windows because Microsoft OneDrive can make it
-malfunction.
+malfunction.)
 
 Version 4.0.0 of the randomizer _only_ supports the latest version of _Dark Souls III_, 1.15.2. This
 is the latest version, so you don't need to do any downpatching!
