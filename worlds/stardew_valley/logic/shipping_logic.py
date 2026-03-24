@@ -5,6 +5,7 @@ from Utils import cache_self1
 from ..locations import LocationTags, locations_by_tag
 from ..stardew_rule import StardewRule
 from ..strings.building_names import Building
+from ..strings.region_names import Region
 from .base_logic import BaseLogic, BaseLogicMixin
 
 
@@ -18,11 +19,11 @@ class ShippingLogic(BaseLogic):
 
     @cached_property
     def can_use_shipping_bin(self) -> StardewRule:
-        return self.logic.building.has_building(Building.shipping_bin)
+        return self.logic.building.has_building(Building.shipping_bin) & self.logic.region.can_reach(Region.farm)
 
     @cached_property
     def can_use_island_shipping_bin(self) -> StardewRule:
-        return self.logic.received("Island Farmhouse")
+        return self.logic.received("Island Farmhouse") & self.logic.region.can_reach(Region.island_west)
 
     @cached_property
     def can_use_any_shipping_bin(self) -> StardewRule:
