@@ -145,7 +145,7 @@ That's the default value in the template, which should let you know to use this 
 #### How do I know the exact names of items and locations?
 
 You can look up a complete list of the item names in the 
-[Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/) page.
+[APSC2 Item Docs](https://archipelago-sc2.github.io/content-docs/) page.
 This page also contains supplementary information of each item.
 
 Locations are of the format `<mission name>: <location name>`. Names are most easily looked up by hovering
