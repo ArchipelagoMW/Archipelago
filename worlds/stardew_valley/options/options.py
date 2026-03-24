@@ -198,7 +198,7 @@ class EntranceRandomization(Choice):
     Non Progression: Only entrances that are always available are randomized with each other
     Buildings: All entrances that allow you to enter a building are randomized with each other
     Overworld: Buildings and all normal overworld map transitions like from the farm to the forest
-    Everywhere: Overworld as well as the special transitions like the minecarts and warps
+    Everywhere: Overworld as well as the special transitions like the minecarts, the bus and warps
     """
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
