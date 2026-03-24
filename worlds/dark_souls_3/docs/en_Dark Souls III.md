@@ -207,9 +207,7 @@ substantial differences with the older 3.x.x versions. Improvements include:
 
 * Auto-equip is no longer supported.
 
-In addition, 4.0.0 supports several new features. Some of these require using
-the new `dark_souls_3.apworld` that's bundled with the 4.0.0 client in place of the
-one that's included with Archipelago by default.
+In addition, 4.0.0 supports several new features.
 
 * The goal is now customizable. You can choose any boss or set of bosses to be
   required. The default is still just defeating Soul of Cinder.
