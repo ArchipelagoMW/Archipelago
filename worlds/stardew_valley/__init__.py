@@ -7,8 +7,7 @@ from random import Random
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 import entrance_rando
-from BaseClasses import (CollectionState, Entrance, Item, ItemClassification,
-                         Location, MultiWorld, Region, Tutorial)
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from NetUtils import JSONMessagePart
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
@@ -20,21 +19,15 @@ from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
 from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
-from .items import (Group, ItemData, create_items, generate_filler_choice_pool,
-                    item_table, items_by_group, setup_early_items)
+from .items import Group, ItemData, create_items, generate_filler_choice_pool, item_table, items_by_group, setup_early_items
 from .items.item_data import FILLER_GROUPS
-from .locations import (LocationData, create_locations, location_table,
-                        locations_by_tag)
+from .locations import LocationData, create_locations, location_table, locations_by_tag
 from .logic.combat_logic import valid_weapons
 from .logic.logic import StardewLogic
-from .options import (BackpackProgression, BuildingProgression,
-                      BundleBlacklist, BundlePerRoom, BundlePrice,
-                      BundleRandomization, BundleWhitelist, EnabledFillerBuffs,
-                      EntranceRandomization, FarmType, Goal,
-                      NumberOfMovementBuffs, SeasonRandomization,
-                      StardewValleyOptions, ToolProgression, TrapDistribution)
-from .options.forced_options import (force_change_options_if_banned,
-                                     force_change_options_if_incompatible)
+from .options import (BackpackProgression, BuildingProgression, BundleBlacklist, BundlePerRoom, BundlePrice, BundleRandomization, BundleWhitelist,
+                      EnabledFillerBuffs, EntranceRandomization, FarmType, Goal, NumberOfMovementBuffs, SeasonRandomization, StardewValleyOptions,
+                      ToolProgression, TrapDistribution)
+from .options.forced_options import force_change_options_if_banned, force_change_options_if_incompatible
 from .options.jojapocalypse_options import JojaAreYouSure
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
@@ -44,8 +37,7 @@ from .regions import create_regions, prepare_mod_data
 from .regions.entrance_rando import get_target_groups
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
-from .strings.ap_names.ap_option_names import (
-    EntranceRandomizerBehaviourOptionName, StartWithoutOptionName)
+from .strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName, StartWithoutOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceNames
@@ -119,9 +111,7 @@ if TRACKER_ENABLED:
 
             launch(client_main, name="Stardew Valley Tracker", args=args)
 
-        components.append(
-            Component("Stardew Valley Tracker", func=launch_client, component_type=Type.CLIENT, icon="stardew")
-        )
+        components.append(Component("Stardew Valley Tracker", func=launch_client, component_type=Type.CLIENT, icon="stardew"))
 
         icon_paths["stardew"] = f"ap:{__name__}/stardew.png"
 
@@ -139,17 +129,12 @@ class StardewValleyWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     item_name_groups = {
-        group.name.replace("_", " ").title()
-        + (" Group" if group.name.replace("_", " ").title() in item_table else ""): [item.name for item in items]
-        for group, items in items_by_group.items()
-    }
+        group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title() in item_table else ""): [item.name for item in items]
+        for group, items in items_by_group.items()}
     location_name_groups = {
-        group.name.replace("_", " ").title()
-        + (" Group" if group.name.replace("_", " ").title() in locations_by_tag else ""): [
-            location.name for location in locations
-        ]
-        for group, locations in locations_by_tag.items()
-    }
+        group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title() in locations_by_tag else ""):
+        [location.name for location in locations]
+        for group, locations in locations_by_tag.items()}
 
     required_client_version = (0, 4, 0)
 
@@ -212,12 +197,10 @@ class StardewValleyWorld(World):
                 if isinstance(parsed_option_value, option_type):
                     self.options.__setattr__(option_name, parsed_option_value)
                     continue
-                logger.warning(
-                    f"Option {option_name} was found in slot data, but could not be automatically parsed to be used in generation.\n"
-                    f"Slot Data Value: {option_value}"
-                    f"Parsed Value: {parsed_option_value}"
-                    f"Yaml Value: {self.options.__getattribute__(option_name)}"
-                )
+                logger.warning(f"Option {option_name} was found in slot data, but could not be automatically parsed to be used in generation.\n"
+                               f"Slot Data Value: {option_value}"
+                               f"Parsed Value: {parsed_option_value}"
+                               f"Yaml Value: {self.options.__getattribute__(option_name)}")
             elif option_name == "randomized_entrances":
                 self.randomized_entrances = slot_data[option_name]
         return {"seed": seed, "randomized_entrances": self.randomized_entrances}
@@ -228,6 +211,7 @@ class StardewValleyWorld(World):
         self.content = create_content(self.options)
 
     def create_regions(self):
+
         def create_region(name: str) -> Region:
             return Region(name, self.player, self.multiworld)
 
@@ -241,16 +225,12 @@ class StardewValleyWorld(World):
             bundle_room.special_behavior(self)
 
         def add_location(name: str, code: Optional[int], region: str):
-            assert (
-                region in world_regions
-            ), f"Location {name} cannot be created in region {region}, because the region does not exist in this slot"
+            assert (region in world_regions), f"Location {name} cannot be created in region {region}, because the region does not exist in this slot"
             region: Region = world_regions[region]
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(
-            add_location, self.modified_bundles, self.trash_bear_requests, self.options, self.content, self.random
-        )
+        create_locations(add_location, self.modified_bundles, self.trash_bear_requests, self.options, self.content, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
@@ -260,24 +240,16 @@ class StardewValleyWorld(World):
         self.precollect_building_items()
         self.precollect_starting_backpacks()
         items_to_exclude = [
-            excluded_items
-            for excluded_items in self.multiworld.precollected_items[self.player]
+            excluded_items for excluded_items in self.multiworld.precollected_items[self.player]
             if item_table[excluded_items.name].has_any_group(Group.MAXIMUM_ONE)
-            or not item_table[excluded_items.name].has_any_group(*FILLER_GROUPS, Group.FRIENDSHIP_PACK)
-        ]
+            or not item_table[excluded_items.name].has_any_group(*FILLER_GROUPS, Group.FRIENDSHIP_PACK)]
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
-            items_to_exclude = [
-                item for item in items_to_exclude if item_table[item.name] not in items_by_group[Group.SEASON]
-            ]
+            items_to_exclude = [item for item in items_to_exclude if item_table[item.name] not in items_by_group[Group.SEASON]]
 
-        locations_count = len(
-            [location for location in self.multiworld.get_locations(self.player) if location.address is not None]
-        )
+        locations_count = len([location for location in self.multiworld.get_locations(self.player) if location.address is not None])
 
-        created_items = create_items(
-            self.create_item, locations_count, items_to_exclude, self.options, self.content, self.random
-        )
+        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options, self.content, self.random)
 
         self.multiworld.itempool += created_items
 
@@ -294,9 +266,7 @@ class StardewValleyWorld(World):
         # ultimately create unwinnable seeds where some items (like Blueberry seeds) are locked in Shipsanity: Blueberry, but world is deemed winnable as the
         # winning rule only check the count of collected progression items.
         self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
-        self.total_progression_items += sum(
-            1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement
-        )
+        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
         self.total_progression_items += sum(1 for i in created_items if i.advancement)
         self.total_progression_items -= 1  # -1 for the victory event
 
@@ -307,13 +277,8 @@ class StardewValleyWorld(World):
         # The only reason this is necessary, is because in an UT context, precollected items was not filled up, and this messes with the seeded random later
         for item_name in self.options.start_inventory:
             item_count = self.options.start_inventory[item_name]
-            precollected_count = len(
-                [
-                    precollected_item
-                    for precollected_item in self.multiworld.precollected_items[self.player]
-                    if precollected_item.name == item_name
-                ]
-            )
+            precollected_count = len([
+                precollected_item for precollected_item in self.multiworld.precollected_items[self.player] if precollected_item.name == item_name])
             while precollected_count < item_count:
                 self.multiworld.push_precollected(self.create_item(item_name))
                 precollected_count += 1
@@ -340,11 +305,7 @@ class StardewValleyWorld(World):
                 self.multiworld.push_precollected(self.create_item(season))
             return
 
-        if [
-            item
-            for item in self.multiworld.precollected_items[self.player]
-            if item.name in {season.name for season in items_by_group[Group.SEASON]}
-        ]:
+        if [item for item in self.multiworld.precollected_items[self.player] if item.name in {season.name for season in items_by_group[Group.SEASON]}]:
             return
 
         if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
@@ -366,10 +327,7 @@ class StardewValleyWorld(World):
                 self.multiworld.push_precollected(self.create_item(item))
 
     def precollect_starting_backpacks(self):
-        if (
-            self.options.backpack_progression != BackpackProgression.option_vanilla
-            and StartWithoutOptionName.backpack in self.options.start_without
-        ):
+        if (self.options.backpack_progression != BackpackProgression.option_vanilla and StartWithoutOptionName.backpack in self.options.start_without):
             minimum_start_slots = 4 if StartWithoutOptionName.tools in self.options.start_without else 6
             num_starting_slots = max(minimum_start_slots, self.options.backpack_size.value)
             num_starting_backpacks = math.ceil(num_starting_slots / self.options.backpack_size.value)
@@ -381,6 +339,7 @@ class StardewValleyWorld(World):
                 self.multiworld.push_precollected(self.create_item("Progressive Backpack"))
 
     def setup_logic_events(self):
+
         def register_event(name: str, region: str, rule: StardewRule, location_name: str | None = None) -> None:
             if location_name is None:
                 location_name = name
@@ -409,13 +368,9 @@ class StardewValleyWorld(World):
                 Event.victory,
             )
         elif self.options.goal == Goal.option_cryptic_note:
-            self.create_event_location(
-                location_table[GoalName.cryptic_note], self.logic.goal.can_complete_cryptic_note(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.cryptic_note], self.logic.goal.can_complete_cryptic_note(), Event.victory)
         elif self.options.goal == Goal.option_master_angler:
-            self.create_event_location(
-                location_table[GoalName.master_angler], self.logic.goal.can_complete_master_angler(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.master_angler], self.logic.goal.can_complete_master_angler(), Event.victory)
         elif self.options.goal == Goal.option_complete_collection:
             self.create_event_location(
                 location_table[GoalName.complete_museum],
@@ -423,9 +378,7 @@ class StardewValleyWorld(World):
                 Event.victory,
             )
         elif self.options.goal == Goal.option_full_house:
-            self.create_event_location(
-                location_table[GoalName.full_house], self.logic.goal.can_complete_full_house(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.full_house], self.logic.goal.can_complete_full_house(), Event.victory)
         elif self.options.goal == Goal.option_greatest_walnut_hunter:
             self.create_event_location(
                 location_table[GoalName.greatest_walnut_hunter],
@@ -445,17 +398,11 @@ class StardewValleyWorld(World):
                 Event.victory,
             )
         elif self.options.goal == Goal.option_gourmet_chef:
-            self.create_event_location(
-                location_table[GoalName.gourmet_chef], self.logic.goal.can_complete_gourmet_chef(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.gourmet_chef], self.logic.goal.can_complete_gourmet_chef(), Event.victory)
         elif self.options.goal == Goal.option_craft_master:
-            self.create_event_location(
-                location_table[GoalName.craft_master], self.logic.goal.can_complete_craft_master(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.craft_master], self.logic.goal.can_complete_craft_master(), Event.victory)
         elif self.options.goal == Goal.option_legend:
-            self.create_event_location(
-                location_table[GoalName.legend], self.logic.goal.can_complete_legend(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.legend], self.logic.goal.can_complete_legend(), Event.victory)
         elif self.options.goal == Goal.option_mystery_of_the_stardrops:
             self.create_event_location(
                 location_table[GoalName.mystery_of_the_stardrops],
@@ -475,13 +422,9 @@ class StardewValleyWorld(World):
                 Event.victory,
             )
         elif self.options.goal == Goal.option_allsanity:
-            self.create_event_location(
-                location_table[GoalName.allsanity], self.logic.goal.can_complete_allsanity(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.allsanity], self.logic.goal.can_complete_allsanity(), Event.victory)
         elif self.options.goal == Goal.option_perfection:
-            self.create_event_location(
-                location_table[GoalName.perfection], self.logic.goal.can_complete_perfection(), Event.victory
-            )
+            self.create_event_location(location_table[GoalName.perfection], self.logic.goal.can_complete_perfection(), Event.victory)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Event.victory, self.player)
 
@@ -527,16 +470,10 @@ class StardewValleyWorld(World):
 
     def connect_entrances(self) -> None:
         if self.options.entrance_randomization.value < EntranceRandomization.option_overworld:
-            self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(
-                LogicRegion.bus_stop_cutscene
-            )
-            self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(
-                LogicRegion.town_cutscene
-            )
+            self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_cutscene)
+            self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(LogicRegion.town_cutscene)
 
-        def connect_cutscene_regions_as_well(
-            state: entrance_rando.ERPlacementState, placed_exits: list[Entrance], placed_entrances: list[Entrance]
-        ):
+        def connect_cutscene_regions_as_well(state: entrance_rando.ERPlacementState, placed_exits: list[Entrance], placed_entrances: list[Entrance]):
             additional_sweep_needed = False
             for ex, entr in zip(placed_exits, placed_entrances):
                 if entr.name == EntranceNames.farm_to_bus_stop:
@@ -561,25 +498,14 @@ class StardewValleyWorld(World):
 
             placement = entrance_rando.randomize_entrances(
                 self,
-                coupled=EntranceRandomizerBehaviourOptionName.decoupled
-                not in self.options.entrance_randomization_behaviour,
+                coupled=EntranceRandomizerBehaviourOptionName.decoupled not in self.options.entrance_randomization_behaviour,
                 target_group_lookup=target_groups,
                 on_connect=connect_cutscene_regions_as_well,
             )
             self.randomized_entrances = prepare_mod_data(placement)
         else:
-            entrances = {
-                entrance.name: entrance
-                for region in self.get_regions()
-                for entrance in region.entrances
-                if entrance.parent_region is None
-            }
-            exits = {
-                exit_.name: exit_
-                for region in self.get_regions()
-                for exit_ in region.exits
-                if exit_.connected_region is None
-            }
+            entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}
+            exits = {exit_.name: exit_ for region in self.get_regions() for exit_ in region.exits if exit_.connected_region is None}
 
             for original, random in self.randomized_entrances.items():
                 rev_random = reverse_connection_name(random) or random
@@ -648,32 +574,19 @@ class StardewValleyWorld(World):
                     bundles[room.name][bundle.name][str(i)] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
         excluded_options = [
-            BundleRandomization,
-            BundlePerRoom,
-            NumberOfMovementBuffs,
-            EnabledFillerBuffs,
-            TrapDistribution,
-            BundleWhitelist,
-            BundleBlacklist,
-            JojaAreYouSure,
-        ]
+            BundleRandomization, BundlePerRoom, NumberOfMovementBuffs, EnabledFillerBuffs, TrapDistribution, BundleWhitelist, BundleBlacklist, JojaAreYouSure]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names.extend(generic_option_names)
-        included_option_names: List[str] = [
-            option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names
-        ]
+        included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
-        slot_data.update(
-            {
-                UNIVERSAL_TRACKER_SEED_PROPERTY: self.seed,
-                "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
-                "randomized_entrances": self.randomized_entrances,
-                "trash_bear_requests": self.trash_bear_requests,
-                "modified_bundles": bundles,
-                "client_version": self.world_version.as_simple_string(),
-            }
-        )
+        slot_data.update({
+            UNIVERSAL_TRACKER_SEED_PROPERTY: self.seed,
+            "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
+            "randomized_entrances": self.randomized_entrances,
+            "trash_bear_requests": self.trash_bear_requests,
+            "modified_bundles": bundles,
+            "client_version": self.world_version.as_simple_string(), })
 
         return slot_data
 
@@ -688,9 +601,7 @@ class StardewValleyWorld(World):
         self.update_received_progression_percent(player_state)
 
         if item.name in APWeapon.all_weapons:
-            player_state[Event.received_progressive_weapon] = max(
-                player_state[Event.received_progressive_weapon], player_state[item.name]
-            )
+            player_state[Event.received_progressive_weapon] = max(player_state[Event.received_progressive_weapon], player_state[item.name])
 
         return True
 
@@ -705,9 +616,7 @@ class StardewValleyWorld(World):
         self.update_received_progression_percent(player_state)
 
         if item.name in APWeapon.all_weapons:
-            player_state[Event.received_progressive_weapon] = max(
-                player_state[weapon] for weapon in APWeapon.all_weapons
-            )
+            player_state[Event.received_progressive_weapon] = max(player_state[weapon] for weapon in APWeapon.all_weapons)
 
         return True
 
@@ -716,9 +625,8 @@ class StardewValleyWorld(World):
             received_progression_count = player_state[Event.received_progression_item]
             # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
-            player_state[Event.received_progression_percent] = (
-                received_progression_count * 100 // self.total_progression_items
-            )
+            player_state[Event.received_progression_percent] = (received_progression_count * 100 // self.total_progression_items)
+
 
 
     previous_explanation: RuleExplanation | None = None

@@ -44,15 +44,8 @@ class BaseLogic(BaseLogicMixin):
     regions: Collection[str]
     logic: StardewLogic
 
-    def __init__(
-        self,
-        player: int,
-        registry: LogicRegistry,
-        options: StardewValleyOptions,
-        content: StardewContent,
-        regions: Collection[str],
-        logic: StardewLogic,
-    ):
+    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, content: StardewContent, regions: Collection[str],
+                 logic: StardewLogic):
         super().__init__(player, registry, options, content, regions, logic)
         self.player = player
         self.registry = registry

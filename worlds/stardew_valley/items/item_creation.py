@@ -232,17 +232,10 @@ def create_skills(item_factory: StardewItemFactory, content: StardewContent, ite
         items.append(item_factory(Wallet.mastery_of_the_five_ways))
 
 
-def create_wizard_buildings(
-    item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]
-):
-    useful_buildings_classification = (
-        ItemClassification.progression_skip_balancing if goal_is_perfection(options) else ItemClassification.useful
-    )
-    er_obelisk_classification = (
-        ItemClassification.progression_skip_balancing
-        if goal_is_perfection(options) or options.entrance_randomization.randomized_transitions()
-        else ItemClassification.useful
-    )
+def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
+    useful_buildings_classification = (ItemClassification.progression_skip_balancing if goal_is_perfection(options) else ItemClassification.useful)
+    er_obelisk_classification = (ItemClassification.progression_skip_balancing
+                                 if goal_is_perfection(options) or options.entrance_randomization.randomized_transitions() else ItemClassification.useful)
     items.append(item_factory("Earth Obelisk", classification_pre_fill=er_obelisk_classification))
     items.append(item_factory("Water Obelisk", classification_pre_fill=er_obelisk_classification))
     items.append(item_factory("Desert Obelisk"))
@@ -253,14 +246,10 @@ def create_wizard_buildings(
     if content.is_enabled(ModNames.deepwoods):
         items.append(item_factory("Woods Obelisk"))
 
-def create_return_scepter(
-    item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: list[Item]
-):
-    return_scepter_classification = (
-        ItemClassification.progression_skip_balancing
-        if options.entrance_randomization.randomized_transitions()
-        else ItemClassification.useful
-    )
+
+def create_return_scepter(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: list[Item]):
+    return_scepter_classification = (ItemClassification.progression_skip_balancing
+                                     if options.entrance_randomization.randomized_transitions() else ItemClassification.useful)
     items.append(item_factory("Return Scepter", classification_pre_fill=return_scepter_classification))
 
 
