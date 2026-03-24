@@ -234,6 +234,71 @@ async def test_shard_poll_does_not_trigger_major_chest_locations(mock_bizhawk_co
     mock_send.assert_not_awaited()
 
 
+@pytest.mark.asyncio
+async def test_poll_vitality_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
+    """Set transport vitality-chest bits should map to vitality-chest LocationChecks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    carrot = data.locations["VITALITY_CHEST_CARROT_CASTLE"].location_id
+    olive = data.locations["VITALITY_CHEST_OLIVE_OCEAN"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.transport_ram_addresses, {"vitality_chest_flags": 0x0202C02C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # Bits 0 and 1 set => Carrot Castle and Olive Ocean vitality chests.
+        mock_read.return_value = [((1 << 0) | (1 << 1)).to_bytes(4, 'little')]
+
+        await client._poll_vitality_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [carrot, olive]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_vitality_chest_skips_already_server_acknowledged(mock_bizhawk_context):
+    """No vitality-chest resend when server already acknowledges all mapped transport checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    carrot = data.locations["VITALITY_CHEST_CARROT_CASTLE"].location_id
+    mock_bizhawk_context.checked_locations = {carrot}
+
+    with patch.dict(data.transport_ram_addresses, {"vitality_chest_flags": 0x0202C02C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [((1 << 0)).to_bytes(4, 'little')]
+
+        await client._poll_vitality_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+    assert mock_logger.debug.called
+    assert "dedupe suppressed vitality-chest LocationChecks" in mock_logger.debug.call_args.args[0]
+    assert mock_logger.debug.call_args.args[1] == [carrot]
+
+
+@pytest.mark.asyncio
+async def test_poll_vitality_chest_skips_when_address_missing(mock_bizhawk_context):
+    """Missing transport vitality chest address should no-op safely."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    transport_without_chests = {k: v for k, v in data.transport_ram_addresses.items() if k != "vitality_chest_flags"}
+    ram_without_chests = {k: v for k, v in data.ram_addresses.items() if k != "vitality_chest_flags"}
+
+    with patch.dict(data.transport_ram_addresses, transport_without_chests, clear=True), \
+         patch.dict(data.ram_addresses, ram_without_chests, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        await client._poll_vitality_chest_locations(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+    mock_send.assert_not_awaited()
+
+
 def test_major_chest_data_sanity():
     """Major-chest entries should have explicit unique IDs and unique mapped bits."""
     major_chests = [
@@ -248,6 +313,24 @@ def test_major_chest_data_sanity():
     assert len(ids) == len(set(ids))
 
     bits = [loc.bit_index for loc in major_chests]
+    assert all(bit is not None for bit in bits)
+    assert len(bits) == len(set(bits))
+
+
+def test_vitality_chest_data_sanity():
+    """Vitality-chest entries should have explicit unique IDs and unique mapped bits."""
+    vitality_chests = [
+        loc for loc in data.locations.values()
+        if loc.category.name == "VITALITY_CHEST"
+    ]
+
+    assert len(vitality_chests) == 4
+
+    ids = [loc.location_id for loc in vitality_chests]
+    assert all(loc_id is not None for loc_id in ids)
+    assert len(ids) == len(set(ids))
+
+    bits = [loc.bit_index for loc in vitality_chests]
     assert all(bit is not None for bit in bits)
     assert len(bits) == len(set(bits))
 
@@ -1181,6 +1264,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
     client._last_shard_poll_log = ("resend", (1,), ())
     client._last_boss_poll_log = ("resend", (2,), ())
     client._last_major_chest_poll_log = ("resend", (3,), ())
+    client._last_vitality_chest_poll_log = ("resend", (4,), ())
     client._last_boss_probe_snapshot = bytes(32)
     client._boss_probe_stream_marker = object()
     client._unsafe_delivery_probe_stream_marker = object()
@@ -1192,6 +1276,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
          patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
             patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major_chests, \
+            patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality_chests, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
@@ -1205,6 +1290,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._last_shard_poll_log is None
         assert client._last_boss_poll_log is None
         assert client._last_major_chest_poll_log is None
+        assert client._last_vitality_chest_poll_log is None
         assert client._last_boss_probe_snapshot is None
         assert client._boss_probe_stream_marker is None
         assert client._unsafe_delivery_probe_stream_marker is None
@@ -1214,6 +1300,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         mock_poll_locations.assert_not_awaited()
         mock_poll_boss.assert_awaited_once()
         mock_poll_major_chests.assert_awaited_once()
+        mock_poll_vitality_chests.assert_awaited_once()
         mock_probe.assert_awaited_once()
         mock_probe_unsafe.assert_awaited_once()
         mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
@@ -1349,6 +1436,7 @@ async def test_game_watcher_syncs_death_link_enabled_from_slot_data(mock_bizhawk
          patch.object(client, '_poll_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \
@@ -1373,6 +1461,7 @@ async def test_game_watcher_death_link_sync_is_deduped_until_value_changes(mock_
          patch.object(client, '_poll_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \

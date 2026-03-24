@@ -13,11 +13,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
   0x02000000 - 0x02040000   EWRAM Region (256 KB)
     ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0202C000 - 0x0202C02B   AP Mailbox (reserved, 44 bytes)
-        └─ 0x0202C02C - 0x02040000   Rest of RAM (unused by AP)
+        ├─ 0x0202C000 - 0x0202C02F   AP Mailbox (reserved, 48 bytes)
+        └─ 0x0202C030 - 0x02040000   Rest of RAM (unused by AP)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C02B)
+### AP Mailbox Block (0x0202C000 - 0x0202C02F)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -35,8 +35,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 
 | 0x24   | 0x0202C024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated; recorded by a hook that replaces the native `CollectShard` call (same bit ordering as shard_bitfield) |
 | 0x28   | 0x0202C028 | 4B | major_chest_flags     | u32  | ROM → Client | Bits set when a native big chest is opened; bit N = area ID N. This drives AP major-chest checks independently of native map ownership. |
+| 0x2C   | 0x0202C02C | 4B | vitality_chest_flags  | u32  | ROM → Client | Bits set when a native vitality big chest is opened; bits 0..3 map to the four vitality chest room IDs (Carrot 5-23, Olive 6-21, Radish 8-4, Candy 9-8). |
 
-**Total: 44 bytes (0x0202C000 - 0x0202C02B)**
+**Total: 48 bytes (0x0202C000 - 0x0202C02F)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -93,7 +94,11 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | MAJOR_CHEST_CARROT_CASTLE | 3960206 | Carrot Castle big chest (bit 5, gTreasures.bigChestField) |
 | MAJOR_CHEST_RADISH_RUINS | 3960207 | Radish Ruins big chest (bit 8, gTreasures.bigChestField) |
 | MAJOR_CHEST_CANDY_CONSTELLATION | 3960208 | Candy Constellation big chest (bit 9, gTreasures.bigChestField) |
-| *Reserved*    | 3960209+ | Future location families |
+| VITALITY_CHEST_CARROT_CASTLE | 3960300 | Carrot Castle 5-23 vitality big chest (transport vitality bit 0) |
+| VITALITY_CHEST_OLIVE_OCEAN | 3960301 | Olive Ocean 6-21 vitality big chest (transport vitality bit 1) |
+| VITALITY_CHEST_RADISH_RUINS | 3960302 | Radish Ruins 8-4 vitality big chest (transport vitality bit 2) |
+| VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
+| *Reserved*    | 3960304+ | Future location families |
 
 ## Client Protocol
 
@@ -187,6 +192,12 @@ for bit in mapped_major_chest_bits:
     if (chest_bits >> bit) & 1:
         mapped_checked.add(major_chest_location_id_for_bit(bit))
 
+# Vitality-chest checks (transport vitality_chest_flags)
+vitality_bits = RAM[0x0202C02C] as u32
+for bit in mapped_vitality_chest_bits:
+    if (vitality_bits >> bit) & 1:
+        mapped_checked.add(vitality_chest_location_id_for_bit(bit))
+
 # Level-based, reconnect-safe resend:
 # Send only checks that RAM reports as collected but the server has not acknowledged.
 # This means checks are re-sent on reconnect until the server reflects them back,
@@ -196,13 +207,13 @@ if missing_on_server:
     send LocationChecks(missing_on_server)
 ```
 
-Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, and native boss shard / native big-chest map grants are intercepted so progression and map ownership only come from AP item delivery.
+Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, vitality chest openings are reported through `vitality_chest_flags`, and native boss shard / native big-chest map / native vitality grants are intercepted so progression, map ownership, and vitality growth come only from AP item delivery.
 
 **Behavior notes:**
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
-- Boss-defeat and major-chest polling follow the same resend/dedupe diagnostic contract.
+- Boss-defeat, major-chest, and vitality-chest polling follow the same resend/dedupe diagnostic contract.
 - Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
 
 ### 3. Item Delivery (Mailbox Protocol)

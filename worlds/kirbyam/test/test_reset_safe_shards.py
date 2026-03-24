@@ -64,6 +64,20 @@ def test_payload_tracks_major_chest_checks_separately_from_native_maps():
     assert "KIRBY_BIG_CHEST_FLAGS" in content, "Native big chest map bitfield should still be addressable"
 
 
+def test_payload_tracks_vitality_chest_checks_and_ap_vitality_apply():
+    """Verify vitality chest checks and AP vitality grants use dedicated payload paths."""
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, 'r') as f:
+        content = f.read()
+
+    assert "AP_VITALITY_CHEST_FLAGS" in content, "Vitality chest transport register should be defined"
+    assert "ap_on_collect_vitality_chest" in content, "Vitality chest hook target should exist"
+    assert "ap_set_vitality_chest_flag_for_room" in content, "Vitality chest room mapping helper should exist"
+    assert "ap_grant_vitality_counter" in content, "AP vitality grant helper should exist"
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 18u" in content, "Vitality AP item IDs should be handled"
+
+
 def test_sram_checksum_fields_updated():
     """Verify that checksum fields are updated alongside shard persistence."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")

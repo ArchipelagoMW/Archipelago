@@ -1244,3 +1244,30 @@ Catalog items `2 Up` and `3 Up` remain defined and dormant:
 - `test_active_filler_selection_is_seed_stable()` updated to assert only `1 Up` is selected.
 - New pool-based logic remains deterministic under fixed seeds (RNG behavior unchanged).
 - Updated `test_item_pool.py` to match Phase 1 expectations.
+
+## Issue #388: Vitality Chest Locations and AP-Delivered Vitality
+
+### Problem
+Native vitality big chest rewards granted vitality directly in-game. That bypassed
+AP location check ownership and made vitality progression diverge from AP item delivery.
+
+### Solution
+Implemented a dedicated vitality chest location family and transport signal path:
+- Added `vitality_chest_flags` at `0x0202C02C` in the mailbox transport block.
+- Added payload hook target `ap_on_collect_vitality_chest` and patched native vitality
+  reward callsite (`0x0000B0CC`) to set transport bits instead of granting native vitality.
+- Added four vitality chest AP locations:
+  - Carrot Castle 5-23 (`3960300`, bit 0)
+  - Olive Ocean 6-21 (`3960301`, bit 1)
+  - Radish Ruins 8-4 (`3960302`, bit 2)
+  - Candy Constellation 9-8 (`3960303`, bit 3)
+- Added client polling for `vitality_chest_flags` with the same resend/dedupe contract as
+  boss and major chest checks.
+
+AP-delivered vitality items now apply native persistent vitality semantics in payload:
+- `VITALITY_COUNTER_1..4` (`BASE+18..BASE+21`) increment `gTreasures.unk20` at `0x02038980`.
+- Active Kirby HP and max HP are synced immediately from the updated vitality total.
+
+### Validation
+- Added/updated tests for vitality chest location data, client polling, item pool sizing,
+  patch callsite constants, and payload vitality signaling/apply behavior.

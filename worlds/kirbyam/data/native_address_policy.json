@@ -40,6 +40,18 @@
         }
       ]
     },
+    "vitality_chest_checks": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "vitality_chest_flags",
+          "address": "0x0202C02C",
+          "width": "u32",
+          "source": "ROM payload vitality-chest hook transport register (room-ID mapped)",
+          "verification": "Integrated and used by polling path for vitality chest AP checks; native vitality grants are intercepted and replaced by AP-delivered vitality items"
+        }
+      ]
+    },
     "dungeon_boss_defeat": {
       "status": "integrated",
       "entries": [

@@ -230,6 +230,7 @@ class KirbyAmWorld(World):
             # Resolve fillable physical locations by category.
             boss_locations: list[KirbyAmLocation] = []
             major_chest_locations: list[KirbyAmLocation] = []
+            vitality_chest_locations: list[KirbyAmLocation] = []
             location_by_key: dict[str, KirbyAmLocation] = {}
             for loc in fill_locations:
                 if loc.key is None:
@@ -242,13 +243,16 @@ class KirbyAmWorld(World):
                     boss_locations.append(loc)
                 elif loc_meta.category == LocationCategory.MAJOR_CHEST:
                     major_chest_locations.append(loc)
+                elif loc_meta.category == LocationCategory.VITALITY_CHEST:
+                    vitality_chest_locations.append(loc)
 
             boss_locations.sort(key=lambda loc: loc.key or "")
             major_chest_locations.sort(key=lambda loc: loc.key or "")
+            vitality_chest_locations.sort(key=lambda loc: loc.key or "")
 
             locked_shard_count = 0
             randomized_item_codes: list[int] = []
-            if boss_locations or major_chest_locations:
+            if boss_locations or major_chest_locations or vitality_chest_locations:
                 shard_label_to_code = {
                     item.label: item.item_id
                     for item in kirby_data.items.values()
@@ -317,9 +321,10 @@ class KirbyAmWorld(World):
                         self.options.shards.current_key,
                     )
 
-                # Build the non-shard pool from boss rewards plus Rainbow Route's big chest reward.
+                # Build the non-shard pool from boss rewards, vitality chest rewards,
+                # and Rainbow Route's big chest reward.
                 base_non_shard_codes: list[int] = []
-                for loc in boss_locations + [rainbow_route_chest]:
+                for loc in boss_locations + vitality_chest_locations + [rainbow_route_chest]:
                     if loc.default_item_code is None:
                         raise ValueError(f"KirbyAM location '{loc.name}' is missing a default item code")
                     base_non_shard_codes.append(loc.default_item_code)
@@ -329,7 +334,7 @@ class KirbyAmWorld(World):
                 randomized_item_codes.extend(base_non_shard_codes)
 
                 open_physical_locations = [
-                    loc for loc in boss_locations + major_chest_locations
+                    loc for loc in boss_locations + major_chest_locations + vitality_chest_locations
                     if loc.item is None
                 ]
                 needed_pool_size = len(open_physical_locations)
@@ -340,10 +345,10 @@ class KirbyAmWorld(World):
                         % (needed_pool_size, len(randomized_item_codes))
                     )
 
-            if (boss_locations or major_chest_locations) and not randomized_item_codes:
+            if (boss_locations or major_chest_locations or vitality_chest_locations) and not randomized_item_codes:
                 raise ValueError(
                     "KirbyAM item pool build failed: no randomized items were produced. "
-                    "This likely indicates a problem with boss/major chest locations or region data."
+                    "This likely indicates a problem with boss/major/vitality chest locations or region data."
                 )
 
             itempool: list[KirbyAmItem] = [

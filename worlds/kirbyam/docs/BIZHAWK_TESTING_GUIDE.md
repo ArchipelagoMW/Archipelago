@@ -154,6 +154,27 @@ Expected current mapping:
 - `bit 8` -> `MAJOR_CHEST_RADISH_RUINS`
 - `bit 9` -> `MAJOR_CHEST_CANDY_CONSTELLATION`
 
+## Vitality Chest Checks (Dedicated Room-Mapped Bits)
+
+Validate that native vitality chest openings drive AP vitality-chest checks through the dedicated transport register.
+
+1. Connect AP + BizHawk session with KirbyAM client logs visible.
+2. Open BizHawk Memory Viewer and watch `0x0202C02C` as a 32-bit value.
+3. Open each native vitality big chest and claim the reward:
+   - Carrot Castle 5-23 (`bit 0`)
+   - Olive Ocean 6-21 (`bit 1`)
+   - Radish Ruins 8-4 (`bit 2`)
+   - Candy Constellation 9-8 (`bit 3`)
+4. Confirm the corresponding transport bit flips from `0` to `1` when the chest reward is claimed.
+5. Confirm the client emits `LocationChecks` for the mapped vitality location IDs and dedupes acknowledged ones.
+6. Reconnect AP client and verify no replay spam for already acknowledged vitality checks.
+
+Expected current mapping:
+- `bit 0` -> `VITALITY_CHEST_CARROT_CASTLE`
+- `bit 1` -> `VITALITY_CHEST_OLIVE_OCEAN`
+- `bit 2` -> `VITALITY_CHEST_RADISH_RUINS`
+- `bit 3` -> `VITALITY_CHEST_CANDY_CONSTELLATION`
+
 ## Notification Pipeline Check (Issue #83)
 
 Validate receive/send notifications and reconnect dedupe behavior.

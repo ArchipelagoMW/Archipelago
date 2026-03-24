@@ -46,7 +46,7 @@
   "BOSS_DEFEAT_5": {
     "label": "Peppermint Palace - Boss Defeat",
     "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
-    "default_item": "VITALITY_COUNTER_1",
+    "default_item": "MAP_PEPPERMINT_PALACE",
     "tags": ["Boss"],
     "bit_index": 4,
     "category": "BOSS_DEFEAT"
@@ -54,7 +54,7 @@
   "BOSS_DEFEAT_6": {
     "label": "Cabbage Cavern - Boss Defeat",
     "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
-    "default_item": "VITALITY_COUNTER_2",
+    "default_item": "MAP_CABBAGE_CAVERN",
     "tags": ["Boss"],
     "bit_index": 5,
     "category": "BOSS_DEFEAT"
@@ -62,7 +62,7 @@
   "BOSS_DEFEAT_7": {
     "label": "Carrot Castle - Boss Defeat",
     "parent_region": "REGION_CARROT_CASTLE/MAIN",
-    "default_item": "VITALITY_COUNTER_3",
+    "default_item": "MAP_CARROT_CASTLE",
     "tags": ["Boss"],
     "bit_index": 6,
     "category": "BOSS_DEFEAT"
@@ -70,7 +70,7 @@
   "BOSS_DEFEAT_8": {
     "label": "Radish Ruins - Boss Defeat",
     "parent_region": "REGION_RADISH_RUINS/MAIN",
-    "default_item": "VITALITY_COUNTER_4",
+    "default_item": "MAP_RADISH_RUINS",
     "tags": ["Boss"],
     "bit_index": 7,
     "category": "BOSS_DEFEAT"
@@ -155,5 +155,41 @@
     "bit_index": 9,
     "category": "MAJOR_CHEST",
     "location_id": 3960208
+  },
+  "VITALITY_CHEST_CARROT_CASTLE": {
+    "label": "Carrot Castle 5-23 - Big Chest Vitality",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "default_item": "VITALITY_COUNTER_1",
+    "tags": ["BigChest", "Vitality", "MAP_CARROT_CASTLE"],
+    "bit_index": 0,
+    "category": "VITALITY_CHEST",
+    "location_id": 3960300
+  },
+  "VITALITY_CHEST_OLIVE_OCEAN": {
+    "label": "Olive Ocean 6-21 - Big Chest Vitality",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "default_item": "VITALITY_COUNTER_2",
+    "tags": ["BigChest", "Vitality", "MAP_OLIVE_OCEAN"],
+    "bit_index": 1,
+    "category": "VITALITY_CHEST",
+    "location_id": 3960301
+  },
+  "VITALITY_CHEST_RADISH_RUINS": {
+    "label": "Radish Ruins 8-4 - Big Chest Vitality",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "default_item": "VITALITY_COUNTER_3",
+    "tags": ["BigChest", "Vitality", "MAP_RADISH_RUINS"],
+    "bit_index": 2,
+    "category": "VITALITY_CHEST",
+    "location_id": 3960302
+  },
+  "VITALITY_CHEST_CANDY_CONSTELLATION": {
+    "label": "Candy Constellation 9-8 - Big Chest Vitality",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "default_item": "VITALITY_COUNTER_4",
+    "tags": ["BigChest", "Vitality", "MAP_CANDY_CONSTELLATION"],
+    "bit_index": 3,
+    "category": "VITALITY_CHEST",
+    "location_id": 3960303
   }
 }

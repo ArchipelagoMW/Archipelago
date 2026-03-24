@@ -11,7 +11,8 @@
       "frame_counter": "0x0202C01C",
       "delivered_item_index": "0x0202C020",
       "boss_defeat_flags": "0x0202C024",
-      "major_chest_flags": "0x0202C028"
+      "major_chest_flags": "0x0202C028",
+      "vitality_chest_flags": "0x0202C02C"
     },
     "native": {
       "shard_bitfield_native": "0x02038970",

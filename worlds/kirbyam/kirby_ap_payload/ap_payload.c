@@ -24,10 +24,20 @@
 //       once the exact patch-site byte offset is confirmed via Issue #110 address verification.
 #define AP_BOSS_DEFEAT_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x24u))
 #define AP_MAJOR_CHEST_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x28u))
+#define AP_VITALITY_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x2Cu))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 #define KIRBY_BIG_CHEST_FLAGS_ADDR 0x0203897Cu
 #define KIRBY_BIG_CHEST_FLAGS   (*(volatile uint32_t*)(KIRBY_BIG_CHEST_FLAGS_ADDR))
+#define KIRBY_VITALITY_COUNTER_ADDR 0x02038980u
+#define KIRBY_VITALITY_COUNTER  (*(volatile uint16_t*)(KIRBY_VITALITY_COUNTER_ADDR))
+
+#define KIRBY_STRUCTS_ADDR       0x02020EE0u
+#define KIRBY_CURRENT_PLAYER_ADDR 0x0203AD3Cu
+#define KIRBY_CURRENT_PLAYER     (*(volatile uint8_t*)(KIRBY_CURRENT_PLAYER_ADDR))
+#define KIRBY_STRUCT_STRIDE      0x1A8u
+#define KIRBY_STRUCT_HP_OFFSET   0x100u
+#define KIRBY_STRUCT_MAX_HP_OFFSET 0x101u
 
 // Player lives is a single byte in EWRAM
 #define KIRBY_LIVES_ADDR        0x02020FE2u
@@ -86,6 +96,31 @@ static void ap_set_major_chest_flag(uint32_t area_id) {
     }
 }
 
+static void ap_set_vitality_chest_flag(uint32_t chest_index) {
+    if (chest_index < 32u) {
+        AP_VITALITY_CHEST_FLAGS |= (1u << chest_index);
+    }
+}
+
+static void ap_set_vitality_chest_flag_for_room(uint16_t room_id) {
+    switch (room_id) {
+        case 739u: // Carrot Castle 5-23 Big Chest Vitality
+            ap_set_vitality_chest_flag(0u);
+            break;
+        case 815u: // Olive Ocean 6-21 Big Chest Vitality
+            ap_set_vitality_chest_flag(1u);
+            break;
+        case 610u: // Radish Ruins 8-4 Big Chest Vitality
+            ap_set_vitality_chest_flag(2u);
+            break;
+        case 403u: // Candy Constellation 9-8 Big Chest Vitality
+            ap_set_vitality_chest_flag(3u);
+            break;
+        default:
+            break;
+    }
+}
+
 static void ap_unlock_area_map(uint32_t area_id) {
     if (area_id < 32u) {
         KIRBY_BIG_CHEST_FLAGS |= (1u << area_id);
@@ -105,6 +140,32 @@ __attribute__((used)) void ap_on_boss_defeat_collect_shard(uint32_t boss_index) 
 // item is delivered through ap_apply_item().
 __attribute__((used)) void ap_on_collect_big_chest(uint32_t area_id) {
     ap_set_major_chest_flag(area_id);
+}
+
+// Hook target for native vitality big chest reward collection. This callsite does
+// not pass a stable argument in r0, so read the live chest object from r5 and
+// map its roomId to a dedicated vitality-chest transport bit.
+__attribute__((used)) void ap_on_collect_vitality_chest(void) {
+    register uint32_t chest_obj_ptr asm("r5");
+    uint16_t room_id = *(volatile uint16_t*)(chest_obj_ptr + 0x60u);
+    ap_set_vitality_chest_flag_for_room(room_id);
+}
+
+static void ap_sync_active_kirby_health_from_vitality(void) {
+    uint8_t player = KIRBY_CURRENT_PLAYER;
+    uint32_t kirby_addr = KIRBY_STRUCTS_ADDR + ((uint32_t)player * KIRBY_STRUCT_STRIDE);
+    uint16_t vitality_total_u16 = (uint16_t)(KIRBY_VITALITY_COUNTER + 6u);
+    uint8_t vitality_total = (vitality_total_u16 > 0xFFu) ? 0xFFu : (uint8_t)vitality_total_u16;
+
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = vitality_total;
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET) = vitality_total;
+}
+
+static void ap_grant_vitality_counter(void) {
+    if (KIRBY_VITALITY_COUNTER < 0xFFFFu) {
+        KIRBY_VITALITY_COUNTER = (uint16_t)(KIRBY_VITALITY_COUNTER + 1u);
+    }
+    ap_sync_active_kirby_health_from_vitality();
 }
 
 static void ap_grant_lives(uint8_t amount) {
@@ -169,6 +230,12 @@ static void ap_apply_item(uint32_t ap_item_id) {
         static const uint8_t map_area_ids[8] = {4u, 2u, 9u, 6u, 7u, 3u, 5u, 8u};
         uint32_t map_index = ap_item_id - (KIRBY_ITEM_ID_BASE_OFFSET + 10u);
         ap_unlock_area_map(map_area_ids[map_index]);
+        return;
+    }
+
+    // VITALITY_COUNTER_1..VITALITY_COUNTER_4 = BASE+18 .. BASE+21
+    if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 18u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 21u)) {
+        ap_grant_vitality_counter();
         return;
     }
 

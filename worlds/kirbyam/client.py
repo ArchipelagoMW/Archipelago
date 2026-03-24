@@ -86,6 +86,13 @@ class KirbyAmClient(BizHawkClient):
                 continue
             self._major_chest_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
+        # Vitality chest bitfield → location IDs (VITALITY_CHEST category; dedicated transport register)
+        self._vitality_chest_location_ids_by_bit: dict[int, list[int]] = {}
+        for loc in data.locations.values():
+            if loc.bit_index is None or loc.category != LocationCategory.VITALITY_CHEST:
+                continue
+            self._vitality_chest_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+
         # One-time RAM state load
         self._ram_state_loaded: bool = False
 
@@ -106,6 +113,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_shard_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_boss_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_major_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+        self._last_vitality_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
         # Notification pipeline state (Issue #83)
         self._notification_settings_loaded: bool = False
@@ -150,6 +158,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_shard_poll_log = None
         self._last_boss_poll_log = None
         self._last_major_chest_poll_log = None
+        self._last_vitality_chest_poll_log = None
         self._last_boss_probe_snapshot = None
         self._boss_probe_stream_marker = None
         self._unsafe_delivery_probe_stream_marker = None
@@ -469,8 +478,11 @@ class KirbyAmClient(BizHawkClient):
         # Boss defeat location polling via transport register
         await self._poll_boss_defeat_locations(ctx)
 
-        # Major chest location polling via native big_chest_bitfield_native
+        # Major chest location polling via dedicated major_chest_flags transport register
         await self._poll_major_chest_locations(ctx)
+
+        # Vitality chest location polling via dedicated vitality_chest_flags transport register
+        await self._poll_vitality_chest_locations(ctx)
 
         # Candidate discovery for non-shard boss defeat signals.
         await self._probe_boss_defeat_candidates(ctx)
@@ -796,6 +808,54 @@ class KirbyAmClient(BizHawkClient):
                 self._last_major_chest_poll_log = chest_log_state
         else:
             self._last_major_chest_poll_log = None
+
+    async def _poll_vitality_chest_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Read transport vitality_chest_flags and map set bits to vitality-chest locations.
+
+        This register is written by the ROM payload's vitality chest hook, keyed by
+        room ID (not area ID). Mirrors shard/boss/major polling semantics: resend
+        RAM-derived checks until the server acknowledges them in ctx.checked_locations.
+        """
+        chest_addr = self._transport_addr("vitality_chest_flags")
+        if chest_addr is None:
+            return
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(chest_addr, 4, "System Bus")]))[0]
+        chest_bits = self._u32_le(raw)
+
+        mapped_checked_locations: set[int] = set()
+        for bit in sorted(self._vitality_chest_location_ids_by_bit.keys()):
+            if (chest_bits >> bit) & 1:
+                mapped_checked_locations.update(self._vitality_chest_location_ids_by_bit.get(bit, []))
+
+        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
+        if missing_on_server:
+            from CommonClient import logger
+
+            chest_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
+            if chest_log_state != self._last_vitality_chest_poll_log:
+                logger.info(
+                    "KirbyAM: resending vitality-chest LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                )
+                self._last_vitality_chest_poll_log = chest_log_state
+
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+        elif mapped_checked_locations:
+            from CommonClient import logger
+
+            chest_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
+            if chest_log_state != self._last_vitality_chest_poll_log:
+                logger.debug(
+                    "KirbyAM: dedupe suppressed vitality-chest LocationChecks (all RAM-derived checks already acknowledged: %s)",
+                    already_acknowledged,
+                )
+                self._last_vitality_chest_poll_log = chest_log_state
+        else:
+            self._last_vitality_chest_poll_log = None
 
     async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

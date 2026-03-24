@@ -5,6 +5,8 @@
 - Hide KirbyAM goal/event-style objective checks from datapackage location exports so `/locations` no longer lists them as normal AP locations.
 - Harden ROM hook context preservation at startup by explicitly saving/restoring low+high register state around `ap_poll_mailbox_c`, reducing startup-state corruption risk (99-lives symptom).
 - Split KirbyAM major-chest AP checks from native area-map ownership so opening a big chest no longer grants the map immediately; the native map now unlocks only when the corresponding AP map item is received.
+- Add dedicated vitality chest AP location family and transport register (`vitality_chest_flags` at `0x0202C02C`), plus payload interception so native vitality chest rewards become AP checks.
+- Apply AP-delivered vitality items through native persistent vitality state (`gTreasures.unk20`) and immediate HP/max HP sync for the active Kirby.
 
 ## v0.0.10
 

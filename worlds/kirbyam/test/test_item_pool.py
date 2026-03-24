@@ -66,21 +66,30 @@ def test_useful_item_catalog_includes_map_and_vitality() -> None:
     assert len(map_items) >= 8, "Expected full eight-area map catalog in useful items"
 
 
-def test_boss_defeat_default_items_use_useful_mix() -> None:
+def test_boss_defeat_default_items_are_useful_maps() -> None:
     boss_locations = [loc for loc in data.locations.values() if loc.category == LocationCategory.BOSS_DEFEAT]
     assert boss_locations, "Expected boss defeat locations to exist"
 
-    assigned_items = []
     for location in boss_locations:
         assert location.default_item is not None, f"Expected default_item for {location.name}"
         item = data.items[location.default_item]
-        assigned_items.append(item)
         assert item.classification & ItemClassification.useful, (
             f"Expected useful classification for {location.name} default item"
         )
+        assert "Map" in item.tags, f"Expected map default for {location.name}"
 
-    assert any("Map" in item.tags for item in assigned_items), "Expected map useful items in boss default pool"
-    assert any("Vitality" in item.tags for item in assigned_items), "Expected vitality useful items in boss default pool"
+
+def test_vitality_chest_default_items_are_useful_vitality() -> None:
+    vitality_locations = [loc for loc in data.locations.values() if loc.category == LocationCategory.VITALITY_CHEST]
+    assert len(vitality_locations) == 4
+
+    for location in vitality_locations:
+        assert location.default_item is not None, f"Expected default_item for {location.name}"
+        item = data.items[location.default_item]
+        assert item.classification & ItemClassification.useful, (
+            f"Expected useful classification for {location.name} default item"
+        )
+        assert "Vitality" in item.tags, f"Expected vitality default for {location.name}"
 
 
 def test_filler_catalog_includes_multiple_life_items() -> None:
@@ -189,8 +198,9 @@ def test_vanilla_shards_are_locked_to_major_chests_not_boss_defeats() -> None:
     assert all("Mirror Shard" in item_name for item_name in locked_chest_shards)
     _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
     _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
-    _total_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
-    _expected_pool_size = _boss_defeat_count + (_total_chest_count - _shard_chest_count)
+    _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
+    _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
+    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + (_major_chest_count - _shard_chest_count)
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
 
@@ -206,8 +216,9 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     shard_items = [item for item in world.multiworld.itempool if "Shard" in item.tags]
     _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
     _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
-    _total_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
+    _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
+    _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
     _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
-    _expected_pool_size = _boss_defeat_count + (_total_chest_count - _shard_chest_count) + _shard_item_count
+    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + (_major_chest_count - _shard_chest_count) + _shard_item_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert len(shard_items) == _shard_item_count
