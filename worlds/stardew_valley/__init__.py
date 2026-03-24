@@ -469,6 +469,7 @@ class StardewValleyWorld(World):
         set_rules(self)
 
     def connect_entrances(self) -> None:
+        # when the cutscene-relevant entrances aren't randomized, connect them manually
         if self.options.entrance_randomization.value < EntranceRandomization.option_overworld:
             self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_cutscene)
             self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(LogicRegion.town_cutscene)
@@ -493,7 +494,8 @@ class StardewValleyWorld(World):
 
             return additional_sweep_needed
 
-        if self.randomized_entrances is None:
+        # in reading of the slot_data the randomized entrances are set when UT is active.
+        if self.randomized_entrances is None:  # no slot_data with randomized_entrances found
             target_groups = get_target_groups(self.options.entrance_randomization_behaviour)
 
             placement = entrance_rando.randomize_entrances(
@@ -503,7 +505,7 @@ class StardewValleyWorld(World):
                 on_connect=connect_cutscene_regions_as_well,
             )
             self.randomized_entrances = prepare_mod_data(placement)
-        else:
+        else:  # randomized_entrances were in the slot_data, connecting them as entered
             entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}
             exits = {exit_.name: exit_ for region in self.get_regions() for exit_ in region.exits if exit_.connected_region is None}
 
