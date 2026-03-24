@@ -1146,6 +1146,8 @@ ability-item ownership gating (#84).
 
 ## Issue #41: Multi-Item Filler Pool (Phase 1)
 
+Status: Historical context only. Superseded by Issue #372 for current Phase 1 shipped behavior.
+
 ### Problem
 KirbyAM filler fallback still always returned `1 Up`, so any future randomized
 non-progression location without an explicit default item would collapse into a
@@ -1157,7 +1159,7 @@ Expanded the shipped filler catalog to a conservative extra-life family:
 - `2 Up`
 - `3 Up`
 
-Generation now uses a deterministic weighted filler table in
+At the time of Issue #41, generation used a deterministic weighted filler table in
 `KirbyAmWorld.get_filler_item_name()`:
 - `1 Up`: weight 6
 - `2 Up`: weight 3
@@ -1170,3 +1172,26 @@ of lives and saturates safely at 255 lives.
 Health-restore and battery-style consumables were considered during issue
 research, but they remain deferred until their native apply semantics are
 verified well enough to ship without risky mailbox-side side effects.
+
+## Issue #372: Phase 1 – Restrict Filler Pool to 1_UP
+
+### Problem
+While Issue #41 introduced a weighted multi-filler pool (`1 Up`, `2 Up`, `3 Up`), Phase 1 gameplay balance requires a single filler item to keep rewards simple and predictable.
+The multi-filler pool introduced unnecessary complexity for the initial release.
+
+### Solution
+Replaced the weighted filler selection table with an explicit **active filler pool** abstraction:
+- Introduced `KirbyAmWorld.ACTIVE_FILLER_POOL: ClassVar[tuple[str, ...]]` on `KirbyAmWorld` (class scope).
+- Phase 1 pool contains only `("1 Up",)`.
+- Generation calls `self.random.choice(self.ACTIVE_FILLER_POOL)` instead of weighted selection.
+- Pool structure supports future expansion without code changes (only data update).
+
+Catalog items `2 Up` and `3 Up` remain defined and dormant:
+- Not selected by active filler generation.
+- Payload handlers remain intact for compatibility.
+- Documented as reserved/inactive for Phase 1.
+
+### Validation
+- `test_active_filler_selection_is_seed_stable()` updated to assert only `1 Up` is selected.
+- New pool-based logic remains deterministic under fixed seeds (RNG behavior unchanged).
+- Updated `test_item_pool.py` to match Phase 1 expectations.

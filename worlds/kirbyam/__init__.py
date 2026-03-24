@@ -111,11 +111,9 @@ class KirbyAmWorld(World):
     _enemy_copy_ability_policy: dict[str, Any]
 
     # Generation stages
-    _FILLER_ITEM_WEIGHTS: ClassVar[tuple[tuple[str, int], ...]] = (
-        ("1 Up", 6),
-        ("2 Up", 3),
-        ("3 Up", 1),
-    )
+    # Phase 1: Active filler pool for random selection.
+    # Contains only "1 Up" for Phase 1 balance; supports future expansion.
+    ACTIVE_FILLER_POOL: ClassVar[tuple[str, ...]] = ("1 Up",)
     _SHARD_CHEST_KEY_ORDER: ClassVar[tuple[str, ...]] = (
         "MAJOR_CHEST_MUSTARD_MOUNTAIN",
         "MAJOR_CHEST_MOONLIGHT_MANSION",
@@ -150,8 +148,7 @@ class KirbyAmWorld(World):
 
     # Filler item name
     def get_filler_item_name(self) -> str:
-        filler_names, filler_weights = zip(*self._FILLER_ITEM_WEIGHTS)
-        return self.random.choices(filler_names, weights=filler_weights, k=1)[0]
+        return self.random.choice(self.ACTIVE_FILLER_POOL)
 
     # Pre-generation adjustments
     def generate_early(self) -> None:
