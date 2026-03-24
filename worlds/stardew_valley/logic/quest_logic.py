@@ -1,7 +1,7 @@
 from typing import Dict
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from ..stardew_rule import StardewRule, Has, True_, False_
+from ..stardew_rule import StardewRule, Has, True_
 from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
