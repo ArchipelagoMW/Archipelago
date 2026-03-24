@@ -17,7 +17,6 @@ else:
             options.BundlePrice,
             options.BundlePerRoom,
             options.EntranceRandomization,
-            options.EntranceRandomizationBehaviour,
             options.ExcludeGingerIsland,
         ]),
         OptionGroup("Major Unlocks", [
@@ -52,6 +51,7 @@ else:
             options.Secretsanity,
             options.Hatsanity,
             options.IncludeEndgameLocations,
+            options.EntranceRandomizationBehaviour,
         ]),
         OptionGroup("Multipliers, Buffs and extra customization", [
             options.StartingMoney,
