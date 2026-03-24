@@ -20,7 +20,9 @@ class SpecialItemsLogicMixin(BaseLogicMixin):
 
 class SpecialItemsLogic(BaseLogic):
 
-    def has_purple_shorts(self, scepter_is_logic: bool) -> StardewRule:
+    def has_purple_shorts(self) -> StardewRule:
+        scepter_is_logic = self.options.include_endgame_locations == self.options.include_endgame_locations.option_true
+
         has_first_shorts = self.logic.season.has(Season.summer) & \
                            self.logic.region.can_reach(Region.ranch) & \
                            self.logic.relationship.has_hearts(NPC.marnie, 2)
