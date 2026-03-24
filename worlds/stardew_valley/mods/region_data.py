@@ -36,7 +36,7 @@ deep_woods_regions = [
     RegionData(DeepWoodsRegion.floor_70),
     RegionData(DeepWoodsRegion.floor_80),
     RegionData(DeepWoodsRegion.floor_90),
-    RegionData(DeepWoodsRegion.floor_100), ]
+    RegionData(DeepWoodsRegion.floor_100)]
 
 deep_woods_entrances = [
     ConnectionData(DeepWoodsEntrance.use_woods_obelisk, DeepWoodsRegion.woods_obelisk_menu),
@@ -53,12 +53,12 @@ deep_woods_entrances = [
     ConnectionData(DeepWoodsEntrance.deep_woods_depth_70, DeepWoodsRegion.floor_70),
     ConnectionData(DeepWoodsEntrance.deep_woods_depth_80, DeepWoodsRegion.floor_80),
     ConnectionData(DeepWoodsEntrance.deep_woods_depth_90, DeepWoodsRegion.floor_90),
-    ConnectionData(DeepWoodsEntrance.deep_woods_depth_100, DeepWoodsRegion.floor_100), ]
+    ConnectionData(DeepWoodsEntrance.deep_woods_depth_100, DeepWoodsRegion.floor_100)]
 
 eugene_regions = [
     RegionData(Region.forest, (EugeneEntrance.forest_to_garden, )),
     RegionData(EugeneRegion.eugene_garden, (EugeneEntrance.garden_to_bedroom, EugeneEntrance.garden_to_forest)),
-    RegionData(EugeneRegion.eugene_bedroom, (EugeneEntrance.bedroom_to_garden, )), ]
+    RegionData(EugeneRegion.eugene_bedroom, (EugeneEntrance.bedroom_to_garden, ))]
 
 eugene_entrances = [
     ConnectionData(
@@ -84,7 +84,7 @@ eugene_entrances = [
         EugeneRegion.eugene_garden,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT,
-    ), ]
+    )]
 
 magic_regions = [RegionData(Region.pierre_store, (MagicEntrance.store_to_altar, )), RegionData(MagicRegion.altar)]
 
@@ -92,15 +92,15 @@ magic_entrances = [ConnectionData(MagicEntrance.store_to_altar, MagicRegion.alta
 
 jasper_regions = [
     RegionData(Region.museum, (JasperEntrance.museum_to_bedroom, )),
-    RegionData(JasperRegion.jasper_bedroom, (JasperEntrance.bedroom_to_museum, )), ]
+    RegionData(JasperRegion.jasper_bedroom, (JasperEntrance.bedroom_to_museum, ))]
 
 jasper_entrances = [
     ConnectionData(JasperEntrance.museum_to_bedroom, JasperRegion.jasper_bedroom, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(JasperEntrance.bedroom_to_museum, Region.museum, flag=RandomizationFlag.BUILDINGS), ]
+    ConnectionData(JasperEntrance.bedroom_to_museum, Region.museum, flag=RandomizationFlag.BUILDINGS)]
 alec_regions = [
     RegionData(Region.forest, (AlecEntrance.forest_to_petshop, )),
     RegionData(AlecRegion.pet_store, (AlecEntrance.petshop_to_bedroom, AlecEntrance.petshop_to_forest)),
-    RegionData(AlecRegion.alec_bedroom, (AlecEntrance.bedroom_to_petshop, )), ]
+    RegionData(AlecRegion.alec_bedroom, (AlecEntrance.bedroom_to_petshop, ))]
 
 alec_entrances = [
     ConnectionData(
@@ -111,19 +111,17 @@ alec_entrances = [
     ),
     ConnectionData(AlecEntrance.petshop_to_forest, Region.forest, flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.IN_TO_OUT),
     ConnectionData(AlecEntrance.petshop_to_bedroom, AlecRegion.alec_bedroom, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(AlecEntrance.bedroom_to_petshop, AlecRegion.pet_store, flag=RandomizationFlag.BUILDINGS), ]
+    ConnectionData(AlecEntrance.bedroom_to_petshop, AlecRegion.pet_store, flag=RandomizationFlag.BUILDINGS)]
 
 yoba_regions = [
     RegionData(Region.secret_woods, (YobaEntrance.secret_woods_to_clearing, )),
-    RegionData(YobaRegion.yoba_clearing, (YobaEntrance.clearing_to_secret_woods, )), ]
+    RegionData(YobaRegion.yoba_clearing, (YobaEntrance.clearing_to_secret_woods, ))]
 
 yoba_entrances = [
     ConnectionData(YobaEntrance.secret_woods_to_clearing, YobaRegion.yoba_clearing, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(YobaEntrance.clearing_to_secret_woods, Region.secret_woods, flag=RandomizationFlag.BUILDINGS), ]
+    ConnectionData(YobaEntrance.clearing_to_secret_woods, Region.secret_woods, flag=RandomizationFlag.BUILDINGS)]
 
-juna_regions = [
-    RegionData(Region.forest, (JunaEntrance.forest_to_juna_cave, )),
-    RegionData(JunaRegion.juna_cave, (JunaEntrance.juna_cave_to_forest, )), ]
+juna_regions = [RegionData(Region.forest, (JunaEntrance.forest_to_juna_cave, )), RegionData(JunaRegion.juna_cave, (JunaEntrance.juna_cave_to_forest, ))]
 
 juna_entrances = [
     ConnectionData(
@@ -137,11 +135,11 @@ juna_entrances = [
         Region.forest,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT,
-    ), ]
+    )]
 
 ayeisha_regions = [
     RegionData(Region.bus_stop, (AyeishaEntrance.bus_stop_to_mail_van, )),
-    RegionData(AyeishaRegion.mail_van, (AyeishaEntrance.mail_van_to_bus_stop, )), ]
+    RegionData(AyeishaRegion.mail_van, (AyeishaEntrance.mail_van_to_bus_stop, ))]
 
 ayeisha_entrances = [
     ConnectionData(
@@ -155,11 +153,9 @@ ayeisha_entrances = [
         Region.bus_stop,
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.IN_TO_OUT,
-    ), ]
+    )]
 
-riley_regions = [
-    RegionData(Region.town, (RileyEntrance.town_to_riley, )),
-    RegionData(RileyRegion.riley_house, (RileyEntrance.riley_to_town, )), ]
+riley_regions = [RegionData(Region.town, (RileyEntrance.town_to_riley, )), RegionData(RileyRegion.riley_house, (RileyEntrance.riley_to_town, ))]
 
 riley_entrances = [
     ConnectionData(
@@ -168,7 +164,7 @@ riley_entrances = [
         flag=RandomizationFlag.NON_PROGRESSION,
         group=GroupFlag.OUT_TO_IN,
     ),
-    ConnectionData(RileyEntrance.riley_to_town, Region.town, flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.IN_TO_OUT), ]
+    ConnectionData(RileyEntrance.riley_to_town, Region.town, flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.IN_TO_OUT)]
 
 sve_main_land_regions = [
     RegionData(Region.backwoods, (SVEEntrance.backwoods_to_grove, )),
@@ -261,7 +257,7 @@ sve_main_land_regions = [
     RegionData(SVERegion.alesia_shop),
     RegionData(SVERegion.isaac_shop),
     RegionData(SVERegion.summit, (SVEEntrance.leave_summit, )),
-    RegionData(SVERegion.susans_house, (SVEEntrance.from_susan_house, )), ]
+    RegionData(SVERegion.susans_house, (SVEEntrance.from_susan_house, ))]
 
 sve_ginger_island_regions = [
     RegionData(Region.wizard_basement, (SVEEntrance.wizard_to_fable_reef, )),
@@ -278,7 +274,7 @@ sve_ginger_island_regions = [
     RegionData(SVERegion.highlands_cavern, (SVEEntrance.to_dwarf_prison, )),
     RegionData(SVERegion.dwarf_prison),
     RegionData(SVERegion.lances_house, (SVEEntrance.lance_to_ladder, SVEEntrance.lance_to_highlands)),
-    RegionData(SVERegion.lances_ladder, (SVEEntrance.lance_ladder_to_highlands, )), ]
+    RegionData(SVERegion.lances_ladder, (SVEEntrance.lance_ladder_to_highlands, ))]
 
 sve_main_land_connections = [
     ConnectionData(SVEEntrance.town_to_jenkins, SVERegion.jenkins_residence),
@@ -355,7 +351,7 @@ sve_main_land_connections = [
     ConnectionData(SVEEntrance.cave_to_sprite_spring, SVERegion.sprite_spring, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.fish_shop_to_willy_bedroom, SVERegion.willy_bedroom),
     ConnectionData(SVEEntrance.museum_to_gunther_bedroom, SVERegion.gunther_bedroom),
-    ConnectionData(SVEEntrance.highlands_to_pond, SVERegion.highlands_pond), ]
+    ConnectionData(SVEEntrance.highlands_to_pond, SVERegion.highlands_pond)]
 
 sve_ginger_island_connections = [
     ConnectionData(SVEEntrance.wizard_to_fable_reef, SVERegion.fable_reef),
@@ -367,11 +363,11 @@ sve_ginger_island_connections = [
     ConnectionData(SVEEntrance.highlands_to_cave, SVERegion.highlands_cavern),
     ConnectionData(SVEEntrance.to_dwarf_prison, SVERegion.dwarf_prison),
     ConnectionData(SVEEntrance.first_slash_guild_to_hallway, SVERegion.first_slash_hallway),
-    ConnectionData(SVEEntrance.first_slash_hallway_to_room, SVERegion.first_slash_spare_room), ]
+    ConnectionData(SVEEntrance.first_slash_hallway_to_room, SVERegion.first_slash_spare_room)]
 
 alecto_regions = [
     RegionData(Region.witch_hut, (AlectoEntrance.witch_hut_to_witch_attic, )),
-    RegionData(AlectoRegion.witch_attic, (AlectoEntrance.witch_attic_to_witch_hut, )), ]
+    RegionData(AlectoRegion.witch_attic, (AlectoEntrance.witch_attic_to_witch_hut, ))]
 
 alecto_entrances = [
     ConnectionData(
@@ -385,15 +381,13 @@ alecto_entrances = [
         Region.witch_hut,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN,
-    ), ]
+    )]
 
-lacey_regions = [
-    RegionData(Region.forest, (LaceyEntrance.forest_to_hat_house, )),
-    RegionData(LaceyRegion.hat_house, (LaceyEntrance.hat_house_to_forest, )), ]
+lacey_regions = [RegionData(Region.forest, (LaceyEntrance.forest_to_hat_house, )), RegionData(LaceyRegion.hat_house, (LaceyEntrance.hat_house_to_forest, ))]
 
 lacey_entrances = [
     ConnectionData(LaceyEntrance.forest_to_hat_house, LaceyRegion.hat_house, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(LaceyEntrance.hat_house_to_forest, Region.forest, flag=RandomizationFlag.BUILDINGS), ]
+    ConnectionData(LaceyEntrance.hat_house_to_forest, Region.forest, flag=RandomizationFlag.BUILDINGS)]
 
 boarding_house_regions = [
     RegionData(Region.bus_stop, (BoardingHouseEntrance.bus_stop_to_boarding_house_plateau, )),
@@ -446,7 +440,7 @@ boarding_house_regions = [
     ),
     RegionData(BoardingHouseRegion.lost_valley_minecart),
     RegionData(BoardingHouseRegion.lost_valley_house_1),
-    RegionData(BoardingHouseRegion.lost_valley_house_2), ]
+    RegionData(BoardingHouseRegion.lost_valley_house_2)]
 
 boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.bus_stop_to_boarding_house_plateau, BoardingHouseRegion.boarding_house_plateau),
@@ -471,7 +465,7 @@ boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.lost_valley_to_lost_valley_minecart, BoardingHouseRegion.lost_valley_minecart),
     ConnectionData(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, BoardingHouseRegion.lost_valley_ruins),
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_1, BoardingHouseRegion.lost_valley_house_1),
-    ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2, BoardingHouseRegion.lost_valley_house_2), ]
+    ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2, BoardingHouseRegion.lost_valley_house_2)]
 
 ginger_island_regions = [
     RegionData(Region.secret_woods, (Entrance.use_island_totem, )),
@@ -593,7 +587,7 @@ ginger_island_regions = [
     RegionData(Region.professor_snail_cave, (Entrance.professor_snail_cave_to_cave_entrance, )),
     RegionData(Region.dangerous_mines_20),
     RegionData(Region.dangerous_mines_60),
-    RegionData(Region.dangerous_mines_100), ]
+    RegionData(Region.dangerous_mines_100)]
 
 ginger_island_connections = [
     ConnectionData(
@@ -999,7 +993,7 @@ ginger_island_connections = [
     ConnectionData(LogicEntrance.grow_fall_crops_on_island, LogicRegion.fall_farming),
     ConnectionData(LogicEntrance.grow_winter_crops_on_island, LogicRegion.winter_farming),
     ConnectionData(LogicEntrance.grow_indoor_crops_on_island, LogicRegion.indoor_farming),
-    ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen), ]
+    ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen)]
 
 vanilla_connections_to_remove_by_content_pack: dict[str, tuple[str, ...]] = {
     ModNames.sve: (Entrance.mountain_to_the_mines, Entrance.mountain_to_adventurer_guild)}
