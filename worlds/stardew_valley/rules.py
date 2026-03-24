@@ -306,8 +306,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     # I can't remember why this was here, but clearly we do not need kitchen rules for island cooking....
     # rule_collector.set_island_entrance_rule(LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
-    rule_collector.set_entrance_rule(LogicEntrance.farmhouse_level_2, logic.building.has_building(Building.kitchen))
-    rule_collector.set_entrance_rule(LogicEntrance.farmhouse_level_3, logic.building.has_building(Building.kids_room))
+    rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_kitchen, logic.building.has_building(Building.kitchen))
+    rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_crib, logic.building.has_building(Building.kids_room))
     rule_collector.set_entrance_rule(LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
         rule_collector.set_entrance_rule(LogicEntrance.island_shipping, logic.shipping.can_use_island_shipping_bin)
