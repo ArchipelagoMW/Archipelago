@@ -71,12 +71,17 @@ static void persist_shard_to_sram(uint8_t new_shard_bitfield) {
 // This function is the intended hook target for sub_0801D948 (ROM address 0x0801D948):
 //   intercept the CollectShard(var->unk218) call site, call this instead, and let AP
 //   item delivery (SHARD_N) grant the actual shard progression.
-// Until the ROM hook is installed, AP_BOSS_DEFEAT_FLAGS stays at zero; the Python
-// client will receive no boss-defeat checks but will not regress any existing behavior.
 static void ap_set_boss_defeat_flag(uint32_t boss_index) {
     if (boss_index < 8u) {
         AP_BOSS_DEFEAT_FLAGS |= (1u << boss_index);
     }
+}
+
+// Hook target for the original boss shard grant call. The game passes the boss's
+// shard index in r0; record the boss defeat for AP and intentionally do not grant
+// native shard progression here.
+__attribute__((used)) void ap_on_boss_defeat_collect_shard(uint32_t boss_index) {
+    ap_set_boss_defeat_flag(boss_index);
 }
 
 static void ap_grant_lives(uint8_t amount) {

@@ -27,6 +27,10 @@ def test_patch_rom_warns_for_unexpected_rom_size() -> None:
     assert warning == "Warning: ROM size is 0x400000, expected 0x1000000. Proceeding anyway."
 
 
+def test_thumb_bl_bytes_matches_existing_main_hook_patch() -> None:
+    assert patch_rom.thumb_bl_bytes(0x08152696, 0x0815E000) == bytes.fromhex("0B F0 B3 FC")
+
+
 # ── Negative-path tests: parse_args ──────────────────────────────────────────
 
 def test_parse_args_source_type_arg_missing_rom_positional() -> None:

@@ -33,7 +33,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x1C   | 0x0202C01C | 4B | frame_counter         | u32  | ROM → Client | Monotonic frame count (incremented every hook call) |
 | 0x20   | 0x0202C020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
 
-| 0x24   | 0x0202C024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated (same bit ordering as shard_bitfield) |
+| 0x24   | 0x0202C024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated; recorded by a hook that replaces the native `CollectShard` call (same bit ordering as shard_bitfield) |
 
 **Total: 40 bytes (0x0202C000 - 0x0202C027)**
 
@@ -80,7 +80,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 
 | Location Type | ID Range | Description |
 |---------------|----------|-------------|
-| SHARD_1 .. SHARD_8 | auto-assigned | Mirror shard check locations (8 locations) |
+| GOAL_DARK_MIND / GOAL_100_PERCENT | auto-assigned | Goal locations (runtime-reported completion checks) |
 | BOSS_DEFEAT_1 .. BOSS_DEFEAT_8 | auto-assigned | Area boss defeat locations (8 locations) |
 | MAJOR_CHEST_CABBAGE_CAVERN | 3960200 | Cabbage Cavern big chest (bit 3, gTreasures.bigChestField) |
 | MAJOR_CHEST_OLIVE_OCEAN | 3960201 | Olive Ocean big chest (bit 6, gTreasures.bigChestField) |
@@ -173,18 +173,17 @@ every watcher tick.
 ```python
 # Run only when gameplay-active gate is true.
 
-# Prefer native shard bitfield, fallback to mailbox mirror
-if has_address("shard_bitfield_native"):
-    bitfield = RAM[0x02038970] as u8  # native shard_bitfield_native (bits 0-7)
-else:
-    bitfield = RAM[0x0202C000] as u32  # transport mailbox mirror
+# Boss-defeat checks (transport mailbox bitfield)
+boss_bits = RAM[0x0202C024] as u32
+for bit in mapped_boss_bits:
+    if (boss_bits >> bit) & 1:
+        mapped_checked.add(boss_location_id_for_bit(bit))
 
-# Collect all locations whose corresponding bit is set in the bitfield.
-# Only consider bits that map to a known location; reserved/unmapped bits are ignored.
-mapped_checked = set()
-for bit in mapped_location_bits:  # only explicitly mapped bits
-    if (bitfield >> bit) & 1:
-        mapped_checked.add(location_id_for_bit(bit))
+# Major-chest checks (native gTreasures.bigChestField)
+chest_bits = RAM[0x0203897C] as u32
+for bit in mapped_major_chest_bits:
+    if (chest_bits >> bit) & 1:
+        mapped_checked.add(major_chest_location_id_for_bit(bit))
 
 # Level-based, reconnect-safe resend:
 # Send only checks that RAM reports as collected but the server has not acknowledged.
@@ -195,15 +194,14 @@ if missing_on_server:
     send LocationChecks(missing_on_server)
 ```
 
-Bits 8-31 are reserved for future expansion and must be ignored until they are assigned to concrete location mappings.
+Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. Boss defeats are reported through `boss_defeat_flags`, and native boss shard grants are intercepted so shard progression only comes from AP item delivery.
 
 **Behavior notes:**
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
-- Client logs resend reasons when RAM-derived checks are missing on server and logs dedupe suppression when all RAM-derived checks are already acknowledged.
+- Boss-defeat and major-chest polling follow the same resend/dedupe diagnostic contract.
 - Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
-- Boss-defeat polling follows the same level-based resend/dedupe diagnostic contract.
 
 ### 3. Item Delivery (Mailbox Protocol)
 

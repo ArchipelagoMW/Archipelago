@@ -26,9 +26,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import forbid_items_for_player, set_rule
 
-from .data import data
+from .data import LocationCategory, data
 from .generation_logging import logger
 from .options import Goal
 
@@ -120,6 +120,19 @@ def get_region_ability_gate_annotations() -> dict[str, dict[str, dict[str, objec
 
 def set_rules(world: KirbyAmWorld) -> None:
     shard_gate_rule = lambda state: _has_all_shards(state, world.player)
+
+    item_name_groups = getattr(world, "item_name_groups", {})
+    shard_items = item_name_groups.get("Shard", set(_SHARD_ITEM_LABELS))
+    get_locations = getattr(world.multiworld, "get_locations", None)
+    if callable(get_locations):
+        for location in get_locations(world.player):
+            key = getattr(location, "key", None)
+            if key is None:
+                continue
+            loc_meta = data.locations.get(key)
+            if loc_meta is None or loc_meta.category != LocationCategory.BOSS_DEFEAT:
+                continue
+            forbid_items_for_player(location, shard_items, world.player)
 
     # Completion condition
     if world.options.goal.value == Goal.option_debug:

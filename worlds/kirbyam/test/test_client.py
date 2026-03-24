@@ -132,183 +132,26 @@ async def test_validate_rom_rejects_empty_patch_metadata_logs_once(mock_bizhawk_
 
 
 @pytest.mark.asyncio
-async def test_poll_locations_empty_bitfield(mock_bizhawk_context):
-    """Test _poll_locations with no shards collected."""
+async def test_poll_locations_is_noop_and_does_not_read_ram(mock_bizhawk_context):
+    """Shard polling is disabled for AP checks and should no-op without RAM reads."""
     client = KirbyAmClient()
     client.initialize_client()
-    
-    # Mock empty shard bitfield (0x0202C000 = 0x00)
+
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(0).to_bytes(4, 'little')]
-        
         await client._poll_locations(mock_bizhawk_context)
-        
-        # No new locations should be checked
-        assert len(client._checked_location_bits) == 0
+        mock_read.assert_not_awaited()
 
 
 @pytest.mark.asyncio
-async def test_poll_locations_single_shard(mock_bizhawk_context):
-    """Test _poll_locations when one shard is collected."""
+async def test_poll_locations_does_not_send_location_checks(mock_bizhawk_context):
+    """No LocationChecks should ever be emitted by shard polling."""
     client = KirbyAmClient()
     client.initialize_client()
-    
-    # Mock shard bitfield with bit 0 set (first shard)
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
-        
-        await client._poll_locations(mock_bizhawk_context)
-        
-        # Bit 0 should be marked as checked
-        assert 0 in client._checked_location_bits
-
-
-@pytest.mark.asyncio
-async def test_poll_locations_prefers_native_shard_address(mock_bizhawk_context):
-    """Test _poll_locations reads the native shard bitfield when available."""
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    with patch.dict(data.native_ram_addresses, {"shard_bitfield_native": 0x02038970}, clear=False), \
-         patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
-         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(0x01).to_bytes(1, 'little')]
-
-        await client._poll_locations(mock_bizhawk_context)
-
-        mock_read.assert_awaited_once_with(
-            mock_bizhawk_context.bizhawk_ctx,
-            [(0x02038970, 1, 'System Bus')]
-        )
-
-
-@pytest.mark.asyncio
-async def test_poll_locations_falls_back_to_transport_shard_address(mock_bizhawk_context):
-    """Test _poll_locations falls back to transport shard bitfield when native key is missing."""
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    with patch.dict(data.native_ram_addresses, {}, clear=True), \
-         patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
-         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
-
-        await client._poll_locations(mock_bizhawk_context)
-
-        mock_read.assert_awaited_once_with(
-            mock_bizhawk_context.bizhawk_ctx,
-            [(0x0202C000, 4, 'System Bus')]
-        )
-
-
-@pytest.mark.asyncio
-async def test_poll_locations_multiple_shards(mock_bizhawk_context, shard_bitfield_fixtures):
-    """Test _poll_locations with multiple shards."""
-    client = KirbyAmClient()
-    client.initialize_client()
-    
-    # Test with shard_1_2_3 pattern (bits 0, 1, 2 set)
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [shard_bitfield_fixtures["shard_1_2_3"].to_bytes(4, 'little')]
-        
-        await client._poll_locations(mock_bizhawk_context)
-        
-        # Bits 0, 1, 2 should be marked as checked
-        assert 0 in client._checked_location_bits
-        assert 1 in client._checked_location_bits
-        assert 2 in client._checked_location_bits
-
-
-@pytest.mark.asyncio
-async def test_poll_locations_ignores_unmapped_reserved_bits(mock_bizhawk_context):
-    """Test reserved/high bits are ignored when they do not map to any location."""
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    with patch.dict(data.native_ram_addresses, {}, clear=True), \
-         patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
-         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        # Bits 0 and 31 set; only bit 0 maps to current shard locations.
-        mock_read.return_value = [(0x80000001).to_bytes(4, 'little')]
-
-        await client._poll_locations(mock_bizhawk_context)
-
-        assert 0 in client._checked_location_bits
-        assert 31 not in client._checked_location_bits
-
-
-@pytest.mark.asyncio
-async def test_location_check_sent_on_new_shard(mock_bizhawk_context):
-    """Test that LocationChecks is sent when a new shard is detected."""
-    client = KirbyAmClient()
-    client.initialize_client()
-    
-    # Pre-populate bizhawk context checked locations
     mock_bizhawk_context.checked_locations = set()
-    
-    # Mock read returning bit 0 set (first new shard)
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
-        
-        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
-        
+
+    with patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         await client._poll_locations(mock_bizhawk_context)
-
-        mock_send.assert_awaited_once_with([
-            {"cmd": "LocationChecks", "locations": [data.locations["SHARD_1"].location_id]}
-        ])
-
-
-@pytest.mark.asyncio
-async def test_location_check_resent_when_server_missing_location(mock_bizhawk_context):
-    """RAM-derived checks should be resent if server checked_locations is missing them."""
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    first_loc = data.locations["SHARD_1"].location_id
-    second_loc = data.locations["SHARD_2"].location_id
-    # Simulate server knowing only shard 1 while RAM reports shards 1+2.
-    mock_bizhawk_context.checked_locations = {first_loc}
-
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
-         patch('CommonClient.logger') as mock_logger:
-
-        mock_read.return_value = [(0x03).to_bytes(4, 'little')]
-
-        await client._poll_locations(mock_bizhawk_context)
-
-        mock_send.assert_awaited_once_with([
-            {"cmd": "LocationChecks", "locations": [second_loc]}
-        ])
-        assert mock_logger.info.called
-        assert "resending RAM-derived LocationChecks missing on server" in mock_logger.info.call_args.args[0]
-        assert mock_logger.info.call_args.args[1] == [second_loc]
-        assert mock_logger.info.call_args.args[2] == [first_loc]
-
-
-@pytest.mark.asyncio
-async def test_no_location_checks_sent_when_all_already_server_acknowledged(mock_bizhawk_context):
-    """No LocationChecks message should be sent when all RAM-derived checks are already on the server."""
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    shard1 = data.locations["SHARD_1"].location_id
-    shard2 = data.locations["SHARD_2"].location_id
-    mock_bizhawk_context.checked_locations = {shard1, shard2}
-
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
-         patch('CommonClient.logger') as mock_logger:
-
-        mock_read.return_value = [(0x03).to_bytes(4, 'little')]  # bits 0 and 1 set
-
-        await client._poll_locations(mock_bizhawk_context)
-
-        mock_send.assert_not_awaited()
-        assert mock_logger.debug.called
-        assert "dedupe suppressed LocationChecks" in mock_logger.debug.call_args.args[0]
-        assert mock_logger.debug.call_args.args[1] == [shard1, shard2]
+    mock_send.assert_not_awaited()
 
 
 @pytest.mark.asyncio
@@ -380,20 +223,11 @@ async def test_shard_poll_does_not_trigger_major_chest_locations(mock_bizhawk_co
     client.initialize_client()
 
     mock_bizhawk_context.checked_locations = set()
-    major_chest_ids = {
-        loc.location_id
-        for loc in data.locations.values()
-        if loc.category.name == "MAJOR_CHEST"
-    }
 
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
-        mock_read.return_value = [(0x03).to_bytes(4, 'little')]  # shard bits 0 and 1
-
+    with patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         await client._poll_locations(mock_bizhawk_context)
 
-    sent_locations = set(mock_send.await_args.args[0][0]["locations"])
-    assert sent_locations.isdisjoint(major_chest_ids)
+    mock_send.assert_not_awaited()
 
 
 def test_major_chest_data_sanity():
@@ -1373,7 +1207,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._last_unsafe_delivery_counter_values == {}
         mock_logger.info.assert_any_call("KirbyAM: AP session ready; reconnect-safe reconciliation active")
         mock_load.assert_awaited_once()
-        mock_poll_locations.assert_awaited_once()
+        mock_poll_locations.assert_not_awaited()
         mock_poll_boss.assert_awaited_once()
         mock_poll_major_chests.assert_awaited_once()
         mock_probe.assert_awaited_once()
@@ -1752,20 +1586,8 @@ async def test_shard_poll_does_not_trigger_boss_defeat_locations(mock_bizhawk_co
     client = KirbyAmClient()
     client.initialize_client()
 
-    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.native_ram_addresses, {}, clear=True), \
-         patch.dict(data.transport_ram_addresses, {"shard_bitfield": 0x0202C000}, clear=False), \
-         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
-        # bit 0 set in shard bitfield
-        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
-
+    with patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         await client._poll_locations(mock_bizhawk_context)
-
-        # Should only send SHARD_1, not BOSS_DEFEAT_1
-        calls = mock_send.await_args_list
-        assert len(calls) == 1
-        sent_locations = calls[0].args[0][0]["locations"]
-        assert boss1_loc not in sent_locations
+        mock_send.assert_not_awaited()

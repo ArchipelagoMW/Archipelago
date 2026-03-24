@@ -14,7 +14,7 @@ You can read through all the options and generate a YAML here.
 
 
 
-This randomizer handles shard randomization for when bosses get defeated. Additional randomization will be added in future updates.
+This randomizer currently treats boss defeats and major chests as the main AP checks. Mirror shards are still progression items, but defeating a boss no longer grants a shard directly in-game.
 
 
 
@@ -22,7 +22,7 @@ This randomizer handles shard randomization for when bosses get defeated. Additi
 
 
 
-Shards will be randomized between different bosses. Ex: If you defeat Gobbler you may receive the shard you'd normally get from defeating Dark Meta Knight.
+Boss defeats are separate checks from shard progression. Shards are delivered through Archipelago item placement instead of being granted directly by boss defeats.
 
 
 

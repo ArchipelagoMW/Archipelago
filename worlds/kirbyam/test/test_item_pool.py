@@ -10,6 +10,52 @@ from ..locations import KirbyAmLocation
 from ..options import RandomizeShards
 
 
+class _DummyMultiWorld:
+    def __init__(self, locations):
+        self._locations = locations
+        self.itempool = []
+
+    def get_locations(self, player):
+        return self._locations
+
+    def get_player_name(self, player):
+        return "KirbyAM-Test"
+
+
+def _build_fill_locations() -> list[KirbyAmLocation]:
+    locations: list[KirbyAmLocation] = []
+    for key, meta in data.locations.items():
+        if meta.category == LocationCategory.GOAL:
+            continue
+        locations.append(
+            KirbyAmLocation(
+                1,
+                meta.label,
+                meta.location_id,
+                None,
+                key=key,
+                default_item_code=meta.default_item,
+            )
+        )
+    return locations
+
+
+def _build_world_for_create_items(shard_mode: int) -> tuple[KirbyAmWorld, list[KirbyAmLocation]]:
+    locations = _build_fill_locations()
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.player = 1
+    world.random = random.Random(7)
+    world.multiworld = _DummyMultiWorld(locations)
+    world.options = SimpleNamespace(
+        shards=SimpleNamespace(value=shard_mode, current_key={
+            RandomizeShards.option_vanilla: "vanilla",
+            RandomizeShards.option_shuffle: "shuffle",
+            RandomizeShards.option_completely_random: "completely_random",
+        }[shard_mode])
+    )
+    return world, locations
+
+
 def test_useful_item_catalog_includes_map_and_vitality() -> None:
     useful_items = [item for item in data.items.values() if item.classification & ItemClassification.useful]
 
@@ -109,3 +155,41 @@ def test_goal_locations_are_converted_to_addressless_events() -> None:
     assert goal_location.item is not None
     assert goal_location.item.code is None
     assert goal_location.address is None
+
+
+def test_vanilla_shards_are_locked_to_major_chests_not_boss_defeats() -> None:
+    world, locations = _build_world_for_create_items(RandomizeShards.option_vanilla)
+
+    world.create_items()
+
+    boss_locations = [loc for loc in locations if data.locations[loc.key].category == LocationCategory.BOSS_DEFEAT]
+    chest_locations = [loc for loc in locations if data.locations[loc.key].category == LocationCategory.MAJOR_CHEST]
+
+    assert all(loc.item is None for loc in boss_locations)
+    locked_chest_shards = [loc.item.name for loc in chest_locations if loc.item is not None]
+    assert len(locked_chest_shards) == 8
+    assert all("Mirror Shard" in item_name for item_name in locked_chest_shards)
+    _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
+    _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
+    _total_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
+    _expected_pool_size = _boss_defeat_count + (_total_chest_count - _shard_chest_count)
+    assert len(world.multiworld.itempool) == _expected_pool_size
+    assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
+
+
+def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() -> None:
+    world, locations = _build_world_for_create_items(RandomizeShards.option_completely_random)
+
+    world.create_items()
+
+    boss_locations = [loc for loc in locations if data.locations[loc.key].category == LocationCategory.BOSS_DEFEAT]
+    assert all(loc.item is None for loc in boss_locations)
+
+    shard_items = [item for item in world.multiworld.itempool if "Shard" in item.tags]
+    _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
+    _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
+    _total_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
+    _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
+    _expected_pool_size = _boss_defeat_count + (_total_chest_count - _shard_chest_count) + _shard_item_count
+    assert len(world.multiworld.itempool) == _expected_pool_size
+    assert len(shard_items) == _shard_item_count

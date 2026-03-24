@@ -261,18 +261,22 @@ All criteria below must be met:
 - `worlds/kirbyam/data/native_address_policy.json`
 - `worlds/kirbyam/ADDRESS_VERIFICATION_MATRIX.md`
 
-## POC shard mapping reference
+## Shard progression mapping reference
 
-Current proof-of-concept shard bit mapping:
+Current shard bit mapping remains valid for progression state:
 
-- bit 0 -> `SHARD_1`
-- bit 1 -> `SHARD_2`
-- bit 2 -> `SHARD_3`
-- bit 3 -> `SHARD_4`
-- bit 4 -> `SHARD_5`
-- bit 5 -> `SHARD_6`
-- bit 6 -> `SHARD_7`
-- bit 7 -> `SHARD_8`
+- bit 0 -> Mustard Mountain shard obtained
+- bit 1 -> Moonlight Mansion shard obtained
+- bit 2 -> Candy Constellation shard obtained
+- bit 3 -> Olive Ocean shard obtained
+- bit 4 -> Peppermint Palace shard obtained
+- bit 5 -> Cabbage Cavern shard obtained
+- bit 6 -> Carrot Castle shard obtained
+- bit 7 -> Radish Ruins shard obtained
+
+Issue #369 contract note:
+- Mirror shard bits are progression-state signals only.
+- AP location checks are emitted from boss-defeat and major-chest polling.
 
 ## Implementation notes
 
@@ -647,11 +651,11 @@ Implemented the AP-side transport infrastructure for boss-defeat locations:
 
 **ROM payload**
 - Added `AP_BOSS_DEFEAT_FLAGS` macro in `ap_payload.c`.
-- Added `ap_set_boss_defeat_flag(uint32_t boss_index)` stub with a TODO comment
-  directing the caller to install the hook at `sub_0801D948` (ROM address
-  `0x0801D948`, the function that calls `CollectShard(var->unk218)` after a boss
-  collection cutscene). Until the hook is installed the register stays at zero;
-  shard polling and delivery are unaffected.
+- Added `ap_set_boss_defeat_flag(uint32_t boss_index)` and a dedicated
+  `ap_on_boss_defeat_collect_shard(uint32_t boss_index)` hook target.
+- `patch_rom.py` now patches the `BL CollectShard` call inside `sub_0801D948`
+  (ROM address `0x0801D948`, callsite file offset `0x001D950`) so boss defeat
+  sets the AP boss flag and does not grant the shard natively.
 
 **Locations**
 - Added 8 `BOSS_DEFEAT_N` locations (bit_index 0–7) to `locations.json`, one per
@@ -668,17 +672,16 @@ Implemented the AP-side transport infrastructure for boss-defeat locations:
 - **Claim**: beating a boss runs `sub_0801D948` which calls `CollectShard(var->unk218)`.
 - **Source**: `d:\kirbyam-extras\katam\src\code_0801C6F8.c` lines 703–705;
   `CollectShard` definition at `d:\kirbyam-extras\katam\src\treasures.c` line 41.
-- **Adaptation**: ROM hook (replacing the `BL CollectShard` with `BL ap_set_boss_defeat_flag`)
-  is deferred pending patch-site byte verification via Issue #110. The transport
-  register, AP locations, and client polling are fully wired so no client-side
-  change is required when the hook is eventually installed.
-- **Validation**: 2 new tests (boss defeat send + no-resend), 29+ tests passing.
+- **Adaptation**: patch the `BL CollectShard` call in `sub_0801D948` to branch
+  into `ap_on_boss_defeat_collect_shard`, which records boss defeat without
+  mutating native shard progression.
+- **Validation**: focused client polling tests, item-pool tests, and patch tool
+  tests covering the new Thumb BL encoder.
 
 ### Remaining work (post-#35)
-- Install the `sub_0801D948` ROM hook in `patch_rom.py` once the exact BL
-  instruction byte offset inside the function is confirmed via live BizHawk
-  inspection.  That step decouples the shard grant and enables real boss-defeat
-  location checks in gameplay.
+- Live BizHawk verification of the patched boss-defeat hook against the clean USA
+  ROM remains advisable before release patch promotion, but the hook is now wired
+  in the shipped patch generator.
 
 ## Issue #75: DeathLink Runtime Receive/Apply and Local Death Send
 

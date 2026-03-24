@@ -11,43 +11,28 @@ from ..data import data
 
 
 @pytest.mark.asyncio
-async def test_reconnect_chaos_location_polling_resends_once_then_dedupes(mock_bizhawk_context):
-    """Reconnect cycles should not duplicate shard LocationChecks after server acknowledgement."""
+async def test_reconnect_chaos_boss_defeat_polling_resends_once_then_dedupes(mock_bizhawk_context):
+    """Reconnect cycles should not duplicate boss-defeat LocationChecks after server acknowledgement."""
     client = KirbyAmClient()
     client.initialize_client()
 
-    shard1_id = data.locations["SHARD_1"].location_id
+    boss1_id = data.locations["BOSS_DEFEAT_1"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
-         patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
-         patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
-         patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
-         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
-         patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
-         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
-         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
-         patch.object(client, '_deliver_items', new_callable=AsyncMock), \
-         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock):
-        mock_gate.return_value = (True, "gameplay_active", 300)
-        # Connected cycle: shard bit set.
-        mock_read.return_value = [(0x01).to_bytes(1, 'little')]
-        await client.game_watcher(mock_bizhawk_context)
+    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0202C024}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        # First poll: boss bit set and not acknowledged by server -> send once.
+        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
+        await client._poll_boss_defeat_locations(mock_bizhawk_context)
 
-        # Disconnect cycle: watcher should skip entirely.
-        mock_bizhawk_context.server.socket.closed = True
-        await client.game_watcher(mock_bizhawk_context)
-
-        # Reconnect cycle with server already acknowledging shard 1.
-        mock_bizhawk_context.server.socket.closed = False
-        mock_bizhawk_context.checked_locations = {shard1_id}
-        mock_read.return_value = [(0x01).to_bytes(1, 'little')]
-        await client.game_watcher(mock_bizhawk_context)
+        # Reconnect-equivalent poll: same RAM bit, now acknowledged by server -> dedupe.
+        mock_bizhawk_context.checked_locations = {boss1_id}
+        mock_read.return_value = [(0x01).to_bytes(4, 'little')]
+        await client._poll_boss_defeat_locations(mock_bizhawk_context)
 
     # Exactly one LocationChecks send across connect/disconnect/reconnect.
     mock_bizhawk_context.send_msgs.assert_awaited_once_with([
-        {"cmd": "LocationChecks", "locations": [shard1_id]}
+        {"cmd": "LocationChecks", "locations": [boss1_id]}
     ])
 
 

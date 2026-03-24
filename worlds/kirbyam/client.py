@@ -48,7 +48,7 @@ class KirbyAmClient(BizHawkClient):
     patch_suffix = ".apkirbyam"
 
     def initialize_client(self) -> None:
-        # Real polling state (shards)
+        # Compatibility state retained for tests and reconnect diagnostics.
         self._checked_location_bits: set[int] = set()
 
         # Item delivery state
@@ -71,13 +71,6 @@ class KirbyAmClient(BizHawkClient):
                     self._goal_location_ids_by_option[Goal.option_100] = loc.location_id
             else:
                 self._non_goal_location_ids_sorted.append(loc.location_id)
-        # Shard bitfield → location IDs (SHARD category only; BOSS_DEFEAT uses separate bitfield)
-        self._location_ids_by_bit: dict[int, list[int]] = {}
-        for loc in data.locations.values():
-            if loc.bit_index is None or loc.category != LocationCategory.SHARD:
-                continue
-            self._location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
-
         # Boss defeat bitfield → location IDs (BOSS_DEFEAT category; polled from boss_defeat_flags)
         self._boss_location_ids_by_bit: dict[int, list[int]] = {}
         for loc in data.locations.values():
@@ -473,9 +466,6 @@ class KirbyAmClient(BizHawkClient):
         await self._apply_pending_death_link(ctx)
         await self._poll_and_send_local_death_link(ctx)
 
-        # Location checks (real RAM polling)
-        await self._poll_locations(ctx)
-
         # Boss defeat location polling via transport register
         await self._poll_boss_defeat_locations(ctx)
 
@@ -701,67 +691,9 @@ class KirbyAmClient(BizHawkClient):
     # Location checking
     # --------------------------
 
-    async def _poll_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
-        """
-        Primary location polling: read shard bitfield and map set bits to locations.
-        
-        Behavior:
-        - Reads shard_bitfield_native from native RAM when available
-        - Falls back to shard_bitfield transport mirror for compatibility
-        - Each mapped bit can correspond to one or more AP location ids
-        - RAM state is authoritative for local checks
-        - Sends LocationChecks for any RAM-derived checks missing from server checked state
-        """
-        read_size = 1
-        shard_addr = self._native_addr("shard_bitfield_native")
-        if shard_addr is None:
-            read_size = 4
-            shard_addr = self._transport_addr("shard_bitfield")
-        if shard_addr is None:
-            return
-        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(shard_addr, read_size, "System Bus")]))[0]
-        shard_bits = self._u32_le(raw.ljust(4, b"\x00"))
-
-        # Track only mapped bits so reserved bits do not pollute checked state.
-        mapped_bits = sorted(self._location_ids_by_bit.keys())
-
-        mapped_checked_locations: set[int] = set()
-        for bit in mapped_bits:
-            if (shard_bits >> bit) & 1:
-                self._checked_location_bits.add(bit)
-                mapped_checked_locations.update(self._location_ids_by_bit.get(bit, []))
-
-        # Reconnect-safe behavior: if server state is missing RAM-derived checks,
-        # resend them until the server acknowledges and reflects them.
-        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
-        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
-
-        if missing_on_server:
-            from CommonClient import logger
-
-            shard_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
-            if shard_log_state != self._last_shard_poll_log:
-                logger.info(
-                    "KirbyAM: resending RAM-derived LocationChecks missing on server (missing=%s, acked=%s)",
-                    missing_on_server,
-                    already_acknowledged,
-                )
-                self._last_shard_poll_log = shard_log_state
-
-            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
-        elif mapped_checked_locations:
-            from CommonClient import logger
-
-            shard_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
-            if shard_log_state != self._last_shard_poll_log:
-                logger.debug(
-                    "KirbyAM: dedupe suppressed LocationChecks (all RAM-derived checks already acknowledged: %s)",
-                    already_acknowledged,
-                )
-                self._last_shard_poll_log = shard_log_state
-
-        else:
-            self._last_shard_poll_log = None
+    async def _poll_locations(self, _ctx: KirbyAmBizHawkClientContext) -> None:
+        """Mirror shard bits are progression state only; they no longer emit AP location checks."""
+        return
 
     async def _poll_boss_defeat_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

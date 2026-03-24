@@ -24,11 +24,11 @@ class Goal(Choice):
 
 class RandomizeShards(Choice):
     """
-    Adds Shards to the pool.
+    Adds Shards to the pool without letting boss defeats grant them directly.
 
-    - Vanilla: Area bosses give their own shard
-    - Shuffle: Area bosses give a random shard
-    - Completely Random: Shards can be found anywhere
+    - Vanilla: Each area's big chest holds its matching shard
+    - Shuffle: The eight area big chests hold a shuffled set of shards
+    - Completely Random: Shards can appear at any non-boss physical check
     """
     display_name = "Randomize Shards"
     default = 2

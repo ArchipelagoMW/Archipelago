@@ -116,6 +116,30 @@ class KirbyAmWorld(World):
         ("2 Up", 3),
         ("3 Up", 1),
     )
+    _SHARD_CHEST_KEY_ORDER: ClassVar[tuple[str, ...]] = (
+        "MAJOR_CHEST_MUSTARD_MOUNTAIN",
+        "MAJOR_CHEST_MOONLIGHT_MANSION",
+        "MAJOR_CHEST_CANDY_CONSTELLATION",
+        "MAJOR_CHEST_OLIVE_OCEAN",
+        "MAJOR_CHEST_PEPPERMINT_PALACE",
+        "MAJOR_CHEST_CABBAGE_CAVERN",
+        "MAJOR_CHEST_CARROT_CASTLE",
+        "MAJOR_CHEST_RADISH_RUINS",
+    )
+    # Shard item labels in the same positional order as _SHARD_CHEST_KEY_ORDER.
+    # Using labels (stable identifiers from items.json) rather than sorted item IDs
+    # keeps the vanilla chest→shard mapping correct even if item IDs are reorganised.
+    _SHARD_ITEM_LABEL_ORDER: ClassVar[tuple[str, ...]] = (
+        "Mustard Mountain - Mirror Shard",
+        "Moonlight Mansion - Mirror Shard",
+        "Candy Constellation - Mirror Shard",
+        "Olive Ocean - Mirror Shard",
+        "Peppermint Palace - Mirror Shard",
+        "Cabbage Cavern - Mirror Shard",
+        "Carrot Castle - Mirror Shard",
+        "Radish Ruins - Mirror Shard",
+    )
+    _RAINBOW_ROUTE_CHEST_KEY: ClassVar[str] = "MAJOR_CHEST_RAINBOW_ROUTE"
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -206,38 +230,128 @@ class KirbyAmWorld(World):
                 if isinstance(loc, KirbyAmLocation) and loc.address is not None
             ]
 
-            # Filter categories that should not be randomized into the pool.
-            filtered_categories = {LocationCategory.GOAL}
-            if self.options.shards.value in {RandomizeShards.option_vanilla, RandomizeShards.option_shuffle}:
-                filtered_categories.add(LocationCategory.SHARD)
-
-            # Build the default item pool from each location's default item.
-            itempool: list[KirbyAmItem] = []
-            shard_count = 0
+            # Resolve fillable physical locations by category.
+            boss_locations: list[KirbyAmLocation] = []
+            major_chest_locations: list[KirbyAmLocation] = []
+            location_by_key: dict[str, KirbyAmLocation] = {}
             for loc in fill_locations:
                 if loc.key is None:
                     continue
+                location_by_key[loc.key] = loc
                 loc_meta = kirby_data.locations.get(loc.key)
                 if loc_meta is None:
                     continue
+                if loc_meta.category == LocationCategory.BOSS_DEFEAT:
+                    boss_locations.append(loc)
+                elif loc_meta.category == LocationCategory.MAJOR_CHEST:
+                    major_chest_locations.append(loc)
 
-                if loc_meta.category in filtered_categories:
-                    if loc_meta.category == LocationCategory.SHARD:
-                        shard_count += 1
-                    continue
+            boss_locations.sort(key=lambda loc: loc.key or "")
+            major_chest_locations.sort(key=lambda loc: loc.key or "")
 
-                # During early iteration it's easy to have a location without a default_item.
-                # Avoid hard crashes and fall back to the world's configured filler.
-                if loc.default_item_code is None:
-                    filler_name = self.get_filler_item_name()
-                    self.logger.warning(
-                        "Location '%s' has no default_item; using filler '%s' instead.",
-                        loc.name,
-                        filler_name,
+            locked_shard_count = 0
+            randomized_item_codes: list[int] = []
+            if boss_locations or major_chest_locations:
+                shard_label_to_code = {
+                    item.label: item.item_id
+                    for item in kirby_data.items.values()
+                    if "Shard" in item.tags
+                }
+                missing_shard_labels = [
+                    label for label in self._SHARD_ITEM_LABEL_ORDER
+                    if label not in shard_label_to_code
+                ]
+                if missing_shard_labels:
+                    available_labels = sorted(shard_label_to_code.keys())
+                    raise ValueError(
+                        "KirbyAM shard item configuration error: missing shard labels in items data: "
+                        f"{missing_shard_labels}. "
+                        f"Available shard-tagged item labels: {available_labels}"
                     )
-                    itempool.append(self.create_item(filler_name))
-                else:
-                    itempool.append(self.create_item_by_code(loc.default_item_code))
+                shard_item_codes = [
+                    shard_label_to_code[label] for label in self._SHARD_ITEM_LABEL_ORDER
+                ]
+
+                shard_chest_locations: list[KirbyAmLocation] = []
+                for chest_key in self._SHARD_CHEST_KEY_ORDER:
+                    shard_chest = location_by_key.get(chest_key)
+                    if shard_chest is None:
+                        raise ValueError(f"KirbyAM shard chest location missing from region graph: {chest_key}")
+                    shard_chest_locations.append(shard_chest)
+
+                rainbow_route_chest = location_by_key.get(self._RAINBOW_ROUTE_CHEST_KEY)
+                if rainbow_route_chest is None:
+                    raise ValueError(
+                        f"KirbyAM non-shard chest location missing from region graph: {self._RAINBOW_ROUTE_CHEST_KEY}"
+                    )
+
+                expected_boss_defeat_count = sum(
+                    1 for m in kirby_data.locations.values()
+                    if m.category == LocationCategory.BOSS_DEFEAT
+                )
+                if len(boss_locations) != expected_boss_defeat_count:
+                    raise ValueError(
+                        f"KirbyAM expected {expected_boss_defeat_count} boss-defeat locations,"
+                        f" found {len(boss_locations)}"
+                    )
+
+                # Place shards onto major-chest locations in vanilla/shuffle modes.
+                if self.options.shards.value in {RandomizeShards.option_vanilla, RandomizeShards.option_shuffle}:
+                    if self.options.shards.value == RandomizeShards.option_vanilla:
+                        shard_codes_for_chests = shard_item_codes
+                    else:
+                        shard_codes_for_chests = list(shard_item_codes)
+                        self.random.shuffle(shard_codes_for_chests)
+
+                    if len(shard_chest_locations) != len(shard_codes_for_chests):
+                        raise ValueError(
+                            "KirbyAM shard placement mismatch: %d shard chest locations vs %d shard items"
+                            % (len(shard_chest_locations), len(shard_codes_for_chests))
+                        )
+                    for chest_loc, shard_code in zip(shard_chest_locations, shard_codes_for_chests):
+                        chest_loc.place_locked_item(self.create_item_by_code(shard_code))
+                        chest_loc.progress_type = LocationProgressType.DEFAULT
+                        locked_shard_count += 1
+
+                    logger.info(
+                        "[P%s] Locked %s shard items onto major-chest locations (mode=%s)",
+                        self.player,
+                        locked_shard_count,
+                        self.options.shards.current_key,
+                    )
+
+                # Build the non-shard pool from boss rewards plus Rainbow Route's big chest reward.
+                base_non_shard_codes: list[int] = []
+                for loc in boss_locations + [rainbow_route_chest]:
+                    if loc.default_item_code is None:
+                        raise ValueError(f"KirbyAM location '{loc.name}' is missing a default item code")
+                    base_non_shard_codes.append(loc.default_item_code)
+
+                if self.options.shards.value == RandomizeShards.option_completely_random:
+                    randomized_item_codes.extend(shard_item_codes)
+                randomized_item_codes.extend(base_non_shard_codes)
+
+                open_physical_locations = [
+                    loc for loc in boss_locations + major_chest_locations
+                    if loc.item is None
+                ]
+                needed_pool_size = len(open_physical_locations)
+
+                if len(randomized_item_codes) != needed_pool_size:
+                    raise ValueError(
+                        "KirbyAM item pool mismatch: open physical locations=%s randomized item count=%s"
+                        % (needed_pool_size, len(randomized_item_codes))
+                    )
+
+            if (boss_locations or major_chest_locations) and not randomized_item_codes:
+                raise ValueError(
+                    "KirbyAM item pool build failed: no randomized items were produced. "
+                    "This likely indicates a problem with boss/major chest locations or region data."
+                )
+
+            itempool: list[KirbyAmItem] = [
+                self.create_item_by_code(code) for code in randomized_item_codes
+            ]
 
             # Add to AP pool
             self.multiworld.itempool += itempool
@@ -245,6 +359,7 @@ class KirbyAmWorld(World):
             useful_count = sum(1 for item in itempool if item.useful)
             filler_count = sum(1 for item in itempool if item.filler)
             progression_count = sum(1 for item in itempool if item.advancement)
+            pool_shard_count = sum(1 for item in itempool if item.name in self.item_name_groups.get("Shard", set()))
             logger.info(
                 "[P%s] Item pool classification summary: useful=%s filler=%s progression=%s",
                 self.player,
@@ -267,30 +382,14 @@ class KirbyAmWorld(World):
                     loc.address = None
                     goal_event_count += 1
 
-            # Log item creation (pool size as total; shards counted separately)
-            log_items_created(self.player, len(itempool), shard_count, len(itempool))
+            # Log item creation (randomized pool + fixed shard placements)
+            log_items_created(
+                self.player,
+                len(itempool),
+                locked_shard_count + pool_shard_count,
+                len(itempool) - pool_shard_count,
+            )
             logger.debug(f"[P{self.player}] Converted {goal_event_count} goal locations to locked events")
-
-            # If shards are vanilla, convert shard locations to events so logic can see them without randomization.
-            if self.options.shards.value == RandomizeShards.option_vanilla:
-                event_count = 0
-                for loc in self.multiworld.get_locations(self.player):
-                    if not isinstance(loc, KirbyAmLocation) or loc.key is None:
-                        continue
-                    loc_meta = kirby_data.locations.get(loc.key)
-                    if loc_meta and loc_meta.category == LocationCategory.SHARD:
-                        if loc.default_item_code is None:
-                            self.logger.warning(
-                                "Shard location '%s' is missing default_item; leaving it randomized.",
-                                loc.name,
-                            )
-                            continue
-                        # Lock the vanilla shard item here as an event.
-                        loc.place_locked_item(self.create_event(self.item_id_to_name[loc.default_item_code]))
-                        loc.progress_type = LocationProgressType.DEFAULT
-                        loc.address = None
-                        event_count += 1
-                logger.debug(f"[P{self.player}] Converted {event_count} shard locations to events (vanilla mode)")
 
     # Set world rules
     def set_rules(self) -> None:
