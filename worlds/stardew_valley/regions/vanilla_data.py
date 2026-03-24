@@ -230,7 +230,7 @@ vanilla_regions: tuple[RegionData, ...] = (
         (
             Entrance.wizard_tower_to_forest,
             Entrance.enter_wizard_basement,
-            Entrance.use_desert_obelisk,  # TODO: figure out how to fix these
+            Entrance.use_desert_obelisk,
             Entrance.use_earth_obelisk,
             Entrance.use_water_obelisk,
             LogicEntrance.purchase_wizard_blueprints,
