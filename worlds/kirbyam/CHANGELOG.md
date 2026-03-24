@@ -2,10 +2,13 @@
 
 ## Unreleased
 
+## v0.0.10
+
 - Fix KirbyAM Open Patch preflight to revalidate configured base ROM for `.apkirbyam` and reprompt in GUI mode when hash/path checks fail.
 - Reduce BizHawk client log spam by suppressing duplicate "patch metadata missing" validation errors during repeated retries.
 - Remove debug-only KirbyAM event locations from normal world generation/spoiler output and add regression coverage to prevent `EVENT_DEBUG_` leaks.
 - Hide non-shipping KirbyAM goal choices (`100`, `debug`) from generated player YAML templates and add regression coverage.
+- Fix KirbyAM BizHawk auth-token registration in `connect_names` to preserve the required `(team, slot)` tuple shape and prevent host `Connect` crashes.
 
 ## v0.0.9
 
