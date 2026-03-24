@@ -197,8 +197,8 @@ class EntranceRandomization(Choice):
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
     Buildings: All entrances that allow you to enter a building are randomized with each other
-    Buildings Without House: Buildings, but excluding the farmhouse
-    Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
+    Overworld: Buildings and all normal overworld map transitions like from the farm to the forest
+    Everywhere: Overworld as well as the special transitions like the minecarts and warps
     """
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
