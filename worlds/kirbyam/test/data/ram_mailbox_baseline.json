@@ -4,7 +4,7 @@
     {
       "name": "ap_mailbox_transport",
       "start": "0x0202C000",
-      "end": "0x0202C020",
+      "end": "0x0202C028",
       "bus": "System Bus",
       "notes": "Transport mirror block used by client mailbox protocol and shard fallback polling."
     }
@@ -23,7 +23,9 @@
     "0x0202C014": 0,
     "0x0202C018": 0,
     "0x0202C01C": 0,
-    "0x0202C020": 0
+    "0x0202C020": 0,
+    "0x0202C024": 0,
+    "0x0202C028": 0
   },
   "fields": {
     "0x0202C000": "shard_bitfield_transport",
@@ -34,6 +36,8 @@
     "0x0202C014": "debug_last_item_id",
     "0x0202C018": "debug_last_from",
     "0x0202C01C": "frame_counter",
-    "0x0202C020": "delivered_item_index"
+    "0x0202C020": "delivered_item_index",
+    "0x0202C024": "boss_defeat_flags",
+    "0x0202C028": "major_chest_flags"
   }
 }

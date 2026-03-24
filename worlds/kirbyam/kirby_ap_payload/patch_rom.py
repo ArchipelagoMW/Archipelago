@@ -26,6 +26,7 @@ from pathlib import Path
 PAYLOAD_OFFSET = 0x0015E000
 MAIN_HOOK_OFFSET = 0x00152696
 BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D950
+BIG_CHEST_COLLECT_CALL_OFFSET = 0x0000B144
 
 
 ROM_PATH_TMP = "rom_path.tmp"
@@ -655,10 +656,12 @@ def main():
             raise SystemExit("Error: payload.elf not found after build; cannot resolve boss hook symbol.")
 
         boss_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_boss_defeat_collect_shard")
+        big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         # arm-none-eabi-nm may encode Thumb function symbols with bit 0 set.
         # Clear the Thumb state bit before passing to thumb_bl_bytes(), which
         # requires a halfword-aligned target address.
         boss_hook_target &= ~1
+        big_chest_hook_target &= ~1
         rom_base = 0x08000000
         payload_rom_start = rom_base + PAYLOAD_OFFSET
         payload_rom_end = payload_rom_start + len(payload)
@@ -669,7 +672,15 @@ def main():
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
+        if not (payload_rom_start <= big_chest_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: big chest hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{big_chest_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
         boss_hook_bl_bytes = thumb_bl_bytes(rom_base + BOSS_COLLECT_SHARD_CALL_OFFSET, boss_hook_target)
+        big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
 
         # 3) Load ROM
         try:
@@ -688,6 +699,7 @@ def main():
         # 5) Patch hook sites with BL
         rom[MAIN_HOOK_OFFSET:MAIN_HOOK_OFFSET + 4] = MAIN_HOOK_BL_BYTES
         rom[BOSS_COLLECT_SHARD_CALL_OFFSET:BOSS_COLLECT_SHARD_CALL_OFFSET + 4] = boss_hook_bl_bytes
+        rom[BIG_CHEST_COLLECT_CALL_OFFSET:BIG_CHEST_COLLECT_CALL_OFFSET + 4] = big_chest_hook_bl_bytes
 
         # 6) Write the intermediary patched ROM
         with open(INTERMEDIARY_ROM, "wb") as f:
@@ -717,6 +729,14 @@ def main():
             boss_hook_bl_bytes.hex(" "),
             "target=",
             hex(boss_hook_target),
+        )
+        print(
+            "Big chest call patched at file offset:",
+            hex(BIG_CHEST_COLLECT_CALL_OFFSET),
+            "with bytes:",
+            big_chest_hook_bl_bytes.hex(" "),
+            "target=",
+            hex(big_chest_hook_target),
         )
 
         # 7) Generate base_patch.bsdiff4: clean base -> intermediary patched ROM

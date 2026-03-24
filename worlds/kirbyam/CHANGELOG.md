@@ -4,6 +4,7 @@
 
 - Hide KirbyAM goal/event-style objective checks from datapackage location exports so `/locations` no longer lists them as normal AP locations.
 - Harden ROM hook context preservation at startup by explicitly saving/restoring low+high register state around `ap_poll_mailbox_c`, reducing startup-state corruption risk (99-lives symptom).
+- Split KirbyAM major-chest AP checks from native area-map ownership so opening a big chest no longer grants the map immediately; the native map now unlocks only when the corresponding AP map item is received.
 
 ## v0.0.10
 

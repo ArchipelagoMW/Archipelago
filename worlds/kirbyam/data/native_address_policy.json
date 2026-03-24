@@ -32,11 +32,11 @@
       "status": "integrated",
       "entries": [
         {
-          "name": "big_chest_bitfield_native",
-          "address": "0x0203897C",
+          "name": "major_chest_flags",
+          "address": "0x0202C028",
           "width": "u32",
-          "source": "gTreasures layout cross-reference + shard_bitfield_native anchor + live client integration",
-          "verification": "Integrated and used by polling path for Cabbage Cavern, Olive Ocean, and Peppermint Palace major chests; pending repeatable BizHawk confirmation per promotion_criteria"
+          "source": "ROM payload big-chest hook transport register",
+          "verification": "Integrated and used by polling path for major chest AP checks; native 0x0203897C remains map ownership state only"
         }
       ]
     },

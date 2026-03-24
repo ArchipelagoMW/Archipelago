@@ -1014,6 +1014,32 @@ This reduces the chance of hook-boundary context drift affecting startup state.
   - explicit high-register mirror/restore (`r8-r11` via `r0-r3`)
   - no `r4`-based LR reconstruction pattern
 
+## Issue #381: Suppress Native Big Chest Map Grants
+
+### Problem
+Major chest checks were polled from native `gTreasures.bigChestField` at
+`0x0203897C`. Opening a big chest therefore both sent the AP check and unlocked
+the native area map immediately, even when the chest's actual AP reward was not
+that map.
+
+### Solution
+Split major chest checks from native map ownership:
+- added transport `major_chest_flags` at `0x0202C028` for AP check polling
+- patched the native `CollectBigChest` call site to invoke payload hook
+  `ap_on_collect_big_chest(area_id)`
+- preserved AP check signaling by setting `major_chest_flags` when the chest is opened
+- suppressed native map unlock at chest-open time
+- granted native area maps only when the corresponding AP `MAP_*` item is delivered
+
+### Native Evidence
+- chest reward dispatcher: `katam/asm/chest.s`, `sub_0800AFC8`
+- `CollectBigChest` caller block at ROM `0x0800B144`
+- native map bitfield: `gTreasures.bigChestField` / `0x0203897C`
+
+### Validation
+- client major chest polling tests updated to use the transport register
+- payload tests assert separate major chest transport signaling and native map unlock handling
+
 ## Issue #223: In-Gameplay Unsafe-State Delivery Policy (Research-First Mode)
 
 ### Problem

@@ -78,7 +78,7 @@ class KirbyAmClient(BizHawkClient):
                 continue
             self._boss_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
-        # Major chest bitfield → location IDs (MAJOR_CHEST category; polled from big_chest_bitfield_native)
+        # Major chest bitfield → location IDs (MAJOR_CHEST category; polled from major_chest_flags)
         # Bit N corresponds to area ID N in enum AreaId (e.g. bit 3 = AREA_CABBAGE_CAVERN).
         self._major_chest_location_ids_by_bit: dict[int, list[int]] = {}
         for loc in data.locations.values():
@@ -744,7 +744,7 @@ class KirbyAmClient(BizHawkClient):
 
     async def _poll_major_chest_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
-        Read big_chest_bitfield_native and map set bits to major-chest locations.
+        Read transport major_chest_flags and map set bits to major-chest locations.
 
         Bit N corresponds to area ID N (enum AreaId): bit 3 = AREA_CABBAGE_CAVERN,
         bit 6 = AREA_OLIVE_OCEAN, bit 7 = AREA_PEPPERMINT_PALACE, etc.
@@ -753,11 +753,11 @@ class KirbyAmClient(BizHawkClient):
         Mirrors shard/boss polling semantics: RAM-derived checks are resent until
         the server acknowledges them in ctx.checked_locations.
 
-        Source: gTreasures.bigChestField (native EWRAM, offset +0x1C from gTreasures base).
-        Evidence: katam disassembly treasures.h/treasures.c + shard_bitfield_native anchor
-        at 0x02038970 (shardField = gTreasures+0x10), yielding bigChestField at 0x0203897C.
+        Source: transport major_chest_flags written by the ROM payload's big chest hook.
+        Native gTreasures.bigChestField still reflects in-game map ownership and is no
+        longer used as the AP check signal.
         """
-        chest_addr = self._native_addr("big_chest_bitfield_native")
+        chest_addr = self._transport_addr("major_chest_flags")
         if chest_addr is None:
             return
 

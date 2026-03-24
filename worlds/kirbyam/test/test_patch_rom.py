@@ -31,6 +31,10 @@ def test_thumb_bl_bytes_matches_existing_main_hook_patch() -> None:
     assert patch_rom.thumb_bl_bytes(0x08152696, 0x0815E000) == bytes.fromhex("0B F0 B3 FC")
 
 
+def test_big_chest_collect_call_offset_matches_verified_hook_site() -> None:
+    assert patch_rom.BIG_CHEST_COLLECT_CALL_OFFSET == 0x0000B144
+
+
 # ── Negative-path tests: parse_args ──────────────────────────────────────────
 
 def test_parse_args_source_type_arg_missing_rom_positional() -> None:

@@ -23,8 +23,11 @@
 // TODO: Call ap_set_boss_defeat_flag(boss_index) from the hook at sub_0801D948 (ROM addr 0x0801D948)
 //       once the exact patch-site byte offset is confirmed via Issue #110 address verification.
 #define AP_BOSS_DEFEAT_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x24u))
+#define AP_MAJOR_CHEST_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x28u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
+#define KIRBY_BIG_CHEST_FLAGS_ADDR 0x0203897Cu
+#define KIRBY_BIG_CHEST_FLAGS   (*(volatile uint32_t*)(KIRBY_BIG_CHEST_FLAGS_ADDR))
 
 // Player lives is a single byte in EWRAM
 #define KIRBY_LIVES_ADDR        0x02020FE2u
@@ -77,11 +80,31 @@ static void ap_set_boss_defeat_flag(uint32_t boss_index) {
     }
 }
 
+static void ap_set_major_chest_flag(uint32_t area_id) {
+    if (area_id < 32u) {
+        AP_MAJOR_CHEST_FLAGS |= (1u << area_id);
+    }
+}
+
+static void ap_unlock_area_map(uint32_t area_id) {
+    if (area_id < 32u) {
+        KIRBY_BIG_CHEST_FLAGS |= (1u << area_id);
+    }
+}
+
 // Hook target for the original boss shard grant call. The game passes the boss's
 // shard index in r0; record the boss defeat for AP and intentionally do not grant
 // native shard progression here.
 __attribute__((used)) void ap_on_boss_defeat_collect_shard(uint32_t boss_index) {
     ap_set_boss_defeat_flag(boss_index);
+}
+
+// Hook target for native big chest reward collection. The game passes the area ID
+// in r0; record the major chest AP check and intentionally do not unlock the
+// native map here. Native maps are granted only when the corresponding AP map
+// item is delivered through ap_apply_item().
+__attribute__((used)) void ap_on_collect_big_chest(uint32_t area_id) {
+    ap_set_major_chest_flag(area_id);
 }
 
 static void ap_grant_lives(uint8_t amount) {
@@ -134,6 +157,18 @@ static void ap_apply_item(uint32_t ap_item_id) {
         // Issue #109: Persist to SRAM to survive reset without room change
         persist_shard_to_sram(new_shard_flags);
 
+        return;
+    }
+
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 24u)) {
+        ap_unlock_area_map(1u);
+        return;
+    }
+
+    if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 10u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 17u)) {
+        static const uint8_t map_area_ids[8] = {4u, 2u, 9u, 6u, 7u, 3u, 5u, 8u};
+        uint32_t map_index = ap_item_id - (KIRBY_ITEM_ID_BASE_OFFSET + 10u);
+        ap_unlock_area_map(map_area_ids[map_index]);
         return;
     }
 

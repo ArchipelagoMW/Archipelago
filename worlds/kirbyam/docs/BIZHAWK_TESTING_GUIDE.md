@@ -122,10 +122,10 @@ Expected signal source for this gate:
 
 ## Major Chest Checks (All Areas)
 
-Validate that the native big-chest area bitfield drives the currently shipped major-chest locations.
+Validate that the transport major-chest bitfield drives the currently shipped major-chest locations while native map ownership stays item-delivery driven.
 
 1. Connect AP + BizHawk session with KirbyAM client logs visible.
-2. Open BizHawk Memory Viewer and watch `0x0203897C` as a 32-bit value.
+2. Open BizHawk Memory Viewer and watch `0x0202C028` as a 32-bit value.
 3. Open one of the currently integrated big chests (repeat for each):
    - Rainbow Route (`bit 1`)
    - Moonlight Mansion (`bit 2`)
@@ -137,10 +137,11 @@ Validate that the native big-chest area bitfield drives the currently shipped ma
    - Radish Ruins (`bit 8`)
    - Candy Constellation (`bit 9`)
 4. Confirm the corresponding bit flips from `0` to `1` when the chest reward is claimed.
-5. Confirm the client logs a resend only if the server has not yet acknowledged the mapped location:
+5. Confirm `0x0203897C` does not flip for that area unless the corresponding AP map item is actually delivered.
+6. Confirm the client logs a resend only if the server has not yet acknowledged the mapped location:
    - `KirbyAM: resending major-chest LocationChecks missing on server (...)`
-6. Reconnect the AP client and confirm already-acknowledged major-chest checks are not replay-spammed.
-7. Save/reload or change rooms and confirm the bit remains set.
+7. Reconnect the AP client and confirm already-acknowledged major-chest checks are not replay-spammed.
+8. Save/reload or change rooms and confirm the bit remains set.
 
 Expected current mapping:
 - `bit 1` -> `MAJOR_CHEST_RAINBOW_ROUTE`

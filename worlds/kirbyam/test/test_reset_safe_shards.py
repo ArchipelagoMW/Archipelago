@@ -50,6 +50,20 @@ def test_shard_persistence_function_exists():
         "persist_shard_to_sram should be called when granting shards"
 
 
+def test_payload_tracks_major_chest_checks_separately_from_native_maps():
+    """Verify big chest openings feed transport checks while AP map items unlock native maps."""
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, 'r') as f:
+        content = f.read()
+
+    assert "AP_MAJOR_CHEST_FLAGS" in content, "Major chest transport register should be defined"
+    assert "ap_on_collect_big_chest" in content, "Big chest hook target should exist"
+    assert "ap_set_major_chest_flag(area_id)" in content, "Big chest hook should set transport check flags"
+    assert "ap_unlock_area_map" in content, "Payload should unlock native maps on AP item receipt"
+    assert "KIRBY_BIG_CHEST_FLAGS" in content, "Native big chest map bitfield should still be addressable"
+
+
 def test_sram_checksum_fields_updated():
     """Verify that checksum fields are updated alongside shard persistence."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")

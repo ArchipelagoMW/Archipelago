@@ -156,7 +156,7 @@ async def test_poll_locations_does_not_send_location_checks(mock_bizhawk_context
 
 @pytest.mark.asyncio
 async def test_poll_major_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
-    """Set big-chest bits should map to major-chest LocationChecks."""
+    """Set transport major-chest bits should map to major-chest LocationChecks."""
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -165,7 +165,7 @@ async def test_poll_major_chest_sends_location_checks_for_set_bits(mock_bizhawk_
     peppermint = data.locations["MAJOR_CHEST_PEPPERMINT_PALACE"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.native_ram_addresses, {"big_chest_bitfield_native": 0x0203897C}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"major_chest_flags": 0x0202C028}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         # Bits 3, 6, 7 set => Cabbage, Olive, Peppermint major chests.
@@ -180,14 +180,14 @@ async def test_poll_major_chest_sends_location_checks_for_set_bits(mock_bizhawk_
 
 @pytest.mark.asyncio
 async def test_poll_major_chest_skips_already_server_acknowledged(mock_bizhawk_context):
-    """No major-chest resend when server already acknowledges all mapped checks."""
+    """No major-chest resend when server already acknowledges all mapped transport checks."""
     client = KirbyAmClient()
     client.initialize_client()
 
     olive = data.locations["MAJOR_CHEST_OLIVE_OCEAN"].location_id
     mock_bizhawk_context.checked_locations = {olive}
 
-    with patch.dict(data.native_ram_addresses, {"big_chest_bitfield_native": 0x0203897C}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"major_chest_flags": 0x0202C028}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:
@@ -203,11 +203,15 @@ async def test_poll_major_chest_skips_already_server_acknowledged(mock_bizhawk_c
 
 @pytest.mark.asyncio
 async def test_poll_major_chest_skips_when_address_missing(mock_bizhawk_context):
-    """Missing native big chest address should no-op safely."""
+    """Missing transport major chest address should no-op safely."""
     client = KirbyAmClient()
     client.initialize_client()
 
-    with patch.dict(data.native_ram_addresses, {}, clear=True), \
+    transport_without_chests = {k: v for k, v in data.transport_ram_addresses.items() if k != "major_chest_flags"}
+    ram_without_chests = {k: v for k, v in data.ram_addresses.items() if k != "major_chest_flags"}
+
+    with patch.dict(data.transport_ram_addresses, transport_without_chests, clear=True), \
+         patch.dict(data.ram_addresses, ram_without_chests, clear=True), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         await client._poll_major_chest_locations(mock_bizhawk_context)

@@ -13,11 +13,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
   0x02000000 - 0x02040000   EWRAM Region (256 KB)
     ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0202C000 - 0x0202C027   AP Mailbox (reserved, 40 bytes)
-        └─ 0x0202C028 - 0x02040000   Rest of RAM (unused by AP)
+        ├─ 0x0202C000 - 0x0202C02B   AP Mailbox (reserved, 44 bytes)
+        └─ 0x0202C02C - 0x02040000   Rest of RAM (unused by AP)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C027)
+### AP Mailbox Block (0x0202C000 - 0x0202C02B)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -34,15 +34,16 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x20   | 0x0202C020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
 
 | 0x24   | 0x0202C024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated; recorded by a hook that replaces the native `CollectShard` call (same bit ordering as shard_bitfield) |
+| 0x28   | 0x0202C028 | 4B | major_chest_flags     | u32  | ROM → Client | Bits set when a native big chest is opened; bit N = area ID N. This drives AP major-chest checks independently of native map ownership. |
 
-**Total: 40 bytes (0x0202C000 - 0x0202C027)**
+**Total: 44 bytes (0x0202C000 - 0x0202C02B)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
 | Addr     | Size | Name                    | Description |
 |----------|------|-------------------------|-----------|
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
-| 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. Derived from shard_bitfield_native 0x02038970 (shardField = gTreasures+0x10, bigChestField = gTreasures+0x1C). The client polls all defined MAJOR_CHEST bits dynamically; currently 1–9 (all playable areas). |
+| 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. This now reflects native map ownership only; AP major-chest checks use `major_chest_flags` in the transport block. |
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
@@ -59,7 +60,8 @@ All item IDs use **BASE_OFFSET = 3860000** for safety (avoids collision with Arc
 | MAP_MUSTARD_MOUNTAIN .. MAP_RADISH_RUINS | 3860010 - 3860017 | Useful map rewards |
 | VITALITY_COUNTER_1 .. VITALITY_COUNTER_4 | 3860018 - 3860021 | Useful vitality rewards |
 | 2_UP, 3_UP        | 3860022 - 3860023 | Dormant compatibility extra-life rewards (not active in Phase 1 filler generation) |
-| *Reserved*        | 3860024+ | Future items (doors, abilities, consumables, etc.) |
+| MAP_RAINBOW_ROUTE | 3860024 | Useful map reward |
+| *Reserved*        | 3860025+ | Future items (doors, abilities, consumables, etc.) |
 
 ### Current filler effect contract
 
@@ -179,8 +181,8 @@ for bit in mapped_boss_bits:
     if (boss_bits >> bit) & 1:
         mapped_checked.add(boss_location_id_for_bit(bit))
 
-# Major-chest checks (native gTreasures.bigChestField)
-chest_bits = RAM[0x0203897C] as u32
+# Major-chest checks (transport major_chest_flags)
+chest_bits = RAM[0x0202C028] as u32
 for bit in mapped_major_chest_bits:
     if (chest_bits >> bit) & 1:
         mapped_checked.add(major_chest_location_id_for_bit(bit))
@@ -194,7 +196,7 @@ if missing_on_server:
     send LocationChecks(missing_on_server)
 ```
 
-Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. Boss defeats are reported through `boss_defeat_flags`, and native boss shard grants are intercepted so shard progression only comes from AP item delivery.
+Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, and native boss shard / native big-chest map grants are intercepted so progression and map ownership only come from AP item delivery.
 
 **Behavior notes:**
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
