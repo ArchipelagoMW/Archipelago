@@ -103,13 +103,13 @@ if TRACKER_ENABLED:
 
     # Best effort to detect if universal tracker is installed
     if any("tracker.apworld" in f.name for f in os.scandir(user_folder)):
-
         def launch_client(*args):
             from worlds.LauncherComponents import launch
 
             from .client import launch as client_main
 
             launch(client_main, name="Stardew Valley Tracker", args=args)
+
 
         components.append(Component("Stardew Valley Tracker", func=launch_client, component_type=Type.CLIENT, icon="stardew"))
 
@@ -133,7 +133,7 @@ class StardewValleyWorld(World):
         for group, items in items_by_group.items()}
     location_name_groups = {
         group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title() in locations_by_tag else ""):
-        [location.name for location in locations]
+            [location.name for location in locations]
         for group, locations in locations_by_tag.items()}
 
     required_client_version = (0, 4, 0)
@@ -242,7 +242,7 @@ class StardewValleyWorld(World):
         items_to_exclude = [
             excluded_items for excluded_items in self.multiworld.precollected_items[self.player]
             if item_table[excluded_items.name].has_any_group(Group.MAXIMUM_ONE)
-            or not item_table[excluded_items.name].has_any_group(*FILLER_GROUPS, Group.FRIENDSHIP_PACK)]
+               or not item_table[excluded_items.name].has_any_group(*FILLER_GROUPS, Group.FRIENDSHIP_PACK)]
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             items_to_exclude = [item for item in items_to_exclude if item_table[item.name] not in items_by_group[Group.SEASON]]
@@ -432,10 +432,10 @@ class StardewValleyWorld(World):
         return list(location.name for location in self.multiworld.get_locations(self.player))
 
     def create_item(
-        self,
-        item: str | ItemData,
-        classification_pre_fill: ItemClassification = None,
-        classification_post_fill: ItemClassification = None,
+            self,
+            item: str | ItemData,
+            classification_pre_fill: ItemClassification = None,
+            classification_post_fill: ItemClassification = None,
     ) -> StardewItem:
         if isinstance(item, str):
             item = item_table[item]

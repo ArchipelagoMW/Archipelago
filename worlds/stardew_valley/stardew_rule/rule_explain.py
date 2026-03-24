@@ -49,7 +49,7 @@ def access_graph(multiworld: MultiWorld, player: int):
 
     for region in multiworld.get_regions(player):
         assert (
-            source_graph.get(region.name) is not None
+                source_graph.get(region.name) is not None
         ), f"#{region.name} is missing\nsg = {source_graph}\ndg = {dest_graph}"
     return source_graph
 
@@ -164,12 +164,12 @@ class RuleExplanation:
             return self.summary(depth)
 
         return (
-            self.summary(depth)
-            + "\n"
-            + "\n".join(
-                i.__str__(depth + 1) if self.expected is None or i.result is not self.expected else i.summary(depth + 1)
-                for i in sorted(self.explained_sub_rules, key=lambda x: x.result)
-            )
+                self.summary(depth)
+                + "\n"
+                + "\n".join(
+            i.__str__(depth + 1) if self.expected is None or i.result is not self.expected else i.summary(depth + 1)
+            for i in sorted(self.explained_sub_rules, key=lambda x: x.result)
+        )
         )
 
     def more(self, more_index: int) -> RuleExplanation:
@@ -298,7 +298,7 @@ class CountExplanation(RuleExplanation):
 
 
 def explain(
-    rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE
+        rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE
 ) -> RuleExplanation:
     if isinstance(rule, StardewRule):
         combined = _explain(
@@ -312,13 +312,13 @@ def explain(
 
 @singledispatch
 def _explain(
-    rule: StardewRule,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: Set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: StardewRule,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: Set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return RuleExplanation(
         rule,
@@ -333,13 +333,13 @@ def _explain(
 
 @_explain.register
 def _(
-    rule: AggregatingStardewRule,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: Set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: AggregatingStardewRule,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: Set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return RuleExplanation(
         rule,
@@ -355,13 +355,13 @@ def _(
 
 @_explain.register
 def _(
-    rule: Count,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: Set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: Count,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: Set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return CountExplanation(
         rule,
@@ -377,13 +377,13 @@ def _(
 
 @_explain.register
 def _(
-    rule: Has,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: Set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: Has,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: Set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     try:
         return RuleExplanation(
@@ -410,13 +410,13 @@ def _(
 
 @_explain.register
 def _(
-    rule: TotalReceived,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: Set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: TotalReceived,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: Set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     return RuleExplanation(
         rule,
@@ -432,13 +432,13 @@ def _(
 
 @_explain.register
 def _(
-    rule: Reach,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: Reach,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     access_rules: list[SubRule] = []
     if rule.resolution_hint == "Location":
@@ -509,13 +509,13 @@ def _(
 
 @_explain.register
 def _(
-    rule: Received,
-    state: CollectionState,
-    expected: bool | None,
-    mode: ExplainMode,
-    more_explanations: list[StardewRule],
-    explored_spots: Set[Tuple[str, str]],
-    blocked_regions: frozenset[str],
+        rule: Received,
+        state: CollectionState,
+        expected: bool | None,
+        mode: ExplainMode,
+        more_explanations: list[StardewRule],
+        explored_spots: Set[Tuple[str, str]],
+        blocked_regions: frozenset[str],
 ) -> RuleExplanation:
     access_rules = None
     if rule.event:

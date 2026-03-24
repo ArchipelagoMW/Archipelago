@@ -61,12 +61,12 @@ class TestRandomizationFlag(unittest.TestCase):
 
     def test_given_entrance_randomization_choice_when_create_player_randomization_flag_then_only_relevant_bit_is_enabled(self, ):
         for entrance_randomization_choice, expected_bit in (
-            (options.EntranceRandomization.option_disabled, RandomizationFlag.NOT_RANDOMIZED),
-            (options.EntranceRandomization.option_pelican_town, RandomizationFlag.SET_PELICAN_TOWN | RandomizationFlag.MASTERY_CAVE),
-            (options.EntranceRandomization.option_non_progression, RandomizationFlag.SET_NON_PROGRESSION | RandomizationFlag.MASTERY_CAVE),
-            (options.EntranceRandomization.option_buildings, RandomizationFlag.SET_BUILDINGS | RandomizationFlag.MASTERY_CAVE),
-            (options.EntranceRandomization.option_overworld, RandomizationFlag.SET_OVERWORLD | RandomizationFlag.MASTERY_CAVE),
-            (options.EntranceRandomization.option_everywhere, RandomizationFlag.SET_EVERYTHING | RandomizationFlag.MASTERY_CAVE),
+                (options.EntranceRandomization.option_disabled, RandomizationFlag.NOT_RANDOMIZED),
+                (options.EntranceRandomization.option_pelican_town, RandomizationFlag.SET_PELICAN_TOWN | RandomizationFlag.MASTERY_CAVE),
+                (options.EntranceRandomization.option_non_progression, RandomizationFlag.SET_NON_PROGRESSION | RandomizationFlag.MASTERY_CAVE),
+                (options.EntranceRandomization.option_buildings, RandomizationFlag.SET_BUILDINGS | RandomizationFlag.MASTERY_CAVE),
+                (options.EntranceRandomization.option_overworld, RandomizationFlag.SET_OVERWORLD | RandomizationFlag.MASTERY_CAVE),
+                (options.EntranceRandomization.option_everywhere, RandomizationFlag.SET_EVERYTHING | RandomizationFlag.MASTERY_CAVE),
         ):
             player_options = fill_dataclass_with_default({
                 options.EntranceRandomization: entrance_randomization_choice,

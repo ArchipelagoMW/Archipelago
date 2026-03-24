@@ -34,7 +34,8 @@ class TestHatsLogic(SVTestBase):
 
     def test_reach_frog_hat(self):
         required_item_names = ["Progressive Fishing Rod", ["Island Obelisk", "Boat Repair"], ["Island West Turtle", "Parrot Express"], "Island Farmhouse"]
-        required_items = [self.create_item(item_name) if isinstance(item_name, str) else [self.create_item(itm) for itm in item_name] for item_name in required_item_names]
+        required_items = [self.create_item(item_name) if isinstance(item_name, str) else [self.create_item(itm) for itm in item_name] for item_name in
+                          required_item_names]
         location = to_location_name(Hats.frog_hat)
         for required_item in required_items:
             self.collect(required_item)
@@ -108,4 +109,3 @@ class TestHatsOptionSetIndependence(SVTestBase):
         for hat in not_difficult_hats:
             with self.subTest(hat.name):
                 self.assertNotIn(to_location_name(hat), location_names)
-

@@ -155,7 +155,8 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
     num_per_tier = options.backpack_size.count_per_tier()
-    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs, StartWithoutOptionName.backpack in options.start_without)
+    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs,
+                                                         StartWithoutOptionName.backpack in options.start_without)
     num_backpacks = len(backpack_tier_names) * num_per_tier
 
     items.extend(item_factory(item) for item in ["Progressive Backpack"] * num_backpacks)
@@ -584,18 +585,18 @@ def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: Sta
     # These items unlock progressively stronger ability to digest food items that give the associated buff
     # Upon receiving the enzyme, you also get a temporary buff of whatever the effect is
     # Stamina and Health items can go beyond their original max value, but the buffs cannot.
-    items.extend(item_factory(item) for item in ["Stamina Enzyme"]*10)
-    items.extend(item_factory(item) for item in ["Health Enzyme"]*10)
-    items.extend(item_factory(item) for item in ["Speed Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Luck Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Farming Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Foraging Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Fishing Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Mining Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Magnetism Enzyme"]*2)
-    items.extend(item_factory(item) for item in ["Defense Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Attack Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Max Stamina Enzyme"]*3)
+    items.extend(item_factory(item) for item in ["Stamina Enzyme"] * 10)
+    items.extend(item_factory(item) for item in ["Health Enzyme"] * 10)
+    items.extend(item_factory(item) for item in ["Speed Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Luck Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Farming Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Foraging Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Fishing Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Mining Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Magnetism Enzyme"] * 2)
+    items.extend(item_factory(item) for item in ["Defense Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Attack Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Max Stamina Enzyme"] * 3)
     items.extend(item_factory(item) for item in ["Squid Ink Enzyme"])
     items.extend(item_factory(item) for item in ["Monster Musk Enzyme"])
     items.extend(item_factory(item) for item in ["Oil Of Garlic Enzyme"])

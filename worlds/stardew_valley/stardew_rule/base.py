@@ -99,7 +99,8 @@ class _SimplificationState:
             pass
 
     def acquire_copy(self):
-        state = _SimplificationState(self.original_simplifiable_rules, self.rules_to_simplify.copy() if self.rules_to_simplify is not None else None, self.simplified_rules.copy())
+        state = _SimplificationState(self.original_simplifiable_rules, self.rules_to_simplify.copy() if self.rules_to_simplify is not None else None,
+                                     self.simplified_rules.copy())
         state.acquire()
         return state
 

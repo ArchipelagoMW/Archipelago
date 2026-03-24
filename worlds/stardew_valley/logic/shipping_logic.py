@@ -38,5 +38,5 @@ class ShippingLogic(BaseLogic):
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
             if not self.content.are_all_enabled(location.content_packs):
                 continue
-            all_items_to_ship.append(location.name[len(shipsanity_prefix) :])
+            all_items_to_ship.append(location.name[len(shipsanity_prefix):])
         return self.logic.shipping.can_use_any_shipping_bin & self.logic.has_all(*all_items_to_ship)

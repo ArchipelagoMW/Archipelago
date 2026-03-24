@@ -136,22 +136,22 @@ class QuestLogic(BaseLogic):
         number_months = number // number_per_month
         if number <= 7:
             return self.logic.time.has_lived_months(number_months)
-        return self.logic.time.has_lived_months(number_months) &\
-               self.can_do_item_delivery_quest() & self.can_do_gathering_quest() &\
-               self.can_do_fishing_quest() & self.can_do_slaying_quest()
+        return self.logic.time.has_lived_months(number_months) & \
+            self.can_do_item_delivery_quest() & self.can_do_gathering_quest() & \
+            self.can_do_fishing_quest() & self.can_do_slaying_quest()
 
     def can_do_item_delivery_quest(self) -> StardewRule:
         return self.logic.region.can_reach(Region.town)
 
     def can_do_gathering_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.forest)) & \
-               self.logic.region.can_reach_any(*(Region.mines, Region.quarry, Region.skull_cavern_25)) & \
-               self.logic.tool.has_tool(Tool.axe) & \
-               self.logic.tool.has_tool(Tool.pickaxe)
+            self.logic.region.can_reach_any(*(Region.mines, Region.quarry, Region.skull_cavern_25)) & \
+            self.logic.tool.has_tool(Tool.axe) & \
+            self.logic.tool.has_tool(Tool.pickaxe)
 
     def can_do_fishing_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.beach)) & \
-               self.logic.tool.has_fishing_rod(FishingRod.bamboo)
+            self.logic.tool.has_fishing_rod(FishingRod.bamboo)
 
     def can_do_slaying_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.mines_floor_10))

@@ -21,8 +21,8 @@ class SpecialItemsLogicMixin(BaseLogicMixin):
 class SpecialItemsLogic(BaseLogic):
 
     def has_purple_shorts(self, scepter_is_logic: bool) -> StardewRule:
-        has_first_shorts = self.logic.season.has(Season.summer) &\
-                           self.logic.region.can_reach(Region.ranch) &\
+        has_first_shorts = self.logic.season.has(Season.summer) & \
+                           self.logic.region.can_reach(Region.ranch) & \
                            self.logic.relationship.has_hearts(NPC.marnie, 2)
         if scepter_is_logic:
             can_warp_back = self.logic.has(Consumable.warp_totem_farm) | self.logic.received("Return Scepter")

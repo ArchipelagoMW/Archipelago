@@ -9,10 +9,10 @@ from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData, rev
 
 
 def create_player_randomization_flag(
-    entrance_randomization_choice: EntranceRandomization,
-    entrance_behavour_choice: set[EntranceRandomizerBehaviourOptionName],
-    include_endgame: bool,
-    content: StardewContent,
+        entrance_randomization_choice: EntranceRandomization,
+        entrance_behavour_choice: set[EntranceRandomizerBehaviourOptionName],
+        include_endgame: bool,
+        content: StardewContent,
 ):
     """Return the flag that a connection is expected to have to be randomized. Only the bit corresponding to the player randomization choice will be enabled.
 
@@ -45,7 +45,6 @@ def create_player_randomization_flag(
 
 
 def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBehaviour):
-
     direction_matching_group_lookup = {
         GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT],
         GroupFlag.UP: [GroupFlag.DOWN, GroupFlag.TO_ANY],
@@ -101,10 +100,10 @@ def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBeh
 
 
 def connect_regions(
-    region_data_by_name: dict[str, RegionData],
-    connection_data_by_name: dict[str, ConnectionData],
-    regions_by_name: dict[str, Region],
-    player_randomization_flag: RandomizationFlag,
+        region_data_by_name: dict[str, RegionData],
+        connection_data_by_name: dict[str, ConnectionData],
+        regions_by_name: dict[str, Region],
+        player_randomization_flag: RandomizationFlag,
 ) -> None:
     for region_name, region_data in region_data_by_name.items():
         origin_region = regions_by_name[region_name]
