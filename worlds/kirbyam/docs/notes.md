@@ -782,6 +782,27 @@ tuple, so connection attempts could crash with a tuple-unpack `ValueError`.
 - `pytest worlds/kirbyam/test/test_multidata_connect_names.py`
 - `pytest worlds/kirbyam/test/test_hosting_integration.py`
 
+## Issue #371: Hide Goal/Event Objective Checks from `/locations`
+
+### Problem
+KirbyAM exported goal labels like `Defeat Dark Mind` and `100% Save File` in
+the datapackage `location_name_to_id` map even though generation later converts
+those checks into runtime events. That made `/locations` show goal/event-style
+objective checks as if they were normal AP locations.
+
+### Solution
+- Excluded `LocationCategory.GOAL` entries from KirbyAM's exported
+  `location_name_to_id` map.
+- Excluded the same goal labels from KirbyAM location groups so datapackage
+  group listings stay consistent with hidden objective checks.
+- Added regression coverage to assert goal labels are hidden from datapackage
+  exports while remaining present in generated worlds as addressless runtime
+  events.
+
+### Validation
+- `pytest worlds/kirbyam/test/test_location_visibility.py`
+- `pytest worlds/kirbyam/test/test_spoiler_event_visibility.py`
+
 ## Issue #311: Golden Snapshot Tests for slot_data and Generated Artifacts
 
 ### Problem

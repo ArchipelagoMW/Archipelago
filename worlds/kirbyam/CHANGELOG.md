@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Hide KirbyAM goal/event-style objective checks from datapackage location exports so `/locations` no longer lists them as normal AP locations.
+
 ## v0.0.10
 
 - Fix KirbyAM Open Patch preflight to revalidate configured base ROM for `.apkirbyam` and reprompt in GUI mode when hash/path checks fail.

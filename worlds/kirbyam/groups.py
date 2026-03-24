@@ -28,7 +28,6 @@ _LOCATION_GROUP_MAPS: dict[str, set[str]] = {
 }
 
 _LOCATION_CATEGORY_TO_GROUP_NAME = {
-    LocationCategory.GOAL: "Goals",
     LocationCategory.MAJOR_CHEST: "Major Chests",
 }
 
@@ -45,6 +44,9 @@ for area_name, tags in _LOCATION_GROUP_MAPS.items():
         _map_tag_to_area.setdefault(t, set()).add(area_name)
 
 for location in data.locations.values():
+    if location.category == LocationCategory.GOAL:
+        continue
+
     # Category groups (tolerant of incomplete category coverage)
     category_group = _LOCATION_CATEGORY_TO_GROUP_NAME.get(location.category)
     if category_group is not None:
