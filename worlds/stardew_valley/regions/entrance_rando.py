@@ -51,19 +51,14 @@ def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBeh
         GroupFlag.DOWN: [GroupFlag.UP, GroupFlag.DOOR, GroupFlag.TO_ANY],
         GroupFlag.LEFT: [GroupFlag.RIGHT, GroupFlag.TO_ANY],
         GroupFlag.RIGHT: [GroupFlag.LEFT, GroupFlag.TO_ANY],
-        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.TO_ANY], }
+        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.TO_ANY]}
 
     area_matching_group_lookup = {
-        GroupFlag.TO_ANY: [
-            GroupFlag.IN_TO_IN,
-            GroupFlag.IN_TO_OUT,
-            GroupFlag.OUT_TO_IN,
-            GroupFlag.OUT_TO_OUT,
-            GroupFlag.TO_ANY, ],
+        GroupFlag.TO_ANY: [GroupFlag.IN_TO_IN, GroupFlag.IN_TO_OUT, GroupFlag.OUT_TO_IN, GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY],
         GroupFlag.IN_TO_IN: [GroupFlag.IN_TO_IN, GroupFlag.TO_ANY],
         GroupFlag.IN_TO_OUT: [GroupFlag.OUT_TO_IN, GroupFlag.TO_ANY],
         GroupFlag.OUT_TO_IN: [GroupFlag.IN_TO_OUT, GroupFlag.TO_ANY],
-        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY], }
+        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY]}
 
     dir_mask = 0b0
     area_mask = 0b0
