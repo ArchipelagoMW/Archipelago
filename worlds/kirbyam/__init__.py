@@ -428,12 +428,10 @@ class KirbyAmWorld(World):
             raise
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None:
-        # Register auth token -> player name mapping for BizHawk
+        # Register auth token using the same (team, slot) tuple shape as player names.
         key = base64.b64encode(self.auth).decode("ascii")
-        connect_names = multidata.setdefault("connect_names", {})
-        # connect_names is used as an auth-token to player-name mapping.
-        # The player's name should always be the value.
-        connect_names[key] = self.player_name
+        connect_names = multidata["connect_names"]
+        connect_names[key] = connect_names[self.player_name]
 
     # Helper method to fill slot data
     def fill_slot_data(self) -> dict[str, Any]:

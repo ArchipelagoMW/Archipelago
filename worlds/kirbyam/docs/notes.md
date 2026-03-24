@@ -764,6 +764,24 @@ enough for reliable parsing/reporting.
 ### Validation
 - Targeted pytest on the new parser test module.
 
+## Issue #373: Fix BizHawk Connect Crash from connect_names Value Shape
+
+### Problem
+KirbyAM registered BizHawk auth tokens in `connect_names` as player-name
+strings. The server expects every `connect_names` value to be a `(team, slot)`
+tuple, so connection attempts could crash with a tuple-unpack `ValueError`.
+
+### Solution
+- Updated `KirbyAmWorld.modify_multidata` to copy the existing `(team, slot)`
+  tuple from the player-name entry instead of storing the player name string.
+- Added regression test module
+  `worlds/kirbyam/test/test_multidata_connect_names.py` to assert auth token
+  registration preserves tuple shape.
+
+### Validation
+- `pytest worlds/kirbyam/test/test_multidata_connect_names.py`
+- `pytest worlds/kirbyam/test/test_hosting_integration.py`
+
 ## Issue #311: Golden Snapshot Tests for slot_data and Generated Artifacts
 
 ### Problem
