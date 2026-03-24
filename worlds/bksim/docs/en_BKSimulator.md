@@ -11,6 +11,8 @@ You have to walk to BK, in various weather conditions. Each time you reach BK is
 - You can adjust the distance to the nearest BK at the start. This will heavily control the speed / length of the game.
 - You can also adjust the speed gained for each speed upgrade.
 - You can set a percentage of your Shoe/Boot upgrades to be replaced with filler. (Higher values will be fulfilled as much as is possible without breaking logic requirements)
+- DeathLink is supported; Deaths will never be *sent* by BK Simulator, only received from other games.
+  - DeathLink Groups are also supported, allowing you to only receive deaths from players in the same group as you.
 
 ## Items / Logic
 Items:
