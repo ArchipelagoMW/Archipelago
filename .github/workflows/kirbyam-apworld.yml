@@ -87,6 +87,7 @@ jobs:
     needs: build-apworld
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Download built artifact
         uses: actions/download-artifact@v4
@@ -169,9 +170,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Persist world_version to main
+      - name: Create PR to sync world_version
         shell: bash
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ needs.build-apworld.outputs.release_tag }}
           RELEASE_VERSION: ${{ needs.build-apworld.outputs.version }}
         run: |
@@ -186,6 +188,28 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          sync_branch="automation/kirbyam-world-version-${RELEASE_VERSION}"
+
+          git checkout -B "${sync_branch}"
           git add worlds/kirbyam/archipelago.json
           git commit -m "KirbyAM: sync world_version to ${RELEASE_VERSION}"
-          git push origin HEAD:main
+          git push --force-with-lease origin "${sync_branch}:${sync_branch}"
+
+          existing_pr_number="$(gh pr list \
+            --repo "${GITHUB_REPOSITORY}" \
+            --base main \
+            --head "${sync_branch}" \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')"
+
+          if [ -n "${existing_pr_number}" ]; then
+            echo "world_version sync PR #${existing_pr_number} already open for ${sync_branch}"
+          else
+            gh pr create \
+              --repo "${GITHUB_REPOSITORY}" \
+              --base main \
+              --head "${sync_branch}" \
+              --title "KirbyAM: sync world_version to ${RELEASE_VERSION}" \
+              --body "Automated sync after tag ${RELEASE_TAG} to keep worlds/kirbyam/archipelago.json world_version current."
+          fi
