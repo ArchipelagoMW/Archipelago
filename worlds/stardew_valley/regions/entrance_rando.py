@@ -1,13 +1,11 @@
 from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
-from worlds.stardew_valley.options.options import \
-    EntranceRandomizationBehaviour
-from .model import (ConnectionData, GroupFlag, RandomizationFlag, RegionData,
-                    reverse_connection_name)
+from worlds.stardew_valley.options.options import EntranceRandomizationBehaviour
+
 from ..content import StardewContent
 from ..options import EntranceRandomization
-from ..strings.ap_names.ap_option_names import \
-    EntranceRandomizerBehaviourOptionName
+from ..strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName
+from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData, reverse_connection_name
 
 
 def create_player_randomization_flag(
@@ -36,10 +34,8 @@ def create_player_randomization_flag(
     elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
         flag |= RandomizationFlag.SET_EVERYTHING
 
-    if (
-        EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behavour_choice
-        or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in entrance_behavour_choice
-    ):
+    if (EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behavour_choice
+            or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in entrance_behavour_choice):
         flag |= RandomizationFlag.FARMHOUSE
     if content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.MASTERY_CAVE
@@ -56,8 +52,7 @@ def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBeh
         GroupFlag.DOWN: [GroupFlag.UP, GroupFlag.DOOR, GroupFlag.TO_ANY],
         GroupFlag.LEFT: [GroupFlag.RIGHT, GroupFlag.TO_ANY],
         GroupFlag.RIGHT: [GroupFlag.LEFT, GroupFlag.TO_ANY],
-        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.TO_ANY],
-    }
+        GroupFlag.DOOR: [GroupFlag.DOWN, GroupFlag.TO_ANY], }
 
     area_matching_group_lookup = {
         GroupFlag.TO_ANY: [
@@ -65,13 +60,11 @@ def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBeh
             GroupFlag.IN_TO_OUT,
             GroupFlag.OUT_TO_IN,
             GroupFlag.OUT_TO_OUT,
-            GroupFlag.TO_ANY,
-        ],
+            GroupFlag.TO_ANY, ],
         GroupFlag.IN_TO_IN: [GroupFlag.IN_TO_IN, GroupFlag.TO_ANY],
         GroupFlag.IN_TO_OUT: [GroupFlag.OUT_TO_IN, GroupFlag.TO_ANY],
         GroupFlag.OUT_TO_IN: [GroupFlag.IN_TO_OUT, GroupFlag.TO_ANY],
-        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY],
-    }
+        GroupFlag.OUT_TO_OUT: [GroupFlag.OUT_TO_OUT, GroupFlag.TO_ANY], }
 
     dir_mask = 0b0
     area_mask = 0b0
@@ -85,33 +78,25 @@ def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBeh
 
     groups = {
         int(direction | inorout): [
-            int(pair_direction | pair_inorout)
-            for pair_direction in direction_matching_group_lookup[direction & dir_mask]
-            for pair_inorout in area_matching_group_lookup[inorout & area_mask]
-        ]
+            int(pair_direction | pair_inorout) for pair_direction in direction_matching_group_lookup[direction & dir_mask]
+            for pair_inorout in area_matching_group_lookup[inorout & area_mask]]
         for direction in [
             GroupFlag.TO_ANY,
             GroupFlag.UP,
             GroupFlag.DOWN,
             GroupFlag.LEFT,
             GroupFlag.RIGHT,
-            GroupFlag.DOOR,
-        ]
+            GroupFlag.DOOR, ]
         for inorout in [
             GroupFlag.TO_ANY,
             GroupFlag.IN_TO_IN,
             GroupFlag.IN_TO_OUT,
             GroupFlag.OUT_TO_IN,
-            GroupFlag.OUT_TO_OUT,
-        ]
-    }
+            GroupFlag.OUT_TO_OUT, ]}
 
     groups[int(GroupFlag.DOWN | GroupFlag.IN_TO_OUT | GroupFlag.FROM_FARMHOUSE)] = [
-        int(pair_direction | pair_inorout | farmhouse_flag)
-        for pair_direction in direction_matching_group_lookup[GroupFlag.DOWN & dir_mask]
-        for pair_inorout in area_matching_group_lookup[GroupFlag.IN_TO_OUT]
-        for farmhouse_flag in [GroupFlag.FROM_FARMHOUSE, GroupFlag.TO_ANY]
-    ]
+        int(pair_direction | pair_inorout | farmhouse_flag) for pair_direction in direction_matching_group_lookup[GroupFlag.DOWN & dir_mask]
+        for pair_inorout in area_matching_group_lookup[GroupFlag.IN_TO_OUT] for farmhouse_flag in [GroupFlag.FROM_FARMHOUSE, GroupFlag.TO_ANY]]
     return groups
 
 
