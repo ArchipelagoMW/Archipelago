@@ -3,7 +3,7 @@
 Issue #111 defines three enemy randomization modes:
 - vanilla
 - shuffled (enemy type deterministic)
-- completely random (per grant event)
+- completely random (deterministic per source/event key)
 
 Enemy statues are intentionally out of scope (issue #209).
 """
@@ -16,25 +16,35 @@ from typing import Any, Iterable
 
 from .options import EnemyCopyAbilityRandomization
 
-# Crash/Wait are intentionally excluded by design (issue #111).
-FORBIDDEN_ENEMY_COPY_ABILITIES: frozenset[str] = frozenset({"Crash", "Wait"})
+# Wait is intentionally excluded by design (issue #111).
+FORBIDDEN_ENEMY_COPY_ABILITIES: frozenset[str] = frozenset({"Wait"})
 
 VALID_ENEMY_COPY_ABILITIES: tuple[str, ...] = (
+    "Beam",
+    "Bomb",
     "Burning",
+    "Cook",
+    "Crash",
     "Cutter",
+    "Cupid",
+    "Fighter",
     "Fire",
     "Hammer",
+    "Ice",
     "Laser",
+    "Magic",
     "Mini",
     "Missile",
-    "Needle",
     "Parasol",
+    "Smash",
     "Sleep",
     "Spark",
     "Stone",
     "Sword",
+    "Throw",
     "Tornado",
     "UFO",
+    "Wheel",
 )
 
 
@@ -62,7 +72,7 @@ def build_enemy_copy_ability_policy(
     """Build deterministic slot-data policy for enemy copy-ability randomization.
 
     For shuffled mode, enemy types can be mapped with `ability_for_enemy_type`.
-    For completely random mode, grant events can be mapped with
+    For completely random mode, source/event keys can be mapped with
     `ability_for_enemy_grant_event`.
     """
     ordered = _normalize_whitelist(whitelist)

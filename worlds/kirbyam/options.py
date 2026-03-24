@@ -44,8 +44,8 @@ class EnemyCopyAbilityRandomization(Choice):
         - Vanilla: Enemy copy abilities stay at native defaults.
         - Shuffled: Enemy types are remapped deterministically so all enemies of
             the same type grant the same ability.
-        - Completely Random: Each eligible enemy ability grant can roll a different
-            ability.
+        - Completely Random: Eligible enemy ability sources are remapped
+            independently (deterministic per source entry).
         """
         display_name = "Enemy Copy-Ability Randomization"
         default = 0

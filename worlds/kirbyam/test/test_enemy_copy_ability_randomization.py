@@ -96,7 +96,7 @@ def test_forbidden_abilities_in_custom_whitelist_raise() -> None:
             EnemyCopyAbilityRandomization.option_shuffled,
             True,
             True,
-            whitelist=["Sword", "Crash"],
+            whitelist=["Sword", "Wait"],
         )
 
 

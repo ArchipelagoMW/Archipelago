@@ -1,48 +1,58 @@
 {
   "random_enemy_event_mapping": {
     "BLADE_KNIGHT": {
-      "1": "Sleep",
-      "2": "Mini",
-      "3": "Burning"
+      "1": "Stone",
+      "2": "Ice",
+      "3": "Sword"
     },
     "HOT_HEAD": {
-      "1": "Stone",
-      "2": "UFO",
-      "3": "Needle"
+      "1": "Bomb",
+      "2": "Wheel",
+      "3": "Fighter"
     },
     "SIR_KIBBLE": {
-      "1": "Stone",
-      "2": "Needle",
-      "3": "Tornado"
+      "1": "Laser",
+      "2": "Burning",
+      "3": "UFO"
     },
     "SPARKY": {
-      "1": "Sword",
-      "2": "UFO",
-      "3": "Sleep"
+      "1": "Smash",
+      "2": "Stone",
+      "3": "Stone"
     },
     "WADDLE_DEE": {
-      "1": "Fire",
-      "2": "Sword",
-      "3": "Mini"
+      "1": "Magic",
+      "2": "Burning",
+      "3": "Sword"
     }
   },
   "random_policy": {
     "allowed_abilities": [
+      "Beam",
+      "Bomb",
       "Burning",
+      "Cook",
+      "Crash",
+      "Cupid",
       "Cutter",
+      "Fighter",
       "Fire",
       "Hammer",
+      "Ice",
       "Laser",
+      "Magic",
       "Mini",
       "Missile",
-      "Needle",
       "Parasol",
       "Sleep",
+      "Smash",
       "Spark",
       "Stone",
       "Sword",
+      "Throw",
       "Tornado",
-      "UFO"
+      "UFO",
+      "Wheel"
     ],
     "mapping_style": "per_grant_event",
     "mode": 2,
@@ -51,29 +61,39 @@
     "seed": 7437834127177459305
   },
   "shuffled_enemy_mapping": {
-    "BLADE_KNIGHT": "Burning",
-    "HOT_HEAD": "Stone",
-    "SIR_KIBBLE": "Cutter",
-    "SPARKY": "Sword",
-    "WADDLE_DEE": "Sword"
+    "BLADE_KNIGHT": "Beam",
+    "HOT_HEAD": "Bomb",
+    "SIR_KIBBLE": "Laser",
+    "SPARKY": "Tornado",
+    "WADDLE_DEE": "Magic"
   },
   "shuffled_policy": {
     "allowed_abilities": [
+      "Beam",
+      "Bomb",
       "Burning",
+      "Cook",
+      "Crash",
+      "Cupid",
       "Cutter",
+      "Fighter",
       "Fire",
       "Hammer",
+      "Ice",
       "Laser",
+      "Magic",
       "Mini",
       "Missile",
-      "Needle",
       "Parasol",
       "Sleep",
+      "Smash",
       "Spark",
       "Stone",
       "Sword",
+      "Throw",
       "Tornado",
-      "UFO"
+      "UFO",
+      "Wheel"
     ],
     "mapping_style": "per_enemy_type",
     "mode": 1,

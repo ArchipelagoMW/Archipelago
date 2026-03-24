@@ -1,10 +1,11 @@
 """ROM patch support for Kirby & The Amazing Mirror.
 
-At this stage, patching is kept minimal: we only produce a valid AP procedure
-patch file so the world can generate. Full ROM integration (writing the auth
-token, location tables, incoming item queue, etc.) should be added once
-addresses.json contains the required ROM symbols and the injected base patch is
-Kirby-specific.
+The world emits AP procedure patches that apply:
+- the shipped KirbyAM base bsdiff patch artifact
+- per-seed token writes (auth token and selected runtime feature writes)
+
+Issue #338 adds deterministic enemy copy-ability remap token writes for
+non-vanilla enemy randomization modes.
 """
 
 import os
@@ -14,6 +15,8 @@ from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from .data import data
+from .enemy_ability_runtime_patch import build_enemy_copy_runtime_patch_writes
+from .options import EnemyCopyAbilityRandomization
 
 if TYPE_CHECKING:
     from . import KirbyAmWorld
@@ -45,5 +48,22 @@ def write_tokens(world: "KirbyAmWorld", patch: KirbyAmProcedurePatch) -> None:
     auth_addr = data.rom_addresses.get("auth_token") or data.rom_addresses.get("gArchipelagoInfo")
     if auth_addr is not None:
         patch.write_token(APTokenTypes.WRITE, auth_addr, world.auth)
+
+    mode = int(world.options.enemy_copy_ability_randomization.value)
+    policy = getattr(world, "_enemy_copy_ability_policy", None)
+    if mode != EnemyCopyAbilityRandomization.option_vanilla and not isinstance(policy, dict):
+        raise ValueError(
+            "enemy_copy_ability_policy must be initialized before writing non-vanilla "
+            "enemy copy-ability runtime patch tokens"
+        )
+
+    if isinstance(policy, dict):
+        ability_writes = build_enemy_copy_runtime_patch_writes(policy)
+        if mode != EnemyCopyAbilityRandomization.option_vanilla and not ability_writes:
+            raise ValueError(
+                "non-vanilla enemy copy-ability mode produced no runtime patch writes"
+            )
+        for rom_offset, ability_id in sorted(ability_writes.items()):
+            patch.write_token(APTokenTypes.WRITE, rom_offset, bytes([ability_id]))
 
     patch.write_file("token_data.bin", patch.get_token_binary())

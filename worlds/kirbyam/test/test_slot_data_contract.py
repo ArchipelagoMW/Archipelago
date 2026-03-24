@@ -47,8 +47,8 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
     world.options = options
     world._enemy_copy_ability_policy = {
         "mode": "shuffled",
-        "allowed_abilities": ["Sword", "Needle", "Burning"],
-        "identity_map": {"Sword": "Needle", "Needle": "Burning", "Burning": "Sword"},
+        "allowed_abilities": ["Sword", "Beam", "Burning"],
+        "identity_map": {"Sword": "Beam", "Beam": "Burning", "Burning": "Sword"},
         "randomize_boss_spawned_ability_grants": True,
         "randomize_miniboss_ability_grants": False,
     }

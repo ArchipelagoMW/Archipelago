@@ -1179,7 +1179,10 @@ Added deterministic enemy copy-ability policy generation in
 - `shuffled`: deterministic per-enemy-type assignment
 - `completely_random`: deterministic per-grant-event assignment
 
-The validated whitelist explicitly excludes `Crash` and `Wait`.
+The validated whitelist explicitly excludes `Wait`. The initial release pool was
+later expanded to include additional abilities (`Beam`, `Bomb`, `Cook`, `Crash`,
+`Cupid`, `Fighter`, `Ice`, `Magic`, `Smash`, `Sword`, `Throw`); the historical
+name `Needle` was renamed to `Beam` and is normalised as a legacy alias.
 
 The world now emits the following slot-data contract:
 - `enemy_copy_ability_randomization`
@@ -1271,6 +1274,47 @@ AP-delivered vitality items now apply native persistent vitality semantics in pa
 ### Validation
 - Added/updated tests for vitality chest location data, client polling, item pool sizing,
   patch callsite constants, and payload vitality signaling/apply behavior.
+
+## Issue #338: Enemy Copy-Ability Non-Vanilla Modes Must Not Silently Ship as Vanilla
+
+### Problem
+`enemy_copy_ability_randomization` accepted `shuffled` and `completely_random`, and
+generation exported deterministic policy payloads into `slot_data`. However, shipped
+runtime connector/payload paths did not consume this policy in live gameplay, so
+in-game behavior stayed vanilla.
+
+### Root Cause
+Issue #111 intentionally scoped enemy-copy work to generation-time policy + protocol
+exposure. Later protocol wording implied runtime hooks were active, creating a
+contract mismatch.
+
+### Fix
+Implemented deterministic runtime ROM writes derived from
+`enemy_copy_ability_policy`:
+- Added `enemy_ability_runtime_patch.py` with a curated enemy/miniboss/
+  boss-spawned ability-source table (address evidence from
+  upstream `kamrandomizer.py` enemy/object ability tables).
+- `build_enemy_copy_runtime_patch_writes(policy)` now produces ROM byte writes
+  (offset -> native ability id) for non-vanilla modes.
+- `write_tokens(...)` in `rom.py` now injects these writes into `token_data.bin`
+  via AP token patching so each generated seed applies the deterministic remap.
+
+Mode behavior after fix:
+- `vanilla`: emits no ability remap writes.
+- `shuffled`: deterministic per-enemy-type remap.
+- `completely_random`: deterministic per-source-entry remap.
+
+Feature toggles are honored in runtime writes:
+- `randomize_miniboss_ability_grants`
+- `randomize_boss_spawned_ability_grants`
+
+### Validation
+- Added runtime patch tests in `test_enemy_copy_ability_runtime_patch.py`:
+  - vanilla emits no writes
+  - shuffled writes are deterministic
+  - miniboss toggle excludes miniboss addresses
+  - boss-spawned toggle excludes object addresses
+- Full KirbyAM suite passed after runtime patch integration.
 
 ## Issue #380: Fix Boss-Defeat Hook — Preserve Native Shard State to Prevent White Screen
 
