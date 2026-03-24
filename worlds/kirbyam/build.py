@@ -25,6 +25,7 @@ if sys.path and os.path.realpath(sys.path[0]) == _SCRIPT_DIR:
 
 import argparse
 import json
+import shutil
 import subprocess
 import zipfile
 from pathlib import Path
@@ -185,6 +186,19 @@ def build_apworld_in_place(world_root: Path, world_name: str) -> Path:
     return out_path
 
 
+def get_default_install_path(world_name: str) -> Path | None:
+    if os.name != "nt":
+        return None
+
+    program_data = Path(os.environ.get("ProgramData", r"C:\ProgramData"))
+    return program_data / "Archipelago" / "custom_worlds" / f"{world_name}.apworld"
+
+
+def install_apworld(apworld_path: Path, install_path: Path) -> None:
+    install_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(apworld_path, install_path)
+
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Build kirbyam.apworld in-place inside worlds/kirbyam/")
     p.add_argument("--world", default=DEFAULT_WORLD_NAME, help="World folder name (must be lowercase).")
@@ -206,6 +220,16 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Path to base ROM when using --source-type arg. Ignored for --source-type file.",
     )
+    p.add_argument(
+        "--install-path",
+        default=None,
+        help="Path to install the built .apworld after packaging. Defaults to %%ProgramData%%\\Archipelago\\custom_worlds\\<world>.apworld on Windows.",
+    )
+    p.add_argument(
+        "--skip-install",
+        action="store_true",
+        help="Skip copying the built .apworld into the Archipelago custom_worlds directory.",
+    )
     return p.parse_args()
 
 
@@ -216,12 +240,10 @@ def main() -> None:
     if world_name.lower() != world_name:
         raise SystemExit("World name must be lowercase.")
 
-    # This build script runs at repo_root/worlds/kirbyam/
-    world_root = Path.cwd().resolve()
+    world_root = Path(__file__).resolve().parent
 
-    if world_root.name != world_name:
-        print(f"Warning: current directory is {world_root}, expected to be .../worlds/{world_name}")
-        print("Proceeding anyway, but ensure you're running from the world folder.")
+    if Path.cwd().resolve() != world_root:
+        print(f"Using world root from script location: {world_root}")
 
     manifest_path = world_root / "archipelago.json"
     if not manifest_path.exists():
@@ -239,13 +261,31 @@ def main() -> None:
     # 3) Build .apworld in-place
     apworld_path = build_apworld_in_place(world_root, world_name)
 
+    install_path: Path | None
+    if args.install_path:
+        install_path = Path(args.install_path)
+    else:
+        install_path = get_default_install_path(world_name)
+
+    if args.skip_install:
+        print("Skipping .apworld install (--skip-install)")
+    elif install_path is None:
+        print("No default .apworld install path for this platform; built archive left in world folder.")
+    else:
+        install_apworld(apworld_path, install_path)
+        print(f"Installed: {install_path}")
+
     print("")
     print(f"Built: {apworld_path}")
     print("")
     print("Next steps:")
-    print("1) Copy this .apworld into your Archipelago custom_worlds directory, if needed.")
-    print("2) Restart ArchipelagoLauncher.exe")
-    print("3) Click 'Generate Template Settings' and look for: Kirby & The Amazing Mirror")
+    if args.skip_install or install_path is None:
+        print("1) Copy this .apworld into your Archipelago custom_worlds directory, if needed.")
+        print("2) Restart ArchipelagoLauncher.exe")
+        print("3) Click 'Generate Template Settings' and look for: Kirby & The Amazing Mirror")
+    else:
+        print("1) Restart ArchipelagoLauncher.exe")
+        print("2) Click 'Generate Template Settings' and look for: Kirby & The Amazing Mirror")
 
 
 if __name__ == "__main__":

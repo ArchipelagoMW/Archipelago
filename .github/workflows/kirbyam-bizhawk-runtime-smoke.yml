@@ -1,0 +1,135 @@
+name: KirbyAM BizHawk Runtime Smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 7 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  bizhawk-runtime-smoke:
+    runs-on: [self-hosted, windows]
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r ci-requirements.txt
+          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+
+      - name: Verify runner runtime prerequisites
+        shell: pwsh
+        run: |
+          $required = @(
+            "BIZHAWK_EMUHAWK_PATH",
+            "KIRBYAM_PATCHED_ROM_PATH"
+          )
+
+          foreach ($name in $required) {
+            $value = [Environment]::GetEnvironmentVariable($name)
+            if ([string]::IsNullOrWhiteSpace($value)) {
+              throw "Missing required environment variable: $name"
+            }
+          }
+
+          if (-not (Test-Path $env:BIZHAWK_EMUHAWK_PATH)) {
+            throw "EmuHawk path does not exist: $env:BIZHAWK_EMUHAWK_PATH"
+          }
+          if (-not (Test-Path $env:KIRBYAM_PATCHED_ROM_PATH)) {
+            throw "Patched ROM path does not exist: $env:KIRBYAM_PATCHED_ROM_PATH"
+          }
+
+      - name: Launch EmuHawk with KirbyAM connector
+        shell: pwsh
+        run: |
+          $args = @(
+            "--lua=$PWD/data/lua/connector_kirbyam_bizhawk.lua",
+            "$env:KIRBYAM_PATCHED_ROM_PATH"
+          )
+
+          $emu = Start-Process -FilePath $env:BIZHAWK_EMUHAWK_PATH -ArgumentList $args -PassThru
+          "PID=$($emu.Id)" | Out-File -FilePath "$env:GITHUB_ENV" -Encoding utf8 -Append
+          Start-Sleep -Seconds 10
+
+      - name: Validate runtime connector handshake and KirbyAM ROM detection
+        shell: pwsh
+        run: |
+          @'
+          import asyncio
+          from types import SimpleNamespace
+
+          import worlds._bizhawk as bizhawk
+          from worlds._bizhawk.client import AutoBizHawkClientRegister
+          from worlds.kirbyam.client import KirbyAmClient
+
+
+          async def main() -> None:
+              ctx = bizhawk.BizHawkContext()
+              if not await bizhawk.connect(ctx):
+                  raise RuntimeError("Failed to connect to BizHawk connector on default port range")
+
+              try:
+                  version = await bizhawk.get_script_version(ctx)
+                  system = await bizhawk.get_system(ctx)
+                  rom_hash = await bizhawk.get_hash(ctx)
+
+                  client_ctx = SimpleNamespace(bizhawk_ctx=ctx, rom_hash=rom_hash)
+                  handler = await AutoBizHawkClientRegister.get_handler(client_ctx, system)
+                  if not isinstance(handler, KirbyAmClient):
+                      raise RuntimeError(
+                          f"Expected KirbyAmClient handler for runtime smoke, got {type(handler).__name__ if handler else 'None'}"
+                      )
+
+                  await handler.set_auth(client_ctx)
+                  if not isinstance(getattr(client_ctx, "auth", None), str) or not client_ctx.auth:
+                      raise RuntimeError("KirbyAM runtime smoke failed: auth token read path returned empty value")
+
+                  print(f"Runtime smoke passed. version={version} system={system} auth_len={len(client_ctx.auth)}")
+              finally:
+                  bizhawk.disconnect(ctx)
+
+
+          asyncio.run(main())
+          '@ | python -
+
+      - name: Upload runtime smoke logs (best effort)
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirbyam-bizhawk-runtime-smoke-logs
+          path: |
+            logs/**
+            test-output/**
+          if-no-files-found: warn
+
+      - name: Stop EmuHawk
+        if: always()
+        shell: pwsh
+        run: |
+          if (-not [string]::IsNullOrWhiteSpace($env:PID)) {
+            try {
+              Stop-Process -Id ([int]$env:PID) -Force -ErrorAction Stop
+            }
+            catch {
+              Write-Host "EmuHawk process already stopped"
+            }
+          }

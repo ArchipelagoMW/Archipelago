@@ -1,5 +1,44 @@
 # Kirby & The Amazing Mirror (GBA) - Address Policy Notes
 
+## Issue #367: KirbyAM Integration Testing for Generation/Hosting/BizHawk Connector
+
+### Problem
+KirbyAM had strong unit coverage for many runtime paths but lacked explicit
+integration tests for:
+- fixture-driven YAML generation,
+- local hosting connectivity with a generated KirbyAM archive,
+- BizHawk connector protocol transport + ROM validation in an end-to-end request path.
+
+### Solution
+Added three integration test modules under `worlds/kirbyam/test`:
+
+- `test_generate_integration.py`
+  - Generates from `server/kirbyam_test_player.yaml` and validates decoded multidata slot metadata.
+- `test_hosting_integration.py`
+  - Spins up local MultiServer on generated KirbyAM archive and verifies AP client connect/datapackage behavior.
+- `test_bizhawk_connector_integration.py`
+  - Uses fake connector harness `support/fake_bizhawk_connector.py` with real `worlds._bizhawk` transport calls.
+  - Confirms KirbyAM handler selection for patched signals and rejection for unpatched base-ROM hash.
+
+Support helper added:
+- `support/integration_generation.py` for fixture-based generation and `.archipelago` multidata decoding.
+
+Fixture correction:
+- `server/kirbyam_test_player.yaml` `goal` value updated from `defeat_dark_mind` to `dark_mind`
+  so generation matches current option names.
+
+### CI strategy
+- PR/default test runs include these integration tests via existing
+  `pytest worlds/kirbyam/test ...` execution.
+- Optional true emulator runtime smoke is provided via
+  `.github/workflows/kirbyam-bizhawk-runtime-smoke.yml`
+  for self-hosted Windows runners with BizHawk + ROM provisioning.
+
+### Validation
+- Added dedicated tests for all three surfaces listed above.
+- Verified fake connector path covers protocol requests used by ROM validation
+  and auth extraction (`SYSTEM`, `HASH`, `READ`, `PING`).
+
 ## Issue #290: Generation Failure from Global bit_index Collision Check
 
 ## Issue #308: Critical-Module Coverage Gates

@@ -1,5 +1,50 @@
 # BizHawk Testing Guide for Address Verification
 
+## Automated Integration Coverage (Issue #367)
+
+Three integration surfaces now have automated coverage split by runtime cost:
+
+1. Fast PR CI coverage (normal `pytest worlds/kirbyam/test ...` runs)
+    - `worlds/kirbyam/test/test_generate_integration.py`
+    - `worlds/kirbyam/test/test_hosting_integration.py`
+    - `worlds/kirbyam/test/test_bizhawk_connector_integration.py`
+
+2. Optional runtime smoke coverage (self-hosted BizHawk)
+    - `.github/workflows/kirbyam-bizhawk-runtime-smoke.yml`
+    - Trigger via `workflow_dispatch` or nightly schedule on a prepared self-hosted Windows runner.
+
+### What each automated integration test validates
+
+- `test_generate_integration.py`
+   - Generates a KirbyAM archive from `worlds/kirbyam/test/server/kirbyam_test_player.yaml`.
+   - Verifies generated multidata contains a KirbyAM slot with expected game/player metadata.
+
+- `test_hosting_integration.py`
+   - Starts local MultiServer with generated KirbyAM archive.
+   - Connects a minimal AP websocket client and validates successful `Connected` flow and sane location arrays.
+
+- `test_bizhawk_connector_integration.py`
+   - Uses a fake BizHawk connector TCP server that speaks the generic connector protocol.
+   - Exercises real `worlds._bizhawk` transport calls (`connect`, `ping`, `get_system`, `get_hash`, `read`).
+   - Validates KirbyAM handler selection + patched ROM auth-path read behavior.
+   - Validates unpatched base-ROM hash rejection path.
+
+### Local command examples
+
+Run only the new issue #367 integration tests:
+
+```bash
+pytest worlds/kirbyam/test/test_generate_integration.py \
+          worlds/kirbyam/test/test_hosting_integration.py \
+          worlds/kirbyam/test/test_bizhawk_connector_integration.py -q
+```
+
+Run all KirbyAM tests (includes these integration tests):
+
+```bash
+pytest worlds/kirbyam/test -q
+```
+
 ## Client Log Reference
 
 ### Log levels

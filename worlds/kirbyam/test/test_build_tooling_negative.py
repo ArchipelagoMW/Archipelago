@@ -90,15 +90,22 @@ def test_build_main_uppercase_world_name() -> None:
 
 
 def test_build_main_missing_manifest(tmp_path: Path) -> None:
-    """Missing archipelago.json in the working directory raises SystemExit."""
+    """Missing archipelago.json next to build.py raises SystemExit."""
     orig_argv = sys.argv
+    orig_file = build_mod.__file__
     orig_cwd = Path.cwd()
+    fake_script = tmp_path / "build.py"
+    fake_script.write_text("# placeholder\n", encoding="utf-8")
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
     sys.argv = ["build.py", "--skip-patch"]
-    os.chdir(tmp_path)
+    os.chdir(run_dir)
     try:
+        build_mod.__file__ = str(fake_script)
         with pytest.raises(SystemExit) as exc_info:
             build_mod.main()
         assert "manifest" in str(exc_info.value).lower() or "archipelago.json" in str(exc_info.value)
     finally:
+        build_mod.__file__ = orig_file
         os.chdir(orig_cwd)
         sys.argv = orig_argv

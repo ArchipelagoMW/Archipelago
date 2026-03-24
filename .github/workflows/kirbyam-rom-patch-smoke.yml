@@ -45,8 +45,7 @@ jobs:
 
       - name: Build payload and generate ROM patch
         run: |
-          cd worlds/kirbyam
-          python build.py --source-type arg --rom "$(pwd)/kirby_ap_payload/kirby.gba"
+          python worlds/kirbyam/build.py --source-type arg --rom "$PWD/worlds/kirbyam/kirby_ap_payload/kirby.gba" --skip-install
 
       - name: Validate expected outputs exist
         run: |
