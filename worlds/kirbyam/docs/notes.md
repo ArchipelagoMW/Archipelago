@@ -991,6 +991,29 @@ reconnect behavior easier to debug.
 - Added tests that assert resend logging and dedupe suppression logging.
 - Full client test file passes after update.
 
+## Issue #337: Startup 99-Lives Follow-up Hook Hardening
+
+### Problem
+Startup-state corruption could still appear as a 99-lives symptom despite the
+earlier fix that removed an explicit `r4` temporary restore pattern.
+
+The remaining risk was the hook boundary itself: calling `ap_poll_mailbox_c`
+from a sensitive site while preserving only part of the live register context.
+
+### Solution
+Hardened `ap_hook_entry` in `ap_hook.s` to preserve a stronger context envelope:
+- save/restore `r0-r7` and `lr`
+- explicitly mirror and restore `r8-r11` through `r0-r3` around the C call
+- keep replayed overwritten instructions (`mov r7, r9` / `mov r6, r8`) intact
+
+This reduces the chance of hook-boundary context drift affecting startup state.
+
+### Validation
+- Updated `test_reset_safe_shards.py` hook regression to assert:
+  - low-register + LR preservation (`push/pop {r0-r7, lr}` / `{r0-r7}`)
+  - explicit high-register mirror/restore (`r8-r11` via `r0-r3`)
+  - no `r4`-based LR reconstruction pattern
+
 ## Issue #223: In-Gameplay Unsafe-State Delivery Policy (Research-First Mode)
 
 ### Problem

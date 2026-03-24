@@ -84,8 +84,8 @@ def test_issue_109_addresses_documented():
     assert "0x1C" in content or "28" in content, "SRAM offset 0x1C should be defined"
 
 
-def test_ap_hook_returns_without_clobbering_r4():
-    """Verify the payload hook keeps LR on the stack instead of using r4 as a temp."""
+def test_ap_hook_preserves_register_context_without_r4_temp_restore():
+    """Verify the hook preserves full context and does not rebuild LR through r4."""
     hook_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_hook.s")
     assert os.path.exists(hook_path), "ap_hook.s should exist in kirby_ap_payload"
 
@@ -97,10 +97,22 @@ def test_ap_hook_returns_without_clobbering_r4():
     # Normalize runs of spaces/tabs to a single space.
     normalized = re.sub(r'[ \t]+', ' ', code_only)
 
-    assert re.search(r'\bpush\s*\{r0-r3,\s*lr\}', normalized), \
-        "Hook should save r0-r3 and lr"
+    assert re.search(r'\bpush\s*\{r0-r7,\s*lr\}', normalized), \
+        "Hook should save r0-r7 and lr"
+    assert re.search(r'\bpush\s*\{r0-r3\}', normalized), \
+        "Hook should save high-register mirrors through r0-r3"
     assert re.search(r'\bpop\s*\{r0-r3\}', normalized), \
-        "Hook should restore r0-r3 before replaying instructions"
+        "Hook should restore high-register mirrors before low-register restore"
+    assert re.search(r'\bmov\s+r8\s*,\s*r0\b', normalized), \
+        "Hook should restore r8 from mirrored low register"
+    assert re.search(r'\bmov\s+r9\s*,\s*r1\b', normalized), \
+        "Hook should restore r9 from mirrored low register"
+    assert re.search(r'\bmov\s+r10\s*,\s*r2\b', normalized), \
+        "Hook should restore r10 from mirrored low register"
+    assert re.search(r'\bmov\s+r11\s*,\s*r3\b', normalized), \
+        "Hook should restore r11 from mirrored low register"
+    assert re.search(r'\bpop\s*\{r0-r7\}', normalized), \
+        "Hook should restore r0-r7 before replaying overwritten instructions"
     assert re.search(r'\bpop\s*\{pc\}', normalized), \
         "Hook should return by popping the saved lr into pc"
     assert not re.search(r'\bpop\s*\{[^}]*\br4\b[^}]*\}', normalized, re.IGNORECASE), \

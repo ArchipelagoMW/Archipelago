@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Hide KirbyAM goal/event-style objective checks from datapackage location exports so `/locations` no longer lists them as normal AP locations.
+- Harden ROM hook context preservation at startup by explicitly saving/restoring low+high register state around `ap_poll_mailbox_c`, reducing startup-state corruption risk (99-lives symptom).
 
 ## v0.0.10
 
