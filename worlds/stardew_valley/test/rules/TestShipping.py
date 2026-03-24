@@ -84,7 +84,7 @@ class TestShipsanityEverything(SVTestBase):
             with self.subTest(f"{location.name} with island bin"):
                 self.assert_cannot_reach_location(location.name)
 
-                _ = self.collect(island_bin_item)
+                self.collect(island_bin_item)
                 self.assert_can_reach_location(location.name)
             self.remove(island_bin_item)
 
@@ -92,6 +92,6 @@ class TestShipsanityEverything(SVTestBase):
                 with self.subTest(f"{location.name} with normal bin"):
                     self.assert_cannot_reach_location(location.name)
 
-                    _ = self.collect(bin_item)
+                    self.collect(bin_item)
                     self.assert_can_reach_location(location.name)
                 self.remove(bin_item)

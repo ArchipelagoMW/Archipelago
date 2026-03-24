@@ -18,7 +18,7 @@ class TestDonationLogicAll(SVTestBase):
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
             self.assert_cannot_reach_location(donation.name)
 
-        _ = self.collect(mens_locker_item)
+        self.collect(mens_locker_item)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
             self.assert_can_reach_location(donation.name)
@@ -39,7 +39,7 @@ class TestDonationLogicRandomized(SVTestBase):
         for donation in donation_locations:
             self.assert_cannot_reach_location(donation.name)
 
-        _ = self.collect(mens_locker_item)
+        self.collect(mens_locker_item)
 
         for donation in donation_locations:
             self.assert_can_reach_location(donation.name)
@@ -58,7 +58,7 @@ class TestDonationLogicMilestones(SVTestBase):
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
             self.assert_cannot_reach_location(donation.name)
 
-        _ = self.collect(mens_locker_item)
+        self.collect(mens_locker_item)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
             self.assert_can_reach_location(donation.name)

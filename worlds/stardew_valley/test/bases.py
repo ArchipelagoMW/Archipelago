@@ -124,7 +124,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         non_event_items = [i for i in self.multiworld.get_items() if i.advancement and i.code]
         for item in non_event_items:
             if item.name not in items_to_not_collect:
-                _ = self.multiworld.state.collect(item)
+                self.multiworld.state.collect(item)
 
     def get_real_locations(self) -> list[Location]:
         return [location for location in self.multiworld.get_locations(self.player) if location.address is not None]
