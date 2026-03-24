@@ -216,7 +216,7 @@ class EntranceRandomization(Choice):
     option_overworld = 4
     option_everywhere = 5
 
-    def randomized_transitions(self) -> bool:
+    def randomized_special_transitions(self) -> bool:
         return self.value >= self.option_everywhere
 
 

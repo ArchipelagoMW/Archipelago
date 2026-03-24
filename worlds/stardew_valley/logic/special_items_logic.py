@@ -27,10 +27,10 @@ class SpecialItemsLogic(BaseLogic):
                            self.logic.region.can_reach(Region.ranch) & \
                            self.logic.relationship.has_hearts(NPC.marnie, 2)
         if scepter_is_logic:
-            can_warp_back = self.logic.has(Consumable.warp_totem_farm) | self.logic.received("Return Scepter")
+            can_warp_away = self.logic.has_any(Consumable.warp_totem_farm) | self.logic.received("Return Scepter")
         else:
-            can_warp_back = self.logic.has(Consumable.warp_totem_farm)
-        has_repeatable_shorts = self.logic.region.can_reach(Region.purple_shorts_maze) & can_warp_back
+            can_warp_away = self.logic.has(Consumable.warp_totem_farm)
+        has_repeatable_shorts = self.logic.region.can_reach(Region.purple_shorts_maze) & can_warp_away
         return has_first_shorts & has_repeatable_shorts
 
     def has_far_away_stone(self) -> StardewRule:
