@@ -9,26 +9,31 @@ local libs = {
     --trap_handling = require("scripts/trap_handling.lua"), --does not yet exist
     --main = require("scripts/main.lua"), --will probably be removed.
     --tech_obscurity = require("scripts/tech-obscurity.lua"), --I am hopefull. But first getting this refactoring approved before adding this shit.
+    control = {} --for all events that get compiled in this file.
 }
 
-local on_entity_died_filter = {}
-local on_entity_died_functions = {}
-for name, lib in pairs(libs) do
-    if lib.on_entity_died then
-        for filter, name in pairs(lib.on_entity_died) do
-            table.insert(on_entity_died_filter, {filter = filter, [filter] = name})
-        end
-        on_entity_died_functions[name] = lib.on_entity_died_function
-    end
-end
+-- was split up in on_player_died and on_entity_died
 
-local function on_entity_died(event)
-    for _, action in pairs(on_entity_died_functions) do
-        action(event)
-    end
-end
+--local on_entity_died_filter = {}
+--local on_entity_died_functions = {}
+--for name, lib in pairs(libs) do
+--    if lib.on_entity_died then
+--        for filter, name in pairs(lib.on_entity_died) do
+--            table.insert(on_entity_died_filter, {filter = filter, [filter] = name, mode = "or"})
+--        end
+--        on_entity_died_functions[name] = lib.on_entity_died_function
+--    end
+--end
+--
+--local function on_entity_died(event)
+--    log("running the control.lua on_entity_died for "..serpent.line(event.entity))
+--    game.print("running the control.lua on_entity_died "..serpent.line(event.entity))
+--    for _, action in pairs(on_entity_died_functions) do
+--        action(event)
+--    end
+--end
 
-script.on_event(defines.events.on_entity_died, on_entity_died, on_entity_died_filter) --register events with filter.
+--libs.control.filtered_events = {on_entity_died = {on_entity_died, on_entity_died_filter}}
 
 local dupes = false
 local all_events = {}

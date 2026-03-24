@@ -188,14 +188,13 @@ lib.events = {
     [defines.events.script_raised_revive] = on_built_entity,
     [defines.events.script_raised_built] = on_built_entity,
 
-    [defines.events.on_entity_died] = on_entity_died,
+    --[defines.events.on_entity_died] = on_entity_died, --is filtered down below.
     [defines.events.on_player_mined_entity] = on_entity_died,
     [defines.events.on_robot_mined_entity] = on_entity_died,
 }
-
-lib.on_entity_died = {name = "ap-energy-bridge"} --a list of all names that need to be filtered for the on_entity_died event
-lib.on_entity_died_function = on_entity_died --a list of all names that need to be filtered for the on_entity_died event
-
+lib.filtered_events = {
+    [defines.events.on_entity_died] = {on_entity_died, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "ap-energy-bridge"}} } --replaced with the one below.
+}
 
 lib.on_init = on_init
 --lib.on_configuration_changed = on_configuration_changed

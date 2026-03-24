@@ -43,12 +43,7 @@ local function kill_players(force)
     death_lock = 0
 end
 
-local function on_entity_died(event)
-    log("activating death link check.")
-    game.print("activating death link check.")
-    if not event.entity.player then return end--detect if a player is connected to this entity. If it is that means a deathlink is in order.
-    log("past the player detection.")
-    game.print("past the player detection.")
+local function on_player_died(event)
     if DEATH_LINK == 0 then
         return
     end
@@ -92,12 +87,13 @@ lib.events = {
     [defines.events.on_force_created] = on_force_created,
     --[defines.events.on_force_reset] = on_force_created, --currently unneeded.
     [defines.events.on_player_created] = on_player_created,
+    [defines.events.on_player_died] = on_player_died, --replaced with the one below.
 }
 lib.filtered_events = {
     --[defines.events.on_entity_died] = {on_entity_died, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}} --replaced with the one below.
 }
-lib.on_entity_died = {type = "character"} --a list of all names that need to be filtered for the on_entity_died event
-lib.on_entity_died_function = on_entity_died --a list of all names that need to be filtered for the on_entity_died event
+--lib.on_entity_died = {type = "character"} --a list of all names that need to be filtered for the on_entity_died event changed to on_player_died
+--lib.on_entity_died_function = on_entity_died --a list of all names that need to be filtered for the on_entity_died event
 
 lib.on_init = on_init
 --lib.on_configuration_changed = on_configuration_changed
