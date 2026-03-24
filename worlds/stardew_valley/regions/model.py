@@ -88,9 +88,7 @@ class RegionData:
     flag: MergeFlag = MergeFlag.ADD_EXITS
 
     def __post_init__(self):
-        assert not isinstance(
-            self.exits, str
-        ), "Exits must be a tuple of strings, you probably forgot a trailing comma."
+        assert not isinstance(self.exits, str), "Exits must be a tuple of strings, you probably forgot a trailing comma."
 
     def merge_with(self, other: RegionData) -> RegionData:
         assert self.name == other.name, "Regions must have the same name to be merged"
