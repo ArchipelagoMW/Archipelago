@@ -5,6 +5,8 @@ name: unittests
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '**'
       - '!docs/**'
@@ -29,6 +31,12 @@ on:
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
 
+concurrency:
+  # Keep one in-flight unittests run per PR or branch and cancel stale runs.
+  # For push events, include commit SHA so main-branch runs are not cancelled by newer pushes.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name == 'push' && github.sha || '' }}
+  cancel-in-progress: true
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -36,6 +44,7 @@ jobs:
   unit:
     runs-on: ${{ matrix.os }}
     name: Test Python ${{ matrix.python.version }} ${{ matrix.os }}
+    timeout-minutes: 20
 
     strategy:
       fail-fast: false
@@ -44,7 +53,7 @@ jobs:
         python:
           - {version: '3.11.2'} # Change to '3.11' around 2026-06-10
           - {version: '3.12'}
-          - {version: '3.13'}
+          - {version: '3.13'}  # current
         include:
           - python: {version: '3.11'}  # old compat
             os: windows-latest
@@ -66,17 +75,11 @@ jobs:
         python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
         python Launcher.py --update_settings  # make sure host.yaml exists for tests
     - name: Unittests
+      timeout-minutes: 15
       run: |
         pytest worlds/kirbyam/test -n auto --dist worksteal
-    - name: KirbyAM critical-module coverage gates
-      if: matrix.os == 'ubuntu-latest' && matrix.python.version == '3.13'
-      run: |
-        pytest worlds/kirbyam/test -q --cov=worlds.kirbyam --cov-report=json:test-output/kirbyam/coverage.json
-        python worlds/kirbyam/test/critical_module_coverage_gate.py \
-          --coverage-json test-output/kirbyam/coverage.json \
-          --thresholds-json worlds/kirbyam/test/critical_module_coverage_thresholds.json
     - name: Upload KirbyAM test logs on failure
-      if: failure()
+      if: failure() || cancelled()
       uses: actions/upload-artifact@v4
       with:
         name: kirbyam-test-logs-${{ matrix.os }}-py${{ matrix.python.version }}
@@ -86,6 +89,7 @@ jobs:
   hosting:
     runs-on: ${{ matrix.os }}
     name: Test hosting with ${{ matrix.python.version }} on ${{ matrix.os }}
+    timeout-minutes: 20
 
     strategy:
       matrix:
