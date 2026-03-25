@@ -11,14 +11,6 @@ Energy_link:
 Multiplayer:    
     start world, swap energy_link setting, get a second player, test if the second player also has the correct setting state. (Should desync on energy transfer if not.)
 
-miscellaneous:
-
-Single player:
-
-DNF silo on spawn     Crash in generation, cause; unknown, crash already happens before refactor.
-
-    make a removed technology that does not exist (but does get put in the list) and watch if the Log file contains an error.
-
 
 Things to talk about;
 

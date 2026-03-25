@@ -88,7 +88,7 @@ local function get_factorio_icons(icons, item_name, this_world)
         tech_sources = {item_name}
     end
     local total_amount = table_size(tech_sources)
-    if total_amount == 1 then -- or settings.startup["archipelago-progressive-technology-icons"].value == "never" or (this_world == false and settings.startup["archipelago-progressive-technology-icons"].value == "only-own") then
+    if total_amount == 1 or settings.startup["archipelago-progressive-technology-icons"].value == "never" or (this_world == false and settings.startup["archipelago-progressive-technology-icons"].value == "only-own") then
         --only display the first of the list.
         icons = util.combine_icons(icons, get_icons(tech_sources[1]), {}, nil)
         return icons

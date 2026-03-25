@@ -34,5 +34,14 @@ data:extend({
         localised_name = {"mod-setting-name.archipelago-energy-link"},
         localised_description = {"mod-setting-description.archipelago-energy-link"},
         default_value = general.mod_setting_defaults.energy_link
+    },
+    {
+        type = "string-setting",
+        name = "archipelago-progressive-technology-icons",
+        setting_type = "startup",
+        localised_name = {"mod-setting-name.archipelago-progressive-technology-icons"},
+        localised_description = {"mod-setting-description.archipelago-progressive-technology-icons"},
+        default_value = "only-own",
+        allowed_values = {"never", "only-own", "always"}
     }
 })
