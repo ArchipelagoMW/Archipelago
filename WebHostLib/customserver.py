@@ -141,8 +141,12 @@ class WebHostContext(Context):
     def _load_world_data(self):
         # Use static_server_data, but skip static data package since that is in cache anyway.
         # Also NOT importing worlds here!
-        # FIXME: does this copy the non_hintable_names (also for games not part of the room)?
-        self.non_hintable_names = collections.defaultdict(frozenset, self.static_server_data["non_hintable_names"])
+        non_hintable_names = {
+            game: item_names
+            for game, item_names in self.static_server_data["non_hintable_names"].items()
+            if game in self.played_games
+        }
+        self.non_hintable_names = collections.defaultdict(Utils.empty_frozenset_factory, non_hintable_names)
         del self.static_server_data  # Not used past this point. Free memory.
 
     def init_save(self, enabled: bool = True):
@@ -188,6 +192,7 @@ def get_static_server_data() -> StaticServerData:
         "non_hintable_names": {
             world_name: world.hint_blacklist
             for world_name, world in worlds.AutoWorldRegister.world_types.items()
+            if world.hint_blacklist
         },
         "games_package": worlds.network_data_package["games"]
     }
