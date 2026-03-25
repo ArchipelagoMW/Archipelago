@@ -11,6 +11,7 @@ from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
 from Utils import title_sorted, get_file_safe_name
+from .cli import CLI
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -45,6 +46,8 @@ app.config["SELFGEN"] = True  # application process is in charge of scheduling G
 app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
 app.config["JOB_TIME"] = 600
+# maximum time in seconds since last activity for a room to be hosted
+app.config["MAX_ROOM_TIMEOUT"] = 259200
 # memory limit for generator processes in bytes
 app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
 
@@ -64,6 +67,7 @@ app.config["ASSET_RIGHTS"] = False
 
 cache = Cache()
 Compress(app)
+CLI(app)
 
 
 def to_python(value: str) -> uuid.UUID:

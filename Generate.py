@@ -23,7 +23,7 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
-def mystery_argparse(argv: list[str] | None = None):
+def mystery_argparse(argv: list[str] | None = None) -> argparse.Namespace:
     from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
@@ -68,7 +68,7 @@ def mystery_argparse(argv: list[str] | None = None):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
-    args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
+    args.plando = PlandoOptions.from_option_string(args.plando)
 
     return args
 
@@ -135,7 +135,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     else:
                         weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
-                        
+
             except Exception as e:
                 logging.exception(f"Exception reading weights in file {fname}")
                 player_errors.append(
@@ -205,7 +205,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                             else:
                                 yaml[category_name][key] = option
 
-    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = {fname: None for fname in weights_cache}
+    settings_cache: dict[str, tuple[argparse.Namespace, ...] | None] = {fname: None for fname in weights_cache}
     if args.sameoptions:
         for fname, yamls in weights_cache.items():
             try:
@@ -225,7 +225,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     player_path_cache: dict[int, str] = {}
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
-    name_counter = Counter()
+    name_counter: Counter[str] = Counter()
     args.player_options = {}
 
     player = 1
@@ -241,13 +241,10 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
             try:
                 # Use the cached settings object if it exists, otherwise roll settings within the try-catch
                 # Invariant: settings_cache[path] and weights_cache[path] have the same length
-                settingsObject: argparse.Namespace = (
-                    settings_cache[path][doc_index]
-                    if settings_cache[path]
-                    else roll_settings(yaml, args.plando)
-                )
-                
-                for k, v in vars(settingsObject).items():
+                cached = settings_cache[path]
+                settings_object: argparse.Namespace = (cached[doc_index] if cached else roll_settings(yaml, args.plando))
+
+                for k, v in vars(settings_object).items():
                     if v is not None:
                         try:
                             getattr(args, k)[player] = v
@@ -365,7 +362,7 @@ class SafeFormatter(string.Formatter):
             return kwargs.get(key, "{" + key + "}")
 
 
-def handle_name(name: str, player: int, name_counter: Counter):
+def handle_name(name: str, player: int, name_counter: Counter[str]):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
@@ -503,7 +500,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     return weights
 
 
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type[Options.Option], plando_options: PlandoOptions):
     try:
         if option_key in game_weights:
             if not option.supports_weighting:
