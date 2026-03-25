@@ -37,3 +37,23 @@ class TestPlayerOptions(unittest.TestCase):
         self.assertEqual(new_weights["dict_2"]["option_g"], 50)
         self.assertEqual(len(new_weights["set_1"]), 2)
         self.assertIn("option_d", new_weights["set_1"])
+
+    def test_update_dict_supports_negatives_and_zeroes(self):
+        original_options = {
+            "dict_1": {"a": 1, "b": -1},
+            "dict_2": {"a": 1, "b": -1},
+        }
+        new_weights = Generate.update_weights(
+            original_options,
+            {
+                "+dict_1": {"a": -2, "b": 2},
+                "-dict_2": {"a": 1, "b": 2},
+            },
+            "Tested",
+            "",
+        )
+        self.assertEqual(new_weights["dict_1"]["a"], -1)
+        self.assertEqual(new_weights["dict_1"]["b"], 1)
+        self.assertEqual(new_weights["dict_2"]["a"], 0)
+        self.assertEqual(new_weights["dict_2"]["b"], -3)
+        self.assertIn("a", new_weights["dict_2"])
