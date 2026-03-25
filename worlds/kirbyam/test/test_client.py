@@ -1276,7 +1276,7 @@ async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
-async def test_global_game_watcher_recovers_when_handler_tick_times_out():
+async def test_global_game_watcher_recovers_when_handler_tick_times_out(caplog):
     """A RequestFailedError in handler game_watcher should not crash the global watcher loop."""
     ctx = Mock()
     ctx.watcher_timeout = 0.01
@@ -1297,15 +1297,15 @@ async def test_global_game_watcher_recovers_when_handler_tick_times_out():
     ctx.client_handler.game_watcher = AsyncMock(side_effect=raise_timeout)
 
     with patch('worlds._bizhawk.context.ping', new_callable=AsyncMock) as mock_ping, \
-         patch('worlds._bizhawk.context.get_hash', new_callable=AsyncMock) as mock_get_hash, \
-         patch('CommonClient.logger') as mock_logger:
+         patch('worlds._bizhawk.context.get_hash', new_callable=AsyncMock) as mock_get_hash:
         mock_get_hash.return_value = "test_rom_hash"
 
-        await asyncio.wait_for(_game_watcher(ctx), timeout=0.2)
+        with caplog.at_level(logging.INFO):
+            await asyncio.wait_for(_game_watcher(ctx), timeout=0.2)
 
     mock_ping.assert_awaited_once_with(ctx.bizhawk_ctx)
     ctx.client_handler.game_watcher.assert_awaited_once_with(ctx)
-    mock_logger.info.assert_any_call("Lost connection to BizHawk: Connection timed out")
+    assert "Lost connection to BizHawk: Connection timed out" in caplog.text
 
 
 @pytest.mark.asyncio
