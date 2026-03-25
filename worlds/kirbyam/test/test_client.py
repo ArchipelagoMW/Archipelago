@@ -1458,20 +1458,21 @@ async def test_runtime_gameplay_state_non_gameplay_on_tutorial_or_menu_state(moc
 
 
 @pytest.mark.asyncio
-async def test_runtime_gameplay_state_non_gameplay_on_goal_clear_state(mock_bizhawk_context):
+@pytest.mark.parametrize("goal_clear_state", [9999, 10000])
+async def test_runtime_gameplay_state_non_gameplay_on_goal_clear_state(mock_bizhawk_context, goal_clear_state):
     """Goal-clear AI states should remain classified as non-gameplay."""
     client = KirbyAmClient()
     client.initialize_client()
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+        mock_read.return_value = [(goal_clear_state).to_bytes(4, 'little')]
 
         active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
 
     assert active is False
     assert reason == "non_gameplay_goal_clear"
-    assert ai_state == 9999
+    assert ai_state == goal_clear_state
 
 
 @pytest.mark.asyncio

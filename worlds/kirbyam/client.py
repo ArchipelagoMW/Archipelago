@@ -23,6 +23,7 @@ _AI_STATE_ADDR_WIDTH = 4
 _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
 _MAILBOX_ACK_TIMEOUT_FRAMES = 30
+_AI_STATE_CUTSCENE_THRESHOLD = 200
 _AI_STATE_NORMAL = 300
 _KIRBY_HP_ADDR_KEY = "kirby_hp_native"
 _KIRBY_HP_READ_WIDTH = 1
@@ -633,7 +634,7 @@ class KirbyAmClient(BizHawkClient):
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
         ai_state = self._u32_le(raw)
 
-        if ai_state < 200:
+        if ai_state < _AI_STATE_CUTSCENE_THRESHOLD:
             return False, "non_gameplay_tutorial_or_menu", ai_state
         if ai_state < _AI_STATE_NORMAL:
             return False, "non_gameplay_cutscene", ai_state
