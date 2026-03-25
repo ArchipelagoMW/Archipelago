@@ -1,9 +1,11 @@
 """Integration tests for client polling and delivery logic."""
+import asyncio
 import pytest
 import logging
 from unittest.mock import AsyncMock, Mock, patch
 
 import worlds._bizhawk as bizhawk
+from worlds._bizhawk.context import _game_watcher, AuthStatus
 
 from ..data import data
 from ..client import KirbyAmClient
@@ -1271,6 +1273,39 @@ async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
         await client.game_watcher(mock_bizhawk_context)
         mock_read.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_global_game_watcher_recovers_when_handler_tick_times_out(caplog):
+    """A RequestFailedError in handler game_watcher should not crash the global watcher loop."""
+    ctx = Mock()
+    ctx.watcher_timeout = 0.01
+    ctx.watcher_event = asyncio.Event()
+    ctx.watcher_event.set()
+    ctx.exit_event = asyncio.Event()
+    ctx.bizhawk_ctx = Mock()
+    ctx.bizhawk_ctx.connection_status = bizhawk.ConnectionStatus.CONNECTED
+    ctx.client_handler = Mock()
+    ctx.server = None
+    ctx.auth_status = AuthStatus.NOT_AUTHENTICATED
+    ctx.rom_hash = "test_rom_hash"
+
+    async def raise_timeout(*_args, **_kwargs):
+        ctx.exit_event.set()
+        raise bizhawk.RequestFailedError("Connection timed out")
+
+    ctx.client_handler.game_watcher = AsyncMock(side_effect=raise_timeout)
+
+    with patch('worlds._bizhawk.context.ping', new_callable=AsyncMock) as mock_ping, \
+         patch('worlds._bizhawk.context.get_hash', new_callable=AsyncMock) as mock_get_hash:
+        mock_get_hash.return_value = "test_rom_hash"
+
+        with caplog.at_level(logging.INFO):
+            await asyncio.wait_for(_game_watcher(ctx), timeout=0.2)
+
+    mock_ping.assert_awaited_once_with(ctx.bizhawk_ctx)
+    ctx.client_handler.game_watcher.assert_awaited_once_with(ctx)
+    assert "Lost connection to BizHawk: Connection timed out" in caplog.text
 
 
 @pytest.mark.asyncio

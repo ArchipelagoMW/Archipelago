@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix BizHawk timeout handling so `RequestFailedError` raised during a world watcher tick no longer terminates the global BizHawk watcher loop; transient `Connection timed out` errors now fall back to reconnect-wait behavior instead of requiring a client restart.
 - Add Sound Player as a useful AP item and split its chest into a dedicated AP location check path so opening the chest reports `SOUND_PLAYER_CHEST` without immediate native unlock; native Sound Player now unlocks only on AP `SOUND_PLAYER` item receipt.
 - Clean up generated KirbyAM player options YAML for first public build: hide non-shipping `goal` choices from comments/weights, hide `enemy_copy_ability_randomization` `completely_random` from template output, hide unsupported common item/location keys, and clarify that boss/miniboss ability toggles only apply when enemy ability randomization is non-vanilla.
 - Remove shard `shuffle` mode from the option contract and generation path; `vanilla` now locks each area shard to its boss-defeat AP location and `completely_random` keeps shards in the global physical-check pool.
