@@ -23,6 +23,7 @@ _AI_STATE_ADDR_WIDTH = 4
 _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
 _MAILBOX_ACK_TIMEOUT_FRAMES = 30
+_AI_STATE_CUTSCENE_THRESHOLD = 200
 _AI_STATE_NORMAL = 300
 _KIRBY_HP_ADDR_KEY = "kirby_hp_native"
 _KIRBY_HP_READ_WIDTH = 1
@@ -621,9 +622,9 @@ class KirbyAmClient(BizHawkClient):
         """
         Classify whether gameplay-active polling/delivery is safe for this frame.
 
-        POC contract for Issue #56:
-        - gameplay-active when ai_kirby_state_native == 300
-        - non-gameplay for all other known states
+        Contract update for Issue #419:
+        - known non-gameplay states remain deferred (tutorial/menu, cutscene, goal-clear states)
+        - unknown post-300 states fail open to avoid blocking mailbox item delivery
         - fail open when native address is unavailable
         """
         ai_state_addr = self._native_addr("ai_kirby_state_native")
@@ -633,13 +634,13 @@ class KirbyAmClient(BizHawkClient):
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
         ai_state = self._u32_le(raw)
 
-        if ai_state == _AI_STATE_NORMAL:
-            return True, "gameplay_active", ai_state
-        if ai_state < 200:
+        if ai_state < _AI_STATE_CUTSCENE_THRESHOLD:
             return False, "non_gameplay_tutorial_or_menu", ai_state
         if ai_state < _AI_STATE_NORMAL:
             return False, "non_gameplay_cutscene", ai_state
-        return False, "non_gameplay_post_normal", ai_state
+        if ai_state in (_GOAL_STATE_DARK_MIND_CLEAR, _GOAL_STATE_FULL_CLEAR):
+            return False, "non_gameplay_goal_clear", ai_state
+        return True, "gameplay_active", ai_state
 
     # --------------------------
     # Helpers / persistence

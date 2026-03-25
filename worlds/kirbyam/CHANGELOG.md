@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix item receipt stalls in v0.0.11 by relaxing gameplay gate classification: known menu/cutscene/goal-clear states still defer new mailbox writes, but unknown post-300 AI states now fail open as gameplay-active so incoming AP items and `/release` items can deliver normally (Issue #419).
 - Fix vitality chest locations not appearing in Archipelago: add vitality chest location definitions to regions in `areas.json` so they are properly instantiated as AP locations and recognized during world generation (Issue #428).
 - Fix BizHawk timeout handling so `RequestFailedError` raised during a world watcher tick no longer terminates the global BizHawk watcher loop; transient `Connection timed out` errors now fall back to reconnect-wait behavior instead of requiring a client restart.
 - Add Sound Player as a useful AP item and split its chest into a dedicated AP location check path so opening the chest reports `SOUND_PLAYER_CHEST` without immediate native unlock; native Sound Player now unlocks only on AP `SOUND_PLAYER` item receipt.

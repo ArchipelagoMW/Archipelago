@@ -118,7 +118,8 @@ Validate that non-gameplay states defer location polling and new mailbox writes.
 
 Expected signal source for this gate:
 - ai_kirby_state_native at 0x0203AD2C (u32)
-- gameplay-active only when value == 300
+- known non-gameplay: value < 300, and goal-clear states 9999/10000
+- gameplay-active: value 300 and unknown post-300 values (fail-open safety)
 
 ## Moonlight Mansion AP Check Contract (Issue #379)
 

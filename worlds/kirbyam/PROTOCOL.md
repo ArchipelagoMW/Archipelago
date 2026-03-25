@@ -153,13 +153,14 @@ Primary signal:
 - `ai_kirby_state_native` (`0x0203AD2C`, u32)
 
 POC classification contract:
-- Gameplay-active: `ai_state == 300`
 - Non-gameplay tutorial/menu: `ai_state < 200`
 - Non-gameplay cutscene band: `200 <= ai_state < 300`
-- Non-gameplay post-normal band: `ai_state > 300`
+- Non-gameplay goal-clear states: `ai_state in {9999, 10000}`
+- Gameplay-active: all other observed states (including `300` and unknown post-300 values)
 
 Fail-open behavior:
 - If `ai_kirby_state_native` is unavailable in address mappings, watcher defaults to gameplay-active behavior for compatibility.
+- Unknown post-300 states fail open as gameplay-active to avoid blocking mailbox item receipt (Issue #419).
 
 **On initial (or re-)connection, the following resync occurs automatically:**
 
