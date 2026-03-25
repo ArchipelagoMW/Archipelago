@@ -2,8 +2,7 @@
 local general = require("Archipelago/general")
 local library = require("libs/lib")
 
-local death_link_setting = settings.global[general.mod_setting_names.death_link]
-if death_link_setting.value then
+if settings.global[general.mod_setting_names.death_link].value then
     DEATH_LINK = 1
 else
     DEATH_LINK = 0
@@ -12,21 +11,19 @@ end
 local death_lock = 0
 
 local function on_runtime_mod_setting_changed(event)
-    if event.setting == death_link_setting.name then
-        local force
-        if event.player_index == nil then
-            force = game.forces.player
-        else
-            force = game.players[event.player_index].force
-        end
-        if death_link_setting.value then
+    if event.setting == general.mod_setting_names.death_link then
+        log("Detecting a death link setting change.")
+        game.print("Detecting a death link setting change.")
+        if settings.global[general.mod_setting_names.death_link].value then
+            log("Turning deathlink on.")
+            game.print("Turning deathlink on.")
             DEATH_LINK = 1
         else
+            log("Turning deathlink off.")
+            game.print("Turning deathlink off.")
             DEATH_LINK = 0
         end
-        if force ~= nil then
-            library.dump_info()
-        end
+        library.dump_info()
     end
 end
 
@@ -50,8 +47,8 @@ local function on_player_died(event)
     if death_lock == 1 then -- don't re-trigger on same event
         return
     end
-
-    local force = event.entity.force
+    local player = game.get_player(event.player_index)
+    local force = player.force
     storage.forcedata[force.name].death_link_tick = game.tick
     library.dump_info()
     kill_players(force)

@@ -18,10 +18,6 @@ if TYPE_CHECKING:
 
 template_env: Optional[jinja2.Environment] = None
 
-data_template: Optional[jinja2.Template] = None
-data_final_template: Optional[jinja2.Template] = None
-control_template: Optional[jinja2.Template] = None
-settings_template: Optional[jinja2.Template] = None
 settings_final_template: Optional[jinja2.Template] = None
 general_template: Optional[jinja2.Template] = None
 locations_template: Optional[jinja2.Template] = None
@@ -91,9 +87,9 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, control_template, data_template, settings_template, settings_final_template, general_template, locations_template, custom_recipes_template
+    global settings_final_template, general_template, locations_template, custom_recipes_template
     with template_load_lock:
-        if not data_final_template:
+        if not settings_final_template:
             def load_template(name: str):
                 import pkgutil
                 data = pkgutil.get_data(__name__, "data/mod_template/" + name).decode()
@@ -102,10 +98,6 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
             template_env: Optional[jinja2.Environment] = \
                 jinja2.Environment(loader=jinja2.FunctionLoader(load_template))
 
-            data_template = template_env.get_template("data.lua")
-            data_final_template = template_env.get_template("data-final-fixes.lua")
-            control_template = template_env.get_template("control.lua")
-            settings_template = template_env.get_template("settings.lua")
             settings_final_template = template_env.get_template(r"Archipelago/settings-final-fixes.lua")
             general_template = template_env.get_template(r"Archipelago/general.lua")
             locations_template = template_env.get_template(r"Archipelago/locations.lua")
@@ -201,14 +193,6 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                                                 file_path=os.path.join(dirpath, filename):
                                          (arcpath, open(file_path, "rb").read()))
 
-    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/data.lua",
-    #                                  data_template.render(**template_data)))
-    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/data-final-fixes.lua",
-    #                                  data_final_template.render(**template_data)))
-    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
-    #                                  control_template.render(**template_data)))
-    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
-    #                                  settings_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/settings-final-fixes.lua",
                                       settings_final_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/general.lua",

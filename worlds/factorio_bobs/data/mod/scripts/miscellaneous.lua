@@ -215,8 +215,6 @@ local function on_rocket_launched(event)
             satellite_count = cargo_pod.get_item_count("satellite")
         end
         if satellite_count > 0 or general.goal == 0 then
-            storage.forcedata[event.rocket.force.name]['victory'] = 1
-            dumpInfo(event.rocket.force)
             game.set_game_state
             {
                 game_finished = true,
@@ -226,6 +224,16 @@ local function on_rocket_launched(event)
             }
         end
     end
+end
+
+local function on_pre_scenario_finished(event)
+    if not event.player_won then return end
+    for _, force in pairs(general.player_forces) do
+        if game.forces[force] then
+            storage.forcedata[force]['victory'] = 1
+        end
+    end
+    library.dump_info()
 end
 
 local function chain_lookup(table, ...)
@@ -240,7 +248,7 @@ end
 
 local function on_init()
     storage.forcedata = storage.forcedata or {}
-    if general.allow_impored_blueprints == false then
+    if general.allow_import_blueprints == false then
         set_permissions()
     end
 
@@ -290,6 +298,7 @@ end)
 commands.add_command("ap-spawn-silo", "Attempts to spawn a silo and cargo landing pad around 0,0", function(call)
     if general.allow_cheats then
         spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
+        spawn_entity(game.player.surface, game.player.force, "cargo-landing-pad", 0, 0, 80, true, true)
     end
 end)
 
@@ -323,8 +332,9 @@ lib.events = {
     [defines.events.on_player_created] = on_player_created,
     [defines.events.on_player_changed_force] = on_player_changed_force,
     [defines.events.on_player_removed] = on_player_removed,
+
     [defines.events.on_rocket_launched] = on_rocket_launched,
-    --[defines.events.on_surface_created] = on_surface_created,
+    [defines.events.on_pre_scenario_finished] = on_pre_scenario_finished,
     --[defines.events.on_surface_created] = on_surface_created,
 }
 lib.on_init = on_init

@@ -2,32 +2,37 @@
 local general = require("Archipelago/general")
 local library = require("libs/lib")
 
-local energy_link_setting = settings.global[general.mod_setting_names.death_link]
-if energy_link_setting.value then
+if settings.global[general.mod_setting_names.energy_link].value then
     ENERGY_INCREMENT = 10000000
 else
     ENERGY_INCREMENT = 0
 end
 
 local function on_runtime_mod_setting_changed(event)
-    if event.setting == energy_link_setting.name then
-        local force
-        if event.player_index == nil then
-            force = game.forces.player
-        else
-            force = game.players[event.player_index].force
-        end
+    if event.setting == general.mod_setting_names.energy_link then
+        log("Detecting a energy link setting change.")
+        game.print("Detecting a energy link setting change.")
 
-        if energy_link_setting.value then
+        if settings.global[general.mod_setting_names.energy_link].value then
+            log("Turning energyLink on.")
+            game.print("Turning energyLink on.")
             ENERGY_INCREMENT = 10000000
-            force.recipes["ap-energy-bridge"].enabled=true
+            for _, force in pairs(general.player_forces) do
+                if game.forces[force] then
+                    game.forces[force].recipes["ap-energy-bridge"].enabled = true
+                end
+            end
         else
+            log("Turning energyLink off.")
+            game.print("Turning energyLink off.")
             ENERGY_INCREMENT = 0
-            force.recipes["ap-energy-bridge"].enabled=false
+            for _, force in pairs(general.player_forces) do
+                if game.forces[force] then
+                    game.forces[force].recipes["ap-energy-bridge"].enabled = false
+                end
+            end
         end
-        if force ~= nil then
-            library.dump_info()
-        end
+        library.dump_info()
     end
 end
 
@@ -115,7 +120,7 @@ local function on_player_created(event)
     local player = game.players[event.player_index]
     -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
     -- For now, they will (probably) always be on the 'player' force when this event fires.
-    if energy_link_setting.value then
+    if settings.global[general.mod_setting_names.energy_link].value then
         player.force.recipes["ap-energy-bridge"].enabled=true
     else
         player.force.recipes["ap-energy-bridge"].enabled=false
@@ -127,7 +132,7 @@ local function on_force_created(event)
     storage.forcedata[force.name] = storage.forcedata[force.name] or {}
     storage.forcedata[force.name]["energy"] = storage.forcedata[force.name]["energy"] or 0
     storage.forcedata[force.name]["energy_bridges"] = storage.forcedata[force.name]["energy_bridges"] or 0
-    if energy_link_setting.value then
+    if settings.global[general.mod_setting_names.energy_link].value then
         force.recipes["ap-energy-bridge"].enabled=true
     else
         force.recipes["ap-energy-bridge"].enabled=false

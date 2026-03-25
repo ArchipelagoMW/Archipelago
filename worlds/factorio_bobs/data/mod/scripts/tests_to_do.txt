@@ -1,31 +1,12 @@
 
 Death_link:
 
-Single player:
-    test if dying sends a Death_link.
-    Test if a death_link kills the player.
-
-    Switch the setting and test those two again.
-
-    kill a different enemy to see if their death causes a deathlink.
-
 Multiplayer:
     get two people in a world and test if a death kills both players.
     
     start world, swap deathlink setting, get a second player, test if the second player also has the correct setting state. (Should desync on death if not.)
 
 Energy_link:
-
-Single player:
-    Generate a world with energy link active.
-    build a energy link.
-    send energy.
-    recieve energy.
-    send and recieve energy.
-
-    Switch the setting and test sending an recieving energy.
-
-    regenerate a world without energy link and test all the above again.
 
 Multiplayer:    
     start world, swap energy_link setting, get a second player, test if the second player also has the correct setting state. (Should desync on energy transfer if not.)
@@ -34,30 +15,14 @@ miscellaneous:
 
 Single player:
 
-    silo on spawn
-    silo random recipe
-
-    cheats on  (check if the cheat spawns a silo.)
-    cheats off (check if nothing happens.)
-
-    fill the area and check if the silo fails to spawn.
-    create a new force and see if the silo spawns.
-
-    swap the player to the new force and see if the silo spawns.
-
-    test if the blue print permissions get set propperly
-
-    test both victory conditions.
+DNF silo on spawn     Crash in generation, cause; unknown, crash already happens before refactor.
 
     make a removed technology that does not exist (but does get put in the list) and watch if the Log file contains an error.
 
 
-Item handling:
+Things to talk about;
 
-Single player:
+    cheating in the rocket silo via `/ap-spawn-silo`. No option exists to actually turn it on or off.
 
-OK  send an Item
-OK  recieve an Item
-    recieve an trap
+    With the spawning silo option. If the spawning fails, the player would still need to craft the silo, and cargo bay.
 
-OK  get some samples

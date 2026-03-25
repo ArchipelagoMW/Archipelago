@@ -1,1 +1,1 @@
-require("Archipelago.settings-final-fixes")
+require("Archipelago/settings-final-fixes")
