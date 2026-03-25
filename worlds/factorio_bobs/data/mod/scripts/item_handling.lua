@@ -218,7 +218,6 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
     end
-    log("running the get-tech command with "..serpent.line(call))
     local chunks = library.split(call.parameter, "\t")
     local item_name = chunks[1]
     local index = chunks[2]
@@ -267,7 +266,6 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     else
         game.print("Unknown Item " .. item_name)
     end
-    log("finished get-tech command with "..serpent.line(call))
 end)
 
 local lib = {}

@@ -12,15 +12,9 @@ local death_lock = 0
 
 local function on_runtime_mod_setting_changed(event)
     if event.setting == general.mod_setting_names.death_link then
-        log("Detecting a death link setting change.")
-        game.print("Detecting a death link setting change.")
         if settings.global[general.mod_setting_names.death_link].value then
-            log("Turning deathlink on.")
-            game.print("Turning deathlink on.")
             DEATH_LINK = 1
         else
-            log("Turning deathlink off.")
-            game.print("Turning deathlink off.")
             DEATH_LINK = 0
         end
         library.dump_info()
@@ -52,8 +46,6 @@ local function on_player_died(event)
     storage.forcedata[force.name].death_link_tick = game.tick
     library.dump_info()
     kill_players(force)
-    log("Finished and send the deathlink to the client....")
-    game.print("Finished and send the deathlink to the client....")
 end
 
 local function on_force_created(event)
