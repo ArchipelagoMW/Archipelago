@@ -1458,8 +1458,8 @@ async def test_runtime_gameplay_state_non_gameplay_on_tutorial_or_menu_state(moc
 
 
 @pytest.mark.asyncio
-async def test_runtime_gameplay_state_non_gameplay_on_post_normal_state(mock_bizhawk_context):
-    """AI state above normal gameplay should be classified as non-gameplay post-normal."""
+async def test_runtime_gameplay_state_non_gameplay_on_goal_clear_state(mock_bizhawk_context):
+    """Goal-clear AI states should remain classified as non-gameplay."""
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -1470,8 +1470,25 @@ async def test_runtime_gameplay_state_non_gameplay_on_post_normal_state(mock_biz
         active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
 
     assert active is False
-    assert reason == "non_gameplay_post_normal"
+    assert reason == "non_gameplay_goal_clear"
     assert ai_state == 9999
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_fail_open_on_unknown_post_normal_state(mock_bizhawk_context):
+    """Unknown post-300 AI states should fail open so item delivery is not blocked."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(301).to_bytes(4, 'little')]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is True
+    assert reason == "gameplay_active"
+    assert ai_state == 301
 
 
 @pytest.mark.asyncio

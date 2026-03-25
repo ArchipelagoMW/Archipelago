@@ -940,8 +940,8 @@ continue in menu/cutscene/post-clear phases where state may be unstable.
 Implemented a runtime gate in `KirbyAmClient.game_watcher` based on
 `ai_kirby_state_native` (`0x0203AD2C`, u32):
 
-- gameplay-active when `ai_state == 300`
-- defer polling/write behavior for all other bands
+- defer polling/write behavior for known non-gameplay states (`ai_state < 300`, and goal-clear `9999`/`10000`)
+- fail open as gameplay-active for unknown post-300 states so item delivery is not blocked (Issue #419)
 
 When non-gameplay is detected, watcher now:
 - defers shard and boss-defeat location polling
