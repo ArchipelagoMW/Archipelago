@@ -92,6 +92,17 @@ def test_vitality_chest_default_items_are_useful_vitality() -> None:
         assert "Vitality" in item.tags, f"Expected vitality default for {location.name}"
 
 
+def test_sound_player_chest_default_item_is_useful_sound_player() -> None:
+    sound_player_locations = [loc for loc in data.locations.values() if loc.category == LocationCategory.SOUND_PLAYER_CHEST]
+    assert len(sound_player_locations) == 1
+
+    location = sound_player_locations[0]
+    assert location.default_item is not None, f"Expected default_item for {location.name}"
+    item = data.items[location.default_item]
+    assert item.classification & ItemClassification.useful
+    assert "SoundPlayer" in item.tags
+
+
 def test_filler_catalog_includes_multiple_life_items() -> None:
     filler_items = [item for item in data.items.values() if item.classification == ItemClassification.filler]
     filler_labels = {item.label for item in filler_items}
@@ -200,7 +211,8 @@ def test_vanilla_shards_are_locked_to_major_chests_not_boss_defeats() -> None:
     _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
-    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + (_major_chest_count - _shard_chest_count)
+    _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
+    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + _sound_player_chest_count + (_major_chest_count - _shard_chest_count)
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
 
@@ -218,7 +230,8 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
+    _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
     _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
-    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + (_major_chest_count - _shard_chest_count) + _shard_item_count
+    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + _sound_player_chest_count + (_major_chest_count - _shard_chest_count) + _shard_item_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert len(shard_items) == _shard_item_count

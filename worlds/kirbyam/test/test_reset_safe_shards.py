@@ -78,6 +78,20 @@ def test_payload_tracks_vitality_chest_checks_and_ap_vitality_apply():
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 18u" in content, "Vitality AP item IDs should be handled"
 
 
+def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
+    """Verify Sound Player chest checks are AP-owned and unlock only on AP item receipt."""
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, 'r') as f:
+        content = f.read()
+
+    assert "AP_SOUND_PLAYER_CHEST_FLAGS" in content, "Sound Player chest transport register should be defined"
+    assert "ap_on_collect_sound_player_chest" in content, "Sound Player chest hook target should exist"
+    assert "ap_set_sound_player_chest_flag(0u)" in content, "Sound Player chest hook should set AP check bit"
+    assert "KIRBY_COLLECT_SOUND_PLAYER_FN(0u)" in content, "AP Sound Player item should apply native unlock"
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 25u" in content, "Sound Player AP item ID should be handled"
+
+
 def test_sram_checksum_fields_updated():
     """Verify that checksum fields are updated alongside shard persistence."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")

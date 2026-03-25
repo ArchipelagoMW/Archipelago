@@ -24,6 +24,7 @@
 #define AP_BOSS_DEFEAT_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x24u))
 #define AP_MAJOR_CHEST_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x28u))
 #define AP_VITALITY_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x2Cu))
+#define AP_SOUND_PLAYER_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x30u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 #define KIRBY_BIG_CHEST_FLAGS_ADDR 0x0203897Cu
@@ -101,6 +102,12 @@ static void ap_set_vitality_chest_flag(uint32_t chest_index) {
     }
 }
 
+static void ap_set_sound_player_chest_flag(uint32_t chest_index) {
+    if (chest_index < 32u) {
+        AP_SOUND_PLAYER_CHEST_FLAGS |= (1u << chest_index);
+    }
+}
+
 static void ap_set_vitality_chest_flag_for_room(uint16_t room_id) {
     switch (room_id) {
         case 739u: // Carrot Castle 5-23 Big Chest Vitality
@@ -163,6 +170,21 @@ __attribute__((used)) void ap_on_collect_vitality_chest(void) {
     register uint32_t chest_obj_ptr asm("r5");
     uint16_t room_id = *(volatile uint16_t*)(chest_obj_ptr + 0x60u);
     ap_set_vitality_chest_flag_for_room(room_id);
+}
+
+typedef void (*KirbyCollectSoundPlayerFn)(uint32_t reward_index);
+#define KIRBY_COLLECT_SOUND_PLAYER_FN ((KirbyCollectSoundPlayerFn)0x08019E69u)
+
+// Hook target for native Sound Player chest reward collection. Reward index 0 is
+// the Sound Player unlock and should become AP-owned; all other native rewards on
+// this call path should keep vanilla behavior.
+__attribute__((used)) void ap_on_collect_sound_player_chest(uint32_t reward_index) {
+    if (reward_index == 0u) {
+        ap_set_sound_player_chest_flag(0u);
+        return;
+    }
+
+    KIRBY_COLLECT_SOUND_PLAYER_FN(reward_index);
 }
 
 static void ap_sync_active_kirby_health_from_vitality(void) {
@@ -250,6 +272,12 @@ static void ap_apply_item(uint32_t ap_item_id) {
     // VITALITY_COUNTER_1..VITALITY_COUNTER_4 = BASE+18 .. BASE+21
     if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 18u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 21u)) {
         ap_grant_vitality_counter();
+        return;
+    }
+
+    // SOUND_PLAYER = BASE+25
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 25u)) {
+        KIRBY_COLLECT_SOUND_PLAYER_FN(0u);
         return;
     }
 

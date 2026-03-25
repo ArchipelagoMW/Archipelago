@@ -1275,6 +1275,29 @@ AP-delivered vitality items now apply native persistent vitality semantics in pa
 - Added/updated tests for vitality chest location data, client polling, item pool sizing,
   patch callsite constants, and payload vitality signaling/apply behavior.
 
+## Issue #408: Sound Player Chest AP Check with AP-Owned Unlock
+
+### Problem
+The native Sound Player chest unlocks the Sound Player immediately on open. That bypasses
+AP item ownership semantics when the chest is modeled as an AP location.
+
+### Solution
+Added a dedicated Sound Player chest AP location family and transport signal path:
+- Added `sound_player_chest_flags` at `0x0202C030` in the mailbox transport block.
+- Added payload hook target `ap_on_collect_sound_player_chest` and patched the native
+  `sub_08019E68` callsite (`0x0000B264`) to intercept Sound Player chest reward index `0`.
+- Hook behavior:
+  - reward index `0`: set AP transport bit 0 and suppress native immediate unlock.
+  - non-zero reward indices on this native path: preserve vanilla behavior via tail-call
+    to native `sub_08019E68`.
+- Added AP location `SOUND_PLAYER_CHEST` (`3960304`, bit 0) and AP item `SOUND_PLAYER`
+  (`3860025`).
+- AP-delivered `SOUND_PLAYER` now applies native unlock by invoking `sub_08019E68(0)`.
+
+### Validation
+- Added/updated tests for Sound Player data sanity, client polling, payload hook/apply
+  semantics, and patch callsite constant coverage.
+
 ## Issue #338: Enemy Copy-Ability Non-Vanilla Modes Must Not Silently Ship as Vanilla
 
 ### Problem

@@ -52,6 +52,18 @@
         }
       ]
     },
+    "sound_player_chest_checks": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "sound_player_chest_flags",
+          "address": "0x0202C030",
+          "width": "u32",
+          "source": "ROM payload Sound Player chest hook transport register",
+          "verification": "Integrated and used by polling path for Sound Player chest AP checks; native Sound Player chest unlock is intercepted and applied only through AP item delivery"
+        }
+      ]
+    },
     "dungeon_boss_defeat": {
       "status": "integrated",
       "entries": [

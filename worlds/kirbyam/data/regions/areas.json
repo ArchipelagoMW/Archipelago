@@ -60,7 +60,7 @@
   },
 
   "REGION_CANDY_CONSTELLATION/MAIN": {
-    "locations": ["BOSS_DEFEAT_3", "MAJOR_CHEST_CANDY_CONSTELLATION"],
+    "locations": ["BOSS_DEFEAT_3", "MAJOR_CHEST_CANDY_CONSTELLATION", "SOUND_PLAYER_CHEST"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": [],

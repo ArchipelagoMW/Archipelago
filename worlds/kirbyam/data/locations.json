@@ -191,5 +191,14 @@
     "bit_index": 3,
     "category": "VITALITY_CHEST",
     "location_id": 3960303
+  },
+  "SOUND_PLAYER_CHEST": {
+    "label": "Candy Constellation - Sound Player Chest",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "default_item": "SOUND_PLAYER",
+    "tags": ["BigChest", "SoundPlayer", "MAP_CANDY_CONSTELLATION"],
+    "bit_index": 0,
+    "category": "SOUND_PLAYER_CHEST",
+    "location_id": 3960304
   }
 }

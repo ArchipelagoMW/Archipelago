@@ -133,5 +133,11 @@
     "classification": "USEFUL",
     "item_id": 3860021,
     "tags": ["Vitality", "Useful"]
+  },
+  "SOUND_PLAYER": {
+    "label": "Sound Player",
+    "classification": "USEFUL",
+    "item_id": 3860025,
+    "tags": ["SoundPlayer", "Useful"]
   }
 }

@@ -100,6 +100,7 @@ class LocationCategory(IntEnum):
     BOSS_DEFEAT = 2
     MAJOR_CHEST = 9
     VITALITY_CHEST = 10
+    SOUND_PLAYER_CHEST = 11
 
 
 class ItemData(NamedTuple):

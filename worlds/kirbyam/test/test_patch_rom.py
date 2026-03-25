@@ -46,6 +46,10 @@ def test_vitality_chest_collect_call_offset_matches_verified_hook_site() -> None
     assert patch_rom.VITALITY_CHEST_COLLECT_CALL_OFFSET == 0x0000B0CC
 
 
+def test_sound_player_chest_collect_call_offset_matches_verified_hook_site() -> None:
+    assert patch_rom.SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET == 0x0000B264
+
+
 # ── Negative-path tests: parse_args ──────────────────────────────────────────
 
 def test_parse_args_source_type_arg_missing_rom_positional() -> None:

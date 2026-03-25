@@ -93,6 +93,13 @@ class KirbyAmClient(BizHawkClient):
                 continue
             self._vitality_chest_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
+        # Sound Player chest bitfield → location IDs (SOUND_PLAYER_CHEST category).
+        self._sound_player_chest_location_ids_by_bit: dict[int, list[int]] = {}
+        for loc in data.locations.values():
+            if loc.bit_index is None or loc.category != LocationCategory.SOUND_PLAYER_CHEST:
+                continue
+            self._sound_player_chest_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+
         # One-time RAM state load
         self._ram_state_loaded: bool = False
 
@@ -114,6 +121,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_boss_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_major_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_vitality_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+        self._last_sound_player_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
         # Notification pipeline state (Issue #83)
         self._notification_settings_loaded: bool = False
@@ -159,6 +167,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_boss_poll_log = None
         self._last_major_chest_poll_log = None
         self._last_vitality_chest_poll_log = None
+        self._last_sound_player_chest_poll_log = None
         self._last_boss_probe_snapshot = None
         self._boss_probe_stream_marker = None
         self._unsafe_delivery_probe_stream_marker = None
@@ -483,6 +492,9 @@ class KirbyAmClient(BizHawkClient):
 
         # Vitality chest location polling via dedicated vitality_chest_flags transport register
         await self._poll_vitality_chest_locations(ctx)
+
+        # Sound Player chest location polling via dedicated sound_player_chest_flags register
+        await self._poll_sound_player_chest_locations(ctx)
 
         # Candidate discovery for non-shard boss defeat signals.
         await self._probe_boss_defeat_candidates(ctx)
@@ -856,6 +868,53 @@ class KirbyAmClient(BizHawkClient):
                 self._last_vitality_chest_poll_log = chest_log_state
         else:
             self._last_vitality_chest_poll_log = None
+
+    async def _poll_sound_player_chest_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Read transport sound_player_chest_flags and map set bits to Sound Player chest locations.
+
+        This register is written by the ROM payload's Sound Player chest hook and mirrors
+        the same resend/dedupe semantics used by boss, major, and vitality polling.
+        """
+        chest_addr = self._transport_addr("sound_player_chest_flags")
+        if chest_addr is None:
+            return
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(chest_addr, 4, "System Bus")]))[0]
+        chest_bits = self._u32_le(raw)
+
+        mapped_checked_locations: set[int] = set()
+        for bit in sorted(self._sound_player_chest_location_ids_by_bit.keys()):
+            if (chest_bits >> bit) & 1:
+                mapped_checked_locations.update(self._sound_player_chest_location_ids_by_bit.get(bit, []))
+
+        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
+        if missing_on_server:
+            from CommonClient import logger
+
+            chest_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
+            if chest_log_state != self._last_sound_player_chest_poll_log:
+                logger.info(
+                    "KirbyAM: resending sound-player-chest LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                )
+                self._last_sound_player_chest_poll_log = chest_log_state
+
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+        elif mapped_checked_locations:
+            from CommonClient import logger
+
+            chest_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
+            if chest_log_state != self._last_sound_player_chest_poll_log:
+                logger.debug(
+                    "KirbyAM: dedupe suppressed sound-player-chest LocationChecks (all RAM-derived checks already acknowledged: %s)",
+                    already_acknowledged,
+                )
+                self._last_sound_player_chest_poll_log = chest_log_state
+        else:
+            self._last_sound_player_chest_poll_log = None
 
     async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

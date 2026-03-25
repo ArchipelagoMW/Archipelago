@@ -182,6 +182,21 @@ Expected current mapping:
 - `bit 2` -> `VITALITY_CHEST_RADISH_RUINS`
 - `bit 3` -> `VITALITY_CHEST_CANDY_CONSTELLATION`
 
+## Sound Player Chest Check (Issue #408)
+
+Validate that the native Sound Player chest emits only an AP location check and does not
+perform immediate native unlock.
+
+1. Connect AP + BizHawk session with KirbyAM client logs visible.
+2. Open BizHawk Memory Viewer and watch `0x0202C030` as a 32-bit value.
+3. Open the native Sound Player chest.
+4. Confirm `bit 0` flips from `0` to `1` and client emits `SOUND_PLAYER_CHEST` check.
+5. Confirm native Sound Player remains locked until AP `SOUND_PLAYER` item is delivered.
+6. Deliver AP `SOUND_PLAYER` and confirm native Sound Player unlock applies at receipt.
+
+Expected current mapping:
+- `bit 0` -> `SOUND_PLAYER_CHEST`
+
 ## Notification Pipeline Check (Issue #83)
 
 Validate receive/send notifications and reconnect dedupe behavior.

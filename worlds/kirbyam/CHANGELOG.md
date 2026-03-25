@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Sound Player as a useful AP item and split its chest into a dedicated AP location check path so opening the chest reports `SOUND_PLAYER_CHEST` without immediate native unlock; native Sound Player now unlocks only on AP `SOUND_PLAYER` item receipt.
+
 ## v0.0.11
 
 - Hide KirbyAM goal/event-style objective checks from datapackage location exports so `/locations` no longer lists them as normal AP locations.
