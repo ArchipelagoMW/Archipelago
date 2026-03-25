@@ -24,18 +24,18 @@ class DBGamesPackageCache(GamesPackageCache):
         # for games started on webhost, full_games_package is likely unpopulated and only has the checksum field
         cache_key = (game, full_games_package.get("checksum", None))
         cached = self._get(cache_key)
-        if any(value is None for value in cached):
-            if "checksum" not in full_games_package:
-                return super().get(game, full_games_package)  # no checksum, assume fully populated
+        if all(value is not None for value in cached):
+            return cached  # type: ignore # mypy doesn't understand all value is not None
 
-            from WebHostLib.models import GameDataPackage
+        if "checksum" not in full_games_package:
+            return super().get(game, full_games_package)  # no checksum, assume fully populated
 
-            row: GameDataPackage | None = GameDataPackage.get(checksum=full_games_package["checksum"])
-            if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
-                return super().get(game, restricted_loads(row.data))
-            return super().get(game, full_games_package)  # ... in which case full_games_package should be populated
+        from WebHostLib.models import GameDataPackage
 
-        return cached  # type: ignore # mypy doesn't understand any value is None
+        row: GameDataPackage | None = GameDataPackage.get(checksum=full_games_package["checksum"])
+        if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8 ...
+            return super().get(game, restricted_loads(row.data))
+        return super().get(game, full_games_package)  # ... in which case full_games_package should be populated
 
     @override
     def get_static(self, game: str) -> tuple[GamesPackage, ItemNameGroups, LocationNameGroups]:
