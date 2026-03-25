@@ -1,14 +1,15 @@
 import numpy
 
 class Data:
-    def __init__(self,ui):
+    def __init__(self,ui, goal, shop_upgrades, shop_colors, shop_music, shop_sounds, gift_coins,
+                          milestone_interval, timecap_interval, Starting_coin_count, Death_link, Death_link_mercy, Time_dilation):
         self.ui = ui
-        self.milestoneint = 1
+        self.milestoneint = milestone_interval
         self.archipelagoactive = False
-        self.goal = 600
+        self.goal = goal
         self._milestonesforce = 1
         self._points = 0
-        self.timecapint = 1
+        self.timecapint = timecap_interval
         self.randoopts = [False for _ in range (4)]
 
         self.WINDOW_WIDTH = 1920
@@ -21,16 +22,22 @@ class Data:
         self.inputs[2] = "Slot Name"
         self.inputs[3] = ""
         
+        self.randoopts[0] = shop_upgrades
+        self.randoopts[1] = shop_colors
+        self.randoopts[2] = shop_music
+        self.randoopts[3] =shop_sounds
+
         self.devcount = 0
-        self.timescale = 1
+        self.timescale = Time_dilation
         self.devmode = 0
-        self.giftcoins = 0
+        self.giftcoins = gift_coins
+        self.giftedcoins = Starting_coin_count
         self.spentcoins = 0
 
-        self.deathlink = False
+        self.deathlink = Death_link
         self.deathlinkcount = 0
-        self.deathlinkmercy = 1
-
+        self.deathlinkmercy = Death_link_mercy
+        self.needsync = 0
         self.connected = 0
         self._maxtime = 0
         self._currenttime = 0
@@ -118,7 +125,7 @@ class Data:
         for x in range(86400):
             self._milestones[x,0] = (x+1)*self.milestoneint
             self._milestones[x,2] = x+1
-        self._shop = [[[0 for _ in range (4)] for _ in range (10)] for _ in range (5)]
+        self._shop = [[[0 for _ in range (5)] for _ in range (10)] for _ in range (4)]
         self._shop[1][0][1] = 1
         self._shop[1][0][2] = 1
         for x in range (4):
@@ -131,6 +138,23 @@ class Data:
         self._shop[0][8][3] = ""
         self._shop[0][9][3] = ""
         
+
+    def update_arch_settings(self,goal, shop_upgrades, shop_colors, shop_music, shop_sounds, gift_coins,
+                          milestone_interval, timecap_interval, Starting_coin_count, Death_link, Death_link_mercy, Time_dilation):
+        self.milestoneint = milestone_interval
+        self.archipelagoactive = True
+        self.goal = goal
+        self.timecapint = timecap_interval
+        self.randoopts[0] = shop_upgrades
+        self.randoopts[1] = shop_colors
+        self.randoopts[2] = shop_music
+        self.randoopts[3] =shop_sounds
+        self.timescale = Time_dilation
+        self.giftcoins = gift_coins
+        self.giftedcoins = Starting_coin_count
+        self.deathlink = Death_link
+        self.deathlinkmercy = Death_link_mercy
+
 
     @property
     def currenttime(self):

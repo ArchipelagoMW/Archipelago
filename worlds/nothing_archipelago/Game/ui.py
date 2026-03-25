@@ -1,5 +1,5 @@
 import pygame, numpy
-from buttons import Button
+from .buttons import Button
 
 
 

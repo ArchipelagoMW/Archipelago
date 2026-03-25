@@ -36,18 +36,15 @@ class IncRoomInfo(APPacket):
         self.seed_name: str = data['seed_name']
         self.time: str = data['time']
 
-    def create_response(self, slot_name: str, password: str, uuid: int, version: dict[str, int | str], client_name_tag: str = "APNothing") -> None:
+    def create_response(self, slot_name: str, password: str, uuid: int, version: dict[str, int | str], client_name_tag: str = "nothing_archipelago") -> None:
         self.response: dict[str, any] = {
             'cmd': 'Connect',
-            'game': '',
+            'game': client_name_tag,
             'items_handling': 0,
             'name': slot_name,
             'password': password,
             'slot_data': True,
-            'tags': [
-                'HintGame',
-                client_name_tag
-            ],
+            'tags': [],
             'uuid': uuid,
             'version': version
         }
