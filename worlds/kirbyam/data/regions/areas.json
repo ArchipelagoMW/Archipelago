@@ -60,7 +60,7 @@
   },
 
   "REGION_CANDY_CONSTELLATION/MAIN": {
-    "locations": ["BOSS_DEFEAT_3", "MAJOR_CHEST_CANDY_CONSTELLATION", "SOUND_PLAYER_CHEST"],
+    "locations": ["BOSS_DEFEAT_3", "MAJOR_CHEST_CANDY_CONSTELLATION", "SOUND_PLAYER_CHEST", "VITALITY_CHEST_CANDY_CONSTELLATION"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": [],
@@ -81,7 +81,7 @@
   },
 
   "REGION_OLIVE_OCEAN/MAIN": {
-    "locations": ["BOSS_DEFEAT_4", "MAJOR_CHEST_OLIVE_OCEAN"],
+    "locations": ["BOSS_DEFEAT_4", "MAJOR_CHEST_OLIVE_OCEAN", "VITALITY_CHEST_OLIVE_OCEAN"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": [],
@@ -148,7 +148,7 @@
   },
 
   "REGION_CARROT_CASTLE/MAIN": {
-    "locations": ["BOSS_DEFEAT_7", "MAJOR_CHEST_CARROT_CASTLE"],
+    "locations": ["BOSS_DEFEAT_7", "MAJOR_CHEST_CARROT_CASTLE", "VITALITY_CHEST_CARROT_CASTLE"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": [],
@@ -169,7 +169,7 @@
   },
 
   "REGION_RADISH_RUINS/MAIN": {
-    "locations": ["BOSS_DEFEAT_8", "MAJOR_CHEST_RADISH_RUINS"],
+    "locations": ["BOSS_DEFEAT_8", "MAJOR_CHEST_RADISH_RUINS", "VITALITY_CHEST_RADISH_RUINS"],
     "events": [],
     "exits": ["REGION_GAME_START"],
     "warps": [],
