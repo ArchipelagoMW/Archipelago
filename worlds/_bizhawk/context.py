@@ -300,7 +300,13 @@ async def _game_watcher(ctx: BizHawkClientContext):
             ctx.auth_status = AuthStatus.NOT_AUTHENTICATED
 
         # Call the handler's game watcher
-        await ctx.client_handler.game_watcher(ctx)
+        try:
+            await ctx.client_handler.game_watcher(ctx)
+        except RequestFailedError as exc:
+            logger.info(f"Lost connection to BizHawk: {exc.args[0]}")
+            continue
+        except NotConnectedError:
+            continue
 
 
 async def _run_game(rom: str):
