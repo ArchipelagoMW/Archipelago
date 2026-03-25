@@ -124,9 +124,20 @@ class KirbyAmWorld(World):
         "MAJOR_CHEST_CARROT_CASTLE",
         "MAJOR_CHEST_RADISH_RUINS",
     )
-    # Shard item labels in the same positional order as _SHARD_CHEST_KEY_ORDER.
-    # Using labels (stable identifiers from items.json) rather than sorted item IDs
-    # keeps the vanilla chest→shard mapping correct even if item IDs are reorganised.
+    _BOSS_DEFEAT_KEY_ORDER: ClassVar[tuple[str, ...]] = (
+        "BOSS_DEFEAT_1",
+        "BOSS_DEFEAT_2",
+        "BOSS_DEFEAT_3",
+        "BOSS_DEFEAT_4",
+        "BOSS_DEFEAT_5",
+        "BOSS_DEFEAT_6",
+        "BOSS_DEFEAT_7",
+        "BOSS_DEFEAT_8",
+    )
+    # Shard item labels in the same positional order as _BOSS_DEFEAT_KEY_ORDER.
+    # Vanilla placement follows boss-defeat index -> shard label. This order also
+    # matches the legacy shard-chest ordering, but boss-defeat ordering is the
+    # authoritative mapping for the current contract.
     _SHARD_ITEM_LABEL_ORDER: ClassVar[tuple[str, ...]] = (
         "Mustard Mountain - Mirror Shard",
         "Moonlight Mansion - Mirror Shard",
@@ -137,8 +148,6 @@ class KirbyAmWorld(World):
         "Carrot Castle - Mirror Shard",
         "Radish Ruins - Mirror Shard",
     )
-    _RAINBOW_ROUTE_CHEST_KEY: ClassVar[str] = "MAJOR_CHEST_RAINBOW_ROUTE"
-
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         # If you don't have sanity_check.py yet, comment these out for now.
@@ -150,6 +159,18 @@ class KirbyAmWorld(World):
     def get_filler_item_name(self) -> str:
         return self.random.choice(self.ACTIVE_FILLER_POOL)
 
+    def _ordered_boss_defeat_locations(self, boss_locations: list[KirbyAmLocation]) -> list[KirbyAmLocation]:
+        boss_locations_by_key = {
+            loc.key: loc for loc in boss_locations if loc.key is not None
+        }
+        ordered_boss_locations: list[KirbyAmLocation] = []
+        for boss_key in self._BOSS_DEFEAT_KEY_ORDER:
+            boss_loc = boss_locations_by_key.get(boss_key)
+            if boss_loc is None:
+                raise ValueError(f"KirbyAM boss-defeat location missing from region graph: {boss_key}")
+            ordered_boss_locations.append(boss_loc)
+        return ordered_boss_locations
+
     # Pre-generation adjustments
     def generate_early(self) -> None:
         # Track generation start
@@ -157,13 +178,7 @@ class KirbyAmWorld(World):
         log_generation_start(self.player, self.player_name, self.options.as_dict("goal", "shards", "death_link"))
 
         with generation_stage("generate_early", self.player, self.player_name):
-            # If shards are shuffled as items, they must be local to the ROM unless you implement remote shard handling.
-            if self.options.shards.value == RandomizeShards.option_shuffle:
-                self.logger.debug("Shards are shuffled; marking them as local items.")
-                self.options.local_items.value.update(self.item_name_groups.get("Shard", set()))
-                logger.info(f"[P{self.player}] Shards marked as local items (shuffle mode)")
-            else:
-                logger.info(f"[P{self.player}] Shards mode: {self.options.shards.current_key}")
+            logger.info(f"[P{self.player}] Shards mode: {self.options.shards.current_key}")
 
             mode = int(self.options.enemy_copy_ability_randomization.value)
             randomize_boss_spawned = bool(self.options.randomize_boss_spawned_ability_grants.value)
@@ -277,19 +292,6 @@ class KirbyAmWorld(World):
                     shard_label_to_code[label] for label in self._SHARD_ITEM_LABEL_ORDER
                 ]
 
-                shard_chest_locations: list[KirbyAmLocation] = []
-                for chest_key in self._SHARD_CHEST_KEY_ORDER:
-                    shard_chest = location_by_key.get(chest_key)
-                    if shard_chest is None:
-                        raise ValueError(f"KirbyAM shard chest location missing from region graph: {chest_key}")
-                    shard_chest_locations.append(shard_chest)
-
-                rainbow_route_chest = location_by_key.get(self._RAINBOW_ROUTE_CHEST_KEY)
-                if rainbow_route_chest is None:
-                    raise ValueError(
-                        f"KirbyAM non-shard chest location missing from region graph: {self._RAINBOW_ROUTE_CHEST_KEY}"
-                    )
-
                 expected_boss_defeat_count = sum(
                     1 for m in kirby_data.locations.values()
                     if m.category == LocationCategory.BOSS_DEFEAT
@@ -300,42 +302,55 @@ class KirbyAmWorld(World):
                         f" found {len(boss_locations)}"
                     )
 
-                # Place shards onto major-chest locations in vanilla/shuffle modes.
-                if self.options.shards.value in {RandomizeShards.option_vanilla, RandomizeShards.option_shuffle}:
-                    if self.options.shards.value == RandomizeShards.option_vanilla:
-                        shard_codes_for_chests = shard_item_codes
-                    else:
-                        shard_codes_for_chests = list(shard_item_codes)
-                        self.random.shuffle(shard_codes_for_chests)
+                # In vanilla shard mode, each area's boss defeat location awards
+                # that area's matching shard (fixed AP placement).
+                if self.options.shards.value == RandomizeShards.option_vanilla:
+                    ordered_boss_locations = self._ordered_boss_defeat_locations(boss_locations)
 
-                    if len(shard_chest_locations) != len(shard_codes_for_chests):
+                    if len(ordered_boss_locations) != len(shard_item_codes):
                         raise ValueError(
-                            "KirbyAM shard placement mismatch: %d shard chest locations vs %d shard items"
-                            % (len(shard_chest_locations), len(shard_codes_for_chests))
+                            "KirbyAM shard placement mismatch: %d ordered boss locations vs %d shard items"
+                            % (len(ordered_boss_locations), len(shard_item_codes))
                         )
-                    for chest_loc, shard_code in zip(shard_chest_locations, shard_codes_for_chests):
-                        chest_loc.place_locked_item(self.create_item_by_code(shard_code))
-                        chest_loc.progress_type = LocationProgressType.DEFAULT
+                    for boss_loc, shard_code in zip(ordered_boss_locations, shard_item_codes):
+                        boss_loc.place_locked_item(self.create_item_by_code(shard_code))
+                        boss_loc.progress_type = LocationProgressType.DEFAULT
                         locked_shard_count += 1
 
                     logger.info(
-                        "[P%s] Locked %s shard items onto major-chest locations (mode=%s)",
+                        "[P%s] Locked %s shard items onto boss-defeat locations (mode=%s)",
                         self.player,
                         locked_shard_count,
                         self.options.shards.current_key,
                     )
 
-                # Build the non-shard pool from boss rewards, vitality chest rewards,
-                # and Rainbow Route's big chest reward.
+                # Build default items for all still-open physical locations.
                 base_non_shard_codes: list[int] = []
-                for loc in boss_locations + vitality_chest_locations + sound_player_chest_locations + [rainbow_route_chest]:
+                base_non_shard_locations = [
+                    loc
+                    for loc in boss_locations + major_chest_locations + vitality_chest_locations + sound_player_chest_locations
+                    if loc.item is None
+                ]
+
+                for loc in base_non_shard_locations:
                     if loc.default_item_code is None:
                         raise ValueError(f"KirbyAM location '{loc.name}' is missing a default item code")
                     base_non_shard_codes.append(loc.default_item_code)
 
                 if self.options.shards.value == RandomizeShards.option_completely_random:
-                    randomized_item_codes.extend(shard_item_codes)
-                randomized_item_codes.extend(base_non_shard_codes)
+                    if len(shard_item_codes) > len(base_non_shard_codes):
+                        raise ValueError(
+                            "KirbyAM shard pool mismatch: shard item count %d exceeds open physical locations %d"
+                            % (len(shard_item_codes), len(base_non_shard_codes))
+                        )
+                    codes_for_open_locations = list(base_non_shard_codes)
+                    replacement_indices = list(range(len(codes_for_open_locations)))
+                    self.random.shuffle(replacement_indices)
+                    for replacement_index, shard_code in zip(replacement_indices, shard_item_codes):
+                        codes_for_open_locations[replacement_index] = shard_code
+                    randomized_item_codes.extend(codes_for_open_locations)
+                else:
+                    randomized_item_codes.extend(base_non_shard_codes)
 
                 open_physical_locations = [
                     loc for loc in boss_locations + major_chest_locations + vitality_chest_locations + sound_player_chest_locations

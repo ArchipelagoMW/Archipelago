@@ -49,7 +49,6 @@ def _build_world_for_create_items(shard_mode: int) -> tuple[KirbyAmWorld, list[K
     world.options = SimpleNamespace(
         shards=SimpleNamespace(value=shard_mode, current_key={
             RandomizeShards.option_vanilla: "vanilla",
-            RandomizeShards.option_shuffle: "shuffle",
             RandomizeShards.option_completely_random: "completely_random",
         }[shard_mode])
     )
@@ -195,7 +194,7 @@ def test_goal_locations_are_converted_to_addressless_events() -> None:
     assert goal_location.address is None
 
 
-def test_vanilla_shards_are_locked_to_major_chests_not_boss_defeats() -> None:
+def test_vanilla_shards_are_locked_to_boss_defeats() -> None:
     world, locations = _build_world_for_create_items(RandomizeShards.option_vanilla)
 
     world.create_items()
@@ -203,16 +202,17 @@ def test_vanilla_shards_are_locked_to_major_chests_not_boss_defeats() -> None:
     boss_locations = [loc for loc in locations if data.locations[loc.key].category == LocationCategory.BOSS_DEFEAT]
     chest_locations = [loc for loc in locations if data.locations[loc.key].category == LocationCategory.MAJOR_CHEST]
 
-    assert all(loc.item is None for loc in boss_locations)
-    locked_chest_shards = [loc.item.name for loc in chest_locations if loc.item is not None]
-    assert len(locked_chest_shards) == 8
-    assert all("Mirror Shard" in item_name for item_name in locked_chest_shards)
-    _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
-    _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
+    key_to_boss_location = {loc.key: loc for loc in boss_locations}
+    ordered_boss_locations = [key_to_boss_location[key] for key in KirbyAmWorld._BOSS_DEFEAT_KEY_ORDER]
+    locked_boss_shards = [loc.item.name for loc in ordered_boss_locations if loc.item is not None]
+    assert len(locked_boss_shards) == 8
+    assert all("Mirror Shard" in item_name for item_name in locked_boss_shards)
+    assert locked_boss_shards == list(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
+    assert all(loc.item is None for loc in chest_locations)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
     _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
-    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + _sound_player_chest_count + (_major_chest_count - _shard_chest_count)
+    _expected_pool_size = _major_chest_count + _vitality_chest_count + _sound_player_chest_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
 
@@ -227,11 +227,11 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
 
     shard_items = [item for item in world.multiworld.itempool if "Shard" in item.tags]
     _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
-    _shard_chest_count = len(KirbyAmWorld._SHARD_CHEST_KEY_ORDER)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
     _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
     _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
-    _expected_pool_size = _boss_defeat_count + _vitality_chest_count + _sound_player_chest_count + (_major_chest_count - _shard_chest_count) + _shard_item_count
+    _open_non_goal_location_count = _boss_defeat_count + _major_chest_count + _vitality_chest_count + _sound_player_chest_count
+    _expected_pool_size = _open_non_goal_location_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert len(shard_items) == _shard_item_count
