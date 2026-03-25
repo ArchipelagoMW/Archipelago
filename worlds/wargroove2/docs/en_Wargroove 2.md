@@ -49,8 +49,8 @@ All final levels require the "Final Center". The "Northern Finale" for example, 
 ## Contributing levels to the randomizer
 
 Anybody can contribute levels to the Wargroove 2 randomizer.
-A contributor's guide can be found 
-[here](https://docs.google.com/documen/d/1ovGGTKYJsJcLH4kLZ2k2FQes82sQ96C35gF6j_akCf4/edit?usp=sharing).
+You can find more information in the
+[contributor's guide](https://docs.google.com/document/d/1ovGGTKYJsJcLH4kLZ2k2FQes82sQ96C35gF6j_akCf4/edit?usp=sharing).
 
 Current Contributors are:
 - Fly Hyping (AKA Fly Sniper, for levels and code)
