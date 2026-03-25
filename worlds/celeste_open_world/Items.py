@@ -93,7 +93,7 @@ class CelesteItemData(NamedTuple):
 
 
 collectable_item_data_table: dict[str, CelesteItemData] = {
-    ItemName.strawberry: CelesteItemData(celeste_base_id + 0x0, ItemClassification.progression_skip_balancing),
+    ItemName.strawberry: CelesteItemData(celeste_base_id + 0x0, ItemClassification.progression_deprioritized_skip_balancing),
     ItemName.raspberry:  CelesteItemData(celeste_base_id + 0x1, ItemClassification.filler),
 }
 
