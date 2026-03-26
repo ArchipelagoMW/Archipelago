@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Improve sent item notifications to include detailed information (Issue #432): notifications now display format `"Sent <item_name> to <receiver_name> (<location_name>)"` (sender name omitted; the local player already knows who sent the item) with graceful fallback when location context unavailable. Item names resolve from AP item-name context for the relevant slot, falling back to world item data, then `"Item <id>"`; location names from AP location address mappings; and player names from AP context or player ID fallback.
 - Fix item receipt stalls in v0.0.11 by relaxing gameplay gate classification: known menu/cutscene/goal-clear states still defer new mailbox writes, but unknown post-300 AI states now fail open as gameplay-active so incoming AP items and `/release` items can deliver normally (Issue #419).
 - Fix vitality chest locations not appearing in Archipelago: add vitality chest location definitions to regions in `areas.json` so they are properly instantiated as AP locations and recognized during world generation (Issue #428).
 - Fix BizHawk timeout handling so `RequestFailedError` raised during a world watcher tick no longer terminates the global BizHawk watcher loop; transient `Connection timed out` errors now fall back to reconnect-wait behavior instead of requiring a client restart.

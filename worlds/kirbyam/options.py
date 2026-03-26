@@ -86,6 +86,9 @@ class KirbyAmDeathLink(DeathLink):
 class _HiddenOptionMixin:
     # Hide unsupported common options from KirbyAM templates/UI while preserving
     # the underlying option types so external configs still parse consistently.
+    # Visibility.none (not the "Removed" mechanism) is intentional: external
+    # YAML configs that set these keys still parse without error rather than
+    # failing fast, which keeps forward compatibility for shared multiworld configs.
     visibility = Visibility.none
 
 

@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 from Utils import parse_yaml
 
 
-def test_kirbyam_template_hides_non_shipping_template_surface() -> None:
+def test_kirbyam_template_surface_options_visibility() -> None:
     import worlds.AutoWorld
     from Options import generate_yaml_templates
     from worlds.AutoWorld import AutoWorldRegister
