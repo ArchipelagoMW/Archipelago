@@ -49,7 +49,7 @@ requires:
 {% endmacro %}
 
 {{ yaml_dump(game) }}:
-  {%- for group_name, group_options in option_groups.items() %}
+  {%- for group_name, group_options in option_groups.items() if group_options %}
   ##{% for _ in group_name %}#{% endfor %}##
   # {{ group_name }} #
   ##{% for _ in group_name %}#{% endfor %}##

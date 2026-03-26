@@ -429,6 +429,26 @@ server backlog. The client now:
 - Updated `worlds/kirbyam/test/test_client.py` to cover the starvation scenario.
 - Verified full KirbyAM client regression suite after the reconciliation change.
 
+## Issue #442: Template Output Should Omit Empty Item/Location Group
+
+### Problem
+KirbyAM intentionally hides unsupported common item/location options from the player
+template (`Visibility.none`). The generated YAML still printed the `Item & Location
+Options` group header even when all options in that group were filtered out, creating
+an empty/dead section in public templates.
+
+### Solution
+Updated shared template rendering in `data/options.yaml` to skip option groups whose
+renderable option set is empty. This preserves all existing group rendering behavior
+while removing orphaned headers for worlds like KirbyAM that intentionally hide an
+entire built-in group.
+
+### Validation
+- Extended `worlds/kirbyam/test/test_template_options.py` to assert:
+  - hidden/non-shipping option choices remain excluded
+  - `Item & Location Options` header is absent when KirbyAM has no visible options in that group
+  - generated template `requires.game` world version remains `0.0.12`
+
 ## Issue #83: In-Game Notification Pipeline (Receive + Send)
 
 ### Problem
