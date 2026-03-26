@@ -54,7 +54,9 @@ create_technology({
     },
     prerequisites = {
         {%- if location in tech_tree_layout_prerequisites %}
-        {{ variable_to_lua(tech_tree_layout_prerequisites[location]) }}
+        {%- for prerequisite in tech_tree_layout_prerequisites[location] %}
+        "ap-{{ prerequisite.address }}-",
+        {% endfor -%}
         {% endif -%}
     },
 })
