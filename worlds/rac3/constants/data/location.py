@@ -2359,6 +2359,10 @@ class RAC3LOCATIONDATA:
                 case RAC3REGION.NANOTECH:
                     section_id = _LOCATION_NAME_TO_SECTION[location_name]
                     UT_MAPPING[f"0/{section_id}/{loc_id}"] = loc_id + RAC3STATUS.APCODE
+                case RAC3REGION.NGPLUS:
+                    UT_MAPPING[f"3/{loc_id}"] = loc_id + RAC3STATUS.APCODE
+                    UT_MAPPING[f"0/{loc_id}"] = loc_id + RAC3STATUS.APCODE
+                    tags.union({RAC3REGION.NGPLUS, RAC3REGION.STARSHIP_PHOENIX})
         check: list[RAC3ADDRESSDATA] = []
         for item in _LOCATION_NAME_TO_ADDRESS[location_name]:
             check += [RAC3ADDRESSDATA(item)]
@@ -2418,6 +2422,7 @@ REGION_TO_INFOBOT_LOCATION: dict[str, str] = {
     RAC3REGION.COMMAND_CENTER: RAC3LOCATION.KOROS_BASE,
 }
 
+# DO NOT REMOVE - Relic of the past
 # {
 #     "Name": "Prizes/Qwark VidComic 2",
 #     "Id": 50070035,
