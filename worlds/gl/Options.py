@@ -143,7 +143,7 @@ class TrapsFrequency(Range):
     """
 
     display_name = "Trap Frequency"
-    range_start = 1
+    range_start = 0
     range_end = 75
     default = 10
 

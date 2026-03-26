@@ -32,6 +32,7 @@ PLAYER_COLOR = 0xFD30E
 SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
+PLAYER_MENU = 0x9D3C
 BOSS_GOAL = 0x45D34
 BOSS_GOAL_BACKUP = 0x45D3C
 LOCATIONS_BASE_ADDRESS = 0x64A68
@@ -165,7 +166,7 @@ class GauntletLegendsContext(CommonContext):
             backup = await self._read_ram_int(BOSS_GOAL_BACKUP, 4)
             return goal == 0xA or backup == 0xA
         elif self.glslotdata["goal"] == 2:
-            goal = await self._read_ram_int(MOD_BOSS_GOAL, 1)
+            goal = await self._read_ram_int(MOD_BOSS_GOAL, 1, True)
             return goal >= self.glslotdata["boss_goal_count"]
 
     def _normalize_item_name(self, name: str) -> str:
@@ -499,7 +500,8 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
             await ctx.handle_items()
             checking = await ctx.location_loop()
 
-            if ctx.deathlink_pending and ctx.deathlink_enabled:
+            menu = await ctx._read_ram_int(PLAYER_MENU, 4)
+            if ctx.deathlink_pending and ctx.deathlink_enabled and menu == 1:
                 ctx.deathlink_pending = False
                 ctx.deathlink_triggered = True
                 await ctx.die()
@@ -518,7 +520,8 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 ctx.locations_checked += checking
                 await ctx.check_locations(checking)
 
-            if not ctx.finished_game and await ctx.check_goal():
+            goal = await ctx.check_goal()
+            if not ctx.finished_game and goal:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
 

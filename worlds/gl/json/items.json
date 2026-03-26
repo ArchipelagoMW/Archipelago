@@ -11,28 +11,28 @@
     "item_name": "Lightning Potion",
     "progression": 0,
     "rom_id": "0x0101",
-    "frequency": 25
+    "frequency": 30
   },
   {
     "id": 77780002,
     "item_name": "Light Potion",
     "progression": 0,
     "rom_id": "0x0102",
-    "frequency": 25
+    "frequency": 30
   },
   {
     "id": 77780003,
     "item_name": "Acid Potion",
     "progression": 0,
     "rom_id": "0x0103",
-    "frequency": 25
+    "frequency": 30
   },
   {
     "id": 77780004,
     "item_name": "Fire Potion",
     "progression": 0,
     "rom_id": "0x0104",
-    "frequency": 25
+    "frequency": 30
   },
   {
     "id": 77780005,
@@ -214,14 +214,14 @@
     "item_name": "Fruit",
     "progression": 0,
     "rom_id": "0x0401",
-    "frequency": 250
+    "frequency": 200
   },
   {
     "id": 77780031,
     "item_name": "Meat",
     "progression": 0,
     "rom_id": "0x0403",
-    "frequency": 200
+    "frequency": 150
   },
   {
     "id": 77780032,
@@ -360,7 +360,7 @@
     "item_name": "Gold",
     "progression": 0,
     "rom_id": "0x0302",
-    "frequency": 800
+    "frequency": 850
   },
   {
     "id": 77780055,
