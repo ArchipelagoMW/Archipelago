@@ -438,7 +438,7 @@ async def test_deliver_items_resyncs_after_save_loss(mock_bizhawk_context):
 
 @pytest.mark.asyncio
 async def test_deliver_items_resyncs_forward_after_reconnect(mock_bizhawk_context):
-    """If ROM counter is ahead, client should fast-forward and deliver next missing item."""
+    """If ROM counter is in-range ahead, client should fast-forward and deliver next missing item."""
     client = KirbyAmClient()
     client.initialize_client()
     client._delivered_item_index = 0
@@ -467,8 +467,8 @@ async def test_deliver_items_resyncs_forward_after_reconnect(mock_bizhawk_contex
 
 
 @pytest.mark.asyncio
-async def test_deliver_items_waits_when_rom_counter_ahead_but_items_partial(mock_bizhawk_context):
-    """Do not write items while ReceivedItems list is still behind ROM counter."""
+async def test_deliver_items_continues_when_rom_counter_ahead_of_received_items(mock_bizhawk_context, caplog):
+    """A stale/high ROM counter should not permanently suppress mailbox writes."""
     client = KirbyAmClient()
     client.initialize_client()
     client._delivered_item_index = 0
@@ -478,22 +478,56 @@ async def test_deliver_items_waits_when_rom_counter_ahead_but_items_partial(mock
         Mock(item=3860001, player=1),
     ]
 
+    caplog.set_level(logging.INFO, logger="Client")
+
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
         mock_read.return_value = [
             (0).to_bytes(4, 'little'),
             (2).to_bytes(4, 'little'),
+            (333).to_bytes(4, 'little'),
         ]
 
         await client._deliver_items(mock_bizhawk_context)
 
-        assert client._delivered_item_index == len(mock_bizhawk_context.items_received)
-        assert client._delivery_pending is False
+        assert client._delivered_item_index == 0
+        assert client._delivery_pending is True
+        assert client._delivery_pending_frame == 333
         mock_write.assert_awaited_once()
-        persisted = mock_write.await_args.args[1]
-        assert persisted == [
-            (data.transport_ram_addresses["delivered_item_index"], (1).to_bytes(4, 'little'), "System Bus")
+        written = mock_write.await_args.args[1]
+        assert written == [
+            (data.transport_ram_addresses["incoming_item_id"], int(3860001).to_bytes(4, 'little'), "System Bus"),
+            (data.transport_ram_addresses["incoming_item_player"], (1).to_bytes(4, 'little'), "System Bus"),
+            (data.transport_ram_addresses["incoming_item_flag"], (1).to_bytes(4, 'little'), "System Bus"),
         ]
+
+    assert "ROM item counter ahead of ReceivedItems" in caplog.text
+    assert "ROM counter ahead fallback active; continuing mailbox write" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_logs_when_rom_counter_returns_in_range(mock_bizhawk_context, caplog):
+    """Ahead-counter fallback should clear once ROM and server state are plausibly aligned again."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivered_item_index = 0
+    client._delivery_counter_ahead_fallback_active = True
+    client._delivery_counter_ahead_resume_logged = True
+
+    caplog.set_level(logging.INFO, logger="Client")
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+            (500).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context, allow_new_writes=False)
+
+    assert client._delivery_counter_ahead_fallback_active is False
+    assert client._delivery_counter_ahead_resume_logged is False
+    assert "ROM item counter back in range" in caplog.text
 
 
 @pytest.mark.asyncio

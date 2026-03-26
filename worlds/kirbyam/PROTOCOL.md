@@ -247,6 +247,12 @@ delivered_item_index += 1
 2. **Pending** (flag == 1): ROM is processing, poll for flag == 0
 3. **Acknowledged** (flag cleared): advance index, return to Idle
 
+`debug_item_counter` reconciliation contract:
+- If `debug_item_counter < delivered_item_index`, rewind cursor to the ROM count.
+- If `debug_item_counter` is ahead but still within `len(ctx.items_received)`, fast-forward cursor to the ROM count.
+- If `debug_item_counter > len(ctx.items_received)`, treat the counter as stale/debug-only and continue normal mailbox delivery once the mailbox is empty. This anti-starvation fallback must not permanently suppress writes.
+- Transition-based logs should make the ahead-counter fallback visible without per-tick spam.
+
 Research-first note for Issue #223:
 - Delivery remains gated only by the gameplay-active contract from Issue #56.
 - Candidate miniboss/travel probes must not suppress delivery until their semantics are repeatably verified.

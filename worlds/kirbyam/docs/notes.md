@@ -408,6 +408,27 @@ Reconnect windows can temporarily expose partial AP context state (for example, 
 - Added tests for watcher no-op when socket is missing or closed.
 - Added test that reconnect-entry resets transient state and only logs readiness once per session-ready transition.
 
+## Issue #437: Item Receipt Starvation When ROM Counter Is Ahead
+
+### Problem
+KirbyAM still had a delivery-starvation path after Issue #419. If ROM `debug_item_counter`
+was greater than `len(ctx.items_received)`, `_deliver_items()` treated that debug counter as
+authoritative, pinned `delivered_item_index` to the current backlog length, and returned
+without writing to the mailbox. A stale/high counter could therefore suppress all future
+item receipt indefinitely.
+
+### Solution
+Changed mailbox reconciliation so `debug_item_counter` remains useful for rewind and
+in-range fast-forward recovery, but no longer blocks delivery when it is ahead of the
+server backlog. The client now:
+- warns once when the ahead-counter fallback activates
+- continues mailbox writes while the counter is out of range
+- logs when the counter returns in range and normal reconciliation resumes
+
+### Validation
+- Updated `worlds/kirbyam/test/test_client.py` to cover the starvation scenario.
+- Verified full KirbyAM client regression suite after the reconciliation change.
+
 ## Issue #83: In-Game Notification Pipeline (Receive + Send)
 
 ### Problem

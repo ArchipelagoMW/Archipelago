@@ -67,6 +67,7 @@ pytest worlds/kirbyam/test -q
 | `KirbyAM: Mailbox ACK observed at item index N` | ROM cleared the flag; delivery confirmed. |
 | `KirbyAM: ROM item counter regressed from X to Y; rewinding delivery cursor` | ROM reported fewer items received than expected; cursor rewound. |
 | `KirbyAM: ROM item counter advanced from X to Y; fast-forwarding delivery cursor` | ROM is ahead of client cursor; cursor fast-forwarded. |
+| `KirbyAM: ROM counter ahead fallback active; continuing mailbox write at item index N (...)` | ROM `debug_item_counter` is ahead of the current `ReceivedItems` list, so the client is ignoring that stale/debug counter and continuing mailbox delivery to avoid starvation. |
 | `KirbyAM: receive notification queued (index=N, item=..., sender=...)` | Receive notification was queued after mailbox ACK for delivered index `N`. |
 | `KirbyAM: send notification queued (item=..., receiver=...)` | Outgoing ItemSend notification was queued for local sender traffic. |
 | `KirbyAM: send notification burst suppression summary (suppressed=N)` | A send burst exceeded policy; `N` notifications were suppressed in the previous window. |
@@ -81,6 +82,7 @@ pytest worlds/kirbyam/test -q
 | `KirbyAM: Mailbox ACK timeout after N frames at item index M; clearing flag and retrying` | ROM did not clear flag within ~30 frames; flag force-cleared and delivery retried. |
 | `KirbyAM: Clearing stale mailbox flag after fast-forward to item index N` | Residual flag found after cursor fast-forward; cleared proactively. |
 | `KirbyAM: Skipping malformed ReceivedItems entry at index N` | A received item entry had invalid fields; skipped and cursor advanced. |
+| `KirbyAM: ROM item counter ahead of ReceivedItems (rom=X, received=Y); ignoring counter to avoid mailbox starvation` | ROM `debug_item_counter` is stale/high relative to the AP `ReceivedItems` backlog. The client will no longer pin the cursor and return forever; it falls back to normal mailbox writes once safe. |
 
 ### Debug-level diagnostics
 Enable debug logging in your AP client to see these:
