@@ -41,7 +41,17 @@ jobs:
 
       - name: Create deterministic dummy base ROM for CI smoke
         run: |
-            truncate -s 2097152 worlds/kirbyam/kirby_ap_payload/kirby.gba
+          python - <<'PY'
+          from pathlib import Path
+
+          rom_path = Path("worlds/kirbyam/kirby_ap_payload/kirby.gba")
+          rom_path.parent.mkdir(parents=True, exist_ok=True)
+          rom = bytearray(0x200000)
+          thumb_bl = bytes.fromhex("00 f0 00 f8")
+          for offset in (0x001D952, 0x0000B144, 0x0000B0CC, 0x0000B264):
+            rom[offset:offset + 4] = thumb_bl
+          rom_path.write_bytes(rom)
+          PY
 
       - name: Build payload and generate ROM patch
         run: |

@@ -30,6 +30,7 @@ from worlds.generic.Rules import forbid_items_for_player, set_rule
 
 from .data import LocationCategory, data
 from .generation_logging import logger
+from .groups import resolve_item_group
 from .options import Goal
 
 if TYPE_CHECKING:
@@ -122,7 +123,7 @@ def set_rules(world: KirbyAmWorld) -> None:
     shard_gate_rule = lambda state: _has_all_shards(state, world.player)
 
     item_name_groups = getattr(world, "item_name_groups", {})
-    shard_items = item_name_groups.get("Shard", set(_SHARD_ITEM_LABELS))
+    shard_items = resolve_item_group(item_name_groups, "Shards", "Shard", default=_SHARD_ITEM_LABELS)
     get_locations = getattr(world.multiworld, "get_locations", None)
     if callable(get_locations):
         for location in get_locations(world.player):

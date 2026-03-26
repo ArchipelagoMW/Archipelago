@@ -19,125 +19,125 @@
   "SHARD_1": {
     "label": "Mustard Mountain - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_2": {
     "label": "Moonlight Mansion - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_3": {
     "label": "Candy Constellation - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_4": {
     "label": "Olive Ocean - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_5": {
     "label": "Peppermint Palace - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_6": {
     "label": "Cabbage Cavern - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_7": {
     "label": "Carrot Castle - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "SHARD_8": {
     "label": "Radish Ruins - Mirror Shard",
     "classification": "PROGRESSION",
-    "tags": ["Shard", "Unique"]
+    "tags": ["Shards", "Unique"]
   },
   "MAP_RAINBOW_ROUTE": {
     "label": "Map - Rainbow Route",
     "classification": "USEFUL",
     "item_id": 3860024,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_MUSTARD_MOUNTAIN": {
     "label": "Map - Mustard Mountain",
     "classification": "USEFUL",
     "item_id": 3860010,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_MOONLIGHT_MANSION": {
     "label": "Map - Moonlight Mansion",
     "classification": "USEFUL",
     "item_id": 3860011,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_CANDY_CONSTELLATION": {
     "label": "Map - Candy Constellation",
     "classification": "USEFUL",
     "item_id": 3860012,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_OLIVE_OCEAN": {
     "label": "Map - Olive Ocean",
     "classification": "USEFUL",
     "item_id": 3860013,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_PEPPERMINT_PALACE": {
     "label": "Map - Peppermint Palace",
     "classification": "USEFUL",
     "item_id": 3860014,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_CABBAGE_CAVERN": {
     "label": "Map - Cabbage Cavern",
     "classification": "USEFUL",
     "item_id": 3860015,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_CARROT_CASTLE": {
     "label": "Map - Carrot Castle",
     "classification": "USEFUL",
     "item_id": 3860016,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_RADISH_RUINS": {
     "label": "Map - Radish Ruins",
     "classification": "USEFUL",
     "item_id": 3860017,
-    "tags": ["Map", "Useful"]
+    "tags": ["Maps", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_1": {
     "label": "Vitality Counter I",
     "classification": "USEFUL",
     "item_id": 3860018,
-    "tags": ["Vitality", "Useful"]
+    "tags": ["Vitality", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_2": {
     "label": "Vitality Counter II",
     "classification": "USEFUL",
     "item_id": 3860019,
-    "tags": ["Vitality", "Useful"]
+    "tags": ["Vitality", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_3": {
     "label": "Vitality Counter III",
     "classification": "USEFUL",
     "item_id": 3860020,
-    "tags": ["Vitality", "Useful"]
+    "tags": ["Vitality", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_4": {
     "label": "Vitality Counter IV",
     "classification": "USEFUL",
     "item_id": 3860021,
-    "tags": ["Vitality", "Useful"]
+    "tags": ["Vitality", "Useful", "Unique"]
   },
   "SOUND_PLAYER": {
     "label": "Sound Player",
     "classification": "USEFUL",
     "item_id": 3860025,
-    "tags": ["SoundPlayer", "Useful"]
+    "tags": ["SoundPlayer", "Useful", "Unique"]
   }
 }

@@ -27,7 +27,7 @@ from .generation_logging import (
     log_regions_created,
     logger,
 )
-from .groups import ITEM_GROUPS, LOCATION_GROUPS
+from .groups import ITEM_GROUPS, LOCATION_GROUPS, resolve_item_group
 from .items import KirbyAmItem, create_item_label_to_code_map, get_item_classification
 from .locations import KirbyAmLocation, create_location_label_to_id_map
 from .options import (
@@ -275,7 +275,7 @@ class KirbyAmWorld(World):
                 shard_label_to_code = {
                     item.label: item.item_id
                     for item in kirby_data.items.values()
-                    if "Shard" in item.tags
+                    if "Shards" in item.tags
                 }
                 missing_shard_labels = [
                     label for label in self._SHARD_ITEM_LABEL_ORDER
@@ -380,7 +380,13 @@ class KirbyAmWorld(World):
             useful_count = sum(1 for item in itempool if item.useful)
             filler_count = sum(1 for item in itempool if item.filler)
             progression_count = sum(1 for item in itempool if item.advancement)
-            pool_shard_count = sum(1 for item in itempool if item.name in self.item_name_groups.get("Shard", set()))
+            shard_group = resolve_item_group(
+                self.item_name_groups,
+                "Shards",
+                "Shard",
+                default=self._SHARD_ITEM_LABEL_ORDER,
+            )
+            pool_shard_count = sum(1 for item in itempool if item.name in shard_group)
             logger.info(
                 "[P%s] Item pool classification summary: useful=%s filler=%s progression=%s",
                 self.player,

@@ -1,13 +1,38 @@
+from collections.abc import Iterable, Mapping, Set as AbstractSet
 from typing import Dict, Set
 
 from .data import LocationCategory, data
 
 # Item Groups
+# Built from item tags in data.items. Each tag becomes a group containing all items with that tag.
 ITEM_GROUPS: dict[str, set[str]] = {}
 
 for item in data.items.values():
     for tag in item.tags:
         ITEM_GROUPS.setdefault(tag, set()).add(item.label)
+
+# Backward-compatible aliases for legacy YAML filters.
+_ITEM_GROUP_ALIASES = {
+    "Shard": "Shards",
+    "Map": "Maps",
+}
+
+for alias, canonical in _ITEM_GROUP_ALIASES.items():
+    canonical_members = ITEM_GROUPS.get(canonical)
+    if canonical_members is not None:
+        ITEM_GROUPS[alias] = set(canonical_members)
+
+
+def resolve_item_group(
+    item_name_groups: Mapping[str, AbstractSet[str]],
+    canonical: str,
+    *aliases: str,
+    default: Iterable[str] = (),
+) -> AbstractSet[str]:
+    for group_name in (canonical, *aliases):
+        if group_name in item_name_groups:
+            return item_name_groups[group_name]
+    return set(default)
 
 
 # Location Groups
