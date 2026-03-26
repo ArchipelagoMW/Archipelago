@@ -25,7 +25,7 @@ from pathlib import Path
 
 PAYLOAD_OFFSET = 0x0015E000
 MAIN_HOOK_OFFSET = 0x00152696
-BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D950
+BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D952
 BIG_CHEST_COLLECT_CALL_OFFSET = 0x0000B144
 VITALITY_CHEST_COLLECT_CALL_OFFSET = 0x0000B0CC
 SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET = 0x0000B264
@@ -187,6 +187,36 @@ def thumb_bl_bytes(src_rom_addr: int, dst_rom_addr: int) -> bytes:
 
 # Computed from offsets rather than hard-coded to avoid drift if offsets change.
 MAIN_HOOK_BL_BYTES = thumb_bl_bytes(0x08000000 + MAIN_HOOK_OFFSET, 0x08000000 + PAYLOAD_OFFSET)
+
+
+def is_thumb_bl_instruction(opcode: bytes) -> bool:
+    """Return True when <opcode> encodes a 32-bit Thumb BL instruction."""
+    if len(opcode) != 4:
+        return False
+    hi = int.from_bytes(opcode[0:2], "little")
+    lo = int.from_bytes(opcode[2:4], "little")
+    return (hi & 0xF800) == 0xF000 and (lo & 0xF800) == 0xF800
+
+
+def validate_thumb_bl_callsite(rom: bytes | bytearray, offset: int, label: str) -> bytes:
+    """Ensure the target callsite is a Thumb BL before overwriting it."""
+    if offset < 0 or offset + 4 > len(rom):
+        raise SystemExit(
+            f"Error: {label} callsite offset {offset:#x} is out of ROM bounds "
+            f"(size={len(rom):#x})."
+        )
+    if offset % 2 != 0:
+        raise SystemExit(
+            f"Error: {label} callsite offset {offset:#x} is not halfword aligned for Thumb "
+            "(must be 2-byte aligned)."
+        )
+    original = bytes(rom[offset:offset + 4])
+    if not is_thumb_bl_instruction(original):
+        raise SystemExit(
+            f"Error: {label} callsite at {offset:#x} is not a Thumb BL instruction. "
+            f"Found bytes: {original.hex(' ')}. Refusing to patch unknown site."
+        )
+    return original
 
 
 def resolve_elf_symbol_address(elf_path: str | Path, symbol_name: str) -> int:
@@ -714,6 +744,16 @@ def main():
         warning = get_rom_size_warning(len(rom))
         if warning is not None:
             print(warning)
+
+        original_boss_hook = validate_thumb_bl_callsite(rom, BOSS_COLLECT_SHARD_CALL_OFFSET, "boss shard")
+        original_big_chest_hook = validate_thumb_bl_callsite(rom, BIG_CHEST_COLLECT_CALL_OFFSET, "big chest")
+        original_vitality_hook = validate_thumb_bl_callsite(rom, VITALITY_CHEST_COLLECT_CALL_OFFSET, "vitality chest")
+        original_sound_player_hook = validate_thumb_bl_callsite(rom, SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, "sound player chest")
+        print("Validated hook callsite instruction shape (Thumb BL):")
+        print(f"  boss shard @ {BOSS_COLLECT_SHARD_CALL_OFFSET:#x}: {original_boss_hook.hex(' ')}")
+        print(f"  big chest @ {BIG_CHEST_COLLECT_CALL_OFFSET:#x}: {original_big_chest_hook.hex(' ')}")
+        print(f"  vitality chest @ {VITALITY_CHEST_COLLECT_CALL_OFFSET:#x}: {original_vitality_hook.hex(' ')}")
+        print(f"  sound player chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: {original_sound_player_hook.hex(' ')}")
 
         # 4) Insert payload
         rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload

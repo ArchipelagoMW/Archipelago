@@ -654,7 +654,7 @@ Implemented the AP-side transport infrastructure for boss-defeat locations:
 - Added `ap_set_boss_defeat_flag(uint32_t boss_index)` and a dedicated
   `ap_on_boss_defeat_collect_shard(uint32_t boss_index)` hook target.
 - `patch_rom.py` now patches the `BL CollectShard` call inside `sub_0801D948`
-  (ROM address `0x0801D948`, callsite file offset `0x001D950`) so boss defeat
+  (ROM address `0x0801D948`, callsite file offset `0x001D952`) so boss defeat
   sets the AP boss flag and does not grant the shard natively.
 
 **Locations**
@@ -1356,7 +1356,7 @@ In the original game, `sub_0801D948` calls `CollectShard(var->unk218)` first, up
 `gTreasures.shardField`. The post-cutscene state machine transitions correctly because native shard
 state is valid.
 
-The AP-patched version replaced `BL CollectShard` (at file offset `0x001D950`, 8 bytes into
+The AP-patched version replaced `BL CollectShard` (at file offset `0x001D952`, 10 bytes into
 `sub_0801D948`) with `BL ap_on_boss_defeat_collect_shard`. The old hook only set the AP
 boss-defeat transport flag and returned without updating `gTreasures.shardField`. The
 post-cutscene state machine encountered stale shard state and could not complete the screen
@@ -1380,13 +1380,35 @@ setting the AP boss-defeat transport flag:
 AP `SHARD_N` item delivery performs the same `KIRBY_SHARD_FLAGS` write, making both paths
 idempotent — no double-grant effect.
 
-Hook callsite: `BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D950` (8 bytes into `sub_0801D948`,
+Hook callsite: `BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D952` (10 bytes into `sub_0801D948`,
 ROM addr `0x0801D948`).
 
 ### Validation
 - `test_boss_collect_shard_call_offset_matches_verified_hook_site` in `test_patch_rom.py`:
-  pins `BOSS_COLLECT_SHARD_CALL_OFFSET == 0x001D950`.
+  pins `BOSS_COLLECT_SHARD_CALL_OFFSET == 0x001D952`.
 - `test_boss_defeat_hook_preserves_native_shard_state` in `test_reset_safe_shards.py`:
   asserts AP flag write, `KIRBY_SHARD_FLAGS` update, and `persist_shard_to_sram` call all
   present in `ap_on_boss_defeat_collect_shard`.
 - ROM patch rebuild required after this payload change.
+
+## Issue #393: Harden Boss-Defeat Hook Patching After v0.0.11 Manual Fail
+
+### Problem
+Manual testing for v0.0.11 recorded a fail in the Moonlight Mansion boss-cutscene path
+(`TC-1 Fail`), so patching reliability needed stronger guardrails in addition to the
+runtime fix from Issue #380.
+
+### Change
+Added pre-patch callsite validation in `kirby_ap_payload/patch_rom.py`:
+- validate each hook target offset is in bounds
+- validate each target opcode is a 32-bit Thumb `BL` instruction before overwrite
+- fail fast with actionable error text when the callsite shape is unexpected
+
+This prevents silently patching an incorrect instruction site if ROM/callsite drift occurs.
+
+### Validation
+- Added tests in `test_patch_rom.py` for:
+  - BL opcode detection (`is_thumb_bl_instruction`)
+  - callsite validation success path
+  - non-BL rejection path
+  - out-of-bounds rejection path
