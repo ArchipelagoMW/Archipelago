@@ -22,6 +22,7 @@ This randomizer currently treats boss defeats, major chests, vitality chests, an
 
 
 
+The locations of Shards, Maps, Vitality Counters, and the Sound Player are all randomized. For example, the big chest in Moonlight Mansion might contain the mirror shard that normally drops from defeating Wiz.
 Boss defeats are separate checks from shard progression. Shards are delivered through Archipelago item placement instead of being granted directly by boss defeats.
 
 
@@ -38,7 +39,7 @@ Additional changes planned, none currently implemented.
 
 
 
-When you find an item that is not your own, you will be able to see what it was and who it was sent to the client window.
+When you find an item that is not your own, you will be able to see what it was and who it was sent to in the client window. The sprite for the item will still appear, but you will need to receive it via Archipelago before it's usable.
 
 
 
@@ -64,5 +65,5 @@ you're playing a multiworld game, the client will sync your game with the server
 
 
 
-\[jiangzhengwenjz](https://github.com/jiangzhengwenjz) — creator of the \[Kirby \& The Amazing Mirror disassembly](https://github.com/jiangzhengwenjz/katam), which was instrumental in understanding ROM internals for this integration.
+\[jiangzhengwenjz](https://github.com/jiangzhengwenjz) and other contributors — creators of the \[Kirby \& The Amazing Mirror disassembly](https://github.com/jiangzhengwenjz/katam), which was instrumental in understanding ROM internals for this integration.
 

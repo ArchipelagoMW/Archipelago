@@ -3,7 +3,7 @@
 ## Required Software
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-- An English Pokémon Emerald ROM. The Archipelago community cannot provide this.
+- An English Kirby & The Amazing Mirror ROM. The Archipelago community cannot provide this.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later
 
 ### Configuring BizHawk
@@ -18,12 +18,13 @@ tabbed out of EmuHawk.
 `Controllers…`, load any `.gba` ROM first.
 - Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
 clear it.
+- Kirby & The Amazing Mirror uses Bizhawks Message system to indicate items sent & received in addition to the Archipelago Bizhawk client. As a result of this we recommend increasing the amount of time these messages stay on screen for you to read to your preferred duration. This can be updated by going to Config > Messages within Bizhawk and changing the setting for "Messages fade after X seconds."
 
 ## Generating and Patching a Game
 
 1. Create your options file (YAML).
 2. Follow the general Archipelago instructions for [generating a game](/tutorial/Archipelago/setup_en#generating-a-game).
-This will generate an output file for you. Your patch file will have the `.apemerald` file extension.
+This will generate an output file for you. Your patch file will have the `.apkirbyam` file extension.
 3. Open `ArchipelagoLauncher.exe`
 4. Select "Open Patch" on the left side and select your patch file.
 5. If this is your first time patching, you will be prompted to locate your vanilla ROM.
