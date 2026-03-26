@@ -1168,8 +1168,8 @@ class ConnectionsMeta(AssembleOptions):
             attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
             assert "exits" in attrs, f"Please define valid exits for {name}"
             attrs["exits"] = frozenset((connection.lower() for connection in attrs["exits"]))
-        if "__doc__" not in attrs:
-            attrs["__doc__"] = PlandoConnections.__doc__
+            if "__doc__" not in attrs:
+                attrs["__doc__"] = PlandoConnections.__doc__
         cls = super().__new__(mcs, name, bases, attrs)
         return cls
 

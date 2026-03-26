@@ -30,7 +30,7 @@ if __name__ == "__main__":
 import settings
 import Utils
 from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
-                   user_path)
+                   user_path, is_mobile)
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -495,8 +495,7 @@ def main(args: argparse.Namespace | dict | None = None):
     elif not args["update_settings"]:
         run_gui(args.get("launch_components", None), args.get("args", ()))
 
-
-if __name__ == '__main__':
+def run():
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
@@ -519,3 +518,22 @@ if __name__ == '__main__':
         # we await all child processes to close before we tear down the process host
         # this makes it feel like each one is its own program, as the Launcher is closed now
         process.join()
+
+
+if is_mobile:
+    allowed_names = {
+        "Launcher",
+        "Text Client",
+        "APQuest Client",
+        "Archipelago Website",
+        "Discord Server",
+        "Unrated/18+ Discord Server",
+    }
+    components[:] = [c for c in components if c.display_name in allowed_names]
+
+
+logging.info(f"Loaded {len(components)} components.")
+
+
+if __name__ == '__main__':
+    run()

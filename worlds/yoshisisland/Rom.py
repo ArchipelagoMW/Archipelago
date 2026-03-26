@@ -1191,7 +1191,7 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
         rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85]))  # Luigi piece clear text
         rom.write_bytes(0x06FC86, bytearray([0xFF]))  # Boss clear goal = 255, renders bowser inaccessible
 
-    from Main import __version__
+    from generate_lib import __version__
     rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', "utf8")[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x007FC0, rom.name)

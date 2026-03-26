@@ -1,0 +1,32 @@
+[app]
+title = Archipelago
+package.name = archipelago
+package.domain = gg.archipelago
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas,json,yml,txt,lua
+source.include_patterns = data/*, *.kv, *.py
+source.exclude_dirs = factorio,test,docs,.github,.git, deploy, bin, build, __pycache__
+source.exclude_patterns = test,*.pyc,*.pyo,__pycache__,*.egg-info,*.dist-info,docs,examples,build,dist,.git,.github
+version = 0.6.7
+
+# Requirements/Python
+p4a.branch = develop
+p4a.setup_py = false
+python_flags = -O
+requirements = python3==3.11.14, hostpython3==3.11.14,pip==24.3.1, kivy==2.3.1,kivymd@git+https://github.com/kivymd/KivyMD@365aa9b,materialyoucolor>=3.0.2,asynckivy>=0.10.0.dev1,asyncgui>=0.10.0.dev0,colorama==0.4.6,websockets==13.0.1,PyYAML>=6.0.3,jinja2>=3.1.6,schema>=0.7.8,bsdiff4>=1.2.6,platformdirs>=4.5.0,certifi>=2025.11.12,cython>=3.2.1,cymem>=2.0.13,orjson>=3.11.4,typing_extensions>=4.15.0,pyshortcuts>=1.9.6,pathspec>=0.12.1
+
+
+# Android settings
+orientation = portrait, landscape, portrait-reverse, landscape-reverse
+fullscreen = 0
+android.gradle_properties = org.gradle.jvmargs=-Xmx8192m -XX:MaxMetaspaceSize=512m
+android.permissions = INTERNET,ACCESS_NETWORK_STATE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
+android.api = 34
+android.minapi = 24
+android.ndk = 25b
+android.archs = arm64-v8a
+android.copy_libs = 1
+
+# Icons/presplash
+icon.filename = data/icon.png
+presplash.filename = data/icon.png

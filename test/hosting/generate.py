@@ -26,7 +26,7 @@ def _generate_local_inner(games: Iterable[str],
         with TemporaryDirectory() as players_dir:
             with TemporaryDirectory() as output_dir:
                 import Generate
-                import Main
+                import generate_lib
 
                 for n, game in enumerate(games, 1):
                     player_path = Path(players_dir) / f"{n}.yaml"

@@ -5,7 +5,7 @@ import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore
+from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, is_mobile
 
 
 class Type(Enum):

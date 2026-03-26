@@ -20,7 +20,8 @@ elif not (3, 11, 0) <= sys.version_info < (3, 14, 0):
 _skip_update = bool(
     getattr(sys, "frozen", False) or 
     multiprocessing.parent_process() or 
-    os.environ.get("SKIP_REQUIREMENTS_UPDATE", "").lower() in ("1", "true", "yes")
+    os.environ.get("SKIP_REQUIREMENTS_UPDATE", "").lower() in ("1", "true", "yes") or
+    sys.platform in ("ios", "android")
 )
 update_ran = _skip_update
 

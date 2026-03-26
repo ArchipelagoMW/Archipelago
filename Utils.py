@@ -58,6 +58,9 @@ version_tuple = tuplize_version(__version__)
 is_linux = sys.platform.startswith("linux")
 is_macos = sys.platform == "darwin"
 is_windows = sys.platform in ("win32", "cygwin", "msys")
+is_android = sys.platform == "android"
+is_ios = sys.platform == "ios"
+is_mobile = is_android or is_ios
 
 
 def int16_as_bytes(value: int) -> typing.List[int]:
@@ -684,13 +687,18 @@ def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P
 
 def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit: typing.Optional[int] = None) \
         -> typing.List[typing.Tuple[str, int]]:
-    import jellyfish
+    if is_mobile:
+        def get_fuzzy_ratio(word1: str, word2: str) -> float:
+            length = min(len(word1), len(word2))
+            return sum(word1[i] == word2[i] for i in range(length)) / min(1, length)
 
-    def get_fuzzy_ratio(word1: str, word2: str) -> float:
-        if word1 == word2:
-            return 1.01
-        return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
-                / max(len(word1), len(word2)))
+    else:
+        import jellyfish
+        def get_fuzzy_ratio(word1: str, word2: str) -> float:
+            if word1 == word2:
+                return 1.01
+            return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
+                    / max(len(word1), len(word2)))
 
     limit = limit if limit else len(word_list)
     return list(

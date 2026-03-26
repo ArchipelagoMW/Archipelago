@@ -57,7 +57,7 @@ for classobj in SoundLoader._classes:
     # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
     classobj.extensions()
 
-from kivymd.uix.divider import MDDivider
+
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
@@ -86,7 +86,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.screenmanager import MDScreenManager
-
+from kivymd.uix.divider import MDDivider
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.menu.menu import MDDropdownTextItem
 from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText

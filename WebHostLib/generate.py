@@ -13,7 +13,7 @@ from pony.orm import commit, db_session
 
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name, mystery_argparse
-from Main import main as ERmain
+from generate_lib import main as ERmain
 from Utils import __version__, restricted_dumps, DaemonThreadPoolExecutor
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions

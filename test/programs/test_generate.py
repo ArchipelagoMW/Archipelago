@@ -9,7 +9,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import Generate
-import Main
+import generate_lib
 
 
 class TestGenerateMain(unittest.TestCase):
@@ -59,7 +59,7 @@ class TestGenerateMain(unittest.TestCase):
                     '--player_files_path', str(self.abs_input_dir),
                     '--outputpath', self.output_tempdir.name]
         print(f'Testing Generate.py {sys.argv} in {os.getcwd()}')
-        Main.main(*Generate.main())
+        generate_lib.main(*Generate.main())
 
         self.assertOutput(self.output_tempdir.name)
 
@@ -68,7 +68,7 @@ class TestGenerateMain(unittest.TestCase):
                     '--player_files_path', str(self.rel_input_dir),
                     '--outputpath', self.output_tempdir.name]
         print(f'Testing Generate.py {sys.argv} in {os.getcwd()}')
-        Main.main(*Generate.main())
+        generate_lib.main(*Generate.main())
 
         self.assertOutput(self.output_tempdir.name)
 
@@ -87,7 +87,7 @@ class TestGenerateMain(unittest.TestCase):
             sys.argv = [sys.argv[0], '--seed', '0',
                         '--outputpath', self.output_tempdir.name]
             print(f'Testing Generate.py {sys.argv} in {os.getcwd()}, player_files_path={self.yaml_input_dir}')
-            Main.main(*Generate.main())
+            generate_lib.main(*Generate.main())
         finally:
             user_path.cached_path = user_path_backup
 
