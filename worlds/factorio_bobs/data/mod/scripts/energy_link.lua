@@ -10,12 +10,8 @@ end
 
 local function on_runtime_mod_setting_changed(event)
     if event.setting == general.mod_setting_names.energy_link then
-        log("Detecting a energy link setting change.")
-        game.print("Detecting a energy link setting change.")
 
         if settings.global[general.mod_setting_names.energy_link].value then
-            log("Turning energyLink on.")
-            game.print("Turning energyLink on.")
             ENERGY_INCREMENT = 10000000
             for _, force in pairs(general.player_forces) do
                 if game.forces[force] then
@@ -23,8 +19,6 @@ local function on_runtime_mod_setting_changed(event)
                 end
             end
         else
-            log("Turning energyLink off.")
-            game.print("Turning energyLink off.")
             ENERGY_INCREMENT = 0
             for _, force in pairs(general.player_forces) do
                 if game.forces[force] then
