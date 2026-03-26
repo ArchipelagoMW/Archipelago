@@ -1,4 +1,6 @@
-{"game": "Gauntlet Legends",
-"authors": ["jamesbrq"],
-"minimum_ap_version": "0.6.0",
-"world_version": "2.1.2"}
+{
+    "game": "Gauntlet Legends",
+	"authors": [ "jamesbrq" ],
+    "minimum_ap_version": "0.6.7",
+    "world_version": "2.1.3"
+}
