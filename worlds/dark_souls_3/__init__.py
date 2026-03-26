@@ -60,22 +60,22 @@ class DarkSouls3World(World):
     location_descriptions = location_descriptions
     item_descriptions = item_descriptions
 
-    yhorm_location: DS3BossInfo = default_yhorm_location
+    yhorm_location: DS3BossInfo
     """If enemy randomization is enabled, this is the boss who Yhorm the Giant should replace.
     
     This is used to determine where the Storm Ruler can be placed.
     """
 
-    goal_bosses: Set[DS3BossInfo] = set()
+    goal_bosses: Set[DS3BossInfo]
     """The set of bosses that must be beaten for the player to win their run."""
 
-    all_excluded_locations: Set[str] = set()
+    all_excluded_locations: Set[str]
     """This is the same value as `self.options.exclude_locations.value` initially, but if
     `options.exclude_locations` gets cleared due to `excluded_locations: allow_useful` this still
     holds the old locations so we can ensure they don't get necessary items.
     """
 
-    local_itempool: List[DarkSouls3Item] = []
+    local_itempool: List[DarkSouls3Item]
     """The pool of all items within this particular world. This is a subset of
     `self.multiworld.itempool`."""
 
@@ -118,6 +118,8 @@ class DarkSouls3World(World):
                 # location in self.options.exclude_locations
                 # if not location_dictionary[location].ngp
             # }
+
+        self.yhorm_location = default_yhorm_location
 
         # Inform Universal Tracker where Yhorm is being randomized to.
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -1329,7 +1331,7 @@ class DarkSouls3World(World):
     def _is_complete(self, state: CollectionState) -> bool:
         """Whether the given state has achieved the victory condition."""
         # Don't use any() because it's been benchmarked to be slower.
-        for boss in self._goal_bosses:
+        for boss in self.goal_bosses:
             if self._can_get(state, next(iter(boss.locations))): return True
         return False
 
@@ -1420,6 +1422,7 @@ class DarkSouls3World(World):
 
     def _compute_goal_bosses(self):
         """Initializes the value of `self.goal_bosses`."""
+        self.goal_bosses = set()
         goal = {*self.options.goal}
 
         if "All Bosses" in goal:
@@ -1655,7 +1658,7 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
-            "goal": [boss.flag for boss in self._goal_bosses],
+            "goal": [boss.flag for boss in self.goal_bosses],
             # Reserializing here is silly, but it's easier for the static randomizer.
             "random_enemy_preset": json.dumps(self.options.random_enemy_preset.value),
             "yhorm": f"{self.yhorm_location.name} {self.yhorm_location.id}",
