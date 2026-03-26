@@ -58,6 +58,7 @@ pytest worlds/kirbyam/test -q
 |---|---|
 | `KirbyAM: ROM validated.` | ROM name matched expected prefix; client initialized. |
 | `KirbyAM: AP session ready; reconnect-safe reconciliation active` | First watcher tick after AP server/socket/slot_data readiness; transient reconnect caches were reset. |
+| `KirbyAM: BizHawk request failed during watcher tick; waiting for reconnect (...)` | A transient BizHawk transport timeout occurred inside the shipped KirbyAM handler; handler-side reconnect state was reset and the next successful tick will resync from RAM instead of requiring a client restart. |
 | `KirbyAM: deferring location polling/new item writes (...)` | Non-gameplay state detected; polling suspended. Fires once per state transition. |
 | `KirbyAM: gameplay-active state restored; resuming normal watcher flow` | Returned to gameplay-active state. |
 | `KirbyAM: resending major-chest LocationChecks missing on server (missing=..., acked=...)` | Big-chest area bits found in RAM but not yet acknowledged by server; resending. |

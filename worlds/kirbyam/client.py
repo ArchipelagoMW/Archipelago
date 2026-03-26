@@ -121,6 +121,8 @@ class KirbyAmClient(BizHawkClient):
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
         self._watcher_server_ready: bool = False
+        self._watcher_requires_bizhawk_resync: bool = False
+        self._last_watcher_transport_error: str | None = None
 
         # Poll diagnostics de-duplication (avoid per-tick log spam)
         self._last_shard_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
@@ -182,6 +184,20 @@ class KirbyAmClient(BizHawkClient):
         self._last_incoming_death_link_time = None
         self._last_local_alive_state = None
         self._suppress_next_local_death_send = False
+
+    def _mark_bizhawk_watcher_transport_error(self, reason: str) -> bool:
+        """Prepare handler state for a clean BizHawk-side recovery on the next successful tick."""
+        self._watcher_requires_bizhawk_resync = True
+        self._ram_state_loaded = False
+        self._delivery_pending = False
+        self._delivery_pending_frame = None
+        self._delivery_pending_item_index = None
+
+        if self._last_watcher_transport_error == reason:
+            return False
+
+        self._last_watcher_transport_error = reason
+        return True
 
     @staticmethod
     def _coerce_bool(value: object, default: bool) -> bool:
@@ -468,6 +484,8 @@ class KirbyAmClient(BizHawkClient):
         # Only run when connected and slot_data is ready
         if not self._server_session_ready(ctx):
             self._watcher_server_ready = False
+            self._watcher_requires_bizhawk_resync = False
+            self._last_watcher_transport_error = None
             self._death_link_enabled = None
             self._incoming_death_link_pending = False
             self._last_incoming_death_link_time = None
@@ -483,58 +501,77 @@ class KirbyAmClient(BizHawkClient):
             self._watcher_server_ready = True
             self._reset_reconnect_transient_state()
 
-        # Load persisted state from RAM once per session (after bizhawk_ctx is valid)
-        if not self._ram_state_loaded:
-            await self._load_persistent_state(ctx)
-            self._ram_state_loaded = True
+        try:
+            if self._watcher_requires_bizhawk_resync:
+                self._reset_reconnect_transient_state()
+                self._watcher_requires_bizhawk_resync = False
 
-        gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
-        if not gameplay_active:
-            if self._last_runtime_gate_reason != defer_reason:
-                logger.info(
-                    "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
-                    defer_reason,
-                    ai_state if ai_state is not None else "unavailable",
-                )
-                self._last_runtime_gate_reason = defer_reason
+            # Load persisted state from RAM once per session (after bizhawk_ctx is valid)
+            if not self._ram_state_loaded:
+                await self._load_persistent_state(ctx)
+                self._ram_state_loaded = True
 
-            # Preserve mailbox ACK handling while deferring new writes.
-            await self._deliver_items(ctx, allow_new_writes=False)
-            # Goal detection remains active because native goal signals may only
-            # be observable in post-clear non-gameplay phases.
+            gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
+            if not gameplay_active:
+                if self._last_runtime_gate_reason != defer_reason:
+                    logger.info(
+                        "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
+                        defer_reason,
+                        ai_state if ai_state is not None else "unavailable",
+                    )
+                    self._last_runtime_gate_reason = defer_reason
+
+                # Preserve mailbox ACK handling while deferring new writes.
+                await self._deliver_items(ctx, allow_new_writes=False)
+                # Goal detection remains active because native goal signals may only
+                # be observable in post-clear non-gameplay phases.
+                await self._maybe_report_goal(ctx, ai_state_override=ai_state)
+                self._last_watcher_transport_error = None
+                return
+
+            if self._last_runtime_gate_reason is not None:
+                logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
+                self._last_runtime_gate_reason = None
+
+            await self._apply_pending_death_link(ctx)
+            await self._poll_and_send_local_death_link(ctx)
+
+            # Boss defeat location polling via transport register
+            await self._poll_boss_defeat_locations(ctx)
+
+            # Major chest location polling via dedicated major_chest_flags transport register
+            await self._poll_major_chest_locations(ctx)
+
+            # Vitality chest location polling via dedicated vitality_chest_flags transport register
+            await self._poll_vitality_chest_locations(ctx)
+
+            # Sound Player chest location polling via dedicated sound_player_chest_flags register
+            await self._poll_sound_player_chest_locations(ctx)
+
+            # Candidate discovery for non-shard boss defeat signals.
+            await self._probe_boss_defeat_candidates(ctx)
+
+            # Research-first observational probes for in-game unsafe delivery windows.
+            await self._probe_unsafe_delivery_candidates(ctx)
+
+            # Item delivery (mailbox protocol)
+            await self._deliver_items(ctx)
+
+            # Goal reporting
             await self._maybe_report_goal(ctx, ai_state_override=ai_state)
+            self._last_watcher_transport_error = None
+        except bizhawk.RequestFailedError as exc:
+            reason = exc.args[0] if exc.args else "request_failed"
+            if self._mark_bizhawk_watcher_transport_error(reason):
+                logger.info(
+                    "KirbyAM: BizHawk request failed during watcher tick; waiting for reconnect (%s)",
+                    reason,
+                )
             return
-
-        if self._last_runtime_gate_reason is not None:
-            logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
-            self._last_runtime_gate_reason = None
-
-        await self._apply_pending_death_link(ctx)
-        await self._poll_and_send_local_death_link(ctx)
-
-        # Boss defeat location polling via transport register
-        await self._poll_boss_defeat_locations(ctx)
-
-        # Major chest location polling via dedicated major_chest_flags transport register
-        await self._poll_major_chest_locations(ctx)
-
-        # Vitality chest location polling via dedicated vitality_chest_flags transport register
-        await self._poll_vitality_chest_locations(ctx)
-
-        # Sound Player chest location polling via dedicated sound_player_chest_flags register
-        await self._poll_sound_player_chest_locations(ctx)
-
-        # Candidate discovery for non-shard boss defeat signals.
-        await self._probe_boss_defeat_candidates(ctx)
-
-        # Research-first observational probes for in-game unsafe delivery windows.
-        await self._probe_unsafe_delivery_candidates(ctx)
-
-        # Item delivery (mailbox protocol)
-        await self._deliver_items(ctx)
-
-        # Goal reporting
-        await self._maybe_report_goal(ctx, ai_state_override=ai_state)
+        except bizhawk.NotConnectedError:
+            if self._mark_bizhawk_watcher_transport_error("not_connected"):
+                logger.info("KirbyAM: BizHawk disconnected during watcher tick; waiting for reconnect")
+            return
 
     async def _sync_death_link_setting(self, ctx: "BizHawkClientContext") -> None:
         """Mirror slot_data death_link into AP DeathLink tag state with de-dupe."""

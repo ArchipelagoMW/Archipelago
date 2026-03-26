@@ -1279,6 +1279,95 @@ async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("raised_exception", "expected_log_call"),
+    [
+        (
+            bizhawk.RequestFailedError("Connection timed out"),
+            (
+                "KirbyAM: BizHawk request failed during watcher tick; waiting for reconnect (%s)",
+                "Connection timed out",
+            ),
+        ),
+        (
+            bizhawk.NotConnectedError(),
+            ("KirbyAM: BizHawk disconnected during watcher tick; waiting for reconnect",),
+        ),
+    ],
+)
+async def test_game_watcher_recovers_locally_from_transport_errors(
+    mock_bizhawk_context,
+    raised_exception,
+    expected_log_call,
+):
+    """KirbyAM's shipped handler should absorb transient BizHawk disconnects without crashing the watcher."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._watcher_server_ready = True
+    client._ram_state_loaded = True
+    client._delivery_pending = True
+    client._delivery_pending_frame = 17
+    client._delivery_pending_item_index = 3
+
+    with patch('CommonClient.logger') as mock_logger, \
+         patch.object(client, '_sync_death_link_setting', new_callable=AsyncMock), \
+         patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate:
+        mock_gate.side_effect = raised_exception
+
+        await client.game_watcher(mock_bizhawk_context)
+
+    assert client._watcher_requires_bizhawk_resync is True
+    assert client._ram_state_loaded is False
+    assert client._delivery_pending is False
+    assert client._delivery_pending_frame is None
+    assert client._delivery_pending_item_index is None
+    mock_logger.info.assert_any_call(*expected_log_call)
+
+
+@pytest.mark.asyncio
+async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_context):
+    """After a transport error, the next successful tick should reload RAM-backed state and clear recovery flags."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._watcher_server_ready = True
+    client._watcher_requires_bizhawk_resync = True
+    client._last_watcher_transport_error = "Connection timed out"
+
+    with patch.object(client, '_reset_reconnect_transient_state') as mock_reset, \
+         patch.object(client, '_load_persistent_state', new_callable=AsyncMock) as mock_load, \
+         patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
+         patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock) as mock_apply_death_link, \
+         patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock) as mock_send_death_link, \
+         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
+         patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major, \
+         patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality, \
+         patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player, \
+         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe_boss, \
+         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
+         patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
+         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock) as mock_goal:
+        mock_gate.return_value = (True, "gameplay_active", 300)
+
+        await client.game_watcher(mock_bizhawk_context)
+
+    mock_reset.assert_called_once_with()
+    mock_load.assert_awaited_once_with(mock_bizhawk_context)
+    mock_apply_death_link.assert_awaited_once_with(mock_bizhawk_context)
+    mock_send_death_link.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_boss.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_major.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_vitality.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_sound_player.assert_awaited_once_with(mock_bizhawk_context)
+    mock_probe_boss.assert_awaited_once_with(mock_bizhawk_context)
+    mock_probe_unsafe.assert_awaited_once_with(mock_bizhawk_context)
+    mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
+    mock_goal.assert_awaited_once_with(mock_bizhawk_context, ai_state_override=300)
+    assert client._watcher_requires_bizhawk_resync is False
+    assert client._ram_state_loaded is True
+    assert client._last_watcher_transport_error is None
+
+
+@pytest.mark.asyncio
 async def test_global_game_watcher_recovers_when_handler_tick_times_out():
     """A RequestFailedError in handler game_watcher should not crash the global watcher loop."""
     ctx = Mock()
