@@ -576,7 +576,7 @@ class Rac3Interface(GameInterface):
                     self.timers[name + str(_time)] = _time
                     self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
-                self.nanotech_exp += 10000 + randint(1, 300 * self.max_health)
+                self.nanotech_exp += 12500 + randint(1, 350 * self.max_health)
                 if self.nanotech_exp > 0x7FFFFFFF:
                     self.nanotech_exp = 0x7FFFFFFF
                 self._write32(RAC3STATUS.NANOTECH_EXP, self.nanotech_exp)
@@ -1178,7 +1178,7 @@ class Rac3Interface(GameInterface):
 
     def near_pda_vendor(self) -> bool:
         """Check if we are near the PDA Vendor"""
-        if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 12.0:
+        if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 15.0:
             return True
         return False
 
