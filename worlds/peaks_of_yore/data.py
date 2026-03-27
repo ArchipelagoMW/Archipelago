@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import math
 from enum import IntEnum
 from typing import Callable
@@ -175,6 +176,7 @@ class AllRequirements(Requirements):
 
     def __init__(self, requirements: list[Requirements], start_priority: int = 0):
         super().__init__(start_priority)
+        self.requirements = []
         for req in requirements:
             if isinstance(req, AllRequirements):
                 self.requirements.extend(req.requirements)
@@ -200,6 +202,7 @@ class AnyRequirements(Requirements):
 
     def __init__(self, requirements: list[Requirements], start_priority: int = 0):
         super().__init__(start_priority)
+        self.requirements = []
         for req in requirements:
             if isinstance(req, AnyRequirements):
                 self.requirements.extend(req.requirements)
@@ -253,11 +256,16 @@ def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
     item_count: int = math.ceil(rope_count/2)
     min_item_count: int = math.ceil(item_count*0.75)
     short_rope_addition: int = item_count-min_item_count
-    return (SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
+    reqs: Requirements = (SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
         & (
             SimpleRequirements({"Extra Rope": short_rope_addition}, 200)   # base case: has required rope count
             | SimpleRequirements({"Rope Length Upgrade": 1}, 0)               # also accepted with 75% ropes and length upgrade
         ))
+
+    if short_rope_addition == 0:
+        reqs = SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
+
+    return reqs
 
 class POYRegion:
     """
@@ -603,17 +611,21 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         PeakRegion("The Great Crevice", 16, locations=[
             LocationData("The Great Crevice: Picture Piece #3", POYItemLocationType.ARTEFACT, 16),
             LocationData("The Great Crevice: Rope", POYItemLocationType.ROPE, 14),
-        ]),
+        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+        ),
         PeakRegion("Old Hagger", 17, locations=[
             LocationData("Old Hagger: Rope", POYItemLocationType.ROPE, 15),
-        ]),
+        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+        ),
         PeakRegion("Ugsome Storr", 18, locations=[
             LocationData("Ugsome Storr: Rope", POYItemLocationType.ROPE, 6),
-        ]),
+        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+        ),
         PeakRegion("Wuthering Crest", 19, locations=[
             LocationData("Wuthering Crest: Coffee Box", POYItemLocationType.ARTEFACT, 8),
             LocationData("Wuthering Crest: Rope", POYItemLocationType.ROPE, 9),
-        ]),
+        ],entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})),
+        ),
     ], enable_requirements=lambda options: options.enable_fundamental),
     BookRegion("Intermediate", subregions=[
         PeakRegion("Porter's Boulder", 20),
@@ -631,7 +643,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ]),
         PeakRegion("Cromlech", 29),
     ], enable_requirements=lambda options: options.enable_intermediate),
-    BookRegion("Advanced", subregions=[
+    BookRegion("Advanced", entry_requirements=LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Progressive Crampons": 1})), subregions=[
         PeakRegion("Walker's Pillar", 30, locations=[
             LocationData("Walker's Pillar: Chalk Box", POYItemLocationType.ARTEFACT, 9),
             LocationData("Walker's Pillar: Rope (Co-Climb)", POYItemLocationType.ROPE, 1,
@@ -645,7 +657,8 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ], generate_free_solo=True),
         PeakRegion("Great Gaol", 32, locations=[
             LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
-                         requirements=get_rope_requirement(1)),
+                         requirements=ConditionalRequirements(get_rope_requirement(1),
+                                                              lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)),
             LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
             LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
             LocationData("Great Gaol: Bird Seed", POYItemLocationType.BIRDSEED, 2),
@@ -656,18 +669,23 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ], generate_free_solo=True),
         PeakRegion("Ymir's Shadow", 34, locations=[
             LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
-                         requirements=get_rope_requirement(1, 200)
-                                      | SimpleRequirements({"Progressive Crampons": 2})
+                         requirements=ConditionalRequirements(get_rope_requirement(1, 200)
+                                      | SimpleRequirements({"Progressive Crampons": 2}),
+                                      lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)
                          ),
             LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
         ], generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_advanced),
-    BookRegion("Expert", entry_requirements=SimpleRequirements({"Progressive Crampons": 1, "Ice Axes": 1}), subregions=[
+    BookRegion("Expert", entry_requirements=(
+            SimpleRequirements({"Ice Axes": 1}) &
+            ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 1}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo) &
+            LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Pipe": 1}))
+    ), subregions=[
         PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
         ], generate_time_attack=False, generate_free_solo=True),
-        PeakRegion("Solemn Tempest", 36, entry_requirements=SimpleRequirements({"Progressive Crampons": 2}),
+        PeakRegion("Solemn Tempest", 36, entry_requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo),
                    enable_requirements=lambda options: not options.disable_solemn_tempest, generate_time_attack=False,
                    generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_expert),
