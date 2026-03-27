@@ -1,47 +1,62 @@
 {% from "macros.lua" import dict_to_lua %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
-require "lib"
-require "util"
 
-FREE_SAMPLES = {{ free_samples }}
-SLOT_NAME = "{{ slot_name }}"
-SEED_NAME = "{{ seed_name }}"
-FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
-TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
-MAX_SCIENCE_PACK = {{ max_science_pack }}
-GOAL = {{ goal }}
-ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-ENERGY_INCREMENT = {{ energy_link * 10000000 }}
-ENERGY_LINK_EFFICIENCY = 0.75
+local util = require "util"
+local lib = require("lib")
+local constants = require("constants")
 
+local FREE_SAMPLES = constants.FREE_SAMPLES
+local SLOT_NAME = constants.SLOT_NAME
+local SEED_NAME = constants.SEED_NAME
+local FREE_SAMPLE_BLACKLIST = constants.FREE_SAMPLE_BLACKLIST
+local TRAP_EVO_FACTOR = constants.TRAP_EVO_FACTOR
+local MAX_SCIENCE_PACK = constants.MAX_SCIENCE_PACK
+local GOAL = constants.GOAL
+local ARCHIPELAGO_DEATH_LINK_SETTING = constants.setting_names.death_link
+local ENERGY_INCREMENT = constants.ENERGY_INCREMENT
+local ENERGY_LINK_EFFICIENCY = constants.ENERGY_LINK_EFFICIENCY
+
+local DEATH_LINK
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
     DEATH_LINK = 1
 else
     DEATH_LINK = 0
 end
 
-CURRENTLY_DEATH_LOCK = 0
+local CURRENTLY_DEATH_LOCK = 0
+
+-- added events list and at the bottom a return_lib for the new control.lua
+local events = {
+    [defines.events.on_script_path_request_finished] = lib.handle_teleport_attempt
+}
 
 {% if chunk_shuffle %}
-LAST_POSITIONS = {}
-GENERATOR = nil
-NORTH = 1
-EAST = 2
-SOUTH = 3
-WEST = 4
-ER_COLOR = {1, 1, 1, 0.2}
-ER_SEED = {{ random.randint(4294967295, 2*4294967295)}}
-CURRENTLY_MOVING = false
-ER_FRAMES = {}
-CHUNK_OFFSET = {
+local LAST_POSITIONS = {}
+local GENERATOR = nil
+local NORTH = 1
+local EAST = 2
+local SOUTH = 3
+local WEST = 4
+local ER_COLOR = {1, 1, 1, 0.2}
+local ER_SEED = {{ random.randint(4294967295, 2*4294967295)}}
+local CURRENTLY_MOVING = false
+local ER_FRAMES = {}
+local CHUNK_OFFSET = {
 [NORTH] = {0, 1},
 [EAST] = {1, 0},
 [SOUTH] = {0, -1},
 [WEST] = {-1, 0}
 }
 
+local function fisher_yates_shuffle(tbl)
+    for i = #tbl, 2, -1 do
+        local j = GENERATOR(i)
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+    return tbl
+end
 
-function on_player_changed_position(event)
+local function on_player_changed_position(event)
     if CURRENTLY_MOVING == true then
         return
     end
@@ -124,20 +139,25 @@ function on_player_changed_position(event)
     LAST_POSITIONS[player_id] = character.position
 end
 
-function fisher_yates_shuffle(tbl)
-    for i = #tbl, 2, -1 do
-        local j = GENERATOR(i)
-        tbl[i], tbl[j] = tbl[j], tbl[i]
-    end
-    return tbl
-end
-
-script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
+    events.[defines.events.on_player_changed_position] = on_player_changed_position
 {% endif %}
 -- Handle the pathfinding result of teleport traps
-script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
 
-function count_energy_bridges()
+local function validate_energy_link_bridge(unit_number, entity)
+    if not entity then
+        if storage.energy_link_bridges[unit_number] == nil then return false end
+        storage.energy_link_bridges[unit_number] = nil
+        return false
+    end
+    if not entity.valid then
+        if storage.energy_link_bridges[unit_number] == nil then return false end
+        storage.energy_link_bridges[unit_number] = nil
+        return false
+    end
+    return true
+end
+
+local function count_energy_bridges()
     local count = 0
     for i, bridge in pairs(storage.energy_link_bridges) do
         if validate_energy_link_bridge(i, bridge) then
@@ -147,11 +167,11 @@ function count_energy_bridges()
     return count
 end
 
-function get_energy_increment(bridge)
+local function get_energy_increment(bridge)
     return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
 end
 
-function on_check_energy_link(event)
+local function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
     if event.tick % 60 == 30 then
@@ -187,52 +207,44 @@ function on_check_energy_link(event)
         end
     end
 end
-function string_starts_with(str, start)
+
+local function string_starts_with(str, start)
     return str:sub(1, #start) == start
 end
-function validate_energy_link_bridge(unit_number, entity)
-    if not entity then
-        if storage.energy_link_bridges[unit_number] == nil then return false end
-        storage.energy_link_bridges[unit_number] = nil
-        return false
-    end
-    if not entity.valid then
-        if storage.energy_link_bridges[unit_number] == nil then return false end
-        storage.energy_link_bridges[unit_number] = nil
-        return false
-    end
-    return true
-end
-function on_energy_bridge_constructed(entity)
+
+
+local function on_energy_bridge_constructed(entity)
     if entity and entity.valid then
         if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
             storage.energy_link_bridges[entity.unit_number] = entity
         end
     end
 end
-function on_energy_bridge_removed(entity)
+
+local function on_energy_bridge_removed(entity)
     if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
         if storage.energy_link_bridges[entity.unit_number] == nil then return end
         storage.energy_link_bridges[entity.unit_number] = nil
     end
 end
+
 if (ENERGY_INCREMENT) then
-    script.on_event(defines.events.on_tick, on_check_energy_link)
+    events[defines.events.on_tick] = on_check_energy_link
 
-    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
-    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
-    script.on_event({defines.events.on_entity_cloned}, function(event) on_energy_bridge_constructed(event.destination) end)
+    events[defines.events.on_built_entity] = function(event) on_energy_bridge_constructed(event.entity) end
+    events[defines.events.on_robot_built_entity] = function(event) on_energy_bridge_constructed(event.entity) end
+    events[defines.events.on_entity_cloned] = function(event) on_energy_bridge_constructed(event.destination) end
 
-    script.on_event({defines.events.script_raised_revive}, function(event) on_energy_bridge_constructed(event.entity) end)
-    script.on_event({defines.events.script_raised_built}, function(event) on_energy_bridge_constructed(event.entity) end)
+    events[defines.events.script_raised_revive] = function(event) on_energy_bridge_constructed(event.entity) end
+    events[defines.events.script_raised_built] = function(event) on_energy_bridge_constructed(event.entity) end
 
-    script.on_event({defines.events.on_entity_died}, function(event) on_energy_bridge_removed(event.entity) end)
-    script.on_event({defines.events.on_player_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
-    script.on_event({defines.events.on_robot_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
+    events[defines.events.on_entity_died] = function(event) on_energy_bridge_removed(event.entity) end
+    events[defines.events.on_player_mined_entity] = function(event) on_energy_bridge_removed(event.entity) end
+    events[defines.events.on_robot_mined_entity] = function(event) on_energy_bridge_removed(event.entity) end
 end
 
 {% if not imported_blueprints -%}
-function set_permissions()
+local function set_permissions()
     local group = game.permissions.get_group("Default")
     group.set_allows_action(defines.input_action.open_blueprint_library_gui, false)
     group.set_allows_action(defines.input_action.import_blueprint, false)
@@ -242,7 +254,7 @@ end
 {%- endif %}
 
 
-function check_spawn_silo(force)
+local function check_spawn_silo(force)
     if force.players and #force.players > 0 and force.get_entity_count("rocket-silo") < 1 then
         local surface = game.get_surface(1)
         local spawn_position = force.get_spawn_position(surface)
@@ -251,7 +263,7 @@ function check_spawn_silo(force)
     end
 end
 
-function check_despawn_silo(force)
+local function check_despawn_silo(force)
     if not force.players or #force.players < 1 then
         if force.get_entity_count("rocket-silo") > 0 then
             local surface = game.get_surface(1)
@@ -286,9 +298,12 @@ function check_despawn_silo(force)
     end
 end
 
+local function dumpInfo(force)
+    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
+end
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
-function on_force_created(event)
+local function on_force_created(event)
     local force = event.force
     if type(event.force) == "string" then  -- should be of type LuaForce
         force = game.forces[force]
@@ -307,17 +322,17 @@ function on_force_created(event)
     force.technologies["{{ tech_name }}"].researched = true
 {%- endfor %}
 end
-script.on_event(defines.events.on_force_created, on_force_created)
+events[defines.events.on_force_created]= on_force_created
 
 -- Destroy force data.  This doesn't appear to be currently possible with the Factorio API, but here for completeness.
-function on_force_destroyed(event)
+local function on_force_destroyed(event)
 {%- if silo == 2 %}
     check_despawn_silo(event.force)
 {%- endif %}
     storage.forcedata[event.force.name] = nil
 end
 
-function on_runtime_mod_setting_changed(event)
+local function on_runtime_mod_setting_changed(event)
     local force
     if event.player_index == nil then
         force = game.forces.player
@@ -336,63 +351,10 @@ function on_runtime_mod_setting_changed(event)
         end
     end
 end
-script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
-
--- Initialize player data, either from them joining the game or them already being part of the game when the mod was
--- added.`
-function on_player_created(event)
-    local player = game.players[event.player_index]
-    -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
-    -- For now, they will (probably) always be on the 'player' force when this event fires.
-    local data = {}
-    data['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
-    storage.playerdata[player.index] = data
-    update_player(player.index)  -- Attempt to send pending free samples, if relevant.
-{%- if silo == 2 %}
-    check_spawn_silo(game.players[event.player_index].force)
-{%- endif %}
-    dumpInfo(player.force)
-end
-script.on_event(defines.events.on_player_created, on_player_created)
-
--- Create/destroy silo for force if player switched force
-function on_player_changed_force(event)
-{%- if silo == 2 %}
-    check_despawn_silo(event.force)
-    check_spawn_silo(game.players[event.player_index].force)
-{%- endif %}
-end
-script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
-
-function on_player_removed(event)
-    storage.playerdata[event.player_index] = nil
-end
-script.on_event(defines.events.on_player_removed, on_player_removed)
-
-function on_rocket_launched(event)
-    if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
-        satellite_count = 0
-        cargo_pod = event.rocket.cargo_pod
-        if cargo_pod then
-            satellite_count = cargo_pod.get_item_count("satellite")
-        end
-        if satellite_count > 0 or GOAL == 0 then
-            storage.forcedata[event.rocket.force.name]['victory'] = 1
-            dumpInfo(event.rocket.force)
-            game.set_game_state
-            {
-                game_finished = true,
-                player_won = true,
-                can_continue = true,
-                victorious_force = event.rocket.force
-            }
-        end
-    end
-end
-script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
+events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
 
 -- Updates a player, attempting to send them any pending samples (if relevant)
-function update_player(index)
+local function update_player(index)
     local player = game.players[index]
     if not player or not player.valid then     -- Do nothing if we reference an invalid player somehow
         return
@@ -442,19 +404,61 @@ function update_player(index)
 end
 
 -- Update players upon them connecting, since updates while they're offline are suppressed.
-script.on_event(defines.events.on_player_joined_game, function(event) update_player(event.player_index) end)
+events[defines.events.on_player_joined_game] = function(event) update_player(event.player_index) end
 
-function update_player_event(event)
+local function update_player_event(event)
     update_player(event.player_index)
 end
 
-script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
+events[defines.events.on_player_main_inventory_changed] = update_player_event
 
 -- Update players when the cutscene is cancelled or finished.  (needed for skins_factored)
-script.on_event(defines.events.on_cutscene_cancelled, update_player_event)
-script.on_event(defines.events.on_cutscene_finished, update_player_event)
+events[defines.events.on_cutscene_cancelled] = update_player_event
+events[defines.events.on_cutscene_finished] = update_player_event
 
-function add_samples(force, name, count)
+-- Initialize player data, either from them joining the game or them already being part of the game when the mod was
+-- added.`
+local function on_player_created(event)
+    local player = game.players[event.player_index]
+    -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
+    -- For now, they will (probably) always be on the 'player' force when this event fires.
+    local data = {}
+    data['pending_samples'] = util.table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
+    storage.playerdata[player.index] = data
+    update_player(player.index)  -- Attempt to send pending free samples, if relevant.
+    {%- if silo == 2 %}
+    check_spawn_silo(game.players[event.player_index].force)
+    {%- endif %}
+    dumpInfo(player.force)
+end
+events[defines.events.on_player_created] = on_player_created
+
+-- Create/destroy silo for force if player switched force
+local function on_player_changed_force(event)
+{%- if silo == 2 %}
+    check_despawn_silo(event.force)
+    check_spawn_silo(game.players[event.player_index].force)
+{%- endif %}
+end
+events[defines.events.on_player_changed_force] = on_player_changed_force
+
+local function on_player_removed(event)
+    storage.playerdata[event.player_index] = nil
+end
+events[defines.events.on_player_removed] = on_player_removed
+
+local function on_pre_scenario_finished(event)
+    if event.player_won then
+        for name, _ in pairs(game.forces) do
+            storage.forcedata[name]['victory'] = 1
+        end
+        dumpInfo(event.tick)
+    end
+end
+events[defines.events.on_pre_scenario_finished] = on_pre_scenario_finished
+
+
+local function add_samples(force, name, count)
     local function add_to_table(t)
         if count <= 0 then
             -- Fixes a bug with single craft, if a recipe gives 0 of a given item.
@@ -471,7 +475,7 @@ function add_samples(force, name, count)
     end
 end
 
-script.on_init(function()
+local function on_init()
     {% if not imported_blueprints %}set_permissions(){% endif %}
     storage.forcedata = {}
     storage.playerdata = {}
@@ -490,13 +494,15 @@ script.on_init(function()
         on_player_created(e)
     end
 
-    if remote.interfaces["silo_script"] then
-        remote.call("silo_script", "set_no_victory", true)
+    if constants.GOAL == 1 then
+        if remote.interfaces["silo_script"] then -- only disables vanilla win condition.
+            remote.call("silo_script", "set_no_victory", true)
+        end
     end
-end)
+end
 
 -- hook into researches done
-script.on_event(defines.events.on_research_finished, function(event)
+local function on_research_finished(event)
     local technology = event.research
     if string.find(technology.force.name, "EE_TESTFORCE") == 1 then
         --Don't acknowledge AP research as an Editor Extensions test force
@@ -508,6 +514,15 @@ script.on_event(defines.events.on_research_finished, function(event)
         -- check if it came from the server anyway, then we don't need to double send.
         dumpInfo(technology.force) --is sendable
     else
+        if constants.GOAL == 1 and event.research.name == "achipellago-trigger-"..constants.goal_science_pack then
+            game.set_game_state
+            {
+                game_finished = true,
+                player_won = true,
+                can_continue = true,
+                victorious_force = event.research.force
+            }
+        end
         if FREE_SAMPLES == 0 then
             return  -- Nothing else to do
         end
@@ -525,7 +540,7 @@ script.on_event(defines.events.on_research_finished, function(event)
                             if FREE_SAMPLES == 1 then
                                 count = result.amount
                             else
-                                count = get_any_stack_size(result.name)
+                                count = lib.get_any_stack_size(result.name)
                                 if FREE_SAMPLES == 2 then
                                     count = math.ceil(count / 2)
                                 end
@@ -537,15 +552,13 @@ script.on_event(defines.events.on_research_finished, function(event)
             end
         end
     end
-end)
-
-
-function dumpInfo(force)
-    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
 end
+events[defines.events.on_research_finished] = on_research_finished
 
 
-function chain_lookup(table, ...)
+
+
+local function chain_lookup(table, ...)
     for _, k in ipairs{...} do
         table = table[k]
         if not table then
@@ -555,7 +568,7 @@ function chain_lookup(table, ...)
     return table
 end
 
-function kill_players(force)
+local function kill_players(force)
     CURRENTLY_DEATH_LOCK = 1
     local current_character = nil
     for _, player in ipairs(force.players) do
@@ -567,7 +580,7 @@ function kill_players(force)
     CURRENTLY_DEATH_LOCK = 0
 end
 
-function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
+local function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
     local prototype = prototypes.entity[name]
     local args = {  -- For can_place_entity and place_entity
         name = prototype.name,
@@ -670,19 +683,21 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
 end
 
 
-script.on_event(defines.events.on_entity_died, function(event)
-    if DEATH_LINK == 0 then
-        return
-    end
-    if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
-        return
-    end
+events[defines.events.on_entity_died] = function(event)
+    if event.entity.name == "character" then 
+        if DEATH_LINK == 0 then
+            return
+        end
+        if CURRENTLY_DEATH_LOCK == 1 then -- don't re-trigger on same event
+            return
+        end
 
-    local force = event.entity.force
-    storage.forcedata[force.name].death_link_tick = game.tick
-    dumpInfo(force)
-    kill_players(force)
-end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
+        local force = event.entity.force
+        storage.forcedata[force.name].death_link_tick = game.tick
+        dumpInfo(force)
+        kill_players(force)
+    end
+end
 
 
 -- add / commands
@@ -730,32 +745,32 @@ end,
 ["Teleport Trap"] = function()
     for _, player in ipairs(game.forces["player"].players) do
         if player.character then
-            attempt_teleport_player(player, 1)
+            lib.attempt_teleport_player(player, 1)
         end
     end
 end,
 ["Grenade Trap"] = function ()
-    fire_entity_at_players("grenade", 0.1)
+    lib.fire_entity_at_players("grenade", 0.1)
 end,
 ["Cluster Grenade Trap"] = function ()
-    fire_entity_at_players("cluster-grenade", 0.1)
+    lib.fire_entity_at_players("cluster-grenade", 0.1)
 end,
 ["Artillery Trap"] = function ()
-    fire_entity_at_players("artillery-projectile", 1)
+    lib.fire_entity_at_players("artillery-projectile", 1)
 end,
 ["Atomic Rocket Trap"] = function ()
-    fire_entity_at_players("atomic-rocket", 0.1)
+    lib.fire_entity_at_players("atomic-rocket", 0.1)
 end,
 ["Atomic Cliff Remover Trap"] = function ()
     local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
 
     if #cliffs > 0 then
-        fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
+        lib.fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
     end
 end,
 ["Inventory Spill Trap"] = function ()
     for _, player in ipairs(game.forces["player"].players) do
-        spill_character_inventory(player.character)
+        lib.spill_character_inventory(player.character)
     end
 end,
 }
@@ -770,7 +785,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
     end
-    chunks = split(call.parameter, "\t")
+    local chunks = lib.split(call.parameter, "\t")
     local item_name = chunks[1]
     local index = chunks[2]
     local source = chunks[3] or "Archipelago"
@@ -869,3 +884,13 @@ end)
 
 -- data
 progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}
+
+
+local return_lib = {}
+
+return_lib.events = events
+return_lib.on_init = on_init
+return_lib.on_configuration_changed = function() return end
+return_lib.on_load = function() return end
+
+return return_lib
