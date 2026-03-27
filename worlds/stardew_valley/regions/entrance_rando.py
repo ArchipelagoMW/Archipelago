@@ -10,7 +10,7 @@ from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData, rev
 
 def create_player_randomization_flag(
         entrance_randomization_choice: EntranceRandomization,
-        entrance_behavour_choice: set[EntranceRandomizerBehaviourOptionName],
+        entrance_behaviour_choice: set[EntranceRandomizerBehaviourOptionName],
         include_endgame: bool,
         content: StardewContent,
 ):
@@ -34,8 +34,8 @@ def create_player_randomization_flag(
     elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
         flag |= RandomizationFlag.SET_EVERYTHING
 
-    if (EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behavour_choice
-            or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in entrance_behavour_choice):
+    if (EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behaviour_choice
+            or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in entrance_behaviour_choice):
         flag |= RandomizationFlag.FARMHOUSE
     if content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.MASTERY_CAVE
