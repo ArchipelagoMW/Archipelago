@@ -941,6 +941,9 @@ class GameManager(ThemedApp):
             if len(self.logging_pairs) > 1:
                 self.add_client_tab(display_name, self.log_panels[display_name])
 
+        self.log_panels["Self"] = UILog(logging.getLogger("Client"))
+        self.add_client_tab("Self", self.log_panels["Self"])
+
         self.hint_log = HintLog(self.json_to_kivy_parser)
         hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
         self.log_panels["Hints"] = hint_panel.content
@@ -1100,6 +1103,11 @@ class GameManager(ThemedApp):
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+        concerns_self = any(("player" in part and self.ctx.slot_concerns_self(part["player"])) for part in data) or \
+                        all("player" not in part for part in data)
+        # only print if there's a player that is us, or there is not a player at all
+        if concerns_self:
+            self.log_panels["Self"].on_message_markup(text)
 
     def focus_textinput(self):
         if hasattr(self, "textinput"):
