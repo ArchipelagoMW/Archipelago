@@ -973,7 +973,7 @@ class DataRandomization(OptionSet):
     internal_name = "data_randomization"
     display_name = "Data Randomization"
     valid_keys = frozenset({
-        DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season,
+        DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location
     })
     preset_none = frozenset()
     preset_all = valid_keys

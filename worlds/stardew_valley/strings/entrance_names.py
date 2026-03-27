@@ -435,6 +435,8 @@ class LogicEntrance:
     buy_from_raccoon_4 = "Buy From Raccoon After 4 Requests"
     buy_from_raccoon_5 = "Buy From Raccoon After 5 Requests"
     buy_from_raccoon_6 = "Buy From Raccoon After 6 Requests"
+    fish_in_forest_river = "Fish In Forest River"
+    fish_in_forest_pond = "Fish In Forest Pond"
     fish_in_waterfall = "Fish In Waterfall"
     find_secret_notes = "Find Secret Notes"
     search_garbage_cans = "Search Garbage Cans"
