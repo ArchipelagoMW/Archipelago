@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from typing import Any, Dict
+from typing import Any, Dict, ClassVar
 
 # Imports of base Archipelago modules must be absolute.
 from worlds.AutoWorld import World
@@ -54,7 +54,31 @@ class BabaIsYouWorld(World):
 
     # Mapping for level shuffle
     active_level_dict: dict[str,str]
-    
+
+    # Universal Tracker
+    tracker_world: ClassVar = {
+        "map_page_folder": "tracker",
+        "map_page_maps": "maps/maps.json",
+        "map_page_locations": [
+            "locations/???.json",
+            "locations/abc.json",
+            "locations/cavern.json",
+            "locations/center.json",
+            "locations/chasm.json",
+            "locations/depths.json",
+            "locations/fall.json",
+            "locations/forest.json",
+            "locations/garden.json",
+            "locations/island.json",
+            "locations/lake.json",
+            "locations/map.json",
+            "locations/meta.json",
+            "locations/mountain.json",
+            "locations/ruins.json",
+            "locations/space.json"
+        ],
+    }
+
     def generate_early(self) -> None:
         # Validate options
         maxBlossoms = self.options.blossoms + (self.options.blossom_petals // 8)

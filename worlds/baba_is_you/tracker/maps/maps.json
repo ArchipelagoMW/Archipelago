@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Map",
+    "img": "images/maps/map.png"
+  },
+  {
+    "name": "The Lake",
+    "img": "images/maps/lake.png"
+  },
+  {
+    "name": "Solitary Island",
+    "img": "images/maps/island.png"
+  },
+  {
+    "name": "Temple Ruins",
+    "img": "images/maps/ruins.png"
+  },
+  {
+    "name": "Forest of Fall",
+    "img": "images/maps/fall.png"
+  },
+  {
+    "name": "Deep Forest",
+    "img": "images/maps/forest.png"
+  },
+  {
+    "name": "Rocket Trip",
+    "img": "images/maps/space.png"
+  },
+  {
+    "name": "Flower Garden",
+    "img": "images/maps/garden.png"
+  },
+  {
+    "name": "Chasm",
+    "img": "images/maps/chasm.png"
+  },
+  {
+    "name": "Volcanic Cavern",
+    "img": "images/maps/cavern.png"
+  },
+  {
+    "name": "Mountaintop",
+    "img": "images/maps/mountain.png"
+  },
+  {
+    "name": "???",
+    "img": "images/maps/???.png"
+  },
+  {
+    "name": "ABC",
+    "img": "images/maps/abc.png"
+  },
+  {
+    "name": "Depths",
+    "img": "images/maps/depths.png"
+  },
+  {
+    "name": "Meta",
+    "img": "images/maps/meta.png"
+  },
+  {
+    "name": "Center",
+    "img": "images/maps/center.png"
+  }
+]
