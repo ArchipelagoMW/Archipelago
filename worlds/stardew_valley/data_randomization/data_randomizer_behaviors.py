@@ -53,7 +53,8 @@ def range_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any
     if len(values) < 2:
         return randomize(existing_values, random)
 
-    max_decimals = max(len(str(val - (val % 1))) - 2 for val in values)
+    # TODO: Handle floats because this shit doesn't work
+    # max_decimals = max(len(str(val - (val // 1))) - 2 for val in values)
     round_digits = 1
     while any(val != round(val, round_digits) for val in values):
         round_digits += 1
@@ -64,12 +65,12 @@ def range_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any
 
     new_values = dict()
     for i in range(len(keys)):
-        if max_decimals == 0:
-            random_value = random.randrange(range_start, range_end)
-            random_value = round(random_value, -round_digits)
-        else:
-            random_value = random.random()
-            random_value = round(random_value, max_decimals)
+        # if max_decimals == 0:
+        random_value = random.randrange(range_start, range_end)
+        random_value = round(random_value, -round_digits)
+        # else:
+        #     random_value = random.random()
+        #     random_value = round(random_value, max_decimals)
         new_values[keys[i]] = random_value
 
     return new_values
