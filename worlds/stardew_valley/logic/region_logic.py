@@ -5,6 +5,13 @@ from ..stardew_rule import Reach, StardewRule, false_, true_
 from ..strings.region_names import Region
 from .base_logic import BaseLogic, BaseLogicMixin
 
+main_outside_area = {Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest, Region.bus_stop,
+                     Region.backwoods, Region.tunnel_entrance}
+
+always_accessible_regions_without_er = {*main_outside_area, Region.hospital, Region.carpenter, Region.alex_house, Region.ranch, Region.farm_cave, Region.tent,
+                                        Region.pierre_store, Region.saloon, Region.blacksmith, Region.trailer, Region.museum, Region.mayor_house,
+                                        Region.haley_house, Region.sam_house, Region.jojamart, Region.fish_shop}
+
 
 class RegionLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
@@ -16,12 +23,18 @@ class RegionLogic(BaseLogic):
 
     @cache_self1
     def can_reach(self, region_name: str) -> StardewRule:
+        if self.options.entrance_randomization == self.options.entrance_randomization.option_disabled and region_name in always_accessible_regions_without_er:
+            return true_
+
         if region_name not in self.regions:
             return false_
 
         return Reach(region_name, "Region", self.player)
 
     def can_reach_any(self, *region_names: str) -> StardewRule:
+        if self.options.entrance_randomization == self.options.entrance_randomization.option_disabled and any(
+                r in always_accessible_regions_without_er for r in region_names):
+            return true_
         return self.logic.or_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
     def can_reach_all(self, *region_names: str) -> StardewRule:
