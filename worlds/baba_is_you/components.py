@@ -1,4 +1,4 @@
-from worlds.LauncherComponents import Component, Type, components, launch
+from worlds.LauncherComponents import Component, Type, components, launch, icon_paths
 
 
 # The most common type of component is a client, but there are other components, such as sprite/palette adjusters.
@@ -29,5 +29,8 @@ components.append(
         game_name="Baba Is You",
         component_type=Type.CLIENT,
         supports_uri=True,
+        icon="Baba Is You",
     )
 )
+
+icon_paths["Baba Is You"] = f"ap:{__name__}/icon.png"
