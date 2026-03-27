@@ -1,16 +1,21 @@
+from random import Random
+
 from . import content_packs
 from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression, tool_progression, hatsanity, museumsanity
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
+from ..data_randomization.data_randomizer import randomize_data
 from ..strings.ap_names.ap_option_names import StartWithoutOptionName
 from ..strings.building_names import Building
 
 
-def create_content(player_options: options.StardewValleyOptions) -> StardewContent:
+def create_content(player_options: options.StardewValleyOptions, random: Random) -> StardewContent:
     active_packs = choose_content_packs(player_options)
     features = choose_features(player_options)
-    return unpack_content(features, active_packs)
+    content = unpack_content(features, active_packs)
+    randomize_data(content, player_options, random)
+    return content
 
 
 def choose_content_packs(player_options: options.StardewValleyOptions):

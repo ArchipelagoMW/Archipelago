@@ -946,7 +946,7 @@ class DataRandomizationBehavior(Choice):
         If any Data Randomization toggles are on, this decides how the data is randomized. Not all toggles can handle all behaviors, when not applicable, the closest lower behavior is chosen.
         Off: No Data Randomization occurs
         Shuffle: All values are maintained, but shuffled between entries.
-        Weighted Randomized: All entries are given a random value from the original pool, weighted from the original frequency, with repeat draws
+        Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
         Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws
         Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed
         Wild: All entries are given a random value, with no regard for the original entries at all.

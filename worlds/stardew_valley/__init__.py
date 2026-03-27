@@ -19,7 +19,9 @@ from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
 from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
-from .items import Group, ItemData, create_items, generate_filler_choice_pool, item_table, items_by_group, setup_early_items
+from .data_randomization.randomized_data_writer import add_randomized_data_to_spoiler_log
+from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
+    setup_early_items
 from .items.item_data import FILLER_GROUPS
 from .locations import LocationData, create_locations, location_table, locations_by_tag
 from .logic.combat_logic import valid_weapons
@@ -161,7 +163,7 @@ class StardewValleyWorld(World):
         group_options = typing.cast(StardewValleyOptions, world_group.options)
         worlds_options = [typing.cast(StardewValleyOptions, multiworld.worlds[player].options) for player in players]
         apply_most_restrictive_options(group_options, worlds_options)
-        world_group.content = create_content(group_options)
+        world_group.content = create_content(group_options, world_group.random)
 
         return world_group
 
@@ -208,7 +210,7 @@ class StardewValleyWorld(World):
     def generate_early(self):
         force_change_options_if_banned(self.options, self.settings, self.player, self.player_name)
         force_change_options_if_incompatible(self.options, self.player, self.player_name)
-        self.content = create_content(self.options)
+        self.content = create_content(self.options, self.random)
 
     def create_regions(self):
 
@@ -542,6 +544,7 @@ class StardewValleyWorld(World):
         """Write to the spoiler "middle", this is after the per-player options and before locations,
         meant for useful or interesting info."""
         self.add_bundles_to_spoiler_log(spoiler_handle)
+        add_randomized_data_to_spoiler_log(spoiler_handle, self.multiworld.get_player_name(self.player), self.content, self.options)
 
     def add_bundles_to_spoiler_log(self, spoiler_handle: TextIO):
         if self.options.bundle_randomization == BundleRandomization.option_vanilla:
