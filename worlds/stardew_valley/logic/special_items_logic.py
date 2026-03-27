@@ -26,8 +26,10 @@ class SpecialItemsLogic(BaseLogic):
         has_first_shorts = self.logic.season.has(Season.summer) & \
                            self.logic.region.can_reach(Region.ranch) & \
                            self.logic.relationship.has_hearts(NPC.marnie, 2)
-        if scepter_is_logic:
-            can_warp_away = self.logic.has_any(Consumable.warp_totem_farm) | self.logic.received("Return Scepter")
+        if scepter_is_logic and self.options.entrance_randomization.randomized_fast_travel_warps():
+            can_warp_away = self.logic.has(Consumable.warp_totem_farm) & self.logic.received("Return Scepter")
+        elif scepter_is_logic:
+            can_warp_away = self.logic.has(Consumable.warp_totem_farm) | self.logic.received("Return Scepter")
         else:
             can_warp_away = self.logic.has(Consumable.warp_totem_farm)
         has_repeatable_shorts = self.logic.region.can_reach(Region.purple_shorts_maze) & can_warp_away
