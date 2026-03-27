@@ -1,4 +1,5 @@
 import unittest
+from random import Random
 
 from ... import create_content, options
 from ...regions.entrance_rando import create_player_randomization_flag
@@ -73,7 +74,7 @@ class TestRandomizationFlag(unittest.TestCase):
                 options.EntranceRandomizationBehaviour: options.EntranceRandomizationBehaviour.default,
                 options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
                 options.IncludeEndgameLocations: options.IncludeEndgameLocations.option_false, })
-            content = create_content(player_options)
+            content = create_content(player_options, Random(1))
 
             flag = create_player_randomization_flag(
                 player_options.entrance_randomization,
@@ -91,7 +92,7 @@ class TestRandomizationFlag(unittest.TestCase):
                 options.EntranceRandomizationBehaviour: options.EntranceRandomizationBehaviour.default,
                 options.SkillProgression: options.SkillProgression.option_progressive,
                 options.IncludeEndgameLocations: options.IncludeEndgameLocations.option_false, })
-            content = create_content(player_options)
+            content = create_content(player_options, Random(1))
 
             flag = create_player_randomization_flag(
                 player_options.entrance_randomization,

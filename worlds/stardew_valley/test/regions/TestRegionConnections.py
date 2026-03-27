@@ -1,4 +1,5 @@
 import unittest
+from random import Random
 
 from ..options.utils import fill_dataclass_with_default
 from ... import options
@@ -30,7 +31,7 @@ class TestModsConnections(unittest.TestCase):
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
         options.Mods: frozenset(options.all_mods_except_invalid_combinations),
     }
-    content = create_content(fill_dataclass_with_default(options))
+    content = create_content(fill_dataclass_with_default(options), Random(1))
     all_regions_by_name = create_all_regions(content.registered_packs)
     all_connections_by_name = create_all_connections(content.registered_packs)
 

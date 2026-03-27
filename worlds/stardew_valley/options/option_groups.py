@@ -52,6 +52,8 @@ else:
             options.Hatsanity,
             options.IncludeEndgameLocations,
             options.EntranceRandomizationBehaviour,
+            options.DataRandomizationBehavior,
+            options.DataRandomization,
         ]),
         OptionGroup("Multipliers, Buffs and extra customization", [
             options.StartingMoney,
