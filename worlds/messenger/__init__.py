@@ -19,7 +19,8 @@ from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
-from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections
+from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections, TRACKER_PACK_CONFIG, GLITCHED_ITEM, \
+    add_glitched_rules
 
 components.append(
     Component(
@@ -41,7 +42,12 @@ class MessengerSettings(Group):
         is_exe = True
         md5s = ["1b53534569060bc06179356cd968ed1d"]
 
+    class UTPackPath(FilePath):
+        required = False
+        ut_dialog_name = "Select The Messenger Randomizer Track Pack"
+
     game_path: GamePath = GamePath("TheMessenger.exe")
+    ut_pack_path: UTPackPath | str = UTPackPath()
 
 
 class MessengerWeb(WebWorld):
@@ -82,6 +88,9 @@ class MessengerWorld(World):
     options: MessengerOptions
     settings_key = "messenger_settings"
     settings: ClassVar[MessengerSettings]
+
+    tracker_world: ClassVar = TRACKER_PACK_CONFIG
+    glitches_item_name: ClassVar[str] = GLITCHED_ITEM
 
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
@@ -280,6 +289,10 @@ class MessengerWorld(World):
         logic = self.options.logic_level
         if logic == Logic.option_normal:
             MessengerRules(self).set_messenger_rules()
+
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                add_glitched_rules(self, MessengerHardRules(self))
+
         elif logic == Logic.option_hard:
             MessengerHardRules(self).set_messenger_rules()
         else:
@@ -296,8 +309,10 @@ class MessengerWorld(World):
             slot_data = self.multiworld.re_gen_passthrough.get(self.game)
             if slot_data:
                 self.multiworld.plando_options |= PlandoOptions.connections
-                self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
-                self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
+                if slot_data["portal_exits"]:
+                    self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
+                if slot_data["transitions"]:
+                    self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
                 keep_entrance_logic = True
 
         add_closed_portal_reqs(self)
