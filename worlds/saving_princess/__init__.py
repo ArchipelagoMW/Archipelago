@@ -1,14 +1,15 @@
 import shutil
-from typing import ClassVar, Dict, Any, Type, List, Union
+from typing import ClassVar, Dict, Any, Type, Union, Optional
 
 import Utils
 from BaseClasses import Tutorial, ItemClassification as ItemClass
 from Options import PerGameCommonOptions, OptionError
 from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
+from worlds.LauncherComponents import components, Component, icon_paths, launch_subprocess, Type as ComponentType
 from . import Options, Items, Locations
 from .Constants import *
+from .Locations import location_dict, location_dict_events, location_dict_event_expanded
 
 
 def launch_client(*args: str):
@@ -17,8 +18,18 @@ def launch_client(*args: str):
 
 
 components.append(
-    Component(f"{GAME_NAME} Client", game_name=GAME_NAME, func=launch_client, component_type=ComponentType.CLIENT, supports_uri=True)
+    Component(
+        f"{GAME_NAME} Client",
+        game_name=GAME_NAME,
+        func=launch_client,
+        component_type=ComponentType.CLIENT,
+        supports_uri=True,
+        icon="Saving Princess",
+        description="Launch Saving Princess.\nAlso fetches and installs mod updates.",
+    )
 )
+
+icon_paths["Saving Princess"] = f"ap:{__name__}/icon.png"
 
 
 def get_default_launch_command() -> List[str]:
@@ -74,7 +85,7 @@ class SavingPrincessWeb(WebWorld):
 
 
 class SavingPrincessWorld(World):
-    """ 
+    """
     Explore a space station crawling with rogue machines and even rival bounty hunters
     with the same objective as you - but with far, far different intentions!
 
@@ -82,7 +93,7 @@ class SavingPrincessWorld(World):
     """  # Excerpt from itch
     game = GAME_NAME
     web = SavingPrincessWeb()
-    required_client_version = (0, 5, 0)
+    required_client_version = tuple(CLIENT_VERSION)
 
     topology_present = False
 
@@ -106,14 +117,60 @@ class SavingPrincessWorld(World):
     settings_key = "saving_princess_settings"
     settings: ClassVar[SavingPrincessSettings]
 
+    final_locks: int = 0
     is_pool_expanded: bool = False
-    music_table: List[int]
+    has_battle_log: bool = False
+    has_extra_goodies: bool = False
+    music_table: List[int] = []
+
+    trap_chance: int = 0
+    filler_list: List[str] = list(Items.item_dict_filler.keys())
+    trap_list: List[str] = []
+
+    arctic_door: DoorType = DoorType.DOOR_TYPE_POWER
+    volcanic_door: DoorType = DoorType.DOOR_TYPE_POWER
+    swamp_door: DoorType = DoorType.DOOR_TYPE_POWER
+
+    item_pool: List[Items.SavingPrincessItem] = []
 
     def generate_early(self) -> None:
+        self.item_pool = []
+
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
-        self.music_table = list(range(16))
+
+        self.final_locks = self.options.final_locks.value
         self.is_pool_expanded = self.options.expanded_pool > 0
+        self.has_battle_log = self.options.battle_log > 0
+        self.has_extra_goodies = self.options.battle_log == Options.BattleLog.option_extra_goodies
+
+        door_types: List[DoorType] = [
+            DoorType.DOOR_TYPE_POWER, DoorType.DOOR_TYPE_FIRE, DoorType.DOOR_TYPE_ICE, DoorType.DOOR_TYPE_VOLT]
+        match self.options.blast_doors:
+            case self.options.blast_doors.option_vanilla:
+                self.arctic_door = DoorType.DOOR_TYPE_POWER
+                self.volcanic_door = DoorType.DOOR_TYPE_POWER
+                self.swamp_door = DoorType.DOOR_TYPE_POWER
+            case self.options.blast_doors.option_random_without_repeats:
+                self.random.shuffle(door_types)
+                self.arctic_door = door_types[0]
+                self.volcanic_door = door_types[1]
+                self.swamp_door = door_types[2]
+            case self.options.blast_doors.option_random_uniform:
+                door_type: DoorType = self.random.choice(door_types)
+                self.arctic_door = door_type
+                self.volcanic_door = door_type
+                self.swamp_door = door_type
+            case self.options.blast_doors.option_fully_random:
+                self.arctic_door = self.random.choice(door_types)
+                self.volcanic_door = self.random.choice(door_types)
+                self.swamp_door = self.random.choice(door_types)
+            case self.options.blast_doors.option_remove_blast_doors:
+                self.arctic_door = DoorType.DOOR_TYPE_NONE
+                self.volcanic_door = DoorType.DOOR_TYPE_NONE
+                self.swamp_door = DoorType.DOOR_TYPE_NONE
+
+        self.music_table = list(range(16))
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)
             # find zzz and purple and swap them back to their original positions
@@ -123,48 +180,58 @@ class SavingPrincessWorld(World):
                 self.music_table[song_id] = song_id
                 self.music_table[song_index] = t
 
+        # make a list of items that can be filler and items that can be traps
+        self.trap_list = ([TRAP_ITEM_ICE] * self.options.ice_weight
+                          + [TRAP_ITEM_SHAKES] * self.options.shake_weight
+                          + [TRAP_ITEM_NINJA] * self.options.ninja_weight
+                          + [TRAP_ITEM_TEXT] * self.options.text_weight)
+
     def create_regions(self) -> None:
         from .Regions import create_regions
-        create_regions(self.multiworld, self.player, self.is_pool_expanded)
+        create_regions(self.multiworld, self.player, self.is_pool_expanded, self.has_battle_log)
 
     def create_items(self) -> None:
-        items_made: int = 0
-
         # now, for each item
         item_dict = Items.item_dict_expanded if self.is_pool_expanded else Items.item_dict_base
+        if self.has_extra_goodies:
+            item_dict.update(Items.item_dict_battle_log)
         for item_name, item_data in item_dict.items():
             # create count copies of the item
             for i in range(item_data.count):
-                self.multiworld.itempool.append(self.create_item(item_name))
-            items_made += item_data.count
+                self.add_item(item_name)
             # and create count_extra useful copies of the item
-            original_item_class: ItemClass = item_data.item_class
-            item_data.item_class = ItemClass.useful
             for i in range(item_data.count_extra):
-                self.multiworld.itempool.append(self.create_item(item_name))
-            item_data.item_class = original_item_class
-            items_made += item_data.count_extra
+                self.add_item(item_name, ItemClass.useful)
 
-        # get the number of unfilled locations, that is, locations for items - items generated
-        location_count = len(Locations.location_dict_base)
-        if self.is_pool_expanded:
-            location_count = len(Locations.location_dict_expanded)
-        junk_count: int = location_count - items_made
-
-        # and generate as many junk items as unfilled locations
+        event_count: int = len(location_dict_event_expanded) if self.is_pool_expanded else len(location_dict_events)
+        # total locations - event locations - already created items = items left to create
+        junk_count: int = len(self.multiworld.get_unfilled_locations(self.player)) - event_count - len(self.item_pool)
         for i in range(junk_count):
-            self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
+            self.add_item(self.get_filler_item_name())
+
+        self.multiworld.itempool += self.item_pool
 
     def create_item(self, name: str) -> Items.SavingPrincessItem:
         return Items.item_dict[name].create_item(self.player)
 
+    def create_item_with_class(self, name: str, classification: ItemClass) -> Items.SavingPrincessItem:
+        item: Items.SavingPrincessItem = self.create_item(name)
+        item.classification = classification
+        return item
+
+    def add_item(self, name: str, classification: Optional[ItemClass] = None):
+        if classification is None:
+            self.item_pool.append(self.create_item(name))
+        else:
+            self.item_pool.append(self.create_item_with_class(name, classification))
+
     def get_filler_item_name(self) -> str:
-        filler_list = list(Items.item_dict_filler.keys())
         # check if this is going to be a trap
-        if self.random.randint(0, 99) < self.options.trap_chance:
-            filler_list = list(Items.item_dict_traps.keys())
-        # and return one of the names at random
-        return self.random.choice(filler_list)
+        if len(self.trap_list) > 0 and self.random.randint(0, 99) < self.options.trap_chance:
+            return self.random.choice(self.trap_list)
+        # not a trap, return filler
+        else:
+            return self.random.choice(self.filler_list)
 
     def set_rules(self):
         from .Rules import set_rules
@@ -172,14 +239,29 @@ class SavingPrincessWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
-            "death_link",
+            # generation options
+            "final_locks",
             "expanded_pool",
+            "battle_log",
+            # trap weights
+            "ice_weight",
+            "shake_weight",
+            "ninja_weight",
+            "text_weight",
+            # gameplay options
             "instant_saving",
             "sprint_availability",
             "cliff_weapon_upgrade",
             "ace_weapon_upgrade",
-            "shake_intensity",
             "iframes_duration",
+            # link options
+            "death_link",
+            "trap_link",
+            # aesthetic options
+            "shake_intensity",
         )
+        slot_data["arctic_door"] = self.arctic_door.value
+        slot_data["volcanic_door"] = self.volcanic_door.value
+        slot_data["swamp_door"] = self.swamp_door.value
         slot_data["music_table"] = self.music_table
         return slot_data
