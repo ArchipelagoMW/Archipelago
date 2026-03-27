@@ -565,7 +565,9 @@ class StardewValleyWorld(World):
         if self.options.entrance_randomization == EntranceRandomization.option_disabled:
             return
         if self.randomized_entrances is None:
-            return
+            # there were no randomized_entrances created in the randomize_entrances call
+            # so no replaced entrances either
+            self.randomized_entrances = {}
         for original_entrance, replaced_entrance in self.randomized_entrances.items():
             self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
