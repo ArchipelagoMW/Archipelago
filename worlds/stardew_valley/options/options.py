@@ -231,7 +231,7 @@ class EntranceRandomizationBehaviour(OptionSet):
     """
 
     default = frozenset({EntranceRandomizerBehaviourOptionName.same_type})
-    internal_name = "er_behaviour"
+    internal_name = "entrance_randomization_behaviour"
     display_name = "Entrance Randomizer Behaviour"
     valid_keys = frozenset(
         {
