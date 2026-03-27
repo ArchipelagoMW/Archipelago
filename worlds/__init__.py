@@ -33,7 +33,7 @@ __all__ = [
 ]
 
 
-failed_world_loads: List[str] = []
+failed_world_loads: dict[str, str] = {}
 
 
 @dataclasses.dataclass(order=True)
@@ -68,8 +68,9 @@ class WorldSource:
             print(f"Could not load world {self}:", file=file_like)
             traceback.print_exc(file=file_like)
             file_like.seek(0)
-            logging.exception(file_like.read())
-            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
+            reason = file_like.read()
+            logging.exception(reason)
+            failed_world_loads[os.path.basename(self.path).rsplit(".", 1)[0]] = reason
             return False
 
 
@@ -128,7 +129,7 @@ if apworlds:
 
         def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
             if add_as_failed_to_load:
-                failed_world_loads.append(game_name)
+                failed_world_loads[game_name] = reason
             logging.warning(reason)
 
         for apworld_source in apworlds:

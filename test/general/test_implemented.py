@@ -54,7 +54,7 @@ class TestImplemented(unittest.TestCase):
 
     def test_no_failed_world_loads(self):
         if failed_world_loads:
-            self.fail(f"The following worlds failed to load: {failed_world_loads}")
+            self.fail(f"The following worlds failed to load: {failed_world_loads.keys()}")
 
     def test_prefill_items(self):
         """Test that every world can reach every location from allstate before pre_fill."""
