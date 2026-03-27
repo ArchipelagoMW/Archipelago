@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, cast, ClassVar
 
 from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
@@ -17,12 +17,13 @@ from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
-from .options import TheWitnessOptions, witness_option_groups
+from .options import RelevanceMixin, TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
 from .regions import WitnessPlayerRegions
 from .rules import set_rules
+from .universal_tracker import set_options_from_ut
 
 
 class WitnessWebWorld(WebWorld):
@@ -82,6 +83,8 @@ class WitnessWorld(World):
     location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
     required_client_version = (0, 6, 4)
+
+    ut_can_gen_without_yaml: ClassVar[bool] = True
 
     player_logic: WitnessPlayerLogic
     player_locations: WitnessPlayerLocations
@@ -155,6 +158,16 @@ class WitnessWorld(World):
                               f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
+        # Do this first, as set_options_from_ut might re-set it to something different
+        if self.options.victory_condition == "panel_hunt":
+            total_panels = self.options.panel_hunt_total
+            required_percentage = self.options.panel_hunt_required_percentage
+            self.panel_hunt_required_count = round(total_panels * required_percentage / 100)
+        else:
+            self.panel_hunt_required_count = 0
+
+        set_options_from_ut(self)
+
         disabled_locations = self.options.exclude_locations.value
 
         self.player_logic = WitnessPlayerLogic(
@@ -175,13 +188,6 @@ class WitnessWorld(World):
         for item_name, item_data in self.player_items.item_data.items():
             if item_data.local_only:
                 self.options.local_items.value.add(item_name)
-
-        if self.options.victory_condition == "panel_hunt":
-            total_panels = self.options.panel_hunt_total
-            required_percentage = self.options.panel_hunt_required_percentage
-            self.panel_hunt_required_count = round(total_panels * required_percentage / 100)
-        else:
-            self.panel_hunt_required_count = 0
 
     def create_regions(self) -> None:
         self.player_regions.create_regions(self, self.player_logic)
@@ -382,11 +388,11 @@ class WitnessWorld(World):
 
         slot_data = self._get_slot_data()
 
-        for option_name in (attr.name for attr in dataclasses.fields(TheWitnessOptions)
-                            if attr not in dataclasses.fields(PerGameCommonOptions)):
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = bool(option.value) if isinstance(option, Toggle) else option.value
-
+        slot_data_options = [
+            option_name for option_name, option_type in TheWitnessOptions.type_hints.items()
+            if issubclass(option_type, RelevanceMixin) and option_type.needs_to_be_in_slot_data
+        ]
+        slot_data |= self.options.as_dict(*slot_data_options, toggles_as_bools=True)
         return slot_data
 
     def create_item(self, item_name: str) -> WitnessItem:
