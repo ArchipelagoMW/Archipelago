@@ -262,7 +262,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
             rom_hash = await get_hash(ctx.bizhawk_ctx)
             if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
-                if ctx.server is not None and not ctx.server.socket.closed:
+                if ctx.server is not None:
                     logger.info(f"ROM changed. Disconnecting from server.")
 
                 ctx.auth = None
@@ -293,7 +293,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
             continue
 
         # Server auth
-        if ctx.server is not None and not ctx.server.socket.closed:
+        if ctx.server is not None:
             if ctx.auth_status == AuthStatus.NOT_AUTHENTICATED:
                 Utils.async_start(ctx.server_auth(ctx.password_requested))
         else:
