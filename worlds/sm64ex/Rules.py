@@ -85,7 +85,8 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
                     rf.build_rule("SF/BF | TJ & LG | MOVELESS & TJ"))
     connect_regions(world, player, "Menu", randomized_entrances_s["Tower of the Wing Cap"], lambda state: state.has("Power Star", player, 10))
     connect_regions(world, player, "Menu", randomized_entrances_s["Bowser in the Dark World"],
-                    lambda state: state.has("Power Star", player, star_costs["FirstBowserDoorCost"]))
+                    lambda state: (state.has("Power Star", player, star_costs["FirstBowserDoorCost"])) or
+                    (options.blj_logic == 1 and rf.build_rule("LJ & CL")))
 
     connect_regions(world, player, "Menu", "Basement", lambda state: state.has("Basement Key", player) or state.has("Progressive Key", player, 1))
 
@@ -95,13 +96,16 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     connect_regions(world, player, "Basement", randomized_entrances_s["Shifting Sand Land"],
                     rf.build_rule("", painting_lvl_name="SSL"))
     connect_regions(world, player, "Basement", randomized_entrances_s["Dire, Dire Docks"],
-                    rf.build_rule("", painting_lvl_name="DDD", star_num_req=star_costs["BasementDoorCost"]))
+                    (options.blj_logic in [1, 2] and rf.build_rule("LJ")) or
+                    (rf.build_rule("", painting_lvl_name="DDD", star_num_req=star_costs["BasementDoorCost"])))
     connect_regions(world, player, "Hazy Maze Cave", randomized_entrances_s["Cavern of the Metal Cap"])
     connect_regions(world, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"],
                     rf.build_rule("GP"))
     entrance = connect_regions(world, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
-                               lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]) and
-                               state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
+                                lambda state: (state.has("Power Star", player, star_costs["BasementDoorCost"]) and
+                                state.can_reach("DDD: Board Bowser's Sub", 'Location', player)) or
+                                ((options.blj_logic in [1, 2] and rf.build_rule("LJ")) and
+                                state.can_reach("DDD: Board Bowser's Sub", 'Location', player)))
     # Access to "DDD: Board Bowser's Sub" does not require access to other locations or regions, so the only region that
     # needs to be registered is its parent region.
     world.register_indirect_condition(world.get_location("DDD: Board Bowser's Sub", player).parent_region, entrance)
@@ -121,13 +125,15 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     connect_regions(world, player, "Tiny-Huge Island (Tiny)", "Tiny-Huge Island")
     connect_regions(world, player, "Tiny-Huge Island (Huge)", "Tiny-Huge Island")
 
-    connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, star_costs["SecondFloorDoorCost"]))
+    connect_regions(world, player, "Second Floor", "Third Floor", lambda state: (state.has("Power Star", player, star_costs["SecondFloorDoorCost"])) or
+                    (options.blj_logic in [1, 2, 3] and rf.build_rule("LJ")))
 
     connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"],
                     rf.build_rule("LG/TJ/SF/BF/WK", painting_lvl_name="TTC"))
     connect_regions(world, player, "Third Floor", randomized_entrances_s["Rainbow Ride"], rf.build_rule("TJ/SF/BF"))
     connect_regions(world, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"], rf.build_rule("TJ/SF/BF"))
-    connect_regions(world, player, "Third Floor", "Bowser in the Sky", lambda state: state.has("Power Star", player, star_costs["StarsToFinish"]))
+    connect_regions(world, player, "Third Floor", "Bowser in the Sky", lambda state: (state.has("Power Star", player, star_costs["StarsToFinish"])) or
+                    (options.blj_logic in [1, 2, 3, 4] and rf.build_rule("LJ")))
 
     # Course Rules
     # Bob-omb Battlefield

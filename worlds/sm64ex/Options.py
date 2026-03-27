@@ -151,6 +151,38 @@ class MoveRandomizerActions(OptionSet):
     valid_keys = [action for action in action_item_data_table if action != 'Double Jump']
     default = valid_keys
 
+class BLJLogic(Choice):
+    """Determine if and how BLJs (Backwards Long Jumps) are treated in logic.
+    (Currently only adds BLJs for the most well-known ones inside the castle. Other BLJ skips may or may not be added in the future.)
+
+    Vanilla - BLJs are not required, and are considered as Out of Logic.
+
+    LBLJ - LBLJ (Lobby BLJ) is required and considered as In Logic.
+    It is the skip to bypass the first Bowser door star requirment. This option will also include BBLJ, US BLJ, and IS BLJ.
+
+    BBLJ - BBLJ (Basement BLJ) is required and considered as In Logic.
+    It is the skip to bypass the second Bowser door star requirement.
+    It also expects you to skip the Dire Dire Docks painting (possible with enough speed).
+    This option will also include US BLJ and IS BLJ.
+
+    US_BLJ - US BLJ (Upstairs Staircase BLJ) is required and considered as In Logic.
+    It is the skip to bypass the door to the third floor's star requirement. This option will also include IS BLJ.
+
+    IS_BLJ - IS BLJ (Infinite Stairs BLJ) is required and considered as In Logic.
+    It is the skip to bypass the infinite stairs star requirement. This option won't include any other BLJ.
+
+    Turning on any BLJ option will most likely lower how much of the game you need to complete, especially LBLJ.
+    Consider turning on area randomizer, move randomizer, locked paintings, progressive keys and all Bowser stages set as your goal to increase the possibility
+    of more needed overall game completion and a more varied experience when using BLJ logic.
+    Or don't for runs that are expected to be quick.
+    """
+    display_name = "BLJ Logic"
+    option_Vanilla = 0
+    option_LBLJ = 1
+    option_BBLJ = 2
+    option_US_BLJ = 3
+    option_IS_BLJ = 4
+
 sm64_options_groups = [
     OptionGroup("Logic Options", [
         AreaRandomizer,
@@ -161,6 +193,7 @@ sm64_options_groups = [
         EnableLockedPaintings,
         StrictCapRequirements,
         StrictCannonRequirements,
+        BLJLogic,
     ]),
     OptionGroup("Ability Options", [
         EnableMoveRandomizer,
@@ -200,3 +233,4 @@ class SM64Options(PerGameCommonOptions):
     stars_to_finish: StarsToFinish
     death_link: DeathLink
     completion_type: CompletionType
+    blj_logic: BLJLogic
