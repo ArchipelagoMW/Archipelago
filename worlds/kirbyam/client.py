@@ -23,6 +23,10 @@ _AI_STATE_ADDR_WIDTH = 4
 _GOAL_STATE_DARK_MIND_CLEAR = 9999
 _GOAL_STATE_FULL_CLEAR = 10000
 _MAILBOX_ACK_TIMEOUT_FRAMES = 30
+_MAILBOX_ACK_TIMEOUT_SECONDS = 1.0  # Fallback when frame_counter is stuck
+_MAILBOX_ACK_RETRY_BACKOFF_SECONDS = 0.5
+_MAIN_HOOK_OFFSET = 0x00152696
+_PAYLOAD_OFFSET = 0x0015E000
 _AI_STATE_CUTSCENE_THRESHOLD = 200
 _AI_STATE_NORMAL = 300
 _KIRBY_HP_ADDR_KEY = "kirby_hp_native"
@@ -48,6 +52,29 @@ def _normalize_gba_rom_address(value: int) -> int:
     return value
 
 
+def _thumb_bl_bytes(src_rom_addr: int, dst_rom_addr: int) -> bytes:
+    diff = dst_rom_addr - (src_rom_addr + 4)
+    if diff % 2 != 0:
+        raise ValueError("Thumb BL target is not halfword aligned")
+
+    imm = diff >> 1
+    if not (-(1 << 21) <= imm < (1 << 21)):
+        raise ValueError("Thumb BL target out of range")
+
+    imm &= (1 << 22) - 1
+    hi = 0xF000 | ((imm >> 11) & 0x7FF)
+    lo = 0xF800 | (imm & 0x7FF)
+    return hi.to_bytes(2, "little") + lo.to_bytes(2, "little")
+
+
+def _is_thumb_bl_instruction(opcode: bytes) -> bool:
+    if len(opcode) != 4:
+        return False
+    hi = int.from_bytes(opcode[0:2], "little")
+    lo = int.from_bytes(opcode[2:4], "little")
+    return (hi & 0xF800) == 0xF000 and (lo & 0xF800) == 0xF800
+
+
 class KirbyAmClient(BizHawkClient):
     game = "Kirby & The Amazing Mirror"
     system = "GBA"
@@ -61,7 +88,13 @@ class KirbyAmClient(BizHawkClient):
         self._delivered_item_index: int = 0
         self._delivery_pending: bool = False  # True after writing mailbox until ROM clears flag
         self._delivery_pending_frame: int | None = None
+        self._delivery_pending_time: float | None = None  # Wall-clock time for timeout fallback
         self._delivery_pending_item_index: int | None = None
+        self._delivery_timeout_streak: int = 0
+        self._delivery_retry_not_before: float = 0.0
+        self._delivery_payload_stall_warned: bool = False
+        self._last_hook_heartbeat: int | None = None
+        self._hook_heartbeat_stale_ticks: int = 0
         self._delivery_counter_ahead_fallback_active: bool = False
         self._delivery_counter_ahead_resume_logged: bool = False
 
@@ -193,7 +226,13 @@ class KirbyAmClient(BizHawkClient):
         self._ram_state_loaded = False
         self._delivery_pending = False
         self._delivery_pending_frame = None
+        self._delivery_pending_time = None
         self._delivery_pending_item_index = None
+        self._delivery_timeout_streak = 0
+        self._delivery_retry_not_before = 0.0
+        self._delivery_payload_stall_warned = False
+        self._last_hook_heartbeat = None
+        self._hook_heartbeat_stale_ticks = 0
 
         if self._last_watcher_transport_error == reason:
             return False
@@ -451,6 +490,19 @@ class KirbyAmClient(BizHawkClient):
                     "Regenerate the patch and recreate the patched ROM before opening the BizHawk client."
                 )
             return _fail("missing_patch_metadata")
+
+        # Diagnostics: verify the loaded ROM has a patched Thumb BL at the main hook site.
+        try:
+            hook_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(_MAIN_HOOK_OFFSET, 4, "ROM")]))[0]
+            if not _is_thumb_bl_instruction(bytes(hook_bytes)):
+                logger.warning(
+                    "KirbyAM: main hook callsite at 0x%06X is not patched with a Thumb BL "
+                    "(found=%s). Loaded ROM may be incompatible with this payload build.",
+                    _MAIN_HOOK_OFFSET,
+                    bytes(hook_bytes).hex(" "),
+                )
+        except Exception as exc:
+            logger.info("KirbyAM: main hook opcode probe failed during validation: %s", exc)
 
         self._last_validation_failure_reason = None
 
@@ -1106,6 +1158,8 @@ class KirbyAmClient(BizHawkClient):
         - If flag=0 and items available: write next item (set flag -> 1)
         - Otherwise: wait
         """
+        from CommonClient import logger
+
         flag_addr = self._transport_addr("incoming_item_flag")
         counter_addr = self._transport_addr("debug_item_counter")
         id_addr = self._transport_addr("incoming_item_id")
@@ -1116,11 +1170,14 @@ class KirbyAmClient(BizHawkClient):
         from CommonClient import logger
 
         frame_addr = self._transport_addr("frame_counter")
+        heartbeat_addr = self._transport_addr("hook_heartbeat")
         reads: list[tuple[int, int, str]] = [(flag_addr, 4, "System Bus")]
         if counter_addr is not None:
             reads.append((counter_addr, 4, "System Bus"))
         if frame_addr is not None:
             reads.append((frame_addr, 4, "System Bus"))
+        if heartbeat_addr is not None:
+            reads.append((heartbeat_addr, 4, "System Bus"))
         raw_values = await bizhawk.read(ctx.bizhawk_ctx, reads)
 
         flag = self._u32_le(raw_values[0])
@@ -1132,6 +1189,16 @@ class KirbyAmClient(BizHawkClient):
         current_frame: Optional[int] = None
         if frame_addr is not None and len(raw_values) > next_read_index:
             current_frame = self._u32_le(raw_values[next_read_index])
+            next_read_index += 1
+
+        hook_heartbeat: Optional[int] = None
+        if heartbeat_addr is not None and len(raw_values) > next_read_index:
+            hook_heartbeat = self._u32_le(raw_values[next_read_index])
+            if self._last_hook_heartbeat is None or hook_heartbeat != self._last_hook_heartbeat:
+                self._hook_heartbeat_stale_ticks = 0
+            else:
+                self._hook_heartbeat_stale_ticks += 1
+            self._last_hook_heartbeat = hook_heartbeat
 
         # Auto-resync delivery cursor if ROM item state moved backward (save-loss)
         # or forward (reconnect after stale client state).
@@ -1165,7 +1232,11 @@ class KirbyAmClient(BizHawkClient):
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_time = None
                 self._delivery_pending_item_index = None
+                self._delivery_timeout_streak = 0
+                self._delivery_retry_not_before = 0.0
+                self._delivery_payload_stall_warned = False
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
             elif rom_received_count > self._delivered_item_index and rom_received_count <= len(ctx.items_received):
                 logger.info(
@@ -1176,7 +1247,11 @@ class KirbyAmClient(BizHawkClient):
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_time = None
                 self._delivery_pending_item_index = None
+                self._delivery_timeout_streak = 0
+                self._delivery_retry_not_before = 0.0
+                self._delivery_payload_stall_warned = False
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 if flag != 0:
                     logger.warning(
@@ -1196,7 +1271,12 @@ class KirbyAmClient(BizHawkClient):
                 logger.info("KirbyAM: Mailbox ACK observed at item index %s", self._delivered_item_index)
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
+                self._delivery_pending_time = None
                 self._delivery_pending_item_index = None
+                self._delivery_timeout_streak = 0
+                self._delivery_retry_not_before = 0.0
+                self._delivery_payload_stall_warned = False
+                self._hook_heartbeat_stale_ticks = 0
                 if rom_received_count is not None and rom_received_count <= len(ctx.items_received):
                     self._delivered_item_index = rom_received_count
                 else:
@@ -1205,20 +1285,62 @@ class KirbyAmClient(BizHawkClient):
                 await self._emit_receive_notification(ctx, delivered_index)
                 return
 
+            # Check for timeout via frame counter OR wall-clock time (fallback if frame_counter stuck)
+            timeout_triggered = False
+            timeout_reason = ""
+            
             if current_frame is not None and self._delivery_pending_frame is not None:
                 elapsed_frames = (current_frame - self._delivery_pending_frame) & 0xFFFFFFFF
                 if elapsed_frames >= _MAILBOX_ACK_TIMEOUT_FRAMES:
-                    logger.warning(
-                        "KirbyAM: Mailbox ACK timeout after %s frames at item index %s; clearing flag and retrying",
-                        elapsed_frames,
-                        self._delivered_item_index,
-                    )
-                    await bizhawk.write(ctx.bizhawk_ctx, [
-                        (flag_addr, (0).to_bytes(4, "little"), "System Bus"),
-                    ])
-                    self._delivery_pending = False
-                    self._delivery_pending_frame = None
-                    self._delivery_pending_item_index = None
+                    timeout_triggered = True
+                    timeout_reason = f"frame timeout ({elapsed_frames} frames >= {_MAILBOX_ACK_TIMEOUT_FRAMES})"
+            
+            # Fallback: wall-clock timeout if frame counter not advancing
+            if not timeout_triggered and self._delivery_pending_time is not None:
+                elapsed_seconds = time.time() - self._delivery_pending_time
+                if elapsed_seconds >= _MAILBOX_ACK_TIMEOUT_SECONDS:
+                    timeout_triggered = True
+                    timeout_reason = f"time timeout ({elapsed_seconds:.1f}s >= {_MAILBOX_ACK_TIMEOUT_SECONDS}s)"
+            
+            if timeout_triggered:
+                self._delivery_timeout_streak += 1
+                logger.warning(
+                    "KirbyAM: Mailbox ACK timeout at item index %s; clearing flag and retrying (%s)",
+                    self._delivered_item_index,
+                    timeout_reason,
+                )
+                if (
+                    not self._delivery_payload_stall_warned
+                    and self._delivery_timeout_streak >= 3
+                    and current_frame == 0
+                    and (self._delivery_pending_frame in (None, 0))
+                ):
+                    if hook_heartbeat is not None and self._hook_heartbeat_stale_ticks >= 3:
+                        logger.warning(
+                            "KirbyAM: Repeated mailbox ACK timeouts with frame_counter stuck at 0 and "
+                            "hook_heartbeat not advancing (value=%s); payload hook appears inactive",
+                            hook_heartbeat,
+                        )
+                    elif hook_heartbeat is not None:
+                        logger.warning(
+                            "KirbyAM: Repeated mailbox ACK timeouts with frame_counter stuck at 0 while "
+                            "hook_heartbeat advances (value=%s); frame_counter slot may be unstable",
+                            hook_heartbeat,
+                        )
+                    else:
+                        logger.warning(
+                            "KirbyAM: Repeated mailbox ACK timeouts with frame_counter stuck at 0; "
+                            "payload hook may be inactive in the loaded ROM patch"
+                        )
+                    self._delivery_payload_stall_warned = True
+                await bizhawk.write(ctx.bizhawk_ctx, [
+                    (flag_addr, (0).to_bytes(4, "little"), "System Bus"),
+                ])
+                self._delivery_pending = False
+                self._delivery_pending_frame = None
+                self._delivery_pending_time = None
+                self._delivery_pending_item_index = None
+                self._delivery_retry_not_before = time.time() + _MAILBOX_ACK_RETRY_BACKOFF_SECONDS
             return
 
         # No pending item; mailbox must be empty to write
@@ -1227,6 +1349,9 @@ class KirbyAmClient(BizHawkClient):
 
         # Gameplay-state gate can defer new writes while still allowing ACK/recovery handling.
         if not allow_new_writes:
+            return
+
+        if self._delivery_retry_not_before > 0.0 and time.time() < self._delivery_retry_not_before:
             return
 
         # Nothing to deliver
@@ -1244,7 +1369,11 @@ class KirbyAmClient(BizHawkClient):
                 )
                 self._delivered_item_index += 1
                 self._delivery_pending = False
+                self._delivery_pending_time = None
                 self._delivery_pending_item_index = None
+                self._delivery_timeout_streak = 0
+                self._delivery_retry_not_before = 0.0
+                self._delivery_payload_stall_warned = False
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 continue
 
@@ -1273,6 +1402,7 @@ class KirbyAmClient(BizHawkClient):
             ])
             self._delivery_pending = True
             self._delivery_pending_frame = current_frame
+            self._delivery_pending_time = time.time()  # Record for wall-clock timeout fallback
             self._delivery_pending_item_index = self._delivered_item_index
             return
 

@@ -28,11 +28,11 @@ def test_patch_rom_warns_for_unexpected_rom_size() -> None:
 
 
 def test_thumb_bl_bytes_matches_existing_main_hook_patch() -> None:
-    assert patch_rom.thumb_bl_bytes(0x08152696, 0x0815E000) == bytes.fromhex("0B F0 B3 FC")
+    assert patch_rom.thumb_bl_bytes(0x08152696, 0x0815E2A8) == bytes.fromhex("0B F0 07 FE")
 
 
 def test_is_thumb_bl_instruction_accepts_bl_opcode() -> None:
-    assert patch_rom.is_thumb_bl_instruction(bytes.fromhex("0B F0 B3 FC")) is True
+    assert patch_rom.is_thumb_bl_instruction(bytes.fromhex("0B F0 07 FE")) is True
 
 
 def test_is_thumb_bl_instruction_rejects_non_bl_opcode() -> None:
@@ -41,9 +41,9 @@ def test_is_thumb_bl_instruction_rejects_non_bl_opcode() -> None:
 
 def test_validate_thumb_bl_callsite_accepts_valid_opcode() -> None:
     rom = bytearray(b"\x00" * 16)
-    rom[4:8] = bytes.fromhex("0B F0 B3 FC")
+    rom[4:8] = bytes.fromhex("0B F0 07 FE")
     original = patch_rom.validate_thumb_bl_callsite(rom, 4, "boss shard")
-    assert original == bytes.fromhex("0B F0 B3 FC")
+    assert original == bytes.fromhex("0B F0 07 FE")
 
 
 def test_validate_thumb_bl_callsite_rejects_non_bl_opcode() -> None:
@@ -63,7 +63,6 @@ def test_validate_thumb_bl_callsite_rejects_odd_offset() -> None:
     rom = bytearray(b"\x00" * 16)
     with pytest.raises(SystemExit, match="not halfword aligned"):
         patch_rom.validate_thumb_bl_callsite(rom, 5, "boss shard")
-
 
 def test_boss_collect_shard_call_offset_matches_verified_hook_site() -> None:
     # sub_0801D948 at ROM addr 0x0801D948 (file offset 0x1D948); BL CollectShard

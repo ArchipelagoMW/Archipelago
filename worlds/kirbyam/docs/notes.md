@@ -1039,18 +1039,24 @@ The remaining risk was the hook boundary itself: calling `ap_poll_mailbox_c`
 from a sensitive site while preserving only part of the live register context.
 
 ### Solution
-Hardened `ap_hook_entry` in `ap_hook.s` to preserve a stronger context envelope:
-- save/restore `r0-r7` and `lr`
-- explicitly mirror and restore `r8-r11` through `r0-r3` around the C call
-- keep replayed overwritten instructions (`mov r7, r9` / `mov r6, r8`) intact
+That hook hardening was later superseded after Issue #437 hook-liveness diagnosis.
+The current diagnostic main hook targets the `VBlankIntr` tail callsite at ROM
+`0x08152596`, replacing the `REG_IF` setup pair after native `gFrameCount++`.
+The hook body stays minimal:
+- save/restore scratch registers and `lr`
+- increment `hook_heartbeat` and `frame_counter` in EWRAM
+- recreate the overwritten `REG_IF` write setup (`ldr r1, =0x04000202; movs r0, #1`)
 
-This reduces the chance of hook-boundary context drift affecting startup state.
+Root-cause correction:
+- the main hook patch must branch to `ap_hook_entry`, not to the payload base at `0x0815E000`
+- non-main hooks already resolved their symbol addresses correctly from `payload.elf`
+
+This tests a provably live per-frame interrupt path without calling the full AP
+mailbox C routine from a timing-sensitive site.
 
 ### Validation
-- Updated `test_reset_safe_shards.py` hook regression to assert:
-  - low-register + LR preservation (`push/pop {r0-r7, lr}` / `{r0-r7}`)
-  - explicit high-register mirror/restore (`r8-r11` via `r0-r3`)
-  - no `r4`-based LR reconstruction pattern
+- Retest target: `frame_counter` / `hook_heartbeat` should advance during active gameplay
+- `test_patch_rom.py` updated for the new main hook callsite and BL encoding
 
 ## Issue #381: Suppress Native Big Chest Map Grants
 

@@ -13,18 +13,18 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
   0x02000000 - 0x02040000   EWRAM Region (256 KB)
     ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0202C000 - 0x0202C033   AP Mailbox (reserved, 52 bytes)
-        └─ 0x0202C034 - 0x02040000   Rest of RAM (unused by AP)
+    ├─ 0x0202C000 - 0x0202C037   AP Mailbox (reserved, 56 bytes)
+    └─ 0x0202C038 - 0x02040000   Rest of RAM (unused by AP)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C033)
+### AP Mailbox Block (0x0202C000 - 0x0202C037)
 
 **Transport Layer: Client ↔ ROM Communication**
 
 | Offset | Addr     | Size | Name                  | Type | Direction   | Purpose |
 |--------|----------|------|----------------------|------|-------------|---------|
 | 0x00   | 0x0202C000 | 4B | shard_bitfield        | u32  | ROM → Client | Mirror of native shard flags (bits 0-7 currently used, bits 8-31 reserved) |
-| 0x04   | 0x0202C004 | 4B | incoming_item_flag    | u32  | ROM ← Client | Write 1 to request delivery, ROM clears to 0 on ACK |
+| 0x04   | 0x0202C004 | 4B | incoming_item_flag    | u32  | ROM ← Client | Write 1 to request delivery; ROM clears to 0 after recognized item apply (ACK) |
 | 0x08   | 0x0202C008 | 4B | incoming_item_id      | u32  | ROM ← Client | Item ID to apply (BASE_OFFSET + item index) |
 | 0x0C   | 0x0202C00C | 4B | incoming_item_player  | u32  | ROM ← Client | Player ID that sent this item |
 | 0x10   | 0x0202C010 | 4B | debug_item_counter    | u32  | ROM → Client | Counter of items received (debug only) |
@@ -37,8 +37,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x28   | 0x0202C028 | 4B | major_chest_flags     | u32  | ROM → Client | Bits set when a native big chest is opened; bit N = area ID N. This drives AP major-chest checks independently of native map ownership. |
 | 0x2C   | 0x0202C02C | 4B | vitality_chest_flags  | u32  | ROM → Client | Bits set when a native vitality big chest is opened; bits 0..3 map to the four vitality chest room IDs (Carrot 5-23, Olive 6-21, Radish 8-4, Candy 9-8). |
 | 0x30   | 0x0202C030 | 4B | sound_player_chest_flags | u32 | ROM → Client | Bits set when the native Sound Player chest is opened; bit 0 maps to `SOUND_PLAYER_CHEST`. Native Sound Player unlock is intentionally deferred until AP item receipt. |
+| 0x34   | 0x0202C034 | 4B | hook_heartbeat        | u32  | ROM → Client | Increments on every AP main hook entry. Diagnostic signal for hook liveness. |
 
-**Total: 52 bytes (0x0202C000 - 0x0202C033)**
+**Total: 56 bytes (0x0202C000 - 0x0202C037)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -242,10 +243,15 @@ await ROM clears RAM[0x0202C004] to 0
 delivered_item_index += 1
 ```
 
+Behavior note:
+- If `incoming_item_id` is not recognized by the shipped payload handler, ROM does not ACK by clearing the flag.
+- Client timeout recovery then clears/retries conservatively and logs the timeout reason.
+
 **State Machine:**
 1. **Idle** (flag == 0): wait
 2. **Pending** (flag == 1): ROM is processing, poll for flag == 0
 3. **Acknowledged** (flag cleared): advance index, return to Idle
+4. **Recovery** (pending too long): client timeout path clears stale flag and retries same delivery index
 
 `debug_item_counter` reconciliation contract:
 - If `debug_item_counter < delivered_item_index`, rewind cursor to the ROM count.

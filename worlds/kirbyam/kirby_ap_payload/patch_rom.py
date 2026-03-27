@@ -185,10 +185,6 @@ def thumb_bl_bytes(src_rom_addr: int, dst_rom_addr: int) -> bytes:
     return hi.to_bytes(2, "little") + lo.to_bytes(2, "little")
 
 
-# Computed from offsets rather than hard-coded to avoid drift if offsets change.
-MAIN_HOOK_BL_BYTES = thumb_bl_bytes(0x08000000 + MAIN_HOOK_OFFSET, 0x08000000 + PAYLOAD_OFFSET)
-
-
 def is_thumb_bl_instruction(opcode: bytes) -> bool:
     """Return True when <opcode> encodes a 32-bit Thumb BL instruction."""
     if len(opcode) != 4:
@@ -687,6 +683,7 @@ def main():
         if not payload_elf_path.exists():
             raise SystemExit("Error: payload.elf not found after build; cannot resolve boss hook symbol.")
 
+        main_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_hook_entry")
         boss_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_boss_defeat_collect_shard")
         big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
@@ -694,6 +691,7 @@ def main():
         # arm-none-eabi-nm may encode Thumb function symbols with bit 0 set.
         # Clear the Thumb state bit before passing to thumb_bl_bytes(), which
         # requires a halfword-aligned target address.
+        main_hook_target &= ~1
         boss_hook_target &= ~1
         big_chest_hook_target &= ~1
         vitality_chest_hook_target &= ~1
@@ -701,6 +699,13 @@ def main():
         rom_base = 0x08000000
         payload_rom_start = rom_base + PAYLOAD_OFFSET
         payload_rom_end = payload_rom_start + len(payload)
+        if not (payload_rom_start <= main_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: main hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{main_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
         if not (payload_rom_start <= boss_hook_target < payload_rom_end):
             raise SystemExit(
                 "Error: boss hook target address out of expected payload range.\n"
@@ -729,6 +734,7 @@ def main():
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
+        main_hook_bl_bytes = thumb_bl_bytes(rom_base + MAIN_HOOK_OFFSET, main_hook_target)
         boss_hook_bl_bytes = thumb_bl_bytes(rom_base + BOSS_COLLECT_SHARD_CALL_OFFSET, boss_hook_target)
         big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
         vitality_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + VITALITY_CHEST_COLLECT_CALL_OFFSET, vitality_chest_hook_target)
@@ -759,7 +765,7 @@ def main():
         rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
 
         # 5) Patch hook sites with BL
-        rom[MAIN_HOOK_OFFSET:MAIN_HOOK_OFFSET + 4] = MAIN_HOOK_BL_BYTES
+        rom[MAIN_HOOK_OFFSET:MAIN_HOOK_OFFSET + 4] = main_hook_bl_bytes
         rom[BOSS_COLLECT_SHARD_CALL_OFFSET:BOSS_COLLECT_SHARD_CALL_OFFSET + 4] = boss_hook_bl_bytes
         rom[BIG_CHEST_COLLECT_CALL_OFFSET:BIG_CHEST_COLLECT_CALL_OFFSET + 4] = big_chest_hook_bl_bytes
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
@@ -785,7 +791,14 @@ def main():
 
         print("Intermediary patched ROM written:", INTERMEDIARY_ROM)
         print("Payload inserted at file offset:", hex(PAYLOAD_OFFSET))
-        print("Main hook patched at file offset:", hex(MAIN_HOOK_OFFSET), "with bytes:", MAIN_HOOK_BL_BYTES.hex(" "))
+        print(
+            "Main hook patched at file offset:",
+            hex(MAIN_HOOK_OFFSET),
+            "with bytes:",
+            main_hook_bl_bytes.hex(" "),
+            "target=",
+            hex(main_hook_target),
+        )
         print(
             "Boss shard call patched at file offset:",
             hex(BOSS_COLLECT_SHARD_CALL_OFFSET),
