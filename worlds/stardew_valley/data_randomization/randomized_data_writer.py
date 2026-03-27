@@ -18,6 +18,7 @@ def add_randomized_data_to_spoiler_log(spoiler_handle: TextIO, player_name: str,
     data_to_print = dict()
 
     prepare_fish_difficulty_for_print(content, data_to_randomize, data_to_print)
+    prepare_fish_season_for_print(content, data_to_randomize, data_to_print)
 
     spoiler_handle.write(f"\n\nRandomized Data ({player_name}):\n")
     for item_name in data_to_print:
@@ -27,10 +28,20 @@ def add_randomized_data_to_spoiler_log(spoiler_handle: TextIO, player_name: str,
 
 
 def prepare_fish_difficulty_for_print(content, data_to_randomize, data_to_print):
-    if DataRandomizationOptionName.fish_difficulty in data_to_randomize:
-        for fish_name, fish_data in content.fishes.items():
-            if fish_data.difficulty <= 0:
-                continue
-            if fish_name not in data_to_print:
-                data_to_print[fish_name] = dict()
-            data_to_print[fish_name]["difficulty"] = fish_data.difficulty
+    if DataRandomizationOptionName.fish_difficulty not in data_to_randomize:
+        return
+    for fish_name, fish_data in content.fishes.items():
+        if fish_data.difficulty <= 0:
+            continue
+        if fish_name not in data_to_print:
+            data_to_print[fish_name] = dict()
+        data_to_print[fish_name]["difficulty"] = fish_data.difficulty
+
+
+def prepare_fish_season_for_print(content, data_to_randomize, data_to_print):
+    if DataRandomizationOptionName.fish_season not in data_to_randomize:
+        return
+    for fish_name, fish_data in content.fishes.items():
+        if fish_name not in data_to_print:
+            data_to_print[fish_name] = dict()
+        data_to_print[fish_name]["season"] = fish_data.seasons
