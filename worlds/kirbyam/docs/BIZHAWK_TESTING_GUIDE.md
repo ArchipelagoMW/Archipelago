@@ -79,7 +79,10 @@ pytest worlds/kirbyam/test -q
 
 | Message pattern | Meaning |
 |---|---|
-| `KirbyAM: Mailbox ACK timeout after N frames at item index M; clearing flag and retrying` | ROM did not clear flag within ~30 frames; flag force-cleared and delivery retried. |
+| `KirbyAM: Mailbox ACK timeout at item index M; clearing flag and retrying (...)` | ROM did not clear flag before timeout; client force-cleared and retried the same index. Timeout reason includes frame-based and/or wall-clock fallback details. |
+| `KirbyAM: Repeated mailbox ACK timeouts with frame_counter stuck at 0 and hook_heartbeat not advancing (...)` | Main payload hook likely inactive; both liveness counters are stale. |
+| `KirbyAM: Repeated mailbox ACK timeouts with frame_counter stuck at 0 while hook_heartbeat advances (...)` | Hook is alive but `frame_counter` slot appears unstable; use heartbeat as liveness signal. |
+| `KirbyAM: Repeated mailbox ACK timeouts with frame_counter stuck at 0; payload hook may be inactive in the loaded ROM patch` | Frame-based liveness signal is unavailable; verify loaded ROM patch and hook callsite. |
 | `KirbyAM: Clearing stale mailbox flag after fast-forward to item index N` | Residual flag found after cursor fast-forward; cleared proactively. |
 | `KirbyAM: Skipping malformed ReceivedItems entry at index N` | A received item entry had invalid fields; skipped and cursor advanced. |
 | `KirbyAM: ROM item counter ahead of ReceivedItems (rom=X, received=Y); ignoring counter to avoid mailbox starvation` | ROM `debug_item_counter` is stale/high relative to the AP `ReceivedItems` backlog. The client will no longer pin the cursor and return forever; it falls back to normal mailbox writes once safe. |
@@ -326,7 +329,7 @@ If this smoke test fails, fix connector startup/ROM context problems before trus
 When validating AP item receipt behavior in BizHawk, also watch for mailbox timeout recovery:
 
 - Normal path: item write -> ROM clears `incoming_item_flag` -> client logs ACK and advances cursor.
-- Recovery path: if `incoming_item_flag` remains high for roughly 30 frames with no ACK, client logs a timeout warning, clears the flag, and retries the same delivery index conservatively.
+- Recovery path: if `incoming_item_flag` remains high with no ACK, client logs a timeout warning (frame or wall-clock fallback), clears the flag, and retries the same delivery index conservatively.
 - Counter reconciliation remains authoritative when `debug_item_counter` proves the ROM has already applied the item.
 
 This behavior is intended to avoid deadlock while still preferring exactly-once ROM outcomes.

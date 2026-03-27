@@ -23,6 +23,21 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+try:
+    from .thumb_branch import is_thumb_bl_instruction as shared_is_thumb_bl_instruction
+    from .thumb_branch import thumb_bl_bytes as shared_thumb_bl_bytes
+except ImportError:
+    _thumb_spec = importlib.util.spec_from_file_location(
+        "kirbyam_thumb_branch",
+        Path(__file__).resolve().with_name("thumb_branch.py"),
+    )
+    if _thumb_spec is None or _thumb_spec.loader is None:
+        raise SystemExit("Error: unable to load thumb_branch.py helper module")
+    _thumb_module = importlib.util.module_from_spec(_thumb_spec)
+    _thumb_spec.loader.exec_module(_thumb_module)
+    shared_is_thumb_bl_instruction = _thumb_module.is_thumb_bl_instruction
+    shared_thumb_bl_bytes = _thumb_module.thumb_bl_bytes
+
 PAYLOAD_OFFSET = 0x0015E000
 MAIN_HOOK_OFFSET = 0x00152696
 BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D952
@@ -167,35 +182,12 @@ def _find_arm_binutil(tool_name: str) -> str:
 
 
 def thumb_bl_bytes(src_rom_addr: int, dst_rom_addr: int) -> bytes:
-    diff = dst_rom_addr - (src_rom_addr + 4)
-    if diff % 2 != 0:
-        raise SystemExit(
-            f"Error: cannot encode Thumb BL from {src_rom_addr:#010x} to {dst_rom_addr:#010x}: target is not halfword aligned."
-        )
-
-    imm = diff >> 1
-    if not (-(1 << 21) <= imm < (1 << 21)):
-        raise SystemExit(
-            f"Error: cannot encode Thumb BL from {src_rom_addr:#010x} to {dst_rom_addr:#010x}: branch out of range."
-        )
-
-    imm &= (1 << 22) - 1
-    hi = 0xF000 | ((imm >> 11) & 0x7FF)
-    lo = 0xF800 | (imm & 0x7FF)
-    return hi.to_bytes(2, "little") + lo.to_bytes(2, "little")
-
-
-# Computed from offsets rather than hard-coded to avoid drift if offsets change.
-MAIN_HOOK_BL_BYTES = thumb_bl_bytes(0x08000000 + MAIN_HOOK_OFFSET, 0x08000000 + PAYLOAD_OFFSET)
+    return shared_thumb_bl_bytes(src_rom_addr, dst_rom_addr)
 
 
 def is_thumb_bl_instruction(opcode: bytes) -> bool:
     """Return True when <opcode> encodes a 32-bit Thumb BL instruction."""
-    if len(opcode) != 4:
-        return False
-    hi = int.from_bytes(opcode[0:2], "little")
-    lo = int.from_bytes(opcode[2:4], "little")
-    return (hi & 0xF800) == 0xF000 and (lo & 0xF800) == 0xF800
+    return shared_is_thumb_bl_instruction(opcode)
 
 
 def validate_thumb_bl_callsite(rom: bytes | bytearray, offset: int, label: str) -> bytes:
@@ -685,8 +677,9 @@ def main():
 
         payload_elf_path = Path("payload.elf")
         if not payload_elf_path.exists():
-            raise SystemExit("Error: payload.elf not found after build; cannot resolve boss hook symbol.")
+            raise SystemExit("Error: payload.elf not found after build; cannot resolve payload hook symbols.")
 
+        main_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_hook_entry")
         boss_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_boss_defeat_collect_shard")
         big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
@@ -694,6 +687,7 @@ def main():
         # arm-none-eabi-nm may encode Thumb function symbols with bit 0 set.
         # Clear the Thumb state bit before passing to thumb_bl_bytes(), which
         # requires a halfword-aligned target address.
+        main_hook_target &= ~1
         boss_hook_target &= ~1
         big_chest_hook_target &= ~1
         vitality_chest_hook_target &= ~1
@@ -701,6 +695,13 @@ def main():
         rom_base = 0x08000000
         payload_rom_start = rom_base + PAYLOAD_OFFSET
         payload_rom_end = payload_rom_start + len(payload)
+        if not (payload_rom_start <= main_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: main hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{main_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
         if not (payload_rom_start <= boss_hook_target < payload_rom_end):
             raise SystemExit(
                 "Error: boss hook target address out of expected payload range.\n"
@@ -729,6 +730,7 @@ def main():
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
+        main_hook_bl_bytes = thumb_bl_bytes(rom_base + MAIN_HOOK_OFFSET, main_hook_target)
         boss_hook_bl_bytes = thumb_bl_bytes(rom_base + BOSS_COLLECT_SHARD_CALL_OFFSET, boss_hook_target)
         big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
         vitality_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + VITALITY_CHEST_COLLECT_CALL_OFFSET, vitality_chest_hook_target)
@@ -759,7 +761,7 @@ def main():
         rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
 
         # 5) Patch hook sites with BL
-        rom[MAIN_HOOK_OFFSET:MAIN_HOOK_OFFSET + 4] = MAIN_HOOK_BL_BYTES
+        rom[MAIN_HOOK_OFFSET:MAIN_HOOK_OFFSET + 4] = main_hook_bl_bytes
         rom[BOSS_COLLECT_SHARD_CALL_OFFSET:BOSS_COLLECT_SHARD_CALL_OFFSET + 4] = boss_hook_bl_bytes
         rom[BIG_CHEST_COLLECT_CALL_OFFSET:BIG_CHEST_COLLECT_CALL_OFFSET + 4] = big_chest_hook_bl_bytes
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
@@ -785,7 +787,14 @@ def main():
 
         print("Intermediary patched ROM written:", INTERMEDIARY_ROM)
         print("Payload inserted at file offset:", hex(PAYLOAD_OFFSET))
-        print("Main hook patched at file offset:", hex(MAIN_HOOK_OFFSET), "with bytes:", MAIN_HOOK_BL_BYTES.hex(" "))
+        print(
+            "Main hook patched at file offset:",
+            hex(MAIN_HOOK_OFFSET),
+            "with bytes:",
+            main_hook_bl_bytes.hex(" "),
+            "target=",
+            hex(main_hook_target),
+        )
         print(
             "Boss shard call patched at file offset:",
             hex(BOSS_COLLECT_SHARD_CALL_OFFSET),

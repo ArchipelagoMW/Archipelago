@@ -177,22 +177,16 @@ def test_ap_hook_preserves_register_context_without_r4_temp_restore():
     # Normalize runs of spaces/tabs to a single space.
     normalized = re.sub(r'[ \t]+', ' ', code_only)
 
-    assert re.search(r'\bpush\s*\{r0-r7,\s*lr\}', normalized), \
-        "Hook should save r0-r7 and lr"
-    assert re.search(r'\bpush\s*\{r0-r3\}', normalized), \
-        "Hook should save high-register mirrors through r0-r3"
+    assert re.search(r'\bpush\s*\{r0-r3,\s*lr\}', normalized), \
+        "Hook should save scratch registers and lr"
+    assert re.search(r'\bbl\s+ap_poll_mailbox_c\b', normalized), \
+        "Hook should call ap_poll_mailbox_c"
     assert re.search(r'\bpop\s*\{r0-r3\}', normalized), \
-        "Hook should restore high-register mirrors before low-register restore"
-    assert re.search(r'\bmov\s+r8\s*,\s*r0\b', normalized), \
-        "Hook should restore r8 from mirrored low register"
-    assert re.search(r'\bmov\s+r9\s*,\s*r1\b', normalized), \
-        "Hook should restore r9 from mirrored low register"
-    assert re.search(r'\bmov\s+r10\s*,\s*r2\b', normalized), \
-        "Hook should restore r10 from mirrored low register"
-    assert re.search(r'\bmov\s+r11\s*,\s*r3\b', normalized), \
-        "Hook should restore r11 from mirrored low register"
-    assert re.search(r'\bpop\s*\{r0-r7\}', normalized), \
-        "Hook should restore r0-r7 before replaying overwritten instructions"
+        "Hook should restore scratch registers before replaying overwritten instructions"
+    assert re.search(r'\bmov\s+r7\s*,\s*r9\b', normalized), \
+        "Hook should replay overwritten instruction mov r7, r9"
+    assert re.search(r'\bmov\s+r6\s*,\s*r8\b', normalized), \
+        "Hook should replay overwritten instruction mov r6, r8"
     assert re.search(r'\bpop\s*\{pc\}', normalized), \
         "Hook should return by popping the saved lr into pc"
     assert not re.search(r'\bpop\s*\{[^}]*\br4\b[^}]*\}', normalized, re.IGNORECASE), \

@@ -14,6 +14,7 @@
 
 // Monotonic counter incremented every AP hook call (typically once per frame).
 #define AP_FRAME_COUNTER        (*(volatile uint32_t*)(AP_BASE + 0x1Cu))
+#define AP_HOOK_HEARTBEAT       (*(volatile uint32_t*)(AP_BASE + 0x34u))
 
 // Shard State Registers
 #define AP_SHARD_BITFIELD       (*(volatile uint32_t*)(AP_BASE + 0x00u))
@@ -219,23 +220,24 @@ static void ap_grant_lives(uint8_t amount) {
     KIRBY_LIVES = (uint8_t)(lives + amount);
 }
 
-static void ap_apply_item(uint32_t ap_item_id) {
+// Returns 1 if item was successfully processed, 0 if unrecognized
+static uint8_t ap_apply_item(uint32_t ap_item_id) {
     // 1_UP = BASE+1
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 1u)) {
         ap_grant_lives(1u);
-        return;
+        return 1u;
     }
 
     // 2_UP = BASE+22
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 22u)) {
         ap_grant_lives(2u);
-        return;
+        return 1u;
     }
 
     // 3_UP = BASE+23
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 23u)) {
         ap_grant_lives(3u);
-        return;
+        return 1u;
     }
 
     // SHARD_1..SHARD_8 = BASE+2 .. BASE+9
@@ -254,50 +256,52 @@ static void ap_apply_item(uint32_t ap_item_id) {
         // Issue #109: Persist to SRAM to survive reset without room change
         persist_shard_to_sram(new_shard_flags);
 
-        return;
+        return 1u;
     }
 
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 24u)) {
         ap_unlock_area_map(1u);
-        return;
+        return 1u;
     }
 
     if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 10u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 17u)) {
         static const uint8_t map_area_ids[8] = {4u, 2u, 9u, 6u, 7u, 3u, 5u, 8u};
         uint32_t map_index = ap_item_id - (KIRBY_ITEM_ID_BASE_OFFSET + 10u);
         ap_unlock_area_map(map_area_ids[map_index]);
-        return;
+        return 1u;
     }
 
     // VITALITY_COUNTER_1..VITALITY_COUNTER_4 = BASE+18 .. BASE+21
     if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 18u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 21u)) {
         ap_grant_vitality_counter();
-        return;
+        return 1u;
     }
 
     // SOUND_PLAYER = BASE+25
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 25u)) {
         KIRBY_COLLECT_SOUND_PLAYER_FN(0u);
-        return;
+        return 1u;
     }
 
-    // Unhandled item
+    // Unhandled item - return 0 to signal that the flag should NOT be cleared
+    return 0u;
 }
 
 
 void ap_poll_mailbox_c(void) {
+
+    // Hook liveness diagnostic counter; increments on every AP hook entry.
+    AP_HOOK_HEARTBEAT++;
 
     // Always tick a monotonic frame counter so the Python client can perform
     // deterministic, frame-based testing without relying on wall-clock time.
     AP_FRAME_COUNTER++;
 
     // Check if there's an item to process
-    if (AP_IN_FLAG != 1u) return;
+    uint32_t flag = AP_IN_FLAG;
+    if (flag != 1u) return;
 
-    // Debug count times mailbox items received
-    AP_ITEM_RCVD_COUNTER++;
-
-    // Receive an item from a player
+    // Receive an item from a player - read IMMEDIATELY after confirming flag
     uint32_t item = AP_IN_ITEM_ID;
     uint32_t from = AP_IN_PLAYER;
 
@@ -306,8 +310,15 @@ void ap_poll_mailbox_c(void) {
     AP_DEBUG_LAST_FROM = from;
 
     // Apply the received item
-    ap_apply_item(item);
+    // Returns 1 if item was recognized and processed, 0 if unrecognized.
+    uint8_t item_was_processed = ap_apply_item(item);
 
-    // Acknowledge / consume
-    AP_IN_FLAG = 0u;
+    // Acknowledge / consume: clear flag to signal completion.
+    // We ONLY clear the flag after successfully processing a valid item.
+    // If the item was unrecognized (item_was_processed==0), the flag is NOT cleared,
+    // allowing the client to detect a protocol mismatch and retry/stall appropriately.
+    if (item_was_processed) {
+        AP_ITEM_RCVD_COUNTER++;
+        AP_IN_FLAG = 0u;
+    }
 }
