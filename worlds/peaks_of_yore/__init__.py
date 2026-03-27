@@ -1,0 +1,259 @@
+import logging
+
+from Options import Toggle, OptionError
+from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Tutorial, Item
+from .options import PeaksOfYoreOptions, Goal, StartingBook, RopeUnlockMode, StartingHands, poy_option_groups, \
+    poy_option_presets, GameMode, PeakGoal, StartingPeak
+from .data import *
+from rule_builder.rules import *
+
+from .regions import create_poy_regions, RegionLocationInfo
+
+class PeaksOfWeb(WebWorld):
+    rich_text_options_doc = True
+    theme = "stone"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Peaks of Yore Mod.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["c0der23"]
+    )]
+    option_groups = poy_option_groups
+    options_presets = poy_option_presets
+
+
+def get_error_item_count(item_pool: list[Item], location_info: RegionLocationInfo) -> str:
+    prog_list: list[Item] = [i for i in item_pool if i.classification == ItemClassification.progression]
+    msg = "Not enough locations to place progression items:\n"
+    msg += f"Found {len(prog_list)} progression items:\n"
+
+    newline = " \n"
+    msg += f"{newline.join([i.name for i in prog_list if i.code >= 1000])}\n"
+    peak_count = len([i for i in prog_list if i.code < 1000])
+    if peak_count > 0:
+        msg += f"+ {peak_count} peaks\n"
+    msg += "\n"
+
+    loc_count = location_info.get_total_location_count()
+    msg += f"found {loc_count} locations: \n"
+    msg += f"({len(location_info.peaks_in_pool)}/{loc_count}) peaks \n"
+    msg += f"({len(location_info.time_attack_in_pool)}/{loc_count}) time attack locations \n"
+    msg += f"({len(location_info.artefacts_in_pool)}/{loc_count}) artefacts \n"
+    msg += f"({len(location_info.other_in_pool)}/{loc_count}) other collectables/free solo's \n"
+
+    if len(location_info.time_attack_in_pool) == 0:
+        msg += "Consider enabling time attack to add more locations"
+    return msg
+
+
+class PeaksOfWorld(World):
+    """
+    Peaks of Yore is a first-person physics-based "climb-em-up" adventure set in 1887.
+    Steel your nerves and perfect your climbing skills as you ascend the rock wall, traverse difficult routes,
+    and encounter many challenges and obstacles.
+    """
+    game = "Peaks of Yore"
+    options_dataclass = PeaksOfYoreOptions
+    options: PeaksOfYoreOptions
+    web = PeaksOfWeb()
+    item_name_to_id = item_name_to_id
+    location_name_to_id = all_locations_to_ids
+    topology_present = True
+    checks_in_pool: RegionLocationInfo
+    origin_region_name = "Cabin"
+
+    def create_item(self, name: str) -> Item:
+        id = item_name_to_id[name]
+        classification = item_id_to_classification[id]
+        return PeaksOfYoreItem(name, classification, id, self.player)
+
+    def create_item_prog(self, name: str) -> Item:
+        id = item_name_to_id[name]
+        return PeaksOfYoreItem(name, ItemClassification.progression, id, self.player)
+
+    def get_filler_item_name(self) -> str:
+        choices = ["Extra Rope", "Extra Coffee", "Extra Chalk", "Extra Seed"]
+        if self.options.item_traps:
+            choices.append("Trap")
+        return self.random.choice(choices)
+
+    def generate_early(self) -> None:
+        if self.options.goal == Goal.option_time_attack and not self.options.include_time_attack:
+            logging.warning("Goal is set to time attack but time attack is not enabled, enabling time attack")
+            self.options.include_time_attack.value = True
+
+        starting_book_options: dict[str, Toggle] = {
+            "Fundamentals Book": self.options.enable_fundamental,
+            "Intermediate Book": self.options.enable_intermediate,
+            "Advanced Book": self.options.enable_advanced,
+            "Expert Book": self.options.enable_expert,
+        }
+
+        book_names: list[str] = list(starting_book_options)
+        enabled_books: list[str] = [b for b, v in starting_book_options.items() if v]
+        start_book: str = self.options.starting_book.get_selected_book()
+
+        if self.options.game_mode == GameMode.option_peak_unlock:
+            if self.options.early_hands:
+                if self.options.start_with_hands != StartingHands.option_both:
+                    raise OptionError("peak unlock with early hands is a restrictive start and may not work")
+
+            if self.options.rope_unlock_mode == RopeUnlockMode.option_early:
+                raise OptionError("peak unlock with early ropes is a restrictive start and may not work")
+
+        # some hard-coded cases:
+        if self.options.start_with_hands != StartingHands.option_both and self.options.early_hands and \
+                self.options.starting_book == StartingBook.option_advanced and \
+                (self.options.rope_unlock_mode == RopeUnlockMode.option_early) and \
+                (self.options.game_mode == GameMode.option_peak_unlock or self.options.disable_solemn_tempest):
+            raise OptionError("this is a too restrictive start and will not work, consider starting with both hands, "
+                              "or changing the rope unlock mode or hand unlock to something else than early")
+
+        if not enabled_books:
+            logging.error(f"Player {self.player_name} has not selected any books!")
+            raise OptionError(f"Player {self.player_name} has not selected any books!")
+
+        if start_book not in enabled_books:
+            logging.warning(f"Start book {start_book} not enabled, selecting random book from following list: ")
+            logging.warning(enabled_books)
+            start_book = self.random.choice(enabled_books)
+            logging.warning(f"selected book: {start_book}")
+
+        self.options.starting_book.value = book_names.index(start_book)
+
+        if self.options.game_mode == GameMode.option_peak_unlock:
+            starting_peak_book = book_names[self.options.starting_peak.get_peak_book_option()]
+            if not starting_book_options[starting_peak_book]:
+                self.options.starting_peak.value = self.options.starting_book.get_start_peak_id()
+                logging.warning(f"setting start peak to {self.options.starting_book.get_start_peak_id()}")
+
+            if self.options.starting_peak.value == StartingPeak.option_solemn_tempest and self.options.disable_solemn_tempest:
+                raise OptionError("solemn tempest is selected as starting peak but solemn tempest is not enabled")
+
+        if self.options.goal == Goal.option_peak:
+            goal_peak_book = book_names[self.options.peak_goal.get_peak_book_option()]
+            if not starting_book_options[goal_peak_book]:
+                raise OptionError(f"selected finish peak {PeakGoal.get_option_name(self.options.peak_goal)}'s book {goal_peak_book} is not enabled ")
+
+            if self.options.peak_goal.value == StartingPeak.option_solemn_tempest and self.options.disable_solemn_tempest:
+                raise OptionError("solemn tempest is selected as target peak but solemn tempest is not enabled")
+
+    def create_regions(self) -> None:
+        self.checks_in_pool = create_poy_regions(self, self.options)
+
+    def create_items(self) -> None:
+        remaining_items: int = len(self.multiworld.get_unfilled_locations(self.player))
+        total_location_count = remaining_items
+        logging.debug(f"all required items: {self.checks_in_pool.total_requirements}")
+        logging.debug(f"all entry items: {self.checks_in_pool.entry_requirements}")
+        local_itempool: list[Item] = []
+
+        for item in all_items:
+            amount = item.min_count
+            required_amount = 0
+            starter_amount = 0
+
+            if not item.is_enabled(self.options):
+                continue # don't include this one :P
+
+            if item.is_starter_item(self.options):
+                starter_amount += amount
+
+            if item.is_early(self.options):
+                self.multiworld.early_items[self.player][item.name] = amount
+
+            if item.name in self.checks_in_pool.total_requirements.keys():
+                required_amount = self.checks_in_pool.total_requirements[item.name]
+                logging.debug(f"item {item.name} requires {required_amount} instance in pool")
+
+            if item.name in self.checks_in_pool.entry_requirements.keys():
+                starter_amount = self.checks_in_pool.entry_requirements[item.name]
+                logging.debug(f"item {item.name} has {starter_amount} starter items")
+
+            amount = max(required_amount, starter_amount, amount)
+            if amount > item.max_count > 0:
+                raise OptionError(f"something has gone very wrong, we somehow tried adding {amount} of {item.name}")
+            for i in range(amount):
+                if starter_amount > 0:
+                    self.multiworld.push_precollected(self.create_item_prog(item.name))
+                    starter_amount -= 1
+                    required_amount -= 1
+                elif required_amount > 0:
+                    local_itempool.append(self.create_item_prog(item.name))
+                    required_amount -= 1
+                else:
+                    local_itempool.append(self.create_item(item.name))
+
+        logging.debug(f"starter items: {self.multiworld.precollected_items}")
+        logging.debug(f"items: {local_itempool}")
+
+        total_itempool: list[Item] = list(local_itempool)
+
+
+        if len(local_itempool) > remaining_items:
+            self.random.shuffle(local_itempool)
+            difference = len(local_itempool) - remaining_items
+            copy = list(local_itempool)
+            for item in copy:
+                if difference == 0:
+                    break
+                if item.classification == ItemClassification.filler:
+                    local_itempool.remove(item)
+                    difference -= 1
+
+
+            if difference > 0:
+                logging.warning(f"Item pool too big, removing useful items :(")
+                copy = list(local_itempool)
+                for item in copy:
+                    if difference == 0:
+                        break
+                    if item.classification != ItemClassification.progression:
+                        local_itempool.remove(item)
+                        difference -= 1
+
+            if difference > 0:
+                logging.debug(f"final pool: {local_itempool}")
+                logging.debug(f"location count: {remaining_items}")
+                raise OptionError(get_error_item_count(total_itempool, self.checks_in_pool))
+
+        if len(local_itempool) < remaining_items:  # fill up local item pool to match unfilled locations
+            local_itempool += [self.create_filler() for _ in range(remaining_items - len(local_itempool))]
+
+        self.multiworld.itempool += local_itempool[:remaining_items]
+
+    def set_rules(self) -> None:
+        if self.options.goal.value == Goal.option_all_artefacts:
+            self.multiworld.completion_condition[self.player] = lambda state: all(
+                state.can_reach_location(artefact, self.player) for artefact in
+                self.checks_in_pool.artefacts_in_pool)
+
+        elif self.options.goal.value == Goal.option_all_peaks:
+            self.multiworld.completion_condition[self.player] = lambda state: all(
+                state.can_reach_location(peak, self.player) for peak in self.checks_in_pool.peaks_in_pool)
+
+        elif self.options.goal.value == Goal.option_all_artefacts_all_peaks:
+            self.multiworld.completion_condition[self.player] = lambda state: all(
+                state.can_reach_location(loc, self.player) for loc in [*self.checks_in_pool.peaks_in_pool,
+                                                                       *self.checks_in_pool.artefacts_in_pool])
+
+        elif self.options.goal.value == Goal.option_time_attack:
+            self.multiworld.completion_condition[self.player] = lambda state: all(
+                state.can_reach_location(loc, self.player) for loc in self.checks_in_pool.peaks_in_pool)
+
+        elif self.options.goal.value == Goal.option_all:
+            self.multiworld.completion_condition[self.player] = lambda state: all(
+                state.can_reach_location(loc.name, self.player) for loc in self.multiworld.get_locations(self.player))
+
+        elif self.options.goal.value == Goal.option_peak:
+            self.set_completion_rule(CanReachLocation(ids_to_locations[self.options.peak_goal.get_location_id()]))
+
+    def fill_slot_data(self) -> dict[str, Any]:
+        data_dict = self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps",
+                                    "game_mode", "disable_solemn_tempest", "include_free_solo", "include_time_attack",
+                                    "peak_goal", casing="camel")
+        data_dict.update({"settingsVer": 1})
+        return data_dict
