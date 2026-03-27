@@ -183,8 +183,7 @@ class SatisfactoryWorld(World):
 
         self.options.goal_selection.value = slot_data["Data"]["Options"]["GoalSelection"]
         self.options.goal_requirement.value = slot_data["Data"]["Options"]["GoalRequirement"]
-        # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
-        self.options.final_elevator_phase.value = slot_data["Data"]["Options"]["FinalElevatorTier"]
+        self.options.final_elevator_phase.value = slot_data["Data"]["Options"]["FinalElevatorPhase"]
         self.options.goal_awesome_sink_points_total.value = slot_data["Data"]["Options"]["FinalResourceSinkPointsTotal"]
         self.options.goal_awesome_sink_points_per_minute.value = \
             slot_data["Data"]["Options"]["FinalResourceSinkPointsPerMinute"]
