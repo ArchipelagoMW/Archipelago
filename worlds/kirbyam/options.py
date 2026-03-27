@@ -30,9 +30,15 @@ class Goal(Choice):
     display_name = "Goal"
     default = 0
     option_dark_mind = 0
-    option_100 = 1
-    option_debug = 2
-    template_excluded_choices = frozenset({"100", "debug"})
+
+    @classmethod
+    def from_any(cls, data: object) -> "Goal":
+        """Coerce legacy goal values (removed in v0.0.12) to Dark Mind."""
+        if type(data) is int and data in {1, 2, 100}:
+            return cls(cls.option_dark_mind)
+        if isinstance(data, str) and data.lower() in {"1", "2", "100", "debug"}:
+            return cls(cls.option_dark_mind)
+        return super().from_any(data)  # type: ignore[return-value]
 
 
 class RandomizeShards(Choice):

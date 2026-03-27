@@ -5,12 +5,6 @@
     "tags": ["Goal", "MAP_DIMENSION_MIRROR"],
     "category": "GOAL"
   },
-  "GOAL_100_PERCENT": {
-    "label": "100% Save File",
-    "parent_region": "REGION_DIMENSION_MIRROR/MAIN",
-    "tags": ["Goal", "MAP_DIMENSION_MIRROR"],
-    "category": "GOAL"
-  },
   "BOSS_DEFEAT_1": {
     "label": "Mustard Mountain - Boss Defeat",
     "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",

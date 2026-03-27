@@ -75,8 +75,6 @@ class KirbyAmClient(BizHawkClient):
             if loc.category.name == "GOAL":
                 if loc.name == "GOAL_DARK_MIND":
                     self._goal_location_ids_by_option[Goal.option_dark_mind] = loc.location_id
-                elif loc.name == "GOAL_100_PERCENT":
-                    self._goal_location_ids_by_option[Goal.option_100] = loc.location_id
             else:
                 self._non_goal_location_ids_sorted.append(loc.location_id)
         # Boss defeat bitfield → location IDs (BOSS_DEFEAT category; polled from boss_defeat_flags)
@@ -1299,15 +1297,12 @@ class KirbyAmClient(BizHawkClient):
             raw = (await bizhawk.read(ctx.bizhawk_ctx, [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]))[0]
             ai_state = self._u32_le(raw)
 
-        if slot_goal == Goal.option_dark_mind:
-            # Dark Mind clear is anchored to 9999. The 10000 state is post-clear progression
-            # and should not be used as the first-clear trigger for this goal mode.
-            return ai_state == _GOAL_STATE_DARK_MIND_CLEAR
+        if slot_goal != Goal.option_dark_mind:
+            return False
 
-        if slot_goal == Goal.option_100:
-            return ai_state == _GOAL_STATE_FULL_CLEAR
-
-        return False
+        # Dark Mind clear is anchored to 9999. The 10000 state is post-clear progression
+        # and should not be used as the first-clear trigger.
+        return ai_state == _GOAL_STATE_DARK_MIND_CLEAR
 
     async def _maybe_report_goal(
         self,
@@ -1329,10 +1324,27 @@ class KirbyAmClient(BizHawkClient):
             return
 
         slot_goal_raw = ctx.slot_data.get("goal", Goal.option_dark_mind)
+        parsed_slot_goal: Optional[int] = None
+        clamped_goal = False
         try:
-            slot_goal = int(slot_goal_raw)
+            parsed_slot_goal = int(slot_goal_raw)
         except (TypeError, ValueError):
+            clamped_goal = True
+
+        if parsed_slot_goal == Goal.option_dark_mind:
+            slot_goal = parsed_slot_goal
+        else:
             slot_goal = Goal.option_dark_mind
+            clamped_goal = True
+
+        if clamped_goal:
+            from CommonClient import logger
+            logger.warning(
+                "KirbyAM: unexpected slot goal value '%s' (parsed=%s); clamping to Dark Mind. "
+                "This may indicate mismatched configs or world versions.",
+                slot_goal_raw,
+                parsed_slot_goal,
+            )
 
         goal_location_id = self._goal_location_ids_by_option.get(slot_goal)
         if goal_location_id is None:

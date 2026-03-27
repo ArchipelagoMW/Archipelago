@@ -762,26 +762,6 @@ async def test_goal_dark_mind_native_signal_reports_location_then_goal_status(mo
 
 
 @pytest.mark.asyncio
-async def test_goal_100_percent_uses_native_10000_signal(mock_bizhawk_context):
-    """100% goal should trigger on native 10000 signal."""
-    client = KirbyAmClient()
-    client.initialize_client()
-
-    goal_id = data.locations["GOAL_100_PERCENT"].location_id
-    mock_bizhawk_context.slot_data["goal"] = 1
-
-    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
-         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
-        mock_read.return_value = [(10000).to_bytes(4, 'little')]
-
-        await client._maybe_report_goal(mock_bizhawk_context)
-
-    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
-        {"cmd": "LocationChecks", "locations": [goal_id]}
-    ])
-
-
-@pytest.mark.asyncio
 async def test_goal_dark_mind_does_not_trigger_on_10000(mock_bizhawk_context):
     """Dark Mind goal mode must not treat 10000 as first-clear trigger."""
     client = KirbyAmClient()

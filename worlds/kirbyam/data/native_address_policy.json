@@ -85,7 +85,7 @@
           "address": "0x0203AD2C",
           "width": "u32",
           "source": "Live-mapped AI state candidate integrated for goal mode polling",
-          "verification": "Integrated with semantics: 9999 = Dark Mind clear trigger, 10000 = 100% progression signal"
+          "verification": "Integrated with semantics: 9999 = Dark Mind clear trigger, 10000 = post-clear progression signal"
         }
       ]
     },
@@ -97,7 +97,7 @@
           "address": "0x0203AD2C",
           "width": "u32",
           "source": "Live-mapped AI state candidate integrated for goal mode polling",
-          "verification": "Integrated with semantics: 10000 used for Goal=100% completion signal"
+          "verification": "Integrated with semantics: 10000 used for post-clear progression telemetry (not a goal trigger)"
         }
       ]
     },

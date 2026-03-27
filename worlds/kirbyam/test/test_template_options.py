@@ -59,3 +59,25 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             assert "plando_items" not in game_block
     finally:
         worlds.AutoWorld.AutoWorldRegister.world_types = old_world_types
+
+
+def test_goal_from_any_coerces_legacy_values() -> None:
+    """Legacy goal values (removed in v0.0.12) must coerce to Dark Mind, not raise."""
+    from worlds.kirbyam.options import Goal
+
+    # Legacy integer option values (option_100=1, option_debug=2)
+    assert Goal.from_any(1).value == Goal.option_dark_mind
+    assert Goal.from_any(2).value == Goal.option_dark_mind
+    # Unquoted YAML `100:` is parsed as int(100) by ruamel/pyyaml; must also coerce
+    assert Goal.from_any(100).value == Goal.option_dark_mind
+
+    # Legacy string template keys
+    assert Goal.from_any("1").value == Goal.option_dark_mind
+    assert Goal.from_any("2").value == Goal.option_dark_mind
+    assert Goal.from_any("100").value == Goal.option_dark_mind
+    assert Goal.from_any("debug").value == Goal.option_dark_mind
+    assert Goal.from_any("DEBUG").value == Goal.option_dark_mind
+
+    # Current valid value still works
+    assert Goal.from_any("dark_mind").value == Goal.option_dark_mind
+    assert Goal.from_any(0).value == Goal.option_dark_mind

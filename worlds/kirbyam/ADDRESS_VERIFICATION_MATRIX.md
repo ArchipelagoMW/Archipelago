@@ -220,9 +220,8 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
   per save slot (not per form individually). Note: `10000` is the subsequent
   100%-completion progression signal and must NOT be used as a Dark Mind trigger.
 - **AP Role**: The `Defeat Dark Mind` goal location fires on the `9999` native
-  signal. The `100% Save File` goal fires on `10000`. Both are in
-  `REGION_DIMENSION_MIRROR/MAIN` and require all 8 shards; `Defeat Dark Mind`
-  additionally requires the Dark Meta Knight (Dimension Mirror) event.
+  signal. The goal is in `REGION_DIMENSION_MIRROR/MAIN`, requires all 8 shards,
+  and additionally requires the Dark Meta Knight (Dimension Mirror) event.
 - **Status**: ⬜ Integrated (pending live verification) — currently used in
   production client for Dark Mind goal detection. Promotion to `verified`
   requires 3+ BizHawk observations with pre/post capture and persistence check.

@@ -85,7 +85,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 
 | Location Type | ID Range | Description |
 |---------------|----------|-------------|
-| GOAL_DARK_MIND / GOAL_100_PERCENT | auto-assigned | Goal locations (runtime-reported completion checks) |
+| GOAL_DARK_MIND | auto-assigned | Goal location (runtime-reported completion check) |
 | BOSS_DEFEAT_1 .. BOSS_DEFEAT_8 | auto-assigned | Area boss defeat locations (8 locations) |
 | MAJOR_CHEST_CABBAGE_CAVERN | 3960200 | Cabbage Cavern big chest (bit 3, gTreasures.bigChestField) |
 | MAJOR_CHEST_OLIVE_OCEAN | 3960201 | Olive Ocean big chest (bit 6, gTreasures.bigChestField) |
@@ -316,17 +316,15 @@ Receive notification message format:
 
 **Current Implementation (native AI-state polling):**
 ```python
-# World rules use explicit goal locations in REGION_DIMENSION_MIRROR/MAIN:
-# - Defeat Dark Mind for Goal=Dark Mind
-# - 100% Save File for Goal=100%
+# World rules use explicit goal location in REGION_DIMENSION_MIRROR/MAIN:
+# - Defeat Dark Mind
 
 # Native signal source:
 # ai_kirby_state_native @ 0x0203AD2C (u32)
-# - Goal=Dark Mind: trigger selected goal location check on value 9999
-# - Goal=100%: trigger selected goal location check on value 10000
+# - Trigger goal location check on value 9999
 #
-# Note: 10000 is post-clear progression for Dark Mind mode and must not be
-# treated as first-clear trigger when Goal=Dark Mind.
+# Note: 10000 is post-clear progression and must not be treated as first-clear
+# trigger.
 ```
 
 **Client StatusUpdate:**

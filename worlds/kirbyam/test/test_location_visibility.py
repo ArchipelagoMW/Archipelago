@@ -2,7 +2,7 @@ from . import KirbyAmTestBase
 from .. import KirbyAmWorld
 
 
-_GOAL_LOCATION_NAMES = {"Defeat Dark Mind", "100% Save File"}
+_GOAL_LOCATION_NAMES = {"Defeat Dark Mind"}
 
 
 def test_goal_locations_are_excluded_from_datapackage_location_ids() -> None:

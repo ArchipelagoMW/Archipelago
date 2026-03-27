@@ -88,21 +88,13 @@ def test_dark_mind_goal_requires_dark_mind_event() -> None:
     assert completion_fn(_FakeState({"Defeat Dark Mind"}))
 
 
-def test_100_percent_goal_requires_100_percent_event() -> None:
-    world = _FakeWorld(Goal.option_100)
+def test_unknown_goal_value_defaults_to_dark_mind_completion() -> None:
+    world = _FakeWorld(99)
     set_rules(world)
 
     completion_fn = _get_completion_fn(world)
-    assert not completion_fn(_FakeState({"Defeat Dark Mind"}))
-    assert completion_fn(_FakeState({"100% Save File"}))
-
-
-def test_debug_goal_is_always_complete() -> None:
-    world = _FakeWorld(Goal.option_debug)
-    set_rules(world)
-
-    completion_fn = _get_completion_fn(world)
-    assert completion_fn(_FakeState())
+    assert not completion_fn(_FakeState())
+    assert completion_fn(_FakeState({"Defeat Dark Mind"}))
 
 
 def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> None:
@@ -114,7 +106,6 @@ def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> N
     applied_names = [call.args[0].name for call in mock_set_rule.call_args_list]
     assert "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
     assert "Defeat Dark Mind" in applied_names
-    assert "100% Save File" in applied_names
 
 
 ALL_SHARDS = {
@@ -159,22 +150,6 @@ def test_defeat_dark_mind_blocked_without_shards() -> None:
 
     # No shards and no DMK: blocked.
     assert not dm_location.access_rule(_FakeState({_DMK_EVENT}))
-
-
-def test_100_percent_goal_does_not_require_dmk_event() -> None:
-    """100% Save File goal location requires only shards, not the DMK event."""
-    world = _FakeWorld(Goal.option_100)
-    set_rules(world)
-
-    pct_location = world.multiworld.get_location("100% Save File", world.player)
-    assert callable(pct_location.access_rule)
-
-    # All shards, no DMK event: accessible (100% has independent logic).
-    assert pct_location.access_rule(_FakeState(ALL_SHARDS))
-
-    # Partial shards: blocked.
-    partial = set(list(ALL_SHARDS)[:7])
-    assert not pct_location.access_rule(_FakeState(partial))
 
 
 def test_dmk_event_present_in_dimension_mirror_region() -> None:

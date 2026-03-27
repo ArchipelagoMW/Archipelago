@@ -366,7 +366,6 @@ Completion logic was still tied directly to "all shard items collected" and used
 ### Solution
 Goal handling now uses explicit goal locations:
 - Goal=Dark Mind -> requires `Defeat Dark Mind`
-- Goal=100% -> requires `100% Save File`
 - Goal locations live in `REGION_DIMENSION_MIRROR/MAIN` and are locked progression events, not randomized pool entries
 - The BizHawk client reports the selected goal location from native AI-state polling (`ai_kirby_state_native`), then sends goal status after the server acknowledges that goal location
 
@@ -380,8 +379,7 @@ Goal completion used temporary client-side aggregation logic instead of native g
 ### Solution
 Integrated native AI-state goal polling from `ai_kirby_state_native` (`0x0203AD2C`):
 - Goal=Dark Mind: trigger selected goal location when value is `9999`
-- Goal=100%: trigger selected goal location when value is `10000`
-- In Dark Mind mode, `10000` is treated as post-clear progression and is not used as first-clear trigger
+- `10000` is treated as post-clear progression and is not used as first-clear trigger
 
 Client continues to send `CLIENT_GOAL` only after server acknowledgement of the selected goal location check, preserving idempotent AP completion reporting.
 
@@ -445,9 +443,9 @@ entire built-in group.
 
 ### Validation
 - Extended `worlds/kirbyam/test/test_template_options.py` to assert:
-  - hidden/non-shipping option choices remain excluded
+  - non-shipping option choices remain excluded from the generated template
   - `Item & Location Options` header is absent when KirbyAM has no visible options in that group
-  - generated template `requires.game` world version remains `0.0.12`
+  - generated template `requires.game` world version matches `KirbyAmWorld.world_version`
 
 ## Issue #83: In-Game Notification Pipeline (Receive + Send)
 
@@ -552,7 +550,7 @@ covering:
 
 ### Problem
 `REGION_DIMENSION_MIRROR/MAIN` modeled the final-boss area as a flat region with
-no internal sequencing: both goal locations (`Defeat Dark Mind`, `100% Save File`)
+no internal sequencing: the goal location (`Defeat Dark Mind`)
 were peers with no representation of the Dark Meta Knight prerequisite encounter.
 The `ADDRESS_VERIFICATION_MATRIX.md` also lacked entries for the Dimension Mirror
 boss encounters.
@@ -569,8 +567,6 @@ in `REGION_DIMENSION_MIRROR/MAIN`. This event:
 `rules.py` now enforces:
 - `Defeat Dark Mind` goal location: requires all 8 shards **and** `Defeat Dark
   Meta Knight (Dimension Mirror)` event.
-- `100% Save File` goal location: requires all 8 shards only (the 100%
-  completion signal incorporates full clear semantics independently).
 
 ### `ai_kirby_state_native` Value Semantics (Address: `0x0203AD2C`, u32)
 
@@ -585,7 +581,7 @@ in `REGION_DIMENSION_MIRROR/MAIN`. This event:
 |---|---|---|
 | `300` | Normal gameplay-active | Gameplay gate (Issue #56) |
 | `9999` | Dark Mind clear trigger | `dark_mind` goal |
-| `10000` | 100% completion signal | `100` goal |
+| `10000` | Post-clear progression signal | none |
 
 **On 9999 vs 10000 in dark_mind mode**: `10000` is post-clear progression and
 must NOT be used as the first-clear trigger for `dark_mind`. The client
@@ -595,9 +591,10 @@ explicitly rejects `10000` when in `dark_mind` goal mode.
 1. Capture pre-action ai_kirby_state value in BizHawk memory viewer.
 2. Complete the final boss sequence and capture post-action value.
 3. Record frame-count and confirm value persists through at least one save/reload.
-4. Repeat 3 times for each of `9999` (Dark Mind) and `10000` (100%) signals.
+4. Repeat 3 times for `9999` (Dark Mind), and treat `10000` as post-clear-only
+  observational telemetry.
 
-Until promoted, treat both values as valid for production use but flag for
+Until promoted, treat `9999` as production goal trigger and flag both values for
 follow-up verification in any regression investigation.
 
 ## Issue #110: Boss Defeat Address Identification Beyond Shards
@@ -826,7 +823,7 @@ tuple, so connection attempts could crash with a tuple-unpack `ValueError`.
 ## Issue #371: Hide Goal/Event Objective Checks from `/locations`
 
 ### Problem
-KirbyAM exported goal labels like `Defeat Dark Mind` and `100% Save File` in
+KirbyAM exported goal labels like `Defeat Dark Mind` in
 the datapackage `location_name_to_id` map even though generation later converts
 those checks into runtime events. That made `/locations` show goal/event-style
 objective checks as if they were normal AP locations.
