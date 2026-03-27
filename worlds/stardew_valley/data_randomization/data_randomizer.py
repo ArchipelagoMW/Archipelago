@@ -39,7 +39,7 @@ def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], 
     if DataRandomizationOptionName.fish_season not in data_to_randomize:
         return
 
-    seasons_by_fish = {fish_name: fish_data.seasons for fish_name, fish_data in content.fishes.items() if fish_data.difficulty > 0}
+    seasons_by_fish = {fish_name: fish_data.seasons for fish_name, fish_data in content.fishes.items() if len(fish_data.seasons) >= 1}
     randomized_seasons_per_fish = randomizers_per_behavior[behavior](seasons_by_fish, random)
 
     for fish_name, fish_season in randomized_seasons_per_fish.items():

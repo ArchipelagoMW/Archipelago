@@ -42,6 +42,8 @@ def prepare_fish_season_for_print(content, data_to_randomize, data_to_print):
     if DataRandomizationOptionName.fish_season not in data_to_randomize:
         return
     for fish_name, fish_data in content.fishes.items():
+        if len(fish_data.seasons) <= 0:
+            continue
         if fish_name not in data_to_print:
             data_to_print[fish_name] = dict()
         data_to_print[fish_name]["season"] = fish_data.seasons

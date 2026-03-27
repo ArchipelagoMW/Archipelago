@@ -12,7 +12,8 @@ from ..strings.craftable_names import Fishing
 from ..strings.fish_names import SVEFish
 from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
+from ..strings.season_names import Season
 from ..strings.skill_names import Skill
 from ..strings.tool_names import FishingRod
 
@@ -101,6 +102,8 @@ class FishingLogic(BaseLogic):
 
         if fish.name == SVEFish.kittyfish:
             item_rule = self.logic.received(SVEQuestItem.kittyfish_spell)
+        elif LogicRegion.night_market in fish.locations and Season.winter not in fish.seasons:
+            item_rule = self.logic.fishing.can_use_any_bait() & self.logic.has(Fishing.magic_bait)
         else:
             item_rule = True_()
 
