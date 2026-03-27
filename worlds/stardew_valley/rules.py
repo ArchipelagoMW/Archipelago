@@ -308,6 +308,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_kitchen, logic.building.has_building(Building.kitchen))
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_crib, logic.building.has_building(Building.kids_room))
+    rule_collector.set_entrance_rule(LogicEntrance.farmhouse_upgrade_cellar, logic.building.has_building(Building.cellar))
     rule_collector.set_entrance_rule(LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
         rule_collector.set_entrance_rule(LogicEntrance.island_shipping, logic.shipping.can_use_island_shipping_bin)
@@ -428,7 +429,6 @@ def set_dangerous_mine_rules(logic, rule_collector: StardewRuleCollector, conten
 
 
 def set_farm_buildings_entrance_rules(logic, rule_collector: StardewRuleCollector):
-    rule_collector.set_entrance_rule(Entrance.downstairs_to_cellar, logic.building.has_building(Building.cellar))
     rule_collector.set_entrance_rule(
         Entrance.enter_greenhouse, logic.received("Greenhouse")
     )

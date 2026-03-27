@@ -28,7 +28,8 @@ vanilla_regions: tuple[RegionData, ...] = (
         ),
     ),
     RegionData(RegionName.farm_house_kitchen, (LogicEntrance.farmhouse_upgrade_crib,)),
-    RegionData(RegionName.farm_house_crib, (Entrance.downstairs_to_cellar, Entrance.downstairs_to_farmhouse)),
+    RegionData(RegionName.farm_house_crib, (LogicEntrance.farmhouse_upgrade_cellar,)),
+    RegionData(RegionName.farm_house_cellar, (Entrance.downstairs_to_cellar, Entrance.downstairs_to_farmhouse)),
     RegionData(RegionName.cellar, (Entrance.cellar_to_downstairs,)),
     RegionData(
         RegionName.farm,
@@ -507,6 +508,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ),
     ConnectionData(LogicEntrance.farmhouse_upgrade_kitchen, RegionName.farm_house_kitchen),
     ConnectionData(LogicEntrance.farmhouse_upgrade_crib, RegionName.farm_house_crib),
+    ConnectionData(LogicEntrance.farmhouse_upgrade_cellar, RegionName.farm_house_cellar),
     ConnectionData(
         Entrance.downstairs_to_cellar,
         RegionName.cellar,

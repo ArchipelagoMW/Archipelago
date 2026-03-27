@@ -349,6 +349,7 @@ class LogicEntrance:
     buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
     farmhouse_upgrade_kitchen = "Farmhouse Kitchen Upgrade"
     farmhouse_upgrade_crib = "Farmhouse Crib Upgrade"
+    farmhouse_upgrade_cellar = "Farmhouse Cellar Upgrade"
     farmhouse_cooking = "Farmhouse Cooking"
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
