@@ -77,9 +77,18 @@ def connect_regions(world: BabaIsYouWorld) -> None:
 
 # Handle level shuffling
 def handle_level_shuffle(world: BabaIsYouWorld) -> None:
-    world.level_shuffle_dict = {}
     if world.options.level_shuffle == 0:
+        world.level_shuffle_dict = {}
         return
+
+    if world.level_shuffle_dict:
+        return
+
+    re_gen_passthrough = getattr(world.multiworld, "re_gen_passthrough", None)
+    if isinstance(re_gen_passthrough, dict) and world.game in re_gen_passthrough:
+        return
+
+    world.level_shuffle_dict = {}
     
     # Make a dictionary of each level swap
     clearable_level_list = [] # levels we can already clear
