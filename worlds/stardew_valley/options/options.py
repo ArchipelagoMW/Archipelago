@@ -8,7 +8,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName, EntranceRandomizerBehaviourOptionName
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName, DataRandomizationOptionName, EntranceRandomizerBehaviourOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -941,6 +941,42 @@ class TrapDistribution(OptionCounter):
     }
 
 
+class DataRandomizationBehavior(Choice):
+    """
+        If any Data Randomization toggles are on, this decides how the data is randomized. Not all toggles can handle all behaviors, when not applicable, the closest lower behavior is chosen.
+        Off: No Data Randomization occurs
+        Shuffle: All values are maintained, but shuffled between entries.
+        Weighted Randomized: All entries are given a random value from the original pool, weighted from the original frequency, with repeat draws
+        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws
+        Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed
+        Wild: All entries are given a random value, with no regard for the original entries at all.
+    """
+    internal_name = "data_randomization_behavior"
+    display_name = "Data Randomization Behavior"
+    default = 0
+    option_off = 0
+    option_shuffle = 1
+    option_weighted_randomized = 2
+    option_randomized = 3
+    option_range_randomized = 4
+    option_wild = 5
+
+
+class DataRandomization(OptionSet):
+    """
+    Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet.
+    Fish Difficulty: Randomizes the difficulty of fish
+    """
+    internal_name = "data_randomization"
+    display_name = "Data Randomization"
+    valid_keys = frozenset({
+        DataRandomizationOptionName.fish_difficulty,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(preset_none)
+
+
 class CustomLogic(OptionSet):
     """Enable various customizations to the logic of the generator.
     Some flags are inherently incompatible with each other, the harder flag takes priority.
@@ -968,6 +1004,7 @@ class CustomLogic(OptionSet):
     """
     internal_name = "custom_logic"
     display_name = "Custom Logic"
+    visibility = Visibility.all & ~Visibility.simple_ui
     valid_keys = frozenset({
         CustomLogicOptionName.chair_skips,
         CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
@@ -1253,6 +1290,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     enabled_filler_buffs: EnabledFillerBuffs
     trap_difficulty: TrapDifficulty
     trap_distribution: TrapDistribution
+    data_randomization_behavior: DataRandomizationBehavior
+    data_randomization: DataRandomization
     custom_logic: CustomLogic
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost
