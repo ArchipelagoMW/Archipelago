@@ -58,7 +58,7 @@ class RaC3World(World):
     def generate_early(self):
         # count number of . in the version number to determine if dev build
         version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
-        if version_dots >= 3:
+        if version_dots >= 3 or "dev" in RAC3OPTION.VERSION_NUMBER:
             rac3_logger.warning("\nYou are using a development build of the RaC3 Archipelago Randomizer!\n"
                                 "There may be bugs present and features that have not been tested fully.\n"
                                 "These builds are meant for testing and bug reporting purposes "
