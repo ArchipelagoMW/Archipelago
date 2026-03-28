@@ -38,7 +38,7 @@ an experience customized for their taste, and different players in the same mult
 ### Where do I get a YAML file?
 
 You can customize your options by visiting
-the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-options).\
+the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-options).
 Alternatively, you can use the "Options Creator" (a GUI tool in the Archipelago Launcher) to customize your options and export your YAML file, or use the "Generate Template Options" feature if you prefer editing your YAML in a text editor. Both tools are available in the Archipelago Launcher.
 
 ### Hosting your MultiWorld

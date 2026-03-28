@@ -31,12 +31,6 @@ Try updating [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/
 Sometimes it just refuses to load the client if you have an outdated version installed.
 Updating Universal Tracker appears to solve this problem for those reporting this issue.
 
-## In the vendors I can purchase a weapon multiple times, but I get nothing, why?
-
-Until you don't have a weapon it's vendor slot will be active, because the game tries to put it back to the shop because
-you don't have it, don't purchase weapons or Armor in the current versions.
-
-
 ## X check is in logic, but when I go there I don't receive it, why?
 
 Currently, there are some checks that doesn't work with sequence breaking (For example most of the Phoenix checks) 
@@ -57,7 +51,7 @@ A location can have multiple tags and be part of multiple groups at the same tim
 
 ## My cosmetics are missing, what can I do?
 
-The client tells you to reload the save file as soon you start the game on Veldin. To reapply cosmetics, restart the client and reconnect, then reload your save file without saving first.
+The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then open and close the skin menu without changing your skin or visit the armor vendor or reload your save file without saving first.
 
 ## How do I toggle death link?
 
@@ -65,7 +59,7 @@ You can run the /death_link command in the Ratchet and Clank 3 client to toggle 
 
 ## Sometimes the message popup does not show when I send/receive items
 
-If the game is paused, you are in a menu, selecting a mission, and in other situations, the game cannot display the message box we use to show these messages.
+If the game is paused, you are in a menu, selecting a mission, and in other situations, the game cannot display the message box we use to show these messages. If messages cannot be displayed, they stay in the notification queue until they can be displayed.
 
 ## A Gadget didn't spawn in the world when I haven't checked the location yet
 
