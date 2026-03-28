@@ -207,6 +207,8 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     else:
         logger.info("Progression balancing skipped.")
 
+    logger.info("Running Pre Output Steps")
+
     AutoWorld.call_all(multiworld, "finalize_multiworld")
     AutoWorld.call_all(multiworld, "pre_output")
 
