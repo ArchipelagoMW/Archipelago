@@ -65,3 +65,5 @@ jobs:
       with:
         name: scan-build-reports
         path: scan-build-reports
+        compression-level: 9  # highly compressible
+        if-no-files-found: error

@@ -112,16 +112,15 @@ jobs:
       - name: Store 7z
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.ZIP_NAME }}
           path: dist/${{ env.ZIP_NAME }}
-          compression-level: 0  # .7z is incompressible by zip
+          archive: false
           if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
       - name: Store Setup
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.SETUP_NAME }}
           path: setups/${{ env.SETUP_NAME }}
+          archive: false
           if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
 
@@ -206,15 +205,15 @@ jobs:
       - name: Store AppImage
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
+          archive: false
+          # TODO: decide if we want to also upload the zsync
           if-no-files-found: error
           retention-days: 7
       - name: Store .tar.gz
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}
-          compression-level: 0  # .gz is incompressible by zip
+          archive: false
           if-no-files-found: error
           retention-days: 7
