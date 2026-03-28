@@ -1,0 +1,279 @@
+[
+  {
+    "name": "Chasm",
+    "children": [
+      {
+        "name": "Chasm-A",
+        "short_name": "Chasm-A",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1776,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-A",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-B",
+        "short_name": "Chasm-B",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1776,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-B",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-C",
+        "short_name": "Chasm-C",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1872,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-C",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-D",
+        "short_name": "Chasm-D",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1872,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-D",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-E",
+        "short_name": "Chasm-E",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1968,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-E",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-F",
+        "short_name": "Chasm-F",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1968,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-F",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-G",
+        "short_name": "Chasm-G",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 2064,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-G",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-H",
+        "short_name": "Chasm-H",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 2064,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-H",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-I",
+        "short_name": "Chasm-I",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 2160,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-I",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 1",
+        "short_name": "Chasm-Extra 1",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1872,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 2",
+        "short_name": "Chasm-Extra 2",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1872,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 3",
+        "short_name": "Chasm-Extra 3",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1872,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 4",
+        "short_name": "Chasm-Extra 4",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1968,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 5",
+        "short_name": "Chasm-Extra 5",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1968,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 6",
+        "short_name": "Chasm-Extra 6",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 1968,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Chasm-Extra 7",
+        "short_name": "Chasm-Extra 7",
+        "map_locations": [
+          {
+            "map": "Chasm",
+            "x": 2064,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Chasm-Extra 7",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

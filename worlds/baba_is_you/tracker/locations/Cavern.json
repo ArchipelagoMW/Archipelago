@@ -1,0 +1,262 @@
+[
+  {
+    "name": "Cavern",
+    "children": [
+      {
+        "name": "Cavern-1",
+        "short_name": "Cavern-1",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-2",
+        "short_name": "Cavern-2",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1488,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-3",
+        "short_name": "Cavern-3",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1584,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-4",
+        "short_name": "Cavern-4",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1584,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-5",
+        "short_name": "Cavern-5",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1680,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-6",
+        "short_name": "Cavern-6",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1584,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-7",
+        "short_name": "Cavern-7",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1680,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-8",
+        "short_name": "Cavern-8",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1680,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-9",
+        "short_name": "Cavern-9",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1680,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-10",
+        "short_name": "Cavern-10",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1584,
+            "y": 1296
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-11",
+        "short_name": "Cavern-11",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1968,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-11",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-12",
+        "short_name": "Cavern-12",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1968,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-12",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-13",
+        "short_name": "Cavern-13",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1968,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-13",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-14",
+        "short_name": "Cavern-14",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1968,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-14",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Cavern-Extra 1",
+        "short_name": "Cavern-Extra 1",
+        "map_locations": [
+          {
+            "map": "Cavern",
+            "x": 1776,
+            "y": 528
+          }
+        ],
+        "sections": [
+          {
+            "name": "Cavern-Extra 1",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

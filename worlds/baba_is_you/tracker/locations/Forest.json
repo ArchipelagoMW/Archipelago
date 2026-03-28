@@ -1,0 +1,364 @@
+[
+  {
+    "name": "Forest",
+    "children": [
+      {
+        "name": "Forest-1",
+        "short_name": "Forest-1",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1584,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-2",
+        "short_name": "Forest-2",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1392,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-3",
+        "short_name": "Forest-3",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1680,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-4",
+        "short_name": "Forest-4",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1488,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-5",
+        "short_name": "Forest-5",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1392,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-6",
+        "short_name": "Forest-6",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1200,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-7",
+        "short_name": "Forest-7",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1776,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-8",
+        "short_name": "Forest-8",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1104,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-9",
+        "short_name": "Forest-9",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1680,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-10",
+        "short_name": "Forest-10",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1488,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-11",
+        "short_name": "Forest-11",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1008,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-11",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-12",
+        "short_name": "Forest-12",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1776,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-12",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-13",
+        "short_name": "Forest-13",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1392,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-13",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-14",
+        "short_name": "Forest-14",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1392,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-14",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-Extra 1",
+        "short_name": "Forest-Extra 1",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1680,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-Extra 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-Extra 2",
+        "short_name": "Forest-Extra 2",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1680,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-Extra 2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-A",
+        "short_name": "Forest-A",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1968,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-A",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-B",
+        "short_name": "Forest-B",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 1968,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-B",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-C",
+        "short_name": "Forest-C",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 2064,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-C",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-D",
+        "short_name": "Forest-D",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 2064,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-D",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Forest-E",
+        "short_name": "Forest-E",
+        "map_locations": [
+          {
+            "map": "Forest",
+            "x": 2160,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Forest-E",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,313 @@
+[
+  {
+    "name": "Island",
+    "children": [
+      {
+        "name": "Island-0",
+        "short_name": "Island-0",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1776,
+            "y": 1392
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-0",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-1",
+        "short_name": "Island-1",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1584,
+            "y": 1200
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-2",
+        "short_name": "Island-2",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1584,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-3",
+        "short_name": "Island-3",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1584,
+            "y": 912
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-4",
+        "short_name": "Island-4",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1584,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-5",
+        "short_name": "Island-5",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1776,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-6",
+        "short_name": "Island-6",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1776,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-6",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-7",
+        "short_name": "Island-7",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1872,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-7",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-8",
+        "short_name": "Island-8",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1872,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-8",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-9",
+        "short_name": "Island-9",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1968,
+            "y": 720
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-9",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-10",
+        "short_name": "Island-10",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1968,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-10",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-11",
+        "short_name": "Island-11",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1872,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-11",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-Extra 1",
+        "short_name": "Island-Extra 1",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1392,
+            "y": 1104
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-Extra 1",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-Extra 2",
+        "short_name": "Island-Extra 2",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1584,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-Extra 2",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-Extra 3",
+        "short_name": "Island-Extra 3",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1872,
+            "y": 1008
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-Extra 3",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-Extra 4",
+        "short_name": "Island-Extra 4",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 2160,
+            "y": 816
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-Extra 4",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-Extra 5",
+        "short_name": "Island-Extra 5",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 1872,
+            "y": 432
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-Extra 5",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "Island-Extra 6",
+        "short_name": "Island-Extra 6",
+        "map_locations": [
+          {
+            "map": "Island",
+            "x": 2064,
+            "y": 624
+          }
+        ],
+        "sections": [
+          {
+            "name": "Island-Extra 6",
+            "item_count": 1
+          }
+        ]
+      }
+    ]
+  }
+]
