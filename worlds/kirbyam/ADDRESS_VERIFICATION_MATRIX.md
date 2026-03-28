@@ -83,15 +83,15 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 
 | Location | Bit | Status | Verified Address | Notes |
 |----------|-----|--------|------------------|-------|
-| Rainbow Route - Big Chest | 1 | ⬜ | | |
-| Moonlight Mansion - Big Chest | 2 | ⬜ | | |
-| Cabbage Cavern - Big Chest | 3 | ⬜ | | |
-| Mustard Mountain - Big Chest | 4 | ⬜ | | |
-| Carrot Castle - Big Chest | 5 | ⬜ | | |
-| Olive Ocean - Big Chest | 6 | ⬜ | | |
-| Peppermint Palace - Big Chest | 7 | ⬜ | | |
-| Radish Ruins - Big Chest | 8 | ⬜ | | |
-| Candy Constellation - Big Chest | 9 | ⬜ | | |
+| Rainbow Route 1-9 - Big Chest | 1 | ⬜ | | |
+| Moonlight Mansion 2-1 - Big Chest | 2 | ⬜ | | |
+| Cabbage Cavern 3-7 - Big Chest | 3 | ⬜ | | |
+| Mustard Mountain 4-25 - Big Chest | 4 | ⬜ | | |
+| Carrot Castle 5-15 - Big Chest | 5 | ⬜ | | |
+| Olive Ocean 6-15 - Big Chest | 6 | ⬜ | | |
+| Peppermint Palace 7-4 - Big Chest | 7 | ⬜ | | |
+| Radish Ruins 8-29 - Big Chest | 8 | ⬜ | | |
+| Candy Constellation 9-18 - Big Chest | 9 | ⬜ | | |
 
 **Testing Steps for Each Major Chest**:
 1. Observe `0x0203897C` before opening the chest
@@ -289,7 +289,7 @@ This document serves as a testing checklist. Use BizHawk's memory viewer to conf
 | Signal | Type | Address | Bit | Confidence | Status |
 |--------|------|---------|-----|------------|--------|
 | Mirror Shard 1 | Bitfield | TBD | 0 | 🔴 | ⬜ |
-| Cabbage Cavern - Big Chest | Bitfield | `0x0203897C` | 3 | 🟡 | Integrated |
+| Cabbage Cavern 3-7 - Big Chest | Bitfield | `0x0203897C` | 3 | 🟡 | Integrated |
 | Crepe Defeated | Flag/Bitfield | TBD | ? | 🔴 | ⬜ |
 | Dark Meta Knight (Dimension Mirror) | Flag/Bitfield | TBD (boss table `0x02028C14+`) | ? | 🔴 | ⬜ |
 | Dark Mind Defeated (all forms) | ai_kirby_state | `0x0203AD2C` → `9999` | n/a | 🟡 | Integrated |

@@ -1213,19 +1213,19 @@ progression remained concentrated in mirror shards.
 ### Solution
 Added a first-pass useful item tier without introducing new progression rules:
 - map useful items:
-  - `Map - Mustard Mountain`
-  - `Map - Moonlight Mansion`
-  - `Map - Candy Constellation`
-  - `Map - Olive Ocean`
-  - `Map - Peppermint Palace`
-  - `Map - Cabbage Cavern`
-  - `Map - Carrot Castle`
-  - `Map - Radish Ruins`
+  - `Mustard Mountain - Map`
+  - `Moonlight Mansion - Map`
+  - `Candy Constellation - Map`
+  - `Olive Ocean - Map`
+  - `Peppermint Palace - Map`
+  - `Cabbage Cavern - Map`
+  - `Carrot Castle - Map`
+  - `Radish Ruins - Map`
 - vitality useful items:
-  - `Vitality Counter I`
-  - `Vitality Counter II`
-  - `Vitality Counter III`
-  - `Vitality Counter IV`
+  - `Carrot Castle - Vitality Counter`
+  - `Olive Ocean - Vitality Counter`
+  - `Radish Ruins - Vitality Counter`
+  - `Candy Constellation - Vitality Counter`
 
 Pool composition wiring for practical quantities:
 - `BOSS_DEFEAT_1..8` locations now have explicit `default_item` values that map

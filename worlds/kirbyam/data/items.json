@@ -57,79 +57,79 @@
     "tags": ["Shards", "Unique"]
   },
   "MAP_RAINBOW_ROUTE": {
-    "label": "Map - Rainbow Route",
+    "label": "Rainbow Route - Map",
     "classification": "USEFUL",
     "item_id": 3860024,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_MUSTARD_MOUNTAIN": {
-    "label": "Map - Mustard Mountain",
+    "label": "Mustard Mountain - Map",
     "classification": "USEFUL",
     "item_id": 3860010,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_MOONLIGHT_MANSION": {
-    "label": "Map - Moonlight Mansion",
+    "label": "Moonlight Mansion - Map",
     "classification": "USEFUL",
     "item_id": 3860011,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_CANDY_CONSTELLATION": {
-    "label": "Map - Candy Constellation",
+    "label": "Candy Constellation - Map",
     "classification": "USEFUL",
     "item_id": 3860012,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_OLIVE_OCEAN": {
-    "label": "Map - Olive Ocean",
+    "label": "Olive Ocean - Map",
     "classification": "USEFUL",
     "item_id": 3860013,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_PEPPERMINT_PALACE": {
-    "label": "Map - Peppermint Palace",
+    "label": "Peppermint Palace - Map",
     "classification": "USEFUL",
     "item_id": 3860014,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_CABBAGE_CAVERN": {
-    "label": "Map - Cabbage Cavern",
+    "label": "Cabbage Cavern - Map",
     "classification": "USEFUL",
     "item_id": 3860015,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_CARROT_CASTLE": {
-    "label": "Map - Carrot Castle",
+    "label": "Carrot Castle - Map",
     "classification": "USEFUL",
     "item_id": 3860016,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "MAP_RADISH_RUINS": {
-    "label": "Map - Radish Ruins",
+    "label": "Radish Ruins - Map",
     "classification": "USEFUL",
     "item_id": 3860017,
     "tags": ["Maps", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_1": {
-    "label": "Vitality Counter I",
+    "label": "Carrot Castle - Vitality Counter",
     "classification": "USEFUL",
     "item_id": 3860018,
     "tags": ["Vitality", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_2": {
-    "label": "Vitality Counter II",
+    "label": "Olive Ocean - Vitality Counter",
     "classification": "USEFUL",
     "item_id": 3860019,
     "tags": ["Vitality", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_3": {
-    "label": "Vitality Counter III",
+    "label": "Radish Ruins - Vitality Counter",
     "classification": "USEFUL",
     "item_id": 3860020,
     "tags": ["Vitality", "Useful", "Unique"]
   },
   "VITALITY_COUNTER_4": {
-    "label": "Vitality Counter IV",
+    "label": "Candy Constellation - Vitality Counter",
     "classification": "USEFUL",
     "item_id": 3860021,
     "tags": ["Vitality", "Useful", "Unique"]

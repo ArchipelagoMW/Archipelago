@@ -111,16 +111,16 @@ static void ap_set_sound_player_chest_flag(uint32_t chest_index) {
 
 static void ap_set_vitality_chest_flag_for_room(uint16_t room_id) {
     switch (room_id) {
-        case 739u: // Carrot Castle 5-23 Big Chest Vitality
+        case 739u: // Carrot Castle 5-23 Big Chest
             ap_set_vitality_chest_flag(0u);
             break;
-        case 815u: // Olive Ocean 6-21 Big Chest Vitality
+        case 815u: // Olive Ocean 6-21 Big Chest
             ap_set_vitality_chest_flag(1u);
             break;
-        case 610u: // Radish Ruins 8-4 Big Chest Vitality
+        case 610u: // Radish Ruins 8-4 Big Chest
             ap_set_vitality_chest_flag(2u);
             break;
-        case 403u: // Candy Constellation 9-8 Big Chest Vitality
+        case 403u: // Candy Constellation 9-8 Big Chest
             ap_set_vitality_chest_flag(3u);
             break;
         default:

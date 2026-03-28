@@ -39,21 +39,21 @@ EXPECTED_GROUP_MEMBERS = {
         "Candy Constellation - Mirror Shard",
     },
     "Maps": {
-        "Map - Rainbow Route",
-        "Map - Mustard Mountain",
-        "Map - Moonlight Mansion",
+        "Rainbow Route - Map",
+        "Mustard Mountain - Map",
+        "Moonlight Mansion - Map",
     },
     "Vitality": {
-        "Vitality Counter I",
-        "Vitality Counter II",
-        "Vitality Counter III",
-        "Vitality Counter IV",
+        "Carrot Castle - Vitality Counter",
+        "Olive Ocean - Vitality Counter",
+        "Radish Ruins - Vitality Counter",
+        "Candy Constellation - Vitality Counter",
     },
     "Unique": {
         "Mustard Mountain - Mirror Shard",  # Shards are also Unique
-        "Map - Rainbow Route",
+        "Rainbow Route - Map",
         "Sound Player",
-        "Vitality Counter I",  # Vitality counters are also Unique
+        "Carrot Castle - Vitality Counter",  # Vitality counters are also Unique
     },
     "Filler": {
         "1 Up",
@@ -125,11 +125,11 @@ class TestItemGroupMembership:
         assert len(maps_group) == len(expected_maps), \
             "Maps group size should match map items in data"
 
-        # Vitality: 4 items (I, II, III, IV)
+        # Vitality: 4 area-specific items
         assert len(ITEM_GROUPS.get("Vitality", set())) == 4, \
             "Vitality group should have 4 items"
-        assert "Vitality Counter IV" in ITEM_GROUPS.get("Vitality", set()), \
-            "Vitality group should include Vitality Counter IV"
+        assert "Candy Constellation - Vitality Counter" in ITEM_GROUPS.get("Vitality", set()), \
+            "Vitality group should include Candy Constellation - Vitality Counter"
         # Filler: 3 items (1-Up, 2-Up, 3-Up)
         assert len(ITEM_GROUPS.get("Filler", set())) == 3, \
             "Filler group should have 3 items (1-Up, 2-Up, 3-Up)"
@@ -170,10 +170,10 @@ class TestItemGroupContracts:
         """Sound Player and Vitality Counters must be in Unique group."""
         unique_items = ITEM_GROUPS.get("Unique", set())
         assert "Sound Player" in unique_items, "Sound Player should be in Unique group"
-        assert "Vitality Counter I" in unique_items, "Vitality Counter I should be in Unique group"
-        assert "Vitality Counter II" in unique_items, "Vitality Counter II should be in Unique group"
-        assert "Vitality Counter III" in unique_items, "Vitality Counter III should be in Unique group"
-        assert "Vitality Counter IV" in unique_items, "Vitality Counter IV should be in Unique group"
+        assert "Carrot Castle - Vitality Counter" in unique_items, "Carrot Castle vitality item should be in Unique group"
+        assert "Olive Ocean - Vitality Counter" in unique_items, "Olive Ocean vitality item should be in Unique group"
+        assert "Radish Ruins - Vitality Counter" in unique_items, "Radish Ruins vitality item should be in Unique group"
+        assert "Candy Constellation - Vitality Counter" in unique_items, "Candy Constellation vitality item should be in Unique group"
 
     def test_no_life_group_in_canonical(self):
         """The 'Life' group should not be in canonical (was removed from contract)."""

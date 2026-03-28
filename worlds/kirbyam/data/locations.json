@@ -70,7 +70,7 @@
     "category": "BOSS_DEFEAT"
   },
   "MAJOR_CHEST_CABBAGE_CAVERN": {
-    "label": "Cabbage Cavern - Big Chest",
+    "label": "Cabbage Cavern 3-7 - Big Chest",
     "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
     "default_item": "MAP_CABBAGE_CAVERN",
     "tags": ["BigChest", "MAP_CABBAGE_CAVERN"],
@@ -79,7 +79,7 @@
     "location_id": 3960200
   },
   "MAJOR_CHEST_OLIVE_OCEAN": {
-    "label": "Olive Ocean - Big Chest",
+    "label": "Olive Ocean 6-15 - Big Chest",
     "parent_region": "REGION_OLIVE_OCEAN/MAIN",
     "default_item": "MAP_OLIVE_OCEAN",
     "tags": ["BigChest", "MAP_OLIVE_OCEAN"],
@@ -88,7 +88,7 @@
     "location_id": 3960201
   },
   "MAJOR_CHEST_PEPPERMINT_PALACE": {
-    "label": "Peppermint Palace - Big Chest",
+    "label": "Peppermint Palace 7-4 - Big Chest",
     "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
     "default_item": "MAP_PEPPERMINT_PALACE",
     "tags": ["BigChest", "MAP_PEPPERMINT_PALACE"],
@@ -97,7 +97,7 @@
     "location_id": 3960202
   },
   "MAJOR_CHEST_RAINBOW_ROUTE": {
-    "label": "Rainbow Route - Big Chest",
+    "label": "Rainbow Route 1-9 - Big Chest",
     "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
     "default_item": "MAP_RAINBOW_ROUTE",
     "tags": ["BigChest", "MAP_RAINBOW_ROUTE"],
@@ -106,7 +106,7 @@
     "location_id": 3960203
   },
   "MAJOR_CHEST_MOONLIGHT_MANSION": {
-    "label": "Moonlight Mansion - Big Chest",
+    "label": "Moonlight Mansion 2-1 - Big Chest",
     "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
     "default_item": "MAP_MOONLIGHT_MANSION",
     "tags": ["BigChest", "MAP_MOONLIGHT_MANSION"],
@@ -115,7 +115,7 @@
     "location_id": 3960204
   },
   "MAJOR_CHEST_MUSTARD_MOUNTAIN": {
-    "label": "Mustard Mountain - Big Chest",
+    "label": "Mustard Mountain 4-25 - Big Chest",
     "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
     "default_item": "MAP_MUSTARD_MOUNTAIN",
     "tags": ["BigChest", "MAP_MUSTARD_MOUNTAIN"],
@@ -124,7 +124,7 @@
     "location_id": 3960205
   },
   "MAJOR_CHEST_CARROT_CASTLE": {
-    "label": "Carrot Castle - Big Chest",
+    "label": "Carrot Castle 5-15 - Big Chest",
     "parent_region": "REGION_CARROT_CASTLE/MAIN",
     "default_item": "MAP_CARROT_CASTLE",
     "tags": ["BigChest", "MAP_CARROT_CASTLE"],
@@ -133,7 +133,7 @@
     "location_id": 3960206
   },
   "MAJOR_CHEST_RADISH_RUINS": {
-    "label": "Radish Ruins - Big Chest",
+    "label": "Radish Ruins 8-29 - Big Chest",
     "parent_region": "REGION_RADISH_RUINS/MAIN",
     "default_item": "MAP_RADISH_RUINS",
     "tags": ["BigChest", "MAP_RADISH_RUINS"],
@@ -142,7 +142,7 @@
     "location_id": 3960207
   },
   "MAJOR_CHEST_CANDY_CONSTELLATION": {
-    "label": "Candy Constellation - Big Chest",
+    "label": "Candy Constellation 9-18 - Big Chest",
     "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
     "default_item": "MAP_CANDY_CONSTELLATION",
     "tags": ["BigChest", "MAP_CANDY_CONSTELLATION"],
@@ -151,7 +151,7 @@
     "location_id": 3960208
   },
   "VITALITY_CHEST_CARROT_CASTLE": {
-    "label": "Carrot Castle 5-23 - Big Chest Vitality",
+    "label": "Carrot Castle 5-23 - Big Chest",
     "parent_region": "REGION_CARROT_CASTLE/MAIN",
     "default_item": "VITALITY_COUNTER_1",
     "tags": ["BigChest", "Vitality", "MAP_CARROT_CASTLE"],
@@ -160,7 +160,7 @@
     "location_id": 3960300
   },
   "VITALITY_CHEST_OLIVE_OCEAN": {
-    "label": "Olive Ocean 6-21 - Big Chest Vitality",
+    "label": "Olive Ocean 6-21 - Big Chest",
     "parent_region": "REGION_OLIVE_OCEAN/MAIN",
     "default_item": "VITALITY_COUNTER_2",
     "tags": ["BigChest", "Vitality", "MAP_OLIVE_OCEAN"],
@@ -169,7 +169,7 @@
     "location_id": 3960301
   },
   "VITALITY_CHEST_RADISH_RUINS": {
-    "label": "Radish Ruins 8-4 - Big Chest Vitality",
+    "label": "Radish Ruins 8-4 - Big Chest",
     "parent_region": "REGION_RADISH_RUINS/MAIN",
     "default_item": "VITALITY_COUNTER_3",
     "tags": ["BigChest", "Vitality", "MAP_RADISH_RUINS"],
@@ -178,7 +178,7 @@
     "location_id": 3960302
   },
   "VITALITY_CHEST_CANDY_CONSTELLATION": {
-    "label": "Candy Constellation 9-8 - Big Chest Vitality",
+    "label": "Candy Constellation 9-8 - Big Chest",
     "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
     "default_item": "VITALITY_COUNTER_4",
     "tags": ["BigChest", "Vitality", "MAP_CANDY_CONSTELLATION"],
@@ -187,7 +187,7 @@
     "location_id": 3960303
   },
   "SOUND_PLAYER_CHEST": {
-    "label": "Candy Constellation - Sound Player Chest",
+    "label": "Candy Constellation 9-4 - Big Chest",
     "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
     "default_item": "SOUND_PLAYER",
     "tags": ["BigChest", "SoundPlayer", "MAP_CANDY_CONSTELLATION"],

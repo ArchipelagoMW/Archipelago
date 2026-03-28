@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Standardize KirbyAM user-facing item and location labels around `Area RoomCode - Thing` naming where room context matters, reorder map item names to `Area - Map`, rename vitality items to area-specific labels, and hide chest contents from physical location names so chest checks no longer spoil map/vitality/Sound Player outcomes (Issue #460).
+
 ## v0.0.13
 
 - Fix KirbyAM goal completion reporting for the shipped addressless Dark Mind goal event: the BizHawk client now sends `CLIENT_GOAL` directly when native clear state is observed instead of waiting on an impossible numeric goal-location acknowledgement, and still accepts post-clear `10000` as a fallback when live polling misses transient `9999`.
