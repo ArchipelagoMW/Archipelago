@@ -11,7 +11,7 @@ All items that appear on the ground are randomized, and there are options to ran
 In addition, there are other changes to the game that make it better optimized for a randomizer:
 
 - Some items and enemies are never randomized.
-- Teleportation between Prie Dieus can be unlocked from the beginning.
+- Teleportation between Prie Dieus is always unlocked.
 - New save files are created in True Torment mode (NG+), but enemies and bosses will use their regular attack & defense values. A penitence can be chosen if the option is enabled.
 - Save files can not be ascended - the randomizer is meant to be completed in a single playthrough.
 - The Ossuary will give a reward for every four bones collected.
