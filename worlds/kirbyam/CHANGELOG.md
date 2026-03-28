@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.13
+
 - Fix KirbyAM goal completion reporting for the shipped addressless Dark Mind goal event: the BizHawk client now sends `CLIENT_GOAL` directly when native clear state is observed instead of waiting on an impossible numeric goal-location acknowledgement, and still accepts post-clear `10000` as a fallback when live polling misses transient `9999`.
 
 - Fix KirbyAM BizHawk receive notifications silently dropped when the ROM processes a mailbox item and clears the flag and increments debug_item_counter in the same GBA frame: the fast-forward reconciliation branch now captures pending delivery state before clearing it and emits the receive notification when the counter-advance is the ACK signal (Issue #269).
