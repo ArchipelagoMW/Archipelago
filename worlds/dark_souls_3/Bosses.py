@@ -19,7 +19,7 @@ class DS3BossInfo:
     id: int
     """The game's ID for this particular boss."""
 
-    flag: Optional[int]
+    flag: int | None
     """The event flag that's set when this boss is defeated.
 
     This is None for first-phase bosses."""
