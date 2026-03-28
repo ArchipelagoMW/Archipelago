@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Mapping, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 from pathspec import PathSpec, GitIgnoreSpec
 from typing_extensions import deprecated
@@ -236,10 +236,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
 
-        env = os.environ
-        if "LD_LIBRARY_PATH" in env:
-            env = env.copy()
-            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        env = env_cleared_lib_path()
         subprocess.call([open_command, filename], env=env)
 
 
@@ -758,6 +755,19 @@ def is_kivy_running() -> bool:
     return False
 
 
+def env_cleared_lib_path() -> Mapping[str, str]:
+    """
+    Creates a copy of the current environment vars with the LD_LIBRARY_PATH removed if set, as this can interfere when
+    launching something in a subprocess.
+    """
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]
+
+    return env
+
+
 def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
@@ -770,10 +780,7 @@ def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(save_filename(*args))
     
 def _run_for_stdout(*args: str):
-    env = os.environ
-    if "LD_LIBRARY_PATH" in env:
-        env = env.copy()
-        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    env = env_cleared_lib_path()
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
 
 
