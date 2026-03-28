@@ -8,6 +8,7 @@ from BaseClasses import ItemClassification
 from CommonClient import logger
 from Utils import __version__
 from worlds.rac3.client.general_interface import GameInterface
+from worlds.rac3.client.texthelper import TEXT_BYTE_TO_EXPECTED_WIDTH
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, infobot_data, ITEM_FROM_AP_CODE,
@@ -1657,12 +1658,12 @@ class Rac3Interface(GameInterface):
                     else:
                         break
                 self.notification_merge_count = merge_count
-                msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
+                msg_list, longest_line_length = self.format_textbox_string(merged_message)
                 if not self.message_display:
                     if self.notification_time < current_time:
                         self.notification_time = current_time + 3
                     display_time = int((self.notification_time - current_time) * 120)
-                    self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
+                    self.messagebox(msg_list, longest_line_length, theme, display_time)
                 else:
                     write_message = b''
                     for line in msg_list:
@@ -1679,7 +1680,7 @@ class Rac3Interface(GameInterface):
                         if display_time < 0:
                             self.notification_time = current_time + 1
                             display_time = int((self.notification_time - current_time) * 120)
-                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
+                        self.messagebox(msg_list, longest_line_length, theme, display_time)
                         logger.debug("Warning: Incorrect Display message detected")
                         logger.debug(f"Message: {merged_message}")
                         logger.debug(f"{read_message}")
@@ -1697,30 +1698,28 @@ class Rac3Interface(GameInterface):
         self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), theme.BOX)
         self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), theme.TEXT)
 
-    def format_textbox_string(self, msg: str) -> tuple[list[bytes], int, int]:
+    def format_textbox_string(self, msg: str) -> tuple[list[bytes], int]:
         """Process a full message into game insertable bytes, for use with in game pop-ups"""
         # Split message on \n to handle newlines
         lines = msg.split('\\n')
-        color_byte_count = 0
         # Write each line to memory, update string pointers
         longest_line_length = 0
         message_list: list[bytes] = []
         for _idx, line in enumerate(lines):
             # Convert to bytes, add null terminator
-            line_bytes, line_color_byte_count = self.format_color_string(line)
+            line_bytes, line_expected_length = self.format_color_string(line)
             line_bytes += b'\x00'
             message_list.append(line_bytes)
-            if len(line_bytes) > longest_line_length:
-                longest_line_length = len(line_bytes)
-                color_byte_count = line_color_byte_count
-        return message_list, color_byte_count, longest_line_length
+            if line_expected_length > longest_line_length:
+                longest_line_length = line_expected_length
+        return message_list, longest_line_length
 
     @staticmethod
     def format_color_string(msg: str) -> tuple[bytes, int]:
         """Converts a message string with color formatting to game insertable bytes with color formatting"""
         result = bytearray()
-        color_byte_count = 0
         i = 0
+        expected_length = 0
         while i < len(msg):
             matched = False
             for code, byte in FORMAT_NAME_TO_BYTE.items():
@@ -1728,8 +1727,8 @@ class Rac3Interface(GameInterface):
                     # Insert the color code byte (as a single byte)
                     if isinstance(byte, str):
                         byte = ord(byte)
+                    expected_length += TEXT_BYTE_TO_EXPECTED_WIDTH.get(byte, 7)
                     result.append(byte)
-                    color_byte_count += 1
                     i += len(code)
                     matched = True
                     break
@@ -1740,13 +1739,12 @@ class Rac3Interface(GameInterface):
                     # Replace unsupported characters with a question mark
                     msg_ordinal = ord('?')
                 result.append(msg_ordinal)
+                expected_length += TEXT_BYTE_TO_EXPECTED_WIDTH.get(msg_ordinal, 7)
                 i += 1
-        color_byte_count += 1  # Count the null terminator
-        return bytes(result), color_byte_count
+        return bytes(result), expected_length
 
     def messagebox(self,
                    msg_list: list[bytes],
-                   color_bytes_count: int,
                    longest_line_length: int,
                    box_theme: int = RAC3BOXTHEME.DEFAULT,
                    _time: int = 0x168) -> None:
@@ -1764,8 +1762,7 @@ class Rac3Interface(GameInterface):
             # Move to next address after this string
             curr_addr += len(line)
         self._write32(RAC3MESSAGEBOX.NUM_LINES, len(msg_list))
-        msg_length = int(longest_line_length - color_bytes_count)
-        width = msg_length * 7 + 12
+        width = longest_line_length
         if width % 2 != 0:
             # Odd numbered width values display as if it was the even number below it
             # Ex: 101 width displays as 100 width

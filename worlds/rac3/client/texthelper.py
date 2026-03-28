@@ -34,3 +34,134 @@ def get_sent_item_message(ctx: 'Rac3Context', net_item: NetworkItem, player_name
         if player_name_after:
             return f"Sent {item_name} to {RAC3TEXTFORMATSTRING.GREEN}{player_name}"
         return f"Sent {player_name}'s {item_name}"
+
+TEXT_BYTE_TO_EXPECTED_WIDTH = {
+    0x00: 0,  # Null terminator
+    0x01: 0,  # Newline
+    0x02: 0,  # Carriage return
+    0x03: 0,  # Tab
+    0x04: 0,  # Backspace
+    0x05: 0,  # Form feed
+    0x06: 0,  # Vertical tab
+    0x07: 0,  # Bell
+    0x08: 0,  # Default Text Color Byte
+    0x09: 0,  # Blue Color Byte
+    0x0A: 0,  # Green Color Byte
+    0x0B: 0,  # Magenta Color Byte
+    0x0C: 0,  # White Color Byte
+    0x0D: 0,  # Black Color Byte
+    0x0E: 0,  # Unused Color Byte 1
+    0x0F: 0,  # Unused Color Byte 2
+    0x10: 32,  # Cross
+    0x11: 32,  # Circle
+    0x12: 32,  # Triangle
+    0x13: 32,  # Square
+    0x14: 32,  # L1
+    0x15: 32,  # R1
+    0x16: 32,  # L2
+    0x17: 32,  # R2
+    0x18: 32,  # L3
+    0x19: 32,  # R3
+    0x1A: 32,  # Select
+    0x1B: 0,  # Nothing
+    0x1C: 0,  # Nothing
+    0x1D: 0,  # Nothing
+    0x1E: 0,  # Nothing
+    0x1F: 0,  # Nothing
+    0x20: 4,  # Space
+    0x21: 3,  # ! (thin)
+    0x22: 6,  # "
+    0x23: 8,  # #
+    0x24: 8,  # $
+    0x25: 9,  # %
+    0x26: 9,  # &
+    0x27: 4,  # ' (thin)
+    0x28: 6,  # (
+    0x29: 6,  # )
+    0x2A: 7,  # *
+    0x2B: 8,  # +
+    0x2C: 3,  # , (thin)
+    0x2D: 4,  # -
+    0x2E: 3,  # . (thin)
+    0x2F: 6,  # /
+    0x30: 9,  # 0 (monospace)
+    0x31: 9,  # 1 (monospace)
+    0x32: 9,  # 2 (monospace)
+    0x33: 9,  # 3 (monospace)
+    0x34: 9,  # 4 (monospace)
+    0x35: 9,  # 5 (monospace)
+    0x36: 9,  # 6 (monospace)
+    0x37: 9,  # 7 (monospace)
+    0x38: 9,  # 8 (monospace)
+    0x39: 9,  # 9 (monospace)
+    0x3A: 3,  # : (thin)
+    0x3B: 3,  # ; (thin)
+    0x3C: 8,  # <
+    0x3D: 8,  # =
+    0x3E: 8,  # >
+    0x3F: 8,  # ?
+    0x40: 11,  # @ (wide)
+    0x41: 11,  # A
+    0x42: 9,  # B
+    0x43: 9,  # C
+    0x44: 10,  # D
+    0x45: 8,  # E
+    0x46: 8,  # F
+    0x47: 10,  # G
+    0x48: 9,  # H
+    0x49: 3,  # I (thin)
+    0x4A: 8,  # J
+    0x4B: 10,  # K
+    0x4C: 8,  # L
+    0x4D: 12,  # M (wide)
+    0x4E: 10,  # N
+    0x4F: 10,  # O (wide)
+    0x50: 9,  # P
+    0x51: 11,  # Q (wide)
+    0x52: 9,  # R
+    0x53: 9,  # S
+    0x54: 9,  # T
+    0x55: 9,  # U
+    0x56: 11,  # V
+    0x57: 14,  # W (wide)
+    0x58: 11,  # X
+    0x59: 11,  # Y
+    0x5A: 9,  # Z
+    0x5B: 4,  # [
+    0x5C: 6,  # \
+    0x5D: 4,  # ]
+    0x5E: 8,  # ^
+    0x5F: 8,  # _
+    0x60: 5,  # ` (thin)
+    0x61: 8,  # a
+    0x62: 8,  # b
+    0x63: 8,  # c
+    0x64: 8,  # d
+    0x65: 8,  # e
+    0x66: 6,  # f (thin)
+    0x67: 8,  # g
+    0x68: 8,  # h
+    0x69: 3,  # i (thin)
+    0x6A: 3,  # j (thin)
+    0x6B: 8,  # k
+    0x6C: 3,  # l (thin)
+    0x6D: 12,  # m (wide)
+    0x6E: 8,  # n
+    0x6F: 8,  # o
+    0x70: 8,  # p
+    0x71: 8,  # q
+    0x72: 7,  # r (thin)
+    0x73: 8,  # s
+    0x74: 7,  # t (thin)
+    0x75: 8,  # u
+    0x76: 8,  # v
+    0x77: 12,  # w (wide)
+    0x78: 8,  # x
+    0x79: 8,  # y
+    0x7A: 8,  # z
+    0x7B: 4,  # {
+    0x7C: 3,  # | (thin)
+    0x7D: 4,  # }
+    0x7E: 8,  # ~
+    0x7F: 0,  # DEL
+}
