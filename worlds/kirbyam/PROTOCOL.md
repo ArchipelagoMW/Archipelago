@@ -122,6 +122,8 @@ Server → Client: ConnectionRefused | Connected
 - `randomize_miniboss_ability_grants` (bool): include/exclude mini-boss ability grants.
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
+- `debug` (dict): debug settings payload.
+    - `gameplay_state_logging` (bool): when true, client logs each newly observed `ai_kirby_state_native` value once per session with gate classification context.
 
 DeathLink runtime behavior contract:
 - Incoming DeathLink packets (`Bounced` with `DeathLink` tag) are queued and only applied when gameplay-active gate is true.

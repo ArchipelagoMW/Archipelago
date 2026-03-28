@@ -164,6 +164,10 @@ class KirbyAmClient(BizHawkClient):
         self._unsafe_delivery_probe_stream_marker: object = None
         self._last_unsafe_delivery_counter_values: dict[str, int] = {}
 
+        # Gameplay-state logging diagnostics (Issue #477)
+        self._debug_gameplay_state_logging_enabled: bool = False
+        self._debug_gameplay_states_seen: set[int] = set()
+
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
         """Return whether AP connection and slot data are ready for watcher work."""
@@ -251,6 +255,16 @@ class KirbyAmClient(BizHawkClient):
             )
 
         self._notification_settings_loaded = True
+
+    def _load_debug_settings(self, ctx: "BizHawkClientContext") -> None:
+        slot_data = getattr(ctx, "slot_data", None)
+        if isinstance(slot_data, dict):
+            debug_config = slot_data.get("debug", {})
+            if isinstance(debug_config, dict):
+                self._debug_gameplay_state_logging_enabled = self._coerce_bool(
+                    debug_config.get("gameplay_state_logging", False),
+                    False,
+                )
 
     @staticmethod
     def _player_name(ctx: "BizHawkClientContext", player_id: int) -> str:
@@ -563,6 +577,7 @@ class KirbyAmClient(BizHawkClient):
             return
 
         self._load_notification_settings(ctx)
+        self._load_debug_settings(ctx)
         await self._sync_death_link_setting(ctx)
 
         if not self._watcher_server_ready:
@@ -581,6 +596,15 @@ class KirbyAmClient(BizHawkClient):
                 self._ram_state_loaded = True
 
             gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
+            if self._debug_gameplay_state_logging_enabled and ai_state is not None:
+                if ai_state not in self._debug_gameplay_states_seen:
+                    self._debug_gameplay_states_seen.add(ai_state)
+                    logger.info(
+                        "KirbyAM debug: observed unique gameplay state (ai_state=%s, gameplay_active=%s, reason=%s)",
+                        ai_state,
+                        gameplay_active,
+                        defer_reason,
+                    )
             if not gameplay_active:
                 if self._last_runtime_gate_reason != defer_reason:
                     logger.info(

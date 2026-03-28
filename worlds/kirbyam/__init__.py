@@ -486,6 +486,11 @@ class KirbyAmWorld(World):
         allowed_abilities = policy.get("allowed_abilities", VALID_ENEMY_COPY_ABILITIES)
         slot_data["enemy_copy_ability_whitelist"] = list(allowed_abilities)
         slot_data["enemy_copy_ability_policy"] = dict(policy)
+
+        # Debug settings are grouped under one key to keep slot_data extensible.
+        slot_data["debug"] = {
+            "gameplay_state_logging": bool(self.options.enable_gameplay_state_debug_logging.value),
+        }
         return slot_data
 
     # Helper methods to create items and events

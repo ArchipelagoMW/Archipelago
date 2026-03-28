@@ -1612,6 +1612,57 @@ async def test_probe_unsafe_delivery_candidates_rebaseline_on_stream_change(mock
     mock_logger.info.assert_not_called()
 
 
+def test_load_debug_settings_defaults_to_disabled(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    client._load_debug_settings(mock_bizhawk_context)
+
+    assert client._debug_gameplay_state_logging_enabled is False
+
+
+def test_load_debug_settings_honors_slot_data_toggle_true(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["debug"] = {"gameplay_state_logging": True}
+
+    client._load_debug_settings(mock_bizhawk_context)
+
+    assert client._debug_gameplay_state_logging_enabled is True
+
+
+@pytest.mark.asyncio
+async def test_game_watcher_logs_unique_gameplay_state_once_per_session(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["debug"] = {"gameplay_state_logging": True}
+
+    with patch('CommonClient.logger') as mock_logger, \
+         patch.object(client, '_sync_death_link_setting', new_callable=AsyncMock), \
+         patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
+         patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
+         patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
+         patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
+         patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
+         patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
+         patch.object(client, '_deliver_items', new_callable=AsyncMock), \
+         patch.object(client, '_maybe_report_goal', new_callable=AsyncMock):
+        mock_gate.return_value = (True, "gameplay_active", 300)
+
+        await client.game_watcher(mock_bizhawk_context)
+        await client.game_watcher(mock_bizhawk_context)
+
+    debug_calls = [
+        c for c in mock_logger.info.call_args_list
+        if c.args and isinstance(c.args[0], str) and "KirbyAM debug: observed unique gameplay state" in c.args[0]
+    ]
+    assert len(debug_calls) == 1
+
+
 @pytest.mark.asyncio
 async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
     """game_watcher should do nothing when ctx.server is None (AP not connected)."""
