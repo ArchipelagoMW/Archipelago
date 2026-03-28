@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Generic, Optional, Set, Dict, Any, TypeVar, Union, TypeGuard
 from yaml import load, load_all, dump
 from pathspec import PathSpec, GitIgnoreSpec
 from typing_extensions import deprecated
@@ -1272,8 +1272,11 @@ def visualize_regions(
         f.write("\n".join(uml))
 
 
-class RepeatableChain:
-    def __init__(self, iterable: typing.Iterable):
+_T_co = TypeVar("_T_co", covariant=True)
+
+
+class RepeatableChain(Generic[_T_co]):
+    def __init__(self, iterable: typing.Iterable[typing.Collection[_T_co]]):
         self.iterable = iterable
 
     def __iter__(self):
@@ -1284,6 +1287,9 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+    def __contains__(self, o: object) -> bool:
+        return any(o in sub_iterable for sub_iterable in self.iterable)
 
 
 def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
