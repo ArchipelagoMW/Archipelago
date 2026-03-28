@@ -779,7 +779,7 @@ class DarkSouls3World(World):
         for location in self.yhorm_location.locations:
             self._add_location_rule(location, "Storm Ruler")
 
-        self.multiworld.completion_condition[self.player] = lambda state: self._is_complete(state)
+        self.multiworld.completion_condition[self.player] = self._is_complete
 
     def _add_shop_rules(self) -> None:
         """Adds rules for items unlocked in shops."""
