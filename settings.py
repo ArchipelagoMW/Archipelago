@@ -532,6 +532,9 @@ class ServerOptions(Group):
         Allows for clients to log on and manage the server.  If this is null, no remote administration is possible.
         """
 
+    class DisablePlayerLocking(Bool):
+        """Disallow use of !lock and !unlock to manage slot connections"""
+
     class DisableItemCheat(Bool):
         """Disallow !getitem"""
 
@@ -618,6 +621,7 @@ class ServerOptions(Group):
     loglevel: str = "info"
     logtime: bool = False
     server_password: ServerPassword | None = None
+    disable_player_locking: DisablePlayerLocking | bool = False
     disable_item_cheat: DisableItemCheat | bool = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)
     hint_cost: HintCost = HintCost(10)
