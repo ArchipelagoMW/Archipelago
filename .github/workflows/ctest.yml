@@ -24,6 +24,8 @@ on:
       - '**/CMakeLists.txt'
       - '.github/workflows/ctest.yml'
 
+permissions: {}
+
 jobs:
   ctest:
     runs-on: ${{ matrix.os }}

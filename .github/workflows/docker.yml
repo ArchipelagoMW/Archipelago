@@ -19,6 +19,8 @@ on:
 env:
   REGISTRY: ghcr.io
 
+permissions: {}
+
 jobs:
   prepare:
     runs-on: ubuntu-latest

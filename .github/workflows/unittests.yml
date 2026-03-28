@@ -29,6 +29,8 @@ on:
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
 
+permissions: {}
+
 jobs:
   unit:
     runs-on: ${{ matrix.os }}

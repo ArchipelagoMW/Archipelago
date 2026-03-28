@@ -28,6 +28,8 @@ on:
       - 'requirements.txt'
       - '.github/workflows/scan-build.yml'
 
+permissions: {}
+
 jobs:
   scan-build:
     runs-on: ubuntu-latest
