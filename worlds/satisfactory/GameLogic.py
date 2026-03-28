@@ -104,17 +104,21 @@ class Building(Recipe):
 class MamNode:
     name: str
     unlock_cost: dict[str, int]
-    """All game items must be submitted to purchase this MamNode"""
+    """Game parts that must be automatable to purchase this MamNode"""
     depends_on: tuple[str, ...]
     """At least one of these prerequisite MamNodes must be unlocked to purchase this MamNode"""
     minimal_phase: Optional[int]
+    """Elevator phase required in logic for this node to be included"""
+    requires_items: Optional[tuple[str, ...]]
+    """AP items that must have been obtained at least once to purchase this MamNode"""
 
     def __init__(self, name: str, unlock_cost: dict[str, int], depends_on: tuple[str, ...],
-                 minimal_phase: Optional[int] = 1):
+                 minimal_phase: Optional[int] = 1, requires_items: Optional[tuple[str, ...]] = None):
         self.name = name
         self.unlock_cost = unlock_cost
         self.depends_on = depends_on
         self.minimal_phase = minimal_phase
+        self.requires_items = requires_items
 
 
 class MamTree:
@@ -520,6 +524,8 @@ class GameLogic:
             Recipe("Iron Rebar", "Constructor", ("Iron Rod", ), handcraftable=True), ),
         "Nobelisk": (
             Recipe("Nobelisk", "Assembler", ("Black Powder", "Steel Pipe"), handcraftable=True), ),
+        "Nuke Nobelisk": (
+            Recipe("Nuke Nobelisk", "Manufacturer", ("Nobelisk", "Encased Uranium Cell", "Smokeless Powder", "AI Limiter"), handcraftable=True), ),
         "Power Shard": (
             Recipe("Power Shard (1)", "Constructor", ("Blue Power Slug", ), handcraftable=True),
             Recipe("Power Shard (2)", "Constructor", ("Yellow Power Slug", ), handcraftable=True),
@@ -598,6 +604,32 @@ class GameLogic:
             Recipe("Turbo Rifle Ammo (Packaged)", "Manufacturer", ("Rifle Ammo", "Aluminum Casing", "Packaged Turbofuel"), minimal_belt_speed=2, minimal_phase=2)),
         "Homing Rifle Ammo": (
             Recipe("Homing Rifle Ammo", "Assembler", ("Rifle Ammo", "High-Speed Connector")), ),
+        ###
+        ### Ficsmas (only includes parts used for logic gates)
+        "FICSMAS Gift": (
+            Recipe("FICSMAS Gift", handcraftable=True, implicitly_unlocked=True), ),
+        "FICSMAS Tree Branch": (
+            Recipe("FICSMAS Tree Branch", "Constructor", ("FICSMAS Gift", )), ),
+        "Blue FICSMAS Ornament": (
+            Recipe("Blue FICSMAS Ornament", "Constructor", ("FICSMAS Gift", )), ),
+        "Red FICSMAS Ornament": (
+            Recipe("Red FICSMAS Ornament", "Constructor", ("FICSMAS Gift", )), ),
+        "Iron FICSMAS Ornament": (
+            Recipe("Iron FICSMAS Ornament", "Assembler", ("Blue FICSMAS Ornament", "Iron Ingot")), ),
+        "Copper FICSMAS Ornament": (
+            Recipe("Copper FICSMAS Ornament", "Assembler", ("Red FICSMAS Ornament", "Copper Ingot")), ),   
+        "Candy Cane": (
+            Recipe("Candy Cane", "Constructor", ("FICSMAS Gift", )), ),
+        "FICSMAS Actual Snow": (
+            Recipe("FICSMAS Actual Snow", "Constructor", ("FICSMAS Gift", )), ),
+        "FICSMAS Bow": (
+            Recipe("FICSMAS Bow", "Constructor", ("FICSMAS Gift", )), ),
+        "FICSMAS Ornament Bundle": (
+            Recipe("Candy Cane", "Assembler", ("Iron FICSMAS Ornament", "Copper FICSMAS Ornament")), ),          
+        "FICSMAS Wreath": (
+            Recipe("FICSMAS Wonder Star", "Assembler", ("FICSMAS Tree Branch", "FICSMAS Ornament Bundle")), ), 
+        "FICSMAS Wonder Star": (
+            Recipe("FICSMAS Wonder Star", "Assembler", ("FICSMAS Wreath", "Candy Cane")), ), 
         ###
     }
 
@@ -877,6 +909,21 @@ class GameLogic:
             MamNode("Nuclear Deterrent Development", {"Nobelisk": 500, "Encased Uranium Cell": 10, "AI Limiter": 100, }, depends_on=("Cluster Nobelisk", ), minimal_phase=2),  # (Research_Sulfur_5_1_C) # 1.0
             MamNode("Rocket Fuel", {"Hard Drive": 1, "Empty Fluid Tank": 10, "Packaged Turbofuel": 100, }, depends_on=("Turbo Fuel", ), minimal_phase=3),  # 1.0
             MamNode("Ionized Fuel", {"Hard Drive": 1, "Power Shard": 100, "Packaged Rocket Fuel": 200, }, depends_on=("Turbo Fuel", ), minimal_phase=4),  # 1.0
+        )),
+        "Ficsmas": MamTree(("FICSMAS Gift", ), (
+            MamNode("FICSMAS Tree Base", {"FICSMAS Gift": 1}, depends_on=tuple()), # removed unlock requirement
+            MamNode("Candy Cane Basher", {"FICSMAS Tree Branch": 50}, depends_on=("FICSMAS Tree Base", )),
+            MamNode("Candy Cane Decor", {"Candy Cane": 10}, depends_on=("FICSMAS Tree Base", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 1", {"Candy Cane": 20, "FICSMAS Bow": 30}, requires_items=("FICSMAS Data Cartridge Day 4", ), depends_on=("FICSMAS Tree Base", )),
+            MamNode("A Friend", { "Candy Cane": 50, "FICSMAS Bow": 50}, depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
+            MamNode("FICSMAS Gift Tree", {"FICSMAS Tree Branch": 50, "Red FICSMAS Ornament": 50, "Blue FICSMAS Ornament": 50}, depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 2", {"Red FICSMAS Ornament": 200, "Blue FICSMAS Ornament": 200, "FICSMAS Gift": 100}, requires_items=("FICSMAS Data Cartridge Day 8", ), depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
+            MamNode("FICSMAS Lights", {"Red FICSMAS Ornament": 100, "Blue FICSMAS Ornament": 100, "Copper FICSMAS Ornament": 50, "Iron FICSMAS Ornament": 50}, depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
+            MamNode("It's Snowing!", {"FICSMAS Actual Snow": 100, "Copper FICSMAS Ornament": 200, "Iron FICSMAS Ornament": 200, "Candy Cane": 200 }, depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 3", {"FICSMAS Tree Branch": 200, "FICSMAS Ornament Bundle": 400}, requires_items=("FICSMAS Data Cartridge Day 14", ), depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
+            MamNode("FICSMAS Wreath", {"FICSMAS Wreath": 100, "FICSMAS Ornament Bundle": 200, "FICSMAS Bow": 500}, depends_on=("Giant FICSMAS Tree: Upgrade 3", )),
+            MamNode("Snowfight!", {"FICSMAS Actual Snow": 500, "Candy Cane": 500, "FICSMAS Bow": 500}, depends_on=("Giant FICSMAS Tree: Upgrade 3", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 4", {"FICSMAS Wonder Star": 500}, depends_on=("Giant FICSMAS Tree: Upgrade 3", ))
         ))
     }
 

@@ -81,6 +81,12 @@ class StateLogic:
         return parts is None or \
             state.has_all(map(to_part_event, parts), self.player)
 
+    def has_obtained_all(self, state: CollectionState, items: Optional[Iterable[str]]) -> bool:
+        if not items:
+            return True
+        else:
+            return state.has_all(items, self.player)
+
     def can_handcraft_single_part(self, state: CollectionState, part: str) -> bool:
         if self.can_produce(state, part):
             return True
