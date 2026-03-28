@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add gameplay-state debug logging option to help diagnose spurious location checks. When enabled via the `Enable Gameplay State Debug Logging` world option, the BizHawk client logs unique `ai_kirby_state_native` values once per session with their gameplay-active classification, allowing players and developers to collect data on which gameplay states correspond with unexpected checks (Issue #477, debugging phase).
 - Standardize KirbyAM user-facing item and location labels around `Area RoomCode - Thing` naming where room context matters, reorder map item names to `Area - Map`, rename vitality items to area-specific labels, and hide chest contents from physical location names so chest checks no longer spoil map/vitality/Sound Player outcomes (Issue #460).
 - Fix BizHawk receive notification item names resolving as `Unknown item (ID: ...)` by resolving received-item names in the local receiver slot context (not sender slot) and treating AP unknown-item placeholders as unresolved so KirbyAM fallback item labels are used when available (Issue #476).
 
