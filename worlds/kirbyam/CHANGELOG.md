@@ -1,5 +1,9 @@
 # KirbyAM APWorld Changelog
 
+## Unreleased
+
+- Fix KirbyAM BizHawk receive notifications silently dropped when the ROM processes a mailbox item and clears the flag and increments debug_item_counter in the same GBA frame: the fast-forward reconciliation branch now captures pending delivery state before clearing it and emits the receive notification when the counter-advance is the ACK signal (Issue #269).
+
 ## v0.0.12
 
 - Add stable KirbyAM item groups for YAML filters and plando workflows, with canonical `Shards`/`Maps` groups, backward-compatible legacy aliases, and documented grouping for Unique, Vitality, Useful, and Filler items (Issue #370).
