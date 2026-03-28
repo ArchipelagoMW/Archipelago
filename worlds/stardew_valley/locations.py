@@ -679,13 +679,16 @@ def extend_filler_locations(randomized_locations: List[LocationData], options: S
                              options.craftsanity != Craftsanity.option_none,
                              len(options.eatsanity.value) > 0,
                              options.museumsanity == Museumsanity.option_all,
-                             options.quest_locations.value >= 0]
+                             options.quest_locations.value >= 0,
+                             options.bundle_per_room >= 2]
     # These settings generate orphan items and can cause too many items, if enabled without a complementary of the filler heavy settings
     orphan_settings = [len(options.chefsanity.value) > 0,
                        options.friendsanity != Friendsanity.option_none,
                        options.skill_progression == SkillProgression.option_progressive_with_masteries,
                        options.cropsanity != Cropsanity.option_disabled,
-                       len(options.start_without.value) > 0]
+                       len(options.start_without.value) > 0,
+                       options.bundle_per_room <= -1,
+                       options.bundle_per_room <= -2]
 
     enabled_filler_heavy_settings = len([val for val in filler_heavy_settings if val])
     enabled_orphan_settings = len([val for val in orphan_settings if val])
