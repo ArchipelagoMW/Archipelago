@@ -92,8 +92,9 @@ for setup).
 
 The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call 
 during generation can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation 
-regarding the API can be found in the [world api doc](/docs/world%20api.md). Before publishing, make sure to also 
-check out [world maintainer.md](/docs/world%20maintainer.md).
+regarding the API can be found in the [world api doc](/docs/world%20api.md), and the [APQuest](/worlds/apquest/) world
+is a complete world implementation that functions as an introduction to world development. Before publishing, make sure
+to also check out [world maintainer.md](/docs/world%20maintainer.md).
 
 ### Hard Requirements
 
