@@ -447,6 +447,33 @@ entire built-in group.
   - `Item & Location Options` header is absent when KirbyAM has no visible options in that group
   - generated template `requires.game` world version matches `KirbyAmWorld.world_version`
 
+## Issue #457: Core - Improve Client Messaging
+
+### Problem
+Player-facing BizHawk notification text was functional but still technical and
+less natural than expected for normal gameplay.
+
+### Solution
+- Reworded receive notification text to: `Received <item> from <player>`.
+- Reworded send notification text to:
+  - `You sent <item> to <player> at <location>` (location available)
+  - `You sent <item> to <player>` (location unavailable)
+- Reworded send-burst summary text to:
+  - `Skipped N send popup(s) to reduce spam`
+- Added concise player popups for non-item client state changes:
+  - ROM load failures now show plain-language `Unable to load ROM: ...` messages.
+  - Runtime gameplay gates show `Item sending paused by game state` and `Item sending resumed` on transitions.
+  - CLIENT_GOAL status send now shows `Goal complete`.
+- Kept technical logs detailed for diagnosis while minimizing player-facing popup verbosity.
+
+### Validation
+- Updated notification assertions in:
+  - `worlds/kirbyam/test/test_client.py`
+  - `worlds/kirbyam/test/test_notifications.py`
+- Updated protocol/manual-testing docs in:
+  - `worlds/kirbyam/PROTOCOL.md`
+  - `worlds/kirbyam/docs/BIZHAWK_TESTING_GUIDE.md`
+
 ## Issue #83: In-Game Notification Pipeline (Receive + Send)
 
 ### Problem

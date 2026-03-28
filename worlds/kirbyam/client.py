@@ -1,6 +1,7 @@
+import logging
+import time
 from typing import TYPE_CHECKING, Optional
 
-import time
 import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -305,7 +306,7 @@ class KirbyAmClient(BizHawkClient):
         item_id, player_id = item_fields
         item_name = self._item_name(ctx, item_id, player_id)
         sender_name = self._player_name(ctx, player_id)
-        message = f"{item_name} received from {sender_name}"
+        message = f"Received {item_name} from {sender_name}"
 
         from CommonClient import logger
 
@@ -347,16 +348,17 @@ class KirbyAmClient(BizHawkClient):
             return
         self._notified_send_keys.add(send_key)
 
-        item_name = self._item_name(ctx, item_id, sender_id)
+        # ItemSend packets should resolve item names in the receiving slot context.
+        item_name = self._item_name(ctx, item_id, receiver_id)
         sender_name = self._player_name(ctx, sender_id)
         receiver_name = self._player_name(ctx, receiver_id)
         location_name = self._location_name(location_id)
 
         # Build message with location context if available
         if location_name:
-            message = f"Sent {item_name} to {receiver_name} ({location_name})"
+            message = f"You sent {item_name} to {receiver_name} at {location_name}"
         else:
-            message = f"Sent {item_name} to {receiver_name}"
+            message = f"You sent {item_name} to {receiver_name}"
 
         from CommonClient import logger
 
@@ -367,10 +369,11 @@ class KirbyAmClient(BizHawkClient):
         elapsed = now - self._send_notify_window_start
         if elapsed >= _SEND_NOTIFY_WINDOW_SECONDS:
             if self._send_notify_window_suppressed > 0:
-                summary = f"Suppressed {self._send_notify_window_suppressed} send notifications"
+                suppressed_count = self._send_notify_window_suppressed
+                summary = f"Skipped {suppressed_count} send popup(s) to reduce spam"
                 logger.info(
                     "KirbyAM: send notification burst suppression summary (suppressed=%s)",
-                    self._send_notify_window_suppressed,
+                    suppressed_count,
                 )
                 Utils.async_start(bizhawk.display_message(ctx.bizhawk_ctx, summary))
             self._send_notify_window_start = now
@@ -398,28 +401,46 @@ class KirbyAmClient(BizHawkClient):
         )
         Utils.async_start(bizhawk.display_message(ctx.bizhawk_ctx, message))
 
+    async def _display_client_message(self, ctx: "BizHawkClientContext", message: str) -> None:
+        """Best-effort popup helper for player-facing messages."""
+        from CommonClient import logger
+
+        try:
+            await bizhawk.display_message(ctx.bizhawk_ctx, message)
+        except Exception:
+            logger.warning(
+                "KirbyAM: failed to display client popup (message=%r)",
+                message,
+                exc_info=True,
+            )
+
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         """Validate ROM is Kirby & The Amazing Mirror and initialize client."""
         from CommonClient import logger
         from .rom import KirbyAmProcedurePatch
 
-        def _fail(reason: str) -> bool:
+        async def _fail(reason: str, popup_message: str | None = None) -> bool:
+            if popup_message is not None and getattr(self, "_last_validation_failure_reason", None) != reason:
+                await self._display_client_message(ctx, popup_message)
             self._last_validation_failure_reason = reason
             return False
 
         auth_addr = data.rom_addresses.get("gArchipelagoInfo")
         if auth_addr is None:
             logger.error("KirbyAM: missing rom address 'gArchipelagoInfo' in worlds/kirbyam/data/addresses.json")
-            return _fail("missing_auth_address")
+            return await _fail("missing_auth_address", "Unable to load ROM: patch metadata address is missing.")
         auth_addr = _normalize_gba_rom_address(auth_addr)
 
         rom_hash = getattr(ctx, "rom_hash", None)
         if isinstance(rom_hash, str) and rom_hash.lower() == KirbyAmProcedurePatch.hash.lower():
-            logger.info(
-                "ERROR: You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
+            logger.error(
+                "You appear to be running an unpatched Kirby & The Amazing Mirror ROM. "
                 "Generate a patch file and use it to create a patched ROM before opening the BizHawk client."
             )
-            return _fail("unpatched_base_rom")
+            return await _fail(
+                "unpatched_base_rom",
+                "Unable to load ROM: base ROM detected. Please use a patched ROM.",
+            )
 
         try:
             title_bytes, game_code_bytes, maker_code_bytes = await bizhawk.read(
@@ -444,30 +465,39 @@ class KirbyAmClient(BizHawkClient):
                     game_code,
                     maker_code,
                 )
-                return _fail("header_mismatch")
+                return await _fail(
+                    "header_mismatch",
+                    "Unable to load ROM: invalid Kirby and the Amazing Mirror ROM.",
+                )
         except bizhawk.RequestFailedError as exc:
             logger.info("KirbyAM: ROM header read failed during validation: %s", exc)
-            return _fail("header_read_failed")
+            return await _fail("header_read_failed", "Unable to load ROM: could not read ROM header data.")
         except Exception as exc:
             logger.error("KirbyAM: unexpected error during ROM header validation", exc_info=exc)
-            return _fail("header_validation_exception")
+            return await _fail("header_validation_exception", "Unable to load ROM: ROM header validation failed.")
 
         try:
             auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(auth_addr, _AUTH_TOKEN_SIZE, "ROM")]))[0]
         except bizhawk.RequestFailedError as exc:
             logger.info("KirbyAM: ROM auth read failed during validation: %s", exc)
-            return _fail("auth_read_failed")
+            return await _fail("auth_read_failed", "Unable to load ROM: could not read patch metadata.")
         except Exception as exc:
             logger.error("KirbyAM: unexpected error during ROM auth validation", exc_info=exc)
-            return _fail("auth_validation_exception")
+            return await _fail(
+                "auth_validation_exception",
+                "Unable to load ROM: patch metadata validation failed.",
+            )
 
         if not any(auth_raw):
             if getattr(self, "_last_validation_failure_reason", None) != "missing_patch_metadata":
-                logger.info(
-                    "ERROR: KirbyAM patch metadata was missing from the loaded ROM. "
+                logger.error(
+                    "KirbyAM patch metadata was missing from the loaded ROM. "
                     "Regenerate the patch and recreate the patched ROM before opening the BizHawk client."
                 )
-            return _fail("missing_patch_metadata")
+            return await _fail(
+                "missing_patch_metadata",
+                "Unable to load ROM: missing patch metadata. Rebuild your patched ROM.",
+            )
 
         # Diagnostics: verify the loaded ROM has a patched Thumb BL at the main hook site.
         try:
@@ -551,6 +581,7 @@ class KirbyAmClient(BizHawkClient):
                         defer_reason,
                         ai_state if ai_state is not None else "unavailable",
                     )
+                    await self._display_client_message(ctx, "Item sending paused by game state")
                     self._last_runtime_gate_reason = defer_reason
 
                 # Preserve mailbox ACK handling while deferring new writes.
@@ -563,6 +594,7 @@ class KirbyAmClient(BizHawkClient):
 
             if self._last_runtime_gate_reason is not None:
                 logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
+                await self._display_client_message(ctx, "Item sending resumed")
                 self._last_runtime_gate_reason = None
 
             await self._apply_pending_death_link(ctx)
@@ -1182,8 +1214,8 @@ class KirbyAmClient(BizHawkClient):
             if rom_received_count > len(ctx.items_received):
                 if not self._delivery_counter_ahead_fallback_active:
                     logger.warning(
-                        "KirbyAM: ROM item counter ahead of ReceivedItems (rom=%s, received=%s); "
-                        "ignoring counter to avoid mailbox starvation",
+                        "KirbyAM: ROM delivery counter is ahead of received items (rom=%s, received=%s); "
+                        "ignoring ROM counter and continuing mailbox delivery",
                         rom_received_count,
                         len(ctx.items_received),
                     )
@@ -1191,8 +1223,8 @@ class KirbyAmClient(BizHawkClient):
             else:
                 if self._delivery_counter_ahead_fallback_active:
                     logger.info(
-                        "KirbyAM: ROM item counter back in range (rom=%s, received=%s); "
-                        "restoring normal reconciliation",
+                        "KirbyAM: ROM delivery counter is back in range (rom=%s, received=%s); "
+                        "restoring normal mailbox synchronization",
                         rom_received_count,
                         len(ctx.items_received),
                     )
@@ -1201,7 +1233,7 @@ class KirbyAmClient(BizHawkClient):
 
             if rom_received_count < self._delivered_item_index:
                 logger.info(
-                    "KirbyAM: ROM item counter regressed from %s to %s; rewinding delivery cursor",
+                    "KirbyAM: ROM delivery counter moved backward from %s to %s; rewinding client delivery cursor",
                     self._delivered_item_index,
                     rom_received_count,
                 )
@@ -1219,7 +1251,7 @@ class KirbyAmClient(BizHawkClient):
                 _ff_was_pending = self._delivery_pending
                 _ff_pending_item_index = self._delivery_pending_item_index
                 logger.info(
-                    "KirbyAM: ROM item counter advanced from %s to %s; fast-forwarding delivery cursor",
+                    "KirbyAM: ROM delivery counter moved forward from %s to %s; fast-forwarding client delivery cursor",
                     self._delivered_item_index,
                     rom_received_count,
                 )
@@ -1258,7 +1290,7 @@ class KirbyAmClient(BizHawkClient):
                 delivered_index = self._delivery_pending_item_index
                 if delivered_index is None:
                     delivered_index = self._delivered_item_index
-                logger.info("KirbyAM: Mailbox ACK observed at item index %s", self._delivered_item_index)
+                logger.info("KirbyAM: Mailbox delivery confirmed at item index %s", delivered_index)
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
                 self._delivery_pending_time = None
@@ -1377,7 +1409,7 @@ class KirbyAmClient(BizHawkClient):
 
             if self._delivery_counter_ahead_fallback_active and not self._delivery_counter_ahead_resume_logged:
                 logger.info(
-                    "KirbyAM: ROM counter ahead fallback active; continuing mailbox write at item index %s "
+                    "KirbyAM: ROM counter fallback active; continuing mailbox delivery at item index %s "
                     "(rom=%s, received=%s)",
                     self._delivered_item_index,
                     rom_received_count,
@@ -1385,12 +1417,13 @@ class KirbyAmClient(BizHawkClient):
                 )
                 self._delivery_counter_ahead_resume_logged = True
 
-            logger.info(
-                "KirbyAM: Writing mailbox item index %s (item=%s, player=%s)",
-                self._delivered_item_index,
-                item_id,
-                player_id,
-            )
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(
+                    "KirbyAM: Delivering mailbox item index %s (%s from %s)",
+                    self._delivered_item_index,
+                    self._item_name(ctx, item_id, player_id),
+                    self._player_name(ctx, player_id),
+                )
             await bizhawk.write(ctx.bizhawk_ctx, [
                 (id_addr, item_id.to_bytes(4, "little"), "System Bus"),
                 (player_addr, player_id.to_bytes(4, "little"), "System Bus"),
@@ -1523,6 +1556,7 @@ class KirbyAmClient(BizHawkClient):
             from CommonClient import logger
             from NetUtils import ClientStatus
             logger.info("KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=%s)", slot_goal)
+            await self._display_client_message(ctx, "Goal complete")
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             self._goal_reported = True
 
