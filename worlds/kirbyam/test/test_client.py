@@ -845,8 +845,34 @@ async def test_deliver_items_skips_entry_missing_player_and_continues(mock_bizha
 
 
 @pytest.mark.asyncio
-async def test_goal_dark_mind_native_signal_reports_location_then_goal_status(mock_bizhawk_context):
-    """Dark Mind goal should use native 9999 signal and report status after server ack."""
+async def test_goal_dark_mind_native_signal_reports_client_goal_for_addressless_event(mock_bizhawk_context):
+    """Dark Mind goal should send CLIENT_GOAL directly when the goal is an addressless runtime event."""
+    from NetUtils import ClientStatus
+
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = set()
+    mock_bizhawk_context.finished_game = False
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+    ])
+    assert mock_bizhawk_context.finished_game is True
+    assert client._goal_reported is True
+
+
+@pytest.mark.asyncio
+async def test_goal_dark_mind_server_exposed_goal_reports_location_then_goal_status(mock_bizhawk_context):
+    """Dark Mind goal should preserve legacy location-check flow when the server exposes a numeric goal location."""
     from NetUtils import ClientStatus
 
     client = KirbyAmClient()
@@ -855,6 +881,7 @@ async def test_goal_dark_mind_native_signal_reports_location_then_goal_status(mo
     dark_mind_goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
     mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = {dark_mind_goal_id}
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
@@ -878,16 +905,22 @@ async def test_goal_dark_mind_native_signal_reports_location_then_goal_status(mo
     mock_bizhawk_context.send_msgs.assert_awaited_once_with([
         {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
     ])
+    assert mock_bizhawk_context.finished_game is True
     assert client._goal_reported is True
 
 
 @pytest.mark.asyncio
-async def test_goal_dark_mind_does_not_trigger_on_10000(mock_bizhawk_context):
-    """Dark Mind goal mode must not treat 10000 as first-clear trigger."""
+async def test_goal_dark_mind_falls_back_to_10000_when_9999_was_missed(mock_bizhawk_context):
+    """Dark Mind goal mode should accept 10000 as a fallback post-clear goal signal."""
+    from NetUtils import ClientStatus
+
     client = KirbyAmClient()
     client.initialize_client()
 
     mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = set()
+    mock_bizhawk_context.finished_game = False
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
@@ -895,7 +928,36 @@ async def test_goal_dark_mind_does_not_trigger_on_10000(mock_bizhawk_context):
 
         await client._maybe_report_goal(mock_bizhawk_context)
 
-    mock_bizhawk_context.send_msgs.assert_not_awaited()
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+    ])
+    assert mock_bizhawk_context.finished_game is True
+
+
+@pytest.mark.asyncio
+async def test_goal_dark_mind_reports_client_goal_after_10000_fallback_ack(mock_bizhawk_context):
+    """Dark Mind goal mode should still send CLIENT_GOAL after a 10000 fallback goal check is acknowledged."""
+    from NetUtils import ClientStatus
+
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    goal_id = data.locations["GOAL_DARK_MIND"].location_id
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = {goal_id}
+    mock_bizhawk_context.server_locations = {goal_id}
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [(10000).to_bytes(4, 'little')]
+
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+    ])
+    assert mock_bizhawk_context.finished_game is True
+    assert client._goal_reported is True
 
 
 @pytest.mark.asyncio
@@ -920,6 +982,7 @@ async def test_goal_location_check_sent_once_before_ack(mock_bizhawk_context):
 
     goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.server_locations = {goal_id}
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
@@ -941,6 +1004,7 @@ async def test_goal_location_uses_locations_checked_for_reconnect_safe_dedup(moc
     goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
     mock_bizhawk_context.locations_checked = set()
+    mock_bizhawk_context.server_locations = {goal_id}
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
@@ -976,6 +1040,8 @@ async def test_goal_reporting_logs_native_signal_seen(mock_bizhawk_context):
 
     mock_bizhawk_context.slot_data["goal"] = 0
     mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = set()
+    mock_bizhawk_context.finished_game = False
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
@@ -1000,6 +1066,7 @@ async def test_goal_reporting_logs_location_check_sent(mock_bizhawk_context):
     goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
     mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = {goal_id}
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
@@ -1024,6 +1091,7 @@ async def test_goal_reporting_logs_client_goal_status(mock_bizhawk_context):
     goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
     mock_bizhawk_context.checked_locations = {goal_id}
+    mock_bizhawk_context.server_locations = {goal_id}
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
@@ -1042,20 +1110,48 @@ async def test_goal_reporting_logs_client_goal_status(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
+async def test_goal_reporting_logs_direct_client_goal_for_addressless_event(mock_bizhawk_context):
+    """Info log should explain direct CLIENT_GOAL reporting when the goal is addressless."""
+    from NetUtils import ClientStatus
+
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot_data["goal"] = 0
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.server_locations = set()
+    mock_bizhawk_context.finished_game = False
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [(9999).to_bytes(4, 'little')]
+        await client._maybe_report_goal(mock_bizhawk_context)
+
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([
+        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+    ])
+    direct_calls = [
+        c for c in mock_logger.info.call_args_list
+        if "goal location is addressless in this world" in c.args[0]
+    ]
+    assert len(direct_calls) == 1
+    assert direct_calls[0].args[1:] == (0,)
+
+
+@pytest.mark.asyncio
 async def test_goal_reporting_emits_goal_complete_popup(mock_bizhawk_context):
     """CLIENT_GOAL status send should also emit a concise player popup."""
     client = KirbyAmClient()
     client.initialize_client()
 
-    goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
-    mock_bizhawk_context.checked_locations = {goal_id}
+    mock_bizhawk_context.checked_locations = set()
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
         mock_read.return_value = [(9999).to_bytes(4, 'little')]
-        client._native_goal_signal_seen = True
 
         await client._maybe_report_goal(mock_bizhawk_context)
 

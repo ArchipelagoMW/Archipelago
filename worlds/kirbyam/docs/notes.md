@@ -367,7 +367,7 @@ Completion logic was still tied directly to "all shard items collected" and used
 Goal handling now uses explicit goal locations:
 - Goal=Dark Mind -> requires `Defeat Dark Mind`
 - Goal locations live in `REGION_DIMENSION_MIRROR/MAIN` and are locked progression events, not randomized pool entries
-- The BizHawk client reports the selected goal location from native AI-state polling (`ai_kirby_state_native`), then sends goal status after the server acknowledges that goal location
+- World generation converts those goal locations into addressless runtime events (`loc.address = None`), so the BizHawk client reports completion with `CLIENT_GOAL` directly from native AI-state polling instead of sending numeric `LocationChecks`
 
 Dimension Mirror access remains shard-gated, so this preserves current progression while ensuring completion is represented by a dedicated AP goal location instead of an auto-collected region event.
 
@@ -378,10 +378,10 @@ Goal completion used temporary client-side aggregation logic instead of native g
 
 ### Solution
 Integrated native AI-state goal polling from `ai_kirby_state_native` (`0x0203AD2C`):
-- Goal=Dark Mind: trigger selected goal location when value is `9999`
-- `10000` is treated as post-clear progression and is not used as first-clear trigger
+- Goal=Dark Mind: treat value `9999` as the native completion transition and trigger goal completion/status reporting
+- `10000` is treated as post-clear progression, but is accepted as a fallback completion signal when the live client misses the transient `9999` state
 
-Client continues to send `CLIENT_GOAL` only after server acknowledgement of the selected goal location check, preserving idempotent AP completion reporting.
+For shipped worlds where the goal location is addressless, the client sends `CLIENT_GOAL` directly and relies on `ctx.finished_game` for reconnect-safe re-sync. A compatibility path still exists for future numeric goal-location worlds.
 
 ## Issue #62: Deterministic Disconnect/Reconnect Resynchronization
 

@@ -113,14 +113,15 @@ async def test_reconnect_chaos_item_delivery_resumes_without_duplicate_first_ite
 
 @pytest.mark.asyncio
 async def test_reconnect_chaos_goal_reporting_is_idempotent_across_cycles(mock_bizhawk_context):
-    """Goal flow should send location then status once, with no duplicate status on later reconnects."""
+    """Addressless goal flow should send CLIENT_GOAL once, with no duplicate status on later reconnects."""
     client = KirbyAmClient()
     client.initialize_client()
 
-    goal_id = data.locations["GOAL_DARK_MIND"].location_id
     mock_bizhawk_context.slot_data["goal"] = 0
     mock_bizhawk_context.checked_locations = set()
     mock_bizhawk_context.locations_checked = set()
+    mock_bizhawk_context.server_locations = set()
+    mock_bizhawk_context.finished_game = False
 
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
@@ -133,20 +134,20 @@ async def test_reconnect_chaos_goal_reporting_is_idempotent_across_cycles(mock_b
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
-         patch.object(client, '_deliver_items', new_callable=AsyncMock):
+         patch.object(client, '_deliver_items', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock):
         # Use ai_state override for deterministic goal signal without RAM reads.
         mock_gate.return_value = (True, "gameplay_active", 9999)
 
-        # Cycle 1: send goal location check.
+        # Cycle 1: send CLIENT_GOAL for the addressless runtime goal event.
         await client.game_watcher(mock_bizhawk_context)
 
         # Cycle 2: disconnected no-op.
         mock_bizhawk_context.server.socket.closed = True
         await client.game_watcher(mock_bizhawk_context)
 
-        # Cycle 3: reconnected with goal location acknowledged by server; send CLIENT_GOAL.
+        # Cycle 3: reconnected; no duplicate status should be emitted.
         mock_bizhawk_context.server.socket.closed = False
-        mock_bizhawk_context.checked_locations.add(goal_id)
         await client.game_watcher(mock_bizhawk_context)
 
         # Cycle 4: another reconnect-safe watcher run should not send duplicate status.
@@ -156,6 +157,5 @@ async def test_reconnect_chaos_goal_reporting_is_idempotent_across_cycles(mock_b
     location_msgs = [p for p in payloads if p.get("cmd") == "LocationChecks"]
     status_msgs = [p for p in payloads if p.get("cmd") == "StatusUpdate"]
 
-    assert len(location_msgs) == 1
-    assert location_msgs[0]["locations"] == [goal_id]
+    assert len(location_msgs) == 0
     assert len(status_msgs) == 1

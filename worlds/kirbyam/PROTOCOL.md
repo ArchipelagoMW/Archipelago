@@ -86,7 +86,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 
 | Location Type | ID Range | Description |
 |---------------|----------|-------------|
-| GOAL_DARK_MIND | auto-assigned | Goal location (runtime-reported completion check) |
+| GOAL_DARK_MIND | auto-assigned | Internal goal metadata entry. Current shipped worlds convert this to an addressless runtime event, so the client reports `CLIENT_GOAL` directly instead of sending a numeric `LocationChecks` entry. |
 | BOSS_DEFEAT_1 .. BOSS_DEFEAT_8 | auto-assigned | Area boss defeat locations (8 locations) |
 | MAJOR_CHEST_CABBAGE_CAVERN | 3960200 | Cabbage Cavern big chest (bit 3, gTreasures.bigChestField) |
 | MAJOR_CHEST_OLIVE_OCEAN | 3960201 | Olive Ocean big chest (bit 6, gTreasures.bigChestField) |
@@ -169,7 +169,7 @@ Fail-open behavior:
 |---|---|
 | Location checks | Level-based poll resends any RAM-derived checks missing from `checked_locations`. |
 | Item delivery | Cursor is reconciled against ROM's `debug_item_counter`; delivery resumes from the correct index. |
-| Goal reporting | Idempotent: goal location and CLIENT_GOAL are skipped when already reflected in `checked_locations`. |
+| Goal reporting | Idempotent: for current shipped worlds, the client re-sends `CLIENT_GOAL` on reconnect when `finished_game` is set. If a future world exposes a numeric goal location, the client falls back to goal-location acknowledgement before `CLIENT_GOAL`. |
 | Boss probe | Probe snapshot re-baselines on BizHawk stream-identity change (reconnect safe). |
 | Watcher transient state | On first tick after AP session becomes ready (`server/socket/slot_data`), reconnect diagnostics/probe caches are reset to clean baselines. |
 
@@ -341,17 +341,23 @@ Other player-visible client popups:
 
 # Native signal source:
 # ai_kirby_state_native @ 0x0203AD2C (u32)
-# - Trigger goal location check on value 9999
+# - Trigger goal completion on value 9999
+# - Accept 10000 as a fallback post-clear signal if 9999 was missed live
 #
-# Note: 10000 is post-clear progression and must not be treated as first-clear
-# trigger.
+# Note: 10000 remains post-clear progression, but the client accepts it as a
+# fallback completion signal to avoid missing goal reporting when 9999 is transient.
 ```
 
 **Client StatusUpdate:**
 ```python
-# Report selected goal location when native signal is active,
-# then send CLIENT_GOAL after server acknowledges that location check.
-if native_signal_active_for_selected_goal:
+# Current shipped worlds convert the goal location into an addressless runtime
+# event, so the client sends CLIENT_GOAL directly.
+if native_signal_active_for_selected_goal and goal_location_is_addressless:
+    send StatusUpdate(status=CLIENT_GOAL)
+
+# Compatibility path for future world versions that expose a numeric goal
+# location to the server.
+if native_signal_active_for_selected_goal and goal_location_is_numeric:
     send LocationChecks([goal_location_id])
 
 if goal_location_id in checked_locations:

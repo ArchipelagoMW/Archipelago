@@ -1459,9 +1459,9 @@ class KirbyAmClient(BizHawkClient):
         if slot_goal != Goal.option_dark_mind:
             return False
 
-        # Dark Mind clear is anchored to 9999. The 10000 state is post-clear progression
-        # and should not be used as the first-clear trigger.
-        return ai_state == _GOAL_STATE_DARK_MIND_CLEAR
+        # Dark Mind clear is ideally observed at 9999, but live sessions can miss that
+        # transient state and only see the subsequent post-clear 10000 signal.
+        return ai_state in (_GOAL_STATE_DARK_MIND_CLEAR, _GOAL_STATE_FULL_CLEAR)
 
     async def _maybe_report_goal(
         self,
@@ -1472,8 +1472,9 @@ class KirbyAmClient(BizHawkClient):
         Goal reporting from native signal polling.
 
         Behavior:
-        - Reports selected goal location when the corresponding native signal is active.
-        - Sends CLIENT_GOAL once server acknowledges the selected goal location.
+        - For addressless runtime goal events, sends CLIENT_GOAL directly.
+        - If a future world version exposes a numeric server goal location, sends
+          LocationChecks first and CLIENT_GOAL after server acknowledgement.
         - Falls back to no-op when native addresses are unavailable.
         """
         if self._goal_reported:
@@ -1509,6 +1510,11 @@ class KirbyAmClient(BizHawkClient):
         if goal_location_id is None:
             return
 
+        server_locations = getattr(ctx, "server_locations", None)
+        goal_location_exposed_by_server = (
+            isinstance(server_locations, set) and goal_location_id in server_locations
+        )
+
         if not self._native_goal_signal_seen:
             self._native_goal_signal_seen = await self._native_goal_signal_active(
                 ctx,
@@ -1523,6 +1529,28 @@ class KirbyAmClient(BizHawkClient):
                 )
 
         if not self._native_goal_signal_seen:
+            return
+
+        if not goal_location_exposed_by_server:
+            from CommonClient import logger
+            from NetUtils import ClientStatus
+
+            finished_game = getattr(ctx, "finished_game", False)
+            if not isinstance(finished_game, bool):
+                finished_game = False
+
+            if finished_game:
+                self._goal_reported = True
+                return
+
+            logger.info(
+                "KirbyAM: goal location is addressless in this world; sending CLIENT_GOAL directly (goal_option=%s)",
+                slot_goal,
+            )
+            await self._display_client_message(ctx, "Goal complete")
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+            self._goal_reported = True
             return
 
         if goal_location_id not in ctx.checked_locations:
@@ -1558,6 +1586,7 @@ class KirbyAmClient(BizHawkClient):
             logger.info("KirbyAM: goal complete; sending CLIENT_GOAL status (goal_option=%s)", slot_goal)
             await self._display_client_message(ctx, "Goal complete")
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
             self._goal_reported = True
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
