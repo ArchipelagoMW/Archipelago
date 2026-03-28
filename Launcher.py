@@ -147,7 +147,7 @@ def handle_uri(path: str) -> tuple[list[Component], Component]:
     text_client_component = None
     game = queries["game"][0]
     for component in components:
-        if component.supports_uri and component.game_name == game:
+        if component.supports_uri and game in component.game_name:
             client_components.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
