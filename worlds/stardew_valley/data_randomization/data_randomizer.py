@@ -2,7 +2,7 @@ from random import Random
 
 from .data_randomizer_behaviors import randomizers_per_behavior
 from ..content import StardewContent
-from ..data.fish_data import change_fish_difficulty, change_fish_season, change_fish_location
+from ..content.override import override
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -33,7 +33,7 @@ def randomize_fish_difficulty(content: StardewContent, data_to_randomize: set[st
 
     for fish_name, fish_difficulty in randomized_difficulties_per_fish.items():
         original_fish = content.fishes[fish_name]
-        content.fishes[fish_name] = change_fish_difficulty(original_fish, fish_difficulty)
+        content.fishes[fish_name] = override(original_fish, difficulty=fish_difficulty)
 
 
 def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
@@ -45,7 +45,7 @@ def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], 
 
     for fish_name, fish_season in randomized_seasons_per_fish.items():
         original_fish = content.fishes[fish_name]
-        content.fishes[fish_name] = change_fish_season(original_fish, fish_season)
+        content.fishes[fish_name] = override(original_fish, seasons=fish_season)
 
 
 def randomize_fish_location(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
@@ -57,5 +57,5 @@ def randomize_fish_location(content: StardewContent, data_to_randomize: set[str]
 
     for fish_name, fish_location in randomized_locations_per_fish.items():
         original_fish = content.fishes[fish_name]
-        content.fishes[fish_name] = change_fish_location(original_fish, fish_location)
+        content.fishes[fish_name] = override(original_fish, locations=fish_location)
 

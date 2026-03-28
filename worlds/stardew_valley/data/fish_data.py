@@ -74,18 +74,6 @@ def create_fish(name: str, locations: Tuple[str, ...], seasons: Union[str, Tuple
     return fish_item
 
 
-def change_fish_difficulty(fish: FishItem, new_difficulty: int) -> FishItem:
-    return FishItem(fish.name, fish.locations, fish.seasons, new_difficulty, fish.legendary, fish.extended_family, fish.minimum_level, fish.mod_name)
-
-
-def change_fish_season(fish: FishItem, new_season: Tuple[str, ...]) -> FishItem:
-    return FishItem(fish.name, fish.locations, new_season, fish.difficulty, fish.legendary, fish.extended_family, fish.minimum_level, fish.mod_name)
-
-
-def change_fish_location(fish: FishItem, new_location: Tuple[str, ...]) -> FishItem:
-    return FishItem(fish.name, new_location, fish.seasons, fish.difficulty, fish.legendary, fish.extended_family, fish.minimum_level, fish.mod_name)
-
-
 albacore = create_fish(Fish.albacore, ocean, (season.fall, season.winter), 60)
 anchovy = create_fish(Fish.anchovy, ocean, (season.spring, season.fall), 30)
 blue_discus = create_fish(Fish.blue_discus, ginger_island_river, season.all_seasons, 60)
