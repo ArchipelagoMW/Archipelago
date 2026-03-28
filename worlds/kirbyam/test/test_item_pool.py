@@ -2,10 +2,13 @@ import random
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 from BaseClasses import ItemClassification
 
 from .. import KirbyAmWorld
 from ..data import LocationCategory, data
+from ..items import get_item_classification
 from ..locations import KirbyAmLocation
 from ..options import RandomizeShards
 
@@ -235,3 +238,69 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     _expected_pool_size = _open_non_goal_location_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert len(shard_items) == _shard_item_count
+
+
+def test_completely_random_pool_contains_each_non_filler_item_exactly_once() -> None:
+    world, _locations = _build_world_for_create_items(RandomizeShards.option_completely_random)
+
+    world.create_items()
+
+    expected_non_filler_codes = {
+        item.item_id for item in data.items.values() if item.classification != ItemClassification.filler
+    }
+    pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
+    pool_non_filler_codes = [code for code in pool_codes if get_item_classification(code) != ItemClassification.filler]
+
+    assert set(pool_non_filler_codes) == expected_non_filler_codes
+    assert len(pool_non_filler_codes) == len(expected_non_filler_codes)
+    assert len(pool_codes) >= len(expected_non_filler_codes)
+
+
+def test_vanilla_pool_contains_each_non_shard_non_filler_item_exactly_once() -> None:
+    world, _locations = _build_world_for_create_items(RandomizeShards.option_vanilla)
+
+    world.create_items()
+
+    shard_codes = {
+        item.item_id for item in data.items.values() if "Shards" in item.tags
+    }
+    expected_non_filler_codes = {
+        item.item_id
+        for item in data.items.values()
+        if item.classification != ItemClassification.filler and item.item_id not in shard_codes
+    }
+    pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
+    pool_non_filler_codes = [code for code in pool_codes if get_item_classification(code) != ItemClassification.filler]
+
+    assert set(pool_non_filler_codes) == expected_non_filler_codes
+    assert len(pool_non_filler_codes) == len(expected_non_filler_codes)
+    assert shard_codes.isdisjoint(set(pool_codes)), "Vanilla shard mode should not randomize shard items"
+
+
+def test_create_items_fails_when_non_filler_count_exceeds_open_locations() -> None:
+    boss_only_locations = [
+        KirbyAmLocation(
+            1,
+            meta.label,
+            meta.location_id,
+            None,
+            key=key,
+            default_item_code=meta.default_item,
+        )
+        for key, meta in data.locations.items()
+        if meta.category == LocationCategory.BOSS_DEFEAT
+    ]
+
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.player = 1
+    world.random = random.Random(7)
+    world.multiworld = _DummyMultiWorld(boss_only_locations)
+    world.options = SimpleNamespace(
+        shards=SimpleNamespace(
+            value=RandomizeShards.option_completely_random,
+            current_key="completely_random",
+        )
+    )
+
+    with pytest.raises(ValueError, match="non-filler item count"):
+        world.create_items()

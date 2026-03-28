@@ -324,39 +324,46 @@ class KirbyAmWorld(World):
                         self.options.shards.current_key,
                     )
 
-                # Build default items for all still-open physical locations.
-                base_non_shard_codes: list[int] = []
-                base_non_shard_locations = [
-                    loc
-                    for loc in boss_locations + major_chest_locations + vitality_chest_locations + sound_player_chest_locations
-                    if loc.item is None
-                ]
-
-                for loc in base_non_shard_locations:
-                    if loc.default_item_code is None:
-                        raise ValueError(f"KirbyAM location '{loc.name}' is missing a default item code")
-                    base_non_shard_codes.append(loc.default_item_code)
-
-                if self.options.shards.value == RandomizeShards.option_completely_random:
-                    if len(shard_item_codes) > len(base_non_shard_codes):
-                        raise ValueError(
-                            "KirbyAM shard pool mismatch: shard item count %d exceeds open physical locations %d"
-                            % (len(shard_item_codes), len(base_non_shard_codes))
-                        )
-                    codes_for_open_locations = list(base_non_shard_codes)
-                    replacement_indices = list(range(len(codes_for_open_locations)))
-                    self.random.shuffle(replacement_indices)
-                    for replacement_index, shard_code in zip(replacement_indices, shard_item_codes):
-                        codes_for_open_locations[replacement_index] = shard_code
-                    randomized_item_codes.extend(codes_for_open_locations)
-                else:
-                    randomized_item_codes.extend(base_non_shard_codes)
-
                 open_physical_locations = [
                     loc for loc in boss_locations + major_chest_locations + vitality_chest_locations + sound_player_chest_locations
                     if loc.item is None
                 ]
                 needed_pool_size = len(open_physical_locations)
+
+                non_filler_item_codes = [
+                    item.item_id
+                    for item in kirby_data.items.values()
+                    if item.classification != ItemClassification.filler
+                ]
+                if self.options.shards.value == RandomizeShards.option_vanilla:
+                    shard_code_set = set(shard_item_codes)
+                    non_filler_item_codes = [
+                        code for code in non_filler_item_codes if code not in shard_code_set
+                    ]
+
+                if len(non_filler_item_codes) > needed_pool_size:
+                    raise ValueError(
+                        "KirbyAM item pool mismatch: non-filler item count %d exceeds open physical locations %d"
+                        % (len(non_filler_item_codes), needed_pool_size)
+                    )
+
+                filler_needed = needed_pool_size - len(non_filler_item_codes)
+                randomized_item_codes.extend(non_filler_item_codes)
+                randomized_item_codes.extend(
+                    self.item_name_to_id[self.get_filler_item_name()]
+                    for _ in range(filler_needed)
+                )
+                self.random.shuffle(randomized_item_codes)
+
+                non_filler_pool_codes = [
+                    code
+                    for code in randomized_item_codes
+                    if get_item_classification(code) != ItemClassification.filler
+                ]
+                if sorted(non_filler_pool_codes) != sorted(non_filler_item_codes):
+                    raise ValueError(
+                        "KirbyAM item pool invariant failed: randomized non-filler item set does not match expected set"
+                    )
 
                 if len(randomized_item_codes) != needed_pool_size:
                     raise ValueError(
