@@ -2042,7 +2042,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locations = args["locations"]
             status = args.get("status", HintStatus.HINT_UNSPECIFIED)
 
-            if self.ctx.hint_cost > 100:
+            if ctx.hint_cost > 100:
                 return
             elif not locations:
                 await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
