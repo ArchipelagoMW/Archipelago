@@ -7,6 +7,8 @@ from Generate import get_seed_name
 from test.general import gen_steps
 from worlds.AutoWorld import call_all
 
+from ..levels import LEVEL_DATA
+from ..locations import LOCATION_NAME_TO_ID
 from ..world import BabaIsYouWorld
 
 
@@ -100,3 +102,13 @@ class TestUniversalTrackerRegeneration(unittest.TestCase):
             {location.name for location in source_world.get_locations()},
         )
         self.assertEqual(get_connection_summary(regenerated_world), get_connection_summary(source_world))
+        self.assertEqual(
+            BabaIsYouWorld.tracker_world["poptracker_name_mapping"],
+            regenerated_world._build_poptracker_name_mapping(),
+        )
+
+        map_zero_target = regenerated_world.level_shuffle_dict.get("Map-0", "Map-0")
+        self.assertEqual(
+            BabaIsYouWorld.tracker_world["poptracker_name_mapping"]["Map-0/Map-0"],
+            LOCATION_NAME_TO_ID[f"{LEVEL_DATA[map_zero_target]['name']}: Win"],
+        )

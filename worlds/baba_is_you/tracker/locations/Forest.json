@@ -7,9 +7,9 @@
         "short_name": "Forest-1",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1584,
-            "y": 1104
+            "map": "Deep Forest",
+            "x": 1488,
+            "y": 1008
           }
         ],
         "sections": [
@@ -24,9 +24,9 @@
         "short_name": "Forest-2",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1392,
-            "y": 912
+            "map": "Deep Forest",
+            "x": 1296,
+            "y": 816
           }
         ],
         "sections": [
@@ -41,9 +41,9 @@
         "short_name": "Forest-3",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1680,
-            "y": 1104
+            "map": "Deep Forest",
+            "x": 1584,
+            "y": 1008
           }
         ],
         "sections": [
@@ -58,9 +58,9 @@
         "short_name": "Forest-4",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1488,
-            "y": 816
+            "map": "Deep Forest",
+            "x": 1392,
+            "y": 720
           }
         ],
         "sections": [
@@ -75,9 +75,9 @@
         "short_name": "Forest-5",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1392,
-            "y": 816
+            "map": "Deep Forest",
+            "x": 1296,
+            "y": 720
           }
         ],
         "sections": [
@@ -92,9 +92,9 @@
         "short_name": "Forest-6",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1200,
-            "y": 912
+            "map": "Deep Forest",
+            "x": 1104,
+            "y": 816
           }
         ],
         "sections": [
@@ -109,9 +109,9 @@
         "short_name": "Forest-7",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1776,
-            "y": 1104
+            "map": "Deep Forest",
+            "x": 1680,
+            "y": 1008
           }
         ],
         "sections": [
@@ -126,9 +126,9 @@
         "short_name": "Forest-8",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1104,
-            "y": 912
+            "map": "Deep Forest",
+            "x": 1008,
+            "y": 816
           }
         ],
         "sections": [
@@ -143,9 +143,9 @@
         "short_name": "Forest-9",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1680,
-            "y": 1008
+            "map": "Deep Forest",
+            "x": 1584,
+            "y": 912
           }
         ],
         "sections": [
@@ -160,9 +160,9 @@
         "short_name": "Forest-10",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1488,
-            "y": 720
+            "map": "Deep Forest",
+            "x": 1392,
+            "y": 624
           }
         ],
         "sections": [
@@ -177,9 +177,9 @@
         "short_name": "Forest-11",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1008,
-            "y": 912
+            "map": "Deep Forest",
+            "x": 912,
+            "y": 816
           }
         ],
         "sections": [
@@ -194,9 +194,9 @@
         "short_name": "Forest-12",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1776,
-            "y": 1008
+            "map": "Deep Forest",
+            "x": 1680,
+            "y": 912
           }
         ],
         "sections": [
@@ -211,9 +211,9 @@
         "short_name": "Forest-13",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1392,
-            "y": 720
+            "map": "Deep Forest",
+            "x": 1296,
+            "y": 624
           }
         ],
         "sections": [
@@ -228,9 +228,9 @@
         "short_name": "Forest-14",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1392,
-            "y": 624
+            "map": "Deep Forest",
+            "x": 1296,
+            "y": 528
           }
         ],
         "sections": [
@@ -245,9 +245,9 @@
         "short_name": "Forest-Extra 1",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1680,
-            "y": 816
+            "map": "Deep Forest",
+            "x": 1584,
+            "y": 720
           }
         ],
         "sections": [
@@ -262,9 +262,9 @@
         "short_name": "Forest-Extra 2",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1680,
-            "y": 624
+            "map": "Deep Forest",
+            "x": 1584,
+            "y": 528
           }
         ],
         "sections": [
@@ -279,9 +279,9 @@
         "short_name": "Forest-A",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1968,
-            "y": 1104
+            "map": "Deep Forest",
+            "x": 1872,
+            "y": 1008
           }
         ],
         "sections": [
@@ -296,9 +296,9 @@
         "short_name": "Forest-B",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 1968,
-            "y": 1008
+            "map": "Deep Forest",
+            "x": 1872,
+            "y": 912
           }
         ],
         "sections": [
@@ -313,9 +313,9 @@
         "short_name": "Forest-C",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 2064,
-            "y": 1104
+            "map": "Deep Forest",
+            "x": 1968,
+            "y": 1008
           }
         ],
         "sections": [
@@ -330,9 +330,9 @@
         "short_name": "Forest-D",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 2064,
-            "y": 1008
+            "map": "Deep Forest",
+            "x": 1968,
+            "y": 912
           }
         ],
         "sections": [
@@ -347,9 +347,9 @@
         "short_name": "Forest-E",
         "map_locations": [
           {
-            "map": "Forest",
-            "x": 2160,
-            "y": 1008
+            "map": "Deep Forest",
+            "x": 2064,
+            "y": 912
           }
         ],
         "sections": [

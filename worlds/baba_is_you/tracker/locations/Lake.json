@@ -7,9 +7,9 @@
         "short_name": "Lake-1",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1488,
-            "y": 1200
+            "map": "The Lake",
+            "x": 1392,
+            "y": 1104
           }
         ],
         "sections": [
@@ -24,9 +24,9 @@
         "short_name": "Lake-2",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1488,
-            "y": 1104
+            "map": "The Lake",
+            "x": 1392,
+            "y": 1008
           }
         ],
         "sections": [
@@ -41,9 +41,9 @@
         "short_name": "Lake-3",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1392,
-            "y": 1104
+            "map": "The Lake",
+            "x": 1296,
+            "y": 1008
           }
         ],
         "sections": [
@@ -58,9 +58,9 @@
         "short_name": "Lake-4",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1488,
-            "y": 1008
+            "map": "The Lake",
+            "x": 1392,
+            "y": 912
           }
         ],
         "sections": [
@@ -75,9 +75,9 @@
         "short_name": "Lake-5",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1392,
-            "y": 1008
+            "map": "The Lake",
+            "x": 1296,
+            "y": 912
           }
         ],
         "sections": [
@@ -92,9 +92,9 @@
         "short_name": "Lake-6",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1584,
-            "y": 720
+            "map": "The Lake",
+            "x": 1488,
+            "y": 624
           }
         ],
         "sections": [
@@ -109,9 +109,9 @@
         "short_name": "Lake-7",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1488,
-            "y": 720
+            "map": "The Lake",
+            "x": 1392,
+            "y": 624
           }
         ],
         "sections": [
@@ -126,9 +126,9 @@
         "short_name": "Lake-8",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1680,
-            "y": 912
+            "map": "The Lake",
+            "x": 1584,
+            "y": 816
           }
         ],
         "sections": [
@@ -143,9 +143,9 @@
         "short_name": "Lake-9",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1776,
-            "y": 912
+            "map": "The Lake",
+            "x": 1680,
+            "y": 816
           }
         ],
         "sections": [
@@ -160,9 +160,9 @@
         "short_name": "Lake-10",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1584,
-            "y": 624
+            "map": "The Lake",
+            "x": 1488,
+            "y": 528
           }
         ],
         "sections": [
@@ -177,9 +177,9 @@
         "short_name": "Lake-11",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1872,
-            "y": 912
+            "map": "The Lake",
+            "x": 1776,
+            "y": 816
           }
         ],
         "sections": [
@@ -194,9 +194,9 @@
         "short_name": "Lake-12",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1968,
-            "y": 912
+            "map": "The Lake",
+            "x": 1872,
+            "y": 816
           }
         ],
         "sections": [
@@ -211,9 +211,9 @@
         "short_name": "Lake-13",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1488,
-            "y": 624
+            "map": "The Lake",
+            "x": 1392,
+            "y": 528
           }
         ],
         "sections": [
@@ -228,9 +228,9 @@
         "short_name": "Lake-Extra 1",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1200,
-            "y": 1008
+            "map": "The Lake",
+            "x": 1104,
+            "y": 912
           }
         ],
         "sections": [
@@ -245,9 +245,9 @@
         "short_name": "Lake-Extra 2",
         "map_locations": [
           {
-            "map": "Lake",
-            "x": 1104,
-            "y": 1008
+            "map": "The Lake",
+            "x": 1008,
+            "y": 912
           }
         ],
         "sections": [

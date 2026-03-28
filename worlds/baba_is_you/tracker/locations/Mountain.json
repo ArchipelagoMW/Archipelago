@@ -7,9 +7,9 @@
         "short_name": "Mountain-1",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1680,
-            "y": 1200
+            "map": "Mountaintop",
+            "x": 1584,
+            "y": 1104
           }
         ],
         "sections": [
@@ -24,9 +24,9 @@
         "short_name": "Mountain-2",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1680,
-            "y": 1104
+            "map": "Mountaintop",
+            "x": 1584,
+            "y": 1008
           }
         ],
         "sections": [
@@ -41,9 +41,9 @@
         "short_name": "Mountain-3",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1584,
-            "y": 1200
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 1104
           }
         ],
         "sections": [
@@ -58,9 +58,9 @@
         "short_name": "Mountain-4",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1584,
-            "y": 1104
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 1008
           }
         ],
         "sections": [
@@ -75,9 +75,9 @@
         "short_name": "Mountain-5",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1680,
-            "y": 1008
+            "map": "Mountaintop",
+            "x": 1584,
+            "y": 912
           }
         ],
         "sections": [
@@ -92,9 +92,9 @@
         "short_name": "Mountain-6",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1584,
-            "y": 1008
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 912
           }
         ],
         "sections": [
@@ -109,9 +109,9 @@
         "short_name": "Mountain-7",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1488,
-            "y": 1104
+            "map": "Mountaintop",
+            "x": 1392,
+            "y": 1008
           }
         ],
         "sections": [
@@ -126,9 +126,9 @@
         "short_name": "Mountain-8",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1488,
-            "y": 1008
+            "map": "Mountaintop",
+            "x": 1392,
+            "y": 912
           }
         ],
         "sections": [
@@ -143,9 +143,9 @@
         "short_name": "Mountain-Extra 1",
         "map_locations": [
           {
-            "map": "Mountain",
-            "x": 1584,
-            "y": 816
+            "map": "Mountaintop",
+            "x": 1488,
+            "y": 720
           }
         ],
         "sections": [

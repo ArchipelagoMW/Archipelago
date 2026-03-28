@@ -7,9 +7,9 @@
         "short_name": "Space-1",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1392,
-            "y": 1008
+            "map": "Rocket Trip",
+            "x": 1296,
+            "y": 912
           }
         ],
         "sections": [
@@ -24,9 +24,9 @@
         "short_name": "Space-2",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1296,
-            "y": 1008
+            "map": "Rocket Trip",
+            "x": 1200,
+            "y": 912
           }
         ],
         "sections": [
@@ -41,9 +41,9 @@
         "short_name": "Space-3",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1296,
-            "y": 912
+            "map": "Rocket Trip",
+            "x": 1200,
+            "y": 816
           }
         ],
         "sections": [
@@ -58,9 +58,9 @@
         "short_name": "Space-4",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1872,
-            "y": 816
+            "map": "Rocket Trip",
+            "x": 1776,
+            "y": 720
           }
         ],
         "sections": [
@@ -75,9 +75,9 @@
         "short_name": "Space-5",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1392,
-            "y": 912
+            "map": "Rocket Trip",
+            "x": 1296,
+            "y": 816
           }
         ],
         "sections": [
@@ -92,9 +92,9 @@
         "short_name": "Space-6",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1872,
-            "y": 720
+            "map": "Rocket Trip",
+            "x": 1776,
+            "y": 624
           }
         ],
         "sections": [
@@ -109,9 +109,9 @@
         "short_name": "Space-7",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1968,
-            "y": 816
+            "map": "Rocket Trip",
+            "x": 1872,
+            "y": 720
           }
         ],
         "sections": [
@@ -126,9 +126,9 @@
         "short_name": "Space-8",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1296,
-            "y": 816
+            "map": "Rocket Trip",
+            "x": 1200,
+            "y": 720
           }
         ],
         "sections": [
@@ -143,9 +143,9 @@
         "short_name": "Space-9",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1968,
-            "y": 720
+            "map": "Rocket Trip",
+            "x": 1872,
+            "y": 624
           }
         ],
         "sections": [
@@ -160,9 +160,9 @@
         "short_name": "Space-10",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1968,
-            "y": 624
+            "map": "Rocket Trip",
+            "x": 1872,
+            "y": 528
           }
         ],
         "sections": [
@@ -177,9 +177,9 @@
         "short_name": "Space-11",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1872,
-            "y": 624
+            "map": "Rocket Trip",
+            "x": 1776,
+            "y": 528
           }
         ],
         "sections": [
@@ -194,9 +194,9 @@
         "short_name": "Space-12",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1392,
-            "y": 816
+            "map": "Rocket Trip",
+            "x": 1296,
+            "y": 720
           }
         ],
         "sections": [
@@ -211,9 +211,9 @@
         "short_name": "Space-13",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1392,
-            "y": 720
+            "map": "Rocket Trip",
+            "x": 1296,
+            "y": 624
           }
         ],
         "sections": [
@@ -228,9 +228,9 @@
         "short_name": "Space-Extra 1",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1584,
-            "y": 912
+            "map": "Rocket Trip",
+            "x": 1488,
+            "y": 816
           }
         ],
         "sections": [
@@ -245,9 +245,9 @@
         "short_name": "Space-Extra 2",
         "map_locations": [
           {
-            "map": "Space",
-            "x": 1872,
-            "y": 432
+            "map": "Rocket Trip",
+            "x": 1776,
+            "y": 336
           }
         ],
         "sections": [

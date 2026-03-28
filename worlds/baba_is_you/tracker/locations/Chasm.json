@@ -8,8 +8,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1776,
-            "y": 1200
+            "x": 1680,
+            "y": 1104
           }
         ],
         "sections": [
@@ -25,8 +25,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1776,
-            "y": 624
+            "x": 1680,
+            "y": 528
           }
         ],
         "sections": [
@@ -42,8 +42,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1872,
-            "y": 1200
+            "x": 1776,
+            "y": 1104
           }
         ],
         "sections": [
@@ -59,8 +59,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1872,
-            "y": 624
+            "x": 1776,
+            "y": 528
           }
         ],
         "sections": [
@@ -76,8 +76,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1968,
-            "y": 1200
+            "x": 1872,
+            "y": 1104
           }
         ],
         "sections": [
@@ -93,8 +93,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1968,
-            "y": 624
+            "x": 1872,
+            "y": 528
           }
         ],
         "sections": [
@@ -110,8 +110,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 2064,
-            "y": 1200
+            "x": 1968,
+            "y": 1104
           }
         ],
         "sections": [
@@ -127,8 +127,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 2064,
-            "y": 624
+            "x": 1968,
+            "y": 528
           }
         ],
         "sections": [
@@ -144,8 +144,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 2160,
-            "y": 624
+            "x": 2064,
+            "y": 528
           }
         ],
         "sections": [
@@ -161,8 +161,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1872,
-            "y": 912
+            "x": 1776,
+            "y": 816
           }
         ],
         "sections": [
@@ -178,8 +178,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1872,
-            "y": 1008
+            "x": 1776,
+            "y": 912
           }
         ],
         "sections": [
@@ -195,8 +195,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1872,
-            "y": 816
+            "x": 1776,
+            "y": 720
           }
         ],
         "sections": [
@@ -212,8 +212,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1968,
-            "y": 912
+            "x": 1872,
+            "y": 816
           }
         ],
         "sections": [
@@ -229,8 +229,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1968,
-            "y": 816
+            "x": 1872,
+            "y": 720
           }
         ],
         "sections": [
@@ -246,8 +246,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 1968,
-            "y": 1008
+            "x": 1872,
+            "y": 912
           }
         ],
         "sections": [
@@ -263,8 +263,8 @@
         "map_locations": [
           {
             "map": "Chasm",
-            "x": 2064,
-            "y": 912
+            "x": 1968,
+            "y": 816
           }
         ],
         "sections": [

@@ -7,9 +7,9 @@
         "short_name": "Ruins-1",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1680,
-            "y": 1104
+            "map": "Temple Ruins",
+            "x": 1584,
+            "y": 1008
           }
         ],
         "sections": [
@@ -24,9 +24,9 @@
         "short_name": "Ruins-2",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1680,
-            "y": 912
+            "map": "Temple Ruins",
+            "x": 1584,
+            "y": 816
           }
         ],
         "sections": [
@@ -41,9 +41,9 @@
         "short_name": "Ruins-3",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1680,
-            "y": 816
+            "map": "Temple Ruins",
+            "x": 1584,
+            "y": 720
           }
         ],
         "sections": [
@@ -58,9 +58,9 @@
         "short_name": "Ruins-4",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1584,
-            "y": 816
+            "map": "Temple Ruins",
+            "x": 1488,
+            "y": 720
           }
         ],
         "sections": [
@@ -75,9 +75,9 @@
         "short_name": "Ruins-5",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1776,
-            "y": 816
+            "map": "Temple Ruins",
+            "x": 1680,
+            "y": 720
           }
         ],
         "sections": [
@@ -92,9 +92,9 @@
         "short_name": "Ruins-6",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1680,
-            "y": 720
+            "map": "Temple Ruins",
+            "x": 1584,
+            "y": 624
           }
         ],
         "sections": [
@@ -109,9 +109,9 @@
         "short_name": "Ruins-7",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1584,
-            "y": 720
+            "map": "Temple Ruins",
+            "x": 1488,
+            "y": 624
           }
         ],
         "sections": [
@@ -126,9 +126,9 @@
         "short_name": "Ruins-8",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1680,
-            "y": 624
+            "map": "Temple Ruins",
+            "x": 1584,
+            "y": 528
           }
         ],
         "sections": [
@@ -143,9 +143,9 @@
         "short_name": "Ruins-9",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1776,
-            "y": 720
+            "map": "Temple Ruins",
+            "x": 1680,
+            "y": 624
           }
         ],
         "sections": [
@@ -160,9 +160,9 @@
         "short_name": "Ruins-Extra 1",
         "map_locations": [
           {
-            "map": "Ruins",
-            "x": 1776,
-            "y": 528
+            "map": "Temple Ruins",
+            "x": 1680,
+            "y": 432
           }
         ],
         "sections": [

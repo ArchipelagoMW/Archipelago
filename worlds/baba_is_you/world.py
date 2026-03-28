@@ -99,6 +99,7 @@ class BabaIsYouWorld(World):
             "locations/Ruins.json",
             "locations/Space.json"
         ],
+        "poptracker_name_mapping": {},
     }
 
     @staticmethod
@@ -131,8 +132,43 @@ class BabaIsYouWorld(World):
                 self.player_name,
             )
 
+    def _build_poptracker_name_mapping(self) -> dict[str, int]:
+        mapping: dict[str, int] = {}
+        for slot_name, slot_data in LEVEL_DATA.items():
+            if slot_data.get("map") is True:
+                continue
+
+            level_name = self.level_shuffle_dict.get(slot_name, slot_name)
+            level_data = LEVEL_DATA.get(level_name)
+            if level_data is None or level_data.get("map") is True:
+                logger.warning(
+                    "Baba Is You (%s): tracker mapping skipped invalid level slot %s -> %s.",
+                    self.player_name,
+                    slot_name,
+                    level_name,
+                )
+                continue
+
+            location_name = f"{level_data['name']}: Win"
+            location_id = locations.LOCATION_NAME_TO_ID.get(location_name)
+            if location_id is None:
+                logger.warning(
+                    "Baba Is You (%s): tracker mapping could not find location id for %s.",
+                    self.player_name,
+                    location_name,
+                )
+                continue
+
+            mapping[f"{slot_name}/{slot_name}"] = location_id
+
+        return mapping
+
+    def _refresh_tracker_world_name_mapping(self) -> None:
+        type(self).tracker_world["poptracker_name_mapping"] = self._build_poptracker_name_mapping()
+
     def generate_early(self) -> None:
         self.level_shuffle_dict = {}
+        self._refresh_tracker_world_name_mapping()
 
         slot_data = self._get_ut_slot_data()
         if slot_data:
@@ -282,6 +318,7 @@ class BabaIsYouWorld(World):
     # For better structure and readability, we put each of these in their own file.
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
+        self._refresh_tracker_world_name_mapping()
         locations.create_all_locations(self)
 
     def set_rules(self) -> None:
