@@ -2,11 +2,12 @@
 Classes and functions related to creating a ROM patch
 """
 import copy
-import os
+import hashlib
+import pkgutil
 import struct
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple, Any
 
-from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from settings import get_settings
 
 from .data import TrainerPokemonDataTypeEnum, BASE_OFFSET, data
@@ -100,11 +101,26 @@ class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = "605b89b67018abcea91e693a4dd25be3"
     patch_file_ending = ".apemerald"
     result_file_ending = ".gba"
+    base_patch_hash: str
+    apworld_version: str
 
     procedure = [
-        ("apply_bsdiff4", ["base_patch.bsdiff4"]),
+        ("apply_base_patch", []),
         ("apply_tokens", ["token_data.bin"])
     ]
+
+    def get_manifest(self) -> Dict[str, Any]:
+        from . import PokemonEmeraldWorld
+        manifest = super().get_manifest()
+        manifest["apworld_version"] = PokemonEmeraldWorld.world_version.as_simple_string()
+        manifest["base_patch_hash"] = self.base_patch_hash
+        return manifest
+
+    def read_contents(self, opened_zipfile) -> Dict[str, Any]:
+        manifest = super().read_contents(opened_zipfile)
+        self.apworld_version = manifest.get("apworld_version", "<2.5.0")
+        self.base_patch_hash = manifest.get("base_patch_hash", "")
+        return manifest
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -112,6 +128,22 @@ class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
             base_rom_bytes = bytes(infile.read())
 
         return base_rom_bytes
+
+
+class PokemonEmeraldPatchExtensions(APPatchExtension):
+    game = "Pokemon Emerald"
+
+    @staticmethod
+    def apply_base_patch(caller: PokemonEmeraldProcedurePatch, rom: bytes) -> bytes:
+        base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
+        if hashlib.sha256(base_patch).hexdigest() != caller.base_patch_hash:
+            from . import PokemonEmeraldWorld
+            raise AssertionError(f"This patch file requires a different version of the Pokemon Emerald APWorld. It was "
+                                 f"made with APWorld version {caller.apworld_version}. You're using APWorld version "
+                                 f"{PokemonEmeraldWorld.world_version.as_simple_string()}.")
+
+        import bsdiff4
+        return bsdiff4.patch(rom, base_patch)
 
 
 def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
