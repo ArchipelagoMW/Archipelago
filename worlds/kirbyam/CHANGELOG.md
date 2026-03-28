@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Standardize KirbyAM user-facing item and location labels around `Area RoomCode - Thing` naming where room context matters, reorder map item names to `Area - Map`, rename vitality items to area-specific labels, and hide chest contents from physical location names so chest checks no longer spoil map/vitality/Sound Player outcomes (Issue #460).
+- Fix BizHawk receive notification item names resolving as `Unknown item (ID: ...)` by resolving received-item names in the local receiver slot context (not sender slot) and treating AP unknown-item placeholders as unresolved so KirbyAM fallback item labels are used when available (Issue #476).
 
 ## v0.0.13
 

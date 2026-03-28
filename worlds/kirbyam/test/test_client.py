@@ -1216,6 +1216,32 @@ async def test_receive_notification_honors_slot_data_toggle(mock_bizhawk_context
 
 
 @pytest.mark.asyncio
+async def test_receive_notification_uses_local_slot_for_item_name_lookup(mock_bizhawk_context):
+    """Receive item-name lookup should use the local slot context, not sender slot."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    if not data.items:
+        pytest.skip("KirbyAM dataset has no items; skipping receive-notification item-name lookup test.")
+
+    first_item_id = next(iter(data.items.keys()))
+    mock_bizhawk_context.slot = 1
+    mock_bizhawk_context.items_received = [Mock(item=first_item_id, player=2)]
+    mock_bizhawk_context.player_names = {2: "PlayerTwo"}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = "Mirror Shard"
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        await client._emit_receive_notification(mock_bizhawk_context, 0)
+
+    mock_bizhawk_context.item_names.lookup_in_slot.assert_called_once_with(first_item_id, 1)
+    mock_display.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        "Received Mirror Shard from PlayerTwo",
+    )
+
+
+@pytest.mark.asyncio
 async def test_receive_notification_not_emitted_for_malformed_skipped_item(mock_bizhawk_context):
     """Malformed ReceivedItems entries should be skipped without receive notification output."""
     client = KirbyAmClient()

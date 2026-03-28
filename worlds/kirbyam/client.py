@@ -269,7 +269,11 @@ class KirbyAmClient(BizHawkClient):
         if lookup is not None:
             try:
                 resolved = lookup.lookup_in_slot(item_id, item_player)
-                if isinstance(resolved, str) and resolved:
+                if (
+                    isinstance(resolved, str)
+                    and resolved
+                    and not resolved.startswith("Unknown item (ID:")
+                ):
                     return resolved
             except Exception:
                 pass
@@ -304,17 +308,20 @@ class KirbyAmClient(BizHawkClient):
 
         self._notified_receive_indices.add(delivered_index)
         item_id, player_id = item_fields
-        item_name = self._item_name(ctx, item_id, player_id)
+        receiver_slot = self._coerce_u32(getattr(ctx, "slot", None))
+        lookup_slot = receiver_slot if receiver_slot is not None else player_id
+        item_name = self._item_name(ctx, item_id, lookup_slot)
         sender_name = self._player_name(ctx, player_id)
         message = f"Received {item_name} from {sender_name}"
 
         from CommonClient import logger
 
         logger.info(
-            "KirbyAM: receive notification queued (index=%s, item=%s, sender=%s)",
+            "KirbyAM: receive notification queued (index=%s, item=%s, sender=%s, lookup_slot=%s)",
             delivered_index,
             item_name,
             sender_name,
+            lookup_slot,
         )
         try:
             await bizhawk.display_message(ctx.bizhawk_ctx, message)

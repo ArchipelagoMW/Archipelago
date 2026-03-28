@@ -48,6 +48,24 @@ def test_item_name_prefers_context_item_names():
     mock_lookup.lookup_in_slot.assert_called_once_with(123456, 1)
 
 
+def test_item_name_falls_back_when_context_returns_unknown_placeholder():
+    """_item_name should continue to KirbyAM fallback when AP lookup returns Unknown item placeholder."""
+    client = KirbyAmClient()
+    ctx = Mock()
+
+    if not data.items:
+        pytest.skip("No items in data.items available for test")
+
+    item_id, item_data = next(iter(data.items.items()))
+    mock_lookup = Mock()
+    mock_lookup.lookup_in_slot = Mock(return_value=f"Unknown item (ID: {item_id})")
+    ctx.item_names = mock_lookup
+
+    name = client._item_name(ctx, item_id, 1)
+    assert name == item_data.label
+    mock_lookup.lookup_in_slot.assert_called_once_with(item_id, 1)
+
+
 def test_location_name_resolves_from_data():
     """_location_name should resolve location labels from data.locations."""
     client = KirbyAmClient()
