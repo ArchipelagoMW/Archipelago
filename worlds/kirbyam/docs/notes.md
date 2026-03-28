@@ -485,6 +485,48 @@ notification contract, which made receive/send events opaque in normal play.
   - verify readable receive/send notifications
   - verify reconnect does not replay old notifications
 
+## Issue #269: Receive Notifications Silent Drop on Fast-Forward ACK Path
+
+### Problem
+BizHawk receive notifications were never displayed despite items being delivered
+correctly.  Root cause: the ROM's ap_poll_mailbox_c clears the mailbox flag
+(incoming_item_flag) AND increments debug_item_counter in the same frame when
+it processes a mailbox item.
+
+On the Python client's next watcher tick, the reconciliation path detects
+
+om_received_count > _delivered_item_index (counter already advanced), enters
+the fast-forward branch, and sets _delivery_pending = False.  The subsequent
+if self._delivery_pending: block is now False, so _emit_receive_notification
+is never called.
+
+### Solution
+Capture _ff_was_pending = self._delivery_pending and
+_ff_pending_item_index = self._delivery_pending_item_index **before** clearing
+delivery state in the fast-forward branch.  After advancing the cursor and clearing
+state, if _ff_was_pending and flag == 0, treat this counter-advance as the ACK
+signal and call _emit_receive_notification with the pending index.
+
+The flag != 0 guard ensures we do not falsely notify on abnormal states where
+the counter advanced but the flag is still set (save-state interference).
+
+Also added the missing self._hook_heartbeat_stale_ticks = 0 reset to the
+fast-forward path, which was present in the normal ACK path but absent here.
+
+### Affected files
+- worlds/kirbyam/client.py: fast-forward elif branch in _deliver_items()
+- worlds/kirbyam/PROTOCOL.md: updated receive-specific contract clause
+- worlds/kirbyam/docs/BIZHAWK_TESTING_GUIDE.md: added Issue #269 test scenario
+
+### Validation
+- Added test_receive_notification_emits_via_counter_advance_ack — counter advance
+  + flag==0 + delivery pending → notification emitted.
+- Added test_receive_notification_not_emitted_on_fast_forward_stale_flag — counter
+  advance + flag==1 (abnormal) + delivery pending → no notification.
+- Existing test test_receive_notification_not_emitted_on_fast_forward_only still
+  covers the reconnect fast-forward (no pending delivery) case.
+- Full suite: 266 passed.
+
 ## Issue #73: Receive Notifications (Exactly-Once Per Delivered Item)
 
 ### Problem
@@ -1314,7 +1356,7 @@ Implemented a dedicated vitality chest location family and transport signal path
   boss and major chest checks.
 
 AP-delivered vitality items now apply native persistent vitality semantics in payload:
-- `VITALITY_COUNTER_1..4` (`BASE+18..BASE+21`) increment `gTreasures.unk20` at `0x02038980`.
+- `VITALITY_COUNTER_1..4` (`BASE+18..BASE+21`) increment `gTreasures.vitalityField` at `0x02038980`.
 - Active Kirby HP and max HP are synced immediately from the updated vitality total.
 
 ### Validation
@@ -1331,14 +1373,14 @@ AP item ownership semantics when the chest is modeled as an AP location.
 Added a dedicated Sound Player chest AP location family and transport signal path:
 - Added `sound_player_chest_flags` at `0x0202C030` in the mailbox transport block.
 - Added payload hook target `ap_on_collect_sound_player_chest` and patched the native
-  `sub_08019E68` callsite (`0x0000B264`) to intercept Sound Player chest reward index `0`.
+  `CollectMusicPlayerOrSheet` callsite (`0x0000B264`) to intercept Sound Player chest reward index `0`.
 - Hook behavior:
   - reward index `0`: set AP transport bit 0 and suppress native immediate unlock.
   - non-zero reward indices on this native path: preserve vanilla behavior via tail-call
-    to native `sub_08019E68`.
+    to native `CollectMusicPlayerOrSheet`.
 - Added AP location `SOUND_PLAYER_CHEST` (`3960304`, bit 0) and AP item `SOUND_PLAYER`
   (`3860025`).
-- AP-delivered `SOUND_PLAYER` now applies native unlock by invoking `sub_08019E68(0)`.
+- AP-delivered `SOUND_PLAYER` now applies native unlock by invoking `CollectMusicPlayerOrSheet(0)`.
 
 ### Validation
 - Added/updated tests for Sound Player data sanity, client polling, payload hook/apply

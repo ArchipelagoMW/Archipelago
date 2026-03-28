@@ -222,7 +222,10 @@ Expected behavior:
 
 Issue #73 receive-focused checks:
 - Skipped malformed items should not produce receive notification text.
-- Cursor fast-forward/rewind reconciliation should not replay old receive notifications.
+- Cursor fast-forward/rewind reconciliation without a pending delivery should not replay old receive notifications.
+- Issue #269 ACK path: if the ROM clears the flag and increments the counter in the same frame (common hardware
+  case), a receive notification should still appear exactly once.  Verify by watching the BizHawk OSD while an
+  item is delivered — the notification must appear even though the flag is already 0 when the client next polls.
 - New ACK-completed deliveries after reconnect should still notify exactly once.
 
 Issue #74 send-focused checks:

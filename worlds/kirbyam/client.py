@@ -1215,6 +1215,9 @@ class KirbyAmClient(BizHawkClient):
                 self._delivery_payload_stall_warned = False
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
             elif rom_received_count > self._delivered_item_index and rom_received_count <= len(ctx.items_received):
+                # Capture pending state before clearing — this counter advance may be the ACK signal.
+                _ff_was_pending = self._delivery_pending
+                _ff_pending_item_index = self._delivery_pending_item_index
                 logger.info(
                     "KirbyAM: ROM item counter advanced from %s to %s; fast-forwarding delivery cursor",
                     self._delivered_item_index,
@@ -1228,6 +1231,7 @@ class KirbyAmClient(BizHawkClient):
                 self._delivery_timeout_streak = 0
                 self._delivery_retry_not_before = 0.0
                 self._delivery_payload_stall_warned = False
+                self._hook_heartbeat_stale_ticks = 0
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
                 if flag != 0:
                     logger.warning(
@@ -1237,6 +1241,16 @@ class KirbyAmClient(BizHawkClient):
                     await bizhawk.write(ctx.bizhawk_ctx, [
                         (flag_addr, (0).to_bytes(4, "little"), "System Bus"),
                     ])
+                # When the ROM counter advances while a delivery was pending and flag == 0,
+                # this IS the ACK: the ROM processed our mailbox item and incremented the
+                # counter in the same frame as clearing the flag.  Emit the receive
+                # notification here so it is not silently dropped by the fast-forward path
+                # taking precedence over the 'if self._delivery_pending' block below.
+                if _ff_was_pending and flag == 0:
+                    _notify_index = _ff_pending_item_index
+                    if _notify_index is None:
+                        _notify_index = self._delivered_item_index - 1
+                    await self._emit_receive_notification(ctx, _notify_index)
 
         # If an item is pending, wait for ROM to clear the flag (ACK)
         if self._delivery_pending:

@@ -1131,6 +1131,70 @@ async def test_receive_notification_not_emitted_on_fast_forward_only(mock_bizhaw
     mock_display.assert_not_awaited()
 
 
+@pytest.mark.asyncio
+async def test_receive_notification_emits_via_counter_advance_ack(mock_bizhawk_context):
+    # Realistic ACK path: ROM clears flag AND advances counter in the same frame.
+    # The fast-forward branch runs before the delivery_pending check, so without the
+    # fix the notification was silently dropped.  Captures _ff_was_pending before
+    # clearing and emits notification when _ff_was_pending and flag == 0.
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [Mock(item=3860001, player=2)]
+    mock_bizhawk_context.player_names = {2: 'PlayerTwo'}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = 'Mirror Shard'
+
+    client._delivery_pending = True
+    client._delivery_pending_item_index = 0
+    client._delivered_item_index = 0
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        # flag == 0 (cleared by ROM), counter == 1 (incremented by ROM - ACK signal)
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),   # incoming_item_flag = 0
+            (1).to_bytes(4, 'little'),   # debug_item_counter = 1
+        ]
+        await client._deliver_items(mock_bizhawk_context)
+
+    mock_display.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        'Mirror Shard received from PlayerTwo',
+    )
+
+
+@pytest.mark.asyncio
+async def test_receive_notification_not_emitted_on_fast_forward_stale_flag(mock_bizhawk_context):
+    # Abnormal fast-forward: counter advanced but flag is still set (save-state
+    # interference).  Client clears the stale flag but must not emit a notification
+    # because the normal flag-clear ACK was not observed.
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.items_received = [Mock(item=3860001, player=2)]
+    mock_bizhawk_context.player_names = {2: 'PlayerTwo'}
+    mock_bizhawk_context.item_names = Mock()
+    mock_bizhawk_context.item_names.lookup_in_slot.return_value = 'Mirror Shard'
+
+    client._delivery_pending = True
+    client._delivery_pending_item_index = 0
+    client._delivered_item_index = 0
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock) as mock_display:
+        # flag = 1 (stale, not cleared), counter = 1 (advanced - abnormal state)
+        mock_read.return_value = [
+            (1).to_bytes(4, 'little'),   # incoming_item_flag = 1 (stale)
+            (1).to_bytes(4, 'little'),   # debug_item_counter = 1
+        ]
+        await client._deliver_items(mock_bizhawk_context)
+
+    mock_display.assert_not_awaited()
+
+
 def test_send_notification_dedupes_outgoing_printjson_events(mock_bizhawk_context):
     """Outgoing ItemSend PrintJSON should notify once and dedupe reconnect echoes."""
     client = KirbyAmClient()
