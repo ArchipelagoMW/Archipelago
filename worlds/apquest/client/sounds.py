@@ -85,7 +85,7 @@ class SoundManager:
 
     def ensure_config(self) -> None:
         Config.adddefaultsection("APQuest")
-        Config.setdefault("APQuest", "volume", 50)
+        Config.setdefault("APQuest", "volume", 30)
         self.set_volume_percentage(Config.getint("APQuest", "volume"))
 
     async def sound_manager_loop(self) -> None:
