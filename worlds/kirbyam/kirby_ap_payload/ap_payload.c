@@ -232,16 +232,20 @@ static uint32_t ap_get_active_kirby_addr(void) {
 
 static void ap_grant_small_food(void) {
     uint32_t kirby_addr = ap_get_active_kirby_addr();
-    uint8_t hp = *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
-    uint8_t max_hp = *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
+    int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
+    int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
+
+    if (hp <= 0) {
+        return;
+    }
 
     if (hp > max_hp) {
-        *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = max_hp;
+        *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = max_hp;
         return;
     }
 
     if (hp < max_hp) {
-        *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = (uint8_t)(hp + 1u);
+        *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = (int8_t)(hp + 1);
     }
 }
 
@@ -256,9 +260,14 @@ static void ap_grant_battery(void) {
 
 static void ap_grant_max_tomato(void) {
     uint32_t kirby_addr = ap_get_active_kirby_addr();
-    uint8_t max_hp = *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
+    int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
+    int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
 
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = max_hp;
+    if (hp <= 0) {
+        return;
+    }
+
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = max_hp;
 }
 
 static void ap_grant_invincibility_candy(void) {
