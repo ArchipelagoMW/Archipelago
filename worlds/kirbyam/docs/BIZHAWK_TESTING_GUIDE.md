@@ -382,9 +382,9 @@ Validate that each shipped filler item can be received and applied safely.
    - mailbox ACK completes normally
    - `debug_last_item_id` matches the delivered filler
    - `1 Up`: Kirby's life count increases by 1 and saturates safely instead of overflowing at high values
-   - `Small Food`: active Kirby HP increases by 1 when below max HP and does not exceed max HP
+   - `Small Food`: when Kirby is alive (HP > 0), active Kirby HP increases by 1 when below max HP and does not exceed max HP; when Kirby is dead (HP <= 0), the item has no effect
    - `Cell Phone Battery`: active Kirby battery increases by 1 when below 3 and does not exceed 3
-   - `Max Tomato`: active Kirby HP becomes exactly max HP
+   - `Max Tomato`: when Kirby is alive (HP > 0), active Kirby HP becomes exactly max HP; when Kirby is dead (HP <= 0), the item has no effect
    - `Invincibility Candy`: native invincibility behavior starts, including the normal timer/music path
 4. Repeat one filler delivery after an AP reconnect and confirm the same ACK path still succeeds.
 5. Confirm shard delivery behavior is unchanged after the filler smoke passes.

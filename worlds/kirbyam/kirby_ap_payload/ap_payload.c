@@ -238,6 +238,7 @@ static void ap_grant_small_food(void) {
     int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
     int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
 
+    // Preserve dead/invalid negative HP states; mailbox healing items should not revive Kirby.
     if (hp <= 0) {
         return;
     }
@@ -266,6 +267,7 @@ static void ap_grant_max_tomato(void) {
     int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
     int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
 
+    // Preserve dead/invalid negative HP states; mailbox healing items should not revive Kirby.
     if (hp <= 0) {
         return;
     }
