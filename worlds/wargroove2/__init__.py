@@ -75,22 +75,22 @@ class Wargroove2World(World):
     web = Wargroove2Web()
     level_list: typing.List[Wargroove2Level]
     final_levels: typing.List[Wargroove2Level]
-    random_barracks_cost_values: typing.List[int]
-    random_tower_cost_values: typing.List[int]
-    random_hideout_cost_values: typing.List[int]
-    random_port_cost_values: typing.List[int]
-    ai_random_barracks_cost_values: typing.List[int]
-    ai_random_tower_cost_values: typing.List[int]
-    ai_random_hideout_cost_values: typing.List[int]
-    ai_random_port_cost_values: typing.List[int]
-    player_barracks_costs: typing.Dict[int, float]
-    player_tower_costs: typing.Dict[int, float]
-    player_hideout_costs: typing.Dict[int, float]
-    player_port_costs: typing.Dict[int, float]
-    ai_barracks_costs: typing.Dict[int, float]
-    ai_tower_costs: typing.Dict[int, float]
-    ai_hideout_costs: typing.Dict[int, float]
-    ai_port_costs: typing.Dict[int, float]
+    random_barracks_cost_values: typing.List[int] = []
+    random_tower_cost_values: typing.List[int] = []
+    random_hideout_cost_values: typing.List[int] = []
+    random_port_cost_values: typing.List[int] = []
+    ai_random_barracks_cost_values: typing.List[int] = []
+    ai_random_tower_cost_values: typing.List[int] = []
+    ai_random_hideout_cost_values: typing.List[int] = []
+    ai_random_port_cost_values: typing.List[int] = []
+    player_barracks_costs: typing.Dict[int, float] = {}
+    player_tower_costs: typing.Dict[int, float] = {}
+    player_hideout_costs: typing.Dict[int, float] = {}
+    player_port_costs: typing.Dict[int, float] = {}
+    ai_barracks_costs: typing.Dict[int, float] = {}
+    ai_tower_costs: typing.Dict[int, float] = {}
+    ai_hideout_costs: typing.Dict[int, float] = {}
+    ai_port_costs: typing.Dict[int, float] = {}
     fill_slot_data_event: threading.Event = threading.Event()
     stage_assert_generate_called: bool = False
     filler_item_counter: int = 0
