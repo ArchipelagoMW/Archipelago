@@ -412,8 +412,10 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         def component_action(button):
             open_text = "Opening in a new window..."
             if button.component.func:
+                # Note: if we want to draw the Snackbar before running func, func needs to be wrapped in schedule_once
                 button.component.func()
             else:
+                # if launch returns False, it started the process in background (not in a new terminal)
                 if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
                     open_text = "Running in the background..."
 
