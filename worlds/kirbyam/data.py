@@ -481,6 +481,7 @@ def _init() -> None:
     # Auto-claim generated room-sanity locations by their parent region.
     # This keeps data integrity checks complete while runtime region creation can
     # still option-gate these locations off.
+    room_sanity_parent_regions: set[str] = set()
     for loc_key, loc in data.locations.items():
         if loc.category != LocationCategory.ROOM_SANITY:
             continue
@@ -493,9 +494,10 @@ def _init() -> None:
             )
         parent_region.locations.append(loc_key)
         claimed_locations.add(loc_key)
+        room_sanity_parent_regions.add(loc.parent_region)
 
-    for region in data.regions.values():
-        region.locations.sort()
+    for region_name in room_sanity_parent_regions:
+        data.regions[region_name].locations.sort()
 
     # Optional warp_map.json (if you want the Emerald-style "warp -> destination warp" helper)
     warp_map_json = _maybe_load_json_data("warp_map.json")
