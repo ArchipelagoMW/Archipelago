@@ -345,6 +345,9 @@ def persistent_load() -> Dict[str, Dict[str, Any]]:
         try:
             with open(path, "r") as f:
                 storage = unsafe_parse_yaml(f.read())
+            if "datapackage" in storage:
+                del storage["datapackage"]
+                logging.debug("Removed old datapackage from persistent storage")
         except Exception as e:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
@@ -368,11 +371,6 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
                     return json.load(f)
             except Exception as e:
                 logging.debug(f"Could not load data package: {e}")
-
-    # fall back to old cache
-    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
-    if cache.get("checksum") == checksum:
-        return cache
 
     # cache does not match
     return {}
