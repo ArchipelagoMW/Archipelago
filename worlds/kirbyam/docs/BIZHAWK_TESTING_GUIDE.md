@@ -63,6 +63,7 @@ pytest worlds/kirbyam/test -q
 | `KirbyAM: gameplay-active state restored; resuming normal watcher flow` | Returned to gameplay-active state. |
 | `KirbyAM: resending major-chest LocationChecks missing on server (missing=..., acked=...)` | Big-chest area bits found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: resending boss-defeat LocationChecks missing on server (missing=..., acked=...)` | Boss-defeat bits found in RAM but not yet acknowledged by server; resending. |
+| `KirbyAM: resending room-sanity LocationChecks missing on server (missing=..., acked=...)` | Room-visit (`gVisitedDoors`) checks found in RAM but not yet acknowledged by server; resending. |
 | `KirbyAM: Delivering mailbox item index N (<item_name> from <sender_name>)` | Beginning delivery of the Nth received item with readable item/sender context. |
 | `KirbyAM: Mailbox delivery confirmed at item index N` | ROM cleared the flag; delivery confirmed. |
 | `KirbyAM: ROM delivery counter moved backward from X to Y; rewinding client delivery cursor` | ROM reported fewer items received than expected; cursor rewound. |
@@ -92,6 +93,7 @@ Enable debug logging in your AP client to see these:
 - `KirbyAM: dedupe suppressed boss-defeat LocationChecks (...)` — boss-defeat checks already acknowledged (per-tick spam suppressed at info level).
 - `dedupe suppressed major-chest LocationChecks` — major-chest checks already acknowledged (per-tick spam suppressed at info level).
 - `dedupe suppressed vitality-chest LocationChecks` — vitality-chest checks already acknowledged (per-tick spam suppressed at info level).
+- `dedupe suppressed room-sanity LocationChecks` — room-visit checks already acknowledged (per-tick spam suppressed at info level).
 - `KirbyAM: boss candidate probe rising bits: ...` — rising-edge transitions detected in the boss mirror table probe. Useful during boss fights for address mapping.
 - `KirbyAM: unsafe-delivery candidate probe: X changed Y -> Z` — miniboss counter candidate changed. Research-only probe (Issue #223).
 
@@ -203,6 +205,25 @@ perform immediate native unlock.
 
 Expected current mapping:
 - `bit 0` -> `SOUND_PLAYER_CHEST`
+
+## Room Sanity Checks (Issue #480)
+
+Validate that native room-visit flags in `gVisitedDoors` drive `Room X-YY` AP checks when the `room_sanity` option is enabled.
+
+1. Generate a seed with `room_sanity: true` and connect AP + BizHawk with KirbyAM client logs visible.
+2. Open BizHawk Memory Viewer and watch `0x02028CA0` as `u16[0x120]` (`gVisitedDoors`).
+3. Enter a not-yet-visited room that corresponds to a Room Sanity location.
+4. Confirm that the room's `doorsIdx` entry in `gVisitedDoors` has bit `15` set (`value & 0x8000 != 0`).
+5. Confirm client emits `LocationChecks` for the mapped room-sanity location and logs resend only when the server has not yet acknowledged it:
+   - `KirbyAM: resending room-sanity LocationChecks missing on server (...)`
+6. Reconnect AP client and verify already acknowledged room-sanity checks are deduped (no replay spam).
+7. Save/reload or room transition and confirm visited-state bit remains set.
+
+Expected current mapping contract:
+- Location key `ROOM_SANITY_X_YY` corresponds to AP label `Room X-YY`.
+- `bit_index` stores native `doorsIdx`.
+- Polling rule: `gVisitedDoors[doorsIdx] & 0x8000` => location considered checked.
+- Scope: 257 eligible NORMAL/BIG rooms (special STAR/UNKNOWN rooms are excluded).
 
 ## Notification Pipeline Check (Issue #83)
 

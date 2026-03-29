@@ -68,5 +68,6 @@
   "goal": 0,
   "randomize_boss_spawned_ability_grants": true,
   "randomize_miniboss_ability_grants": false,
+  "room_sanity": false,
   "shards": 2
 }

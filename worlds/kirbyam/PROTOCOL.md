@@ -52,6 +52,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. This now reflects native map ownership only; AP major-chest checks use `major_chest_flags` in the transport block. |
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
+| 0x02028CA0 | 0x240B | gVisitedDoors (`room_visit_flags_native`) | Native room-visit array (`u16[0x120]`); bit 15 marks visited state by `doorsIdx` |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
 | 0x0203AD10 | 4B | DEMO_PLAYBACK_FLAGS     | Native title-demo discriminator (`demo_playback_flags_native`; bit `0x10` indicates title-screen demo playback) |
 | 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
@@ -106,6 +107,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_RADISH_RUINS | 3960302 | Radish Ruins 8-4 vitality big chest (transport vitality bit 2) |
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
+| ROOM_SANITY_1_01 .. ROOM_SANITY_9_27 | 3961000+ | Room visit checks (`Room X-YY`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15 |
 | *Reserved*    | 3960305+ | Future location families |
 
 ## Client Protocol
@@ -124,6 +126,7 @@ Server → Client: ConnectionRefused | Connected
 - `enemy_copy_ability_randomization` (int): enemy copy-ability mode (`0=vanilla`, `1=shuffled`, `2=completely_random`).
 - `randomize_boss_spawned_ability_grants` (bool): include/exclude ability-granting boss-spawned objects.
 - `randomize_miniboss_ability_grants` (bool): include/exclude mini-boss ability grants.
+- `room_sanity` (bool): enables/disables room-visit locations (`Room X-YY`, 257 checks).
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
 - `debug` (dict): debug settings payload.
@@ -218,6 +221,12 @@ for bit in mapped_sound_player_chest_bits:
     if (sound_player_bits >> bit) & 1:
         mapped_checked.add(sound_player_chest_location_id_for_bit(bit))
 
+# Room sanity checks (native gVisitedDoors)
+room_visits = RAM[0x02028CA0 : 0x02028CA0 + 0x240] as u16[0x120]
+for doors_idx in mapped_room_sanity_doors_indices:
+    if room_visits[doors_idx] & 0x8000:
+        mapped_checked.add(room_sanity_location_id_for_doors_idx(doors_idx))
+
 # Level-based, reconnect-safe resend:
 # Send only checks that RAM reports as collected but the server has not acknowledged.
 # This means checks are re-sent on reconnect until the server reflects them back,
@@ -233,7 +242,7 @@ Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progress
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
-- Boss-defeat, major-chest, vitality-chest, and sound-player-chest polling follow the same resend/dedupe diagnostic contract.
+- Boss-defeat, major-chest, vitality-chest, sound-player-chest, and room-sanity polling follow the same resend/dedupe diagnostic contract.
 - Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
 
 ### 3. Item Delivery (Mailbox Protocol)

@@ -1,0 +1,2572 @@
+{
+  "ROOM_SANITY_1_01": {
+    "label": "Room 1-01",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 0,
+    "category": "ROOM_SANITY",
+    "location_id": 3961000
+  },
+  "ROOM_SANITY_1_02": {
+    "label": "Room 1-02",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 10,
+    "category": "ROOM_SANITY",
+    "location_id": 3961001
+  },
+  "ROOM_SANITY_1_03": {
+    "label": "Room 1-03",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 11,
+    "category": "ROOM_SANITY",
+    "location_id": 3961002
+  },
+  "ROOM_SANITY_1_04": {
+    "label": "Room 1-04",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 12,
+    "category": "ROOM_SANITY",
+    "location_id": 3961003
+  },
+  "ROOM_SANITY_1_05": {
+    "label": "Room 1-05",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 13,
+    "category": "ROOM_SANITY",
+    "location_id": 3961004
+  },
+  "ROOM_SANITY_1_06": {
+    "label": "Room 1-06",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 14,
+    "category": "ROOM_SANITY",
+    "location_id": 3961005
+  },
+  "ROOM_SANITY_1_07": {
+    "label": "Room 1-07",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 15,
+    "category": "ROOM_SANITY",
+    "location_id": 3961006
+  },
+  "ROOM_SANITY_1_08": {
+    "label": "Room 1-08",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 16,
+    "category": "ROOM_SANITY",
+    "location_id": 3961007
+  },
+  "ROOM_SANITY_1_09": {
+    "label": "Room 1-09",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 17,
+    "category": "ROOM_SANITY",
+    "location_id": 3961008
+  },
+  "ROOM_SANITY_1_10": {
+    "label": "Room 1-10",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 18,
+    "category": "ROOM_SANITY",
+    "location_id": 3961009
+  },
+  "ROOM_SANITY_1_11": {
+    "label": "Room 1-11",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 19,
+    "category": "ROOM_SANITY",
+    "location_id": 3961010
+  },
+  "ROOM_SANITY_1_12": {
+    "label": "Room 1-12",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 20,
+    "category": "ROOM_SANITY",
+    "location_id": 3961011
+  },
+  "ROOM_SANITY_1_13": {
+    "label": "Room 1-13",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 21,
+    "category": "ROOM_SANITY",
+    "location_id": 3961012
+  },
+  "ROOM_SANITY_1_14": {
+    "label": "Room 1-14",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 22,
+    "category": "ROOM_SANITY",
+    "location_id": 3961013
+  },
+  "ROOM_SANITY_1_15": {
+    "label": "Room 1-15",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 23,
+    "category": "ROOM_SANITY",
+    "location_id": 3961014
+  },
+  "ROOM_SANITY_1_16": {
+    "label": "Room 1-16",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 24,
+    "category": "ROOM_SANITY",
+    "location_id": 3961015
+  },
+  "ROOM_SANITY_1_17": {
+    "label": "Room 1-17",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 25,
+    "category": "ROOM_SANITY",
+    "location_id": 3961016
+  },
+  "ROOM_SANITY_1_18": {
+    "label": "Room 1-18",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 26,
+    "category": "ROOM_SANITY",
+    "location_id": 3961017
+  },
+  "ROOM_SANITY_1_19": {
+    "label": "Room 1-19",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 27,
+    "category": "ROOM_SANITY",
+    "location_id": 3961018
+  },
+  "ROOM_SANITY_1_20": {
+    "label": "Room 1-20",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 28,
+    "category": "ROOM_SANITY",
+    "location_id": 3961019
+  },
+  "ROOM_SANITY_1_21": {
+    "label": "Room 1-21",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 29,
+    "category": "ROOM_SANITY",
+    "location_id": 3961020
+  },
+  "ROOM_SANITY_1_22": {
+    "label": "Room 1-22",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 31,
+    "category": "ROOM_SANITY",
+    "location_id": 3961021
+  },
+  "ROOM_SANITY_1_23": {
+    "label": "Room 1-23",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 32,
+    "category": "ROOM_SANITY",
+    "location_id": 3961022
+  },
+  "ROOM_SANITY_1_24": {
+    "label": "Room 1-24",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 33,
+    "category": "ROOM_SANITY",
+    "location_id": 3961023
+  },
+  "ROOM_SANITY_1_25": {
+    "label": "Room 1-25",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 34,
+    "category": "ROOM_SANITY",
+    "location_id": 3961024
+  },
+  "ROOM_SANITY_1_26": {
+    "label": "Room 1-26",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 35,
+    "category": "ROOM_SANITY",
+    "location_id": 3961025
+  },
+  "ROOM_SANITY_1_27": {
+    "label": "Room 1-27",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 36,
+    "category": "ROOM_SANITY",
+    "location_id": 3961026
+  },
+  "ROOM_SANITY_1_28": {
+    "label": "Room 1-28",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 37,
+    "category": "ROOM_SANITY",
+    "location_id": 3961027
+  },
+  "ROOM_SANITY_1_29": {
+    "label": "Room 1-29",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 38,
+    "category": "ROOM_SANITY",
+    "location_id": 3961028
+  },
+  "ROOM_SANITY_1_30": {
+    "label": "Room 1-30",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 39,
+    "category": "ROOM_SANITY",
+    "location_id": 3961029
+  },
+  "ROOM_SANITY_1_31": {
+    "label": "Room 1-31",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 40,
+    "category": "ROOM_SANITY",
+    "location_id": 3961030
+  },
+  "ROOM_SANITY_1_32": {
+    "label": "Room 1-32",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 41,
+    "category": "ROOM_SANITY",
+    "location_id": 3961031
+  },
+  "ROOM_SANITY_1_33": {
+    "label": "Room 1-33",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 42,
+    "category": "ROOM_SANITY",
+    "location_id": 3961032
+  },
+  "ROOM_SANITY_1_34": {
+    "label": "Room 1-34",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 43,
+    "category": "ROOM_SANITY",
+    "location_id": 3961033
+  },
+  "ROOM_SANITY_1_35": {
+    "label": "Room 1-35",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 44,
+    "category": "ROOM_SANITY",
+    "location_id": 3961034
+  },
+  "ROOM_SANITY_1_36": {
+    "label": "Room 1-36",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 45,
+    "category": "ROOM_SANITY",
+    "location_id": 3961035
+  },
+  "ROOM_SANITY_1_37": {
+    "label": "Room 1-37",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 46,
+    "category": "ROOM_SANITY",
+    "location_id": 3961036
+  },
+  "ROOM_SANITY_1_38": {
+    "label": "Room 1-38",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 47,
+    "category": "ROOM_SANITY",
+    "location_id": 3961037
+  },
+  "ROOM_SANITY_1_39": {
+    "label": "Room 1-39",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 48,
+    "category": "ROOM_SANITY",
+    "location_id": 3961038
+  },
+  "ROOM_SANITY_1_40": {
+    "label": "Room 1-40",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 49,
+    "category": "ROOM_SANITY",
+    "location_id": 3961039
+  },
+  "ROOM_SANITY_1_41": {
+    "label": "Room 1-41",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 50,
+    "category": "ROOM_SANITY",
+    "location_id": 3961040
+  },
+  "ROOM_SANITY_1_42": {
+    "label": "Room 1-42",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 51,
+    "category": "ROOM_SANITY",
+    "location_id": 3961041
+  },
+  "ROOM_SANITY_1_43": {
+    "label": "Room 1-43",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 52,
+    "category": "ROOM_SANITY",
+    "location_id": 3961042
+  },
+  "ROOM_SANITY_1_44": {
+    "label": "Room 1-44",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 53,
+    "category": "ROOM_SANITY",
+    "location_id": 3961043
+  },
+  "ROOM_SANITY_1_45": {
+    "label": "Room 1-45",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 54,
+    "category": "ROOM_SANITY",
+    "location_id": 3961044
+  },
+  "ROOM_SANITY_1_46": {
+    "label": "Room 1-46",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 55,
+    "category": "ROOM_SANITY",
+    "location_id": 3961045
+  },
+  "ROOM_SANITY_1_47": {
+    "label": "Room 1-47",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 56,
+    "category": "ROOM_SANITY",
+    "location_id": 3961046
+  },
+  "ROOM_SANITY_1_48": {
+    "label": "Room 1-48",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 57,
+    "category": "ROOM_SANITY",
+    "location_id": 3961047
+  },
+  "ROOM_SANITY_1_49": {
+    "label": "Room 1-49",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 58,
+    "category": "ROOM_SANITY",
+    "location_id": 3961048
+  },
+  "ROOM_SANITY_1_50": {
+    "label": "Room 1-50",
+    "parent_region": "REGION_RAINBOW_ROUTE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 59,
+    "category": "ROOM_SANITY",
+    "location_id": 3961049
+  },
+  "ROOM_SANITY_2_01": {
+    "label": "Room 2-01",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 8,
+    "category": "ROOM_SANITY",
+    "location_id": 3961050
+  },
+  "ROOM_SANITY_2_02": {
+    "label": "Room 2-02",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 60,
+    "category": "ROOM_SANITY",
+    "location_id": 3961051
+  },
+  "ROOM_SANITY_2_03": {
+    "label": "Room 2-03",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 61,
+    "category": "ROOM_SANITY",
+    "location_id": 3961052
+  },
+  "ROOM_SANITY_2_04": {
+    "label": "Room 2-04",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 62,
+    "category": "ROOM_SANITY",
+    "location_id": 3961053
+  },
+  "ROOM_SANITY_2_05": {
+    "label": "Room 2-05",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 63,
+    "category": "ROOM_SANITY",
+    "location_id": 3961054
+  },
+  "ROOM_SANITY_2_06": {
+    "label": "Room 2-06",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 64,
+    "category": "ROOM_SANITY",
+    "location_id": 3961055
+  },
+  "ROOM_SANITY_2_07": {
+    "label": "Room 2-07",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 65,
+    "category": "ROOM_SANITY",
+    "location_id": 3961056
+  },
+  "ROOM_SANITY_2_08": {
+    "label": "Room 2-08",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 66,
+    "category": "ROOM_SANITY",
+    "location_id": 3961057
+  },
+  "ROOM_SANITY_2_09": {
+    "label": "Room 2-09",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 67,
+    "category": "ROOM_SANITY",
+    "location_id": 3961058
+  },
+  "ROOM_SANITY_2_10": {
+    "label": "Room 2-10",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 68,
+    "category": "ROOM_SANITY",
+    "location_id": 3961059
+  },
+  "ROOM_SANITY_2_11": {
+    "label": "Room 2-11",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 70,
+    "category": "ROOM_SANITY",
+    "location_id": 3961060
+  },
+  "ROOM_SANITY_2_12": {
+    "label": "Room 2-12",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 71,
+    "category": "ROOM_SANITY",
+    "location_id": 3961061
+  },
+  "ROOM_SANITY_2_13": {
+    "label": "Room 2-13",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 72,
+    "category": "ROOM_SANITY",
+    "location_id": 3961062
+  },
+  "ROOM_SANITY_2_14": {
+    "label": "Room 2-14",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 73,
+    "category": "ROOM_SANITY",
+    "location_id": 3961063
+  },
+  "ROOM_SANITY_2_15": {
+    "label": "Room 2-15",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 74,
+    "category": "ROOM_SANITY",
+    "location_id": 3961064
+  },
+  "ROOM_SANITY_2_16": {
+    "label": "Room 2-16",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 75,
+    "category": "ROOM_SANITY",
+    "location_id": 3961065
+  },
+  "ROOM_SANITY_2_17": {
+    "label": "Room 2-17",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 76,
+    "category": "ROOM_SANITY",
+    "location_id": 3961066
+  },
+  "ROOM_SANITY_2_18": {
+    "label": "Room 2-18",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 77,
+    "category": "ROOM_SANITY",
+    "location_id": 3961067
+  },
+  "ROOM_SANITY_2_19": {
+    "label": "Room 2-19",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 78,
+    "category": "ROOM_SANITY",
+    "location_id": 3961068
+  },
+  "ROOM_SANITY_2_20": {
+    "label": "Room 2-20",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 79,
+    "category": "ROOM_SANITY",
+    "location_id": 3961069
+  },
+  "ROOM_SANITY_2_21": {
+    "label": "Room 2-21",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 80,
+    "category": "ROOM_SANITY",
+    "location_id": 3961070
+  },
+  "ROOM_SANITY_2_22": {
+    "label": "Room 2-22",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 81,
+    "category": "ROOM_SANITY",
+    "location_id": 3961071
+  },
+  "ROOM_SANITY_2_23": {
+    "label": "Room 2-23",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 82,
+    "category": "ROOM_SANITY",
+    "location_id": 3961072
+  },
+  "ROOM_SANITY_2_24": {
+    "label": "Room 2-24",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 83,
+    "category": "ROOM_SANITY",
+    "location_id": 3961073
+  },
+  "ROOM_SANITY_2_25": {
+    "label": "Room 2-25",
+    "parent_region": "REGION_MOONLIGHT_MANSION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 84,
+    "category": "ROOM_SANITY",
+    "location_id": 3961074
+  },
+  "ROOM_SANITY_3_01": {
+    "label": "Room 3-01",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 170,
+    "category": "ROOM_SANITY",
+    "location_id": 3961075
+  },
+  "ROOM_SANITY_3_02": {
+    "label": "Room 3-02",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 171,
+    "category": "ROOM_SANITY",
+    "location_id": 3961076
+  },
+  "ROOM_SANITY_3_03": {
+    "label": "Room 3-03",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 172,
+    "category": "ROOM_SANITY",
+    "location_id": 3961077
+  },
+  "ROOM_SANITY_3_04": {
+    "label": "Room 3-04",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 173,
+    "category": "ROOM_SANITY",
+    "location_id": 3961078
+  },
+  "ROOM_SANITY_3_05": {
+    "label": "Room 3-05",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 174,
+    "category": "ROOM_SANITY",
+    "location_id": 3961079
+  },
+  "ROOM_SANITY_3_06": {
+    "label": "Room 3-06",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 175,
+    "category": "ROOM_SANITY",
+    "location_id": 3961080
+  },
+  "ROOM_SANITY_3_07": {
+    "label": "Room 3-07",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 176,
+    "category": "ROOM_SANITY",
+    "location_id": 3961081
+  },
+  "ROOM_SANITY_3_08": {
+    "label": "Room 3-08",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 177,
+    "category": "ROOM_SANITY",
+    "location_id": 3961082
+  },
+  "ROOM_SANITY_3_09": {
+    "label": "Room 3-09",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 178,
+    "category": "ROOM_SANITY",
+    "location_id": 3961083
+  },
+  "ROOM_SANITY_3_10": {
+    "label": "Room 3-10",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 179,
+    "category": "ROOM_SANITY",
+    "location_id": 3961084
+  },
+  "ROOM_SANITY_3_11": {
+    "label": "Room 3-11",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 180,
+    "category": "ROOM_SANITY",
+    "location_id": 3961085
+  },
+  "ROOM_SANITY_3_12": {
+    "label": "Room 3-12",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 181,
+    "category": "ROOM_SANITY",
+    "location_id": 3961086
+  },
+  "ROOM_SANITY_3_13": {
+    "label": "Room 3-13",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 182,
+    "category": "ROOM_SANITY",
+    "location_id": 3961087
+  },
+  "ROOM_SANITY_3_14": {
+    "label": "Room 3-14",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 183,
+    "category": "ROOM_SANITY",
+    "location_id": 3961088
+  },
+  "ROOM_SANITY_3_15": {
+    "label": "Room 3-15",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 184,
+    "category": "ROOM_SANITY",
+    "location_id": 3961089
+  },
+  "ROOM_SANITY_3_16": {
+    "label": "Room 3-16",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 185,
+    "category": "ROOM_SANITY",
+    "location_id": 3961090
+  },
+  "ROOM_SANITY_3_17": {
+    "label": "Room 3-17",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 186,
+    "category": "ROOM_SANITY",
+    "location_id": 3961091
+  },
+  "ROOM_SANITY_3_18": {
+    "label": "Room 3-18",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 187,
+    "category": "ROOM_SANITY",
+    "location_id": 3961092
+  },
+  "ROOM_SANITY_3_19": {
+    "label": "Room 3-19",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 188,
+    "category": "ROOM_SANITY",
+    "location_id": 3961093
+  },
+  "ROOM_SANITY_3_20": {
+    "label": "Room 3-20",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 189,
+    "category": "ROOM_SANITY",
+    "location_id": 3961094
+  },
+  "ROOM_SANITY_3_21": {
+    "label": "Room 3-21",
+    "parent_region": "REGION_CABBAGE_CAVERN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 219,
+    "category": "ROOM_SANITY",
+    "location_id": 3961095
+  },
+  "ROOM_SANITY_4_01": {
+    "label": "Room 4-01",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 117,
+    "category": "ROOM_SANITY",
+    "location_id": 3961096
+  },
+  "ROOM_SANITY_4_02": {
+    "label": "Room 4-02",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 118,
+    "category": "ROOM_SANITY",
+    "location_id": 3961097
+  },
+  "ROOM_SANITY_4_03": {
+    "label": "Room 4-03",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 119,
+    "category": "ROOM_SANITY",
+    "location_id": 3961098
+  },
+  "ROOM_SANITY_4_04": {
+    "label": "Room 4-04",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 120,
+    "category": "ROOM_SANITY",
+    "location_id": 3961099
+  },
+  "ROOM_SANITY_4_05": {
+    "label": "Room 4-05",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 121,
+    "category": "ROOM_SANITY",
+    "location_id": 3961100
+  },
+  "ROOM_SANITY_4_06": {
+    "label": "Room 4-06",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 122,
+    "category": "ROOM_SANITY",
+    "location_id": 3961101
+  },
+  "ROOM_SANITY_4_07": {
+    "label": "Room 4-07",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 123,
+    "category": "ROOM_SANITY",
+    "location_id": 3961102
+  },
+  "ROOM_SANITY_4_08": {
+    "label": "Room 4-08",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 124,
+    "category": "ROOM_SANITY",
+    "location_id": 3961103
+  },
+  "ROOM_SANITY_4_09": {
+    "label": "Room 4-09",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 125,
+    "category": "ROOM_SANITY",
+    "location_id": 3961104
+  },
+  "ROOM_SANITY_4_10": {
+    "label": "Room 4-10",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 126,
+    "category": "ROOM_SANITY",
+    "location_id": 3961105
+  },
+  "ROOM_SANITY_4_11": {
+    "label": "Room 4-11",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 127,
+    "category": "ROOM_SANITY",
+    "location_id": 3961106
+  },
+  "ROOM_SANITY_4_12": {
+    "label": "Room 4-12",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 128,
+    "category": "ROOM_SANITY",
+    "location_id": 3961107
+  },
+  "ROOM_SANITY_4_13": {
+    "label": "Room 4-13",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 129,
+    "category": "ROOM_SANITY",
+    "location_id": 3961108
+  },
+  "ROOM_SANITY_4_14": {
+    "label": "Room 4-14",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 130,
+    "category": "ROOM_SANITY",
+    "location_id": 3961109
+  },
+  "ROOM_SANITY_4_15": {
+    "label": "Room 4-15",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 131,
+    "category": "ROOM_SANITY",
+    "location_id": 3961110
+  },
+  "ROOM_SANITY_4_16": {
+    "label": "Room 4-16",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 132,
+    "category": "ROOM_SANITY",
+    "location_id": 3961111
+  },
+  "ROOM_SANITY_4_17": {
+    "label": "Room 4-17",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 133,
+    "category": "ROOM_SANITY",
+    "location_id": 3961112
+  },
+  "ROOM_SANITY_4_18": {
+    "label": "Room 4-18",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 135,
+    "category": "ROOM_SANITY",
+    "location_id": 3961113
+  },
+  "ROOM_SANITY_4_19": {
+    "label": "Room 4-19",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 136,
+    "category": "ROOM_SANITY",
+    "location_id": 3961114
+  },
+  "ROOM_SANITY_4_20": {
+    "label": "Room 4-20",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 137,
+    "category": "ROOM_SANITY",
+    "location_id": 3961115
+  },
+  "ROOM_SANITY_4_21": {
+    "label": "Room 4-21",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 138,
+    "category": "ROOM_SANITY",
+    "location_id": 3961116
+  },
+  "ROOM_SANITY_4_22": {
+    "label": "Room 4-22",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 139,
+    "category": "ROOM_SANITY",
+    "location_id": 3961117
+  },
+  "ROOM_SANITY_4_23": {
+    "label": "Room 4-23",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 140,
+    "category": "ROOM_SANITY",
+    "location_id": 3961118
+  },
+  "ROOM_SANITY_4_24": {
+    "label": "Room 4-24",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 141,
+    "category": "ROOM_SANITY",
+    "location_id": 3961119
+  },
+  "ROOM_SANITY_5_01": {
+    "label": "Room 5-01",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 9,
+    "category": "ROOM_SANITY",
+    "location_id": 3961120
+  },
+  "ROOM_SANITY_5_02": {
+    "label": "Room 5-02",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 97,
+    "category": "ROOM_SANITY",
+    "location_id": 3961121
+  },
+  "ROOM_SANITY_5_03": {
+    "label": "Room 5-03",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 249,
+    "category": "ROOM_SANITY",
+    "location_id": 3961122
+  },
+  "ROOM_SANITY_5_04": {
+    "label": "Room 5-04",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 250,
+    "category": "ROOM_SANITY",
+    "location_id": 3961123
+  },
+  "ROOM_SANITY_5_05": {
+    "label": "Room 5-05",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 251,
+    "category": "ROOM_SANITY",
+    "location_id": 3961124
+  },
+  "ROOM_SANITY_5_06": {
+    "label": "Room 5-06",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 252,
+    "category": "ROOM_SANITY",
+    "location_id": 3961125
+  },
+  "ROOM_SANITY_5_07": {
+    "label": "Room 5-07",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 253,
+    "category": "ROOM_SANITY",
+    "location_id": 3961126
+  },
+  "ROOM_SANITY_5_08": {
+    "label": "Room 5-08",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 254,
+    "category": "ROOM_SANITY",
+    "location_id": 3961127
+  },
+  "ROOM_SANITY_5_09": {
+    "label": "Room 5-09",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 255,
+    "category": "ROOM_SANITY",
+    "location_id": 3961128
+  },
+  "ROOM_SANITY_5_10": {
+    "label": "Room 5-10",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 256,
+    "category": "ROOM_SANITY",
+    "location_id": 3961129
+  },
+  "ROOM_SANITY_5_11": {
+    "label": "Room 5-11",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 257,
+    "category": "ROOM_SANITY",
+    "location_id": 3961130
+  },
+  "ROOM_SANITY_5_12": {
+    "label": "Room 5-12",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 258,
+    "category": "ROOM_SANITY",
+    "location_id": 3961131
+  },
+  "ROOM_SANITY_5_13": {
+    "label": "Room 5-13",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 259,
+    "category": "ROOM_SANITY",
+    "location_id": 3961132
+  },
+  "ROOM_SANITY_5_14": {
+    "label": "Room 5-14",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 260,
+    "category": "ROOM_SANITY",
+    "location_id": 3961133
+  },
+  "ROOM_SANITY_5_15": {
+    "label": "Room 5-15",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 261,
+    "category": "ROOM_SANITY",
+    "location_id": 3961134
+  },
+  "ROOM_SANITY_5_16": {
+    "label": "Room 5-16",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 262,
+    "category": "ROOM_SANITY",
+    "location_id": 3961135
+  },
+  "ROOM_SANITY_5_17": {
+    "label": "Room 5-17",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 263,
+    "category": "ROOM_SANITY",
+    "location_id": 3961136
+  },
+  "ROOM_SANITY_5_18": {
+    "label": "Room 5-18",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 264,
+    "category": "ROOM_SANITY",
+    "location_id": 3961137
+  },
+  "ROOM_SANITY_5_19": {
+    "label": "Room 5-19",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 265,
+    "category": "ROOM_SANITY",
+    "location_id": 3961138
+  },
+  "ROOM_SANITY_5_20": {
+    "label": "Room 5-20",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 266,
+    "category": "ROOM_SANITY",
+    "location_id": 3961139
+  },
+  "ROOM_SANITY_5_21": {
+    "label": "Room 5-21",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 267,
+    "category": "ROOM_SANITY",
+    "location_id": 3961140
+  },
+  "ROOM_SANITY_5_22": {
+    "label": "Room 5-22",
+    "parent_region": "REGION_CARROT_CASTLE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 268,
+    "category": "ROOM_SANITY",
+    "location_id": 3961141
+  },
+  "ROOM_SANITY_6_01": {
+    "label": "Room 6-01",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 190,
+    "category": "ROOM_SANITY",
+    "location_id": 3961142
+  },
+  "ROOM_SANITY_6_02": {
+    "label": "Room 6-02",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 191,
+    "category": "ROOM_SANITY",
+    "location_id": 3961143
+  },
+  "ROOM_SANITY_6_03": {
+    "label": "Room 6-03",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 192,
+    "category": "ROOM_SANITY",
+    "location_id": 3961144
+  },
+  "ROOM_SANITY_6_04": {
+    "label": "Room 6-04",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 193,
+    "category": "ROOM_SANITY",
+    "location_id": 3961145
+  },
+  "ROOM_SANITY_6_05": {
+    "label": "Room 6-05",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 194,
+    "category": "ROOM_SANITY",
+    "location_id": 3961146
+  },
+  "ROOM_SANITY_6_06": {
+    "label": "Room 6-06",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 195,
+    "category": "ROOM_SANITY",
+    "location_id": 3961147
+  },
+  "ROOM_SANITY_6_07": {
+    "label": "Room 6-07",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 196,
+    "category": "ROOM_SANITY",
+    "location_id": 3961148
+  },
+  "ROOM_SANITY_6_08": {
+    "label": "Room 6-08",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 197,
+    "category": "ROOM_SANITY",
+    "location_id": 3961149
+  },
+  "ROOM_SANITY_6_09": {
+    "label": "Room 6-09",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 198,
+    "category": "ROOM_SANITY",
+    "location_id": 3961150
+  },
+  "ROOM_SANITY_6_10": {
+    "label": "Room 6-10",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 199,
+    "category": "ROOM_SANITY",
+    "location_id": 3961151
+  },
+  "ROOM_SANITY_6_11": {
+    "label": "Room 6-11",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 200,
+    "category": "ROOM_SANITY",
+    "location_id": 3961152
+  },
+  "ROOM_SANITY_6_12": {
+    "label": "Room 6-12",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 201,
+    "category": "ROOM_SANITY",
+    "location_id": 3961153
+  },
+  "ROOM_SANITY_6_13": {
+    "label": "Room 6-13",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 202,
+    "category": "ROOM_SANITY",
+    "location_id": 3961154
+  },
+  "ROOM_SANITY_6_14": {
+    "label": "Room 6-14",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 203,
+    "category": "ROOM_SANITY",
+    "location_id": 3961155
+  },
+  "ROOM_SANITY_6_15": {
+    "label": "Room 6-15",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 204,
+    "category": "ROOM_SANITY",
+    "location_id": 3961156
+  },
+  "ROOM_SANITY_6_16": {
+    "label": "Room 6-16",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 205,
+    "category": "ROOM_SANITY",
+    "location_id": 3961157
+  },
+  "ROOM_SANITY_6_17": {
+    "label": "Room 6-17",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 206,
+    "category": "ROOM_SANITY",
+    "location_id": 3961158
+  },
+  "ROOM_SANITY_6_18": {
+    "label": "Room 6-18",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 207,
+    "category": "ROOM_SANITY",
+    "location_id": 3961159
+  },
+  "ROOM_SANITY_6_19": {
+    "label": "Room 6-19",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 208,
+    "category": "ROOM_SANITY",
+    "location_id": 3961160
+  },
+  "ROOM_SANITY_6_20": {
+    "label": "Room 6-20",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 209,
+    "category": "ROOM_SANITY",
+    "location_id": 3961161
+  },
+  "ROOM_SANITY_6_21": {
+    "label": "Room 6-21",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 210,
+    "category": "ROOM_SANITY",
+    "location_id": 3961162
+  },
+  "ROOM_SANITY_6_22": {
+    "label": "Room 6-22",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 211,
+    "category": "ROOM_SANITY",
+    "location_id": 3961163
+  },
+  "ROOM_SANITY_6_23": {
+    "label": "Room 6-23",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 212,
+    "category": "ROOM_SANITY",
+    "location_id": 3961164
+  },
+  "ROOM_SANITY_6_24": {
+    "label": "Room 6-24",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 213,
+    "category": "ROOM_SANITY",
+    "location_id": 3961165
+  },
+  "ROOM_SANITY_6_25": {
+    "label": "Room 6-25",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 214,
+    "category": "ROOM_SANITY",
+    "location_id": 3961166
+  },
+  "ROOM_SANITY_6_26": {
+    "label": "Room 6-26",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 215,
+    "category": "ROOM_SANITY",
+    "location_id": 3961167
+  },
+  "ROOM_SANITY_6_27": {
+    "label": "Room 6-27",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 216,
+    "category": "ROOM_SANITY",
+    "location_id": 3961168
+  },
+  "ROOM_SANITY_6_28": {
+    "label": "Room 6-28",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 217,
+    "category": "ROOM_SANITY",
+    "location_id": 3961169
+  },
+  "ROOM_SANITY_6_29": {
+    "label": "Room 6-29",
+    "parent_region": "REGION_OLIVE_OCEAN/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 218,
+    "category": "ROOM_SANITY",
+    "location_id": 3961170
+  },
+  "ROOM_SANITY_7_01": {
+    "label": "Room 7-01",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 85,
+    "category": "ROOM_SANITY",
+    "location_id": 3961171
+  },
+  "ROOM_SANITY_7_02": {
+    "label": "Room 7-02",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 86,
+    "category": "ROOM_SANITY",
+    "location_id": 3961172
+  },
+  "ROOM_SANITY_7_03": {
+    "label": "Room 7-03",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 87,
+    "category": "ROOM_SANITY",
+    "location_id": 3961173
+  },
+  "ROOM_SANITY_7_04": {
+    "label": "Room 7-04",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 88,
+    "category": "ROOM_SANITY",
+    "location_id": 3961174
+  },
+  "ROOM_SANITY_7_05": {
+    "label": "Room 7-05",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 89,
+    "category": "ROOM_SANITY",
+    "location_id": 3961175
+  },
+  "ROOM_SANITY_7_06": {
+    "label": "Room 7-06",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 90,
+    "category": "ROOM_SANITY",
+    "location_id": 3961176
+  },
+  "ROOM_SANITY_7_07": {
+    "label": "Room 7-07",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 91,
+    "category": "ROOM_SANITY",
+    "location_id": 3961177
+  },
+  "ROOM_SANITY_7_08": {
+    "label": "Room 7-08",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 92,
+    "category": "ROOM_SANITY",
+    "location_id": 3961178
+  },
+  "ROOM_SANITY_7_09": {
+    "label": "Room 7-09",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 93,
+    "category": "ROOM_SANITY",
+    "location_id": 3961179
+  },
+  "ROOM_SANITY_7_10": {
+    "label": "Room 7-10",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 94,
+    "category": "ROOM_SANITY",
+    "location_id": 3961180
+  },
+  "ROOM_SANITY_7_11": {
+    "label": "Room 7-11",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 95,
+    "category": "ROOM_SANITY",
+    "location_id": 3961181
+  },
+  "ROOM_SANITY_7_12": {
+    "label": "Room 7-12",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 96,
+    "category": "ROOM_SANITY",
+    "location_id": 3961182
+  },
+  "ROOM_SANITY_7_13": {
+    "label": "Room 7-13",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 98,
+    "category": "ROOM_SANITY",
+    "location_id": 3961183
+  },
+  "ROOM_SANITY_7_14": {
+    "label": "Room 7-14",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 99,
+    "category": "ROOM_SANITY",
+    "location_id": 3961184
+  },
+  "ROOM_SANITY_7_15": {
+    "label": "Room 7-15",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 100,
+    "category": "ROOM_SANITY",
+    "location_id": 3961185
+  },
+  "ROOM_SANITY_7_16": {
+    "label": "Room 7-16",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 102,
+    "category": "ROOM_SANITY",
+    "location_id": 3961186
+  },
+  "ROOM_SANITY_7_17": {
+    "label": "Room 7-17",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 103,
+    "category": "ROOM_SANITY",
+    "location_id": 3961187
+  },
+  "ROOM_SANITY_7_18": {
+    "label": "Room 7-18",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 104,
+    "category": "ROOM_SANITY",
+    "location_id": 3961188
+  },
+  "ROOM_SANITY_7_19": {
+    "label": "Room 7-19",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 105,
+    "category": "ROOM_SANITY",
+    "location_id": 3961189
+  },
+  "ROOM_SANITY_7_20": {
+    "label": "Room 7-20",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 106,
+    "category": "ROOM_SANITY",
+    "location_id": 3961190
+  },
+  "ROOM_SANITY_7_21": {
+    "label": "Room 7-21",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 107,
+    "category": "ROOM_SANITY",
+    "location_id": 3961191
+  },
+  "ROOM_SANITY_7_22": {
+    "label": "Room 7-22",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 108,
+    "category": "ROOM_SANITY",
+    "location_id": 3961192
+  },
+  "ROOM_SANITY_7_23": {
+    "label": "Room 7-23",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 109,
+    "category": "ROOM_SANITY",
+    "location_id": 3961193
+  },
+  "ROOM_SANITY_7_24": {
+    "label": "Room 7-24",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 110,
+    "category": "ROOM_SANITY",
+    "location_id": 3961194
+  },
+  "ROOM_SANITY_7_25": {
+    "label": "Room 7-25",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 111,
+    "category": "ROOM_SANITY",
+    "location_id": 3961195
+  },
+  "ROOM_SANITY_7_26": {
+    "label": "Room 7-26",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 112,
+    "category": "ROOM_SANITY",
+    "location_id": 3961196
+  },
+  "ROOM_SANITY_7_27": {
+    "label": "Room 7-27",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 113,
+    "category": "ROOM_SANITY",
+    "location_id": 3961197
+  },
+  "ROOM_SANITY_7_28": {
+    "label": "Room 7-28",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 114,
+    "category": "ROOM_SANITY",
+    "location_id": 3961198
+  },
+  "ROOM_SANITY_7_29": {
+    "label": "Room 7-29",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 115,
+    "category": "ROOM_SANITY",
+    "location_id": 3961199
+  },
+  "ROOM_SANITY_7_30": {
+    "label": "Room 7-30",
+    "parent_region": "REGION_PEPPERMINT_PALACE/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 116,
+    "category": "ROOM_SANITY",
+    "location_id": 3961200
+  },
+  "ROOM_SANITY_8_01": {
+    "label": "Room 8-01",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 220,
+    "category": "ROOM_SANITY",
+    "location_id": 3961201
+  },
+  "ROOM_SANITY_8_02": {
+    "label": "Room 8-02",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 221,
+    "category": "ROOM_SANITY",
+    "location_id": 3961202
+  },
+  "ROOM_SANITY_8_03": {
+    "label": "Room 8-03",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 222,
+    "category": "ROOM_SANITY",
+    "location_id": 3961203
+  },
+  "ROOM_SANITY_8_04": {
+    "label": "Room 8-04",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 223,
+    "category": "ROOM_SANITY",
+    "location_id": 3961204
+  },
+  "ROOM_SANITY_8_05": {
+    "label": "Room 8-05",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 224,
+    "category": "ROOM_SANITY",
+    "location_id": 3961205
+  },
+  "ROOM_SANITY_8_06": {
+    "label": "Room 8-06",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 225,
+    "category": "ROOM_SANITY",
+    "location_id": 3961206
+  },
+  "ROOM_SANITY_8_07": {
+    "label": "Room 8-07",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 226,
+    "category": "ROOM_SANITY",
+    "location_id": 3961207
+  },
+  "ROOM_SANITY_8_08": {
+    "label": "Room 8-08",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 227,
+    "category": "ROOM_SANITY",
+    "location_id": 3961208
+  },
+  "ROOM_SANITY_8_09": {
+    "label": "Room 8-09",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 228,
+    "category": "ROOM_SANITY",
+    "location_id": 3961209
+  },
+  "ROOM_SANITY_8_10": {
+    "label": "Room 8-10",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 229,
+    "category": "ROOM_SANITY",
+    "location_id": 3961210
+  },
+  "ROOM_SANITY_8_11": {
+    "label": "Room 8-11",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 230,
+    "category": "ROOM_SANITY",
+    "location_id": 3961211
+  },
+  "ROOM_SANITY_8_12": {
+    "label": "Room 8-12",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 231,
+    "category": "ROOM_SANITY",
+    "location_id": 3961212
+  },
+  "ROOM_SANITY_8_13": {
+    "label": "Room 8-13",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 232,
+    "category": "ROOM_SANITY",
+    "location_id": 3961213
+  },
+  "ROOM_SANITY_8_14": {
+    "label": "Room 8-14",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 233,
+    "category": "ROOM_SANITY",
+    "location_id": 3961214
+  },
+  "ROOM_SANITY_8_15": {
+    "label": "Room 8-15",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 234,
+    "category": "ROOM_SANITY",
+    "location_id": 3961215
+  },
+  "ROOM_SANITY_8_16": {
+    "label": "Room 8-16",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 235,
+    "category": "ROOM_SANITY",
+    "location_id": 3961216
+  },
+  "ROOM_SANITY_8_17": {
+    "label": "Room 8-17",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 236,
+    "category": "ROOM_SANITY",
+    "location_id": 3961217
+  },
+  "ROOM_SANITY_8_18": {
+    "label": "Room 8-18",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 237,
+    "category": "ROOM_SANITY",
+    "location_id": 3961218
+  },
+  "ROOM_SANITY_8_19": {
+    "label": "Room 8-19",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 238,
+    "category": "ROOM_SANITY",
+    "location_id": 3961219
+  },
+  "ROOM_SANITY_8_20": {
+    "label": "Room 8-20",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 239,
+    "category": "ROOM_SANITY",
+    "location_id": 3961220
+  },
+  "ROOM_SANITY_8_21": {
+    "label": "Room 8-21",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 240,
+    "category": "ROOM_SANITY",
+    "location_id": 3961221
+  },
+  "ROOM_SANITY_8_22": {
+    "label": "Room 8-22",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 241,
+    "category": "ROOM_SANITY",
+    "location_id": 3961222
+  },
+  "ROOM_SANITY_8_23": {
+    "label": "Room 8-23",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 242,
+    "category": "ROOM_SANITY",
+    "location_id": 3961223
+  },
+  "ROOM_SANITY_8_24": {
+    "label": "Room 8-24",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 243,
+    "category": "ROOM_SANITY",
+    "location_id": 3961224
+  },
+  "ROOM_SANITY_8_25": {
+    "label": "Room 8-25",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 244,
+    "category": "ROOM_SANITY",
+    "location_id": 3961225
+  },
+  "ROOM_SANITY_8_26": {
+    "label": "Room 8-26",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 245,
+    "category": "ROOM_SANITY",
+    "location_id": 3961226
+  },
+  "ROOM_SANITY_8_27": {
+    "label": "Room 8-27",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 246,
+    "category": "ROOM_SANITY",
+    "location_id": 3961227
+  },
+  "ROOM_SANITY_8_28": {
+    "label": "Room 8-28",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 247,
+    "category": "ROOM_SANITY",
+    "location_id": 3961228
+  },
+  "ROOM_SANITY_8_29": {
+    "label": "Room 8-29",
+    "parent_region": "REGION_RADISH_RUINS/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 248,
+    "category": "ROOM_SANITY",
+    "location_id": 3961229
+  },
+  "ROOM_SANITY_9_01": {
+    "label": "Room 9-01",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 142,
+    "category": "ROOM_SANITY",
+    "location_id": 3961230
+  },
+  "ROOM_SANITY_9_02": {
+    "label": "Room 9-02",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 143,
+    "category": "ROOM_SANITY",
+    "location_id": 3961231
+  },
+  "ROOM_SANITY_9_03": {
+    "label": "Room 9-03",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 144,
+    "category": "ROOM_SANITY",
+    "location_id": 3961232
+  },
+  "ROOM_SANITY_9_04": {
+    "label": "Room 9-04",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 145,
+    "category": "ROOM_SANITY",
+    "location_id": 3961233
+  },
+  "ROOM_SANITY_9_05": {
+    "label": "Room 9-05",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 146,
+    "category": "ROOM_SANITY",
+    "location_id": 3961234
+  },
+  "ROOM_SANITY_9_06": {
+    "label": "Room 9-06",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 147,
+    "category": "ROOM_SANITY",
+    "location_id": 3961235
+  },
+  "ROOM_SANITY_9_07": {
+    "label": "Room 9-07",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 148,
+    "category": "ROOM_SANITY",
+    "location_id": 3961236
+  },
+  "ROOM_SANITY_9_08": {
+    "label": "Room 9-08",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 149,
+    "category": "ROOM_SANITY",
+    "location_id": 3961237
+  },
+  "ROOM_SANITY_9_09": {
+    "label": "Room 9-09",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 150,
+    "category": "ROOM_SANITY",
+    "location_id": 3961238
+  },
+  "ROOM_SANITY_9_10": {
+    "label": "Room 9-10",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 151,
+    "category": "ROOM_SANITY",
+    "location_id": 3961239
+  },
+  "ROOM_SANITY_9_11": {
+    "label": "Room 9-11",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 152,
+    "category": "ROOM_SANITY",
+    "location_id": 3961240
+  },
+  "ROOM_SANITY_9_12": {
+    "label": "Room 9-12",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 154,
+    "category": "ROOM_SANITY",
+    "location_id": 3961241
+  },
+  "ROOM_SANITY_9_13": {
+    "label": "Room 9-13",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 155,
+    "category": "ROOM_SANITY",
+    "location_id": 3961242
+  },
+  "ROOM_SANITY_9_14": {
+    "label": "Room 9-14",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 156,
+    "category": "ROOM_SANITY",
+    "location_id": 3961243
+  },
+  "ROOM_SANITY_9_15": {
+    "label": "Room 9-15",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 157,
+    "category": "ROOM_SANITY",
+    "location_id": 3961244
+  },
+  "ROOM_SANITY_9_16": {
+    "label": "Room 9-16",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 158,
+    "category": "ROOM_SANITY",
+    "location_id": 3961245
+  },
+  "ROOM_SANITY_9_17": {
+    "label": "Room 9-17",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 159,
+    "category": "ROOM_SANITY",
+    "location_id": 3961246
+  },
+  "ROOM_SANITY_9_18": {
+    "label": "Room 9-18",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 160,
+    "category": "ROOM_SANITY",
+    "location_id": 3961247
+  },
+  "ROOM_SANITY_9_19": {
+    "label": "Room 9-19",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 161,
+    "category": "ROOM_SANITY",
+    "location_id": 3961248
+  },
+  "ROOM_SANITY_9_20": {
+    "label": "Room 9-20",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 162,
+    "category": "ROOM_SANITY",
+    "location_id": 3961249
+  },
+  "ROOM_SANITY_9_21": {
+    "label": "Room 9-21",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 163,
+    "category": "ROOM_SANITY",
+    "location_id": 3961250
+  },
+  "ROOM_SANITY_9_22": {
+    "label": "Room 9-22",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 164,
+    "category": "ROOM_SANITY",
+    "location_id": 3961251
+  },
+  "ROOM_SANITY_9_23": {
+    "label": "Room 9-23",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 165,
+    "category": "ROOM_SANITY",
+    "location_id": 3961252
+  },
+  "ROOM_SANITY_9_24": {
+    "label": "Room 9-24",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 166,
+    "category": "ROOM_SANITY",
+    "location_id": 3961253
+  },
+  "ROOM_SANITY_9_25": {
+    "label": "Room 9-25",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 167,
+    "category": "ROOM_SANITY",
+    "location_id": 3961254
+  },
+  "ROOM_SANITY_9_26": {
+    "label": "Room 9-26",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 168,
+    "category": "ROOM_SANITY",
+    "location_id": 3961255
+  },
+  "ROOM_SANITY_9_27": {
+    "label": "Room 9-27",
+    "parent_region": "REGION_CANDY_CONSTELLATION/MAIN",
+    "tags": [
+      "RoomSanity"
+    ],
+    "bit_index": 169,
+    "category": "ROOM_SANITY",
+    "location_id": 3961256
+  }
+}

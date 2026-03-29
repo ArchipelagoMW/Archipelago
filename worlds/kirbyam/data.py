@@ -101,6 +101,7 @@ class LocationCategory(IntEnum):
     MAJOR_CHEST = 9
     VITALITY_CHEST = 10
     SOUND_PLAYER_CHEST = 11
+    ROOM_SANITY = 12
 
 
 class ItemData(NamedTuple):
@@ -313,7 +314,7 @@ def _init() -> None:
         data.items[item_id] = ItemData(label=label, item_id=item_id, classification=classification, tags=tags)
         item_key_to_id[item_key] = item_id
 
-    # Load locations.json
+    # Load locations.json (+ optional locations_*.json fragments)
     # Expected forms:
     #   { "LOC_KEY": {"label":"...", "parent_region":"REGION_X", "default_item":"ITEM_KEY" or item_id,
     #                "category":"SHARD", "tags":[...], "location_id":123} }
@@ -322,8 +323,23 @@ def _init() -> None:
     if not isinstance(locations_json, dict):
         raise TypeError("locations.json must be a JSON object mapping location keys to attributes")
 
+    merged_locations_json: dict[str, Any] = dict(locations_json)
+    for file in _list_data_files(""):
+        if not isinstance(file, str):
+            continue
+        if not file.lower().startswith("locations_") or not file.lower().endswith(".json"):
+            continue
+        fragment = load_json_data(file)
+        if not isinstance(fragment, dict):
+            raise TypeError(f"{file} must be a JSON object mapping location keys to attributes")
+        duplicate_keys = set(merged_locations_json.keys()) & set(fragment.keys())
+        if duplicate_keys:
+            dup_list = sorted(duplicate_keys)
+            raise AssertionError(f"Location keys defined multiple times across location datasets: {dup_list}")
+        merged_locations_json.update(fragment)
+
     next_location_id = BASE_OFFSET + 100_000  # keep items and locations in separate ranges
-    for loc_key, attrs in locations_json.items():
+    for loc_key, attrs in merged_locations_json.items():
         if not isinstance(loc_key, str) or not isinstance(attrs, dict):
             continue
 
@@ -461,6 +477,25 @@ def _init() -> None:
         region.warps.sort()
 
         data.regions[region_name] = region
+
+    # Auto-claim generated room-sanity locations by their parent region.
+    # This keeps data integrity checks complete while runtime region creation can
+    # still option-gate these locations off.
+    for loc_key, loc in data.locations.items():
+        if loc.category != LocationCategory.ROOM_SANITY:
+            continue
+        if loc_key in claimed_locations:
+            continue
+        parent_region = data.regions.get(loc.parent_region)
+        if parent_region is None:
+            raise AssertionError(
+                f"Room-sanity location [{loc_key}] references unknown parent region [{loc.parent_region}]"
+            )
+        parent_region.locations.append(loc_key)
+        claimed_locations.add(loc_key)
+
+    for region in data.regions.values():
+        region.locations.sort()
 
     # Optional warp_map.json (if you want the Emerald-style "warp -> destination warp" helper)
     warp_map_json = _maybe_load_json_data("warp_map.json")
