@@ -527,7 +527,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
                     items[item] = 1
             elif isinstance(child, HasAnyCount.Resolved):
                 for item, count in child.item_counts:
-                    if item not in items or items[item] < count:
+                    if item not in items or count < items[item]:
                         items[item] = count
             else:
                 clauses.append(child)
