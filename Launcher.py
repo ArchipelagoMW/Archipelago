@@ -169,6 +169,11 @@ def build_uri_popup(component_list: list[Component], launch_args: tuple[str, ...
 def identify(path: None | str) -> tuple[None | str, None | Component]:
     if path is None:
         return None, None
+    else:
+        suffix = "." + path.split(".")[-1]
+        from worlds.LauncherComponents import component_by_suffix
+        if suffix in component_by_suffix:
+            return path, component_by_suffix[suffix]
     for component in components:
         if component.handles_file(path):
             return path, component
