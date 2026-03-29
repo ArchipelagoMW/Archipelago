@@ -2,9 +2,16 @@
 
 ## Unreleased
 
+- No unreleased changes yet.
+
+## v0.0.14
+
 - Add gameplay-state debug logging option to help diagnose spurious location checks. When enabled via the `Enable Gameplay State Debug Logging` world option, the BizHawk client logs unique `ai_kirby_state_native` values once per session with their gameplay-active classification, allowing players and developers to collect data on which gameplay states correspond with unexpected checks (Issue #477, debugging phase).
+- Fix demo-driven false location checks by introducing title-demo discrimination and preventing gameplay check polling while title-screen demo playback is active (Issue #489).
 - Standardize KirbyAM user-facing item and location labels around `Area RoomCode - Thing` naming where room context matters, reorder map item names to `Area - Map`, rename vitality items to area-specific labels, and hide chest contents from physical location names so chest checks no longer spoil map/vitality/Sound Player outcomes (Issue #460).
 - Fix BizHawk receive notification item names resolving as `Unknown item (ID: ...)` by resolving received-item names in the local receiver slot context (not sender slot) and treating AP unknown-item placeholders as unresolved so KirbyAM fallback item labels are used when available (Issue #476).
+- Fix duplicate physical-item generation in KirbyAM item pool construction by enforcing non-filler uniqueness in pool selection logic (Issue #479 / #484).
+- Fix premature native mirror shard ownership after boss-defeat checks by introducing AP-owned shard authority + delayed scrub behavior, while preserving post-cutscene native-state safety from the white-screen regression fix (Issue #478).
 
 ## v0.0.13
 
