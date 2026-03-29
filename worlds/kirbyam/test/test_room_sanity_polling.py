@@ -106,7 +106,7 @@ async def test_poll_room_sanity_skips_when_address_missing(mock_bizhawk_context)
 
 
 @pytest.mark.asyncio
-async def test_reconnect_chaos_room_sanity_resends_once_then_dedupes(mock_bizhawk_context):
+async def test_reconnect_room_sanity_resends_once_then_dedupes(mock_bizhawk_context):
     """Reconnect-equivalent room polling should resend once then dedupe after server ack."""
     client = KirbyAmClient()
     client.initialize_client()

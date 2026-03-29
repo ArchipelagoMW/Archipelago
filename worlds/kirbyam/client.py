@@ -1145,14 +1145,17 @@ class KirbyAmClient(BizHawkClient):
             )
             return
 
-        mapped_checked_locations: set[int] = set()
         raw_view = memoryview(raw)
+        room_visit_entries = [
+            unpack_from("<H", raw_view, offset)[0]
+            for offset in range(0, read_width, 2)
+        ]
+
+        mapped_checked_locations: set[int] = set()
         for doors_idx in self._room_sanity_bits_sorted:
             if doors_idx < 0 or doors_idx >= _ROOM_VISIT_FLAGS_ENTRY_COUNT:
                 continue
-            offset = doors_idx * 2
-            entry_value = unpack_from("<H", raw_view, offset)[0]
-            if entry_value & _ROOM_VISIT_FLAGS_BIT_MASK:
+            if room_visit_entries[doors_idx] & _ROOM_VISIT_FLAGS_BIT_MASK:
                 mapped_checked_locations.update(self._room_sanity_location_ids_by_bit.get(doors_idx, []))
 
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)

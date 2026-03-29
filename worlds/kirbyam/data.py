@@ -432,7 +432,7 @@ def _init() -> None:
     for subset in region_json_list:
         for region_name, region_def in subset.items():
             if region_name in merged_regions:
-                raise AssertionError(f"Region [{region_name}] was defined multiple times")
+                raise ValueError(f"Region [{region_name}] was defined multiple times")
             merged_regions[region_name] = region_def
 
     # Create region objects, and claim locations
@@ -455,9 +455,9 @@ def _init() -> None:
             if not isinstance(loc_key, str):
                 continue
             if loc_key in claimed_locations:
-                raise AssertionError(f"Location [{loc_key}] was claimed by multiple regions")
+                raise ValueError(f"Location [{loc_key}] was claimed by multiple regions")
             if loc_key not in data.locations:
-                raise AssertionError(f"Region [{region_name}] references unknown location key [{loc_key}]")
+                raise ValueError(f"Region [{region_name}] references unknown location key [{loc_key}]")
             region.locations.append(loc_key)
             claimed_locations.add(loc_key)
 
@@ -478,7 +478,7 @@ def _init() -> None:
             if not isinstance(encoded_warp, str):
                 continue
             if encoded_warp in claimed_warps:
-                raise AssertionError(f"Warp [{encoded_warp}] was claimed by multiple regions")
+                raise ValueError(f"Warp [{encoded_warp}] was claimed by multiple regions")
             region.warps.append(encoded_warp)
             data.warps[encoded_warp] = Warp(encoded_warp, region_name)
             claimed_warps.add(encoded_warp)
