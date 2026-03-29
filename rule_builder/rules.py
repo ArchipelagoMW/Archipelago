@@ -410,6 +410,97 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
             return combined_deps
 
 
+class AtLeast(NestedRule[TWorld], game="Archipelago"):
+    """A rule that returns true when at least N child rules evaluate as true"""
+    count: int
+
+    def __init__(
+        self,
+        count: int,
+        *children: Rule[TWorld],
+        options: Iterable[OptionFilter] = (),
+        filtered_resolution: bool = False,
+    ) -> None:
+        super().__init__(*children, options=options, filtered_resolution=filtered_resolution)
+        self.count = count
+
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        count = self.count
+        if count == 0:
+            return True_().resolve(world)
+
+        children_to_process = [c.resolve(world) for c in self.children]
+        clauses: list[Rule.Resolved] = []
+
+        while children_to_process:
+            child = children_to_process.pop(0)
+            if child.always_true:
+                # true always wins
+                if count == 1:
+                    return child
+                else:
+                    count -= 1
+                    continue
+            if child.always_false:
+                # falses can be ignored
+                continue
+
+            clauses.append(child)
+
+        if len(clauses) < count:
+            return False_().resolve(world)
+        if count == 1:
+            # Switch to Or which has more optimized handling
+            return Or(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(world)
+        if count == len(clauses):
+            # Switch to And which has more optimized handling
+            return And(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(world)
+        return AtLeast.Resolved(
+            tuple(clauses),
+            count=count,
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
+
+    class Resolved(NestedRule.Resolved):
+        count: int
+
+        @override
+        def _evaluate(self, state: CollectionState) -> bool:
+            count = self.count
+            for rule in self.children:
+                if rule(state):
+                    if count == 1:
+                        return True
+                    else:
+                        count += 1
+            return False
+
+        @override
+        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            messages: list[JSONMessagePart] = [
+                    {"type": "color", "color": "cyan", "text": str(self.count)},
+                {"type": "text", "text": f" of ("}
+            ]
+            for i, child in enumerate(self.children):
+                if i > 0:
+                    messages.append({"type": "text", "text": ", "})
+                messages.extend(child.explain_json(state))
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
+        @override
+        def explain_str(self, state: CollectionState | None = None) -> str:
+            clauses = ", ".join([c.explain_str(state) for c in self.children])
+            return f"{self.count} of ({clauses})"
+
+        @override
+        def __str__(self) -> str:
+            clauses = ", ".join([str(c) for c in self.children])
+            return f"{self.count} of ({clauses})"
+
+
 @dataclasses.dataclass(init=False)
 class And(NestedRule[TWorld], game="Archipelago"):
     """A rule that only returns true when all child rules evaluate as true"""

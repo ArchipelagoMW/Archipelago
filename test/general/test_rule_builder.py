@@ -27,7 +27,7 @@ from rule_builder.rules import (
     HasGroupUnique,
     Or,
     Rule,
-    True_,
+    True_, AtLeast,
 )
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
