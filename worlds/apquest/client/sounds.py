@@ -149,6 +149,7 @@ class SoundManager:
                 continue
 
             if sound_name == audio_filename:
+                sound.volume = self.volume_percentage / 100
                 sound.play()
                 self.update_background_music()
                 higher_priority_sound_is_playing = True
@@ -213,6 +214,7 @@ class SoundManager:
                     # It ends up feeling better if this just always continues playing quietly after being started.
                     # Even "fading in at a random spot" is better than restarting the song after a jingle / math trap.
                     if self.game_started and song.state == "stop":
+                        song.volume = self.current_background_music_volume * self.volume_percentage / 100
                         song.play()
                         song.seek(0)
                     continue
@@ -228,6 +230,7 @@ class SoundManager:
 
             if self.current_background_music_volume != 0:
                 if song.state == "stop":
+                    song.volume = self.current_background_music_volume * self.volume_percentage / 100
                     song.play()
                     song.seek(0)
 
