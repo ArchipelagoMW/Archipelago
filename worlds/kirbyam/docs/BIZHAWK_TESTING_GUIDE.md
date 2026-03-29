@@ -91,9 +91,9 @@ pytest worlds/kirbyam/test -q
 ### Debug-level diagnostics
 Enable debug logging in your AP client to see these:
 - `KirbyAM: dedupe suppressed boss-defeat LocationChecks (...)` — boss-defeat checks already acknowledged (per-tick spam suppressed at info level).
-- `dedupe suppressed major-chest LocationChecks` — major-chest checks already acknowledged (per-tick spam suppressed at info level).
-- `dedupe suppressed vitality-chest LocationChecks` — vitality-chest checks already acknowledged (per-tick spam suppressed at info level).
-- `dedupe suppressed room-sanity LocationChecks` — room-visit checks already acknowledged (per-tick spam suppressed at info level).
+- `KirbyAM: dedupe suppressed major-chest LocationChecks (...)` — major-chest checks already acknowledged (per-tick spam suppressed at info level).
+- `KirbyAM: dedupe suppressed vitality-chest LocationChecks (...)` — vitality-chest checks already acknowledged (per-tick spam suppressed at info level).
+- `KirbyAM: dedupe suppressed room-sanity LocationChecks (...)` — room-visit checks already acknowledged (per-tick spam suppressed at info level).
 - `KirbyAM: boss candidate probe rising bits: ...` — rising-edge transitions detected in the boss mirror table probe. Useful during boss fights for address mapping.
 - `KirbyAM: unsafe-delivery candidate probe: X changed Y -> Z` — miniboss counter candidate changed. Research-only probe (Issue #223).
 

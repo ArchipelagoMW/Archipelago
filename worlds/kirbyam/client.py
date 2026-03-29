@@ -1134,6 +1134,16 @@ class KirbyAmClient(BizHawkClient):
         read_width = _ROOM_VISIT_FLAGS_ENTRY_COUNT * 2
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(room_visit_addr, read_width, "System Bus")]))[0]
 
+        if len(raw) != read_width:
+            from CommonClient import logger
+
+            logger.warning(
+                "KirbyAM: room-sanity poll expected %s bytes from gVisitedDoors, got %s; skipping tick",
+                read_width,
+                len(raw),
+            )
+            return
+
         mapped_checked_locations: set[int] = set()
         for doors_idx in self._room_sanity_bits_sorted:
             if doors_idx < 0 or doors_idx >= _ROOM_VISIT_FLAGS_ENTRY_COUNT:

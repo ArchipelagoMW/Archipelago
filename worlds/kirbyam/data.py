@@ -504,7 +504,13 @@ def _init() -> None:
 
     for region_name, loc_keys in sorted(room_sanity_by_region.items()):
         region = data.regions[region_name]
-        for loc_key in sorted(loc_keys, key=lambda key: (data.locations[key].bit_index or -1, key)):
+        for loc_key in sorted(
+            loc_keys,
+            key=lambda key: (
+                data.locations[key].bit_index if data.locations[key].bit_index is not None else -1,
+                key,
+            ),
+        ):
             region.locations.append(loc_key)
             claimed_locations.add(loc_key)
 
