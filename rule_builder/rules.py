@@ -428,11 +428,11 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
 class AtLeast(NestedRule[TWorld], game="Archipelago"):
     """A rule that returns true when at least N child rules evaluate as true"""
-    count: int
+    count: int | FieldResolver
 
     def __init__(
         self,
-        count: int,
+        count: int | FieldResolver,
         *children: Rule[TWorld],
         options: Iterable[OptionFilter] = (),
         filtered_resolution: bool = False,
@@ -442,7 +442,7 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        count = self.count
+        count = resolve_field(self.count, world, int)
         if count == 0:
             return True_().resolve(world)
 
