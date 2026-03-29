@@ -1002,11 +1002,6 @@ class Rac3Interface(GameInterface):
                 if not self.options.armor_vendor:
                     return
                 new_inventory = [ARMOR_VENDOR_INVENTORY[ITEM_TO_ARMOR_VENDOR_LOCATION[item]] for item in self.armor_vendor_items]
-                # Patch out the check that prevents buying weaker armor
-                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC) == 0x1062001A:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC, 0)
-                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL) == 0x1062001A:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL, 0)
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
@@ -1143,6 +1138,7 @@ class Rac3Interface(GameInterface):
         self.verify_quick_select_and_last_used()
         self.clank_cycler()
         self.multiplier_cycler()
+        self.patch_cycler()
         self.overflow_fix()
         self.health_cycler()
         self.pda_vendor_cycler()
@@ -1205,25 +1201,29 @@ class Rac3Interface(GameInterface):
 
     def respawn_gadgets(self):
         """Respawn gadget if the associated location isn't checked but the gadget is unlocked through AP"""
-        if (self.UnlockItem[RAC3ITEM.REFRACTOR].status and
-                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.MARCADIA_REFRACTOR].AP_CODE)):
+        if (self.UnlockItem[RAC3ITEM.REFRACTOR].status 
+                and not RAC3LOCATION.MARCADIA_REFRACTOR in self.checked_locations
+                and self.planet == RAC3REGION.MARCADIA):
             self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
 
-        if (self.UnlockItem[RAC3ITEM.CHARGE_BOOTS].status and
-                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.DAXX_CHARGE_BOOTS].AP_CODE)):
+        if (self.UnlockItem[RAC3ITEM.CHARGE_BOOTS].status 
+                and not RAC3LOCATION.DAXX_CHARGE_BOOTS in self.checked_locations
+                and self.planet == RAC3REGION.DAXX):
             self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
 
-        if (self.UnlockItem[RAC3ITEM.NANO_PAK].status and
-                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.CRASH_SITE_NANO_PAK].AP_CODE)):
+        if (self.UnlockItem[RAC3ITEM.NANO_PAK].status 
+                and not RAC3LOCATION.CRASH_SITE_NANO_PAK in self.checked_locations
+                and self.planet == RAC3REGION.CRASH_SITE):
             self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
 
-        if ((self.UnlockItem[RAC3ITEM.BOLT_GRABBER].status or self.UnlockItem[RAC3ITEM.BOX_BREAKER].status) and
-                not self.is_location_checked(
-                    RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER].AP_CODE)):
+        if ((self.UnlockItem[RAC3ITEM.BOLT_GRABBER].status or self.UnlockItem[RAC3ITEM.BOX_BREAKER].status) 
+                and not RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER in self.checked_locations
+                and self.planet == RAC3REGION.ZELDRIN_STARPORT):
             self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
             self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
-        if (self.UnlockItem[RAC3ITEM.PDA].status and
-                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
+        if (self.UnlockItem[RAC3ITEM.PDA].status 
+                and not RAC3LOCATION.HIDEOUT_PDA in self.checked_locations
+                and self.planet == RAC3REGION.QWARKS_HIDEOUT):
             self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
 
     def planet_cycler(self):
@@ -1499,6 +1499,48 @@ class Rac3Interface(GameInterface):
                 else:
                     self.UnlockItem[name].unlock_delay += 1
 
+    def patch_cycler(self):
+        """Apply runtime instruction patches based on current planet."""
+        match self.planet:
+            case RAC3REGION.STARSHIP_PHOENIX:
+                # Patch out the check that prevents buying weaker armor.
+                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC) == 0x1062001A:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC, 0)
+                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL) == 0x1062001A:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL, 0)
+                # Patch out Hypershot removal from quick select due to VR gadget training removing it if incomplete
+                if self._read32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC) == 0xAC600000:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC, 0x00000000)  # NOP
+                if self._read32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL) == 0xAC600000:
+                    self._write32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL, 0x00000000)  # NOP
+            case RAC3REGION.ANNIHILATION_NATION:
+                character = self.player_type
+                if character == RAC3PLAYERTYPE.TYHRRANOID:
+                    character = RAC3PLAYERTYPE.RATCHET
+
+                if self.one_hp_challenge.get(character, False) and character == RAC3PLAYERTYPE.RATCHET:
+                    # Patch out sleeping gas health reduction to prevent death.
+                    if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x2442FFFF:
+                        self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
+                    # Patch out health refill to prevent auto losing One Hit Wonder challenge.
+                    if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0xAC652850:
+                        self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000)  # nop
+                    # Patch out nanotech level up healing to prevent losing One Hit Wonder challenge.
+                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00621821:
+                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00000000)  # nop
+                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0xACA22850:
+                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0x00000000)  # nop
+                elif not self.one_hp_challenge.get(character, False):
+                    # Restore patched instructions to their original state when not doing one HP challenge.
+                    if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x24420000:
+                        self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
+                    if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0x00000000:
+                        self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
+                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00000000:
+                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00621821)  # addu v1,v1,v0
+                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0x00000000:
+                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0xACA22850)  # sw a2,0x2850(v1)
+
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
         if self.nanotech_exp > 0x7FFFFFFF:
@@ -1528,19 +1570,6 @@ class Rac3Interface(GameInterface):
                 if self._read8(RAC3STATUS.HEALTH) > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
-                if (character == RAC3PLAYERTYPE.RATCHET
-                        and self.planet == RAC3REGION.ANNIHILATION_NATION):
-                    # Patch out sleeping gas health reduction to prevent death
-                    if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x2442FFFF:
-                        self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
-                    # Patch out health refill to prevent auto losing One Hit Wonder challenge
-                    if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0xAC652850:
-                        self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000)  # nop
-                    # Patch out nanotech level up healing to prevent losing One Hit Wonder challenge
-                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00621821:
-                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00000000)  # nop
-                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0xACA22850:
-                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0x00000000)  # nop
 
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
@@ -1553,18 +1582,6 @@ class Rac3Interface(GameInterface):
             if self._read_float(health_addr) > target_health:
                 # This displays as 1 HP in-game for vehicles with 500 max health
                 self._write_float(health_addr, target_health)
-
-        if (not self.one_hp_challenge.get(character, False)
-                and self.planet == RAC3REGION.ANNIHILATION_NATION):
-            # Restore patched instructions to their original state when not doing one HP challenge
-            if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x24420000:
-                self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
-            if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0x00000000:
-                self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
-            if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00000000:
-                self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00621821)  # addu v1,v1,v0
-            if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0x00000000:
-                self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0xACA22850)  # sw a2,0x2850(v1)
 
         # If loading from the main menu we delay fixing the current health until the load is complete
         if self.main_menu:
