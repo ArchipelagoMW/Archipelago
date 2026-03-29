@@ -165,7 +165,7 @@ def test_filler_selection_respects_active_pool() -> None:
     )
 
 
-def test_phase1_active_filler_pool_contents() -> None:
+def test_active_filler_pool_contents() -> None:
     """Issue #295: active filler generation includes the shipped consumable set."""
     assert KirbyAmWorld.ACTIVE_FILLER_POOL == (
         "1 Up",

@@ -52,10 +52,13 @@
 #define KIRBY_CURRENT_PLAYER     (*(volatile uint8_t*)(KIRBY_CURRENT_PLAYER_ADDR))
 #define KIRBY_STRUCT_STRIDE      0x1A8u
 #define KIRBY_STRUCT_BATTERY_OFFSET 0xDCu
-#define KIRBY_STRUCT_UNKE1_OFFSET 0xE1u
-#define KIRBY_STRUCT_UNKE2_OFFSET 0xE2u
-#define KIRBY_STRUCT_UNKE4_OFFSET 0xE4u
-#define KIRBY_STRUCT_UNKE5_OFFSET 0xE5u
+// Reverse-engineered timed-effect fields used by BonusGiveInvincibility in the
+// KatAM decomp (`bonus.c`): clear the effect-reset byte, set the invincibility
+// kind byte to 100, mark the state byte active, and store a 1000-tick duration.
+#define KIRBY_STRUCT_INVINCIBILITY_RESET_OFFSET 0xE1u
+#define KIRBY_STRUCT_INVINCIBILITY_DURATION_OFFSET 0xE2u
+#define KIRBY_STRUCT_INVINCIBILITY_KIND_OFFSET 0xE4u
+#define KIRBY_STRUCT_INVINCIBILITY_STATE_OFFSET 0xE5u
 #define KIRBY_STRUCT_HP_OFFSET   0x100u
 #define KIRBY_STRUCT_MAX_HP_OFFSET 0x101u
 #define KIRBY_INVINCIBILITY_KIND 100u
@@ -220,10 +223,10 @@ static void ap_sync_active_kirby_health_from_vitality(void) {
     uint8_t player = KIRBY_CURRENT_PLAYER;
     uint32_t kirby_addr = KIRBY_STRUCTS_ADDR + ((uint32_t)player * KIRBY_STRUCT_STRIDE);
     uint16_t vitality_total_u16 = (uint16_t)(KIRBY_VITALITY_COUNTER + 6u);
-    uint8_t vitality_total = (vitality_total_u16 > 0xFFu) ? 0xFFu : (uint8_t)vitality_total_u16;
+    int8_t vitality_total = (vitality_total_u16 > 0x7Fu) ? 0x7F : (int8_t)vitality_total_u16;
 
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = vitality_total;
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET) = vitality_total;
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = vitality_total;
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET) = vitality_total;
 }
 
 static uint32_t ap_get_active_kirby_addr(void) {
@@ -273,10 +276,10 @@ static void ap_grant_max_tomato(void) {
 static void ap_grant_invincibility_candy(void) {
     uint32_t kirby_addr = ap_get_active_kirby_addr();
 
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_UNKE1_OFFSET) = 0u;
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_UNKE4_OFFSET) = KIRBY_INVINCIBILITY_KIND;
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_UNKE5_OFFSET) = KIRBY_EFFECT_ACTIVE_COUNTDOWN;
-    *(volatile uint16_t*)(kirby_addr + KIRBY_STRUCT_UNKE2_OFFSET) = KIRBY_INVINCIBILITY_DURATION;
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_RESET_OFFSET) = 0u;
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_KIND_OFFSET) = KIRBY_INVINCIBILITY_KIND;
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_STATE_OFFSET) = KIRBY_EFFECT_ACTIVE_COUNTDOWN;
+    *(volatile uint16_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_DURATION_OFFSET) = KIRBY_INVINCIBILITY_DURATION;
     KIRBY_GIVE_INVINCIBILITY_FN((void*)kirby_addr, KIRBY_INVINCIBILITY_DURATION);
 }
 
