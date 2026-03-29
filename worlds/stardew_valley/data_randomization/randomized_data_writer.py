@@ -1,6 +1,7 @@
 from typing import TextIO
 
 from ..content import StardewContent
+from ..data.fish_data import FishItem
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -15,59 +16,79 @@ def add_randomized_data_to_spoiler_log(spoiler_handle: TextIO, player_name: str,
     if len(data_to_randomize) <= 0:
         return
 
-    data_to_print = dict()
-
-    prepare_fish_difficulty_for_print(content, data_to_randomize, data_to_print)
-    prepare_fish_season_for_print(content, data_to_randomize, data_to_print)
-    prepare_fish_location_for_print(content, data_to_randomize, data_to_print)
-    prepare_fish_weather_for_print(content, data_to_randomize, data_to_print)
+    prepared_data = prepare_randomized_data(content, options)
 
     spoiler_handle.write(f"\n\nRandomized Data ({player_name}):\n")
-    for item_name in data_to_print:
-        spoiler_handle.write(f"\t{item_name}:\n")
-        for value_name in data_to_print[item_name]:
-            spoiler_handle.write(f"\t\t{value_name}: {data_to_print[item_name][value_name]}\n")
+    for category in prepared_data:
+        spoiler_handle.write(f"\t{category}:\n")
+        for item_name in prepared_data[category]:
+            spoiler_handle.write(f"\t\t{item_name}:\n")
+            for value_name in prepared_data[category][item_name]:
+                spoiler_handle.write(f"\t\t\t{value_name}: {prepared_data[category][item_name][value_name]}\n")
 
 
-def prepare_fish_difficulty_for_print(content, data_to_randomize, data_to_print):
-    prepare_fish_data_for_print(content, data_to_randomize, data_to_print,
-                                DataRandomizationOptionName.fish_difficulty,
-                                lambda fish: fish.difficulty > 0,
-                                lambda fish: fish.difficulty,
-                                "difficulty")
+def prepare_randomized_data(content: StardewContent, options: StardewValleyOptions):
+    data_to_randomize = options.data_randomization.value
+
+    prepared_data = dict()
+    prepare_fish_data(content, data_to_randomize, prepared_data)
+
+    return prepared_data
 
 
-def prepare_fish_season_for_print(content, data_to_randomize, data_to_print):
-    prepare_fish_data_for_print(content, data_to_randomize, data_to_print,
-                                DataRandomizationOptionName.fish_season,
-                                lambda fish: len(fish.seasons) > 0,
-                                lambda fish: fish.seasons,
-                                "season")
+def prepare_fish_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
+    prepared_data["Fish"] = dict()
+    prepare_fish_difficulty_data(content, data_to_randomize, prepared_data)
+    prepare_fish_season_data(content, data_to_randomize, prepared_data)
+    prepare_fish_location_data(content, data_to_randomize, prepared_data)
+    prepare_fish_weather_data(content, data_to_randomize, prepared_data)
 
 
-def prepare_fish_location_for_print(content, data_to_randomize, data_to_print):
-    prepare_fish_data_for_print(content, data_to_randomize, data_to_print,
-                                DataRandomizationOptionName.fish_location,
-                                lambda fish: len(fish.locations) > 0,
-                                lambda fish: fish.locations,
-                                "location")
+def prepare_fish_difficulty_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_fish_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.fish_difficulty,
+                             lambda fish: fish.difficulty > 0,
+                             lambda fish: fish.difficulty,
+                             "difficulty")
 
 
-def prepare_fish_weather_for_print(content, data_to_randomize, data_to_print):
-    prepare_fish_data_for_print(content, data_to_randomize, data_to_print,
-                                DataRandomizationOptionName.fish_weather,
-                                lambda fish: len(fish.weather) > 0,
-                                lambda fish: fish.weather,
-                                "weather")
+def prepare_fish_season_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_fish_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.fish_season,
+                             lambda fish: len(fish.seasons) > 0 and fish_is_included(data_to_randomize, fish),
+                             lambda fish: list(fish.seasons),
+                             "season")
 
 
-def prepare_fish_data_for_print(content: StardewContent, data_to_randomize: set[str], data_to_print: dict,
-                                randomize_toggle: str, fish_validator, fish_data_extractor, data_key: str):
+def prepare_fish_location_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_fish_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.fish_location,
+                             lambda fish: len(fish.locations) > 0 and fish_is_included(data_to_randomize, fish),
+                             lambda fish: list(fish.locations),
+                             "location")
+
+
+def prepare_fish_weather_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_fish_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.fish_weather,
+                             lambda fish: len(fish.weather) > 0 and fish_is_included(data_to_randomize, fish),
+                             lambda fish: list(fish.weather),
+                             "weather")
+
+
+def prepare_fish_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
+                             randomize_toggle: str, fish_validator, fish_data_extractor, aspect_key: str):
     if randomize_toggle not in data_to_randomize:
         return
     for fish_name, fish_data in content.fishes.items():
         if not fish_validator(fish_data):
             continue
-        if fish_name not in data_to_print:
-            data_to_print[fish_name] = dict()
-        data_to_print[fish_name][data_key] = fish_data_extractor(fish_data)
+        if fish_name not in prepared_data["Fish"]:
+            prepared_data["Fish"][fish_name] = dict()
+        prepared_data["Fish"][fish_name][aspect_key] = fish_data_extractor(fish_data)
+
+
+def fish_is_included(data_to_randomize: set[str], fish: FishItem) -> bool:
+    if DataRandomizationOptionName.fish_includes_crab_pot in data_to_randomize:
+        return True
+    return fish.difficulty > 0
