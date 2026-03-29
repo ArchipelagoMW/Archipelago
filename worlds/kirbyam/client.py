@@ -130,6 +130,7 @@ class KirbyAmClient(BizHawkClient):
             if loc.bit_index is None or loc.category != LocationCategory.ROOM_SANITY:
                 continue
             self._room_sanity_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+        self._room_sanity_bits_sorted: list[int] = sorted(self._room_sanity_location_ids_by_bit.keys())
 
         # One-time RAM state load
         self._ram_state_loaded: bool = False
@@ -1134,7 +1135,7 @@ class KirbyAmClient(BizHawkClient):
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(room_visit_addr, read_width, "System Bus")]))[0]
 
         mapped_checked_locations: set[int] = set()
-        for doors_idx in sorted(self._room_sanity_location_ids_by_bit.keys()):
+        for doors_idx in self._room_sanity_bits_sorted:
             if doors_idx < 0 or doors_idx >= _ROOM_VISIT_FLAGS_ENTRY_COUNT:
                 continue
             offset = doors_idx * 2

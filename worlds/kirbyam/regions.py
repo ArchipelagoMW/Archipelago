@@ -34,7 +34,7 @@ def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
             loc_meta = data.locations[loc_key]
             if (
                 loc_meta.category == LocationCategory.ROOM_SANITY
-                and not bool(world.options.room_sanity.value)
+                and not world.options.room_sanity.value
             ):
                 continue
             region.locations.append(

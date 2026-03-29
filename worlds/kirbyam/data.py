@@ -324,18 +324,18 @@ def _init() -> None:
         raise TypeError("locations.json must be a JSON object mapping location keys to attributes")
 
     merged_locations_json: dict[str, Any] = dict(locations_json)
-    for file in _list_data_files(""):
-        if not isinstance(file, str):
+    for filename in _list_data_files(""):
+        if not isinstance(filename, str):
             continue
-        if not file.lower().startswith("locations_") or not file.lower().endswith(".json"):
+        if not filename.lower().startswith("locations_") or not filename.lower().endswith(".json"):
             continue
-        fragment = load_json_data(file)
+        fragment = load_json_data(filename)
         if not isinstance(fragment, dict):
-            raise TypeError(f"{file} must be a JSON object mapping location keys to attributes")
+            raise TypeError(f"{filename} must be a JSON object mapping location keys to attributes")
         duplicate_keys = set(merged_locations_json.keys()) & set(fragment.keys())
         if duplicate_keys:
             dup_list = sorted(duplicate_keys)
-            raise AssertionError(f"Location keys defined multiple times across location datasets: {dup_list}")
+            raise ValueError(f"Location keys defined multiple times across location datasets: {dup_list}")
         merged_locations_json.update(fragment)
 
     next_location_id = BASE_OFFSET + 100_000  # keep items and locations in separate ranges

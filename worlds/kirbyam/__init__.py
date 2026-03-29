@@ -378,7 +378,8 @@ class KirbyAmWorld(World):
             if (boss_locations or major_chest_locations or vitality_chest_locations or sound_player_chest_locations or room_sanity_locations) and not randomized_item_codes:
                 raise ValueError(
                     "KirbyAM item pool build failed: no randomized items were produced. "
-                    "This likely indicates a problem with boss/major/vitality chest locations or region data."
+                    "This likely indicates a problem with boss/major/vitality or sound-player chest locations, "
+                    "room-sanity locations, or region/location data."
                 )
 
             itempool: list[KirbyAmItem] = [
