@@ -1,6 +1,6 @@
 import pygame
 from random import randint
-
+from .events import VictoryEvent
 
 class Level:
     def __init__(self,data,audio_files):
@@ -72,6 +72,7 @@ class Level:
         if self.data.maxtime >= self.data.goal and self.data.goalled == False:
             self.data.playingstate = 5
             self.data.goalled = True
+            self.data.queued_events.append(VictoryEvent())
         
     def getpoints(self):
         if self.data.points < int(self.data.currenttime/600):

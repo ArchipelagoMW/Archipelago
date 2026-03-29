@@ -46,9 +46,9 @@ class Nothing_Archipelago_Context():
     highest_processed_item_index: int = 0
     queued_locations: list[int]
 
-    def __init__(self) -> None:
+    def __init__(self,APnothing) -> None:
         
-        
+        self.nothing = APnothing
         self._condition = asyncio.Condition()
         self.queued_locations = []
         self.slot_data = {}
@@ -128,7 +128,7 @@ class Nothing_Archipelago_Context():
             self.Death_link_mercy = self.slot_data["Death_link_mercy"]
             self.Time_dilation = self.slot_data["Time_dilation"]
 
-            self.nothing_archipelago_game.update_settings(self.goal, self.shop_upgrades, self.shop_colors, self.shop_music, self.shop_sounds,
+            self.nothing.update_settings(self.goal, self.shop_upgrades, self.shop_colors, self.shop_music, self.shop_sounds,
                                       self.gift_coins, self.milestone_interval, self.timecap_interval, self.Starting_coin_count,
                                       self.Death_link, self.Death_link_mercy, self.Time_dilation)
             self.highest_processed_item_index = 0
@@ -143,7 +143,7 @@ class Nothing_Archipelago_Context():
         if self.nothing is None:
             raise RuntimeError("Tried to render before self.ap_quest_game was initialized.")
 
-        self.nothing.run()
+        
         self.handle_game_events()
 
     def handle_game_events(self) -> None:
@@ -163,25 +163,17 @@ class Nothing_Archipelago_Context():
     def trigger_server(server_address, password):
         super().__init__(server_address, password)
 
-class StateManager:
-    def __init__(self):
-        self._condition = asyncio.Condition()
-
-    async def wait_until_equals(self,ctx, expected_value):
-        async with self._condition:
-            # wait() releases the lock, pauses the task until notified, 
-            # re-acquires the lock upon awakening, and then checks the predicate.
-            await self._condition.wait_for(lambda: ctx.nothing.data.archipelagoactive == expected_value)
 
 
 
-async def main(data) -> None:
+
+async def main(APnothing) -> None:
     _condition = asyncio.Condition()
-    ctx = Nothing_Archipelago_Context()
-
+    ctx = Nothing_Archipelago_Context(APnothing)
+    
     async with _condition:        
-        await _condition.wait_for(lambda: data.archipelagoactive == True)
-        ctx.trigger_server(data.inputs[0]+":"+data.inputs[1],data.inputs[3])
+        await _condition.wait_for(lambda: ctx.nothing.data.archipelagoactive == True)
+        ctx.trigger_server(ctx.nothing.data.inputs[0]+":"+ctx.nothing.data.inputs[1],ctx.nothing.data.inputs[3])
         ctx.auth = ctx.nothing.data.inputs[2]
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 

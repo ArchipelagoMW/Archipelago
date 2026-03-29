@@ -1,6 +1,7 @@
 import pygame, numpy
 from .buttons import Button
-
+from .events import LocationClearedEvent
+from random import randint
 
 
 class UI:
@@ -29,6 +30,11 @@ class UI:
         self.digit_s = 1
         self.music_select = 0
         self.color_select = 0
+        self.coin_spawned = False
+        self.coin_xpos = 0
+        self.coin_ypos = 0
+        self.coin_color = (255,215,0)
+        self.delta3 = 0
         self.shops = [[[0 for _ in range (4)] for _ in range (10)] for _ in range (4)]
         self.sound_s = [0 for _ in range(10)]
         self.gear_surf = frames['gear']
@@ -57,6 +63,7 @@ class UI:
         self.continuebutton = Button(self.font, "[CONTINUE]",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+160,(255,255,255),0)
         self.archipelagobutton = Button(self.font, "Archipelago",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+40,(255,255,255),0)
         self.devmodebutton = Button(self.font, "Devmode",WINDOW_WIDTH,WINDOW_HEIGHT,(255,255,255),0)
+        self.freecoin = Button(self.font, "COIN",0,0,(255,255,255),0)
         #max timer
 
 
@@ -171,6 +178,7 @@ class UI:
                     data.shop[data.shopstate][0][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][0][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][0][4]))
                     if data.shop[data.shopstate][0][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][0][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][0][2] == 1:
@@ -187,6 +195,7 @@ class UI:
                     data.shop[data.shopstate][1][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][1][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][1][4]))
                     if data.shop[data.shopstate][1][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][1][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][1][2] == 1:
@@ -203,6 +212,7 @@ class UI:
                     data.shop[data.shopstate][2][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][2][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][2][4]))
                     if data.shop[data.shopstate][2][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][2][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][2][2] == 1:
@@ -219,6 +229,7 @@ class UI:
                     data.shop[data.shopstate][3][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][3][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][3][4]))
                     if data.shop[data.shopstate][3][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][3][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][3][2] == 1:
@@ -235,6 +246,7 @@ class UI:
                     data.shop[data.shopstate][4][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][4][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][4][4]))
                     if data.shop[data.shopstate][4][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][4][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][4][2] == 1:
@@ -251,6 +263,7 @@ class UI:
                     data.shop[data.shopstate][5][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][5][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][5][4]))
                     if data.shop[data.shopstate][5][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][5][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][5][2] == 1:
@@ -267,6 +280,7 @@ class UI:
                     data.shop[data.shopstate][6][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][6][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][6][4]))
                     if data.shop[data.shopstate][6][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][6][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][6][2] == 1:
@@ -283,6 +297,7 @@ class UI:
                     data.shop[data.shopstate][7][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][7][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][7][4]))
                     if data.shop[data.shopstate][7][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][7][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][7][2] == 1:
@@ -299,6 +314,7 @@ class UI:
                     data.shop[data.shopstate][8][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][8][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][8][4]))
                     if data.shop[data.shopstate][8][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][8][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][8][2] == 1:
@@ -315,6 +331,7 @@ class UI:
                     data.shop[data.shopstate][9][2] = 1
                 else:
                     data.checked_locations_player.append(data.shop[data.shopstate][9][4])
+                    data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][9][4]))
                     if data.shop[data.shopstate][9][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][9][4])
             elif data.shopstate == 1 and data.shop[data.shopstate][9][2] == 1:
@@ -409,7 +426,13 @@ class UI:
             data.milestones[test,1] = 1
             data.milestones[test,0] = 0
             if data.archipelagoactive == False:
-                 data.timecaps += 1
+                data.timecaps += 1
+            else:
+                data.checked_locations_player.append(data.milestones[test,2])
+                data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
+                if data.milestones[test,2] in data.missing_locations:
+                        data.missing_locations.remove(data.milestones[test,2])
+                
             data.timecap = data.timecaps * data.timecapint
             self.milestone1button.value = 0
             self.delta = 0
@@ -476,6 +499,7 @@ class UI:
                 data.timecaps += 1
             else:
                 data.checked_locations_player.append(data.milestones[test,2])
+                data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
@@ -489,6 +513,7 @@ class UI:
                 data.timecaps += 1
             else:
                 data.checked_locations_player.append(data.milestones[test,2])
+                data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
@@ -502,6 +527,7 @@ class UI:
                 data.timecaps += 1
             else:
                 data.checked_locations_player.append(data.milestones[test,2])
+                data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
@@ -515,6 +541,7 @@ class UI:
                 data.timecaps += 1
             else:
                 data.checked_locations_player.append(data.milestones[test,2])
+                data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
@@ -528,6 +555,7 @@ class UI:
                 data.timecaps += 1
             else:
                 data.checked_locations_player.append(data.milestones[test,2])
+                data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
             data.timecap = data.timecaps * data.timecapint
@@ -575,6 +603,41 @@ class UI:
         if self.backbutton.draw(self.display_surface):
             data.playingstate = 0
             self.playing_state = 0
+
+    def display_free_coins(self,data,dt):
+        y = randint(1,5000)
+        if self.coin_spawned == False and y == 1 and data.points == 0:
+            self.coin_spawned = True
+            y = randint(1,6)
+            if y == 1:
+                self.coin_xpos = randint(45,800)
+                self.coin_ypos = randint(20,190)
+            elif y ==2:
+                self.coin_xpos = randint(data.WINDOW_WIDTH-800,data.WINDOW_WIDTH-45)
+                self.coin_ypos = randint(40,200)
+            elif y == 3:
+                self.coin_xpos = randint(380,1500)
+                self.coin_ypos = randint(80,520)
+            elif y == 4:
+                self.coin_xpos = randint(380,1500)
+                self.coin_ypos = randint(data.WINDOW_HEIGHT-400,data.WINDOW_HEIGHT-80)
+            elif y == 5:
+                self.coin_xpos = randint(45,200)
+                self.coin_ypos = randint(data.WINDOW_HEIGHT-400,data.WINDOW_HEIGHT-80)
+            else:
+                self.coin_xpos = randint(data.WINDOW_WIDTH-600,data.WINDOW_WIDTH-45)
+                self.coin_ypos = randint(data.WINDOW_HEIGHT-580,data.WINDOW_HEIGHT-80)
+            self.freecoin.updatec("COIN"+str(y),self.coin_xpos,self.coin_ypos,self.coin_color,0)
+        if self.delta3 > 3:
+            self.delta3 = 0
+            self.coin_spawned = False
+        
+        if self.coin_spawned:
+            self.delta3 += dt
+            if self.freecoin.draw(self.display_surface):
+                data.points += 1
+                self.coin_spawned = 0
+                self.delta3 = 0
 
 
     def timer(self,amount):
@@ -631,6 +694,8 @@ class UI:
             self.display_shop(data)
             self.display_interactables(data)
             self.display_digits(data)
+            if data.giftcoins == True:
+                 self.display_free_coins(data,dt)
             self.delta += dt
         elif self.playing_state == 4:
             self.leavearch(data)

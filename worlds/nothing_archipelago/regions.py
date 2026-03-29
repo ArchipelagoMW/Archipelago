@@ -47,7 +47,7 @@ def connect_regions(world: NothingWorld) -> None:
         shopdigits = world.get_region("shopdigits")
         start.connect(shopdigits, "Start to shopdigits")
 
-    if (world.options.gift_coins or world.options.goal > 1200): 
+    if (world.options.goal > 1200): 
         if world.options.shop_upgrades:   
             shopups = world.get_region("shopups")
             start.connect(shopups, "Start to shopupgrades")

@@ -15,6 +15,8 @@ class Data:
         self.WINDOW_WIDTH = 1920
         self.WINDOW_HEIGHT = 1080
 
+        self.queued_events = []
+        self.connected = 0
         self.activeinput = 3
         self.inputs = [0 for _ in range(4)]
         self.inputs[0] = "Archipelago.gg"
@@ -142,6 +144,8 @@ class Data:
     def update_arch_settings(self,goal, shop_upgrades, shop_colors, shop_music, shop_sounds, gift_coins,
                           milestone_interval, timecap_interval, Starting_coin_count, Death_link, Death_link_mercy, Time_dilation):
         self.milestoneint = milestone_interval
+        for x in range(86400):
+            self._milestones[x,0] = (x+1)*self.milestoneint
         self.archipelagoactive = True
         self.goal = goal
         self.timecapint = timecap_interval

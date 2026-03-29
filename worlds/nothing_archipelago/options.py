@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from Options import Choice, OptionGroup, PerGameCommonOptions, Range, DefaultOnToggle, Toggle
 
-
-
 class Goal(Choice):
     """
     Decide how long you would like to do nothing for (in seconds)

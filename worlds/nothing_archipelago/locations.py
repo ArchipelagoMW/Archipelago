@@ -142,7 +142,7 @@ def create_regular_locations(world: NothingWorld) -> None:
         shopdigits = world.get_region("shopdigits")
         shopdigits.add_locations(shopdigits_locations, Nothing_Archipelago_Location)
 
-    if (world.options.gift_coins or world.options.goal > 1200):
+    if (world.options.goal > 1200):
         if world.options.shop_upgrades:
             shopups = world.get_region("shopups")
             shopups.add_locations(shopupgrades_locations,Nothing_Archipelago_Location)

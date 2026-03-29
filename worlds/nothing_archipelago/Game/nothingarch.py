@@ -46,7 +46,7 @@ class archipelagoUI:
     def updateitems(self,data,items) -> None:
         digitcount = 0
         data.timecaps = 1
-        data.giftcoins = 0
+        data.edcoins = 0
         for item in items:
             if item == 1:
                 data.shop[0][0][2] = 1
@@ -59,7 +59,7 @@ class archipelagoUI:
                 data.timecaps += 1
                 data.timecap = data.timecaps * data.timecapint
             elif item == 5:
-                giftcoins += 1
+                giftedcoins += 1
             elif item == 11:
                 data.shop[2][0][2] = 1
             elif item == 12:
@@ -119,8 +119,8 @@ class archipelagoUI:
             elif item == 40:
                 data.shop[3][9][2] = 1
         
-        if data.giftcoins > data.spentcoins:
-            data.points += data.giftcoins - data.spentcoins
+        if data.giftedcoins > data.spentcoins:
+            data.points += data.giftedcoins - data.spentcoins
     
     def serverinputs(self,data):
         self.addressbutton.updatec("Address : " + data.inputs[0],data.WINDOW_WIDTH/2,data.WINDOW_HEIGHT/2-80,data.colors[data.colorselect][1],0)

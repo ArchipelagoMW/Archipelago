@@ -47,8 +47,8 @@ ITEM_NAME_TO_ID = {
 DEFAULT_ITEM_CLASSIFICATIONS = {
     "Nothing Item Auto Milestone Collector": ItemClassification.useful,
     "Nothing Item Auto Timer Restart": ItemClassification.useful,
-    "Nothing Item Timer Digit": ItemClassification.progression,
-    "Nothing Item Progressive Time Cap": ItemClassification.progression,
+    "Nothing Item Timer Digit": ItemClassification.progression | ItemClassification.useful,
+    "Nothing Item Progressive Time Cap": ItemClassification.progression_deprioritized | ItemClassification.useful,
     "Nothing Item Gifted Coin": ItemClassification.useful | ItemClassification.filler,
     "Nothing Item Song 1": ItemClassification.filler,
     "Nothing Item Song 2": ItemClassification.filler,
@@ -95,8 +95,6 @@ def create_item_with_correct_classification(world: NothingWorld, name: str) -> N
 
 def create_all_items(world: NothingWorld) -> None:
     itempool: list[Item] = []
-    for _ in range(int(math.ceil(world.options.goal/world.options.milestone_interval))):
-        itempool.append(world.create_item("Nothing Item Progressive Time Cap"))
     
     if world.options.shop_upgrades:
         itempool.append(world.create_item("Nothing Item Timer Digit"))
@@ -105,6 +103,11 @@ def create_all_items(world: NothingWorld) -> None:
         itempool.append(world.create_item("Nothing Item Timer Digit"))
         itempool.append(world.create_item("Nothing Item Timer Digit"))
         itempool.append(world.create_item("Nothing Item Timer Digit"))
+    
+    for _ in range(int(math.ceil(world.options.goal/world.options.timecap_interval))):
+        itempool.append(world.create_item("Nothing Item Progressive Time Cap"))
+    
+    
 
     if (world.options.gift_coins or world.options.goal > 1200):
         if world.options.shop_upgrades:
