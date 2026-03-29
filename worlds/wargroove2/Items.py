@@ -66,7 +66,7 @@ item_table: Dict[str, ItemData] = {
     "Faahri Commanders": ItemData(252040, "Faction", USEFUL),
 
     # Event Items
-    "Wargroove 2 Victory": ItemData(None, "Goal")
+    "Wargroove 2 Final Level Completed": ItemData(None, "Goal")
 
 }
 

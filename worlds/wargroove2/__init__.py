@@ -7,7 +7,7 @@ import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification, MultiWorld
 from Options import NumericOption, OptionSet, OptionError
-from .Items import item_table, faction_table, Wargroove2Item
+from .Items import item_table, faction_table, Wargroove2Item, PROGRESSION, PROGRESSION_SKIP_BALANCING
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
     final_levels, region_names, FINAL_LEVEL_1, \
     FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT, main_filler_levels, \
@@ -73,27 +73,32 @@ class Wargroove2World(World):
     game = "Wargroove 2"
     topology_present = True
     web = Wargroove2Web()
-    level_list: typing.List[Wargroove2Level] = []
-    final_levels: typing.List[Wargroove2Level] = []
-    random_barracks_cost_values: typing.List[int] = []
-    random_tower_cost_values: typing.List[int] = []
-    random_hideout_cost_values: typing.List[int] = []
-    random_port_cost_values: typing.List[int] = []
-    ai_random_barracks_cost_values: typing.List[int] = []
-    ai_random_tower_cost_values: typing.List[int] = []
-    ai_random_hideout_cost_values: typing.List[int] = []
-    ai_random_port_cost_values: typing.List[int] = []
-    player_barracks_costs: typing.Dict[int, float] = {}
-    player_tower_costs: typing.Dict[int, float] = {}
-    player_hideout_costs: typing.Dict[int, float] = {}
-    player_port_costs: typing.Dict[int, float] = {}
-    ai_barracks_costs: typing.Dict[int, float] = {}
-    ai_tower_costs: typing.Dict[int, float] = {}
-    ai_hideout_costs: typing.Dict[int, float] = {}
-    ai_port_costs: typing.Dict[int, float] = {}
+    level_list: typing.List[Wargroove2Level]
+    final_levels: typing.List[Wargroove2Level]
+    random_barracks_cost_values: typing.List[int]
+    random_tower_cost_values: typing.List[int]
+    random_hideout_cost_values: typing.List[int]
+    random_port_cost_values: typing.List[int]
+    ai_random_barracks_cost_values: typing.List[int]
+    ai_random_tower_cost_values: typing.List[int]
+    ai_random_hideout_cost_values: typing.List[int]
+    ai_random_port_cost_values: typing.List[int]
+    player_barracks_costs: typing.Dict[int, float]
+    player_tower_costs: typing.Dict[int, float]
+    player_hideout_costs: typing.Dict[int, float]
+    player_port_costs: typing.Dict[int, float]
+    ai_barracks_costs: typing.Dict[int, float]
+    ai_tower_costs: typing.Dict[int, float]
+    ai_hideout_costs: typing.Dict[int, float]
+    ai_port_costs: typing.Dict[int, float]
     fill_slot_data_event: threading.Event = threading.Event()
     stage_assert_generate_called: bool = False
     filler_item_counter: int = 0
+    total_progressive_items: int = len(list(filter(lambda item: (item.classification == PROGRESSION or
+                                                        item.classification == PROGRESSION_SKIP_BALANCING) and
+                                                        item.code is not None,
+                                              item_table.values())))
+    total_defense_boost_items: int = 5
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
@@ -102,10 +107,7 @@ class Wargroove2World(World):
         early_level_slots = 4
         main_level_slots = LEVEL_COUNT - early_level_slots
         final_level_no_ocean_slots = 1
-
-        total_progressive_items = 32
-        total_defense_boost_items = 5
-        total_item_count = total_progressive_items + total_defense_boost_items
+        total_item_count = self.total_progressive_items + self.total_defense_boost_items
 
         # Selecting a random starting faction and add faction items to the total item count
         factions = [faction for faction in faction_table.keys() if faction != "Starter"]
@@ -161,10 +163,15 @@ class Wargroove2World(World):
                                           if level.name in self.options.custom_early_level_playlist.value]
         high_victory_checks_levels_copy = [level for level in high_victory_checks_levels_copy
                                           if level.name in self.options.custom_main_level_playlist.value]
-        while len(low_victory_checks_levels_copy) < early_level_slots:
-            low_victory_checks_levels_copy.append(random.choice(main_filler_levels))
-        while len(high_victory_checks_levels_copy) < main_level_slots:
-            high_victory_checks_levels_copy.append(random.choice(main_filler_levels))
+        length_of_main_filler_levels = len(main_filler_levels)
+        early_level_sample_counts = length_of_main_filler_levels * [early_level_slots // length_of_main_filler_levels]
+        main_level_sample_counts = length_of_main_filler_levels * [main_level_slots // length_of_main_filler_levels]
+        low_victory_checks_levels_copy.extend(random.sample(main_filler_levels,
+                                                            counts=early_level_sample_counts,
+                                                            k=early_level_slots))
+        high_victory_checks_levels_copy.extend(random.sample(main_filler_levels,
+                                                            counts=main_level_sample_counts,
+                                                            k=main_level_slots))
 
         random.shuffle(low_victory_checks_levels_copy)
         random.shuffle(high_victory_checks_levels_copy)
@@ -174,14 +181,15 @@ class Wargroove2World(World):
                                  if not level.has_ocean and level.name in self.options.custom_final_level_playlist]
         final_levels_ocean = [level for level in final_levels if level.has_ocean
                               and level.name in self.options.custom_final_level_playlist]
-        while len(final_levels_no_ocean) < final_level_no_ocean_slots:
-            final_filler_level = random.choice(final_filler_levels_copy)
-            final_filler_levels_copy.remove(final_filler_level)
-            final_levels_no_ocean.append(final_filler_level)
-        while len(final_levels_ocean) + len(final_levels_no_ocean) < FINAL_LEVEL_COUNT:
-            final_filler_level = random.choice(final_filler_levels_copy)
-            final_filler_levels_copy.remove(final_filler_level)
-            final_levels_ocean.append(final_filler_level)
+
+        selected_final_levels_no_ocean = random.sample(final_filler_levels_copy, final_level_no_ocean_slots)
+        final_filler_levels_copy = \
+            list(filter(lambda x: x not in selected_final_levels_no_ocean, final_filler_levels_copy))
+        final_levels_no_ocean.extend(selected_final_levels_no_ocean)
+
+        selected_final_levels_ocean = random.sample(final_filler_levels_copy,
+                                                    FINAL_LEVEL_COUNT - final_level_no_ocean_slots)
+        final_levels_ocean.extend(selected_final_levels_ocean)
 
         random.shuffle(final_levels_no_ocean)
         random.shuffle(final_levels_ocean)
@@ -224,12 +232,12 @@ class Wargroove2World(World):
         self.multiworld.itempool += pool
 
         for i in range(0, 4):
-            victory = Wargroove2Item("Wargroove 2 Victory", self.player)
+            victory = Wargroove2Item("Wargroove 2 Final Level Completed", self.player)
             final_level = self.final_levels[i]
             self.get_location(final_level.victory_location).place_locked_item(victory)
         # Placing victory event at final location
         self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has("Wargroove 2 Victory", self.player, self.options.final_levels.value)
+            state.has("Wargroove 2 Final Level Completed", self.player, self.options.final_levels.value)
 
     def set_rules(self) -> None:
         set_rules(self)

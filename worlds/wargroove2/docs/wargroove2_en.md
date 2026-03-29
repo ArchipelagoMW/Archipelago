@@ -65,7 +65,7 @@ steps once more.
 
 ### Wargroove 2 crashes or there is a lua error
 Wargroove 2 is finicky, but there could be several causes for this. If it happens often or can be reproduced, 
-please submit a bug report in the bug-reports channel on the [discord](https://discord.gg/archipelago).
+please submit a bug report in the bug-reports channel on the [discord](https://archipelago.gg/discord).
 Wargroove 2 may report an error when retrying a level. This is currently a bug in the game and not the mod.
 
 ### Wargroove 2 crashes when trying to run the Archipelago 2 campaign
