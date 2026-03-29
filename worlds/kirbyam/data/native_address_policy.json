@@ -89,6 +89,18 @@
         }
       ]
     },
+    "room_visit_checks": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "room_visit_flags_native",
+          "address": "0x02028CA0",
+          "width": "u16[0x120]",
+          "source": "katam linker.ld (`gVisitedDoors`) + room transition flow (`sub_08002A80`)",
+          "verification": "Integrated and used by room-sanity polling path; visit checks are keyed by doorsIdx and test bit 15 in each entry"
+        }
+      ]
+    },
     "full_clear_completion": {
       "status": "integrated",
       "entries": [

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- No unreleased changes yet.
+- Add optional Room Sanity (`room_sanity`) with 257 `Room X-YY` checks keyed by native `gVisitedDoors` (`doorsIdx`, bit 15), including reconnect-safe resend/dedupe polling, generation + slot_data gating, protocol/address policy updates, and dedicated Room Sanity polling/docs coverage (Issue #480).
 
 ## v0.0.14
 

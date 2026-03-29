@@ -16,6 +16,8 @@ You can read through all the options and generate a YAML here.
 
 This randomizer currently treats boss defeats, major chests, vitality chests, and sound player chests as primary AP checks. In vanilla shard mode, each area's boss defeat check awards that area's shard as the AP item. In completely random shard mode, shards can appear at any physical check.
 
+An optional Room Sanity mode is also available (`room_sanity`). When enabled, room visits become AP checks using labels like `Room 1-01` and `Room 9-27`. Room Sanity is disabled by default because it adds 257 checks.
+
 
 
 ## What items and locations get randomized?
@@ -24,6 +26,8 @@ This randomizer currently treats boss defeats, major chests, vitality chests, an
 
 The locations of Shards, Maps, Vitality Counters, and the Sound Player are all randomized. For example, the big chest in Moonlight Mansion might contain the mirror shard that normally drops from defeating Wiz.
 Boss defeats are separate checks from shard progression. Shards are delivered through Archipelago item placement instead of being granted directly by boss defeats.
+
+If Room Sanity is enabled, each eligible NORMAL/BIG room visit is also a randomized check. Special STAR/UNKNOWN rooms are excluded from Room Sanity in the current implementation.
 
 
 

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 
 from BaseClasses import ItemClassification, Region
 
-from .data import data
+from .data import LocationCategory, data
 from .items import KirbyAmItem
 from .locations import KirbyAmLocation
 
@@ -32,6 +32,11 @@ def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
         # Add fillable locations from JSON
         for loc_key in region_data.locations:
             loc_meta = data.locations[loc_key]
+            if (
+                loc_meta.category == LocationCategory.ROOM_SANITY
+                and not world.options.room_sanity.value
+            ):
+                continue
             region.locations.append(
                 KirbyAmLocation(
                     world.player,
