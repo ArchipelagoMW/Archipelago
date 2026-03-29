@@ -23,7 +23,7 @@ CANONICAL_ITEM_GROUPS = {
     "Maps",       # Area map items
     "Vitality",   # Vitality counter items
     "Useful",     # Useful but non-critical progression items
-    "Filler",     # Filler items (1-Up, 2-Up, 3-Up)
+    "Filler",     # Filler items (1-Up plus shipped consumables)
 }
 
 EXPECTED_ALIASES = {
@@ -57,8 +57,10 @@ EXPECTED_GROUP_MEMBERS = {
     },
     "Filler": {
         "1 Up",
-        "2 Up",
-        "3 Up",
+        "Small Food",
+        "Cell Phone Battery",
+        "Max Tomato",
+        "Invincibility Candy",
     },
 }
 
@@ -130,9 +132,9 @@ class TestItemGroupMembership:
             "Vitality group should have 4 items"
         assert "Candy Constellation - Vitality Counter" in ITEM_GROUPS.get("Vitality", set()), \
             "Vitality group should include Candy Constellation - Vitality Counter"
-        # Filler: 3 items (1-Up, 2-Up, 3-Up)
-        assert len(ITEM_GROUPS.get("Filler", set())) == 3, \
-            "Filler group should have 3 items (1-Up, 2-Up, 3-Up)"
+        # Filler: 5 shipped filler items (1-Up plus consumables)
+        assert len(ITEM_GROUPS.get("Filler", set())) == 5, \
+            "Filler group should have 5 items (1-Up plus consumables)"
 
 
 class TestItemGroupsInWorldContext:
@@ -190,7 +192,7 @@ class TestItemGroupContracts:
             "Maps": "Area map items",
             "Vitality": "Vitality counter increase items",
             "Useful": "Non-critical progression enhancers (e.g., copy ability upgrades)",
-            "Filler": "Generic filler items (1-Up, 2-Up, 3-Up)",
+            "Filler": "Generic filler items (1-Up plus consumables)",
         }
         # Verify all canonical groups are documented
         for group_name in CANONICAL_ITEM_GROUPS:

@@ -4,17 +4,29 @@
     "classification": "FILLER",
     "tags": ["Filler", "Life"]
   },
-  "2_UP": {
-    "label": "2 Up",
+  "FOOD": {
+    "label": "Small Food",
     "classification": "FILLER",
-    "item_id": 3860022,
-    "tags": ["Filler", "Life"]
+    "item_id": 3860026,
+    "tags": ["Filler", "Consumable", "Health"]
   },
-  "3_UP": {
-    "label": "3 Up",
+  "BATTERY": {
+    "label": "Cell Phone Battery",
     "classification": "FILLER",
-    "item_id": 3860023,
-    "tags": ["Filler", "Life"]
+    "item_id": 3860027,
+    "tags": ["Filler", "Consumable", "Battery"]
+  },
+  "MAX_TOMATO": {
+    "label": "Max Tomato",
+    "classification": "FILLER",
+    "item_id": 3860028,
+    "tags": ["Filler", "Consumable", "Health"]
+  },
+  "INVINCIBILITY_CANDY": {
+    "label": "Invincibility Candy",
+    "classification": "FILLER",
+    "item_id": 3860029,
+    "tags": ["Filler", "Consumable", "Invincibility"]
   },
   "SHARD_1": {
     "label": "Mustard Mountain - Mirror Shard",

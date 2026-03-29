@@ -1342,6 +1342,8 @@ verified well enough to ship without risky mailbox-side side effects.
 
 ## Issue #372: Phase 1 – Restrict Filler Pool to 1_UP
 
+Status: Historical context only. Superseded by Issue #295 for the current shipped filler contract.
+
 ### Problem
 While Issue #41 introduced a weighted multi-filler pool (`1 Up`, `2 Up`, `3 Up`), Phase 1 gameplay balance requires a single filler item to keep rewards simple and predictable.
 The multi-filler pool introduced unnecessary complexity for the initial release.
@@ -1353,15 +1355,60 @@ Replaced the weighted filler selection table with an explicit **active filler po
 - Generation calls `self.random.choice(self.ACTIVE_FILLER_POOL)` instead of weighted selection.
 - Pool structure supports future expansion without code changes (only data update).
 
-Catalog items `2 Up` and `3 Up` remain defined and dormant:
-- Not selected by active filler generation.
-- Payload handlers remain intact for compatibility.
-- Documented as reserved/inactive for Phase 1.
-
 ### Validation
 - `test_active_filler_selection_is_seed_stable()` updated to assert only `1 Up` is selected.
 - New pool-based logic remains deterministic under fixed seeds (RNG behavior unchanged).
 - Updated `test_item_pool.py` to match Phase 1 expectations.
+
+## Issue #295: Ship Consumable Filler Effects
+
+### Problem
+The shipped filler contract still reflected the temporary Phase 1 restriction from
+Issue #372: only `1 Up` was generated, while dormant `2 Up` and `3 Up` compatibility
+handlers stayed in the catalog and payload. That no longer matched the desired
+filler set or the decomp-backed consumable behavior.
+
+### Solution
+Promoted the shipped active filler pool to:
+- `1 Up`
+- `Small Food`
+- `Cell Phone Battery`
+- `Max Tomato`
+- `Invincibility Candy`
+
+Removed `2 Up` and `3 Up` from item definitions, group membership, tests, payload
+handling, and protocol docs.
+
+Allocated the new consumable IDs at `3860026` through `3860029` instead of the
+issue's provisional `3860024` through `3860027`, because the shipped contract
+already uses `3860024` for `MAP_RAINBOW_ROUTE` and `3860025` for `SOUND_PLAYER`.
+
+Payload behavior now mirrors the decomp-backed native semantics closely enough for
+mailbox delivery:
+- `Small Food`: heal active Kirby by 1 HP, capped at max HP
+- `Cell Phone Battery`: increment active Kirby battery, capped at 3
+- `Max Tomato`: set active Kirby HP to max HP
+- `Invincibility Candy`: write the native Kirby invincibility state fields and call
+  the native helper used by `BonusGiveInvincibility` with the same 1000-tick duration
+
+### Evidence Trail
+- Claim: Small Food, Battery, Max Tomato, and Invincibility Candy are first-class native consumables.
+  - Source: `katam/include/constants/object_types.h`, `katam/src/bonus.c`
+  - Adaptation: model them as AP filler items in `items.json` and `ACTIVE_FILLER_POOL`
+  - Validation: targeted KirbyAM tests updated; live BizHawk validation remains required
+- Claim: battery, HP, max HP, and lives live in the active Kirby struct.
+  - Source: `katam/include/kirby.h`
+  - Adaptation: payload derives the active Kirby struct base from `KIRBY_CURRENT_PLAYER` and writes offsets `0xDC`, `0x100`, and `0x101`
+  - Validation: build/test validation locally; live BizHawk RAM confirmation remains required
+- Claim: native invincibility uses both struct writes and `sub_0808324C(kirby, 1000)`.
+  - Source: `katam/src/bonus.c`, `katam/src/code_0806F780.c`
+  - Adaptation: payload writes `unkE1/unkE2/unkE4/unkE5` and calls the Thumb helper at `0x0808324D`
+  - Validation: build/test validation locally; live BizHawk timer/music confirmation remains required
+
+### Validation
+- Updated item-pool and item-group tests for the new shipped filler catalog.
+- Updated payload regression checks to assert consumable handlers are present and `2 Up`/`3 Up` handlers are absent.
+- Updated `PROTOCOL.md` and `docs/BIZHAWK_TESTING_GUIDE.md` to match the shipped filler contract.
 
 ## Issue #388: Vitality Chest Locations and AP-Delivered Vitality
 

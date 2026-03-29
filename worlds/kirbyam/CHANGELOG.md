@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Replace dormant `2 Up`/`3 Up` compatibility fillers with shipped consumable filler effects for `Small Food`, `Cell Phone Battery`, `Max Tomato`, and `Invincibility Candy`, update the active filler pool and ROM payload apply logic, and document the new filler contract and manual validation expectations (Issue #295).
 - Add optional Room Sanity (`room_sanity`) with 257 `Room X-YY` checks keyed by native `gVisitedDoors` (`doorsIdx`, bit 15), including reconnect-safe resend/dedupe polling, generation + slot_data gating, protocol/address policy updates, and dedicated Room Sanity polling/docs coverage (Issue #480).
 
 ## v0.0.14

@@ -105,13 +105,36 @@ def test_sound_player_chest_default_item_is_useful_sound_player() -> None:
     assert "SoundPlayer" in item.tags
 
 
-def test_filler_catalog_includes_multiple_life_items() -> None:
+def test_filler_catalog_includes_current_filler_set() -> None:
     filler_items = [item for item in data.items.values() if item.classification == ItemClassification.filler]
-    filler_labels = {item.label for item in filler_items}
+    filler_by_label = {item.label: item for item in filler_items}
+    filler_labels = set(filler_by_label)
 
-    assert {"1 Up", "2 Up", "3 Up"}.issubset(filler_labels)
+    assert filler_labels == {
+        "1 Up",
+        "Small Food",
+        "Cell Phone Battery",
+        "Max Tomato",
+        "Invincibility Candy",
+    }
     assert all("Filler" in item.tags for item in filler_items)
-    assert all("Life" in item.tags for item in filler_items)
+    assert "Life" in filler_by_label["1 Up"].tags
+    assert "Consumable" in filler_by_label["Small Food"].tags
+    assert "Health" in filler_by_label["Small Food"].tags
+    assert "Battery" in filler_by_label["Cell Phone Battery"].tags
+    assert "Health" in filler_by_label["Max Tomato"].tags
+    assert "Invincibility" in filler_by_label["Invincibility Candy"].tags
+
+
+def test_consumable_filler_item_ids_are_stable() -> None:
+    labels_to_ids = {item.label: item.item_id for item in data.items.values()}
+
+    assert labels_to_ids["Small Food"] == 3860026
+    assert labels_to_ids["Cell Phone Battery"] == 3860027
+    assert labels_to_ids["Max Tomato"] == 3860028
+    assert labels_to_ids["Invincibility Candy"] == 3860029
+    assert "2 Up" not in labels_to_ids
+    assert "3 Up" not in labels_to_ids
 
 
 def test_active_filler_selection_is_seed_stable() -> None:
@@ -121,12 +144,12 @@ def test_active_filler_selection_is_seed_stable() -> None:
     world_b = KirbyAmWorld.__new__(KirbyAmWorld)
     world_b.random = random.Random(41)
 
-    picks_a = [world_a.get_filler_item_name() for _ in range(16)]
-    picks_b = [world_b.get_filler_item_name() for _ in range(16)]
+    picks_a = [world_a.get_filler_item_name() for _ in range(64)]
+    picks_b = [world_b.get_filler_item_name() for _ in range(64)]
 
     assert picks_a == picks_b
-    assert set(picks_a) == {"1 Up"}, "Phase 1 active filler pool contains only 1 Up"
-    assert all(pick == "1 Up" for pick in picks_a), "All filler picks should be 1 Up in Phase 1"
+    assert all(pick in KirbyAmWorld.ACTIVE_FILLER_POOL for pick in picks_a)
+    assert len(set(picks_a)) > 1, "Expanded filler pool should produce more than one filler label"
 
 
 def test_filler_selection_respects_active_pool() -> None:
@@ -143,20 +166,33 @@ def test_filler_selection_respects_active_pool() -> None:
 
 
 def test_phase1_active_filler_pool_contents() -> None:
-    """Phase 1: active filler generation is intentionally limited to 1 Up."""
-    assert KirbyAmWorld.ACTIVE_FILLER_POOL == ("1 Up",)
+    """Issue #295: active filler generation includes the shipped consumable set."""
+    assert KirbyAmWorld.ACTIVE_FILLER_POOL == (
+        "1 Up",
+        "Small Food",
+        "Cell Phone Battery",
+        "Max Tomato",
+        "Invincibility Candy",
+    )
 
 
-def test_payload_supports_weighted_life_fillers() -> None:
+def test_payload_supports_consumable_and_life_fillers() -> None:
     payload_path = Path(__file__).resolve().parents[1] / "kirby_ap_payload" / "ap_payload.c"
     with payload_path.open("r", encoding="utf-8") as payload_file:
         payload = payload_file.read()
 
     assert "static void ap_grant_lives(uint8_t amount)" in payload
-    assert "KIRBY_ITEM_ID_BASE_OFFSET + 22u" in payload
-    assert "KIRBY_ITEM_ID_BASE_OFFSET + 23u" in payload
-    assert "ap_grant_lives(2u)" in payload
-    assert "ap_grant_lives(3u)" in payload
+    assert "static void ap_grant_small_food(void)" in payload
+    assert "static void ap_grant_battery(void)" in payload
+    assert "static void ap_grant_max_tomato(void)" in payload
+    assert "static void ap_grant_invincibility_candy(void)" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 26u" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 27u" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 28u" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 29u" in payload
+    assert "KIRBY_GIVE_INVINCIBILITY_FN" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 22u" not in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 23u" not in payload
 
 
 def test_goal_locations_are_converted_to_addressless_events() -> None:
@@ -215,7 +251,8 @@ def test_vanilla_shards_are_locked_to_boss_defeats() -> None:
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
     _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
-    _expected_pool_size = _major_chest_count + _vitality_chest_count + _sound_player_chest_count
+    _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
+    _expected_pool_size = _major_chest_count + _vitality_chest_count + _sound_player_chest_count + _room_sanity_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
 
@@ -233,8 +270,15 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
     _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
     _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
+    _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
     _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
-    _open_non_goal_location_count = _boss_defeat_count + _major_chest_count + _vitality_chest_count + _sound_player_chest_count
+    _open_non_goal_location_count = (
+        _boss_defeat_count
+        + _major_chest_count
+        + _vitality_chest_count
+        + _sound_player_chest_count
+        + _room_sanity_count
+    )
     _expected_pool_size = _open_non_goal_location_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert len(shard_items) == _shard_item_count
