@@ -27,14 +27,18 @@ async def test_poll_room_sanity_sends_location_checks_for_visited_doors(mock_biz
     mock_bizhawk_context.slot_data["room_sanity"] = True
     mock_bizhawk_context.checked_locations = set()
 
-    room_1_01 = data.locations["ROOM_SANITY_1_01"].location_id
-    room_1_02 = data.locations["ROOM_SANITY_1_02"].location_id
+    room_1_01_data = data.locations["ROOM_SANITY_1_01"]
+    room_1_02_data = data.locations["ROOM_SANITY_1_02"]
+    room_1_01 = room_1_01_data.location_id
+    room_1_02 = room_1_02_data.location_id
+    assert room_1_01_data.bit_index is not None
+    assert room_1_02_data.bit_index is not None
 
     with patch.dict(data.native_ram_addresses, {"room_visit_flags_native": 0x02028CA0}, clear=False), \
          patch("worlds.kirbyam.client.bizhawk.read", new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, "send_msgs", new_callable=AsyncMock) as mock_send:
-        # doorsIdx 0 and 10 map to Room 1-01 and Room 1-02 in the generated dataset.
-        mock_read.return_value = [_room_visit_bytes(0, 10)]
+        # Derive visited bits from current location metadata instead of hard-coding doorsIdx constants.
+        mock_read.return_value = [_room_visit_bytes(room_1_01_data.bit_index, room_1_02_data.bit_index)]
 
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
@@ -65,14 +69,16 @@ async def test_poll_room_sanity_dedupes_already_server_acknowledged(mock_bizhawk
     client.initialize_client()
 
     mock_bizhawk_context.slot_data["room_sanity"] = True
-    room_1_01 = data.locations["ROOM_SANITY_1_01"].location_id
+    room_1_01_data = data.locations["ROOM_SANITY_1_01"]
+    room_1_01 = room_1_01_data.location_id
+    assert room_1_01_data.bit_index is not None
     mock_bizhawk_context.checked_locations = {room_1_01}
 
     with patch.dict(data.native_ram_addresses, {"room_visit_flags_native": 0x02028CA0}, clear=False), \
          patch("worlds.kirbyam.client.bizhawk.read", new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, "send_msgs", new_callable=AsyncMock) as mock_send, \
          patch("CommonClient.logger") as mock_logger:
-        mock_read.return_value = [_room_visit_bytes(0)]
+        mock_read.return_value = [_room_visit_bytes(room_1_01_data.bit_index)]
 
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
@@ -112,18 +118,20 @@ async def test_reconnect_room_sanity_resends_once_then_dedupes(mock_bizhawk_cont
     client.initialize_client()
 
     mock_bizhawk_context.slot_data["room_sanity"] = True
-    room_1_01 = data.locations["ROOM_SANITY_1_01"].location_id
+    room_1_01_data = data.locations["ROOM_SANITY_1_01"]
+    room_1_01 = room_1_01_data.location_id
+    assert room_1_01_data.bit_index is not None
     mock_bizhawk_context.checked_locations = set()
 
     with patch.dict(data.native_ram_addresses, {"room_visit_flags_native": 0x02028CA0}, clear=False), \
          patch("worlds.kirbyam.client.bizhawk.read", new_callable=AsyncMock) as mock_read:
         # First poll: visited in RAM but not on server -> send.
-        mock_read.return_value = [_room_visit_bytes(0)]
+        mock_read.return_value = [_room_visit_bytes(room_1_01_data.bit_index)]
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
         # Reconnect-equivalent poll: now server has acknowledged -> dedupe.
         mock_bizhawk_context.checked_locations = {room_1_01}
-        mock_read.return_value = [_room_visit_bytes(0)]
+        mock_read.return_value = [_room_visit_bytes(room_1_01_data.bit_index)]
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
     mock_bizhawk_context.send_msgs.assert_awaited_once_with([
