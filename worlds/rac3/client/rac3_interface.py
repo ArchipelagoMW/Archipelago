@@ -11,9 +11,10 @@ from worlds.rac3.client.general_interface import GameInterface
 from worlds.rac3.client.texthelper import TEXT_BYTE_TO_EXPECTED_WIDTH
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
-from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, infobot_data, ITEM_FROM_AP_CODE,
-                                             ITEM_NAME_FROM_ID, non_prog_weapon_data, PROG_TO_NAME_DICT,
-                                             RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data)
+from worlds.rac3.constants.data.item import (armor_data, equipable_data, cheat_data, gadget_data, infobot_data, 
+                                             ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, non_prog_weapon_data, 
+                                             PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, timer_to_status, 
+                                             vidcomic_data)
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
                                                  RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
@@ -296,6 +297,7 @@ class Rac3Interface(GameInterface):
         self.weapon_exp_cycler()
         self.verify_quick_select_and_last_used()
         self.clank_cycler()
+        self.cheat_cycler()
         self.notification_cycler()
 
     def undo_collections(self):
@@ -1136,6 +1138,7 @@ class Rac3Interface(GameInterface):
         self.vidcomic_cycler()
         self.armor_cycler()
         self.timer_cycler()
+        self.cheat_cycler()
         self.weapon_exp_cycler()
         self.verify_quick_select_and_last_used()
         self.clank_cycler()
@@ -1484,6 +1487,17 @@ class Rac3Interface(GameInterface):
         """Update the Bolt+EXP multiplier based on settings"""
         self._write32(RAC3STATUS.JACKPOT_TIMER, 0x7FFFFFFF)
         self._write8(RAC3STATUS.JACKPOT, self.boltAndXPMultiplierValue)
+    
+    def cheat_cycler(self):
+        """Handles unlocking cheats such as the lightsaber wrench cheat"""
+        for name in cheat_data.keys():
+            addr = cheat_data[name].UNLOCK_ADDRESS
+            if self.UnlockItem[name].status:
+                if self.UnlockItem[name].unlock_delay:
+                    self._write8(addr, 1)
+                    self.UnlockItem[name].unlock_delay = 0
+                else:
+                    self.UnlockItem[name].unlock_delay += 1
 
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
