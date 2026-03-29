@@ -13,11 +13,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
   0x02000000 - 0x02040000   EWRAM Region (256 KB)
     ├─ 0x02000000 - 0x0202BFFF   Native game state
-    ├─ 0x0202C000 - 0x0202C037   AP Mailbox (reserved, 56 bytes)
-    └─ 0x0202C038 - 0x02040000   Rest of RAM (unused by AP)
+    ├─ 0x0202C000 - 0x0202C043   AP Mailbox (reserved, 68 bytes)
+    └─ 0x0202C044 - 0x02040000   Rest of RAM (unused by AP)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C037)
+### AP Mailbox Block (0x0202C000 - 0x0202C043)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -38,8 +38,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x2C   | 0x0202C02C | 4B | vitality_chest_flags  | u32  | ROM → Client | Bits set when a native vitality big chest is opened; bits 0..3 map to the four vitality chest room IDs (Carrot 5-23, Olive 6-21, Radish 8-4, Candy 9-8). |
 | 0x30   | 0x0202C030 | 4B | sound_player_chest_flags | u32 | ROM → Client | Bits set when the native Sound Player chest is opened; bit 0 maps to `SOUND_PLAYER_CHEST`. Native Sound Player unlock is intentionally deferred until AP item receipt. |
 | 0x34   | 0x0202C034 | 4B | hook_heartbeat        | u32  | ROM → Client | Increments once on every AP main hook entry. Diagnostic signal for hook liveness. |
+| 0x38   | 0x0202C038 | 4B | delivered_shard_bitfield | u32 | ROM → Client | Bits 0–7 represent shard ownership authority. On mailbox initialization (`mailbox_init_cookie` absent/mismatched), `ap_poll_mailbox_c()` seeds this from current native shard save state; after init, shard delivery in `ap_apply_item()` sets additional bits. Never set by boss-defeat hook. Used by per-frame scrub (Issue #478) to clamp `KIRBY_SHARD_FLAGS`. |
+| 0x3C   | 0x0202C03C | 4B | shard_scrub_delay_frames | u32 | ROM internal | Countdown timer (frames). Set to 600 by boss-defeat hook to hold off `KIRBY_SHARD_FLAGS` scrub during post-boss cutscene; decremented to 0 by `ap_poll_mailbox_c()`, then scrub runs. |
+| 0x40   | 0x0202C040 | 4B | mailbox_init_cookie | u32 | ROM internal | Initialization cookie (`0x4B41504D`). If absent/mismatched, payload seeds `delivered_shard_bitfield` from native shard state, clears scrub delay + boss-defeat flags, and stores the cookie to prevent stale EWRAM transport values from triggering scrub writes. |
 
-**Total: 56 bytes (0x0202C000 - 0x0202C037)**
+**Total: 68 bytes (0x0202C000 - 0x0202C043)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -224,7 +227,7 @@ if missing_on_server:
     send LocationChecks(missing_on_server)
 ```
 
-Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, vitality chest openings are reported through `vitality_chest_flags`, and Sound Player chest openings are reported through `sound_player_chest_flags`. Native boss shard / native big-chest map / native vitality grants are intercepted so progression, map ownership, and vitality growth come only from AP item delivery, and native Sound Player unlock is similarly intercepted so unlock ownership comes only from AP `SOUND_PLAYER` receipt.
+Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. `delivered_shard_bitfield` is the authority used by the per-frame scrub to enforce that `KIRBY_SHARD_FLAGS` (and therefore all `HasShard()` / `NumShardsCollected()` gate checks) reflects AP-owned shard state (Issue #478): it is seeded from native shard save state on mailbox init, then extended by AP `SHARD_N` item delivery. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, vitality chest openings are reported through `vitality_chest_flags`, and Sound Player chest openings are reported through `sound_player_chest_flags`. Native boss shard / native big-chest map / native vitality grants are intercepted so progression, map ownership, and vitality growth come only from AP item delivery, and native Sound Player unlock is similarly intercepted so unlock ownership comes only from AP `SOUND_PLAYER` receipt.
 
 **Behavior notes:**
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.

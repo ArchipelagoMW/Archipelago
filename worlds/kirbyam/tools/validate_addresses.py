@@ -82,10 +82,14 @@ class AddressValidator:
         """Check that addresses are used in client code."""
         issues = []
         informational_unused = {
+            "shard_bitfield",
             "debug_item_counter",
             "debug_last_item_id",
             "debug_last_from",
             "frame_counter",
+            "delivered_shard_bitfield",
+            "shard_scrub_delay_frames",
+            "mailbox_init_cookie",
         }
         
         print("\n--- Address Usage Validation ---")

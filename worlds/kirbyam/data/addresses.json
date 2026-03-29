@@ -14,7 +14,10 @@
       "boss_defeat_flags": "0x0202C024",
       "major_chest_flags": "0x0202C028",
       "vitality_chest_flags": "0x0202C02C",
-      "sound_player_chest_flags": "0x0202C030"
+      "sound_player_chest_flags": "0x0202C030",
+      "delivered_shard_bitfield": "0x0202C038",
+      "shard_scrub_delay_frames": "0x0202C03C",
+      "mailbox_init_cookie": "0x0202C040"
     },
     "native": {
       "shard_bitfield_native": "0x02038970",

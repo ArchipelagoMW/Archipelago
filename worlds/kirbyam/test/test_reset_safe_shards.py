@@ -164,6 +164,108 @@ def test_boss_defeat_hook_preserves_native_shard_state():
         "Boss hook must persist shard flags to SRAM for reset-safe behaviour"
 
 
+def test_boss_defeat_hook_sets_scrub_delay():
+    """Verify ap_on_boss_defeat_collect_shard sets AP_SHARD_SCRUB_DELAY (Issue #478).
+
+    The scrub delay holds off the per-frame KIRBY_SHARD_FLAGS clamp so the
+    post-boss cutscene state machine can read the temporary native write without
+    triggering the white-screen regression from Issue #380.
+    """
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, "r") as f:
+        content = f.read()
+
+    match = re.search(
+        r"void\s+ap_on_boss_defeat_collect_shard[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert match is not None, "ap_on_boss_defeat_collect_shard definition must exist"
+    hook_body = match.group(0)
+
+    assert "AP_SHARD_SCRUB_DELAY" in hook_body, \
+        "Boss hook must set AP_SHARD_SCRUB_DELAY to hold off shard scrub during cutscene"
+    assert "SHARD_BOSS_CUTSCENE_FRAMES" in hook_body, \
+        "Boss hook must assign SHARD_BOSS_CUTSCENE_FRAMES to AP_SHARD_SCRUB_DELAY"
+
+
+def test_ap_apply_item_shard_path_writes_delivered_bitfield():
+    """Verify ap_apply_item shard path writes AP_DELIVERED_SHARD_BITFIELD (Issue #478).
+
+    AP_DELIVERED_SHARD_BITFIELD is the authority for which shard bits are
+    AP-owned.  Only ap_apply_item() may set bits in it; boss-defeat must not.
+    """
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, "r") as f:
+        content = f.read()
+
+    # Extract ap_apply_item body
+    match = re.search(
+        r"uint8_t\s+ap_apply_item[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert match is not None, "ap_apply_item definition must exist in ap_payload.c"
+    apply_body = match.group(0)
+
+    assert "AP_DELIVERED_SHARD_BITFIELD" in apply_body, \
+        "ap_apply_item shard path must write AP_DELIVERED_SHARD_BITFIELD"
+
+    # Boss hook must NOT write AP_DELIVERED_SHARD_BITFIELD
+    match_boss = re.search(
+        r"void\s+ap_on_boss_defeat_collect_shard[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert match_boss is not None, "ap_on_boss_defeat_collect_shard definition must exist"
+    assert "AP_DELIVERED_SHARD_BITFIELD" not in match_boss.group(0), \
+        "Boss hook must NOT write AP_DELIVERED_SHARD_BITFIELD; it is AP-delivery-only"
+
+
+def test_ap_poll_mailbox_contains_shard_scrub_logic():
+    """Verify ap_poll_mailbox_c contains the per-frame KIRBY_SHARD_FLAGS scrub (Issue #478).
+
+    Once AP_SHARD_SCRUB_DELAY reaches 0, the scrub clamps KIRBY_SHARD_FLAGS to
+    AP_DELIVERED_SHARD_BITFIELD so that HasShard() / NumShardsCollected() gate
+    checks reflect only AP-delivered shards.
+    """
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, "r") as f:
+        content = f.read()
+
+    match = re.search(
+        r"void\s+ap_poll_mailbox_c[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert match is not None, "ap_poll_mailbox_c definition must exist in ap_payload.c"
+    poll_body = match.group(0)
+
+    # Strip line comments and normalize whitespace to reduce formatting brittleness.
+    poll_body_code_only = re.sub(r'//[^\n]*', '', poll_body)
+    poll_body_norm = re.sub(r'\s+', ' ', poll_body_code_only)
+
+    assert "AP_SHARD_SCRUB_DELAY" in poll_body_norm, \
+        "ap_poll_mailbox_c must reference AP_SHARD_SCRUB_DELAY for the scrub countdown"
+    assert "AP_DELIVERED_SHARD_BITFIELD" in poll_body_norm, \
+        "ap_poll_mailbox_c must read AP_DELIVERED_SHARD_BITFIELD to clamp KIRBY_SHARD_FLAGS"
+    assert "AP_MAILBOX_INIT_COOKIE" in poll_body_norm, \
+        "ap_poll_mailbox_c must validate mailbox init cookie before shard scrub logic"
+    assert "AP_MAILBOX_INIT_COOKIE_VALUE" in poll_body_norm, \
+        "ap_poll_mailbox_c must compare against AP_MAILBOX_INIT_COOKIE_VALUE"
+    assert re.search(r"AP_DELIVERED_SHARD_BITFIELD\s*=\s*\(uint32_t\)\s*native_shards_boot", poll_body_norm), \
+        "ap_poll_mailbox_c must seed AP_DELIVERED_SHARD_BITFIELD from native shard state on init"
+    assert re.search(r"AP_BOSS_DEFEAT_FLAGS\s*==\s*0u", poll_body_norm), \
+        "ap_poll_mailbox_c must guard bootstrap behavior before local boss-defeat activity"
+    assert re.search(r"AP_DELIVERED_SHARD_BITFIELD\s*=\s*\(uint32_t\)\s*native_shards", poll_body_norm), \
+        "ap_poll_mailbox_c must be able to seed AP_DELIVERED_SHARD_BITFIELD from native saved shards"
+    assert re.search(r"persist_shard_to_sram\s*\(", poll_body_norm), \
+        "ap_poll_mailbox_c scrub must persist the clamped state to SRAM"
+
+
 def test_ap_hook_preserves_register_context_without_r4_temp_restore():
     """Verify the hook preserves full context and does not rebuild LR through r4."""
     hook_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_hook.s")
