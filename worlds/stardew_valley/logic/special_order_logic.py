@@ -3,6 +3,7 @@ from typing import Dict
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..content.vanilla.qi_board import qi_board_content_pack
+from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, Has, false_
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.transport_names import Transportation
@@ -10,6 +11,7 @@ from ..strings.artisan_good_names import ArtisanGood
 from ..strings.crop_names import Vegetable, Fruit
 from ..strings.fertilizer_names import Fertilizer
 from ..strings.fish_names import Fish
+from ..strings.food_names import Beverage, Meal
 from ..strings.forageable_names import Forageable
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
@@ -50,8 +52,8 @@ class SpecialOrderLogic(BaseLogic):
             SpecialOrder.robins_resource_rush: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                                self.logic.has(Fertilizer.tree) & self.logic.ability.can_mine_perfectly(),
             SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat),
-            SpecialOrder.a_curious_substance: self.logic.region.can_reach(Region.wizard_tower),
-            SpecialOrder.prismatic_jelly: self.logic.region.can_reach(Region.wizard_tower),
+            SpecialOrder.a_curious_substance: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_55,)),
+            SpecialOrder.prismatic_jelly: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_25,)),
 
         })
 
@@ -80,8 +82,9 @@ class SpecialOrderLogic(BaseLogic):
                                                    self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_use_shipping_bin &
-                                          (self.logic.money.can_spend_at(Region.saloon, 205000) | self.logic.money.can_spend_at(Region.pierre_store, 170000)),
-                SpecialOrder.qis_kindness: self.logic.relationship.can_give_loved_gifts_to_everyone(),
+                                          (self.logic.money.can_spend_at(Region.saloon, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) &
+                                           (self.logic.money.can_spend_at(Region.pierre_store, 170000) & self.logic.cooking.can_cook(Meal.bread)),
+                SpecialOrder.qis_kindness: self.logic.gifts.can_give_loved_gifts_to_everyone(),
                 SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &
                                               self.logic.has(Fish.crimsonfish) & self.logic.has(Fish.mutant_carp) & self.logic.has(Fish.legend),
                 SpecialOrder.danger_in_the_deep: self.logic.ability.can_mine_perfectly() & self.logic.mine.has_mine_elevator_to_floor(120),
@@ -103,3 +106,10 @@ class SpecialOrderLogic(BaseLogic):
 
     def has_island_transport(self) -> StardewRule:
         return self.logic.received(Transportation.island_obelisk) | self.logic.received(Transportation.boat_repair)
+
+    def can_get_radioactive_ore(self) -> StardewRule:
+        if not self.options.special_order_locations & SpecialOrderLocations.value_qi:
+            return self.logic.false_
+
+        return self.logic.ability.can_mine_perfectly() & self.logic.region.can_reach(Region.qi_walnut_room) &\
+               self.logic.region.can_reach_all(*(Region.mines_floor_100, Region.skull_cavern_100))

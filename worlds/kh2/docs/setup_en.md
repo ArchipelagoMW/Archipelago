@@ -16,9 +16,10 @@ Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.
 - Needed for Archipelago 
     1. [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases)
     2. Install the Archipelago Companion mod from `JaredWeakStrike/APCompanion` using OpenKH Mod Manager
-    3. Install the mod from `KH2FM-Mods-equations19/auto-save` using OpenKH Mod Manager
-    4. Install the mod from `KH2FM-Mods-equations19/KH2-Lua-Library` using OpenKH Mod Manager
-    5. AP Randomizer Seed
+    3. Install the mod from `TopazTK/KH2-ArchipelagoEnablers` using OpenKH Mod manager
+       1. Do Note that if you have `KH2FM-Mods-equations19/auto-save` OR `KH2FM-Mods-equations19/soft-reset` you should download `TopazTK/KH2-ArchipelagoEnablersLITE` instead
+       2. This mod overwrites slot 99 with an autosave. Make sure to copy your save data to another slot before installing.
+    4. AP Randomizer Seed
 - Optional Quality of Life Mods for Archipelago
     1. Optionally Install the Archipelago Quality Of Life mod from `JaredWeakStrike/AP_QOL` using OpenKH Mod Manager
     2. Optionally Install the Quality Of Life mod from `shananas/BearSkip` using OpenKH Mod Manager
@@ -29,9 +30,9 @@ Load this mod just like the <b>GoA ROM</b> you did during the KH2 Rando setup. `
 Have this mod second-highest priority below the .zip seed.<br>
 This mod is based upon Num's Garden of Assemblage Mod and requires it to work. Without Num this could not be possible. 
 
-### Required: Auto Save Mod and KH2 Lua Library
+### Required: Archipelago Enablers
 
-Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library` Location doesn't matter, required in case of crashes. See [Best Practices](#best-practices) on how to load the auto save
+Load this mod just like <b> GoA ROM</b> `TopazTK/KH2-ArchipelagoEnablers`. <b>NOTE:</b> if you perfer `KH2FM-Mods-equations19/auto-save` or `KH2FM-Mods-equations19/soft-reset`you need to download `TopazTK/KH2-ArchipelagoEnablersLITE`
 
 ### Optional QoL Mods: AP QoL and Bear Skip
 
@@ -52,8 +53,8 @@ After Installing the seed click "Mod Loader -> Build/Build and Run". Every slot 
 
 ## What the Mod Manager Should Look Like.
 
-![image](https://i.imgur.com/N0WJ8Qn.png)
-
+![image](https://i.imgur.com/3IAgeee.png)
+- if you are using APEnablers Lite, install `KH2FM-Mods-equations19/soft-reset` and  `KH2FM-Mods-equations19/KH2-Lua-Library`. Put them below the APCompanion but ABOVE the goa
 
 ## Using the KH2 Client
 
@@ -84,8 +85,10 @@ Enter The room's port number into the top box <b> where the x's are</b> and pres
     - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Panacea and Lua Backend Steps.
 
 -  Using a seed from the standalone KH2 Randomizer Seed Generator.
-    - The Archipelago version of the KH2 Randomizer does not use this Seed Generator; refer to the [Archipelago Setup](https://archipelago.gg/tutorial/Archipelago/setup/en) to learn how to generate and play a seed through Archipelago. 
+    - The Archipelago version of the KH2 Randomizer does not use this Seed Generator; refer to the [Archipelago Setup](/tutorial/Archipelago/setup/en) to learn how to generate and play a seed through Archipelago. 
 
+- Using equations19/auto-save OR equations19/soft-reset while using TopazTK/KH2-ArchipelagoEnablers. 
+    - Since APEnablers has both of these features they conflict with each-other. If you want to keep on using Equation's mods you need to download TopazTK/KH2-ArchipelagoEnablersLITE instead
 ## Best Practices
 
 - Make a save at the start of the GoA before opening anything. This will be the file to select when loading an autosave if/when your game crashes.
@@ -93,6 +96,7 @@ Enter The room's port number into the top box <b> where the x's are</b> and pres
 - Set fps limit to 60fps.
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
 - Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
+
 
 ## Logic Sheet & PopTracker Autotracking
 
@@ -125,7 +129,7 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why did I not load into the correct visit?
     - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
-    - Currently the only supported versions are Epic Games Version 1.0.0.10_WW and Steam Build Version 15194255.
+    - Currently, the only supported versions are Epic Games Version 1.0.0.10_WW and Steam Build Version 15194255.
 - Why am I getting wallpapered while going into a world for the first time?
     - Your Lua Backend was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
 - Why am I not getting magic?
@@ -138,8 +142,6 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why am I getting dummy items or letters?
     - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this if you scroll up)
 - Why am I not sending or receiving items?
-    - Make sure you are connected to the KH2 client and the correct room (for more information scroll up)
-- Why should I install the auto save mod at `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library`?
-    - Because Kingdom Hearts 2 is prone to crashes and will keep you from losing your progress. Both mods are needed for auto save to work.
+    - Make sure you are connected to the KH2 client and the correct room (for more information scroll up). You may need to run the client/launcher as admin
 - How do I load an auto save?
     - To load an auto-save, hold down the Select or your equivalent on your preferred controller while choosing a file. Make sure to hold the button down the whole time.

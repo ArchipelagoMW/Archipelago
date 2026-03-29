@@ -1,3 +1,4 @@
+import shutil
 from typing import ClassVar, Dict, Any, Type, List, Union
 
 import Utils
@@ -20,6 +21,15 @@ components.append(
 )
 
 
+def get_default_launch_command() -> List[str]:
+    """Returns platform-dependant default launch command for Saving Princess"""
+    if Utils.is_windows:
+        return []
+    else:
+        wine_path = shutil.which("wine")
+        return [wine_path] if wine_path is not None else ["/usr/bin/wine"]
+
+
 class SavingPrincessSettings(Group):
     class GamePath(UserFilePath):
         """Path to the game executable from which files are extracted"""
@@ -34,17 +44,17 @@ class SavingPrincessSettings(Group):
     class LaunchGame(Bool):
         """Set this to false to never autostart the game"""
 
-    class LaunchCommand(str):
+    class LaunchCommandWithArgs(List[str]):
         """
         The console command that will be used to launch the game
         The command will be executed with the installation folder as the current directory
+        Additional items in the list will be passed in as arguments
         """
 
     exe_path: GamePath = GamePath("Saving Princess.exe")
     install_folder: InstallFolder = InstallFolder("Saving Princess")
     launch_game: Union[LaunchGame, bool] = True
-    launch_command: LaunchCommand = LaunchCommand('"Saving Princess v0_8.exe"' if Utils.is_windows
-                                                  else 'wine "Saving Princess v0_8.exe"')
+    launch_command_with_args: LaunchCommandWithArgs = LaunchCommandWithArgs(get_default_launch_command())
 
 
 class SavingPrincessWeb(WebWorld):
@@ -97,11 +107,12 @@ class SavingPrincessWorld(World):
     settings: ClassVar[SavingPrincessSettings]
 
     is_pool_expanded: bool = False
-    music_table: List[int] = list(range(16))
+    music_table: List[int]
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
             raise OptionError(f"{self.player_name}'s name must be only ASCII.")
+        self.music_table = list(range(16))
         self.is_pool_expanded = self.options.expanded_pool > 0
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)

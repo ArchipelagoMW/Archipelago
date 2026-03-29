@@ -70,13 +70,13 @@ if __name__ == "__main__":
         empty_file = str(Path(tempdir) / "empty")
         open(empty_file, "w").close()
         sys.argv += ["--config_override", empty_file]  # tests #5541
-        multis = [["VVVVVV"], ["Temp World"], ["VVVVVV", "Temp World"]]
+        multis = [["APQuest"], ["Temp World"], ["APQuest", "Temp World"]]
         p1_games: list[str] = []
         data_paths: list[Path | None] = []
         rooms: list[str] = []
         multidata: Path | None
 
-        copy_world("VVVVVV", "Temp World")
+        copy_world("APQuest", "Temp World")
         try:
             for n, games in enumerate(multis, 1):
                 print(f"Generating [{n}] {', '.join(games)} offline")

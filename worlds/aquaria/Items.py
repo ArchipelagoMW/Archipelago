@@ -29,6 +29,7 @@ class ItemGroup(Enum):
     UTILITY = 4
     SONG = 5
     TURTLE = 6
+    DOOR = 7
 
 
 class AquariaItem(Item):
@@ -211,6 +212,7 @@ class ItemNames:
     TRANSTURTLE_BODY = "Transturtle Final Boss"
     TRANSTURTLE_SIMON_SAYS = "Transturtle Simon Says"
     TRANSTURTLE_ARNASSI_RUINS = "Transturtle Arnassi Ruins"
+    DOOR_TO_CATHEDRAL = "Door to the Cathedral opened"
     # Events name
     BODY_TONGUE_CLEARED = "Body Tongue cleared"
     HAS_SUN_CRYSTAL = "Has Sun Crystal"
@@ -240,7 +242,7 @@ item_table = {
     ItemNames.BIG_SEED: ItemData(698002, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_big_seed
     ItemNames.GLOWING_SEED: ItemData(698003, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_bio_seed
     ItemNames.BLACK_PEARL: ItemData(698004, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_blackpearl
-    ItemNames.BABY_BLASTER: ItemData(698005, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_blaster
+    ItemNames.BABY_BLASTER: ItemData(698005, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_blaster
     ItemNames.CRAB_ARMOR: ItemData(698006, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_crab_costume
     ItemNames.BABY_DUMBO: ItemData(698007, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_dumbo
     ItemNames.TOOTH: ItemData(698008, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_boss
@@ -256,8 +258,8 @@ item_table = {
     ItemNames.MITHALAS_BANNER: ItemData(698018, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_banner
     ItemNames.MITHALAS_POT: ItemData(698019, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_pot
     ItemNames.MUTANT_COSTUME: ItemData(698020, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mutant_costume
-    ItemNames.BABY_NAUTILUS: ItemData(698021, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_nautilus
-    ItemNames.BABY_PIRANHA: ItemData(698022, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_piranha
+    ItemNames.BABY_NAUTILUS: ItemData(698021, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_nautilus
+    ItemNames.BABY_PIRANHA: ItemData(698022, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_piranha
     ItemNames.ARNASSI_ARMOR: ItemData(698023, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_seahorse_costume
     ItemNames.SEED_BAG: ItemData(698024, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_seed_bag
     ItemNames.KING_S_SKULL: ItemData(698025, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_skull
@@ -371,4 +373,20 @@ item_table = {
     ItemNames.TRANSTURTLE_BODY: ItemData(698131, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_finalboss
     ItemNames.TRANSTURTLE_SIMON_SAYS: ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
     ItemNames.TRANSTURTLE_ARNASSI_RUINS: ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
+    ItemNames.DOOR_TO_CATHEDRAL: ItemData(698134, 1, ItemType.PROGRESSION, ItemGroup.DOOR),  # door_to_cathedral
 }
+
+
+four_gods_excludes = [ItemNames.ANEMONE, ItemNames.ARNASSI_STATUE, ItemNames.BIG_SEED, ItemNames.GLOWING_SEED,
+                      ItemNames.BLACK_PEARL, ItemNames.TOOTH, ItemNames.ENERGY_STATUE, ItemNames.KROTITE_ARMOR,
+                      ItemNames.GOLDEN_STARFISH, ItemNames.GOLDEN_GEAR, ItemNames.JELLY_BEACON,
+                      ItemNames.JELLY_PLANT, ItemNames.MITHALAS_DOLL, ItemNames.MITHALAN_DRESS,
+                      ItemNames.MITHALAS_BANNER, ItemNames.MITHALAS_POT, ItemNames.MUTANT_COSTUME, ItemNames.SEED_BAG,
+                      ItemNames.KING_S_SKULL, ItemNames.SONG_PLANT_SPORE, ItemNames.STONE_HEAD, ItemNames.SUN_KEY,
+                      ItemNames.GIRL_COSTUME, ItemNames.ODD_CONTAINER, ItemNames.TRIDENT, ItemNames.TURTLE_EGG,
+                      ItemNames.JELLY_EGG, ItemNames.URCHIN_COSTUME, ItemNames.BABY_WALKER,
+                      ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM,
+                      ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE,
+                      ItemNames.LEECHING_POULTICE, ItemNames.LEECHING_POULTICE, ItemNames.ARCANE_POULTICE,
+                      ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT,
+                      ItemNames.SEA_LOAF_X_2, ItemNames.SMALL_EGG]
