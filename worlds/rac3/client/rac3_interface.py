@@ -1499,47 +1499,56 @@ class Rac3Interface(GameInterface):
                 else:
                     self.UnlockItem[name].unlock_delay += 1
 
+    def safe_patch_instruction(self, instruction_address: int, patch: bool = True):
+        """Safely apply or restore an instruction patch if current opcode matches the expected source opcode."""
+        original = RAC3INSTRUCTION.ORIGINAL_INSTRUCTIONS.get(instruction_address)
+        patched = RAC3INSTRUCTION.PATCHED_INSTRUCTIONS.get(instruction_address)
+        if original is None or patched is None:
+            return
+        
+        # Determine source and target opcodes based on whether we are patching or restoring
+        source = original if patch else patched
+        target = patched if patch else original
+        current = self._read32(instruction_address)
+        if current == source:
+            self._write32(instruction_address, target)
+
     def patch_cycler(self):
         """Apply runtime instruction patches based on current planet."""
         match self.planet:
             case RAC3REGION.STARSHIP_PHOENIX:
-                # Patch out the check that prevents buying weaker armor.
-                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC) == 0x1062001A:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC, 0)
-                if self._read32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL) == 0x1062001A:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL, 0)
-                # Patch out Hypershot removal from quick select due to VR gadget training removing it if incomplete
-                if self._read32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC) == 0xAC600000:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC, 0x00000000)  # NOP
-                if self._read32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL) == 0xAC600000:
-                    self._write32(RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL, 0x00000000)  # NOP
+                # Allow buying weaker armor 
+                # Allow keeping hypershot on quick select even if you havent completed VR Gadget Training
+                phoenix_patches = [
+                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC,
+                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL,
+                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC,
+                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL,
+                ]
+                for instruction in phoenix_patches:
+                    self.safe_patch_instruction(instruction)
+            
             case RAC3REGION.ANNIHILATION_NATION:
+                # One HP challenge patches for Ratchet to prevent automatically losing One Hit Wonder type challenges
+                # Sadly doesnt fix Flee Flawlessly skill point
+                nation_patches = [
+                    RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE,
+                    RAC3INSTRUCTION.NATION_HEALTH_REFILL,
+                    RAC3INSTRUCTION.NATION_LEVELUP_HEALING,
+                    RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING,
+                ]
                 character = self.player_type
                 if character == RAC3PLAYERTYPE.TYHRRANOID:
                     character = RAC3PLAYERTYPE.RATCHET
 
+                # Apply patches if one HP challenge is enabled for Ratchet
                 if self.one_hp_challenge.get(character, False) and character == RAC3PLAYERTYPE.RATCHET:
-                    # Patch out sleeping gas health reduction to prevent death.
-                    if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x2442FFFF:
-                        self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
-                    # Patch out health refill to prevent auto losing One Hit Wonder challenge.
-                    if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0xAC652850:
-                        self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000)  # nop
-                    # Patch out nanotech level up healing to prevent losing One Hit Wonder challenge.
-                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00621821:
-                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00000000)  # nop
-                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0xACA22850:
-                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0x00000000)  # nop
+                    for instruction in nation_patches:
+                        self.safe_patch_instruction(instruction)
+                # Restore original instructions if one HP challenge is not enabled for Ratchet
                 elif not self.one_hp_challenge.get(character, False):
-                    # Restore patched instructions to their original state when not doing one HP challenge.
-                    if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x24420000:
-                        self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
-                    if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0x00000000:
-                        self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
-                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00000000:
-                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00621821)  # addu v1,v1,v0
-                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0x00000000:
-                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0xACA22850)  # sw a2,0x2850(v1)
+                    for instruction in nation_patches:
+                        self.safe_patch_instruction(instruction, patch=False)
 
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
