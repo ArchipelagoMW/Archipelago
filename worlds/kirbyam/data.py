@@ -498,7 +498,7 @@ def _init() -> None:
             continue
         if loc.parent_region not in data.regions:
             raise ValueError(
-                f"Room-sanity location [{loc_key}] references unknown parent region [{loc.parent_region}]"
+                f"Room-sanity location [{loc_key}] references missing parent region [{loc.parent_region}]"
             )
         room_sanity_by_region.setdefault(loc.parent_region, []).append(loc_key)
 
