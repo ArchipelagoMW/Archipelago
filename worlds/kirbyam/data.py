@@ -339,7 +339,16 @@ def _init() -> None:
         merged_locations_json.update(fragment)
 
     next_location_id = BASE_OFFSET + 100_000  # keep items and locations in separate ranges
-    for loc_key, attrs in merged_locations_json.items():
+    auto_assign_needed = any(
+        isinstance(attrs, dict) and attrs.get("location_id") in (None, 0, "0")
+        for attrs in merged_locations_json.values()
+    )
+    if auto_assign_needed:
+        iter_locations = ((loc_key, merged_locations_json[loc_key]) for loc_key in sorted(merged_locations_json))
+    else:
+        iter_locations = merged_locations_json.items()
+
+    for loc_key, attrs in iter_locations:
         if not isinstance(loc_key, str) or not isinstance(attrs, dict):
             continue
 
@@ -481,23 +490,23 @@ def _init() -> None:
     # Auto-claim generated room-sanity locations by their parent region.
     # This keeps data integrity checks complete while runtime region creation can
     # still option-gate these locations off.
-    room_sanity_parent_regions: set[str] = set()
+    room_sanity_by_region: dict[str, list[str]] = {}
     for loc_key, loc in data.locations.items():
         if loc.category != LocationCategory.ROOM_SANITY:
             continue
         if loc_key in claimed_locations:
             continue
-        parent_region = data.regions.get(loc.parent_region)
-        if parent_region is None:
+        if loc.parent_region not in data.regions:
             raise AssertionError(
                 f"Room-sanity location [{loc_key}] references unknown parent region [{loc.parent_region}]"
             )
-        parent_region.locations.append(loc_key)
-        claimed_locations.add(loc_key)
-        room_sanity_parent_regions.add(loc.parent_region)
+        room_sanity_by_region.setdefault(loc.parent_region, []).append(loc_key)
 
-    for region_name in room_sanity_parent_regions:
-        data.regions[region_name].locations.sort()
+    for region_name, loc_keys in sorted(room_sanity_by_region.items()):
+        region = data.regions[region_name]
+        for loc_key in sorted(loc_keys, key=lambda key: (data.locations[key].bit_index or -1, key)):
+            region.locations.append(loc_key)
+            claimed_locations.add(loc_key)
 
     # Optional warp_map.json (if you want the Emerald-style "warp -> destination warp" helper)
     warp_map_json = _maybe_load_json_data("warp_map.json")
