@@ -1903,6 +1903,52 @@ async def test_runtime_gameplay_state_active_on_normal_state(mock_bizhawk_contex
 
     with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [
+            (300).to_bytes(4, 'little'),
+            (0).to_bytes(4, 'little'),
+        ]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is True
+    assert reason == "gameplay_active"
+    assert ai_state == 300
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_non_gameplay_on_title_demo_state(mock_bizhawk_context):
+    """AI state 300 should defer polling when the title-demo playback flag is active."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(data.native_ram_addresses, {"ai_kirby_state_native": 0x0203AD2C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.return_value = [
+            (300).to_bytes(4, 'little'),
+            (0x10).to_bytes(4, 'little'),
+        ]
+
+        active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)
+
+    assert active is False
+    assert reason == "non_gameplay_title_demo"
+    assert ai_state == 300
+
+
+@pytest.mark.asyncio
+async def test_runtime_gameplay_state_fail_open_when_demo_signal_unavailable(mock_bizhawk_context):
+    """Missing demo_playback_flags_native should fail open for state 300."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch.dict(
+        data.native_ram_addresses,
+        {
+            "ai_kirby_state_native": 0x0203AD2C,
+            "demo_playback_flags_native": None,
+        },
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
         mock_read.return_value = [(300).to_bytes(4, 'little')]
 
         active, reason, ai_state = await client._runtime_gameplay_state(mock_bizhawk_context)

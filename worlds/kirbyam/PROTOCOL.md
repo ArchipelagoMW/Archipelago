@@ -50,6 +50,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
+| 0x0203AD10 | 4B | DEMO_PLAYBACK_FLAGS     | Native title-demo discriminator (`demo_playback_flags_native`; bit `0x10` indicates title-screen demo playback) |
 | 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
 
 ## Item ID Ranges
@@ -158,12 +159,15 @@ Primary signal:
 POC classification contract:
 - Non-gameplay tutorial/menu: `ai_state < 200`
 - Non-gameplay cutscene band: `200 <= ai_state < 300`
+- Non-gameplay title demo: `ai_state == 300` when native demo playback flag `demo_playback_flags_native` (underlying symbol `gUnk_0203AD10`, bit `0x10`) is set
 - Non-gameplay goal-clear states: `ai_state in {9999, 10000}`
-- Gameplay-active: all other observed states (including `300` and unknown post-300 values)
+- Gameplay-active: all other observed states (including non-demo `300` and unknown post-300 values)
 
 Fail-open behavior:
 - If `ai_kirby_state_native` is unavailable in address mappings, watcher defaults to gameplay-active behavior for compatibility.
 - Unknown post-300 states fail open as gameplay-active to avoid blocking mailbox item receipt (Issue #419).
+- Demo discrimination uses the mapped native key `demo_playback_flags_native` (`0x0203AD10`, bit `0x10`) based on katam decomp evidence that title-screen demos set this flag before forcing `gAIKirbyState = AI_KIRBY_STATE_NORMAL`.
+- Runtime gate batches AI/demo native reads in one BizHawk call and treats missing `demo_playback_flags_native` as inactive (fail open).
 
 **On initial (or re-)connection, the following resync occurs automatically:**
 
