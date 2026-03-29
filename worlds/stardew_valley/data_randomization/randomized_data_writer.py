@@ -20,6 +20,7 @@ def add_randomized_data_to_spoiler_log(spoiler_handle: TextIO, player_name: str,
     prepare_fish_difficulty_for_print(content, data_to_randomize, data_to_print)
     prepare_fish_season_for_print(content, data_to_randomize, data_to_print)
     prepare_fish_location_for_print(content, data_to_randomize, data_to_print)
+    prepare_fish_weather_for_print(content, data_to_randomize, data_to_print)
 
     spoiler_handle.write(f"\n\nRandomized Data ({player_name}):\n")
     for item_name in data_to_print:
@@ -50,6 +51,14 @@ def prepare_fish_location_for_print(content, data_to_randomize, data_to_print):
                                 lambda fish: len(fish.locations) > 0,
                                 lambda fish: fish.locations,
                                 "location")
+
+
+def prepare_fish_weather_for_print(content, data_to_randomize, data_to_print):
+    prepare_fish_data_for_print(content, data_to_randomize, data_to_print,
+                                DataRandomizationOptionName.fish_weather,
+                                lambda fish: len(fish.weather) > 0,
+                                lambda fish: fish.weather,
+                                "weather")
 
 
 def prepare_fish_data_for_print(content: StardewContent, data_to_randomize: set[str], data_to_print: dict,

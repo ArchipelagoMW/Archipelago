@@ -101,7 +101,7 @@ def range_randomize_iterable(existing_values: dict[Any, Iterable], random: Rando
 
     new_values = dict()
     for i in range(len(keys)):
-        size_value = random.randrange(smallest_value_size, biggest_value_size)
+        size_value = random.randrange(smallest_value_size, biggest_value_size+1)
         entries = random.sample(possible_entries, k=size_value)
         entries = sorted(entries)
         if isinstance(value_for_type, frozenset):

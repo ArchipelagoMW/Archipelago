@@ -7,6 +7,7 @@ from ..mods.mod_data import ModNames
 from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
 from ..strings.region_names import Region, SVERegion, LogicRegion
 from ..strings.tool_names import FishingRod
+from ..strings.weather_names import Weather
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -24,6 +25,7 @@ class FishItem:
     difficulty: int
     legendary: bool
     extended_family: bool
+    weather: Tuple[str]
     minimum_level: int
     mod_name: Optional[str] = None
 
@@ -64,13 +66,15 @@ sprite_spring = (SVERegion.sprite_spring,)
 fable_reef = (SVERegion.fable_reef,)
 vineyard = (SVERegion.blue_moon_vineyard,)
 
+weather_any = (Weather.sun, Weather.rain,)
+
 
 def create_fish(name: str, locations: Tuple[str, ...], seasons: Union[str, Tuple[str, ...]],
-                difficulty: int, legendary: bool = False, extended_family: bool = False, minimum_level: int = 0, mod_name: Optional[str] = None) -> FishItem:
+                difficulty: int, legendary: bool = False, extended_family: bool = False, weather: Tuple[str, ...] = weather_any, minimum_level: int = 0, mod_name: Optional[str] = None) -> FishItem:
     if isinstance(seasons, str):
         seasons = (seasons,)
 
-    fish_item = FishItem(name, locations, seasons, difficulty, legendary, extended_family, minimum_level, mod_name)
+    fish_item = FishItem(name, locations, seasons, difficulty, legendary, extended_family, weather, minimum_level, mod_name)
     return fish_item
 
 
@@ -80,7 +84,7 @@ blue_discus = create_fish(Fish.blue_discus, ginger_island_river, season.all_seas
 bream = create_fish(Fish.bream, town_river + forest_river, season.all_seasons, 35)
 bullhead = create_fish(Fish.bullhead, mountain_lake, season.all_seasons, 46)
 carp = create_fish(Fish.carp, mountain_lake + secret_woods + sewers + mutant_bug_lair, season.not_winter, 15)
-catfish = create_fish(Fish.catfish, town_river + forest_river + secret_woods + witch_swamp, (season.spring, season.fall), 75)
+catfish = create_fish(Fish.catfish, town_river + forest_river + secret_woods + witch_swamp, (season.spring, season.fall), 75, weather=(Weather.rain,))
 chub = create_fish(Fish.chub, forest_river + mountain_lake, season.all_seasons, 35)
 dorado = create_fish(Fish.dorado, forest_river, season.summer, 78)
 eel = create_fish(Fish.eel, ocean, (season.spring, season.fall), 70)
@@ -91,7 +95,7 @@ halibut = create_fish(Fish.halibut, ocean, season.not_fall, 50)
 herring = create_fish(Fish.herring, ocean, (season.spring, season.winter), 25)
 ice_pip = create_fish(Fish.ice_pip, mines_floor_60, season.all_seasons, 85)
 largemouth_bass = create_fish(Fish.largemouth_bass, mountain_lake, season.all_seasons, 50)
-lava_eel = create_fish(Fish.lava_eel, mines_floor_100 + volcano_floor_10, season.all_seasons, 90)
+lava_eel = create_fish(Fish.lava_eel, mines_floor_100 + volcano_floor_10, season.all_seasons, 90, weather=(Weather.rain,))
 lingcod = create_fish(Fish.lingcod, town_river + forest_river + mountain_lake, season.winter, 85)
 lionfish = create_fish(Fish.lionfish, ginger_island_ocean, season.all_seasons, 50)
 midnight_carp = create_fish(Fish.midnight_carp, mountain_lake + forest_pond + ginger_island_river,
@@ -99,30 +103,30 @@ midnight_carp = create_fish(Fish.midnight_carp, mountain_lake + forest_pond + gi
 octopus = create_fish(Fish.octopus, ocean + ginger_island_ocean, season.summer, 95)
 perch = create_fish(Fish.perch, town_river + forest_river + forest_pond + mountain_lake, season.winter, 35)
 pike = create_fish(Fish.pike, town_river + forest_river + forest_pond, (season.summer, season.winter), 60)
-pufferfish = create_fish(Fish.pufferfish, ocean + ginger_island_ocean, season.summer, 80)
-rainbow_trout = create_fish(Fish.rainbow_trout, town_river + forest_river + mountain_lake, season.summer, 45)
+pufferfish = create_fish(Fish.pufferfish, ocean + ginger_island_ocean, season.summer, 80, weather=(Weather.sun,))
+rainbow_trout = create_fish(Fish.rainbow_trout, town_river + forest_river + mountain_lake, season.summer, 45, weather=(Weather.sun,))
 red_mullet = create_fish(Fish.red_mullet, ocean, (season.summer, season.winter), 55)
-red_snapper = create_fish(Fish.red_snapper, ocean, (season.summer, season.fall), 40)
+red_snapper = create_fish(Fish.red_snapper, ocean, (season.summer, season.fall), 40, weather=(Weather.rain,))
 salmon = create_fish(Fish.salmon, town_river + forest_river + forest_waterfall, season.fall, 50)
 sandfish = create_fish(Fish.sandfish, desert, season.all_seasons, 65)
 sardine = create_fish(Fish.sardine, ocean, (season.spring, season.fall, season.winter), 30)
 scorpion_carp = create_fish(Fish.scorpion_carp, desert, season.all_seasons, 90, minimum_level=4)
 sea_cucumber = create_fish(Fish.sea_cucumber, ocean, (season.fall, season.winter), 40)
-shad = create_fish(Fish.shad, town_river + forest_river, season.not_winter, 45)
+shad = create_fish(Fish.shad, town_river + forest_river, season.not_winter, 45, weather=(Weather.rain,))
 slimejack = create_fish(Fish.slimejack, mutant_bug_lair, season.all_seasons, 55)
 smallmouth_bass = create_fish(Fish.smallmouth_bass, town_river + forest_pond, (season.spring, season.fall), 28)
 squid = create_fish(Fish.squid, ocean, season.winter, 75)
 stingray = create_fish(Fish.stingray, pirate_cove, season.all_seasons, 80)
 stonefish = create_fish(Fish.stonefish, mines_floor_20, season.all_seasons, 65)
 sturgeon = create_fish(Fish.sturgeon, mountain_lake, (season.summer, season.winter), 78)
-sunfish = create_fish(Fish.sunfish, town_river + forest_river, (season.spring, season.summer), 30)
+sunfish = create_fish(Fish.sunfish, town_river + forest_river, (season.spring, season.summer), 30, weather=(Weather.sun,))
 super_cucumber = create_fish(Fish.super_cucumber, ocean + ginger_island_ocean, (season.summer, season.fall), 80)
 tiger_trout = create_fish(Fish.tiger_trout, town_river + forest_river, (season.fall, season.winter), 60)
 tilapia = create_fish(Fish.tilapia, ocean + ginger_island_ocean, (season.summer, season.fall), 50)
 # Tuna has different seasons on ginger island. Should be changed when the whole fish thing is refactored
 tuna = create_fish(Fish.tuna, ocean + ginger_island_ocean, (season.summer, season.winter), 70)
 void_salmon = create_fish(Fish.void_salmon, witch_swamp, season.all_seasons, 80)
-walleye = create_fish(Fish.walleye, town_river + forest_river + forest_pond + mountain_lake, season.fall, 45)
+walleye = create_fish(Fish.walleye, town_river + forest_river + forest_pond + mountain_lake, season.fall, 45, weather=(Weather.rain,))
 woodskip = create_fish(Fish.woodskip, secret_woods, season.all_seasons, 50)
 
 blobfish = create_fish(Fish.blobfish, night_market, season.winter, 75)
@@ -132,13 +136,13 @@ spook_fish = create_fish(Fish.spook_fish, night_market, season.winter, 60)
 angler = create_fish(Fish.angler, town_river, season.fall, 85, True, False, minimum_level=3)
 crimsonfish = create_fish(Fish.crimsonfish, tide_pools, season.summer, 95, True, False, minimum_level=5)
 glacierfish = create_fish(Fish.glacierfish, forest_river, season.winter, 100, True, False, minimum_level=6)
-legend = create_fish(Fish.legend, mountain_lake, season.spring, 110, True, False, minimum_level=10)
+legend = create_fish(Fish.legend, mountain_lake, season.spring, 110, True, False, weather=(Weather.rain,), minimum_level=10)
 mutant_carp = create_fish(Fish.mutant_carp, sewers, season.all_seasons, 80, True, False)
 
 ms_angler = create_fish(Fish.ms_angler, town_river, season.fall, 85, True, True, minimum_level=3)
 son_of_crimsonfish = create_fish(Fish.son_of_crimsonfish, tide_pools, season.summer, 95, True, True, minimum_level=5)
 glacierfish_jr = create_fish(Fish.glacierfish_jr, forest_river, season.winter, 100, True, True, minimum_level=6)
-legend_ii = create_fish(Fish.legend_ii, mountain_lake, season.spring, 110, True, True, minimum_level=10)
+legend_ii = create_fish(Fish.legend_ii, mountain_lake, season.spring, 110, True, True, weather=(Weather.rain,), minimum_level=10)
 radioactive_carp = create_fish(Fish.radioactive_carp, sewers, season.all_seasons, 80, True, True)
 
 baby_lunaloo = create_fish(SVEFish.baby_lunaloo, ginger_island_ocean, season.all_seasons, 15, mod_name=ModNames.sve)
