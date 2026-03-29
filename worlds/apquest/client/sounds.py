@@ -1,12 +1,12 @@
 import asyncio
 import pkgutil
 from asyncio import Task
-from collections.abc import Buffer
 from pathlib import Path
 from typing import cast
 
 from kivy import Config
 from kivy.core.audio import Sound, SoundLoader
+from typing_extensions import Buffer
 
 from CommonClient import logger
 
