@@ -497,7 +497,7 @@ def _init() -> None:
         if loc_key in claimed_locations:
             continue
         if loc.parent_region not in data.regions:
-            raise AssertionError(
+            raise ValueError(
                 f"Room-sanity location [{loc_key}] references unknown parent region [{loc.parent_region}]"
             )
         room_sanity_by_region.setdefault(loc.parent_region, []).append(loc_key)

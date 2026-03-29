@@ -1,5 +1,6 @@
 import logging
 import time
+from struct import unpack_from
 from typing import TYPE_CHECKING, Optional
 
 import Utils
@@ -1145,11 +1146,12 @@ class KirbyAmClient(BizHawkClient):
             return
 
         mapped_checked_locations: set[int] = set()
+        raw_view = memoryview(raw)
         for doors_idx in self._room_sanity_bits_sorted:
             if doors_idx < 0 or doors_idx >= _ROOM_VISIT_FLAGS_ENTRY_COUNT:
                 continue
             offset = doors_idx * 2
-            entry_value = int.from_bytes(raw[offset:offset + 2], "little")
+            entry_value = unpack_from("<H", raw_view, offset)[0]
             if entry_value & _ROOM_VISIT_FLAGS_BIT_MASK:
                 mapped_checked_locations.update(self._room_sanity_location_ids_by_bit.get(doors_idx, []))
 

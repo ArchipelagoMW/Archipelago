@@ -77,9 +77,10 @@ async def test_poll_room_sanity_dedupes_already_server_acknowledged(mock_bizhawk
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
     mock_send.assert_not_awaited()
-    assert mock_logger.debug.called
-    assert "dedupe suppressed room-sanity LocationChecks" in mock_logger.debug.call_args.args[0]
-    assert mock_logger.debug.call_args.args[1] == [room_1_01]
+    mock_logger.debug.assert_called_once()
+    debug_args = mock_logger.debug.call_args.args
+    assert "dedupe suppressed room-sanity LocationChecks" in debug_args[0]
+    assert debug_args[1] == [room_1_01]
 
 
 @pytest.mark.asyncio
