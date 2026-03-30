@@ -297,7 +297,10 @@ receive/apply, outgoing send, and reconnect safety.
 1. Restore Kirby to a live gameplay state.
 2. Take one normal in-game death locally.
 3. Confirm exactly one outgoing DeathLink is observed by the linked player.
-4. Confirm repeated frames while already dead do not send duplicates.
+4. Confirm the outgoing cause text is a flavored line chosen from
+   `worlds/kirbyam/data/deathlink_flavor_text.json` and includes the sender
+   player name substitution.
+5. Confirm repeated frames while already dead do not send duplicates.
 
 ### Echo suppression and reconnect
 1. Trigger an incoming DeathLink and confirm the resulting forced death does not

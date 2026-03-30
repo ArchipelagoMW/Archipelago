@@ -2179,6 +2179,21 @@ def test_on_package_queues_incoming_death_link_when_enabled(mock_bizhawk_context
     assert client._last_incoming_death_link_time == 123.0
 
 
+def test_death_link_flavor_templates_loaded_from_data_file():
+    """DeathLink flavor text templates should be loaded through the JSON data loader."""
+    sentinel_templates = [
+        "{player} was defeated by a mysterious force.",
+        "{player} found the wrong kind of shortcut.",
+    ]
+
+    with patch("worlds.kirbyam.client.load_json_data", return_value=sentinel_templates) as mock_loader:
+        client = KirbyAmClient()
+        client.initialize_client()
+
+    mock_loader.assert_called_once_with("deathlink_flavor_text.json")
+    assert client._death_link_flavor_templates == sentinel_templates
+
+
 @pytest.mark.asyncio
 async def test_apply_pending_death_link_writes_zero_hp(mock_bizhawk_context):
     """Incoming DeathLink should write Kirby HP to zero when gameplay is active."""
@@ -2208,6 +2223,8 @@ async def test_local_death_transition_sends_death_link_once(mock_bizhawk_context
     client = KirbyAmClient()
     client.initialize_client()
     client._death_link_enabled = True
+    client._death_link_flavor_templates = ["{player} got lost in the mirror world."]
+    mock_bizhawk_context.player_names = {1: "hasherwi"}
 
     with patch.dict(data.native_ram_addresses, {"kirby_hp_native": 0x02020FE0}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
@@ -2221,7 +2238,7 @@ async def test_local_death_transition_sends_death_link_once(mock_bizhawk_context
         await client._poll_and_send_local_death_link(mock_bizhawk_context)
         await client._poll_and_send_local_death_link(mock_bizhawk_context)
 
-    mock_bizhawk_context.send_death.assert_awaited_once_with("Kirby was defeated.")
+    mock_bizhawk_context.send_death.assert_awaited_once_with("hasherwi got lost in the mirror world.")
 
 
 @pytest.mark.asyncio

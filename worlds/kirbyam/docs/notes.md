@@ -253,6 +253,26 @@ door traversal already have separate logic semantics.
 - Updated the Dimension Mirror entrance-name assertion so shard gating follows
   the new Rainbow Route hub edge.
 
+## Issue #409: DeathLink Flavor Text Pool
+
+### Problem
+Outgoing DeathLink messages used one fixed cause string (`Kirby was defeated.`),
+which made cross-player death notifications repetitive.
+
+### Solution
+- Added a randomized outgoing DeathLink flavor text pool in
+  `worlds/kirbyam/data/deathlink_flavor_text.json`.
+- Outgoing DeathLink send logic now selects one template per send and replaces
+  `{player}` with the local sender name.
+- Incoming DeathLink application behavior remains unchanged (local HP write +
+  echo suppression), preserving existing in-game semantics.
+
+### Validation
+- Added `test_death_link_flavor_templates_loaded_from_data_file` to ensure the
+  flavor text pool is loaded from JSON and wired into the outgoing send path.
+- Updated `test_local_death_transition_sends_death_link_once` to validate
+  outgoing template interpolation.
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.
