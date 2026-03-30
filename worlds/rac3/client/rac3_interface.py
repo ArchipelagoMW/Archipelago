@@ -643,6 +643,8 @@ class Rac3Interface(GameInterface):
                     self.timers[name] += randint(6, 15)
                 else:
                     self.timers[name] = int(time.time() + uniform(6, 15))
+            case RAC3ITEM.LIGHTSABER_WRENCH:
+                self._write8(RAC3STATUS.WRENCH_REPLACEMENT_CHEAT, 1)
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
