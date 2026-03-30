@@ -53,7 +53,7 @@ class APQuestGameView(MDRecycleView):
         self.input_function = input_function
         self.bind_keyboard()
 
-    def on_touch_down(self, touch: MotionEvent) -> None:
+    def on_touch_down(self, touch: MotionEvent) -> bool | None:
         self.bind_keyboard()
         return super().on_touch_down(touch)
 
@@ -214,13 +214,13 @@ class ConfettiView(Widget):
         self.confetti = []
 
     # Don't eat tap events for the game grid under the confetti view
-    def on_touch_down(self, touch):
+    def on_touch_down(self, touch) -> bool:
         return False
 
-    def on_touch_move(self, touch):
+    def on_touch_move(self, touch) -> bool:
         return False
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
         return False
 
     def check_resize(self, _: int, _1: int) -> None:
@@ -276,8 +276,10 @@ class TapImage(ButtonBehavior, Image):
         self.callback = callback
         super().__init__(**kwargs)
 
-    def on_release(self):
+    def on_release(self) -> bool:
         self.callback()
+
+        return True
 
 
 class TapIfConfettiCannonImage(ButtonBehavior, Image):
@@ -285,10 +287,12 @@ class TapIfConfettiCannonImage(ButtonBehavior, Image):
 
     is_confetti_cannon: bool = False
 
-    def __init__(self, callback: Callable[[], None], **kwargs) -> None:
+    def __init__(self, callback: Callable[[], None], **kwargs: dict[str, Any]) -> None:
         self.callback = callback
         super().__init__(**kwargs)
 
-    def on_release(self):
+    def on_release(self) -> bool:
         if self.is_confetti_cannon:
             self.callback()
+
+        return True

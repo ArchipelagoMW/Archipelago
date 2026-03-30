@@ -182,7 +182,7 @@ class APQuestManager(GameManager):
 
             self.top_image_grid[-1].append(image2)
 
-    def start_auto_move(self):
+    def start_auto_move(self) -> None:
         if self.move_event is not None:
             self.move_event.cancel()
 

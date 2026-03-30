@@ -1,4 +1,5 @@
 import heapq
+from typing import Generator
 
 Point = tuple[int, int]
 
@@ -31,14 +32,14 @@ def find_path_or_closest(
     def passable(p: Point) -> bool:
         return grid[p[1]][p[0]]
 
-    def neighbors(p: Point):
+    def neighbors(p: Point) -> Generator[Point, None, None]:
         x, y = p
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             np = (x + dx, y + dy)
             if in_bounds(np) and passable(np):
                 yield np
 
-    open_heap = []
+    open_heap: list[tuple[int, tuple[int, int]]] = []
     heapq.heappush(open_heap, (0, start))
 
     came_from: dict[Point, Point] = {}

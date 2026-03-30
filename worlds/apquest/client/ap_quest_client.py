@@ -4,8 +4,9 @@ from argparse import Namespace
 from enum import Enum
 from typing import TYPE_CHECKING, Any
 
-from CommonClient import ClientCommandProcessor, CommonContext, gui_enabled, logger, server_loop
+from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop
 from NetUtils import ClientStatus
+from Utils import gui_enabled
 
 from ..game.events import ConfettiFired, LocationClearedEvent, MathProblemSolved, MathProblemStarted, VictoryEvent
 from ..game.game import Game
@@ -44,7 +45,7 @@ class ConnectionStatus(Enum):
 class APQuestClientCommandProcessor(ClientCommandProcessor):
     ctx: "APQuestContext"
 
-    def default(self, raw: str):
+    def default(self, raw: str) -> None:
         if self.ctx.external_math_trap_input(raw):
             return
 
@@ -255,7 +256,7 @@ class APQuestContext(CommonContext):
         self.ap_quest_game.input(input_key)
         self.render()
 
-    def queue_auto_move(self, target_x: int, target_y: int):
+    def queue_auto_move(self, target_x: int, target_y: int) -> None:
         if self.ap_quest_game is None:
             return
         if not self.ap_quest_game.gameboard.ready:
@@ -263,7 +264,7 @@ class APQuestContext(CommonContext):
         self.ap_quest_game.queue_auto_move(target_x, target_y)
         self.ui.start_auto_move()
 
-    def do_auto_move_and_rerender(self):
+    def do_auto_move_and_rerender(self) -> None:
         if self.ap_quest_game is None:
             return
         if not self.ap_quest_game.gameboard.ready:

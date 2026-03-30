@@ -117,8 +117,7 @@ class Gameboard:
             for x, entity in enumerate(row):
                 traversable_row.append(
                     not entity.solid
-                    or (isinstance(entity, InteractableMixin)
-                    and entity.auto_move_attempt_passing_through)
+                    or (isinstance(entity, InteractableMixin) and entity.auto_move_attempt_passing_through)
                 )
 
             traversability.append(tuple(traversable_row))

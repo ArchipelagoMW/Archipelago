@@ -23,7 +23,7 @@ class Game:
     active_math_problem: MathProblem | None
     active_math_problem_input: list[int] | None
 
-    auto_target_path = []
+    auto_target_path: list[tuple[int, int]] = []
 
     remotely_received_items: set[tuple[int, int, int]]
 
@@ -167,7 +167,7 @@ class Game:
         self.active_math_problem_input.pop()
         self.check_math_problem_result()
 
-    def math_problem_replace(self, input: list[int]):
+    def math_problem_replace(self, input: list[int]) -> None:
         if self.active_math_problem_input is None:
             return
         self.active_math_problem_input = input[:2]
