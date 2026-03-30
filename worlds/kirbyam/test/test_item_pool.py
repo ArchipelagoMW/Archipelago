@@ -82,7 +82,11 @@ def test_boss_defeat_default_items_are_useful_maps() -> None:
 
 
 def test_vitality_chest_default_items_are_useful_vitality() -> None:
-    vitality_locations = [loc for loc in data.locations.values() if loc.category == LocationCategory.VITALITY_CHEST]
+    vitality_locations = [
+        loc
+        for key, loc in data.locations.items()
+        if key.startswith("VITALITY_CHEST_") and loc.category == LocationCategory.MAJOR_CHEST
+    ]
     assert len(vitality_locations) == 4
 
     for location in vitality_locations:
@@ -95,7 +99,11 @@ def test_vitality_chest_default_items_are_useful_vitality() -> None:
 
 
 def test_sound_player_chest_default_item_is_useful_sound_player() -> None:
-    sound_player_locations = [loc for loc in data.locations.values() if loc.category == LocationCategory.SOUND_PLAYER_CHEST]
+    sound_player_locations = [
+        loc
+        for key, loc in data.locations.items()
+        if key == "SOUND_PLAYER_CHEST" and loc.category == LocationCategory.MAJOR_CHEST
+    ]
     assert len(sound_player_locations) == 1
 
     location = sound_player_locations[0]
@@ -257,10 +265,9 @@ def test_vanilla_shards_are_locked_to_boss_defeats() -> None:
     assert locked_boss_shards == list(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
     assert all(loc.item is None for loc in chest_locations)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
-    _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
-    _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
+    _minor_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MINOR_CHEST)
     _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
-    _expected_pool_size = _major_chest_count + _vitality_chest_count + _sound_player_chest_count + _room_sanity_count
+    _expected_pool_size = _major_chest_count + _minor_chest_count + _room_sanity_count
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
 
@@ -276,15 +283,13 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     shard_items = [item for item in world.multiworld.itempool if "Shards" in item.tags]
     _boss_defeat_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.BOSS_DEFEAT)
     _major_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MAJOR_CHEST)
-    _vitality_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.VITALITY_CHEST)
-    _sound_player_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.SOUND_PLAYER_CHEST)
+    _minor_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MINOR_CHEST)
     _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
     _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
     _open_non_goal_location_count = (
         _boss_defeat_count
         + _major_chest_count
-        + _vitality_chest_count
-        + _sound_player_chest_count
+        + _minor_chest_count
         + _room_sanity_count
     )
     _expected_pool_size = _open_non_goal_location_count

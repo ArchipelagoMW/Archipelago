@@ -58,6 +58,6 @@ def test_physical_big_chest_locations_hide_contents_in_labels() -> None:
     actual = {
         location.label
         for location in data.locations.values()
-        if location.category.name in {"MAJOR_CHEST", "VITALITY_CHEST", "SOUND_PLAYER_CHEST"}
+        if location.category.name == "MAJOR_CHEST"
     }
     assert actual == expected

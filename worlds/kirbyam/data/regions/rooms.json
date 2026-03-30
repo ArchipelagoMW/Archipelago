@@ -294,7 +294,9 @@
     "ability_gates": {}
   },
   "REGION_RAINBOW_ROUTE/ROOM_1_20": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_RAINBOW_ROUTE_3"
+    ],
     "events": [],
     "exits": [
       "REGION_MOONLIGHT_MANSION/ROOM_2_02",
@@ -1274,7 +1276,9 @@
     "ability_gates": {}
   },
   "REGION_CABBAGE_CAVERN/ROOM_3_07": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CABBAGE_CAVERN_7"
+    ],
     "events": [],
     "exits": [
       "REGION_CABBAGE_CAVERN/ROOM_3_08",
@@ -1334,7 +1338,9 @@
     "ability_gates": {}
   },
   "REGION_CABBAGE_CAVERN/ROOM_3_11": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_CABBAGE_CAVERN_11"
+    ],
     "events": [],
     "exits": [
       "REGION_CABBAGE_CAVERN/ROOM_3_02",
@@ -1579,7 +1585,9 @@
     "ability_gates": {}
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_06": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_2"
+    ],
     "events": [],
     "exits": [
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_05",
@@ -1637,7 +1645,9 @@
     "ability_gates": {}
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_10": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_8"
+    ],
     "events": [],
     "exits": [
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_03",
@@ -1726,7 +1736,9 @@
     "ability_gates": {}
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_16": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_13"
+    ],
     "events": [],
     "exits": [
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_02",
@@ -1789,7 +1801,9 @@
     "ability_gates": {}
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_20": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_17"
+    ],
     "events": [],
     "exits": [
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_16",
@@ -1803,7 +1817,9 @@
     "ability_gates": {}
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_21": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_18"
+    ],
     "events": [],
     "exits": [
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_10",
@@ -1865,7 +1881,8 @@
   },
   "REGION_MUSTARD_MOUNTAIN/ROOM_4_25": {
     "locations": [
-      "BOSS_DEFEAT_1"
+      "BOSS_DEFEAT_1",
+      "MINOR_CHEST_MUSTARD_MOUNTAIN_25"
     ],
     "events": [],
     "exits": [

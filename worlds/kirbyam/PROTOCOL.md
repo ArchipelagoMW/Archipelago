@@ -51,7 +51,8 @@ EWRAM Layout (0x02000000 - 0x02040000):
 |----------|------|-------------------------|-----------|
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
 | 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. This now reflects native map ownership only; AP major-chest checks use `major_chest_flags` in the transport block. |
-| 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
+| 0x02038960 | 16B | small_chest_flags_native | Native `gTreasures.chestFields[0x10]` bitfield used by `HasChest/CollectChest`. Minor-chest AP checks map directly by chest index (`bit_index`) against this field. |
+| 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags (includes `small_chest_flags_native`) |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x02028CA0 | 576B | gVisitedDoors (`room_visit_flags_native`) | Native room-visit array (`u16[0x120]`); bit 15 marks visited state by `doorsIdx` |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
@@ -107,6 +108,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_RADISH_RUINS | 3960302 | Radish Ruins 8-4 vitality big chest (transport vitality bit 2) |
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
+| MINOR_CHEST_* | 3960305+ | Minor chest checks keyed by native `small_chest_flags_native` chest index (`bit_index`) |
 | ROOM_SANITY_1_01 .. ROOM_SANITY_9_27 | 3961000+ | Room visit checks (`Room X-YY`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15 |
 | *Reserved*    | 3960305+ | Future location families |
 

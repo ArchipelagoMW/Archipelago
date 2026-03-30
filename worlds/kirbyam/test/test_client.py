@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, Mock, patch
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.context import _game_watcher, AuthStatus
 
-from ..data import data
+from ..data import LocationCategory, data
 from ..client import KirbyAmClient
 from ..rom import KirbyAmProcedurePatch
 
@@ -268,6 +268,78 @@ async def test_poll_major_chest_skips_when_address_missing(mock_bizhawk_context)
 
 
 @pytest.mark.asyncio
+async def test_poll_minor_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
+    """Set native small-chest bits should map to minor-chest LocationChecks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    loc_a = 3960400
+    loc_b = 3960401
+    client._minor_chest_location_ids_by_bit = {2: [loc_a], 9: [loc_b]}
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        flags = bytearray(0x10)
+        flags[0] = (1 << 2)
+        flags[1] = (1 << 1)  # bit 9
+        mock_read.return_value = [bytes(flags)]
+
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [loc_a, loc_b]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_minor_chest_skips_already_server_acknowledged(mock_bizhawk_context):
+    """No minor-chest resend when server already acknowledges all mapped checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    loc_a = 3960400
+    client._minor_chest_location_ids_by_bit = {2: [loc_a]}
+    mock_bizhawk_context.checked_locations = {loc_a}
+
+    with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        flags = bytearray(0x10)
+        flags[0] = (1 << 2)
+        mock_read.return_value = [bytes(flags)]
+
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+    assert mock_logger.debug.called
+    assert "dedupe suppressed minor-chest LocationChecks" in mock_logger.debug.call_args.args[0]
+    assert mock_logger.debug.call_args.args[1] == [loc_a]
+
+
+@pytest.mark.asyncio
+async def test_poll_minor_chest_skips_when_address_missing(mock_bizhawk_context):
+    """Missing native small-chest address should no-op safely."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._minor_chest_location_ids_by_bit = {2: [3960400]}
+
+    native_without_minor = {k: v for k, v in data.native_ram_addresses.items() if k != "small_chest_flags_native"}
+    ram_without_minor = {k: v for k, v in data.ram_addresses.items() if k != "small_chest_flags_native"}
+
+    with patch.dict(data.native_ram_addresses, native_without_minor, clear=True), \
+         patch.dict(data.ram_addresses, ram_without_minor, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+    mock_send.assert_not_awaited()
+
+
+@pytest.mark.asyncio
 async def test_shard_poll_does_not_trigger_major_chest_locations(mock_bizhawk_context):
     """Shard polling should not emit major-chest location IDs."""
     client = KirbyAmClient()
@@ -407,13 +479,14 @@ def test_major_chest_data_sanity():
 
 
 def test_vitality_chest_data_sanity():
-    """Vitality-chest entries should have explicit unique IDs and unique mapped bits."""
+    """Vitality chest keys should be MAJOR_CHEST entries with unique IDs and bits."""
     vitality_chests = [
-        loc for loc in data.locations.values()
-        if loc.category.name == "VITALITY_CHEST"
+        loc for key, loc in data.locations.items()
+        if key.startswith("VITALITY_CHEST_")
     ]
 
     assert len(vitality_chests) == 4
+    assert all(loc.category == LocationCategory.MAJOR_CHEST for loc in vitality_chests)
 
     ids = [loc.location_id for loc in vitality_chests]
     assert all(loc_id is not None for loc_id in ids)
@@ -425,10 +498,10 @@ def test_vitality_chest_data_sanity():
 
 
 def test_sound_player_chest_data_sanity():
-    """Sound Player chest entry should have explicit unique ID and mapped transport bit."""
+    """Sound Player chest key should be MAJOR_CHEST with expected ID and transport bit."""
     sound_player_chests = [
-        loc for loc in data.locations.values()
-        if loc.category.name == "SOUND_PLAYER_CHEST"
+        loc for key, loc in data.locations.items()
+        if key == "SOUND_PLAYER_CHEST"
     ]
 
     assert len(sound_player_chests) == 1
@@ -436,6 +509,25 @@ def test_sound_player_chest_data_sanity():
     sound_player = sound_player_chests[0]
     assert sound_player.location_id is not None
     assert sound_player.bit_index == 0
+    assert sound_player.category == LocationCategory.MAJOR_CHEST
+
+
+def test_minor_chest_data_sanity():
+    """Minor chest entries should have explicit unique IDs and unique mapped bits."""
+    minor_chests = [
+        loc for loc in data.locations.values()
+        if loc.category == LocationCategory.MINOR_CHEST
+    ]
+
+    assert len(minor_chests) == 9
+
+    ids = [loc.location_id for loc in minor_chests]
+    assert all(loc_id is not None for loc_id in ids)
+    assert len(ids) == len(set(ids))
+
+    bits = [loc.bit_index for loc in minor_chests]
+    assert all(bit is not None for bit in bits)
+    assert len(bits) == len(set(bits))
 
 
 def test_client_initialization():
@@ -2615,24 +2707,22 @@ async def test_shard_poll_does_not_trigger_boss_defeat_locations(mock_bizhawk_co
 
 
 def test_vitality_chest_locations_defined_in_regions():
-    """Regression test: all VITALITY_CHEST locations must be registered in their regions.
+    """Regression test: all vitality chest keys must be registered in their regions.
 
     Issue #428 occurred because vitality chest locations were defined in locations.json
     but not referenced in areas.json. This test prevents that regression from silently
     recurring during future region edits.
     """
     # Derive vitality chest keys from locations data to keep this test future-proof.
-    location_category_enum = getattr(data, "LocationCategory", None)
-    vitality_category = getattr(location_category_enum, "VITALITY_CHEST", None) if location_category_enum else None
     vitality_chest_keys = {
         key
         for key, loc in data.locations.items()
         if key.startswith("VITALITY_CHEST_")
-        or (vitality_category is not None and getattr(loc, "category", None) == vitality_category)
     }
 
     # Verify vitality chests were found (derivation logic sanity check).
-    assert vitality_chest_keys, "No VITALITY_CHEST locations found in locations.json"
+    assert vitality_chest_keys, "No vitality chest locations found in locations.json"
+    assert all(data.locations[key].category == LocationCategory.MAJOR_CHEST for key in vitality_chest_keys)
 
     # Verify each vitality chest is registered in a region.
     all_region_locations = set()
@@ -2641,4 +2731,23 @@ def test_vitality_chest_locations_defined_in_regions():
 
     for key in vitality_chest_keys:
         assert key in all_region_locations, \
-            f"VITALITY_CHEST location '{key}' defined in locations.json but not registered in any region in areas.json"
+            f"Vitality chest location '{key}' defined in locations.json but not registered in any region in areas.json"
+
+
+def test_minor_chest_locations_defined_in_regions():
+    """All MINOR_CHEST locations must be registered in their regions."""
+    minor_chest_keys = {
+        key
+        for key, loc in data.locations.items()
+        if getattr(loc, "category", None) == LocationCategory.MINOR_CHEST
+    }
+
+    assert minor_chest_keys, "No minor chest locations found in locations.json"
+
+    all_region_locations = set()
+    for region_data in data.regions.values():
+        all_region_locations.update(region_data.locations)
+
+    for key in minor_chest_keys:
+        assert key in all_region_locations, \
+            f"Minor chest location '{key}' defined in locations.json but not registered in any region"

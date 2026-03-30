@@ -206,7 +206,7 @@
       "MAP_CARROT_CASTLE"
     ],
     "bit_index": 0,
-    "category": "VITALITY_CHEST",
+    "category": "MAJOR_CHEST",
     "location_id": 3960300
   },
   "VITALITY_CHEST_OLIVE_OCEAN": {
@@ -219,7 +219,7 @@
       "MAP_OLIVE_OCEAN"
     ],
     "bit_index": 1,
-    "category": "VITALITY_CHEST",
+    "category": "MAJOR_CHEST",
     "location_id": 3960301
   },
   "VITALITY_CHEST_RADISH_RUINS": {
@@ -232,7 +232,7 @@
       "MAP_RADISH_RUINS"
     ],
     "bit_index": 2,
-    "category": "VITALITY_CHEST",
+    "category": "MAJOR_CHEST",
     "location_id": 3960302
   },
   "VITALITY_CHEST_CANDY_CONSTELLATION": {
@@ -245,7 +245,7 @@
       "MAP_CANDY_CONSTELLATION"
     ],
     "bit_index": 3,
-    "category": "VITALITY_CHEST",
+    "category": "MAJOR_CHEST",
     "location_id": 3960303
   },
   "SOUND_PLAYER_CHEST": {
@@ -258,7 +258,115 @@
       "MAP_CANDY_CONSTELLATION"
     ],
     "bit_index": 0,
-    "category": "SOUND_PLAYER_CHEST",
+    "category": "MAJOR_CHEST",
     "location_id": 3960304
+  },
+  "MINOR_CHEST_RAINBOW_ROUTE_3": {
+    "label": "Rainbow Route 3 (R20) - Small Chest 0",
+    "parent_region": "REGION_RAINBOW_ROUTE/ROOM_1_20",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_RAINBOW_ROUTE"
+    ],
+    "bit_index": 3,
+    "category": "MINOR_CHEST",
+    "location_id": 3960305
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_2": {
+    "label": "Mustard Mountain 2 (M6) - Small Chest 0",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_06",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 6,
+    "category": "MINOR_CHEST",
+    "location_id": 3960306
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_8": {
+    "label": "Mustard Mountain 8 (M10) - Small Chest 0",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_10",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 10,
+    "category": "MINOR_CHEST",
+    "location_id": 3960307
+  },
+  "MINOR_CHEST_CABBAGE_CAVERN_7": {
+    "label": "Cabbage Cavern 7 (C7) - Small Chest 0",
+    "parent_region": "REGION_CABBAGE_CAVERN/ROOM_3_07",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_CABBAGE_CAVERN"
+    ],
+    "bit_index": 12,
+    "category": "MINOR_CHEST",
+    "location_id": 3960308
+  },
+  "MINOR_CHEST_CABBAGE_CAVERN_11": {
+    "label": "Cabbage Cavern 11 (C11) - Small Chest 0",
+    "parent_region": "REGION_CABBAGE_CAVERN/ROOM_3_11",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_CABBAGE_CAVERN"
+    ],
+    "bit_index": 13,
+    "category": "MINOR_CHEST",
+    "location_id": 3960309
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_13": {
+    "label": "Mustard Mountain 13 (M16) - Small Chest 0",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_16",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 16,
+    "category": "MINOR_CHEST",
+    "location_id": 3960310
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_17": {
+    "label": "Mustard Mountain 17 (M20) - Small Chest 0",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_20",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 20,
+    "category": "MINOR_CHEST",
+    "location_id": 3960311
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_18": {
+    "label": "Mustard Mountain 18 (M21) - Small Chest 0",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_21",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 21,
+    "category": "MINOR_CHEST",
+    "location_id": 3960312
+  },
+  "MINOR_CHEST_MUSTARD_MOUNTAIN_25": {
+    "label": "Mustard Mountain 25 (M29) - Small Chest 0",
+    "parent_region": "REGION_MUSTARD_MOUNTAIN/ROOM_4_25",
+    "default_item": "ONE_UP",
+    "tags": [
+      "SmallChest",
+      "MAP_MUSTARD_MOUNTAIN"
+    ],
+    "bit_index": 29,
+    "category": "MINOR_CHEST",
+    "location_id": 3960313
   }
 }

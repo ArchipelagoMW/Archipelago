@@ -149,9 +149,8 @@ class LocationCategory(IntEnum):
     GOAL = 1
     BOSS_DEFEAT = 2
     MAJOR_CHEST = 9
-    VITALITY_CHEST = 10
-    SOUND_PLAYER_CHEST = 11
-    ROOM_SANITY = 12
+    ROOM_SANITY = 10
+    MINOR_CHEST = 11
 
 
 class ItemData(NamedTuple):
