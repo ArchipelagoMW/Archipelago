@@ -52,8 +52,18 @@ def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], 
                        if len(fish_data.seasons) >= 1 and fish_is_included(data_to_randomize, fish_data)}
     randomized_seasons_per_fish = randomizers_per_behavior[behavior](seasons_by_fish, random)
 
+    season_groups = sorted({val for val in seasons_by_fish.values()})
+    possible_seasons = sorted({entry for sublist in randomized_seasons_per_fish for entry in sublist})
+
     for fish_name, fish_season in randomized_seasons_per_fish.items():
         original_fish = content.fishes[fish_name]
+
+        # Crab pot fish are a massive pain to find. Let's be nice.
+        minimum_seasons_for_crab_pot_fish = 2
+        while original_fish.difficulty <= 0 and len(fish_season) < minimum_seasons_for_crab_pot_fish:
+            added_season = random.choice(possible_seasons)
+            fish_season = tuple({*fish_season, added_season})
+
         content.fishes[fish_name] = override(original_fish, seasons=fish_season)
 
 
@@ -65,8 +75,18 @@ def randomize_fish_location(content: StardewContent, data_to_randomize: set[str]
                          if len(fish_data.locations) >= 1 and fish_is_included(data_to_randomize, fish_data)}
     randomized_locations_per_fish = randomizers_per_behavior[behavior](locations_by_fish, random)
 
+    location_groups = sorted({val for val in locations_by_fish.values()})
+    possible_locations = sorted({entry for sublist in location_groups for entry in sublist})
+
     for fish_name, fish_location in randomized_locations_per_fish.items():
         original_fish = content.fishes[fish_name]
+
+        # Crab pot fish are a massive pain to find. Let's be nice.
+        minimum_locations_for_crab_pot_fish = 4
+        while original_fish.difficulty <= 0 and len(fish_location) < minimum_locations_for_crab_pot_fish:
+            added_location = random.choice(possible_locations)
+            fish_location = tuple({*fish_location, added_location})
+
         content.fishes[fish_name] = override(original_fish, locations=fish_location)
 
 

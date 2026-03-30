@@ -36,7 +36,7 @@ class FishItem:
                f"Mod: {self.mod_name}"
 
 
-fresh_water = (Region.forest, Region.town, Region.mountain)
+fresh_water = (LogicRegion.forest_river, LogicRegion.forest_pond, Region.town, Region.mountain)
 ocean = (Region.beach,)
 tide_pools = (Region.tide_pools,)
 town_river = (Region.town,)

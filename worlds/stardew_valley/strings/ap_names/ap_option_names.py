@@ -118,7 +118,7 @@ class DataRandomizationOptionName:
     fish_time = "Fish Time"
     fish_location = "Fish Location"
     fish_sell_price = "Fish Sell Price"
-    fish_includes_crab_pot = "Fish Sell Price"
+    fish_includes_crab_pot = "Fish Includes Crab Pot"
     crop_sell_price = "Crop Sell Price"
     crop_growth_time = "Crop Growth Time"
     crop_seed_price = "Crop Seed Price"
