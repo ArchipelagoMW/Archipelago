@@ -230,7 +230,7 @@ def test_room_reachability_from_start() -> None:
 
 def test_room_sanity_binding_optional() -> None:
     from ..data import load_json_data
-    from ..rules import bind_room_sanity_locations
+    from ..rules import _bind_room_sanity_locations
 
     room_regions = load_json_data("regions/rooms.json")
     
@@ -239,10 +239,10 @@ def test_room_sanity_binding_optional() -> None:
         for name, region in room_regions.items()
     }
     
-    bind_room_sanity_locations(room_regions, enable_room_sanity=False)
+    _bind_room_sanity_locations(room_regions, enable_room_sanity=False)
     assert room_regions["REGION_RAINBOW_ROUTE/ROOM_1_01"]["locations"] == regions_before["REGION_RAINBOW_ROUTE/ROOM_1_01"]
     
-    bind_room_sanity_locations(room_regions, enable_room_sanity=True)
+    _bind_room_sanity_locations(room_regions, enable_room_sanity=True)
     assert "ROOM_SANITY_1_01" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_01"]["locations"]
     assert "ROOM_SANITY_10_01" not in room_regions["REGION_DIMENSION_MIRROR/ROOM_10_01"]["locations"]
     assert "ROOM_SANITY_0_01" not in room_regions["REGION_TUTORIAL/ROOM_0_01"]["locations"]

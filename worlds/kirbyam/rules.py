@@ -22,6 +22,7 @@ CLIENT_GOAL after server acknowledgement of the selected goal location check.
 
 from __future__ import annotations
 
+from collections import deque
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
@@ -181,13 +182,14 @@ def set_rules(world: KirbyAmWorld) -> None:
 # ============================================================================
 # Room Graph Reachability Queries
 # ============================================================================
-# The room topology (rooms.json) is pure: no locations embedded.
+# rooms.json defines room connectivity and may include non-room-sanity locations
+# (for example, boss/chest ownership). Room-sanity binding remains optional.
 # These functions allow querying which rooms are reachable from which other rooms.
 # The location binding (room-sanity checks) is separate and optional.
 
 
 def _get_room_graph() -> dict[str, dict]:
-    """Load the pure room topology graph."""
+    """Load room topology data used for reachability queries."""
     from .data import load_json_data
     return load_json_data("regions/rooms.json")
 
@@ -210,10 +212,11 @@ def _reachable_rooms_from(
         graph = _get_room_graph()
     
     visited = set()
-    queue = [start_region]
+    queued = {start_region}
+    queue = deque([start_region])
     
     while queue:
-        current = queue.pop(0)
+        current = queue.popleft()
         if current in visited:
             continue
         if current not in graph:
@@ -221,20 +224,21 @@ def _reachable_rooms_from(
         
         visited.add(current)
         for next_room in graph[current].get("exits", []):
-            if next_room not in visited:
+            if next_room not in visited and next_room not in queued:
                 queue.append(next_room)
+                queued.add(next_room)
     
     return visited
 
 
-def bind_room_sanity_locations(
+def _bind_room_sanity_locations(
     world_regions: dict,
     enable_room_sanity: bool = True,
 ) -> None:
     """
     Optionally bind room-sanity locations to room regions.
     
-    Room topology (rooms.json) is pure: this function selectively
+    Room topology may include non-room-sanity locations; this function selectively
     attaches ROOM_SANITY_* locations to their corresponding room regions.
     
     Args:
