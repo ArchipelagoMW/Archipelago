@@ -1446,6 +1446,54 @@ def test_send_notification_ignores_unrelated_itemsend_traffic(mock_bizhawk_conte
     assert mock_display.call_count == 0
 
 
+def test_self_send_printjson_queues_fallback_received_item(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot = 1
+    mock_bizhawk_context.items_received = []
+
+    payload = {
+        "type": "ItemSend",
+        "item": Mock(item=3860001, player=1, location=3961000, flags=0),
+        "receiving": 1,
+    }
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.Utils.async_start') as mock_async_start:
+        mock_async_start.side_effect = lambda coro: coro.close()
+        client.on_package(mock_bizhawk_context, "PrintJSON", payload)
+
+    assert len(mock_bizhawk_context.items_received) == 1
+    queued = mock_bizhawk_context.items_received[0]
+    assert queued.item == 3860001
+    assert queued.location == 3961000
+    assert queued.player == 1
+    assert queued.flags == 0
+
+
+def test_self_send_printjson_fallback_dedupes_identical_packet(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    mock_bizhawk_context.slot = 1
+    mock_bizhawk_context.items_received = []
+
+    payload = {
+        "type": "ItemSend",
+        "item": Mock(item=3860001, player=1, location=3961000, flags=0),
+        "receiving": 1,
+    }
+
+    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock), \
+         patch('worlds.kirbyam.client.Utils.async_start') as mock_async_start:
+        mock_async_start.side_effect = lambda coro: coro.close()
+        client.on_package(mock_bizhawk_context, "PrintJSON", payload)
+        client.on_package(mock_bizhawk_context, "PrintJSON", payload)
+
+    assert len(mock_bizhawk_context.items_received) == 1
+
+
 def test_send_notification_rate_limit_suppresses_burst(mock_bizhawk_context):
     """Burst sends should be rate-limited with summary notification when window rolls over."""
     client = KirbyAmClient()

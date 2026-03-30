@@ -166,6 +166,7 @@ class KirbyAmClient(BizHawkClient):
         self._send_notifications_enabled: bool = True
         self._notified_receive_indices: set[int] = set()
         self._notified_send_keys: set[tuple[int, int, int, int]] = set()
+        self._self_send_fallback_keys: set[tuple[int, int, int, int]] = set()
         self._send_notify_window_start: float = 0.0
         self._send_notify_window_count: int = 0
         self._send_notify_window_suppressed: int = 0
@@ -221,6 +222,62 @@ class KirbyAmClient(BizHawkClient):
         self._suppress_next_local_death_send = False
         self._delivery_counter_ahead_fallback_active = False
         self._delivery_counter_ahead_resume_logged = False
+        self._self_send_fallback_keys.clear()
+
+    @staticmethod
+    def _item_signature(item: object) -> tuple[int, int, int, int] | None:
+        item_id = KirbyAmClient._coerce_u32(getattr(item, "item", None))
+        location_id = KirbyAmClient._coerce_u32(getattr(item, "location", None))
+        player_id = KirbyAmClient._coerce_u32(getattr(item, "player", None))
+        flags = KirbyAmClient._coerce_u32(getattr(item, "flags", 0))
+        if item_id is None or location_id is None or player_id is None or flags is None:
+            return None
+        return item_id, location_id, player_id, flags
+
+    def _maybe_queue_self_send_fallback_item(self, ctx: "BizHawkClientContext", args: dict) -> None:
+        """Best-effort fallback for self-send events missing from ReceivedItems."""
+        if args.get("type") != "ItemSend":
+            return
+
+        receiver_id = self._coerce_u32(args.get("receiving"))
+        sender_slot = self._coerce_u32(getattr(ctx, "slot", None))
+        if receiver_id is None or sender_slot is None:
+            return
+        if receiver_id != sender_slot:
+            return
+
+        item = args.get("item")
+        if item is None:
+            return
+
+        signature = self._item_signature(item)
+        if signature is None:
+            return
+
+        item_id, location_id, player_id, flags = signature
+        if player_id != sender_slot:
+            return
+        if location_id <= 0:
+            return
+        if signature in self._self_send_fallback_keys:
+            return
+
+        for existing in ctx.items_received:
+            if self._item_signature(existing) == signature:
+                return
+
+        from CommonClient import logger
+        from NetUtils import NetworkItem
+
+        ctx.items_received.append(NetworkItem(item_id, location_id, player_id, flags))
+        self._self_send_fallback_keys.add(signature)
+        ctx.watcher_event.set()
+        logger.warning(
+            "KirbyAM: queued self-send fallback item from ItemSend (item=%s, location=%s, player=%s)",
+            item_id,
+            location_id,
+            player_id,
+        )
 
     def _mark_bizhawk_watcher_transport_error(self, reason: str) -> bool:
         """Prepare handler state for a clean BizHawk-side recovery on the next successful tick."""
@@ -1800,4 +1857,5 @@ class KirbyAmClient(BizHawkClient):
         if cmd == "Bounced":
             self._queue_incoming_death_link(args)
         if cmd == "PrintJSON":
+            self._maybe_queue_self_send_fallback_item(ctx, args)
             self._maybe_emit_send_notification(ctx, args)
