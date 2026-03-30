@@ -291,9 +291,12 @@ def _init() -> None:
         raise TypeError("items.json must be a JSON object mapping item keys to attributes")
 
     next_item_id = BASE_OFFSET + 1
+    used_item_ids: set[int] = set()
+    explicit_item_id_owner: dict[int, str] = {}
     # Build a helper mapping from item_key (string) -> item_id regardless of whether
     # the JSON specified an explicit item_id.
     item_key_to_id: dict[str, int] = {}
+    parsed_items: list[tuple[str, str, ItemClassification, frozenset[str], int | None]] = []
 
     for item_key, attrs in items_json.items():
         if not isinstance(item_key, str) or not isinstance(attrs, dict):
@@ -304,12 +307,32 @@ def _init() -> None:
         tags = frozenset(attrs.get("tags", []))
 
         item_id_val = attrs.get("item_id")
+        explicit_item_id: int | None
         # Treat 0 as "unset" to allow placeholder JSON during early development.
         if item_id_val in (None, 0, "0"):
+            explicit_item_id = None
+        else:
+            explicit_item_id = _parse_int(item_id_val)
+            if explicit_item_id in used_item_ids:
+                first_key = explicit_item_id_owner.get(explicit_item_id, "<unknown>")
+                raise ValueError(
+                    "Duplicate KirbyAM item_id detected in items.json: "
+                    f"item_id={explicit_item_id} is used by '{first_key}' and '{item_key}'"
+                )
+            used_item_ids.add(explicit_item_id)
+            explicit_item_id_owner[explicit_item_id] = item_key
+
+        parsed_items.append((item_key, label, classification, tags, explicit_item_id))
+
+    for item_key, label, classification, tags, explicit_item_id in parsed_items:
+        if explicit_item_id is None:
+            while next_item_id in used_item_ids:
+                next_item_id += 1
             item_id = next_item_id
             next_item_id += 1
+            used_item_ids.add(item_id)
         else:
-            item_id = _parse_int(item_id_val)
+            item_id = explicit_item_id
 
         data.items[item_id] = ItemData(label=label, item_id=item_id, classification=classification, tags=tags)
         item_key_to_id[item_key] = item_id

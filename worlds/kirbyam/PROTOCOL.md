@@ -67,23 +67,22 @@ All item IDs use **BASE_OFFSET = 3860000** for safety (avoids collision with Arc
 | SHARD_1 .. SHARD_8 | 3860002 - 3860009 | Mirror shards (8 items) |
 | MAP_MUSTARD_MOUNTAIN .. MAP_RADISH_RUINS | 3860010 - 3860017 | Useful map rewards |
 | VITALITY_COUNTER_1 .. VITALITY_COUNTER_4 | 3860018 - 3860021 | Useful vitality rewards |
-| 2_UP, 3_UP        | 3860022 - 3860023 | Dormant compatibility extra-life rewards (not active in Phase 1 filler generation) |
 | MAP_RAINBOW_ROUTE | 3860024 | Useful map reward |
 | SOUND_PLAYER      | 3860025 | Useful unlock reward (applies native Sound Player unlock on receipt) |
-| *Reserved*        | 3860026+ | Future items (doors, abilities, consumables, etc.) |
+| FOOD, BATTERY, MAX_TOMATO, INVINCIBILITY_CANDY | 3860026 - 3860029 | Filler consumable rewards |
+| *Reserved*        | 3860030+ | Future items (doors, abilities, additional consumables, etc.) |
 
 ### Current filler effect contract
 
-Phase 1 filler generation remains intentionally conservative:
+Current shipped filler generation uses a uniform active filler pool:
 
 | Item | Effect |
 |------|--------|
-| `1 Up` | Active filler generation item. Grants 1 life, saturating at 255 |
-| `2 Up` | Dormant compatibility item. Grants 2 lives, saturating at 255 |
-| `3 Up` | Dormant compatibility item. Grants 3 lives, saturating at 255 |
-
-Health-restoring and battery-style consumables remain out of the shipped payload
-contract until their native apply semantics are verified on the USA ROM.
+| `1 Up` | Grants 1 life, saturating at 255 |
+| `Small Food` | Increments active Kirby HP by 1 if Kirby is alive (`hp > 0`) and below max HP; no effect for `hp <= 0` |
+| `Cell Phone Battery` | Increments active Kirby battery by 1 if below 3 |
+| `Max Tomato` | Sets active Kirby HP to max HP if Kirby is alive (`hp > 0`); no effect for `hp <= 0` |
+| `Invincibility Candy` | Applies the native invincibility state using the decomp-backed 1000-tick helper path |
 
 ## Location ID Ranges
 

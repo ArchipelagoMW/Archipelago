@@ -367,27 +367,31 @@ When validating AP item receipt behavior in BizHawk, also watch for mailbox time
 
 This behavior is intended to avoid deadlock while still preferring exactly-once ROM outcomes.
 
-## Filler Receipt Compatibility Smoke (Issues #41, #372)
+## Filler Receipt Compatibility Smoke (Issue #295)
 
 Validate that each shipped filler item can be received and applied safely.
-Only `1 Up` is generated as active filler in Phase 1; `2 Up` and `3 Up` checks below are payload-compatibility validation.
 
 1. Connect a patched KirbyAM ROM to Archipelago with BizHawk logs visible.
 2. Deliver each filler item at least once through the mailbox path:
-   - `1 Up` (`3860001`) — active filler in Phase 1
-   - `2 Up` (`3860022`) — dormant, retained for payload compatibility (Issue #372)
-   - `3 Up` (`3860023`) — dormant, retained for payload compatibility (Issue #372)
+   - `1 Up` (`3860001`)
+   - `Small Food` (`3860026`)
+   - `Cell Phone Battery` (`3860027`)
+   - `Max Tomato` (`3860028`)
+   - `Invincibility Candy` (`3860029`)
 3. After each delivery, confirm:
    - mailbox ACK completes normally
    - `debug_last_item_id` matches the delivered filler
-   - Kirby's life count increases by the expected amount
-   - life count saturates safely instead of overflowing at high values
+   - `1 Up`: Kirby's life count increases by 1 and saturates safely instead of overflowing at high values
+   - `Small Food`: when Kirby is alive (HP > 0), active Kirby HP increases by 1 when below max HP and does not exceed max HP; when Kirby is dead (HP <= 0), the item has no effect
+   - `Cell Phone Battery`: active Kirby battery increases by 1 when below 3 and does not exceed 3
+   - `Max Tomato`: when Kirby is alive (HP > 0), active Kirby HP becomes exactly max HP; when Kirby is dead (HP <= 0), the item has no effect
+   - `Invincibility Candy`: native invincibility behavior starts, including the normal timer/music path
 4. Repeat one filler delivery after an AP reconnect and confirm the same ACK path still succeeds.
 5. Confirm shard delivery behavior is unchanged after the filler smoke passes.
 
 Expected current scope:
-- filler effects only grant lives
-- no health-restore or battery-side effects are expected in the current payload
+- live/item-side effects follow the current shipped filler contract in `PROTOCOL.md`
+- no native pickup sprite drop is expected from mailbox receipt
 
 ## Reconnect Lifecycle Check (Issue #52)
 

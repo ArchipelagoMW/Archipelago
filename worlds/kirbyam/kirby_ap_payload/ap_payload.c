@@ -51,8 +51,19 @@
 #define KIRBY_CURRENT_PLAYER_ADDR 0x0203AD3Cu
 #define KIRBY_CURRENT_PLAYER     (*(volatile uint8_t*)(KIRBY_CURRENT_PLAYER_ADDR))
 #define KIRBY_STRUCT_STRIDE      0x1A8u
+#define KIRBY_STRUCT_BATTERY_OFFSET 0xDCu
+// Reverse-engineered timed-effect fields used by BonusGiveInvincibility in the
+// KatAM decomp (`bonus.c`): clear the effect-reset byte, set the invincibility
+// kind byte to 100, mark the state byte active, and store a 1000-tick duration.
+#define KIRBY_STRUCT_INVINCIBILITY_RESET_OFFSET 0xE1u
+#define KIRBY_STRUCT_INVINCIBILITY_DURATION_OFFSET 0xE2u
+#define KIRBY_STRUCT_INVINCIBILITY_KIND_OFFSET 0xE4u
+#define KIRBY_STRUCT_INVINCIBILITY_STATE_OFFSET 0xE5u
 #define KIRBY_STRUCT_HP_OFFSET   0x100u
 #define KIRBY_STRUCT_MAX_HP_OFFSET 0x101u
+#define KIRBY_INVINCIBILITY_KIND 100u
+#define KIRBY_INVINCIBILITY_DURATION 1000u
+#define KIRBY_EFFECT_ACTIVE_COUNTDOWN 0xFFu
 
 // Player lives is a single byte in EWRAM
 #define KIRBY_LIVES_ADDR        0x02020FE2u
@@ -193,6 +204,9 @@ __attribute__((used)) void ap_on_collect_vitality_chest(void) {
 typedef void (*KirbyCollectSoundPlayerFn)(uint32_t reward_index);
 #define KIRBY_COLLECT_SOUND_PLAYER_FN ((KirbyCollectSoundPlayerFn)0x08019E69u)
 
+typedef void (*KirbyGiveInvincibilityFn)(void *kirby, uint16_t duration);
+#define KIRBY_GIVE_INVINCIBILITY_FN ((KirbyGiveInvincibilityFn)0x0808324Du)
+
 // Hook target for native Sound Player chest reward collection. Reward index 0 is
 // the Sound Player unlock and should become AP-owned; all other native rewards on
 // this call path should keep vanilla behavior.
@@ -209,10 +223,66 @@ static void ap_sync_active_kirby_health_from_vitality(void) {
     uint8_t player = KIRBY_CURRENT_PLAYER;
     uint32_t kirby_addr = KIRBY_STRUCTS_ADDR + ((uint32_t)player * KIRBY_STRUCT_STRIDE);
     uint16_t vitality_total_u16 = (uint16_t)(KIRBY_VITALITY_COUNTER + 6u);
-    uint8_t vitality_total = (vitality_total_u16 > 0xFFu) ? 0xFFu : (uint8_t)vitality_total_u16;
+    int8_t vitality_total = (vitality_total_u16 > 0x7Fu) ? 0x7F : (int8_t)vitality_total_u16;
 
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = vitality_total;
-    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET) = vitality_total;
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = vitality_total;
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET) = vitality_total;
+}
+
+static uint32_t ap_get_active_kirby_addr(void) {
+    return KIRBY_STRUCTS_ADDR + ((uint32_t)KIRBY_CURRENT_PLAYER * KIRBY_STRUCT_STRIDE);
+}
+
+static void ap_grant_small_food(void) {
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+    int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
+    int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
+
+    // Preserve dead/invalid negative HP states; mailbox healing items should not revive Kirby.
+    if (hp <= 0) {
+        return;
+    }
+
+    if (hp > max_hp) {
+        *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = max_hp;
+        return;
+    }
+
+    if (hp < max_hp) {
+        *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = (int8_t)(hp + 1);
+    }
+}
+
+static void ap_grant_battery(void) {
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+    uint8_t battery = *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_BATTERY_OFFSET);
+
+    if (battery <= 2u) {
+        *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_BATTERY_OFFSET) = (uint8_t)(battery + 1u);
+    }
+}
+
+static void ap_grant_max_tomato(void) {
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+    int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
+    int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
+
+    // Preserve dead/invalid negative HP states; mailbox healing items should not revive Kirby.
+    if (hp <= 0) {
+        return;
+    }
+
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = max_hp;
+}
+
+static void ap_grant_invincibility_candy(void) {
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_RESET_OFFSET) = 0u;
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_KIND_OFFSET) = KIRBY_INVINCIBILITY_KIND;
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_STATE_OFFSET) = KIRBY_EFFECT_ACTIVE_COUNTDOWN;
+    *(volatile uint16_t*)(kirby_addr + KIRBY_STRUCT_INVINCIBILITY_DURATION_OFFSET) = KIRBY_INVINCIBILITY_DURATION;
+    KIRBY_GIVE_INVINCIBILITY_FN((void*)kirby_addr, KIRBY_INVINCIBILITY_DURATION);
 }
 
 static void ap_grant_vitality_counter(void) {
@@ -242,18 +312,6 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
     // 1_UP = BASE+1
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 1u)) {
         ap_grant_lives(1u);
-        return 1u;
-    }
-
-    // 2_UP = BASE+22
-    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 22u)) {
-        ap_grant_lives(2u);
-        return 1u;
-    }
-
-    // 3_UP = BASE+23
-    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 23u)) {
-        ap_grant_lives(3u);
         return 1u;
     }
 
@@ -301,6 +359,27 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
     // SOUND_PLAYER = BASE+25
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 25u)) {
         KIRBY_COLLECT_SOUND_PLAYER_FN(0u);
+        return 1u;
+    }
+
+    // FOOD, BATTERY, MAX_TOMATO, INVINCIBILITY_CANDY = BASE+26 .. BASE+29
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 26u)) {
+        ap_grant_small_food();
+        return 1u;
+    }
+
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 27u)) {
+        ap_grant_battery();
+        return 1u;
+    }
+
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 28u)) {
+        ap_grant_max_tomato();
+        return 1u;
+    }
+
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 29u)) {
+        ap_grant_invincibility_candy();
         return 1u;
     }
 

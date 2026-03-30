@@ -111,9 +111,15 @@ class KirbyAmWorld(World):
     _enemy_copy_ability_policy: dict[str, Any]
 
     # Generation stages
-    # Phase 1: Active filler pool for random selection.
-    # Contains only "1 Up" for Phase 1 balance; supports future expansion.
-    ACTIVE_FILLER_POOL: ClassVar[tuple[str, ...]] = ("1 Up",)
+    # Active filler pool for random selection.
+    # Issue #295 ships the life-up plus consumable filler set as uniform choices.
+    ACTIVE_FILLER_POOL: ClassVar[tuple[str, ...]] = (
+        "1 Up",
+        "Small Food",
+        "Cell Phone Battery",
+        "Max Tomato",
+        "Invincibility Candy",
+    )
     _SHARD_CHEST_KEY_ORDER: ClassVar[tuple[str, ...]] = (
         "MAJOR_CHEST_MUSTARD_MOUNTAIN",
         "MAJOR_CHEST_MOONLIGHT_MANSION",

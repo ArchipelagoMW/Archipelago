@@ -9,7 +9,7 @@ OBJCOPY := C:/devkitPro/devkitARM/bin/arm-none-eabi-objcopy.exe
 endif
 
 
-CFLAGS  := -mthumb -mcpu=arm7tdmi -Os -ffreestanding -fno-builtin -nostdlib -Wall -Wextra
+CFLAGS  := -mthumb -mcpu=arm7tdmi -Os -ffreestanding -fno-builtin -fno-jump-tables -fno-tree-switch-conversion -nostdlib -Wall -Wextra
 LDFLAGS := -T linker.ld -nostdlib
 
 all: payload.bin
