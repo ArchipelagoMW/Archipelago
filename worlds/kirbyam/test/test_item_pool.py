@@ -128,6 +128,14 @@ def test_filler_catalog_includes_current_filler_set() -> None:
 
 def test_consumable_filler_item_ids_are_stable() -> None:
     labels_to_ids = {item.label: item.item_id for item in data.items.values()}
+    shard_ids = sorted(
+        item.item_id
+        for item in data.items.values()
+        if "Shards" in item.tags
+    )
+
+    assert labels_to_ids["1 Up"] == 3860001
+    assert shard_ids == list(range(3860002, 3860010))
 
     assert labels_to_ids["Small Food"] == 3860026
     assert labels_to_ids["Cell Phone Battery"] == 3860027

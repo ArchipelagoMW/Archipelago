@@ -292,6 +292,7 @@ def _init() -> None:
 
     next_item_id = BASE_OFFSET + 1
     used_item_ids: set[int] = set()
+    explicit_item_id_owner: dict[int, str] = {}
     # Build a helper mapping from item_key (string) -> item_id regardless of whether
     # the JSON specified an explicit item_id.
     item_key_to_id: dict[str, int] = {}
@@ -313,8 +314,13 @@ def _init() -> None:
         else:
             explicit_item_id = _parse_int(item_id_val)
             if explicit_item_id in used_item_ids:
-                raise ValueError(f"Duplicate KirbyAM item_id detected in items.json: {explicit_item_id}")
+                first_key = explicit_item_id_owner.get(explicit_item_id, "<unknown>")
+                raise ValueError(
+                    "Duplicate KirbyAM item_id detected in items.json: "
+                    f"item_id={explicit_item_id} is used by '{first_key}' and '{item_key}'"
+                )
             used_item_ids.add(explicit_item_id)
+            explicit_item_id_owner[explicit_item_id] = item_key
 
         parsed_items.append((item_key, label, classification, tags, explicit_item_id))
 
