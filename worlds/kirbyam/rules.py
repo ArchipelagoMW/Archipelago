@@ -5,15 +5,15 @@ client/ROM integration are still in flux.
 
 Current rules:
     - Access to Rainbow Route's connected area graph starts from REGION_GAME_START,
-        which now only feeds the Rainbow Route hub.
+            which now only feeds the Rainbow Route hub.
     - Access to the Dimension Mirror region from Rainbow Route requires collecting
-        all 8 Mirror Shards (implemented as 8 progression items).
-  - Within the Dimension Mirror:
-      * Defeat Dark Meta Knight (Dimension Mirror) is an event available once
-        the region is entered (no additional items required beyond the shards gate).
-      * Defeat Dark Mind goal location requires: all 8 shards + DMK event.
-  - Completion conditions:
-      * Dark Mind: collect Defeat Dark Mind.
+            all 8 Mirror Shards (implemented as 8 progression items).
+        - Within the Dimension Mirror:
+            * Defeat Dark Meta Knight (Dimension Mirror) is an event available once
+                the region is entered (no additional items required beyond the shards gate).
+            * Defeat Dark Mind goal location requires: all 8 shards + DMK event.
+        - Completion conditions:
+            * Dark Mind: collect Defeat Dark Mind.
 
 NOTE: Dark Mind is modeled as an explicit AP goal location.
 The client reports this goal location from native AI-state signals and sends
