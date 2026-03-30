@@ -2,6 +2,7 @@
   "1_UP": {
     "label": "1 Up",
     "classification": "FILLER",
+    "item_id": 3860001,
     "tags": ["Filler", "Life"]
   },
   "FOOD": {
