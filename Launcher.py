@@ -29,8 +29,12 @@ if __name__ == "__main__":
 
 import settings
 import Utils
-from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
-                   user_path)
+from Utils import (env_cleared_lib_path, init_logging, is_frozen, is_linux, is_macos, is_windows, local_path,
+                   messagebox, open_filename, user_path)
+
+if __name__ == "__main__":
+    init_logging('Launcher')
+
 from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
@@ -48,10 +52,7 @@ def open_host_yaml():
         webbrowser.open(file)
         return
 
-    env = os.environ
-    if "LD_LIBRARY_PATH" in env:
-        env = env.copy()
-        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    env = env_cleared_lib_path()
     subprocess.Popen([exe, file], env=env)
 
 def open_patch():
@@ -102,10 +103,7 @@ def open_folder(folder_path):
         return
 
     if exe:
-        env = os.environ
-        if "LD_LIBRARY_PATH" in env:
-            env = env.copy()
-            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        env = env_cleared_lib_path()
         subprocess.Popen([exe, folder_path], env=env)
     else:
         logging.warning(f"No file browser available to open {folder_path}")
@@ -198,22 +196,32 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
         return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
-def launch(exe, in_terminal=False):
+def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
+    """Runs the given command/args in `exe` in a new process.
+
+    If `in_terminal` is True, it will attempt to run in a terminal window,
+    and the return value will indicate whether one was found."""
     if in_terminal:
         if is_windows:
             # intentionally using a window title with a space so it gets quoted and treated as a title
             subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
-            return
+            return True
         elif is_linux:
-            terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+            terminal = which("x-terminal-emulator") or which("konsole") or which("gnome-terminal") or which("xterm")
             if terminal:
-                subprocess.Popen([terminal, '-e', shlex.join(exe)])
-                return
+                # Clear LD_LIB_PATH during terminal startup, but set it again when running command in case it's needed
+                ld_lib_path = os.environ.get("LD_LIBRARY_PATH")
+                lib_path_setter = f"env LD_LIBRARY_PATH={shlex.quote(ld_lib_path)} " if ld_lib_path else ""
+                env = env_cleared_lib_path()
+
+                subprocess.Popen([terminal, "-e", lib_path_setter + shlex.join(exe)], env=env)
+                return True
         elif is_macos:
-            terminal = [which('open'), '-W', '-a', 'Terminal.app']
+            terminal = [which("open"), "-W", "-a", "Terminal.app"]
             subprocess.Popen([*terminal, *exe])
-            return
+            return True
     subprocess.Popen(exe)
+    return False
 
 
 def create_shortcut(button: Any, component: Component) -> None:
@@ -402,12 +410,17 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
         @staticmethod
         def component_action(button):
-            MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
-                       size_hint_x=0.5).open()
+            open_text = "Opening in a new window..."
             if button.component.func:
+                # Note: if we want to draw the Snackbar before running func, func needs to be wrapped in schedule_once
                 button.component.func()
             else:
-                launch(get_exe(button.component), button.component.cli)
+                # if launch returns False, it started the process in background (not in a new terminal)
+                if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
+                    open_text = "Running in the background..."
+
+            MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
@@ -493,7 +506,6 @@ def main(args: argparse.Namespace | dict | None = None):
 
 
 if __name__ == '__main__':
-    init_logging('Launcher')
     multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
