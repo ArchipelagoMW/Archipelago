@@ -55,7 +55,7 @@ class KirbyAmWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Harrison Sherwin"],
+        ["Harrison Sherwin, BlameMateo"],
     )
 
     tutorials = [setup_en]
