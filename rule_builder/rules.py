@@ -1353,7 +1353,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     def __init__(
         self,
         *item_names: str,
-        count: int = 1,
+        count: int | FieldResolver = 1,
         options: Iterable[OptionFilter] = (),
         filtered_resolution: bool = False,
     ) -> None:
@@ -1487,7 +1487,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
     def __init__(
         self,
         *item_names: str,
-        count: int = 1,
+        count: int | FieldResolver = 1,
         options: Iterable[OptionFilter] = (),
         filtered_resolution: bool = False,
     ) -> None:
