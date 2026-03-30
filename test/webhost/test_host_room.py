@@ -170,7 +170,7 @@ class TestHostFakeRoom(TestBase):
             self.assertNotIn("href=\"/seed/", response_text)
             self.assertNotIn(text, response_text)
             self.assertIn("/connect ", response_text)
-            self.assertIn(":12345", response_text)
+            self.assertIn("/12345", response_text)
 
     def test_host_room_own_post(self) -> None:
         """Verify command from owner gets queued for the server and response is redirect."""
