@@ -104,8 +104,43 @@ def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> N
         set_rules(world)
 
     applied_names = [call.args[0].name for call in mock_set_rule.call_args_list]
-    assert "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
+    assert "REGION_RAINBOW_ROUTE/MAIN -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
     assert "Defeat Dark Mind" in applied_names
+
+
+def test_area_topology_routes_through_rainbow_route_hub() -> None:
+    from ..data import load_json_data
+
+    regions = load_json_data("regions/areas.json")
+
+    assert regions["REGION_GAME_START"]["exits"] == ["REGION_RAINBOW_ROUTE/MAIN"]
+
+    rainbow_route_exits = set(regions["REGION_RAINBOW_ROUTE/MAIN"]["exits"])
+    assert rainbow_route_exits == {
+        "REGION_MUSTARD_MOUNTAIN/MAIN",
+        "REGION_MOONLIGHT_MANSION/MAIN",
+        "REGION_CANDY_CONSTELLATION/MAIN",
+        "REGION_OLIVE_OCEAN/MAIN",
+        "REGION_PEPPERMINT_PALACE/MAIN",
+        "REGION_CABBAGE_CAVERN/MAIN",
+        "REGION_CARROT_CASTLE/MAIN",
+        "REGION_RADISH_RUINS/MAIN",
+        "REGION_DIMENSION_MIRROR/MAIN",
+    }
+
+    spoke_regions = {
+        "REGION_MUSTARD_MOUNTAIN/MAIN",
+        "REGION_MOONLIGHT_MANSION/MAIN",
+        "REGION_CANDY_CONSTELLATION/MAIN",
+        "REGION_OLIVE_OCEAN/MAIN",
+        "REGION_PEPPERMINT_PALACE/MAIN",
+        "REGION_CABBAGE_CAVERN/MAIN",
+        "REGION_CARROT_CASTLE/MAIN",
+        "REGION_RADISH_RUINS/MAIN",
+        "REGION_DIMENSION_MIRROR/MAIN",
+    }
+    for region_name in spoke_regions:
+        assert regions[region_name]["exits"] == ["REGION_RAINBOW_ROUTE/MAIN"]
 
 
 ALL_SHARDS = {

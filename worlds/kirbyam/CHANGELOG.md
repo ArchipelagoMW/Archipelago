@@ -8,9 +8,6 @@
 - Replace dormant `2 Up`/`3 Up` compatibility fillers with shipped consumable filler effects for `Small Food`, `Cell Phone Battery`, `Max Tomato`, and `Invincibility Candy`, update the active filler pool and ROM payload apply logic, and document the new filler contract and manual validation expectations (Issue #295).
 - Add optional Room Sanity (`room_sanity`) with 257 `Room X-YY` checks keyed by native `gVisitedDoors` (`doorsIdx`, bit 15), including reconnect-safe resend/dedupe polling, generation + slot_data gating, protocol/address policy updates, and dedicated Room Sanity polling/docs coverage (Issue #480).
 
-- Replace dormant `2 Up`/`3 Up` compatibility fillers with shipped consumable filler effects for `Small Food`, `Cell Phone Battery`, `Max Tomato`, and `Invincibility Candy`, update the active filler pool and ROM payload apply logic, and document the new filler contract and manual validation expectations (Issue #295).
-- Add optional Room Sanity (`room_sanity`) with 257 `Room X-YY` checks keyed by native `gVisitedDoors` (`doorsIdx`, bit 15), including reconnect-safe resend/dedupe polling, generation + slot_data gating, protocol/address policy updates, and dedicated Room Sanity polling/docs coverage (Issue #480).
-
 ## v0.0.14
 
 - Add gameplay-state debug logging option to help diagnose spurious location checks. When enabled via the `Enable Gameplay State Debug Logging` world option, the BizHawk client logs unique `ai_kirby_state_native` values once per session with their gameplay-active classification, allowing players and developers to collect data on which gameplay states correspond with unexpected checks (Issue #477, debugging phase).

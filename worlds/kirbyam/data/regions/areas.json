@@ -3,16 +3,7 @@
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_RAINBOW_ROUTE/MAIN",
-      "REGION_MUSTARD_MOUNTAIN/MAIN",
-      "REGION_MOONLIGHT_MANSION/MAIN",
-      "REGION_CANDY_CONSTELLATION/MAIN",
-      "REGION_OLIVE_OCEAN/MAIN",
-      "REGION_PEPPERMINT_PALACE/MAIN",
-      "REGION_CABBAGE_CAVERN/MAIN",
-      "REGION_CARROT_CASTLE/MAIN",
-      "REGION_RADISH_RUINS/MAIN",
-      "REGION_DIMENSION_MIRROR/MAIN"
+      "REGION_RAINBOW_ROUTE/MAIN"
     ],
     "warps": []
   },
@@ -20,7 +11,7 @@
   "REGION_MUSTARD_MOUNTAIN/MAIN": {
     "locations": ["BOSS_DEFEAT_1", "MAJOR_CHEST_MUSTARD_MOUNTAIN"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanUseMini": {
@@ -41,7 +32,7 @@
   "REGION_MOONLIGHT_MANSION/MAIN": {
     "locations": ["BOSS_DEFEAT_2", "MAJOR_CHEST_MOONLIGHT_MANSION"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanCutRopes": {
@@ -62,7 +53,7 @@
   "REGION_CANDY_CONSTELLATION/MAIN": {
     "locations": ["BOSS_DEFEAT_3", "MAJOR_CHEST_CANDY_CONSTELLATION", "SOUND_PLAYER_CHEST", "VITALITY_CHEST_CANDY_CONSTELLATION"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanUseMini": {
@@ -83,7 +74,7 @@
   "REGION_OLIVE_OCEAN/MAIN": {
     "locations": ["BOSS_DEFEAT_4", "MAJOR_CHEST_OLIVE_OCEAN", "VITALITY_CHEST_OLIVE_OCEAN"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanBreakBlocks": {
@@ -116,14 +107,14 @@
   "REGION_PEPPERMINT_PALACE/MAIN": {
     "locations": ["BOSS_DEFEAT_5", "MAJOR_CHEST_PEPPERMINT_PALACE"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": []
   },
 
   "REGION_CABBAGE_CAVERN/MAIN": {
     "locations": ["BOSS_DEFEAT_6", "MAJOR_CHEST_CABBAGE_CAVERN"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanBreakBlocks": {
@@ -150,7 +141,7 @@
   "REGION_CARROT_CASTLE/MAIN": {
     "locations": ["BOSS_DEFEAT_7", "MAJOR_CHEST_CARROT_CASTLE", "VITALITY_CHEST_CARROT_CASTLE"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanUseMini": {
@@ -171,7 +162,7 @@
   "REGION_RADISH_RUINS/MAIN": {
     "locations": ["BOSS_DEFEAT_8", "MAJOR_CHEST_RADISH_RUINS", "VITALITY_CHEST_RADISH_RUINS"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": [],
     "ability_gates": {
       "CanUseMini": {
@@ -192,7 +183,17 @@
   "REGION_RAINBOW_ROUTE/MAIN": {
     "locations": ["MAJOR_CHEST_RAINBOW_ROUTE"],
     "events": [],
-    "exits": ["REGION_GAME_START"],
+    "exits": [
+      "REGION_MUSTARD_MOUNTAIN/MAIN",
+      "REGION_MOONLIGHT_MANSION/MAIN",
+      "REGION_CANDY_CONSTELLATION/MAIN",
+      "REGION_OLIVE_OCEAN/MAIN",
+      "REGION_PEPPERMINT_PALACE/MAIN",
+      "REGION_CABBAGE_CAVERN/MAIN",
+      "REGION_CARROT_CASTLE/MAIN",
+      "REGION_RADISH_RUINS/MAIN",
+      "REGION_DIMENSION_MIRROR/MAIN"
+    ],
     "warps": [],
     "ability_gates": {
       "CanCutRopes": {
@@ -213,7 +214,7 @@
   "REGION_DIMENSION_MIRROR/MAIN": {
     "locations": ["GOAL_DARK_MIND"],
     "events": ["Defeat Dark Meta Knight (Dimension Mirror)"],
-    "exits": ["REGION_GAME_START"],
+    "exits": ["REGION_RAINBOW_ROUTE/MAIN"],
     "warps": []
   }
 }
