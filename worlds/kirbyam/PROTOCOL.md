@@ -135,6 +135,8 @@ DeathLink runtime behavior contract:
 - Incoming DeathLink packets (`Bounced` with `DeathLink` tag) are queued and only applied when gameplay-active gate is true.
 - Application writes `kirby_hp_native` to `0` to trigger local defeat.
 - Outgoing DeathLink uses alive->dead transitions on `kirby_hp_native` and sends once per transition.
+- Outgoing DeathLink cause text is selected randomly from `worlds/kirbyam/data/deathlink_flavor_text.json`.
+    Each template should use the `{player}` placeholder for the sender name.
 - Incoming-application echo suppression prevents immediate re-broadcast loops.
 ```
 

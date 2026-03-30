@@ -1,4 +1,5 @@
 import logging
+import random
 import time
 from struct import unpack_from
 from typing import TYPE_CHECKING, Optional
@@ -7,7 +8,7 @@ import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import LocationCategory, data
+from .data import LocationCategory, data, load_json_data
 from .kirby_ap_payload.thumb_branch import is_thumb_bl_instruction
 from .options import Goal
 from .types import KirbyAmBizHawkClientContext
@@ -175,6 +176,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_incoming_death_link_time: float | None = None
         self._last_local_alive_state: bool | None = None
         self._suppress_next_local_death_send: bool = False
+        self._death_link_flavor_templates: list[str] = self._load_death_link_flavor_templates()
 
         # Research-first unsafe-delivery candidate probing state (Issue #223)
         self._unsafe_delivery_probe_stream_marker: object = None
@@ -715,6 +717,50 @@ class KirbyAmClient(BizHawkClient):
             return 0
         return int.from_bytes(value[:1], "little", signed=True)
 
+    @staticmethod
+    def _load_death_link_flavor_templates() -> list[str]:
+        """Load outgoing DeathLink flavor text templates from data file."""
+        fallback = ["{player} was defeated."]
+        try:
+            loaded = load_json_data("deathlink_flavor_text.json")
+        except Exception:
+            logging.getLogger(__name__).warning(
+                "KirbyAM: failed to load deathlink_flavor_text.json; using fallback text"
+            )
+            return fallback
+
+        templates_raw: list[object]
+        if isinstance(loaded, list):
+            templates_raw = loaded
+        elif isinstance(loaded, dict):
+            maybe_templates = loaded.get("templates", [])
+            templates_raw = maybe_templates if isinstance(maybe_templates, list) else []
+        else:
+            templates_raw = []
+
+        templates: list[str] = []
+        for entry in templates_raw:
+            if isinstance(entry, str):
+                normalized = entry.strip()
+                if normalized:
+                    templates.append(normalized)
+
+        if not templates:
+            logging.getLogger(__name__).warning(
+                "KirbyAM: deathlink flavor text pool empty; using fallback text"
+            )
+            return fallback
+
+        return templates
+
+    def _build_outgoing_death_link_cause(self, ctx: "BizHawkClientContext") -> str:
+        """Build randomized outgoing DeathLink cause text for remote players."""
+        if not self._death_link_flavor_templates:
+            self._death_link_flavor_templates = ["{player} was defeated."]
+        template = random.choice(self._death_link_flavor_templates)
+        sender_name = self._player_name(ctx, int(getattr(ctx, "slot", 0) or 0))
+        return template.replace("{player}", sender_name)
+
     def _queue_incoming_death_link(self, args: dict) -> None:
         """Queue an incoming DeathLink event for safe application during gameplay-active ticks."""
         if self._death_link_enabled is not True:
@@ -793,7 +839,11 @@ class KirbyAmClient(BizHawkClient):
             if self._suppress_next_local_death_send:
                 self._suppress_next_local_death_send = False
             else:
-                await ctx.send_death("Kirby was defeated.")
+                from CommonClient import logger
+
+                cause = self._build_outgoing_death_link_cause(ctx)
+                logger.info("KirbyAM: sending outgoing DeathLink with flavored cause")
+                await ctx.send_death(cause)
 
         self._last_local_alive_state = alive_now
 
