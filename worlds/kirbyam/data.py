@@ -291,6 +291,7 @@ def _init() -> None:
         raise TypeError("items.json must be a JSON object mapping item keys to attributes")
 
     next_item_id = BASE_OFFSET + 1
+    used_item_ids: set[int] = set()
     # Build a helper mapping from item_key (string) -> item_id regardless of whether
     # the JSON specified an explicit item_id.
     item_key_to_id: dict[str, int] = {}
@@ -306,13 +307,19 @@ def _init() -> None:
         item_id_val = attrs.get("item_id")
         # Treat 0 as "unset" to allow placeholder JSON during early development.
         if item_id_val in (None, 0, "0"):
+            while next_item_id in used_item_ids:
+                next_item_id += 1
             item_id = next_item_id
             next_item_id += 1
         else:
             item_id = _parse_int(item_id_val)
 
+        if item_id in used_item_ids:
+            raise ValueError(f"Duplicate KirbyAM item_id detected in items.json: {item_id}")
+
         data.items[item_id] = ItemData(label=label, item_id=item_id, classification=classification, tags=tags)
         item_key_to_id[item_key] = item_id
+        used_item_ids.add(item_id)
 
     # Load locations.json (+ optional locations_*.json fragments)
     # Expected forms:
