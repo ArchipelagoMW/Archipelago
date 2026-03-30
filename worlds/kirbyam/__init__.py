@@ -501,7 +501,7 @@ class KirbyAmWorld(World):
 
         # Debug settings are grouped under one key to keep slot_data extensible.
         slot_data["debug"] = {
-            "gameplay_state_logging": bool(self.options.enable_gameplay_state_debug_logging.value),
+            "logging": bool(self.options.enable_debug_logging.value),
         }
         return slot_data
 

@@ -1666,24 +1666,34 @@ def test_load_debug_settings_defaults_to_disabled(mock_bizhawk_context):
 
     client._load_debug_settings(mock_bizhawk_context)
 
-    assert client._debug_gameplay_state_logging_enabled is False
+    assert client._debug_logging_enabled is False
 
 
 def test_load_debug_settings_honors_slot_data_toggle_true(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["debug"] = {"logging": True}
+
+    client._load_debug_settings(mock_bizhawk_context)
+
+    assert client._debug_logging_enabled is True
+
+
+def test_load_debug_settings_accepts_legacy_gameplay_state_key(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
     mock_bizhawk_context.slot_data["debug"] = {"gameplay_state_logging": True}
 
     client._load_debug_settings(mock_bizhawk_context)
 
-    assert client._debug_gameplay_state_logging_enabled is True
+    assert client._debug_logging_enabled is True
 
 
 @pytest.mark.asyncio
 async def test_game_watcher_logs_unique_gameplay_state_once_per_session(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    mock_bizhawk_context.slot_data["debug"] = {"gameplay_state_logging": True}
+    mock_bizhawk_context.slot_data["debug"] = {"logging": True}
 
     with patch('CommonClient.logger') as mock_logger, \
          patch.object(client, '_sync_death_link_setting', new_callable=AsyncMock), \

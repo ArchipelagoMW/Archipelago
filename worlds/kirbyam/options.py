@@ -85,9 +85,9 @@ class RandomizeMiniBossAbilityGrants(Toggle):
     default = 1
 
 
-class EnableGameplayStateDebugLogging(Toggle):
-    """Enable gameplay state debug logging in the BizHawk client. When enabled, unique gameplay state values are logged once per session."""
-    display_name = "Enable Gameplay State Debug Logging"
+class EnableDebugLogging(Toggle):
+    """Enable extra BizHawk client diagnostics for gameplay-state and mailbox delivery troubleshooting."""
+    display_name = "Enable Debug Logging"
     default = 0
 
 
@@ -170,7 +170,7 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     room_sanity: RoomSanity
 
-    enable_gameplay_state_debug_logging: EnableGameplayStateDebugLogging
+    enable_debug_logging: EnableDebugLogging
 
     death_link: KirbyAmDeathLink
 

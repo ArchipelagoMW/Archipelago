@@ -80,4 +80,4 @@ def test_debug_settings_contract_fields_present_with_expected_shapes() -> None:
     slot_data = _emit_slot_data_for_contract_test()
 
     assert isinstance(slot_data["debug"], dict)
-    assert isinstance(slot_data["debug"]["gameplay_state_logging"], bool)
+    assert isinstance(slot_data["debug"]["logging"], bool)
