@@ -187,7 +187,6 @@ class KirbyAmClient(BizHawkClient):
         self._debug_logging_enabled: bool = False
         self._last_logged_ai_state: int | None = None
         self._last_logged_demo_flags: int | None = None
-        self._last_delivery_debug_snapshot: tuple[int, int, int, int, bool, bool, int] | None = None
 
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
@@ -227,7 +226,6 @@ class KirbyAmClient(BizHawkClient):
         self._self_send_fallback_keys.clear()
         self._last_logged_ai_state = None
         self._last_logged_demo_flags = None
-        self._last_delivery_debug_snapshot = None
 
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
@@ -413,44 +411,6 @@ class KirbyAmClient(BizHawkClient):
             return ""
         label = _LOCATION_ID_TO_LABEL.get(location_id)
         return label if label is not None else f"Location {location_id}"
-
-    def _maybe_log_delivery_debug_state(
-        self,
-        ctx: "BizHawkClientContext",
-        *,
-        flag: int,
-        rom_received_count: Optional[int],
-        allow_new_writes: bool,
-        current_frame: Optional[int],
-    ) -> None:
-        if not self._debug_logging_enabled:
-            return
-
-        from CommonClient import logger
-
-        snapshot = (
-            flag,
-            rom_received_count if rom_received_count is not None else -1,
-            self._delivered_item_index,
-            len(ctx.items_received),
-            self._delivery_pending,
-            allow_new_writes,
-            current_frame if current_frame is not None else -1,
-        )
-        if snapshot == self._last_delivery_debug_snapshot:
-            return
-
-        self._last_delivery_debug_snapshot = snapshot
-        logger.info(
-            "KirbyAM debug: mailbox state (flag=%s, rom_count=%s, delivered_index=%s, queue_len=%s, pending=%s, allow_new_writes=%s, frame=%s)",
-            flag,
-            rom_received_count,
-            self._delivered_item_index,
-            len(ctx.items_received),
-            self._delivery_pending,
-            allow_new_writes,
-            current_frame,
-        )
 
     async def _emit_receive_notification(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
         # ACK-gated + index-deduped to avoid replay spam during reconnect
@@ -1563,14 +1523,6 @@ class KirbyAmClient(BizHawkClient):
         if frame_addr is not None and len(raw_values) > next_read_index:
             current_frame = self._u32_le(raw_values[next_read_index])
             next_read_index += 1
-
-        self._maybe_log_delivery_debug_state(
-            ctx,
-            flag=flag,
-            rom_received_count=rom_received_count,
-            allow_new_writes=allow_new_writes,
-            current_frame=current_frame,
-        )
 
         hook_heartbeat: Optional[int] = None
         if heartbeat_addr is not None and len(raw_values) > next_read_index:

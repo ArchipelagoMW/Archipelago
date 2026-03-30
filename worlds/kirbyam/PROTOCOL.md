@@ -129,7 +129,7 @@ Server → Client: ConnectionRefused | Connected
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
 - `debug` (dict): debug settings payload.
-    - `logging` (bool): when true, client emits expanded diagnostics for gameplay-state transitions, self-ItemSend fallback decisions, and mailbox-delivery state changes.
+    - `logging` (bool): when true, client emits diagnostics for gameplay-state/demo-flag transitions (including `hook_heartbeat`) and self-ItemSend fallback decisions.
 
 DeathLink runtime behavior contract:
 - Incoming DeathLink packets (`Bounced` with `DeathLink` tag) are queued and only applied when gameplay-active gate is true.
