@@ -727,7 +727,7 @@ class KirbyAmClient(BizHawkClient):
             loaded = load_json_data("deathlink_flavor_text.json")
         except Exception:
             logger.warning(
-                "KirbyAM: failed to load deathlink_flavor_text.json; using fallback text",
+                "KirbyAM: failed to load DeathLink flavor text file; using fallback text",
                 exc_info=True,
             )
             return fallback
@@ -764,7 +764,7 @@ class KirbyAmClient(BizHawkClient):
 
         if not valid_templates:
             logger.warning(
-                "KirbyAM: deathlink flavor text pool empty; using fallback text"
+                "KirbyAM: DeathLink flavor text pool empty; using fallback text"
             )
             return fallback
 

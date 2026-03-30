@@ -269,7 +269,7 @@ which made cross-player death notifications repetitive.
 
 ### Validation
 - Added `test_death_link_flavor_templates_loaded_from_data_file` to ensure the
-  flavor text pool is loaded and includes `{player}` templates.
+  flavor text pool is loaded from JSON and wired into the outgoing send path.
 - Updated `test_local_death_transition_sends_death_link_once` to validate
   outgoing template interpolation.
 
