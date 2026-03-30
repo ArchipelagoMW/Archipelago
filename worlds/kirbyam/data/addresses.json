@@ -17,7 +17,8 @@
       "sound_player_chest_flags": "0x0202C030",
       "delivered_shard_bitfield": "0x0202C038",
       "shard_scrub_delay_frames": "0x0202C03C",
-      "mailbox_init_cookie": "0x0202C040"
+      "mailbox_init_cookie": "0x0202C040",
+      "boss_temp_shard_bitfield": "0x0202C044"
     },
     "native": {
       "shard_bitfield_native": "0x02038970",

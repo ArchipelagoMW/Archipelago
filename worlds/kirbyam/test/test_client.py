@@ -1755,6 +1755,142 @@ async def test_runtime_gameplay_state_logs_ai_and_demo_changes_with_heartbeat(mo
 
 
 @pytest.mark.asyncio
+async def test_log_boss_shard_debug_window_emits_per_frame_while_active(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+
+    with patch.dict(
+        data.transport_ram_addresses,
+        {
+            "boss_defeat_flags": 0x0202C024,
+            "shard_scrub_delay_frames": 0x0202C03C,
+            "delivered_shard_bitfield": 0x0202C038,
+            "shard_bitfield": 0x0202C000,
+            "hook_heartbeat": 0x0202C034,
+            "boss_temp_shard_bitfield": 0x0202C044,
+        },
+        clear=False,
+    ), patch.dict(
+        data.native_ram_addresses,
+        {"shard_bitfield_native": 0x02038970},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [
+                (5).to_bytes(4, 'little'),
+                (0x02).to_bytes(4, 'little'),
+            ],
+            [
+                (1).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+                (0x02).to_bytes(4, 'little'),
+                (100).to_bytes(4, 'little'),
+                (0x02).to_bytes(1, 'little'),
+            ],
+            [
+                (4).to_bytes(4, 'little'),
+                (0x02).to_bytes(4, 'little'),
+            ],
+            [
+                (1).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+                (0x02).to_bytes(4, 'little'),
+                (101).to_bytes(4, 'little'),
+                (0x02).to_bytes(1, 'little'),
+            ],
+        ]
+
+        await client._log_boss_shard_debug_window(
+            mock_bizhawk_context,
+            gameplay_active=False,
+            defer_reason="non_gameplay_cutscene",
+            ai_state=200,
+        )
+        await client._log_boss_shard_debug_window(
+            mock_bizhawk_context,
+            gameplay_active=False,
+            defer_reason="non_gameplay_cutscene",
+            ai_state=200,
+        )
+
+    frame_logs = [
+        c for c in mock_logger.info.call_args_list
+        if c.args and isinstance(c.args[0], str) and "boss-shard window frame" in c.args[0]
+    ]
+    assert len(frame_logs) == 2
+
+
+@pytest.mark.asyncio
+async def test_log_boss_shard_debug_window_logs_completion_on_resume(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+
+    with patch.dict(
+        data.transport_ram_addresses,
+        {
+            "boss_defeat_flags": 0x0202C024,
+            "shard_scrub_delay_frames": 0x0202C03C,
+            "delivered_shard_bitfield": 0x0202C038,
+            "shard_bitfield": 0x0202C000,
+            "hook_heartbeat": 0x0202C034,
+            "boss_temp_shard_bitfield": 0x0202C044,
+        },
+        clear=False,
+    ), patch.dict(
+        data.native_ram_addresses,
+        {"shard_bitfield_native": 0x02038970},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [
+                (1).to_bytes(4, 'little'),
+                (0x02).to_bytes(4, 'little'),
+            ],
+            [
+                (1).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+                (0x02).to_bytes(4, 'little'),
+                (200).to_bytes(4, 'little'),
+                (0x02).to_bytes(1, 'little'),
+            ],
+            [
+                (0).to_bytes(4, 'little'),
+                (0x00).to_bytes(4, 'little'),
+            ],
+            [
+                (1).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+                (0x00).to_bytes(4, 'little'),
+                (201).to_bytes(4, 'little'),
+                (0x00).to_bytes(1, 'little'),
+            ],
+        ]
+
+        await client._log_boss_shard_debug_window(
+            mock_bizhawk_context,
+            gameplay_active=False,
+            defer_reason="non_gameplay_cutscene",
+            ai_state=200,
+        )
+        await client._log_boss_shard_debug_window(
+            mock_bizhawk_context,
+            gameplay_active=True,
+            defer_reason="gameplay_active",
+            ai_state=300,
+        )
+
+    completion_logs = [
+        c for c in mock_logger.info.call_args_list
+        if c.args and isinstance(c.args[0], str) and "boss-shard window complete" in c.args[0]
+    ]
+    assert len(completion_logs) == 1
+
+
+@pytest.mark.asyncio
 async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
     """game_watcher should do nothing when ctx.server is None (AP not connected)."""
     client = KirbyAmClient()

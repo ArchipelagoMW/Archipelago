@@ -21,17 +21,21 @@
 // Issue #478: AP shard authority register.
 // Bits are set by ap_apply_item() shard delivery; never by boss-defeat hook.
 // ap_poll_mailbox_c() may initialize/seed this from native save state when
-// mailbox init cookie is absent, then clamps KIRBY_SHARD_FLAGS to this value
-// once AP_SHARD_SCRUB_DELAY reaches zero after boss activity.
+// mailbox init cookie is absent, then uses this authority when scrubbing
+// non-AP-owned temporary boss shard bits after gameplay resumes.
 #define AP_DELIVERED_SHARD_BITFIELD  (*(volatile uint32_t*)(AP_BASE + 0x38u))
 // Issue #478: Frames remaining before the shard scrub is allowed to run.
 // Set to SHARD_BOSS_CUTSCENE_FRAMES by the boss-defeat hook so the
-// post-cutscene state machine has time to observe the temporary native write.
+// post-cutscene state machine has time to observe the temporary native write
+// before gameplay-resume scrub eligibility is reached.
 #define AP_SHARD_SCRUB_DELAY         (*(volatile uint32_t*)(AP_BASE + 0x3Cu))
 #define SHARD_BOSS_CUTSCENE_FRAMES   600u  // ~10 s at 60 fps; covers post-boss shard cutscene
 // Mailbox initialization cookie to protect against stale EWRAM on cold/soft reset.
 #define AP_MAILBOX_INIT_COOKIE       (*(volatile uint32_t*)(AP_BASE + 0x40u))
 #define AP_MAILBOX_INIT_COOKIE_VALUE 0x4B41504Du  // "KAPM"
+// Tracks shard bits temporarily written by boss defeat hook for cutscene safety.
+// Cleared after gameplay resumes and non-AP-owned bits are scrubbed.
+#define AP_BOSS_TEMP_SHARD_BITFIELD  (*(volatile uint32_t*)(AP_BASE + 0x44u))
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -42,6 +46,14 @@
 #define AP_SOUND_PLAYER_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x30u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
+#define AI_KIRBY_STATE_ADDR     0x0203AD2Cu
+#define AI_KIRBY_STATE          (*(volatile uint32_t*)(AI_KIRBY_STATE_ADDR))
+#define DEMO_PLAYBACK_FLAGS_ADDR 0x0203AD10u
+#define DEMO_PLAYBACK_FLAGS     (*(volatile uint32_t*)(DEMO_PLAYBACK_FLAGS_ADDR))
+#define DEMO_PLAYBACK_ACTIVE_FLAG 0x10u
+#define AI_STATE_NORMAL         300u
+#define AI_STATE_DARK_MIND_CLEAR 9999u
+#define AI_STATE_FULL_CLEAR     10000u
 #define KIRBY_BIG_CHEST_FLAGS_ADDR 0x0203897Cu
 #define KIRBY_BIG_CHEST_FLAGS   (*(volatile uint32_t*)(KIRBY_BIG_CHEST_FLAGS_ADDR))
 #define KIRBY_VITALITY_COUNTER_ADDR 0x02038980u
@@ -181,6 +193,7 @@ __attribute__((used)) void ap_on_boss_defeat_collect_shard(uint32_t boss_index) 
         // Issue #478: Hold off the per-frame shard scrub so the post-cutscene
         // state machine can read the temporary native write without white-screening.
         AP_SHARD_SCRUB_DELAY = SHARD_BOSS_CUTSCENE_FRAMES;
+        AP_BOSS_TEMP_SHARD_BITFIELD |= (uint32_t)mask;
     }
 }
 
@@ -404,27 +417,51 @@ void ap_poll_mailbox_c(void) {
         AP_DELIVERED_SHARD_BITFIELD = (uint32_t)native_shards_boot;
         AP_SHARD_SCRUB_DELAY = 0u;
         AP_BOSS_DEFEAT_FLAGS = 0u;
+        AP_BOSS_TEMP_SHARD_BITFIELD = 0u;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 
     uint8_t ap_delivered = (uint8_t)(AP_DELIVERED_SHARD_BITFIELD & 0xFFu);
     uint8_t native_shards = KIRBY_SHARD_FLAGS;
+    uint8_t pending_boss_temp = (uint8_t)(AP_BOSS_TEMP_SHARD_BITFIELD & 0xFFu);
 
     // Cold-boot/soft-reset guard: before any local boss-defeat hook activity,
     // align AP-delivered authority to the current native shard save state.
     // This prevents scrub from acting on stale/uninitialized transport values.
-    if (AP_BOSS_DEFEAT_FLAGS == 0u && AP_SHARD_SCRUB_DELAY == 0u) {
+    if (pending_boss_temp == 0u && AP_SHARD_SCRUB_DELAY == 0u) {
         if (ap_delivered != native_shards) {
             AP_DELIVERED_SHARD_BITFIELD = (uint32_t)native_shards;
         }
     } else {
-        // Issue #478: Enforce AP-delivered shard authority after local boss
-        // defeat activity is observed.
-        if (AP_SHARD_SCRUB_DELAY > 0u) {
-            AP_SHARD_SCRUB_DELAY--;
-        } else if (native_shards != ap_delivered) {
-            KIRBY_SHARD_FLAGS = ap_delivered;
-            persist_shard_to_sram(ap_delivered);
+        // Issue #505: keep temporary native shard visibility during post-boss
+        // cutscene, but scrub to AP-owned authority as soon as gameplay resumes.
+        uint32_t ai_state = AI_KIRBY_STATE;
+        uint8_t gameplay_active = 0u;
+        if (ai_state >= AI_STATE_NORMAL
+            && ai_state != AI_STATE_DARK_MIND_CLEAR
+            && ai_state != AI_STATE_FULL_CLEAR) {
+            gameplay_active = 1u;
+        }
+        if (gameplay_active && ai_state == AI_STATE_NORMAL) {
+            uint32_t demo_flags = DEMO_PLAYBACK_FLAGS;
+            if ((demo_flags & DEMO_PLAYBACK_ACTIVE_FLAG) != 0u) {
+                gameplay_active = 0u;
+            }
+        }
+
+        if (!gameplay_active) {
+            if (AP_SHARD_SCRUB_DELAY > 0u) {
+                AP_SHARD_SCRUB_DELAY--;
+            }
+        } else {
+            uint8_t scrub_mask = (uint8_t)(pending_boss_temp & (uint8_t)(~ap_delivered));
+            uint8_t clamped = (uint8_t)(native_shards & (uint8_t)(~scrub_mask));
+            if (clamped != native_shards) {
+                KIRBY_SHARD_FLAGS = clamped;
+                persist_shard_to_sram(clamped);
+            }
+            AP_BOSS_TEMP_SHARD_BITFIELD = 0u;
+            AP_SHARD_SCRUB_DELAY = 0u;
         }
     }
 

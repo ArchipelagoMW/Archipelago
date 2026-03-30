@@ -187,6 +187,7 @@ class KirbyAmClient(BizHawkClient):
         self._debug_logging_enabled: bool = False
         self._last_logged_ai_state: int | None = None
         self._last_logged_demo_flags: int | None = None
+        self._boss_shard_debug_window_active: bool = False
 
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
@@ -226,6 +227,7 @@ class KirbyAmClient(BizHawkClient):
         self._self_send_fallback_keys.clear()
         self._last_logged_ai_state = None
         self._last_logged_demo_flags = None
+        self._boss_shard_debug_window_active = False
 
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
@@ -703,6 +705,12 @@ class KirbyAmClient(BizHawkClient):
                 self._ram_state_loaded = True
 
             gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
+            await self._log_boss_shard_debug_window(
+                ctx,
+                gameplay_active=gameplay_active,
+                defer_reason=defer_reason,
+                ai_state=ai_state,
+            )
             if not gameplay_active:
                 if self._last_runtime_gate_reason != defer_reason:
                     logger.info(
@@ -1022,6 +1030,104 @@ class KirbyAmClient(BizHawkClient):
                 self._last_logged_demo_flags = demo_flags
 
         return gameplay_active, reason, ai_state
+
+    async def _log_boss_shard_debug_window(
+        self,
+        ctx: KirbyAmBizHawkClientContext,
+        *,
+        gameplay_active: bool,
+        defer_reason: str,
+        ai_state: int | None,
+    ) -> None:
+        """Emit per-frame shard telemetry after boss defeat until gameplay resumes."""
+        if not self._debug_logging_enabled:
+            return
+
+        delay_addr = self._transport_addr("shard_scrub_delay_frames")
+        temp_shard_addr = self._transport_addr("boss_temp_shard_bitfield")
+        preflight_reads: list[tuple[int, int, str]] = []
+        preflight_labels: list[str] = []
+        for label, addr in (("delay", delay_addr), ("temp_shards", temp_shard_addr)):
+            if addr is None:
+                continue
+            preflight_reads.append((addr, 4, "System Bus"))
+            preflight_labels.append(label)
+
+        if not preflight_reads:
+            return
+
+        values: dict[str, int] = {}
+        raw_preflight = await bizhawk.read(ctx.bizhawk_ctx, preflight_reads)
+        for label, raw in zip(preflight_labels, raw_preflight):
+            values[label] = self._u32_le(raw)
+
+        scrub_delay = values.get("delay", 0)
+        temp_shards = values.get("temp_shards", 0)
+        window_active = (scrub_delay > 0) or ((temp_shards & 0xFF) != 0)
+        completion_pending = self._boss_shard_debug_window_active and gameplay_active
+
+        if not window_active and not completion_pending:
+            return
+
+        boss_flags_addr = self._transport_addr("boss_defeat_flags")
+        delivered_addr = self._transport_addr("delivered_shard_bitfield")
+        mirror_addr = self._transport_addr("shard_bitfield")
+        heartbeat_addr = self._transport_addr("hook_heartbeat")
+        native_shard_addr = self._native_addr("shard_bitfield_native")
+
+        detail_reads: list[tuple[int, int, str]] = []
+        detail_labels: list[str] = []
+        for label, addr, width in (
+            ("boss_flags", boss_flags_addr, 4),
+            ("delivered", delivered_addr, 4),
+            ("mirror", mirror_addr, 4),
+            ("heartbeat", heartbeat_addr, 4),
+            ("native_shards", native_shard_addr, 1),
+        ):
+            if addr is None:
+                continue
+            detail_reads.append((addr, width, "System Bus"))
+            detail_labels.append(label)
+
+        if detail_reads:
+            raw_details = await bizhawk.read(ctx.bizhawk_ctx, detail_reads)
+            for label, raw in zip(detail_labels, raw_details):
+                values[label] = self._u32_le(raw) if len(raw) >= 4 else int.from_bytes(raw, "little")
+
+        boss_flags = values.get("boss_flags", 0)
+        delivered = values.get("delivered", 0)
+        mirror = values.get("mirror", 0)
+        heartbeat = values.get("heartbeat")
+        native_shards = values.get("native_shards")
+        from CommonClient import logger
+
+        if window_active:
+            self._boss_shard_debug_window_active = True
+            logger.info(
+                "KirbyAM debug: boss-shard window frame (hook_heartbeat=%s, ai_state=%s, gameplay_active=%s, reason=%s, boss_flags=0x%08X, temp_shards=0x%02X, scrub_delay=%s, delivered_shards=0x%02X, native_shards=0x%02X, mirror_shards=0x%02X)",
+                heartbeat,
+                ai_state,
+                gameplay_active,
+                defer_reason,
+                boss_flags,
+                temp_shards & 0xFF,
+                scrub_delay,
+                delivered & 0xFF,
+                (native_shards if native_shards is not None else mirror) & 0xFF,
+                mirror & 0xFF,
+            )
+            return
+
+        if self._boss_shard_debug_window_active and gameplay_active:
+            logger.info(
+                "KirbyAM debug: boss-shard window complete (hook_heartbeat=%s, ai_state=%s, boss_flags=0x%08X, temp_shards=0x%02X, scrub_delay=%s)",
+                heartbeat,
+                ai_state,
+                boss_flags,
+                temp_shards & 0xFF,
+                scrub_delay,
+            )
+            self._boss_shard_debug_window_active = False
 
     # --------------------------
     # Helpers / persistence

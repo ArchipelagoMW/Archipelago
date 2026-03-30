@@ -90,6 +90,8 @@ pytest worlds/kirbyam/test -q
 
 ### Debug-level diagnostics
 Enable debug logging in your AP client to see these:
+- `KirbyAM debug: boss-shard window frame (...)` — per-frame shard telemetry after boss defeat while temporary shard state is active (includes heartbeat, ai_state, scrub delay, AP-delivered/native shard bitfields).
+- `KirbyAM debug: boss-shard window complete (...)` — emitted when the post-boss temporary shard window closes on gameplay resume.
 - `KirbyAM: dedupe suppressed boss-defeat LocationChecks (...)` — boss-defeat checks already acknowledged (per-tick spam suppressed at info level).
 - `KirbyAM: dedupe suppressed major-chest LocationChecks (...)` — major-chest checks already acknowledged (per-tick spam suppressed at info level).
 - `KirbyAM: dedupe suppressed vitality-chest LocationChecks (...)` — vitality-chest checks already acknowledged (per-tick spam suppressed at info level).

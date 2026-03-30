@@ -188,6 +188,8 @@ def test_boss_defeat_hook_sets_scrub_delay():
         "Boss hook must set AP_SHARD_SCRUB_DELAY to hold off shard scrub during cutscene"
     assert "SHARD_BOSS_CUTSCENE_FRAMES" in hook_body, \
         "Boss hook must assign SHARD_BOSS_CUTSCENE_FRAMES to AP_SHARD_SCRUB_DELAY"
+    assert "AP_BOSS_TEMP_SHARD_BITFIELD" in hook_body, \
+        "Boss hook must mark temporary boss shard bits for state-driven scrub"
 
 
 def test_ap_apply_item_shard_path_writes_delivered_bitfield():
@@ -258,8 +260,12 @@ def test_ap_poll_mailbox_contains_shard_scrub_logic():
         "ap_poll_mailbox_c must compare against AP_MAILBOX_INIT_COOKIE_VALUE"
     assert re.search(r"AP_DELIVERED_SHARD_BITFIELD\s*=\s*\(uint32_t\)\s*native_shards_boot", poll_body_norm), \
         "ap_poll_mailbox_c must seed AP_DELIVERED_SHARD_BITFIELD from native shard state on init"
-    assert re.search(r"AP_BOSS_DEFEAT_FLAGS\s*==\s*0u", poll_body_norm), \
-        "ap_poll_mailbox_c must guard bootstrap behavior before local boss-defeat activity"
+    assert "AP_BOSS_TEMP_SHARD_BITFIELD" in poll_body_norm, \
+        "ap_poll_mailbox_c must track temporary boss shard bits"
+    assert "AI_KIRBY_STATE" in poll_body_norm, \
+        "ap_poll_mailbox_c must gate scrub release on gameplay-state resume"
+    assert "DEMO_PLAYBACK_FLAGS" in poll_body_norm, \
+        "ap_poll_mailbox_c gameplay gate must account for title-demo playback"
     assert re.search(r"AP_DELIVERED_SHARD_BITFIELD\s*=\s*\(uint32_t\)\s*native_shards", poll_body_norm), \
         "ap_poll_mailbox_c must be able to seed AP_DELIVERED_SHARD_BITFIELD from native saved shards"
     assert re.search(r"persist_shard_to_sram\s*\(", poll_body_norm), \

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix boss shard AP-ownership semantics by keeping temporary native shard writes only during post-boss cutscene safety windows, then scrubbing non-AP-owned boss-temp shard bits on gameplay resume (instead of relying solely on fixed-frame delay), while preserving already AP-owned shard bits and adding debug-only per-frame post-boss shard telemetry gated by `enable_debug_logging` (Issue #505).
+
 ## v0.0.15
 
 - Refactor the KirbyAM area graph to use Rainbow Route as the explicit hub region instead of a flat `REGION_GAME_START` topology, route all shard areas and the Dimension Mirror through that hub, and document that one-way mirrors, two-way mirrors, big-switch shortcuts, and non-mirror travel remain future room-level logic work (Issue #32 / #42).
