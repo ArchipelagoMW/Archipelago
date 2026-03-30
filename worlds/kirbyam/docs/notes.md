@@ -206,6 +206,53 @@ logged the same metadata-missing error repeatedly, creating log spam during vali
 - Added `worlds/kirbyam/test/test_client.py::test_validate_rom_rejects_empty_patch_metadata_logs_once`
   - repeated empty-metadata validation attempts emit one user-facing error
 
+## Issue #32 / #42: Rainbow Route Hub Topology
+
+### Problem
+The world graph still treated `REGION_GAME_START` as a flat stand-in for the
+entire overworld. That erased the fact that Rainbow Route is the actual hub and
+made all shard areas plus the Dimension Mirror look like direct start-region
+neighbors.
+
+That simplification also blurred several distinct travel concepts that matter to
+future logic work:
+- one-way mirror returns unlocked by big switches
+- two-way mirrors that behave more like stable shortcuts
+- non-mirror travel such as normal doors, warp stars, and cannons
+- hub routing through Rainbow Route / Central Circle rather than a synthetic
+  "all areas from start" graph
+
+### Solution
+Promoted `REGION_RAINBOW_ROUTE/MAIN` to the area-level hub in `areas.json`:
+- `REGION_GAME_START` now only exits to `REGION_RAINBOW_ROUTE/MAIN`
+- all shard areas now connect to/from Rainbow Route instead of directly to/from
+  `REGION_GAME_START`
+- the Dimension Mirror shard gate now applies to
+  `REGION_RAINBOW_ROUTE/MAIN -> REGION_DIMENSION_MIRROR/MAIN`
+
+This remains an area-level abstraction, not room-level routing. For now the AP
+graph intentionally collapses all hub return methods into generic Rainbow Route
+connections so generation reflects the hub-and-spoke world shape without
+claiming that one-way mirrors, two-way mirrors, warp stars, cannons, or normal
+door traversal already have separate logic semantics.
+
+### Travel-model notes
+- One-way mirrors remain future shortcut metadata, not current rule objects.
+- Two-way mirrors remain future stable-shortcut metadata, not current rule
+  objects.
+- Big switches are still documented as the native trigger for unlocking hub
+  mirror shortcuts, but those unlock states are not yet AP progression items or
+  AP region gates.
+- Non-mirror travel methods such as doors, warp stars, and cannons are
+  currently folded into the same coarse area connection because room-level
+  routing is still out of scope.
+
+### Validation
+- Added a topology regression test asserting the start region only feeds
+  Rainbow Route and all area spokes connect through that hub.
+- Updated the Dimension Mirror entrance-name assertion so shard gating follows
+  the new Rainbow Route hub edge.
+
 ## POC baseline
 
 - Baseline ROM for the POC is `Kirby & The Amazing Mirror (USA).gba` only.

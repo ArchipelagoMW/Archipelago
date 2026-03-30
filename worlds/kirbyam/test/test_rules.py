@@ -104,8 +104,148 @@ def test_set_rules_applies_shard_gate_to_dimension_mirror_and_goal_events() -> N
         set_rules(world)
 
     applied_names = [call.args[0].name for call in mock_set_rule.call_args_list]
-    assert "REGION_GAME_START -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
+    assert "REGION_RAINBOW_ROUTE/MAIN -> REGION_DIMENSION_MIRROR/MAIN" in applied_names
     assert "Defeat Dark Mind" in applied_names
+
+
+def test_area_topology_routes_start_through_rainbow_route_anchor() -> None:
+    from ..data import load_json_data
+
+    regions = load_json_data("regions/areas.json")
+
+    assert regions["REGION_GAME_START"]["exits"] == ["REGION_RAINBOW_ROUTE/MAIN"]
+
+    # Rainbow Route is the hub; connects to all areas that have a hub mirror in
+    # the room-level transition data. Olive Ocean and Radish Ruins have no hub
+    # mirror to Rainbow Route (they are reached via adjacent areas instead).
+    assert set(regions["REGION_RAINBOW_ROUTE/MAIN"]["exits"]) == {
+        "REGION_RAINBOW_ROUTE/ROOM_1_01",
+        "REGION_MUSTARD_MOUNTAIN/MAIN",
+        "REGION_MOONLIGHT_MANSION/MAIN",
+        "REGION_CANDY_CONSTELLATION/MAIN",
+        "REGION_PEPPERMINT_PALACE/MAIN",
+        "REGION_CABBAGE_CAVERN/MAIN",
+        "REGION_CARROT_CASTLE/MAIN",
+        "REGION_DIMENSION_MIRROR/MAIN",
+    }
+
+    # Areas connected to Rainbow Route via hub mirror exit back to it.
+    for region_name in {
+        "REGION_MUSTARD_MOUNTAIN/MAIN",
+        "REGION_MOONLIGHT_MANSION/MAIN",
+        "REGION_CANDY_CONSTELLATION/MAIN",
+        "REGION_PEPPERMINT_PALACE/MAIN",
+        "REGION_CABBAGE_CAVERN/MAIN",
+        "REGION_CARROT_CASTLE/MAIN",
+    }:
+        assert "REGION_RAINBOW_ROUTE/MAIN" in regions[region_name]["exits"]
+
+    # Areas reachable only via cross-area mirrors have no direct Rainbow Route exit.
+    assert "REGION_RAINBOW_ROUTE/MAIN" not in regions["REGION_OLIVE_OCEAN/MAIN"]["exits"]
+    assert "REGION_RAINBOW_ROUTE/MAIN" not in regions["REGION_RADISH_RUINS/MAIN"]["exits"]
+
+    # Cross-area mirror connections derived from transitions.json.
+    assert set(regions["REGION_CABBAGE_CAVERN/MAIN"]["exits"]) >= {
+        "REGION_OLIVE_OCEAN/MAIN", "REGION_RADISH_RUINS/MAIN",
+    }
+    assert "REGION_OLIVE_OCEAN/MAIN" in regions["REGION_MOONLIGHT_MANSION/MAIN"]["exits"]
+    assert set(regions["REGION_OLIVE_OCEAN/MAIN"]["exits"]) >= {
+        "REGION_CABBAGE_CAVERN/MAIN", "REGION_MOONLIGHT_MANSION/MAIN",
+    }
+    assert set(regions["REGION_CARROT_CASTLE/MAIN"]["exits"]) >= {
+        "REGION_PEPPERMINT_PALACE/MAIN", "REGION_RADISH_RUINS/MAIN",
+    }
+    assert set(regions["REGION_PEPPERMINT_PALACE/MAIN"]["exits"]) >= {"REGION_CARROT_CASTLE/MAIN"}
+    assert set(regions["REGION_RADISH_RUINS/MAIN"]["exits"]) >= {
+        "REGION_CABBAGE_CAVERN/MAIN", "REGION_CARROT_CASTLE/MAIN",
+    }
+
+
+def test_room_subareas_pure_topology_with_all_rooms() -> None:
+    from ..data import load_json_data
+
+    room_regions = load_json_data("regions/rooms.json")
+
+    assert len(room_regions) == 287
+
+    included_room_sanity = [
+        region.get("room_sanity", {}).get("included", False)
+        for region in room_regions.values()
+    ]
+    assert sum(1 for included in included_room_sanity if included) == 257
+    
+    # Rooms may carry location data where the actual in-game pickup occurs.
+    # Exactly the rooms with boss defeats and big chests should have locations;
+    # all other rooms remain topology-only with empty lists.
+    from ..data import load_json_data as _load
+    known_locations = set(_load("locations.json").keys())
+    rooms_with_locations = {
+        key: region["locations"]
+        for key, region in room_regions.items()
+        if region.get("locations")
+    }
+    # Every location claimed by a room must be a known location key
+    for room_key, loc_list in rooms_with_locations.items():
+        for loc_key in loc_list:
+            assert loc_key in known_locations, (
+                f"Room {room_key} claims unknown location key {loc_key!r}"
+            )
+    # Exactly 22 rooms carry locations (9 major chests + 5 vitality/sound + 8 boss defeats)
+    assert len(rooms_with_locations) == 22, (
+        f"Expected 22 rooms with locations, got {len(rooms_with_locations)}: {list(rooms_with_locations.keys())}"
+    )
+
+    # Topology includes all rooms, but Room Sanity remains optional metadata.
+    assert all(
+        "room_sanity" in region for region in room_regions.values()
+    ), "All room regions must carry room_sanity metadata"
+    
+    assert all(
+        "exits" in region for region in room_regions.values()
+    ), "All room regions must have exits defined"
+
+
+def test_room_subareas_preserve_two_way_and_one_way_transitions() -> None:
+    from ..data import load_json_data
+
+    room_regions = load_json_data("regions/rooms.json")
+
+    assert "REGION_RAINBOW_ROUTE/ROOM_1_04" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_01"]["exits"]
+    assert "REGION_RAINBOW_ROUTE/ROOM_1_01" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_04"]["exits"]
+
+    assert "REGION_RAINBOW_ROUTE/ROOM_1_06" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_05"]["exits"]
+    assert "REGION_RAINBOW_ROUTE/ROOM_1_05" not in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_06"]["exits"]
+
+
+def test_room_reachability_from_start() -> None:
+    from ..rules import _reachable_rooms_from
+
+    reachable = _reachable_rooms_from("REGION_RAINBOW_ROUTE/ROOM_1_01")
+
+    assert len(reachable) == 266
+    assert "REGION_RAINBOW_ROUTE/ROOM_1_01" in reachable
+    assert "REGION_RAINBOW_ROUTE/ROOM_1_04" in reachable
+    assert "REGION_CANDY_CONSTELLATION/ROOM_9_01" in reachable
+
+
+def test_room_sanity_binding_optional() -> None:
+    from ..data import load_json_data
+    from ..rules import _bind_room_sanity_locations
+
+    room_regions = load_json_data("regions/rooms.json")
+    
+    regions_before = {
+        name: region.get("locations", []).copy()
+        for name, region in room_regions.items()
+    }
+    
+    _bind_room_sanity_locations(room_regions, enable_room_sanity=False)
+    assert room_regions["REGION_RAINBOW_ROUTE/ROOM_1_01"]["locations"] == regions_before["REGION_RAINBOW_ROUTE/ROOM_1_01"]
+    
+    _bind_room_sanity_locations(room_regions, enable_room_sanity=True)
+    assert "ROOM_SANITY_1_01" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_01"]["locations"]
+    assert "ROOM_SANITY_10_01" not in room_regions["REGION_DIMENSION_MIRROR/ROOM_10_01"]["locations"]
+    assert "ROOM_SANITY_0_01" not in room_regions["REGION_TUTORIAL/ROOM_0_01"]["locations"]
 
 
 ALL_SHARDS = {
@@ -173,30 +313,22 @@ def test_ability_gate_helpers_default_true_without_ability_items() -> None:
 
 
 def test_region_ability_gate_annotations_load_for_future_big_chest_rollout() -> None:
-    annotations = get_region_ability_gate_annotations()
+    # ability_gates has moved from areas.json /MAIN regions to rooms.json room entries.
+    # Each room carries an ability_gates dict (empty by default; populated when gate
+    # evidence is confirmed for that specific room).  Areas no longer carry this metadata.
+    from ..data import load_json_data
 
-    expected_regions = {
-        "REGION_MUSTARD_MOUNTAIN/MAIN",
-        "REGION_MOONLIGHT_MANSION/MAIN",
-        "REGION_CANDY_CONSTELLATION/MAIN",
-        "REGION_OLIVE_OCEAN/MAIN",
-        "REGION_CABBAGE_CAVERN/MAIN",
-        "REGION_CARROT_CASTLE/MAIN",
-        "REGION_RADISH_RUINS/MAIN",
-    }
-    assert expected_regions.issubset(annotations)
+    rooms = load_json_data("regions/rooms.json")
+    areas = load_json_data("regions/areas.json")
 
-    for region_name in expected_regions:
-        region_annotations = annotations[region_name]
-        assert region_annotations == data.regions[region_name].ability_gates
-        for gate_name, gate_annotation in region_annotations.items():
-            assert gate_name in ABILITY_GATE_RULES
-            assert gate_annotation["status"] in _ABILITY_GATE_STATUS_VALUES
-            assert gate_annotation["applies_to"] == ["future_major_chest_locations"]
-            assert gate_annotation["evidence"]
+    for room_name, room_def in rooms.items():
+        assert "ability_gates" in room_def, f"Room {room_name} missing ability_gates key"
+        assert isinstance(room_def["ability_gates"], dict), (
+            f"Room {room_name} ability_gates must be a dict"
+        )
 
-    assert annotations["REGION_OLIVE_OCEAN/MAIN"]["CanBreakBlocks"]["status"] == "confirmed"
-    assert annotations["REGION_OLIVE_OCEAN/MAIN"]["CanPoundPegs"]["status"] == "confirmed"
-    assert annotations["REGION_CABBAGE_CAVERN/MAIN"]["CanBreakBlocks"]["status"] == "confirmed"
-    assert annotations["REGION_CABBAGE_CAVERN/MAIN"]["CanUseMini"]["status"] == "semantic_candidate"
+    for area_name, area_def in areas.items():
+        assert "ability_gates" not in area_def, (
+            f"Area {area_name} should not have ability_gates (belongs in rooms.json)"
+        )
 

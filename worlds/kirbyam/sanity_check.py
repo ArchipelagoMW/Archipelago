@@ -1,6 +1,6 @@
 """
 Looks through data object to double-check it makes sense. Will fail for missing or duplicate definitions or
-duplicate claims and give warnings for unused and unignored locations or warps.
+duplicate claims and give warnings for unused and unignored locations.
 """
 import logging
 
@@ -34,7 +34,7 @@ def validate_group_maps() -> bool:
 def validate_regions() -> bool:
     """
     Verifies that Kirby's data doesn't have duplicate or missing
-    regions/warps/locations. Meant to catch problems during development like
+    regions/locations. Meant to catch problems during development like
     forgetting to add a new location or incorrectly splitting a region.
     """
     from .data import data, load_json_data

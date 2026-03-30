@@ -19,7 +19,7 @@ _DEBUG_EVENT_PREFIX = "EVENT_DEBUG_"
 
 def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
     """
-    Create Regions from JSON, add event Locations, and connect Regions via exits and warps.
+    Create Regions from JSON, add event Locations, and connect Regions via exits.
     Returns a name -> Region mapping for convenience.
     """
     regions: dict[str, Region] = {}
@@ -63,18 +63,6 @@ def create_regions(world: "KirbyAmWorld") -> dict[str, Region]:
         # Collect region exits
         for region_exit in region_data.exits:
             connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
-
-        # Collect warp connections (warp name -> destination parent region)
-        for warp in region_data.warps:
-            dest_key = data.warp_map.get(warp)
-            if not dest_key:
-                continue
-
-            dest_warp = data.warps.get(dest_key)
-            if not dest_warp or dest_warp.parent_region is None:
-                continue
-
-            connections.append((warp, region_name, dest_warp.parent_region))
 
     # 2) Connect regions (after all are created)
     for entrance_name, source_name, dest_name in connections:
