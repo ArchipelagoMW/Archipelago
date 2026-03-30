@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
 import math
 
 if TYPE_CHECKING:
@@ -32,59 +32,121 @@ def set_all_entrance_rules(world: NothingWorld) -> None:
         Start_to_shopdigits = world.get_entrance("Start to shopdigits")
         set_rule(Start_to_shopdigits, lambda state: (
                     (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*10)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,2)) | state.has("Nothing Item Gifted Coin", world.player, coinreq) | 
+                    and state.has("Nothing Item Timer Digit", world.player,2)) or state.has("Nothing Item Gifted Coin", world.player, coinreq) or 
                     (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,1)) | (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(10/world.options.timecap_interval)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,0)) | world.options.gift_coins))
+                    and state.has("Nothing Item Timer Digit", world.player,1)) or (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(10/world.options.timecap_interval)-1)) 
+                    and state.has("Nothing Item Timer Digit", world.player,0)) or world.options.gift_coins))
+        # location = world.get_location("Nothing Timer Digit 1")
+        # allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
+        # location = world.get_location("Nothing Timer Digit 2")
+        # allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
+        # location = world.get_location("Nothing Timer Digit 3")
+        # allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
+        # location = world.get_location("Nothing Timer Digit 4")
+        # allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
+        # location = world.get_location("Nothing Timer Digit 5")
+        # allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
+        # location = world.get_location("Nothing Timer Digit 6")
+        # allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
+        print("Start to shopdigits")
+        print(int(math.ceil(timereq*10)-1))
+        print(int(math.ceil(timereq)-1))
+        print(int(math.ceil(10/world.options.timecap_interval)-1))
+        print(coinreq)
 
-    if (world.options.goal > 1200): 
+    if (world.options.goal > 1200) and world.options.shop_upgrades: 
         if world.options.shop_upgrades:
             Start_to_shopupgrades = world.get_entrance("Start to shopupgrades")
             set_rule(Start_to_shopupgrades, lambda state: 
                     (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,3)) | state.has("Nothing Item Gifted Coin", world.player, coinreq))
+                    and state.has("Nothing Item Timer Digit", world.player,3)) or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopupgrades")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Digits: 3" + " Coin req: "+ str(coinreq))
         if world.options.shop_colors:
             Start_to_shopcolors = world.get_entrance("Start to shopcolors")
             set_rule(Start_to_shopcolors, lambda state: 
                     (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,3)) | state.has("Nothing Item Gifted Coin", world.player, coinreq))
+                    and state.has("Nothing Item Timer Digit", world.player,3)) or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopcolors")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Digits: 3" + " Coin req: "+ str(coinreq))
         if world.options.shop_music:
             Start_to_shopmusic = world.get_entrance("Start to shopmusic")
             set_rule(Start_to_shopmusic, lambda state: 
                     (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,3)) | state.has("Nothing Item Gifted Coin", world.player, coinreq))
+                    and state.has("Nothing Item Timer Digit", world.player,3)) or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopmusic")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Digits: 3" + " Coin req: "+ str(coinreq))
         if world.options.shop_sounds:
             Start_to_shopsounds = world.get_entrance("Start to shopsounds")
             set_rule(Start_to_shopsounds, lambda state: 
                     (state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
-                    & state.has("Nothing Item Timer Digit", world.player,3)) | state.has("Nothing Item Gifted Coin", world.player, coinreq))
+                    and state.has("Nothing Item Timer Digit", world.player,3)) or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopsounds")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Digits: 3" + " Coin req: "+ str(coinreq))
+    elif (world.options.goal > 1200):
+        if world.options.shop_colors:
+            Start_to_shopcolors = world.get_entrance("Start to shopcolors")
+            set_rule(Start_to_shopcolors, lambda state: 
+                    state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
+                    or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopcolors")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Coin req: "+ str(coinreq))
+        if world.options.shop_music:
+            Start_to_shopmusic = world.get_entrance("Start to shopmusic")
+            set_rule(Start_to_shopmusic, lambda state: 
+                    state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
+                    or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopmusic")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Coin req: "+ str(coinreq))
+        if world.options.shop_sounds:
+            Start_to_shopsounds = world.get_entrance("Start to shopsounds")
+            set_rule(Start_to_shopsounds, lambda state: 
+                    state.has("Nothing Item Progressive Time Cap", world.player,int(math.ceil(timereq*20)-1)) 
+                    or state.has("Nothing Item Gifted Coin", world.player, coinreq))
+            print("Start to shopsounds")
+            print("   Timecaps: " + str(int(math.ceil(timereq*20)-1)) + " Coin req: "+ str(coinreq))
+
 
 def set_all_location_rules(world: NothingWorld) -> None:
-    difference = world.options.milestone_interval/world.options.timecap_interval
+    ratio = world.options.milestone_interval/world.options.timecap_interval
     timereq = -1
     timerval = 0
-    number = int(math.ceil(world.options.goal/world.options.milestone_interval))
-    for i in range (0,number):
+    number = math.ceil(world.options.goal/world.options.milestone_interval)
+    for i in range(number):
         location = world.get_location("Nothing Milestone "+str(i+1))
-        timereq += difference
+        timereq += ratio
         timerval += world.options.milestone_interval
+        print("Nothing Milestone "+str(i+1))
+        print("   milestone value: " +str(timerval))
+        
         if world.options.shop_upgrades:
-            if timerval > 9:
+            if timerval > 9 and timereq > 0:
                 if timerval <= 59:
-                     add_rule(location, lambda state: state.count("Nothing Item Timer Digit",world.player) > 0)
+                    add_rule(location, lambda state: state.has("Nothing Item Timer Digit",world.player,1) and state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                    print("   digits: 1 " + "timecaps " + str(int(timereq)))
                 elif timerval <= 599:
-                     add_rule(location, lambda state: state.count("Nothing Item Timer Digit",world.player) > 1)
+                    add_rule(location, lambda state: state.has("Nothing Item Timer Digit",world.player,2) and state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                    print("   digits: 2 " + "timecaps " + str(int(timereq)))
                 elif timerval <= 3599:
-                     add_rule(location, lambda state: state.count("Nothing Item Timer Digit",world.player) > 2)
+                    add_rule(location, lambda state: state.has("Nothing Item Timer Digit",world.player,3) and state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                    print("   digits: 3 " + "timecaps " + str(int(timereq)))
                 elif timerval <= 35999:
-                     add_rule(location, lambda state: state.count("Nothing Item Timer Digit",world.player) > 3)
+                    add_rule(location, lambda state: state.has("Nothing Item Timer Digit",world.player,4) and state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                    print("   digits: 4 " + "timecaps " + str(int(timereq)))
                 elif timerval <= 86399:
-                     add_rule(location, lambda state: state.count("Nothing Item Timer Digit",world.player) > 4)
+                    add_rule(location, lambda state: state.has("Nothing Item Timer Digit",world.player,5) and state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                    print("   digits: 5 " + "timecaps " + str(int(timereq)))
                 else:
-                     add_rule(location, lambda state: state.count("Nothing Item Timer Digit",world.player) > 5)
-        if timereq > 0:
-            add_rule(location, lambda state: 
-                     state.count("Nothing Item Progressive Time Cap",world.player) >= int(timereq))
+                    add_rule(location, lambda state: state.has("Nothing Item Timer Digit",world.player,6) and state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                    print("   digits: 6 " + "timecaps " + str(int(timereq)))
+            elif timereq > 0:
+                add_rule(location, lambda state: state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+                print("   timecaps " + str(int(timereq)))
+        elif timereq > 0:
+            add_rule(location, lambda state: state.has("Nothing Item Progressive Time Cap",world.player,int(timereq)))
+            print("   timecaps " + str(int(timereq)))
+        if i < number:
+            allow_self_locking_items(location,"Nothing Item Timer Digit","Nothing Item Progressive Time Cap")
 
 
 

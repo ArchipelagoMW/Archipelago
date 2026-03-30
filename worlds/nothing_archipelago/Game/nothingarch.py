@@ -17,7 +17,7 @@ class archipelagoUI:
             text_surf = self.font.render("Archipelago Connected",False,data.colors[data.colorselect][1])
         else:
             text_surf = self.font.render("Archipelago Disconnected",False,data.colors[data.colorselect][1])
-        text_rect = text_surf.get_frect(topleft = (0,data.WINDOW_HEIGHT))
+        text_rect = text_surf.get_frect(topleft = (20,data.WINDOW_HEIGHT-40))
         self.display_surface.blit(text_surf, text_rect)
         if data.needsync == 1:
             self.sync_locations(data)

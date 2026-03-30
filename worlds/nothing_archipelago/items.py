@@ -48,7 +48,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Nothing Item Auto Milestone Collector": ItemClassification.useful,
     "Nothing Item Auto Timer Restart": ItemClassification.useful,
     "Nothing Item Timer Digit": ItemClassification.progression | ItemClassification.useful,
-    "Nothing Item Progressive Time Cap": ItemClassification.progression_deprioritized | ItemClassification.useful,
+    "Nothing Item Progressive Time Cap": ItemClassification.progression | ItemClassification.useful,
     "Nothing Item Gifted Coin": ItemClassification.useful | ItemClassification.filler,
     "Nothing Item Song 1": ItemClassification.filler,
     "Nothing Item Song 2": ItemClassification.filler,

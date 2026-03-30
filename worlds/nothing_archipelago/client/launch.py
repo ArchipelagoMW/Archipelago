@@ -9,5 +9,5 @@ def launch_nothing_archipelago()-> None:
 
     APnothing = Game()
     asyncio.run(APnothing.run())
-    asyncio.run(main(APnothing))
+    #asyncio.create_task(main(APnothing),name="client_Launcher")
     colorama.deinit()

@@ -2,6 +2,7 @@ import asyncio
 import sys
 from argparse import Namespace
 from enum import Enum
+from CommonClient import CommonContext
 from typing import TYPE_CHECKING, Any
 
 from CommonClient import logger, server_loop
@@ -19,7 +20,7 @@ class ConnectionStatus(Enum):
     SCOUTS_SENT = 2
     GAME_RUNNING = 3
 
-class Nothing_Archipelago_Context():
+class Nothing_Archipelago_Context(CommonContext):
     game = "nothing_archipelago"
     items_handling = 0b111
 
@@ -46,9 +47,11 @@ class Nothing_Archipelago_Context():
     highest_processed_item_index: int = 0
     queued_locations: list[int]
 
-    def __init__(self,APnothing) -> None:
-        
-        self.nothing = APnothing
+    def __init__(self,data,archui,server_address: str | None = None, password: str | None = None) -> None:
+        super().__init__(server_address, password)
+        self.data = data
+        self.password = self.data.inputs[3]
+        self.archui = archui
         self._condition = asyncio.Condition()
         self.queued_locations = []
         self.slot_data = {}
@@ -87,12 +90,12 @@ class Nothing_Archipelago_Context():
                 if new_items:
                     for _ in new_items:
                         self.highest_processed_item_index += 1
-                    self.nothing.update_items(self.items_recieved)
+                    self.archui.update_items(self.items_recieved)
 
                 if self.checked_locations > self.locations_checked:
-                    self.nothing.verifylocations(self.checked_locations)
+                    self.archui.verifylocations(self.checked_locations)
 
-                if self.nothing.data.goalled and not self.finished_game:
+                if self.data.goalled and not self.finished_game:
                     await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     self.finished_game = True
             except Exception as e:
@@ -128,7 +131,7 @@ class Nothing_Archipelago_Context():
             self.Death_link_mercy = self.slot_data["Death_link_mercy"]
             self.Time_dilation = self.slot_data["Time_dilation"]
 
-            self.nothing.update_settings(self.goal, self.shop_upgrades, self.shop_colors, self.shop_music, self.shop_sounds,
+            self.data.update_arch_settings(self.goal, self.shop_upgrades, self.shop_colors, self.shop_music, self.shop_sounds,
                                       self.gift_coins, self.milestone_interval, self.timecap_interval, self.Starting_coin_count,
                                       self.Death_link, self.Death_link_mercy, self.Time_dilation)
             self.highest_processed_item_index = 0
@@ -140,45 +143,40 @@ class Nothing_Archipelago_Context():
         await super().disconnect(*args, **kwargs)
 
     def render(self) -> None:
-        if self.nothing is None:
+        if self.data is None:
             raise RuntimeError("Tried to render before self.ap_quest_game was initialized.")
 
         
         self.handle_game_events()
 
     def handle_game_events(self) -> None:
-        if self.nothing is None:
+        if self.data is None:
             return
 
-        while self.nothing.data.queued_events:
-            event = self.nothing.queued_events.pop(0)
+        while self.data.queued_events:
+            event = self.data.queued_events.pop(0)
 
             if isinstance(event, LocationClearedEvent):
-                self.queued_locations.append(event.location_id)
+                self.data.queued_locations.append(event.location_id)
                 continue
 
             if isinstance(event, VictoryEvent):
                 continue
 
-    def trigger_server(server_address, password):
+    def trigger_server(self,server_address, password):
         super().__init__(server_address, password)
 
 
 
 
 
-async def main(APnothing) -> None:
-    _condition = asyncio.Condition()
-    ctx = Nothing_Archipelago_Context(APnothing)
-    
-    async with _condition:        
-        await _condition.wait_for(lambda: ctx.nothing.data.archipelagoactive == True)
-        ctx.trigger_server(ctx.nothing.data.inputs[0]+":"+ctx.nothing.data.inputs[1],ctx.nothing.data.inputs[3])
-        ctx.auth = ctx.nothing.data.inputs[2]
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+async def main(data,archui) -> None:
+    ctx = Nothing_Archipelago_Context(data,archui,data.inputs[0]+":"+data.inputs[1],data.inputs[3])
+    ctx.auth = data.inputs[2]
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
 
-        ctx.client_loop = asyncio.create_task(ctx.nothing_archipelago_loop(), name="Client Loop")
+    ctx.client_loop = asyncio.create_task(ctx.nothing_archipelago_loop(), name="Client Loop")
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
@@ -191,4 +189,4 @@ def launch() -> None:
 
 
 if __name__ == "__main__":
-    launch()
+    launch(*sys.argv[1:])

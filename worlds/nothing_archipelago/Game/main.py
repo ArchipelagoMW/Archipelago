@@ -6,6 +6,7 @@ from .support import *
 from .data import Data
 from .nothingarch import archipelagoUI
 import asyncio
+from ..client.nothing_archipelago_client import main
 
 class Game:
     def __init__(self, goal = 86400, shop_upgrades = True, shop_colors = True,
@@ -14,17 +15,17 @@ class Game:
         pygame.init()
         self.display_surface = pygame.display.set_mode((1920, 1080),pygame.SCALED | pygame.FULLSCREEN)
         self.import_assets()
-
+        
         self.ui = UI(self.font,self.font2,self.font3, self.uiframes)
         self.data = Data(self.ui, goal, shop_upgrades, shop_colors, shop_music, shop_sounds, gift_coins,
                           milestone_interval, timecap_interval, Starting_coin_count, Death_link, Death_link_mercy, Time_dilation)
-        
         pygame.display.set_caption('nothing_archipelago')
         
         self.clock = pygame.time.Clock()
         
         self.archui = archipelagoUI(self.font,self.data)
         self.current_stage = Level(self.data,self.audio_files)
+        #asyncio.create_task(main(self.data,self.archui),name="clientcreator")
         
     def update_settings(self, goal = 86400, shop_upgrades = True, shop_colors = True, shop_music = True, shop_sounds = True, gift_coins = True,
                          milestone_interval = 1, timecap_interval = 1, Starting_coin_count = 0, Death_link = False, 
@@ -33,10 +34,10 @@ class Game:
                           milestone_interval, timecap_interval, Starting_coin_count, Death_link, Death_link_mercy, Time_dilation)
 
     def update_items(self,items):
-        archipelagoUI.updateitems(self.data,items)
+        self.archui.updateitems(self.data,items)
 
     def verifylocations(self,locations):
-        archipelagoUI.checklocations(self.data,locations)
+        self.archui.checklocations(self.data,locations)
 
     def import_assets(self):
         
@@ -131,12 +132,15 @@ class Game:
 
 
         
-
+    #make connection fail reset archipelago active at aome point please
 
     async def run(self):
         await asyncio.sleep(0)
+        test = 0
         while True:
-            
+            if test == 0 and self.data.archipelagoactive == True:
+                asyncio.create_task(main(self.data,self.archui),name="clientcreator")
+                test = 1
             dt = self.clock.get_time()/1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or self.data.leave == 1:
