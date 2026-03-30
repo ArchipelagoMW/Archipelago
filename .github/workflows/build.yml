@@ -41,9 +41,9 @@ jobs:
     runs-on: windows-latest
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -82,7 +82,7 @@ jobs:
       # - copy code above to release.yml -
       - name: Attest Build
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest@v4.1.0
         with:
           subject-path: |
             build/exe.*/ArchipelagoLauncher.exe
@@ -110,18 +110,17 @@ jobs:
           cp Players/Templates/VVVVVV.yaml Players/
           timeout 30 ./ArchipelagoGenerate
       - name: Store 7z
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.ZIP_NAME }}
           path: dist/${{ env.ZIP_NAME }}
-          compression-level: 0  # .7z is incompressible by zip
+          archive: false
           if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
       - name: Store Setup
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.SETUP_NAME }}
           path: setups/${{ env.SETUP_NAME }}
+          archive: false
           if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
 
@@ -129,14 +128,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -173,7 +172,7 @@ jobs:
       # - copy code above to release.yml -
       - name: Attest Build
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest@v4.1.0
         with:
           subject-path: |
             build/exe.*/ArchipelagoLauncher
@@ -204,17 +203,17 @@ jobs:
           cp Players/Templates/VVVVVV.yaml Players/
           timeout 30 ./ArchipelagoGenerate
       - name: Store AppImage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
+          archive: false
+          # TODO: decide if we want to also upload the zsync
           if-no-files-found: error
           retention-days: 7
       - name: Store .tar.gz
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}
-          compression-level: 0  # .gz is incompressible by zip
+          archive: false
           if-no-files-found: error
           retention-days: 7
