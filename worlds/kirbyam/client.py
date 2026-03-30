@@ -166,6 +166,7 @@ class KirbyAmClient(BizHawkClient):
         self._send_notifications_enabled: bool = True
         self._notified_receive_indices: set[int] = set()
         self._notified_send_keys: set[tuple[int, int, int, int]] = set()
+        self._self_send_fallback_keys: set[tuple[int, int, int, int]] = set()
         self._send_notify_window_start: float = 0.0
         self._send_notify_window_count: int = 0
         self._send_notify_window_suppressed: int = 0
@@ -182,9 +183,11 @@ class KirbyAmClient(BizHawkClient):
         self._unsafe_delivery_probe_stream_marker: object = None
         self._last_unsafe_delivery_counter_values: dict[str, int] = {}
 
-        # Gameplay-state logging diagnostics (Issue #477)
-        self._debug_gameplay_state_logging_enabled: bool = False
-        self._debug_gameplay_states_seen: set[int] = set()
+        # Debug diagnostics (Issue #477 and Issue #510)
+        self._debug_logging_enabled: bool = False
+        self._last_logged_ai_state: int | None = None
+        self._last_logged_demo_flags: int | None = None
+        self._last_delivery_debug_snapshot: tuple[int, int, int, int, bool, bool, int] | None = None
 
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
@@ -221,6 +224,92 @@ class KirbyAmClient(BizHawkClient):
         self._suppress_next_local_death_send = False
         self._delivery_counter_ahead_fallback_active = False
         self._delivery_counter_ahead_resume_logged = False
+        self._self_send_fallback_keys.clear()
+        self._last_logged_ai_state = None
+        self._last_logged_demo_flags = None
+        self._last_delivery_debug_snapshot = None
+
+    @staticmethod
+    def _item_signature(item: object) -> tuple[int, int, int, int] | None:
+        item_id = KirbyAmClient._coerce_u32(getattr(item, "item", None))
+        location_id = KirbyAmClient._coerce_u32(getattr(item, "location", None))
+        player_id = KirbyAmClient._coerce_u32(getattr(item, "player", None))
+        flags = KirbyAmClient._coerce_u32(getattr(item, "flags", 0))
+        if item_id is None or location_id is None or player_id is None or flags is None:
+            return None
+        return item_id, location_id, player_id, flags
+
+    def _maybe_queue_self_send_fallback_item(self, ctx: "BizHawkClientContext", args: dict) -> None:
+        """Best-effort fallback for self-send events missing from ReceivedItems."""
+        if args.get("type") != "ItemSend":
+            return
+
+        receiver_id = self._coerce_u32(args.get("receiving"))
+        sender_slot = self._coerce_u32(getattr(ctx, "slot", None))
+        if receiver_id is None or sender_slot is None:
+            return
+        if receiver_id != sender_slot:
+            return
+
+        item = args.get("item")
+        if item is None:
+            return
+
+        signature = self._item_signature(item)
+        if signature is None:
+            return
+
+        item_id, location_id, player_id, flags = signature
+        if player_id != sender_slot:
+            return
+        if location_id <= 0:
+            return
+
+        from CommonClient import logger
+
+        if self._debug_logging_enabled:
+            logger.info(
+                "KirbyAM debug: self ItemSend observed (item=%s, location=%s, player=%s, queue_len=%s, delivered_index=%s)",
+                item_id,
+                location_id,
+                player_id,
+                len(ctx.items_received),
+                self._delivered_item_index,
+            )
+
+        if signature in self._self_send_fallback_keys:
+            if self._debug_logging_enabled:
+                logger.info(
+                    "KirbyAM debug: self ItemSend fallback skipped (already queued signature item=%s location=%s player=%s)",
+                    item_id,
+                    location_id,
+                    player_id,
+                )
+            return
+
+        for existing in ctx.items_received:
+            if self._item_signature(existing) == signature:
+                if self._debug_logging_enabled:
+                    logger.info(
+                        "KirbyAM debug: self ItemSend already present in items_received (item=%s, location=%s, player=%s)",
+                        item_id,
+                        location_id,
+                        player_id,
+                    )
+                return
+
+        from NetUtils import NetworkItem
+
+        ctx.items_received.append(NetworkItem(item_id, location_id, player_id, flags))
+        self._self_send_fallback_keys.add(signature)
+        ctx.watcher_event.set()
+        if self._debug_logging_enabled:
+            logger.info(
+                "KirbyAM debug: queued self-send fallback item from ItemSend (item=%s, location=%s, player=%s)",
+                item_id,
+                location_id,
+                player_id,
+            )
 
     def _mark_bizhawk_watcher_transport_error(self, reason: str) -> bool:
         """Prepare handler state for a clean BizHawk-side recovery on the next successful tick."""
@@ -280,8 +369,9 @@ class KirbyAmClient(BizHawkClient):
         if isinstance(slot_data, dict):
             debug_config = slot_data.get("debug", {})
             if isinstance(debug_config, dict):
-                self._debug_gameplay_state_logging_enabled = self._coerce_bool(
-                    debug_config.get("gameplay_state_logging", False),
+                # Backward-compat: older seeds may still provide gameplay_state_logging.
+                self._debug_logging_enabled = self._coerce_bool(
+                    debug_config.get("logging", debug_config.get("gameplay_state_logging", False)),
                     False,
                 )
 
@@ -323,6 +413,44 @@ class KirbyAmClient(BizHawkClient):
             return ""
         label = _LOCATION_ID_TO_LABEL.get(location_id)
         return label if label is not None else f"Location {location_id}"
+
+    def _maybe_log_delivery_debug_state(
+        self,
+        ctx: "BizHawkClientContext",
+        *,
+        flag: int,
+        rom_received_count: Optional[int],
+        allow_new_writes: bool,
+        current_frame: Optional[int],
+    ) -> None:
+        if not self._debug_logging_enabled:
+            return
+
+        from CommonClient import logger
+
+        snapshot = (
+            flag,
+            rom_received_count if rom_received_count is not None else -1,
+            self._delivered_item_index,
+            len(ctx.items_received),
+            self._delivery_pending,
+            allow_new_writes,
+            current_frame if current_frame is not None else -1,
+        )
+        if snapshot == self._last_delivery_debug_snapshot:
+            return
+
+        self._last_delivery_debug_snapshot = snapshot
+        logger.info(
+            "KirbyAM debug: mailbox state (flag=%s, rom_count=%s, delivered_index=%s, queue_len=%s, pending=%s, allow_new_writes=%s, frame=%s)",
+            flag,
+            rom_received_count,
+            self._delivered_item_index,
+            len(ctx.items_received),
+            self._delivery_pending,
+            allow_new_writes,
+            current_frame,
+        )
 
     async def _emit_receive_notification(self, ctx: "BizHawkClientContext", delivered_index: int) -> None:
         # ACK-gated + index-deduped to avoid replay spam during reconnect
@@ -615,15 +743,6 @@ class KirbyAmClient(BizHawkClient):
                 self._ram_state_loaded = True
 
             gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
-            if self._debug_gameplay_state_logging_enabled and ai_state is not None:
-                if ai_state not in self._debug_gameplay_states_seen:
-                    self._debug_gameplay_states_seen.add(ai_state)
-                    logger.info(
-                        "KirbyAM debug: observed unique gameplay state (ai_state=%s, gameplay_active=%s, reason=%s)",
-                        ai_state,
-                        gameplay_active,
-                        defer_reason,
-                    )
             if not gameplay_active:
                 if self._last_runtime_gate_reason != defer_reason:
                     logger.info(
@@ -884,24 +1003,65 @@ class KirbyAmClient(BizHawkClient):
         reads: list[tuple[int, int, str]] = [(ai_state_addr, _AI_STATE_ADDR_WIDTH, "System Bus")]
         if demo_flags_addr is not None:
             reads.append((demo_flags_addr, _DEMO_PLAYBACK_FLAGS_WIDTH, "System Bus"))
+        heartbeat_addr = self._transport_addr("hook_heartbeat")
+        if self._debug_logging_enabled and heartbeat_addr is not None:
+            reads.append((heartbeat_addr, 4, "System Bus"))
 
         raw_values = await bizhawk.read(ctx.bizhawk_ctx, reads)
         ai_state = self._u32_le(raw_values[0])
+        next_read_index = 1
+
+        demo_flags: int | None = None
+        if demo_flags_addr is not None and len(raw_values) > next_read_index:
+            demo_flags = self._u32_le(raw_values[next_read_index])
+            next_read_index += 1
+
+        heartbeat_counter: int | None = None
+        if self._debug_logging_enabled and heartbeat_addr is not None and len(raw_values) > next_read_index:
+            heartbeat_counter = self._u32_le(raw_values[next_read_index])
+
+        reason: str
+        gameplay_active: bool
 
         if ai_state < _AI_STATE_CUTSCENE_THRESHOLD:
-            return False, "non_gameplay_tutorial_or_menu", ai_state
-        if ai_state < _AI_STATE_NORMAL:
-            return False, "non_gameplay_cutscene", ai_state
-        if ai_state == _AI_STATE_NORMAL:
-            demo_playback_active = False
-            if demo_flags_addr is not None and len(raw_values) > 1:
-                demo_flags = self._u32_le(raw_values[1])
-                demo_playback_active = bool(demo_flags & _DEMO_PLAYBACK_ACTIVE_FLAG)
-            if demo_playback_active:
-                return False, "non_gameplay_title_demo", ai_state
-        if ai_state in (_GOAL_STATE_DARK_MIND_CLEAR, _GOAL_STATE_FULL_CLEAR):
-            return False, "non_gameplay_goal_clear", ai_state
-        return True, "gameplay_active", ai_state
+            reason = "non_gameplay_tutorial_or_menu"
+            gameplay_active = False
+        elif ai_state < _AI_STATE_NORMAL:
+            reason = "non_gameplay_cutscene"
+            gameplay_active = False
+        elif ai_state == _AI_STATE_NORMAL and demo_flags is not None and bool(demo_flags & _DEMO_PLAYBACK_ACTIVE_FLAG):
+            reason = "non_gameplay_title_demo"
+            gameplay_active = False
+        elif ai_state in (_GOAL_STATE_DARK_MIND_CLEAR, _GOAL_STATE_FULL_CLEAR):
+            reason = "non_gameplay_goal_clear"
+            gameplay_active = False
+        else:
+            reason = "gameplay_active"
+            gameplay_active = True
+
+        if self._debug_logging_enabled:
+            from CommonClient import logger
+
+            if ai_state != self._last_logged_ai_state:
+                logger.info(
+                    "KirbyAM debug: ai_kirby_state_native changed (ai_state=%s, gameplay_active=%s, reason=%s, hook_heartbeat=%s)",
+                    ai_state,
+                    gameplay_active,
+                    reason,
+                    heartbeat_counter,
+                )
+                self._last_logged_ai_state = ai_state
+
+            if demo_flags is not None and demo_flags != self._last_logged_demo_flags:
+                logger.info(
+                    "KirbyAM debug: demo_playback_flags_native changed (demo_flags=0x%08X, demo_active=%s, hook_heartbeat=%s)",
+                    demo_flags,
+                    bool(demo_flags & _DEMO_PLAYBACK_ACTIVE_FLAG),
+                    heartbeat_counter,
+                )
+                self._last_logged_demo_flags = demo_flags
+
+        return gameplay_active, reason, ai_state
 
     # --------------------------
     # Helpers / persistence
@@ -1404,6 +1564,14 @@ class KirbyAmClient(BizHawkClient):
             current_frame = self._u32_le(raw_values[next_read_index])
             next_read_index += 1
 
+        self._maybe_log_delivery_debug_state(
+            ctx,
+            flag=flag,
+            rom_received_count=rom_received_count,
+            allow_new_writes=allow_new_writes,
+            current_frame=current_frame,
+        )
+
         hook_heartbeat: Optional[int] = None
         if heartbeat_addr is not None and len(raw_values) > next_read_index:
             hook_heartbeat = self._u32_le(raw_values[next_read_index])
@@ -1800,4 +1968,5 @@ class KirbyAmClient(BizHawkClient):
         if cmd == "Bounced":
             self._queue_incoming_death_link(args)
         if cmd == "PrintJSON":
+            self._maybe_queue_self_send_fallback_item(ctx, args)
             self._maybe_emit_send_notification(ctx, args)

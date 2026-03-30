@@ -1,7 +1,7 @@
 {
   "death_link": true,
   "debug": {
-    "gameplay_state_logging": true
+    "logging": true
   },
   "enemy_copy_ability_policy": {
     "allowed_abilities": [
