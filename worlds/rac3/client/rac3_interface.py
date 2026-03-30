@@ -608,7 +608,7 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.QWARK_AMMO, 0)
             case RAC3ITEM.LOCK_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(10, 15)
+                    self.timers[name] += randint(10, 20)
                 else:
                     self.timers[name] = int(time.time() + uniform(10, 15))
             case RAC3ITEM.MIRROR_TRAP:
@@ -618,7 +618,7 @@ class Rac3Interface(GameInterface):
                     self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.BLACK_SCREEN_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(6, 10)
+                    self.timers[name] += randint(6, 12)
                 else:
                     self.timers[name] = int(time.time() + uniform(6, 10))
             case RAC3ITEM.NO_CLANK_TRAP:
@@ -630,9 +630,9 @@ class Rac3Interface(GameInterface):
                         self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.INVISIBLE_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(6, 15)
+                    self.timers[name] += randint(10, 20)
                 else:
-                    self.timers[name] = int(time.time() + uniform(6, 15))
+                    self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.DISARM_TRAP:
                 if self.timers.get(name, False):
                     self.timers[name] += randint(6, 15)
@@ -640,14 +640,14 @@ class Rac3Interface(GameInterface):
                     self.timers[name] = int(time.time() + uniform(6, 15))
             case RAC3ITEM.WRENCH_ONLY_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(6, 15)
+                    self.timers[name] += randint(10, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(6, 15))
+                    self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.LIGHTSABER_WRENCH:
                 self._write8(RAC3STATUS.WRENCH_REPLACEMENT_CHEAT, 1)
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
-                self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
+                self._write32(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
         if name in equipable_data.keys() and self.UnlockItem[name].status == 1:
             self.update_equip(name)
 
