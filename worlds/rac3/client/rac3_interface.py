@@ -604,7 +604,7 @@ class Rac3Interface(GameInterface):
             case RAC3ITEM.NO_AMMO_TRAP:
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
-                        self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
+                        self._write32(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
                 self._write8(RAC3STATUS.QWARK_AMMO, 0)
             case RAC3ITEM.LOCK_TRAP:
                 if self.timers.get(name, False):
