@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.0.15
+
+- Refactor the KirbyAM area graph to use Rainbow Route as the explicit hub region instead of a flat `REGION_GAME_START` topology, route all shard areas and the Dimension Mirror through that hub, and document that one-way mirrors, two-way mirrors, big-switch shortcuts, and non-mirror travel remain future room-level logic work (Issue #32 / #42).
+- Replace dormant `2 Up`/`3 Up` compatibility fillers with shipped consumable filler effects for `Small Food`, `Cell Phone Battery`, `Max Tomato`, and `Invincibility Candy`, update the active filler pool and ROM payload apply logic, and document the new filler contract and manual validation expectations (Issue #295).
+- Add optional Room Sanity (`room_sanity`) with 257 `Room X-YY` checks keyed by native `gVisitedDoors` (`doorsIdx`, bit 15), including reconnect-safe resend/dedupe polling, generation + slot_data gating, protocol/address policy updates, and dedicated Room Sanity polling/docs coverage (Issue #480).
+
 - Replace dormant `2 Up`/`3 Up` compatibility fillers with shipped consumable filler effects for `Small Food`, `Cell Phone Battery`, `Max Tomato`, and `Invincibility Candy`, update the active filler pool and ROM payload apply logic, and document the new filler contract and manual validation expectations (Issue #295).
 - Add optional Room Sanity (`room_sanity`) with 257 `Room X-YY` checks keyed by native `gVisitedDoors` (`doorsIdx`, bit 15), including reconnect-safe resend/dedupe polling, generation + slot_data gating, protocol/address policy updates, and dedicated Room Sanity polling/docs coverage (Issue #480).
 
