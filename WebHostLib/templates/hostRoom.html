@@ -38,7 +38,7 @@
             {% elif room.last_port %}
                 You can connect to this room by using <span class="interactive"
                 data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
-                '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
+                '/connect {{ config['HOST_ADDRESS'] }}/{{ room.last_port }}'
                 </span>
                 in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
             {% endif %}
