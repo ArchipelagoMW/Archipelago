@@ -743,7 +743,7 @@ class CommonContext:
             logger.info("DeathLink: Sending death to your friends...")
             self.last_death_link = time.time()
             await self.send_msgs([{
-                "cmd": "Bounce", "tags": ["DeathLink" + self.death_link_group],
+                "cmd": "Bounce", "tags": [f"DeathLink{self.death_link_group}"],
                 "data": {
                     "time": self.last_death_link,
                     "source": self.player_names[self.slot],
@@ -755,20 +755,20 @@ class CommonContext:
         """Helper function to set Death Link connection tag on/off and update the connection if already connected."""
         old_tags = self.tags.copy()
         if death_link:
-            self.tags.add("DeathLink" + self.death_link_group)
+            self.tags.add(f"DeathLink{self.death_link_group}")
         else:
-            self.tags -= {"DeathLink" + self.death_link_group}
+            self.tags -= {f"DeathLink{self.death_link_group}"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     async def update_death_link_group(self, group_name: str):
         """Helper function to change the Death Link group, updating the connection tag as needed if already connected."""
-        death_link: bool = ("DeathLink" + self.death_link_group) in self.tags
+        death_link: bool = f"DeathLink{self.death_link_group}" in self.tags
         if death_link:
-            self.tags -= {"DeathLink" + self.death_link_group}
+            self.tags -= {f"DeathLink{self.death_link_group}"}
         self.death_link_group = group_name
         if death_link:
-            self.tags.add("DeathLink" + self.death_link_group)
+            self.tags.add(f"DeathLink{self.death_link_group}")
             if self.server and not self.server.socket.closed:
                 await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
@@ -1103,7 +1103,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == "Bounced":
         tags = args.get("tags", [])
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if ("DeathLink" + ctx.death_link_group) in tags and ctx.last_death_link != args["data"]["time"]:
+        if f"DeathLink{ctx.death_link_group}" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
 
     elif cmd == "Retrieved":
