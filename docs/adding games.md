@@ -87,7 +87,8 @@ The world is your game integration for the Archipelago generator, webhost, and m
 information necessary for creating the items and locations to be randomized, the logic for item placement, the 
 datapackage information so other game clients can recognize your game data, and documentation. Your world must be
 written as a Python package to be loaded by Archipelago. This is currently done by creating a fork of the Archipelago
-repository and creating a new world package in `/worlds/`. 
+repository and creating a new world package in `/worlds/` (see [running from source](/docs/running%20from%20source.md)
+for setup).
 
 The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call 
 during generation can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation 
