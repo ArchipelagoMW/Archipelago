@@ -65,6 +65,15 @@ end
 function general.technologies.removed_technologies ()
     return {{ variable_to_lua(removed_technologies) }}
 end
+function general.technologies.local_items ()
+    return {
+{%- for location, item in locations -%}
+{%- if (item.player == slot_player) %}
+        ["ap-{{ location.address }}-"] = "{{ item.name }}",
+{%- endif -%}
+{%- endfor %}
+    }
+end
 
 --recipes
 general.recipes = {}
