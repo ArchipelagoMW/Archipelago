@@ -720,12 +720,15 @@ class KirbyAmClient(BizHawkClient):
     @staticmethod
     def _load_death_link_flavor_templates() -> list[str]:
         """Load outgoing DeathLink flavor text templates from data file."""
+        from CommonClient import logger
+
         fallback = ["{player} was defeated."]
         try:
             loaded = load_json_data("deathlink_flavor_text.json")
         except Exception:
-            logging.getLogger(__name__).warning(
-                "KirbyAM: failed to load deathlink_flavor_text.json; using fallback text"
+            logger.warning(
+                "KirbyAM: failed to load deathlink_flavor_text.json; using fallback text",
+                exc_info=True,
             )
             return fallback
 
@@ -745,13 +748,27 @@ class KirbyAmClient(BizHawkClient):
                 if normalized:
                     templates.append(normalized)
 
-        if not templates:
-            logging.getLogger(__name__).warning(
+        valid_templates: list[str] = []
+        skipped_without_placeholder = 0
+        for template in templates:
+            if "{player}" in template:
+                valid_templates.append(template)
+            else:
+                skipped_without_placeholder += 1
+
+        if skipped_without_placeholder:
+            logger.warning(
+                "KirbyAM: skipped %d DeathLink flavor text template(s) without '{player}' placeholder",
+                skipped_without_placeholder,
+            )
+
+        if not valid_templates:
+            logger.warning(
                 "KirbyAM: deathlink flavor text pool empty; using fallback text"
             )
             return fallback
 
-        return templates
+        return valid_templates
 
     def _build_outgoing_death_link_cause(self, ctx: "BizHawkClientContext") -> str:
         """Build randomized outgoing DeathLink cause text for remote players."""

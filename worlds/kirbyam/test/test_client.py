@@ -2180,12 +2180,18 @@ def test_on_package_queues_incoming_death_link_when_enabled(mock_bizhawk_context
 
 
 def test_death_link_flavor_templates_loaded_from_data_file():
-    """DeathLink flavor text templates should load a non-empty randomized pool."""
-    client = KirbyAmClient()
-    client.initialize_client()
+    """DeathLink flavor text templates should be loaded through the JSON data loader."""
+    sentinel_templates = [
+        "{player} was defeated by a mysterious force.",
+        "{player} found the wrong kind of shortcut.",
+    ]
 
-    assert client._death_link_flavor_templates
-    assert any("{player}" in line for line in client._death_link_flavor_templates)
+    with patch("worlds.kirbyam.client.load_json_data", return_value=sentinel_templates) as mock_loader:
+        client = KirbyAmClient()
+        client.initialize_client()
+
+    mock_loader.assert_called_once_with("deathlink_flavor_text.json")
+    assert client._death_link_flavor_templates == sentinel_templates
 
 
 @pytest.mark.asyncio
