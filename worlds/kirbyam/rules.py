@@ -176,3 +176,97 @@ def set_rules(world: KirbyAmWorld) -> None:
                 world.player,
                 goal_location_name,
             )
+
+
+# ============================================================================
+# Room Graph Reachability Queries
+# ============================================================================
+# The room topology (rooms.json) is pure: no locations embedded.
+# These functions allow querying which rooms are reachable from which other rooms.
+# The location binding (room-sanity checks) is separate and optional.
+
+
+def _get_room_graph() -> dict[str, dict]:
+    """Load the pure room topology graph."""
+    from .data import load_json_data
+    return load_json_data("regions/rooms.json")
+
+
+def _reachable_rooms_from(
+    start_region: str,
+    graph: dict[str, dict] | None = None,
+) -> set[str]:
+    """
+    BFS to find all rooms reachable from a given start region.
+    
+    Args:
+        start_region: The starting room region name (e.g., "REGION_RAINBOW_ROUTE/ROOM_1_01").
+        graph: The room graph dict. If None, loads from data.
+    
+    Returns:
+        Set of all reachable room region names.
+    """
+    if graph is None:
+        graph = _get_room_graph()
+    
+    visited = set()
+    queue = [start_region]
+    
+    while queue:
+        current = queue.pop(0)
+        if current in visited:
+            continue
+        if current not in graph:
+            continue
+        
+        visited.add(current)
+        for next_room in graph[current].get("exits", []):
+            if next_room not in visited:
+                queue.append(next_room)
+    
+    return visited
+
+
+def bind_room_sanity_locations(
+    world_regions: dict,
+    enable_room_sanity: bool = True,
+) -> None:
+    """
+    Optionally bind room-sanity locations to room regions.
+    
+    Room topology (rooms.json) is pure: this function selectively
+    attaches ROOM_SANITY_* locations to their corresponding room regions.
+    
+    Args:
+        world_regions: The regions dict loaded from data files.
+        enable_room_sanity: If True, load and bind room-sanity locations to rooms.
+    """
+    if not enable_room_sanity:
+        return
+    
+    from .data import load_json_data
+    import re
+    
+    room_regions_topology = load_json_data("regions/rooms.json")
+
+    # Bind each room_sanity-enabled room region to its ROOM_SANITY_* location key.
+    for region_name, region_def in room_regions_topology.items():
+        if not isinstance(region_def, dict):
+            continue
+        room_meta = region_def.get("room_sanity")
+        if not isinstance(room_meta, dict) or not bool(room_meta.get("included", False)):
+            continue
+
+        match = re.match(r"REGION_[A-Z_]+/ROOM_(\d+)_(\d+)$", region_name)
+        if not match:
+            continue
+
+        area_code = int(match.group(1))
+        room_code = int(match.group(2))
+        location_name = f"ROOM_SANITY_{area_code}_{room_code:02d}"
+
+        if region_name in world_regions:
+            if "locations" not in world_regions[region_name]:
+                world_regions[region_name]["locations"] = []
+            if location_name not in world_regions[region_name]["locations"]:
+                world_regions[region_name]["locations"].append(location_name)

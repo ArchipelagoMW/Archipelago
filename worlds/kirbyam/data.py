@@ -7,6 +7,7 @@ It is tolerant of incomplete data while you iterate on JSON schemas.
 from __future__ import annotations
 
 import pkgutil
+import re
 from dataclasses import dataclass
 from enum import IntEnum
 from importlib import resources
@@ -59,6 +60,55 @@ def _maybe_load_json_data(data_name: str) -> list[Any] | dict[str, Any] | None:
         return None
 
     return orjson.loads(raw.decode("utf-8-sig"))
+
+
+def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]]:
+    """Build ROOM_SANITY location definitions from regions/rooms.json metadata."""
+    room_subareas = _maybe_load_json_data("regions/rooms.json")
+    if not isinstance(room_subareas, dict):
+        return {}
+
+    generated_locations: dict[str, dict[str, Any]] = {}
+    room_key_pattern = re.compile(r"^REGION_[A-Z_]+/ROOM_(\d+)_(\d+)$")
+
+    for region_name, region_def in room_subareas.items():
+        if not isinstance(region_name, str) or not isinstance(region_def, dict):
+            continue
+
+        room_meta = region_def.get("room_sanity")
+        if not isinstance(room_meta, dict):
+            continue
+        if not bool(room_meta.get("included", False)):
+            continue
+
+        match = room_key_pattern.match(region_name)
+        if not match:
+            raise ValueError(
+                "room_sanity metadata is only valid on ROOM regions; "
+                f"got region [{region_name}]"
+            )
+
+        area_num = int(match.group(1))
+        room_num = int(match.group(2))
+        location_key = f"ROOM_SANITY_{area_num}_{room_num:02d}"
+
+        bit_index_raw = room_meta.get("bit_index")
+        location_id_raw = room_meta.get("location_id")
+        if bit_index_raw in (None, "", "null") or location_id_raw in (None, "", "null"):
+            raise ValueError(
+                f"room_sanity metadata missing bit_index/location_id for region [{region_name}]"
+            )
+
+        generated_locations[location_key] = {
+            "label": f"Room {area_num}-{room_num:02d}",
+            "parent_region": region_name,
+            "tags": ["RoomSanity"],
+            "bit_index": int(bit_index_raw),
+            "category": "ROOM_SANITY",
+            "location_id": int(location_id_raw),
+        }
+
+    return generated_locations
 
 
 def _parse_int(value: Any) -> int:
@@ -137,7 +187,6 @@ class EventData(NamedTuple):
 class RegionData:
     name: str
     exits: list[str]
-    warps: list[str]
     locations: list[str]
     events: list[EventData]
     ability_gates: dict[str, dict[str, Any]]
@@ -145,65 +194,9 @@ class RegionData:
     def __init__(self, name: str) -> None:
         self.name = name
         self.exits = []
-        self.warps = []
         self.locations = []
         self.events = []
         self.ability_gates = {}
-
-
-class Warp:
-    """
-    Optional: Represents warp events in the game like doorways or warp pads.
-    Kept for future expansion; safe even if you don't use warps yet.
-    """
-    is_one_way: bool
-    source_map: str
-    source_ids: list[int]
-    dest_map: str
-    dest_ids: list[int]
-    parent_region: str | None
-
-    def __init__(self, encoded_string: str | None = None, parent_region: str | None = None) -> None:
-        self.is_one_way = False
-        self.source_map = ""
-        self.source_ids = []
-        self.dest_map = ""
-        self.dest_ids = []
-        self.parent_region = parent_region
-
-        if encoded_string is not None:
-            decoded = Warp.decode(encoded_string)
-            self.is_one_way = decoded.is_one_way
-            self.source_map = decoded.source_map
-            self.source_ids = decoded.source_ids
-            self.dest_map = decoded.dest_map
-            self.dest_ids = decoded.dest_ids
-
-    def encode(self) -> str:
-        source_ids_string = ",".join(str(x) for x in self.source_ids)
-        dest_ids_string = ",".join(str(x) for x in self.dest_ids)
-        return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{dest_ids_string}{'!' if self.is_one_way else ''}"
-
-    def connects_to(self, other: Warp) -> bool:
-        return self.dest_map == other.source_map and set(self.dest_ids) <= set(other.source_ids)
-
-    @staticmethod
-    def decode(encoded_string: str) -> Warp:
-        warp = Warp()
-        warp.is_one_way = encoded_string.endswith("!")
-        if warp.is_one_way:
-            encoded_string = encoded_string[:-1]
-
-        warp_source, warp_dest = encoded_string.split("/")
-        warp_source_map, warp_source_indices = warp_source.split(":")
-        warp_dest_map, warp_dest_indices = warp_dest.split(":")
-
-        warp.source_map = warp_source_map
-        warp.dest_map = warp_dest_map
-        warp.source_ids = [int(i) for i in warp_source_indices.split(",") if i != ""]
-        warp.dest_ids = [int(i) for i in warp_dest_indices.split(",") if i != ""]
-
-        return warp
 
 
 class KirbyAmData:
@@ -219,9 +212,6 @@ class KirbyAmData:
     locations: dict[str, LocationData]
     items: dict[int, ItemData]
 
-    warps: dict[str, Warp]
-    warp_map: dict[str, str | None]
-
     def __init__(self) -> None:
         self.ram_addresses = {}
         self.transport_ram_addresses = {}
@@ -230,8 +220,6 @@ class KirbyAmData:
         self.regions = {}
         self.locations = {}
         self.items = {}
-        self.warps = {}
-        self.warp_map = {}
 
 
 def _classification_from_string(s: str) -> ItemClassification:
@@ -361,6 +349,17 @@ def _init() -> None:
             raise ValueError(f"Location keys defined multiple times across location datasets: {dup_list}")
         merged_locations_json.update(fragment)
 
+    # Build Room Sanity locations from room topology metadata.
+    room_sanity_locations = _load_room_sanity_locations_from_room_subareas()
+    duplicate_room_sanity = set(merged_locations_json.keys()) & set(room_sanity_locations.keys())
+    if duplicate_room_sanity:
+        dup_list = sorted(duplicate_room_sanity)
+        raise ValueError(
+            "Room-sanity location keys are defined in multiple sources. "
+            f"Keep them only in regions/rooms.json metadata: {dup_list}"
+        )
+    merged_locations_json.update(room_sanity_locations)
+
     next_location_id = BASE_OFFSET + 100_000  # keep items and locations in separate ranges
     auto_assign_needed = any(
         isinstance(attrs, dict) and attrs.get("location_id") in (None, 0, "0")
@@ -434,7 +433,7 @@ def _init() -> None:
 
     # Load/merge region json files from data/regions/*.json
     # Expected minimal shape:
-    #   { "REGION_NAME": { "exits":[...], "locations":[loc_key...], "events":[...], "warps":[...] } }
+    #   { "REGION_NAME": { "exits":[...], "locations":[loc_key...], "events":[...] } }
     region_json_list: list[dict[str, Any]] = []
     for file in _list_data_files("regions"):
         # Skip nested dirs / non-json content defensively
@@ -460,7 +459,6 @@ def _init() -> None:
 
     # Create region objects, and claim locations
     claimed_locations: set[str] = set()
-    claimed_warps: set[str] = set()
 
     for region_name, region_def in merged_regions.items():
         if not isinstance(region_def, dict):
@@ -496,18 +494,6 @@ def _init() -> None:
             if isinstance(gate_name, str) and isinstance(gate_def, dict):
                 region.ability_gates[gate_name] = dict(gate_def)
 
-        # Warps (encoded strings, optional)
-        for encoded_warp in region_def.get("warps", []):
-            if not isinstance(encoded_warp, str):
-                continue
-            if encoded_warp in claimed_warps:
-                raise ValueError(f"Warp [{encoded_warp}] was claimed by multiple regions")
-            region.warps.append(encoded_warp)
-            data.warps[encoded_warp] = Warp(encoded_warp, region_name)
-            claimed_warps.add(encoded_warp)
-
-        region.warps.sort()
-
         data.regions[region_name] = region
 
     # Auto-claim generated room-sanity locations by their parent region.
@@ -536,18 +522,6 @@ def _init() -> None:
         ):
             region.locations.append(loc_key)
             claimed_locations.add(loc_key)
-
-    # Optional warp_map.json (if you want the Emerald-style "warp -> destination warp" helper)
-    warp_map_json = _maybe_load_json_data("warp_map.json")
-    if isinstance(warp_map_json, dict):
-        for warp, destination in warp_map_json.items():
-            if not isinstance(warp, str):
-                continue
-            if destination == "" or destination is None:
-                data.warp_map[warp] = None
-            elif isinstance(destination, str):
-                data.warp_map[warp] = destination
-
 
 data = KirbyAmData()
 _init()
