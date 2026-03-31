@@ -98,8 +98,9 @@ def launch_subprocess(func: Callable, name: str | None = None, args: Tuple[str, 
 
 
 def launch(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
-    from Utils import is_kivy_running
-    if is_kivy_running():
+    if is_mobile:
+        func(*args)
+    elif is_kivy_running():
         launch_subprocess(func, name, args)
     else:
         func(*args)

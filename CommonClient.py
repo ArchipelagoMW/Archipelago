@@ -806,8 +806,17 @@ class CommonContext:
     def run_gui(self):
         """Import kivy UI system from make_gui() and start running it as self.ui_task."""
         ui_class = self.make_gui()
-        self.ui = ui_class(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+        if Utils.is_kivy_running():
+            from kivy.app import App
+            app = App.get_running_app()
+            self.ui = ui_class(self)
+            app.add_screen(self.ui)
+        else:
+            from kvui import GameApp
+            self.ui_app = GameApp(None)
+            self.ui = ui_class(self)
+            self.ui_app.update_ui(self.ui)
+            self.ui_task = asyncio.create_task(self.ui_app.async_run(), name="UI")
 
     def run_cli(self):
         if sys.stdin:
@@ -1215,15 +1224,23 @@ def run_as_textclient(*args):
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
 
-    args = handle_url_arg(args, parser=parser)
+    parsed_args = handle_url_arg(parsed_args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
     colorama.just_fix_windows_console()
 
-    asyncio.run(main(args))
-    colorama.deinit()
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if loop:
+        return loop.create_task(main(parsed_args), name="TextClient Main")
+    else:
+        asyncio.run(main(parsed_args))
+        colorama.deinit()
 
 
 if __name__ == '__main__':

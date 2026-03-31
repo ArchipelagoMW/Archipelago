@@ -98,6 +98,17 @@ from kivymd.uix.progressindicator import MDLinearProgressIndicator
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
+from kivy.effects.scroll import ScrollEffect
+from kivy.effects.dampedscroll import DampedScrollEffect
+
+# Despite the same version on desktop and android, these don't exist on android. I don't know why.
+# But making them exist as empty stubs makes the app launch successfully.
+for effect_cls in (ScrollEffect, DampedScrollEffect):
+    if not hasattr(effect_cls, "reset_scale"):
+        effect_cls.reset_scale = lambda *args: None
+    if not hasattr(effect_cls, "convert_overscroll"):
+        effect_cls.convert_overscroll = lambda *args: None
+
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
@@ -114,6 +125,46 @@ remove_between_brackets = re.compile(r"\[.*?]")
 
 
 class ThemedApp(MDApp):
+    # Empty properties that only become useful in a Client.
+    @property
+    def active_manager(self) -> typing.Optional["GameManager"]:
+        return None
+
+    @property
+    def ctx(self) -> typing.Optional[context_type]:
+        manager = self.active_manager
+        return manager.ctx if manager else None
+
+    @property
+    def textinput(self):
+        manager = self.active_manager
+        return manager.textinput if manager else None
+
+    @property
+    def commandprocessor(self):
+        manager = self.active_manager
+        return manager.commandprocessor if manager else None
+
+    @property
+    def last_autofillable_command(self):
+        manager = self.active_manager
+        return manager.last_autofillable_command if manager else None
+
+    @property
+    def screens(self):
+        manager = self.active_manager
+        return manager.screens if manager else None
+
+    @property
+    def tabs(self):
+        manager = self.active_manager
+        return manager.tabs if manager else None
+
+    def update_hints(self):
+        manager = self.active_manager
+        if manager:
+            manager.update_hints()
+
     def set_colors(self):
         text_colors = KivyJSONtoTextParser.TextColors()
         self.theme_cls.theme_style = text_colors.theme_style
@@ -154,7 +205,7 @@ class ImageButton(MDIconButton):
 
 
 class ScrollBox(MDScrollView):
-    layout: MDBoxLayout = ObjectProperty(None)
+    layout: MDBoxLayout = ObjectProperty(None, allownone=True)
     box_height: int = NumericProperty(dp(100))
 
     def __init__(self, *args, **kwargs):
@@ -225,7 +276,7 @@ MDButton.on_release = on_release
 class HoverBehavior(object):
     """originally from https://stackoverflow.com/a/605348110"""
     hovered = BooleanProperty(False)
-    border_point = ObjectProperty(None)
+    border_point = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         self.register_event_type("on_enter")
@@ -252,8 +303,8 @@ class HoverBehavior(object):
 
     def on_cursor_leave(self, *args):
         # if the mouse left the window, it is obviously no longer inside the hover label.
-        self.hovered = BooleanProperty(False)
-        self.border_point = ObjectProperty(None)
+        self.hovered = False
+        self.border_point = None
         self.dispatch("on_leave")
 
 
@@ -327,8 +378,9 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
     tooltip_display_delay = 0.1
     text: str = StringProperty("Server:")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, ctx, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.ctx = ctx
         self.add_widget(MDIcon(icon="information", font_size=sp(15)))
         self.add_widget(TooltipLabel(text=self.text, pos_hint={"center_x": 0.5, "center_y": 0.5},
                                      font_size=sp(15)))
@@ -340,10 +392,6 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
 
     def on_leave(self):
         self.animation_tooltip_dismiss()
-
-    @property
-    def ctx(self) -> context_type:
-        return MDApp.get_running_app().ctx
 
     def get_text(self):
         if self.ctx.server:
@@ -524,20 +572,22 @@ class MarkupDropdown(MDDropdownMenu):
 class AutocompleteHintInput(ResizableTextField):
     min_chars = NumericProperty(3)
 
-    def __init__(self, **kwargs):
+    def __init__(self, ctx, commandprocessor, **kwargs):
         super().__init__(**kwargs)
+        self.ctx = ctx
+        self.commandprocessor = commandprocessor
 
         self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(2), width=self.width)
         self.bind(on_text_validate=self.on_message)
         self.bind(width=lambda instance, x: setattr(self.dropdown, "width", x))
 
     def on_message(self, instance):
-        MDApp.get_running_app().commandprocessor("!hint "+instance.text)
+        self.commandprocessor("!hint "+instance.text)
 
     def on_text(self, instance, value):
         if len(value) >= self.min_chars:
             self.dropdown.items.clear()
-            ctx: context_type = MDApp.get_running_app().ctx
+            ctx: context_type = self.ctx
             if not ctx.game:
                 return
             item_names = ctx.item_names._game_store[ctx.game].values()
@@ -592,7 +642,6 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.status_text = ""
         self.hint = {}
 
-        ctx = MDApp.get_running_app().ctx
         menu_items = []
 
         for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
@@ -608,7 +657,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.dropdown = MDDropdownMenu(caller=self.ids["status"], items=menu_items)
 
         def select(instance, data):
-            ctx.update_hint(self.hint["location"],
+            self.ctx.update_hint(self.hint["location"],
                             self.hint["finding_player"],
                             data)
 
@@ -618,6 +667,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.height = max([child.texture_size[1] for child in self.children])
 
     def refresh_view_attrs(self, rv, index, data):
+        self.ctx = rv.ctx
         self.index = index
         self.striped = data.get("striped", False)
         self.receiving_text = data["receiving"]["text"]
@@ -639,8 +689,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                 if status_label.collide_point(*touch.pos):
                     if self.hint["status"] == HintStatus.HINT_FOUND:
                         return
-                    ctx = MDApp.get_running_app().ctx
-                    if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
+                    if self.ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
                         self.dropdown.open()
                 elif self.selected:
@@ -754,7 +803,7 @@ class MessageBox(Popup):
 
 
 class MDNavigationItemBase(MDNavigationItem):
-    text = StringProperty(None)
+    text = StringProperty(None, allownone=True)
 
 
 class ButtonsPrompt(MDDialog):
@@ -842,7 +891,37 @@ class CommandButton(MDButton, MDTooltip):
         self.animation_tooltip_dismiss()
 
 
-class GameManager(ThemedApp):
+class GameApp(ThemedApp):
+    @property
+    def active_manager(self) -> typing.Optional["GameManager"]:
+        return self.ui_screen
+
+    def __init__(self, ui_screen: typing.Optional["GameManager"] = None):
+        if ui_screen:
+            self.title = ui_screen.title
+            self.icon = ui_screen.icon
+        self.ui_screen = ui_screen
+        super().__init__()
+
+    def update_ui(self, ui_screen: "GameManager"):
+        self.ui_screen = ui_screen
+        self.title = ui_screen.title
+        self.icon = ui_screen.icon
+
+    def build(self) -> Layout:
+        self.ui_screen.build()
+        return self.ui_screen
+
+    def on_start(self):
+        super().on_start()
+        self.ui_screen.on_start()
+
+    def on_stop(self):
+        self.ui_screen.on_stop()
+        super().on_stop()
+
+
+class GameManager(MDScreen):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
@@ -855,7 +934,7 @@ class GameManager(ThemedApp):
     tabs: MDNavigationBar
     screens: MDScreenManagerBase
 
-    def __init__(self, ctx: context_type):
+    def __init__(self, ctx: context_type, **kwargs):
         self.title = self.base_title
         self.ctx = ctx
         self.commandprocessor = ctx.command_processor(ctx)
@@ -879,7 +958,14 @@ class GameManager(ThemedApp):
 
         ctx.on_user_say = intercept_say
 
-        super(GameManager, self).__init__()
+        super().__init__(**kwargs)
+
+    @property
+    def theme_cls(self):
+        app = MDApp.get_running_app()
+        if app:
+            return app.theme_cls
+        return None
 
     @property
     def tab_count(self):
@@ -889,9 +975,14 @@ class GameManager(ThemedApp):
 
     def on_start(self):
         def on_start(*args):
-            self.root.md_bg_color = self.theme_cls.backgroundColor
-        super().on_start()
+            if hasattr(self, "container"):
+                self.container.md_bg_color = self.theme_cls.backgroundColor
         Clock.schedule_once(on_start)
+
+    def set_colors(self):
+        app = MDApp.get_running_app()
+        if hasattr(app, "set_colors"):
+            app.set_colors()
 
     def build(self) -> Layout:
         self.set_colors()
@@ -902,7 +993,7 @@ class GameManager(ThemedApp):
         self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
                                           spacing=5, padding=(5, 10))
         # top part
-        server_label = ServerLabel(width=dp(75))
+        server_label = ServerLabel(self.ctx, width=dp(75))
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
                                                       pos_hint={"center_x": 0.5, "center_y": 0.5})
@@ -941,8 +1032,8 @@ class GameManager(ThemedApp):
             if len(self.logging_pairs) > 1:
                 self.add_client_tab(display_name, self.log_panels[display_name])
 
-        self.hint_log = HintLog(self.json_to_kivy_parser)
-        hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
+        self.hint_log = HintLog(self.ctx, self.json_to_kivy_parser)
+        hint_panel = self.add_client_tab("Hints", HintLayout(self.ctx, self.commandprocessor, self.hint_log))
         self.log_panels["Hints"] = hint_panel.content
 
         self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
@@ -969,6 +1060,7 @@ class GameManager(ThemedApp):
         self.commandprocessor("/help")
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
+        self.add_widget(self.container)
 
         # If the address contains a port, select it; otherwise, select the host.
         s = self.server_connect_bar.text
@@ -1078,6 +1170,18 @@ class GameManager(ThemedApp):
 
         self.ctx.exit_event.set()
 
+    def stop(self):
+        """Stops the current "top" App. On Desktop that's a full quit,
+        on Android it quits to Launcher and calling again on Launcher then exits fully."""
+        from kivy.app import App
+        app = App.get_running_app()
+        if app:
+            if hasattr(app, "remove_screen"):
+                app.remove_screen(self)
+                self.on_stop()
+            else:
+                app.stop()
+
     def on_message(self, textinput: CommandPromptTextInput):
         try:
             input_text = textinput.text.strip()
@@ -1178,12 +1282,12 @@ class UILog(MDRecycleView):
 class HintLayout(MDBoxLayout):
     orientation = "vertical"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, ctx, commandprocessor, *args, **kwargs):
         super().__init__(*args, **kwargs)
         boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40))
         boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None,
                                      height=dp(40), width=dp(75), halign="center", valign="center"))
-        boxlayout.add_widget(AutocompleteHintInput())
+        boxlayout.add_widget(AutocompleteHintInput(ctx, commandprocessor))
         self.add_widget(boxlayout)
 
     def fix_heights(self):
@@ -1230,8 +1334,9 @@ class HintLog(MDRecycleView):
     sort_key: str = ""
     reversed: bool = True
 
-    def __init__(self, parser):
+    def __init__(self, ctx, parser):
         super(HintLog, self).__init__()
+        self.ctx = ctx
         self.data = [self.header]
         self.parser = parser
 
@@ -1239,7 +1344,7 @@ class HintLog(MDRecycleView):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
             self.scroll_y = 1.0
         data = []
-        ctx = MDApp.get_running_app().ctx
+        ctx = self.ctx
         for hint in hints:
             if not hint.get("status"): # Allows connecting to old servers
                 hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED

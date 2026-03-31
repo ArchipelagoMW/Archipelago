@@ -9,6 +9,7 @@ Additional components can be added to worlds.LauncherComponents.components.
 """
 
 import argparse
+import asyncio
 import logging
 import multiprocessing
 import os
@@ -240,7 +241,7 @@ refresh_components: Callable[[], None] | None = None
 
 
 def run_gui(launch_components: list[Component], args: Any) -> None:
-    from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
+    from kvui import (ThemedApp, MDScreenManager, MDScreen, MDFloatLayout, MDGridLayout, ScrollBox)
     from kivy.properties import ObjectProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
@@ -255,7 +256,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
     class LauncherCard(MDCard):
         component: Component | None
         image: str
-        context_button: MDIconButton = ObjectProperty(None)
+        context_button: MDIconButton = ObjectProperty(None, allownone=True)
 
         def __init__(self, *args, component: Component | None = None, image_path: str = "", **kwargs):
             self.component = component
@@ -264,17 +265,23 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
     class Launcher(ThemedApp):
         base_title: str = "Archipelago Launcher"
-        top_screen: MDFloatLayout = ObjectProperty(None)
-        navigation: MDGridLayout = ObjectProperty(None)
-        grid: MDGridLayout = ObjectProperty(None)
-        button_layout: ScrollBox = ObjectProperty(None)
-        search_box: MDTextField = ObjectProperty(None)
+        sm: MDScreenManager
+
+        @property
+        def active_manager(self):
+            return getattr(getattr(self, "sm", None), "current_screen", None)
+
+        launcher_screen: MDScreen
+        top_screen: MDFloatLayout = ObjectProperty(None, allownone=True)
+        navigation: MDGridLayout = ObjectProperty(None, allownone=True)
+        grid: MDGridLayout = ObjectProperty(None, allownone=True)
+        button_layout: ScrollBox = ObjectProperty(None, allownone=True)
+        search_box: MDTextField = ObjectProperty(None, allownone=True)
         cards: list[LauncherCard]
         current_filter: Sequence[str | Type] | None
 
-        def __init__(self, ctx=None, components=None, args=None):
+        def __init__(self, components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
-            self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
             self.launch_components = components
@@ -372,6 +379,9 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                 self.button_layout.layout.add_widget(card)
 
         def build(self):
+            self.sm = MDScreenManager()
+            self.launcher_screen = MDScreen(name='launcher')
+
             self.top_screen = Builder.load_file(Utils.local_path("data/launcher.kv"))
             self.grid = self.top_screen.ids.grid
             self.navigation = self.top_screen.ids.navigation
@@ -379,6 +389,9 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             self.search_box = self.top_screen.ids.search_box
             self.set_colors()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
+
+            self.launcher_screen.add_widget(self.top_screen)
+            self.sm.add_widget(self.launcher_screen)
 
             global refresh_components
             refresh_components = self._refresh_components
@@ -396,7 +409,19 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             # from kivy.modules.console import create_console
             # create_console(Window, self.top_screen)
 
-            return self.top_screen
+            return self.sm
+
+        def add_screen(self, screen: MDScreen):
+            if self.sm.has_screen(screen.name):
+                self.sm.remove_widget(self.sm.get_screen(screen.name))
+            screen.build()
+            self.sm.add_widget(screen)
+            self.sm.current = screen.name
+            screen.on_start()
+
+        def remove_screen(self, screen: MDScreen):
+            self.sm.current = 'launcher'
+            self.sm.remove_widget(screen)
 
         def on_start(self):
             if self.launch_components:
@@ -425,7 +450,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             # Activate search as soon as we start typing, no matter if we are focused on the search box or not.
             # Focus first, then capture the first character we type, otherwise it gets swallowed and lost.
             # Limit text input to ASCII non-control characters (space bar to tilde).
-            if not self.search_box.focus:
+            if self.sm.current == 'launcher' and not self.search_box.focus:
                 self.search_box.focus = True
                 if key in range(32, 126):
                     self.search_box.text += codepoint
@@ -442,7 +467,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                                                                    for filter in self.current_filter))
             super().on_stop()
 
-    Launcher(components=launch_components, args=args).run()
+    asyncio.run(Launcher(components=launch_components, args=args).async_run())
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed

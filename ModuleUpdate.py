@@ -21,7 +21,7 @@ _skip_update = bool(
     getattr(sys, "frozen", False) or 
     multiprocessing.parent_process() or 
     os.environ.get("SKIP_REQUIREMENTS_UPDATE", "").lower() in ("1", "true", "yes") or
-    sys.platform in ("ios", "android")
+    sys.platform in ("ios", "android") or "P4A_BOOTSTRAP" in os.environ or "ANDROID_ARGUMENT" in os.environ
 )
 update_ran = _skip_update
 

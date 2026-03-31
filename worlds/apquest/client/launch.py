@@ -23,5 +23,10 @@ def launch_ap_quest_client(*args: Sequence[str]) -> None:
 
     colorama.just_fix_windows_console()
 
-    asyncio.run(main(launch_args))
-    colorama.deinit()
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        asyncio.run(main(launch_args))
+        colorama.deinit()
+    else:
+        loop.create_task(main(launch_args), name="APQuest Main")

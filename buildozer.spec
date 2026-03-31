@@ -3,7 +3,7 @@ title = Archipelago
 package.name = archipelago
 package.domain = gg.archipelago
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,json,yml,txt,lua
+source.include_exts = py,png,jpg,kv,atlas,json,yml,txt,lua,ogg,csv,dsv,dat
 source.include_patterns = data/*, *.kv, *.py
 source.exclude_dirs = factorio,test,docs,.github,.git, deploy, bin, build, __pycache__
 source.exclude_patterns = test,*.pyc,*.pyo,__pycache__,*.egg-info,*.dist-info,docs,examples,build,dist,.git,.github
@@ -18,7 +18,7 @@ requirements = python3==3.11.14, hostpython3==3.11.14,pip==24.3.1, kivy==2.3.1,k
 
 # Android settings
 orientation = portrait, landscape, portrait-reverse, landscape-reverse
-fullscreen = 0
+fullscreen = 1
 android.gradle_properties = org.gradle.jvmargs=-Xmx8192m -XX:MaxMetaspaceSize=512m
 android.permissions = INTERNET,ACCESS_NETWORK_STATE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 android.api = 34

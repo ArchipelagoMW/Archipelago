@@ -58,7 +58,7 @@ version_tuple = tuplize_version(__version__)
 is_linux = sys.platform.startswith("linux")
 is_macos = sys.platform == "darwin"
 is_windows = sys.platform in ("win32", "cygwin", "msys")
-is_android = sys.platform == "android"
+is_android = sys.platform == "android" or "P4A_BOOTSTRAP" in os.environ or "ANDROID_ARGUMENT" in os.environ
 is_ios = sys.platform == "ios"
 is_mobile = is_android or is_ios
 
