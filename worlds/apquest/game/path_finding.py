@@ -1,5 +1,5 @@
 import heapq
-from typing import Generator
+from collections.abc import Generator
 
 Point = tuple[int, int]
 
