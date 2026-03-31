@@ -129,6 +129,42 @@ common_rule_only_on_easy = common_rule & easy_filter
 common_rule_skipped_on_easy = common_rule | easy_filter
 ```
 
+### Field resolvers
+
+When creating rules you may sometimes need to set a field to a value that depends on the world instance. You can use a `FieldResolver` to define how to populate that field when the rule is being resolved.
+
+There are two build-in field resolvers:
+
+- `FromOption`: Resolves to the value of the given option
+- `FromWorldAttr`: Resolves to the value of the given world instance attribute, can specify a dotted path `a.b.c` to get a nested attribute or dict item
+
+```python
+world.options.mcguffin_count = 5
+world.precalculated_value = 99
+rule = (
+    Has("A", count=FromOption(McguffinCount))
+    | HasGroup("Important items", count=FromWorldAttr("precalculated_value"))
+)
+# Results in Has("A", count=5) | HasGroup("Important items", count=99)
+```
+
+You can define your own resolvers by creating a class that inherits from `FieldResolver`, provides your game name, and implements a `resolve` function:
+
+```python
+@dataclasses.dataclass(frozen=True)
+class FromCustomResolution(FieldResolver, game="MyGame"):
+    modifier: str
+
+    @override
+    def resolve(self, world: "World") -> Any:
+        return some_math_calculation(world, self.modifier)
+
+
+rule = Has("Combat Level", count=FromCustomResolution("combat"))
+```
+
+If you want to support rule serialization and your resolver contains non-serializable properties you may need to override `to_dict` or `from_dict`.
+
 ## Enabling caching
 
 The rule builder provides a `CachedRuleBuilderWorld` base class for your `World` class that enables caching on your rules.
