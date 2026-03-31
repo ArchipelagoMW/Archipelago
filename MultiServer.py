@@ -430,9 +430,10 @@ class Context:
         )
         async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
-    def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
+    def broadcast_text_all(self, text: str, additional_arguments: dict = {}, include_header: bool = False):
         self.logger.info("Notice (all): %s" % text)
-        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": ("[All] " if include_header
+                                                                        else "") + text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
@@ -444,10 +445,11 @@ class Context:
         )
         async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
-    def broadcast_text_team(self, text: str, additional_arguments: dict = {}):
+    def broadcast_text_team(self, text: str, additional_arguments: dict = {}, include_header: bool = False):
         self.logger.info("Notice (team): %s" % text)
         self.broadcast_team(additional_arguments.get("team"),
-                            [{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
+                            [{**{"cmd": "PrintJSON", "data": [{ "text": ("[Team] " if include_header else "")
+                                                                        + text }]}, **additional_arguments}])
 
     def broadcast(self, endpoints: typing.Iterable[Client], msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
@@ -1460,9 +1462,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
             args = {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": raw}
             if team is not None:
-                self.ctx.broadcast_text_team(message, args)
+                self.ctx.broadcast_text_team(message, args, True)
             else:
-                self.ctx.broadcast_text_all(message, args)
+                self.ctx.broadcast_text_all(message, args, True)
         return super(ClientMessageProcessor, self).__call__(raw)
 
     def output(self, text: str):
