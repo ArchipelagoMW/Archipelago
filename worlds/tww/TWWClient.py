@@ -187,7 +187,7 @@ class TWWContext(CommonContext):
         :param team_requested: Whether the server requires a team. Defaults to `False`.
         """
         if password_requested and not self.password:
-            await super().server_auth(password_requested)
+            await super().server_auth(password_requested, team_required)
         if not self.auth:
             if self.awaiting_rom:
                 return

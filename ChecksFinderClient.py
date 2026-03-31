@@ -55,7 +55,7 @@ class ChecksFinderContext(CommonContext):
 
     async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(ChecksFinderContext, self).server_auth(password_requested)
+            await super(ChecksFinderContext, self).server_auth(password_requested, team_required)
         await self.get_username()
         if team_required:
             await self.get_team()

@@ -1001,6 +1001,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
+        team_requested = False
+        if "NoTeam" in errors or "InvalidTeam" in errors:
+            team_requested = True
         if 'InvalidSlot' in errors:
             ctx.disconnected_intentionally = True
             ctx.event_invalid_slot()
@@ -1017,7 +1020,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         elif 'InvalidPassword' in errors:
             logger.error('Invalid password')
             ctx.password = None
-            await ctx.server_auth(True)
+            await ctx.server_auth(True, team_requested)
+        elif "NoTeam" in errors or "InvalidTeam" in errors:
+            logger.error("Invalid team")
+            ctx.auth = None
+            await ctx.server_auth(False, team_requested)
         elif errors:
             raise Exception("Unknown connection errors: " + str(errors))
         else:

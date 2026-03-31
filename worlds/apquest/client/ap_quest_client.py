@@ -75,11 +75,13 @@ class APQuestContext(CommonContext):
         self.slot_data = {}
         self.delay_intro_song = delay_intro_song
 
-    async def server_auth(self, password_requested: bool = False) -> None:
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False) -> None:
         if password_requested and not self.password:
             self.ui.allow_intro_song()
-            await super().server_auth(password_requested)
+            await super().server_auth(password_requested, team_required)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         await self.send_connect(game=self.game)
 
     def handle_connection_loss(self, msg: str) -> None:
