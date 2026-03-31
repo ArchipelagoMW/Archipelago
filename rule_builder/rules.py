@@ -428,6 +428,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
 class AtLeast(NestedRule[TWorld], game="Archipelago"):
     """A rule that returns true when at least N child rules evaluate as true"""
+
     count: int | FieldResolver
 
     def __init__(
@@ -452,12 +453,10 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
         while children_to_process:
             child = children_to_process.pop(0)
             if child.always_true:
-                # true always wins
                 if count == 1:
                     return child
-                else:
-                    count -= 1
-                    continue
+                count -= 1
+                continue
             if child.always_false:
                 # falses can be ignored
                 continue
@@ -471,7 +470,9 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
             return Or(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(world)
         if count == len(clauses):
             # Switch to And which has more optimized handling
-            return And(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(world)
+            return And(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(
+                world
+            )
         return AtLeast.Resolved(
             tuple(clauses),
             count=count,
@@ -489,15 +490,15 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
                 if rule(state):
                     if count == 1:
                         return True
-                    else:
-                        count += 1
+                    count -= 1
             return False
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
             messages: list[JSONMessagePart] = [
-                    {"type": "color", "color": "cyan", "text": str(self.count)},
-                {"type": "text", "text": f" of ("}
+                {"type": "text", "text": "At least "},
+                {"type": "color", "color": "cyan", "text": str(self.count)},
+                {"type": "text", "text": " of ("},
             ]
             for i, child in enumerate(self.children):
                 if i > 0:
@@ -509,12 +510,12 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
         @override
         def explain_str(self, state: CollectionState | None = None) -> str:
             clauses = ", ".join([c.explain_str(state) for c in self.children])
-            return f"{self.count} of ({clauses})"
+            return f"At least {self.count} of ({clauses})"
 
         @override
         def __str__(self) -> str:
             clauses = ", ".join([str(c) for c in self.children])
-            return f"{self.count} of ({clauses})"
+            return f"At least {self.count} of ({clauses})"
 
 
 @dataclasses.dataclass(init=False)
