@@ -40,7 +40,8 @@ class TestResolvePlayerName(unittest.TestCase):
         assert not p.resolve_player("aB"), "partial name shouldn't resolve to player"
 
         # teams
-        p = ServerCommandProcessor(Context("", 0, "", "", 2, 0, 0, False))
+        p.ctx.teams = 2
+        p.ctx._update_teams()
         p.ctx.player_names = {
             (0, 1): "AAA",
             (0, 2): "aBc",

@@ -2333,14 +2333,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
         """ returns (team, slot, player name) """
         # TODO: clean up once we disallow multidata < 0.3.6, which has CI unique names
-        name, target_team, _ = self.ctx.parse_name(input_name)
+        target_name, target_team, _ = self.ctx.parse_name(input_name)
         # first match case
         for (team, slot), name in self.ctx.player_names.items():
-            if name == input_name and team == target_team:
+            if name == target_name and team == target_team:
                 return team, slot, name
 
         # if no case-sensitive match, then match without case only if there's only 1 match
-        input_lower = input_name.lower()
+        input_lower = target_name.lower()
         match: typing.Optional[typing.Tuple[int, int, str]] = None
         for (team, slot), name in self.ctx.player_names.items():
             lowered = name.lower()
