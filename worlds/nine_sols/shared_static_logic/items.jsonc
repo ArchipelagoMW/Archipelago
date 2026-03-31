@@ -76,7 +76,7 @@
     { "code": 53, "name": "Twin Tao Fruit", "type": "useful" },
 
     // other "Status" menu upgrades
-    { "category": "shop", "code": 61, "name": "Pipe Upgrade", "type": "useful" },
+    { "category": "shop", "code": 61, "name": "Pipe Upgrade", "type": "useful", "count": 8 },
     { "category": "shop", "code": 62, "name": "Transmute Unto Wealth", "type": "useful" },
     { "category": "shop", "code": 63, "name": "Transmute Unto Life", "type": "useful" },
     { "category": "shop", "code": 64, "name": "Transmute Unto Qi", "type": "useful" },

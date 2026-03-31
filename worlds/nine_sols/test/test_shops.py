@@ -37,6 +37,21 @@ class TestUnlockItemsShopUnlocks(NineSolsTestBase):
         self.assertEqual(3, len([x for x in self.multiworld.get_items() if x.name == "Progressive Shop Unlock"]))
 
 
+class TestItemsWithoutShopRando(NineSolsTestBase):
+    options = {
+        "randomize_shops": False,
+    }
+
+    def test_default(self):
+        items = self.multiworld.get_items()
+        self.assertEqual(1, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
+        self.assertEqual(0, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
+        self.assertEqual(0, len([x for x in items if x.name == "Transmute Unto Wealth"]))
+        self.assertEqual(0, len([x for x in items if x.name == "Transmute Unto Life"]))
+        self.assertEqual(0, len([x for x in items if x.name == "Transmute Unto Qi"]))
+        self.assertEqual(0, len([x for x in items if x.name == "Pipe Upgrade"]))
+
+
 class TestShopRandoDefaultSpawn(NineSolsTestBase):
     options = {
         "randomize_shops": True,
@@ -48,6 +63,10 @@ class TestShopRandoDefaultSpawn(NineSolsTestBase):
         items = self.multiworld.get_items()
         self.assertEqual(0, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
         self.assertEqual(3, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
+        self.assertEqual(1, len([x for x in items if x.name == "Transmute Unto Wealth"]))
+        self.assertEqual(1, len([x for x in items if x.name == "Transmute Unto Life"]))
+        self.assertEqual(1, len([x for x in items if x.name == "Transmute Unto Qi"]))
+        self.assertEqual(8, len([x for x in items if x.name == "Pipe Upgrade"]))
 
         # none of the shop locations are in logic yet
         sphere1 = [loc.name for loc in self.multiworld.get_reachable_locations()]
@@ -63,10 +82,6 @@ class TestShopRandoFGHSpawn(NineSolsTestBase):
 
     def test_default(self):
         self.assertEqual(self.getNonEventLocationCount(), 361)
-
-        items = self.multiworld.get_items()
-        self.assertEqual(0, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
-        self.assertEqual(3, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
 
         # spawning in one of the regions we check for shop logic makes low cost locations immediately in logic
         sphere1 = [loc.name for loc in self.multiworld.get_reachable_locations()]
