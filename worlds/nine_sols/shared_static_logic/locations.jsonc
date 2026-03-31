@@ -248,6 +248,7 @@
     {
         "address": null, "name": "Event - Kuafu Extra Shop Inventory",
         "region": "FSP - Root Node", "requires": [
+            { "item": "Event - Kuafu in FSP" },
             {
                 "option": "shop_unlocks",
                 "vanilla_like_locations": { "item": "Event - Chiyou in FSP" },
