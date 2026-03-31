@@ -116,7 +116,7 @@ class NineSolsWorld(World):
                     self.options.chiyou_shop_unlock_sol_seals.value = slot_data.get('chiyou_shop_unlock_sol_seals', 0)
                     self.options.kuafu_extra_inventory_unlock_sol_seals.value = (
                         slot_data.get('kuafu_extra_inventory_unlock_sol_seals', 0))
-                    self.options.chiyou_shop_unlock_sol_seals.value = slot_data.get('randomize_shops', 0)
+                    self.options.randomize_shops.value = slot_data.get('randomize_shops', 0)
             return
 
         # generate game-specific randomizations separate from AP items/locations
