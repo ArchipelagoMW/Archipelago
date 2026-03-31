@@ -34,4 +34,6 @@ class Machine:
     anvil = "Anvil"
     mini_forge = "Mini-Forge"
     bait_maker = "Bait Maker"
+    sewing_machine = "Sewing Machine"
+    statue_endless_fortune = "Statue Of Endless Fortune"
 
