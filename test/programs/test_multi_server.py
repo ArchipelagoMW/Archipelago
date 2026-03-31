@@ -41,7 +41,7 @@ class TestResolvePlayerName(unittest.TestCase):
 
         # teams
         p.ctx.teams = 2
-        p.ctx._update_teams()
+        p.ctx._update_teams()  # pyright: ignore [reportPrivateUsage]
         p.ctx.player_names = {
             (0, 1): "AAA",
             (0, 2): "aBc",
