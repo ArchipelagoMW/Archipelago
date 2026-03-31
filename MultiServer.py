@@ -889,7 +889,7 @@ class Context:
 
     def parse_name(self, name: str) -> typing.Tuple[str, int, str]:
         if self.teams == 1:
-            return name, 1, ""
+            return name, 0, ""
 
         if "@" in name:
             slot_name, team = name.rsplit("@", 1)
