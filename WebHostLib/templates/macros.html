@@ -26,6 +26,7 @@
                         <td data-tooltip="Connect via Game Client"><a href="archipelago://{{ patch.player_name | e}}:None@{{ config['HOST_ADDRESS'] }}:80/{{ room.last_port }}?game={{ patch.game }}&room={{ room.id | suuid }}">{{ patch.player_name }}</a></td>
                     {% elif config['HTTPONLY'] == false %}
                         <td data-tooltip="Connect via Game Client"><a href="archipelago://{{ patch.player_name | e}}:None@{{ config['HOST_ADDRESS'] }}:{{ room.last_port }}?game={{ patch.game }}&room={{ room.id | suuid }}">{{ patch.player_name }}</a></td>
+                    {% endif %}
                     <td>{{ patch.game }}</td>
                     <td>
                         {% if patch.data %}
