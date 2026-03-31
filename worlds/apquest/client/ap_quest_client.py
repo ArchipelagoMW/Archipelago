@@ -184,7 +184,6 @@ class APQuestContext(CommonContext):
             assert self.ap_quest_game is not None
             self.ap_quest_game.gameboard.fill_remote_location_content(remote_item_graphic_overrides)
             self.render()
-            self.ui.game_view.bind_keyboard()
 
             self.connection_status = ConnectionStatus.GAME_RUNNING
             self.ui.game_started()
@@ -261,6 +260,8 @@ class APQuestContext(CommonContext):
             return
         if not self.ap_quest_game.gameboard.ready:
             return
+        if not self.ui.game_view.focused > 1:  # Must already be in focus
+            return
         self.ap_quest_game.queue_auto_move(target_x, target_y)
         self.ui.start_auto_move()
 
@@ -299,6 +300,10 @@ class APQuestContext(CommonContext):
             return False
 
         self.ap_quest_game.math_problem_replace([int(digit) for digit in raw])
+
+        if not self.ap_quest_game.active_math_problem:
+            self.ui.game_view.force_focus()
+
         self.render()
 
         return True
