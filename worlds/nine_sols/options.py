@@ -299,10 +299,22 @@ class ShuffleSomeRootNodes(Toggle):
 class RandomizeShops(Toggle):
     """
     Randomizes (most of) the content in Kuafu's shop, Chiyou's shop, and the 3D printer in Four Seasons Pavilion.
-    Shop purchases become new AP locations, and the vanilla shop items are added to the AP item pool.
+    Shop purchases become 43 new AP locations, and the vanilla shop items are added to the AP item pool.
+    See also shop_unlocks.
 
-    TODO: enumerate special cases (progressive arrows? alt currencies becoming progression?)
-    TODO: describe logic
+    Item details:
+    - Azure Sand Magazines, Pipe Upgrades, Transmute Unto Wealth/Life/Qi, the 8 jades sold by Chiyou and the 3D Printer,
+    and the 7 poisons sold by Chiyou are all added to the item pool by this option.
+    - The unique Arrow: Cloud Piercer item is replaced with 3 Progressive Cloud Piercer items.
+    Same for the other two arrow types.
+
+    Logic details:
+    - Kuafu's Jin-only shop locations are available as soon as you unlock him and his "extra inventory".
+    The 6 Dark Steel locations and the 8 Herb Catalyst locations still each require 1 DS or HC to purchase.
+    The Nth DS/HC location becomes "in logic" when you receive the Nth DS/HC item.
+    - Chiyou and 3D Printer shop locations are grouped into low, medium and high cost.
+    They'll become "in logic" as you gain access to more of the game world.
+    Depending on your first_root_node, low cost locations may be in logic immediately.
     """
 
 
