@@ -111,6 +111,9 @@ class ItemGroupNames:
     TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES = "Terran Original Progressive Upgrades"
     """Progressive items where level 1 appeared in WoL"""
     MENGSK_UNITS = "Mengsk Units"
+    TERRAN_SC1_UNITS = "Terran SC1 Units"
+    TERRAN_SC1_BUILDINGS = "Terran SC1 Buildings"
+    TERRAN_LADDER_UNITS = "Terran Ladder Units"
     TERRAN_VETERANCY_UNITS = "Terran Veterancy Units"
     ORBITAL_COMMAND_ABILITIES = "Orbital Command Abilities"
     WOL_ORBITAL_COMMAND_ABILITIES = "WoL Command Center Abilities"
@@ -154,6 +157,8 @@ class ItemGroupNames:
     """All items from Stukov co-op subfaction"""
     INF_TERRAN_UNITS = "Infested Terran Units"
     INF_TERRAN_UPGRADES = "Infested Terran Upgrades"
+    ZERG_SC1_UNITS = "Zerg SC1 Units"
+    ZERG_LADDER_UNITS = "Zerg Ladder Units"
 
     PROTOSS_ITEMS = "Protoss Items"
     PROTOSS_UNITS = "Protoss Units"
@@ -167,6 +172,7 @@ class ItemGroupNames:
     LOTV_UNITS = "LotV Units"
     LOTV_ITEMS = "LotV Items"
     LOTV_GLOBAL_UPGRADES = "LotV Global Upgrades"
+    SOA_PASSIVES = "SOA Passive Abilities"
     SOA_ITEMS = "SOA"
     PROTOSS_GLOBAL_UPGRADES = "Protoss Global Upgrades"
     PROTOSS_BUILDINGS = "Protoss Buildings"
@@ -175,6 +181,9 @@ class ItemGroupNames:
     NERAZIM_UNITS = "Nerazim"
     TAL_DARIM_UNITS = "Tal'Darim"
     PURIFIER_UNITS = "Purifier"
+    PROTOSS_SC1_UNITS = "Protoss SC1 Units"
+    PROTOSS_SC1_BUILDINGS = "Protoss SC1 Buildings"
+    PROTOSS_LADDER_UNITS = "Protoss Ladder Units"
 
     VANILLA_ITEMS = "Vanilla Items"
     OVERPOWERED_ITEMS = "Overpowered Items"
@@ -287,8 +296,14 @@ item_name_groups[ItemGroupNames.WOL_BUILDINGS] = wol_buildings = [
     item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER,
 ]
 item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
-    item_name for item_name, item_data in item_tables.item_table.items()
-    if item_data.type == item_tables.TerranItemType.Building or item_name in wol_buildings
+    *[
+        item_name for item_name, item_data in item_tables.item_table.items()
+        if item_data.type == item_tables.TerranItemType.Building or item_name in wol_buildings
+    ],
+    item_names.PSI_SCREEN,
+    item_names.SONIC_DISRUPTER,
+    item_names.PSI_INDOCTRINATOR,
+    item_names.ARGUS_AMPLIFIER,
 ]
 item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
     item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW,
@@ -315,6 +330,41 @@ spider_mine_sources = [
     item_names.REAPER_SPIDER_MINES,
     item_names.SIEGE_TANK_SPIDER_MINES,
     item_names.RAVEN_SPIDER_MINES,
+]
+item_name_groups[ItemGroupNames.TERRAN_SC1_UNITS] = [
+    item_names.MARINE,
+    item_names.FIREBAT,
+    item_names.GHOST,
+    item_names.MEDIC,
+    item_names.VULTURE,
+    item_names.SIEGE_TANK,
+    item_names.GOLIATH,
+    item_names.WRAITH,
+    # No dropship
+    item_names.SCIENCE_VESSEL,
+    item_names.BATTLECRUISER,
+    item_names.VALKYRIE,
+]
+item_name_groups[ItemGroupNames.TERRAN_SC1_BUILDINGS] = [
+    item_names.BUNKER,
+    item_names.MISSILE_TURRET,
+]
+item_name_groups[ItemGroupNames.TERRAN_LADDER_UNITS] = [
+    item_names.MARINE,
+    item_names.MARAUDER,
+    item_names.REAPER,
+    item_names.GHOST,
+    item_names.HELLION,
+    item_names.WIDOW_MINE,
+    item_names.SIEGE_TANK,
+    item_names.THOR,
+    item_names.CYCLONE,
+    item_names.VIKING,
+    item_names.MEDIVAC,
+    item_names.LIBERATOR,
+    item_names.RAVEN,
+    item_names.BANSHEE,
+    item_names.BATTLECRUISER,
 ]
 
 # Terran Upgrades
@@ -550,7 +600,7 @@ item_name_groups[ItemGroupNames.KERRIGAN_LOGIC_ACTIVE_ABILITIES] = kerrigan_logi
     item_name for item_name in kerrigan_active_abilities if item_name != item_names.KERRIGAN_ASSIMILATION_AURA
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_TIER_1] = kerrigan_tier_1 = [
-    item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
+    item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_TIER_2] = kerrigan_tier_2= [
     item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_PSIONIC_SHIFT
@@ -595,6 +645,38 @@ item_name_groups[ItemGroupNames.OVERLORD_UPGRADES] = [
     item_names.OVERLORD_PNEUMATIZED_CARAPACE,
     item_names.OVERLORD_IMPROVED_OVERLORDS,
     item_names.OVERLORD_OVERSEER_ASPECT,
+]
+item_name_groups[ItemGroupNames.ZERG_SC1_UNITS] = [
+    item_names.ZERGLING,
+    item_names.HYDRALISK,
+    item_names.MUTALISK,
+    item_names.SCOURGE,
+    item_names.BROOD_QUEEN,
+    item_names.DEFILER,
+    item_names.ULTRALISK,
+    item_names.HYDRALISK_LURKER_ASPECT,
+    item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT,
+    item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT,
+    item_names.DEVOURING_ONES,
+    item_names.HUNTER_KILLERS,
+    item_names.TORRASQUE_MERC,
+]
+item_name_groups[ItemGroupNames.ZERG_LADDER_UNITS] = [
+    item_names.ZERGLING,
+    item_names.SWARM_QUEEN,  # Replace: Hive Queen
+    item_names.ZERGLING_BANELING_ASPECT,
+    item_names.ROACH,
+    item_names.ROACH_RAVAGER_ASPECT,
+    item_names.OVERLORD_OVERSEER_ASPECT,
+    item_names.HYDRALISK,
+    item_names.HYDRALISK_LURKER_ASPECT,
+    item_names.MUTALISK,
+    item_names.CORRUPTOR,
+    item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
+    item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
+    item_names.INFESTOR,
+    item_names.SWARM_HOST,
+    item_names.ULTRALISK,
 ]
 
 # Zerg Upgrades
@@ -777,11 +859,21 @@ item_name_groups[ItemGroupNames.PURIFIER_UNITS] = [
     item_names.MIRAGE, item_names.DAWNBRINGER, item_names.TRIREME, item_names.TEMPEST,
     item_names.CALADRIUS,
 ]
-item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = [
+item_name_groups[ItemGroupNames.SOA_PASSIVES] = spear_of_adun_passives = [
+    item_names.RECONSTRUCTION_BEAM,
+    item_names.OVERWATCH,
+    item_names.GUARDIAN_SHELL,
+]
+spear_of_adun_actives = [
     *[item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ProtossItemType.Spear_Of_Adun],
     item_names.SOA_PROGRESSIVE_PROXY_PYLON,
 ]
-lotv_soa_items = [item_name for item_name in soa_items if item_name != item_names.SOA_PYLON_OVERCHARGE]
+item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = spear_of_adun_actives + spear_of_adun_passives
+lotv_soa_items = [
+    item_name
+    for item_name in soa_items
+    if item_name not in (item_names.SOA_PYLON_OVERCHARGE, item_names.OVERWATCH)
+]
 item_name_groups[ItemGroupNames.PROTOSS_GLOBAL_UPGRADES] = [
     item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ProtossItemType.Solarite_Core
 ]
@@ -815,6 +907,45 @@ item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
     + protoss_generic_upgrades
     + lotv_war_council_upgrades
 )
+item_name_groups[ItemGroupNames.PROTOSS_SC1_UNITS] = [
+    item_names.ZEALOT,
+    item_names.DRAGOON,
+    item_names.HIGH_TEMPLAR,
+    item_names.DARK_TEMPLAR,
+    item_names.DARK_ARCHON,
+    item_names.DARK_TEMPLAR_DARK_ARCHON_MELD,
+    # No shuttle
+    item_names.REAVER,
+    item_names.OBSERVER,
+    item_names.SCOUT,
+    item_names.CARRIER,
+    item_names.ARBITER,
+    item_names.CORSAIR,
+]
+item_name_groups[ItemGroupNames.PROTOSS_SC1_BUILDINGS] = [
+    item_names.PHOTON_CANNON,
+    item_names.SHIELD_BATTERY,
+]
+item_name_groups[ItemGroupNames.PROTOSS_LADDER_UNITS] = [
+    item_names.ZEALOT,
+    item_names.STALKER,
+    item_names.SENTRY,
+    item_names.ADEPT,
+    item_names.HIGH_TEMPLAR,
+    item_names.DARK_TEMPLAR,
+    item_names.DARK_TEMPLAR_ARCHON_MERGE,
+    item_names.OBSERVER,
+    item_names.WARP_PRISM,
+    item_names.IMMORTAL,
+    item_names.COLOSSUS,
+    item_names.DISRUPTOR,
+    item_names.PHOENIX,
+    item_names.VOID_RAY,
+    item_names.ORACLE,
+    item_names.CARRIER,
+    item_names.TEMPEST,
+    item_names.MOTHERSHIP,  # Replace: Aiur Mothership
+]
 
 item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
     vanilla_wol_items + vanilla_hots_items + vanilla_lotv_items

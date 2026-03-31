@@ -4,7 +4,7 @@ Archipelago has a rudimentary API that can be queried by endpoints. The API is a
 
 The following API requests are formatted as: `https://<Archipelago URL>/api/<endpoint>`
 
-The returned data will be formated in a combination of JSON lists or dicts, with their keys or values being notated in `blocks` (if applicable)
+The returned data will be formatted in a combination of JSON lists or dicts, with their keys or values being notated in `blocks` (if applicable)
 
 Current endpoints:
 - Datapackage API
@@ -24,13 +24,21 @@ Current endpoints:
     - [`/get_rooms`](#getrooms)
     - [`/get_seeds`](#getseeds)
 
+## API Data Caching
+To reduce the strain on an Archipelago WebHost, many API endpoints will cache their data and only poll new data in timed intervals. Each endpoint has their own caching time related to the type of data being served. More dynamic data is refreshed more frequently, while static data is cached for longer.  
+Each API endpoint will have their "Cache timer" listed under their definition (if any).
+API calls to these endpoints should not be faster than the listed timer. This will result in wasted processing for your client and (more importantly) the Archipelago WebHost, as the data will not be refreshed by the WebHost until the internal timer has elapsed.
+
 
 ## Datapackage Endpoints
 These endpoints are used by applications to acquire a room's datapackage, and validate that they have the correct datapackage for use. Datapackages normally include, item IDs, location IDs, and name groupings, for a given room, and are essential for mapping IDs received from Archipelago to their correct items or locations.
 
 ### `/datapackage`
 <a name="datapackage"></a>
+
 Fetches the current datapackage from the WebHost.  
+**Cache timer: None**
+
 You'll receive a dict named `games` that contains a named dict of every game and its data currently supported by Archipelago.  
 Each game will have:
 - A checksum `checksum`
@@ -40,7 +48,7 @@ Each game will have:
 - Location name to AP ID dict `location_name_to_id`
 
 Example:
-```
+```json
 {
     "games": {
         ...
@@ -76,7 +84,10 @@ Example:
 
 ### `/datapackage/<string:checksum>`
 <a name="datapackagestringchecksum"></a>
-Fetches a single datapackage by checksum.
+
+Fetches a single datapackage by checksum.  
+**Cache timer: None**
+
 Returns a dict of the game's data with:
 - A checksum `checksum`
 - A dict of item groups `item_name_groups`
@@ -88,10 +99,13 @@ Its format will be identical to the whole-datapackage endpoint (`/datapackage`),
 
 ### `/datapackage_checksum`
 <a name="datapackagechecksum"></a>
-Fetches the checksums of the current static datapackages on the WebHost.
+
+Fetches the checksums of the current static datapackages on the WebHost.  
+**Cache timer: None**
+
 You'll receive a dict with `game:checksum` key-value pairs for all the current officially supported games.  
 Example:
-```
+```json
 {
 ...
 "Donkey Kong Country 3":"f90acedcd958213f483a6a4c238e2a3faf92165e",
@@ -108,6 +122,7 @@ These endpoints are used internally for the WebHost to generate games and valida
 <a name="generate"></a>
 Submits a game to the WebHost for generation.  
 **This endpoint only accepts a POST HTTP request.**  
+**Cache timer: None**
 
 There are two ways to submit data for generation: With a file and with JSON.
 
@@ -116,7 +131,7 @@ Have your ZIP of yaml(s) or a single yaml, and submit a POST request to the `/ge
 If the options are valid, you'll be returned a successful generation response. (see [Generation Response](#generation-response))
 
 Example using the python requests library:
-```
+```python
 file = {'file': open('Games.zip', 'rb')}
 req = requests.post("https://archipelago.gg/api/generate", files=file)
 ```
@@ -127,7 +142,7 @@ Finally, submit a POST request to the `/generate` endpoint.
 If the weighted options are valid, you'll be returned a successful generation response (see [Generation Response](#generation-response))
 
 Example using the python requests library:
-```
+```python
 data = {"Test":{"game": "Factorio","name": "Test","Factorio": {}},}
 weights={"weights": data}
 req = requests.post("https://archipelago.gg/api/generate", json=weights)
@@ -143,7 +158,7 @@ Upon successful generation, you'll be sent a JSON dict response detailing the ge
 - The API status page of the generation `wait_api_url` (see [Status Endpoint](#status))
 
 Example:
-```
+```json
 {
     "detail": "19878f16-5a58-4b76-aab7-d6bf38be9463",
     "encoded": "GYePFlpYS3aqt9a_OL6UYw",
@@ -167,12 +182,14 @@ If the generation detects a issue in generation, you'll be sent a dict with two 
 - Detailed issue in `detail`
 
 In the event of an unhandled server exception, you'll be provided a dict with a single key `text`:
-- Exception, `Uncought Exception: <error>` with a 500 status code
+- Exception, `Uncaught Exception: <error>` with a 500 status code
 
 ### `/status/<suuid:seed>`
 <a name="status"></a>
 Retrieves the status of the seed's generation.  
-This endpoint will return a dict with a single key-vlaue pair. The key will always be `text`  
+**Cache timer: None**
+
+This endpoint will return a dict with a single key-value pair. The key will always be `text`  
 The value will tell you the status of the generation:
 - Generation was completed: `Generation done` with a 201 status code
 - Generation request was not found: `Generation not found` with a 404 status code
@@ -184,6 +201,8 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 
 ### `/room_status/<suuid:room_id>`  
 <a name="roomstatus"></a>
+**Cache timer: None**
+
 Will provide a dict of room data with the following keys:
 - Tracker SUUID (`tracker`)
 - A list of players (`players`)
@@ -192,10 +211,10 @@ Will provide a dict of room data with the following keys:
 - Last activity timestamp (`last_activity`)
 - The room timeout counter (`timeout`)
 - A list of downloads for files required for gameplay (`downloads`)
-    - Each item is a dict containings the download URL and slot (`slot`, `download`)
+    - Each item is a dict containing the download URL and slot (`slot`, `download`)
 
 Example:
-```
+```json
 {
     "downloads": [
         {
@@ -244,7 +263,7 @@ Example:
         ]
     ],
     "timeout": 7200,
-    "tracker": "cf6989c0-4703-45d7-a317-2e5158431171"
+    "tracker": "2gVkMQgISGScA8wsvDZg5A"
 }
 ```
 
@@ -254,17 +273,27 @@ can either be viewed while on a room tracker page, or from the [room's endpoint]
 
 ### `/tracker/<suuid:tracker>`
 <a name=tracker></a>
+**Cache timer: 60 seconds**
+
 Will provide a dict of tracker data with the following keys:
 
-- Each player's current alias (`aliases`)
-  - Will return the name if there is none
-- A list of items each player has received as a NetworkItem (`player_items_received`)
+- A list of players current alias data (`aliases`)
+  - Each item containing a dict with, their alias `alias`, their player number `player`, and their team `team`
+  - `alias` will return `null` if there is no alias set
+- A list of items each player has received as a [NetworkItem](network%20protocol.md#networkitem) (`player_items_received`)
+  - Each item containing a dict with, a list of NetworkItems `items`, their player number `player`, their team `team`
 - A list of checks done by each player as a list of the location id's (`player_checks_done`)
-- The total number of checks done by all players (`total_checks_done`)
-- Hints that players have used or received (`hints`)
-- The time of last activity of each player in RFC 1123 format (`activity_timers`)
-- The time of last active connection of each player in RFC 1123 format (`connection_timers`)
-- The current client status of each player (`player_status`)
+  - Each item containing a dict with, a list of checked location id's `locations`, their player number `player`, and their team `team`
+- A list of the total number of checks done by all players (`total_checks_done`)
+  - Each item will contain a dict with, the total checks done `checks_done`, and the team `team`  
+- A list of [Hints](network%20protocol.md#hint) data that players have used or received (`hints`)
+  - Each item containing a dict containing, a list of hint data `hints`, the player number `player`, and their team `team`
+- A list containing the last activity time for each player, formatted in RFC 1123 format (`activity_timers`)
+  - Each item containing, last activity time `time`, their player number `player`, and their team `team`
+- A list containing the last connection time for each player, formatted in RFC 1123 format (`connection_timers`)
+  - Each item containing, the time of their last connection `time`, their player number `player`, and their team `team`
+- A list of the current [ClientStatus](network%20protocol.md#clientstatus) of each player (`player_status`)
+  - Each item will contain, their status `status`, their player number `player`, and their team `team`
 
 Example:
 ```json
@@ -279,7 +308,12 @@ Example:
       "team": 0,
       "player": 2,
       "alias": "Slot_Name_2"
-    }
+    },
+    {
+      "team": 0,
+      "player": 3,
+      "alias": null
+    },
   ],
   "player_items_received": [
     {
@@ -378,13 +412,21 @@ Example:
 
 ### `/static_tracker/<suuid:tracker>`
 <a name=statictracker></a>
+**Cache timer: 300 seconds**
+
 Will provide a dict of static tracker data with the following keys:
 
-- item_link groups and their players (`groups`)
-- The datapackage hash for each game (`datapackage`)
+- A list of item_link groups and their member players (`groups`)
+  - Each item containing a dict with, the slot registering the group `slot`, the item_link name `name`, and a list of members `members`
+- A dict of datapackage hashes for each game (`datapackage`)
+  - Each item is a named dict of the game's name.
+    - Each game contains two keys, the datapackage's checksum hash `checksum`, and the version `version`
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
-- The number of checks found vs. total checks available per player (`player_locations_total`)
+- A list of number of checks found vs. total checks available per player (`player_locations_total`)
+  - Each list item contains a dict with three keys, the total locations for that slot `total_locations`, their player number `player`, and their team `team`
   - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
+- The game each player is playing (`player_game`)
+  - Provided as a list of objects with `team`, `player`, and `game`.
 
 Example:
 ```json
@@ -409,10 +451,10 @@ Example:
   ],
   "datapackage": {
     "Archipelago": {
-      "checksum": "ac9141e9ad0318df2fa27da5f20c50a842afeecb",
+      "checksum": "ac9141e9ad0318df2fa27da5f20c50a842afeecb"
     },
     "The Messenger": {
-      "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b",
+      "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b"
     }
   },
   "player_locations_total": [
@@ -427,12 +469,29 @@ Example:
       "total_locations": 20
     }
   ],
+  "player_game": [
+    {
+      "team": 0,
+      "player": 1,
+      "game": "Archipelago"
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "game": "The Messenger"
+    }
+  ]
 }
 ```
 
 ### `/slot_data_tracker/<suuid:tracker>`
 <a name=slotdatatracker></a>
-Will provide a list of each player's slot_data.
+Will provide a list of each player's slot_data.  
+**Cache timer: 300 seconds**
+
+Each list item will contain a dict with the player's data:
+- player slot number `player`
+- A named dict `slot_data` containing any set slot data for that player
 
 Example:
 ```json
@@ -460,6 +519,8 @@ User endpoints can get room and seed details from the current session tokens (co
 ### `/get_rooms`  
 <a name="getrooms"></a>
 Retreives a list of all rooms currently owned by the session token.  
+**Cache timer: None**
+
 Each list item will contain a dict with the room's details:
 - Room SUUID (`room_id`)
 - Seed SUUID (`seed_id`)
@@ -470,25 +531,25 @@ Each list item will contain a dict with the room's details:
 - Room tracker SUUID (`tracker`)
 
 Example:
-```
+```json
 [
     {
         "creation_time": "Fri, 18 Apr 2025 19:46:53 GMT",
         "last_activity": "Fri, 18 Apr 2025 21:16:02 GMT",
         "last_port": 52122,
-        "room_id": "90ae5f9b-177c-4df8-ac53-9629fc3bff7a",
-        "seed_id": "efbd62c2-aaeb-4dda-88c3-f461c029cef6",
+        "room_id": "0D30FgQaRcWivFsw9o8qzw",
+        "seed_id": "TFjiarBgTsCj5-Jbe8u33A",
         "timeout": 7200,
-        "tracker": "cf6989c0-4703-45d7-a317-2e5158431171"
+        "tracker": "52BycvJhRe6knrYH8v4bag"
     },
     {
         "creation_time": "Fri, 18 Apr 2025 20:36:42 GMT",
         "last_activity": "Fri, 18 Apr 2025 20:36:46 GMT",
         "last_port": 56884,
-        "room_id": "14465c05-d08e-4d28-96bd-916f994609d8",
-        "seed_id": "a528e34c-3b4f-42a9-9f8f-00a4fd40bacb",
+        "room_id": "LMCFchESSNyuqcY3GxkhwA",
+        "seed_id": "CENtJMXCTGmkIYCzjB5Csg",
         "timeout": 7200,
-        "tracker": "4e624bd8-32b6-42e4-9178-aa407f72751c"
+        "tracker": "2gVkMQgISGScA8wsvDZg5A"
     }
 ]
 ```
@@ -496,6 +557,8 @@ Example:
 ### `/get_seeds`  
 <a name="getseeds"></a>
 Retreives a list of all seeds currently owned by the session token.  
+**Cache timer: None**
+
 Each item in the list will contain a dict with the seed's details:
 - Seed SUUID (`seed_id`)
 - Creation timestamp (`creation_time`)
@@ -503,7 +566,7 @@ Each item in the list will contain a dict with the seed's details:
     - Each item in the list will contain a list of the slot name and game
 
 Example:
-```
+```json
 [
     {
         "creation_time": "Fri, 18 Apr 2025 19:46:52 GMT",
@@ -529,7 +592,7 @@ Example:
                 "Ocarina of Time"
             ]
         ],
-        "seed_id": "efbd62c2-aaeb-4dda-88c3-f461c029cef6"
+        "seed_id": "CENtJMXCTGmkIYCzjB5Csg"
     },
     {
         "creation_time": "Fri, 18 Apr 2025 20:36:39 GMT",
@@ -551,7 +614,7 @@ Example:
                 "Archipelago"
             ]
         ],
-        "seed_id": "a528e34c-3b4f-42a9-9f8f-00a4fd40bacb"
+        "seed_id": "TFjiarBgTsCj5-Jbe8u33A"
     }
 ]
 ```

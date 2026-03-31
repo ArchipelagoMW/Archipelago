@@ -10,7 +10,7 @@ from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
 from NetUtils import ClientStatus, Hint, NetworkItem, NetworkSlot, SlotType
-from Utils import restricted_loads, KeyedDefaultDict
+from Utils import restricted_loads, KeyedDefaultDict, utcnow
 from . import app, cache
 from .models import GameDataPackage, Room
 
@@ -273,9 +273,10 @@ class TrackerData:
         Does not include players who have no activity recorded.
         """
         last_activity: Dict[TeamPlayer, datetime.timedelta] = {}
-        now = datetime.datetime.utcnow()
+        now = utcnow()
         for (team, player), timestamp in self._multisave.get("client_activity_timers", []):
-            last_activity[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+            from_timestamp = datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).replace(tzinfo=None)
+            last_activity[team, player] = now - from_timestamp
 
         return last_activity
 
@@ -959,7 +960,7 @@ if "Timespinner" in network_data_package["games"]:
 
         timespinner_location_ids = {
             "Present": list(range(1337000, 1337085)),
-            "Past": list(range(1337086, 1337175)),
+            "Past": list(range(1337086, 1337157)) + list(range(1337159, 1337175)),
             "Ancient Pyramid": [
                 1337236,
                 1337246, 1337247, 1337248, 1337249]
@@ -1228,7 +1229,7 @@ if "Starcraft 2" in network_data_package["games"]:
     def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
         SC2WOL_ITEM_ID_OFFSET = 1000
         SC2HOTS_ITEM_ID_OFFSET = 2000
-        SC2LOTV_ITEM_ID_OFFSET = 2000
+        SC2LOTV_ITEM_ID_OFFSET = 3000
         SC2_KEY_ITEM_ID_OFFSET = 4000
         NCO_LOCATION_ID_LOW = 20004500
         NCO_LOCATION_ID_HIGH = NCO_LOCATION_ID_LOW + 1000

@@ -280,6 +280,7 @@ def remaining_fill(multiworld: MultiWorld,
         item_to_place = itempool.pop()
         spot_to_fill: typing.Optional[Location] = None
 
+        # going through locations in the same order as the provided `locations` argument
         for i, location in enumerate(locations):
             if location_can_fill_item(location, item_to_place):
                 # popping by index is faster than removing by content,
