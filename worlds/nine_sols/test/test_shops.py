@@ -37,7 +37,7 @@ class TestUnlockItemsShopUnlocks(NineSolsTestBase):
         self.assertEqual(3, len([x for x in self.multiworld.get_items() if x.name == "Progressive Shop Unlock"]))
 
 
-class TestShopRando(NineSolsTestBase):
+class TestShopRandoDefaultSpawn(NineSolsTestBase):
     options = {
         "randomize_shops": True,
     }
@@ -49,6 +49,26 @@ class TestShopRando(NineSolsTestBase):
         self.assertEqual(0, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
         self.assertEqual(3, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
 
+        # none of the shop locations are in logic yet
+        sphere1 = [loc.name for loc in self.multiworld.get_reachable_locations()]
+        self.assertNotIn("3D Printer: 1st Low Cost Purchase", sphere1)
+        self.assertNotIn("3D Printer: 1st Medium Cost Purchase", sphere1)
+
+
+class TestShopRandoFGHSpawn(NineSolsTestBase):
+    options = {
+        "randomize_shops": True,
+        "first_root_node": "factory_great_hall"
+    }
+
+    def test_default(self):
+        self.assertEqual(self.getNonEventLocationCount(), 361)
+
+        items = self.multiworld.get_items()
+        self.assertEqual(0, len([x for x in items if x.name == "Arrow: Cloud Piercer"]))
+        self.assertEqual(3, len([x for x in items if x.name == "Progressive Cloud Piercer"]))
+
+        # spawning in one of the regions we check for shop logic makes low cost locations immediately in logic
         sphere1 = [loc.name for loc in self.multiworld.get_reachable_locations()]
         self.assertIn("3D Printer: 1st Low Cost Purchase", sphere1)
         self.assertNotIn("3D Printer: 1st Medium Cost Purchase", sphere1)

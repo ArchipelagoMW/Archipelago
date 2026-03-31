@@ -1958,19 +1958,19 @@
 
     {
          "category": "shop", "address": 4201, "name": "3D Printer: 1st Low Cost Purchase",
-         "region": "FSP - Root Node", "requires": []
+         "region": "FSP - Shops (Low Cost)", "requires": []
     },
     {
          "category": "shop", "address": 4202, "name": "3D Printer: 2nd Low Cost Purchase",
-         "region": "FSP - Root Node", "requires": []
+         "region": "FSP - Shops (Low Cost)", "requires": []
     },
     {
          "category": "shop", "address": 4203, "name": "3D Printer: 3rd Low Cost Purchase",
-         "region": "FSP - Root Node", "requires": []
+         "region": "FSP - Shops (Low Cost)", "requires": []
     },
     {
          "category": "shop", "address": 4204, "name": "3D Printer: 4th Low Cost Purchase",
-         "region": "FSP - Root Node", "requires": []
+         "region": "FSP - Shops (Low Cost)", "requires": []
     },
     {
          "category": "shop", "address": 4205, "name": "3D Printer: 1st Medium Cost Purchase",
