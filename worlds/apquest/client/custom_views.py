@@ -49,6 +49,7 @@ INPUT_MAP_SPECIAL_INT = {
 
 class APQuestGameView(MDRecycleView):
     focused: int = 1
+    input_function: Callable[[Input], None]
 
     def __init__(self, input_function: Callable[[Input], None], **kwargs: Any) -> None:
         super().__init__(**kwargs)
