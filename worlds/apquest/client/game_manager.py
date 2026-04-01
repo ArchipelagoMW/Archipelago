@@ -38,7 +38,7 @@ class APQuestManager(GameManager):
     lower_game_grid: GridLayout
     upper_game_grid: GridLayout
 
-    game_view: MDRecycleView
+    game_view: MDRecycleView | None = None
     game_view_tab: MDNavigationItemBase
 
     sound_manager: SoundManager
@@ -84,6 +84,8 @@ class APQuestManager(GameManager):
 
     def game_started(self) -> None:
         self.switch_to_game_tab()
+        if self.game_view is not None:
+            self.game_view.force_focus()
         self.sound_manager.game_started = True
 
     def render(self, game: Game, player_sprite: PlayerSprite) -> None:
