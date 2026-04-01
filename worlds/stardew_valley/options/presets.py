@@ -428,5 +428,5 @@ sv_options_presets: Dict[str, Dict[str, Any]] = {
     "Nightmare": nightmare_settings,
     "Short": short_settings,
     "Minsanity": minsanity_settings,
-    "Allsanity": maxsanity_settings,
+    "Maxsanity": maxsanity_settings,
 }
