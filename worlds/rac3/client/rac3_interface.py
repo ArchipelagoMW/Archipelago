@@ -1354,6 +1354,7 @@ class Rac3Interface(GameInterface):
                         case RAC3STATUS.BLACK_SCREEN:
                             self._write16(status, 0)
                             self._write8(status + 4, 0)
+                            self._write16(RAC3STATUS.BLACK_SCREEN_2, 0)
                         case RAC3STATUS.INVISIBLE:
                             self._write8(status, 2)
                         case RAC3STATUS.WRENCH_ONLY:
@@ -1386,6 +1387,7 @@ class Rac3Interface(GameInterface):
                     case RAC3ITEM.BLACK_SCREEN_TRAP:
                         self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
                         self._write8(RAC3STATUS.BLACK_SCREEN + 4, 1)
+                        self._write16(RAC3STATUS.BLACK_SCREEN_2, 0x8C)
                     case RAC3ITEM.NO_CLANK_TRAP:
                         self.clank_disabled_trap = False
                     case RAC3ITEM.INVISIBLE_TRAP:
