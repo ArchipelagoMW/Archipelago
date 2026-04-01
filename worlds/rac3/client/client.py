@@ -295,11 +295,11 @@ class Rac3Context(CommonContext):
                     logger.warning("Received PrintJSON command with type Hint but no item data!")
                     return
                 location_name = self.location_names.lookup_in_slot(net_item.location, net_item.player)
+                receiving_player = args.get("receiving", None)
                 item_name = colorize_item_name(
-                    self.item_names.lookup_in_slot(net_item.item, net_item.player),
+                    self.item_names.lookup_in_slot(net_item.item, receiving_player),
                     net_item.flags
                 )
-                receiving_player = args.get("receiving", None)
                 format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else RAC3TEXTFORMATSTRING.GREEN 
                 player_name = self.player_names.get(receiving_player, "???")
                 hint_text = f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}'
