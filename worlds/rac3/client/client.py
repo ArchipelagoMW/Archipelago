@@ -294,7 +294,7 @@ class Rac3Context(CommonContext):
                 if net_item is None:
                     logger.warning("Received PrintJSON command with type Hint but no item data!")
                     return
-                location_name = self.location_names.lookup_in_slot(net_item.location, self.slot)
+                location_name = self.location_names.lookup_in_slot(net_item.location, net_item.player)
                 item_name = colorize_item_name(
                     self.item_names.lookup_in_slot(net_item.item, net_item.player),
                     net_item.flags
