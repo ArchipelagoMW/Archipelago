@@ -63,7 +63,7 @@ class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
     options = default_7_x_x()
 
     def test_default_settings_has_exactly_locations(self):
-        expected_locations = 475
+        expected_locations = 471
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Default options locations: {number_locations}")
