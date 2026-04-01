@@ -16,7 +16,7 @@ class TestGoalsRequiringAllLocationsOverrideAccessibility(unittest.TestCase):
         be left inaccessible, which in practice will make the seed unwinnable.
         """
 
-        for goal in [options.Goal.option_perfection, options.Goal.option_maxsanity]:
+        for goal in [options.Goal.option_perfection, options.Goal.option_allsanity]:
             for accessibility in ap_options.Accessibility.options.keys():
                 with self.subTest(f"Goal: {options.Goal.get_option_name(goal)} Accessibility: {accessibility}"):
                     world_options = fill_dataclass_with_default({
