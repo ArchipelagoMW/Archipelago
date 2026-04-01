@@ -673,7 +673,7 @@ class CommonContext:
                     else:
                         self.update_game(cached_game, game)
         if needed_updates:
-            await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
+            await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name for game_name in needed_updates]}])
 
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
