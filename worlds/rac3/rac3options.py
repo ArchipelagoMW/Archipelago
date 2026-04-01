@@ -1,14 +1,13 @@
 """This module contains the RAC3 Option class, containing all adjustable YAML options"""
 from dataclasses import dataclass
 
-from Options import Accessibility, OptionGroup, ProgressionBalancing, StartInventoryPool
+from Options import Accessibility, DeathLink, OptionGroup, ProgressionBalancing, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
 from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
 from worlds.rac3.options.armor_vendor_options import ArmorVendors
 from worlds.rac3.options.clank_options import ClankOptions
-from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
 from worlds.rac3.options.holostar_skip_options import HolostarSkip
@@ -49,7 +48,7 @@ def create_option_groups() -> list[OptionGroup]:
 @dataclass
 class RaC3Options(PerGameCommonOptions):
     """YAML Options for RAC3"""
-    deathlink: Deathlink
+    deathlink: DeathLink
     start_inventory_from_pool: StartInventoryPool
     starting_weapons: StartingWeapons
     bolt_and_xp_multiplier: BoltAndXPMultiplier
@@ -87,7 +86,7 @@ rac3_option_groups = [
     OptionGroup("Generic Options", [
         ProgressionBalancing,
         Accessibility,
-        Deathlink,
+        DeathLink,
     ]),
     OptionGroup("RAC3 Game Options", [
         IntroSkip,
