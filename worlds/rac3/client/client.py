@@ -299,7 +299,7 @@ class Rac3Context(CommonContext):
                     self.item_names.lookup_in_slot(net_item.item, net_item.player),
                     net_item.flags
                 )
-                format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.WHITE 
+                format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.GREEN 
                 player_name = self.player_names.get(net_item.player, "???")
                 self.game_interface.notification_queue.append((f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}', RAC3BOXTHEME.HINT))
 
