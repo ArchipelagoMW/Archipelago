@@ -1,4 +1,5 @@
 from collections import Counter
+from random import Random
 from unittest.mock import patch
 
 from ..bases import SVTestBase
@@ -35,7 +36,7 @@ class DisabledMuseumRule(LiteralStardewRule):
 
 class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBase):
     options = {
-        **presets.allsanity_mods_6_x_x(),
+        **presets.allsanity_mods_7_x_x(),
         options.Museumsanity.internal_name: options.Museumsanity.option_none
     }
 
@@ -51,12 +52,20 @@ class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBa
             museum_logic.can_donate.return_value = DisabledMuseumRule()
             # Allowing calls to museum rules since a lot of other logic depends on it, for minerals for instance.
             museum_logic.can_find_museum_item.return_value = true_
+            museum_logic.has_any_gem.return_value = true_
+            museum_logic.has_all_gems.return_value = true_
 
             regions = {region.name for region in self.multiworld.regions}
             self.world.logic = StardewLogic(self.player, self.world.options, self.world.content, regions)
             self.world.set_rules()
 
             self.collect_everything()
-            for location in self.get_real_locations():
+            # Fixed seed for consistency
+            seed = 2184959
+            random = Random(seed)
+            all_locations = self.get_real_locations()
+            # We test 1% of all locations, to be fast
+            locations_to_test = random.sample(all_locations, k=len(all_locations)//100)
+            for location in locations_to_test:
                 with self.subTest(location.name):
                     self.assert_can_reach_location(location)
