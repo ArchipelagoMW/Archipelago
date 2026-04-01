@@ -177,7 +177,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][0][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][0][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][0][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][0][4]))
                     if data.shop[data.shopstate][0][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][0][4])
@@ -194,7 +194,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][1][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][1][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][1][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][1][4]))
                     if data.shop[data.shopstate][1][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][1][4])
@@ -211,7 +211,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate]  == False:
                     data.shop[data.shopstate][2][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][2][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][2][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][2][4]))
                     if data.shop[data.shopstate][2][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][2][4])
@@ -228,7 +228,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][3][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][3][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][3][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][3][4]))
                     if data.shop[data.shopstate][3][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][3][4])
@@ -245,7 +245,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][4][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][4][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][4][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][4][4]))
                     if data.shop[data.shopstate][4][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][4][4])
@@ -262,7 +262,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][5][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][5][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][5][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][5][4]))
                     if data.shop[data.shopstate][5][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][5][4])
@@ -279,7 +279,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][6][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][6][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][6][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][6][4]))
                     if data.shop[data.shopstate][6][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][6][4])
@@ -296,7 +296,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][7][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][7][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][7][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][7][4]))
                     if data.shop[data.shopstate][7][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][7][4])
@@ -313,7 +313,7 @@ class UI:
                 if data.archipelagoactive == False  or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][8][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][8][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][8][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][8][4]))
                     if data.shop[data.shopstate][8][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][8][4])
@@ -330,7 +330,7 @@ class UI:
                 if data.archipelagoactive == False or data.randoopts[data.shopstate] == False:
                     data.shop[data.shopstate][9][2] = 1
                 else:
-                    data.checked_locations_player.append(data.shop[data.shopstate][9][4])
+                    data.checked_locations_player.add(data.shop[data.shopstate][9][4])
                     data.queued_events.append(LocationClearedEvent(data.shop[data.shopstate][9][4]))
                     if data.shop[data.shopstate][9][4] in data.missing_locations:
                         data.missing_locations.remove(data.shop[data.shopstate][9][4])
@@ -428,7 +428,7 @@ class UI:
             if data.archipelagoactive == False:
                 data.timecaps += 1
             else:
-                data.checked_locations_player.append(data.milestones[test,2])
+                data.checked_locations_player.add(data.milestones[test,2])
                 data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
@@ -498,7 +498,7 @@ class UI:
             if data.archipelagoactive == False:
                 data.timecaps += 1
             else:
-                data.checked_locations_player.append(data.milestones[test,2])
+                data.checked_locations_player.add(data.milestones[test,2])
                 data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
@@ -512,7 +512,7 @@ class UI:
             if data.archipelagoactive == False:
                 data.timecaps += 1
             else:
-                data.checked_locations_player.append(data.milestones[test,2])
+                data.checked_locations_player.add(data.milestones[test,2])
                 data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
@@ -526,7 +526,7 @@ class UI:
             if data.archipelagoactive == False:
                 data.timecaps += 1
             else:
-                data.checked_locations_player.append(data.milestones[test,2])
+                data.checked_locations_player.add(data.milestones[test,2])
                 data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
@@ -540,7 +540,7 @@ class UI:
             if data.archipelagoactive == False:
                 data.timecaps += 1
             else:
-                data.checked_locations_player.append(data.milestones[test,2])
+                data.checked_locations_player.add(data.milestones[test,2])
                 data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])
@@ -554,7 +554,7 @@ class UI:
             if data.archipelagoactive == False:
                 data.timecaps += 1
             else:
-                data.checked_locations_player.append(data.milestones[test,2])
+                data.checked_locations_player.add(data.milestones[test,2])
                 data.queued_events.append(LocationClearedEvent(data.milestones[test,2]))
                 if data.milestones[test,2] in data.missing_locations:
                         data.missing_locations.remove(data.milestones[test,2])

@@ -41,7 +41,6 @@ class Nothing_Archipelago_Context(CommonContext):
     Death_link: bool = False
     Death_link_mercy: int =100
     Time_dilation: int = 1
-
     connection_status: ConnectionStatus = ConnectionStatus.NOT_CONNECTED
 
     highest_processed_item_index: int = 0
@@ -54,7 +53,9 @@ class Nothing_Archipelago_Context(CommonContext):
         self.archui = archui
         self._condition = asyncio.Condition()
         self.queued_locations = []
+        self.items_received = []
         self.slot_data = {}
+        self.needsync = 0
         
 
     async def server_auth(self, password_requested: bool = False) -> None:
@@ -75,25 +76,32 @@ class Nothing_Archipelago_Context(CommonContext):
         while not self.exit_event.is_set():
             
             
-            if not self.nothing_archipelago_game:
-                await asyncio.sleep(0.1)
-                continue
+            await asyncio.sleep(0.1)
+
 
 
             try:
+                if self.needsync == 1:
+                    await self.send_msgs([{"cmd": "Sync"}])
+                    self.needsync = 0
+                self.handle_game_events()
                 while self.queued_locations:
                     location = self.queued_locations.pop(0)
                     self.locations_checked.add(location)
                     await self.check_locations({location})
 
-                new_items = self.items_recieved[self.highest_processed_item_index :]
+                new_items = self.items_received[self.highest_processed_item_index :]
                 if new_items:
                     for _ in new_items:
                         self.highest_processed_item_index += 1
-                    self.archui.update_items(self.items_recieved)
+                    self.archui.updateitems(self.data,self.items_received)
 
-                if self.checked_locations > self.locations_checked:
-                    self.archui.verifylocations(self.checked_locations)
+#fix this bullshit
+
+                if self.checked_locations != self.locations_checked:
+                    self.locations_checked = self.checked_locations
+                    self.archui.checklocations(self.data,self.checked_locations)
+
 
                 if self.data.goalled and not self.finished_game:
                     await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -116,7 +124,9 @@ class Nothing_Archipelago_Context(CommonContext):
             self.last_connected_slot = self.slot
 
             self.connection_status = ConnectionStatus.NOT_CONNECTED  # for safety, it will get set again later
-
+            self.checked_locations = set(args["checked_locations"])
+            self.archui.checklocations(self.data,self.checked_locations)
+            self.needsync = 1
             self.slot_data = args["slot_data"] 
             self.goal = self.slot_data["goal"]
             self.shop_upgrades = self.slot_data["shop_upgrades"]
@@ -142,13 +152,6 @@ class Nothing_Archipelago_Context(CommonContext):
         self.connection_status = ConnectionStatus.NOT_CONNECTED
         await super().disconnect(*args, **kwargs)
 
-    def render(self) -> None:
-        if self.data is None:
-            raise RuntimeError("Tried to render before self.ap_quest_game was initialized.")
-
-        
-        self.handle_game_events()
-
     def handle_game_events(self) -> None:
         if self.data is None:
             return
@@ -157,7 +160,7 @@ class Nothing_Archipelago_Context(CommonContext):
             event = self.data.queued_events.pop(0)
 
             if isinstance(event, LocationClearedEvent):
-                self.data.queued_locations.append(event.location_id)
+                self.queued_locations.append(event.location_id)
                 continue
 
             if isinstance(event, VictoryEvent):

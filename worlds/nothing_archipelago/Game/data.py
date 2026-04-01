@@ -56,8 +56,8 @@ class Data:
         self.goalled = False
         self.leave = 0
         self._milestones = numpy.zeros((86400,4))
-        self.checked_locations_player: list[int] = []
-        self.checked_locations: list[int] = []
+        self.checked_locations_player: set[int] = []
+        self.checked_locations: set[int] = []
         self.missing_locations: list[int] = []
         
         self.names = [[0 for _ in range(4)] for _ in range (10)]
@@ -136,19 +136,21 @@ class Data:
                     self._shop[x][y][3] = 1
                 else:
                     self._shop[x][y][3] = 2
-                self._shop[x][y][4] = 86400+(x*10)+(y+1)
+                self._shop[x][y][4] = 86400+(x*10)+(y)
         self._shop[0][8][3] = ""
         self._shop[0][9][3] = ""
         
 
-    def update_arch_settings(self,goal, shop_upgrades, shop_colors, shop_music, shop_sounds, gift_coins,
+    def update_arch_settings(self, goal, shop_upgrades, shop_colors, shop_music, shop_sounds, gift_coins,
                           milestone_interval, timecap_interval, Starting_coin_count, Death_link, Death_link_mercy, Time_dilation):
+        self.connected = 1
         self.milestoneint = milestone_interval
         for x in range(86400):
             self._milestones[x,0] = (x+1)*self.milestoneint
         self.archipelagoactive = True
         self.goal = goal
         self.timecapint = timecap_interval
+        self._timecap = self.timecapint
         self.randoopts[0] = shop_upgrades
         self.randoopts[1] = shop_colors
         self.randoopts[2] = shop_music
