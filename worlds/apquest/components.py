@@ -29,6 +29,7 @@ components.append(
         game_name="APQuest",
         component_type=Type.CLIENT,
         supports_uri=True,
+        supports_mobile=True,
     )
 )
 

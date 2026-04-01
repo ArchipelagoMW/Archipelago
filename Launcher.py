@@ -124,11 +124,14 @@ components.extend([
     Component("Generate Template Options", func=generate_yamls,
               description="Generate template YAMLs for currently installed games."),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/"),
+              supports_mobile=True,
               description="Open archipelago.gg in your browser."),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2"),
+              supports_mobile=True,
               description="Join the Discord server to play public multiworlds, report issues, or just chat!"),
     Component("Unrated/18+ Discord Server", icon="discord",
               func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4"),
+              supports_mobile=True,
               description="Find unrated and 18+ games in the After Dark Discord server."),
     Component("Browse Files", func=browse_files,
               description="Open the Archipelago installation folder in your file browser."),
@@ -555,15 +558,7 @@ def run():
 
 
 if is_mobile:
-    allowed_names = {
-        "Launcher",
-        "Text Client",
-        "APQuest Client",
-        "Archipelago Website",
-        "Discord Server",
-        "Unrated/18+ Discord Server",
-    }
-    components[:] = [c for c in components if c.display_name in allowed_names]
+    components[:] = [c for c in components if c.supports_mobile]
 
 
 logging.info(f"Loaded {len(components)} components.")

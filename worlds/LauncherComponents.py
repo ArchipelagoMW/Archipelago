@@ -56,11 +56,14 @@ class Component:
     """Game name to identify component when handling launch links from WebHost"""
     supports_uri: Optional[bool]
     """Bool to identify if a component supports being launched by launch links from WebHost"""
+    supports_mobile: bool
+    """Bool to identify if a component supports being launched on mobile devices"""
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False,
+                 supports_mobile: bool = False, description: str = "") -> None:
         self.display_name = display_name
         self.description = description
         self.script_name = script_name
@@ -79,6 +82,7 @@ class Component:
         self.file_identifier = file_identifier
         self.game_name = game_name
         self.supports_uri = supports_uri
+        self.supports_mobile = supports_mobile
 
     def handles_file(self, path: str):
         return self.file_identifier(path) if self.file_identifier else False
@@ -219,7 +223,7 @@ def export_datapackage() -> None:
 
 components: List[Component] = [
     # Launcher
-    Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
+    Component('Launcher', 'Launcher', component_type=Type.HIDDEN, supports_mobile=True),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip'),
@@ -231,6 +235,7 @@ components: List[Component] = [
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
+              supports_mobile=True,
               description="Connect to a multiworld using the text client."),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Ocarina of Time
