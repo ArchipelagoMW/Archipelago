@@ -1689,7 +1689,7 @@ class Rac3Interface(GameInterface):
                 logger.debug(f"notification queue: {len(self.notification_queue)}")
                 self.notification_time = current_time + 3
             if self.notification_queue:
-                # Merge up to 3 notifications of the same theme, but do not exceed 225 chars
+                # Merge up to 3 notifications of the same theme, but do not exceed 235 chars
                 merged_message, theme = self.notification_queue[0]
                 merge_count = 1
                 total_length = len(merged_message)
@@ -1697,7 +1697,7 @@ class Rac3Interface(GameInterface):
                     next_message, next_theme = self.notification_queue[i]
                     # +2 for the '\n' separator
                     add_length = 2 + len(next_message)
-                    if next_theme == theme and (total_length + add_length) <= 225:
+                    if next_theme == theme and (total_length + add_length) <= 235:
                         merged_message += "\\n" + next_message
                         total_length += add_length
                         merge_count += 1

@@ -5,13 +5,17 @@ from time import time
 from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import NetworkItem
 from Utils import Any, async_start, init_logging
 from worlds.rac3.client.callbacks import handle_respawn, pcsx2_sync_task, update
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.rac3_interface import Rac3Interface
+from worlds.rac3.client.texthelper import colorize_item_name
 from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
+from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import ONE_HP_CHALLENGE_CHARACTERS
 from worlds.rac3.constants.region import RAC3REGION
@@ -173,10 +177,10 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             message = " ".join(args)
-            self.ctx.game_interface.notification_queue.append((message[:225:], RAC3BOXTHEME.DEFAULT))
-            if len(message) > 225:
-                self.output('Message longer than 225 characters, truncated to fit in message box.')
-            self.output(f'Message box displayed with message: {message[:225:]}')
+            self.ctx.game_interface.notification_queue.append((message[:235:], RAC3BOXTHEME.DEFAULT))
+            if len(message) > 235:
+                self.output('Message longer than 235 characters, truncated to fit in message box.')
+            self.output(f'Message box displayed with message: {message[:235:]}')
 
     def _cmd_one_hp(self, *args):
         """Toggles One HP Challenge for the specified character."""
@@ -284,6 +288,20 @@ class Rac3Context(CommonContext):
                 self.data_package = args["data"]["games"][RAC3OPTION.GAME_TITLE_FULL][RAC3OPTION.PROCESSED_LOCATIONS]
                 logger.debug(f"Data Package updated: {self.data_package}")
                 async_start(self.send_msgs([{'cmd': 'Sync'}]))
+        if cmd == "PrintJSON":
+            if args.get("type") == "Hint" and self.is_connected_to_game and not self.main_menu:
+                net_item: NetworkItem = args.get("item")
+                if net_item is None:
+                    logger.warning("Received PrintJSON command with type Hint but no item data!")
+                    return
+                location_name = self.location_names.lookup_in_slot(net_item.location, self.slot)
+                item_name = colorize_item_name(
+                    self.item_names.lookup_in_slot(net_item.item, net_item.player),
+                    net_item.flags
+                )
+                format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.WHITE 
+                player_name = self.player_names.get(net_item.player, "???")
+                self.game_interface.notification_queue.append((f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}', RAC3BOXTHEME.HINT))
 
 
 def launch_client():
