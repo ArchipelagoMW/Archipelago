@@ -304,6 +304,8 @@ class Rac3Context(CommonContext):
                 player_name = self.player_names.get(receiving_player, "???")
                 hint_text = f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}'
                 if net_item.player != self.slot:
+                    player_name = self.player_names.get(net_item.player, "???")
+                    format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.GREEN
                     hint_text += f"\\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s world."
                 self.game_interface.notification_queue.append((hint_text, RAC3BOXTHEME.HINT))
 
