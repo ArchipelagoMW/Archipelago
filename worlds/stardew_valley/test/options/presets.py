@@ -292,3 +292,48 @@ def minimal_locations_maximal_items_with_island():
     min_max_options = minimal_locations_maximal_items()
     min_max_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false})
     return min_max_options
+
+
+def setting_mins_and_maxes():
+    low_orphan_options = {
+        options.ArcadeMachineLocations.internal_name: [options.ArcadeMachineLocations.option_disabled, options.ArcadeMachineLocations.option_full_shuffling],
+        options.BackpackProgression.internal_name: [options.BackpackProgression.option_vanilla, options.BackpackProgression.option_progressive],
+        options.BackpackSize.internal_name: [options.BackpackSize.option_1, options.BackpackSize.option_12],
+        options.Booksanity.internal_name: [options.Booksanity.option_none, options.Booksanity.option_power_skill, options.Booksanity.option_power, options.Booksanity.option_all],
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla_cheap,
+        options.BundlePerRoom.internal_name: [options.BundlePerRoom.option_two_fewer, options.BundlePerRoom.option_four_extra],
+        options.BundlePrice.internal_name: options.BundlePrice.option_normal,
+        options.BundleRandomization.internal_name: options.BundleRandomization.option_remixed,
+        options.Chefsanity.internal_name: [options.Chefsanity.preset_none, options.Chefsanity.preset_all],
+        options.Cooksanity.internal_name: [options.Cooksanity.option_none, options.Cooksanity.option_all],
+        options.Craftsanity.internal_name: [options.Craftsanity.option_none, options.Craftsanity.option_all],
+        options.Cropsanity.internal_name: [options.Cropsanity.option_disabled, options.Cropsanity.option_enabled],
+        options.Eatsanity.internal_name: [options.Eatsanity.preset_none, options.Eatsanity.preset_all],
+        options.ElevatorProgression.internal_name: [options.ElevatorProgression.option_vanilla, options.ElevatorProgression.option_progressive],
+        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.preset_all,
+        options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
+        options.ExcludeGingerIsland.internal_name: [options.ExcludeGingerIsland.option_false, options.ExcludeGingerIsland.option_true],
+        options.FarmType.internal_name: [options.FarmType.option_standard, options.FarmType.option_meadowlands],
+        options.FestivalLocations.internal_name: [options.FestivalLocations.option_disabled, options.FestivalLocations.option_hard],
+        options.Fishsanity.internal_name: [options.Fishsanity.option_none, options.Fishsanity.option_all],
+        options.Friendsanity.internal_name: [options.Friendsanity.option_none, options.Friendsanity.option_all_with_marriage],
+        options.FriendsanityHeartSize.internal_name: [1, 8],
+        options.Goal.internal_name: options.Goal.option_allsanity,
+        options.IncludeEndgameLocations.internal_name: [options.IncludeEndgameLocations.option_false, options.IncludeEndgameLocations.option_true],
+        options.Mods.internal_name: frozenset(),
+        options.Monstersanity.internal_name: [options.Monstersanity.option_none, options.Monstersanity.option_one_per_monster],
+        options.Moviesanity.internal_name: [options.Moviesanity.option_none, options.Moviesanity.option_all_movies_and_all_loved_snacks],
+        options.Museumsanity.internal_name: [options.Museumsanity.option_none, options.Museumsanity.option_all],
+        options.NumberOfMovementBuffs.internal_name: [0, 12],
+        options.QuestLocations.internal_name: [-1, 56],
+        options.SeasonRandomization.internal_name: [options.SeasonRandomization.option_disabled, options.SeasonRandomization.option_randomized_not_winter],
+        options.Secretsanity.internal_name: [options.Secretsanity.preset_none, options.Secretsanity.preset_all],
+        options.Shipsanity.internal_name: [options.Shipsanity.option_none, options.Shipsanity.option_everything],
+        options.SkillProgression.internal_name: [options.SkillProgression.option_vanilla, options.SkillProgression.option_progressive_with_masteries],
+        options.SpecialOrderLocations.internal_name: [options.SpecialOrderLocations.option_vanilla, options.SpecialOrderLocations.option_board_qi],
+        options.StartWithout.internal_name: [options.StartWithout.preset_none, options.StartWithout.preset_all],
+        options.ToolProgression.internal_name: [options.ToolProgression.option_vanilla, options.ToolProgression.option_progressive],
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
+        options.Walnutsanity.internal_name: [options.Walnutsanity.preset_none, options.Walnutsanity.preset_all],
+    }
+    return low_orphan_options
