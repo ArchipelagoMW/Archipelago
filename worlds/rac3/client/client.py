@@ -301,7 +301,10 @@ class Rac3Context(CommonContext):
                 )
                 format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.GREEN 
                 player_name = self.player_names.get(net_item.player, "???")
-                self.game_interface.notification_queue.append((f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}', RAC3BOXTHEME.HINT))
+                hint_text = f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}'
+                if net_item.player != self.slot:
+                    hint_text += f"\\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s world."
+                self.game_interface.notification_queue.append((hint_text, RAC3BOXTHEME.HINT))
 
 
 def launch_client():
