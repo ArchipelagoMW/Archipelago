@@ -14,31 +14,31 @@ from ..ability_randomization import (
     build_enemy_copy_ability_policy,
     remap_is_whitelist_preserving,
 )
-from ..options import EnemyCopyAbilityRandomization
+from ..options import AbilityRandomizationMode
 
 
 def test_vanilla_mode_returns_identity_mapping_policy() -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(12345),
-        EnemyCopyAbilityRandomization.option_vanilla,
-        randomize_boss_spawned_ability_grants=True,
-        randomize_miniboss_ability_grants=True,
+        AbilityRandomizationMode.option_vanilla,
+        include_boss_spawns=True,
+        include_minibosses=True,
     )
 
     remap = policy["identity_map"]
     assert len(remap) == len(VALID_ENEMY_COPY_ABILITIES)
     assert all(remap[name] == name for name in VALID_ENEMY_COPY_ABILITIES)
     assert remap_is_whitelist_preserving(remap, VALID_ENEMY_COPY_ABILITIES)
-    assert policy["randomize_boss_spawned_ability_grants"] is True
-    assert policy["randomize_miniboss_ability_grants"] is True
+    assert policy["ability_randomization_boss_spawns"] is True
+    assert policy["ability_randomization_minibosses"] is True
 
 
 def test_shuffled_mode_maps_enemy_type_consistently() -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(20260322),
-        EnemyCopyAbilityRandomization.option_shuffled,
-        randomize_boss_spawned_ability_grants=False,
-        randomize_miniboss_ability_grants=False,
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=False,
+        include_minibosses=False,
     )
     first = ability_for_enemy_type(policy, "WADDLE_DEE")
     second = ability_for_enemy_type(policy, "WADDLE_DEE")
@@ -47,16 +47,16 @@ def test_shuffled_mode_maps_enemy_type_consistently() -> None:
     assert first == second
     assert first in VALID_ENEMY_COPY_ABILITIES
     assert other in VALID_ENEMY_COPY_ABILITIES
-    assert policy["randomize_boss_spawned_ability_grants"] is False
-    assert policy["randomize_miniboss_ability_grants"] is False
+    assert policy["ability_randomization_boss_spawns"] is False
+    assert policy["ability_randomization_minibosses"] is False
 
 
 def test_completely_random_mode_varies_by_event() -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(7),
-        EnemyCopyAbilityRandomization.option_completely_random,
-        randomize_boss_spawned_ability_grants=True,
-        randomize_miniboss_ability_grants=True,
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
     )
     first = ability_for_enemy_grant_event(policy, 1, "WADDLE_DEE")
     second = ability_for_enemy_grant_event(policy, 2, "WADDLE_DEE")
@@ -78,7 +78,7 @@ def test_empty_whitelist_raises_value_error() -> None:
     with pytest.raises(ValueError, match="enemy copy-ability whitelist cannot be empty"):
         build_enemy_copy_ability_policy(
             random.Random(1),
-            EnemyCopyAbilityRandomization.option_shuffled,
+            AbilityRandomizationMode.option_shuffled,
             True,
             True,
             whitelist=[],
@@ -93,7 +93,7 @@ def test_forbidden_abilities_in_custom_whitelist_raise() -> None:
     with pytest.raises(ValueError, match="forbidden enemy copy abilities present"):
         build_enemy_copy_ability_policy(
             random.Random(10),
-            EnemyCopyAbilityRandomization.option_shuffled,
+            AbilityRandomizationMode.option_shuffled,
             True,
             True,
             whitelist=["Sword", "Wait"],
@@ -104,7 +104,7 @@ def test_unknown_abilities_in_custom_whitelist_raise() -> None:
     with pytest.raises(ValueError, match="unknown enemy copy abilities present"):
         build_enemy_copy_ability_policy(
             random.Random(10),
-            EnemyCopyAbilityRandomization.option_shuffled,
+            AbilityRandomizationMode.option_shuffled,
             True,
             True,
             whitelist=["Sword", "TotallyFakeAbility"],
@@ -115,18 +115,50 @@ def test_build_policy_is_deterministic_for_same_seed_and_options() -> None:
     rng_seed = 20260322
     policy1 = build_enemy_copy_ability_policy(
         random.Random(rng_seed),
-        EnemyCopyAbilityRandomization.option_shuffled,
-        randomize_boss_spawned_ability_grants=True,
-        randomize_miniboss_ability_grants=True,
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
     )
     policy2 = build_enemy_copy_ability_policy(
         random.Random(rng_seed),
-        EnemyCopyAbilityRandomization.option_shuffled,
-        randomize_boss_spawned_ability_grants=True,
-        randomize_miniboss_ability_grants=True,
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
     )
 
     assert policy1 == policy2
     enemies = ["WADDLE_DEE", "BLADE_KNIGHT", "HOT_HEAD"]
     for enemy in enemies:
         assert ability_for_enemy_type(policy1, enemy) == ability_for_enemy_type(policy2, enemy)
+
+
+def test_non_ability_enemies_flag_defaults_to_false_in_policy() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(1),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+    )
+    assert policy["ability_randomization_passive_enemies"] is False
+
+
+def test_non_ability_enemies_flag_true_stored_in_policy() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(1),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+    )
+    assert policy["ability_randomization_passive_enemies"] is True
+
+
+def test_vanilla_mode_stores_non_ability_flag_in_policy() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(1),
+        AbilityRandomizationMode.option_vanilla,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+    )
+    assert policy["ability_randomization_passive_enemies"] is True

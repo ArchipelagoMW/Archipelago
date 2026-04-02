@@ -7,7 +7,8 @@ Address evidence source:
 - kamrandomizer enemy/object ability tables (kamrandomizer.py)
 
 Notes:
-- We only patch entries that natively grant a non-zero ability.
+- We patch entries that natively grant a non-zero ability, plus zero-id
+    sources when `ability_randomization_passive_enemies` is enabled.
 - Wait remains excluded via the existing policy whitelist.
 """
 
@@ -26,7 +27,7 @@ from .enemy_ability_data import (
     LEGACY_ABILITY_ALIASES,
     VALID_ENEMY_COPY_ABILITIES,
 )
-from .options import EnemyCopyAbilityRandomization
+from .options import AbilityRandomizationMode
 
 _MISSING_RUNTIME_ABILITY_NAMES = set(VALID_ENEMY_COPY_ABILITIES) - set(ABILITY_NAME_TO_ID)
 
@@ -47,11 +48,16 @@ def _ability_name_to_id(name: str) -> int:
 
 
 def _is_source_enabled(source: AbilitySource, policy: dict[str, Any]) -> bool:
-    if source.kind == "miniboss" and not bool(policy.get("randomize_miniboss_ability_grants", True)):
+    if source.kind == "miniboss" and not bool(policy.get("ability_randomization_minibosses", True)):
         return False
-    if source.kind == "boss_spawned" and not bool(policy.get("randomize_boss_spawned_ability_grants", True)):
+    if source.kind == "boss_spawned" and not bool(policy.get("ability_randomization_boss_spawns", True)):
         return False
     return True
+
+
+def _source_event_key(source: AbilitySource) -> str:
+    address_fragment = ",".join(f"{address:06X}" for address in source.addresses)
+    return f"{source.kind}:{source.key}:{address_fragment}"
 
 
 def build_enemy_copy_runtime_patch_writes(policy: dict[str, Any]) -> dict[int, int]:
@@ -63,26 +69,27 @@ def build_enemy_copy_runtime_patch_writes(policy: dict[str, Any]) -> dict[int, i
     per-ability-source variation (each patched source entry can map differently),
     not per-live-grant re-roll at runtime.
     """
-    mode = int(policy.get("mode", EnemyCopyAbilityRandomization.option_vanilla))
-    if mode == EnemyCopyAbilityRandomization.option_vanilla:
+    mode = int(policy.get("mode", AbilityRandomizationMode.option_vanilla))
+    if mode == AbilityRandomizationMode.option_vanilla:
         return {}
 
     _validate_runtime_ability_ids()
 
+    randomize_non_ability = bool(policy.get("ability_randomization_passive_enemies", False))
+
     writes: dict[int, int] = {}
-    for source_index, source in enumerate(ABILITY_SOURCES):
-        # Preserve vanilla no-ability entries.
-        if source.default_ability_id == 0:
+    for source in ABILITY_SOURCES:
+        # Preserve vanilla no-ability entries unless the option explicitly enables them.
+        if source.default_ability_id == 0 and not randomize_non_ability:
             continue
         if not _is_source_enabled(source, policy):
             continue
 
-        if mode == EnemyCopyAbilityRandomization.option_shuffled:
+        if mode == AbilityRandomizationMode.option_shuffled:
             ability_name = ability_for_enemy_type(policy, source.key)
-        elif mode == EnemyCopyAbilityRandomization.option_completely_random:
-            # Keep mapping stable per source independent of category toggles.
-            source_event_index = source_index + 1
-            ability_name = ability_for_enemy_grant_event(policy, source_event_index, source.key)
+        elif mode == AbilityRandomizationMode.option_completely_random:
+            # Keep mapping stable per source independent of list ordering and toggles.
+            ability_name = ability_for_enemy_grant_event(policy, _source_event_key(source), source.key)
         else:
             raise ValueError(f"unsupported enemy copy-ability randomization mode: {mode}")
 

@@ -6,6 +6,27 @@
     ],
     "default_ability": "Missile"
   },
+  "BATTY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351A86"
+    ],
+    "default_ability": "Normal"
+  },
+  "BIG_WADDLE_DEE": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3517E6"
+    ],
+    "default_ability": "Normal"
+  },
+  "BLIPPER": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35167E"
+    ],
+    "default_ability": "Normal"
+  },
   "BOMBER": {
     "kind": "enemy",
     "addresses": [
@@ -20,6 +41,20 @@
     ],
     "default_ability": "Fighter"
   },
+  "BRONTO_BURT": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351666"
+    ],
+    "default_ability": "Normal"
+  },
+  "CHIP": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35170E"
+    ],
+    "default_ability": "Normal"
+  },
   "COOKIN": {
     "kind": "enemy",
     "addresses": [
@@ -33,6 +68,14 @@
       "0x35176E"
     ],
     "default_ability": "Cupid"
+  },
+  "DROPPY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351AFE",
+      "0x3527D6"
+    ],
+    "default_ability": "Normal"
   },
   "FLAMER": {
     "kind": "enemy",
@@ -55,6 +98,20 @@
     ],
     "default_ability": "Stone"
   },
+  "GLUNK": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351696"
+    ],
+    "default_ability": "Normal"
+  },
+  "HALEY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35173E"
+    ],
+    "default_ability": "Normal"
+  },
   "HEAVY_KNIGHT": {
     "kind": "enemy",
     "addresses": [
@@ -69,12 +126,26 @@
     ],
     "default_ability": "Fire"
   },
+  "JACK": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3517CE"
+    ],
+    "default_ability": "Normal"
+  },
   "LASER_BALL": {
     "kind": "enemy",
     "addresses": [
       "0x351846"
     ],
     "default_ability": "Laser"
+  },
+  "LEAP": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3517B6"
+    ],
+    "default_ability": "Normal"
   },
   "METAL_GUARDIAN": {
     "kind": "enemy",
@@ -111,6 +182,20 @@
     ],
     "default_ability": "Stone"
   },
+  "ROLY_POLY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351756"
+    ],
+    "default_ability": "Normal"
+  },
+  "SHOOTY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351996"
+    ],
+    "default_ability": "Normal"
+  },
   "SIR_KIBBLE": {
     "kind": "enemy",
     "addresses": [
@@ -125,12 +210,33 @@
     ],
     "default_ability": "Sword"
   },
+  "SNOOTER": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3516F6"
+    ],
+    "default_ability": "Normal"
+  },
+  "SOARAR": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351726"
+    ],
+    "default_ability": "Normal"
+  },
   "SPARKY": {
     "kind": "enemy",
     "addresses": [
       "0x3518A6"
     ],
     "default_ability": "Spark"
+  },
+  "SQUISHY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3516AE"
+    ],
+    "default_ability": "Normal"
   },
   "SWORD_KNIGHT": {
     "kind": "enemy",
@@ -152,6 +258,13 @@
       "0x3518D6"
     ],
     "default_ability": "UFO"
+  },
+  "WADDLE_DEE": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35164E"
+    ],
+    "default_ability": "Normal"
   },
   "WADDLE_DOO": {
     "kind": "enemy",
@@ -222,6 +335,13 @@
       "0x351BBE"
     ],
     "default_ability": "Throw"
+  },
+  "WADDLE_DEE_MINI": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351B76"
+    ],
+    "default_ability": "Normal"
   },
   "BOMBAR_BOMB": {
     "kind": "boss_spawned",

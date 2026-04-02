@@ -15,7 +15,7 @@ import random
 from typing import Any, Iterable
 
 from .enemy_ability_data import FORBIDDEN_ENEMY_COPY_ABILITIES, VALID_ENEMY_COPY_ABILITIES
-from .options import EnemyCopyAbilityRandomization
+from .options import AbilityRandomizationMode
 
 
 def _normalize_whitelist(values: Iterable[str]) -> list[str]:
@@ -34,10 +34,10 @@ def _normalize_whitelist(values: Iterable[str]) -> list[str]:
 def build_enemy_copy_ability_policy(
     rng: random.Random,
     mode: int,
-    randomize_boss_spawned_ability_grants: bool,
-    randomize_miniboss_ability_grants: bool,
+    include_boss_spawns: bool,
+    include_minibosses: bool,
     whitelist: Iterable[str] = VALID_ENEMY_COPY_ABILITIES,
-
+    include_passive_enemies: bool = False,
 ) -> dict[str, Any]:
     """Build deterministic slot-data policy for enemy copy-ability randomization.
 
@@ -50,22 +50,23 @@ def build_enemy_copy_ability_policy(
     policy: dict[str, Any] = {
         "mode": int(mode),
         "allowed_abilities": ordered,
-        "randomize_boss_spawned_ability_grants": bool(randomize_boss_spawned_ability_grants),
-        "randomize_miniboss_ability_grants": bool(randomize_miniboss_ability_grants),
+        "ability_randomization_boss_spawns": bool(include_boss_spawns),
+        "ability_randomization_minibosses": bool(include_minibosses),
+        "ability_randomization_passive_enemies": bool(include_passive_enemies),
     }
 
-    if mode == EnemyCopyAbilityRandomization.option_vanilla:
+    if mode == AbilityRandomizationMode.option_vanilla:
         policy["identity_map"] = {name: name for name in ordered}
         return policy
 
     seed_value = rng.getrandbits(64)
     policy["seed"] = seed_value
 
-    if mode == EnemyCopyAbilityRandomization.option_shuffled:
+    if mode == AbilityRandomizationMode.option_shuffled:
         policy["mapping_style"] = "per_enemy_type"
         return policy
 
-    if mode == EnemyCopyAbilityRandomization.option_completely_random:
+    if mode == AbilityRandomizationMode.option_completely_random:
         policy["mapping_style"] = "per_grant_event"
         return policy
 
@@ -80,7 +81,7 @@ def _stable_index(seed: int, key: str, pool_size: int) -> int:
 
 def ability_for_enemy_type(policy: dict[str, Any], enemy_type_key: str) -> str:
     """Return the deterministic shuffled ability for an enemy type key."""
-    if int(policy.get("mode", -1)) != EnemyCopyAbilityRandomization.option_shuffled:
+    if int(policy.get("mode", -1)) != AbilityRandomizationMode.option_shuffled:
         raise ValueError("ability_for_enemy_type requires shuffled mode policy")
 
     abilities = list(policy.get("allowed_abilities", []))
@@ -92,9 +93,9 @@ def ability_for_enemy_type(policy: dict[str, Any], enemy_type_key: str) -> str:
     return abilities[index]
 
 
-def ability_for_enemy_grant_event(policy: dict[str, Any], event_index: int, enemy_type_key: str) -> str:
+def ability_for_enemy_grant_event(policy: dict[str, Any], event_index: int | str, enemy_type_key: str) -> str:
     """Return the deterministic per-event ability for completely random mode."""
-    if int(policy.get("mode", -1)) != EnemyCopyAbilityRandomization.option_completely_random:
+    if int(policy.get("mode", -1)) != AbilityRandomizationMode.option_completely_random:
         raise ValueError("ability_for_enemy_grant_event requires completely random mode policy")
 
     abilities = list(policy.get("allowed_abilities", []))
@@ -132,15 +133,15 @@ def build_enemy_copy_ability_remap(
     """
     ordered = _normalize_whitelist(whitelist)
 
-    if mode == EnemyCopyAbilityRandomization.option_vanilla:
+    if mode == AbilityRandomizationMode.option_vanilla:
         return {name: name for name in ordered}
 
-    if mode == EnemyCopyAbilityRandomization.option_shuffled:
+    if mode == AbilityRandomizationMode.option_shuffled:
         shuffled = list(ordered)
         random.Random(rng.getrandbits(64)).shuffle(shuffled)
         return {source: target for source, target in zip(ordered, shuffled)}
 
-    if mode == EnemyCopyAbilityRandomization.option_completely_random:
+    if mode == AbilityRandomizationMode.option_completely_random:
         # Snapshot remap for compatibility only; runtime per-event behavior uses
         # ability_for_enemy_grant_event with policy mode.
         shuffled = list(ordered)

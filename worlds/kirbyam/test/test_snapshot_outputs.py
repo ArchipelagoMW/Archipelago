@@ -14,7 +14,7 @@ from ..ability_randomization import (
     ability_for_enemy_type,
     build_enemy_copy_ability_policy,
 )
-from ..options import EnemyCopyAbilityRandomization
+from ..options import AbilityRandomizationMode
 
 SNAPSHOT_DIR = Path(__file__).resolve().parent / "data" / "snapshots"
 UPDATE_SNAPSHOTS = os.environ.get("KIRBYAM_UPDATE_SNAPSHOTS") == "1"
@@ -50,18 +50,19 @@ def _build_representative_slot_data() -> dict[str, object]:
         "goal": 0,
         "shards": 2,
         "death_link": True,
-        "enemy_copy_ability_randomization": 1,
-        "randomize_boss_spawned_ability_grants": True,
-        "randomize_miniboss_ability_grants": False,
+        "ability_randomization_mode": 1,
+        "ability_randomization_boss_spawns": True,
+        "ability_randomization_minibosses": False,
+        "ability_randomization_passive_enemies": False,
         "room_sanity": False,
     }
 
     world.options = options
     world._enemy_copy_ability_policy = build_enemy_copy_ability_policy(
         random.Random(20260322),
-        EnemyCopyAbilityRandomization.option_shuffled,
-        randomize_boss_spawned_ability_grants=True,
-        randomize_miniboss_ability_grants=False,
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=False,
     )
     return KirbyAmWorld.fill_slot_data(world)
 
@@ -77,9 +78,9 @@ def _build_deterministic_mapping_artifacts() -> dict[str, object]:
 
     shuffled_policy = build_enemy_copy_ability_policy(
         random.Random(20260322),
-        EnemyCopyAbilityRandomization.option_shuffled,
-        randomize_boss_spawned_ability_grants=False,
-        randomize_miniboss_ability_grants=False,
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=False,
+        include_minibosses=False,
     )
     shuffled_mapping = {
         key: ability_for_enemy_type(shuffled_policy, key)
@@ -88,9 +89,9 @@ def _build_deterministic_mapping_artifacts() -> dict[str, object]:
 
     random_policy = build_enemy_copy_ability_policy(
         random.Random(20260322),
-        EnemyCopyAbilityRandomization.option_completely_random,
-        randomize_boss_spawned_ability_grants=True,
-        randomize_miniboss_ability_grants=True,
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
     )
     random_mapping = {
         key: {

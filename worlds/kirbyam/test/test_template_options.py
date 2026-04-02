@@ -28,7 +28,7 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             game_block = data["Kirby & The Amazing Mirror"]
             goal_weights = game_block["goal"]
             shard_weights = game_block["shards"]
-            ability_weights = game_block["enemy_copy_ability_randomization"]
+            ability_weights = game_block["ability_randomization_mode"]
 
             assert "dark_mind" in goal_weights
             assert "100" not in goal_weights

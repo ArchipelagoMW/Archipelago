@@ -32,7 +32,7 @@ from .items import KirbyAmItem, create_item_label_to_code_map, get_item_classifi
 from .locations import KirbyAmLocation, create_location_label_to_id_map
 from .options import (
     OPTION_GROUPS,
-    EnemyCopyAbilityRandomization,
+    AbilityRandomizationMode,
     Goal,
     KirbyAmOptions,
     RandomizeShards,
@@ -186,32 +186,36 @@ class KirbyAmWorld(World):
         with generation_stage("generate_early", self.player, self.player_name):
             logger.info(f"[P{self.player}] Shards mode: {self.options.shards.current_key}")
 
-            mode = int(self.options.enemy_copy_ability_randomization.value)
-            randomize_boss_spawned = bool(self.options.randomize_boss_spawned_ability_grants.value)
-            randomize_miniboss = bool(self.options.randomize_miniboss_ability_grants.value)
+            mode = int(self.options.ability_randomization_mode.value)
+            randomize_boss_spawned = bool(self.options.ability_randomization_boss_spawns.value)
+            randomize_miniboss = bool(self.options.ability_randomization_minibosses.value)
+            randomize_non_ability = bool(self.options.ability_randomization_passive_enemies.value)
             self._enemy_copy_ability_policy = build_enemy_copy_ability_policy(
                 self.random,
                 mode,
                 randomize_boss_spawned,
                 randomize_miniboss,
+                include_passive_enemies=randomize_non_ability,
             )
-            if mode == EnemyCopyAbilityRandomization.option_vanilla:
+            if mode == AbilityRandomizationMode.option_vanilla:
                 logger.info(
                     "[P%s] Enemy copy-ability randomization: vanilla (%s whitelist entries)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
                 )
-            elif mode == EnemyCopyAbilityRandomization.option_shuffled:
+            elif mode == AbilityRandomizationMode.option_shuffled:
                 logger.info(
-                    "[P%s] Enemy copy-ability randomization: shuffled (%s whitelist entries)",
+                    "[P%s] Enemy copy-ability randomization: shuffled (%s whitelist entries, non_ability=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
+                    randomize_non_ability,
                 )
             else:
                 logger.info(
-                    "[P%s] Enemy copy-ability randomization: completely_random (%s whitelist entries)",
+                    "[P%s] Enemy copy-ability randomization: completely_random (%s whitelist entries, non_ability=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
+                    randomize_non_ability,
                 )
                 logger.debug(
                     "[P%s] Enemy copy-ability policy: %s",
@@ -480,14 +484,17 @@ class KirbyAmWorld(World):
 
     # Helper method to fill slot data
     def fill_slot_data(self) -> dict[str, Any]:
-        # Slot data needed by client. Keep minimal while you iterate.
+        # Slot data needed by client.
+        # Pre-v0.1.0 policy: emit only canonical ability_randomization_* keys.
+        # Legacy key aliases are intentionally not emitted before first public release.
         slot_data = self.options.as_dict(
             "goal",
             "shards",
             "death_link",
-            "enemy_copy_ability_randomization",
-            "randomize_boss_spawned_ability_grants",
-            "randomize_miniboss_ability_grants",
+            "ability_randomization_mode",
+            "ability_randomization_boss_spawns",
+            "ability_randomization_minibosses",
+            "ability_randomization_passive_enemies",
             "room_sanity",
             toggles_as_bools=True,
         )

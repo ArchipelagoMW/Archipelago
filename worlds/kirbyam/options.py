@@ -10,6 +10,7 @@ from Options import (
     ItemLinks,
     LocalItems,
     NonLocalItems,
+    OptionGroup,
     PerGameCommonOptions,
     PlandoItems,
     PriorityLocations,
@@ -54,35 +55,49 @@ class RandomizeShards(Choice):
     option_completely_random = 2
 
 
-class EnemyCopyAbilityRandomization(Choice):
-        """
-        Controls randomization of enemy-granted copy abilities.
+class AbilityRandomizationMode(Choice):
+    """
+    Controls randomization of enemy-granted copy abilities.
 
-        - Vanilla: Enemy copy abilities stay at native defaults.
-        - Shuffled: Experimental. Enemy types are remapped deterministically so
-            all enemies of the same type grant the same ability.
-        - Completely Random: Experimental. Eligible enemy ability sources are
-            remapped independently (deterministic per source entry). Hidden
-            from the generated player template for the first public build.
-        """
-        display_name = "Enemy Copy-Ability Randomization"
-        default = 0
-        option_vanilla = 0
-        option_shuffled = 1
-        option_completely_random = 2
-        template_excluded_choices = frozenset({"completely_random"})
+    - Vanilla: Enemy copy abilities stay at native defaults.
+    - Shuffled: Experimental. Enemy types are remapped deterministically so
+        all enemies of the same type grant the same ability.
+    - Completely Random: Experimental. Eligible enemy ability sources are remapped
+        independently (deterministic per source entry). Hidden from the
+        generated player template for the first public build.
+    """
+    display_name = "Ability Randomization Mode"
+    default = 0
+    option_vanilla = 0
+    option_shuffled = 1
+    option_completely_random = 2
+    template_excluded_choices = frozenset({"completely_random"})
 
 
-class RandomizeBossSpawnedAbilityGrants(Toggle):
-    """Whether boss-spawned ability grants are randomized. Only applies when Enemy Copy-Ability Randomization is not Vanilla."""
-    display_name = "Randomize Boss-Spawned Ability Grants"
+# The following three options only apply when Ability Randomization Mode is not Vanilla.
+# Regular enemy sources (kind: enemy) with a non-zero native copy ability are always included
+# regardless of these settings; miniboss and boss-spawn ability sources are controlled by the
+# toggles below.
+
+class AbilityRandomizationBossSpawns(Toggle):
+    """Include boss-spawned ability grants in randomization. Only applies when Ability Randomization Mode is not Vanilla."""
+    display_name = "Ability Randomization: Boss Spawns"
     default = 1
 
 
-class RandomizeMiniBossAbilityGrants(Toggle):
-    """Whether mini-boss ability grants are randomized. Only applies when Enemy Copy-Ability Randomization is not Vanilla."""
-    display_name = "Randomize Mini-Boss Ability Grants"
+class AbilityRandomizationMinibosses(Toggle):
+    """Include mini-boss ability grants in randomization. Only applies when Ability Randomization Mode is not Vanilla."""
+    display_name = "Ability Randomization: Minibosses"
     default = 1
+
+
+class AbilityRandomizationPassiveEnemies(Toggle):
+    """
+    When enabled, enemies that normally do not grant a copy ability can receive a
+    randomized ability. Only applies when Ability Randomization Mode is not Vanilla.
+    """
+    display_name = "Ability Randomization: Passive Enemies"
+    default = 0
 
 
 class EnableDebugLogging(Toggle):
@@ -162,11 +177,13 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     shards: RandomizeShards
 
-    enemy_copy_ability_randomization: EnemyCopyAbilityRandomization
+    ability_randomization_mode: AbilityRandomizationMode
 
-    randomize_boss_spawned_ability_grants: RandomizeBossSpawnedAbilityGrants
+    ability_randomization_boss_spawns: AbilityRandomizationBossSpawns
 
-    randomize_miniboss_ability_grants: RandomizeMiniBossAbilityGrants
+    ability_randomization_minibosses: AbilityRandomizationMinibosses
+
+    ability_randomization_passive_enemies: AbilityRandomizationPassiveEnemies
 
     room_sanity: RoomSanity
 
@@ -175,4 +192,11 @@ class KirbyAmOptions(PerGameCommonOptions):
     death_link: KirbyAmDeathLink
 
 
-OPTION_GROUPS = []
+OPTION_GROUPS = [
+    OptionGroup("Ability Randomization", [
+        AbilityRandomizationMode,
+        AbilityRandomizationBossSpawns,
+        AbilityRandomizationMinibosses,
+        AbilityRandomizationPassiveEnemies,
+    ]),
+]

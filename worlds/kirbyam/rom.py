@@ -16,7 +16,7 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from .data import data
 from .enemy_ability_runtime_patch import build_enemy_copy_runtime_patch_writes
-from .options import EnemyCopyAbilityRandomization
+from .options import AbilityRandomizationMode
 
 if TYPE_CHECKING:
     from . import KirbyAmWorld
@@ -49,9 +49,9 @@ def write_tokens(world: "KirbyAmWorld", patch: KirbyAmProcedurePatch) -> None:
     if auth_addr is not None:
         patch.write_token(APTokenTypes.WRITE, auth_addr, world.auth)
 
-    mode = int(world.options.enemy_copy_ability_randomization.value)
+    mode = int(world.options.ability_randomization_mode.value)
     policy = getattr(world, "_enemy_copy_ability_policy", None)
-    if mode != EnemyCopyAbilityRandomization.option_vanilla and not isinstance(policy, dict):
+    if mode != AbilityRandomizationMode.option_vanilla and not isinstance(policy, dict):
         raise ValueError(
             "enemy_copy_ability_policy must be initialized before writing non-vanilla "
             "enemy copy-ability runtime patch tokens"
@@ -59,10 +59,6 @@ def write_tokens(world: "KirbyAmWorld", patch: KirbyAmProcedurePatch) -> None:
 
     if isinstance(policy, dict):
         ability_writes = build_enemy_copy_runtime_patch_writes(policy)
-        if mode != EnemyCopyAbilityRandomization.option_vanilla and not ability_writes:
-            raise ValueError(
-                "non-vanilla enemy copy-ability mode produced no runtime patch writes"
-            )
         for rom_offset, ability_id in sorted(ability_writes.items()):
             patch.write_token(APTokenTypes.WRITE, rom_offset, bytes([ability_id]))
 
