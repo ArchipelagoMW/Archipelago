@@ -47,7 +47,7 @@ class TestHatsLogic(SVTestBase):
                     self.assert_cannot_reach_location(location)
                     self.collect(required_item)
             else:
-                with self.subTest(f"Requires one of {", ".join((it.name for it in required_item))} to {location}"):
+                with self.subTest(f"Requires one of {', '.join((it.name for it in required_item))} to {location}"):
                     self.remove(required_item)
                     self.assert_cannot_reach_location(location)
                     self.collect(required_item)
