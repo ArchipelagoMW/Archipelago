@@ -250,7 +250,7 @@ class RAC3ITEM:
     MUSEUM = "Infobot: Insomniac Museum"
 
     LIGHTSABER_WRENCH = "Lightsaber Wrench"
-    
+
     TITANIUM_BOLT = "Titanium Bolt"
     WEAPON_XP = "Weapon Level-Up"
     PLAYER_XP = "Player EXP"

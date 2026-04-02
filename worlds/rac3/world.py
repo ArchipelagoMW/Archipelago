@@ -205,6 +205,8 @@ class RaC3World(World):
             option_list.append(RAC3OPTION.VR_CHALLENGES)
         if self.options.weapon_vendors.value == 0:
             option_list.append(RAC3OPTION.WEAPON_VENDORS)
+        if self.options.armor_vendor.value == 0:
+            option_list.append(RAC3OPTION.ARMOR_VENDOR)
         if self.options.ship_vendor.value == 0:
             option_list.append(RAC3OPTION.SHIP_VENDOR)
         if self.options.sewer_crystals.value < 3:

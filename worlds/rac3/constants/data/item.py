@@ -180,7 +180,7 @@ class RAC3ITEMDATA:
         else:
             tags: list[str] = [RAC3ITEMTAG.CLANK]
         return RAC3ITEMDATA(idx, ap_classification=ItemClassification.progression, tags=tags)
-    
+
     @staticmethod
     def construct_cheat(idx: int,
                         address: Optional[int] = None,
