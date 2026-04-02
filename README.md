@@ -85,6 +85,7 @@ Currently, the following games are supported:
 * Mario & Luigi: Superstar Saga
 * Mario Kart Double Dash
 * Mega Man 2
+* Mega Man 3
 * Mega Man Battle Network 3: Blue Version
 * Mega Man X
 * Mega Man X2
