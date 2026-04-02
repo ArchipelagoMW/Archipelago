@@ -14,38 +14,8 @@ import hashlib
 import random
 from typing import Any, Iterable
 
+from .enemy_ability_data import FORBIDDEN_ENEMY_COPY_ABILITIES, VALID_ENEMY_COPY_ABILITIES
 from .options import EnemyCopyAbilityRandomization
-
-# Wait is intentionally excluded by design (issue #111).
-FORBIDDEN_ENEMY_COPY_ABILITIES: frozenset[str] = frozenset({"Wait"})
-
-VALID_ENEMY_COPY_ABILITIES: tuple[str, ...] = (
-    "Beam",
-    "Bomb",
-    "Burning",
-    "Cook",
-    "Crash",
-    "Cutter",
-    "Cupid",
-    "Fighter",
-    "Fire",
-    "Hammer",
-    "Ice",
-    "Laser",
-    "Magic",
-    "Mini",
-    "Missile",
-    "Parasol",
-    "Smash",
-    "Sleep",
-    "Spark",
-    "Stone",
-    "Sword",
-    "Throw",
-    "Tornado",
-    "UFO",
-    "Wheel",
-)
 
 
 def _normalize_whitelist(values: Iterable[str]) -> list[str]:

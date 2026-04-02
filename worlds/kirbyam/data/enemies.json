@@ -1,0 +1,359 @@
+{
+  "BANG_BANG": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351AB6"
+    ],
+    "default_ability": "Missile"
+  },
+  "BOMBER": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351A0E"
+    ],
+    "default_ability": "Crash"
+  },
+  "BOXIN": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3519C6"
+    ],
+    "default_ability": "Fighter"
+  },
+  "COOKIN": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3519DE"
+    ],
+    "default_ability": "Cook"
+  },
+  "CUPIE": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35176E"
+    ],
+    "default_ability": "Cupid"
+  },
+  "FLAMER": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351816"
+    ],
+    "default_ability": "Burning"
+  },
+  "FOLEY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35197E"
+    ],
+    "default_ability": "Bomb"
+  },
+  "GIANT_ROCKY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351A3E"
+    ],
+    "default_ability": "Stone"
+  },
+  "HEAVY_KNIGHT": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351A26"
+    ],
+    "default_ability": "Sword"
+  },
+  "HOT_HEAD": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35182E"
+    ],
+    "default_ability": "Fire"
+  },
+  "LASER_BALL": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351846"
+    ],
+    "default_ability": "Laser"
+  },
+  "METAL_GUARDIAN": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351A56"
+    ],
+    "default_ability": "Laser"
+  },
+  "MINNY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3519F6"
+    ],
+    "default_ability": "Mini"
+  },
+  "NODDY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35191E"
+    ],
+    "default_ability": "Sleep"
+  },
+  "PENGY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35185E"
+    ],
+    "default_ability": "Ice"
+  },
+  "ROCKY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351876"
+    ],
+    "default_ability": "Stone"
+  },
+  "SIR_KIBBLE": {
+    "kind": "enemy",
+    "addresses": [
+      "0x35188E"
+    ],
+    "default_ability": "Cutter"
+  },
+  "SNAPPER": {
+    "kind": "enemy",
+    "addresses": [
+      "0x352536"
+    ],
+    "default_ability": "Sword"
+  },
+  "SPARKY": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3518A6"
+    ],
+    "default_ability": "Spark"
+  },
+  "SWORD_KNIGHT": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3518BE"
+    ],
+    "default_ability": "Sword"
+  },
+  "TWISTER": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3518EE"
+    ],
+    "default_ability": "Tornado"
+  },
+  "UFO": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3518D6"
+    ],
+    "default_ability": "UFO"
+  },
+  "WADDLE_DOO": {
+    "kind": "enemy",
+    "addresses": [
+      "0x3517FE"
+    ],
+    "default_ability": "Beam"
+  },
+  "WHEELIE": {
+    "kind": "enemy",
+    "addresses": [
+      "0x351906"
+    ],
+    "default_ability": "Wheel"
+  },
+  "BATAFIRE": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351BD6"
+    ],
+    "default_ability": "Burning"
+  },
+  "BOMBAR": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351C36"
+    ],
+    "default_ability": "Missile"
+  },
+  "BONKERS": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351BA6"
+    ],
+    "default_ability": "Hammer"
+  },
+  "BOX_BOXER": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351BEE"
+    ],
+    "default_ability": "Fighter"
+  },
+  "BOXY": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351C06"
+    ],
+    "default_ability": "Magic"
+  },
+  "MASTER_HAND": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351C1E"
+    ],
+    "default_ability": "Smash"
+  },
+  "MR_FROSTY": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351B8E"
+    ],
+    "default_ability": "Ice"
+  },
+  "PHAN_PHAN": {
+    "kind": "miniboss",
+    "addresses": [
+      "0x351BBE"
+    ],
+    "default_ability": "Throw"
+  },
+  "BOMBAR_BOMB": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3526FE"
+    ],
+    "default_ability": "Bomb"
+  },
+  "BOMBAR_MISSILE": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x352716"
+    ],
+    "default_ability": "Missile"
+  },
+  "DARK_MIND_BLUE_STAR": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x35296E"
+    ],
+    "default_ability": "Ice"
+  },
+  "DARK_MIND_BOMB": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x351ACE"
+    ],
+    "default_ability": "Crash"
+  },
+  "DARK_MIND_PURPLE_STAR": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x352986"
+    ],
+    "default_ability": "Spark"
+  },
+  "DARK_MIND_RED_STAR": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x352956"
+    ],
+    "default_ability": "Fire"
+  },
+  "MOLEY_BOMB": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3528AE"
+    ],
+    "default_ability": "Bomb"
+  },
+  "MOLEY_LARGE_ROCK": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3528C6"
+    ],
+    "default_ability": "Stone"
+  },
+  "MOLEY_OIL_DRUM": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3528DE"
+    ],
+    "default_ability": "Burning"
+  },
+  "MOLEY_SPINY": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3528F6"
+    ],
+    "default_ability": "Cutter"
+  },
+  "MOLEY_TIRE": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x352896"
+    ],
+    "default_ability": "Wheel"
+  },
+  "PARASOL_OBJECT": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x35257E"
+    ],
+    "default_ability": "Parasol"
+  },
+  "PRANK_BOMB": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x352686"
+    ],
+    "default_ability": "Bomb"
+  },
+  "PRANK_FIREBALL": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x352656"
+    ],
+    "default_ability": "Fire"
+  },
+  "PRANK_ICE": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x35266E"
+    ],
+    "default_ability": "Ice"
+  },
+  "WIZ_BOMB": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x35278E"
+    ],
+    "default_ability": "Bomb"
+  },
+  "WIZ_CAR": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x35275E"
+    ],
+    "default_ability": "Wheel"
+  },
+  "WIZ_CLOUD": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3527A6"
+    ],
+    "default_ability": "Spark"
+  },
+  "WIZ_POISON_APPLE": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3527BE"
+    ],
+    "default_ability": "Sleep"
+  }
+}

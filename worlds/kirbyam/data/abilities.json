@@ -1,0 +1,92 @@
+{
+  "Beam": {
+    "runtime_ability_id": 7,
+    "aliases": [
+      "Needle"
+    ]
+  },
+  "Bomb": {
+    "runtime_ability_id": 9
+  },
+  "Burning": {
+    "runtime_ability_id": 3
+  },
+  "Cook": {
+    "runtime_ability_id": 12
+  },
+  "Crash": {
+    "runtime_ability_id": 24
+  },
+  "Cutter": {
+    "runtime_ability_id": 6
+  },
+  "Cupid": {
+    "runtime_ability_id": 19
+  },
+  "Fighter": {
+    "runtime_ability_id": 20
+  },
+  "Fire": {
+    "runtime_ability_id": 1
+  },
+  "Hammer": {
+    "runtime_ability_id": 17
+  },
+  "Ice": {
+    "runtime_ability_id": 2
+  },
+  "Laser": {
+    "runtime_ability_id": 13
+  },
+  "Magic": {
+    "runtime_ability_id": 21
+  },
+  "Master": {
+    "runtime_ability_id": 26,
+    "enemy_copy_allowed": false
+  },
+  "Mini": {
+    "runtime_ability_id": 23
+  },
+  "Missile": {
+    "runtime_ability_id": 25
+  },
+  "Normal": {
+    "runtime_ability_id": 0,
+    "enemy_copy_allowed": false
+  },
+  "Parasol": {
+    "runtime_ability_id": 5
+  },
+  "Smash": {
+    "runtime_ability_id": 22
+  },
+  "Sleep": {
+    "runtime_ability_id": 11
+  },
+  "Spark": {
+    "runtime_ability_id": 15
+  },
+  "Stone": {
+    "runtime_ability_id": 8
+  },
+  "Sword": {
+    "runtime_ability_id": 18
+  },
+  "Throw": {
+    "runtime_ability_id": 10
+  },
+  "Tornado": {
+    "runtime_ability_id": 16
+  },
+  "UFO": {
+    "runtime_ability_id": 14
+  },
+  "Wheel": {
+    "runtime_ability_id": 4
+  },
+  "Wait": {
+    "runtime_ability_id": 27,
+    "enemy_copy_allowed": false
+  }
+}

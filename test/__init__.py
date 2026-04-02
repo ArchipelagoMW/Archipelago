@@ -1,4 +1,5 @@
 import pathlib
+import os
 import warnings
 
 import settings
@@ -7,6 +8,7 @@ warnings.simplefilter("always")
 warnings.filterwarnings(action="ignore", category=DeprecationWarning, module="s2clientprotocol")
 settings.no_gui = True
 settings.skip_autosave = True
+os.environ.setdefault("SKIP_PYTHON_VERSION_CHECK", "1")
 
 import ModuleUpdate
 
