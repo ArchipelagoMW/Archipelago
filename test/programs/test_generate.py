@@ -4,6 +4,7 @@ import unittest
 import os
 import os.path
 import sys
+from unittest.mock import patch
 
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -137,3 +138,30 @@ class TestGenerateWeights(TestGenerateMain):
                     result, getattr(namespace, option_name)[player].value,
                     "Generated results from weights file did not match expected value."
                 )
+
+    def test_generate_logs_rolled_options(self):
+        from settings import get_settings
+        from Utils import user_path, local_path
+        settings = get_settings()
+        settings.generator.player_files_path = settings.generator.PlayerFilesPath(self.yaml_input_dir)
+        settings.generator.players = 5
+        settings._filename = None
+        user_path_backup = user_path.cached_path
+        user_path.cached_path = local_path()
+        try:
+            sys.argv = [sys.argv[0], "--seed", "1"]
+            with patch("Generate.logging.info") as mocked_info:
+                Generate.main()
+        finally:
+            user_path.cached_path = user_path_backup
+
+        self.assertTrue(
+            any(
+                call.args
+                and isinstance(call.args[0], str)
+                and "Rolled options (" in call.args[0]
+                and any("progression_balancing" in str(arg) for arg in call.args[1:])
+                for call in mocked_info.call_args_list
+            ),
+            "Expected generation log to include resolved rolled options values.",
+        )

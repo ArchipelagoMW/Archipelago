@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Unhide KirbyAM common item/location options in generated templates and option surface (`local_items`, `non_local_items`, `start_inventory`, `start_hints`, `start_location_hints`, `exclude_locations`, `priority_locations`, `item_links`, `plando_items`), and document standard Archipelago usage in world docs (Issue #546).
 - Add `Randomize Non-Ability Enemies` world option (`ability_randomization_passive_enemies`) that, when enabled alongside non-vanilla enemy copy-ability randomization, allows enemies that normally grant no copy ability (e.g. Waddle Dee, Bronto Burt, Batty) to receive a randomized ability from the whitelist. Includes 16 additional enemies and a split Waddle Dee mini-boss entry (`WADDLE_DEE_MINI`) gated by the existing mini-boss toggle (Issue #398).
 - Reorganize enemy ability-randomization slot/config keys to `ability_randomization_*` names and document that legacy key aliases are intentionally not emitted during the pre-public (`< v0.1.0`) phase.
 

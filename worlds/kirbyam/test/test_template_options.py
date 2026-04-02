@@ -45,18 +45,17 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             assert "100% Save File" not in content
             assert "DEBUG: Testing-only goal" not in content
             assert "KirbyAM DeathLink uses native Kirby HP semantics" not in content
-            assert "Item & Location Options" not in content
             assert requires_game_version == KirbyAmWorld.world_version.as_simple_string()
 
-            assert "local_items" not in game_block
-            assert "non_local_items" not in game_block
-            assert "start_inventory" not in game_block
-            assert "start_hints" not in game_block
-            assert "start_location_hints" not in game_block
-            assert "exclude_locations" not in game_block
-            assert "priority_locations" not in game_block
-            assert "item_links" not in game_block
-            assert "plando_items" not in game_block
+            assert "local_items" in game_block
+            assert "non_local_items" in game_block
+            assert "start_inventory" in game_block
+            assert "start_hints" in game_block
+            assert "start_location_hints" in game_block
+            assert "exclude_locations" in game_block
+            assert "priority_locations" in game_block
+            assert "item_links" in game_block
+            assert "plando_items" in game_block
     finally:
         worlds.AutoWorld.AutoWorldRegister.world_types = old_world_types
 

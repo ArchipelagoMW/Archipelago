@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import json
 import logging
 import os
 import random
@@ -262,6 +263,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                         # use the filename
                         args.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                 args.name[player] = handle_name(args.name[player], player, name_counter)
+                _log_player_options(player, settings_object, args.name[player])
 
             except Exception as e:
                 logging.exception(f"Exception reading settings in file {path} document #{doc_index + 1} "
@@ -286,6 +288,33 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                          f"See logs for full tracebacks.\n\n{errors}")
 
     return args, seed
+
+
+def _option_value_for_log(value: Any) -> Any:
+    if isinstance(value, Options.Option):
+        value = value.value
+    if isinstance(value, set):
+        return sorted(value)
+    if isinstance(value, dict):
+        return {key: _option_value_for_log(value[key]) for key in sorted(value)}
+    if isinstance(value, (list, tuple)):
+        return [_option_value_for_log(entry) for entry in value]
+    return value
+
+
+def _log_player_options(player: int, settings_object: argparse.Namespace, player_name: str) -> None:
+    option_values = {
+        option_key: _option_value_for_log(option_value)
+        for option_key, option_value in vars(settings_object).items()
+        if option_value is not None
+    }
+    logging.info(
+        "P%s Rolled options (%s/%s): %s",
+        player,
+        player_name,
+        settings_object.game,
+        json.dumps(option_values, sort_keys=True, ensure_ascii=True, default=str),
+    )
 
 
 def read_weights_yamls(path) -> tuple[Any, ...]:

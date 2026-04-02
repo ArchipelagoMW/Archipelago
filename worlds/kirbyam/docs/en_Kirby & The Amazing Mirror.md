@@ -51,6 +51,23 @@ The KirbyAM world defines the following item groups for use in YAML-based item/l
 - To ensure you get at least one helpful item early: Plando the first chest to require an item from the `Useful` group.
 
 
+## Common Item/Location Options
+
+KirbyAM supports the standard Archipelago common options for item and location control:
+
+- `local_items`: force selected item names/groups to stay in your world.
+- `non_local_items`: force selected item names/groups out of your world.
+- `start_inventory`: begin with selected items precollected.
+- `start_hints`: begin with hints for selected item names/groups.
+- `start_location_hints`: begin with hints for selected location names.
+- `exclude_locations`: remove selected locations from placement.
+- `priority_locations`: bias selected locations toward important item placement.
+- `item_links`: configure linked/shared item pools across players.
+- `plando_items`: explicitly plan item placement.
+
+Use exact item/location names from this world (or the item groups listed above) when configuring these fields.
+
+
 
 ## What other changes are made to the game?
 
