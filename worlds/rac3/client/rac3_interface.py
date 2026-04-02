@@ -603,6 +603,9 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.HEALTH, 1)
                 if self.player_type == RAC3PLAYERTYPE.GIANT:
                     self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 1)
+                if self.vehicle != 0:
+                    health_addr = self._read32(self._read32(self.vehicle + 0x68))
+                    self._write_float(health_addr, 1)
             case RAC3ITEM.NO_AMMO_TRAP:
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
