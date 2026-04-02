@@ -132,6 +132,7 @@ def test_non_ability_option_off_excludes_zero_id_entries() -> None:
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=False,
+        no_ability_weight=0,
     )
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
@@ -148,6 +149,7 @@ def test_non_ability_option_on_includes_zero_id_enemy_entries() -> None:
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=True,
+        no_ability_weight=0,
     )
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
@@ -166,6 +168,7 @@ def test_non_ability_option_on_patches_both_droppy_addresses() -> None:
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=True,
+        no_ability_weight=0,
     )
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
@@ -183,6 +186,7 @@ def test_non_ability_option_on_with_miniboss_toggle_off_excludes_mini_waddle_dee
         include_boss_spawns=True,
         include_minibosses=False,
         include_passive_enemies=True,
+        no_ability_weight=0,
     )
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
@@ -200,6 +204,7 @@ def test_non_ability_option_on_with_miniboss_toggle_on_includes_mini_waddle_dee(
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=True,
+        no_ability_weight=0,
     )
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
@@ -240,3 +245,38 @@ def test_completely_random_mapping_is_stable_when_skipped_zero_id_sources_are_ad
     shifted_writes = build_enemy_copy_runtime_patch_writes(shifted_policy)
 
     assert shifted_writes == baseline_writes
+
+
+def test_full_no_ability_weight_sets_included_randomized_sources_to_zero() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260324),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=False,
+        no_ability_weight=100,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy)
+
+    assert writes[0x3517FE] == 0
+    assert writes[0x351906] == 0
+    assert 0x35164E not in writes
+
+
+def test_full_no_ability_weight_respects_existing_source_toggles() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260324),
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=False,
+        include_minibosses=False,
+        include_passive_enemies=True,
+        no_ability_weight=100,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy)
+
+    assert writes[0x3517FE] == 0
+    assert writes[0x35164E] == 0
+    assert 0x351BA6 not in writes
+    assert 0x352686 not in writes

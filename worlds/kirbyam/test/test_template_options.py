@@ -41,6 +41,7 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             assert "vanilla" in ability_weights
             assert "shuffled" in ability_weights
             assert "completely_random" not in ability_weights
+            assert "ability_randomization_no_ability_weight" in game_block
 
             assert "100% Save File" not in content
             assert "DEBUG: Testing-only goal" not in content

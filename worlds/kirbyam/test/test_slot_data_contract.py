@@ -43,6 +43,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "ability_randomization_boss_spawns": True,
         "ability_randomization_minibosses": False,
         "ability_randomization_passive_enemies": False,
+        "ability_randomization_no_ability_weight": 55,
         "room_sanity": False,
     }
 
@@ -54,6 +55,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "ability_randomization_boss_spawns": True,
         "ability_randomization_minibosses": False,
         "ability_randomization_passive_enemies": False,
+        "ability_randomization_no_ability_weight": 55,
     }
 
     return KirbyAmWorld.fill_slot_data(world)

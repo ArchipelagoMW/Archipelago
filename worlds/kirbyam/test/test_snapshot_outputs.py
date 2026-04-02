@@ -54,6 +54,7 @@ def _build_representative_slot_data() -> dict[str, object]:
         "ability_randomization_boss_spawns": True,
         "ability_randomization_minibosses": False,
         "ability_randomization_passive_enemies": False,
+        "ability_randomization_no_ability_weight": 55,
         "room_sanity": False,
     }
 
@@ -63,6 +64,7 @@ def _build_representative_slot_data() -> dict[str, object]:
         AbilityRandomizationMode.option_shuffled,
         include_boss_spawns=True,
         include_minibosses=False,
+        no_ability_weight=55,
     )
     return KirbyAmWorld.fill_slot_data(world)
 
@@ -81,6 +83,7 @@ def _build_deterministic_mapping_artifacts() -> dict[str, object]:
         AbilityRandomizationMode.option_shuffled,
         include_boss_spawns=False,
         include_minibosses=False,
+        no_ability_weight=55,
     )
     shuffled_mapping = {
         key: ability_for_enemy_type(shuffled_policy, key)
@@ -92,6 +95,7 @@ def _build_deterministic_mapping_artifacts() -> dict[str, object]:
         AbilityRandomizationMode.option_completely_random,
         include_boss_spawns=True,
         include_minibosses=True,
+        no_ability_weight=55,
     )
     random_mapping = {
         key: {

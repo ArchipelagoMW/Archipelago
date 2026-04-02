@@ -8,7 +8,7 @@
     "HOT_HEAD": {
       "1": "Bomb",
       "2": "Wheel",
-      "3": "Fighter"
+      "3": "Normal"
     },
     "SIR_KIBBLE": {
       "1": "Laser",
@@ -18,17 +18,18 @@
     "SPARKY": {
       "1": "Smash",
       "2": "Stone",
-      "3": "Stone"
+      "3": "Normal"
     },
     "WADDLE_DEE": {
       "1": "Magic",
-      "2": "Burning",
-      "3": "Sword"
+      "2": "Normal",
+      "3": "Normal"
     }
   },
   "random_policy": {
     "ability_randomization_boss_spawns": true,
     "ability_randomization_minibosses": true,
+    "ability_randomization_no_ability_weight": 55,
     "ability_randomization_passive_enemies": false,
     "allowed_abilities": [
       "Beam",
@@ -62,15 +63,16 @@
     "seed": 7437834127177459305
   },
   "shuffled_enemy_mapping": {
-    "BLADE_KNIGHT": "Beam",
+    "BLADE_KNIGHT": "Normal",
     "HOT_HEAD": "Bomb",
     "SIR_KIBBLE": "Laser",
     "SPARKY": "Tornado",
-    "WADDLE_DEE": "Magic"
+    "WADDLE_DEE": "Normal"
   },
   "shuffled_policy": {
     "ability_randomization_boss_spawns": false,
     "ability_randomization_minibosses": false,
+    "ability_randomization_no_ability_weight": 55,
     "ability_randomization_passive_enemies": false,
     "allowed_abilities": [
       "Beam",

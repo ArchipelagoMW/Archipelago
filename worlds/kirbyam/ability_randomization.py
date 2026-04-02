@@ -18,6 +18,9 @@ from .enemy_ability_data import FORBIDDEN_ENEMY_COPY_ABILITIES, VALID_ENEMY_COPY
 from .options import AbilityRandomizationMode
 
 
+NO_ABILITY_NAME = "Normal"
+
+
 def _normalize_whitelist(values: Iterable[str]) -> list[str]:
     normalized = sorted({value.strip() for value in values if value and value.strip()})
     if not normalized:
@@ -31,6 +34,13 @@ def _normalize_whitelist(values: Iterable[str]) -> list[str]:
     return normalized
 
 
+def _normalize_no_ability_weight(value: int) -> int:
+    normalized = int(value)
+    if not 0 <= normalized <= 100:
+        raise ValueError("enemy no-ability weight must be between 0 and 100")
+    return normalized
+
+
 def build_enemy_copy_ability_policy(
     rng: random.Random,
     mode: int,
@@ -38,6 +48,7 @@ def build_enemy_copy_ability_policy(
     include_minibosses: bool,
     whitelist: Iterable[str] = VALID_ENEMY_COPY_ABILITIES,
     include_passive_enemies: bool = False,
+    no_ability_weight: int = 0,
 ) -> dict[str, Any]:
     """Build deterministic slot-data policy for enemy copy-ability randomization.
 
@@ -46,6 +57,7 @@ def build_enemy_copy_ability_policy(
     `ability_for_enemy_grant_event`.
     """
     ordered = _normalize_whitelist(whitelist)
+    normalized_no_ability_weight = _normalize_no_ability_weight(no_ability_weight)
 
     policy: dict[str, Any] = {
         "mode": int(mode),
@@ -53,6 +65,7 @@ def build_enemy_copy_ability_policy(
         "ability_randomization_boss_spawns": bool(include_boss_spawns),
         "ability_randomization_minibosses": bool(include_minibosses),
         "ability_randomization_passive_enemies": bool(include_passive_enemies),
+        "ability_randomization_no_ability_weight": normalized_no_ability_weight,
     }
 
     if mode == AbilityRandomizationMode.option_vanilla:
@@ -79,6 +92,14 @@ def _stable_index(seed: int, key: str, pool_size: int) -> int:
     return int.from_bytes(digest[:8], "little") % pool_size
 
 
+def _selects_no_ability(seed: int, key: str, weight: int) -> bool:
+    if weight <= 0:
+        return False
+    if weight >= 100:
+        return True
+    return _stable_index(seed, f"{key}:no_ability", 100) < weight
+
+
 def ability_for_enemy_type(policy: dict[str, Any], enemy_type_key: str) -> str:
     """Return the deterministic shuffled ability for an enemy type key."""
     if int(policy.get("mode", -1)) != AbilityRandomizationMode.option_shuffled:
@@ -89,6 +110,11 @@ def ability_for_enemy_type(policy: dict[str, Any], enemy_type_key: str) -> str:
         raise ValueError("policy allowed_abilities cannot be empty")
 
     seed = int(policy.get("seed", 0))
+    no_ability_weight = _normalize_no_ability_weight(
+        policy.get("ability_randomization_no_ability_weight", 0)
+    )
+    if _selects_no_ability(seed, enemy_type_key, no_ability_weight):
+        return NO_ABILITY_NAME
     index = _stable_index(seed, enemy_type_key, len(abilities))
     return abilities[index]
 
@@ -104,6 +130,11 @@ def ability_for_enemy_grant_event(policy: dict[str, Any], event_index: int | str
 
     seed = int(policy.get("seed", 0))
     event_key = f"{enemy_type_key}:{event_index}"
+    no_ability_weight = _normalize_no_ability_weight(
+        policy.get("ability_randomization_no_ability_weight", 0)
+    )
+    if _selects_no_ability(seed, event_key, no_ability_weight):
+        return NO_ABILITY_NAME
     index = _stable_index(seed, event_key, len(abilities))
     return abilities[index]
 

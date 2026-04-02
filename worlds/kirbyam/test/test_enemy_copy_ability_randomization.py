@@ -23,6 +23,7 @@ def test_vanilla_mode_returns_identity_mapping_policy() -> None:
         AbilityRandomizationMode.option_vanilla,
         include_boss_spawns=True,
         include_minibosses=True,
+        no_ability_weight=55,
     )
 
     remap = policy["identity_map"]
@@ -31,6 +32,7 @@ def test_vanilla_mode_returns_identity_mapping_policy() -> None:
     assert remap_is_whitelist_preserving(remap, VALID_ENEMY_COPY_ABILITIES)
     assert policy["ability_randomization_boss_spawns"] is True
     assert policy["ability_randomization_minibosses"] is True
+    assert policy["ability_randomization_no_ability_weight"] == 55
 
 
 def test_shuffled_mode_maps_enemy_type_consistently() -> None:
@@ -72,6 +74,17 @@ def test_completely_random_mode_varies_by_event() -> None:
 def test_invalid_mode_raises_value_error() -> None:
     with pytest.raises(ValueError, match="unsupported enemy copy-ability randomization mode"):
         build_enemy_copy_ability_policy(random.Random(1), 999, True, True)
+
+
+def test_invalid_no_ability_weight_raises_value_error() -> None:
+    with pytest.raises(ValueError, match="enemy no-ability weight must be between 0 and 100"):
+        build_enemy_copy_ability_policy(
+            random.Random(1),
+            AbilityRandomizationMode.option_shuffled,
+            True,
+            True,
+            no_ability_weight=101,
+        )
 
 
 def test_empty_whitelist_raises_value_error() -> None:
@@ -140,6 +153,7 @@ def test_non_ability_enemies_flag_defaults_to_false_in_policy() -> None:
         include_minibosses=True,
     )
     assert policy["ability_randomization_passive_enemies"] is False
+    assert policy["ability_randomization_no_ability_weight"] == 0
 
 
 def test_non_ability_enemies_flag_true_stored_in_policy() -> None:
@@ -149,8 +163,10 @@ def test_non_ability_enemies_flag_true_stored_in_policy() -> None:
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=True,
+        no_ability_weight=55,
     )
     assert policy["ability_randomization_passive_enemies"] is True
+    assert policy["ability_randomization_no_ability_weight"] == 55
 
 
 def test_vanilla_mode_stores_non_ability_flag_in_policy() -> None:
@@ -160,5 +176,63 @@ def test_vanilla_mode_stores_non_ability_flag_in_policy() -> None:
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=True,
+        no_ability_weight=55,
     )
     assert policy["ability_randomization_passive_enemies"] is True
+    assert policy["ability_randomization_no_ability_weight"] == 55
+
+
+def test_shuffled_mode_with_zero_no_ability_weight_never_returns_normal() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260322),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        no_ability_weight=0,
+    )
+
+    for enemy in ("WADDLE_DEE", "BLADE_KNIGHT", "HOT_HEAD", "SIR_KIBBLE"):
+        assert ability_for_enemy_type(policy, enemy) in VALID_ENEMY_COPY_ABILITIES
+
+
+def test_shuffled_mode_with_full_no_ability_weight_always_returns_normal() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260322),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        no_ability_weight=100,
+    )
+
+    for enemy in ("WADDLE_DEE", "BLADE_KNIGHT", "HOT_HEAD", "SIR_KIBBLE"):
+        assert ability_for_enemy_type(policy, enemy) == "Normal"
+
+
+def test_completely_random_weight_changes_observed_no_ability_rate() -> None:
+    low_policy = build_enemy_copy_ability_policy(
+        random.Random(20260322),
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        no_ability_weight=10,
+    )
+    high_policy = build_enemy_copy_ability_policy(
+        random.Random(20260322),
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        no_ability_weight=80,
+    )
+
+    low_normal_count = sum(
+        1
+        for event in range(200)
+        if ability_for_enemy_grant_event(low_policy, event, "WADDLE_DEE") == "Normal"
+    )
+    high_normal_count = sum(
+        1
+        for event in range(200)
+        if ability_for_enemy_grant_event(high_policy, event, "WADDLE_DEE") == "Normal"
+    )
+
+    assert high_normal_count > low_normal_count

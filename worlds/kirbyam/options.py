@@ -8,6 +8,7 @@ from Options import (
     DeathLink,
     OptionGroup,
     PerGameCommonOptions,
+    Range,
     Toggle,
 )
 
@@ -90,6 +91,25 @@ class AbilityRandomizationPassiveEnemies(Toggle):
     default = 0
 
 
+class AbilityRandomizationNoAbilityWeight(Range):
+    """
+    Sets the percentage chance that an included randomized enemy grant resolves to
+    no ability instead of a copy ability.
+
+    - 0: Included randomized enemies always grant a copy ability.
+    - 100: Included randomized enemies always grant no ability.
+
+    This only affects enemies already included by the ability randomization mode and
+    the boss/miniboss/passive-enemy toggles.
+    """
+    display_name = "Ability Randomization: No Ability Weight"
+    range_start = 0
+    range_end = 100
+    # Rounded from 827 / 1510 = 54.77% vanilla no-ability regular-enemy placements
+    # in the USA ROM across the current randomized-enemy dataset.
+    default = 55
+
+
 class EnableDebugLogging(Toggle):
     """Enable extra BizHawk client diagnostics for gameplay-state and mailbox delivery troubleshooting."""
     display_name = "Enable Debug Logging"
@@ -120,6 +140,8 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     ability_randomization_passive_enemies: AbilityRandomizationPassiveEnemies
 
+    ability_randomization_no_ability_weight: AbilityRandomizationNoAbilityWeight
+
     room_sanity: RoomSanity
 
     enable_debug_logging: EnableDebugLogging
@@ -133,5 +155,6 @@ OPTION_GROUPS = [
         AbilityRandomizationBossSpawns,
         AbilityRandomizationMinibosses,
         AbilityRandomizationPassiveEnemies,
+        AbilityRandomizationNoAbilityWeight,
     ]),
 ]
