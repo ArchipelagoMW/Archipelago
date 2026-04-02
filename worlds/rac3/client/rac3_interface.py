@@ -1124,6 +1124,8 @@ class Rac3Interface(GameInterface):
             if item_string_offset is not None:
                 item_string_address = string_id_table_start + item_string_offset
                 original_string_ptr = all_strings_start + ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET[item]
+                if self.current_game == RAC3VERSION.EU_ID:
+                    original_string_ptr += 0x11
                 self._write32(item_string_address, original_string_ptr)
         self.should_restore_vendor_item_names = False
 
