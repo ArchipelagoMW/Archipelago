@@ -33,8 +33,8 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
         logger.warning(message)
     if (not settings.allow_chaos_er and EntranceRandomizerBehaviourOptionName.chaos in world_options.entrance_randomization_behaviour):
-        world_options.entrance_randomization.value = options.EntranceRandomization.option_buildings
-        message = f"Chaos Entrance Randomization {message_template} Replaced with 'Buildings'"
+        world_options.entrance_randomization_behavior.value.remove(EntranceRandomizerBehaviourOptionName.chaos)
+        message = f"Chaos Entrance Randomization {message_template} removed from Entrance Randomization Behaviour"
         logger.warning(message)
     if not settings.allow_shipsanity_everything and world_options.shipsanity == options.Shipsanity.option_everything:
         world_options.shipsanity.value = options.Shipsanity.option_full_shipment_with_fish
