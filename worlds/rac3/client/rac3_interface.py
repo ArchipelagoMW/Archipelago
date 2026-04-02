@@ -603,7 +603,7 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.HEALTH, 1)
                 if self.player_type == RAC3PLAYERTYPE.GIANT:
                     self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 1)
-                if self.vehicle != 0:
+                if self.vehicle:
                     health_addr = self._read32(self._read32(self.vehicle + 0x68))
                     self._write_float(health_addr, 1)
             case RAC3ITEM.NO_AMMO_TRAP:
@@ -796,7 +796,7 @@ class Rac3Interface(GameInterface):
             self._write8(RAC3STATUS.HEALTH, 0)
             self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
             # death = choice(list(DEATH_FROM_ACTION.keys()))
-            if self.vehicle != 0:
+            if self.vehicle:
                 health_addr = self._read32(self._read32(self.vehicle + 0x68))
                 self._write32(health_addr, 0)  # health is a float, but we can write 0 as int32
                 if self.planet == RAC3REGION.MARCADIA:
