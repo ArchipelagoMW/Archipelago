@@ -149,6 +149,7 @@ class Rac3Interface(GameInterface):
     armor_vendor_items: list[str] = []
     vendor_type: Optional[RAC3VENDORTYPE] = None
     vendor_string_pointers: dict[str, int] = None
+    should_restore_vendor_item_names: bool = True
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -1108,9 +1109,14 @@ class Rac3Interface(GameInterface):
                 location = combined_locations[item]
                 ap_item_ptr = self.vendor_string_pointers[location]
                 self._write32(item_string_address, ap_item_ptr)
-    
+        self.should_restore_vendor_item_names = True
+
     def restore_vendor_item_names(self):
         """Restore the names of the weapons in the weapon vendor to their original values"""
+        # For performance reasons, we only restore the original names when we need to, which is when the player leaves the vendor menu
+        # Otherwise, we just do 20 writes all the time when in reality the vendor is only interacted with a tiny fraction of the time.
+        if not self.should_restore_vendor_item_names:
+            return
         string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
         all_strings_start = self._read32(string_id_table_start)
         for item in non_prog_weapon_data.keys() | armor_data.keys():
@@ -1119,6 +1125,7 @@ class Rac3Interface(GameInterface):
                 item_string_address = string_id_table_start + item_string_offset
                 original_string_ptr = all_strings_start + ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET[item]
                 self._write32(item_string_address, original_string_ptr)
+        self.should_restore_vendor_item_names = False
 
     ##################
     # Sequence Break #
