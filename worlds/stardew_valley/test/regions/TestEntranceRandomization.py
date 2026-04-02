@@ -35,7 +35,7 @@ class TestEntranceRando(SVTestCase):
         player_randomization_flag = RandomizationFlag.SET_PELICAN_TOWN
 
         with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
-            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag)
+            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, False)
 
             expected_origin, expected_destination = regions_by_name["Region1"], regions_by_name["Region2"]
             expected_connection = connection_data_by_name["randomized_connection"]
