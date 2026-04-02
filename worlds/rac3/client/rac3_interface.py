@@ -147,7 +147,7 @@ class Rac3Interface(GameInterface):
     weapon_vendor_items: list[str] = []
     armor_vendor_items: list[str] = []
     vendor_type: Optional[RAC3VENDORTYPE] = None
-    ship_vendor_string_pointers: dict[str, int] = None
+    vendor_string_pointers: dict[str, int] = None
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -1010,7 +1010,7 @@ class Rac3Interface(GameInterface):
                 ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:self.UnlockItem[RAC3REGION.SLOT_0].status*3]
                 # Set item_name_ptr for each ship item using the string pointer
                 for key in ship_keys:
-                    addr = self.ship_vendor_string_pointers.get(key, 0)
+                    addr = self.vendor_string_pointers.get(key, 0)
                     SHIP_VENDOR_INVENTORY[key].item_name_ptr.value = addr
                 filtered_ship_items = [SHIP_VENDOR_INVENTORY[key] for key in ship_keys if key not in self.checked_locations]
                 new_inventory = filtered_ship_items

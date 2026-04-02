@@ -451,11 +451,14 @@ async def handle_codecave(ctx: 'Context') -> None:
     """Set up the codecave with the current item locations for use in the randomizer"""
     if ctx.slot_data is None or ctx.code_cave_setup:
         return
+    weapon_locations = list(ITEM_TO_WEAPON_VENDOR_LOCATION.values())
+    armor_locations = list(ITEM_TO_ARMOR_VENDOR_LOCATION.values())
     ship_locations = list(SHIP_VENDOR_INVENTORY.keys())
-    ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in ship_locations]
-    ctx.game_interface.ship_vendor_string_pointers = {}
+    all_vendor_locations = weapon_locations + armor_locations + ship_locations
+    ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
+    ctx.game_interface.vendor_string_pointers = {}
     offset = 0x10
-    for loc_key, ap_code in zip(ship_locations, ap_codes):
+    for loc_key, ap_code in zip(all_vendor_locations, ap_codes):
         net_item = ctx.locations_info.get(ap_code, None)
         if net_item is not None:
             item_name = colorize_item_name(
@@ -474,6 +477,6 @@ async def handle_codecave(ctx: 'Context') -> None:
             if not byte_array or byte_array[-1] != 0:
                 byte_array = byte_array + bytes([0])
             ctx.game_interface._write_bytes(addr, byte_array)
-            ctx.game_interface.ship_vendor_string_pointers[loc_key] = addr
+            ctx.game_interface.vendor_string_pointers[loc_key] = addr
             offset += len(byte_array)
             ctx.code_cave_setup = True
