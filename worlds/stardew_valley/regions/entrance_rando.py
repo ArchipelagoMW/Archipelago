@@ -148,7 +148,7 @@ def prepare_chaos_data(
     randomized_entrances: dict[str, str] = {}
 
     for connection in randomized_connections:
-        randomized_entrances[connection] = reverse_connection_name(connection) or connection
+        randomized_entrances[connection] = connection
     return randomized_entrances
 
 
