@@ -3,7 +3,7 @@ import pkgutil
 import typing
 from typing import Any, NamedTuple
 
-from BaseClasses import CollectionState, Location, Region, DEFAULT_COLLECTION_RULE
+from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
 from rule_builder.rules import HasFromListUnique
 from worlds.generic.Rules import set_rule
@@ -254,7 +254,7 @@ def create_regions(world: "NineSolsWorld") -> None:
     # then we want to change the logic from has(node item) to just True
     try:
         e = mw.get_entrance(world.origin_region_name + " -> " + first_node_region, p)
-        e.access_rule = DEFAULT_COLLECTION_RULE
+        e.access_rule = lambda state: True  # on 0.6.7: from BaseClasses import DEFAULT_COLLECTION_RULE
     # otherwise, there won't be an existing connection; we can just add a new one with no rule
     except KeyError:
         mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
