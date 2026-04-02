@@ -1,16 +1,16 @@
 from BaseClasses import EntranceType, Region
 from entrance_rando import ERPlacementState
-from worlds.stardew_valley.options.options import EntranceRandomizationBehaviour
+from worlds.stardew_valley.options.options import EntranceRandomizationBehavior
 
 from ..content import StardewContent
 from ..options import EntranceRandomization
-from ..strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName
+from ..strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName
 from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData, reverse_connection_name
 
 
 def create_player_randomization_flag(
         entrance_randomization_choice: EntranceRandomization,
-        entrance_behaviour_choice: set[EntranceRandomizerBehaviourOptionName],
+        entrance_behavior_choice: set[EntranceRandomizationBehaviorOptionName],
         include_endgame: bool,
         content: StardewContent,
 ):
@@ -34,8 +34,8 @@ def create_player_randomization_flag(
     elif entrance_randomization_choice == EntranceRandomization.option_everywhere:
         flag |= RandomizationFlag.SET_EVERYTHING
 
-    if (EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in entrance_behaviour_choice
-            or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in entrance_behaviour_choice):
+    if (EntranceRandomizationBehaviorOptionName.shuffle_farmhouse in entrance_behavior_choice
+            or EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere in entrance_behavior_choice):
         flag |= RandomizationFlag.FARMHOUSE
     if content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.MASTERY_CAVE
@@ -44,7 +44,7 @@ def create_player_randomization_flag(
     return flag
 
 
-def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBehaviour):
+def get_target_groups(entrance_randomization_behavior: EntranceRandomizationBehavior):
     direction_matching_group_lookup = {
         GroupFlag.TO_ANY: [GroupFlag.TO_ANY, GroupFlag.UP, GroupFlag.DOWN, GroupFlag.LEFT, GroupFlag.RIGHT],
         GroupFlag.UP: [GroupFlag.DOWN, GroupFlag.TO_ANY],
@@ -64,10 +64,10 @@ def get_target_groups(entrance_randomization_behaviour: EntranceRandomizationBeh
     area_mask = 0b0
     farmhouse_mask = GroupFlag.FROM_FARMHOUSE
 
-    if EntranceRandomizerBehaviourOptionName.same_direction in entrance_randomization_behaviour:
+    if EntranceRandomizationBehaviorOptionName.same_direction in entrance_randomization_behavior:
         dir_mask = GroupFlag.DIR_MASK
 
-    if EntranceRandomizerBehaviourOptionName.same_type in entrance_randomization_behaviour:
+    if EntranceRandomizationBehaviorOptionName.same_type in entrance_randomization_behavior:
         area_mask = GroupFlag.AREA_MASK
 
     groups = {

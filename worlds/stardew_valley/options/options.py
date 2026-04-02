@@ -8,7 +8,8 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName, DataRandomizationOptionName, EntranceRandomizerBehaviourOptionName
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName, DataRandomizationOptionName, \
+    EntranceRandomizationBehaviorOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -220,7 +221,7 @@ class EntranceRandomization(Choice):
         return self.value >= self.option_everywhere
 
 
-class EntranceRandomizationBehaviour(OptionSet):
+class EntranceRandomizationBehavior(OptionSet):
     """Modifications to how ER will behave within the randomized locations.
     - Chaos: all Enabled entrances are reshuffled every day!
     - Decoupled: Going into an entrance and going back might bring you somewhere different.
@@ -230,26 +231,26 @@ class EntranceRandomizationBehaviour(OptionSet):
     - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside
     """
 
-    default = frozenset({EntranceRandomizerBehaviourOptionName.same_type})
-    internal_name = "entrance_randomization_behaviour"
-    display_name = "Entrance Randomizer Behaviour"
+    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type})
+    internal_name = "entrance_randomization_behavior"
+    display_name = "Entrance Randomizer Behavior"
     valid_keys = frozenset(
         {
-            EntranceRandomizerBehaviourOptionName.chaos,
-            EntranceRandomizerBehaviourOptionName.decoupled,
-            EntranceRandomizerBehaviourOptionName.shuffle_farmhouse,
-            EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere,
-            EntranceRandomizerBehaviourOptionName.same_direction,
-            EntranceRandomizerBehaviourOptionName.same_type,
+            EntranceRandomizationBehaviorOptionName.chaos,
+            EntranceRandomizationBehaviorOptionName.decoupled,
+            EntranceRandomizationBehaviorOptionName.shuffle_farmhouse,
+            EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere,
+            EntranceRandomizationBehaviorOptionName.same_direction,
+            EntranceRandomizationBehaviorOptionName.same_type,
         }
     )
 
-    preset_easy = frozenset({EntranceRandomizerBehaviourOptionName.same_type})
-    preset_normal = frozenset({EntranceRandomizerBehaviourOptionName.same_type, EntranceRandomizerBehaviourOptionName.shuffle_farmhouse})
-    preset_hard = frozenset({EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere})
+    preset_easy = frozenset({EntranceRandomizationBehaviorOptionName.same_type})
+    preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse})
+    preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere})
 
     def is_chaos(self) -> bool:
-        return EntranceRandomizerBehaviourOptionName.chaos in self.value
+        return EntranceRandomizationBehaviorOptionName.chaos in self.value
 
 
 class StartWithout(OptionSet):
@@ -1253,7 +1254,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     bundle_price: BundlePrice
     bundle_per_room: BundlePerRoom
     entrance_randomization: EntranceRandomization
-    entrance_randomization_behaviour: EntranceRandomizationBehaviour
+    entrance_randomization_behavior: EntranceRandomizationBehavior
     start_without: StartWithout
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity

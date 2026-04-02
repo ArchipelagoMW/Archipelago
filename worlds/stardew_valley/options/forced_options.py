@@ -5,7 +5,7 @@ from . import options
 from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
 from ..mods.mod_data import mod_combination_is_valid, get_invalid_mod_combination
 from ..options.settings import StardewSettings
-from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizerBehaviourOptionName
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizationBehaviorOptionName
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         world_options.bundle_price.value = options.BundlePrice.option_very_expensive
         message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
         logger.warning(message)
-    if (not settings.allow_chaos_er and EntranceRandomizerBehaviourOptionName.chaos in world_options.entrance_randomization_behaviour):
+    if (not settings.allow_chaos_er and EntranceRandomizationBehaviorOptionName.chaos in world_options.entrance_randomization_behavior):
         world_options.entrance_randomization_behavior.value.remove(EntranceRandomizerBehaviourOptionName.chaos)
         message = f"Chaos Entrance Randomization {message_template} removed from Entrance Randomization Behaviour"
         logger.warning(message)

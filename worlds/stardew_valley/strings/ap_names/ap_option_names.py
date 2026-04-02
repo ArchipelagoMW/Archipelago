@@ -43,7 +43,7 @@ class ChefsanityOptionName:
     friendship = "Friendship"
 
 
-class EntranceRandomizerBehaviourOptionName:
+class EntranceRandomizationBehaviorOptionName:
     chaos = "Chaos"
     decoupled = "Decoupled"
     same_direction = "Same Direction"

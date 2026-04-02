@@ -39,7 +39,7 @@ from .regions import create_regions, prepare_mod_data
 from .regions.entrance_rando import get_target_groups, prepare_chaos_data
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
-from .strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName, StartWithoutOptionName
+from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceNames
@@ -222,7 +222,7 @@ class StardewValleyWorld(World):
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
         self.trash_bear_requests = get_trash_bear_requests(self.random, self.content, self.options)
-        if self.options.entrance_randomization_behaviour.is_chaos():
+        if self.options.entrance_randomization_behavior.is_chaos():
             self.randomized_entrances = prepare_chaos_data(randomized_connections)
 
         for bundle_room in self.modified_bundles:
@@ -473,7 +473,7 @@ class StardewValleyWorld(World):
         set_rules(self)
 
     def connect_entrances(self) -> None:
-        is_chaos = self.options.entrance_randomization_behaviour.is_chaos()
+        is_chaos = self.options.entrance_randomization_behavior.is_chaos()
         # when the cutscene-relevant entrances aren't randomized, connect them manually
         if self.options.entrance_randomization.value < EntranceRandomization.option_overworld or is_chaos:
             self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_cutscene)
@@ -501,11 +501,11 @@ class StardewValleyWorld(World):
 
         # in reading of the slot_data the randomized entrances are set when UT is active.
         if self.randomized_entrances is None:  # no slot_data with randomized_entrances found
-            target_groups = get_target_groups(self.options.entrance_randomization_behaviour)
+            target_groups = get_target_groups(self.options.entrance_randomization_behavior)
 
             placement = entrance_rando.randomize_entrances(
                 self,
-                coupled=EntranceRandomizerBehaviourOptionName.decoupled not in self.options.entrance_randomization_behaviour,
+                coupled=EntranceRandomizationBehaviorOptionName.decoupled not in self.options.entrance_randomization_behavior,
                 target_group_lookup=target_groups,
                 on_connect=connect_cutscene_regions_as_well,
             )

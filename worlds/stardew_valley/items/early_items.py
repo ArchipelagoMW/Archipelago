@@ -3,7 +3,7 @@ from random import Random
 from .. import options as stardew_options
 from ..content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
-from ..strings.ap_names.ap_option_names import ChefsanityOptionName, EntranceRandomizerBehaviourOptionName, StartWithoutOptionName
+from ..strings.ap_names.ap_option_names import ChefsanityOptionName, EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.building_names import Building
@@ -84,8 +84,8 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     # When the farmhouse is shuffled too much, the odds of a tiny sphere 1 become large,
     # which means the early_items are likely to lead to fill errors
     if ((
-            EntranceRandomizerBehaviourOptionName.shuffle_farmhouse in options.entrance_randomization_behaviour and options.entrance_randomization.value >= options.entrance_randomization.option_buildings)
-            or EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere in options.entrance_randomization_behaviour):
+            EntranceRandomizationBehaviorOptionName.shuffle_farmhouse in options.entrance_randomization_behavior and options.entrance_randomization.value >= options.entrance_randomization.option_buildings)
+            or EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere in options.entrance_randomization_behavior):
         early_forced = []
 
     for item_name in early_forced:
