@@ -400,31 +400,31 @@ async def handle_vendors(ctx: 'Context') -> None:
         case RAC3VENDORTYPE.WEAPON:
             if not ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False):
                 return
-            vendor_items = ctx.game_interface.weapon_vendor_items
-            is_slimcognito = (
-            ctx.game_interface.planet == RAC3REGION.AQUATOS and
-            bool(ctx.game_interface._read8(
-                RAC3VENDOR.get_vendor_property_address(
-                    ctx.game_interface.planet,
-                    RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET)))
-            )
-            if is_slimcognito:
-                # Only hint Megacorp weapons
-                filtered_items = [item for item in vendor_items if item in MEGACORP_WEAPONS]
-            else:
-                # Only hint Gadgetron weapons
-                filtered_items = [item for item in vendor_items if item not in MEGACORP_WEAPONS]
+            # vendor_items = ctx.game_interface.weapon_vendor_items
+            # is_slimcognito = (
+            # ctx.game_interface.planet == RAC3REGION.AQUATOS and
+            # bool(ctx.game_interface._read8(
+            #     RAC3VENDOR.get_vendor_property_address(
+            #         ctx.game_interface.planet,
+            #         RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET)))
+            # )
+            # if is_slimcognito:
+            #     # Only hint Megacorp weapons
+            #     filtered_items = [item for item in vendor_items if item in MEGACORP_WEAPONS]
+            # else:
+            #     # Only hint Gadgetron weapons
+            #     filtered_items = [item for item in vendor_items if item not in MEGACORP_WEAPONS]
 
-            vendor_locations = [ITEM_TO_WEAPON_VENDOR_LOCATION[item]
-                            for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
-            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
+            # vendor_locations = [ITEM_TO_WEAPON_VENDOR_LOCATION[item]
+            #                 for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
+            # vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
         case RAC3VENDORTYPE.ARMOR:
             if not ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False):
                 return
 
-            armor_items = ctx.game_interface.armor_vendor_items
-            vendor_locations = [ITEM_TO_ARMOR_VENDOR_LOCATION[item] for item in armor_items if item in ITEM_TO_ARMOR_VENDOR_LOCATION]
-            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
+            # armor_items = ctx.game_interface.armor_vendor_items
+            # vendor_locations = [ITEM_TO_ARMOR_VENDOR_LOCATION[item] for item in armor_items if item in ITEM_TO_ARMOR_VENDOR_LOCATION]
+            # vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
         case RAC3VENDORTYPE.SHIP:
             if not ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
                 return
@@ -432,12 +432,12 @@ async def handle_vendors(ctx: 'Context') -> None:
             # filtered_ship_keys = [key for key in ship_keys if key not in ctx.game_interface.checked_locations]
             # vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[key].AP_CODE for key in filtered_ship_keys]
 
-    current_hints = set(vendor_location_apcodes)
-    if current_hints and current_hints != ctx.already_hinted:
-        await ctx.send_msgs([
-            {"cmd": "CreateHints", "locations": vendor_location_apcodes, "player": ctx.slot}
-        ])
-        ctx.already_hinted.update(current_hints)
+    # current_hints = set(vendor_location_apcodes)
+    # if current_hints and current_hints != ctx.already_hinted:
+    #     await ctx.send_msgs([
+    #         {"cmd": "CreateHints", "locations": vendor_location_apcodes, "player": ctx.slot}
+    #     ])
+    #     ctx.already_hinted.update(current_hints)
 
 
 async def handle_sequence_break(ctx: 'Context') -> None:

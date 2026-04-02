@@ -8,7 +8,8 @@ from BaseClasses import ItemClassification
 from CommonClient import logger
 from Utils import __version__
 from worlds.rac3.client.general_interface import GameInterface
-from worlds.rac3.client.texthelper import TEXT_BYTE_TO_EXPECTED_WIDTH
+from worlds.rac3.client.texthelper import (ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET, ITEM_TO_STRING_TABLE_INDEX_OFFSET, 
+                                           TEXT_BYTE_TO_EXPECTED_WIDTH)
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, cheat_data, gadget_data, infobot_data, 
@@ -27,7 +28,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
-from worlds.rac3.constants.locations.vendors import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM, ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION, ITEM_TO_ARMOR_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY, WEAPON_VENDOR_LOCATION_TO_ITEM,
+from worlds.rac3.constants.locations.vendors import (ARMOR_VENDOR_INVENTORY, ARMOR_VENDOR_LOCATION_TO_ITEM, ARMOR_VENDOR_LOCATION_TO_UNLOCK_REGION, ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY, WEAPON_VENDOR_LOCATION_TO_ITEM,
                                                      WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION)
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
@@ -37,7 +38,7 @@ from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, RAC3REGION,
+from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_LOAD_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, RAC3REGION,
                                           RESPAWN_COORDS_OFFSET, SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
@@ -958,6 +959,7 @@ class Rac3Interface(GameInterface):
                     RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
             except ValueError:
                 return None
+        self.restore_vendor_item_names()
         return None
 
     def vendor_update(self):
@@ -1000,10 +1002,12 @@ class Rac3Interface(GameInterface):
                     if self.planet == RAC3REGION.STARSHIP_PHOENIX:
                         # add memory card item
                         new_inventory.append(RAC3WEAPONVENDORSLOTDATA([0, 0, 0x0CDB, 0, 0, 0, 1]))
+                self.overwrite_vendor_item_names()
             case RAC3VENDORTYPE.ARMOR:
                 if not self.options.armor_vendor:
                     return
                 new_inventory = [ARMOR_VENDOR_INVENTORY[ITEM_TO_ARMOR_VENDOR_LOCATION[item]] for item in self.armor_vendor_items]
+                self.overwrite_vendor_item_names()
             case RAC3VENDORTYPE.SHIP:
                 if not self.options.ship_vendor:
                     return
@@ -1092,6 +1096,27 @@ class Rac3Interface(GameInterface):
         if slot_data.ammo_text.value:
             return True
         return False
+
+    def overwrite_vendor_item_names(self):
+        """Overwrite the names of the weapons in the weapon vendor with the provided list of weapon names"""
+        string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
+        for item in self.weapon_vendor_items + self.armor_vendor_items:
+            item_string_offset = ITEM_TO_STRING_TABLE_INDEX_OFFSET.get(item, None)
+            if item_string_offset is not None:
+                item_string_address = string_id_table_start + item_string_offset
+                ap_item_ptr = self.vendor_string_pointers[ITEM_TO_WEAPON_VENDOR_LOCATION[item]]
+                self._write32(item_string_address, ap_item_ptr)
+    
+    def restore_vendor_item_names(self):
+        """Restore the names of the weapons in the weapon vendor to their original values"""
+        string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
+        all_strings_start = self._read32(string_id_table_start)
+        for item in non_prog_weapon_data.keys() | armor_data.keys():
+            item_string_offset = ITEM_TO_STRING_TABLE_INDEX_OFFSET.get(item, None)
+            if item_string_offset is not None:
+                item_string_address = string_id_table_start + item_string_offset
+                original_string_ptr = all_strings_start + ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET[item]
+                self._write32(item_string_address, original_string_ptr)
 
     ##################
     # Sequence Break #
