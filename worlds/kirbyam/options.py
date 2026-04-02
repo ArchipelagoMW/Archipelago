@@ -116,6 +116,12 @@ class EnableDebugLogging(Toggle):
     default = 0
 
 
+class NoExtraLives(Toggle):
+    """Start with zero lives and clamp all extra-life gains to zero during gameplay."""
+    display_name = "No Extra Lives"
+    default = 0
+
+
 class RoomSanity(Toggle):
     """Adds room-visit checks (Room X-YY). Disabled by default because it adds 257 locations."""
     display_name = "Room Sanity"
@@ -131,6 +137,8 @@ class KirbyAmOptions(PerGameCommonOptions):
     goal: Goal
 
     shards: RandomizeShards
+
+    no_extra_lives: NoExtraLives
 
     ability_randomization_mode: AbilityRandomizationMode
 
@@ -150,6 +158,10 @@ class KirbyAmOptions(PerGameCommonOptions):
 
 
 OPTION_GROUPS = [
+    OptionGroup("Make the game harder", [
+        NoExtraLives,
+        KirbyAmDeathLink,
+    ]),
     OptionGroup("Ability Randomization", [
         AbilityRandomizationMode,
         AbilityRandomizationBossSpawns,

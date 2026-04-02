@@ -229,6 +229,12 @@ class KirbyAmClient(BizHawkClient):
         self._last_logged_demo_flags = None
         self._boss_shard_debug_window_active = False
 
+    def _no_extra_lives_enabled(self, ctx: "BizHawkClientContext") -> bool:
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return False
+        return self._coerce_bool(slot_data.get("no_extra_lives", False), False)
+
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
         item_id = KirbyAmClient._coerce_u32(getattr(item, "item", None))
@@ -734,6 +740,7 @@ class KirbyAmClient(BizHawkClient):
                 await self._display_client_message(ctx, "Item sending resumed")
                 self._last_runtime_gate_reason = None
 
+            await self._enforce_no_extra_lives(ctx)
             await self._apply_pending_death_link(ctx)
             await self._poll_and_send_local_death_link(ctx)
 
@@ -797,6 +804,29 @@ class KirbyAmClient(BizHawkClient):
             self._last_local_alive_state = None
             self._suppress_next_local_death_send = False
         logger.info("KirbyAM: DeathLink %s", "enabled" if enabled else "disabled")
+
+    async def _enforce_no_extra_lives(self, ctx: "BizHawkClientContext") -> None:
+        if not self._no_extra_lives_enabled(ctx):
+            return
+
+        lives_addr = data.native_ram_addresses.get("kirby_lives_native")
+        if lives_addr is None:
+            return
+
+        current_lives_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(lives_addr, 1, "System Bus")]))[0]
+        current_lives = int.from_bytes(current_lives_raw[:1], "little", signed=False)
+        if current_lives == 0:
+            return
+
+        await bizhawk.write(ctx.bizhawk_ctx, [(lives_addr, (0).to_bytes(1, "little"), "System Bus")])
+
+        if self._debug_logging_enabled:
+            from CommonClient import logger
+
+            logger.info(
+                "KirbyAM debug: no-extra-lives clamped native lives from %s to 0",
+                current_lives,
+            )
 
     @staticmethod
     def _s8(value: bytes) -> int:

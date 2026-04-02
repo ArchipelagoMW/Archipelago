@@ -1689,6 +1689,78 @@ def test_load_debug_settings_accepts_legacy_gameplay_state_key(mock_bizhawk_cont
     assert client._debug_logging_enabled is True
 
 
+def test_no_extra_lives_enabled_defaults_to_false(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    assert client._no_extra_lives_enabled(mock_bizhawk_context) is False
+
+
+def test_no_extra_lives_enabled_honors_slot_data_toggle(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["no_extra_lives"] = True
+
+    assert client._no_extra_lives_enabled(mock_bizhawk_context) is True
+
+
+@pytest.mark.asyncio
+async def test_enforce_no_extra_lives_writes_zero_to_life_counter(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["no_extra_lives"] = True
+
+    with patch.dict(data.native_ram_addresses, {"kirby_lives_native": 0x02020FE2}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [(2).to_bytes(1, 'little')]
+
+        await client._enforce_no_extra_lives(mock_bizhawk_context)
+
+    mock_write.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        [(0x02020FE2, (0).to_bytes(1, 'little'), 'System Bus')]
+    )
+
+
+@pytest.mark.asyncio
+async def test_enforce_no_extra_lives_skips_write_when_already_zero(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["no_extra_lives"] = True
+
+    with patch.dict(data.native_ram_addresses, {"kirby_lives_native": 0x02020FE2}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [(0).to_bytes(1, 'little')]
+
+        await client._enforce_no_extra_lives(mock_bizhawk_context)
+
+    mock_write.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_enforce_no_extra_lives_logs_only_when_debug_enabled(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+    mock_bizhawk_context.slot_data["no_extra_lives"] = True
+
+    with patch.dict(data.native_ram_addresses, {"kirby_lives_native": 0x02020FE2}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [(1).to_bytes(1, 'little')]
+
+        await client._enforce_no_extra_lives(mock_bizhawk_context)
+
+    mock_write.assert_awaited_once()
+    mock_logger.info.assert_any_call(
+        "KirbyAM debug: no-extra-lives clamped native lives from %s to 0",
+        1,
+    )
+
+
 @pytest.mark.asyncio
 async def test_runtime_gameplay_state_logs_ai_and_demo_changes_with_heartbeat(mock_bizhawk_context):
     client = KirbyAmClient()

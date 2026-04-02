@@ -38,6 +38,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
     options.as_dict.return_value = {
         "goal": 0,
         "shards": 2,
+        "no_extra_lives": False,
         "death_link": True,
         "ability_randomization_mode": 1,
         "ability_randomization_boss_spawns": True,

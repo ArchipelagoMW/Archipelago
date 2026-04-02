@@ -125,6 +125,18 @@
         }
       ]
     },
+    "no_extra_lives_runtime": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "kirby_lives_native",
+          "address": "0x02020FE2",
+          "width": "u8",
+          "source": "katam include/kirby.h (struct Kirby lives field) + katam linker.ld (gKirbys base 0x02020EE0)",
+          "verification": "Integrated for client-side no-extra-lives enforcement; the BizHawk client clamps the native life counter to 0 whenever the world option is enabled"
+        }
+      ]
+    },
     "miniboss_encounters": {
       "status": "candidate",
       "entries": [

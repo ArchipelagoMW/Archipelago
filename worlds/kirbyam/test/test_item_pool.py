@@ -53,7 +53,8 @@ def _build_world_for_create_items(shard_mode: int) -> tuple[KirbyAmWorld, list[K
         shards=SimpleNamespace(value=shard_mode, current_key={
             RandomizeShards.option_vanilla: "vanilla",
             RandomizeShards.option_completely_random: "completely_random",
-        }[shard_mode])
+        }[shard_mode]),
+        no_extra_lives=SimpleNamespace(value=False),
     )
     return world, locations
 
@@ -148,9 +149,11 @@ def test_consumable_filler_item_ids_are_stable() -> None:
 def test_active_filler_selection_is_seed_stable() -> None:
     world_a = KirbyAmWorld.__new__(KirbyAmWorld)
     world_a.random = random.Random(41)
+    world_a.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=False))
 
     world_b = KirbyAmWorld.__new__(KirbyAmWorld)
     world_b.random = random.Random(41)
+    world_b.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=False))
 
     picks_a = [world_a.get_filler_item_name() for _ in range(64)]
     picks_b = [world_b.get_filler_item_name() for _ in range(64)]
@@ -164,6 +167,7 @@ def test_filler_selection_respects_active_pool() -> None:
     """Verify that all filler picks are from the configured active filler pool."""
     world = KirbyAmWorld.__new__(KirbyAmWorld)
     world.random = random.Random(12345)
+    world.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=False))
 
     picks = [world.get_filler_item_name() for _ in range(50)]
 
@@ -182,6 +186,29 @@ def test_active_filler_pool_contents() -> None:
         "Max Tomato",
         "Invincibility Candy",
     )
+
+
+def test_no_extra_lives_excludes_1_up_from_active_filler_pool() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=True))
+
+    assert world._active_filler_pool() == (
+        "Small Food",
+        "Cell Phone Battery",
+        "Max Tomato",
+        "Invincibility Candy",
+    )
+
+
+def test_no_extra_lives_filler_selection_never_picks_1_up() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.random = random.Random(12345)
+    world.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=True))
+
+    picks = [world.get_filler_item_name() for _ in range(50)]
+
+    assert "1 Up" not in picks
+    assert all(pick in world._active_filler_pool() for pick in picks)
 
 
 def test_payload_supports_consumable_and_life_fillers() -> None:

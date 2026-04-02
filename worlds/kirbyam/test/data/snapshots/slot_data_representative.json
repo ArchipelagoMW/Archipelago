@@ -72,6 +72,7 @@
     "Wheel"
   ],
   "goal": 0,
+  "no_extra_lives": false,
   "room_sanity": false,
   "shards": 2
 }

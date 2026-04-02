@@ -76,6 +76,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
 | 0x0203AD10 | 4B | DEMO_PLAYBACK_FLAGS     | Native title-demo discriminator (`demo_playback_flags_native`; bit `0x10` indicates title-screen demo playback) |
 | 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
+| 0x02020FE2 | 1B | KIRBY_LIVES             | Native extra-life counter (`u8`) used for `no_extra_lives` enforcement |
 
 ## Item ID Ranges
 
@@ -141,6 +142,7 @@ Server → Client: ConnectionRefused | Connected
 `slot_data` currently includes:
 - `goal` (int): selected goal option.
 - `shards` (int): shard randomization mode.
+- `no_extra_lives` (bool): when true, exclude `1 Up` filler generation and have the BizHawk client clamp the native life counter to `0` during gameplay.
 - `death_link` (bool): enables/disables AP DeathLink tag synchronization in the client.
 - `ability_randomization_mode` (int): enemy copy-ability mode (`0=vanilla`, `1=shuffled`, `2=completely_random`).
 - `ability_randomization_boss_spawns` (bool): include/exclude ability-granting boss-spawned objects.
@@ -165,6 +167,11 @@ DeathLink runtime behavior contract:
 - Outgoing DeathLink cause text is selected randomly from `worlds/kirbyam/data/deathlink_flavor_text.json`.
     Each template should use the `{player}` placeholder for the sender name.
 - Incoming-application echo suppression prevents immediate re-broadcast loops.
+
+`no_extra_lives` runtime behavior contract:
+- Generation removes `1 Up` from the active filler pool when the option is enabled.
+- During gameplay, the BizHawk client clamps `kirby_lives_native` to `0` so the player starts with zero extra lives and native/in-game life gains are overwritten.
+- Any `no_extra_lives` runtime diagnostics must remain gated behind `debug.logging`.
 ```
 
 **Preconditions before gameplay watchers run:**
