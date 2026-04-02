@@ -39,6 +39,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
                         "and should not be used for normal play!\n")
     connected_to_game: bool = False
     connection_retry_attempts: int = 0
+    correct_version: bool = True
     while not ctx.exit_event.is_set():
         try:
             connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
@@ -47,6 +48,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
                 ctx.is_connected_to_server = connected_to_server
                 if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
                     await ctx.disconnect()
+                    correct_version = False
                     logger.warning(
                         f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
                         f"{ctx.slot_data[RAC3OPTION.VERSION]}")
@@ -54,6 +56,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
                     continue
                 if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
                     await ctx.disconnect()
+                    correct_version = False
                     logger.warning(
                         f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
                         f"{ctx.slot_data[RAC3OPTION.VERSION]}")
@@ -111,7 +114,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
                     logger.info(message)
                     ctx.last_server_message = message
 
-            if connected_to_game and connected_to_server:
+            if connected_to_game and connected_to_server and correct_version:
                 await _handle_game_ready(ctx)
 
         except ConnectionError:
