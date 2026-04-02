@@ -62,7 +62,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
                             self.collect(item_required)
                             self.assert_can_reach_location(location)
                     else:
-                        with self.subTest(f"{fish} requires {" or ".join((item_required.name for item_required in items_required))}"):
+                        with self.subTest(f"{fish} requires {' or '.join((item_required.name for item_required in items_required))}"):
                             self.remove(items_required)
                             self.assert_cannot_reach_location(location)
                             self.collect(items_required)
