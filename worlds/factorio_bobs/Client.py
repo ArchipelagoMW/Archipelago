@@ -396,11 +396,12 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
-                    item_id = transfer_item.item
-                    player_name = ctx.player_names[transfer_item.player]
-                    item_name = ctx.item_names.lookup_in_game(item_id)
-                    factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
-                    commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
+                    if transfer_item.player != ctx.slot:
+                        item_id = transfer_item.item
+                        player_name = ctx.player_names[transfer_item.player]
+                        item_name = ctx.item_names.lookup_in_game(item_id)
+                        factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
+                        commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
                     ctx.send_index += 1
                 if commands:
                     ctx.rcon_client.send_commands(commands)
