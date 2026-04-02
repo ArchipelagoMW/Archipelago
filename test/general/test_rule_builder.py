@@ -29,6 +29,7 @@ from rule_builder.rules import (
     Or,
     Rule,
     True_,
+    AtLeast,
 )
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
@@ -250,6 +251,26 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             Or(HasAnyCount({"A": 1, "B": 2}), HasAnyCount({"A": 2, "B": 2})),
             HasAnyCount.Resolved((("A", 1), ("B", 2)), player=1),
         ),
+        (
+            AtLeast(0, Has("A")),
+            True_.Resolved(player=1),
+        ),
+        (
+            AtLeast(2, True_(), True_(), Has("A")),
+            True_.Resolved(player=1),
+        ),
+        (
+            AtLeast(3, Has("A"), Has("B")),
+            False_.Resolved(player=1),
+        ),
+        (
+            AtLeast(1, Has("A"), Has("B")),
+            HasAny.Resolved(("A", "B"), player=1),
+        ),
+        (
+            AtLeast(2, Has("A"), Has("B")),
+            HasAll.Resolved(("A", "B"), player=1),
+        ),
     )
 )
 class TestSimplify(RuleBuilderTestCase):
@@ -260,6 +281,8 @@ class TestSimplify(RuleBuilderTestCase):
         world = multiworld.worlds[1]
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
+        if resolved_rule != expected:
+            rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
 
 
