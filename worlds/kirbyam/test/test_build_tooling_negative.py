@@ -109,3 +109,85 @@ def test_build_main_missing_manifest(tmp_path: Path) -> None:
         build_mod.__file__ = orig_file
         os.chdir(orig_cwd)
         sys.argv = orig_argv
+
+
+def test_build_main_falls_back_when_make_missing_and_existing_patch_present(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """When make/devkit tools are unavailable, main() continues if base_patch.bsdiff4 already exists."""
+    world_root = tmp_path
+    (world_root / "data").mkdir()
+    (world_root / "data" / "base_patch.bsdiff4").write_bytes(b"existing-patch")
+    (world_root / "archipelago.json").write_text("{}\n", encoding="utf-8")
+
+    fake_script = world_root / "build.py"
+    fake_script.write_text("# placeholder\n", encoding="utf-8")
+
+    built_apworld = world_root / "kirbyam.apworld"
+    installed_target = world_root / "installed" / "kirbyam.apworld"
+    installed: list[Path] = []
+
+    def _raise_make_missing(*_args: object, **_kwargs: object) -> None:
+        raise SystemExit("patch_rom.py failed.\nError: 'make' was not found on PATH.")
+
+    def _build_apworld(_world_root: Path, _world_name: str) -> Path:
+        built_apworld.write_bytes(b"apworld")
+        return built_apworld
+
+    def _install_apworld(_apworld_path: Path, install_path: Path) -> None:
+        install_path.parent.mkdir(parents=True, exist_ok=True)
+        install_path.write_bytes(b"installed")
+        installed.append(install_path)
+
+    monkeypatch.setattr(build_mod, "run_patch_rom", _raise_make_missing)
+    monkeypatch.setattr(build_mod, "build_apworld_in_place", _build_apworld)
+    monkeypatch.setattr(build_mod, "install_apworld", _install_apworld)
+    monkeypatch.setattr(build_mod, "get_default_install_path", lambda _world: installed_target)
+
+    orig_argv = sys.argv
+    orig_file = build_mod.__file__
+    orig_cwd = Path.cwd()
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    sys.argv = ["build.py"]
+    os.chdir(run_dir)
+    try:
+        build_mod.__file__ = str(fake_script)
+        build_mod.main()
+    finally:
+        build_mod.__file__ = orig_file
+        os.chdir(orig_cwd)
+        sys.argv = orig_argv
+
+    assert installed == [installed_target]
+    assert built_apworld.exists()
+
+
+def test_build_main_still_fails_when_make_missing_and_no_existing_patch(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Without an existing base patch, toolchain-missing patch build still fails fast."""
+    world_root = tmp_path
+    (world_root / "data").mkdir()
+    (world_root / "archipelago.json").write_text("{}\n", encoding="utf-8")
+
+    fake_script = world_root / "build.py"
+    fake_script.write_text("# placeholder\n", encoding="utf-8")
+
+    def _raise_make_missing(*_args: object, **_kwargs: object) -> None:
+        raise SystemExit("patch_rom.py failed.\nError: 'make' was not found on PATH.")
+
+    monkeypatch.setattr(build_mod, "run_patch_rom", _raise_make_missing)
+
+    orig_argv = sys.argv
+    orig_file = build_mod.__file__
+    orig_cwd = Path.cwd()
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    sys.argv = ["build.py"]
+    os.chdir(run_dir)
+    try:
+        build_mod.__file__ = str(fake_script)
+        with pytest.raises(SystemExit) as exc_info:
+            build_mod.main()
+        assert "make" in str(exc_info.value)
+    finally:
+        build_mod.__file__ = orig_file
+        os.chdir(orig_cwd)
+        sys.argv = orig_argv

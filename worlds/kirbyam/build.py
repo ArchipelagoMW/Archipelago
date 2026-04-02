@@ -35,6 +35,30 @@ DEFAULT_WORLD_NAME = "kirbyam"
 DEFAULT_APCONTAINER_VERSION = 7
 
 
+def _augment_toolchain_path(base_env: dict[str, str]) -> dict[str, str]:
+    """Return a child-process env with common Windows toolchain paths prepended."""
+    env = dict(base_env)
+    existing_path = env.get("PATH") or env.get("Path") or ""
+
+    user_home = Path.home()
+    path_candidates = [
+        # User-local make install path used in this workspace.
+        user_home / "tools" / "make-4.4.1-without-guile-w32-bin" / "bin",
+        # User-local Arm GNU toolchain path used in this workspace.
+        user_home / "tools" / "arm-gnu-toolchain-14.2.rel1" / "bin",
+        # Winget app links (contains make shim for per-user install).
+        Path(env.get("LOCALAPPDATA", str(user_home / "AppData" / "Local"))) / "Microsoft" / "WinGet" / "Links",
+        # Common devkitPro install locations.
+        Path("C:/devkitPro/msys2/usr/bin"),
+        Path("C:/devkitPro/devkitARM/bin"),
+    ]
+
+    prepended = [str(p) for p in path_candidates if p.exists()]
+    if prepended:
+        env["PATH"] = ";".join(prepended + ([existing_path] if existing_path else []))
+    return env
+
+
 def load_json(path: Path) -> dict[str, Any]:
     try:
         with path.open("r", encoding="utf-8") as f:
@@ -110,15 +134,15 @@ def run_patch_rom(world_root: Path, source_type: str, rom_arg: str | None) -> No
         print(f"  Input ROM:  {rom_arg}")
         # patch_rom.py expects: --source-type arg <in.gba> [patch]
         cmd += [rom_arg, str(patch_out)]
-    else:
-        # patch_rom.py expects: [patch] (default source-type file)
-        # We pass patch_out as the single optional positional.
-        cmd += [str(patch_out)]
+    # For --source-type file, patch_rom.py reads rom_path.tmp and writes to a fixed
+    # output path under worlds/kirbyam/data/. Passing [patch] in this mode is ignored.
 
     try:
+        child_env = _augment_toolchain_path(os.environ)
         proc = subprocess.run(
             cmd,
             cwd=str(payload_dir),
+            env=child_env,
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -254,7 +278,26 @@ def main() -> None:
 
     # 2) Run patch_rom.py (build payload + generate base_patch.bsdiff4)
     if not args.skip_patch:
-        run_patch_rom(world_root, source_type=args.source_type, rom_arg=args.rom)
+        patch_out = world_root / "data" / "base_patch.bsdiff4"
+        try:
+            run_patch_rom(world_root, source_type=args.source_type, rom_arg=args.rom)
+        except SystemExit as e:
+            message = str(e)
+            toolchain_missing = (
+                "'make' was not found on PATH" in message
+                or "required tool 'arm-none-eabi" in message
+            )
+
+            # Allow packaging/install to continue when patch regeneration is unavailable
+            # but an existing base patch is already present in data/.
+            if toolchain_missing and patch_out.exists():
+                print(
+                    "Warning: payload toolchain unavailable; using existing "
+                    f"base patch at {patch_out} and continuing packaging/install."
+                )
+                print("Hint: install GNU make + devkitARM to regenerate base_patch.bsdiff4.")
+            else:
+                raise
     else:
         print("Skipping patch_rom.py (--skip-patch)")
 

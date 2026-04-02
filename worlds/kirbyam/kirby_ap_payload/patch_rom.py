@@ -126,6 +126,20 @@ def run_make():
             ) from e
         except subprocess.CalledProcessError as e:
             output = (e.stdout or "").rstrip()
+            # Some Windows make setups do not provide `rm`, causing only the
+            # clean target to fail. Continue to `make` in that case.
+            if cmd == ["make", "clean"] and (
+                "rm -f" in output
+                or "CreateProcess(NULL, rm -f" in output
+                or "cannot find the file specified" in output.lower()
+            ):
+                print(
+                    "Warning: `make clean` failed because `rm` is unavailable "
+                    "in this environment; continuing with `make`."
+                )
+                if output:
+                    print(output)
+                continue
             raise SystemExit(
                 f"Error: command failed: {' '.join(cmd)}\n"
                 f"{output}"

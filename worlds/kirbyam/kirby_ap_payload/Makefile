@@ -2,6 +2,11 @@ PREFIX  :=
 CC      := arm-none-eabi-gcc
 OBJCOPY := arm-none-eabi-objcopy
 
+# GNU make defaults RM to `rm -f`; on native Windows hosts, prefer cmd's `del`.
+ifeq ($(OS),Windows_NT)
+RM := cmd /C del /Q /F
+endif
+
 # Preserve existing local devkitPro defaults when installed at the historical path.
 ifneq ("$(wildcard C:/devkitPro/devkitARM/bin/arm-none-eabi-gcc.exe)","")
 CC      := C:/devkitPro/devkitARM/bin/arm-none-eabi-gcc.exe
@@ -27,4 +32,4 @@ payload.bin: payload.elf
 	$(OBJCOPY) -O binary $< $@
 
 clean:
-	rm -f *.o payload.elf payload.bin
+	-$(RM) *.o payload.elf payload.bin
