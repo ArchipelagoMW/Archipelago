@@ -99,7 +99,9 @@ def connect_regions(
         connection_data_by_name: dict[str, ConnectionData],
         regions_by_name: dict[str, Region],
         player_randomization_flag: RandomizationFlag,
-) -> None:
+        is_chaos: bool
+) -> set[str]:
+    randomized_entrances: set[str] = set()
     for region_name, region_data in region_data_by_name.items():
         origin_region = regions_by_name[region_name]
 
@@ -107,10 +109,16 @@ def connect_regions(
             connection_data = connection_data_by_name[exit_name]
             destination_region = regions_by_name[connection_data.destination]
 
-            if connection_data.is_eligible_for_randomization(player_randomization_flag):
+            eligible = connection_data.is_eligible_for_randomization(player_randomization_flag)
+            if eligible and is_chaos:
+                randomized_entrances.add(connection_data.name)
+                origin_region.connect(destination_region, connection_data.name)
+            elif eligible:
+                randomized_entrances.add(connection_data.name)
                 create_entrance_rando_target(origin_region, destination_region, connection_data)
             else:
                 origin_region.connect(destination_region, connection_data.name)
+    return randomized_entrances
 
 
 def create_entrance_rando_target(origin: Region, destination: Region, connection_data: ConnectionData) -> None:
@@ -131,6 +139,16 @@ def create_entrance_rando_target(origin: Region, destination: Region, connection
     exit.randomization_type = EntranceType.TWO_WAY
     exit.randomization_group = connection_data.group
     destination.create_er_target(rev).randomization_type = EntranceType.TWO_WAY
+
+
+def prepare_chaos_data(
+        randomized_connections: set[str]
+) -> dict[str, str]:
+    randomized_entrances: dict[str, str] = {}
+
+    for connection in randomized_connections:
+        randomized_entrances[connection] = reverse_connection_name(connection) or connection
+    return randomized_entrances
 
 
 def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:

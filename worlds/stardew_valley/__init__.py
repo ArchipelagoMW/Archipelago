@@ -36,7 +36,7 @@ from .options.presets import sv_options_presets
 from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
-from .regions.entrance_rando import get_target_groups
+from .regions.entrance_rando import get_target_groups, prepare_chaos_data
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName, StartWithoutOptionName
@@ -217,11 +217,13 @@ class StardewValleyWorld(World):
         def create_region(name: str) -> Region:
             return Region(name, self.player, self.multiworld)
 
-        world_regions = create_regions(create_region, self.options, self.content)
+        world_regions, randomized_connections = create_regions(create_region, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
         self.trash_bear_requests = get_trash_bear_requests(self.random, self.content, self.options)
+        if self.options.entrance_randomization_behaviour.is_chaos():
+            self.randomized_entrances = prepare_chaos_data(randomized_connections)
 
         for bundle_room in self.modified_bundles:
             bundle_room.special_behavior(self)
@@ -471,8 +473,9 @@ class StardewValleyWorld(World):
         set_rules(self)
 
     def connect_entrances(self) -> None:
+        is_chaos = self.options.entrance_randomization_behaviour.is_chaos()
         # when the cutscene-relevant entrances aren't randomized, connect them manually
-        if self.options.entrance_randomization.value < EntranceRandomization.option_overworld:
+        if self.options.entrance_randomization.value < EntranceRandomization.option_overworld or is_chaos:
             self.get_entrance(EntranceNames.farm_to_bus_stop).connected_region = self.get_region(LogicRegion.bus_stop_cutscene)
             self.get_entrance(EntranceNames.bus_stop_to_town).connected_region = self.get_region(LogicRegion.town_cutscene)
 
@@ -507,7 +510,8 @@ class StardewValleyWorld(World):
                 on_connect=connect_cutscene_regions_as_well,
             )
             self.randomized_entrances = prepare_mod_data(placement)
-        else:  # randomized_entrances were in the slot_data, connecting them as entered
+        elif not is_chaos:
+            # randomized_entrances were in the slot_data, connecting them as entered
             entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}
             exits = {exit_.name: exit_ for region in self.get_regions() for exit_ in region.exits if exit_.connected_region is None}
 

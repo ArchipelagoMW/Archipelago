@@ -3,11 +3,12 @@ from typing import Protocol
 from BaseClasses import Region
 from . import vanilla_data, mods
 from .entrance_rando import create_player_randomization_flag, connect_regions
-from .model import ConnectionData, RegionData
+from .model import ConnectionData, RegionData, RandomizationFlag
 from ..content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions
+from ..strings.ap_names.ap_option_names import EntranceRandomizerBehaviourOptionName
 
 
 class RegionFactory(Protocol):
@@ -15,9 +16,11 @@ class RegionFactory(Protocol):
         raise NotImplementedError
 
 
-def create_regions(region_factory: RegionFactory, world_options: StardewValleyOptions, content: StardewContent) -> dict[str, Region]:
+def create_regions(region_factory: RegionFactory, world_options: StardewValleyOptions, content: StardewContent) -> tuple[dict[str, Region], set[str]]:
+    # the ginger island regions are now a content pack instead of a special case, but this does mean the pack needs to be registerd
     if not world_options.exclude_ginger_island.value:
         content.registered_packs.add(ModNames.ginger_island)
+
     connection_data_by_name, region_data_by_name = create_connections_and_regions(content.registered_packs)
 
     regions_by_name: dict[str: Region] = {
@@ -27,9 +30,11 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
 
     randomization_flag = create_player_randomization_flag(world_options.entrance_randomization, world_options.entrance_randomization_behaviour.value,
                                                           world_options.include_endgame_locations.value, content)
-    connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, randomization_flag)
 
-    return regions_by_name
+    is_chaos = world_options.entrance_randomization_behaviour.is_chaos()
+    randomized_entrances = connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, randomization_flag, is_chaos)
+
+    return regions_by_name, randomized_entrances
 
 
 def create_connections_and_regions(active_content_packs: set[str]) -> tuple[dict[str, ConnectionData], dict[str, RegionData]]:

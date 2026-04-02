@@ -248,6 +248,9 @@ class EntranceRandomizationBehaviour(OptionSet):
     preset_normal = frozenset({EntranceRandomizerBehaviourOptionName.same_type, EntranceRandomizerBehaviourOptionName.shuffle_farmhouse})
     preset_hard = frozenset({EntranceRandomizerBehaviourOptionName.shuffle_farmhouse_anywhere})
 
+    def is_chaos(self) -> bool:
+        return EntranceRandomizerBehaviourOptionName.chaos in self.value
+
 
 class StartWithout(OptionSet):
     """ Items that, in vanilla, you generally start with (or get very quickly), but in Archipelago, you would rather start without them.
