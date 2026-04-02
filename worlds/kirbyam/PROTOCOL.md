@@ -4,6 +4,25 @@
 
 This document defines the contract between the Archipelago server, the Python client, and the Kirby GBA ROM payload. All communication uses a shared EWRAM mailbox region for state synchronization.
 
+## Purpose and Scope
+
+Use this document as the protocol source-of-truth for runtime data exchange and delivery semantics.
+
+- It defines mailbox memory layout, field ownership, and directionality.
+- It defines item/location ID ranges and behavioral contracts for polling/delivery.
+- It documents reconnect, ACK, and gameplay-gate behavior expected by server, client, and ROM payload.
+
+Out of scope:
+
+- World design rationale and balancing decisions.
+- General implementation architecture outside protocol boundaries.
+- Historical notes that do not affect current runtime contract.
+
+Update policy:
+
+- Any change to mailbox fields, ID contracts, or delivery/polling semantics must update this file in the same work cycle.
+- If implementation and this document disagree, fix one immediately; do not leave contract drift unresolved.
+
 ## Memory Layout
 
 ### General Memory Map
