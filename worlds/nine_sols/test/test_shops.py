@@ -73,18 +73,30 @@ class TestShopRandoDefaultSpawn(NineSolsTestBase):
         self.assertNotIn("3D Printer: 1st Low Cost Purchase", sphere1)
         self.assertNotIn("3D Printer: 1st Medium Cost Purchase", sphere1)
 
+        # being able to reach PR (Central) puts Low Cost in logic
+        self.assertNotReachableWith("3D Printer: 1st Low Cost Purchase", [
+            "Mystic Nymph: Scout Mode"
+        ])
+        self.assertReachableWith("3D Printer: 1st Low Cost Purchase", [
+            "Mystic Nymph: Scout Mode", "Tai-Chi Kick"
+        ])
 
-class TestShopRandoFGHSpawn(NineSolsTestBase):
-    options = {
-        "randomize_shops": True,
-        "first_root_node": "factory_great_hall"
-    }
+        # being able to reach ED (Passages) too puts Medium Cost in logic
+        self.assertNotReachableWith("3D Printer: 1st Medium Cost Purchase", [
+            "Mystic Nymph: Scout Mode", "Tai-Chi Kick", "Air Dash"
+        ])
+        self.assertReachableWith("3D Printer: 1st Medium Cost Purchase", [
+            "Mystic Nymph: Scout Mode", "Tai-Chi Kick", "Air Dash", "Cloud Leap"
+        ])
 
-    def test_default(self):
-        self.assertEqual(self.getNonEventLocationCount(), 361)
-
-        # spawning in one of the regions we check for shop logic makes low cost locations immediately in logic
-        sphere1 = [loc.name for loc in self.multiworld.get_reachable_locations()]
-        self.assertIn("3D Printer: 1st Low Cost Purchase", sphere1)
-        self.assertNotIn("3D Printer: 1st Medium Cost Purchase", sphere1)
-
+        # finally, being able to reach Factory (MR) via Prison (default 3 seals) too puts High Cost in logic
+        self.assertNotReachableWith("3D Printer: 1st High Cost Purchase", [
+            "Mystic Nymph: Scout Mode", "Tai-Chi Kick", "Air Dash", "Cloud Leap",
+            "Charged Strike",  # to get through Cortex Center
+            "Seal of Kuafu", "Seal of Goumang"
+        ])
+        self.assertReachableWith("3D Printer: 1st High Cost Purchase", [
+            "Mystic Nymph: Scout Mode", "Tai-Chi Kick", "Air Dash", "Cloud Leap",
+            "Charged Strike",  # to get through Cortex Center
+            "Seal of Kuafu", "Seal of Goumang", "Seal of Yanlao"
+        ])

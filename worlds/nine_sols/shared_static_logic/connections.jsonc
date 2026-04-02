@@ -2145,8 +2145,8 @@
     {
         "from": "FSP - Root Node", "to": "FSP - Shops (Low Cost)",
         "requires": [ { "anyOf": [
-            { "region": "Factory (GH) - Lower Levels & Root Node" },
-            { "region": "GoS (Entry) - Root Node" },
+            { "region": "Factory (MR) - Root Node" },
+            { "region": "ED (Passages) - Root Node" },
             { "region": "PR (Central) - Root Node" }
         ] } ]
     },
@@ -2154,16 +2154,16 @@
         "from": "FSP - Root Node", "to": "FSP - Shops (Medium Cost)",
         // we don't have a good way of expressing "any 2 of these 3 regions"
         "requires": [ { "anyOf": [
-            [ { "region": "Factory (GH) - Lower Levels & Root Node" }, { "region": "GoS (Entry) - Root Node" } ],
-            [ { "region": "Factory (GH) - Lower Levels & Root Node" }, { "region": "PR (Central) - Root Node" } ],
-            [ { "region": "GoS (Entry) - Root Node" }, { "region": "PR (Central) - Root Node" } ]
+            [ { "region": "Factory (MR) - Root Node" }, { "region": "ED (Passages) - Root Node" } ],
+            [ { "region": "Factory (MR) - Root Node" }, { "region": "PR (Central) - Root Node" } ],
+            [ { "region": "ED (Passages) - Root Node" }, { "region": "PR (Central) - Root Node" } ]
         ] } ]
     },
     {
         "from": "FSP - Root Node", "to": "FSP - Shops (High Cost)",
         "requires": [
-            { "region": "Factory (GH) - Lower Levels & Root Node" },
-            { "region": "GoS (Entry) - Root Node" },
+            { "region": "Factory (MR) - Root Node" },
+            { "region": "ED (Passages) - Root Node" },
             { "region": "PR (Central) - Root Node" }
         ]
     },
