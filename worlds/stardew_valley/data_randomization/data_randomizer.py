@@ -65,23 +65,6 @@ def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[
         content.fishes[fish_name] = override(original_fish, difficulty=fish_difficulty)
 
 
-def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
-    if DataRandomizationOptionName.fish_season not in data_to_randomize:
-        return
-
-    seasons_by_fish = {fish_name: fish_data.seasons for fish_name, fish_data in content.fishes.items()
-                       if len(fish_data.seasons) >= 1 and fish_data.difficulty != crab_pot_difficulty}
-    randomized_seasons_per_fish = randomizers_per_behavior[behavior](seasons_by_fish, random)
-
-    has_magic_bait = content_packs.ginger_island_content_pack.name in content.registered_packs and content_packs.qi_board_content_pack.name in content.registered_packs
-
-    for fish_name, fish_season in randomized_seasons_per_fish.items():
-        original_fish = content.fishes[fish_name]
-        if not has_magic_bait and LogicRegion.night_market in original_fish.locations and Season.winter not in fish_season:
-            fish_season += (Season.winter,)
-        content.fishes[fish_name] = override(original_fish, seasons=fish_season)
-
-
 def randomize_fish_difficulty(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
     if DataRandomizationOptionName.fish_difficulty not in data_to_randomize:
         return
@@ -113,6 +96,28 @@ def randomize_fish_location(content: StardewContent, data_to_randomize: set[str]
     for fish_name, fish_location in randomized_locations_per_crab_pot_fish.items():
         original_fish = content.fishes[fish_name]
         content.fishes[fish_name] = override(original_fish, locations=fish_location)
+
+
+def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    has_magic_bait = content_packs.ginger_island_content_pack.name in content.registered_packs and content_packs.qi_board_content_pack.name in content.registered_packs
+
+    seasons_by_fish = {fish_name: fish_data.seasons for fish_name, fish_data in content.fishes.items()
+                       if len(fish_data.seasons) >= 1 and fish_data.difficulty != crab_pot_difficulty}
+
+    # The reason we do this, is so that the night market winter exception can occur even if seasons were not randomized.
+    # This is because only randomizing the locations suffices to cause the problem
+    if DataRandomizationOptionName.fish_season in data_to_randomize:
+        randomized_seasons_per_fish = randomizers_per_behavior[behavior](seasons_by_fish, random)
+    elif has_magic_bait:
+        return
+    else:
+        randomized_seasons_per_fish = seasons_by_fish
+
+    for fish_name, fish_season in randomized_seasons_per_fish.items():
+        original_fish = content.fishes[fish_name]
+        if not has_magic_bait and LogicRegion.night_market in original_fish.locations and Season.winter not in fish_season:
+            fish_season += (Season.winter,)
+        content.fishes[fish_name] = override(original_fish, seasons=fish_season)
 
 
 def randomize_fish_weather(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
