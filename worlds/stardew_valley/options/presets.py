@@ -421,7 +421,7 @@ maxsanity_settings = {
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_all,
     options.ExcludeGingerIsland.internal_name:          options.ExcludeGingerIsland.option_false,
     options.TrapDifficulty.internal_name:               options.TrapDifficulty.default,
-    options.DataRandomizationBehavior.internal_name:    options.DataRandomizationBehavior.option_wild,
+    options.DataRandomizationBehavior.internal_name:    options.DataRandomizationBehavior.option_range_randomized,
     options.DataRandomization.internal_name:            options.DataRandomization.preset_all,
     options.MultipleDaySleepEnabled.internal_name:      options.MultipleDaySleepEnabled.default,
     options.MultipleDaySleepCost.internal_name:         options.MultipleDaySleepCost.default,

@@ -44,12 +44,13 @@ def randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]
 
 
 def range_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
-    if len(existing_values) < 2:
+    if len(existing_values) < 2 or all(isinstance(val, bool) for val in existing_values.values()):
         return randomize(existing_values, random)
     if all(isinstance(val, Number) for val in existing_values.values()):
         return range_randomize_numeric(existing_values, random)
     if all(isinstance(val, Iterable) for val in existing_values.values()):
         return range_randomize_iterable(existing_values, random)
+    return randomize(existing_values, random)
 
 
 def range_randomize_numeric(existing_values: dict[Any, Number], random: Random) -> dict[Any, Any]:
@@ -129,5 +130,5 @@ randomizers_per_behavior = {
     DataRandomizationBehavior.option_weighted_randomized: weight_randomize,
     DataRandomizationBehavior.option_randomized: randomize,
     DataRandomizationBehavior.option_range_randomized: range_randomize,
-    DataRandomizationBehavior.option_wild: randomize_wild,
+    # DataRandomizationBehavior.option_wild: randomize_wild,
 }

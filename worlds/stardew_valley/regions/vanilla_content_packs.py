@@ -1,6 +1,6 @@
+from .model import RegionData, ConnectionData, RandomizationFlag, GroupFlag
 from ..strings.entrance_names import Entrance, LogicEntrance
 from ..strings.region_names import Region, LogicRegion
-from .model import RegionData, ConnectionData, RandomizationFlag, GroupFlag
 
 ginger_island_regions = [
     RegionData(Region.secret_woods, (Entrance.use_island_totem,)),
@@ -28,6 +28,7 @@ ginger_island_regions = [
             Entrance.parrot_express_docks_to_dig_site,
             Entrance.parrot_express_docks_to_jungle,
             Entrance.parrot_express_docks_to_farm,
+            LogicEntrance.place_crab_pot_in_island_south,
         ),
     ),
     RegionData(Region.island_resort),
@@ -51,6 +52,7 @@ ginger_island_regions = [
             LogicEntrance.grow_fall_crops_on_island,
             LogicEntrance.grow_winter_crops_on_island,
             LogicEntrance.grow_indoor_crops_on_island,
+            LogicEntrance.place_crab_pot_in_island_west,
         ),
     ),
     RegionData(
@@ -528,4 +530,7 @@ ginger_island_connections = [
     ConnectionData(LogicEntrance.grow_fall_crops_on_island, LogicRegion.fall_farming),
     ConnectionData(LogicEntrance.grow_winter_crops_on_island, LogicRegion.winter_farming),
     ConnectionData(LogicEntrance.grow_indoor_crops_on_island, LogicRegion.indoor_farming),
-    ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen)]
+    ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen),
+    ConnectionData(LogicEntrance.place_crab_pot_in_island_south, LogicRegion.crab_pot_seawater),
+    ConnectionData(LogicEntrance.place_crab_pot_in_island_west, LogicRegion.crab_pot_seawater),
+]

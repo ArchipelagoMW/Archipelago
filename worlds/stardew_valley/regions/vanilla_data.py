@@ -86,6 +86,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.fish_in_forest_river,
             LogicEntrance.fish_in_forest_pond,
             LogicEntrance.fish_in_waterfall,
+            LogicEntrance.place_crab_pot_in_forest,
             LogicEntrance.attend_flower_dance,
             LogicEntrance.attend_trout_derby,
             LogicEntrance.attend_festival_of_ice,
@@ -124,6 +125,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             Entrance.mountain_to_outside_adventure_guild,  # can't randomize
             Entrance.mountain_lake_to_outside_adventure_guild_shortcut,  # can't randomize
             LogicEntrance.mountain_shortcut_fence_entrance,
+            LogicEntrance.place_crab_pot_in_mountain,
         ),
     ),
     RegionData(
@@ -181,6 +183,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.search_garbage_cans,
             LogicEntrance.jojamart_shortcut_cave_entrance,
             LogicEntrance.town_shortcut_fence_entrance,
+            LogicEntrance.place_crab_pot_in_town,
         ),
     ),
     RegionData(
@@ -208,6 +211,7 @@ vanilla_regions: tuple[RegionData, ...] = (
             LogicEntrance.attend_moonlight_jellies,
             LogicEntrance.attend_night_market,
             LogicEntrance.attend_squidfest,
+            LogicEntrance.place_crab_pot_in_ocean,
         ),
     ),
     RegionData(
@@ -491,6 +495,8 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.hat_mouse),
     RegionData(LogicRegion.lost_items_shop),
     RegionData(LogicRegion.garbage_cans),
+    RegionData(LogicRegion.crab_pot_freshwater),
+    RegionData(LogicRegion.crab_pot_seawater),
 )
 
 # Exists and where they lead
@@ -1541,6 +1547,10 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.buy_experience_books, LogicRegion.bookseller_experience),
     ConnectionData(LogicEntrance.search_garbage_cans, LogicRegion.garbage_cans),
     ConnectionData(LogicEntrance.purchase_wizard_blueprints, LogicRegion.wizard_blueprints),
+    ConnectionData(LogicEntrance.place_crab_pot_in_town, LogicRegion.crab_pot_freshwater),
+    ConnectionData(LogicEntrance.place_crab_pot_in_mountain, LogicRegion.crab_pot_freshwater),
+    ConnectionData(LogicEntrance.place_crab_pot_in_forest, LogicRegion.crab_pot_freshwater),
+    ConnectionData(LogicEntrance.place_crab_pot_in_ocean, LogicRegion.crab_pot_seawater),
 )
 
 connections_without_ginger_island_by_name: Mapping[str, ConnectionData] = MappingProxyType({connection.name: connection for connection in vanilla_connections})

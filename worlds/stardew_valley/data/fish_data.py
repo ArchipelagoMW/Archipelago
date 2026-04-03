@@ -36,7 +36,10 @@ class FishItem:
                f"Mod: {self.mod_name}"
 
 
-fresh_water = (LogicRegion.forest_river, LogicRegion.forest_pond, Region.town, Region.mountain)
+crab_pot_difficulty = -1
+
+crab_pot_freshwater = (LogicRegion.crab_pot_freshwater,)
+crab_pot_seawater = (LogicRegion.crab_pot_seawater,)
 ocean = (Region.beach,)
 tide_pools = (Region.tide_pools,)
 town_river = (Region.town,)
@@ -73,6 +76,12 @@ def create_fish(name: str, locations: Tuple[str, ...], seasons: Union[str, Tuple
                 difficulty: int, legendary: bool = False, extended_family: bool = False, weather: Tuple[str, ...] = weather_any, minimum_level: int = 0, mod_name: Optional[str] = None) -> FishItem:
     if isinstance(seasons, str):
         seasons = (seasons,)
+
+    if difficulty == crab_pot_difficulty:
+        assert len(locations) == 1
+        assert locations[0] == LogicRegion.crab_pot_freshwater or locations[0] == LogicRegion.crab_pot_seawater
+        assert weather == weather_any
+        assert seasons == season.all_seasons
 
     fish_item = FishItem(name, locations, seasons, difficulty, legendary, extended_family, weather, minimum_level, mod_name)
     return fish_item
@@ -177,15 +186,15 @@ purple_algae = create_fish(DistantLandsFish.purple_algae, witch_swamp, season.al
 swamp_leech = create_fish(DistantLandsFish.swamp_leech, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
 giant_horsehoe_crab = create_fish(DistantLandsFish.giant_horsehoe_crab, witch_swamp, season.all_seasons, 90, mod_name=ModNames.distant_lands)
 
-clam = create_fish(Fish.clam, ocean, season.all_seasons, -1)
-cockle = create_fish(Fish.cockle, ocean, season.all_seasons, -1)
-crab = create_fish(Fish.crab, ocean, season.all_seasons, -1)
-crayfish = create_fish(Fish.crayfish, fresh_water, season.all_seasons, -1)
-lobster = create_fish(Fish.lobster, ocean, season.all_seasons, -1)
-mussel = create_fish(Fish.mussel, ocean, season.all_seasons, -1)
-oyster = create_fish(Fish.oyster, ocean, season.all_seasons, -1)
-periwinkle = create_fish(Fish.periwinkle, fresh_water, season.all_seasons, -1)
-shrimp = create_fish(Fish.shrimp, ocean, season.all_seasons, -1)
-snail = create_fish(Fish.snail, fresh_water, season.all_seasons, -1)
+clam = create_fish(Fish.clam, crab_pot_seawater, season.all_seasons, -1)
+cockle = create_fish(Fish.cockle, crab_pot_seawater, season.all_seasons, -1)
+crab = create_fish(Fish.crab, crab_pot_seawater, season.all_seasons, -1)
+crayfish = create_fish(Fish.crayfish, crab_pot_freshwater, season.all_seasons, -1)
+lobster = create_fish(Fish.lobster, crab_pot_seawater, season.all_seasons, -1)
+mussel = create_fish(Fish.mussel, crab_pot_seawater, season.all_seasons, -1)
+oyster = create_fish(Fish.oyster, crab_pot_seawater, season.all_seasons, -1)
+periwinkle = create_fish(Fish.periwinkle, crab_pot_freshwater, season.all_seasons, -1)
+shrimp = create_fish(Fish.shrimp, crab_pot_seawater, season.all_seasons, -1)
+snail = create_fish(Fish.snail, crab_pot_freshwater, season.all_seasons, -1)
 
 vanilla_legendary_fish = [angler, crimsonfish, glacierfish, legend, mutant_carp]

@@ -372,6 +372,13 @@ class LogicEntrance:
     town_shortcut_fence_entrance = "Entrance to Behind Fence In Town"
     town_shortcut_fence_exit = "Exit from Behind Fence In Town"
 
+    place_crab_pot_in_town = "Place Crab Pot in Town"
+    place_crab_pot_in_mountain = "Place Crab Pot in Mountain"
+    place_crab_pot_in_forest = "Place Crab Pot in Forest"
+    place_crab_pot_in_ocean = "Place Crab Pot in Ocean"
+    place_crab_pot_in_island_south = "Place Crab Pot in Ginger Island South"
+    place_crab_pot_in_island_west = "Place Crab Pot in Ginger Island West"
+
     @staticmethod
     def blacksmith_upgrade(material: str) -> str:
         return f"Upgrade {material} Tools"

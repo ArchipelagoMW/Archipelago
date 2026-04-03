@@ -963,7 +963,7 @@ class DataRandomizationBehavior(Choice):
     option_weighted_randomized = 2
     option_randomized = 3
     option_range_randomized = 4
-    option_wild = 5
+    # option_wild = 5
 
 
 class DataRandomization(OptionSet):
@@ -975,7 +975,7 @@ class DataRandomization(OptionSet):
     display_name = "Data Randomization"
     valid_keys = frozenset({
         DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location,
-        DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_includes_crab_pot,
+        DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method,
     })
     preset_none = frozenset()
     preset_all = valid_keys

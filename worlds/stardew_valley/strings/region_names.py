@@ -238,6 +238,8 @@ class LogicRegion:
     lost_items_shop = "Lost Items Shop"
     garbage_cans = "Garbage Cans"
     wizard_blueprints = "Wizard Blueprints"
+    crab_pot_freshwater = "Crab Pot in Freshwater"
+    crab_pot_seawater = "Crab Pot in Seawater"
 
     forest_part_behind_tree_stump = "Part Behind Tree Stump"
     railroad_part_behind_chicken_stone = "Part Behind Chicken Stone"
