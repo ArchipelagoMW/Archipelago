@@ -5,7 +5,6 @@ from typing import Any, NamedTuple
 
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
-from rule_builder.rules import HasFromListUnique
 from worlds.generic.Rules import set_rule
 from .options import FirstRootNode, LogicDifficulty, NineSolsGameOptions
 from .should_generate import should_generate
