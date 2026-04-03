@@ -188,6 +188,8 @@ class BanjoTooieWorld(World):
     options_dataclass = BanjoTooieOptions
     options: BanjoTooieOptions
 
+    has_converted_progression_items = False
+
     def __init__(self, world, player):
         self.starting_egg: int = 0
         self.starting_attack: int = 0
@@ -214,26 +216,18 @@ class BanjoTooieWorld(World):
     def create_item(self, name: str) -> Item:
         item_classification = None
 
-        if name == itemName.JIGGY_AS_FILLER:
-            name = itemName.JIGGY
-            if not hasattr(self.multiworld, "generation_is_fake"):
-                item_classification = ItemClassification.filler
-        elif name == itemName.JIGGY_AS_USEFUL:
+        if name == itemName.JIGGY_AS_USEFUL:
             name = itemName.JIGGY
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.useful
-        elif name == itemName.NOTE_AS_FILLER:
-            name = itemName.NOTE
-            if not hasattr(self.multiworld, "generation_is_fake"):
-                item_classification = ItemClassification.filler
         elif name == itemName.NOTE_AS_USEFUL:
             name = itemName.NOTE
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.useful
-        elif name == itemName.DOUBLOON_AS_FILLER:
+        elif name == itemName.DOUBLOON_AS_USEFUL:
             name = itemName.DOUBLOON
             if not hasattr(self.multiworld, "generation_is_fake"):
-                item_classification = ItemClassification.filler
+                item_classification = ItemClassification.useful
         elif name == itemName.HEALTHUP and (
             self.options.logic_type.value
                 == LogicType.option_easy_tricks or self.options.logic_type.value == LogicType.option_intended
@@ -292,15 +286,6 @@ class BanjoTooieWorld(World):
         created_item = BanjoTooieItem(name, item_classification, None, self.player)
         return created_item
 
-    @staticmethod
-    def calculate_useful_filler(total: int, progression: int) -> tuple[int, int]:
-        # We want to split non-progressive items into two halfs
-        # half is useful, half is filler
-        remainder = total - progression
-        useful = ceil(remainder / 2)
-
-        return useful, remainder - useful
-
     def get_jiggies_in_pool(self) -> List[Item]:
         itempool = []
 
@@ -349,34 +334,40 @@ class BanjoTooieWorld(World):
 
         progression_notes = ceil(max(self.jamjars_siloname_costs.values()) / 5)
 
-        useful_notes, filler_notes = \
-            self.calculate_useful_filler(int(900 / 5), progression_notes)
-
         taken_by_clefs = 4 * (self.options.extra_trebleclefs_count.value + all_item_table[itemName.TREBLE].qty)\
             + 2 * self.options.bass_clef_amount.value
 
         progression_notes -= taken_by_clefs
-
-        # in case preplaced items are over the progression count
+        # Random Jamjars costs can make max silo very low (even 0); treble deduction still applies to the
+        # 900-note budget but cannot require negative progression bundles — clamp here (no bug).
         if progression_notes < 0:
-            useful_notes += progression_notes
             progression_notes = 0
-        if useful_notes < 0:
-            filler_notes += useful_notes
-            useful_notes = 0
-        if filler_notes < 0:
-            logging.warning("Number of notes that need to be inserted is somehow negative.")
+
+        # Treble clef locations always remove 20 notes each from the 900-note budget, whether clefs are
+        # randomized (in the item pool) or vanilla (prefilled). Using 0 here when trebles are off made
+        # note_item_slots too large (180 bundles vs 144 note nests), overflowing the item pool.
+        treble_items = all_item_table[itemName.TREBLE].qty + self.options.extra_trebleclefs_count.value
+        bass_items = self.options.bass_clef_amount.value
+        raw_notes_from_clefs = 20 * treble_items + 10 * bass_items
+        note_item_slots = (900 - raw_notes_from_clefs) // 5
+        if note_item_slots < 0:
+            logging.warning("Clefs exceed 900 notes worth; no 5-note bundles will be added.")
+            note_item_slots = 0
+
+        progression_notes = min(progression_notes, note_item_slots)
+        remainder = note_item_slots - progression_notes
+
+        if self.options.replace_extra_notes.value:
+            useful_note_bundles = ceil(remainder / 2)
+        else:
+            useful_note_bundles = remainder
 
         itempool += [
             self.create_item(itemName.NOTE) for i in range(progression_notes)
         ]
         itempool += [
-            self.create_item(itemName.NOTE_AS_USEFUL) for i in range(useful_notes)
+            self.create_item(itemName.NOTE_AS_USEFUL) for i in range(useful_note_bundles)
         ]
-        if not self.options.replace_extra_notes.value:
-            itempool += [
-                self.create_item(itemName.NOTE_AS_FILLER) for i in range(filler_notes)
-            ]
 
         return itempool
 
@@ -630,10 +621,9 @@ class BanjoTooieWorld(World):
                 and not (
                     self.options.randomize_bk_moves.value
                     and self.options.randomize_bt_moves.value
-                    and (self.options.randomize_signposts.value or self.options.nestsanity.value)
                 ):
-            raise OptionError("You cannot have progressive Shoes without randomizing moves, "
-                              "randomizing BK moves and enabling either nestanity or randomize signpost")
+            raise OptionError("You cannot have progressive Shoes without randomizing moves, or "
+                              "randomizing BK moves")
         if self.options.progressive_water_training.value != ProgressiveWaterTraining.option_none \
                 and (
                     self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_none
@@ -886,15 +876,15 @@ class BanjoTooieWorld(World):
                 locationName.JINJOGI3
             ])
 
-    def allow_jiggies_as_filler(self) -> bool:
+    def allow_extra_jiggies_roll(self) -> bool:
         return self.options.replace_extra_jiggies.value and self.jiggies_in_pool < self.hard_item_limit
 
-    def allow_notes_as_filler(self) -> bool:
+    def allow_extra_notes_roll(self) -> bool:
         return self.options.replace_extra_notes.value\
             and self.options.randomize_notes.value\
             and self.notes_in_pool < self.hard_item_limit
 
-    def allow_doubloons_as_filler(self) -> bool:
+    def allow_extra_doubloons_roll(self) -> bool:
         return self.options.randomize_doubloons.value and self.doubloons_in_pool < self.hard_item_limit
 
     def get_filler_item_name(self) -> str:
@@ -907,10 +897,10 @@ class BanjoTooieWorld(World):
             (itemName.TITRAP, self.options.tip_trap_weight.value),
         ]
         filler_weights = [
-            (itemName.JIGGY_AS_FILLER, self.options.extra_jiggies_weight.value if self.allow_jiggies_as_filler() else 0),
-            (itemName.NOTE_AS_FILLER, self.options.extra_notes_weight.value if self.allow_notes_as_filler() else 0),
-            (itemName.DOUBLOON_AS_FILLER, self.options.extra_doubloons_weight
-                if self.allow_doubloons_as_filler() else 0),
+            (itemName.JIGGY_AS_USEFUL, self.options.extra_jiggies_weight.value if self.allow_extra_jiggies_roll() else 0),
+            (itemName.NOTE_AS_USEFUL, self.options.extra_notes_weight.value if self.allow_extra_notes_roll() else 0),
+            (itemName.DOUBLOON_AS_USEFUL, self.options.extra_doubloons_weight
+                if self.allow_extra_doubloons_roll() else 0),
             (itemName.ENEST, self.options.egg_nests_weight.value * (2 if self.options.nestsanity.value else 1)),
             (itemName.FNEST, self.options.feather_nests_weight.value * (2 if self.options.nestsanity.value else 1)),
             (itemName.NONE, self.options.big_o_pants_weight.value)
@@ -1032,6 +1022,15 @@ class BanjoTooieWorld(World):
                     currentWorld.location_id_to_name[location_id],
                     hint_data.text
                 ))
+
+    def post_fill(self) -> None:
+        if not BanjoTooieWorld.has_converted_progression_items:
+            BanjoTooieWorld.has_converted_progression_items = True
+            # Now that all the items are placed, we can re-add the progression flag for fillers.
+            for location in self.multiworld.get_locations():
+                if location.item.game == self.game:
+                    if location.item.name in [itemName.NOTE, itemName.DOUBLOON, itemName.JIGGY]:
+                        location.item.classification = ItemClassification.progression
 
     def finalize_multiworld(self):
         choose_hinted_locations(self)

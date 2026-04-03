@@ -328,8 +328,8 @@ regular egg nests after they have been collected."""
 class ReplaceExtraJiggies(DefaultOnToggle):
     """Jiggies over the maximum needed to beat the seed (plus a generous buffer) are replaced by fillers/traps.
        If turned off, you are guranteed exactly 90 jiggies.
-       You can control how likely extra jiggies show up as fillers by extra_jiggies_weight."""
-    display_name = "Replace Extra Jiggies with filler"
+       You can control how likely extra jiggies appear in the pool via extra_jiggies_weight."""
+    display_name = "Replace Extra Jiggies"
 
 
 class ReplaceExtraNotes(DefaultOnToggle):

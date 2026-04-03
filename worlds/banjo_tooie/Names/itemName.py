@@ -155,9 +155,7 @@ FNEST = "Feather Nest"
 
 # Copies of existing progression items with different classification
 # should not have mappings in Items.py
-JIGGY_AS_FILLER = "Jiggy (filler)"
-NOTE_AS_FILLER = "5 Notes (filler)"
-DOUBLOON_AS_FILLER = "Doubloon (filler)"
+DOUBLOON_AS_USEFUL = "Doubloon (useful)"
 JIGGY_AS_USEFUL = "Jiggy (useful)"
 NOTE_AS_USEFUL = "5 Notes (useful)"
 

@@ -1,9 +1,7 @@
-import enum
-import logging
 import re
-from typing import Iterable, List, Set, Union, TYPE_CHECKING
+from typing import List, Set, Union, TYPE_CHECKING
 from dataclasses import dataclass
-from BaseClasses import ItemClassification, Location, LocationProgressType, CollectionState, MultiWorld
+from BaseClasses import ItemClassification, Location, LocationProgressType, CollectionState
 from .Options import HintClarity, AddSignpostHintsToArchipelagoHints
 from .Items import moves_table, bk_moves_table, progressive_ability_table
 from .Locations import (MumboTokenBoss_table, MumboTokenGames_table, MumboTokenJinjo_table, all_location_table,
@@ -83,6 +81,7 @@ class Hint:
         while worthwhile_locations:
             base_state.sweep_for_advancements(checked_locations=base_state.locations_checked | worthwhile_locations)
             current_sphere_locations = {loc for loc in worthwhile_locations if base_state.can_reach(loc)}
+            
             if not current_sphere_locations:
                 # Remaining locations are unreachable, so not required.
                 for location in worthwhile_locations:
@@ -97,6 +96,8 @@ class Hint:
                 batch_state = base_state.copy()
                 batch_state.sweep_for_advancements(checked_locations=base_state.locations_checked | set(location_batch))
                 while location_batch:
+                    # Useful print to see the progress!
+                    # print(len(worthwhile_locations), len(current_sphere_locations), len(location_batch))
                     loc = world.random.choice(location_batch)
                     location_batch.remove(loc)
 
@@ -107,11 +108,11 @@ class Hint:
 
                     # If collecting one location is not required, then everything that remains unreachable without collecting that location is also not required.
                     if not Hint.item_requirement_cache[loc]:
-                        for new_reachable in {location for location in worthwhile_locations if not test_state.can_reach(location)}:
-                            worthwhile_locations.remove(new_reachable)
-                            Hint.item_requirement_cache[new_reachable] = []
+                        for unreachable in {location for location in worthwhile_locations if not test_state.can_reach(location)}:
+                            worthwhile_locations.remove(unreachable)
+                            Hint.item_requirement_cache[unreachable] = []
 
-                # We no longer need to test that location, so advance the base state with that location not excluded to save time on the next iterations.
+                # We finished a batch, so we update the base state by collecting the batch so that we no longer have compute what gets unlocked by anything in that batch.
                 base_state.sweep_for_advancements(checked_locations=base_state.locations_checked | worthwhile_locations | current_sphere_locations)
         # Save final state for lost hints
         Hint.final_state = base_state
