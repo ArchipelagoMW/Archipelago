@@ -394,7 +394,8 @@ async def handle_vendors(ctx: 'Context') -> None:
 
     ctx.game_interface.vendor_update()
 
-    if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR or not ctx.slot_data.get(RAC3OPTION.SCOUT_VENDORS, True):
+    # TODO: If people want ship vendor scouting, redo the yaml option to be similar to the 1-HP Challenge approach
+    if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR or not ctx.slot_data.get(RAC3OPTION.SCOUT_VENDORS, False):
         return
 
     vendor_type = ctx.game_interface.vendor_type
