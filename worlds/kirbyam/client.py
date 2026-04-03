@@ -10,7 +10,7 @@ from worlds._bizhawk.client import BizHawkClient
 
 from .data import LocationCategory, data, load_json_data
 from .kirby_ap_payload.thumb_branch import is_thumb_bl_instruction
-from .options import Goal
+from .options import Goal, OneHitMode
 from .types import KirbyAmBizHawkClientContext
 
 if TYPE_CHECKING:
@@ -38,6 +38,10 @@ _DEMO_PLAYBACK_ACTIVE_FLAG = 0x10
 _DEMO_PLAYBACK_FLAGS_WIDTH = 4
 _KIRBY_HP_ADDR_KEY = "kirby_hp_native"
 _KIRBY_HP_READ_WIDTH = 1
+_KIRBY_MAX_HP_ADDR_KEY = "kirby_max_hp_native"
+_KIRBY_MAX_HP_READ_WIDTH = 1
+_KIRBY_VITALITY_COUNTER_ADDR_KEY = "kirby_vitality_counter_native"
+_KIRBY_VITALITY_COUNTER_READ_WIDTH = 2
 _ROOM_VISIT_FLAGS_ADDR_KEY = "room_visit_flags_native"
 _ROOM_VISIT_FLAGS_ENTRY_COUNT = 0x120
 _ROOM_VISIT_FLAGS_BIT_MASK = 0x8000
@@ -234,6 +238,16 @@ class KirbyAmClient(BizHawkClient):
         if not isinstance(slot_data, dict):
             return False
         return self._coerce_bool(slot_data.get("no_extra_lives", False), False)
+
+    def _one_hit_mode_value(self, ctx: "BizHawkClientContext") -> int:
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return OneHitMode.option_vanilla
+        value = slot_data.get("one_hit_mode", OneHitMode.option_vanilla)
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return OneHitMode.option_vanilla
 
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
@@ -741,6 +755,7 @@ class KirbyAmClient(BizHawkClient):
                 self._last_runtime_gate_reason = None
 
             await self._enforce_no_extra_lives(ctx)
+            await self._enforce_one_hit_mode(ctx)
             await self._apply_pending_death_link(ctx)
             await self._poll_and_send_local_death_link(ctx)
 
@@ -827,6 +842,68 @@ class KirbyAmClient(BizHawkClient):
                 "KirbyAM debug: no-extra-lives clamped native lives from %s to 0",
                 current_lives,
             )
+
+    async def _enforce_one_hit_mode(self, ctx: "BizHawkClientContext") -> None:
+        """Clamp Kirby's max HP (and current HP) to vitality_counter + 1 while one-hit mode is active.
+
+        Both exclude_vitality_counters and include_vitality_counters modes use a 1 HP base.
+        In exclude mode the vitality counter stays at 0 all game, giving a permanent max of 1.
+        In include mode each received Vitality Counter item raises the cap by 1.
+
+        Enforcement targets player 0's Kirby struct (consistent with DeathLink HP tracking).
+        """
+        if self._one_hit_mode_value(ctx) == OneHitMode.option_vanilla:
+            return
+
+        vitality_addr = data.native_ram_addresses.get(_KIRBY_VITALITY_COUNTER_ADDR_KEY)
+        hp_addr = data.native_ram_addresses.get(_KIRBY_HP_ADDR_KEY)
+        max_hp_addr = data.native_ram_addresses.get(_KIRBY_MAX_HP_ADDR_KEY)
+        if vitality_addr is None or hp_addr is None or max_hp_addr is None:
+            return
+
+        results = await bizhawk.read(ctx.bizhawk_ctx, [
+            (vitality_addr, _KIRBY_VITALITY_COUNTER_READ_WIDTH, "System Bus"),
+            (hp_addr, _KIRBY_HP_READ_WIDTH, "System Bus"),
+            (max_hp_addr, _KIRBY_MAX_HP_READ_WIDTH, "System Bus"),
+        ])
+        vitality_raw, hp_raw, max_hp_raw = results
+
+        vitality_count = int.from_bytes(vitality_raw[:2], "little", signed=False)
+        current_hp = self._s8(hp_raw)
+        current_max_hp = self._s8(max_hp_raw)
+
+        # One-hit base is 1; each Vitality Counter adds 1 to the cap.
+        desired_max_hp = min(vitality_count + 1, 0x7F)
+
+        if current_max_hp <= desired_max_hp and current_hp <= desired_max_hp:
+            return
+
+        writes: list[tuple[int, bytes, str]] = []
+        if current_max_hp > desired_max_hp:
+            writes.append((max_hp_addr, bytes([desired_max_hp & 0xFF]), "System Bus"))
+        # Clamp alive HP down to new max; preserve dead/negative states.
+        if current_hp > 0 and current_hp > desired_max_hp:
+            writes.append((hp_addr, bytes([desired_max_hp & 0xFF]), "System Bus"))
+
+        if writes:
+            await bizhawk.write(ctx.bizhawk_ctx, writes)
+
+            if self._debug_logging_enabled:
+                from CommonClient import logger
+
+                clamped_max_hp = current_max_hp > desired_max_hp
+                clamped_hp = current_hp > 0 and current_hp > desired_max_hp
+                parts = []
+                if clamped_max_hp:
+                    parts.append(f"max_hp {current_max_hp}->{desired_max_hp}")
+                if clamped_hp:
+                    parts.append(f"hp {current_hp}->{desired_max_hp}")
+                if parts:
+                    logger.info(
+                        "KirbyAM debug: one-hit mode clamped %s (vitality_count=%s)",
+                        ", ".join(parts),
+                        vitality_count,
+                    )
 
     @staticmethod
     def _s8(value: bytes) -> int:

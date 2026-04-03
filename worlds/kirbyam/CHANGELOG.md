@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add `One-Hit Mode` (`one_hit_mode`) to the `Make the game harder` option group. Selecting `exclude_vitality_counters` removes all four Vitality Counter items from the item pool (replaced by filler) and enforces a maximum HP of 1 throughout the run. Selecting `include_vitality_counters` keeps Vitality Counters in the pool but still starts Kirby at maximum 1 HP; each Vitality Counter item received raises the cap by 1 (up to 5 with all four). The BizHawk client enforces the cap every gameplay tick by clamping `kirby_max_hp_native` and `kirby_hp_native` (player 0) to `vitality_counter + 1`, with dead/negative HP states preserved (Issue #549).
+
 ## v0.0.17
 
 - Add a `Make the game harder` option group containing `No Extra Lives` (`no_extra_lives`) and `DeathLink`, pass `no_extra_lives` through slot data, exclude `1 Up` from filler generation when enabled, and clamp the native life counter to `0` during gameplay with debug-only enforcement logging (Issue #491).

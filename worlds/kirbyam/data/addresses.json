@@ -28,7 +28,9 @@
       "ai_kirby_state_native": "0x0203AD2C",
       "demo_playback_flags_native": "0x0203AD10",
       "kirby_hp_native": "0x02020FE0",
-      "kirby_lives_native": "0x02020FE2"
+      "kirby_max_hp_native": "0x02020FE1",
+      "kirby_lives_native": "0x02020FE2",
+      "kirby_vitality_counter_native": "0x02038980"
     }
   },
   "rom": {

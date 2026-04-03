@@ -35,6 +35,7 @@ from .options import (
     AbilityRandomizationMode,
     Goal,
     KirbyAmOptions,
+    OneHitMode,
     RandomizeShards,
 )
 from .rom import KirbyAmProcedurePatch, write_tokens
@@ -168,6 +169,11 @@ class KirbyAmWorld(World):
         option = getattr(getattr(self, "options", None), "no_extra_lives", None)
         value = getattr(option, "value", option)
         return bool(value)
+
+    def _one_hit_mode_value(self) -> int:
+        option = getattr(getattr(self, "options", None), "one_hit_mode", None)
+        value = getattr(option, "value", option)
+        return int(value) if value is not None else 0
 
     def _active_filler_pool(self) -> tuple[str, ...]:
         if not self._no_extra_lives_enabled():
@@ -375,6 +381,24 @@ class KirbyAmWorld(World):
                         code for code in non_filler_item_codes if code not in shard_code_set
                     ]
 
+                if self._one_hit_mode_value() == OneHitMode.option_exclude_vitality_counters:
+                    vitality_code_set = {
+                        item.item_id
+                        for item in kirby_data.items.values()
+                        if "Vitality" in item.tags
+                    }
+                    excluded_vitality_count = sum(
+                        1 for code in non_filler_item_codes if code in vitality_code_set
+                    )
+                    non_filler_item_codes = [
+                        code for code in non_filler_item_codes if code not in vitality_code_set
+                    ]
+                    logger.info(
+                        "[P%s] One-hit mode (exclude_vitality_counters): removed %s vitality counter item(s) from non-filler pool",
+                        self.player,
+                        excluded_vitality_count,
+                    )
+
                 if len(non_filler_item_codes) > needed_pool_size:
                     raise ValueError(
                         "KirbyAM item pool mismatch: non-filler item count %d exceeds open physical locations %d"
@@ -511,6 +535,7 @@ class KirbyAmWorld(World):
             "goal",
             "shards",
             "no_extra_lives",
+            "one_hit_mode",
             "death_link",
             "ability_randomization_mode",
             "ability_randomization_boss_spawns",

@@ -122,6 +122,23 @@ class NoExtraLives(Toggle):
     default = 0
 
 
+class OneHitMode(Choice):
+    """
+    Controls whether Kirby's maximum health is reduced to 1 HP at the start (one-hit mode).
+
+    - Vanilla: Kirby's maximum health is unmodified (native 6 HP base, plus 1 per Vitality Counter found).
+    - Exclude Vitality Counters: Kirby starts with a maximum of 1 HP. All four Vitality Counter items are
+        removed from the item pool and replaced with filler. Kirby's HP cap stays at 1 for the entire run.
+    - Include Vitality Counters: Kirby starts with a maximum of 1 HP. Vitality Counter items remain in the
+        pool; each one received increases Kirby's HP cap by 1 (up to 5 with all four).
+    """
+    display_name = "One-Hit Mode"
+    default = 0
+    option_vanilla = 0
+    option_exclude_vitality_counters = 1
+    option_include_vitality_counters = 2
+
+
 class RoomSanity(Toggle):
     """Adds room-visit checks (Room X-YY). Disabled by default because it adds 257 locations."""
     display_name = "Room Sanity"
@@ -139,6 +156,8 @@ class KirbyAmOptions(PerGameCommonOptions):
     shards: RandomizeShards
 
     no_extra_lives: NoExtraLives
+
+    one_hit_mode: OneHitMode
 
     ability_randomization_mode: AbilityRandomizationMode
 
@@ -160,6 +179,7 @@ class KirbyAmOptions(PerGameCommonOptions):
 OPTION_GROUPS = [
     OptionGroup("Make the game harder", [
         NoExtraLives,
+        OneHitMode,
         KirbyAmDeathLink,
     ]),
     OptionGroup("Ability Randomization", [

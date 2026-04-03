@@ -76,7 +76,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
 | 0x0203AD10 | 4B | DEMO_PLAYBACK_FLAGS     | Native title-demo discriminator (`demo_playback_flags_native`; bit `0x10` indicates title-screen demo playback) |
 | 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
+| 0x02020FE1 | 1B | KIRBY_MAX_HP            | Kirby max HP (`s8`) used for one-hit mode enforcement (player 0 struct) |
 | 0x02020FE2 | 1B | KIRBY_LIVES             | Native extra-life counter (`u8`) used for `no_extra_lives` enforcement |
+| 0x02038980 | 2B | KIRBY_VITALITY_COUNTER  | Native vitality counter (`u16`); incremented by ROM payload on Vitality Counter item delivery; read by one-hit mode enforcement |
 
 ## Item ID Ranges
 
@@ -143,6 +145,7 @@ Server → Client: ConnectionRefused | Connected
 - `goal` (int): selected goal option.
 - `shards` (int): shard randomization mode.
 - `no_extra_lives` (bool): when true, exclude `1 Up` filler generation and have the BizHawk client clamp the native life counter to `0` during gameplay.
+- `one_hit_mode` (int): one-hit mode selection (`0=vanilla`, `1=exclude_vitality_counters`, `2=include_vitality_counters`). When non-zero, Kirby's max HP is clamped to `vitality_counter + 1` during gameplay. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool (replaced by filler) so the cap stays at 1. In `include_vitality_counters` mode, Vitality Counter items remain in the pool and each one received raises the cap by 1.
 - `death_link` (bool): enables/disables AP DeathLink tag synchronization in the client.
 - `ability_randomization_mode` (int): enemy copy-ability mode (`0=vanilla`, `1=shuffled`, `2=completely_random`).
 - `ability_randomization_boss_spawns` (bool): include/exclude ability-granting boss-spawned objects.
@@ -172,6 +175,13 @@ DeathLink runtime behavior contract:
 - Generation removes `1 Up` from the active filler pool when the option is enabled.
 - During gameplay, the BizHawk client clamps `kirby_lives_native` to `0` so the player starts with zero extra lives and native/in-game life gains are overwritten.
 - Any `no_extra_lives` runtime diagnostics must remain gated behind `debug.logging`.
+
+`one_hit_mode` runtime behavior contract:
+- Generation removes all four Vitality Counter items from the non-filler item pool (replaced by filler) when `one_hit_mode == exclude_vitality_counters` (1). Vitality Chest locations are kept, but this mode does not guarantee location-specific filler placement on those chests.
+- Generation leaves the item pool unchanged when `one_hit_mode == include_vitality_counters` (2).
+- During gameplay, when `one_hit_mode != vanilla`, the BizHawk client reads `kirby_vitality_counter_native` (`u16`) and enforces `desired_max_hp = vitality_counter + 1` (capped to `0x7F`) onto `kirby_max_hp_native` and `kirby_hp_native` for player 0's struct.
+- Dead/negative HP states (`current_hp <= 0`) are preserved; only alive Kirby's HP is clamped.
+- Any `one_hit_mode` runtime diagnostics must remain gated behind `debug.logging`.
 ```
 
 **Preconditions before gameplay watchers run:**

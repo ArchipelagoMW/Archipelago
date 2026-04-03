@@ -10,7 +10,7 @@ from .. import KirbyAmWorld
 from ..data import LocationCategory, data
 from ..items import get_item_classification
 from ..locations import KirbyAmLocation
-from ..options import RandomizeShards
+from ..options import OneHitMode, RandomizeShards
 
 
 class _DummyMultiWorld:
@@ -43,7 +43,10 @@ def _build_fill_locations() -> list[KirbyAmLocation]:
     return locations
 
 
-def _build_world_for_create_items(shard_mode: int) -> tuple[KirbyAmWorld, list[KirbyAmLocation]]:
+def _build_world_for_create_items(
+    shard_mode: int,
+    one_hit_mode: int = OneHitMode.option_vanilla,
+) -> tuple[KirbyAmWorld, list[KirbyAmLocation]]:
     locations = _build_fill_locations()
     world = KirbyAmWorld.__new__(KirbyAmWorld)
     world.player = 1
@@ -55,6 +58,7 @@ def _build_world_for_create_items(shard_mode: int) -> tuple[KirbyAmWorld, list[K
             RandomizeShards.option_completely_random: "completely_random",
         }[shard_mode]),
         no_extra_lives=SimpleNamespace(value=False),
+        one_hit_mode=SimpleNamespace(value=one_hit_mode),
     )
     return world, locations
 
@@ -383,3 +387,103 @@ def test_create_items_fails_when_non_filler_count_exceeds_open_locations() -> No
 
     with pytest.raises(ValueError, match="non-filler item count"):
         world.create_items()
+
+
+# ── One-Hit Mode item pool tests ────────────────────────────────────────────
+
+
+def _vitality_item_codes() -> set[int]:
+    return {item.item_id for item in data.items.values() if "Vitality" in item.tags}
+
+
+def test_one_hit_mode_vanilla_includes_all_vitality_items() -> None:
+    world, _locations = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_vanilla,
+    )
+    world.create_items()
+
+    vitality_codes = _vitality_item_codes()
+    pool_codes = {item.code for item in world.multiworld.itempool if item.code is not None}
+    assert vitality_codes.issubset(pool_codes), (
+        "Vanilla one-hit mode should not remove vitality counter items from the pool"
+    )
+
+
+def test_one_hit_mode_include_vitality_counters_includes_all_vitality_items() -> None:
+    world, _locations = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_include_vitality_counters,
+    )
+    world.create_items()
+
+    vitality_codes = _vitality_item_codes()
+    pool_codes = {item.code for item in world.multiworld.itempool if item.code is not None}
+    assert vitality_codes.issubset(pool_codes), (
+        "include_vitality_counters mode should keep all vitality counter items in the pool"
+    )
+
+
+def test_one_hit_mode_exclude_vitality_counters_removes_vitality_items() -> None:
+    world, _locations = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_exclude_vitality_counters,
+    )
+    world.create_items()
+
+    vitality_codes = _vitality_item_codes()
+    pool_codes = {item.code for item in world.multiworld.itempool if item.code is not None}
+    assert vitality_codes.isdisjoint(pool_codes), (
+        "exclude_vitality_counters mode should have no vitality counter items in the pool"
+    )
+
+
+def test_one_hit_mode_exclude_vitality_counters_pool_size_unchanged() -> None:
+    """Total pool size should not change; filler fills the slots vacated by vitality items."""
+    world_vanilla, _locs_v = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_vanilla,
+    )
+    world_vanilla.create_items()
+
+    world_exclude, _locs_e = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_exclude_vitality_counters,
+    )
+    world_exclude.create_items()
+
+    assert len(world_exclude.multiworld.itempool) == len(world_vanilla.multiworld.itempool), (
+        "Pool size should be the same in exclude_vitality_counters mode as in vanilla"
+    )
+
+
+def test_one_hit_mode_exclude_vitality_counters_vitality_chest_locations_exist() -> None:
+    """Vitality Chest locations remain in the pool; pool has enough items to fill them (with filler)."""
+    world, locations = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_exclude_vitality_counters,
+    )
+    world.create_items()
+
+    vitality_locs = [
+        loc for loc in locations
+        if data.locations[loc.key].category == LocationCategory.VITALITY_CHEST
+    ]
+    assert len(vitality_locs) == 4, "Expected 4 vitality chest locations"
+
+    # All vitality chest locations are open (no locked item); the pool covers them with filler.
+    for loc in vitality_locs:
+        assert loc.item is None, (
+            f"Vitality chest location {loc.name} should be open (no locked item) in exclude mode"
+        )
+
+    # The pool size equals the number of open locations, confirming filler fills the vitality slots.
+    open_count = sum(
+        1 for loc in locations
+        if data.locations.get(loc.key) is not None
+        and data.locations[loc.key].category != LocationCategory.GOAL
+        and loc.item is None
+    )
+    assert len(world.multiworld.itempool) == open_count, (
+        "Pool size should equal the number of open non-goal locations"
+    )
