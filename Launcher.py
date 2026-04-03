@@ -433,7 +433,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
             if button.component.func:
                 # Run using schedule_once so snackbar shows up first
-                Clock.schedule_once(button.component.func(), 0)
+                Clock.schedule_once(lambda _: button.component.func(), 0)
             else:
                 launch(get_exe(button.component), button.component.cli, terminal)
 
