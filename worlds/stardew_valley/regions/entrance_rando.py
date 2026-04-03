@@ -128,9 +128,7 @@ def connect_regions(
     return special_randomized_entrances
 
 
-def create_entrance_rando_target(
-        origin: Region, destination: Region, connection_data: ConnectionData
-) -> None:
+def create_entrance_rando_target(origin: Region, destination: Region, connection_data: ConnectionData) -> None:
     """We need our own function to create the GER targets, because the Stardew Mod have very specific expectations for the name of the entrances.
     We need to know exactly which entrances to swap in both directions."""
 
@@ -150,9 +148,7 @@ def create_entrance_rando_target(
     origin.create_er_target(connection_data.name).randomization_type = EntranceType.TWO_WAY
 
 
-def prepare_mod_data(
-        placements: ERPlacementState, forced_placements: dict[str, str]
-) -> dict[str, str]:
+def prepare_mod_data(placements: ERPlacementState, forced_placements: dict[str, str]) -> dict[str, str]:
     """Take the placements from GER and prepare the data for the mod.
     The mod require a dictionary detailing which connections need to be swapped. It acts as if the connections are decoupled, so both directions are required.
 
