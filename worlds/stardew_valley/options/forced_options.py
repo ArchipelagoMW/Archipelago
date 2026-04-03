@@ -1,3 +1,4 @@
+from worlds.stardew_valley.regions.model import reverse_connection_name
 import logging
 
 import Options as ap_options
@@ -33,7 +34,7 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
         logger.warning(message)
     if (not settings.allow_chaos_er and EntranceRandomizationBehaviorOptionName.chaos in world_options.entrance_randomization_behavior):
-        world_options.entrance_randomization_behavior.value.remove(EntranceRandomizerBehaviourOptionName.chaos)
+        world_options.entrance_randomization_behavior.value.remove(EntranceRandomizationBehaviorOptionName.chaos)
         message = f"Chaos Entrance Randomization {message_template} removed from Entrance Randomization Behaviour"
         logger.warning(message)
     if not settings.allow_shipsanity_everything and world_options.shipsanity == options.Shipsanity.option_everything:
@@ -76,6 +77,7 @@ def force_change_options_if_incompatible(world_options: options.StardewValleyOpt
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
+    force_reverse_entrance_plando_when_not_decoupled(world_options, player, player_name)
 
 
 def force_no_jojapocalypse_without_being_sure(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
@@ -169,6 +171,23 @@ def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_op
         world_options.special_order_locations.value -= options.SpecialOrderLocations.value_qi
         logger.warning(f"Mr. Qi's Special Orders requires Ginger Island. "
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so Special Order Locations was changed from {original_option_name} to {world_options.special_order_locations.current_option_name}")
+
+
+def force_reverse_entrance_plando_when_not_decoupled(world_options: options.StardewValleyOptions, player, player_name):
+    if EntranceRandomizationBehaviorOptionName.decoupled in world_options.entrance_randomization_behavior:
+        return
+    plando_map = world_options.entrance_randomization_plando.value
+    to_add = {}
+    for before, after in plando_map.items():
+        after_rev = reverse_connection_name(after)
+        before_rev = reverse_connection_name(before)
+        if after_rev in plando_map:
+            continue
+        if after_rev is None and before_rev is None:  # a one-way
+            continue
+        logger.warning(f"Adding forced connection '{after_rev}: {before_rev}' due to '{before}: {after}' existing for player {player} ({player_name})")
+        to_add[after_rev] = before_rev
+    world_options.entrance_randomization_plando.value.update(to_add)
 
 
 def force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options):

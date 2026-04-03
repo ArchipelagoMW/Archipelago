@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
-    Visibility, Removed, OptionCounter
+    Visibility, Removed, OptionCounter, OptionDict
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
@@ -219,6 +219,16 @@ class EntranceRandomization(Choice):
 
     def randomized_fast_travel_warps(self) -> bool:
         return self.value >= self.option_everywhere
+
+
+class EntranceRandomizationPlando(OptionDict):
+    """Lock certain Entrances that would otherwise be randomized.
+    Should have entries of the format
+    `Farm to Forest: Forest to Town`
+    which will make leaving the farm leads to the town from the left bottom"""
+    default = {}
+    internal_name = "entrance_randomization_plando"
+    display_name = "Entrance Plando"
 
 
 class EntranceRandomizationBehavior(OptionSet):
@@ -1271,6 +1281,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     bundle_price: BundlePrice
     bundles_per_room: BundlesPerRoom
     entrance_randomization: EntranceRandomization
+    entrance_randomization_plando: EntranceRandomizationPlando
     entrance_randomization_behavior: EntranceRandomizationBehavior
     start_without: StartWithout
     season_randomization: SeasonRandomization

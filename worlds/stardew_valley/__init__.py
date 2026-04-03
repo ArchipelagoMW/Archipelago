@@ -35,7 +35,7 @@ from .options.presets import sv_options_presets
 from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
-from .regions.entrance_rando import get_target_groups, prepare_chaos_data
+from .regions.entrance_rando import get_target_groups
 from .rules import set_rules
 from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
@@ -148,6 +148,7 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: List[BundleRoom]
     randomized_entrances: None | Dict[str, str] = None
+    forced_entrances: dict[str, str]
     trash_bear_requests: Dict[str, List[str]]
 
     total_progression_items: int
@@ -222,7 +223,9 @@ class StardewValleyWorld(World):
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
         self.trash_bear_requests = get_trash_bear_requests(self.random, self.content, self.options)
         if self.options.entrance_randomization_behavior.is_chaos():
-            self.randomized_entrances = prepare_chaos_data(randomized_connections)
+            self.randomized_entrances = randomized_connections
+        else:
+            self.forced_entrances = randomized_connections
 
         for bundle_room in self.modified_bundles:
             bundle_room.special_behavior(self)
@@ -508,7 +511,7 @@ class StardewValleyWorld(World):
                 target_group_lookup=target_groups,
                 on_connect=connect_cutscene_regions_as_well,
             )
-            self.randomized_entrances = prepare_mod_data(placement)
+            self.randomized_entrances = prepare_mod_data(placement, self.forced_entrances)
         elif not is_chaos:
             # randomized_entrances were in the slot_data, connecting them as entered
             entrances = {entrance.name: entrance for region in self.get_regions() for entrance in region.entrances if entrance.parent_region is None}

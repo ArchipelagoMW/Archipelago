@@ -100,9 +100,10 @@ def connect_regions(
         connection_data_by_name: dict[str, ConnectionData],
         regions_by_name: dict[str, Region],
         player_randomization_flag: RandomizationFlag,
-        is_chaos: bool
-) -> set[str]:
-    randomized_entrances: set[str] = set()
+        er_plando: dict[str, str],
+        is_chaos: bool,
+) -> dict[str, str]:
+    special_randomized_entrances: dict[str, str] = {}
     for region_name, region_data in region_data_by_name.items():
         origin_region = regions_by_name[region_name]
 
@@ -112,17 +113,24 @@ def connect_regions(
 
             eligible = connection_data.is_eligible_for_randomization(player_randomization_flag)
             if eligible and is_chaos:
-                randomized_entrances.add(connection_data.name)
+                special_randomized_entrances[connection_data.name] = connection_data.name
                 origin_region.connect(destination_region, connection_data.name)
+            elif eligible and connection_data.name in er_plando:
+                new_connection_name = er_plando[connection_data.name]
+                new_connection = connection_data_by_name[new_connection_name]
+                special_randomized_entrances[connection_data.name] = new_connection_name
+                dest = regions_by_name[new_connection.destination]
+                origin_region.connect(dest, connection_data.name)
             elif eligible:
-                randomized_entrances.add(connection_data.name)
                 create_entrance_rando_target(origin_region, destination_region, connection_data)
             else:
                 origin_region.connect(destination_region, connection_data.name)
-    return randomized_entrances
+    return special_randomized_entrances
 
 
-def create_entrance_rando_target(origin: Region, destination: Region, connection_data: ConnectionData) -> None:
+def create_entrance_rando_target(
+        origin: Region, destination: Region, connection_data: ConnectionData
+) -> None:
     """We need our own function to create the GER targets, because the Stardew Mod have very specific expectations for the name of the entrances.
     We need to know exactly which entrances to swap in both directions."""
 
@@ -139,20 +147,12 @@ def create_entrance_rando_target(origin: Region, destination: Region, connection
     exit = origin.create_exit(connection_data.name)
     exit.randomization_type = EntranceType.TWO_WAY
     exit.randomization_group = connection_data.group
-    destination.create_er_target(rev).randomization_type = EntranceType.TWO_WAY
+    origin.create_er_target(connection_data.name).randomization_type = EntranceType.TWO_WAY
 
 
-def prepare_chaos_data(
-        randomized_connections: set[str]
+def prepare_mod_data(
+        placements: ERPlacementState, forced_placements: dict[str, str]
 ) -> dict[str, str]:
-    randomized_entrances: dict[str, str] = {}
-
-    for connection in randomized_connections:
-        randomized_entrances[connection] = connection
-    return randomized_entrances
-
-
-def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
     """Take the placements from GER and prepare the data for the mod.
     The mod require a dictionary detailing which connections need to be swapped. It acts as if the connections are decoupled, so both directions are required.
 
@@ -167,4 +167,5 @@ def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
     for entrance, exit_ in placements.pairings:
         swapped_connections[entrance] = reverse_connection_name(exit_) or exit_
 
+    swapped_connections.update(forced_placements)
     return swapped_connections
