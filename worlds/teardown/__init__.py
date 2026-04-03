@@ -1,20 +1,16 @@
 
+from worlds.LauncherComponents import Component, components, launch as launch_component
 
 
 
 def launch_client():
     from .client.TeardownClient import launch
-    launch()
-
-
-
-
-from worlds.LauncherComponents import Component, components
+    launch_component(launch, name="TeardownClient")
 
 components.append(Component(
     display_name="Teardown Client",
     func=launch_client,
-    icon="icon",
+    #icon="icon",
     #description="Archipelago Bridge for Teardown"
 ))
 
