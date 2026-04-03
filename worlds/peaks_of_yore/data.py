@@ -360,7 +360,9 @@ class PeakRegion(POYRegion):
                 self.locations.remove(location)
                 # move the location to a subregion so it's access requirements can be fulfilled :)
                 self.subregions.append(POYRegion(self.name + ": " + location.name.split(": ")[-1],
-                                                 location.requirements, locations=[location],
+                                                 location.requirements, locations=[
+                        LocationData(location.name, location.type, location.id, None, None, location.is_event)
+                    ],
                                                  enable_requirements=location.enable_override))
 
         if self.generate_free_solo:
