@@ -19,6 +19,7 @@ from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
+from worlds.rac3.options.scout_vendors import ScoutVendors
 from worlds.rac3.options.sewer_limitation_options import SewerLimitation
 from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
@@ -80,6 +81,7 @@ class RaC3Options(PerGameCommonOptions):
     clank_options: ClankOptions
     ship_vendor: ShipVendors
     armor_vendor: ArmorVendors
+    scout_vendors: ScoutVendors
 
 
 rac3_option_groups = [
@@ -107,6 +109,7 @@ rac3_option_groups = [
         WeaponVendors,
         ArmorVendors,
         ShipVendors,
+        ScoutVendors,
         SkillPoints,
         Trophies,
         TitaniumBolts,
@@ -162,4 +165,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.CLANK_OPTIONS,
     RAC3OPTION.SHIP_VENDOR,
     RAC3OPTION.ARMOR_VENDOR,
+    RAC3OPTION.SCOUT_VENDORS,
 ]
