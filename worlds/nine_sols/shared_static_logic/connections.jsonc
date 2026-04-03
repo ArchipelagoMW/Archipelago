@@ -412,8 +412,9 @@
             { "item": "Wall Climb" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ],
         "medium_requires": [
-            { "item": "Wall Climb" },
-            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // and T-dash replaces the other
+            { "item": "Wall Climb" }, // then T-dash and
+            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" }, { "item": "Charged Strike" } ] }
+            // Swift Runner is also required for the Charged Strike option
         ],
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // wall slide and parry hover replace WC and AD
     },
