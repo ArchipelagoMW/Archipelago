@@ -1,7 +1,7 @@
 from random import Random
 
 from .data_randomizer_behaviors import randomizers_per_behavior
-from ..content import StardewContent
+from ..content import StardewContent, content_packs
 from ..content.override import override
 from ..data import season_data
 from ..data.fish_data import FishItem, crab_pot_difficulty
@@ -9,6 +9,7 @@ from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
 from ..strings.region_names import LogicRegion
+from ..strings.season_names import Season
 from ..strings.weather_names import Weather
 
 
@@ -23,8 +24,8 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
 
     randomize_fish_catch_method(content, data_to_randomize, behavior, random)
     randomize_fish_difficulty(content, data_to_randomize, behavior, random)
-    randomize_fish_season(content, data_to_randomize, behavior, random)
     randomize_fish_location(content, data_to_randomize, behavior, random)
+    randomize_fish_season(content, data_to_randomize, behavior, random)
     randomize_fish_weather(content, data_to_randomize, behavior, random)
 
     return content
@@ -64,6 +65,23 @@ def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[
         content.fishes[fish_name] = override(original_fish, difficulty=fish_difficulty)
 
 
+def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.fish_season not in data_to_randomize:
+        return
+
+    seasons_by_fish = {fish_name: fish_data.seasons for fish_name, fish_data in content.fishes.items()
+                       if len(fish_data.seasons) >= 1 and fish_data.difficulty != crab_pot_difficulty}
+    randomized_seasons_per_fish = randomizers_per_behavior[behavior](seasons_by_fish, random)
+
+    has_magic_bait = content_packs.ginger_island_content_pack.name in content.registered_packs and content_packs.qi_board_content_pack.name in content.registered_packs
+
+    for fish_name, fish_season in randomized_seasons_per_fish.items():
+        original_fish = content.fishes[fish_name]
+        if not has_magic_bait and LogicRegion.night_market in original_fish.locations and Season.winter not in fish_season:
+            fish_season += (Season.winter,)
+        content.fishes[fish_name] = override(original_fish, seasons=fish_season)
+
+
 def randomize_fish_difficulty(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
     if DataRandomizationOptionName.fish_difficulty not in data_to_randomize:
         return
@@ -74,19 +92,6 @@ def randomize_fish_difficulty(content: StardewContent, data_to_randomize: set[st
     for fish_name, fish_difficulty in randomized_difficulties_per_fish.items():
         original_fish = content.fishes[fish_name]
         content.fishes[fish_name] = override(original_fish, difficulty=fish_difficulty)
-
-
-def randomize_fish_season(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
-    if DataRandomizationOptionName.fish_season not in data_to_randomize:
-        return
-
-    seasons_by_fish = {fish_name: fish_data.seasons for fish_name, fish_data in content.fishes.items()
-                       if len(fish_data.seasons) >= 1 and fish_data.difficulty != crab_pot_difficulty}
-    randomized_seasons_per_fish = randomizers_per_behavior[behavior](seasons_by_fish, random)
-
-    for fish_name, fish_season in randomized_seasons_per_fish.items():
-        original_fish = content.fishes[fish_name]
-        content.fishes[fish_name] = override(original_fish, seasons=fish_season)
 
 
 def randomize_fish_location(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
@@ -102,7 +107,7 @@ def randomize_fish_location(content: StardewContent, data_to_randomize: set[str]
         content.fishes[fish_name] = override(original_fish, locations=fish_location)
 
     locations_by_crab_pot_fish = {fish_name: fish_data.locations for fish_name, fish_data in content.fishes.items()
-                         if len(fish_data.locations) >= 1 and fish_data.difficulty == crab_pot_difficulty}
+                                  if len(fish_data.locations) >= 1 and fish_data.difficulty == crab_pot_difficulty}
     randomized_locations_per_crab_pot_fish = randomizers_per_behavior[behavior](locations_by_crab_pot_fish, random)
 
     for fish_name, fish_location in randomized_locations_per_crab_pot_fish.items():
@@ -121,4 +126,3 @@ def randomize_fish_weather(content: StardewContent, data_to_randomize: set[str],
     for fish_name, fish_weather in randomized_weather_per_fish.items():
         original_fish = content.fishes[fish_name]
         content.fishes[fish_name] = override(original_fish, weather=fish_weather)
-
