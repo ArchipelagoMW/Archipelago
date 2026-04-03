@@ -6,6 +6,7 @@ from kvui import GameManager, MDNavigationItemBase
 # isort: on
 from typing import TYPE_CHECKING, Any
 
+from kivy._clock import ClockEvent
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
@@ -13,7 +14,16 @@ from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
 
 from ..game.game import Game
-from .custom_views import APQuestControlsView, APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
+from ..game.graphics import Graphic
+from .custom_views import (
+    APQuestControlsView,
+    APQuestGameView,
+    APQuestGrid,
+    ConfettiView,
+    TapIfConfettiCannonImage,
+    TapImage,
+    VolumeSliderView,
+)
 from .graphics import PlayerSprite, get_texture
 from .sounds import SoundManager
 
@@ -28,14 +38,16 @@ class APQuestManager(GameManager):
     lower_game_grid: GridLayout
     upper_game_grid: GridLayout
 
-    game_view: MDRecycleView
+    game_view: MDRecycleView | None = None
     game_view_tab: MDNavigationItemBase
 
     sound_manager: SoundManager
 
     bottom_image_grid: list[list[Image]]
-    top_image_grid: list[list[Image]]
+    top_image_grid: list[list[TapImage]]
     confetti_view: ConfettiView
+
+    move_event: ClockEvent | None
 
     bottom_grid_is_grass: bool
 
@@ -45,6 +57,7 @@ class APQuestManager(GameManager):
         self.sound_manager.allow_intro_to_play = not self.ctx.delay_intro_song
         self.top_image_grid = []
         self.bottom_image_grid = []
+        self.move_event = None
         self.bottom_grid_is_grass = False
 
     def allow_intro_song(self) -> None:
@@ -71,10 +84,12 @@ class APQuestManager(GameManager):
 
     def game_started(self) -> None:
         self.switch_to_game_tab()
+        if self.game_view is not None:
+            self.game_view.force_focus()
         self.sound_manager.game_started = True
 
     def render(self, game: Game, player_sprite: PlayerSprite) -> None:
-        self.setup_game_grid_if_not_setup(game.gameboard.size)
+        self.setup_game_grid_if_not_setup(game)
 
         # This calls game.render(), which needs to happen to update the state of math traps
         self.render_gameboard(game, player_sprite)
@@ -103,6 +118,8 @@ class APQuestManager(GameManager):
         rendered_item_column = game.render_health_and_inventory(vertical=True)
         for item_graphic, image_row in zip(rendered_item_column, self.top_image_grid, strict=False):
             image = image_row[-1]
+
+            image.is_confetti_cannon = item_graphic == Graphic.CONFETTI_CANNON
 
             texture = get_texture(item_graphic)
             if texture is None:
@@ -136,23 +153,25 @@ class APQuestManager(GameManager):
 
         self.bottom_grid_is_grass = grass
 
-    def setup_game_grid_if_not_setup(self, size: tuple[int, int]) -> None:
+    def setup_game_grid_if_not_setup(self, game: Game) -> None:
         if self.upper_game_grid.children:
             return
 
         self.top_image_grid = []
         self.bottom_image_grid = []
 
-        for _row in range(size[1]):
+        size = game.gameboard.size
+
+        for row in range(size[1]):
             self.top_image_grid.append([])
             self.bottom_image_grid.append([])
 
-            for _column in range(size[0]):
+            for column in range(size[0]):
                 bottom_image = Image(fit_mode="fill", color=(0.3, 0.3, 0.3))
                 self.lower_game_grid.add_widget(bottom_image)
                 self.bottom_image_grid[-1].append(bottom_image)
 
-                top_image = Image(fit_mode="fill")
+                top_image = TapImage(lambda y=row, x=column: self.ctx.queue_auto_move(x, y), fit_mode="fill")
                 self.upper_game_grid.add_widget(top_image)
                 self.top_image_grid[-1].append(top_image)
 
@@ -160,10 +179,18 @@ class APQuestManager(GameManager):
             image = Image(fit_mode="fill", color=(0.3, 0.3, 0.3))
             self.lower_game_grid.add_widget(image)
 
-            image2 = Image(fit_mode="fill", opacity=0)
+            image2 = TapIfConfettiCannonImage(lambda: self.ctx.confetti_and_rerender(), fit_mode="fill", opacity=0)
             self.upper_game_grid.add_widget(image2)
 
             self.top_image_grid[-1].append(image2)
+
+    def start_auto_move(self) -> None:
+        if self.move_event is not None:
+            self.move_event.cancel()
+
+        self.ctx.do_auto_move_and_rerender()
+
+        self.move_event = Clock.schedule_interval(lambda _: self.ctx.do_auto_move_and_rerender(), 0.10)
 
     def build(self) -> Layout:
         container = super().build()
