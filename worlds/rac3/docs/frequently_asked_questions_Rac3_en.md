@@ -55,7 +55,7 @@ The client tells you to reload the save file as soon you start the game on Veldi
 
 ## How do I toggle death link?
 
-You can run the /death_link command in the Ratchet and Clank 3 client to toggle it.
+You can run the /deathlink command in the Ratchet and Clank 3 client to toggle it.
 
 ## Sometimes the message popup does not show when I send/receive items
 
