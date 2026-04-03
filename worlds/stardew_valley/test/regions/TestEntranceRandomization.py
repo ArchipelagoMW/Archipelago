@@ -35,27 +35,31 @@ class TestEntranceRando(SVTestCase):
         player_randomization_flag = RandomizationFlag.SET_PELICAN_TOWN
 
         with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
-            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, False)
+            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, {}, False)
 
             expected_origin, expected_destination = regions_by_name["Region1"], regions_by_name["Region2"]
             expected_connection = connection_data_by_name["randomized_connection"]
             mock_create_entrance_rando_target.assert_called_once_with(expected_origin, expected_destination, expected_connection)
 
-    def test_when_create_entrance_rando_target_then_create_exit_and_er_target(self):
+    def test_when_create_entrance_rando_target_both_ways_exits_and_targets_are_correct(self):
         origin = Mock()
         destination = Mock()
         connection_data = ConnectionData("origin to destination", "destination")
+        connection_data_back = ConnectionData("destination to origin", "origin")
 
         create_entrance_rando_target(origin, destination, connection_data)
+        create_entrance_rando_target(destination, origin, connection_data_back)
 
         origin.create_exit.assert_called_once_with("origin to destination")
+        origin.create_er_target.assert_called_once_with("origin to destination")
+        destination.create_exit.assert_called_once_with("destination to origin")
         destination.create_er_target.assert_called_once_with("destination to origin")
 
     def test_when_prepare_mod_data_then_swapped_connections_contains_both_directions(self):
         # all two-way warps are explicit to allow for detached.
         placements = Mock(pairings=[("A to B", "C to A"), ("C to A", "A to B"), ("C to D", "A to C"), ("A to C", "C to D")])
 
-        swapped_connections = prepare_mod_data(placements)
+        swapped_connections = prepare_mod_data(placements, {})
 
         self.assertEqual({"A to B": "A to C", "C to A": "B to A", "C to D": "C to A", "A to C": "D to C"}, swapped_connections)
 
