@@ -221,16 +221,6 @@ class EntranceRandomization(Choice):
         return self.value >= self.option_everywhere
 
 
-class EntranceRandomizationPlando(OptionDict):
-    """Lock certain Entrances that would otherwise be randomized.
-    Should have entries of the format
-    `Farm to Forest: Forest to Town`
-    which will make leaving the farm leads to the town from the left bottom"""
-    default = {}
-    internal_name = "entrance_randomization_plando"
-    display_name = "Entrance Plando"
-
-
 class EntranceRandomizationBehavior(OptionSet):
     """Modifications to how ER will behave within the randomized locations.
     - Chaos: all Enabled entrances are reshuffled every day!
@@ -261,6 +251,18 @@ class EntranceRandomizationBehavior(OptionSet):
 
     def is_chaos(self) -> bool:
         return EntranceRandomizationBehaviorOptionName.chaos in self.value
+
+
+class EntranceRandomizationPlando(OptionDict):
+    """Set where specific Entrances go instead of being randomized.
+    Should have entries of the format
+    `Farm to Forest: Forest to Town`
+    which will make leaving the farm leads to the town from the left bottom.
+    Note that this only works for entrances that are randomized by Entrance Randomization
+    """
+    default = {}
+    internal_name = "entrance_randomization_plando"
+    display_name = "Entrance Plando"
 
 
 class StartWithout(OptionSet):

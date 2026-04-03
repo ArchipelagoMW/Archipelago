@@ -81,9 +81,9 @@ else:
         OptionGroup("Very Advanced Options", [
             options.Mods,
             options.CustomLogic,
+            options.EntranceRandomizationPlando
             ap_options.ProgressionBalancing,
             ap_options.Accessibility,
-            options.EntranceRandomizationPlando
         ]),
         OptionGroup("Jojapocalypse", [
             options.Jojapocalypse,
