@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.17
+
 - Add a `Make the game harder` option group containing `No Extra Lives` (`no_extra_lives`) and `DeathLink`, pass `no_extra_lives` through slot data, exclude `1 Up` from filler generation when enabled, and clamp the native life counter to `0` during gameplay with debug-only enforcement logging (Issue #491).
 - Add `Ability Randomization: No Ability Weight` (`ability_randomization_no_ability_weight`), a 0-100 weighted no-ability outcome for included randomized enemy grants. A value of `0` preserves all included grants as copy abilities, `100` forces all included grants to resolve to no ability, and intermediate values are deterministic per shuffled enemy type or per completely-random grant event with a separately salted no-ability roll. The shipped default is `55` based on a USA-ROM scan of vanilla regular-enemy placements (`827 / 1510 = 54.77%`). Existing boss-spawn, miniboss, and passive-enemy toggles still control which sources participate (Issue #399).
 - Unhide KirbyAM common item/location options in generated templates and option surface (`local_items`, `non_local_items`, `start_inventory`, `start_hints`, `start_location_hints`, `exclude_locations`, `priority_locations`, `item_links`, `plando_items`), and document standard Archipelago usage in world docs (Issue #546).
