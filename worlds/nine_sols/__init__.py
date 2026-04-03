@@ -57,6 +57,11 @@ class NineSolsWebWorld(WebWorld):
             ChiyouShopUnlockSolSeals,
             KuafuExtraInventoryUnlockSolSeals,
         ]),
+        OptionGroup("Additional Randomizations", [
+            RandomizeShops,
+            # skill_tree_randomization
+            # entrance_randomization
+        ]),
     ]
 
 
