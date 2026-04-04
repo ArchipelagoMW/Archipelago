@@ -80,7 +80,8 @@ class LocalServeGame(ServeGame):
         self._proc = Process(target=_launch_multiserver, args=(self._multidata, ready, self._stop))
         try:
             self._proc.start()
-            ready.wait(30)
+            if not ready.wait(30):
+                raise TimeoutError("Timed out waiting for local MultiServer startup")
             self.address = "localhost:38281"
             return self
         except BaseException:

@@ -3,7 +3,6 @@ Tests for KirbyAM item groups.
 
 Validates that:
 - Canonical item groups are defined and properly populated.
-- Legacy aliases resolve to the canonical groups.
 - All grouped items exist in the item data.
 - No empty groups are exposed (AP requirement).
 """
@@ -24,11 +23,6 @@ CANONICAL_ITEM_GROUPS = {
     "Vitality",   # Vitality counter items
     "Useful",     # Useful but non-critical progression items
     "Filler",     # Filler items (1-Up plus shipped consumables)
-}
-
-EXPECTED_ALIASES = {
-    "Shard": "Shards",
-    "Map": "Maps",
 }
 
 # Expected members in canonical groups (representative samples for validation).
@@ -77,15 +71,6 @@ class TestItemGroupsExist:
         """Canonical groups must not be empty."""
         empty_groups = {name for name in CANONICAL_ITEM_GROUPS if not ITEM_GROUPS.get(name)}
         assert not empty_groups, f"Empty canonical item groups: {empty_groups}"
-
-    def test_legacy_aliases_expose_same_members(self):
-        """Legacy aliases must resolve to the same members as their canonical groups."""
-        for alias, canonical in EXPECTED_ALIASES.items():
-            assert alias in ITEM_GROUPS, f"Alias '{alias}' not found in ITEM_GROUPS"
-            assert canonical in ITEM_GROUPS, f"Canonical group '{canonical}' not found in ITEM_GROUPS"
-            assert ITEM_GROUPS[alias] == ITEM_GROUPS[canonical], \
-                f"Alias '{alias}' does not expose the same members as canonical '{canonical}'"
-
 
 class TestItemGroupMembership:
     """Test that expected items are present in groups."""

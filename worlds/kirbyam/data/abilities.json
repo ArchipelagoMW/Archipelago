@@ -1,9 +1,6 @@
 {
   "Beam": {
-    "runtime_ability_id": 7,
-    "aliases": [
-      "Needle"
-    ]
+    "runtime_ability_id": 7
   },
   "Bomb": {
     "runtime_ability_id": 9

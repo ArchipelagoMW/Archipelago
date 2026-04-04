@@ -1679,14 +1679,14 @@ def test_load_debug_settings_honors_slot_data_toggle_true(mock_bizhawk_context):
     assert client._debug_logging_enabled is True
 
 
-def test_load_debug_settings_accepts_legacy_gameplay_state_key(mock_bizhawk_context):
+def test_load_debug_settings_ignores_removed_gameplay_state_key(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
     mock_bizhawk_context.slot_data["debug"] = {"gameplay_state_logging": True}
 
     client._load_debug_settings(mock_bizhawk_context)
 
-    assert client._debug_logging_enabled is True
+    assert client._debug_logging_enabled is False
 
 
 def test_no_extra_lives_enabled_defaults_to_false(mock_bizhawk_context):

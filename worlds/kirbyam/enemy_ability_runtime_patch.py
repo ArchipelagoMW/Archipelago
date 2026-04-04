@@ -24,7 +24,6 @@ from .enemy_ability_data import (
     AbilitySource,
     ABILITY_NAME_TO_ID,
     ABILITY_SOURCES,
-    LEGACY_ABILITY_ALIASES,
     VALID_ENEMY_COPY_ABILITIES,
 )
 from .options import AbilityRandomizationMode
@@ -41,10 +40,9 @@ def _validate_runtime_ability_ids() -> None:
 
 
 def _ability_name_to_id(name: str) -> int:
-    normalized_name = LEGACY_ABILITY_ALIASES.get(name, name)
-    if normalized_name not in ABILITY_NAME_TO_ID:
+    if name not in ABILITY_NAME_TO_ID:
         raise ValueError(f"unsupported runtime enemy ability name in policy: {name}")
-    return ABILITY_NAME_TO_ID[normalized_name]
+    return ABILITY_NAME_TO_ID[name]
 
 
 def _is_source_enabled(source: AbilitySource, policy: dict[str, Any]) -> bool:
@@ -69,8 +67,8 @@ def build_enemy_copy_runtime_patch_writes(policy: dict[str, Any]) -> dict[int, i
     per-ability-source variation (each patched source entry can map differently),
     not per-live-grant re-roll at runtime.
     """
-    mode = int(policy.get("mode", AbilityRandomizationMode.option_vanilla))
-    if mode == AbilityRandomizationMode.option_vanilla:
+    mode = int(policy.get("mode", AbilityRandomizationMode.option_off))
+    if mode == AbilityRandomizationMode.option_off:
         return {}
 
     _validate_runtime_ability_ids()

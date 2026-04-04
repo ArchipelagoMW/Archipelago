@@ -7,6 +7,11 @@ from ..data import data
 from ..client import KirbyAmClient
 
 
+def _close_async_start_coro(coro):
+    """Mimic async_start scheduling in tests by explicitly closing created coroutines."""
+    coro.close()
+
+
 def test_item_name_resolves_from_data_items():
     """_item_name should resolve item labels from data.items when available."""
     client = KirbyAmClient()
@@ -132,7 +137,7 @@ def test_send_notification_omits_sender_includes_receiver_and_location():
     }
 
     with patch('worlds.kirbyam.client.bizhawk.display_message') as mock_display:
-        with patch('worlds.kirbyam.client.Utils.async_start'):
+        with patch('worlds.kirbyam.client.Utils.async_start', side_effect=_close_async_start_coro):
             client._maybe_emit_send_notification(ctx, args)
 
         # Verify display_message was called with proper formatting
@@ -166,7 +171,7 @@ def test_send_notification_deduplicates_by_key():
     }
 
     with patch('worlds.kirbyam.client.bizhawk.display_message') as mock_display:
-        with patch('worlds.kirbyam.client.Utils.async_start'):
+        with patch('worlds.kirbyam.client.Utils.async_start', side_effect=_close_async_start_coro):
             # First call should go through
             client._maybe_emit_send_notification(ctx, args)
             first_call_count = mock_display.call_count
@@ -197,7 +202,7 @@ def test_send_notification_only_emits_own_items():
     }
 
     with patch('worlds.kirbyam.client.bizhawk.display_message') as mock_display:
-        with patch('worlds.kirbyam.client.Utils.async_start'):
+        with patch('worlds.kirbyam.client.Utils.async_start', side_effect=_close_async_start_coro):
             client._maybe_emit_send_notification(ctx, args)
 
         # Should not emit for items from other players
@@ -218,7 +223,7 @@ def test_send_notification_ignores_non_itemsend_events():
     }
 
     with patch('worlds.kirbyam.client.bizhawk.display_message') as mock_display:
-        with patch('worlds.kirbyam.client.Utils.async_start'):
+        with patch('worlds.kirbyam.client.Utils.async_start', side_effect=_close_async_start_coro):
             client._maybe_emit_send_notification(ctx, args)
 
         # Should not emit for non-ItemSend types

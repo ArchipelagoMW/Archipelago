@@ -374,9 +374,29 @@ class Context:
     def location_names_for_game(self, game: str) -> typing.Optional[typing.Dict[str, int]]:
         return self.gamespackage[game]["location_name_to_id"] if game in self.gamespackage else None
 
+    @staticmethod
+    def _socket_is_open(socket: typing.Any) -> bool:
+        if not socket:
+            return False
+
+        open_attr = getattr(socket, "open", None)
+        if isinstance(open_attr, bool):
+            return open_attr
+
+        closed_attr = getattr(socket, "closed", None)
+        if isinstance(closed_attr, bool):
+            return not closed_attr
+
+        state = getattr(socket, "state", None)
+        state_name = getattr(state, "name", None)
+        if isinstance(state_name, str):
+            return state_name == "OPEN"
+
+        return True
+
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
+        if not self._socket_is_open(endpoint.socket):
             return False
         msg = self.dumper(msgs)
         try:
@@ -391,7 +411,7 @@ class Context:
             return True
 
     async def send_encoded_msgs(self, endpoint: Endpoint, msg: str) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
+        if not self._socket_is_open(endpoint.socket):
             return False
         try:
             await endpoint.socket.send(msg)
@@ -407,7 +427,7 @@ class Context:
     async def broadcast_send_encoded_msgs(self, endpoints: typing.Iterable[Endpoint], msg: str) -> bool:
         sockets = []
         for endpoint in endpoints:
-            if endpoint.socket and endpoint.socket.open:
+            if self._socket_is_open(endpoint.socket):
                 sockets.append(endpoint.socket)
         try:
             websockets.broadcast(sockets, msg)
@@ -1320,6 +1340,17 @@ _Return = typing.TypeVar("_Return")
 def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callable[[typing.Any], _Return]:
     function.raw_text = True
     return function
+
+
+def _close_ws_server(server: typing.Any) -> None:
+    ws_server = getattr(server, "ws_server", None)
+    if ws_server is not None:
+        ws_server.close()
+        return
+
+    close = getattr(server, "close", None)
+    if callable(close):
+        close()
 
 
 class CommandProcessor(metaclass=CommandMeta):
@@ -2258,7 +2289,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         try:
-            self.ctx.server.ws_server.close()
+            _close_ws_server(self.ctx.server)
         finally:
             self.ctx.exit_event.set()
         return True
@@ -2654,7 +2685,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     def inactivity_shutdown():
-        ctx.server.ws_server.close()
+        _close_ws_server(ctx.server)
         ctx.exit_event.set()
         if to_cancel:
             for task in to_cancel:

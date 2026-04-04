@@ -218,9 +218,9 @@ class KirbyAmWorld(World):
                 include_passive_enemies=randomize_non_ability,
                 no_ability_weight=no_ability_weight,
             )
-            if mode == AbilityRandomizationMode.option_vanilla:
+            if mode == AbilityRandomizationMode.option_off:
                 logger.info(
-                    "[P%s] Enemy copy-ability randomization: vanilla (%s whitelist entries, no_ability_weight=%s)",
+                    "[P%s] Enemy copy-ability randomization: off (%s whitelist entries, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
                     no_ability_weight,
@@ -449,7 +449,6 @@ class KirbyAmWorld(World):
             shard_group = resolve_item_group(
                 self.item_name_groups,
                 "Shards",
-                "Shard",
                 default=self._SHARD_ITEM_LABEL_ORDER,
             )
             pool_shard_count = sum(1 for item in itempool if item.name in shard_group)

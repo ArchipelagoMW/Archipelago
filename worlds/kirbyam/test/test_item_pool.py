@@ -45,7 +45,7 @@ def _build_fill_locations() -> list[KirbyAmLocation]:
 
 def _build_world_for_create_items(
     shard_mode: int,
-    one_hit_mode: int = OneHitMode.option_vanilla,
+    one_hit_mode: int = OneHitMode.option_off,
 ) -> tuple[KirbyAmWorld, list[KirbyAmLocation]]:
     locations = _build_fill_locations()
     world = KirbyAmWorld.__new__(KirbyAmWorld)
@@ -399,7 +399,7 @@ def _vitality_item_codes() -> set[int]:
 def test_one_hit_mode_vanilla_includes_all_vitality_items() -> None:
     world, _locations = _build_world_for_create_items(
         RandomizeShards.option_completely_random,
-        one_hit_mode=OneHitMode.option_vanilla,
+        one_hit_mode=OneHitMode.option_off,
     )
     world.create_items()
 
@@ -442,7 +442,7 @@ def test_one_hit_mode_exclude_vitality_counters_pool_size_unchanged() -> None:
     """Total pool size should not change; filler fills the slots vacated by vitality items."""
     world_vanilla, _locs_v = _build_world_for_create_items(
         RandomizeShards.option_completely_random,
-        one_hit_mode=OneHitMode.option_vanilla,
+        one_hit_mode=OneHitMode.option_off,
     )
     world_vanilla.create_items()
 

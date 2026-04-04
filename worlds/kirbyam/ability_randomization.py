@@ -68,7 +68,7 @@ def build_enemy_copy_ability_policy(
         "ability_randomization_no_ability_weight": normalized_no_ability_weight,
     }
 
-    if mode == AbilityRandomizationMode.option_vanilla:
+    if mode == AbilityRandomizationMode.option_off:
         policy["identity_map"] = {name: name for name in ordered}
         return policy
 
@@ -143,40 +143,3 @@ def policy_is_whitelist_preserving(policy: dict[str, Any], whitelist: Iterable[s
     ordered = set(_normalize_whitelist(whitelist))
     allowed = set(policy.get("allowed_abilities", []))
     return allowed == ordered
-
-
-def remap_is_whitelist_preserving(remap: dict[str, str], whitelist: Iterable[str]) -> bool:
-    """Backwards-compatible helper for identity/remap tables."""
-    ordered = set(_normalize_whitelist(whitelist))
-    return set(remap.keys()) == ordered and set(remap.values()) == ordered
-
-
-def build_enemy_copy_ability_remap(
-    rng: random.Random,
-    mode: int,
-    whitelist: Iterable[str] = VALID_ENEMY_COPY_ABILITIES,
-) -> dict[str, str]:
-    """Backwards-compatible helper used by older tests/callers.
-
-    - vanilla returns identity
-    - shuffled returns deterministic permutation
-    - completely random returns a deterministic permutation snapshot
-    """
-    ordered = _normalize_whitelist(whitelist)
-
-    if mode == AbilityRandomizationMode.option_vanilla:
-        return {name: name for name in ordered}
-
-    if mode == AbilityRandomizationMode.option_shuffled:
-        shuffled = list(ordered)
-        random.Random(rng.getrandbits(64)).shuffle(shuffled)
-        return {source: target for source, target in zip(ordered, shuffled)}
-
-    if mode == AbilityRandomizationMode.option_completely_random:
-        # Snapshot remap for compatibility only; runtime per-event behavior uses
-        # ability_for_enemy_grant_event with policy mode.
-        shuffled = list(ordered)
-        rng.shuffle(shuffled)
-        return {source: target for source, target in zip(ordered, shuffled)}
-
-    raise ValueError(f"unsupported enemy copy-ability randomization mode: {mode}")

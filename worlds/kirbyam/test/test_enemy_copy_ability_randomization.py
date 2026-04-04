@@ -12,24 +12,24 @@ from ..ability_randomization import (
     ability_for_enemy_grant_event,
     ability_for_enemy_type,
     build_enemy_copy_ability_policy,
-    remap_is_whitelist_preserving,
+    policy_is_whitelist_preserving,
 )
 from ..options import AbilityRandomizationMode
 
 
-def test_vanilla_mode_returns_identity_mapping_policy() -> None:
+def test_off_mode_returns_identity_mapping_policy() -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(12345),
-        AbilityRandomizationMode.option_vanilla,
+        AbilityRandomizationMode.option_off,
         include_boss_spawns=True,
         include_minibosses=True,
         no_ability_weight=55,
     )
 
-    remap = policy["identity_map"]
-    assert len(remap) == len(VALID_ENEMY_COPY_ABILITIES)
-    assert all(remap[name] == name for name in VALID_ENEMY_COPY_ABILITIES)
-    assert remap_is_whitelist_preserving(remap, VALID_ENEMY_COPY_ABILITIES)
+    identity_map = policy["identity_map"]
+    assert len(identity_map) == len(VALID_ENEMY_COPY_ABILITIES)
+    assert all(identity_map[name] == name for name in VALID_ENEMY_COPY_ABILITIES)
+    assert policy_is_whitelist_preserving(policy, VALID_ENEMY_COPY_ABILITIES)
     assert policy["ability_randomization_boss_spawns"] is True
     assert policy["ability_randomization_minibosses"] is True
     assert policy["ability_randomization_no_ability_weight"] == 55
@@ -169,10 +169,10 @@ def test_non_ability_enemies_flag_true_stored_in_policy() -> None:
     assert policy["ability_randomization_no_ability_weight"] == 55
 
 
-def test_vanilla_mode_stores_non_ability_flag_in_policy() -> None:
+def test_off_mode_stores_non_ability_flag_in_policy() -> None:
     policy = build_enemy_copy_ability_policy(
         random.Random(1),
-        AbilityRandomizationMode.option_vanilla,
+        AbilityRandomizationMode.option_off,
         include_boss_spawns=True,
         include_minibosses=True,
         include_passive_enemies=True,

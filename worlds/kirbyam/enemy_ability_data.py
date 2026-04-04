@@ -43,7 +43,6 @@ _ABILITY_DATA = _load_json_file("abilities.json")
 _runtime_ability_name_to_id: dict[str, int] = {}
 _valid_enemy_copy_abilities: list[str] = []
 _forbidden_enemy_copy_abilities: set[str] = set()
-_legacy_aliases: dict[str, str] = {}
 
 for ability_name, raw_entry in _ABILITY_DATA.items():
     if not isinstance(ability_name, str) or not ability_name:
@@ -58,15 +57,6 @@ for ability_name, raw_entry in _ABILITY_DATA.items():
     if runtime_id is not None:
         _runtime_ability_name_to_id[ability_name] = runtime_id
 
-    aliases_raw = raw_entry.get("aliases", [])
-    if aliases_raw:
-        if not isinstance(aliases_raw, list):
-            raise ValueError(f"aliases for {ability_name} must be a list")
-        for alias in aliases_raw:
-            if not isinstance(alias, str) or not alias:
-                raise ValueError(f"aliases for {ability_name} must contain non-empty strings")
-            _legacy_aliases[alias] = ability_name
-
     if enemy_copy_allowed:
         if runtime_id is None:
             raise ValueError(
@@ -80,7 +70,6 @@ for ability_name, raw_entry in _ABILITY_DATA.items():
 ABILITY_NAME_TO_ID: dict[str, int] = dict(_runtime_ability_name_to_id)
 VALID_ENEMY_COPY_ABILITIES: tuple[str, ...] = tuple(_valid_enemy_copy_abilities)
 FORBIDDEN_ENEMY_COPY_ABILITIES: frozenset[str] = frozenset(_forbidden_enemy_copy_abilities)
-LEGACY_ABILITY_ALIASES: dict[str, str] = dict(_legacy_aliases)
 
 
 _ENEMY_DATA = _load_json_file("enemies.json")

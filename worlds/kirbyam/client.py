@@ -242,12 +242,12 @@ class KirbyAmClient(BizHawkClient):
     def _one_hit_mode_value(self, ctx: "BizHawkClientContext") -> int:
         slot_data = getattr(ctx, "slot_data", None)
         if not isinstance(slot_data, dict):
-            return OneHitMode.option_vanilla
-        value = slot_data.get("one_hit_mode", OneHitMode.option_vanilla)
+            return OneHitMode.option_off
+        value = slot_data.get("one_hit_mode", OneHitMode.option_off)
         try:
             return int(value)
         except (TypeError, ValueError):
-            return OneHitMode.option_vanilla
+            return OneHitMode.option_off
 
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
@@ -389,9 +389,8 @@ class KirbyAmClient(BizHawkClient):
         if isinstance(slot_data, dict):
             debug_config = slot_data.get("debug", {})
             if isinstance(debug_config, dict):
-                # Backward-compat: older seeds may still provide gameplay_state_logging.
                 self._debug_logging_enabled = self._coerce_bool(
-                    debug_config.get("logging", debug_config.get("gameplay_state_logging", False)),
+                    debug_config.get("logging", False),
                     False,
                 )
 
@@ -852,7 +851,7 @@ class KirbyAmClient(BizHawkClient):
 
         Enforcement targets player 0's Kirby struct (consistent with DeathLink HP tracking).
         """
-        if self._one_hit_mode_value(ctx) == OneHitMode.option_vanilla:
+        if self._one_hit_mode_value(ctx) == OneHitMode.option_off:
             return
 
         vitality_addr = data.native_ram_addresses.get(_KIRBY_VITALITY_COUNTER_ADDR_KEY)
