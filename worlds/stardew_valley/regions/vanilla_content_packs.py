@@ -53,6 +53,8 @@ ginger_island_regions = [
             LogicEntrance.grow_winter_crops_on_island,
             LogicEntrance.grow_indoor_crops_on_island,
             LogicEntrance.place_crab_pot_in_island_west,
+            LogicEntrance.fish_in_island_west_ocean,
+            LogicEntrance.fish_in_island_west_river
         ),
     ),
     RegionData(
@@ -106,6 +108,8 @@ ginger_island_regions = [
     RegionData(Region.leo_hut, (Entrance.leo_hut_to_island_east,)),
     RegionData(Region.pirate_cove, (Entrance.pirate_cove_to_island_southeast,)),
     RegionData(Region.field_office, (Entrance.field_office_to_island_north,)),
+    RegionData(LogicRegion.island_west_river),
+    RegionData(LogicRegion.island_west_ocean),
     RegionData(
         Region.dig_site,
         (
@@ -533,4 +537,6 @@ ginger_island_connections = [
     ConnectionData(LogicEntrance.island_cooking, LogicRegion.kitchen),
     ConnectionData(LogicEntrance.place_crab_pot_in_island_south, LogicRegion.crab_pot_seawater),
     ConnectionData(LogicEntrance.place_crab_pot_in_island_west, LogicRegion.crab_pot_seawater),
+    ConnectionData(LogicEntrance.fish_in_island_west_ocean, LogicRegion.island_west_ocean),
+    ConnectionData(LogicEntrance.fish_in_island_west_river, LogicRegion.island_west_river),
 ]

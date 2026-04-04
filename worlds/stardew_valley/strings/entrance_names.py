@@ -378,6 +378,8 @@ class LogicEntrance:
     place_crab_pot_in_ocean = "Place Crab Pot in Ocean"
     place_crab_pot_in_island_south = "Place Crab Pot in Ginger Island South"
     place_crab_pot_in_island_west = "Place Crab Pot in Ginger Island West"
+    fish_in_island_west_ocean = "Fish in Island West Ocean"
+    fish_in_island_west_river = "Fish in Island West River"
 
     @staticmethod
     def blacksmith_upgrade(material: str) -> str:
