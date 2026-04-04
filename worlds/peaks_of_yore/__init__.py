@@ -89,7 +89,7 @@ class PeaksOfWorld(World):
             "Fundamentals Book": self.options.enable_fundamental,
             "Intermediate Book": self.options.enable_intermediate,
             "Advanced Book": self.options.enable_advanced,
-            "Expert Book": self.options.enable_expert,
+            "Northern Range Ticket": self.options.enable_expert,
         }
 
         book_names: list[str] = list(starting_book_options)

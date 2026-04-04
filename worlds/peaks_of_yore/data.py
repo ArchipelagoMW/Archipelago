@@ -392,15 +392,18 @@ class BookRegion(POYRegion):
     """
     Similar to PeakRegion, BookRegion is a descendant of POYRegion, that will (semi) automatically be set up as a book.
     """
-    def __init__(self, name: str, entry_requirements: Requirements=None, subregions: list[POYRegion]=None,
+    def __init__(self, name: str, item_name:str=None, entry_requirements: Requirements=None, subregions: list[POYRegion]=None,
                  enable_requirements: Callable[[PeaksOfYoreOptions], bool] = lambda opts: True):
         super().__init__(name, entry_requirements, subregions, None, enable_requirements)
+        self.item_name = item_name
+        if self.item_name is None:
+            self.item_name = name + " Book"
         self.is_peak = False
         self.is_book = True
         self.prepare_book_region()
 
     def prepare_book_region(self):
-        conditional = ConditionalRequirements(SimpleRequirements({f"{self.name} Book": 1}), lambda opts: opts.game_mode == GameMode.option_book_unlock)
+        conditional = ConditionalRequirements(SimpleRequirements({f"{self.item_name}": 1}), lambda opts: opts.game_mode == GameMode.option_book_unlock)
         if self.entry_requirements.is_empty():
             self.entry_requirements = conditional
         else:
@@ -442,7 +445,7 @@ all_items: list[ItemData] = [
              min_count = 0),
     ItemData("Advanced Book", 2, ItemClassification.progression, POYItemLocationType.BOOK,
              min_count = 0),
-    ItemData("Expert Book", 3, ItemClassification.progression, POYItemLocationType.BOOK,
+    ItemData("Northern Range Ticket", 3, ItemClassification.progression, POYItemLocationType.BOOK,
              min_count = 0),
 
     # Fundamental Peaks
@@ -684,7 +687,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
         ], generate_free_solo=True),
     ], enable_requirements=lambda options: options.enable_advanced),
-    BookRegion("Expert", entry_requirements=(
+    BookRegion("Expert", "Northern Range Ticket", entry_requirements=(
             SimpleRequirements({"Ice Axes": 1}) &
             ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 1}), lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo) &
             LeveledRequirements(RequirementsDifficulty.option_easy, SimpleRequirements({"Pipe": 1}))

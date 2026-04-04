@@ -130,7 +130,9 @@ class StartingBook(Choice):
             return "Intermediate Book"
         elif self.value == 2:
             return "Advanced Book"
-        return "Expert Book"
+        elif self.value == 3:
+            return "Northern Range Ticket"
+        raise OptionError("StartingBook has incorrect value")
 
     def get_start_peak_id(self) -> int:
         if self.value == self.option_fundamentals:
