@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.1.1
+
+- Harden `One-Hit Mode` (`one_hit_mode`) `exclude_vitality_counters` behavior by removing health-restoring filler (`Small Food`, `Max Tomato`) from filler selection in that mode; when combined with `No Extra Lives`, `1 Up` is also excluded from the already-reduced filler pool.
+- Gate additional non-user-facing BizHawk client diagnostics behind `enable_debug_logging`, including AP session readiness/reconnect-state logs, room-sanity resend diagnostics, mailbox delivery cursor fast-forward logs, and send/receive queue diagnostic logs; user-facing popups and gameplay behavior are unchanged.
+- Add regression coverage for the one-hit/no-extra-lives filler-pool interaction and one-hit HP clamp behavior, plus debug-log gating coverage for runtime gameplay-gate, notification queue, room-sanity resend, mailbox delivery, and AP session-ready diagnostics.
+
 ## v0.1.0
 
 - Add `One-Hit Mode` (`one_hit_mode`) to the `Make the game harder` option group. Selecting `exclude_vitality_counters` removes all four Vitality Counter items from the item pool (replaced by filler) and enforces a maximum HP of 1 throughout the run. Selecting `include_vitality_counters` keeps Vitality Counters in the pool but still starts Kirby at maximum 1 HP; each Vitality Counter item received raises the cap by 1 (up to 5 with all four). The BizHawk client enforces the cap every gameplay tick by clamping `kirby_max_hp_native` and `kirby_hp_native` (player 0) to `vitality_counter + 1`, with dead/negative HP states preserved (Issue #549).
