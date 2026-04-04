@@ -1,13 +1,14 @@
-import logging
 import typing
 from collections import deque
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 from typing import TypeVar
 
-from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
+from rule_builder.rules import And, CanReachRegion, Has, Or, Rule, True_
 from worlds.AutoWorld import WebWorld, World
 
+from .custom_rules import AnyTwo, HasRatCount
 from .definitions_types import (
     Aura,
     AutopelagoAllRequirement,
@@ -40,7 +41,6 @@ from .locations import (
     location_name_to_id,
     location_name_to_nonprogression_item,
     location_name_to_progression_item_name,
-    location_name_to_requirement,
     max_required_rat_count,
     total_available_rat_count,
 )
@@ -58,35 +58,25 @@ from .options import (
 )
 from .util import GAME_NAME
 
-autopelago_logger = logging.getLogger(GAME_NAME)
 T = TypeVar("T")
 
 
-def _is_trivial(req: AutopelagoGameRequirement):
-    if "all" in req:
-        return not req["all"]
-    if "rat_count" in req:
-        return req["rat_count"] == 0
-    return False
-
-
-def _is_satisfied(player: int, req: AutopelagoGameRequirement, state: CollectionState):
+def _to_rule(req: AutopelagoGameRequirement) -> Rule:
     if "all" in req:
         req: AutopelagoAllRequirement
-        return all(_is_satisfied(player, sub_req, state) for sub_req in req["all"])
+        return And(*(_to_rule(sub_req) for sub_req in req["all"])) if req["all"] else True_()
     if "any" in req:
         req: AutopelagoAnyRequirement
-        return any(_is_satisfied(player, sub_req, state) for sub_req in req["any"])
+        return Or(*(_to_rule(sub_req) for sub_req in req["any"]))
     if "any_two" in req:
         req: AutopelagoAnyTwoRequirement
-        return sum(1 if _is_satisfied(player, sub_req, state) else 0 for sub_req in req["any_two"]) > 1
+        return AnyTwo(*(_to_rule(sub_req) for sub_req in req["any_two"]))
     if "item" in req:
         req: AutopelagoItemRequirement
-        return state.has(item_key_to_name[req["item"]], player)
+        return Has(item_key_to_name[req["item"]])
     assert "rat_count" in req, "Only AutopelagoRatCountRequirement is expected here"
     req: AutopelagoRatCountRequirement
-    return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[player].items() if
-               k in item_name_to_rat_count) >= req["rat_count"]
+    return HasRatCount(req["rat_count"]) if req["rat_count"] > 0 else True_()
 
 
 class AutopelagoItem(Item):
@@ -96,23 +86,25 @@ class AutopelagoItem(Item):
 class AutopelagoLocation(Location):
     game = GAME_NAME
 
-    def __init__(self, player: int, name: str, parent: Region):
-        super().__init__(player, name, location_name_to_id[name] if name in location_name_to_id else None, parent)
-        if name in location_name_to_requirement:
-            req = location_name_to_requirement[name]
-            if not _is_trivial(req):
-                self.access_rule = lambda state: _is_satisfied(player, req, state)
-
 
 class AutopelagoRegion(Region):
     game = GAME_NAME
     autopelago_definition: AutopelagoRegionDefinition
+    rule: Rule
 
     def __init__(self, autopelago_definition: AutopelagoRegionDefinition, player: int, multiworld: MultiWorld,
                  hint: str | None = None):
         super().__init__(autopelago_definition.key, player, multiworld, hint)
+        self.rule = _to_rule(autopelago_definition.requires)
         self.autopelago_definition = autopelago_definition
-        self.locations += (AutopelagoLocation(player, loc, self) for loc in autopelago_definition.locations)
+        self.locations += (
+            AutopelagoLocation(
+                player,
+                location_name,
+                location_name_to_id[location_name] if location_name in location_name_to_id else None,
+                self
+            ) for location_name in autopelago_definition.locations
+        )
 
 
 class AutopelagoWebWorld(WebWorld):
@@ -279,26 +271,19 @@ class AutopelagoWorld(World):
     def create_regions(self):
         victory_region = Region("Victory", self.player, self.multiworld)
         self.multiworld.regions.append(victory_region)
-        self.multiworld.completion_condition[self.player] =\
-            lambda state: state.can_reach(victory_region)
+        self.set_completion_rule(CanReachRegion(victory_region.name))
 
         new_regions = {r.key: AutopelagoRegion(r, self.player, self.multiworld)
                        for key, r in autopelago_regions.items()
                        if key in self.regions_in_scope}
         for r in new_regions.values():
             self.multiworld.regions.append(r)
-            req = r.autopelago_definition.requires
-            rule: Callable[[CollectionState], bool] | None
-            # disable PLC3002: the lambda must use the CURRENT value of 'req', so it needs a new scope somehow.
-            rule = None if _is_trivial(req) \
-                else (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req) # noqa: PLC3002
             if self.victory_location in r.autopelago_definition.locations:
-                r.connect(victory_region, rule=rule)
+                r.connect(victory_region)
                 if self.options.victory_location == VictoryLocation.option_snakes_on_a_planet:
                     r.locations[0].place_locked_item(self.create_item("Moon Shoes"))
-            else:
-                for next_exit in r.autopelago_definition.exits:
-                    r.connect(new_regions[next_exit], rule=rule)
+            for next_exit in r.autopelago_definition.exits:
+                r.connect(new_regions[next_exit], rule=new_regions[next_exit].rule)
 
     def get_filler_item_name(self):
         assert "Nothing" in self.item_name_to_id
@@ -326,7 +311,7 @@ class AutopelagoWorld(World):
                 item_name_to_id[name]: rat_count for name, rat_count in item_name_to_rat_count.items()
             },
 
-            # obsolete in 1.0.0 (auras_by_item_id does the same thing) but kept for 0.11.x client support:
+            # obsolete in 1.0.0 (auras_by_item_id does the same thing) but kept for 0.x client support:
             "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
             "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
 

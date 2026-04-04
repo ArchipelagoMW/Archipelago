@@ -2,7 +2,6 @@
 
 from test.bases import WorldTestBase
 from test.general import setup_multiworld
-
 from worlds.autopelago import AutopelagoWorld
 from worlds.yachtdice import YachtDiceWorld
 

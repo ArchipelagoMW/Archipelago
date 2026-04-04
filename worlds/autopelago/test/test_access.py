@@ -1,8 +1,9 @@
 ﻿from collections.abc import Iterable
 from typing import TypedDict, TypeVar
 
-from test.bases import WorldTestBase
 from typing_extensions import Unpack
+
+from test.bases import WorldTestBase
 
 T = TypeVar("T")
 

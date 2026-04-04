@@ -15,7 +15,6 @@ from .util import defs, gen_ids
 autopelago_regions: dict[str, AutopelagoRegionDefinition] = {}
 location_name_to_progression_item_name: dict[str, str] = {}
 location_name_to_nonprogression_item: dict[str, AutopelagoNonProgressionItemType] = {}
-location_name_to_requirement: dict[str, AutopelagoGameRequirement] = {}
 location_name_to_id: dict[str, int] = {}
 _location_id_gen = gen_ids()
 
@@ -24,7 +23,6 @@ for k, curr_region in defs["regions"]["landmarks"].items():
     _name = curr_region["name"]
     location_name_to_id[_name] = next(_location_id_gen)
     location_name_to_progression_item_name[_name] = item_key_to_name[curr_region["unrandomized_item"]]
-    location_name_to_requirement[_name] = curr_region["requires"]
     exits: list[str] = curr_region["exits"] if "exits" in curr_region else []
     autopelago_regions[k] = AutopelagoRegionDefinition(k, exits, [_name], curr_region["requires"], True)
 
@@ -78,11 +76,7 @@ def _get_required_rat_count(req: AutopelagoGameRequirement):
     return 0
 
 
-max_required_rat_count = max(
-    _get_required_rat_count(req) for req in
-        [location_name_to_requirement.values()] +
-        [r.requires for r in autopelago_regions.values()]
-)
+max_required_rat_count = max(_get_required_rat_count(r.requires) for r in autopelago_regions.values())
 total_available_rat_count = sum(
     item_name_to_rat_count[i] for i in
     location_name_to_progression_item_name.values()
