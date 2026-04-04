@@ -6,17 +6,19 @@
 
 
 
-As this is a custom AP world you will need to first install Kirby & The Amazing Mirror's apworld, then run the Archipelago launcher and open Options Creator. Select Kirby & The Amazing Mirror and your options and then choose your save destination.
+- As this is a custom AP world you will need to first install Kirby & The Amazing Mirror's apworld, then run the Archipelago launcher and open Options Creator. Select Kirby & The Amazing Mirror and your options and then choose your save destination. 
+- If you prefer to setup your options via a standard yaml file, you will need to first install Kirby & The Amazing Mirror's apworld, run the Archipelago launcher, and select the Generate Template Options. A file explorer will open which you can then locate the Kirby & The Amazing Mirror yaml file to edit.
 
 
 
 ## What does randomization do to this game?
 
 
-Items which the player would normally acquire throughout the game have been moved around. (Maps, Vitality, Sound Player)
-Abilities enemies provide can be randomized to give another copy ability.
 
-An optional Room Sanity mode is also available (`room_sanity`). When enabled, room visits become AP checks using labels like `Room 1-01` and `Room 9-27`. Room Sanity is disabled by default because it adds 257 checks.
+- Progression & useful items which the player would normally acquire throughout the game have been moved around. (Mirror Shards, Maps, Vitality, Sound Player)
+- Normal copy ability enemies can be randomized to give a different copy ability.
+- Enemies which typically do not give abilities can be randomized to give abilities.
+- The chance for an enemy to not have a copy ability can be controlled via the `ability_randomization_no_ability_weight`
 
 
 
@@ -27,7 +29,7 @@ An optional Room Sanity mode is also available (`room_sanity`). When enabled, ro
 Locations in which items can be found:
 - All Big Chests
 - All Mirror Shards
-- All Rooms
+- All Rooms (Optional, not enabled by default)
 Items that can be shuffled:
 - All Mirror Shards
 - All Maps
@@ -58,7 +60,8 @@ Use exact item/location names from this world (or the item groups listed above) 
 
 
 
-Additional changes planned, none currently implemented.
+- There is an optional setting to enable one-life mode (no_extra_lives). If you die you are instantly sent back to the Hub, and any 1Ups you receive will be immediately removed.
+- There is an optional setting to enable one-hit mode. If you get hit at all, you will immediately die and be sent back to the Hub, and any food items or 1Ups you receive will be immediately removed upon collecting them.
 
 
 
@@ -66,7 +69,7 @@ Additional changes planned, none currently implemented.
 
 
 
-When you find an item that is not your own, you will be able to see what it was and who it was sent to in both Bizhawk and the Archipelago Bizhawk client. The sprite for the item will still appear, but you will need to receive it via Archipelago before it's usable.
+When you find an item that is not your own, you will be able to see what it was and who it was sent to in both Bizhawk and the Archipelago Bizhawk client. The sprite for the item will still appear, but you will need to receive it via Archipelago before it's usable. When collecting a mirror shard check, the cutscene will still play as if you've received the mirror shard, however it will not be given until you receive it properly via Archipelago.
 
 
 
@@ -75,6 +78,14 @@ When you find an item that is not your own, you will be able to see what it was 
 
 
 You will not see an indicator in the game, instead you'll see you received an item from the client window.
+
+
+
+## Trackers
+
+
+
+Currently a tracker is not available, however with the current version the only logic is that you need all 8 mirror shards to goal the game. Everything else is considered to always be in logic.
 
 
 
