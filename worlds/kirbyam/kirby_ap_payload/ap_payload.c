@@ -4,7 +4,7 @@
 #define KIRBY_ITEM_ID_BASE_OFFSET       3860000u  // must match worlds/kirbyam/data.py BASE_OFFSET
 
 // AP Mailbox Registers
-#define AP_BASE                 0x0202C000u
+#define AP_BASE                 0x0203B000u
 #define AP_IN_FLAG              (*(volatile uint32_t*)(AP_BASE + 0x04u))
 #define AP_IN_ITEM_ID           (*(volatile uint32_t*)(AP_BASE + 0x08u))
 #define AP_IN_PLAYER            (*(volatile uint32_t*)(AP_BASE + 0x0Cu))

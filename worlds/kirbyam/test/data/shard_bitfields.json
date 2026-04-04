@@ -10,8 +10,8 @@
     },
     {
       "name": "transport_shard_bitfield",
-      "start": "0x0202C000",
-      "end": "0x0202C003",
+      "start": "0x0203B000",
+      "end": "0x0203B003",
       "bus": "System Bus",
       "notes": "Fallback transport mirror bitfield."
     }

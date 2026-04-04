@@ -1,23 +1,23 @@
 SystemID GBA
-0	S	_	0		=== KirbyAM AP Transport Mailbox (0x0202C000 block) ===
-0202C000	d	h	0	System Bus	shard_bitfield (ROM->Client)
-0202C004	d	h	0	System Bus	incoming_item_flag (Client->ROM)
-0202C008	d	h	0	System Bus	incoming_item_id (Client->ROM)
-0202C00C	d	h	0	System Bus	incoming_item_player (Client->ROM)
-0202C010	d	u	0	System Bus	debug_item_counter
-0202C014	d	h	0	System Bus	debug_last_item_id
-0202C018	d	u	0	System Bus	debug_last_from
-0202C01C	d	u	0	System Bus	frame_counter
-0202C020	d	u	0	System Bus	delivered_item_index (client-owned cursor)
-0202C024	d	h	0	System Bus	boss_defeat_flags
-0202C028	d	h	0	System Bus	major_chest_flags
-0202C02C	d	h	0	System Bus	vitality_chest_flags
-0202C030	d	h	0	System Bus	sound_player_chest_flags
-0202C034	d	u	0	System Bus	hook_heartbeat
-0202C038	d	h	0	System Bus	delivered_shard_bitfield
-0202C03C	d	u	0	System Bus	shard_scrub_delay_frames
-0202C040	d	h	0	System Bus	mailbox_init_cookie (expect 4B41504D)
-0202C044	d	h	0	System Bus	boss_temp_shard_bitfield
+0	S	_	0		=== KirbyAM AP Transport Mailbox (0x0203B000 block) ===
+0203B000	d	h	0	System Bus	shard_bitfield (ROM->Client)
+0203B004	d	h	0	System Bus	incoming_item_flag (Client->ROM)
+0203B008	d	h	0	System Bus	incoming_item_id (Client->ROM)
+0203B00C	d	h	0	System Bus	incoming_item_player (Client->ROM)
+0203B010	d	u	0	System Bus	debug_item_counter
+0203B014	d	h	0	System Bus	debug_last_item_id
+0203B018	d	u	0	System Bus	debug_last_from
+0203B01C	d	u	0	System Bus	frame_counter
+0203B020	d	u	0	System Bus	delivered_item_index (client-owned cursor)
+0203B024	d	h	0	System Bus	boss_defeat_flags
+0203B028	d	h	0	System Bus	major_chest_flags
+0203B02C	d	h	0	System Bus	vitality_chest_flags
+0203B030	d	h	0	System Bus	sound_player_chest_flags
+0203B034	d	u	0	System Bus	hook_heartbeat
+0203B038	d	h	0	System Bus	delivered_shard_bitfield
+0203B03C	d	u	0	System Bus	shard_scrub_delay_frames
+0203B040	d	h	0	System Bus	mailbox_init_cookie (expect 4B41504D)
+0203B044	d	h	0	System Bus	boss_temp_shard_bitfield
 0	S	_	0		=== Native Gameplay Addresses (from worlds/kirbyam/data/addresses.json) ===
 02038970	b	h	0	System Bus	shard_bitfield_native (KIRBY_SHARD_FLAGS)
 0203897C	d	h	0	System Bus	big_chest_bitfield_native (gTreasures.bigChestField)
@@ -32,12 +32,12 @@ SystemID GBA
 02020FE0	b	s	0	System Bus	CHEAT: freeze HP > 0 (commonly 6) to avoid death
 02038970	b	h	0	System Bus	CHEAT: freeze shard flags to FF (all mirror shards)
 0203897C	d	h	0	System Bus	CHEAT: freeze major chest map flags (1..9 bits)
-0202C038	d	h	0	System Bus	CHEAT: freeze delivered_shard_bitfield (AP authority)
-0202C03C	d	u	0	System Bus	CHEAT: force scrub delay (cutscene/debug behavior)
-0202C024	d	h	0	System Bus	CHEAT: force boss_defeat_flags bits for AP checks
-0202C028	d	h	0	System Bus	CHEAT: force major_chest_flags bits for AP checks
-0202C02C	d	h	0	System Bus	CHEAT: force vitality_chest_flags bits for AP checks
-0202C030	d	h	0	System Bus	CHEAT: force sound_player_chest_flags bit0
+0203B038	d	h	0	System Bus	CHEAT: freeze delivered_shard_bitfield (AP authority)
+0203B03C	d	u	0	System Bus	CHEAT: force scrub delay (cutscene/debug behavior)
+0203B024	d	h	0	System Bus	CHEAT: force boss_defeat_flags bits for AP checks
+0203B028	d	h	0	System Bus	CHEAT: force major_chest_flags bits for AP checks
+0203B02C	d	h	0	System Bus	CHEAT: force vitality_chest_flags bits for AP checks
+0203B030	d	h	0	System Bus	CHEAT: force sound_player_chest_flags bit0
 0	S	_	0		=== Internet Cheat Notes (USA Gameshark source: almarsguides.com) ===
 0	S	_	0		GS Master: 34165F72 B08D117B / 25982608 B17B6C25
 0	S	_	0		GS Invulnerability: 771681C5 6954AFCA

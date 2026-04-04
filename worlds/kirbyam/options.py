@@ -137,6 +137,7 @@ class NoExtraLives(Toggle):
     """
     Start with zero lives and clamp all extra-life gains to zero during gameplay.
       Starts after the tutorial. Off by default.
+      
       Yes, you can combine this with One-Hit Mode for an extra challenge.
     """
     display_name = "No Extra Lives"

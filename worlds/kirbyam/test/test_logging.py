@@ -25,8 +25,8 @@ async def test_kirbyam_test_logging_records_protocol_traffic(
         marker = f"TEST_MARKER {uuid.uuid4().hex}"
         test_logger.info(marker)
 
-        await mock_bizhawk_read(mock_bizhawk_context.bizhawk_ctx, [(0x0202C000, 4, "System Bus")])
-        await mock_bizhawk_write(mock_bizhawk_context.bizhawk_ctx, [(0x0202C004, (1).to_bytes(4, "little"), "System Bus")])
+        await mock_bizhawk_read(mock_bizhawk_context.bizhawk_ctx, [(0x0203B000, 4, "System Bus")])
+        await mock_bizhawk_write(mock_bizhawk_context.bizhawk_ctx, [(0x0203B004, (1).to_bytes(4, "little"), "System Bus")])
         await mock_bizhawk_context.send_msgs([{"cmd": "LocationChecks", "locations": [3860101]}])
 
         for handler in logging.getLogger().handlers:

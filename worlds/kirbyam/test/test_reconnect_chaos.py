@@ -19,7 +19,7 @@ async def test_reconnect_chaos_boss_defeat_polling_resends_once_then_dedupes(moc
     boss1_id = data.locations["BOSS_DEFEAT_1"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0202C024}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0203B024}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
         # First poll: boss bit set and not acknowledged by server -> send once.
         mock_read.return_value = [(0x01).to_bytes(4, 'little')]

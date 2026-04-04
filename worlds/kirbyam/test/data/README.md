@@ -18,7 +18,7 @@ This directory contains reusable, pre-generated fixture datasets for unit and in
 
 ## Address Ranges
 
-- `0x0202C000-0x0202C020`
+- `0x0203B000-0x0203B020`
   - AP transport mailbox / debug region used by client protocol fields.
 - `0x02038970`
   - Native shard flag byte used by current POC polling path.

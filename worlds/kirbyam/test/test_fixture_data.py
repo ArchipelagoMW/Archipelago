@@ -33,7 +33,7 @@ def test_fixture_documents_core_address_ranges() -> None:
     ram_ranges = ram_fixture.get("address_ranges", [])
     shard_ranges = shard_fixture.get("address_ranges", [])
 
-    assert any(r.get("start") == "0x0202C000" for r in ram_ranges)
+    assert any(r.get("start") == "0x0203B000" for r in ram_ranges)
     assert any(r.get("start") == "0x02038970" for r in shard_ranges)
 
 

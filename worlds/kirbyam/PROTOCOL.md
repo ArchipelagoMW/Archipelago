@@ -32,37 +32,37 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
     0x02000000 - 0x02040000   EWRAM Region (256 KB)
         ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0202C000 - 0x0202C047   AP Mailbox (reserved, 72 bytes)
-        └─ 0x0202C048 - 0x02040000   Rest of RAM (unused by AP)
+    ├─ 0x0203B000 - 0x0203B047   AP Mailbox (reserved, 72 bytes)
+    └─ Remaining EWRAM (excluding AP mailbox block)
 ```
 
-### AP Mailbox Block (0x0202C000 - 0x0202C047)
+### AP Mailbox Block (0x0203B000 - 0x0203B047)
 
 **Transport Layer: Client ↔ ROM Communication**
 
 | Offset | Addr     | Size | Name                  | Type | Direction   | Purpose |
 |--------|----------|------|----------------------|------|-------------|---------|
-| 0x00   | 0x0202C000 | 4B | shard_bitfield        | u32  | ROM → Client | Mirror of native shard flags (bits 0-7 currently used, bits 8-31 reserved) |
-| 0x04   | 0x0202C004 | 4B | incoming_item_flag    | u32  | ROM ← Client | Write 1 to request delivery; ROM clears to 0 after recognized item apply (ACK) |
-| 0x08   | 0x0202C008 | 4B | incoming_item_id      | u32  | ROM ← Client | Item ID to apply (BASE_OFFSET + item index) |
-| 0x0C   | 0x0202C00C | 4B | incoming_item_player  | u32  | ROM ← Client | Player ID that sent this item |
-| 0x10   | 0x0202C010 | 4B | debug_item_counter    | u32  | ROM → Client | Counter of items received (debug only) |
-| 0x14   | 0x0202C014 | 4B | debug_last_item_id    | u32  | ROM → Client | Last item ID processed (debug only) |
-| 0x18   | 0x0202C018 | 4B | debug_last_from       | u32  | ROM → Client | Last player ID (debug only) |
-| 0x1C   | 0x0202C01C | 4B | frame_counter         | u32  | ROM → Client | Monotonic frame count (incremented every hook call) |
-| 0x20   | 0x0202C020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
+| 0x00   | 0x0203B000 | 4B | shard_bitfield        | u32  | ROM → Client | Mirror of native shard flags (bits 0-7 currently used, bits 8-31 reserved) |
+| 0x04   | 0x0203B004 | 4B | incoming_item_flag    | u32  | ROM ← Client | Write 1 to request delivery; ROM clears to 0 after recognized item apply (ACK) |
+| 0x08   | 0x0203B008 | 4B | incoming_item_id      | u32  | ROM ← Client | Item ID to apply (BASE_OFFSET + item index) |
+| 0x0C   | 0x0203B00C | 4B | incoming_item_player  | u32  | ROM ← Client | Player ID that sent this item |
+| 0x10   | 0x0203B010 | 4B | debug_item_counter    | u32  | ROM → Client | Counter of items received (debug only) |
+| 0x14   | 0x0203B014 | 4B | debug_last_item_id    | u32  | ROM → Client | Last item ID processed (debug only) |
+| 0x18   | 0x0203B018 | 4B | debug_last_from       | u32  | ROM → Client | Last player ID (debug only) |
+| 0x1C   | 0x0203B01C | 4B | frame_counter         | u32  | ROM → Client | Monotonic frame count (incremented every hook call) |
+| 0x20   | 0x0203B020 | 4B | delivered_item_index  | u32  | Client ↔ ROM | Next item to deliver index (persisted in RAM) |
 
-| 0x24   | 0x0202C024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated; recorded by a hook that replaces the native `CollectShard` call (same bit ordering as shard_bitfield) |
-| 0x28   | 0x0202C028 | 4B | major_chest_flags     | u32  | ROM → Client | Bits set when a native big chest is opened; bit N = area ID N. This drives AP major-chest checks independently of native map ownership. |
-| 0x2C   | 0x0202C02C | 4B | vitality_chest_flags  | u32  | ROM → Client | Bits set when a native vitality big chest is opened; bits 0..3 map to the four vitality chest room IDs (Carrot 5-23, Olive 6-21, Radish 8-4, Candy 9-8). |
-| 0x30   | 0x0202C030 | 4B | sound_player_chest_flags | u32 | ROM → Client | Bits set when the native Sound Player chest is opened; bit 0 maps to `SOUND_PLAYER_CHEST`. Native Sound Player unlock is intentionally deferred until AP item receipt. |
-| 0x34   | 0x0202C034 | 4B | hook_heartbeat        | u32  | ROM → Client | Increments once on every AP main hook entry. Diagnostic signal for hook liveness. |
-| 0x38   | 0x0202C038 | 4B | delivered_shard_bitfield | u32 | ROM → Client | Bits 0–7 represent shard ownership authority. On mailbox initialization (`mailbox_init_cookie` absent/mismatched), `ap_poll_mailbox_c()` seeds this from current native shard save state; after init, shard delivery in `ap_apply_item()` sets additional bits. Never set by boss-defeat hook. Used by scrub logic (Issue #478 / #505) to clamp `KIRBY_SHARD_FLAGS` to AP-owned bits. |
-| 0x3C   | 0x0202C03C | 4B | shard_scrub_delay_frames | u32 | ROM internal | Countdown timer (frames). Set to 600 by boss-defeat hook while temporary native shard state is visible during post-boss cutscene. |
-| 0x40   | 0x0202C040 | 4B | mailbox_init_cookie | u32 | ROM internal | Initialization cookie (`0x4B41504D`). If absent/mismatched, payload seeds `delivered_shard_bitfield` from native shard state, clears scrub delay + boss-defeat flags + boss temp shard mask, and stores the cookie to prevent stale EWRAM transport values from triggering scrub writes. |
-| 0x44   | 0x0202C044 | 4B | boss_temp_shard_bitfield | u32 | ROM internal | Bits 0-7 track shard bits temporarily written by boss-defeat hook for cutscene safety. On gameplay resume, payload scrubs only `boss_temp_shard_bitfield & ~delivered_shard_bitfield`, then clears this mask. |
+| 0x24   | 0x0203B024 | 4B | boss_defeat_flags     | u32  | ROM → Client | Bits 0–7 set when each area boss is defeated; recorded by a hook that replaces the native `CollectShard` call (same bit ordering as shard_bitfield) |
+| 0x28   | 0x0203B028 | 4B | major_chest_flags     | u32  | ROM → Client | Bits set when a native big chest is opened; bit N = area ID N. This drives AP major-chest checks independently of native map ownership. |
+| 0x2C   | 0x0203B02C | 4B | vitality_chest_flags  | u32  | ROM → Client | Bits set when a native vitality big chest is opened; bits 0..3 map to the four vitality chest room IDs (Carrot 5-23, Olive 6-21, Radish 8-4, Candy 9-8). |
+| 0x30   | 0x0203B030 | 4B | sound_player_chest_flags | u32 | ROM → Client | Bits set when the native Sound Player chest is opened; bit 0 maps to `SOUND_PLAYER_CHEST`. Native Sound Player unlock is intentionally deferred until AP item receipt. |
+| 0x34   | 0x0203B034 | 4B | hook_heartbeat        | u32  | ROM → Client | Increments once on every AP main hook entry. Diagnostic signal for hook liveness. |
+| 0x38   | 0x0203B038 | 4B | delivered_shard_bitfield | u32 | ROM → Client | Bits 0–7 represent shard ownership authority. On mailbox initialization (`mailbox_init_cookie` absent/mismatched), `ap_poll_mailbox_c()` seeds this from current native shard save state; after init, shard delivery in `ap_apply_item()` sets additional bits. Never set by boss-defeat hook. Used by scrub logic (Issue #478 / #505) to clamp `KIRBY_SHARD_FLAGS` to AP-owned bits. |
+| 0x3C   | 0x0203B03C | 4B | shard_scrub_delay_frames | u32 | ROM internal | Countdown timer (frames). Set to 600 by boss-defeat hook while temporary native shard state is visible during post-boss cutscene. |
+| 0x40   | 0x0203B040 | 4B | mailbox_init_cookie | u32 | ROM internal | Initialization cookie (`0x4B41504D`). If absent/mismatched, payload seeds `delivered_shard_bitfield` from native shard state, clears scrub delay + boss-defeat flags + boss temp shard mask, and stores the cookie to prevent stale EWRAM transport values from triggering scrub writes. |
+| 0x44   | 0x0203B044 | 4B | boss_temp_shard_bitfield | u32 | ROM internal | Bits 0-7 track shard bits temporarily written by boss-defeat hook for cutscene safety. On gameplay resume, payload scrubs only `boss_temp_shard_bitfield & ~delivered_shard_bitfield`, then clears this mask. |
 
-**Total: 72 bytes (0x0202C000 - 0x0202C047)**
+**Total: 72 bytes (0x0203B000 - 0x0203B047)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -244,25 +244,25 @@ every watcher tick.
 # Run only when gameplay-active gate is true.
 
 # Boss-defeat checks (transport mailbox bitfield)
-boss_bits = RAM[0x0202C024] as u32
+boss_bits = RAM[0x0203B024] as u32
 for bit in mapped_boss_bits:
     if (boss_bits >> bit) & 1:
         mapped_checked.add(boss_location_id_for_bit(bit))
 
 # Major-chest checks (transport major_chest_flags)
-chest_bits = RAM[0x0202C028] as u32
+chest_bits = RAM[0x0203B028] as u32
 for bit in mapped_major_chest_bits:
     if (chest_bits >> bit) & 1:
         mapped_checked.add(major_chest_location_id_for_bit(bit))
 
 # Vitality-chest checks (transport vitality_chest_flags)
-vitality_bits = RAM[0x0202C02C] as u32
+vitality_bits = RAM[0x0203B02C] as u32
 for bit in mapped_vitality_chest_bits:
     if (vitality_bits >> bit) & 1:
         mapped_checked.add(vitality_chest_location_id_for_bit(bit))
 
 # Sound Player chest checks (transport sound_player_chest_flags)
-sound_player_bits = RAM[0x0202C030] as u32
+sound_player_bits = RAM[0x0203B030] as u32
 for bit in mapped_sound_player_chest_bits:
     if (sound_player_bits >> bit) & 1:
         mapped_checked.add(sound_player_chest_location_id_for_bit(bit))
@@ -303,12 +303,12 @@ Boss shard scrub timing contract (Issue #505):
 ```python
 # Write next item
 item = items_received[delivered_item_index]
-RAM[0x0202C008] = item.item_id  # u32
-RAM[0x0202C00C] = item.player    # u32
-RAM[0x0202C004] = 1              # Set flag (signal ROM)
+RAM[0x0203B008] = item.item_id  # u32
+RAM[0x0203B00C] = item.player    # u32
+RAM[0x0203B004] = 1              # Set flag (signal ROM)
 
 # Wait for ROM to ACK
-await ROM clears RAM[0x0202C004] to 0
+await ROM clears RAM[0x0203B004] to 0
 delivered_item_index += 1
 ```
 
@@ -485,7 +485,7 @@ if goal_location_id in checked_locations:
 
 ```bash
 # BizHawk LUA script or address watch:
-for addr in [0x0202C000, 0x0202C004, 0x0202C008]:
+for addr in [0x0203B000, 0x0203B004, 0x0203B008]:
     print(f"RAM[{hex(addr)}] = {read(addr)}")
 ```
 

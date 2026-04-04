@@ -3,15 +3,15 @@
   "address_ranges": [
     {
       "name": "mailbox_write_window",
-      "start": "0x0202C008",
-      "end": "0x0202C010",
+      "start": "0x0203B008",
+      "end": "0x0203B010",
       "bus": "System Bus",
       "notes": "Client writes item_id/player_id and then toggles incoming_item_flag."
     },
     {
       "name": "delivery_progress_counter",
-      "start": "0x0202C010",
-      "end": "0x0202C020",
+      "start": "0x0203B010",
+      "end": "0x0203B020",
       "bus": "System Bus",
       "notes": "ROM ack/debug state used for delivery cursor resync."
     }

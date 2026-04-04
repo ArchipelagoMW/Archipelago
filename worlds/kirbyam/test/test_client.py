@@ -213,7 +213,7 @@ async def test_poll_major_chest_sends_location_checks_for_set_bits(mock_bizhawk_
     peppermint = data.locations["MAJOR_CHEST_PEPPERMINT_PALACE"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.transport_ram_addresses, {"major_chest_flags": 0x0202C028}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"major_chest_flags": 0x0203B028}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         # Bits 3, 6, 7 set => Cabbage, Olive, Peppermint major chests.
@@ -235,7 +235,7 @@ async def test_poll_major_chest_skips_already_server_acknowledged(mock_bizhawk_c
     olive = data.locations["MAJOR_CHEST_OLIVE_OCEAN"].location_id
     mock_bizhawk_context.checked_locations = {olive}
 
-    with patch.dict(data.transport_ram_addresses, {"major_chest_flags": 0x0202C028}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"major_chest_flags": 0x0203B028}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:
@@ -292,7 +292,7 @@ async def test_poll_vitality_chest_sends_location_checks_for_set_bits(mock_bizha
     olive = data.locations["VITALITY_CHEST_OLIVE_OCEAN"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.transport_ram_addresses, {"vitality_chest_flags": 0x0202C02C}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"vitality_chest_flags": 0x0203B02C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         # Bits 0 and 1 set => Carrot Castle and Olive Ocean vitality chests.
@@ -314,7 +314,7 @@ async def test_poll_vitality_chest_skips_already_server_acknowledged(mock_bizhaw
     carrot = data.locations["VITALITY_CHEST_CARROT_CASTLE"].location_id
     mock_bizhawk_context.checked_locations = {carrot}
 
-    with patch.dict(data.transport_ram_addresses, {"vitality_chest_flags": 0x0202C02C}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"vitality_chest_flags": 0x0203B02C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:
@@ -356,7 +356,7 @@ async def test_poll_sound_player_chest_sends_location_checks_for_set_bits(mock_b
     sound_player = data.locations["SOUND_PLAYER_CHEST"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.transport_ram_addresses, {"sound_player_chest_flags": 0x0202C030}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"sound_player_chest_flags": 0x0203B030}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         mock_read.return_value = [((1 << 0)).to_bytes(4, 'little')]
@@ -2099,7 +2099,7 @@ async def test_runtime_gameplay_state_logs_ai_and_demo_changes_with_heartbeat(mo
         clear=False,
     ), patch.dict(
         data.transport_ram_addresses,
-        {"hook_heartbeat": 0x0202C040},
+        {"hook_heartbeat": 0x0203B034},
         clear=False,
     ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('CommonClient.logger') as mock_logger:
@@ -2157,12 +2157,12 @@ async def test_log_boss_shard_debug_window_emits_per_frame_while_active(mock_biz
     with patch.dict(
         data.transport_ram_addresses,
         {
-            "boss_defeat_flags": 0x0202C024,
-            "shard_scrub_delay_frames": 0x0202C03C,
-            "delivered_shard_bitfield": 0x0202C038,
-            "shard_bitfield": 0x0202C000,
-            "hook_heartbeat": 0x0202C034,
-            "boss_temp_shard_bitfield": 0x0202C044,
+            "boss_defeat_flags": 0x0203B024,
+            "shard_scrub_delay_frames": 0x0203B03C,
+            "delivered_shard_bitfield": 0x0203B038,
+            "shard_bitfield": 0x0203B000,
+            "hook_heartbeat": 0x0203B034,
+            "boss_temp_shard_bitfield": 0x0203B044,
         },
         clear=False,
     ), patch.dict(
@@ -2225,12 +2225,12 @@ async def test_log_boss_shard_debug_window_logs_completion_on_resume(mock_bizhaw
     with patch.dict(
         data.transport_ram_addresses,
         {
-            "boss_defeat_flags": 0x0202C024,
-            "shard_scrub_delay_frames": 0x0202C03C,
-            "delivered_shard_bitfield": 0x0202C038,
-            "shard_bitfield": 0x0202C000,
-            "hook_heartbeat": 0x0202C034,
-            "boss_temp_shard_bitfield": 0x0202C044,
+            "boss_defeat_flags": 0x0203B024,
+            "shard_scrub_delay_frames": 0x0203B03C,
+            "delivered_shard_bitfield": 0x0203B038,
+            "shard_bitfield": 0x0203B000,
+            "hook_heartbeat": 0x0203B034,
+            "boss_temp_shard_bitfield": 0x0203B044,
         },
         clear=False,
     ), patch.dict(
@@ -3036,7 +3036,7 @@ async def test_poll_boss_defeat_sends_location_checks_for_set_bits(mock_bizhawk_
     boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
     mock_bizhawk_context.checked_locations = set()
 
-    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0202C024}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0203B024}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:
@@ -3062,7 +3062,7 @@ async def test_poll_boss_defeat_skips_already_server_acknowledged(mock_bizhawk_c
     boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
     mock_bizhawk_context.checked_locations = {boss1_loc}
 
-    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0202C024}, clear=False), \
+    with patch.dict(data.transport_ram_addresses, {"boss_defeat_flags": 0x0203B024}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:

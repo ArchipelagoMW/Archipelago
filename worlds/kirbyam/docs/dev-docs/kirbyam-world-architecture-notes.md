@@ -558,7 +558,7 @@ The most important file for understanding behavior is `kirby_ap_payload/ap_paylo
 
 ### What The Payload Does
 
-It reserves a mailbox block in EWRAM at `0x0202C000` and uses it as the shared contract between the running GBA ROM and the Python client.
+It reserves a mailbox block in EWRAM at `0x0203B000` and uses it as the shared contract between the running GBA ROM and the Python client.
 
 Transport registers include:
 
