@@ -29,6 +29,7 @@
   "random_policy": {
     "ability_randomization_boss_spawns": true,
     "ability_randomization_minibosses": true,
+    "ability_randomization_minny": true,
     "ability_randomization_no_ability_weight": 55,
     "ability_randomization_passive_enemies": false,
     "allowed_abilities": [
@@ -72,6 +73,7 @@
   "shuffled_policy": {
     "ability_randomization_boss_spawns": false,
     "ability_randomization_minibosses": false,
+    "ability_randomization_minny": true,
     "ability_randomization_no_ability_weight": 55,
     "ability_randomization_passive_enemies": false,
     "allowed_abilities": [

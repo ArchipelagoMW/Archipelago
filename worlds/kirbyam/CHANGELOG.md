@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `Ability Randomization: Minny` (`ability_randomization_minny`) so Minny can be excluded from enemy copy-ability randomization and kept at vanilla behavior while other enemy ability sources remain randomized (Issue #572).
 - Gate ROM delivery-counter reconciliation diagnostics behind `Enable Debug Logging` (`enable_debug_logging`) so non-debug sessions only show normal sent/received item notifications; counter-ahead/back-in-range/rewind/fallback progress messages are now suppressed unless debug logging is enabled (Issue #574).
 
 ## v0.1.1

@@ -46,6 +46,7 @@ def build_enemy_copy_ability_policy(
     mode: int,
     include_boss_spawns: bool,
     include_minibosses: bool,
+    include_minny: bool = True,
     whitelist: Iterable[str] = VALID_ENEMY_COPY_ABILITIES,
     include_passive_enemies: bool = False,
     no_ability_weight: int = 0,
@@ -64,6 +65,7 @@ def build_enemy_copy_ability_policy(
         "allowed_abilities": ordered,
         "ability_randomization_boss_spawns": bool(include_boss_spawns),
         "ability_randomization_minibosses": bool(include_minibosses),
+        "ability_randomization_minny": bool(include_minny),
         "ability_randomization_passive_enemies": bool(include_passive_enemies),
         "ability_randomization_no_ability_weight": normalized_no_ability_weight,
     }

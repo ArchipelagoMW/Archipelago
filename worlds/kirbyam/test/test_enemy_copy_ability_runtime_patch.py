@@ -212,6 +212,25 @@ def test_non_ability_option_on_with_miniboss_toggle_on_includes_mini_waddle_dee(
     assert writes[0x351B76] != 0
 
 
+def test_minny_toggle_excludes_minny_runtime_writes_only() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(123),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_minny=False,
+        include_passive_enemies=False,
+        no_ability_weight=0,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy)
+
+    # MINNY default ability source address.
+    assert 0x3519F6 not in writes
+    # A different normal enemy source should still be patched.
+    assert 0x3518BE in writes
+
+
 def test_completely_random_mapping_is_stable_when_skipped_zero_id_sources_are_added(monkeypatch) -> None:
     baseline_policy = build_enemy_copy_ability_policy(
         random.Random(20260324),

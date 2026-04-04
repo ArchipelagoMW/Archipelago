@@ -83,6 +83,16 @@ class AbilityRandomizationMinibosses(Toggle):
     default = 1
 
 
+class AbilityRandomizationMinny(Toggle):
+    """
+    Include Minny in enemy copy-ability randomization.
+      Only applies when Ability Randomization Mode is not Off.
+      On by Default, but ability_randomization_mode is Off by Default.
+    """
+    display_name = "Ability Randomization: Minny"
+    default = 1
+
+
 class AbilityRandomizationPassiveEnemies(Toggle):
     """
     When enabled, enemies that normally do not grant a copy ability can receive a
@@ -190,6 +200,8 @@ class KirbyAmOptions(PerGameCommonOptions):
 
     ability_randomization_minibosses: AbilityRandomizationMinibosses
 
+    ability_randomization_minny: AbilityRandomizationMinny
+
     ability_randomization_passive_enemies: AbilityRandomizationPassiveEnemies
 
     ability_randomization_no_ability_weight: AbilityRandomizationNoAbilityWeight
@@ -214,6 +226,7 @@ OPTION_GROUPS = [
         AbilityRandomizationMode,
         AbilityRandomizationBossSpawns,
         AbilityRandomizationMinibosses,
+        AbilityRandomizationMinny,
         AbilityRandomizationPassiveEnemies,
         AbilityRandomizationNoAbilityWeight,
     ]),

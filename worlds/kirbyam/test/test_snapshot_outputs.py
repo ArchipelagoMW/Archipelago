@@ -54,6 +54,7 @@ def _build_representative_slot_data() -> dict[str, object]:
         "ability_randomization_mode": 1,
         "ability_randomization_boss_spawns": True,
         "ability_randomization_minibosses": False,
+        "ability_randomization_minny": False,
         "ability_randomization_passive_enemies": False,
         "ability_randomization_no_ability_weight": 55,
         "room_sanity": False,
@@ -65,6 +66,7 @@ def _build_representative_slot_data() -> dict[str, object]:
         AbilityRandomizationMode.option_shuffled,
         include_boss_spawns=True,
         include_minibosses=False,
+        include_minny=False,
         no_ability_weight=55,
     )
     return KirbyAmWorld.fill_slot_data(world)

@@ -214,6 +214,7 @@ class KirbyAmWorld(World):
             mode = int(self.options.ability_randomization_mode.value)
             randomize_boss_spawned = bool(self.options.ability_randomization_boss_spawns.value)
             randomize_miniboss = bool(self.options.ability_randomization_minibosses.value)
+            randomize_minny = bool(self.options.ability_randomization_minny.value)
             randomize_non_ability = bool(self.options.ability_randomization_passive_enemies.value)
             no_ability_weight = int(self.options.ability_randomization_no_ability_weight.value)
             self._enemy_copy_ability_policy = build_enemy_copy_ability_policy(
@@ -221,31 +222,35 @@ class KirbyAmWorld(World):
                 mode,
                 randomize_boss_spawned,
                 randomize_miniboss,
+                include_minny=randomize_minny,
                 include_passive_enemies=randomize_non_ability,
                 no_ability_weight=no_ability_weight,
             )
             if mode == AbilityRandomizationMode.option_off:
                 logger.info(
-                    "[P%s] Enemy copy-ability randomization: off (%s whitelist entries, no_ability_weight=%s)",
+                    "[P%s] Enemy copy-ability randomization: off (%s whitelist entries, minny=%s, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
+                    randomize_minny,
                     no_ability_weight,
                 )
             elif mode == AbilityRandomizationMode.option_shuffled:
                 logger.info(
                     "[P%s] Enemy copy-ability randomization: shuffled "
-                    "(%s whitelist entries, passive_enemies=%s, no_ability_weight=%s)",
+                    "(%s whitelist entries, minny=%s, passive_enemies=%s, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
+                    randomize_minny,
                     randomize_non_ability,
                     no_ability_weight,
                 )
             else:
                 logger.info(
                     "[P%s] Enemy copy-ability randomization: completely_random "
-                    "(%s whitelist entries, passive_enemies=%s, no_ability_weight=%s)",
+                    "(%s whitelist entries, minny=%s, passive_enemies=%s, no_ability_weight=%s)",
                     self.player,
                     len(VALID_ENEMY_COPY_ABILITIES),
+                    randomize_minny,
                     randomize_non_ability,
                     no_ability_weight,
                 )
@@ -545,6 +550,7 @@ class KirbyAmWorld(World):
             "ability_randomization_mode",
             "ability_randomization_boss_spawns",
             "ability_randomization_minibosses",
+            "ability_randomization_minny",
             "ability_randomization_passive_enemies",
             "ability_randomization_no_ability_weight",
             "room_sanity",

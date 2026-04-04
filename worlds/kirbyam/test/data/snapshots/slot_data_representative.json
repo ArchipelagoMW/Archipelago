@@ -1,6 +1,7 @@
 {
   "ability_randomization_boss_spawns": true,
   "ability_randomization_minibosses": false,
+  "ability_randomization_minny": false,
   "ability_randomization_mode": 1,
   "ability_randomization_no_ability_weight": 55,
   "ability_randomization_passive_enemies": false,
@@ -11,6 +12,7 @@
   "enemy_copy_ability_policy": {
     "ability_randomization_boss_spawns": true,
     "ability_randomization_minibosses": false,
+    "ability_randomization_minny": false,
     "ability_randomization_no_ability_weight": 55,
     "ability_randomization_passive_enemies": false,
     "allowed_abilities": [

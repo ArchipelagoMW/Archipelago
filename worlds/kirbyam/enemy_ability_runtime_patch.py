@@ -46,6 +46,8 @@ def _ability_name_to_id(name: str) -> int:
 
 
 def _is_source_enabled(source: AbilitySource, policy: dict[str, Any]) -> bool:
+    if source.key == "MINNY" and not bool(policy.get("ability_randomization_minny", True)):
+        return False
     if source.kind == "miniboss" and not bool(policy.get("ability_randomization_minibosses", True)):
         return False
     if source.kind == "boss_spawned" and not bool(policy.get("ability_randomization_boss_spawns", True)):

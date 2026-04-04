@@ -18,6 +18,7 @@
 - Progression & useful items which the player would normally acquire throughout the game have been moved around. (Mirror Shards, Maps, Vitality, Sound Player)
 - Normal copy ability enemies can be randomized to give a different copy ability.
 - Enemies which typically do not give abilities can be randomized to give abilities.
+- Minny can be kept vanilla with the `ability_randomization_minny` toggle while still randomizing other enemy ability sources.
 - The chance for an enemy to not have a copy ability can be controlled via the `ability_randomization_no_ability_weight`
 
 
