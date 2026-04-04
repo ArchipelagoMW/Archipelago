@@ -31,12 +31,12 @@ if __name__ == "__main__":
 import settings
 import Utils
 from Utils import (env_cleared_lib_path, init_logging, is_frozen, is_linux, is_macos, is_windows, local_path,
-                   messagebox, open_filename, user_path, is_mobile)
+                   messagebox, open_filename, user_path)
 
 if __name__ == "__main__":
     init_logging('Launcher')
 
-from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
+from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type, always_available
 
 
 def open_host_yaml():
@@ -124,14 +124,14 @@ components.extend([
     Component("Generate Template Options", func=generate_yamls,
               description="Generate template YAMLs for currently installed games."),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/"),
-              supports_mobile=True,
+              available=always_available,
               description="Open archipelago.gg in your browser."),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2"),
-              supports_mobile=True,
+              available=always_available,
               description="Join the Discord server to play public multiworlds, report issues, or just chat!"),
     Component("Unrated/18+ Discord Server", icon="discord",
               func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4"),
-              supports_mobile=True,
+              available=always_available,
               description="Find unrated and 18+ games in the After Dark Discord server."),
     Component("Browse Files", func=browse_files,
               description="Open the Archipelago installation folder in your file browser."),
@@ -557,8 +557,7 @@ def run():
         process.join()
 
 
-if is_mobile:
-    components[:] = [c for c in components if c.supports_mobile]
+components[:] = [c for c in components if c.available()]
 
 
 logging.info(f"Loaded {len(components)} components.")

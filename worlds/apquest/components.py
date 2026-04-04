@@ -1,4 +1,4 @@
-from worlds.LauncherComponents import Component, Type, components, launch
+from worlds.LauncherComponents import Component, Type, components, launch, always_available
 
 
 # The most common type of component is a client, but there are other components, such as sprite/palette adjusters.
@@ -29,7 +29,7 @@ components.append(
         game_name="APQuest",
         component_type=Type.CLIENT,
         supports_uri=True,
-        supports_mobile=True,
+        available=always_available,
     )
 )
 
