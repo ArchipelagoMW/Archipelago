@@ -19,6 +19,7 @@
 - Normal copy ability enemies can be randomized to give a different copy ability.
 - Enemies which typically do not give abilities can be randomized to give abilities.
 - Minny can be kept vanilla with the `ability_randomization_minny` toggle while still randomizing other enemy ability sources.
+- Enemies that cannot be swallowed are excluded from the enemy copy-ability randomization pool.
 - The chance for an enemy to not have a copy ability can be controlled via the `ability_randomization_no_ability_weight`
 
 

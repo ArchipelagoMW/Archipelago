@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import random
 
 import worlds.kirbyam.enemy_ability_runtime_patch as runtime_patch_module
@@ -299,3 +300,39 @@ def test_full_no_ability_weight_respects_existing_source_toggles() -> None:
     assert writes[0x35164E] == 0
     assert 0x351BA6 not in writes
     assert 0x352686 not in writes
+
+
+def test_unswallowable_enemy_sources_are_excluded_from_runtime_pool() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260404),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy)
+
+    # GLUNK is currently represented by this source address and should never be randomized.
+    assert 0x351696 not in writes
+
+
+def test_unswallowable_enemy_exclusion_is_logged(caplog) -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260404),
+        AbilityRandomizationMode.option_completely_random,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    with caplog.at_level(logging.INFO, logger="worlds.kirbyam.enemy_ability_runtime_patch"):
+        build_enemy_copy_runtime_patch_writes(policy)
+
+    assert any(
+        "Excluded unswallowable enemies from copy-ability randomization pool:" in message
+        and "GLUNK" in message
+        for message in caplog.messages
+    )
