@@ -458,13 +458,14 @@ class KirbyAmClient(BizHawkClient):
 
         from CommonClient import logger
 
-        logger.info(
-            "KirbyAM: receive notification queued (index=%s, item=%s, sender=%s, lookup_slot=%s)",
-            delivered_index,
-            item_name,
-            sender_name,
-            lookup_slot,
-        )
+        if self._debug_logging_enabled:
+            logger.info(
+                "KirbyAM: receive notification queued (index=%s, item=%s, sender=%s, lookup_slot=%s)",
+                delivered_index,
+                item_name,
+                sender_name,
+                lookup_slot,
+            )
         try:
             await bizhawk.display_message(ctx.bizhawk_ctx, message)
         except Exception:
@@ -541,13 +542,14 @@ class KirbyAmClient(BizHawkClient):
 
         self._send_notify_window_count += 1
 
-        logger.info(
-            "KirbyAM: send notification queued (item=%s, sender=%s, receiver=%s, location=%s)",
-            item_name,
-            sender_name,
-            receiver_name,
-            location_name,
-        )
+        if self._debug_logging_enabled:
+            logger.info(
+                "KirbyAM: send notification queued (item=%s, sender=%s, receiver=%s, location=%s)",
+                item_name,
+                sender_name,
+                receiver_name,
+                location_name,
+            )
         Utils.async_start(bizhawk.display_message(ctx.bizhawk_ctx, message))
 
     async def _display_client_message(self, ctx: "BizHawkClientContext", message: str) -> None:
@@ -709,7 +711,8 @@ class KirbyAmClient(BizHawkClient):
         await self._sync_death_link_setting(ctx)
 
         if not self._watcher_server_ready:
-            logger.info("KirbyAM: AP session ready; reconnect-safe reconciliation active")
+            if self._debug_logging_enabled:
+                logger.info("KirbyAM: AP session ready; reconnect-safe reconciliation active")
             self._watcher_server_ready = True
             self._reset_reconnect_transient_state()
 
@@ -732,11 +735,12 @@ class KirbyAmClient(BizHawkClient):
             )
             if not gameplay_active:
                 if self._last_runtime_gate_reason != defer_reason:
-                    logger.info(
-                        "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
-                        defer_reason,
-                        ai_state if ai_state is not None else "unavailable",
-                    )
+                    if self._debug_logging_enabled:
+                        logger.info(
+                            "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
+                            defer_reason,
+                            ai_state if ai_state is not None else "unavailable",
+                        )
                     await self._display_client_message(ctx, "Item sending paused by game state")
                     self._last_runtime_gate_reason = defer_reason
 
@@ -749,7 +753,8 @@ class KirbyAmClient(BizHawkClient):
                 return
 
             if self._last_runtime_gate_reason is not None:
-                logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
+                if self._debug_logging_enabled:
+                    logger.info("KirbyAM: gameplay-active state restored; resuming normal watcher flow")
                 await self._display_client_message(ctx, "Item sending resumed")
                 self._last_runtime_gate_reason = None
 
@@ -1561,11 +1566,12 @@ class KirbyAmClient(BizHawkClient):
 
             room_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if room_log_state != self._last_room_sanity_poll_log:
-                logger.info(
-                    "KirbyAM: resending room-sanity LocationChecks missing on server (missing=%s, acked=%s)",
-                    missing_on_server,
-                    already_acknowledged,
-                )
+                if self._debug_logging_enabled:
+                    logger.info(
+                        "KirbyAM: resending room-sanity LocationChecks missing on server (missing=%s, acked=%s)",
+                        missing_on_server,
+                        already_acknowledged,
+                    )
                 self._last_room_sanity_poll_log = room_log_state
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
@@ -1787,11 +1793,12 @@ class KirbyAmClient(BizHawkClient):
                 # Capture pending state before clearing — this counter advance may be the ACK signal.
                 _ff_was_pending = self._delivery_pending
                 _ff_pending_item_index = self._delivery_pending_item_index
-                logger.info(
-                    "KirbyAM: ROM delivery counter moved forward from %s to %s; fast-forwarding client delivery cursor",
-                    self._delivered_item_index,
-                    rom_received_count,
-                )
+                if self._debug_logging_enabled:
+                    logger.info(
+                        "KirbyAM: ROM delivery counter moved forward from %s to %s; fast-forwarding client delivery cursor",
+                        self._delivered_item_index,
+                        rom_received_count,
+                    )
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
@@ -1954,7 +1961,7 @@ class KirbyAmClient(BizHawkClient):
                 )
                 self._delivery_counter_ahead_resume_logged = True
 
-            if logger.isEnabledFor(logging.INFO):
+            if self._debug_logging_enabled:
                 logger.info(
                     "KirbyAM: Delivering mailbox item index %s (%s from %s)",
                     self._delivered_item_index,

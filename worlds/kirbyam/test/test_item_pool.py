@@ -194,7 +194,10 @@ def test_active_filler_pool_contents() -> None:
 
 def test_no_extra_lives_excludes_1_up_from_active_filler_pool() -> None:
     world = KirbyAmWorld.__new__(KirbyAmWorld)
-    world.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=True))
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=True),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_off),
+    )
 
     assert world._active_filler_pool() == (
         "Small Food",
@@ -207,11 +210,56 @@ def test_no_extra_lives_excludes_1_up_from_active_filler_pool() -> None:
 def test_no_extra_lives_filler_selection_never_picks_1_up() -> None:
     world = KirbyAmWorld.__new__(KirbyAmWorld)
     world.random = random.Random(12345)
-    world.options = SimpleNamespace(no_extra_lives=SimpleNamespace(value=True))
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=True),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_off),
+    )
 
     picks = [world.get_filler_item_name() for _ in range(50)]
 
     assert "1 Up" not in picks
+    assert all(pick in world._active_filler_pool() for pick in picks)
+
+
+def test_one_hit_mode_exclude_vitality_counters_excludes_food_from_active_filler_pool() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=False),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_exclude_vitality_counters),
+    )
+
+    assert world._active_filler_pool() == (
+        "1 Up",
+        "Cell Phone Battery",
+        "Invincibility Candy",
+    )
+
+
+def test_one_hit_mode_exclude_vitality_counters_and_no_extra_lives_stack_filler_exclusions() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=True),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_exclude_vitality_counters),
+    )
+
+    assert world._active_filler_pool() == (
+        "Cell Phone Battery",
+        "Invincibility Candy",
+    )
+
+
+def test_one_hit_mode_exclude_vitality_counters_filler_selection_never_picks_food() -> None:
+    world = KirbyAmWorld.__new__(KirbyAmWorld)
+    world.random = random.Random(12345)
+    world.options = SimpleNamespace(
+        no_extra_lives=SimpleNamespace(value=False),
+        one_hit_mode=SimpleNamespace(value=OneHitMode.option_exclude_vitality_counters),
+    )
+
+    picks = [world.get_filler_item_name() for _ in range(50)]
+
+    assert "Small Food" not in picks
+    assert "Max Tomato" not in picks
     assert all(pick in world._active_filler_pool() for pick in picks)
 
 

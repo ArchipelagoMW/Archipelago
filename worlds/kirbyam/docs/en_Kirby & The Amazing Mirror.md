@@ -61,7 +61,7 @@ Use exact item/location names from this world (or the item groups listed above) 
 
 
 - There is an optional setting to enable one-life mode (no_extra_lives). If you die you are instantly sent back to the Hub, and any 1Ups you receive will be immediately removed.
-- There is an optional setting to enable one-hit mode. If you get hit at all, you will immediately die and be sent back to the Hub, and any food items or 1Ups you receive will be immediately removed upon collecting them.
+- There is an optional setting to enable one-hit mode. Kirby's HP cap is clamped to 1 plus collected Vitality Counters. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool and health-restoring filler (Small Food and Max Tomato) is also removed from filler selection so randomized filler cannot counteract the 1 HP challenge.
 
 
 
