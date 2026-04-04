@@ -455,10 +455,16 @@ async def handle_codecave(ctx: 'Context') -> None:
     """Set up the codecave with the current item locations for use in the randomizer"""
     if ctx.slot_data is None or ctx.code_cave_setup:
         return
-    weapon_locations = list(ITEM_TO_WEAPON_VENDOR_LOCATION.values())
-    armor_locations = list(ITEM_TO_ARMOR_VENDOR_LOCATION.values())
-    ship_locations = list(SHIP_VENDOR_INVENTORY.keys())
-    all_vendor_locations = weapon_locations + armor_locations + ship_locations
+    all_vendor_locations = []
+    if ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False):
+        all_vendor_locations.extend(ITEM_TO_WEAPON_VENDOR_LOCATION.values())
+    if ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False):
+        all_vendor_locations.extend(ITEM_TO_ARMOR_VENDOR_LOCATION.values())
+    if ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
+        all_vendor_locations.extend(SHIP_VENDOR_INVENTORY.keys())
+    if not all_vendor_locations:
+        return
+
     ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
     ctx.game_interface.vendor_string_pointers = {}
     offset = 0x10
