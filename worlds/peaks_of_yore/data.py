@@ -251,8 +251,12 @@ class LeveledRequirements(ConditionalRequirements):
         super().__init__(requirements,  lambda opts: opts.requirements_difficulty == difficulty, start_priority)
 
 def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
-    # this assumes that the change to make extra ropes worth 2 has been made!!
-    # requires either ropecount ropes, or ropecount * .75 ropes + rope length upgrade
+    """
+    this assumes that the change to make extra ropes worth 2 has been made!!
+    requires either ropecount ropes, or ropecount * .75 ropes + rope length upgrade
+    Warning: currently broken somehow
+    """
+    logging.warning("get_rope_requirement may not work correctly at this time but was used!")
     item_count: int = math.ceil(rope_count/2)
     min_item_count: int = math.ceil(item_count*0.75)
     short_rope_addition: int = item_count-min_item_count
@@ -264,6 +268,8 @@ def get_rope_requirement(rope_count: int, start_priority = 0) -> Requirements:
 
     if short_rope_addition == 0:
         reqs = SimpleRequirements({"Rope Unlock": 1, "Extra Rope": min_item_count})
+
+    reqs.start_priority = start_priority
 
     return reqs
 
@@ -659,7 +665,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ], generate_free_solo=True),
         PeakRegion("Great Gaol", 32, locations=[
             LocationData("Great Gaol: Picture Frame", POYItemLocationType.ARTEFACT, 18,
-                         requirements=ConditionalRequirements(get_rope_requirement(1),
+                         requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
                                                               lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)),
             LocationData("Great Gaol: Rope (Encounter)", POYItemLocationType.ROPE, 2),
             LocationData("Great Gaol: Rope", POYItemLocationType.ROPE, 10),
@@ -671,8 +677,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
         ], generate_free_solo=True),
         PeakRegion("Ymir's Shadow", 34, locations=[
             LocationData("Ymir's Shadow: Advanced Trophy", POYItemLocationType.ARTEFACT, 12,
-                         requirements=ConditionalRequirements(get_rope_requirement(1, 200)
-                                      | SimpleRequirements({"Progressive Crampons": 2}),
+                         requirements=ConditionalRequirements(SimpleRequirements({"Progressive Crampons": 2}),
                                       lambda opts: opts.requirements_difficulty != RequirementsDifficulty.option_free_solo)
                          ),
             LocationData("Ymir's Shadow: Rope", POYItemLocationType.ROPE, 8),
