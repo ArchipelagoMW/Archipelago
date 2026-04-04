@@ -18,6 +18,7 @@ SystemID GBA
 0203B03C	d	u	0	System Bus	shard_scrub_delay_frames
 0203B040	d	h	0	System Bus	mailbox_init_cookie (expect 4B41504D)
 0203B044	d	h	0	System Bus	boss_temp_shard_bitfield
+0203B048	d	h	0	System Bus	delivered_vitality_item_bits
 0	S	_	0		=== Native Gameplay Addresses (from worlds/kirbyam/data/addresses.json) ===
 02038970	b	h	0	System Bus	shard_bitfield_native (KIRBY_SHARD_FLAGS)
 0203897C	d	h	0	System Bus	big_chest_bitfield_native (gTreasures.bigChestField)

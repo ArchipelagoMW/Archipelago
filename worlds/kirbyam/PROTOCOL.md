@@ -32,11 +32,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
     0x02000000 - 0x02040000   EWRAM Region (256 KB)
         ├─ 0x02000000 - 0x0202BFFF   Native game state
-    ├─ 0x0203B000 - 0x0203B047   AP Mailbox (reserved, 72 bytes)
-    └─ Remaining EWRAM (excluding AP mailbox block)
+        ├─ 0x0203B000 - 0x0203B04B   AP Mailbox (reserved, 76 bytes)
+        └─ Remaining EWRAM (excluding AP mailbox block)
 ```
 
-### AP Mailbox Block (0x0203B000 - 0x0203B047)
+### AP Mailbox Block (0x0203B000 - 0x0203B04B)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -61,8 +61,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x3C   | 0x0203B03C | 4B | shard_scrub_delay_frames | u32 | ROM internal | Countdown timer (frames). Set to 600 by boss-defeat hook while temporary native shard state is visible during post-boss cutscene. |
 | 0x40   | 0x0203B040 | 4B | mailbox_init_cookie | u32 | ROM internal | Initialization cookie (`0x4B41504D`). If absent/mismatched, payload seeds `delivered_shard_bitfield` from native shard state, clears scrub delay + boss-defeat flags + boss temp shard mask, and stores the cookie to prevent stale EWRAM transport values from triggering scrub writes. |
 | 0x44   | 0x0203B044 | 4B | boss_temp_shard_bitfield | u32 | ROM internal | Bits 0-7 track shard bits temporarily written by boss-defeat hook for cutscene safety. On gameplay resume, payload scrubs only `boss_temp_shard_bitfield & ~delivered_shard_bitfield`, then clears this mask. |
+| 0x48   | 0x0203B048 | 4B | delivered_vitality_item_bits | u32 | ROM internal | Replay guard for vitality counter items. Bit N marks that `VITALITY_COUNTER_(N+1)` has already been applied, preventing duplicate vitality grants if an item is resent during reconnect/reset recovery. |
 
-**Total: 72 bytes (0x0203B000 - 0x0203B047)**
+**Total: 76 bytes (0x0203B000 - 0x0203B04B)**
 
 ### Native Game State (Referenced but not Managed by AP)
 

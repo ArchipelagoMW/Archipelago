@@ -5,6 +5,7 @@ import base64
 import os
 import pkgutil
 import time
+from collections import Counter
 from typing import TYPE_CHECKING, Any, ClassVar, Dict, List
 
 import settings
@@ -386,6 +387,14 @@ class KirbyAmWorld(World):
                     for item in kirby_data.items.values()
                     if item.classification != ItemClassification.filler
                 ]
+                vitality_item_codes = getattr(self, "_vitality_item_codes", None)
+                if vitality_item_codes is None:
+                    vitality_item_codes = {
+                        item.item_id
+                        for item in kirby_data.items.values()
+                        if "Vitality" in item.tags
+                    }
+                    self._vitality_item_codes = vitality_item_codes
                 if self.options.shards.value == RandomizeShards.option_vanilla:
                     shard_code_set = set(shard_item_codes)
                     non_filler_item_codes = [
@@ -393,16 +402,11 @@ class KirbyAmWorld(World):
                     ]
 
                 if self._one_hit_mode_value() == OneHitMode.option_exclude_vitality_counters:
-                    vitality_code_set = {
-                        item.item_id
-                        for item in kirby_data.items.values()
-                        if "Vitality" in item.tags
-                    }
                     excluded_vitality_count = sum(
-                        1 for code in non_filler_item_codes if code in vitality_code_set
+                        1 for code in non_filler_item_codes if code in vitality_item_codes
                     )
                     non_filler_item_codes = [
-                        code for code in non_filler_item_codes if code not in vitality_code_set
+                        code for code in non_filler_item_codes if code not in vitality_item_codes
                     ]
                     logger.info(
                         "[P%s] One-hit mode (exclude_vitality_counters): removed %s vitality counter item(s) from non-filler pool",
@@ -439,6 +443,35 @@ class KirbyAmWorld(World):
                         "KirbyAM item pool mismatch: open physical locations=%s randomized item count=%s"
                         % (needed_pool_size, len(randomized_item_codes))
                     )
+
+                vitality_code_counts = Counter(
+                    code for code in randomized_item_codes if code in vitality_item_codes
+                )
+                if self._one_hit_mode_value() == OneHitMode.option_exclude_vitality_counters:
+                    if vitality_code_counts:
+                        raise ValueError(
+                            "KirbyAM vitality pool invariant failed in exclude_vitality_counters mode: "
+                            f"expected zero vitality items, got counts={dict(vitality_code_counts)}"
+                        )
+                else:
+                    missing_vitality_codes = sorted(
+                        code for code in vitality_item_codes if vitality_code_counts.get(code, 0) == 0
+                    )
+                    duplicate_vitality_codes = {
+                        code: count
+                        for code, count in vitality_code_counts.items()
+                        if count > 1
+                    }
+                    if missing_vitality_codes or duplicate_vitality_codes:
+                        raise ValueError(
+                            "KirbyAM vitality pool invariant failed: each vitality counter must appear exactly once. "
+                            f"missing={missing_vitality_codes} duplicates={duplicate_vitality_codes}"
+                        )
+                logger.info(
+                    "[P%s] Vitality counter pool multiplicity: %s",
+                    self.player,
+                    dict(sorted(vitality_code_counts.items())),
+                )
 
             if (boss_locations or major_chest_locations or vitality_chest_locations or sound_player_chest_locations or room_sanity_locations) and not randomized_item_codes:
                 raise ValueError(

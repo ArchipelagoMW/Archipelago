@@ -88,6 +88,7 @@ class AddressValidator:
             "debug_last_from",
             "frame_counter",
             "delivered_shard_bitfield",
+            "delivered_vitality_item_bits",
             "shard_scrub_delay_frames",
             "mailbox_init_cookie",
         }

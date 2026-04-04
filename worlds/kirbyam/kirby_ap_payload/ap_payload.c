@@ -36,6 +36,9 @@
 // Tracks shard bits temporarily written by boss defeat hook for cutscene safety.
 // Cleared after gameplay resumes and non-AP-owned bits are scrubbed.
 #define AP_BOSS_TEMP_SHARD_BITFIELD  (*(volatile uint32_t*)(AP_BASE + 0x44u))
+// Bitfield for AP vitality item replay-guard semantics.
+// Bit N set means VITALITY_COUNTER_(N+1) has already been applied this EWRAM session.
+#define AP_DELIVERED_VITALITY_ITEM_BITS (*(volatile uint32_t*)(AP_BASE + 0x48u))
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -365,7 +368,12 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
 
     // VITALITY_COUNTER_1..VITALITY_COUNTER_4 = BASE+18 .. BASE+21
     if (ap_item_id >= (KIRBY_ITEM_ID_BASE_OFFSET + 18u) && ap_item_id <= (KIRBY_ITEM_ID_BASE_OFFSET + 21u)) {
-        ap_grant_vitality_counter();
+        uint32_t vitality_index = ap_item_id - (KIRBY_ITEM_ID_BASE_OFFSET + 18u);  // 0..3
+        uint32_t vitality_mask = (1u << vitality_index);
+        if ((AP_DELIVERED_VITALITY_ITEM_BITS & vitality_mask) == 0u) {
+            AP_DELIVERED_VITALITY_ITEM_BITS |= vitality_mask;
+            ap_grant_vitality_counter();
+        }
         return 1u;
     }
 
@@ -418,6 +426,7 @@ void ap_poll_mailbox_c(void) {
         AP_SHARD_SCRUB_DELAY = 0u;
         AP_BOSS_DEFEAT_FLAGS = 0u;
         AP_BOSS_TEMP_SHARD_BITFIELD = 0u;
+        AP_DELIVERED_VITALITY_ITEM_BITS = 0u;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 

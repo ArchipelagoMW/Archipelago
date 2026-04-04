@@ -1,6 +1,7 @@
 import random
 from pathlib import Path
 from types import SimpleNamespace
+from collections import Counter
 
 import pytest
 
@@ -469,6 +470,46 @@ def test_one_hit_mode_include_vitality_counters_includes_all_vitality_items() ->
     pool_codes = {item.code for item in world.multiworld.itempool if item.code is not None}
     assert vitality_codes.issubset(pool_codes), (
         "include_vitality_counters mode should keep all vitality counter items in the pool"
+    )
+
+
+def test_vitality_items_appear_exactly_once_in_vanilla_pool() -> None:
+    world, _locations = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_off,
+    )
+    world.create_items()
+
+    vitality_codes = _vitality_item_codes()
+    pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
+    counts = Counter(code for code in pool_codes if code in vitality_codes)
+
+    assert counts, "Expected vitality counters in vanilla pool"
+    assert all(count == 1 for count in counts.values()), (
+        f"Vitality counter items must be unique in pool, got counts={dict(counts)}"
+    )
+    assert counts.keys() == vitality_codes, (
+        "Vanilla pool must contain each vitality counter exactly once"
+    )
+
+
+def test_vitality_items_appear_exactly_once_in_include_mode_pool() -> None:
+    world, _locations = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        one_hit_mode=OneHitMode.option_include_vitality_counters,
+    )
+    world.create_items()
+
+    vitality_codes = _vitality_item_codes()
+    pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
+    counts = Counter(code for code in pool_codes if code in vitality_codes)
+
+    assert counts, "Expected vitality counters in include_vitality_counters pool"
+    assert all(count == 1 for count in counts.values()), (
+        f"Vitality counter items must be unique in pool, got counts={dict(counts)}"
+    )
+    assert counts.keys() == vitality_codes, (
+        "include_vitality_counters pool must contain each vitality counter exactly once"
     )
 
 
