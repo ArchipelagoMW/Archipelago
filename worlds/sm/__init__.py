@@ -8,7 +8,8 @@ import typing
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
 import settings
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial, \
+    LocationProgressType
 from Options import Accessibility
 from worlds.AutoWorld import AutoLogicRegister, WebWorld, World
 from worlds.generic.Rules import add_rule, set_rule
@@ -436,6 +437,13 @@ class SMWorld(World):
                 if not world.get_location(bossLoc, player).can_reach(new_state):
                     world.state.smbm[player].onlyBossLeft = True
                     break
+
+    @classmethod
+    def stage_finalize_multiworld(cls, multiworld):
+        for location in multiworld.get_locations():
+            if location.item.game == cls.game and location.progress_type != LocationProgressType.EXCLUDED:
+                if location.item.classification == ItemClassification.filler and location.item.name != "Nothing":
+                    location.item.classification = ItemClassification.progression
 
     def getWordArray(self, w: int) -> List[int]:
         """ little-endian convert a 16-bit number to an array of numbers <= 255 each """
