@@ -517,6 +517,7 @@ async def test_deliver_items_continues_when_rom_counter_ahead_of_received_items(
     """A stale/high ROM counter should not permanently suppress mailbox writes."""
     client = KirbyAmClient()
     client.initialize_client()
+    client._debug_logging_enabled = True
     client._delivered_item_index = 0
     client._delivery_pending = False
 
@@ -556,6 +557,7 @@ async def test_deliver_items_logs_when_rom_counter_returns_in_range(mock_bizhawk
     """Ahead-counter fallback should clear once ROM and server state are plausibly aligned again."""
     client = KirbyAmClient()
     client.initialize_client()
+    client._debug_logging_enabled = True
     client._delivered_item_index = 0
     client._delivery_counter_ahead_fallback_active = True
     client._delivery_counter_ahead_resume_logged = True
@@ -574,6 +576,38 @@ async def test_deliver_items_logs_when_rom_counter_returns_in_range(mock_bizhawk
     assert client._delivery_counter_ahead_fallback_active is False
     assert client._delivery_counter_ahead_resume_logged is False
     assert "ROM delivery counter is back in range" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_deliver_items_rom_counter_logs_suppressed_when_debug_disabled(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._delivered_item_index = 0
+    client._delivery_pending = False
+
+    mock_bizhawk_context.items_received = [
+        Mock(item=3860001, player=1),
+    ]
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [
+            (0).to_bytes(4, 'little'),
+            (2).to_bytes(4, 'little'),
+            (333).to_bytes(4, 'little'),
+        ]
+
+        await client._deliver_items(mock_bizhawk_context)
+
+    assert not any(
+        call.args and isinstance(call.args[0], str) and "ROM delivery counter" in call.args[0]
+        for call in mock_logger.info.call_args_list
+    )
+    assert not any(
+        call.args and isinstance(call.args[0], str) and "ROM counter fallback active" in call.args[0]
+        for call in mock_logger.info.call_args_list
+    )
 
 
 @pytest.mark.asyncio

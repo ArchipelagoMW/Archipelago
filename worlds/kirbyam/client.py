@@ -1755,8 +1755,8 @@ class KirbyAmClient(BizHawkClient):
         # or forward (reconnect after stale client state).
         if rom_received_count is not None:
             if rom_received_count > len(ctx.items_received):
-                if not self._delivery_counter_ahead_fallback_active:
-                    logger.warning(
+                if self._debug_logging_enabled and not self._delivery_counter_ahead_fallback_active:
+                    logger.info(
                         "KirbyAM: ROM delivery counter is ahead of received items (rom=%s, received=%s); "
                         "ignoring ROM counter and continuing mailbox delivery",
                         rom_received_count,
@@ -1764,7 +1764,7 @@ class KirbyAmClient(BizHawkClient):
                     )
                 self._delivery_counter_ahead_fallback_active = True
             else:
-                if self._delivery_counter_ahead_fallback_active:
+                if self._debug_logging_enabled and self._delivery_counter_ahead_fallback_active:
                     logger.info(
                         "KirbyAM: ROM delivery counter is back in range (rom=%s, received=%s); "
                         "restoring normal mailbox synchronization",
@@ -1775,11 +1775,12 @@ class KirbyAmClient(BizHawkClient):
                 self._delivery_counter_ahead_resume_logged = False
 
             if rom_received_count < self._delivered_item_index:
-                logger.info(
-                    "KirbyAM: ROM delivery counter moved backward from %s to %s; rewinding client delivery cursor",
-                    self._delivered_item_index,
-                    rom_received_count,
-                )
+                if self._debug_logging_enabled:
+                    logger.info(
+                        "KirbyAM: ROM delivery counter moved backward from %s to %s; rewinding client delivery cursor",
+                        self._delivered_item_index,
+                        rom_received_count,
+                    )
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
@@ -1952,13 +1953,14 @@ class KirbyAmClient(BizHawkClient):
             item_id, player_id = item_fields
 
             if self._delivery_counter_ahead_fallback_active and not self._delivery_counter_ahead_resume_logged:
-                logger.info(
-                    "KirbyAM: ROM counter fallback active; continuing mailbox delivery at item index %s "
-                    "(rom=%s, received=%s)",
-                    self._delivered_item_index,
-                    rom_received_count,
-                    len(ctx.items_received),
-                )
+                if self._debug_logging_enabled:
+                    logger.info(
+                        "KirbyAM: ROM counter fallback active; continuing mailbox delivery at item index %s "
+                        "(rom=%s, received=%s)",
+                        self._delivered_item_index,
+                        rom_received_count,
+                        len(ctx.items_received),
+                    )
                 self._delivery_counter_ahead_resume_logged = True
 
             if self._debug_logging_enabled:
