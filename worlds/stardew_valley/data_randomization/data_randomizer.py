@@ -8,7 +8,7 @@ from ..data.fish_data import FishItem, crab_pot_difficulty
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
-from ..strings.region_names import LogicRegion
+from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.weather_names import Weather
 
@@ -44,10 +44,10 @@ def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[
     catch_method_by_fish = {fish_name: fish_data.difficulty == crab_pot_difficulty for fish_name, fish_data in content.fishes.items()}
     randomized_catch_method_per_fish = randomizers_per_behavior[behavior](catch_method_by_fish, random)
 
-    for fish_name, fish_catch_method in randomized_catch_method_per_fish.items():
+    for fish_name, is_crab_pot in randomized_catch_method_per_fish.items():
         original_fish = content.fishes[fish_name]
         original_difficulty = original_fish.difficulty
-        if fish_catch_method:
+        if is_crab_pot:
             fish_difficulty = crab_pot_difficulty
             if original_difficulty != fish_difficulty:
                 locations = random.choice([LogicRegion.crab_pot_freshwater, LogicRegion.crab_pot_seawater])
@@ -60,6 +60,14 @@ def randomize_fish_catch_method(content: StardewContent, data_to_randomize: set[
             continue
         elif original_difficulty == crab_pot_difficulty:
             fish_difficulty = random.randrange(10, 111)
+            if original_fish.locations[0] == LogicRegion.crab_pot_seawater:
+                fish_locations = (Region.beach,)
+            else:
+                fish_locations = (Region.town, LogicRegion.forest_river, LogicRegion.forest_pond, Region.mountain,)
+            content.fishes[fish_name] = override(content.fishes[fish_name],
+                                                 difficulty=fish_difficulty,
+                                                 locations=fish_locations,)
+            continue
         else:
             fish_difficulty = original_difficulty
         content.fishes[fish_name] = override(original_fish, difficulty=fish_difficulty)

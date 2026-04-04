@@ -50,7 +50,7 @@ def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: s
                              DataRandomizationOptionName.fish_catch_method,
                              lambda fish: True,
                              lambda fish: "Crab Pot" if fish.difficulty == crab_pot_difficulty else "Fishing Rod",
-                             "catch method")
+                             "method")
 
 
 def prepare_fish_difficulty_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
