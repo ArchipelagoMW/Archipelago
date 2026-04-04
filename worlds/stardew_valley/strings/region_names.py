@@ -240,6 +240,8 @@ class LogicRegion:
     wizard_blueprints = "Wizard Blueprints"
     crab_pot_freshwater = "Crab Pot in Freshwater"
     crab_pot_seawater = "Crab Pot in Seawater"
+    island_west_ocean = "Island West Ocean"
+    island_west_river = "Island West River"
 
     forest_part_behind_tree_stump = "Part Behind Tree Stump"
     railroad_part_behind_chicken_stone = "Part Behind Chicken Stone"
