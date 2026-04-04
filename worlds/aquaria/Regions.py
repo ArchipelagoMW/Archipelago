@@ -37,7 +37,7 @@ def _has_li(state: CollectionState, player: int) -> bool:
 DAMAGING_ITEMS:Iterable[str] = [
     ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM,
     ItemNames.LI_AND_LI_SONG, ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA,
-    ItemNames.BABY_BLASTER
+    ItemNames.BABY_BLASTER, ItemNames.URCHIN_COSTUME
 ]
 
 def _has_damaging_item(state: CollectionState, player: int, damaging_items:Iterable[str] = DAMAGING_ITEMS) -> bool:
