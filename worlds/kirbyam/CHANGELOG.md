@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.1.0
+
 - Add `One-Hit Mode` (`one_hit_mode`) to the `Make the game harder` option group. Selecting `exclude_vitality_counters` removes all four Vitality Counter items from the item pool (replaced by filler) and enforces a maximum HP of 1 throughout the run. Selecting `include_vitality_counters` keeps Vitality Counters in the pool but still starts Kirby at maximum 1 HP; each Vitality Counter item received raises the cap by 1 (up to 5 with all four). The BizHawk client enforces the cap every gameplay tick by clamping `kirby_max_hp_native` and `kirby_hp_native` (player 0) to `vitality_counter + 1`, with dead/negative HP states preserved (Issue #549).
 - Align ability-randomization release contract wording to current option names (`off`/`non-off`) across option/help/protocol/log text, set `ability_randomization_passive_enemies` default to `true`, and keep `ability_randomization_no_ability_weight` default at `55`.
 - Remove pre-public legacy compatibility paths: item-group aliases (`Shard`/`Map`), legacy ability remap helpers, legacy runtime ability aliases (`Needle` -> `Beam`), and old debug key fallback (`debug.gameplay_state_logging`).
