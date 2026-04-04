@@ -99,6 +99,7 @@ class Rac3Interface(GameInterface):
         clank_options: int
         ship_vendor: int
         armor_vendor: int
+        scout_vendors: int
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
@@ -246,6 +247,7 @@ class Rac3Interface(GameInterface):
         self.options.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
         self.options.ship_vendor = slot_data[RAC3OPTION.SHIP_VENDOR]
         self.options.armor_vendor = slot_data[RAC3OPTION.ARMOR_VENDOR]
+        self.options.scout_vendors = slot_data[RAC3OPTION.SCOUT_VENDORS]
 
     ########################################
     # Called on Game and Server Connection #
@@ -475,7 +477,7 @@ class Rac3Interface(GameInterface):
             self.homewarping = True
             self._write8(planet_data.PLANET_TO_LOAD, RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PLANET_LOAD, 1)
-            self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PAUSE_STATE, 6)
+            self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PAUSE_STATE, RAC3PAUSESTATE.PLANET_CHANGE)
             logger.debug(f"Player home-warped from {self.planet}")
         else:
             logger.warning(f"Couldn't find warp data to leave planet: {self.planet}")
