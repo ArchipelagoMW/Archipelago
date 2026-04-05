@@ -91,6 +91,12 @@ edla = set(n for n in location_names if n.startswith("ED (Living Area): "))
 eds = set(n for n in location_names if n.startswith("ED (Sanctum): "))
 trc = set(n for n in location_names if n.startswith("TRC: "))
 
+kuafu_shop = set(n for n in location_names if n.startswith("Kuafu's Shop: "))
+kuafu_extra = set(n for n in location_names if n.startswith("Kuafu's Extra Inventory: "))
+chiyou_shop = set(n for n in location_names if n.startswith("Chiyou's Shop: "))
+printer = set(n for n in location_names if n.startswith("3D Printer: "))
+all_shops = kuafu_shop | kuafu_extra | chiyou_shop | printer
+
 location_name_groups = {
     # Auto-generated groups
     # We don't need an "Everywhere" group because AP makes that for us
@@ -127,6 +133,12 @@ location_name_groups = {
     "EDLA": edla, "ED (Living Area)": edla, "Empyrean District (Living Area)": edla,
     "EDS": eds, "ED (Sanctum)": eds, "Empyrean District (Sanctum)": eds,
     "TRC": trc, "Tiandao Research Center": trc,
+
+    "Kuafu's Shop": kuafu_shop,
+    "Kuafu's Extra Inventory": kuafu_extra,
+    "Chiyou's Shop": chiyou_shop,
+    "3D Printer": printer,
+    "All Shops": all_shops,
 
     # Manually curated groups
     "Sol Seal Locations": {
