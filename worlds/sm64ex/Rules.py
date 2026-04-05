@@ -86,7 +86,7 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     connect_regions(world, player, "Menu", randomized_entrances_s["Tower of the Wing Cap"], lambda state: state.has("Power Star", player, 10))
     connect_regions(world, player, "Menu", randomized_entrances_s["Bowser in the Dark World"],
                     lambda state: (state.has("Power Star", player, star_costs["FirstBowserDoorCost"])) or
-                    (options.blj_logic == 1 and rf.build_rule("LJ & CL")))
+                    (options.blj_logic == 1 and rf.build_rule("LJ & LG & DJ")))
 
     connect_regions(world, player, "Menu", "Basement", lambda state: state.has("Basement Key", player) or state.has("Progressive Key", player, 1))
 
