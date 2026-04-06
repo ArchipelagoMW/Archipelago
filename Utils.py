@@ -55,9 +55,12 @@ class Version(typing.NamedTuple):
 __version__ = "0.6.7"
 version_tuple = tuplize_version(__version__)
 
-is_linux = sys.platform.startswith("linux")
+is_android = sys.platform == "android" or "P4A_BOOTSTRAP" in os.environ or "ANDROID_ARGUMENT" in os.environ
+is_linux = sys.platform.startswith("linux") and not is_android
 is_macos = sys.platform == "darwin"
 is_windows = sys.platform in ("win32", "cygwin", "msys")
+is_ios = sys.platform == "ios"
+is_mobile = is_android or is_ios
 
 
 def int16_as_bytes(value: int) -> typing.List[int]:
