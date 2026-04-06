@@ -299,25 +299,79 @@ class GauntletLegendsContext(CommonContext):
             # in the multiworld). Spawners occupy a separate array and are excluded. Every other
             # location takes a fixed slot in either the item or chest array regardless of whether
             # it's in the multiworld, so all must be counted to get correct offsets.
-            item_idx = 0
-            chest_idx = 0
+            item_slots: list[int] = []
+            chest_slots: list[int] = []
+            appended_items: list[int] = []
+
             for loc in raw_locations:
-                is_chest_loc = "Chest" in loc.name or ("Barrel" in loc.name and "Barrel of Gold" not in loc.name)
+                is_obelisk_loc = "Obelisk" in loc.name
+                is_chest_loc = (not is_obelisk_loc) and (
+                        "Chest" in loc.name
+                        or ("Barrel" in loc.name and "Barrel of Gold" not in loc.name)
+                )
+
                 scouted = scouted_by_location.get(loc.id)
-                if scouted and scouted.player == self.slot and scouted.item in spawner_trap_ids:
-                    continue  # spawner array — doesn't count toward item/chest indices
+
+                if not scouted:
+                    if is_obelisk_loc:
+                        pass
+                    elif is_chest_loc:
+                        chest_slots.append(loc.id)
+                    else:
+                        item_slots.append(loc.id)
+                    continue
+
+                item_id = scouted.item
+                item_player = scouted.player
+                item_data = items_by_id.get(item_id, ItemData())
+
+                if is_obelisk_loc:
+                    if "Obelisk" in item_data.item_name and item_player == self.slot:
+
+                        pass
+                    else:
+
+                        appended_items.append(loc.id)
+                    continue
+
+                if item_player == self.slot and item_id in spawner_trap_ids:
+                    continue
+
+                if item_player != self.slot:
+
+                    if is_chest_loc:
+                        chest_slots.append(loc.id)
+                    else:
+                        item_slots.append(loc.id)
+                    continue
+
+                if "Obelisk" in item_data.item_name:
+                    continue
+
+                if (item_data.progression in (ItemClassification.useful, ItemClassification.progression)
+                        and is_chest_loc):
+                    appended_items.append(loc.id)
+                    continue
+
                 if is_chest_loc:
-                    self.chest_ram_indices[loc.id] = chest_idx
-                    chest_idx += 1
+                    chest_slots.append(loc.id)
                 else:
-                    self.item_ram_indices[loc.id] = item_idx
-                    item_idx += 1
+                    item_slots.append(loc.id)
+
+            final_item_order = item_slots + appended_items
+
+            self.item_ram_indices = {
+                loc_id: idx for idx, loc_id in enumerate(final_item_order)
+            }
+            self.chest_ram_indices = {
+                loc_id: idx for idx, loc_id in enumerate(chest_slots)
+            }
 
             # Categorize scouted locations - mirror ROM's patch_items logic exactly
             for loc in raw_locations:
                 scouted_item = scouted_by_location.get(loc.id)
                 if not scouted_item:
-                    continue  # No item at this location (item[0] == 0 in ROM)
+                    continue
 
                 item_id = scouted_item.item
                 item_player = scouted_item.player
@@ -329,8 +383,9 @@ class GauntletLegendsContext(CommonContext):
                     if "Obelisk" in item_data.item_name and item_player == self.slot:
                         self.obelisk_locations.append(loc.id)
                         self.obelisks.append(scouted_item)
-                        continue
-                    # Non-obelisk item at obelisk location — fall through to item categorization
+                    else:
+                        self.item_locations.append(loc.id)
+                    continue
 
                 # Check spawner (ROM: item[1] == player and item[0] in SPAWNER_TRAP_IDS)
                 if item_player == self.slot and item_id in spawner_trap_ids:

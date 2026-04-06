@@ -208,13 +208,23 @@ class GLPatchExtension(APPatchExtension):
             stream.seek(level_address_, 0)
             stream, data = get_level_data(stream, level_size[i], i)
 
-            # Track deletions for index calculations
+            items_seen = 0
             items_deleted = 0
             chests_deleted = 0
             chests_seen = 0
 
-            for j, (location_name, item) in enumerate(level.items()):
+            for location_name, item in level.items():
+                is_chest = chest_barrel(location_name)
+                if is_chest:
+                    chest_index = chests_seen - chests_deleted
+                    chests_seen += 1
+                else:
+                    item_index = items_seen - items_deleted
+                    items_seen += 1
+
                 if item[0] == 0:
+                    continue
+                if "Mirror" in location_name:
                     continue
 
                 item_data = items_by_id.get(item[0], ItemData())
@@ -224,9 +234,6 @@ class GLPatchExtension(APPatchExtension):
                         [0x0300, 0x0301, 0x0302, 0x0303, 0x0304],
                         weights=[10, 20, 40, 20, 10]
                     )[0]
-
-                if "Mirror" in location_name:
-                    continue
 
                 # Handle obelisk locations
                 if "Obelisk" in location_name:
@@ -260,13 +267,6 @@ class GLPatchExtension(APPatchExtension):
                         except (StopIteration, Exception):
                             pass
                     continue
-
-                # Calculate indices
-                is_chest = chest_barrel(location_name)
-                item_index = j - data.obelisks_kept - items_deleted
-                if is_chest:
-                    chest_index = chests_seen - chests_deleted
-                    chests_seen += 1
 
                 # Handle spawner trap items (local player only)
                 if item[1] == player and item[0] in spawner_trap_ids:
