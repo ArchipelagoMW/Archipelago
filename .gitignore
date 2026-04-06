@@ -98,6 +98,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 /buildozer.spec
+/.buildozer/
 
 # Installer logs
 pip-log.txt

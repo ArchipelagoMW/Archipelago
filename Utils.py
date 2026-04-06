@@ -55,10 +55,10 @@ class Version(typing.NamedTuple):
 __version__ = "0.6.7"
 version_tuple = tuplize_version(__version__)
 
-is_linux = sys.platform.startswith("linux")
+is_android = sys.platform == "android" or "P4A_BOOTSTRAP" in os.environ or "ANDROID_ARGUMENT" in os.environ
+is_linux = sys.platform.startswith("linux") and not is_android
 is_macos = sys.platform == "darwin"
 is_windows = sys.platform in ("win32", "cygwin", "msys")
-is_android = sys.platform == "android" or "P4A_BOOTSTRAP" in os.environ or "ANDROID_ARGUMENT" in os.environ
 is_ios = sys.platform == "ios"
 is_mobile = is_android or is_ios
 
@@ -164,7 +164,16 @@ def home_path(*path: str) -> str:
     """Returns path to a file in the user home's Archipelago directory."""
     if hasattr(home_path, 'cached_path'):
         pass
-    elif sys.platform.startswith('linux'):
+    elif is_android:
+        import platformdirs
+        # On Android, we prefer a public directory so it's reachable by the user.
+        home_path.cached_path = os.path.join(platformdirs.user_documents_dir(), 'Archipelago')
+        os.makedirs(home_path.cached_path, exist_ok=True)
+    elif is_ios:
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
+        os.makedirs(home_path.cached_path, exist_ok=True)
+    elif is_linux:
         xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
         home_path.cached_path = xdg_data_home + '/Archipelago'
         if not os.path.isdir(home_path.cached_path):
@@ -174,7 +183,7 @@ def home_path(*path: str) -> str:
                 os.symlink(home_path.cached_path, legacy_home_path)
             else:
                 os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
-    elif sys.platform == 'darwin':
+    elif is_macos:
         import platformdirs
         home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
         os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
@@ -234,6 +243,9 @@ def output_path(*path: str) -> str:
 def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
     if is_windows:
         os.startfile(filename)  # type: ignore
+    elif is_mobile:
+        import webbrowser
+        webbrowser.open(f"file://{filename}")
     else:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
