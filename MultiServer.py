@@ -1688,9 +1688,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    def get_hints(self, input_text: str, for_location: bool = False, hint_all: bool = False) -> bool:
+    def get_hints(self, input_text: str, for_location: bool = False, hint_count: int = 1) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
+        if hint_count > 1000 or hint_count < 0:
+            hint_count = 1000
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1762,11 +1764,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
                 if not cost:
-                    can_pay = 1000 if hint_all else 1
-                elif hint_all:
-                    can_pay = min(points_available // cost, 1000)  # Limit to 1000 max
+                    can_pay = hint_count
                 else:
-                    can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
+                    can_pay = min(points_available // cost, hint_count)
 
                 self.ctx.random.shuffle(not_found_hints)
                 # By popular vote, make hints prefer non-local placements
@@ -1818,26 +1818,24 @@ class ClientMessageProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_hint(self, item_name: str = "") -> bool:
         """For example, '!hint Lamp' to get a spoiler peek for that item.
-        Only gives one result per command; see !hint_all for multiple at once."""
-        return self.get_hints(item_name, False, False)
+        Only gives one result per command; see !hint_multiple for multiple at once."""
+        return self.get_hints(item_name, False, 1)
 
     @mark_raw
     def _cmd_hint_location(self, location_name: str = "") -> bool:
         """For example, '!hint_location atomic-bomb' to get a spoiler peek for that location.
-        Only gives 1 result per command; use !hint_location_all for multiple at once."""
-        return self.get_hints(location_name, True, False)
+        Only gives 1 result per command; use !hint_location_multiple for multiple at once."""
+        return self.get_hints(location_name, True, 1)
 
-    @mark_raw
-    def _cmd_hint_all(self, item_name: str = "") -> bool:
-        """For example, '!hint_all Power Star' to get a spoiler peek for that item.
-        Will return as many results as possible, possibly spending multiple hints worth of hint points in the process."""
-        return self.get_hints(item_name, False, True)
+    def _cmd_hint_multiple(self, amount: int | str, *item_name: str) -> bool:
+        """For example, '!hint_multiple 5 Power Star' to get a spoiler peek for that item.
+        Will return as many results as possible up to the specified amount, possibly spending multiple hints worth of hint points in the process."""
+        return self.get_hints(" ".join(item_name), False, int(amount))
 
-    @mark_raw
-    def _cmd_hint_location_all(self, location_name: str = "") -> bool:
-        """For example, '!hint_location_all Everywhere' to get a spoiler peek for matching locations.
-        Will return as many results as possible, possibly spending multiple hints worth of hint points in the process."""
-        return self.get_hints(location_name, True, True)
+    def _cmd_hint_location_multiple(self, amount: int | str, *location_name: str) -> bool:
+        """For example, '!hint_location_multiple 5 Everywhere' to get a spoiler peek for matching locations.
+        Will return as many results as possible up to the specified amount, possibly spending multiple hints worth of hint points in the process."""
+        return self.get_hints(" ".join(location_name), True, int(amount))
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
@@ -2438,8 +2436,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def get_hints(self, player_name: str, input_text: str, for_location: bool = False, hint_all: bool = False) -> bool:
+    def get_hints(self, player_name: str, input_text: str, for_location: bool = False, hint_count: int = 1) -> bool:
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if hint_count > 1000 or hint_count < 0:
+            hint_count = 1000
         if not usable:
             self.output(response)
             return False
@@ -2482,8 +2482,6 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 hints = collect_hints(self.ctx, team, slot, target_id)
         if not hints:
             self.output("No hints found.")
-        elif hint_all:
-            self.ctx.notify_hints(team, hints)
         else:
             new_hints = set(hints) - self.ctx.hints[team, slot]
             old_hints = list(set(hints) - new_hints)
@@ -2499,8 +2497,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
                                      reverse=True)
 
                 hints = found_hints + old_hints
-                if not_found_hints:
+                while not_found_hints and hint_count > 0:
                     hints.append(not_found_hints.pop())
+                    hint_count -= 1
 
                 self.ctx.notify_hints(team, hints)
                 self.ctx.save()
@@ -2510,19 +2509,19 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
         """Send out a single new hint for a player's item or item group to their team"""
-        return self.get_hints(player_name, " ".join(item_name), False, False)
+        return self.get_hints(player_name, " ".join(item_name), False, 1)
 
     def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
         """Send out a single new hint for a player's location or location group to their team"""
-        return self.get_hints(player_name, " ".join(location_name), True, False)
+        return self.get_hints(player_name, " ".join(location_name), True, 1)
 
-    def _cmd_hint_all(self, player_name: str, *item_name: str) -> bool:
-        """Send out all matching hints for a player's item or item group to their team"""
-        return self.get_hints(player_name, " ".join(item_name), False, True)
+    def _cmd_hint_multiple(self, amount: int | str, player_name: str, *item_name: str) -> bool:
+        """Send out multiple matching hints for a player's item or item group to their team"""
+        return self.get_hints(player_name, " ".join(item_name), False, int(amount))
 
-    def _cmd_hint_location_all(self, player_name: str, *location_name: str) -> bool:
-        """Send out all matching hints for a player's location or location group to their team"""
-        return self.get_hints(player_name, " ".join(location_name), True, True)
+    def _cmd_hint_location_multiple(self, amount: int | str, player_name: str, *location_name: str) -> bool:
+        """Send out multiple matching hints for a player's location or location group to their team"""
+        return self.get_hints(player_name, " ".join(location_name), True, int(amount))
 
     def _cmd_option(self, option_name: str, option_value: str):
         """Set an option for the server."""
