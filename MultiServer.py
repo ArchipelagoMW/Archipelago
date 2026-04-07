@@ -1782,7 +1782,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
 
                 self.ctx.notify_hints(self.client.team, hints)
-                if not_found_hints:
+                if not_found_hints and hint_count > 0:
                     points_available = get_client_points(self.ctx, self.client)
                     if hints and cost and int((points_available // cost) <= 0):
                         self.output(
@@ -1800,7 +1800,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return True
             elif old_hints:
                 self.ctx.notify_hints(self.client.team, old_hints)
-                self.output("Hint was previously used, no points deducted.")
+                if hint_count > 0:
+                    self.output("Hint was previously used, no points deducted.")
         else:
             if points_available >= cost:
                 if for_location:
