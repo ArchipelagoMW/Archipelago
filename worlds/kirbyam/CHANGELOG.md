@@ -4,6 +4,7 @@
 
 - Updated `Ability Randomization: Minny` (`ability_randomization_minny`) so that it's off by default (Issue #583).
 - Add `Start With All Maps` (`start_with_all_maps`) option to the `Make the game easier` option group. When enabled, all nine area maps are precollected at generation time and removed from the randomized item pool (replaced with filler), so the player begins with every map already acquired (Issue #584).
+- Hide additional KirbyAM reconnect/resend diagnostics from the live client output unless `Enable Debug Logging` is enabled, while still writing those diagnostics to log files unconditionally (`NoStream`-filtered stream suppression only); includes watcher transport reconnect messages and resend diagnostics for boss/major/vitality/sound-player LocationChecks polling (Issue #582).
 
 ## v0.1.2
 

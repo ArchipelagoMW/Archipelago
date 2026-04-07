@@ -2332,7 +2332,7 @@ async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ("raised_exception", "expected_log_call"),
+    ("raised_exception", "expected_log_call", "expected_log_kwargs"),
     [
         (
             bizhawk.RequestFailedError("Connection timed out"),
@@ -2340,10 +2340,12 @@ async def test_game_watcher_skips_when_server_is_none(mock_bizhawk_context):
                 "KirbyAM: BizHawk request failed during watcher tick; waiting for reconnect (%s)",
                 "Connection timed out",
             ),
+            {"extra": {"NoStream": True}},
         ),
         (
             bizhawk.NotConnectedError(),
             ("KirbyAM: BizHawk disconnected during watcher tick; waiting for reconnect",),
+            {"extra": {"NoStream": True}},
         ),
     ],
 )
@@ -2351,6 +2353,7 @@ async def test_game_watcher_recovers_locally_from_transport_errors(
     mock_bizhawk_context,
     raised_exception,
     expected_log_call,
+    expected_log_kwargs,
 ):
     """KirbyAM's shipped handler should absorb transient BizHawk disconnects without crashing the watcher."""
     client = KirbyAmClient()
@@ -2373,7 +2376,7 @@ async def test_game_watcher_recovers_locally_from_transport_errors(
     assert client._delivery_pending is False
     assert client._delivery_pending_frame is None
     assert client._delivery_pending_item_index is None
-    mock_logger.info.assert_any_call(*expected_log_call)
+    mock_logger.info.assert_any_call(*expected_log_call, **expected_log_kwargs)
 
 
 @pytest.mark.asyncio
