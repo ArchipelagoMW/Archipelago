@@ -4,10 +4,19 @@ import pathlib
 import weakref
 import sys
 import webbrowser
+from enum import Enum
 from typing import Optional, Callable, Iterable, Sequence
 
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, \
-    is_windows, Type
+    is_windows
+
+
+class Type(str, Enum):
+    TOOL = "TOOL"
+    MISC = "MISC"
+    CLIENT = "CLIENT"
+    ADJUSTER = "ADJUSTER"
+    HIDDEN = "HIDDEN"
 
 
 class Component:
@@ -60,10 +69,6 @@ class Component:
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
         self.icon = icon
         self.cli = cli
-        if component_type == Type.FUNC:
-            from Utils import deprecate
-            deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
-            component_type = Type.MISC
 
         self.type = component_type or (
             Type.CLIENT if "Client" in display_name else

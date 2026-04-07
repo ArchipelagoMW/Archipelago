@@ -1,5 +1,4 @@
 #:import Utils Utils
-#:import Type Utils.Type
 <LauncherCard>:
     id: main
     style: "filled"
@@ -80,7 +79,7 @@ MDFloatLayout:
             MDButton:
                 id: all
                 style: "text"
-                type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+                type: ("CLIENT", "TOOL", "ADJUSTER", "MISC")
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -90,7 +89,7 @@ MDFloatLayout:
             MDButton:
                 id: client
                 style: "text"
-                type: (Type.CLIENT, )
+                type: ("CLIENT", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -100,7 +99,7 @@ MDFloatLayout:
             MDButton:
                 id: Tool
                 style: "text"
-                type: (Type.TOOL, )
+                type: ("TOOL", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -110,7 +109,7 @@ MDFloatLayout:
             MDButton:
                 id: adjuster
                 style: "text"
-                type: (Type.ADJUSTER, )
+                type: ("ADJUSTER", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -120,7 +119,7 @@ MDFloatLayout:
             MDButton:
                 id: misc
                 style: "text"
-                type: (Type.MISC, )
+                type: ("MISC", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:

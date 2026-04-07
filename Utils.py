@@ -1376,11 +1376,3 @@ def get_all_causes(ex: Exception) -> str:
     others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
     return f"{top}{others}"
 
-
-class Type(Enum):
-    TOOL = auto()
-    MISC = auto()
-    CLIENT = auto()
-    ADJUSTER = auto()
-    FUNC = auto()  # do not use anymore
-    HIDDEN = auto()

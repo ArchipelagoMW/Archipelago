@@ -21,7 +21,7 @@ from shutil import which
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from worlds.LauncherComponents import Component
+    from worlds.LauncherComponents import Component, Type
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     ModuleUpdate.update()
 
 import Utils
-from Utils import env_cleared_lib_path, init_logging, is_linux, is_macos, is_windows, local_path, Type
+from Utils import env_cleared_lib_path, init_logging, is_linux, is_macos, is_windows, local_path
 
 if __name__ == "__main__":
     init_logging('Launcher')
@@ -150,7 +150,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
-        current_filter: Sequence[str | Type] | None
+        current_filter: Sequence["Type"] | None
 
         def __init__(self, ctx=None, components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -164,6 +164,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             super().__init__()
 
         def load_filter(self):
+            from worlds.LauncherComponents import Type
             self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
@@ -214,8 +215,9 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
 
             return button_card
 
-        def _refresh_components(self, type_filter: Sequence[str | Type] | None = None) -> None:
+        def _refresh_components(self, type_filter: Sequence["Type"] | None = None) -> None:
             if not type_filter:
+                from worlds.LauncherComponents import Type
                 type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
             favorites = "favorites" in type_filter
 
@@ -246,6 +248,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             if len(name) == 0:
                 self._refresh_components(self.current_filter)
                 return
+            from worlds.LauncherComponents import Type
 
             sub_matches = [
                 card for card in self.cards
@@ -360,6 +363,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
+            from worlds.LauncherComponents import Type
             Utils.persistent_store("launcher", "favorites", self.favorites)
             Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
                                                                    for filter in self.current_filter))
