@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Updated `Ability Randomization: Minny` (`ability_randomization_minny`) so that it's off by default (Issue #583).
 - Add `Start With All Maps` (`start_with_all_maps`) option to the `Make the game easier` option group. When enabled, all nine area maps are precollected at generation time and removed from the randomized item pool (replaced with filler), so the player begins with every map already acquired (Issue #584).
 
 ## v0.1.2
