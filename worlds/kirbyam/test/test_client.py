@@ -3114,6 +3114,41 @@ async def test_poll_boss_defeat_skips_already_server_acknowledged(mock_bizhawk_c
 
 
 @pytest.mark.asyncio
+async def test_poll_boss_defeat_uses_probe_fallback_when_transport_bit_missing(mock_bizhawk_context):
+    """Issue #573: probe-observed native boss bit should backfill missing transport signal."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(
+        data.transport_ram_addresses,
+        {"boss_defeat_flags": 0x0203B024},
+        clear=False,
+    ), patch.dict(
+        data.native_ram_addresses,
+        {"boss_mirror_table_native": 0x02028C14},
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # Probe baseline then rising edge for bit 0 (boss 1), then poll transport=0.
+        mock_read.side_effect = [
+            [bytes(32)],
+            [bytes([0x01]) + bytes(31)],
+            [(0x00).to_bytes(4, 'little')],
+        ]
+
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+        await client._probe_boss_defeat_candidates(mock_bizhawk_context)
+        await client._poll_boss_defeat_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [boss1_loc]}
+    ])
+
+
+@pytest.mark.asyncio
 async def test_poll_boss_defeat_skips_when_address_missing(mock_bizhawk_context):
     """When boss_defeat_flags address is not in addresses.json the method should no-op."""
     client = KirbyAmClient()

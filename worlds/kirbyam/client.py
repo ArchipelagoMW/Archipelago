@@ -149,6 +149,7 @@ class KirbyAmClient(BizHawkClient):
         # Boss candidate probing state
         self._last_boss_probe_snapshot: bytes | None = None
         self._boss_probe_stream_marker: object = None
+        self._boss_probe_fallback_bits: set[int] = set()
 
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
@@ -220,6 +221,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_room_sanity_poll_log = None
         self._last_boss_probe_snapshot = None
         self._boss_probe_stream_marker = None
+        self._boss_probe_fallback_bits.clear()
         self._unsafe_delivery_probe_stream_marker = None
         self._last_unsafe_delivery_counter_values = {}
         self._incoming_death_link_pending = False
@@ -1341,6 +1343,12 @@ class KirbyAmClient(BizHawkClient):
             if (boss_bits >> bit) & 1:
                 mapped_checked_locations.update(self._boss_location_ids_by_bit.get(bit, []))
 
+        # Fallback source for Issue #573: if boss_defeat_flags does not rise because
+        # native CollectShard() was skipped (already-owned shard), use rising-edge
+        # observations from boss_mirror_table_native collected by probe polling.
+        for bit in sorted(self._boss_probe_fallback_bits):
+            mapped_checked_locations.update(self._boss_location_ids_by_bit.get(bit, []))
+
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
@@ -1616,6 +1624,7 @@ class KirbyAmClient(BizHawkClient):
         elif stream_marker is not self._boss_probe_stream_marker:
             self._boss_probe_stream_marker = stream_marker
             self._last_boss_probe_snapshot = None
+            self._boss_probe_fallback_bits.clear()
 
         raw = (await bizhawk.read(
             ctx.bizhawk_ctx,
@@ -1654,6 +1663,25 @@ class KirbyAmClient(BizHawkClient):
                 "KirbyAM: boss candidate probe rising bits: %s",
                 ", ".join(rising_edges),
             )
+
+        # Conservative fallback mapping: only byte 0 bits 0-7 are considered,
+        # and only when observed as rising edges. This preserves probe behavior
+        # while providing a low-risk backup for boss check signaling.
+        supported_bits = set(self._boss_location_ids_by_bit.keys())
+        if not supported_bits:
+            return
+
+        prev_byte0 = old[0] if old else 0
+        new_byte0 = raw[0] if raw else 0
+        rising_mask = (~prev_byte0 & 0xFF) & new_byte0
+        if rising_mask == 0:
+            return
+
+        for bit in supported_bits:
+            if bit < 0 or bit > 7:
+                continue
+            if (rising_mask >> bit) & 1:
+                self._boss_probe_fallback_bits.add(bit)
 
     async def _probe_unsafe_delivery_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
