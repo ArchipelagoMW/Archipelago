@@ -2098,7 +2098,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
             hint = ctx.get_hint(client.team, player, location)
             if not hint:
-                return  # Ignored safely
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments",
+                                      "text": f"UpdateHint: Hint for location {location} in player {player}'s world not found",
+                                      "original_cmd": cmd}])
+                return
             if client.slot not in ctx.slot_set(hint.receiving_player):
                 await ctx.send_msgs(client,
                                     [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
