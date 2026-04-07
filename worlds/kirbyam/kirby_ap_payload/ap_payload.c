@@ -47,6 +47,7 @@
 #define AP_MAJOR_CHEST_FLAGS    (*(volatile uint32_t*)(AP_BASE + 0x28u))
 #define AP_VITALITY_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x2Cu))
 #define AP_SOUND_PLAYER_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x30u))
+#define AP_HUB_SWITCH_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x4Cu))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 #define AI_KIRBY_STATE_ADDR     0x0203AD2Cu
@@ -149,6 +150,12 @@ static void ap_set_sound_player_chest_flag(uint32_t chest_index) {
     }
 }
 
+static void ap_set_hub_switch_flag(uint32_t door_index) {
+    if (door_index < 15u) {
+        AP_HUB_SWITCH_FLAGS |= (1u << door_index);
+    }
+}
+
 static void ap_set_vitality_chest_flag_for_room(uint16_t room_id) {
     switch (room_id) {
         case 739u: // Carrot Castle 5-23 Big Chest
@@ -233,6 +240,18 @@ __attribute__((used)) void ap_on_collect_sound_player_chest(uint32_t reward_inde
     }
 
     KIRBY_COLLECT_SOUND_PLAYER_FN(reward_index);
+}
+
+typedef void (*WorldMapUnlockFn)(void);
+
+// Hook target for the world-map unlock dispatcher call in sub_08039ED4.
+// r0 contains the selected unlock function pointer from gUnk_0834BD94 and r4
+// holds the task pointer whose +0x08 halfword stores the WorldMapDoor index.
+__attribute__((used)) void ap_on_world_map_unlock_call(WorldMapUnlockFn unlock_fn) {
+    register uint32_t task_ptr asm("r4");
+    uint16_t door_index = *(volatile uint16_t*)(task_ptr + 0x08u);
+    ap_set_hub_switch_flag((uint32_t)door_index);
+    unlock_fn();
 }
 
 static void ap_sync_active_kirby_health_from_vitality(void) {
@@ -427,6 +446,7 @@ void ap_poll_mailbox_c(void) {
         AP_BOSS_DEFEAT_FLAGS = 0u;
         AP_BOSS_TEMP_SHARD_BITFIELD = 0u;
         AP_DELIVERED_VITALITY_ITEM_BITS = 0u;
+        AP_HUB_SWITCH_FLAGS = 0u;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 

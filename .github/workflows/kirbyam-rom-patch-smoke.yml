@@ -48,7 +48,7 @@ jobs:
           rom_path.parent.mkdir(parents=True, exist_ok=True)
           rom = bytearray(0x200000)
           thumb_bl = bytes.fromhex("00 f0 00 f8")
-          for offset in (0x001D952, 0x0000B144, 0x0000B0CC, 0x0000B264):
+          for offset in (0x001D952, 0x0000B144, 0x0000B0CC, 0x0000B264, 0x00039EEE):
             rom[offset:offset + 4] = thumb_bl
           rom_path.write_bytes(rom)
           PY

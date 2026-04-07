@@ -148,6 +148,141 @@
         "MAP_DIMENSION_MIRROR"
       ]
     },
+    "HUB_SWITCH_CABBAGE_CAVERN_CENTER": {
+      "category": "HUB_SWITCH",
+      "label": "Cabbage Cavern Center - Big Switch",
+      "location_id": 3960403,
+      "tags": [
+        "HubSwitch",
+        "MAP_CABBAGE_CAVERN"
+      ]
+    },
+    "HUB_SWITCH_CABBAGE_CAVERN_EAST": {
+      "category": "HUB_SWITCH",
+      "label": "Cabbage Cavern East - Big Switch",
+      "location_id": 3960412,
+      "tags": [
+        "HubSwitch",
+        "MAP_CABBAGE_CAVERN"
+      ]
+    },
+    "HUB_SWITCH_CABBAGE_CAVERN_WEST": {
+      "category": "HUB_SWITCH",
+      "label": "Cabbage Cavern West - Big Switch",
+      "location_id": 3960408,
+      "tags": [
+        "HubSwitch",
+        "MAP_CABBAGE_CAVERN"
+      ]
+    },
+    "HUB_SWITCH_CANDY": {
+      "category": "HUB_SWITCH",
+      "label": "Candy Constellation - Big Switch",
+      "location_id": 3960414,
+      "tags": [
+        "HubSwitch",
+        "MAP_CANDY_CONSTELLATION"
+      ]
+    },
+    "HUB_SWITCH_CARROT": {
+      "category": "HUB_SWITCH",
+      "label": "Carrot Castle - Big Switch",
+      "location_id": 3960405,
+      "tags": [
+        "HubSwitch",
+        "MAP_CARROT_CASTLE"
+      ]
+    },
+    "HUB_SWITCH_MOONLIGHT": {
+      "category": "HUB_SWITCH",
+      "label": "Moonlight Mansion - Big Switch",
+      "location_id": 3960400,
+      "tags": [
+        "HubSwitch",
+        "MAP_MOONLIGHT_MANSION"
+      ]
+    },
+    "HUB_SWITCH_MUSTARD": {
+      "category": "HUB_SWITCH",
+      "label": "Mustard Mountain - Big Switch",
+      "location_id": 3960407,
+      "tags": [
+        "HubSwitch",
+        "MAP_MUSTARD_MOUNTAIN"
+      ]
+    },
+    "HUB_SWITCH_OLIVE": {
+      "category": "HUB_SWITCH",
+      "label": "Olive Ocean - Big Switch",
+      "location_id": 3960413,
+      "tags": [
+        "HubSwitch",
+        "MAP_OLIVE_OCEAN"
+      ]
+    },
+    "HUB_SWITCH_PEPPERMINT_EAST": {
+      "category": "HUB_SWITCH",
+      "label": "Peppermint Palace East - Big Switch",
+      "location_id": 3960410,
+      "tags": [
+        "HubSwitch",
+        "MAP_PEPPERMINT_PALACE"
+      ]
+    },
+    "HUB_SWITCH_PEPPERMINT_WEST": {
+      "category": "HUB_SWITCH",
+      "label": "Peppermint Palace West - Big Switch",
+      "location_id": 3960411,
+      "tags": [
+        "HubSwitch",
+        "MAP_PEPPERMINT_PALACE"
+      ]
+    },
+    "HUB_SWITCH_RADISH": {
+      "category": "HUB_SWITCH",
+      "label": "Radish Ruins - Big Switch",
+      "location_id": 3960409,
+      "tags": [
+        "HubSwitch",
+        "MAP_RADISH_RUINS"
+      ]
+    },
+    "HUB_SWITCH_RAINBOW_ROUTE_EAST": {
+      "category": "HUB_SWITCH",
+      "label": "Rainbow Route East - Big Switch",
+      "location_id": 3960401,
+      "tags": [
+        "HubSwitch",
+        "MAP_RAINBOW_ROUTE"
+      ]
+    },
+    "HUB_SWITCH_RAINBOW_ROUTE_NORTH": {
+      "category": "HUB_SWITCH",
+      "label": "Rainbow Route North - Big Switch",
+      "location_id": 3960406,
+      "tags": [
+        "HubSwitch",
+        "MAP_RAINBOW_ROUTE"
+      ]
+    },
+    "HUB_SWITCH_RAINBOW_ROUTE_SOUTH": {
+      "category": "HUB_SWITCH",
+      "label": "Rainbow Route South - Big Switch",
+      "location_id": 3960402,
+      "tags": [
+        "HubSwitch",
+        "MAP_RAINBOW_ROUTE"
+      ]
+    },
+    "HUB_SWITCH_RAINBOW_ROUTE_WEST": {
+      "category": "HUB_SWITCH",
+      "label": "Rainbow Route West - Big Switch",
+      "location_id": 3960404,
+      "tags": [
+        "HubSwitch",
+        "MAP_RAINBOW_ROUTE"
+      ]
+    },
     "MAJOR_CHEST_CABBAGE_CAVERN": {
       "category": "MAJOR_CHEST",
       "label": "Cabbage Cavern 3-7 - Big Chest",

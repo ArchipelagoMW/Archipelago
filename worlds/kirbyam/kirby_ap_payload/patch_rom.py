@@ -44,6 +44,7 @@ BOSS_COLLECT_SHARD_CALL_OFFSET = 0x001D952
 BIG_CHEST_COLLECT_CALL_OFFSET = 0x0000B144
 VITALITY_CHEST_COLLECT_CALL_OFFSET = 0x0000B0CC
 SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET = 0x0000B264
+BIG_SWITCH_UNLOCK_CALL_OFFSET = 0x00039EEE
 
 
 ROM_PATH_TMP = "rom_path.tmp"
@@ -698,6 +699,7 @@ def main():
         big_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_big_chest")
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
         sound_player_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_sound_player_chest")
+        hub_switch_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_world_map_unlock_call")
         # arm-none-eabi-nm may encode Thumb function symbols with bit 0 set.
         # Clear the Thumb state bit before passing to thumb_bl_bytes(), which
         # requires a halfword-aligned target address.
@@ -706,6 +708,7 @@ def main():
         big_chest_hook_target &= ~1
         vitality_chest_hook_target &= ~1
         sound_player_chest_hook_target &= ~1
+        hub_switch_hook_target &= ~1
         rom_base = 0x08000000
         payload_rom_start = rom_base + PAYLOAD_OFFSET
         payload_rom_end = payload_rom_start + len(payload)
@@ -744,11 +747,19 @@ def main():
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
+        if not (payload_rom_start <= hub_switch_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: hub switch hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{hub_switch_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
         main_hook_bl_bytes = thumb_bl_bytes(rom_base + MAIN_HOOK_OFFSET, main_hook_target)
         boss_hook_bl_bytes = thumb_bl_bytes(rom_base + BOSS_COLLECT_SHARD_CALL_OFFSET, boss_hook_target)
         big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
         vitality_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + VITALITY_CHEST_COLLECT_CALL_OFFSET, vitality_chest_hook_target)
         sound_player_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, sound_player_chest_hook_target)
+        hub_switch_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_SWITCH_UNLOCK_CALL_OFFSET, hub_switch_hook_target)
 
         # 3) Load ROM
         try:
@@ -765,11 +776,13 @@ def main():
         original_big_chest_hook = validate_thumb_bl_callsite(rom, BIG_CHEST_COLLECT_CALL_OFFSET, "big chest")
         original_vitality_hook = validate_thumb_bl_callsite(rom, VITALITY_CHEST_COLLECT_CALL_OFFSET, "vitality chest")
         original_sound_player_hook = validate_thumb_bl_callsite(rom, SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET, "sound player chest")
+        original_hub_switch_hook = validate_thumb_bl_callsite(rom, BIG_SWITCH_UNLOCK_CALL_OFFSET, "hub switch unlock")
         print("Validated hook callsite instruction shape (Thumb BL):")
         print(f"  boss shard @ {BOSS_COLLECT_SHARD_CALL_OFFSET:#x}: {original_boss_hook.hex(' ')}")
         print(f"  big chest @ {BIG_CHEST_COLLECT_CALL_OFFSET:#x}: {original_big_chest_hook.hex(' ')}")
         print(f"  vitality chest @ {VITALITY_CHEST_COLLECT_CALL_OFFSET:#x}: {original_vitality_hook.hex(' ')}")
         print(f"  sound player chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: {original_sound_player_hook.hex(' ')}")
+        print(f"  hub switch unlock @ {BIG_SWITCH_UNLOCK_CALL_OFFSET:#x}: {original_hub_switch_hook.hex(' ')}")
 
         # 4) Insert payload
         rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
@@ -780,6 +793,7 @@ def main():
         rom[BIG_CHEST_COLLECT_CALL_OFFSET:BIG_CHEST_COLLECT_CALL_OFFSET + 4] = big_chest_hook_bl_bytes
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
         rom[SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET + 4] = sound_player_chest_hook_bl_bytes
+        rom[BIG_SWITCH_UNLOCK_CALL_OFFSET:BIG_SWITCH_UNLOCK_CALL_OFFSET + 4] = hub_switch_hook_bl_bytes
 
         # 6) Write the intermediary patched ROM
         with open(INTERMEDIARY_ROM, "wb") as f:
@@ -840,6 +854,14 @@ def main():
             sound_player_chest_hook_bl_bytes.hex(" "),
             "target=",
             hex(sound_player_chest_hook_target),
+        )
+        print(
+            "Hub switch unlock call patched at file offset:",
+            hex(BIG_SWITCH_UNLOCK_CALL_OFFSET),
+            "with bytes:",
+            hub_switch_hook_bl_bytes.hex(" "),
+            "target=",
+            hex(hub_switch_hook_target),
         )
 
         # 7) Generate base_patch.bsdiff4: clean base -> intermediary patched ROM

@@ -132,6 +132,7 @@ async def test_reconnect_chaos_goal_reporting_is_idempotent_across_cycles(mock_b
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \

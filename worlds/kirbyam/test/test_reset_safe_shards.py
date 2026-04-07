@@ -110,6 +110,19 @@ def test_payload_tracks_sound_player_chest_checks_and_ap_unlock_apply():
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 25u" in content, "Sound Player AP item ID should be handled"
 
 
+def test_payload_tracks_hub_switch_checks_from_world_map_unlocks() -> None:
+    """Verify world-map big-switch unlock callbacks set dedicated AP hub-switch check flags."""
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, 'r') as f:
+        content = f.read()
+
+    assert "AP_HUB_SWITCH_FLAGS" in content, "Hub switch transport register should be defined"
+    assert "ap_set_hub_switch_flag" in content, "Hub switch flag helper should exist"
+    assert "ap_on_world_map_unlock_call" in content, "World-map unlock hook target should exist"
+    assert "door_index" in content, "World-map unlock hook should read the unlock door index"
+
+
 def test_sram_checksum_fields_updated():
     """Verify that checksum fields are updated alongside shard persistence."""
     payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")

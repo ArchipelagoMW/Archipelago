@@ -32,11 +32,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
     0x02000000 - 0x02040000   EWRAM Region (256 KB)
         ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0203B000 - 0x0203B04B   AP Mailbox (reserved, 76 bytes)
+        ├─ 0x0203B000 - 0x0203B04F   AP Mailbox (reserved, 80 bytes)
         └─ Remaining EWRAM (excluding AP mailbox block)
 ```
 
-### AP Mailbox Block (0x0203B000 - 0x0203B04B)
+### AP Mailbox Block (0x0203B000 - 0x0203B04F)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -62,8 +62,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x40   | 0x0203B040 | 4B | mailbox_init_cookie | u32 | ROM internal | Initialization cookie (`0x4B41504D`). If absent/mismatched, payload seeds `delivered_shard_bitfield` from native shard state, clears scrub delay + boss-defeat flags + boss temp shard mask, and stores the cookie to prevent stale EWRAM transport values from triggering scrub writes. |
 | 0x44   | 0x0203B044 | 4B | boss_temp_shard_bitfield | u32 | ROM internal | Bits 0-7 track shard bits temporarily written by boss-defeat hook for cutscene safety. On gameplay resume, payload scrubs only `boss_temp_shard_bitfield & ~delivered_shard_bitfield`, then clears this mask. |
 | 0x48   | 0x0203B048 | 4B | delivered_vitality_item_bits | u32 | ROM internal | Replay guard for vitality counter items. Bit N marks that `VITALITY_COUNTER_(N+1)` has already been applied, preventing duplicate vitality grants if an item is resent during reconnect/reset recovery. |
+| 0x4C   | 0x0203B04C | 4B | hub_switch_flags | u32 | ROM → Client | Bits 0–14 set when world-map big-switch door unlock callbacks fire (`WorldMapDoor` order: Moonlight, RR East, RR South, Cabbage Center, RR West, Carrot, RR North, Mustard, Cabbage West, Radish, Peppermint East, Peppermint West, Cabbage East, Olive, Candy). |
 
-**Total: 76 bytes (0x0203B000 - 0x0203B04B)**
+**Total: 80 bytes (0x0203B000 - 0x0203B04F)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -130,8 +131,9 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_RADISH_RUINS | 3960302 | Radish Ruins 8-4 vitality big chest (transport vitality bit 2) |
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
+| HUB_SWITCH_MOONLIGHT .. HUB_SWITCH_CANDY | 3960400 - 3960414 | Hub big-switch checks mapped to `hub_switch_flags` bits 0..14 |
 | ROOM_SANITY_1_01 .. ROOM_SANITY_9_27 | 3961000+ | Room visit checks (`Room X-YY`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15 |
-| *Reserved*    | 3960305+ | Future location families |
+| *Reserved*    | 3960415+ | Future location families |
 
 ## Client Protocol
 
@@ -274,6 +276,12 @@ for bit in mapped_sound_player_chest_bits:
     if (sound_player_bits >> bit) & 1:
         mapped_checked.add(sound_player_chest_location_id_for_bit(bit))
 
+# Hub switch checks (transport hub_switch_flags)
+hub_switch_bits = RAM[0x0203B04C] as u32
+for bit in mapped_hub_switch_bits:
+    if (hub_switch_bits >> bit) & 1:
+        mapped_checked.add(hub_switch_location_id_for_bit(bit))
+
 # Room sanity checks (native gVisitedDoors)
 room_visits = RAM[0x02028CA0 : 0x02028CA0 + 0x240] as u16[0x120]
 for doors_idx in mapped_room_sanity_doors_indices:
@@ -289,7 +297,7 @@ if missing_on_server:
     send LocationChecks(missing_on_server)
 ```
 
-Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. `delivered_shard_bitfield` is the authority used by scrub logic to enforce that `KIRBY_SHARD_FLAGS` (and therefore all `HasShard()` / `NumShardsCollected()` gate checks) reflects AP-owned shard state (Issue #478 / #505): it is seeded from native shard save state on mailbox init, then extended by AP `SHARD_N` item delivery. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, vitality chest openings are reported through `vitality_chest_flags`, and Sound Player chest openings are reported through `sound_player_chest_flags`. Native boss shard / native big-chest map / native vitality grants are intercepted so progression, map ownership, and vitality growth come only from AP item delivery, and native Sound Player unlock is similarly intercepted so unlock ownership comes only from AP `SOUND_PLAYER` receipt.
+Mirror shard bitfields (`shard_bitfield_native` / `shard_bitfield`) are progression-state signals only. `delivered_shard_bitfield` is the authority used by scrub logic to enforce that `KIRBY_SHARD_FLAGS` (and therefore all `HasShard()` / `NumShardsCollected()` gate checks) reflects AP-owned shard state (Issue #478 / #505): it is seeded from native shard save state on mailbox init, then extended by AP `SHARD_N` item delivery. Boss defeats are reported through `boss_defeat_flags`, major chest openings are reported through `major_chest_flags`, vitality chest openings are reported through `vitality_chest_flags`, Sound Player chest openings are reported through `sound_player_chest_flags`, and world-map big switch unlocks are reported through `hub_switch_flags`. Native boss shard / native big-chest map / native vitality grants are intercepted so progression, map ownership, and vitality growth come only from AP item delivery, and native Sound Player unlock is similarly intercepted so unlock ownership comes only from AP `SOUND_PLAYER` receipt.
 
 Boss shard scrub timing contract (Issue #505):
 - Boss hook writes temporary native shard state for cutscene safety and marks `boss_temp_shard_bitfield`.
@@ -300,7 +308,7 @@ Boss shard scrub timing contract (Issue #505):
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
-- Boss-defeat, major-chest, vitality-chest, sound-player-chest, and room-sanity polling follow the same resend/dedupe diagnostic contract.
+- Boss-defeat, major-chest, vitality-chest, sound-player-chest, hub-switch, and room-sanity polling follow the same resend/dedupe diagnostic contract.
 - Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
 
 ### 3. Item Delivery (Mailbox Protocol)

@@ -94,6 +94,10 @@ def test_sound_player_chest_collect_call_offset_matches_verified_hook_site() -> 
     assert patch_rom.SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET == 0x0000B264
 
 
+def test_big_switch_unlock_call_offset_matches_verified_hook_site() -> None:
+    assert patch_rom.BIG_SWITCH_UNLOCK_CALL_OFFSET == 0x00039EEE
+
+
 # ── Negative-path tests: parse_args ──────────────────────────────────────────
 
 def test_parse_args_source_type_arg_missing_rom_positional() -> None:

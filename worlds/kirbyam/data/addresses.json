@@ -19,7 +19,8 @@
       "shard_scrub_delay_frames": "0x0203B03C",
       "mailbox_init_cookie": "0x0203B040",
       "boss_temp_shard_bitfield": "0x0203B044",
-      "delivered_vitality_item_bits": "0x0203B048"
+      "delivered_vitality_item_bits": "0x0203B048",
+      "hub_switch_flags": "0x0203B04C"
     },
     "native": {
       "shard_bitfield_native": "0x02038970",

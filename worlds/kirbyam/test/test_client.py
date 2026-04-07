@@ -389,6 +389,71 @@ async def test_poll_sound_player_chest_skips_when_address_missing(mock_bizhawk_c
     mock_send.assert_not_awaited()
 
 
+@pytest.mark.asyncio
+async def test_poll_hub_switch_sends_location_checks_for_set_bits(mock_bizhawk_context):
+    """Set transport hub-switch bits should map to hub-switch LocationChecks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    moonlight = data.locations["HUB_SWITCH_MOONLIGHT"].location_id
+    rainbow_east = data.locations["HUB_SWITCH_RAINBOW_ROUTE_EAST"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        # Bits 0 and 1 set => Moonlight and Rainbow Route East hub switch checks.
+        mock_read.return_value = [((1 << 0) | (1 << 1)).to_bytes(4, 'little')]
+
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [moonlight, rainbow_east]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_hub_switch_skips_already_server_acknowledged(mock_bizhawk_context):
+    """No hub-switch resend when server already acknowledges all mapped transport checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    moonlight = data.locations["HUB_SWITCH_MOONLIGHT"].location_id
+    mock_bizhawk_context.checked_locations = {moonlight}
+
+    with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [((1 << 0)).to_bytes(4, 'little')]
+
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+    assert mock_logger.debug.called
+    assert "dedupe suppressed hub-switch LocationChecks" in mock_logger.debug.call_args.args[0]
+    assert mock_logger.debug.call_args.args[1] == [moonlight]
+
+
+@pytest.mark.asyncio
+async def test_poll_hub_switch_skips_when_address_missing(mock_bizhawk_context):
+    """Missing transport hub-switch address should no-op safely."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    transport_without_hub_switch = {k: v for k, v in data.transport_ram_addresses.items() if k != "hub_switch_flags"}
+    ram_without_hub_switch = {k: v for k, v in data.ram_addresses.items() if k != "hub_switch_flags"}
+
+    with patch.dict(data.transport_ram_addresses, transport_without_hub_switch, clear=True), \
+         patch.dict(data.ram_addresses, ram_without_hub_switch, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+    mock_send.assert_not_awaited()
+
+
 def test_major_chest_data_sanity():
     """Major-chest entries should have explicit unique IDs and unique mapped bits."""
     major_chests = [
@@ -437,6 +502,24 @@ def test_sound_player_chest_data_sanity():
     sound_player = sound_player_chests[0]
     assert sound_player.location_id is not None
     assert sound_player.bit_index == 0
+
+
+def test_hub_switch_data_sanity():
+    """Hub-switch entries should have explicit unique IDs and unique mapped bits."""
+    hub_switches = [
+        loc for loc in data.locations.values()
+        if loc.category.name == "HUB_SWITCH"
+    ]
+
+    assert len(hub_switches) == 15
+
+    ids = [loc.location_id for loc in hub_switches]
+    assert all(loc_id is not None for loc_id in ids)
+    assert len(ids) == len(set(ids))
+
+    bits = [loc.bit_index for loc in hub_switches]
+    assert all(bit is not None for bit in bits)
+    assert len(bits) == len(set(bits))
 
 
 def test_client_initialization():
@@ -2397,6 +2480,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major, \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality, \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player, \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock) as mock_poll_hub_switch, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe_boss, \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
@@ -2413,6 +2497,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
     mock_poll_major.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_vitality.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_sound_player.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_hub_switch.assert_awaited_once_with(mock_bizhawk_context)
     mock_probe_boss.assert_awaited_once_with(mock_bizhawk_context)
     mock_probe_unsafe.assert_awaited_once_with(mock_bizhawk_context)
     mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
@@ -2505,6 +2590,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
     client._last_major_chest_poll_log = ("resend", (3,), ())
     client._last_vitality_chest_poll_log = ("resend", (4,), ())
     client._last_sound_player_chest_poll_log = ("resend", (5,), ())
+    client._last_hub_switch_poll_log = ("resend", (6,), ())
     client._last_boss_probe_snapshot = bytes(32)
     client._boss_probe_stream_marker = object()
     client._unsafe_delivery_probe_stream_marker = object()
@@ -2519,6 +2605,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
             patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major_chests, \
             patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality_chests, \
             patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player_chests, \
+                patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock) as mock_poll_hub_switches, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
@@ -2534,6 +2621,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._last_major_chest_poll_log is None
         assert client._last_vitality_chest_poll_log is None
         assert client._last_sound_player_chest_poll_log is None
+        assert client._last_hub_switch_poll_log is None
         assert client._last_boss_probe_snapshot is None
         assert client._boss_probe_stream_marker is None
         assert client._unsafe_delivery_probe_stream_marker is None
@@ -2545,6 +2633,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         mock_poll_major_chests.assert_awaited_once()
         mock_poll_vitality_chests.assert_awaited_once()
         mock_poll_sound_player_chests.assert_awaited_once()
+        mock_poll_hub_switches.assert_awaited_once()
         mock_probe.assert_awaited_once()
         mock_probe_unsafe.assert_awaited_once()
         mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
@@ -2570,6 +2659,7 @@ async def test_game_watcher_reconnect_entry_suppresses_session_ready_log_when_de
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_room_sanity_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
@@ -2777,6 +2867,7 @@ async def test_game_watcher_emits_pause_then_resume_popups_on_transition(mock_bi
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \
@@ -2832,6 +2923,7 @@ async def test_game_watcher_emits_runtime_gate_logs_when_debug_enabled(mock_bizh
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_room_sanity_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
@@ -2873,6 +2965,7 @@ async def test_game_watcher_syncs_death_link_enabled_from_slot_data(mock_bizhawk
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \
@@ -2899,6 +2992,7 @@ async def test_game_watcher_death_link_sync_is_deduped_until_value_changes(mock_
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \
@@ -3203,3 +3297,25 @@ def test_vitality_chest_locations_defined_in_regions():
     for key in vitality_chest_keys:
         assert key in all_region_locations, \
             f"VITALITY_CHEST location '{key}' defined in locations.json but not registered in any region in areas.json"
+
+
+def test_hub_switch_locations_defined_in_regions():
+    """Regression test: all HUB_SWITCH locations must be registered in their regions."""
+    location_category_enum = getattr(data, "LocationCategory", None)
+    hub_switch_category = getattr(location_category_enum, "HUB_SWITCH", None) if location_category_enum else None
+    hub_switch_keys = {
+        key
+        for key, loc in data.locations.items()
+        if key.startswith("HUB_SWITCH_")
+        or (hub_switch_category is not None and getattr(loc, "category", None) == hub_switch_category)
+    }
+
+    assert hub_switch_keys, "No HUB_SWITCH locations found in locations.json"
+
+    all_region_locations = set()
+    for region_data in data.regions.values():
+        all_region_locations.update(region_data.locations)
+
+    for key in hub_switch_keys:
+        assert key in all_region_locations, \
+            f"HUB_SWITCH location '{key}' defined in locations.json but not registered in any region in areas.json"

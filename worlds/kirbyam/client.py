@@ -130,6 +130,13 @@ class KirbyAmClient(BizHawkClient):
                 continue
             self._sound_player_chest_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
 
+        # Hub switch bitfield → location IDs (HUB_SWITCH category).
+        self._hub_switch_location_ids_by_bit: dict[int, list[int]] = {}
+        for loc in data.locations.values():
+            if loc.bit_index is None or loc.category != LocationCategory.HUB_SWITCH:
+                continue
+            self._hub_switch_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
+
         # Room-sanity bitfield index (doorsIdx) → location IDs.
         self._room_sanity_location_ids_by_bit: dict[int, list[int]] = {}
         for loc in data.locations.values():
@@ -163,6 +170,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_major_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_vitality_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_sound_player_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+        self._last_hub_switch_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_room_sanity_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
         # Notification pipeline state (Issue #83)
@@ -218,6 +226,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_major_chest_poll_log = None
         self._last_vitality_chest_poll_log = None
         self._last_sound_player_chest_poll_log = None
+        self._last_hub_switch_poll_log = None
         self._last_room_sanity_poll_log = None
         self._last_boss_probe_snapshot = None
         self._boss_probe_stream_marker = None
@@ -776,6 +785,9 @@ class KirbyAmClient(BizHawkClient):
 
             # Sound Player chest location polling via dedicated sound_player_chest_flags register
             await self._poll_sound_player_chest_locations(ctx)
+
+            # Hub switch location polling via dedicated hub_switch_flags register
+            await self._poll_hub_switch_locations(ctx)
 
             # Room-sanity location polling via native gVisitedDoors bit 15.
             await self._poll_room_sanity_locations(ctx)
@@ -1530,6 +1542,55 @@ class KirbyAmClient(BizHawkClient):
                 self._last_sound_player_chest_poll_log = chest_log_state
         else:
             self._last_sound_player_chest_poll_log = None
+
+    async def _poll_hub_switch_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Read transport hub_switch_flags and map set bits to hub-switch locations.
+
+        This register is written by the ROM payload when world-map big switches
+        trigger a hub-door unlock callback. Polling mirrors existing resend/dedupe
+        semantics used by other transport-backed location families.
+        """
+        switch_addr = self._transport_addr("hub_switch_flags")
+        if switch_addr is None:
+            return
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(switch_addr, 4, "System Bus")]))[0]
+        switch_bits = self._u32_le(raw)
+
+        mapped_checked_locations: set[int] = set()
+        for bit in sorted(self._hub_switch_location_ids_by_bit.keys()):
+            if (switch_bits >> bit) & 1:
+                mapped_checked_locations.update(self._hub_switch_location_ids_by_bit.get(bit, []))
+
+        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
+        if missing_on_server:
+            from CommonClient import logger
+
+            switch_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
+            if switch_log_state != self._last_hub_switch_poll_log:
+                logger.info(
+                    "KirbyAM: resending hub-switch LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
+                )
+                self._last_hub_switch_poll_log = switch_log_state
+
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+        elif mapped_checked_locations:
+            from CommonClient import logger
+
+            switch_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
+            if switch_log_state != self._last_hub_switch_poll_log:
+                logger.debug(
+                    "KirbyAM: dedupe suppressed hub-switch LocationChecks (all RAM-derived checks already acknowledged: %s)",
+                    already_acknowledged,
+                )
+                self._last_hub_switch_poll_log = switch_log_state
+        else:
+            self._last_hub_switch_poll_log = None
 
     async def _poll_room_sanity_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

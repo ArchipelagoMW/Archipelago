@@ -7,14 +7,18 @@
     ]
   },
   "REGION_MUSTARD_MOUNTAIN/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_MUSTARD"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/MAIN"
     ]
   },
   "REGION_MOONLIGHT_MANSION/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_MOONLIGHT"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/MAIN",
@@ -22,14 +26,18 @@
     ]
   },
   "REGION_CANDY_CONSTELLATION/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_CANDY"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/MAIN"
     ]
   },
   "REGION_OLIVE_OCEAN/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_OLIVE"
+    ],
     "events": [],
     "exits": [
       "REGION_CABBAGE_CAVERN/MAIN",
@@ -37,7 +45,10 @@
     ]
   },
   "REGION_PEPPERMINT_PALACE/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_PEPPERMINT_EAST",
+      "HUB_SWITCH_PEPPERMINT_WEST"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/MAIN",
@@ -45,7 +56,11 @@
     ]
   },
   "REGION_CABBAGE_CAVERN/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_CABBAGE_CAVERN_CENTER",
+      "HUB_SWITCH_CABBAGE_CAVERN_EAST",
+      "HUB_SWITCH_CABBAGE_CAVERN_WEST"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/MAIN",
@@ -54,7 +69,9 @@
     ]
   },
   "REGION_CARROT_CASTLE/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_CARROT"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/MAIN",
@@ -63,7 +80,9 @@
     ]
   },
   "REGION_RADISH_RUINS/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_RADISH"
+    ],
     "events": [],
     "exits": [
       "REGION_CABBAGE_CAVERN/MAIN",
@@ -71,7 +90,12 @@
     ]
   },
   "REGION_RAINBOW_ROUTE/MAIN": {
-    "locations": [],
+    "locations": [
+      "HUB_SWITCH_RAINBOW_ROUTE_EAST",
+      "HUB_SWITCH_RAINBOW_ROUTE_NORTH",
+      "HUB_SWITCH_RAINBOW_ROUTE_SOUTH",
+      "HUB_SWITCH_RAINBOW_ROUTE_WEST"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/ROOM_1_01",
