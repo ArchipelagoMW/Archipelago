@@ -76,6 +76,10 @@ def create_itempool(world: "RaC3World") -> list[Item]:
                   and name != RAC3ITEM.PROGRESSIVE_PACK):
                 continue
 
+        # Vidcomics option
+        if RAC3ITEMTAG.VIDCOMIC in item_tags and not options.vidcomics.value:
+            continue
+
         # Catch accidental duplicates
         if item_amount is None:
             rac3_logger.warning(f"{name} has an incorrect amount count")
