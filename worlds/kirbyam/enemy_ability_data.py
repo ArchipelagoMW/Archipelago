@@ -15,6 +15,7 @@ class AbilitySource:
     default_ability_name: str
     default_ability_id: int
     kind: str  # enemy | miniboss | boss_spawned
+    can_be_swallowed: bool = True
 
 
 def _load_json_file(filename: str) -> dict[str, Any]:
@@ -85,6 +86,13 @@ for source_key, raw_entry in _ENEMY_DATA.items():
     if kind not in {"enemy", "miniboss", "boss_spawned"}:
         raise ValueError(f"enemy source {source_key} has unsupported kind: {kind}")
 
+    can_be_swallowed_raw = raw_entry.get("can_be_swallowed", True)
+    if not isinstance(can_be_swallowed_raw, bool):
+        raise ValueError(
+            f"enemy source {source_key} field can_be_swallowed must be a boolean"
+        )
+    can_be_swallowed = can_be_swallowed_raw
+
     addresses_raw = raw_entry.get("addresses")
     if not isinstance(addresses_raw, list) or not addresses_raw:
         raise ValueError(f"enemy source {source_key} must include non-empty addresses")
@@ -105,6 +113,7 @@ for source_key, raw_entry in _ENEMY_DATA.items():
             default_ability_name=default_ability_name,
             default_ability_id=ABILITY_NAME_TO_ID[default_ability_name],
             kind=kind,
+            can_be_swallowed=can_be_swallowed,
         )
     )
 

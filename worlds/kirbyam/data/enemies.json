@@ -103,7 +103,8 @@
     "addresses": [
       "0x351696"
     ],
-    "default_ability": "Normal"
+    "default_ability": "Normal",
+    "can_be_swallowed": false
   },
   "HALEY": {
     "kind": "enemy",
@@ -131,7 +132,8 @@
     "addresses": [
       "0x3517CE"
     ],
-    "default_ability": "Normal"
+    "default_ability": "Normal",
+    "can_be_swallowed": false
   },
   "LASER_BALL": {
     "kind": "enemy",
@@ -236,7 +238,8 @@
     "addresses": [
       "0x3516AE"
     ],
-    "default_ability": "Normal"
+    "default_ability": "Normal",
+    "can_be_swallowed": false
   },
   "SWORD_KNIGHT": {
     "kind": "enemy",
