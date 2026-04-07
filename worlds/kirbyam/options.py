@@ -87,10 +87,10 @@ class AbilityRandomizationMinny(Toggle):
     """
     Include Minny in enemy copy-ability randomization.
       Only applies when Ability Randomization Mode is not Off.
-      On by Default, but ability_randomization_mode is Off by Default.
+      Off by Default.
     """
     display_name = "Ability Randomization: Minny"
-    default = 1
+    default = 0
 
 
 class AbilityRandomizationPassiveEnemies(Toggle):
