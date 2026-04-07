@@ -8,11 +8,16 @@ from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import colorize_item_name, get_sent_item_message
-from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import RAC3INSTRUCTION
-from worlds.rac3.constants.locations.vendors import ITEM_TO_ARMOR_VENDOR_LOCATION, ITEM_TO_WEAPON_VENDOR_LOCATION, MEGACORP_WEAPONS, SHIP_VENDOR_INVENTORY
+from worlds.rac3.constants.locations.vendors import (
+    ITEM_TO_ARMOR_VENDOR_LOCATION,
+    ITEM_TO_WEAPON_VENDOR_LOCATION,
+    MEGACORP_WEAPONS,
+    SHIP_VENDOR_INVENTORY,
+)
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
@@ -28,7 +33,7 @@ if TYPE_CHECKING:
     from worlds.rac3.client.client import Rac3Context as Context
 
 
-async def pcsx2_sync_task(ctx: 'Context'):
+async def pcsx2_sync_task(ctx: "Context"):
     """Connects to PCSX2 and loops through update functions until the connection is closed."""
     logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
     version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
@@ -132,7 +137,7 @@ async def pcsx2_sync_task(ctx: 'Context'):
     logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
 
 
-async def _handle_game_ready(ctx: 'Context') -> None:
+async def _handle_game_ready(ctx: "Context") -> None:
     # Quite a lot of stuff ended up in this function, even though it might
     # have fit better in init(). It just didn't work when I put it there,
     # probably because of when the game loads stuff.
@@ -203,7 +208,7 @@ async def _handle_game_ready(ctx: 'Context') -> None:
 
 
 # common functions
-async def update(ctx: 'Context') -> None:
+async def update(ctx: "Context") -> None:
     """Called continuously"""
     ctx.game_interface.early_update()
     await handle_codecave(ctx)
@@ -229,7 +234,7 @@ async def update(ctx: 'Context') -> None:
     # logger.info(f"Update is called")
 
 
-async def handle_intro_skip(ctx: 'Context') -> None:
+async def handle_intro_skip(ctx: "Context") -> None:
     """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
@@ -246,7 +251,7 @@ async def handle_intro_skip(ctx: 'Context') -> None:
         ctx.game_interface.homewarp()
 
 
-async def handle_received_items(ctx: 'Context') -> None:
+async def handle_received_items(ctx: "Context") -> None:
     """Process items received from the AP server"""
     if ctx.slot_data is None:
         return
@@ -258,13 +263,13 @@ async def handle_received_items(ctx: 'Context') -> None:
         # logger.info(f"Received item: ({item_id})")
 
     if ctx.processed_item_count != len(ctx.items_received):
-        logger.debug(f'Update Data Package to {len(ctx.items_received)}')
+        logger.debug(f"Update Data Package to {len(ctx.items_received)}")
         ctx.stored_data[RAC3OPTION.PROCESSED_LOCATIONS] = len(ctx.items_received)
         ctx.processed_item_count = len(ctx.items_received)
         await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
 
 
-async def handle_checked_locations(ctx: 'Context') -> None:
+async def handle_checked_locations(ctx: "Context") -> None:
     """Check for new locations collected, send these to the AP server"""
     if ctx.slot_data is None:
         return
@@ -284,13 +289,13 @@ async def handle_checked_locations(ctx: 'Context') -> None:
             net_item = ctx.locations_info.get(location, None)
             if net_item is not None and net_item.player != ctx.slot:
                 item_to_player_names = get_sent_item_message(ctx, net_item, True)
-                ctx.game_interface.notification_queue.append((f'{item_to_player_names}', RAC3BOXTHEME.DEFAULT))
+                ctx.game_interface.notification_queue.append((f"{item_to_player_names}", RAC3BOXTHEME.DEFAULT))
 
     # else:
     #     logger.info("Not found new location")
 
 
-async def handle_deathlink(ctx: 'Context') -> None:
+async def handle_deathlink(ctx: "Context") -> None:
     """Receive and send deathlink"""
     if not ctx.death_link:
         return
@@ -299,24 +304,24 @@ async def handle_deathlink(ctx: 'Context') -> None:
         alive, message = ctx.game_interface.alive()
         if alive:
             if ctx.queued_deaths > 0:
-                logger.debug(f'Deaths requires processing: {ctx.queued_deaths}')
+                logger.debug(f"Deaths requires processing: {ctx.queued_deaths}")
                 if ctx.game_interface.kill_player():
                     ctx.game_interface.notification_queue.append(
-                        (f'{RAC3TEXTFORMATSTRING.WHITE}Deathlink Received from {RAC3TEXTFORMATSTRING.GREEN}'
-                         f'{ctx.last_deathlink_sender}{RAC3TEXTFORMATSTRING.WHITE}:\\n{ctx.last_deathlink_msg}',
+                        (f"{RAC3TEXTFORMATSTRING.WHITE}Deathlink Received from {RAC3TEXTFORMATSTRING.GREEN}"
+                         f"{ctx.last_deathlink_sender}{RAC3TEXTFORMATSTRING.WHITE}:\\n{ctx.last_deathlink_msg}",
                          RAC3BOXTHEME.DEATHLINK))
-                    logger.debug('Deaths processed')
+                    logger.debug("Deaths processed")
                     ctx.queued_deaths = 0
                     ctx.last_death_link = time()
         else:
-            logger.debug(f'Sending Death, queue: {ctx.queued_deaths}')
-            ctx.game_interface.notification_queue.append((f'{RAC3TEXTFORMATSTRING.WHITE}Sending Deathlink:\\n{message}',
+            logger.debug(f"Sending Death, queue: {ctx.queued_deaths}")
+            ctx.game_interface.notification_queue.append((f"{RAC3TEXTFORMATSTRING.WHITE}Sending Deathlink:\\n{message}",
                                                           RAC3BOXTHEME.DEATHLINK))
             await ctx.send_death(message)
-            logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
+            logger.debug(f"Sent Death, queue: {ctx.queued_deaths}")
 
 
-async def handle_check_goal(ctx: 'Context') -> None:
+async def handle_check_goal(ctx: "Context") -> None:
     """Checks if the goal is completed"""
     if ctx.slot_data is None:
         return
@@ -327,7 +332,7 @@ async def handle_check_goal(ctx: 'Context') -> None:
         await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_GOAL)])
 
 
-async def handle_planet_changed(ctx: 'Context') -> None:
+async def handle_planet_changed(ctx: "Context") -> None:
     """Checks if the player is changing planet"""
     if ctx.slot_data is None:
         return
@@ -343,7 +348,7 @@ async def handle_planet_changed(ctx: 'Context') -> None:
         await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
 
 
-async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load: bool = False):
+async def handle_respawn(ctx: "Context", force_respawn: bool = False, force_load: bool = False):
     """Check if the player should respawn"""
     if ctx.game_interface.is_reloading:
         return
@@ -351,9 +356,9 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
                                                             0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
                                                             0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:
         if force_load:
-            logger.error('Player cannot homewarp right now')
+            logger.error("Player cannot homewarp right now")
         elif force_respawn:
-            logger.error('Player cannot respawn right now')
+            logger.error("Player cannot respawn right now")
         return  # Todo: Action states
     planet_data = RAC3_REGION_DATA_TABLE[ctx.game_interface.planet]
     if planet_data.ID > 55:
@@ -365,9 +370,9 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
             return
         if ctx.game_interface.check_intro():
             if force_load:
-                logger.error('Player cannot homewarp right now')
+                logger.error("Player cannot homewarp right now")
             elif force_respawn:
-                logger.error('Player cannot respawn right now')
+                logger.error("Player cannot respawn right now")
             return
         if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, True) or force_load:
             ctx.game_interface.unpause_game()
@@ -379,7 +384,7 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
     return
 
 
-async def handle_vendors(ctx: 'Context') -> None:
+async def handle_vendors(ctx: "Context") -> None:
     """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
     if ctx.slot_data is None or ctx.current_planet not in PLANET_VENDOR_OFFSET.keys():
         return
@@ -444,14 +449,14 @@ async def handle_vendors(ctx: 'Context') -> None:
         ctx.already_hinted.update(current_hints)
 
 
-async def handle_sequence_break(ctx: 'Context') -> None:
+async def handle_sequence_break(ctx: "Context") -> None:
     """Undoes the flags for infobot locations when sequence breaking if you haven't checked the corresponding location
     yet"""
     if ctx.slot_data is None:
         return
     ctx.game_interface.sequence_break()
 
-async def handle_codecave(ctx: 'Context') -> None:
+async def handle_codecave(ctx: "Context") -> None:
     """Set up the codecave with the current item locations for use in the randomizer"""
     if ctx.slot_data is None or ctx.code_cave_setup:
         return
@@ -468,7 +473,7 @@ async def handle_codecave(ctx: 'Context') -> None:
     ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
     ctx.game_interface.vendor_string_pointers = {}
     offset = 0x10
-    for loc_key, ap_code in zip(all_vendor_locations, ap_codes):
+    for loc_key, ap_code in zip(all_vendor_locations, ap_codes, strict=False):
         net_item = ctx.locations_info.get(ap_code, None)
         if net_item is not None:
             item_name = colorize_item_name(

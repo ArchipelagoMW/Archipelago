@@ -1,24 +1,34 @@
 """This module contains the World class for Ratchet and Clank 3"""
 from logging import DEBUG, getLogger
-from typing import Any, ClassVar, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from BaseClasses import CollectionState, Item, MultiWorld
 from Options import OptionError
 from worlds.AutoWorld import World
-from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
+from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE, item_groups
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.items import (create_item, create_itempool, get_filler_selection, process_start_inventory,
-                               starting_planets, starting_weapons)
-from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
-                                   location_groups)
+from worlds.rac3.items import (
+    create_item,
+    create_itempool,
+    get_filler_selection,
+    process_start_inventory,
+    starting_planets,
+    starting_weapons,
+)
+from worlds.rac3.locations import (
+    get_level_locations,
+    get_location_names,
+    get_regions,
+    get_total_locations,
+    location_groups,
+)
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3.regions import create_regions, every_nanotech, every_10_nanotech, every_20_nanotech, every_5_nanotech
+from worlds.rac3.regions import create_regions, every_5_nanotech, every_10_nanotech, every_20_nanotech, every_nanotech
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web
-
 
 rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
@@ -221,12 +231,12 @@ class RaC3World(World):
             option_list: str = "dunno"  # ¯\_(''/)_/¯
         message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
-            message += (f"\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
-                        f"Crystal Trade locations, or Additional Nanotech level locations.")
+            message += ("\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
+                        "Crystal Trade locations, or Additional Nanotech level locations.")
         if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
-            message += f"Consider adding some items to your starting_items_from_pool or "
+            message += "Consider adding some items to your starting_items_from_pool or "
         else:
-            message += f"Consider "
+            message += "Consider "
         message += f"adjusting some of the following options: {option_list}"
         raise OptionError(message)
 

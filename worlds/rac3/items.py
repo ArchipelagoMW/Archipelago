@@ -2,8 +2,16 @@ from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from worlds.rac3.constants.data.item import (goal_data, infobot_data, item_counts, item_table, NAME_TO_PROG_DICT,
-                                             PROG_TO_NAME_DICT, progressive_data, RAC3ITEMDATA)
+from worlds.rac3.constants.data.item import (
+    NAME_TO_PROG_DICT,
+    PROG_TO_NAME_DICT,
+    RAC3ITEMDATA,
+    goal_data,
+    infobot_data,
+    item_counts,
+    item_table,
+    progressive_data,
+)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -42,8 +50,7 @@ def create_itempool(world: "RaC3World") -> list[Item]:
             count = world.preplaced_items.count(name)
             if item_amount <= count:
                 continue
-            else:
-                item_amount -= count  # remove one from the pool as it has already been placed
+            item_amount -= count  # remove one from the pool as it has already been placed
 
         # Progressive Weapons option
         if RAC3ITEMTAG.PROG_WEAPON in item_tags and not options.enable_progressive_weapons.value:
@@ -60,12 +67,12 @@ def create_itempool(world: "RaC3World") -> list[Item]:
         if RAC3ITEMTAG.CLANK in item_tags:
             if options.clank_options.value == options.clank_options.option_start_with:
                 continue
-            elif options.clank_options.value == options.clank_options.option_shuffled_as_one and name != RAC3ITEM.CLANK:
+            if options.clank_options.value == options.clank_options.option_shuffled_as_one and name != RAC3ITEM.CLANK:
                 continue
-            elif (options.clank_options.value == options.clank_options.option_shuffled_independently
+            if (options.clank_options.value == options.clank_options.option_shuffled_independently
                   and name not in [RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]):
                 continue
-            elif (options.clank_options.value == options.clank_options.option_shuffled_progressive
+            if (options.clank_options.value == options.clank_options.option_shuffled_progressive
                   and name != RAC3ITEM.PROGRESSIVE_PACK):
                 continue
 
@@ -209,7 +216,7 @@ def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[s
         to_remove = {RAC3ITEM.BLACKWATER_CITY}
         if world.options.weapon_vendors.value == 0:
             to_remove.add(RAC3ITEM.ARIDIA)
-            
+
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
 
     # If no Arena challenges are locations or only the second half is,
@@ -217,14 +224,14 @@ def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[s
     if (world.options.arena.value == 0 or world.options.arena.value == 2) and world.options.weapon_vendors.value == 0:
         to_remove = {RAC3ITEM.ANNIHILATION_NATION}
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
-    
+
     # If you dont start with clank, you cant do leviathan
     # If you also dont have titanium bolts, you cant get the one before first hypershot node
     # If you also dont start with hypershot, you cant get the explore the starport rewards
     if world.options.clank_options.value and not world.options.titanium_bolts.value and (RAC3ITEM.HYPERSHOT not in world.options.start_inventory.value):
         to_remove = {RAC3ITEM.ZELDRIN_STARPORT}
         current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
-    
+
     # If titanium bolts are disabled, you cant get the one on marcadia before the ranger
     # If you also dont have rangers or only the optional rangers, you cant get any of the marcadia locations including LDF
     if world.options.titanium_bolts.value == 0 and (world.options.rangers.value == 0 or world.options.rangers.value == 2):

@@ -548,13 +548,13 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.LONG_TROPHY:
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
-                elif (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
+                if (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
                       RAC3TROPHY.PHOENIX_SKILL_MASTER):
                     return True
             case RAC3TAG.SKILLPOINT:
                 if options.skill_points.value == 0:
                     return True  # Skips skill points when disabled
-                elif options.skill_points.value == 1 and loc not in simple_skillpoints:
+                if options.skill_points.value == 1 and loc not in simple_skillpoints:
                     return True  # Skips harder skill points
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
@@ -564,25 +564,25 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Place nanotech milestone amount specified in nanotech_limitation
                 if options.nanotech_milestones.value == 0:
                     return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
-                elif options.nanotech_milestones.value == 1 and loc not in every_20_nanotech:
+                if options.nanotech_milestones.value == 1 and loc not in every_20_nanotech:
                     return True  # Skips nanotech milestones that are not in every 20
-                elif options.nanotech_milestones.value == 2 and loc not in every_10_nanotech:
+                if options.nanotech_milestones.value == 2 and loc not in every_10_nanotech:
                     return True  # Skips nanotech milestones that are not in every 10
-                elif options.nanotech_milestones.value == 3 and loc not in every_5_nanotech:
+                if options.nanotech_milestones.value == 3 and loc not in every_5_nanotech:
                     return True  # Skips nanotech milestones that are not in every 5
             case RAC3TAG.RANGERS:
                 if options.rangers.value == 0:
                     return True  # Skips ranger missions locations if rangers option is none
-                elif options.rangers.value == 1 and loc in extra_ranger:
+                if options.rangers.value == 1 and loc in extra_ranger:
                     return True  # Skips optional ranger missions locations if set to story_missions
-                elif options.rangers.value == 2 and loc not in extra_ranger:
+                if options.rangers.value == 2 and loc not in extra_ranger:
                     return True  # Skips story ranger missions locations if set to optional_missions
             case RAC3TAG.ARENA:
                 if options.arena.value == 0:
                     return True  # Skips arena challenges locations if arena option is none
-                elif options.arena.value == 1 and loc not in annihilation_nation_1:
+                if options.arena.value == 1 and loc not in annihilation_nation_1:
                     return True  # Skips AN2 challenge locations if arena option is set to first_only
-                elif options.arena.value == 2 and loc not in annihilation_nation_2:
+                if options.arena.value == 2 and loc not in annihilation_nation_2:
                     return True  # Skips AN1 challenge locations if arena option is set to second_only
             case RAC3TAG.VIDCOMIC:
                 if options.vidcomics.value == 0:
@@ -594,13 +594,13 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if (loc in every_sewer_crystals[options.sewer_limitation.value::]
                     and not (loc == RAC3SKILLPOINT.SEWER_MOTHERLOAD and options.sewer_limitation.value >= 100)):
                     return True  # Place sewer crystal amount specified in sewer_limitations
-                elif options.sewer_crystals.value == 0:
+                if options.sewer_crystals.value == 0:
                     return True  # Skip sewer crystal locations if sewer crystals option is disabled
-                elif options.sewer_crystals.value == 1 and loc not in every_20_sewer_crystals:
+                if options.sewer_crystals.value == 1 and loc not in every_20_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 20
-                elif options.sewer_crystals.value == 2 and loc not in every_10_sewer_crystals:
+                if options.sewer_crystals.value == 2 and loc not in every_10_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 10
-                elif options.sewer_crystals.value == 3 and loc not in every_5_sewer_crystals:
+                if options.sewer_crystals.value == 3 and loc not in every_5_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 5
             case RAC3TAG.WEAPONS:
                 if options.weapon_vendors.value == 0 and loc not in veldin_weapons:

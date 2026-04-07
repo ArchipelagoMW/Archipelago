@@ -1,4 +1,3 @@
-from typing import Optional
 
 from NetUtils import ClientStatus
 from worlds.rac3.constants.options import RAC3OPTION
@@ -15,12 +14,12 @@ class ClientMessage:
 
     def __init__(self,
                  cmd,
-                 key: Optional[str] = None,
-                 default: Optional[str] = None,
-                 want_reply: Optional[bool] = False,
-                 operations: Optional[list[dict[str, str]]] = None,
-                 status: Optional[ClientStatus] = None,
-                 locations: Optional[list[int]] = None):
+                 key: str | None = None,
+                 default: str | None = None,
+                 want_reply: bool | None = False,
+                 operations: list[dict[str, str]] | None = None,
+                 status: ClientStatus | None = None,
+                 locations: list[int] | None = None):
         self.cmd = cmd
         self.key = key
         self.default = default
@@ -33,41 +32,41 @@ class ClientMessage:
         output = {}
         for attr in dir(self):
             # print(attr)
-            if attr == '__dict__':
+            if attr == "__dict__":
                 output.update(getattr(self, attr))
                 # print("Added to Output")
         return output
 
     @staticmethod
     def set_map(slot: int, team: int, planet: str) -> dict:
-        cmd = 'Set'
-        key = f'rac3_current_planet_{slot}_{team}'
-        default = f'Galaxy'
+        cmd = "Set"
+        key = f"rac3_current_planet_{slot}_{team}"
+        default = "Galaxy"
         want_reply = False
         operations = [{
-            "operation": 'replace',
+            "operation": "replace",
             "value": planet,
         }]
         return ClientMessage(cmd, key=key, default=default, want_reply=want_reply, operations=operations).output()
 
     @staticmethod
     def set_processed(count: int) -> dict:
-        cmd = 'Set'
+        cmd = "Set"
         key = RAC3OPTION.PROCESSED_LOCATIONS
         default = "0"
         want_reply = True
         operations = [{
-            "operation": 'replace',
+            "operation": "replace",
             "value": count,
         }]
         return ClientMessage(cmd, key=key, default=default, want_reply=want_reply, operations=operations).output()
 
     @staticmethod
     def status_update(status: ClientStatus) -> dict:
-        cmd = 'StatusUpdate'
+        cmd = "StatusUpdate"
         return ClientMessage(cmd, status=status).output()
 
     @staticmethod
     def location_scouts(locations: list[int]) -> dict:
-        cmd = 'LocationScouts'
+        cmd = "LocationScouts"
         return ClientMessage(cmd, locations=locations).output()

@@ -1,6 +1,6 @@
 """This module contains functionality for universal tracker"""
 
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from worlds.rac3.constants.data.location import UT_MAPPING
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
@@ -60,14 +60,13 @@ def map_page_index(data: str) -> int:
     """Lookup the ID of the current map page"""
     if data:
         return RAC3_REGION_DATA_TABLE[data].ID
-    else:
-        return RAC3_REGION_DATA_TABLE[RAC3REGION.GALAXY].ID
+    return RAC3_REGION_DATA_TABLE[RAC3REGION.GALAXY].ID
 
 
 tracker_world: dict[str, Any] = {
     "map_page_maps": "tracker/maps.json",
     "map_page_locations": "tracker/locations.json",
-    "map_page_setting_key": r'rac3_current_planet_{player}_{team}',
+    "map_page_setting_key": r"rac3_current_planet_{player}_{team}",
     "map_page_index": map_page_index,
     "poptracker_name_mapping": UT_MAPPING,
 }

@@ -1,6 +1,7 @@
 """This module contains the logic implementation for RAC3"""
+from collections.abc import Callable
 from logging import DEBUG, getLogger
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule

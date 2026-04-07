@@ -1,8 +1,7 @@
 """This module provides a launchable client for connecting RAC3 running on PCSX2 Emulation to a Multiworld"""
-from asyncio import create_task, run, sleep, Task
+from asyncio import Task, create_task, run, sleep
 from multiprocessing import freeze_support
 from time import time
-from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import NetworkItem
@@ -12,7 +11,6 @@ from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.rac3_interface import Rac3Interface
 from worlds.rac3.client.texthelper import colorize_item_name
 from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE
-from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
@@ -23,8 +21,9 @@ from worlds.rac3.constants.region import RAC3REGION
 # Load Universal Tracker modules with aliases
 tracker_loaded: bool = False
 try:
-    from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
-                                              TrackerGameContext as CommonContext, UT_VERSION)
+    from worlds.tracker.TrackerClient import UT_VERSION
+    from worlds.tracker.TrackerClient import TrackerCommandProcessor as ClientCommandProcessor
+    from worlds.tracker.TrackerClient import TrackerGameContext as CommonContext
 
     tracker_loaded = True
 except ImportError:
@@ -53,18 +52,14 @@ class CommandProcessor(ClientCommandProcessor):
                         return True
                     if not self.ctx.main_menu:
                         return True
-                    else:
-                        self.output("Not in game, please load a game file")
-                        return False
-                else:
-                    self.output(f"No Game Detected, please connect to {RAC3OPTION.GAME_TITLE_FULL}")
+                    self.output("Not in game, please load a game file")
                     return False
-            else:
-                self.output("No slot data, please connect to a multiworld server")
+                self.output(f"No Game Detected, please connect to {RAC3OPTION.GAME_TITLE_FULL}")
                 return False
-        else:
-            self.output(f"Somehow this client isn't for {RAC3OPTION.GAME_TITLE_FULL}, delete this build and try again")
+            self.output("No slot data, please connect to a multiworld server")
             return False
+        self.output(f"Somehow this client isn't for {RAC3OPTION.GAME_TITLE_FULL}, delete this build and try again")
+        return False
 
     # This is not mandatory for the game. Just a client command implementation.
     def _cmd_kill(self):
@@ -139,7 +134,7 @@ class CommandProcessor(ClientCommandProcessor):
             if RAC3OPTION.DEATHLINK in self.ctx.slot_data.keys():
                 self.ctx.death_link = not self.ctx.death_link
                 async_start(self.ctx.update_death_link(self.ctx.death_link))
-                self.output(f'Death Link set to {self.ctx.death_link}')
+                self.output(f"Death Link set to {self.ctx.death_link}")
             else:
                 self.output("Death Link not found in slot_data. Please report this")
 
@@ -157,7 +152,7 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
-            self.output('Attempting to homewarp to the Phoenix...')
+            self.output("Attempting to homewarp to the Phoenix...")
             create_task(handle_respawn(self.ctx, force_load=True))
 
     def _cmd_ryno(self):
@@ -167,9 +162,9 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
             if self.ctx.game_interface.ryno:
-                self.output('RYNO max upgrade is Lv4')
+                self.output("RYNO max upgrade is Lv4")
             else:
-                self.output('RYNO max upgrade is Lv5')
+                self.output("RYNO max upgrade is Lv5")
 
     def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
@@ -179,8 +174,8 @@ class CommandProcessor(ClientCommandProcessor):
             message = " ".join(args)
             self.ctx.game_interface.notification_queue.append((message[:235:], RAC3BOXTHEME.DEFAULT))
             if len(message) > 235:
-                self.output('Message longer than 235 characters, truncated to fit in message box.')
-            self.output(f'Message box displayed with message: {message[:235:]}')
+                self.output("Message longer than 235 characters, truncated to fit in message box.")
+            self.output(f"Message box displayed with message: {message[:235:]}")
 
     def _cmd_one_hp(self, *args):
         """Toggles One HP Challenge for the specified character."""
@@ -218,16 +213,16 @@ class Rac3Context(CommonContext):
     is_connected_to_game: bool = False
     is_connected_to_server: bool = False
     items_handling: int = 0b111  # This is mandatory
-    last_game_message: Optional[str] = None
-    last_pine_message: Optional[str] = None
-    last_server_message: Optional[str] = None
+    last_game_message: str | None = None
+    last_pine_message: str | None = None
+    last_server_message: str | None = None
     main_menu: bool = True
-    pcsx2_sync_task: Optional[Task] = None
+    pcsx2_sync_task: Task | None = None
     processed_item_count: int = 0
     queued_deaths: int = 0
-    slot_data: Optional[dict[str, Any]] = None
-    last_deathlink_msg: Optional[str] = None
-    last_deathlink_sender: Optional[str] = None
+    slot_data: dict[str, Any] | None = None
+    last_deathlink_msg: str | None = None
+    last_deathlink_sender: str | None = None
     code_cave_setup: bool = False
     data_package: int = 0
 
@@ -259,7 +254,7 @@ class Rac3Context(CommonContext):
     async def server_auth(self, password_requested: bool = False) -> None:
         """Authenticate with the Multiworld server."""
         if password_requested and not self.password:
-            await super(Rac3Context, self).server_auth(password_requested)
+            await super().server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
 
@@ -283,11 +278,11 @@ class Rac3Context(CommonContext):
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
         if cmd == "DataPackage":
-            logger.debug(f'Data Package received with args {args}')
+            logger.debug(f"Data Package received with args {args}")
             if RAC3OPTION.GAME_TITLE_FULL in args["data"]["games"]:
                 self.data_package = args["data"]["games"][RAC3OPTION.GAME_TITLE_FULL][RAC3OPTION.PROCESSED_LOCATIONS]
                 logger.debug(f"Data Package updated: {self.data_package}")
-                async_start(self.send_msgs([{'cmd': 'Sync'}]))
+                async_start(self.send_msgs([{"cmd": "Sync"}]))
         if cmd == "PrintJSON":
             if args.get("type") == "Hint" and self.is_connected_to_game and not self.main_menu:
                 net_item: NetworkItem = args.get("item")
@@ -300,9 +295,9 @@ class Rac3Context(CommonContext):
                     self.item_names.lookup_in_slot(net_item.item, receiving_player),
                     net_item.flags
                 )
-                format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else RAC3TEXTFORMATSTRING.GREEN 
+                format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else RAC3TEXTFORMATSTRING.GREEN
                 player_name = self.player_names.get(receiving_player, "???")
-                hint_text = f'{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}\'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}'
+                hint_text = f"{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}"
                 if net_item.player != self.slot:
                     player_name = self.player_names.get(net_item.player, "???")
                     format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.GREEN

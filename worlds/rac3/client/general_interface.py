@@ -1,7 +1,6 @@
 """This module provides an interface for connecting to a pcsx2 game"""
 
 from struct import unpack
-from typing import Optional
 
 from CommonClient import logger
 from worlds.rac3.constants.version import RAC3VERSION
@@ -10,8 +9,8 @@ from worlds.rac3.pcsx2_interface.pine import Pine
 
 class GameInterface:
     """Base class for connecting with a pcsx2 game"""
-    current_game: Optional[str] = None
-    game_id_error: Optional[str] = None
+    current_game: str | None = None
+    game_id_error: str | None = None
     is_connecting: bool = False
     emulator_connected: bool = False
     pcsx2_interface: Pine = Pine()
@@ -32,7 +31,7 @@ class GameInterface:
         return self.pcsx2_interface.read_bytes(address, n)
 
     def _read_float(self, address: int):
-        return unpack('f', self.pcsx2_interface.read_bytes(address, 4))[0]
+        return unpack("f", self.pcsx2_interface.read_bytes(address, 4))[0]
 
     def _read_string(self, address: int, n: int):
         return self.pcsx2_interface.read_string(address, n)
@@ -62,23 +61,23 @@ class GameInterface:
         """
         if not self.pcsx2_interface.is_connected():
             self.is_connecting = True
-            logger.debug('Begin attempting emulator connection...')
+            logger.debug("Begin attempting emulator connection...")
             self.pcsx2_interface.connect()
             self.is_connecting = False
             if not self.pcsx2_interface.is_connected():
                 self.emulator_connected = False
-                logger.debug('No Connection to PCSX2 Emulator')
+                logger.debug("No Connection to PCSX2 Emulator")
                 return
-            logger.info('Connected to PCSX2 Emulator')
+            logger.info("Connected to PCSX2 Emulator")
             self.emulator_connected = True
         self.current_game = None
         try:
             self.verify_game_version()
         except RuntimeError:
-            logger.warning('PCSX2 Emulator is unreachable')
+            logger.warning("PCSX2 Emulator is unreachable")
             self.emulator_connected = False
         except ConnectionError as error:
-            logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
+            logger.warning(f"Connection to PCSX2 Emulator lost: {error}")
             self.emulator_connected = False
 
     def disconnect_from_game(self):
@@ -90,69 +89,67 @@ class GameInterface:
 
     def verify_game_version(self) -> bool:
         """Verify that the current game loaded in the PCSX connection has a valid game ID for Ratchet and Clank 3"""
-        logger.debug('Start Game Verification')
+        logger.debug("Start Game Verification")
         try:
             game_id = self.pcsx2_interface.get_game_id()
         except ConnectionError as error:
-            logger.debug(f'Game Verify Connection Error: {error}')
+            logger.debug(f"Game Verify Connection Error: {error}")
             return False
         # The first read of the address will be null if the client is faster than the emulator
         if game_id is None:
-            logger.info('No Game Loaded')
+            logger.info("No Game Loaded")
             return False
         if game_id != self.current_game:
-            logger.info(f'Detecting new game version...')
+            logger.info("Detecting new game version...")
             match game_id:
                 case RAC3VERSION.US_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: US release')
+                    logger.info("Version Detected: US release")
                 case RAC3VERSION.US_GH_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: US Greatest Hits release')
-                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                   'inconsistencies found')
+                    logger.info("Version Detected: US Greatest Hits release")
+                    logger.warning("WARNING: Game version untested, please inform apworld devs of any "
+                                   "inconsistencies found")
                 case RAC3VERSION.JP_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: Japanese release')
-                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                   'inconsistencies found')
+                    logger.info("Version Detected: Japanese release")
+                    logger.warning("WARNING: Game version untested, please inform apworld devs of any "
+                                   "inconsistencies found")
                 case RAC3VERSION.JP_TB_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: Japanese The Best release')
-                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                   'inconsistencies found')
+                    logger.info("Version Detected: Japanese The Best release")
+                    logger.warning("WARNING: Game version untested, please inform apworld devs of any "
+                                   "inconsistencies found")
                 case RAC3VERSION.KO_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: Korean release')
-                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                   'inconsistencies found')
+                    logger.info("Version Detected: Korean release")
+                    logger.warning("WARNING: Game version untested, please inform apworld devs of any "
+                                   "inconsistencies found")
                 case RAC3VERSION.CH_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: Chinese release')
-                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                   'inconsistencies found')
+                    logger.info("Version Detected: Chinese release")
+                    logger.warning("WARNING: Game version untested, please inform apworld devs of any "
+                                   "inconsistencies found")
                 case RAC3VERSION.EU_ID:
                     self.current_game = game_id
-                    logger.info(f'Version Detected: EU release')
-                    logger.warning('WARNING: PAL support is currently in beta, but the game is completable, '
-                                   'please inform apworld devs of any inconsistencies found')
+                    logger.info("Version Detected: EU release")
+                    logger.warning("WARNING: PAL support is currently in beta, but the game is completable, "
+                                   "please inform apworld devs of any inconsistencies found")
                 case _:
                     self.current_game = None
-                    logger.info('Unknown game version detected')
-        if self.current_game is None and self.game_id_error != game_id and game_id != b'\x00\x00\x00\x00\x00\x00':
-            logger.warning(f'Connected to the wrong game ({game_id})')
+                    logger.info("Unknown game version detected")
+        if self.current_game is None and self.game_id_error != game_id and game_id != b"\x00\x00\x00\x00\x00\x00":
+            logger.warning(f"Connected to the wrong game ({game_id})")
             self.game_id_error = game_id
             return False
-        else:
-            logger.debug('Valid Game detected')
-            return True
+        logger.debug("Valid Game detected")
+        return True
 
     def get_connection_state(self) -> bool:
         """Safe connection test"""
         try:
             if self.pcsx2_interface.is_connected():
                 return self.verify_game_version()
-            else:
-                return False
+            return False
         except RuntimeError:
             return False

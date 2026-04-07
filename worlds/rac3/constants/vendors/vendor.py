@@ -16,13 +16,6 @@ class RAC3VENDOR:
     IS_PDA_OFFSET: int = -0xE4
     SLOT_SIZE: int = 0
 
-    VENDORTYPE_TO_SLOT_SIZE: dict[int, int] = {
-        RAC3VENDORTYPE.WEAPON: 0x14,
-        RAC3VENDORTYPE.ARMOR: 0x10,
-        RAC3VENDORTYPE.SHIP: 0x24,
-        RAC3VENDORTYPE.SKIN: 0xF,
-    }
-
     @staticmethod
     def get_vendor_property_address(planet: str, vendor_prop: int) -> int:
         """Provides the vendor property address for reading data"""
@@ -102,3 +95,10 @@ class RAC3SKINVENDOR(RAC3VENDOR):
     ITEM_SKIN_ID_SIZE: int = 4
     ITEM_DESCRIPTION_STRING_ID_OFFSET: int = 0x0C
     ITEM_DESCRIPTION_STRING_ID_SIZE: int = 4
+
+VENDORTYPE_TO_SLOT_SIZE: dict[int, int] = {
+    RAC3VENDORTYPE.WEAPON: 0x14,
+    RAC3VENDORTYPE.ARMOR: 0x10,
+    RAC3VENDORTYPE.SHIP: 0x24,
+    RAC3VENDORTYPE.SKIN: 0x0F,
+}
