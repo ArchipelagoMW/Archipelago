@@ -2445,83 +2445,91 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
-        """Send out a hint for a player's item to their team"""
+    def get_hints(self, player_name: str, input_text: str, for_location: bool = False, hint_all: bool = False) -> bool:
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
-            game = self.ctx.games[slot]
-            full_name = " ".join(item_name)
-
-            if full_name.isnumeric():
-                item, usable, response = int(full_name), True, None
-            elif game in self.ctx.all_item_and_group_names:
-                item, usable, response = get_intended_text(full_name, self.ctx.all_item_and_group_names[game])
-            else:
-                self.output("Can't look up item for unknown game. Hint for ID instead.")
-                return False
-
-            if usable:
-                if game in self.ctx.item_name_groups and item in self.ctx.item_name_groups[game]:
-                    hints = []
-                    for item_name_from_group in self.ctx.item_name_groups[game][item]:
-                        if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
-                else:  # item name or id
-                    hints = collect_hints(self.ctx, team, slot, item)
-
-                if hints:
-                    self.ctx.notify_hints(team, hints)
-
-                else:
-                    self.output("No hints found.")
-                return True
-            else:
-                self.output(response)
-                return False
-
-        else:
+        if not usable:
             self.output(response)
             return False
-
-    def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
-        """Send out a hint for a player's location to their team"""
-        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
-            game = self.ctx.games[slot]
-            full_name = " ".join(location_name)
-
-            if full_name.isnumeric():
-                location, usable, response = int(full_name), True, None
-            elif game in self.ctx.all_location_and_group_names:
-                location, usable, response = get_intended_text(full_name, self.ctx.all_location_and_group_names[game])
+        team, slot = self.ctx.player_name_lookup[seeked_player]
+        game = self.ctx.games[slot]
+        if input_text.isnumeric():
+            target_id, usable, response = int(input_text), True, None
+        elif for_location:
+            if game in self.ctx.all_location_and_group_names:
+                target_id, usable, response = get_intended_text(input_text, self.ctx.all_location_and_group_names[game])
             else:
                 self.output("Can't look up location for unknown game. Hint for ID instead.")
                 return False
-
-            if usable:
-                if isinstance(location, int):
-                    hints = collect_hint_location_id(self.ctx, team, slot, location)
-                elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
-                    hints = []
-                    for loc_name_from_group in self.ctx.location_name_groups[game][location]:
-                        if loc_name_from_group in self.ctx.location_names_for_game(game):
-                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
-                else:
-                    hints = collect_hint_location_name(self.ctx, team, slot, location)
-                if hints:
-                    self.ctx.notify_hints(team, hints)
-                else:
-                    self.output("No hints found.")
-                return True
-            else:
-                self.output(response)
-                return False
-
         else:
+            if game in self.ctx.all_item_and_group_names:
+                target_id, usable, response = get_intended_text(input_text, self.ctx.all_item_and_group_names[game])
+            else:
+                self.output("Can't look up item for unknown game. Hint for ID instead.")
+                return False
+        if not usable:
             self.output(response)
             return False
+        if for_location:
+            if isinstance(target_id, int):
+                hints = collect_hint_location_id(self.ctx, team, slot, target_id)
+            elif game in self.ctx.location_name_groups and target_id in self.ctx.location_name_groups[game]:
+                hints = []
+                for loc_name_from_group in self.ctx.location_name_groups[game][target_id]:
+                    if loc_name_from_group in self.ctx.location_names_for_game(game):
+                        hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
+            else:
+                hints = collect_hint_location_name(self.ctx, team, slot, target_id)
+        else:
+            if game in self.ctx.item_name_groups and target_id in self.ctx.item_name_groups[game]:
+                hints = []
+                for item_name_from_group in self.ctx.item_name_groups[game][target_id]:
+                    if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
+                        hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
+            else:  # item name or id
+                hints = collect_hints(self.ctx, team, slot, target_id)
+        if not hints:
+            self.output("No hints found.")
+        elif hint_all:
+            self.ctx.notify_hints(team, hints)
+        else:
+            new_hints = set(hints) - self.ctx.hints[team, slot]
+            old_hints = list(set(hints) - new_hints)
+            if new_hints:
+                found_hints = [hint for hint in new_hints if hint.found]
+                not_found_hints = [hint for hint in new_hints if not hint.found]
+
+                self.ctx.random.shuffle(not_found_hints)
+                # By popular vote, make hints prefer non-local placements
+                not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
+                # By another popular vote, prefer early sphere
+                not_found_hints.sort(key=lambda hint: self.ctx.get_sphere(hint.finding_player, hint.location),
+                                     reverse=True)
+
+                hints = found_hints + old_hints
+                if not_found_hints:
+                    hints.append(not_found_hints.pop())
+
+                self.ctx.notify_hints(team, hints)
+                self.ctx.save()
+            elif old_hints:
+                self.ctx.notify_hints(team, old_hints)
+        return True
+
+    def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
+        """Send out a single new hint for a player's item or item group to their team"""
+        return self.get_hints(player_name, " ".join(item_name), False, False)
+
+    def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
+        """Send out a single new hint for a player's location or location group to their team"""
+        return self.get_hints(player_name, " ".join(location_name), True, False)
+
+    def _cmd_hint_all(self, player_name: str, *item_name: str) -> bool:
+        """Send out all matching hints for a player's item or item group to their team"""
+        return self.get_hints(player_name, " ".join(item_name), False, True)
+
+    def _cmd_hint_location_all(self, player_name: str, *location_name: str) -> bool:
+        """Send out all matching hints for a player's location or location group to their team"""
+        return self.get_hints(player_name, " ".join(location_name), True, True)
 
     def _cmd_option(self, option_name: str, option_value: str):
         """Set an option for the server."""
