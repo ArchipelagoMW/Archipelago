@@ -1261,6 +1261,10 @@ class Rac3Interface(GameInterface):
     def near_pda_vendor(self) -> bool:
         """Check if we are near the PDA Vendor"""
         if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 15.0:
+            # In case the PDA vendor bugs out and doesn't play the cutscene
+            if (self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_BOLT_DIFFERENCE_BASE) == 0xFFFC2F70 # -250.000
+                and self.action_2 != 0x09):
+                 self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS_2, 1)
             return True
         return False
 
