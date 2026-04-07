@@ -51,7 +51,7 @@ A location can have multiple tags and be part of multiple groups at the same tim
 
 ## My cosmetics are missing, what can I do?
 
-The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then open and close the skin menu without changing your skin or visit the armor vendor or reload your save file without saving first.
+The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then visit the armor vendor or reload your save file without saving first. If you accidentially overwrite your skin with the skin vendor, you can visit the ship vendor to have the randomizer apply your skin values and then visit the armor vendor to have the game reapply your player skin.
 
 ## How do I toggle death link?
 
