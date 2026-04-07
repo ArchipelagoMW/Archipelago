@@ -174,6 +174,16 @@ class OneHitMode(Choice):
     option_include_vitality_counters = 2
 
 
+class StartWithAllMaps(Toggle):
+    """
+    Start the game with all nine area maps already acquired.
+      Off by default. Intended for new players who find exploring unmapped areas daunting.
+      All map items are removed from the item pool and replaced with filler.
+    """
+    display_name = "Start With All Maps"
+    default = 0
+
+
 class RoomSanity(Toggle):
     """Adds room-visit checks (Room X-YY). Off by default because it adds 257 locations."""
     display_name = "Room Sanity"
@@ -189,6 +199,8 @@ class KirbyAmOptions(PerGameCommonOptions):
     goal: Goal
 
     shards: RandomizeShards
+
+    start_with_all_maps: StartWithAllMaps
 
     no_extra_lives: NoExtraLives
 
@@ -214,6 +226,9 @@ class KirbyAmOptions(PerGameCommonOptions):
 
 
 OPTION_GROUPS = [
+    OptionGroup("Make the game easier", [
+        StartWithAllMaps,
+    ]),
     OptionGroup("Make the game last longer", [
         RoomSanity,
     ]),

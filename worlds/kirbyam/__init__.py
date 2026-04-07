@@ -179,6 +179,11 @@ class KirbyAmWorld(World):
         value = getattr(option, "value", option)
         return int(value) if value is not None else 0
 
+    def _start_with_all_maps_enabled(self) -> bool:
+        option = getattr(getattr(self, "options", None), "start_with_all_maps", None)
+        value = getattr(option, "value", option)
+        return bool(value)
+
     def _active_filler_pool(self) -> tuple[str, ...]:
         pool = self.ACTIVE_FILLER_POOL
         if self._one_hit_mode_value() == OneHitMode.option_exclude_vitality_counters:
@@ -259,6 +264,19 @@ class KirbyAmWorld(World):
                     "[P%s] Enemy copy-ability policy: %s",
                     self.player,
                     self._enemy_copy_ability_policy,
+                )
+
+            if self._start_with_all_maps_enabled():
+                map_items = [
+                    item for item in kirby_data.items.values()
+                    if "Maps" in item.tags
+                ]
+                for map_item in map_items:
+                    self.push_precollected(self.create_item(map_item.label))
+                logger.info(
+                    "[P%s] start_with_all_maps: precollected %s map item(s)",
+                    self.player,
+                    len(map_items),
                 )
 
     # Create world regions
@@ -395,6 +413,14 @@ class KirbyAmWorld(World):
                         if "Vitality" in item.tags
                     }
                     self._vitality_item_codes = vitality_item_codes
+                map_item_codes = getattr(self, "_map_item_codes", None)
+                if map_item_codes is None:
+                    map_item_codes = {
+                        item.item_id
+                        for item in kirby_data.items.values()
+                        if "Maps" in item.tags
+                    }
+                    self._map_item_codes = map_item_codes
                 if self.options.shards.value == RandomizeShards.option_vanilla:
                     shard_code_set = set(shard_item_codes)
                     non_filler_item_codes = [
@@ -412,6 +438,19 @@ class KirbyAmWorld(World):
                         "[P%s] One-hit mode (exclude_vitality_counters): removed %s vitality counter item(s) from non-filler pool",
                         self.player,
                         excluded_vitality_count,
+                    )
+
+                if self._start_with_all_maps_enabled():
+                    excluded_map_count = sum(
+                        1 for code in non_filler_item_codes if code in map_item_codes
+                    )
+                    non_filler_item_codes = [
+                        code for code in non_filler_item_codes if code not in map_item_codes
+                    ]
+                    logger.info(
+                        "[P%s] start_with_all_maps: removed %s map item(s) from non-filler pool",
+                        self.player,
+                        excluded_map_count,
                     )
 
                 if len(non_filler_item_codes) > needed_pool_size:
@@ -472,6 +511,20 @@ class KirbyAmWorld(World):
                     self.player,
                     dict(sorted(vitality_code_counts.items())),
                 )
+
+                if self._start_with_all_maps_enabled():
+                    map_code_counts = Counter(
+                        code for code in randomized_item_codes if code in map_item_codes
+                    )
+                    if map_code_counts:
+                        raise ValueError(
+                            "KirbyAM map pool invariant failed in start_with_all_maps mode: "
+                            f"expected zero map items in pool, got counts={dict(map_code_counts)}"
+                        )
+                    logger.info(
+                        "[P%s] start_with_all_maps: confirmed no map items in randomized pool",
+                        self.player,
+                    )
 
             if (boss_locations or major_chest_locations or vitality_chest_locations or sound_player_chest_locations or room_sanity_locations) and not randomized_item_codes:
                 raise ValueError(
