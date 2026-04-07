@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Expand tracker integration surface by exporting all locations, all rooms (including those outside Room Sanity), and all received unique items via expanded KirbyAM `slot_data` for use in tracker templates and generic player/multiworld trackers (Issue #114).
+- Expose all configured KirbyAM seed options in `slot_data` (including `start_with_all_maps` and `enable_debug_logging`) so tracker surfaces can render the exact seed configuration from slot data without inferring from partial fields (Issue #114).
 - Updated `Ability Randomization: Minny` (`ability_randomization_minny`) so that it's off by default (Issue #583).
 - Add `Start With All Maps` (`start_with_all_maps`) option to the `Make the game easier` option group. When enabled, all nine area maps are precollected at generation time and removed from the randomized item pool (replaced with filler), so the player begins with every map already acquired (Issue #584).
 - Extend the unswallowable-enemy exclusion list for copy-ability randomization to include `JACK`, `SQUISHY`, `BLOCKIN`, `GORDO`, and `MIRRA` (in addition to the existing `GLUNK`, `SCARFY`, `SHOTZO`), preventing potential no-ability lockouts from all non-inhalable enemies (Issue #570).

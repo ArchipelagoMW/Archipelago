@@ -17,8 +17,7 @@ from .ability_randomization import (
     VALID_ENEMY_COPY_ABILITIES,
     build_enemy_copy_ability_policy,
 )
-from .data import LocationCategory
-from .data import data as kirby_data
+from .data import LocationCategory, load_json_data, data as kirby_data
 from .generation_logging import (
     generation_stage,
     log_generation_complete,
@@ -630,6 +629,7 @@ class KirbyAmWorld(World):
         slot_data = self.options.as_dict(
             "goal",
             "shards",
+            "start_with_all_maps",
             "no_extra_lives",
             "one_hit_mode",
             "death_link",
@@ -640,6 +640,7 @@ class KirbyAmWorld(World):
             "ability_randomization_passive_enemies",
             "ability_randomization_no_ability_weight",
             "room_sanity",
+            "enable_debug_logging",
             toggles_as_bools=True,
         )
         policy = getattr(self, "_enemy_copy_ability_policy", None)
@@ -649,6 +650,41 @@ class KirbyAmWorld(World):
         allowed_abilities = policy.get("allowed_abilities", VALID_ENEMY_COPY_ABILITIES)
         slot_data["enemy_copy_ability_whitelist"] = list(allowed_abilities)
         slot_data["enemy_copy_ability_policy"] = dict(policy)
+
+        # Tracker surface integration (Issue #114)
+        # Expose all locations and rooms for tracker display
+        slot_data["locations"] = {
+            loc_key: {
+                "label": loc_data.label,
+                "location_id": loc_data.location_id,
+                "category": loc_data.category.name,
+                "tags": sorted(loc_data.tags),
+            }
+            for loc_key, loc_data in kirby_data.locations.items()
+        }
+
+        # All rooms (visited and unvisited), including those not in Room Sanity
+        rooms_payload = load_json_data("regions/rooms.json")
+        rooms = rooms_payload if isinstance(rooms_payload, dict) else {}
+        slot_data["rooms"] = {
+            room_key: {
+                "label": room_data.get("label", room_key),
+                "exits": room_data.get("exits", []),
+                "parent_region": room_key.split("/")[0] if "/" in room_key else "",
+                "room_sanity_location_id": room_data.get("room_sanity", {}).get("location_id"),
+            }
+            for room_key, room_data in rooms.items()
+        }
+
+        # Unique items for tracker display (items tagged as "Unique").
+        # Emit in stable deduplicated order for tracker/cache determinism.
+        slot_data["unique_items"] = sorted(
+            {
+                item_data.label
+                for item_data in kirby_data.items.values()
+                if "Unique" in item_data.tags
+            }
+        )
 
         # Debug settings are grouped under one key to keep slot_data extensible.
         slot_data["debug"] = {

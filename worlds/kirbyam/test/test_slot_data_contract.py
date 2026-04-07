@@ -38,6 +38,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
     options.as_dict.return_value = {
         "goal": 0,
         "shards": 2,
+        "start_with_all_maps": False,
         "no_extra_lives": False,
         "one_hit_mode": 0,
         "death_link": True,
@@ -48,6 +49,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "ability_randomization_passive_enemies": False,
         "ability_randomization_no_ability_weight": 55,
         "room_sanity": False,
+        "enable_debug_logging": False,
     }
 
     world.options = options
@@ -89,3 +91,28 @@ def test_debug_settings_contract_fields_present_with_expected_shapes() -> None:
 
     assert isinstance(slot_data["debug"], dict)
     assert isinstance(slot_data["debug"]["logging"], bool)
+
+
+def test_tracker_surface_contract_fields_present_with_expected_shapes() -> None:
+    slot_data = _emit_slot_data_for_contract_test()
+
+    assert isinstance(slot_data["locations"], dict)
+    assert slot_data["locations"]
+    first_location = next(iter(slot_data["locations"].values()))
+    assert isinstance(first_location, dict)
+    assert isinstance(first_location["label"], str)
+    assert isinstance(first_location["location_id"], int)
+    assert isinstance(first_location["category"], str)
+    assert isinstance(first_location["tags"], list)
+
+    assert isinstance(slot_data["rooms"], dict)
+    assert slot_data["rooms"]
+    first_room = next(iter(slot_data["rooms"].values()))
+    assert isinstance(first_room, dict)
+    assert isinstance(first_room["label"], str)
+    assert isinstance(first_room["exits"], list)
+    assert isinstance(first_room["parent_region"], str)
+
+    assert isinstance(slot_data["unique_items"], list)
+    assert slot_data["unique_items"]
+    assert all(isinstance(item, str) for item in slot_data["unique_items"])
