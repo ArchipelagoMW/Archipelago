@@ -1817,34 +1817,27 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_hint(self, item_name: str = "") -> bool:
-        """Use !hint {item_name},
-        for example !hint Lamp to get a spoiler peek for that item.
-        Only gives one result per command; use !hint_all {item_name}
-        to hint as many as possible instead."""
+        """For example, '!hint Lamp' to get a spoiler peek for that item.
+        Only gives one result per command; see !hint_all for multiple at once."""
         return self.get_hints(item_name, False, False)
 
     @mark_raw
-    def _cmd_hint_location(self, location: str = "") -> bool:
-        """Use !hint_location {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location.
-        Only gives 1 result when hinting a location group; use !hint_location_all {location_name}
-        to hint as many as possible instead."""
-        return self.get_hints(location, True, False)
+    def _cmd_hint_location(self, location_name: str = "") -> bool:
+        """For example, '!hint_location atomic-bomb' to get a spoiler peek for that location.
+        Only gives 1 result per command; use !hint_location_all for multiple at once."""
+        return self.get_hints(location_name, True, False)
+
     @mark_raw
     def _cmd_hint_all(self, item_name: str = "") -> bool:
-        """Use !hint_all {item_name},
-        for example !hint Lamp to get a spoiler peek for that item.
-        Will return as many results as possible, possibly spending multiple
-        hints worth of hint points in the process."""
+        """For example, '!hint Power Star' to get a spoiler peek for that item.
+        Will return as many results as possible, possibly spending multiple hints worth of hint points in the process."""
         return self.get_hints(item_name, False, True)
 
     @mark_raw
-    def _cmd_hint_location_all(self, location: str = "") -> bool:
-        """Use !hint_location_all {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location.
-        Will return as many results as possible (relevant when using a location group name),
-        possibly spending multiple hints worth of hint points in the process."""
-        return self.get_hints(location, True, True)
+    def _cmd_hint_location_all(self, location_name: str = "") -> bool:
+        """For example, '!hint_location_all Everywhere' to get a spoiler peek for matching locations.
+        Will return as many results as possible, possibly spending multiple hints worth of hint points in the process."""
+        return self.get_hints(location_name, True, True)
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
