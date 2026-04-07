@@ -35,6 +35,9 @@ __all__ = [
 
 failed_world_loads: List[str] = []
 
+logger = logging.getLogger("Worlds")
+logger.propagate = False
+logger.setLevel(logging.INFO)
 
 @dataclasses.dataclass(order=True)
 class WorldSource:
@@ -56,7 +59,7 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            importlib.import_module(f".{Path(self.path).stem}", "worlds")
+            importlib.import_module(f".{self.name}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
 
@@ -72,8 +75,12 @@ class WorldSource:
             failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
+    @property
+    def name(self) -> str:
+        return Path(self.path).stem
 
 # find potential world containers, currently folders and zip-importable .apworld's
+logger.info("Indexing worlds")
 world_sources: List[WorldSource] = []
 for folder in (folder for folder in (user_folder, local_folder) if folder):
     relative = folder == local_folder
@@ -92,6 +99,7 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
                 world_sources.append(WorldSource(file_name, is_zip=True, relative=relative))
 
 # import all submodules to trigger AutoWorldRegister
+logger.info("Processing found worlds")
 world_sources.sort()
 apworlds: list[WorldSource] = []
 for world_source in world_sources:
@@ -99,6 +107,7 @@ for world_source in world_sources:
     if world_source.is_zip:
         apworlds.append(world_source)
     else:
+        logger.info(world_source.name)
         world_source.load()
 
 from .AutoWorld import AutoWorldRegister
@@ -132,6 +141,7 @@ if apworlds:
             logging.warning(reason)
 
         for apworld_source in apworlds:
+            logger.info(apworld_source.name)
             apworld: APWorldContainer = APWorldContainer(apworld_source.resolved_path)
             # populate metadata
             try:
@@ -205,6 +215,7 @@ if apworlds:
 del apworlds
 
 # Build the data package for each game.
+logger.info("Datapackage")
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }

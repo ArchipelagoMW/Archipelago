@@ -1,3 +1,5 @@
+#:import Utils Utils
+#:import Type Utils.Type
 <LauncherCard>:
     id: main
     style: "filled"
@@ -61,7 +63,6 @@
                 text: "Open"
 
 
-#:import Type worlds.LauncherComponents.Type
 MDFloatLayout:
     id: top_screen
 
@@ -159,3 +160,24 @@ MDFloatLayout:
 
             ScrollBox:
                 id: button_layout
+
+
+<LoadingScreen>:
+    label: label
+    md_bg_color: self.theme_cls.backgroundColor
+    ApAsyncImage:
+        source: Utils.local_path("data/icon.png")
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        size_hint: None, None
+        size: 512, 512
+        opacity: 0.5
+    MDCircularProgressIndicator:
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        size: 550, 550
+        size_hint: None, None
+    MDLabel:
+        id: label
+        text: "Loading..."
+        halign: "center"
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        theme_text_color: "Primary"
