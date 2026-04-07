@@ -1829,7 +1829,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_hint_all(self, item_name: str = "") -> bool:
-        """For example, '!hint Power Star' to get a spoiler peek for that item.
+        """For example, '!hint_all Power Star' to get a spoiler peek for that item.
         Will return as many results as possible, possibly spending multiple hints worth of hint points in the process."""
         return self.get_hints(item_name, False, True)
 
