@@ -80,14 +80,14 @@ def create_regions_and_locations(multiworld: MultiWorld, player: int, options: T
     connect(multiworld, player, 'Lake desolation', 'Space time continuum', logic.has_teleport)
     connect(multiworld, player, 'Upper lake desolation', 'Lake desolation')
     connect(multiworld, player, 'Upper lake desolation', 'Eastern lake desolation')
-    connect(multiworld, player, 'Lower lake desolation', 'Lake desolation') 
+    connect(multiworld, player, 'Lower lake desolation', 'Lake desolation')
     connect(multiworld, player, 'Lower lake desolation', 'Eastern lake desolation')
     connect(multiworld, player, 'Eastern lake desolation', 'Space time continuum', logic.has_teleport)
     connect(multiworld, player, 'Eastern lake desolation', 'Library')
     connect(multiworld, player, 'Eastern lake desolation', 'Lower lake desolation')
     connect(multiworld, player, 'Eastern lake desolation', 'Upper lake desolation', lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player), "Upper Lake Serene")
     connect(multiworld, player, 'Library', 'Eastern lake desolation')
-    connect(multiworld, player, 'Library', 'Library top', lambda state: logic.has_doublejump(state) or state.has('Talaria Attachment', player)) 
+    connect(multiworld, player, 'Library', 'Library top', lambda state: logic.has_doublejump(state) or state.has('Talaria Attachment', player))
     connect(multiworld, player, 'Library', 'Varndagroth tower left', logic.has_keycard_D)
     connect(multiworld, player, 'Library', 'Space time continuum', logic.has_teleport)
     connect(multiworld, player, 'Library top', 'Library')
@@ -255,7 +255,7 @@ def connectStartingRegion(multiworld: MultiWorld, player: int, options: Timespin
     space_time_continuum.exits.append(teleport_back_to_start)
 
 
-def connect(multiworld: MultiWorld, player: int, source: str, target: str, 
+def connect(multiworld: MultiWorld, player: int, source: str, target: str,
             rule: Optional[Callable[[CollectionState], bool]] = None,
             indirect: str = ""):
 
