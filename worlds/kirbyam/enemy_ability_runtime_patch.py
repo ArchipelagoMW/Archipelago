@@ -30,7 +30,16 @@ from .enemy_ability_data import (
 from .options import AbilityRandomizationMode
 
 _MISSING_RUNTIME_ABILITY_NAMES = set(VALID_ENEMY_COPY_ABILITIES) - set(ABILITY_NAME_TO_ID)
-_UNSWALLOWABLE_ENEMY_SOURCE_KEYS = frozenset({"GLUNK", "SCARFY", "SHOTZO"})
+_UNSWALLOWABLE_ENEMY_SOURCE_KEYS = frozenset({
+    "BLOCKIN",
+    "GLUNK",
+    "GORDO",
+    "JACK",
+    "MIRRA",
+    "SCARFY",
+    "SHOTZO",
+    "SQUISHY",
+})
 
 logger = logging.getLogger(__name__)
 
@@ -84,12 +93,12 @@ def build_enemy_copy_runtime_patch_writes(policy: dict[str, Any]) -> dict[int, i
     writes: dict[int, int] = {}
     excluded_unswallowable_sources: set[str] = set()
     for source in ABILITY_SOURCES:
-        if source.kind == "enemy" and source.key in _UNSWALLOWABLE_ENEMY_SOURCE_KEYS:
-            excluded_unswallowable_sources.add(source.key)
-            continue
-
         # Preserve vanilla no-ability entries unless the option explicitly enables them.
         if source.default_ability_id == 0 and not randomize_non_ability:
+            continue
+
+        if source.kind == "enemy" and source.key in _UNSWALLOWABLE_ENEMY_SOURCE_KEYS:
+            excluded_unswallowable_sources.add(source.key)
             continue
         if not _is_source_enabled(source, policy):
             continue

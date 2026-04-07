@@ -314,8 +314,10 @@ def test_unswallowable_enemy_sources_are_excluded_from_runtime_pool() -> None:
 
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
-    # GLUNK is currently represented by this source address and should never be randomized.
-    assert 0x351696 not in writes
+    # Enemies that cannot be swallowed should never appear in the randomized write set.
+    assert 0x351696 not in writes  # GLUNK
+    assert 0x3517CE not in writes  # JACK
+    assert 0x3516AE not in writes  # SQUISHY
 
 
 def test_unswallowable_enemy_exclusion_is_logged(caplog) -> None:
@@ -334,5 +336,7 @@ def test_unswallowable_enemy_exclusion_is_logged(caplog) -> None:
     assert any(
         "Excluded unswallowable enemies from copy-ability randomization pool:" in message
         and "GLUNK" in message
+        and "JACK" in message
+        and "SQUISHY" in message
         for message in caplog.messages
     )
