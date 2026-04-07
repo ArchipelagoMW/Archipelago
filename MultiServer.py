@@ -1688,7 +1688,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    def get_hints(self, input_text: str, for_location: bool = False) -> bool:
+    def get_hints(self, input_text: str, for_location: bool = False, hint_all: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
         if not input_text:
@@ -1758,18 +1758,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if hints:
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = list(set(hints) - new_hints)
-            if old_hints and not new_hints:
-                self.ctx.notify_hints(self.client.team, old_hints)
-                self.output("Hint was previously used, no points deducted.")
             if new_hints:
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
-                if not not_found_hints:  # everything's been found, no need to pay
-                    can_pay = 1000
-                elif cost:
-                    can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
+                if not cost:
+                    can_pay = 1000 if hint_all else 1
+                elif hint_all:
+                    can_pay = min(points_available // cost, 1000)  # Limit to 1000 max
                 else:
-                    can_pay = 1000
+                    can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
 
                 self.ctx.random.shuffle(not_found_hints)
                 # By popular vote, make hints prefer non-local placements
@@ -1779,18 +1776,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                      reverse=True)
 
                 hints = found_hints + old_hints
-                while can_pay > 0:
-                    if not not_found_hints:
-                        break
-                    hint = not_found_hints.pop()
-                    hints.append(hint)
+                while can_pay > 0 and not_found_hints:
+                    hints.append(not_found_hints.pop())
                     can_pay -= 1
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
 
                 self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
                     points_available = get_client_points(self.ctx, self.client)
-                    if hints and cost and int((points_available // cost) == 0):
+                    if hints and cost and int((points_available // cost) <= 0):
                         self.output(
                             f"There may be more hintables, however, you cannot afford to pay for any more. "
                             f" You have {points_available} and need at least "
@@ -1804,7 +1798,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
                 self.ctx.save()
                 return True
-
+            elif old_hints:
+                self.ctx.notify_hints(self.client.team, old_hints)
+                self.output("Hint was previously used, no points deducted.")
         else:
             if points_available >= cost:
                 if for_location:
@@ -1823,15 +1819,32 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_hint(self, item_name: str = "") -> bool:
         """Use !hint {item_name},
         for example !hint Lamp to get a spoiler peek for that item.
-        If hint costs are on, this will only give you one new result,
-        you can rerun the command to get more in that case."""
-        return self.get_hints(item_name)
+        Only gives one result per command; use !hint_all {item_name}
+        to hint as many as possible instead."""
+        return self.get_hints(item_name, False, False)
 
     @mark_raw
     def _cmd_hint_location(self, location: str = "") -> bool:
         """Use !hint_location {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location."""
-        return self.get_hints(location, True)
+        for example !hint_location atomic-bomb to get a spoiler peek for that location.
+        Only gives 1 result when hinting a location group; use !hint_location_all {location_name}
+        to hint as many as possible instead."""
+        return self.get_hints(location, True, False)
+    @mark_raw
+    def _cmd_hint_all(self, item_name: str = "") -> bool:
+        """Use !hint_all {item_name},
+        for example !hint Lamp to get a spoiler peek for that item.
+        Will return as many results as possible, possibly spending multiple
+        hints worth of hint points in the process."""
+        return self.get_hints(item_name, False, True)
+
+    @mark_raw
+    def _cmd_hint_location_all(self, location: str = "") -> bool:
+        """Use !hint_location_all {location_name},
+        for example !hint_location atomic-bomb to get a spoiler peek for that location.
+        Will return as many results as possible (relevant when using a location group name),
+        possibly spending multiple hints worth of hint points in the process."""
+        return self.get_hints(location, True, True)
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
