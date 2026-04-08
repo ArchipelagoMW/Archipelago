@@ -1468,11 +1468,16 @@
     }, // parry hover works but is redundant with vanilla logic
     {
         "from": "GoS (Entry) - Root Node", "to": "GoS (Entry) - Greenhouse",
+        "medium_requires": [
+            { "item": "Trick - Bow Hover" },
+            { "item": "Cloud Leap" },
+            { "item": "Ledge Grab" }
+        ],
         "ls_requires": [
             { "item": "Trick - Bow Hover" },
-            { "item": "Ledge Grab" }, // then LS parry vault
-            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
-        ] // no one to parry for T-dash
+            { "item": "Air Dash" }, // for LS setup (no one to parry for T-dash; CL works but is redundant with medium)
+            { "item": "Ledge Grab" } // then LS parry vault
+        ]
     }, // "real elevator skip" in the ASS% speedrun is bow hover, parry vault, T-dash, AD, and 2 bow knockbacks
     { "from": "GoS (Entry) - Greenhouse", "to": "GoS (Entry) - Coffin", "requires": [] }, // fall
     {
