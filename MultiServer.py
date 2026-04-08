@@ -1782,26 +1782,33 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
 
                 self.ctx.notify_hints(self.client.team, hints)
-                if not_found_hints and hint_count > 0:
-                    points_available = get_client_points(self.ctx, self.client)
-                    if hints and cost and int((points_available // cost) <= 0):
-                        self.output(
-                            f"There may be more hintables, however, you cannot afford to pay for any more. "
-                            f" You have {points_available} and need at least "
-                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                    elif hints:
-                        self.output(
-                            "There may be more hintables, you can rerun the command to find more.")
-                    else:
-                        self.output(f"You can't afford the hint. "
-                                    f"You have {points_available} points and need at least "
-                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                points_available = get_client_points(self.ctx, self.client)
+                if hint_count <= 0 and not hints:
+                    self.output("No matching hints already exist.")
+                elif not hints:
+                    self.output(f"You can't afford the hint. "
+                                f"You have {points_available} points and need at least {cost}.")
+                elif not cost or points_available // cost > 0:
+                    self.output(
+                        f"There may be more hintables, you can rerun the command"
+                        f"{"" if hint_count > 0 else "with a non-zero count "} to find more.")
+                else:
+                    self.output(
+                        f"There may be more hintables, however, you cannot afford to pay for any more. "
+                        f" You have {points_available} and need at least {cost}.")
                 self.ctx.save()
                 return True
             elif old_hints:
                 self.ctx.notify_hints(self.client.team, old_hints)
-                if hint_count > 0:
-                    self.output("Hint was previously used, no points deducted.")
+                if cost and points_available // cost <= 0:
+                    self.output(
+                        f"There may be more hintables, however, you cannot afford to pay for any more. "
+                        f" You have {points_available} and need at least {cost}.")
+                elif hint_count > 0:  # only give the information that there are no more hints if the user COULD have paid the cost
+                    self.output(f"No new hint(s) found.{" No points deducted." if cost else ""}")
+                else:
+                    self.output(
+                        "There may be more hintables, you can rerun the command with a non-zero amount to find more.")
         else:
             if points_available >= cost:
                 if for_location:
