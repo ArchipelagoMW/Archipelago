@@ -186,8 +186,9 @@
         ]
     },
     {
-        "address": 510, "name": "FSP: Half-Grown Tree Chest",
-        "region": "FSP - Root Node", "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer" } ] // and Shennong
+        "address": 510, "name": "FSP: Half-Grown Tree Chest", "region": "FSP - Root Node",
+        "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer" } ], // and Shennong
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Storage" } ] // CL setup then CL + LS vault + CL again
     },
     {
         "address": 511, "name": "FSP: Fully Grown Tree 1st Chest",

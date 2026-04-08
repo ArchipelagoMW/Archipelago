@@ -307,11 +307,17 @@
     { "from": "Cortex Center - Right Exit", "to": "Central Hall - Left", "requires": [] },
 
     // Four Seasons Pavilion
-    { "from": "FSP - Root Node", "to": "FSP - Roof", "requires": [
-        { "item": "(Artifact) Unknown Seed" }, // plant the tree
-        { "item": "(Artifact) GM Fertilizer", "count": 2 }, // fully grow the tree
-        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } // jump from tree platform to roof
-    ] },
+    {
+        "from": "FSP - Root Node", "to": "FSP - Roof",
+        "requires": [
+            { "item": "(Artifact) Unknown Seed" }, // plant the tree
+            { "item": "(Artifact) GM Fertilizer", "count": 2 }, // fully grow the tree
+            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } // jump from tree platform to roof
+        ],
+        // CL setup wherever, then CL + LS vault + CL again onto the Half-Grown Tree Chest ledge,
+        // use that ledge for another CL setup, then one more CL + LS vault + CL combo
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Storage" } ]
+    },
 
     // Cortex Center
     {
