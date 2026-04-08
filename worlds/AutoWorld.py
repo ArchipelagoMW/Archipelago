@@ -353,6 +353,8 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
     world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
+    manifest: ClassVar[dict[str, Any]]
+    """Mapping of the world's archipelago.json manifest. Use game and world_version attrs instead for those values."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
