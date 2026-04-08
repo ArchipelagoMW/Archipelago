@@ -1791,7 +1791,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 elif not cost or points_available // cost > 0:
                     self.output(
                         f"There may be more hintables, you can rerun the command"
-                        f"{"" if hint_count > 0 else "with a non-zero count "} to find more.")
+                        f"{'' if hint_count > 0 else 'with a non-zero count '} to find more.")
                 else:
                     self.output(
                         f"There may be more hintables, however, you cannot afford to pay for any more. "
@@ -1805,7 +1805,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         f"There may be more hintables, however, you cannot afford to pay for any more. "
                         f" You have {points_available} and need at least {cost}.")
                 elif hint_count > 0:  # only give the information that there are no more hints if the user COULD have paid the cost
-                    self.output(f"No new hint(s) found.{" No points deducted." if cost else ""}")
+                    self.output(f"No new hint(s) found.{' No points deducted.' if cost else ''}")
                 else:
                     self.output(
                         "There may be more hintables, you can rerun the command with a non-zero amount to find more.")
@@ -1819,8 +1819,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                 f"Item appears to not exist in this multiworld.")
             else:
                 self.output(f"You can't afford the hint. "
-                            f"You have {points_available} points and need at least "
-                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                            f"You have {points_available} points and need at least {cost}.")
             return False
 
     @mark_raw
