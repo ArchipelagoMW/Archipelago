@@ -2086,26 +2086,26 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.notify_hints(client.team, hints, only_new=True, persist_even_if_found=True)
             ctx.save()
         
-        elif cmd == 'UpdateHint':
+        elif cmd == "UpdateHint":
             location = args["location"]
             player = args["player"]
             status = args["status"]
             if not isinstance(player, int) or not isinstance(location, int) \
                     or (status is not None and not isinstance(status, int)):
                 await ctx.send_msgs(client,
-                                    [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint',
+                                    [{"cmd": "InvalidPacket", "type": "arguments", "text": "UpdateHint",
                                       "original_cmd": cmd}])
                 return
             hint = ctx.get_hint(client.team, player, location)
             if not hint:
                 await ctx.send_msgs(client,
-                                    [{'cmd': 'InvalidPacket', "type": "arguments",
+                                    [{"cmd": "InvalidPacket", "type": "arguments",
                                       "text": f"UpdateHint: Hint for location {location} in player {player}'s world not found",
                                       "original_cmd": cmd}])
                 return
             if client.slot not in ctx.slot_set(hint.receiving_player):
                 await ctx.send_msgs(client,
-                                    [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
+                                    [{"cmd": "InvalidPacket", "type": "arguments", "text": "UpdateHint: No Permission",
                                       "original_cmd": cmd}])
                 return
             new_hint = hint
@@ -2115,13 +2115,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 status = HintStatus(status)
             except ValueError:
                 await ctx.send_msgs(client,
-                                    [{'cmd': 'InvalidPacket', "type": "arguments",
-                                      "text": 'UpdateHint: Invalid Status', "original_cmd": cmd}])
+                                    [{"cmd": "InvalidPacket", "type": "arguments",
+                                      "text": "UpdateHint: Invalid Status", "original_cmd": cmd}])
                 return
             if status == HintStatus.HINT_FOUND:
                 await ctx.send_msgs(client,
-                                    [{'cmd': 'InvalidPacket', "type": "arguments",
-                                      "text": 'UpdateHint: Cannot manually update status to "HINT_FOUND"', "original_cmd": cmd}])
+                                    [{"cmd": "InvalidPacket", "type": "arguments",
+                                      "text": "UpdateHint: Cannot manually update status to \"HINT_FOUND\"", "original_cmd": cmd}])
                 return
             new_hint = new_hint.re_prioritize(ctx, status)
             if hint == new_hint:
