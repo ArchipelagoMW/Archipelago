@@ -315,6 +315,9 @@ class RandomizeShops(Toggle):
     - Chiyou and 3D Printer shop locations are grouped into low, medium and high cost.
     They'll become "in logic" as you gain access to more of the game world.
     Depending on your first_root_node, low cost locations may be in logic immediately.
+
+    Jin can get pretty tight if enough important items land in shops, so consider additional mods
+    such as Jin Multiplier and No Death Penalty.
     """
 
 
