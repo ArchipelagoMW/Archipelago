@@ -4,11 +4,12 @@ import asyncio
 import subprocess
 import tempfile
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import AsyncIterator
+from types import SimpleNamespace
+from typing import AsyncIterator, Callable
 
-from core import HostService, InstallService, LaunchService, ProcessRunner, create_bus, create_dispatcher
+from core import ComponentCatalogService, HostService, InstallService, LaunchService, ProcessRunner, create_bus, create_dispatcher
 
 
 class FakeProcessRunner(ProcessRunner):
@@ -16,6 +17,8 @@ class FakeProcessRunner(ProcessRunner):
         self.lines = list(lines)
         self.error = error
         self.commands: list[list[str]] = []
+        self.blocking_commands: list[list[str]] = []
+        self.launches: list[tuple[list[str], bool]] = []
 
     async def run_streaming(self, command: list[str]) -> AsyncIterator[str]:
         self.commands.append(command)
@@ -23,6 +26,16 @@ class FakeProcessRunner(ProcessRunner):
             yield line
         if self.error is not None:
             raise self.error
+
+    async def run_blocking(self, command: list[str]) -> int:
+        self.blocking_commands.append(command)
+        if self.error is not None:
+            raise self.error
+        return 0
+
+    async def run_detached(self, command: list[str], in_terminal: bool = False) -> bool:
+        self.launches.append((command, in_terminal))
+        return in_terminal
 
 
 class FakeHostHandle:
@@ -43,6 +56,90 @@ class FakeHostHandle:
         self.alive = False
 
 
+class FakeSuffixIdentifier:
+    def __init__(self, *suffixes: str) -> None:
+        self.suffixes = suffixes
+
+    def __call__(self, path: str) -> bool:
+        return any(path.endswith(suffix) for suffix in self.suffixes)
+
+
+@dataclass(slots=True)
+class FakeLegacyComponent:
+    display_name: str
+    script_name: str | None = None
+    frozen_name: str | None = None
+    description: str = ""
+    type: object = field(default_factory=lambda: SimpleNamespace(name="MISC"))
+    cli: bool = False
+    func: Callable[..., object] | None = None
+    file_identifier: Callable[[str], bool] | None = None
+    game_name: str | None = None
+    supports_uri: bool = False
+    handler_id: str | None = None
+    launch_mode: str | None = None
+    id: str | None = None
+    icon: str = "icon"
+
+    def handles_file(self, path: str) -> bool:
+        return self.file_identifier(path) if self.file_identifier else False
+
+
+def fake_registry() -> list[FakeLegacyComponent]:
+    return [
+        FakeLegacyComponent(
+            "Host",
+            script_name="MultiServer",
+            frozen_name="ArchipelagoServer",
+            description="Host a generated multiworld on your computer.",
+            type=SimpleNamespace(name="MISC"),
+            cli=True,
+            file_identifier=FakeSuffixIdentifier(".archipelago", ".zip"),
+            handler_id="host",
+            launch_mode="terminal",
+            id="host",
+        ),
+        FakeLegacyComponent(
+            "Text Client",
+            script_name="CommonClient",
+            frozen_name="ArchipelagoTextClient",
+            description="Connect to a multiworld using the text client.",
+            type=SimpleNamespace(name="CLIENT"),
+            handler_id="process",
+            launch_mode="background",
+            id="text_client",
+        ),
+        FakeLegacyComponent(
+            "Messenger Client",
+            script_name="MessengerClient",
+            description="Messenger client.",
+            type=SimpleNamespace(name="CLIENT"),
+            game_name="The Messenger",
+            supports_uri=True,
+            handler_id="process",
+            launch_mode="background",
+            id="messenger_client",
+        ),
+        FakeLegacyComponent(
+            "Install APWorld",
+            description="Install an APWorld.",
+            type=SimpleNamespace(name="MISC"),
+            file_identifier=FakeSuffixIdentifier(".apworld"),
+            handler_id="install_apworld",
+            launch_mode="direct",
+            id="install_apworld",
+        ),
+        FakeLegacyComponent(
+            "Export Datapackage",
+            description="Export datapackage.",
+            type=SimpleNamespace(name="TOOL"),
+            handler_id="export_datapackage",
+            launch_mode="direct",
+            id="export_datapackage",
+        ),
+    ]
+
+
 @dataclass(slots=True)
 class DispatcherHarness:
     dispatcher: object
@@ -52,6 +149,7 @@ class DispatcherHarness:
     host_service: HostService[dict[str, float]]
     process_runner: FakeProcessRunner
     host_handle: FakeHostHandle
+    component_catalog: ComponentCatalogService
 
 
 def make_dispatcher() -> DispatcherHarness:
@@ -64,7 +162,15 @@ def make_dispatcher() -> DispatcherHarness:
         command_resolver=lambda game, profile: ["launcher", game] if game == "Archipelago" else None,
     )
     host_service = HostService(host_factory=lambda multidata, host, port: host_handle)
-    dispatcher = create_dispatcher(bus, install_service, launch_service, host_service)
+    component_catalog = ComponentCatalogService(registry_provider=fake_registry)
+    dispatcher = create_dispatcher(
+        bus,
+        install_service,
+        launch_service,
+        host_service,
+        catalog_service=component_catalog,
+        process_runner=process_runner,
+    )
     return DispatcherHarness(
         dispatcher=dispatcher,
         bus=bus,
@@ -73,6 +179,7 @@ def make_dispatcher() -> DispatcherHarness:
         host_service=host_service,
         process_runner=process_runner,
         host_handle=host_handle,
+        component_catalog=component_catalog,
     )
 
 

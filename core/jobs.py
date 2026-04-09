@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import logging
 from dataclasses import asdict, dataclass, field, is_dataclass
 from enum import Enum
 from typing import Any, Awaitable, Callable, Generic, TypeVar, cast
@@ -13,6 +14,7 @@ from .result import Err, Ok
 
 TEvent = TypeVar("TEvent")
 JobWork = Callable[["JobContext[TEvent]"], Awaitable[Any] | Any]
+logger = logging.getLogger(__name__)
 
 
 class JobStatus(str, Enum):
@@ -92,6 +94,7 @@ class JobContext(Generic[TEvent]):
         """
 
         self.record.logs.append(message)
+        logger.info("Job %s: %s", self.job_id, message)
 
     async def progress(self, value: float) -> None:
         """Clamp and store job progress between `0.0` and `1.0`.
@@ -168,7 +171,27 @@ class JobManager(Generic[TEvent]):
                         record.progress = 1.0
 
         future = asyncio.create_task(run_job())
-        future.add_done_callback(lambda _: self._futures.pop(job_id, None))
+
+        def finalize_job(done_future: asyncio.Future[Any]) -> None:
+            self._futures.pop(job_id, None)
+            if done_future.cancelled():
+                logger.info("Job %s cancelled.", job_id)
+                return
+
+            exception = done_future.exception()
+            if exception is not None:
+                logger.exception("Job %s crashed.", job_id, exc_info=exception)
+                return
+
+            record = self._records.get(job_id)
+            if record is None:
+                return
+            if record.status is JobStatus.FAILED:
+                logger.error("Job %s failed: %s", job_id, record.error or "unknown error")
+            elif record.status is JobStatus.SUCCEEDED:
+                logger.info("Job %s completed successfully.", job_id)
+
+        future.add_done_callback(finalize_job)
         self._futures[job_id] = future
         return job_id
 
