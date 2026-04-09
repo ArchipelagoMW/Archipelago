@@ -23,7 +23,7 @@ buff_name_map: dict[FriendlyBuffNames, Aura] = {
     "Smart": "smart",
 }
 
-FriendlyTrapNames = Literal["Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"]
+FriendlyTrapNames = Literal["Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial", "Poison"]
 trap_name_map: dict[FriendlyTrapNames, Aura] = {
     "Upset Tummy": "upset_tummy",
     "Unlucky": "unlucky",
@@ -31,12 +31,14 @@ trap_name_map: dict[FriendlyTrapNames, Aura] = {
     "Distracted": "distracted",
     "Startled": "startled",
     "Conspiratorial": "conspiratorial",
+    "Poison": "poison",
 }
 
 class FillWithDetermination(Toggle):
     """Either fills the rat with determination, or does nothing. Perhaps both.
 
     This option was added early on for technical reasons. It does not directly affect the game."""
+    visibility = Visibility.none
     display_name = "Fill With Determination"
 
 
@@ -76,15 +78,23 @@ class EnabledTraps(OptionSet):
     - **Sluggish:** Moves slower
     - **Distracted:** Skip a "step"
     - **Startled:** Run towards start
-    - **Conspiratorial:** Next check is trap"""
+    - **Conspiratorial:** Next check is trap
+    - **Poison:** Dies"""
     display_name = "Enabled Traps"
     value: frozenset[FriendlyTrapNames]
     valid_keys = default = frozenset(trap_name_map.keys())
     map: ClassVar[dict[FriendlyTrapNames, Aura]] = trap_name_map
 
 
+class DeathLink(Toggle):
+    """When you die, everyone who enabled death link dies. Of course, the reverse is true too."""
+    display_name = "Death Link"
+
+
 class DeathDelaySeconds(Range):
-    """Sets the delay (in seconds) from a death trigger to when the rat actually "dies". Has no effect if DeathLink is disabled.
+    """Has no effect if "Poison" traps are disabled. Otherwise:
+
+    Sets the delay (in seconds) from a death trigger to when the rat actually "dies".
 
     Default: 5 (seconds)
     """
@@ -92,6 +102,26 @@ class DeathDelaySeconds(Range):
     range_start = 0
     range_end = 60
     default = 5
+
+
+class DeathItemPercentage(Range):
+    """Has no effect if "Poison" traps are disabled. Otherwise:
+
+    Controls what percentage of trap items added to the pool should be replaced by "poison" items. The percentage is
+    taken from the items that are INTENDED to be traps, so you can disable all other traps and still get the same number
+    of "poison" items as you would otherwise have.
+
+    Specifically, items with "poison" auras are held back, and then this configured percentage of random trap items are
+    replaced by copies of the items that were held back.
+
+    Whole numbers only.
+
+    Default: 2 (percent).
+    """
+    display_name = "Death Item Replacement %"
+    range_start = 0
+    range_end = 100
+    default = 2
 
 
 # hack to avoid outputting the messages in flow style. it REALLY helps readability, which matters especially now before
@@ -246,6 +276,19 @@ class CompleteGoalMessages(RatChatMessages):
     )
 
 
+class ImpendingDoomMessages(RatChatMessages):
+    """What messages the rat can say when it's about to die.
+
+    Specify the message itself, or with an optional weight to have that message appear more often (default weight is 1).
+
+    If you want to disable rat chat, then you're in the wrong place. Do that from the settings menu in the game client itself."""
+    display_name = "Messages - Impending Doom"
+
+    default = RatChatMessagesHack(
+        "I don't feel so good...",
+    )
+
+
 class LactoseIntolerantMode(Toggle):
     """Replaces all references to lactose-containing products with less offensive ones."""
     display_name = "Lactose Intolerant Mode"
@@ -263,8 +306,8 @@ class AutopelagoGameOptions(PerGameCommonOptions):
     msg_remind_bk: RemindBKModeMessages
     msg_exit_bk: ExitBKModeMessages
     msg_completed_goal: CompleteGoalMessages
+    msg_impending_doom: ImpendingDoomMessages
     lactose_intolerant: LactoseIntolerantMode
-
-    # not working yet:
-    # death_link: DeathLink
-    # death_delay_seconds: DeathDelaySeconds
+    death_link: DeathLink
+    death_delay_seconds: DeathDelaySeconds
+    death_item_percentage: DeathItemPercentage

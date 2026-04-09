@@ -52,7 +52,7 @@ def _names_of(item: AutopelagoItemDefinition):
     return [lactose_name, lactose_intolerant_name]
 
 
-def _rat_count_of(item: AutopelagoItemDefinition):
+def _rat_count_of(item: AutopelagoItemDefinition) -> int | None:
     return item["rat_count"] if isinstance(item, dict) and "rat_count" in item else None
 
 
@@ -147,6 +147,7 @@ _aura_classification_points: dict[Aura, int] = {
   "distracted": -3,
   "startled": -6,
   "conspiratorial": -1,
+  "poison": -999,
 }
 ENABLED_AURA_SCORE_MULTIPLIER = 1_000_000
 ENABLED_AURA_SCORE_THRESHOLD = 100_000

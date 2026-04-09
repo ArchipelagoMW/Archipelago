@@ -361,8 +361,8 @@ regions:
           - item: legally_binding_contract
       ability_check_dc: 18
       exits:
-        - before_room_full_of_typewriters
         - before_binary_tree
+        - before_room_full_of_typewriters
 
     blue_colored_screen_interface:
       name: 'Blue-Colored Screen Interface'

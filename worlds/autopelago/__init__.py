@@ -1,6 +1,7 @@
 import typing
 from collections import deque
 from collections.abc import Iterable
+from math import ceil
 from typing import TypeVar
 
 from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
@@ -48,6 +49,9 @@ from .options import (
     AutopelagoGameOptions,
     ChangedTargetMessages,
     CompleteGoalMessages,
+    DeathDelaySeconds,
+    DeathItemPercentage,
+    DeathLink,
     EnabledBuffs,
     EnabledTraps,
     EnterBKModeMessages,
@@ -118,6 +122,21 @@ class AutopelagoWebWorld(WebWorld):
         link="guide/en",
         authors=["airbreather"]
     )]
+    option_groups: typing.ClassVar[list[OptionGroup]] = [
+        OptionGroup("Death Settings", [
+            DeathLink,
+            DeathDelaySeconds,
+            DeathItemPercentage,
+        ]),
+        OptionGroup("Message Text Replacements", [
+            ChangedTargetMessages,
+            EnterGoModeMessages,
+            EnterBKModeMessages,
+            RemindBKModeMessages,
+            ExitBKModeMessages,
+            CompleteGoalMessages,
+        ]),
+    ]
 
 
 class AutopelagoWorld(World):
@@ -136,16 +155,6 @@ class AutopelagoWorld(World):
     locations_in_scope: set[str]
     enabled_auras: set[Aura]
     enabled_auras_by_item_id: dict[int, list[Aura]]
-    option_groups: typing.ClassVar[list[OptionGroup]] = [
-        OptionGroup("Message Text Replacements", [
-            ChangedTargetMessages,
-            EnterGoModeMessages,
-            EnterBKModeMessages,
-            RemindBKModeMessages,
-            ExitBKModeMessages,
-            CompleteGoalMessages,
-        ]),
-    ]
 
     # item_name_to_id and location_name_to_id must be filled VERY early. don't get any ideas about
     # having the user's YAML file dynamically create new items / locations or anything like that. of
@@ -241,6 +250,19 @@ class AutopelagoWorld(World):
         # nonprogression items are tricky. even just picking an item to fill a slot that's marked as
         # a buff/trap/filler is nontrivial because buffs and traps can be disabled arbitrarily.
         item_pools = { k: self._sort_nonprogression_items_for_item_type(k) for k in nonprogression_item_types }
+        poison_items_for_replacement: set[str] = set()
+        if self.options.death_item_percentage.value > 0 and "poison" in self.enabled_auras:
+            for item_pool in item_pools.values():
+                new_item_pool: list[str] = []
+                for item_name in item_pool:
+                    if item_name in item_name_to_auras and "poison" in item_name_to_auras[item_name]:
+                        poison_items_for_replacement.add(item_name)
+                    else:
+                        new_item_pool.append(item_name)
+                item_pool.clear()
+                item_pool.extend(new_item_pool)
+        item_names_by_item_type: dict[AutopelagoNonProgressionItemType, list[str]] = \
+            { k: [] for k in nonprogression_item_types }
         next_item_indices = dict.fromkeys(nonprogression_item_types, 0)
 
         # none of the "unrandomized" items at our locations actually say "trap"; instead, half of
@@ -263,10 +285,26 @@ class AutopelagoWorld(World):
                 next_item_index += 1
                 if next_item in excluded_names:
                     continue
-                self.multiworld.itempool.append(self.create_item(next_item))
+                item_names_by_item_type[item_type].append(next_item)
                 excluded_names.add(next_item)
                 next_item_indices[item_type] = next_item_index
                 break
+
+        if self.options.death_item_percentage.value > 0 and "poison" in self.enabled_auras:
+            # replace enough traps in the item pool to ensure that we hit the target.
+            traps = item_names_by_item_type["trap"]
+            replacement_count = ceil(self.options.death_item_percentage.value / 100 * len(traps))
+            replacements = list(self.random.choices(list(poison_items_for_replacement), k=replacement_count))
+            # replace them in reverse order: _sort_nonprogression_items_for_item_type ensured that
+            # the most replaceable ones are at the end.
+            for i in range(replacement_count):
+                traps[-i - 1] = replacements.pop()
+
+        self.multiworld.itempool += (
+            self.create_item(item_name)
+            for item_names in item_names_by_item_type.values()
+            for item_name in item_names
+        )
 
     def create_regions(self):
         victory_region = Region("Victory", self.player, self.multiworld)
@@ -283,7 +321,8 @@ class AutopelagoWorld(World):
                 if self.options.victory_location == VictoryLocation.option_snakes_on_a_planet:
                     r.locations[0].place_locked_item(self.create_item("Moon Shoes"))
             for next_exit in r.autopelago_definition.exits:
-                r.connect(new_regions[next_exit], rule=new_regions[next_exit].rule)
+                if next_exit in new_regions:
+                    r.connect(new_regions[next_exit], rule=new_regions[next_exit].rule)
 
     def get_filler_item_name(self):
         assert "Nothing" in self.item_name_to_id
@@ -315,9 +354,15 @@ class AutopelagoWorld(World):
             "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
             "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
 
-            # not working yet:
-            # "death_link": bool(self.options.death_link),
-            # "death_delay_seconds": self.options.death_delay_seconds - 0,
+            # above 1.0.0, new options must be added in clearly identifiable sections like this. they also
+            # should ideally be backwards-compatible to the greatest extent possible so that older 1.x
+            # clients can completely ignore what they don't recognize and still complete the game (albeit
+            # potentially without the benefit of whatever frills have been added).
+            "added_in_1_1_0": {
+                "msg_impending_doom": self.options.msg_impending_doom.value,
+                "death_link": bool(self.options.death_link),
+                "death_delay_seconds": int(self.options.death_delay_seconds),
+            },
         }
 
     def _sort_nonprogression_items_for_item_type(self, item_type: AutopelagoNonProgressionItemType):

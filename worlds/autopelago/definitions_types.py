@@ -13,6 +13,7 @@ Aura = Literal[
   "distracted",
   "startled",
   "conspiratorial",
+  "poison",
 ]
 
 
@@ -104,7 +105,7 @@ class AutopelagoRegionDefinition:
     key: str
     exits: list[str]
     locations: list[str]
-    requires: AutopelagoAllRequirement
+    requires: AutopelagoGameRequirement
     landmark: bool
 
     def __init__(self, key: str, exits: list[str], locations: list[str], requires: AutopelagoGameRequirement,

@@ -1,6 +1,6 @@
 import dataclasses
-from collections.abc import Mapping
-from typing import Any, Iterable, Self
+from collections.abc import Iterable, Mapping
+from typing import Any, Self
 
 from typing_extensions import override
 
@@ -58,7 +58,7 @@ class HasRatCount(Rule[TWorld], game=GAME_NAME):
     @classmethod
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         rat_count = data.get("rat_count")
-        if rat_count is None:
+        if not isinstance(rat_count, int):
             raise ValueError("Missing 'rat_count' in HasRatCount rule")
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(rat_count, options=options, filtered_resolution=data.get("filtered_resolution", False))

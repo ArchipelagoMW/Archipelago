@@ -111,7 +111,10 @@
 - ['Extra-Well-Done Steak', [upset_tummy]]
 - ['Your Friendly Neighborhood Tapeworm', [upset_tummy, upset_tummy, upset_tummy]]
 - ['Honey Roasted Packing Peanuts', [upset_tummy]]
-- ['Rat Poison', [upset_tummy, upset_tummy, upset_tummy, unlucky, startled, startled, startled, sluggish]]
+
+# the other auras only matter when 'poison' is disabled. otherwise, it triggers a death, which resets everything else.
+- ['Rat Poison', [poison, upset_tummy, upset_tummy, upset_tummy, unlucky, startled, startled, startled, sluggish]]
+
 - ['Poisonous Mushroom', [upset_tummy, upset_tummy, unlucky]]
 - ['Too Much Eggnog', [upset_tummy]]
 - ['Peanut Boulder and Jelly Sandwich', [upset_tummy, sluggish]]
