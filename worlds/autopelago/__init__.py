@@ -57,6 +57,7 @@ from .options import (
     EnterBKModeMessages,
     EnterGoModeMessages,
     ExitBKModeMessages,
+    ImpendingDoomMessages,
     RemindBKModeMessages,
     VictoryLocation,
 )
@@ -129,6 +130,7 @@ class AutopelagoWebWorld(WebWorld):
             DeathItemPercentage,
         ]),
         OptionGroup("Message Text Replacements", [
+            ImpendingDoomMessages,
             ChangedTargetMessages,
             EnterGoModeMessages,
             EnterBKModeMessages,
