@@ -23,6 +23,7 @@ from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET, RAC3REGION
+from worlds.rac3.constants.vendors.name import RAC3VENDORNAME
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR
 
@@ -399,15 +400,15 @@ async def handle_vendors(ctx: "Context") -> None:
 
     ctx.game_interface.vendor_update()
 
-    # TODO: If people want ship vendor scouting, redo the yaml option to be similar to the 1-HP Challenge approach
     if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR or not ctx.slot_data.get(RAC3OPTION.SCOUT_VENDORS, False):
         return
 
+    vendor_scouting = ctx.slot_data[RAC3OPTION.SCOUT_VENDORS]
     vendor_type = ctx.game_interface.vendor_type
     vendor_location_apcodes = []
     match vendor_type:
         case RAC3VENDORTYPE.WEAPON:
-            if not ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False):
+            if not ctx.slot_data.get(RAC3OPTION.WEAPON_VENDORS, False) or not vendor_scouting.get(RAC3VENDORNAME.WEAPON, False):
                 return
             vendor_items = ctx.game_interface.weapon_vendor_items
             is_slimcognito = (
@@ -428,18 +429,18 @@ async def handle_vendors(ctx: "Context") -> None:
                             for item in filtered_items if item in ITEM_TO_WEAPON_VENDOR_LOCATION]
             vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
         case RAC3VENDORTYPE.ARMOR:
-            if not ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False):
+            if not ctx.slot_data.get(RAC3OPTION.ARMOR_VENDOR, False) or not vendor_scouting.get(RAC3VENDORNAME.ARMOR, False):
                 return
 
             armor_items = ctx.game_interface.armor_vendor_items
             vendor_locations = [ITEM_TO_ARMOR_VENDOR_LOCATION[item] for item in armor_items if item in ITEM_TO_ARMOR_VENDOR_LOCATION]
             vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in vendor_locations]
         case RAC3VENDORTYPE.SHIP:
-            if not ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
+            if not ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False) or not vendor_scouting.get(RAC3VENDORNAME.SHIP, False):
                 return
-            # ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[ctx.game_interface.UnlockItem[RAC3REGION.SLOT_0].status*3]
-            # filtered_ship_keys = [key for key in ship_keys if key not in ctx.game_interface.checked_locations]
-            # vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[key].AP_CODE for key in filtered_ship_keys]
+            ship_keys = list(SHIP_VENDOR_INVENTORY.keys())[:ctx.game_interface.UnlockItem[RAC3REGION.SLOT_0].status*3]
+            filtered_ship_keys = [key for key in ship_keys if key not in ctx.game_interface.checked_locations]
+            vendor_location_apcodes = [RAC3_LOCATION_DATA_TABLE[key].AP_CODE for key in filtered_ship_keys]
 
     current_hints = set(vendor_location_apcodes)
     if current_hints and current_hints != ctx.already_hinted:
