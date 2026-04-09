@@ -293,6 +293,16 @@ function mapcursor_enter(varsunitid)
 	end
 end
 
+orig_findletterwords = findletterwords
+function findletterwords(...)
+    -- behave as base world
+    local prevBase = generaldata.strings[BASEWORLD]
+    generaldata.strings[BASEWORLD] = generaldata.strings[WORLD]
+    local results = table.pack(orig_findletterwords(...))
+    generaldata.strings[BASEWORLD] = prevBase -- change back after running
+    return table.unpack(results)
+end
+
 -- Go to different first level when level shuffle is on
 orig_firstlevel = orig_firstlevel or firstlevel
 function firstlevel()
