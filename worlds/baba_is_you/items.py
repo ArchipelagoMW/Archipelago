@@ -93,18 +93,21 @@ def create_item_with_correct_classification(world: BabaIsYouWorld, name: str) ->
 # You can do the same with location_name_groups in locations.py (or anywhere) if you like.
 # I have only added the words seen in words.py so far. If others are included in the pool somewhere, add them as well.
 item_name_groups = {
-    "Nouns": {"Baba", "Flag", "Wall", "Rock", "Skull", "Lava", "Star", "Crab", "Keke", "Love", "Pillar",
-               "Jelly", "Key", "Door", "Belt", "Rose", "Violet", "Water", "Text", "Robot", "Bolt", "Cog",
-               "Box", "Ghost", "Ice", "Leaf", "Fence", "Me", "Tree", "Bug", "Fungus", "Empty", "Cloud",
-               "Rocket", "UFO", "Moon", "Dust", "Grass", "Hand", "Fruit", "All", "Bat", "Group","Fire", 
-               "Bird", "Sun", "Tile"},
+    "Nouns": {"Baba", "Flag", "Wall", "Rock", "Skull", "Lava", "Star", "Crab", "Keke", "Love",
+              "Pillar", "Jelly", "Key", "Door", "Belt", "Rose", "Violet", "Water", "Robot", "Bolt",
+              "Cog", "Box", "Ghost", "Ice", "Leaf", "Fence", "Me", "Tree", "Bug", "Fungus",
+              "Cloud", "Rocket", "UFO", "Moon", "Dust", "Grass", "Hand", "Fruit", "Bat", "Fire", 
+              "Bird", "Sun", "Tile"},
     "Verbs": {"Is", "Has", "Make"},
-    "Properties": {"You", "Win", "Stop", "Push", "Sink", "Defeat", "Move", "Open", "Shut", "Shift", "End",
-                   "Red", "Blue", "Float", "Hot", "Weak", "Melt", "Tele", "Pull", "Up", "Right", "Swap",
-                   "Fall", "More", "Word", "Sleep"},
-    "Conditions": {"Facing", "Lonely"},
+    "Properties": {"You", "Win", "Stop", "Push", "Sink", "Defeat", "Move", "Open", "Shut", "Shift",
+                   "End", "Red", "Blue", "Float", "Hot", "Weak", "Melt", "Tele", "Pull", "Up",
+                   "Right", "Swap",  "Fall", "More", "Word", "Sleep"},
+    "Conditions": {"On", "Facing", "Lonely"},
+    "Special Nouns": {"Text", "Empty", "All", "Group"},
 #    "Letters": {},  # Commented out since it has nothing. For future use.
-    "Other": {"Not", "And"},
+    "Misc": {"Not", "And"},
+    "World Keys": {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key",
+             "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key"},
 }
 
 
