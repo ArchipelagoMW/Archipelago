@@ -88,6 +88,25 @@ def create_item_with_correct_classification(world: BabaIsYouWorld, name: str) ->
 
     return BabaIsYouItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
+# I like to define item groups here. Item groups must be formatted exactly as a dictionary containing sets.
+# The dictionary key is the name of the group that you can hint for, and the set inside contains everything in that group.
+# You can do the same with location_name_groups in locations.py (or anywhere) if you like.
+# I have only added the words seen in words.py so far. If others are included in the pool somewhere, add them as well.
+item_name_groups = {
+    "Nouns": {"Baba", "Flag", "Wall", "Rock", "Skull", "Lava", "Star", "Crab", "Keke", "Love", "Pillar",
+               "Jelly", "Key", "Door", "Belt", "Rose", "Violet", "Water", "Text", "Robot", "Bolt", "Cog",
+               "Box", "Ghost", "Ice", "Leaf", "Fence", "Me", "Tree", "Bug", "Fungus", "Empty", "Cloud",
+               "Rocket", "UFO", "Moon", "Dust", "Grass", "Hand", "Fruit", "All", "Bat", "Group","Fire", 
+               "Bird", "Sun", "Tile"},
+    "Verbs": {"Is", "Has", "Make"},
+    "Properties": {"You", "Win", "Stop", "Push", "Sink", "Defeat", "Move", "Open", "Shut", "Shift", "End",
+                   "Red", "Blue", "Float", "Hot", "Weak", "Melt", "Tele", "Pull", "Up", "Right", "Swap",
+                   "Fall", "More", "Word", "Sleep"},
+    "Conditions": {"Facing", "Lonely"},
+#    "Letters": {},  # Commented out since it has nothing. For future use.
+    "Other": {"Not", "And"},
+}
+
 
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: BabaIsYouWorld) -> None:
