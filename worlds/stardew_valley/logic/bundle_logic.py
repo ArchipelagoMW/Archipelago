@@ -61,7 +61,7 @@ class BundleLogic(BaseLogic):
         if crop_quality != CropQuality.basic:
             quality_rules.append(self.logic.quality.can_grow_crop_quality(crop_quality))
         if fish_quality != FishQuality.basic:
-            quality_rules.append(self.logic.fishing.can_catch_quality_fish(fish_quality))
+            quality_rules.append(self.logic.fishing.can_catch_quality_fish_rod(fish_quality))
         if forage_quality != ForageQuality.basic:
             quality_rules.append(self.logic.skill.can_forage_quality(forage_quality))
         if artisan_quality != ArtisanQuality.basic:

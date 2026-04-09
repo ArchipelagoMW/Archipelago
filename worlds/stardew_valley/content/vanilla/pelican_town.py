@@ -353,7 +353,7 @@ pelican_town = ContentPack(
         fish_data.chub,
         fish_data.dorado,
         fish_data.eel,
-        fish_data.flounder,
+        fish_data.flounder,  # Ginger island override
         fish_data.goby,
         fish_data.halibut,
         fish_data.herring,

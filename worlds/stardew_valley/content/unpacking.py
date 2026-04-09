@@ -4,8 +4,12 @@ from graphlib import TopologicalSorter
 from typing import Iterable, Mapping, Callable
 
 from .game_content import StardewContent, ContentPack, StardewFeatures
+from .override import override
 from .vanilla.base import base_game as base_game_content_pack
+from .vanilla.ginger_island import ginger_island_content_pack
 from ..data.game_item import Source
+from ..regions.vanilla_content_packs import ginger_island_regions
+from ..regions.vanilla_data import vanilla_regions
 
 
 def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> StardewContent:
@@ -35,6 +39,7 @@ def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> S
             packs_to_finalize.append(pack)
 
     prune_inaccessible_items(content)
+    prune_inaccessible_regions(content)
 
     for pack in packs_to_finalize:
         pack.finalize_hook(content)
@@ -99,3 +104,17 @@ def prune_inaccessible_items(content: StardewContent):
     for item in list(content.game_items.values()):
         if not item.sources:
             content.game_items.pop(item.name)
+
+
+def prune_inaccessible_regions(content: StardewContent):
+    inaccessible_regions = []
+    allowed_regions = [region.name for region in vanilla_regions]
+    if ginger_island_content_pack.name not in content.registered_packs:
+        inaccessible_regions.extend([region.name for region in ginger_island_regions if region.name not in allowed_regions])
+    prune_inaccessible_fish_regions(content, inaccessible_regions)
+
+
+def prune_inaccessible_fish_regions(content: StardewContent, inaccessible_regions: list[str]):
+    for fish_name, fish_content in content.fishes.items():
+        pruned_regions = tuple([region for region in fish_content.locations if region not in inaccessible_regions])
+        content.fishes[fish_name] = override(fish_content, locations=pruned_regions)

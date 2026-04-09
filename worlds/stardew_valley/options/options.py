@@ -953,7 +953,6 @@ class DataRandomizationBehavior(Choice):
         Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
         Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws
         Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed
-        Wild: All entries are given a random value, with no regard for the original entries at all.
     """
     internal_name = "data_randomization_behavior"
     display_name = "Data Randomization Behavior"
@@ -963,13 +962,17 @@ class DataRandomizationBehavior(Choice):
     option_weighted_randomized = 2
     option_randomized = 3
     option_range_randomized = 4
-    # option_wild = 5
+    # option_wild = 5 # Wild: All entries are given a random value, with no regard for the original entries at all.
 
 
 class DataRandomization(OptionSet):
     """
     Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet.
     Fish Difficulty: Randomizes the difficulty of fish
+    Fish Season: Randomizes which seasons fish can be caught in
+    Fish Location: Randomizes which body of water fish can be caught in
+    Fish Weather: Randomizes which weather fish can be caught in
+    Fish Catch Method: Randomizes whether fish are caught using fishing rods or crab pots.
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"

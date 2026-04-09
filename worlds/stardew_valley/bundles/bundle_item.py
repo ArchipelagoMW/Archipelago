@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from ..content import StardewContent, content_packs
+from ..data.fish_data import crab_pot_difficulty
 from ..options import StardewValleyOptions, FestivalLocations
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
@@ -101,6 +102,11 @@ class BundleItem:
         return f"{self.amount} {quality} {self.get_item()}"
 
     def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        if self.item_name in content.fishes:
+            crab_pot_illegal_qualities = [FishQuality.gold, FishQuality.iridium]
+            if content.fishes[self.item_name].difficulty == crab_pot_difficulty and self.quality in crab_pot_illegal_qualities:
+                return False
+
         if isinstance(self.source, ContentItemSource):
             return self.get_item() in content.game_items
 

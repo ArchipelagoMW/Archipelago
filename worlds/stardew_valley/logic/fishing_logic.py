@@ -121,7 +121,7 @@ class FishingLogic(BaseLogic):
 
         return self.logic.false_
 
-    def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
+    def can_catch_quality_fish_rod(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
             return self.logic.true_
         if fish_quality == FishQuality.silver:
@@ -130,6 +130,16 @@ class FishingLogic(BaseLogic):
             return self.logic.skill.has_level(Skill.fishing, 4) & self.can_use_tackle(Fishing.quality_bobber)
         if fish_quality == FishQuality.iridium:
             return self.logic.skill.has_level(Skill.fishing, 10) & self.can_use_tackle(Fishing.quality_bobber)
+
+        raise ValueError(f"Quality {fish_quality} is unknown.")
+
+    def can_catch_quality_fish_crab_pot(self, fish_quality: str) -> StardewRule:
+        if fish_quality == FishQuality.basic:
+            return self.logic.true_
+        if fish_quality == FishQuality.silver:
+            return self.logic.has(Fishing.deluxe_bait)
+        if fish_quality == FishQuality.gold or fish_quality == FishQuality.iridium:
+            return self.logic.false_
 
         raise ValueError(f"Quality {fish_quality} is unknown.")
 
