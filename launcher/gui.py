@@ -114,6 +114,33 @@ def run_gui(launch_components: list[LauncherEntry] | None, args: Sequence[str]) 
                     self.current_filter = filters
             super().__init__()
 
+        @staticmethod
+        def _normalize_filter_values(type_filter: Sequence[str | ComponentKind] | None) -> list[str | ComponentKind]:
+            """Map persisted/KV filter values onto `ComponentKind` members."""
+
+            if not type_filter:
+                return [ComponentKind.CLIENT, ComponentKind.ADJUSTER, ComponentKind.TOOL, ComponentKind.MISC]
+
+            normalized: list[str | ComponentKind] = []
+            for value in type_filter:
+                if value == "favorites":
+                    normalized.append(value)
+                    continue
+                if isinstance(value, ComponentKind):
+                    normalized.append(value)
+                    continue
+
+                member_name = getattr(value, "name", None)
+                if isinstance(member_name, str) and member_name in ComponentKind.__members__:
+                    normalized.append(ComponentKind[member_name])
+                    continue
+
+                if isinstance(value, str):
+                    upper_value = value.upper()
+                    if upper_value in ComponentKind.__members__:
+                        normalized.append(ComponentKind[upper_value])
+            return normalized
+
         def set_favorite(self, caller):
             if caller.component.display_name in self.favorites:
                 self.favorites.remove(caller.component.display_name)
@@ -147,8 +174,7 @@ def run_gui(launch_components: list[LauncherEntry] | None, args: Sequence[str]) 
             return button_card
 
         def _refresh_components(self, type_filter: Sequence[str | ComponentKind] | None = None) -> None:
-            if not type_filter:
-                type_filter = [ComponentKind.CLIENT, ComponentKind.ADJUSTER, ComponentKind.TOOL, ComponentKind.MISC]
+            type_filter = self._normalize_filter_values(type_filter)
             favorites = "favorites" in type_filter
 
             assert self.button_layout, "must call `build` first"

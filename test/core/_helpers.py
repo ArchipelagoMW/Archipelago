@@ -10,6 +10,7 @@ from types import SimpleNamespace
 from typing import AsyncIterator, Callable
 
 from core import ComponentCatalogService, HostService, InstallService, LaunchService, ProcessRunner, create_bus, create_dispatcher
+from launcher.bootstrap import create_launcher_services, register_launcher_handlers
 
 
 class FakeProcessRunner(ProcessRunner):
@@ -150,6 +151,8 @@ class DispatcherHarness:
     process_runner: FakeProcessRunner
     host_handle: FakeHostHandle
     component_catalog: ComponentCatalogService
+    template_service: object
+    datapackage_service: object
 
 
 def make_dispatcher() -> DispatcherHarness:
@@ -163,14 +166,16 @@ def make_dispatcher() -> DispatcherHarness:
     )
     host_service = HostService(host_factory=lambda multidata, host, port: host_handle)
     component_catalog = ComponentCatalogService(registry_provider=fake_registry)
-    dispatcher = create_dispatcher(
-        bus,
-        install_service,
-        launch_service,
-        host_service,
+    dispatcher = create_dispatcher(bus)
+    services = create_launcher_services(
         catalog_service=component_catalog,
         process_runner=process_runner,
+        install_service=install_service,
+        launch_service=launch_service,
+        host_service=host_service,
+        jobs=dispatcher.jobs,
     )
+    register_launcher_handlers(dispatcher, services)
     return DispatcherHarness(
         dispatcher=dispatcher,
         bus=bus,
@@ -180,6 +185,8 @@ def make_dispatcher() -> DispatcherHarness:
         process_runner=process_runner,
         host_handle=host_handle,
         component_catalog=component_catalog,
+        template_service=services.template_service,
+        datapackage_service=services.datapackage_service,
     )
 
 

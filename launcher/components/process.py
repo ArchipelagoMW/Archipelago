@@ -32,4 +32,8 @@ def launch_script_component(component: LauncherEntry, *args: str) -> bool:
     result = dispatch(
         RunComponent(component_id=component.core_component_id, args=args, execution_mode=component.launch_mode)
     )
-    return isinstance(result, Ok) and result.value.message == "Opening in a new window..."
+    match result:
+        case Ok(value=value):
+            return value.message == "Opening in a new window..."
+        case _:
+            return False

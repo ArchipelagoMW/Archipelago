@@ -59,7 +59,24 @@ def open_host_yaml(*args: str) -> str:
         webbrowser.open(file)
         return "Opening in a new window..."
 
+    if exe is None:
+        logging.warning("No editor available to open host.yaml directly; falling back to browser open.")
+        webbrowser.open(file)
+        return "Opening in a new window..."
+
     subprocess.Popen([exe, file], env=env_cleared_lib_path())
+    return "Opening in a new window..."
+
+
+def open_url(url: str) -> str:
+    """Open `url` in the user's default browser.
+
+    Example::
+
+        open_url("https://archipelago.gg/")
+    """
+
+    webbrowser.open(url)
     return "Opening in a new window..."
 
 
@@ -76,14 +93,14 @@ def generate_yamls(*args: str) -> str:
     parsed = parser.parse_args(args)
 
     result = dispatch(GenerateTemplates())
-    if isinstance(result, Err):
-        messagebox("Error", result.error.message, error=True)
-        return result.error.message
-
-    assert isinstance(result, Ok)
-    if not parsed.skip_open_folder:
-        open_folder(result.value.output_directory)
-    return f"Generated templates in {result.value.output_directory}"
+    match result:
+        case Err(error=error):
+            messagebox("Error", error.message, error=True)
+            return error.message
+        case Ok(value=value):
+            if not parsed.skip_open_folder:
+                open_folder(value.output_directory)
+            return f"Generated templates in {value.output_directory}"
 
 
 def browse_files(*args: str) -> str:
@@ -125,18 +142,18 @@ def install_apworld(*args: str) -> str:
             return "Aborting APWorld installation."
 
     result = dispatch(InstallApworld(apworld_path=apworld_path))
-    if isinstance(result, Err):
-        messagebox("Notice", result.error.message, error=True)
-        logging.error(result.error.message)
-        return result.error.message
-
-    assert isinstance(result, Ok)
-    message = f"Installed APWorld from {result.value.source_path}."
-    if result.value.restart_required:
-        message += " Restart the launcher to load the new installation."
-    logging.info(f"Installed APWorld successfully, copied {result.value.source_path} to {result.value.target_path}.")
-    messagebox("Install complete.", message)
-    return "Install complete."
+    match result:
+        case Err(error=error):
+            messagebox("Notice", error.message, error=True)
+            logging.error(error.message)
+            return error.message
+        case Ok(value=value):
+            message = f"Installed APWorld from {value.source_path}."
+            if value.restart_required:
+                message += " Restart the launcher to load the new installation."
+            logging.info(f"Installed APWorld successfully, copied {value.source_path} to {value.target_path}.")
+            messagebox("Install complete.", message)
+            return "Install complete."
 
 
 def export_datapackage(*args: str) -> str:
@@ -148,13 +165,13 @@ def export_datapackage(*args: str) -> str:
     """
 
     result = dispatch(ExportDatapackage())
-    if isinstance(result, Err):
-        messagebox("Error", result.error.message, error=True)
-        return result.error.message
-
-    assert isinstance(result, Ok)
-    open_file(result.value.output_path)
-    return f"Exported datapackage to {result.value.output_path}"
+    match result:
+        case Err(error=error):
+            messagebox("Error", error.message, error=True)
+            return error.message
+        case Ok(value=value):
+            open_file(value.output_path)
+            return f"Exported datapackage to {value.output_path}"
 
 
 def open_patch(*args: str) -> str:
@@ -183,12 +200,12 @@ def open_patch(*args: str) -> str:
         return "Aborting patch selection."
 
     result = resolve_input(filename)
-    if isinstance(result, Err):
-        messagebox("Error", result.error.message, error=True)
-        return result.error.message
-
-    assert isinstance(result, Ok)
-    resolved = result.value.resolved
+    match result:
+        case Err(error=error):
+            messagebox("Error", error.message, error=True)
+            return error.message
+        case Ok(value=value):
+            resolved = value.resolved
     if not resolved.component_id:
         return "No component available."
 
@@ -248,7 +265,7 @@ def get_launcher_entries() -> list[LauncherEntry]:
             display_name="Archipelago Website",
             description="Open archipelago.gg in your browser.",
             kind=ComponentKind.MISC,
-            action=lambda *args: webbrowser.open("https://archipelago.gg/") or "Opening in a new window...",
+            action=lambda *args: open_url("https://archipelago.gg/"),
         ),
         LauncherEntry(
             id="discord_server",
@@ -256,7 +273,7 @@ def get_launcher_entries() -> list[LauncherEntry]:
             description="Join the Discord server to play public multiworlds, report issues, or just chat!",
             kind=ComponentKind.MISC,
             icon="discord",
-            action=lambda *args: webbrowser.open("https://discord.gg/8Z65BR2") or "Opening in a new window...",
+            action=lambda *args: open_url("https://discord.gg/8Z65BR2"),
         ),
         LauncherEntry(
             id="after_dark_discord",
@@ -264,7 +281,7 @@ def get_launcher_entries() -> list[LauncherEntry]:
             description="Find unrated and 18+ games in the After Dark Discord server.",
             kind=ComponentKind.MISC,
             icon="discord",
-            action=lambda *args: webbrowser.open("https://discord.gg/fqvNCCRsu4") or "Opening in a new window...",
+            action=lambda *args: open_url("https://discord.gg/fqvNCCRsu4"),
         ),
         LauncherEntry(
             id="browse_files",

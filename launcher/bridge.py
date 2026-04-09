@@ -6,19 +6,9 @@ import threading
 from dataclasses import dataclass
 from typing import Any
 
-from core import (
-    ApworldService,
-    ComponentCatalogService,
-    DatapackageService,
-    Dispatcher,
-    HostService,
-    InstallService,
-    LaunchService,
-    ProcessRunner,
-    TemplateService,
-    create_bus,
-    create_dispatcher,
-)
+from core import Dispatcher
+
+from .bootstrap import create_launcher_composition
 
 logger = logging.getLogger(__name__)
 
@@ -54,17 +44,6 @@ def _run_loop(loop: asyncio.AbstractEventLoop) -> None:
     loop.run_forever()
 
 
-def _resolve_launch_command(catalog: ComponentCatalogService, game_name: str, profile_name: str) -> list[str] | None:
-    for descriptor in catalog._descriptors():
-        if game_name and descriptor.game_name == game_name:
-            return catalog.resolve_command(descriptor.id)
-        if game_name in {descriptor.display_name, descriptor.script_name or ""}:
-            return catalog.resolve_command(descriptor.id)
-        if profile_name and profile_name in {descriptor.display_name, descriptor.script_name or ""}:
-            return catalog.resolve_command(descriptor.id)
-    return None
-
-
 def get_runtime() -> CoreRuntime:
     """Return the process-scoped launcher runtime for core requests."""
 
@@ -80,30 +59,8 @@ def get_runtime() -> CoreRuntime:
         thread = threading.Thread(target=_run_loop, args=(loop,), name="launcher-core-runtime", daemon=True)
         thread.start()
 
-        bus = create_bus(dict)
-        process_runner = ProcessRunner()
-        install_service = InstallService()
-        catalog_service = ComponentCatalogService()
-        launch_service = LaunchService(
-            process_runner=process_runner,
-            command_resolver=lambda game_name, profile_name: _resolve_launch_command(catalog_service, game_name, profile_name),
-        )
-        host_service = HostService()
-        apworld_service = ApworldService(install_service=install_service)
-        template_service = TemplateService()
-        datapackage_service = DatapackageService()
-        dispatcher = create_dispatcher(
-            bus,
-            install_service=install_service,
-            launch_service=launch_service,
-            host_service=host_service,
-            catalog_service=catalog_service,
-            apworld_service=apworld_service,
-            template_service=template_service,
-            datapackage_service=datapackage_service,
-            process_runner=process_runner,
-        )
-        _runtime = CoreRuntime(dispatcher=dispatcher, loop=loop, thread=thread)
+        composition = create_launcher_composition()
+        _runtime = CoreRuntime(dispatcher=composition.dispatcher, loop=loop, thread=thread)
         return _runtime
 
 

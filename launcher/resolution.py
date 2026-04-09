@@ -15,10 +15,11 @@ def get_backend_components(include_hidden: bool = False) -> list[ComponentDescri
     """
 
     result = dispatch(ListComponents(include_hidden=include_hidden))
-    if isinstance(result, Err):
-        return []
-    assert isinstance(result, Ok)
-    return result.value.components
+    match result:
+        case Err():
+            return []
+        case Ok(value=value):
+            return value.components
 
 
 def resolve_input(value: str):
@@ -99,11 +100,11 @@ def handle_uri(path: str) -> tuple[list[LauncherEntry], LauncherEntry | None]:
     """
 
     result = resolve_input(path)
-    if isinstance(result, Err):
-        return [], None
-
-    assert isinstance(result, Ok)
-    resolved = result.value.resolved
+    match result:
+        case Err():
+            return [], None
+        case Ok(value=value):
+            resolved = value.resolved
     launch_components: list[LauncherEntry] = []
     if resolved.component_id:
         direct = to_launcher_entry(resolved.component_id)
@@ -126,10 +127,10 @@ def identify(path: str | None) -> tuple[str | None, LauncherEntry | None]:
         return None, None
 
     result = resolve_input(path)
-    if isinstance(result, Err):
-        return None, None
-
-    assert isinstance(result, Ok)
-    resolved = result.value.resolved
+    match result:
+        case Err():
+            return None, None
+        case Ok(value=value):
+            resolved = value.resolved
     component = to_launcher_entry(resolved.component_id) if resolved.component_id else None
     return resolved.file_path, component

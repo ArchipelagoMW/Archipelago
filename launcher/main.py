@@ -38,12 +38,12 @@ def main(args: argparse.Namespace | dict | None = None) -> None:
     if path is not None:
         logging.info("Launcher resolving input: %s", path)
         result = resolve_input(path)
-        if isinstance(result, Err):
-            logging.warning(result.error.message)
-            return
-
-        assert isinstance(result, Ok)
-        resolved = result.value.resolved
+        match result:
+            case Err(error=error):
+                logging.warning(error.message)
+                return
+            case Ok(value=value):
+                resolved = value.resolved
         logging.info(
             "Launcher resolved input '%s' to kind=%s component_id=%s file_path=%s",
             path,

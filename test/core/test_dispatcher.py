@@ -31,6 +31,8 @@ from core import (
     SupportedGamesData,
     TemplateGenerationData,
     ValidateInstall,
+    create_bus,
+    create_dispatcher,
 )
 from core.requests import Request
 
@@ -49,6 +51,8 @@ class TestDispatcher(unittest.IsolatedAsyncioTestCase):
         self.host_service = harness.host_service
         self.host_handle = harness.host_handle
         self.process_runner = harness.process_runner
+        self.template_service = harness.template_service
+        self.datapackage_service = harness.datapackage_service
 
     async def test_query_and_command_markers_and_supported_games(self) -> None:
         self.assertIsInstance(GetSupportedGames(), Query)
@@ -65,6 +69,19 @@ class TestDispatcher(unittest.IsolatedAsyncioTestCase):
         self.assertIsInstance(result, Err)
         assert isinstance(result, Err)
         self.assertIn("Unsupported request type", result.error.message)
+
+    async def test_dispatcher_requires_explicit_registration(self) -> None:
+        dispatcher = create_dispatcher(create_bus(dict))
+
+        async def handle_unknown(request: Request[SupportedGamesData, BasicError]):
+            return Ok(SupportedGamesData(games=["Registered"]))
+
+        dispatcher.register(UnknownQuery, handle_unknown)
+
+        result = await dispatcher.handle(UnknownQuery())
+        self.assertIsInstance(result, Ok)
+        assert isinstance(result, Ok)
+        self.assertEqual(["Registered"], result.value.games)
 
     async def test_list_components_and_resolve_input(self) -> None:
         listed = await self.dispatcher.handle(ListComponents())
@@ -154,13 +171,13 @@ class TestDispatcher(unittest.IsolatedAsyncioTestCase):
         from unittest.mock import AsyncMock, patch
 
         with patch.object(
-            type(self.dispatcher.template_service),
+            type(self.template_service),
             "generate",
             new=AsyncMock(return_value=Ok(TemplateGenerationData(output_directory="Players/Templates"))),
         ):
             generate = await self.dispatcher.handle(GenerateTemplates())
         with patch.object(
-            type(self.dispatcher.datapackage_service),
+            type(self.datapackage_service),
             "export",
             new=AsyncMock(return_value=Ok(DatapackageExportData(output_path="datapackage_export.json"))),
         ):

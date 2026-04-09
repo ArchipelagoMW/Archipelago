@@ -159,16 +159,21 @@ class JobManager(Generic[TEvent]):
                 record.error = str(exc)
                 raise
             else:
-                if isinstance(result, Err):
-                    record.status = JobStatus.FAILED
-                    record.error = _error_message(result.error)
-                    record.result = None
-                else:
-                    value = result.value if isinstance(result, Ok) else result
-                    record.status = JobStatus.SUCCEEDED
-                    record.result = _result_payload(value)
-                    if record.progress < 1.0:
-                        record.progress = 1.0
+                match result:
+                    case Err(error=error):
+                        record.status = JobStatus.FAILED
+                        record.error = _error_message(error)
+                        record.result = None
+                    case Ok(value=value):
+                        record.status = JobStatus.SUCCEEDED
+                        record.result = _result_payload(value)
+                        if record.progress < 1.0:
+                            record.progress = 1.0
+                    case _:
+                        record.status = JobStatus.SUCCEEDED
+                        record.result = _result_payload(result)
+                        if record.progress < 1.0:
+                            record.progress = 1.0
 
         future = asyncio.create_task(run_job())
 

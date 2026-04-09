@@ -48,18 +48,19 @@ def activate_component(component: LauncherEntry) -> str:
             execution_mode=component.launch_mode,
         )
     )
-    if isinstance(result, Err):
-        logging.error("Launcher component '%s' failed: %s", component.display_name, result.error.message)
-        return result.error.message
-    assert isinstance(result, Ok)
-    if result.value.job_id:
-        logging.info(
-            "Launcher component '%s' accepted as job %s.",
-            component.display_name,
-            result.value.job_id,
-        )
-    logging.info("Launcher component '%s' returned message: %s", component.display_name, result.value.message)
-    return result.value.message
+    match result:
+        case Err(error=error):
+            logging.error("Launcher component '%s' failed: %s", component.display_name, error.message)
+            return error.message
+        case Ok(value=value):
+            if value.job_id:
+                logging.info(
+                    "Launcher component '%s' accepted as job %s.",
+                    component.display_name,
+                    value.job_id,
+                )
+            logging.info("Launcher component '%s' returned message: %s", component.display_name, value.message)
+            return value.message
 
 
 def run_component(component: LauncherEntry, *args: str) -> None:
@@ -89,17 +90,17 @@ def run_component(component: LauncherEntry, *args: str) -> None:
             execution_mode=ExecutionMode.DIRECT,
         )
     )
-    if isinstance(result, Err):
-        logging.error("Launcher component '%s' failed: %s", component.display_name, result.error.message)
-    else:
-        assert isinstance(result, Ok)
-        if result.value.job_id:
-            logging.info(
-                "Launcher component '%s' accepted as job %s.",
-                component.display_name,
-                result.value.job_id,
-            )
-        logging.info("Launcher component '%s' returned message: %s", component.display_name, result.value.message)
+    match result:
+        case Err(error=error):
+            logging.error("Launcher component '%s' failed: %s", component.display_name, error.message)
+        case Ok(value=value):
+            if value.job_id:
+                logging.info(
+                    "Launcher component '%s' accepted as job %s.",
+                    component.display_name,
+                    value.job_id,
+                )
+            logging.info("Launcher component '%s' returned message: %s", component.display_name, value.message)
     if refresh_components:
         refresh_components()
 
