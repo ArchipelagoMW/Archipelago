@@ -25,31 +25,41 @@ class TestGenerateYamlTemplates(unittest.TestCase):
         if "World: with colon" in worlds.AutoWorld.AutoWorldRegister.world_types:
             del worlds.AutoWorld.AutoWorldRegister.world_types["World: with colon"]
 
+
     def test_name_with_colon(self) -> None:
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
-        from worlds.AutoWorld import World
+        from worlds.AutoWorld import World, WebWorld
+
+        class WebWorldWithColon(WebWorld):
+            options_presets = {
+                "Generic": {
+                    "progression_balancing": "disabled",
+                    "accessibility": "minimal",
+                }
+            }
 
         class WorldWithColon(World):
             game = "World: with colon"
             item_name_to_id = {}
             location_name_to_id = {}
+            web = WebWorldWithColon()
 
         AutoWorldRegister.world_types = {WorldWithColon.game: WorldWithColon}
         with TemporaryDirectory(f"archipelago_{__name__}") as temp_dir:
             generate_yaml_templates(temp_dir)
             path: Path
-            for path in Path(temp_dir).iterdir():
-                self.assertTrue(path.is_file())
-                self.assertTrue(path.suffix == ".yaml")
-                with path.open(encoding="utf-8") as f:
-                    try:
-                        data = parse_yaml(f)
-                    except:
-                        f.seek(0)
-                        print(f"Error in {path.name}:\n{f.read()}")
-                        raise
-                    self.assertIn("game", data)
-                    self.assertIn(":", data["game"])
-                    self.assertIn(data["game"], data)
-                    self.assertIsInstance(data[data["game"]], dict)
+            for path in Path(temp_dir).rglob("*"):
+                if path.is_file():
+                    self.assertTrue(path.suffix == ".yaml")
+                    with path.open(encoding="utf-8") as f:
+                        try:
+                            data = parse_yaml(f)
+                        except:
+                            f.seek(0)
+                            print(f"Error in {path.name}:\n{f.read()}")
+                            raise
+                        self.assertIn("game", data)
+                        self.assertIn(":", data["game"])
+                        self.assertIn(data["game"], data)
+                        self.assertIsInstance(data[data["game"]], dict)

@@ -15,6 +15,7 @@ from .entities import (
     EnemyWithLoot,
     Entity,
     FinalBoss,
+    InteractableMixin,
     KeyDoor,
     LocationMixin,
     Wall,
@@ -23,6 +24,7 @@ from .generate_math_problem import MathProblem
 from .graphics import DIGIT_TO_GRAPHIC, DIGIT_TO_GRAPHIC_ZERO_EMPTY, MATH_PROBLEM_TYPE_TO_GRAPHIC, Graphic
 from .items import Item
 from .locations import DEFAULT_CONTENT, Location
+from .path_finding import find_path_or_closest
 
 if TYPE_CHECKING:
     from .player import Player
@@ -107,6 +109,21 @@ class Gameboard:
 
         return tuple(graphics)
 
+    def as_traversability_bools(self) -> tuple[tuple[bool, ...], ...]:
+        traversability = []
+
+        for y, row in enumerate(self.gameboard):
+            traversable_row = []
+            for x, entity in enumerate(row):
+                traversable_row.append(
+                    not entity.solid
+                    or (isinstance(entity, InteractableMixin) and entity.auto_move_attempt_passing_through)
+                )
+
+            traversability.append(tuple(traversable_row))
+
+        return tuple(traversability)
+
     def render_math_problem(
         self, problem: MathProblem, current_input_digits: list[int], current_input_int: int | None
     ) -> tuple[tuple[Graphic, ...], ...]:
@@ -185,6 +202,23 @@ class Gameboard:
     def force_clear_location(self, location: Location) -> None:
         entity = self.remote_entity_by_location_id[location]
         entity.force_clear()
+
+    def calculate_shortest_path(
+        self, source_x: int, source_y: int, target_x: int, target_y: int
+    ) -> list[tuple[int, int]]:
+        gameboard_traversability = self.as_traversability_bools()
+
+        path = find_path_or_closest(gameboard_traversability, source_x, source_y, target_x, target_y)
+
+        if not path:
+            return path
+
+        # If the path stops just short of target, attempt interacting with it at the end
+        if abs(path[-1][0] - target_x) + abs(path[-1][1] - target_y) == 1:
+            if isinstance(self.gameboard[target_y][target_x], InteractableMixin):
+                path.append((target_x, target_y))
+
+        return path[1:]  # Cut off starting tile
 
     @property
     def ready(self) -> bool:
