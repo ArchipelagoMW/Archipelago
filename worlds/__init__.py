@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 from types import ModuleType
 from typing import List, Sequence
-from zipfile import BadZipFile
+from zipfile import ZipFile, BadZipFile
 
 from NetUtils import DataPackage
 from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
@@ -200,6 +200,15 @@ if apworlds:
                     # world could fail to load at this point
                     if apworld.world_version:
                         AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+
+                    assert apworld.path
+                    with ZipFile(apworld.path, "r") as zf:
+                        manifest = apworld.read_contents(zf)
+                    # version/compatible_version shouldn't be needed by world, makes it consistent with folder world
+                    manifest.pop("version", None)
+                    manifest.pop("compatible_version", None)
+                    AutoWorldRegister.world_types[apworld.game].manifest = manifest
+
     load_apworlds()
     del load_apworlds
 
