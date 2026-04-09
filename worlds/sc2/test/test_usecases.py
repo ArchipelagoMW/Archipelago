@@ -271,9 +271,19 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_regions.remove('Menu')
 
         for region in world_regions:
-            self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
-                             ([mission_tables.SC2Campaign.EPILOGUE]),
-                             f"{region} is an epilogue mission!")
+            self.assertNotIn(
+                mission_tables.lookup_name_to_mission[region].campaign,
+                ([mission_tables.SC2Campaign.EPILOGUE]),
+                f"{region} is an epilogue mission!"
+            )
+
+    def test_excluding_all_factions_and_campaigns_still_generates(self) -> None:
+        world_options = {
+            'selected_races': set(),
+            'enabled_campaigns': set(),
+        }
+        # asserting no exception is thrown
+        self.generate_world(world_options)
 
     def test_race_swap_pick_one_has_correct_length_and_includes_swaps(self) -> None:
         world_options = {

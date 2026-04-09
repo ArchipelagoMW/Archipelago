@@ -24,6 +24,39 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+_RANDOM_OPTS = [
+        "random", "random-low", "random-middle", "random-high", 
+        "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>",
+        "random-range-high-<min>-<max>", "random-range-<min>-<max>",
+]
+    
+    
+def triangular(lower: int, end: int, tri: float = 0.5) -> int:
+    """
+    Integer triangular distribution for `lower` inclusive to `end` inclusive.
+
+    Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
+    """
+    # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
+    # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
+    # when a != b, so ensure the result is never more than `end`.
+    return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
+  
+
+def random_weighted_range(text: str, range_start: int, range_end: int):
+    if text == "random-low":
+        return triangular(range_start, range_end, 0.0)
+    elif text == "random-high":
+        return triangular(range_start, range_end, 1.0)
+    elif text == "random-middle":
+        return triangular(range_start, range_end)
+    elif text == "random":
+        return random.randint(range_start, range_end)
+    else:
+            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: {', '.join(_RANDOM_OPTS)}.")
+
+        
 def roll_percentage(percentage: int | float) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
@@ -417,10 +450,12 @@ class Toggle(NumericOption):
     def from_text(cls, text: str) -> Toggle:
         if text == "random":
             return cls(random.choice(list(cls.name_lookup)))
-        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        elif text.lower() in {"off", "0", "false", "none", "null", "no", "disabled"}:
             return cls(0)
-        else:
+        elif text.lower() in {"on", "1", "true", "yes", "enabled"}:
             return cls(1)
+        else:
+            raise OptionError(f"Option {cls.__name__} does not support a value of {text}")
 
     @classmethod
     def from_any(cls, data: typing.Any):
@@ -523,9 +558,9 @@ class Choice(NumericOption):
 
 class TextChoice(Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
-    value: typing.Union[str, int]
+    value: str | int
 
-    def __init__(self, value: typing.Union[str, int]):
+    def __init__(self, value: str | int):
         assert isinstance(value, str) or isinstance(value, int), \
             f"'{value}' is not a valid option for '{self.__class__.__name__}'"
         self.value = value
@@ -546,7 +581,7 @@ class TextChoice(Choice):
         return cls(text)
 
     @classmethod
-    def get_option_name(cls, value: T) -> str:
+    def get_option_name(cls, value: str | int) -> str:
         if isinstance(value, str):
             return value
         return super().get_option_name(value)
@@ -688,12 +723,6 @@ class Range(NumericOption):
     range_start = 0
     range_end = 1
 
-    _RANDOM_OPTS = [
-        "random", "random-low", "random-middle", "random-high", 
-        "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>",
-        "random-range-high-<min>-<max>", "random-range-<min>-<max>",
-    ]
-
     def __init__(self, value: int):
         if value < self.range_start:
             raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__}")
@@ -742,25 +771,16 @@ class Range(NumericOption):
 
     @classmethod
     def weighted_range(cls, text) -> Range:
-        if text == "random-low":
-            return cls(cls.triangular(cls.range_start, cls.range_end, 0.0))
-        elif text == "random-high":
-            return cls(cls.triangular(cls.range_start, cls.range_end, 1.0))
-        elif text == "random-middle":
-            return cls(cls.triangular(cls.range_start, cls.range_end))
-        elif text.startswith("random-range-"):
+        if text.startswith("random-range-"):
             return cls.custom_range(text)
-        elif text == "random":
-            return cls(random.randint(cls.range_start, cls.range_end))
         else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: {', '.join(cls._RANDOM_OPTS)}.")
+            return cls(random_weighted_range(text, cls.range_start, cls.range_end))
 
     @classmethod
     def custom_range(cls, text) -> Range:
         textsplit = text.split("-")
         try:
-            random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+            random_range = [int(textsplit[-2]), int(textsplit[-1])]
         except ValueError:
             raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
         random_range.sort()
@@ -768,14 +788,9 @@ class Range(NumericOption):
             raise Exception(
                 f"{random_range[0]}-{random_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
-        if text.startswith("random-range-low"):
-            return cls(cls.triangular(random_range[0], random_range[1], 0.0))
-        elif text.startswith("random-range-middle"):
-            return cls(cls.triangular(random_range[0], random_range[1]))
-        elif text.startswith("random-range-high"):
-            return cls(cls.triangular(random_range[0], random_range[1], 1.0))
-        else:
-            return cls(random.randint(random_range[0], random_range[1]))
+        if textsplit[2] in ("low", "middle", "high"):
+            return cls(random_weighted_range(f"{textsplit[0]}-{textsplit[2]}", *random_range))
+        return cls(random_weighted_range("random", *random_range))
 
     @classmethod
     def from_any(cls, data: typing.Any) -> Range:
@@ -789,18 +804,6 @@ class Range(NumericOption):
 
     def __str__(self) -> str:
         return str(self.value)
-
-    @staticmethod
-    def triangular(lower: int, end: int, tri: float = 0.5) -> int:
-        """
-        Integer triangular distribution for `lower` inclusive to `end` inclusive.
-
-        Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
-        """
-        # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
-        # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
-        # when a != b, so ensure the result is never more than `end`.
-        return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
 
 
 class NamedRange(Range):
@@ -891,7 +894,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     def __iter__(self) -> typing.Iterator[typing.Any]:
         return self.value.__iter__()
 
-    
+
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default = {}
     supports_weighting = False
@@ -906,7 +909,8 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
 
     def __getitem__(self, item: str) -> typing.Any:
@@ -986,7 +990,8 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value):
         return ", ".join(map(str, value))
 
     def __contains__(self, item):
@@ -996,13 +1001,19 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
+    random_str: str | None
 
-    def __init__(self, value: typing.Iterable[str]):
+    def __init__(self, value: typing.Iterable[str], random_str: str | None = None):
         self.value = set(deepcopy(value))
+        self.random_str = random_str
         super(OptionSet, self).__init__()
 
     @classmethod
     def from_text(cls, text: str):
+        check_text = text.lower().split(",")
+        if ((cls.valid_keys or cls.verify_item_name or cls.verify_location_name)
+                and len(check_text) == 1 and check_text[0].startswith("random")):
+            return cls((), check_text[0])
         return cls([option.strip() for option in text.split(",")])
 
     @classmethod
@@ -1011,7 +1022,37 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        if self.random_str and not self.value:
+            choice_list = sorted(self.valid_keys)
+            if self.verify_item_name:
+                choice_list.extend(sorted(world.item_names))
+            if self.verify_location_name:
+                choice_list.extend(sorted(world.location_names))
+            if self.random_str.startswith("random-range-"):
+                textsplit = self.random_str.split("-")
+                try:
+                    random_range = [int(textsplit[-2]), int(textsplit[-1])]
+                except ValueError:
+                    raise ValueError(f"Invalid random range {self.random_str} for option {self.__class__.__name__} "
+                                     f"for player {player_name}")
+                random_range.sort()
+                if random_range[0] < 0 or random_range[1] > len(choice_list):
+                    raise Exception(
+                        f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                        f"0-{len(choice_list)} for option {self.__class__.__name__} for player {player_name}")
+                if textsplit[2] in ("low", "middle", "high"):
+                    choice_count = random_weighted_range(f"{textsplit[0]}-{textsplit[2]}",
+                                                         random_range[0], random_range[1])
+                else:
+                    choice_count = random_weighted_range("random", random_range[0], random_range[1])
+            else:
+                choice_count = random_weighted_range(self.random_str, 0, len(choice_list))
+            self.value = set(random.sample(choice_list, k=choice_count))
+        super(Option, self).verify(world, player_name, plando_options)
+
+    @classmethod
+    def get_option_name(cls, value):
         return ", ".join(sorted(value))
 
     def __contains__(self, item):
@@ -1656,7 +1697,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
     def __len__(self) -> int:
         return len(self.value)
 
-        
+
 class Removed(FreeText):
     """This Option has been Removed."""
     rich_text_doc = True
@@ -1742,8 +1783,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     from Utils import local_path, __version__
 
     full_path: str
+    preset_folder = os.path.join(target_folder, "Presets")
 
     os.makedirs(target_folder, exist_ok=True)
+    os.makedirs(preset_folder, exist_ok=True)
 
     # clean out old
     for file in os.listdir(target_folder):
@@ -1751,11 +1794,16 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: Range):
-        data = {option.default: 50}
+    for file in os.listdir(preset_folder):
+        full_path = os.path.join(preset_folder, file)
+        if os.path.isfile(full_path) and full_path.endswith(".yaml"):
+            os.unlink(full_path)
+
+    def dictify_range(option: Range, option_val: int | str):
+        data = {option_val: 50}
         for sub_option in ["random", "random-low", "random-high",
                            f"random-range-{option.range_start}-{option.range_end}"]:
-            if sub_option != option.default:
+            if sub_option != option_val:
                 data[sub_option] = 0
         notes = {
             "random-low": "random value weighted towards lower values",
@@ -1768,6 +1816,8 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
             if number in data:
                 data[name] = data[number]
                 del data[number]
+            elif name in data:
+                pass
             else:
                 data[name] = 0
 
@@ -1783,20 +1833,27 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
+            presets = world.web.options_presets.copy()
+            presets.update({"": {}})
+
             option_groups = get_option_groups(world)
-
-            res = template.render(
-                option_groups=option_groups,
-                __version__=__version__,
-                game=game_name,
-                world_version=world.world_version.as_simple_string(),
-                yaml_dump=yaml_dump_scalar,
-                dictify_range=dictify_range,
-                cleandoc=cleandoc,
-            )
-
-            with open(os.path.join(target_folder, get_file_safe_name(game_name) + ".yaml"), "w", encoding="utf-8-sig") as f:
-                f.write(res)
+            for name, preset in presets.items():
+                res = template.render(
+                    option_groups=option_groups,
+                    __version__=__version__,
+                    game=game_name, 
+                    world_version=world.world_version.as_simple_string(),
+                    yaml_dump=yaml_dump_scalar,
+                    dictify_range=dictify_range,
+                    cleandoc=cleandoc,
+                    preset_name=name,
+                    preset=preset,
+                )
+                preset_name = f" - {name}" if name else ""
+                with open(os.path.join(preset_folder if name else target_folder,
+                                       get_file_safe_name(game_name + preset_name) + ".yaml"),
+                          "w", encoding="utf-8-sig") as f:
+                    f.write(res)
 
 
 def dump_player_options(multiworld: MultiWorld) -> None:

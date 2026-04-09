@@ -24,7 +24,7 @@ class Dungeon6:
 
         # right side
         to_miniboss = Location(dungeon=6).connect(entrance, KEY6)
-        miniboss = Location(dungeon=6).connect(to_miniboss, AND(BOMB, r.miniboss_requirements[world_setup.miniboss_mapping[5]]))
+        miniboss = Location(dungeon=6).connect(to_miniboss, AND(BOMB, r.miniboss_requirements[world_setup.miniboss_mapping['5']]))
         lower_right_side = Location(dungeon=6).add(DungeonChest(0x1BE)).connect(entrance, AND(r.attack_wizrobe, COUNT(POWER_BRACELET, 2))) # waterway key
         medicine_chest = Location(dungeon=6).add(DungeonChest(0x1D1)).connect(lower_right_side, FEATHER) # ledge chest medicine
         if options.owlstatues == "both" or options.owlstatues == "dungeon":

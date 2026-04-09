@@ -2,9 +2,12 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from ..data.artisan import MachineSource
 from ..data.game_item import ItemTag
 from ..stardew_rule import StardewRule
+from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
+from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable, Fruit
 from ..strings.fish_names import Fish, all_fish
+from ..strings.flower_names import all_flowers
 from ..strings.forageable_names import Mushroom
 from ..strings.generic_names import Generic
 from ..strings.machine_names import Machine
@@ -21,6 +24,9 @@ class ArtisanLogic(BaseLogic):
         # TODO remove this one too once fish are converted to sources
         self.registry.artisan_good_rules.update({ArtisanGood.specific_smoked_fish(fish): self.can_smoke(fish) for fish in all_fish})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_bait(fish): self.can_bait(fish) for fish in all_fish})
+        self.registry.artisan_good_rules.update({AnimalProduct.specific_roe(fish): self.can_get_roe(fish) for fish in all_fish})
+        self.registry.artisan_good_rules.update({ArtisanGood.specific_aged_roe(fish): self.can_preserves_jar(AnimalProduct.specific_roe(fish)) for fish in all_fish})
+        self.registry.artisan_good_rules.update({ArtisanGood.specific_honey(flower): self.can_get_honey(flower) for flower in all_flowers})
 
     def has_jelly(self) -> StardewRule:
         return self.logic.artisan.can_preserves_jar(Fruit.any)
@@ -73,6 +79,10 @@ class ArtisanLogic(BaseLogic):
         machine_rule = self.logic.has(Machine.fish_smoker)
         return machine_rule & self.logic.has(item)
 
+    def can_get_roe(self, item: str) -> StardewRule:
+        machine_rule = self.logic.building.has_building(Building.fish_pond)
+        return machine_rule & self.logic.has(item)
+
     def can_bait(self, item: str) -> StardewRule:
         machine_rule = self.logic.has(Machine.bait_maker)
         return machine_rule & self.logic.has(item)
@@ -87,3 +97,11 @@ class ArtisanLogic(BaseLogic):
         if item == Mushroom.any_edible:
             return machine_rule & self.logic.has_any(*(mushroom.name for mushroom in self.content.find_tagged_items(ItemTag.EDIBLE_MUSHROOM)))
         return machine_rule & self.logic.has(item)
+
+    def can_get_honey(self, flower: str) -> StardewRule:
+        machine_rule = self.logic.has(Machine.bee_house)
+        flower_rule = self.logic.has(flower)
+        return machine_rule & flower_rule
+
+    def can_replicate_gem(self, gem: str) -> StardewRule:
+        return self.logic.has(Machine.crystalarium) & self.logic.has(gem)

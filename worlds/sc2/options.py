@@ -1309,7 +1309,7 @@ class MaximumSupplyReductionPerItem(Range):
 class LowestMaximumSupply(Range):
     """Controls how far max supply reduction traps can reduce maximum supply."""
     display_name = "Lowest Maximum Supply"
-    range_start = 100
+    range_start = 50
     range_end = 200
     default = 180
 
@@ -1576,7 +1576,7 @@ def get_option_value(world: Union['SC2World', None], name: str) -> int:
 
 
 def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
-    race_names = world.options.selected_races.value if world and len(world.options.selected_races.value) > 0 else SelectedRaces.valid_keys
+    race_names = world.options.selected_races.value if world else SelectedRaces.default
     return {race for race in SC2Race if race.get_title() in race_names}
 
 
@@ -1584,16 +1584,7 @@ def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     if world is None:
         return {campaign for campaign in SC2Campaign if campaign.campaign_name in EnabledCampaigns.default}
     campaign_names = world.options.enabled_campaigns
-    campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
-    if (world.options.mission_order.value == MissionOrder.option_vanilla
-        and get_enabled_races(world) != {SC2Race.TERRAN, SC2Race.ZERG, SC2Race.PROTOSS}
-        and SC2Campaign.EPILOGUE in campaigns
-    ):
-        campaigns.remove(SC2Campaign.EPILOGUE)
-    if len(campaigns) == 0:
-        # Everything is disabled, roll as everything enabled
-        return {campaign for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
-    return campaigns
+    return {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1606,8 +1597,8 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     excluded = (
-            (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
-            ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
+        (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
+        ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
     )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:
