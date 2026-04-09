@@ -190,6 +190,8 @@ def get_firemaking_skill_rule(level, player, options) -> CollectionRule:
 
 
 def get_skill_rule(skill, level, player, options) -> CollectionRule:
+    if level <= 1:
+        return lambda state: True
     if skill.lower() == "fishing":
         return get_fishing_skill_rule(level, player, options)
     if skill.lower() == "mining":

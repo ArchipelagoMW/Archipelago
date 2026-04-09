@@ -7,7 +7,7 @@ Da wir BizHawk benutzen, gilt diese Anleitung nur für Windows und Linux.
 ## Benötigte Software
 
 - BizHawk: [BizHawk Veröffentlichungen von TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.3.1 und später werden unterstützt. Version 2.10 ist empfohlen.
+  - Version 2.10 und neuer werden unterstützt. Version 2.10 ist empfohlen.
   - Detailierte Installtionsanweisungen für BizHawk können über den obrigen Link gefunden werden.
   - Windows-Benutzer müssen die Prerequisiten installiert haben. Diese können ebenfalls über
     den obrigen Link gefunden werden.
@@ -19,11 +19,6 @@ Da wir BizHawk benutzen, gilt diese Anleitung nur für Windows und Linux.
 
 Sobald Bizhawk einmal installiert wurde, öffne **EmuHawk** und ändere die folgenen Einsteluungen:
 
-- (≤ 2.8) Gehe zu `Config > Customize`. Wechlse zu dem `Advanced`-Reiter, wechsle dann den `Lua Core` von "NLua+KopiLua" zu
-  `"Lua+LuaInterface"`. Starte danach EmuHawk neu. Dies ist zwingend notwendig, damit die Lua-Scripts, mit denen man sich mit dem Client verbindet, ordnungsgemäß funktionieren.
-  **ANMERKUNG: Selbst wenn "Lua+LuaInterface" bereits ausgewählt ist, wechsle zwischen den beiden Optionen umher und**
-  **wähle es erneut aus. Neue Installationen oder Versionen von EmuHawk neigen dazu "Lua+LuaInterface" als die**
-  **Standard-Option anzuzeigen, aber laden dennoch "NLua+KopiLua", bis dieser Schritt getan ist.**
 - Unter `Config > Customize > Advanced`, gehe sicher dass der Haken bei `AutoSaveRAM` ausgeählt ist, und klicke dann
   den 5s-Knopf. Dies verringert die Wahrscheinlichkeit den Speicherfrotschritt zu verlieren, sollte der Emulator mal
   abstürzen.
@@ -84,7 +79,7 @@ Wenn du einer Multiworld beitrittst, wirst du gefordert eine YAML-Datei bei dem 
 erhälst du (in der Regel) einen Link vom Host der Multiworld. Dieser führt dich zu einem Raum, in dem alle
 teilnehmenden Spieler (bzw. Welten) aufgelistet sind. Du solltest dich dann auf **deine** Welt konzentrieren
 und klicke dann auf `Download APZ5 File...`.
-![Screenshot of a Multiworld Room with an Ocarina of Time Player](/static/generated/docs/Ocarina%20of%20Time/MultiWorld-room_oot.png)
+![Screenshot of a Multiworld Room with an Ocarina of Time Player](MultiWorld-Room_oot.png)
 
 Führe die `.apz5`-Datei mit einem Doppelklick aus, um deinen Ocarina Of Time-Client zu starten, sowie das patchen
 deiner ROM. Ist dieser Prozess fertig (kann etwas dauern), startet sich der Client und der Emulator automatisch

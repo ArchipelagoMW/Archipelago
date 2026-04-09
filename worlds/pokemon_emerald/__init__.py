@@ -26,9 +26,14 @@ from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType,
 from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilities, randomize_learnsets,
                       randomize_legendary_encounters, randomize_misc_pokemon, randomize_starters,
                       randomize_tm_hm_compatibility,randomize_types, randomize_wild_encounters)
-from .rom import PokemonEmeraldProcedurePatch, write_tokens 
+from .rom import PokemonEmeraldProcedurePatch, write_tokens
 from .util import get_encounter_type_label
 
+# Try adding the Pokemon Gen 3 Adjuster
+try:
+    from worlds._pokemon_gen3_adjuster import __init__
+except:
+    pass
 
 class PokemonEmeraldWebWorld(WebWorld):
     """
@@ -53,7 +58,7 @@ class PokemonEmeraldWebWorld(WebWorld):
         "setup/es",
         ["nachocua"]
     )
-    
+
     setup_sv = Tutorial(
         "Multivärld Installations Guide",
         "En guide för att kunna spela Pokémon Emerald med Archipelago.",
@@ -61,6 +66,16 @@ class PokemonEmeraldWebWorld(WebWorld):
         "setup_sv.md",
         "setup/sv",
         ["Tsukino"]
+    )
+
+    # Add this doc file when the adjuster is merged
+    adjuster_en = Tutorial(
+        "Usage Guide",
+        "A guide to use the Pokemon Gen 3 Adjuster with Pokemon Emerald.",
+        "English",
+        "adjuster_en.md",
+        "adjuster/en",
+        ["RhenaudTheLukark"]
     )
 
     tutorials = [setup_en, setup_es, setup_sv]
@@ -108,6 +123,7 @@ class PokemonEmeraldWorld(World):
     blacklisted_wilds: Set[int]
     blacklisted_starters: Set[int]
     blacklisted_opponent_pokemon: Set[int]
+    allowed_dexsanity_species: set[int]
     hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
 
@@ -127,6 +143,7 @@ class PokemonEmeraldWorld(World):
         self.blacklisted_wilds = set()
         self.blacklisted_starters = set()
         self.blacklisted_opponent_pokemon = set()
+        self.allowed_dexsanity_species = set()
         self.modified_maps = copy.deepcopy(emerald_data.maps)
         self.modified_species = copy.deepcopy(emerald_data.species)
         self.modified_tmhm_moves = []
@@ -246,10 +263,19 @@ class PokemonEmeraldWorld(World):
         if self.options.hms == RandomizeHms.option_shuffle:
             self.options.local_items.value.update(self.item_name_groups["HM"])
 
+        # Manually enable Latios as a dexsanity location if we're doing legendary hunt (which confines Latios to
+        # the roamer encounter), the player allows Latios as a valid legendary hunt target, and they didn't also
+        # blacklist Latios to remove its dexsanity location
+        if self.options.goal == Goal.option_legendary_hunt and self.options.dexsanity \
+                and "Latios" in self.options.allowed_legendary_hunt_encounters.value \
+                and emerald_data.constants["SPECIES_LATIOS"] not in self.blacklisted_wilds:
+            self.allowed_dexsanity_species.add(emerald_data.constants["SPECIES_LATIOS"])
+
     def create_regions(self) -> None:
         from .regions import create_regions
         all_regions = create_regions(self)
 
+        randomize_wild_encounters(self)
         # Categories with progression items always included
         categories = {
             LocationCategory.BADGE,
@@ -479,7 +505,6 @@ class PokemonEmeraldWorld(World):
         set_rules(self)
 
     def connect_entrances(self):
-        randomize_wild_encounters(self)
         self.shuffle_badges_hms()
         # For entrance randomization, disconnect entrances here, randomize map, then
         # undo badge/HM placement and re-shuffle them in the new map.

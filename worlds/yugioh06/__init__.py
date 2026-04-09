@@ -56,7 +56,7 @@ class Yugioh06Web(WebWorld):
         "A guide to setting up Yu-Gi-Oh! - Ultimate Masters Edition - World Championship Tournament 2006 "
         "for Archipelago on your computer.",
         "English",
-        "docs/setup_en.md",
+        "setup_en.md",
         "setup/en",
         ["Rensen"],
     )
@@ -130,8 +130,8 @@ class Yugioh06World(World):
     campaign_opponents: List[OpponentData]
     is_draft_mode: bool
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
 
     def generate_early(self):
         self.starting_opponent = ""

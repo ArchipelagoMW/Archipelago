@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import json
 import typing
 import builtins
@@ -17,10 +18,14 @@ import logging
 import warnings
 
 from argparse import Namespace
+from datetime import datetime, timezone
+
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Mapping, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from pathspec import PathSpec, GitIgnoreSpec
+from typing_extensions import deprecated
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -35,7 +40,7 @@ if typing.TYPE_CHECKING:
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    return Version(*(int(piece) for piece in version.split(".")))
 
 
 class Version(typing.NamedTuple):
@@ -47,7 +52,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.3"
+__version__ = "0.6.7"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -231,10 +236,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
 
-        env = os.environ
-        if "LD_LIBRARY_PATH" in env:
-            env = env.copy()
-            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        env = env_cleared_lib_path()
         subprocess.call([open_command, filename], env=env)
 
 
@@ -313,20 +315,19 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove when removing get_options
-
-
+@deprecated("Utils.get_options() is deprecated. Use the settings API instead.")
 def get_options() -> Settings:
-    # TODO: switch to Utils.deprecate after 0.4.4
-    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
 
 
-def persistent_store(category: str, key: str, value: typing.Any):
-    path = user_path("_persistent_storage.yaml")
+def persistent_store(category: str, key: str, value: typing.Any, force_store: bool = False):
     storage = persistent_load()
+    if not force_store and category in storage and key in storage[category] and storage[category][key] == value:
+        return  # no changes necessary
     category_dict = storage.setdefault(category, {})
     category_dict[key] = value
+    path = user_path("_persistent_storage.yaml")
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
@@ -341,6 +342,9 @@ def persistent_load() -> Dict[str, Dict[str, Any]]:
         try:
             with open(path, "r") as f:
                 storage = unsafe_parse_yaml(f.read())
+            if "datapackage" in storage:
+                del storage["datapackage"]
+                logging.debug("Removed old datapackage from persistent storage")
         except Exception as e:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
@@ -365,11 +369,6 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
             except Exception as e:
                 logging.debug(f"Could not load data package: {e}")
 
-    # fall back to old cache
-    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
-    if cache.get("checksum") == checksum:
-        return cache
-
     # cache does not match
     return {}
 
@@ -386,6 +385,14 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+def read_apignore(filename: str | pathlib.Path) -> PathSpec | None:
+    try:
+        with open(filename) as ignore_file:
+            return GitIgnoreSpec.from_lines(ignore_file)
+    except FileNotFoundError:
+        return None
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
@@ -414,11 +421,11 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 @cache_argsless
 def get_unique_identifier():
     common_path = cache_path("common.json")
-    if os.path.exists(common_path):
+    try:
         with open(common_path) as f:
             common_file = json.load(f)
             uuid = common_file.get("uuid", None)
-    else:
+    except FileNotFoundError:
         common_file = {}
         uuid = None
 
@@ -428,6 +435,9 @@ def get_unique_identifier():
     from uuid import uuid4
     uuid = str(uuid4())
     common_file["uuid"] = uuid
+
+    cache_folder = os.path.dirname(common_path)
+    os.makedirs(cache_folder, exist_ok=True)
     with open(common_path, "w") as f:
         json.dump(common_file, f, separators=(",", ":"))
     return uuid
@@ -472,7 +482,7 @@ class RestrictedUnpickler(pickle.Unpickler):
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
             if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
-                                self.options_module.PlandoText)):
+                                self.options_module.PlandoItem, self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -715,13 +725,22 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
 
 
 def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    """
+    Parses the response text from `get_intended_text` to find the suggested input and autocomplete the command in
+    arguments with it.
+
+    :param text: The response text from `get_intended_text`.
+    :param command: The command to which the input text should be added. Must contain the prefix used by the command
+                    (`!` or `/`).
+    :return: The command with the suggested input text appended, or None if no suggestion was found.
+    """
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
             if text.startswith(question):
                 name = get_text_between(text, "did you mean '",
                                         "'? (")
-                return f"!{command} {name}"
+                return f"{command} {name}"
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None
@@ -734,17 +753,32 @@ def is_kivy_running() -> bool:
     return False
 
 
+def env_cleared_lib_path() -> Mapping[str, str]:
+    """
+    Creates a copy of the current environment vars with the LD_LIBRARY_PATH removed if set, as this can interfere when
+    launching something in a subprocess.
+    """
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]
+
+    return env
+
+
 def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
     res.put(open_filename(*args))
 
 
+def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(save_filename(*args))
+    
 def _run_for_stdout(*args: str):
-    env = os.environ
-    if "LD_LIBRARY_PATH" in env:
-        env = env.copy()
-        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    env = env_cleared_lib_path()
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
 
 
@@ -786,8 +820,62 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         except tkinter.TclError:
             return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
-        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
-                                                  initialfile=suggest or None)
+        try:
+            return tkinter.filedialog.askopenfilename(
+                title=title,
+                filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                initialfile=suggest or None,
+            )
+        finally:
+            root.destroy()
+
+
+def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
+        -> typing.Optional[str]:
+    logging.info(f"Opening file save dialog for {title}.")
+
+    if is_linux:
+        # prefer native dialog
+        from shutil import which
+        kdialog = which("kdialog")
+        if kdialog:
+            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            return _run_for_stdout(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
+        zenity = which("zenity")
+        if zenity:
+            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
+            selection = (f"--filename={suggest}",) if suggest else ()
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because save_filename was used for "{title}".')
+        raise e
+    else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_save_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
+        root.withdraw()
+        try:
+            return tkinter.filedialog.asksaveasfilename(
+                title=title,
+                filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                initialfile=suggest or None,
+            )
+        finally:
+            root.destroy()
 
 
 def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
@@ -835,6 +923,13 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    if not gui_enabled:
+        if error:
+            logging.error(f"{title}: {text}")
+        else:
+            logging.info(f"{title}: {text}")
+        return
+
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -870,6 +965,9 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+"""Checks if the user wanted no GUI mode and has a terminal to use it with."""
+
 def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: Union[str, Dict[str, Any]]) -> str:
@@ -900,7 +998,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
     """
-    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # https://docs.python.org/3.11/library/asyncio-task.html#asyncio.create_task
     # Python docs:
     # ```
     # Important: Save a reference to the result of [asyncio.create_task],
@@ -914,6 +1012,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
 
 
 def deprecate(message: str, add_stacklevels: int = 0):
+    """also use typing_extensions.deprecated wherever you use this"""
     if __debug__:
         raise Exception(message)
     warnings.warn(message, stacklevel=2 + add_stacklevels)
@@ -937,15 +1036,15 @@ class DeprecateDict(dict):
 
 
 def _extend_freeze_support() -> None:
-    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
-    # upstream issue: https://github.com/python/cpython/issues/76327
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
+    # original upstream issue: https://github.com/python/cpython/issues/76327
     # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
     import multiprocessing
     import multiprocessing.spawn
 
     def _freeze_support() -> None:
         """Minimal freeze_support. Only apply this if frozen."""
-        from subprocess import _args_from_interpreter_flags
+        from subprocess import _args_from_interpreter_flags  # noqa
 
         # Prevent `spawn` from trying to read `__main__` in from the main script
         multiprocessing.process.ORIGINAL_DIR = None
@@ -953,8 +1052,7 @@ def _extend_freeze_support() -> None:
         # Handle the first process that MP will create
         if (
             len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
-                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
-                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.resource_tracker import main',
                 'from multiprocessing.forkserver import main'
             )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
         ):
@@ -973,20 +1071,36 @@ def _extend_freeze_support() -> None:
             multiprocessing.spawn.spawn_main(**kwargs)
             sys.exit()
 
-    if not is_windows and is_frozen():
-        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+    def _noop() -> None:
+        pass
+
+    multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
+@deprecated("Use multiprocessing.freeze_support() instead")
 def freeze_support() -> None:
-    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
-    _extend_freeze_support()
+
+    deprecate("Use multiprocessing.freeze_support() instead")
     multiprocessing.freeze_support()
 
 
-def visualize_regions(root_region: Region, file_name: str, *,
-                      show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None) -> None:
+_extend_freeze_support()
+
+
+def visualize_regions(
+        root_region: Region,
+        file_name: str,
+        *,
+        show_entrance_names: bool = False,
+        show_locations: bool = True,
+        show_other_regions: bool = True,
+        linetype_ortho: bool = True,
+        regions_to_highlight: set[Region] | None = None,
+        entrance_highlighting: dict[int, int] | None = None,
+        detail_other_regions: bool = False,
+        auto_assign_colors: bool = False) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -1003,6 +1117,13 @@ def visualize_regions(root_region: Region, file_name: str, *,
     :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
     :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
     :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
+    :param entrance_highlighting: a mapping from your world's entrance randomization groups to RGB values, used to color
+            your entrances
+    :param detail_other_regions: (default False) If enabled, will fully visualize regions that aren't reachable
+            from root_region.
+    :param auto_assign_colors: (default False) If enabled, will automatically assign random colors to entrances of the
+            same randomization group. Uses entrance_highlighting first, and only picks random colors for entrance groups
+            not found in the passed-in map
 
     Example usage in World code:
     from Utils import visualize_regions
@@ -1028,6 +1149,34 @@ def visualize_regions(root_region: Region, file_name: str, *,
     regions: typing.Deque[Region] = deque((root_region,))
     multiworld: MultiWorld = root_region.multiworld
 
+    colors_used: set[int] = set()
+    if entrance_highlighting:
+        for color in entrance_highlighting.values():
+            # filter the colors to their most-significant bits to avoid too similar colors
+            colors_used.add(color & 0xF0F0F0)
+    else:
+        # assign an empty dict to not crash later
+        # the parameter is optional for ease of use when you don't care about colors
+        entrance_highlighting = {}
+
+    def select_color(group: int) -> int:
+        # specifically spacing color indexes by three different prime numbers (3, 5, 7) for the RGB components to avoid
+        # obvious cyclical color patterns
+        COLOR_INDEX_SPACING: int = 0x357
+        new_color_index: int = (group * COLOR_INDEX_SPACING) % 0x1000
+        new_color = ((new_color_index & 0xF00) << 12) + \
+                    ((new_color_index & 0xF0) << 8) + \
+                    ((new_color_index & 0xF) << 4)
+        while new_color in colors_used:
+            # while this is technically unbounded, expected collisions are low. There are 4095 possible colors
+            # and worlds are unlikely to get to anywhere close to that many entrance groups
+            # intentionally not using multiworld.random to not affect output when debugging with this tool
+            new_color_index += COLOR_INDEX_SPACING
+            new_color = ((new_color_index & 0xF00) << 12) + \
+                        ((new_color_index & 0xF0) << 8) + \
+                        ((new_color_index & 0xF) << 4)
+        return new_color
+
     def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
         name = obj.name
         if isinstance(obj, Item):
@@ -1047,18 +1196,28 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     def visualize_exits(region: Region) -> None:
         for exit_ in region.exits:
+            color_code: str = ""
+            if exit_.randomization_group in entrance_highlighting:
+                color_code = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
             if exit_.connected_region:
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"")
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color_code}")
                 else:
                     try:
-                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"")
-                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"")
+                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color_code}")
+                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"{color_code}")
                     except ValueError:
-                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"")
+                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"{color_code}")
             else:
-                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\"")
-                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"")
+                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\" {color_code}")
+                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"{color_code}")
+        for entrance in region.entrances:
+            color_code: str = ""
+            if entrance.randomization_group in entrance_highlighting:
+                color_code = f" #{entrance_highlighting[entrance.randomization_group]:0>6X}"
+            if not entrance.parent_region:
+                uml.append(f"circle \"unconnected entrance:\\n{fmt(entrance)}\"{color_code}")
+                uml.append(f"\"unconnected entrance:\\n{fmt(entrance)}\" --> \"{fmt(region)}\"{color_code}")
 
     def visualize_locations(region: Region) -> None:
         any_lock = any(location.locked for location in region.locations)
@@ -1079,8 +1238,26 @@ def visualize_regions(root_region: Region, file_name: str, *,
         if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
             uml.append("package \"other regions\" <<Cloud>> {")
             for region in other_regions:
-                uml.append(f"class \"{fmt(region)}\"")
+                if detail_other_regions:
+                    visualize_region(region)
+                else:
+                    uml.append(f"class \"{fmt(region)}\"")
             uml.append("}")
+
+    if auto_assign_colors:
+        all_entrances: list[Entrance] = []
+        for region in multiworld.get_regions(root_region.player):
+            all_entrances.extend(region.entrances)
+            all_entrances.extend(region.exits)
+        all_groups: list[int] = sorted(set([entrance.randomization_group for entrance in all_entrances]))
+        for group in all_groups:
+            if group not in entrance_highlighting:
+                if len(colors_used) >= 0x1000:
+                    # on the off chance someone makes 4096 different entrance groups, don't cycle forever
+                    break
+                new_color: int = select_color(group)
+                entrance_highlighting[group] = new_color
+                colors_used.add(new_color)
 
     uml.append("@startuml")
     uml.append("hide circle")
@@ -1092,7 +1269,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
             seen.add(current_region)
             visualize_region(current_region)
             regions.extend(exit_.connected_region for exit_ in current_region.exits if exit_.connected_region)
-    if show_other_regions:
+    if show_other_regions or detail_other_regions:
         visualize_other_regions()
     uml.append("@enduml")
 
@@ -1119,3 +1296,81 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+def utcnow() -> datetime:
+    """
+    Implementation of Python's datetime.utcnow() function for use after deprecation.
+    Needed for timezone-naive UTC datetimes stored in databases with PonyORM (upstream).
+    https://ponyorm.org/ponyorm-list/2014-August/000113.html
+    """
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
+    """
+    ThreadPoolExecutor that uses daemonic threads that do not keep the program alive.
+    NOTE: use this with caution because killed threads will not properly clean up.
+    """
+
+    def _adjust_thread_count(self):
+        # see upstream ThreadPoolExecutor for details
+        import threading
+        import weakref
+        from concurrent.futures.thread import _worker
+
+        if self._idle_semaphore.acquire(timeout=0):
+            return
+
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+
+        num_threads = len(self._threads)
+        if num_threads < self._max_workers:
+            thread_name = f"{self._thread_name_prefix or self}_{num_threads}"
+            t = threading.Thread(
+                name=thread_name,
+                target=_worker,
+                args=(
+                    weakref.ref(self, weakref_cb),
+                    self._work_queue,
+                    self._initializer,
+                    self._initargs,
+                ),
+                daemon=True,
+            )
+            t.start()
+            self._threads.add(t)
+            # NOTE: don't add to _threads_queues so we don't block on shutdown
+
+
+def get_full_typename(t: type) -> str:
+    """Returns the full qualified name of a type, including its module (if not builtins)."""
+    module = t.__module__
+    if module and module != "builtins":
+        return f"{module}.{t.__qualname__}"
+    return t.__qualname__
+
+
+def get_all_causes(ex: Exception) -> str:
+    """Return a string describing the recursive causes of this exception.
+
+    :param ex: The exception to be described.
+    :return A multiline string starting with the initial exception on the first line and each resulting exception
+            on subsequent lines with progressive indentation.
+
+            For example:
+
+            ```
+            Exception: Invalid value 'bad'.
+             Which caused: Options.OptionError: Error generating option
+              Which caused: ValueError: File bad.yaml is invalid.
+            ```
+    """
+    cause = ex
+    causes = [f"{get_full_typename(type(ex))}: {ex}"]
+    while cause := cause.__cause__:
+        causes.append(f"{get_full_typename(type(cause))}: {cause}")
+    top = causes[-1]
+    others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
+    return f"{top}{others}"
