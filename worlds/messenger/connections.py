@@ -316,7 +316,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Searing Mega Shard Shop": [
             "Searing Crags - Falling Rocks Shop",
             "Searing Crags - Before Final Climb Shop",
-            "Searing Crags - Key of Strength Shop",
+            "Searing Crags - Key of Strength Room",
         ],
         "Before Final Climb Shop": [
             "Searing Crags - Raining Rocks Checkpoint",
@@ -330,6 +330,9 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Searing Crags - Top",
         ],
         "Key of Strength Shop": [
+            "Searing Crags - Key of Strength Room",
+        ],
+        "Key of Strength Room": [
             "Searing Crags - Searing Mega Shard Shop",
         ],
         "Triple Ball Spinner Checkpoint": [
