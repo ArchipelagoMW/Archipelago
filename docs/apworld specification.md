@@ -35,8 +35,8 @@ There are also the following optional fields:
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An APWorld without a world_version is always treated as older than one with a version
   (**Must** use exactly the format `"major.minor.build"`, e.g. `1.0.0`)
-* `authors` - a list of authors, to eventually be displayed in various user-facing places such as WebHost and
-  package managers. Should always be a list of strings.
+* `authors` - a list of authors of the world. Displayed in user-facing places like the Supported Games page
+  on WebHost. Should always be a list of strings.
 
 If the APWorld is packaged as an `.apworld` zip file, it also needs to have `version` and `compatible_version`,
 which refer to the version of the APContainer packaging scheme defined in [Files.py](../worlds/Files.py).  
