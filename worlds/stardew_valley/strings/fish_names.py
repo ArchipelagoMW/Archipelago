@@ -68,7 +68,6 @@ class Fish:
     snail = fish("Snail")
     son_of_crimsonfish = fish("Son of Crimsonfish")
     spook_fish = fish("Spook Fish")
-    spookfish = fish("Spook Fish")
     squid = fish("Squid")
     stingray = fish("Stingray")
     stonefish = fish("Stonefish")

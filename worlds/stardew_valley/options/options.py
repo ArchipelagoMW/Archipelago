@@ -951,8 +951,8 @@ class DataRandomizationBehavior(Choice):
         Off: No Data Randomization occurs
         Shuffle: All values are maintained, but shuffled between entries.
         Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
-        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws
-        Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed
+        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Usually imbalanced
+        Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed. Very imbalanced.
     """
     internal_name = "data_randomization_behavior"
     display_name = "Data Randomization Behavior"
@@ -978,7 +978,8 @@ class DataRandomization(OptionSet):
     display_name = "Data Randomization"
     valid_keys = frozenset({
         DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location,
-        DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method,
+        DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method, DataRandomizationOptionName.fish_sell_price,
+        DataRandomizationOptionName.crop_sell_price
     })
     preset_none = frozenset()
     preset_all = valid_keys

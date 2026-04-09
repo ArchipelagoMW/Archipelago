@@ -255,7 +255,7 @@ algorerhythm_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.algor
 
 
 red_fish_items = [red_mullet, red_snapper, lava_eel, crimsonfish]
-blue_fish_items = [anchovy, tuna, sardine, bream, squid, ice_pip, albacore, blue_discus, midnight_squid, spook_fish, glacierfish]
+blue_fish_items = [anchovy, tuna, sardine, bream, squid, ice_pip, albacore, blue_discus, midnight_squid, spookfish, glacierfish]
 other_fish = [pufferfish, largemouth_bass, smallmouth_bass, rainbow_trout, walleye, perch, carp, catfish, pike, sunfish, herring, eel, octopus, sea_cucumber,
               super_cucumber, ghostfish, stonefish, sandfish, scorpion_carp, flounder, midnight_carp, bullhead, tilapia, chub, dorado, shad, tiger_trout,
               lingcod, halibut, slimejack, stingray, goby, blobfish, angler, legend, mutant_carp]

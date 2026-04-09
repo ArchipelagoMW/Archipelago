@@ -5,6 +5,8 @@ from ..content import StardewContent, content_packs
 from ..content.override import override
 from ..data import season_data
 from ..data.fish_data import FishItem, crab_pot_difficulty
+from ..data.sell_prices.crops_prices import all_crop_sell_prices
+from ..data.sell_prices.fish_prices import all_fish_sell_prices
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -27,6 +29,8 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
     randomize_fish_location(content, data_to_randomize, behavior, random)
     randomize_fish_season(content, data_to_randomize, behavior, random)
     randomize_fish_weather(content, data_to_randomize, behavior, random)
+    randomize_fish_sell_prices(content, data_to_randomize, behavior, random)
+    randomize_crop_sell_prices(content, data_to_randomize, behavior, random)
 
     return content
 
@@ -139,3 +143,29 @@ def randomize_fish_weather(content: StardewContent, data_to_randomize: set[str],
     for fish_name, fish_weather in randomized_weather_per_fish.items():
         original_fish = content.fishes[fish_name]
         content.fishes[fish_name] = override(original_fish, weather=fish_weather)
+
+
+def randomize_fish_sell_prices(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.fish_sell_price not in data_to_randomize:
+        return
+
+    fishes_included = content.fishes.keys()
+    sell_prices_by_fish = {fish_name: fish_price for fish_name, fish_price in all_fish_sell_prices.items() if fish_name in fishes_included}
+    randomized_sell_prices_per_fish = randomizers_per_behavior[behavior](sell_prices_by_fish, random)
+
+    for fish_name, fish_price in randomized_sell_prices_per_fish.items():
+        original_fish = content.fishes[fish_name]
+        content.fishes[fish_name] = override(original_fish, sell_price=fish_price)
+
+
+def randomize_crop_sell_prices(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.fish_sell_price not in data_to_randomize:
+        return
+
+    crops_included = content.game_items.keys()
+    sell_prices_by_crop = {crop_name: crop_price for crop_name, crop_price in all_crop_sell_prices.items() if crop_name in crops_included}
+    randomized_sell_prices_per_crop = randomizers_per_behavior[behavior](sell_prices_by_crop, random)
+
+    for crop_name, crop_price in randomized_sell_prices_per_crop.items():
+        original_crop = content.game_items[crop_name]
+        content.game_items[crop_name] = override(original_crop, sell_price=crop_price)

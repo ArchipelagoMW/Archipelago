@@ -82,6 +82,7 @@ class GameItem:
     name: str
     sources: list[Source] = field(default_factory=list)
     tags: set[ItemTag] = field(default_factory=set)
+    sell_price: int = -1
 
     def add_sources(self, sources: Iterable[Source]):
         self.sources.extend(source for source in sources if type(source) is not Tag)

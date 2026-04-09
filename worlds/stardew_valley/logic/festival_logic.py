@@ -126,7 +126,7 @@ class FestivalLogic(BaseLogic):
 
     def can_get_luau_soup_delight(self) -> StardewRule:
         eligible_fish = (Fish.blobfish, Fish.crimsonfish, Fish.ice_pip, Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish,
-                         Fish.mutant_carp, Fish.spookfish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
+                         Fish.mutant_carp, Fish.spook_fish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
         fish_rule = self.logic.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
         eligible_kegables = (Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
                              Fruit.orange, Fruit.peach, Fruit.pineapple, Fruit.pomegranate, Fruit.rhubarb, Fruit.starfruit, Fruit.strawberry,

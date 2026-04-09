@@ -28,6 +28,7 @@ class FishItem:
     weather: Tuple[str]
     minimum_level: int
     mod_name: Optional[str] = None
+    sell_price: int = -1
 
     def __repr__(self):
         return f"{self.name} (Locations: {self.locations} |" \

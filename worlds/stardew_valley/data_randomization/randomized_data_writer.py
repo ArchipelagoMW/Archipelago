@@ -2,6 +2,7 @@ from typing import TextIO
 
 from ..content import StardewContent
 from ..data.fish_data import crab_pot_difficulty
+from ..data.game_item import ItemTag
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -32,6 +33,7 @@ def prepare_randomized_data(content: StardewContent, options: StardewValleyOptio
 
     prepared_data = dict()
     prepare_fish_data(content, data_to_randomize, prepared_data)
+    prepare_crop_data(content, data_to_randomize, prepared_data)
 
     return prepared_data
 
@@ -43,6 +45,12 @@ def prepare_fish_data(content: StardewContent, data_to_randomize: set[str], prep
     prepare_fish_season_data(content, data_to_randomize, prepared_data)
     prepare_fish_location_data(content, data_to_randomize, prepared_data)
     prepare_fish_weather_data(content, data_to_randomize, prepared_data)
+    prepare_fish_sell_price_data(content, data_to_randomize, prepared_data)
+
+
+def prepare_crop_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
+    prepared_data["Crops"] = dict()
+    prepare_crop_sell_price_data(content, data_to_randomize, prepared_data)
 
 
 def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -50,7 +58,7 @@ def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: s
                              DataRandomizationOptionName.fish_catch_method,
                              lambda fish: True,
                              lambda fish: "Crab Pot" if fish.difficulty == crab_pot_difficulty else "Fishing Rod",
-                             "method")
+                             "Method")
 
 
 def prepare_fish_difficulty_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -58,7 +66,7 @@ def prepare_fish_difficulty_data(content: StardewContent, data_to_randomize: set
                              DataRandomizationOptionName.fish_difficulty,
                              lambda fish: fish.difficulty > 0,
                              lambda fish: fish.difficulty,
-                             "difficulty")
+                             "Difficulty")
 
 
 def prepare_fish_season_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -66,7 +74,7 @@ def prepare_fish_season_data(content: StardewContent, data_to_randomize: set[str
                              DataRandomizationOptionName.fish_season,
                              lambda fish: len(fish.seasons) > 0 and fish.difficulty != crab_pot_difficulty,
                              lambda fish: list(fish.seasons),
-                             "season")
+                             "Season")
 
 
 def prepare_fish_location_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -74,7 +82,7 @@ def prepare_fish_location_data(content: StardewContent, data_to_randomize: set[s
                              DataRandomizationOptionName.fish_location,
                              lambda fish: len(fish.locations) > 0,
                              lambda fish: list(fish.locations),
-                             "location")
+                             "Location")
 
 
 def prepare_fish_weather_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -82,7 +90,15 @@ def prepare_fish_weather_data(content: StardewContent, data_to_randomize: set[st
                              DataRandomizationOptionName.fish_weather,
                              lambda fish: len(fish.weather) > 0 and fish.difficulty != crab_pot_difficulty,
                              lambda fish: list(fish.weather),
-                             "weather")
+                             "Weather")
+
+
+def prepare_fish_sell_price_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_fish_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.fish_sell_price,
+                             lambda fish: fish.sell_price > 0,
+                             lambda fish: fish.sell_price,
+                             "Sell Price")
 
 
 def prepare_fish_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
@@ -95,3 +111,26 @@ def prepare_fish_data_aspect(content: StardewContent, data_to_randomize: set[str
         if fish_name not in prepared_data["Fish"]:
             prepared_data["Fish"][fish_name] = dict()
         prepared_data["Fish"][fish_name][aspect_key] = fish_data_extractor(fish_data)
+
+
+def prepare_crop_sell_price_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_crop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.crop_sell_price,
+                             lambda crop: crop.sell_price > 0,
+                             lambda crop: crop.sell_price,
+                             "Sell Price")
+
+
+def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
+                             randomize_toggle: str, crop_validator, crop_data_extractor, aspect_key: str):
+    if randomize_toggle not in data_to_randomize:
+        return
+    crop_item_tags = [ItemTag.FRUIT, ItemTag.VEGETABLE, ItemTag.FORAGE, ItemTag.EDIBLE_MUSHROOM]
+    for crop_name, crop_data in content.game_items.items():
+        if not any(tag in crop_data.tags for tag in crop_item_tags):
+            continue
+        if not crop_validator(crop_data):
+            continue
+        if crop_name not in prepared_data["Crops"]:
+            prepared_data["Crops"][crop_name] = dict()
+        prepared_data["Crops"][crop_name][aspect_key] = crop_data_extractor(crop_data)
