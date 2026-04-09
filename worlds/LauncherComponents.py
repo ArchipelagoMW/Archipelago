@@ -5,7 +5,7 @@ import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path
+from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore
 
 
 class Type(Enum):
@@ -269,8 +269,9 @@ if not is_frozen():
         from Launcher import open_folder
 
         import argparse
-        parser = argparse.ArgumentParser("Build script for APWorlds")
-        parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
+        parser = argparse.ArgumentParser(prog="Build APWorlds", description="Build script for APWorlds")
+        parser.add_argument("worlds", type=str, default=(), nargs="*", help="names of APWorlds to build")
+        parser.add_argument("--skip_open_folder", action="store_true", help="don't open the output build folder")
         args = parser.parse_args(launch_args)
 
         if args.worlds:
@@ -278,6 +279,10 @@ if not is_frozen():
         else:
             games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
                      if not worldtype.zip_path]
+
+        global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))
+        if not global_apignores:
+            raise RuntimeError("Could not read global apignore file for build component")
 
         apworlds_folder = os.path.join("build", "apworlds")
         os.makedirs(apworlds_folder, exist_ok=True)
@@ -306,18 +311,19 @@ if not is_frozen():
             apworld = APWorldContainer(str(zip_path))
             apworld.game = worldtype.game
             manifest.update(apworld.get_manifest())
-            apworld.manifest_path = f"{file_name}/archipelago.json"
-            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
-                                 compresslevel=9) as zf:
-                for path in pathlib.Path(world_directory).rglob("*"):
-                    relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
-                    if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
-                        continue
-                    if not relative_path.endswith("archipelago.json"):
-                        zf.write(path, relative_path)
-                zf.writestr(apworld.manifest_path, json.dumps(manifest))
-        open_folder(apworlds_folder)
+            apworld.manifest_path = os.path.join(file_name, "archipelago.json")
 
+            local_ignores = read_apignore(pathlib.Path(world_directory, ".apignore"))
+            apignores = global_apignores + local_ignores if local_ignores else global_apignores
+
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+                for file in apignores.match_tree_files(world_directory, negate=True):
+                    zf.write(pathlib.Path(world_directory, file), pathlib.Path(file_name, file))
+
+                zf.writestr(apworld.manifest_path, json.dumps(manifest))
+
+        if not args.skip_open_folder:
+            open_folder(apworlds_folder)
 
     components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))
