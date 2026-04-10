@@ -448,6 +448,10 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
             return True_().resolve(world)
 
         children_to_process = [c.resolve(world) for c in self.children]
+        return AtLeast.from_resolved(count, world, children_to_process)
+
+    @classmethod
+    def from_resolved(cls, count: int, world: TWorld, children_to_process) -> Rule.Resolved:
         clauses: list[Rule.Resolved] = []
 
         while children_to_process:
@@ -467,17 +471,35 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
             return False_().resolve(world)
         if count == 1:
             # Switch to Or which has more optimized handling
-            return Or(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(world)
+            return Or.from_resolved(world, clauses)
         if count == len(clauses):
             # Switch to And which has more optimized handling
-            return And(*self.children, options=self.options, filtered_resolution=self.filtered_resolution).resolve(
-                world
-            )
+            return And.from_resolved(world, clauses)
         return AtLeast.Resolved(
             tuple(clauses),
             count=count,
             player=world.player,
             caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
+
+    @override
+    def to_dict(self) -> dict[str, Any]:
+        output = super().to_dict()
+        count = self.count
+        output["count"] = count.to_dict() if isinstance(count, FieldResolver) else count
+        return output
+
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
+        args = cls._parse_field_resolvers(data, world_cls.game)
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        children = [world_cls.rule_from_dict(c) for c in data.get("children", ())]
+        return cls(
+            args.pop("count"),
+            *children,
+            options=options,
+            filtered_resolution=data.get("filtered_resolution", False),
         )
 
     class Resolved(NestedRule.Resolved):
@@ -495,9 +517,22 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            if state is None:
+                messages: list[JSONMessagePart] = [
+                    {"type": "text", "text": "At least "},
+                    {"type": "color", "color": "cyan", "text": str(self.count)},
+                    {"type": "text", "text": " of ("},
+                ]
+                for i, child in enumerate(self.children):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.extend(child.explain_json(state))
+                messages.append({"type": "text", "text": ")"})
+                return messages
+            satisfied_count = sum(1 if child(state) else 0 for child in self.children)
             messages: list[JSONMessagePart] = [
                 {"type": "text", "text": "At least "},
-                {"type": "color", "color": "cyan", "text": str(self.count)},
+                {"type": "color", "color": "cyan", "text": f"{satisfied_count}/{self.count}"},
                 {"type": "text", "text": " of ("},
             ]
             for i, child in enumerate(self.children):
@@ -510,7 +545,10 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
         @override
         def explain_str(self, state: CollectionState | None = None) -> str:
             clauses = ", ".join([c.explain_str(state) for c in self.children])
-            return f"At least {self.count} of ({clauses})"
+            if state is None:
+                return f"At least {self.count} of ({clauses})"
+            satisfied_count = sum(1 if child(state) else 0 for child in self.children)
+            return f"At least {satisfied_count}/{self.count} of ({clauses})"
 
         @override
         def __str__(self) -> str:
@@ -524,13 +562,16 @@ class And(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        children_to_process = [c.resolve(world) for c in self.children]
+        return And.from_resolved(world, [c.resolve(world) for c in self.children])
+
+    @classmethod
+    def from_resolved(cls, world: TWorld, children_to_process: list[Rule.Resolved]) -> Rule.Resolved:
         clauses: list[Rule.Resolved] = []
         items: dict[str, int] = {}
         true_rule: Rule.Resolved | None = None
 
         while children_to_process:
-            child = children_to_process.pop(0)
+            child: Any = children_to_process.pop(0)  # Real typing is Rule.Resolved but this confuses Pycharm
             if child.always_false:
                 # false always wins
                 return child
@@ -611,12 +652,15 @@ class Or(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        children_to_process = [c.resolve(world) for c in self.children]
+        return Or.from_resolved(world, [c.resolve(world) for c in self.children])
+
+    @classmethod
+    def from_resolved(cls, world: TWorld, children_to_process: list[Rule.Resolved]) -> Rule.Resolved:
         clauses: list[Rule.Resolved] = []
         items: dict[str, int] = {}
 
         while children_to_process:
-            child = children_to_process.pop(0)
+            child: Any = children_to_process.pop(0)  # Real typing is Rule.Resolved but this confuses Pycharm
             if child.always_true:
                 # true always wins
                 return child
