@@ -571,7 +571,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
         true_rule: Rule.Resolved | None = None
 
         while children_to_process:
-            child: Any = children_to_process.pop(0)  # Real typing is Rule.Resolved but this confuses Pycharm
+            child = children_to_process.pop(0)
             if child.always_false:
                 # false always wins
                 return child
@@ -580,17 +580,21 @@ class And(NestedRule[TWorld], game="Archipelago"):
                 true_rule = child
                 continue
             if isinstance(child, And.Resolved):
+                child: And.Resolved
                 children_to_process.extend(child.children)
                 continue
 
             if isinstance(child, Has.Resolved):
+                child: Has.Resolved
                 if child.item_name not in items or items[child.item_name] < child.count:
                     items[child.item_name] = child.count
             elif isinstance(child, HasAll.Resolved):
+                child: HasAll.Resolved
                 for item in child.item_names:
                     if item not in items:
                         items[item] = 1
             elif isinstance(child, HasAllCounts.Resolved):
+                child: HasAllCounts.Resolved
                 for item, count in child.item_counts:
                     if item not in items or items[item] < count:
                         items[item] = count
@@ -660,7 +664,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         items: dict[str, int] = {}
 
         while children_to_process:
-            child: Any = children_to_process.pop(0)  # Real typing is Rule.Resolved but this confuses Pycharm
+            child = children_to_process.pop(0)
             if child.always_true:
                 # true always wins
                 return child
@@ -668,16 +672,20 @@ class Or(NestedRule[TWorld], game="Archipelago"):
                 # falses can be ignored
                 continue
             if isinstance(child, Or.Resolved):
+                child: Or.Resolved
                 children_to_process.extend(child.children)
                 continue
 
             if isinstance(child, Has.Resolved):
+                child: Has.Resolved
                 if child.item_name not in items or child.count < items[child.item_name]:
                     items[child.item_name] = child.count
             elif isinstance(child, HasAny.Resolved):
+                child: HasAny.Resolved
                 for item in child.item_names:
                     items[item] = 1
             elif isinstance(child, HasAnyCount.Resolved):
+                child: HasAnyCount.Resolved
                 for item, count in child.item_counts:
                     if item not in items or count < items[item]:
                         items[item] = count
