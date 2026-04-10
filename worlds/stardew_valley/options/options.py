@@ -973,6 +973,8 @@ class DataRandomization(OptionSet):
     Fish Location: Randomizes which body of water fish can be caught in
     Fish Weather: Randomizes which weather fish can be caught in
     Fish Catch Method: Randomizes whether fish are caught using fishing rods or crab pots.
+    Fish Sell Price: Randomizes the sell price of all fish
+    Crop Sell Price: Randomizes the sell price of all crops and forage
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"
