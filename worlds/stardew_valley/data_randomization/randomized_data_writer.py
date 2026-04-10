@@ -98,7 +98,7 @@ def prepare_fish_sell_price_data(content: StardewContent, data_to_randomize: set
                              DataRandomizationOptionName.fish_sell_price,
                              lambda fish: fish.sell_price > 0,
                              lambda fish: fish.sell_price,
-                             "Sell Price")
+                             "SellPrice")
 
 
 def prepare_fish_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
@@ -118,7 +118,7 @@ def prepare_crop_sell_price_data(content: StardewContent, data_to_randomize: set
                              DataRandomizationOptionName.crop_sell_price,
                              lambda crop: crop.sell_price > 0,
                              lambda crop: crop.sell_price,
-                             "Sell Price")
+                             "SellPrice")
 
 
 def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
