@@ -956,7 +956,7 @@ class DataRandomizationBehavior(Choice):
     """
     internal_name = "data_randomization_behavior"
     display_name = "Data Randomization Behavior"
-    default = 0
+    default = 1
     option_off = 0
     option_shuffle = 1
     option_weighted_randomized = 2
