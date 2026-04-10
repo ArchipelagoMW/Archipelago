@@ -1,3 +1,4 @@
+import math
 from numbers import Number
 from random import Random
 from typing import Any, Hashable, Iterable
@@ -27,6 +28,50 @@ def weight_randomize(existing_values: dict[Any, Any], random: Random) -> dict[An
         new_values[keys[i]] = random.choice(values)
 
     return new_values
+
+
+def normal_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
+    if len(existing_values) < 2 or all(isinstance(val, bool) for val in existing_values.values()):
+        return randomize(existing_values, random)
+    if any(not isinstance(val, Number) for val in existing_values.values()):
+        return randomize(existing_values, random)
+
+    keys = sorted([key for key in existing_values.keys()])
+    values = sorted([val for val in existing_values.values()])
+
+    min_value = min(values)
+    max_value = max(values)
+
+    all_integer = all(isinstance(val, int) for val in values)
+
+    # Log data before doing the math so big outliers don't dominate as much
+    log_data = [math.log(x) for x in values]
+
+    mean = sum(log_data) / len(log_data)
+    variance = sum((x - mean)**2 for x in log_data) / len(log_data)
+    standard_deviation = variance**0.5
+
+    new_values = dict()
+    for i in range(len(keys)):
+        normal_random_value = normal_sample(random, mean, standard_deviation)
+        restored_value = math.exp(normal_random_value)
+        if restored_value > max_value or restored_value < min_value:
+            normal_random_value = normal_sample(random, mean, standard_deviation)
+            restored_value = math.exp(normal_random_value)
+        if all_integer:
+            restored_value = round(restored_value)
+        new_values[keys[i]] = restored_value
+
+    return new_values
+
+
+def normal_sample(random: Random, mean: float = 0.0, standard_deviation: float = 1.0) -> float:
+    # Box-Muller transform
+    u1 = random.random()
+    u2 = random.random()
+
+    z0 = math.sqrt(-2.0 * math.log(u1)) * math.cos(2 * math.pi * u2)
+    return mean + z0 * standard_deviation
 
 
 def randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
@@ -128,6 +173,7 @@ randomizers_per_behavior = {
     DataRandomizationBehavior.option_off: None,
     DataRandomizationBehavior.option_shuffle: shuffle_data,
     DataRandomizationBehavior.option_weighted_randomized: weight_randomize,
+    DataRandomizationBehavior.option_normal_randomized: normal_randomize,
     DataRandomizationBehavior.option_randomized: randomize,
     DataRandomizationBehavior.option_range_randomized: range_randomize,
     # DataRandomizationBehavior.option_wild: randomize_wild,

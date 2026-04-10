@@ -951,7 +951,8 @@ class DataRandomizationBehavior(Choice):
         Off: No Data Randomization occurs
         Shuffle: All values are maintained, but shuffled between entries.
         Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
-        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Usually imbalanced
+        Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values.
+        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Can be imbalanced
         Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed. Very imbalanced.
     """
     internal_name = "data_randomization_behavior"
@@ -960,9 +961,10 @@ class DataRandomizationBehavior(Choice):
     option_off = 0
     option_shuffle = 1
     option_weighted_randomized = 2
-    option_randomized = 3
-    option_range_randomized = 4
-    # option_wild = 5 # Wild: All entries are given a random value, with no regard for the original entries at all.
+    option_normal_randomized = 3
+    option_randomized = 4
+    option_range_randomized = 5
+    # option_wild = 6 # Wild: All entries are given a random value, with no regard for the original entries at all.
 
 
 class DataRandomization(OptionSet):
