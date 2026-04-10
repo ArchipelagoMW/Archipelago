@@ -8,6 +8,7 @@ from worlds.AutoWorld import World
 from . import items, locations, regions, rules
 from .levels import LEVEL_DATA
 from . import options as babaisyou_options  # rename due to a name conflict with World.options
+from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
 import logging
 logger = logging.getLogger("Baba Is You")
@@ -50,7 +51,7 @@ class BabaIsYouWorld(World):
 
     # We can define location and item name groups here as well.
     item_name_groups = items.item_name_groups
-    # location_name_groups = location_name_groups
+    location_name_groups = locations.location_name_groups
 
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
@@ -121,30 +122,16 @@ class BabaIsYouWorld(World):
         self.multiworld.early_items[self.player]["Push"] = 1
         self.multiworld.early_items[self.player]["And"] = 1
 
-        # Decide on one area to be the "Early Area"
-        early_area = "Lake"
-        if self.options.open_map:
-            early_areas = ["Lake", "Island", "Fall", "Ruins", "Forest", "Space", "Garden", "Chasm"]
-            self.random.shuffle(early_areas)
-            early_area = early_areas.pop()
         
-        # If world keys are on, make the early area's key early
+        # If world keys are on, designate one area as the "Early" area and make that area's key early
         if self.options.world_keys:
+            early_area = "Lake"
+            if self.options.open_map:
+                early_areas = ["Lake", "Island", "Fall", "Ruins", "Forest", "Space", "Garden", "Chasm"]
+                self.random.shuffle(early_areas)
+                early_area = early_areas.pop()
             #print(early_area)
             self.multiworld.early_items[self.player][f"{early_area} Key"] = 1
-
-        # Get first level of that area, and make all words required early items
-        firstLevel = f"{early_area}-1"
-        if early_area == "Chasm": # Chasm doesn't have a level 1, use extra 1 instead
-            firstLevel = "Chasm-Extra 1"
-        if self.options.level_shuffle != 0 and self.level_shuffle_dict.get(firstLevel) != None:
-            firstLevel = self.level_shuffle_dict.get(firstLevel)
-        data = LEVEL_DATA[firstLevel]
-        #print(firstLevel)
-        if data.get("winLogic") != None:
-            for word in data["winLogic"]:
-               #print(word)
-               self.multiworld.early_items[self.player][word] = 1
 
         # Unused: give even more early words
         """if self.options.level_shuffle == 0:

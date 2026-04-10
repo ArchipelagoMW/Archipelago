@@ -6,8 +6,9 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
 from . import items
-from .levels import LEVEL_DATA
+from .levels import LEVEL_DATA, can_win
 from .locations import BabaIsYouLocation
+from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
@@ -42,9 +43,10 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
     for entrance in cavern.entrances:
         add_rule(entrance, check_second_gate)
 
-    # Conditions for default ending
+    # Conditions for ending
     ending = world.get_location("Ending")
-    set_rule(ending, lambda state: state.has_all(("Keke", "Is", "Push", "Belt", "Shift", "Rock", "Win", "End"), world.player))
+    a_way_out_rule = can_win("Map-Finale", world.options.logic_difficulty)
+    world.set_rule(ending, a_way_out_rule & Has("End"))
 
 
 def set_all_location_rules(world: BabaIsYouWorld) -> None:
@@ -56,14 +58,7 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
             locationName = data["name"] + ": Win"
             location = world.get_location(locationName)
 
-            if data.get("winLogic") != None:
-                def can_win(state: CollectionState, words=data["winLogic"]):
-                    return state.has_all(words, world.player)
-                
-                # print(location.name, data["winLogic"])
-                set_rule(location, can_win)
-            else:
-                can_win = None # No rule
+            rule = can_win(name, world.options.logic_difficulty)
 
             # Get parent based where the level is placed
             parent = data.get("parent")
@@ -73,42 +68,40 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
                     if name == name2: # This level got shuffled into the other one, get the old parent
                         parent = LEVEL_DATA[oldName].get("parent")
                         break
+            
+            world.set_rule(location, rule)
 
             # Create win event with same logic as winning using parent
             if parent != None:
                 region = world.get_region(name)
-                region.add_event(location_name = locationName + " Event", item_name = f"{parent} Win", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem, rule=can_win)
+                region.add_event(location_name = locationName + " Event", item_name = f"{parent} Win", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem, rule=rule)
         else:
             if data.get("clearCount") != None:
                 wins = data.get("clearCount")
                 locationName = data["name"] + ": Clear"
                 itemName = f"{name} Win"
                 location = world.get_location(locationName)
-                def can_reach_wins(state: CollectionState, name=itemName, wins=wins):
-                    return state.has(name, world.player, wins)
                 
-                set_rule(location, can_reach_wins)
+                world.set_rule(location, Has(itemName, wins))
             if world.options.complete_checks and data.get("completeCount") != None:
                 wins = data.get("completeCount")
                 locationName = data["name"] + ": Complete"
                 itemName = f"{name} Win"
                 location = world.get_location(locationName)
-                def can_reach_wins(state: CollectionState, name=itemName, wins=wins):
-                    return state.has(name, world.player, wins)
                 
-                set_rule(location, can_reach_wins)
+                world.set_rule(location, Has(itemName, wins))
 
 def set_completion_condition(world: BabaIsYouWorld) -> None:
     if world.options.goal == 0: # end
-        world.multiworld.completion_condition[world.player] = lambda state: state.has("goal_end", world.player)
+        world.set_completion_rule(Has("goal_end"))
     elif world.options.goal == 1: # flower
-        world.multiworld.completion_condition[world.player] = lambda state: state.has("goal_flower", world.player)
+        world.set_completion_rule(Has("goal_flower"))
     elif world.options.goal == 2: # depths
-        world.multiworld.completion_condition[world.player] = lambda state: state.has("goal_depths", world.player)
+        world.set_completion_rule(Has("goal_depths"))
     elif world.options.goal == 3: # meta
-        world.multiworld.completion_condition[world.player] = lambda state: state.has("goal_meta", world.player)
+        world.set_completion_rule(Has("goal_meta"))
     elif world.options.goal == 4: # done
-        world.multiworld.completion_condition[world.player] = lambda state: state.has("goal_done", world.player)
+        world.set_completion_rule(Has("goal_done"))
     elif world.options.goal == 5: # levels
         world.multiworld.completion_condition[world.player] = lambda state: get_win_count(state, world) >= world.options.goal_levels
     elif world.options.goal == 6: # blossoms

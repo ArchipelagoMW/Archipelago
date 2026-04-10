@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region, CollectionState
 from worlds.generic.Rules import add_rule, set_rule
+from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
-from .levels import LEVEL_DATA
-from .words import DEFAULT_WORDS
+from .levels import LEVEL_DATA, can_win
 
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
@@ -62,18 +62,17 @@ def connect_regions(world: BabaIsYouWorld) -> None:
                 level.connect(subLevel)
                 entrance = world.get_entrance(entranceName)
 
+                rule = True_()
                 data2 = LEVEL_DATA[otherRegion]
                 if world.options.world_keys and data2.get("key") != None:
-                    def has_key(state: CollectionState, key=data2.get("key")):
-                        return state.has(key, world.player)
-                    add_rule(entrance, has_key)
+                    rule = rule & Has(data2.get("key"))
                 
                 # Add connection rules, ignoring for map levels if open map is enabled
-                rule = connections.get(orgOtherRegion)
-                if rule != None and (parent != "Map" or not world.options.open_map):
-                    def ruleFunc(state: CollectionState, player=world.player, level=name):
-                        return rule(state, player, level)
-                    add_rule(entrance, ruleFunc)
+                connectRule = connections.get(orgOtherRegion)
+                if (connectRule is not None) and (parent != "Map" or not world.options.open_map):
+                    rule = rule & connectRule(name, world.options.logic_difficulty)
+                
+                world.set_rule(entrance, rule)
 
 # Handle level shuffling
 def handle_level_shuffle(world: BabaIsYouWorld) -> None:
@@ -93,15 +92,15 @@ def handle_level_shuffle(world: BabaIsYouWorld) -> None:
                 starting_level_list.append(name)
             else:
                 level_list.append(name)
-            clearable = (data.get("winLogic") == None)
+            rule = can_win(name, world.options.logic_difficulty)
+            clearable = (rule is None)
 
             # When default words is on, include levels that only require those words as clearable
             if (not clearable) and (world.options.start_with_default_words):
-                clearable = True
-                for word in data.get("winLogic"):
-                    if word not in DEFAULT_WORDS:
-                        clearable = False
-                        break
+                difficulty = data.get("defaultWordOnlyDiff")
+                if difficulty is None:
+                    difficulty = 99
+                clearable = (difficulty <= world.options.logic_difficulty)
             
             if clearable:
                 clearable_level_list.append(name)

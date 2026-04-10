@@ -56,6 +56,20 @@ class GoalBlossoms(Range):
     range_end = 12
     default = 7
 
+class LogicDifficulty(Choice):
+    """
+    Determines the logic difficulty for levels.
+    easy: All interactable words are expected to complete a level.
+    normal: Only the necessary words will be expected to complete a level. You may have to use alternative solutions.
+    hard: Like normal, but also includes solutions that require deep game knowledge (such as parsing bugs and the order of operations).
+    """
+
+    display_name = "Logic Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    default = 1
+
 class StartWithDefaultWords(DefaultOnToggle):
     """
     Start with the 9 words that appear in the level "Baba Is You".
@@ -226,6 +240,7 @@ class BabaIsYouOptions(PerGameCommonOptions):
     goal: Goal
     goal_levels: GoalLevels
     goal_blossoms: GoalBlossoms
+    logic_difficulty: LogicDifficulty
     start_with_default_words: StartWithDefaultWords
     open_map: OpenMap
     world_keys: WorldKeys

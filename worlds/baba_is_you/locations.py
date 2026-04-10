@@ -15,6 +15,13 @@ if TYPE_CHECKING:
 # Even if a location doesn't exist on specific options, it must be present in this lookup.
 LOCATION_NAME_TO_ID = {}
 
+# Define location groups
+location_name_groups = {
+    "Level Wins": {},
+    "World Clears": {},
+    "World Completes": {},
+}
+
 # Set up location ids
 locationID = 1
 for name in LEVEL_DATA:
@@ -24,16 +31,19 @@ for name in LEVEL_DATA:
         # Add win location
         locationName = data["name"] + ": Win"
         LOCATION_NAME_TO_ID[locationName] = locationID
+        location_name_groups["Level Wins"].append(locationName)
         locationID += 1
     else:
         # Add clear and complete locations
         if data.get("clearCount") != None:
             locationName = data["name"] + ": Clear"
             LOCATION_NAME_TO_ID[locationName] = locationID
+            location_name_groups["World Clears"].append(locationName)
             locationID += 1
         if data.get("completeCount") != None:
             locationName = data["name"] + ": Complete"
             LOCATION_NAME_TO_ID[locationName] = locationID
+            location_name_groups["World Completes"].append(locationName)
             locationID += 1
 
 
