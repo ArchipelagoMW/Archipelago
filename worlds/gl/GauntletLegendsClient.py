@@ -143,8 +143,8 @@ class GauntletLegendsContext(CommonContext):
         self.vanilla_spawner_count: int = 0
         self.zone: int = 0
         self.level: int = 0
-        self.current_zone: int = 0
-        self.current_level: int = 0
+        self.current_zone: int = -1
+        self.current_level: int = -1
         self.level_id: int = 0
         self.location_scouts: list[NetworkItem] = []
         self.players: list[int] = []
@@ -423,7 +423,7 @@ class GauntletLegendsContext(CommonContext):
             logger.error(traceback.format_exc())
 
     async def location_loop(self) -> list[int]:
-        if self.current_zone == 0:
+        if self.current_zone == -1:
             self.current_zone = self.zone
             self.current_level = self.level
             self.level_id = (self.current_zone << 4) + self.current_level
