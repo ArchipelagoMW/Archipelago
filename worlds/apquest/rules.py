@@ -10,6 +10,8 @@ from .options import HardMode
 if TYPE_CHECKING:
     from .world import APQuestWorld
 
+HAS_KEY = Has("Key")  # Hmm, what could this be? A little foreshadowing perhaps? :) You'll find out if you keep reading!
+
 
 def set_all_rules(world: APQuestWorld) -> None:
     # In order for AP to generate an item layout that is actually possible for the player to complete,
@@ -57,12 +59,17 @@ def set_all_entrance_rules(world: APQuestWorld) -> None:
     # As a demonstration of what that looks like, let's do it with our final Entrance rule:
     world.set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
     # This style is not really recommended anymore, though.
-    # Using Rule Builder allows the core AP code to do a lot of under-the-hood optimizations.
+    # Notice how you have to explicitly capture world.player here so that the rule applies to the correct player?
+    # Well, Rule Builder does this part for you, inside of world.set_rule.
+    # This doesn't just result in shorter code, it also means you can define rules statically (at the module level).
+    # APQuest opts to create its Rule objects locally, but just to show what this would look like,
+    # we'll re-set the "Overworld to Top Left Room" rule to a constant defined at the top of this file:
+    world.set_rule(overworld_to_top_left_room, HAS_KEY)
+
+    # Beyond these structural advantages,
+    # Rule Builder also allows the core AP code to do a lot of under-the-hood optimizations.
     # Rule Builder is quite comprehensive, and even if you have really esoteric rules,
     # you can make custom rules by subclassing CustomRule.
-    # Since Rule Builder is preferred, we'll re-set this rule to also use "Has" from the Rule Builder.
-    world.set_rule(overworld_to_top_left_room, Has("Key"))
-
 
 def set_all_location_rules(world: APQuestWorld) -> None:
     # Location rules work no differently from Entrance rules.
@@ -109,10 +116,11 @@ def set_all_location_rules(world: APQuestWorld) -> None:
 
     # Previously, we used an "if world.options.hard_mode" condition to check if we should apply the extra requirement.
     # However, if you're comfortable with boolean logic, there is another way.
-    # OptionFilter is a rule which just resolves to True if the option has the specified value, or False otherwise.
+    # OptionFilter is a rule component which isn't a "Rule" on its own, but when used in a boolean expression with
+    # rules, it acts like True if the option has the specified value, and acts like False otherwise.
     hard_mode_is_off = OptionFilter(HardMode, False)
 
-    # Now we can combine our rule as follows.
+    # So with this option-checking rule component in hand, we can write our boss condition like this:
     can_defeat_final_boss = has_sword_and_shield & (hard_mode_is_off | has_both_health_upgrades)
     # If you're not as comfortable with boolean logic, it might be somewhat confusing why this is correct.
     # There is nothing wrong with using "if" conditions to check for options, if you find that easier to understand.
