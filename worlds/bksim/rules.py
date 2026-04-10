@@ -11,15 +11,13 @@ if TYPE_CHECKING:
 
 
 def set_rules(world: BKSimWorld) -> None:
-    multiworld = world.multiworld
-    player = world.player
     options = world.options
 
     world.create_entrance(world.get_region(RID.HOME), world.get_region(RID.SUNNY))
     world.create_entrance(world.get_region(RID.HOME), world.get_region(RID.RAINY))
     world.create_entrance(world.get_region(RID.HOME), world.get_region(RID.SNOWY), Has(ITEM.BOOTS))
 
-    locs_list: typing.Iterable[BKSim_Location] = typing.cast(typing.Iterable[BKSim_Location], multiworld.get_locations(player))
+    locs_list: typing.Iterable[BKSim_Location] = typing.cast(typing.Iterable[BKSim_Location], world.get_locations())
     loc_count = options.locs_per_weather.value
     max_rule = True_()
     for loc in locs_list:
