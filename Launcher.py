@@ -456,7 +456,7 @@ def run_component(component: Component, *args):
         if refresh_components:
             refresh_components()
     elif component.script_name:
-        subprocess.run([*get_exe(component.script_name), *args])
+        subprocess.Popen([*get_exe(component.script_name), *args])
     else:
         logging.warning(f"Component {component} does not appear to be executable.")
 
