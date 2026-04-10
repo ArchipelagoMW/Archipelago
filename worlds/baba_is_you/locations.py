@@ -17,9 +17,9 @@ LOCATION_NAME_TO_ID = {}
 
 # Define location groups
 location_name_groups = {
-    "Level Wins": {},
-    "World Clears": {},
-    "World Completes": {},
+    "Level Wins": set(),
+    "World Clears": set(),
+    "World Completes": set(),
 }
 
 # Set up location ids
@@ -31,19 +31,19 @@ for name in LEVEL_DATA:
         # Add win location
         locationName = data["name"] + ": Win"
         LOCATION_NAME_TO_ID[locationName] = locationID
-        location_name_groups["Level Wins"].append(locationName)
+        location_name_groups["Level Wins"].add(locationName)
         locationID += 1
     else:
         # Add clear and complete locations
         if data.get("clearCount") != None:
             locationName = data["name"] + ": Clear"
             LOCATION_NAME_TO_ID[locationName] = locationID
-            location_name_groups["World Clears"].append(locationName)
+            location_name_groups["World Clears"].add(locationName)
             locationID += 1
         if data.get("completeCount") != None:
             locationName = data["name"] + ": Complete"
             LOCATION_NAME_TO_ID[locationName] = locationID
-            location_name_groups["World Completes"].append(locationName)
+            location_name_groups["World Completes"].add(locationName)
             locationID += 1
 
 
