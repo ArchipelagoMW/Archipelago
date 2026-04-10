@@ -399,11 +399,11 @@ async def handle_vendors(ctx: "Context") -> None:
                 ctx.game_interface._write8(0x001D54B4, 1) # Infernox skill point
 
     ctx.game_interface.vendor_update()
+    vendor_scouting = ctx.slot_data.get(RAC3OPTION.SCOUT_VENDORS)
 
-    if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR or not ctx.slot_data.get(RAC3OPTION.SCOUT_VENDORS, False):
+    if ctx.game_interface.pause_state_value != RAC3PAUSESTATE.VENDOR or not vendor_scouting:
         return
 
-    vendor_scouting = ctx.slot_data[RAC3OPTION.SCOUT_VENDORS]
     vendor_type = ctx.game_interface.vendor_type
     vendor_location_apcodes = []
     match vendor_type:

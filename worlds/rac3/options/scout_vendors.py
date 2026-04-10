@@ -15,5 +15,5 @@ class ScoutVendors(OptionCounter):
     min = 0
     max = 1
     display_name = RAC3OPTION.SCOUT_VENDORS
-    default = {name: 0 for name in VENDOR_TYPES}
+    default = dict.fromkeys(VENDOR_TYPES, 0)
     valid_keys = VENDOR_TYPES
