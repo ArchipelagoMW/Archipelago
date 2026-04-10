@@ -447,7 +447,7 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
         if count == 0:
             return True_().resolve(world)
 
-        children_to_process: list[Rule.Resolved] = [c.resolve(world) for c in self.children]
+        children_to_process = [c.resolve(world) for c in self.children]
         return AtLeast.from_resolved(count, world, children_to_process)
 
     @classmethod
@@ -571,7 +571,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
         true_rule: Rule.Resolved | None = None
 
         while children_to_process:
-            child: Any = children_to_process.pop(0)  # Real typing is Rule.Resolved but this confuses Pycharm
+            child = children_to_process.pop(0)
             if child.always_false:
                 # false always wins
                 return child
@@ -660,7 +660,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         items: dict[str, int] = {}
 
         while children_to_process:
-            child: Any = children_to_process.pop(0)  # Real typing is Rule.Resolved but this confuses Pycharm
+            child = children_to_process.pop(0)
             if child.always_true:
                 # true always wins
                 return child
