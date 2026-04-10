@@ -22,6 +22,9 @@ class HostHandle(Protocol):
     def stop(self) -> None:
         ...
 
+    def drain_logs(self) -> list[str]:
+        ...
+
 
 class LocalMultiServerHandle:
     """Process-backed `HostHandle` for local `MultiServer` sessions."""
@@ -37,7 +40,11 @@ class LocalMultiServerHandle:
         self._manager = Manager()
         self._ready = self._manager.Event()
         self._stop = self._manager.Event()
-        self._process = Process(target=_launch_multiserver, args=(multidata_path, self._ready, self._stop, host, port))
+        self._logs = self._manager.Queue()
+        self._process = Process(
+            target=_launch_multiserver,
+            args=(multidata_path, self._ready, self._stop, host, port, self._logs),
+        )
 
     def start(self) -> None:
         """Start the host process and wait for its ready signal."""
@@ -59,6 +66,14 @@ class LocalMultiServerHandle:
         if self._process.is_alive():
             self._process.terminate()
             self._process.join()
+
+    def drain_logs(self) -> list[str]:
+        """Return queued stdout/stderr lines from the hosted process."""
+
+        lines: list[str] = []
+        while not self._logs.empty():
+            lines.append(self._logs.get())
+        return lines
 
 
 @dataclass(slots=True)
@@ -108,6 +123,9 @@ class HostService(Generic[TEvent]):
 
         try:
             while handle.is_alive():
+                if ctx:
+                    for line in await asyncio.to_thread(handle.drain_logs):
+                        await ctx.log(line)
                 await asyncio.sleep(0.1)
                 if ctx and ctx.record.progress < 0.9:
                     await ctx.progress(0.9)
@@ -115,6 +133,9 @@ class HostService(Generic[TEvent]):
             await asyncio.to_thread(handle.stop)
             raise
         finally:
+            if ctx:
+                for line in await asyncio.to_thread(handle.drain_logs):
+                    await ctx.log(line)
             self._running = False
             self._job_id = None
 

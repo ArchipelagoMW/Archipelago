@@ -95,6 +95,7 @@ class JobContext(Generic[TEvent]):
 
         self.record.logs.append(message)
         logger.info("Job %s: %s", self.job_id, message)
+        await self.emit("job_log", {"job_id": self.job_id, "message": message})
 
     async def progress(self, value: float) -> None:
         """Clamp and store job progress between `0.0` and `1.0`.
@@ -145,18 +146,35 @@ class JobManager(Generic[TEvent]):
         self._records[job_id] = record
         ctx = JobContext(job_id=job_id, bus=self._bus, record=record)
 
+        async def publish_status() -> None:
+            await self._bus.publish(
+                Event(
+                    name="job_status",
+                    data={
+                        "job_id": job_id,
+                        "status": record.status.value,
+                        "progress": record.progress,
+                        "result": _result_payload(record.result),
+                        "error": record.error,
+                    },
+                )
+            )
+
         async def run_job() -> None:
             record.status = JobStatus.RUNNING
+            await publish_status()
             try:
                 maybe_result = work(ctx)
                 # Allow handlers to provide either a direct value or an awaitable for the same job interface.
                 result = await maybe_result if inspect.isawaitable(maybe_result) else maybe_result
             except asyncio.CancelledError:
                 record.status = JobStatus.CANCELLED
+                await publish_status()
                 raise
             except Exception as exc:
                 record.status = JobStatus.FAILED
                 record.error = str(exc)
+                await publish_status()
                 raise
             else:
                 match result:
@@ -164,16 +182,19 @@ class JobManager(Generic[TEvent]):
                         record.status = JobStatus.FAILED
                         record.error = _error_message(error)
                         record.result = None
+                        await publish_status()
                     case Ok(value=value):
                         record.status = JobStatus.SUCCEEDED
                         record.result = _result_payload(value)
                         if record.progress < 1.0:
                             record.progress = 1.0
+                        await publish_status()
                     case _:
                         record.status = JobStatus.SUCCEEDED
                         record.result = _result_payload(result)
                         if record.progress < 1.0:
                             record.progress = 1.0
+                        await publish_status()
 
         future = asyncio.create_task(run_job())
 

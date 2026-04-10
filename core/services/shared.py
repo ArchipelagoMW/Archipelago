@@ -164,11 +164,37 @@ def _host_defaults() -> tuple[str | None, str | None, int]:
     return server_options.multidata, server_options.host, int(server_options.port)
 
 
-def _launch_multiserver(multidata_path: str, ready: Any, stop: Any, host: str, port: int) -> None:
+class _QueueStream:
+    """File-like writer that forwards complete lines into a queue."""
+
+    def __init__(self, queue: Any) -> None:
+        self._queue = queue
+        self._buffer = ""
+
+    def write(self, data: str) -> int:
+        self._buffer += data
+        while "\n" in self._buffer:
+            line, self._buffer = self._buffer.split("\n", 1)
+            line = line.rstrip("\r")
+            if line:
+                self._queue.put(line)
+        return len(data)
+
+    def flush(self) -> None:
+        if self._buffer:
+            line = self._buffer.rstrip("\r")
+            if line:
+                self._queue.put(line)
+            self._buffer = ""
+
+
+def _launch_multiserver(multidata_path: str, ready: Any, stop: Any, host: str, port: int, log_queue: Any) -> None:
     """Run `MultiServer` in a child process with a pipe-backed stdin."""
 
     original_argv = sys.argv
     original_stdin = sys.stdin
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
     warnings.simplefilter("ignore")
     try:
         from MultiServer import main, parse_args
@@ -176,6 +202,9 @@ def _launch_multiserver(multidata_path: str, ready: Any, stop: Any, host: str, p
         sys.argv = [sys.argv[0], multidata_path, "--host", host, "--port", str(port)]
         read_fd, write_fd = os.pipe()
         sys.stdin = os.fdopen(read_fd, "r")
+        queue_stream = _QueueStream(log_queue)
+        sys.stdout = queue_stream
+        sys.stderr = queue_stream
 
         async def set_ready() -> None:
             await asyncio.sleep(0.01)
@@ -199,5 +228,9 @@ def _launch_multiserver(multidata_path: str, ready: Any, stop: Any, host: str, p
 
         asyncio.run(run())
     finally:
+        if isinstance(sys.stdout, _QueueStream):
+            sys.stdout.flush()
         sys.argv = original_argv
         sys.stdin = original_stdin
+        sys.stdout = original_stdout
+        sys.stderr = original_stderr

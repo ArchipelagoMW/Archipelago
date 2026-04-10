@@ -1,0 +1,153 @@
+<HostScreen>:
+    name: "host"
+    selected_path_label: selected_path
+    status_label: status_label
+    log_output: log_output
+    start_button: start_button
+    stop_button: stop_button
+    load_button: load_button
+
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: "12dp"
+        padding: "12dp"
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "40dp"
+            spacing: "8dp"
+
+            MDButton:
+                style: "text"
+                size_hint_x: None
+                width: "120dp"
+                on_release: app.show_launcher_screen()
+
+                MDButtonIcon:
+                    icon: "arrow-left"
+                MDButtonText:
+                    text: "Launcher"
+
+            MDLabel:
+                text: "Host MultiWorld"
+                font_style: "Headline"
+                role: "small"
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.primaryColor
+
+        MDCard:
+            style: "filled"
+            radius: [6, 6, 6, 6]
+            padding: "12dp"
+            size_hint_y: None
+            height: "150dp"
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "10dp"
+
+                MDLabel:
+                    text: "Loaded MultiWorld"
+                    size_hint_y: None
+                    height: "18dp"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+                    theme_text_color: "Secondary"
+
+                MDLabel:
+                    id: selected_path
+                    text: "No multi-world loaded."
+                    size_hint_y: None
+                    height: "22dp"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.width, self.height
+                    shorten: True
+                    shorten_from: "center"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primaryColor
+
+                MDLabel:
+                    text: "Status"
+                    size_hint_y: None
+                    height: "18dp"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+                    theme_text_color: "Secondary"
+
+                MDLabel:
+                    id: status_label
+                    text: "Select a multi-world file to start hosting."
+                    size_hint_y: None
+                    height: "20dp"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.width, self.height
+                    shorten: True
+                    shorten_from: "right"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primaryColor
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "36dp"
+                    spacing: "8dp"
+
+                    MDButton:
+                        id: load_button
+                        style: "filled"
+                        on_release: app.load_host_multidata()
+
+                        MDButtonText:
+                            text: "Load Multi-World"
+
+                    MDButton:
+                        id: start_button
+                        style: "filled"
+                        on_release: app.start_host()
+
+                        MDButtonText:
+                            text: "Start"
+
+                    MDButton:
+                        id: stop_button
+                        style: "outlined"
+                        disabled: True
+                        on_release: app.stop_host()
+
+                        MDButtonText:
+                            text: "Stop"
+
+        MDCard:
+            style: "filled"
+            radius: [6, 6, 6, 6]
+            padding: "12dp"
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "8dp"
+
+                MDLabel:
+                    text: "Host Logs"
+                    size_hint_y: None
+                    height: "20dp"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primaryColor
+
+                TextInput:
+                    id: log_output
+                    readonly: True
+                    multiline: True
+                    text: ""
+
+HostScreen:
