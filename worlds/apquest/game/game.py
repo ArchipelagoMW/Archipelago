@@ -34,6 +34,7 @@ class Game:
         self.gameboard = create_gameboard(hard_mode, hammer_exists, extra_chest)
         self.player = Player(self.gameboard, self.queued_events.append)
         self.active_math_problem = None
+        self.active_math_problem_input = None
         self.remotely_received_items = set()
 
         if random_object is None:
