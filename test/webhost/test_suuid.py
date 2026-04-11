@@ -30,6 +30,15 @@ class TestSUUID(TestBase):
         with self.assertRaises(ValueError):
             self.converter.to_python("AAAA")
 
+    def test_padding(self) -> None:
+        self.converter.to_python("A" * 22)  # check that the correct value works
+        with self.assertRaises(ValueError):
+            self.converter.to_python("A" * 22 + "==")  # converter should not allow padding
+
+    def test_empty(self) -> None:
+        with self.assertRaises(ValueError):
+            self.converter.to_python("")
+
     def test_stray_equal_signs(self) -> None:
         self.converter.to_python("A" * 22)  # check that the correct value works
         with self.assertRaises(ValueError):
