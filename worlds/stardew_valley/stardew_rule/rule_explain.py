@@ -6,9 +6,8 @@ from dataclasses import dataclass, field
 from functools import cached_property, singledispatch
 from typing import Iterable, List, Optional, Set, Tuple
 
-from BaseClasses import CollectionState, Entrance, Location, MultiWorld, Region
+from BaseClasses import CollectionState, MultiWorld, Region
 from worlds.generic.Rules import CollectionRule
-
 from . import (AggregatingStardewRule, Count, Has, Reach, Received,
                StardewRule, TotalReceived, true_)
 
@@ -301,11 +300,11 @@ def explain(
         rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE
 ) -> RuleExplanation:
     if isinstance(rule, StardewRule):
-        combined = _explain(
+        explanation = _explain(
             rule, state, expected, mode, more_explanations=list(), explored_spots=set(), blocked_regions=frozenset()
         )
-        print(combined)
-        return combined
+        # print(explanation)
+        return explanation
     else:
         return f"Value of rule {str(rule)} was not {str(expected)} in {str(state)}"  # noqa
 
