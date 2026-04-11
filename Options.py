@@ -1736,7 +1736,7 @@ class DeathLinkMixin:
 
 
 @dataclass
-class DeathLinkGroupMixin:
+class DeathLinkGroupMixin(DeathLinkMixin):
     death_link_group: DeathLinkGroup
 
 
