@@ -12,6 +12,7 @@ from rule_builder.field_resolvers import FieldResolver, FromOption, FromWorldAtt
 from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
     And,
+    AtLeast,
     CanReachEntrance,
     CanReachLocation,
     CanReachRegion,
@@ -29,7 +30,6 @@ from rule_builder.rules import (
     Or,
     Rule,
     True_,
-    AtLeast,
 )
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
@@ -293,8 +293,6 @@ class TestSimplify(RuleBuilderTestCase):
         world = multiworld.worlds[1]
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
-        if resolved_rule != expected:
-            rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
 
 
