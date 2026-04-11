@@ -227,7 +227,7 @@ class AutopelagoWorld(World):
     def create_items(self):
         new_items = [self.create_item(item)
                      for location, item in location_name_to_progression_item_name.items()
-                     if location in self.locations_in_scope and item != "Moon Shoes"]
+                     if location in self.locations_in_scope and location != self.victory_location]
 
         # skip balancing for the pack_rat items that take us beyond the minimum limit
         rat_items = sorted(
@@ -320,8 +320,7 @@ class AutopelagoWorld(World):
             self.multiworld.regions.append(r)
             if self.victory_location in r.autopelago_definition.locations:
                 r.connect(victory_region)
-                if self.options.victory_location == VictoryLocation.option_snakes_on_a_planet:
-                    r.locations[0].place_locked_item(self.create_item("Moon Shoes"))
+                r.locations[0].place_locked_item(self.create_item("Moon Shoes"))
             for next_exit in r.autopelago_definition.exits:
                 if next_exit in new_regions:
                     r.connect(new_regions[next_exit], rule=new_regions[next_exit].rule)
