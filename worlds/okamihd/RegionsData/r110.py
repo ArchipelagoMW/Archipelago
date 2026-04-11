@@ -141,14 +141,14 @@ events = {
         "Moon Cave - 4F Rafters cross banners": EventData(required_brush_techniques=[BrushTechniques.GALESTORM])
     },
     RegionNames.MOON_CAVE_4F_CANON: {
-        "Moon Cave - 4F Fire the canon!": EventData(special_rule=lambda s, w: moon_cave_fire_rule(s, w)),
+        "Moon Cave - 4F Fire the canon!": EventData(required_brush_techniques=[BrushTechniques.INFERNO],special_rule=lambda s, w: moon_cave_fire_rule(s, w)),
         # FIXME: Add enemies
         "Moon Cave - 4F Mandatory Fight": EventData(mandatory_enemies=[],
                                                     required_items_events=['Moon Cave - 4F Fire the canon!']),
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {
         "Moon Cave - 4F Move Fireball": EventData(required_brush_techniques=[BrushTechniques.GALESTORM]),
-        "Moon Cave - 4F Melt Ice Blocks": EventData(special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w)),
+        "Moon Cave - 4F Melt Ice Blocks": EventData(required_brush_techniques=[BrushTechniques.INFERNO],special_rule=lambda s, w: moon_cave_fire_rule_4f(s, w)),
         "Moon Cave - 4F Black Demon Horn Torii": EventData(mandatory_enemies=[],
                                                            required_items_events=["Moon Cave - 4F Melt Ice Blocks"]),
         "Moon Cave - 4F Get Black Demon Horn": EventData(
@@ -164,8 +164,8 @@ events = {
 locations = {
     RegionNames.MOON_CAVE: {
         "Moon Cave - 1F Chest on ledge in the kitchen": LocData(969640),
-        "Moon Cave - 1F Frozen Chest after 3 ingredients": LocData(969639, special_rule=(
-            lambda s, w: has_soup_ingerdients(s, w, 3) and s.has(BrushTechniques.INFERNO, w.player))),
+        "Moon Cave - 1F Frozen Chest after 3 ingredients": LocData(969639, type=LocationType.FROZEN_CHEST, special_rule=
+            lambda s, w: has_soup_ingerdients(s, w, 3) ),
         "Moon Cave - 1F Chest after 4 ingredients": LocData(969642,
                                                             special_rule=(lambda s, w: has_soup_ingerdients(s, w, 4))),
     },
@@ -187,18 +187,21 @@ locations = {
         "Moon Cave - 2F Map Chest after ball puzzle": LocData(969637)
     },
     RegionNames.MOON_CAVE_2F_3F_RAFTERS: {
-        "Moon Cave - 3F Frozen Chest near merchant": LocData(969644, special_rule=lambda s, w: moon_cave_fire_rule(s, w)),
+        "Moon Cave - 3F Frozen Chest near merchant": LocData(969644, type=LocationType.FROZEN_CHEST, special_rule=lambda s, w: moon_cave_fire_rule(s, w)),
         "Moon Cave - 2F Rafters Chest under 3F Rafters": LocData(969643),
     },
     RegionNames.MOON_CAVE_2F_FIRE_EYE: {
         "Moon Cave - 2F Left Frozen Chest after Fire eye room": LocData(969651,
+                                                                        type=LocationType.FROZEN_CHEST,
                                                                         special_rule=lambda s, w: moon_cave_fire_rule(s,
                                                                                                                       w)),
         "Moon Cave - 2F Middle Frozen Chest after Fire eye room": LocData(969649,
-                                                                        special_rule=lambda s, w: moon_cave_fire_rule(s,
+                                                                          type=LocationType.FROZEN_CHEST,
+                                                                          special_rule=lambda s, w: moon_cave_fire_rule(s,
                                                                                                                       w)),
         "Moon Cave - 2F Right Frozen Chest after Fire eye room": LocData(969650,
-                                                                        special_rule=lambda s, w: moon_cave_fire_rule(s,
+                                                                         type=LocationType.FROZEN_CHEST,
+                                                                         special_rule=lambda s, w: moon_cave_fire_rule(s,
                                                                                                                       w)),
     },
     RegionNames.MOON_CAVE_4F_AFTER_CANON: {

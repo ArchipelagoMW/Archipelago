@@ -51,14 +51,11 @@ def night_time_check_rule(state:CollectionState,world:"OkamiWorld")->bool:
 # Special Rule to handle fire with the big ball torches in Moon Cave
 # Player needs to have either fire, or lit the torches by solving the sand room.
 def moon_cave_fire_rule(state:CollectionState,world:"OkamiWorld")->bool:
-    return state.has(BrushTechniques.INFERNO,world.player) and (
-        has_portable_fire_source(state,world) or state.has("Moon Cave - 2F Push the ball",world.player)
-    )
+       return has_portable_fire_source(state,world) or state.has("Moon Cave - 2F Push the ball",world.player)
+
 # Variant for the 4F fireball room
 def moon_cave_fire_rule_4f(state:CollectionState,world:"OkamiWorld")->bool:
-    return state.has(BrushTechniques.INFERNO,world.player) and (
-        has_portable_fire_source(state,world) or state.has("Moon Cave - 4F Move Fireball",world.player)
-    )
+       return has_portable_fire_source(state,world) or state.has("Moon Cave - 4F Move Fireball",world.player)
 
 
 def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:
