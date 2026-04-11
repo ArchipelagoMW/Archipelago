@@ -45,17 +45,17 @@ def moon_cave_access(state: CollectionState, world: "OkamiWorld") -> bool:
 def has_soup_ingerdients(state: CollectionState, world: "OkamiWorld", amount:int) -> bool:
     return state.has_group("soup_ingredients",world.player,amount)
 
+def night_time_check_rule(state:CollectionState,world:"OkamiWorld")->bool:
+    return state.has(BrushTechniques.CRESCENT,world.player) or not world.options.NightTimeChecksRequireCrescent
+
 # Special Rule to handle fire with the big ball torches in Moon Cave
 # Player needs to have either fire, or lit the torches by solving the sand room.
 def moon_cave_fire_rule(state:CollectionState,world:"OkamiWorld")->bool:
-    return state.has(BrushTechniques.INFERNO,world.player) and (
-        has_portable_fire_source(state,world) or state.has("Moon Cave - 2F Push the ball",world.player)
-    )
+       return has_portable_fire_source(state,world) or state.has("Moon Cave - 2F Push the ball",world.player)
+
 # Variant for the 4F fireball room
 def moon_cave_fire_rule_4f(state:CollectionState,world:"OkamiWorld")->bool:
-    return state.has(BrushTechniques.INFERNO,world.player) and (
-        has_portable_fire_source(state,world) or state.has("Moon Cave - 4F Move Fireball",world.player)
-    )
+       return has_portable_fire_source(state,world) or state.has("Moon Cave - 4F Move Fireball",world.player)
 
 
 def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:
@@ -92,8 +92,7 @@ def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiW
 
 
 def apply_event_or_location_rules(loc: Location, name: str, data: LocData | EventData, world: "OkamiWorld"):
-    #TODO: Make special rule apply with other rules (and operator)
-    if data.special_rule is None:
+
         required_techinques = []
         required_power_slash_level = data.power_slash_level
         required_cherry_bomb_level = data.cherry_bomb_level
@@ -121,14 +120,14 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
                 required_techinques += [BrushTechniques.GREENSPROUT_BLOOM]
             case LocationType.BURIED_UNDER_LEAF_PILE:
                 required_techinques += [BrushTechniques.GALESTORM]
-                if world.options.BuriedChestsByNight:
+                if world.options.NightTimeChecksRequireCrescent:
                     required_techinques += [BrushTechniques.CRESCENT]
             case LocationType.BURIED_CHEST:
-                if world.options.BuriedChestsByNight:
+                if world.options.NightTimeChecksRequireCrescent:
                     required_techinques += [BrushTechniques.CRESCENT]
             case LocationType.STONE_BURIED_CHEST:
                 # FIXME when dojo techniques are handled
-                if world.options.BuriedChestsByNight:
+                if world.options.NightTimeChecksRequireCrescent:
                     required_techinques += [BrushTechniques.CRESCENT]
             case LocationType.BURNING_CHEST:
                 add_rule(loc, lambda state: state.has(BrushTechniques.GALESTORM, world.player)
@@ -171,9 +170,10 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
 
         for i in data.required_items_events:
             add_rule(loc, lambda state: state.has(i, world.player))
-    else:
-        # Call special rule if it's defined
-        add_rule(loc, lambda state: data.special_rule(state, world))
+
+        if data.special_rule is not None:
+            # Call special rule if it's defined
+            add_rule(loc, lambda state: data.special_rule(state, world))
 
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):

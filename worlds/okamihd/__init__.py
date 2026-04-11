@@ -22,9 +22,9 @@ class OkamiWebWolrd(WebWorld):
         "Multiworld Setup Guide",
         "A guide for setting up Okami HD to be played in Archipelago.",
         "English",
-        "",
-        "",
-        [""]
+        "setup_en.md",
+        "setup/en",
+        ["Axertin","Ragmoa"]
     )]
 
 

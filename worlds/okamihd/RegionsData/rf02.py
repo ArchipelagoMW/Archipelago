@@ -4,6 +4,7 @@ from ..Enums.BrushTechniques import BrushTechniques
 from ..Enums.LocationType import LocationType
 from ..Enums.OkamiEnemies import OkamiEnemies
 from ..Enums.RegionNames import RegionNames
+from ..Rules import night_time_check_rule
 from ..Types import ExitData, LocData, EventData
 
 if TYPE_CHECKING:
@@ -52,6 +53,6 @@ locations = {
     },
 
     RegionNames.TAMA_HOUSE: {
-        "Shinshu Field - Bakigami": LocData(200025, required_items_events=["Kamiki Village - Restore Sakuya's Tree"],type=LocationType.CONSTELLATION)  # bit 25
+        "Shinshu Field - Bakigami": LocData(200025, required_items_events=["Kamiki Village - Restore Sakuya's Tree"],type=LocationType.CONSTELLATION,special_rule=lambda s,w:night_time_check_rule(s,w))  # bit 25
     }
 }

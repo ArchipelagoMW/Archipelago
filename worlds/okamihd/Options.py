@@ -16,9 +16,14 @@ def create_option_groups() -> List[OptionGroup]:
     return option_group_list
 
 
-class BuriedChestsByNight(Toggle):
-    """Buried chests logically require Crescent, as they're way more visible at night"""
-    display_name = "Buried chests by night"
+class NightTimeChecksRequireCrescent(Toggle):
+    """Makes all nighttime checks logically require Crescent.
+
+    Currently included:
+    - All buried chests
+    - Bakigami
+    - Hayabusa"""
+    display_name = "Night time checks require crescent"
     default = 1
 
 
@@ -147,7 +152,7 @@ class OkamiOptions(PerGameCommonOptions):
     RandomizeShops: RandomizeShops
     RandomizeBrushes: RandomizeBrushes
     ShopSlots: ShopSlots
-    BuriedChestsByNight: BuriedChestsByNight
+    NightTimeChecksRequireCrescent:NightTimeChecksRequireCrescent
     KarmicTransformers: KarmicTransformers
     OpenGameStart: OpenGameStart
     ProgressiveWeapons: ProgressiveWeapons
@@ -169,7 +174,7 @@ okami_option_groups: Dict[str, List[Any]] = {
         ShopSlots,
     ],
     "General Options": [
-        BuriedChestsByNight,
+        NightTimeChecksRequireCrescent,
         KarmicTransformers,
         OpenGameStart,
         ProgressiveWeapons,
@@ -191,7 +196,7 @@ slot_data_options = {
     "RandomizeShops",
     "RandomizeBrushes",
     "ShopSlots",
-    "BuriedChestsByNight",
+    "NightTimeChecksRequireCrescent",
     "KarmicTransformers",
     "OpenGameStart",
     "ProgressiveWeapons",

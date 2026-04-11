@@ -24,7 +24,7 @@ class LocationType(Enum):
     DIGGING_MINIGAME_EARLY=13,
     # + Watersprout + Galestrom
     DIGGING_MINIGAME_LATER = 14,
-    # Frozen chest with fire source around
+    # Frozen chest
     FROZEN_CHEST= 15,
     # Shop item slot
     SHOP = 16,
