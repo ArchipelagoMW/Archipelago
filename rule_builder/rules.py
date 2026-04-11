@@ -517,24 +517,20 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            messages: list[JSONMessagePart] = []
             if state is None:
-                messages: list[JSONMessagePart] = [
+                messages = [
                     {"type": "text", "text": "At least "},
                     {"type": "color", "color": "cyan", "text": str(self.count)},
                     {"type": "text", "text": " of ("},
                 ]
-                for i, child in enumerate(self.children):
-                    if i > 0:
-                        messages.append({"type": "text", "text": ", "})
-                    messages.extend(child.explain_json(state))
-                messages.append({"type": "text", "text": ")"})
-                return messages
-            satisfied_count = sum(1 if child(state) else 0 for child in self.children)
-            messages: list[JSONMessagePart] = [
-                {"type": "text", "text": "At least "},
-                {"type": "color", "color": "cyan", "text": f"{satisfied_count}/{self.count}"},
-                {"type": "text", "text": " of ("},
-            ]
+            else:
+                satisfied_count = sum(1 if child(state) else 0 for child in self.children)
+                messages = [
+                    {"type": "text", "text": "At least "},
+                    {"type": "color", "color": "cyan", "text": f"{satisfied_count}/{self.count}"},
+                    {"type": "text", "text": " of ("},
+                ]
             for i, child in enumerate(self.children):
                 if i > 0:
                     messages.append({"type": "text", "text": ", "})
