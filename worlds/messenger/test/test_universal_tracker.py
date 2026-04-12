@@ -81,9 +81,10 @@ class ShuffleTransitionsCoupledUniversalTrackerTest(UniversalTrackerTestBase):
     }
 
     def test_can_recreate_world(self) -> None:
+        re_gen_slot_data = self.world.fill_slot_data()
+
         self.assertListEqual(self.slot_data["starting_portals"], self.world.starting_portals)
-        # Should be empty ,
-        self.assertListEqual([], self.world.transitions)
+        self.assertListEqual(self.slot_data["transitions"], re_gen_slot_data["transitions"])
 
 
 class ShuffleTransitionsDecoupledUniversalTrackerTest(UniversalTrackerTestBase):
