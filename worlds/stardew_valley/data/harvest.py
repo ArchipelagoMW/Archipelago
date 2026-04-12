@@ -53,6 +53,7 @@ class HarvestCropSource(Source):
 
     seed: str
     seasons: Tuple[str, ...] = Season.all
+    growth_time: int = -1
     """Empty means it can't be grown on the farm."""
 
     @property

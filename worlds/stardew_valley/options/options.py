@@ -951,8 +951,8 @@ class DataRandomizationBehavior(Choice):
         Off: No Data Randomization occurs
         Shuffle: All values are maintained, but shuffled between entries.
         Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
-        Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values.
         Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Can be imbalanced
+        Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values. Can be imbalanced
         Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed. Very imbalanced.
     """
     internal_name = "data_randomization_behavior"
@@ -961,8 +961,8 @@ class DataRandomizationBehavior(Choice):
     option_off = 0
     option_shuffle = 1
     option_weighted_randomized = 2
-    option_normal_randomized = 3
-    option_randomized = 4
+    option_randomized = 3
+    option_normal_randomized = 4
     option_range_randomized = 5
     # option_wild = 6 # Wild: All entries are given a random value, with no regard for the original entries at all.
 
@@ -970,20 +970,22 @@ class DataRandomizationBehavior(Choice):
 class DataRandomization(OptionSet):
     """
     Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet.
-    Fish Difficulty: Randomizes the difficulty of fish
-    Fish Season: Randomizes which seasons fish can be caught in
-    Fish Location: Randomizes which body of water fish can be caught in
-    Fish Weather: Randomizes which weather fish can be caught in
-    Fish Catch Method: Randomizes whether fish are caught using fishing rods or crab pots.
-    Fish Sell Price: Randomizes the sell price of all fish
-    Crop Sell Price: Randomizes the sell price of all crops and forage
+    Fish Difficulty: Difficulty of fish
+    Fish Season: Which seasons fish can be caught in
+    Fish Location: Which body of water fish can be caught in
+    Fish Weather: Which weather fish can be caught in
+    Fish Catch Method: Whether fish are caught using fishing rods or crab pots.
+    Fish Sell Price: Ssell price of all fish
+    Crop Sell Price: Sell price of all crops and forage
+    Seed Price: Purchase price and sell price of all seeds
+    Seed Growth Time: Time to grow crops from planting to first harvest
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"
     valid_keys = frozenset({
         DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location,
         DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method, DataRandomizationOptionName.fish_sell_price,
-        DataRandomizationOptionName.crop_sell_price
+        DataRandomizationOptionName.crop_sell_price, DataRandomizationOptionName.seed_growth_time, # DataRandomizationOptionName.seed_prices
     })
     preset_none = frozenset()
     preset_all = valid_keys
