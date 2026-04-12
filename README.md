@@ -24,7 +24,6 @@ Currently, the following games are supported:
 * The Witness
 * Sonic Adventure 2: Battle
 * Starcraft 2
-* Donkey Kong Country 3
 * Dark Souls 3
 * Super Mario World
 * Pokémon Red and Blue
