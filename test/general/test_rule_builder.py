@@ -276,12 +276,14 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             False_.Resolved(player=1),
         ),
         (
-            AtLeast(1, Has("A"), Has("B")),
-            HasAny.Resolved(("A", "B"), player=1),
+            # This test will fail when Or(Rule, Rule) will be optimized to Rule
+            AtLeast(1, Rule(), Rule()),
+            Or.Resolved((Rule.Resolved(player=1), Rule.Resolved(player=1)), player=1),
         ),
         (
-            AtLeast(2, Has("A"), Has("B")),
-            HasAll.Resolved(("A", "B"), player=1),
+            # This test will fail when And(Rule, Rule) will be optimized to Rule
+            AtLeast(2, Rule(), Rule()),
+            And.Resolved((Rule.Resolved(player=1), Rule.Resolved(player=1)), player=1),
         ),
     )
 )
