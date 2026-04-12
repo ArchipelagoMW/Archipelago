@@ -990,7 +990,10 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
                 item_list: list[str] = []
                 for key, value in items.items():
                     if value is True:
-                        value = multiworld.itempool.count(multiworld.worlds[player].create_item(key))
+                        value = 0
+                        for item in multiworld.itempool:
+                            if item.name == key and item.player == player:
+                                value += 1
                     item_list += [key] * value
                 items = item_list
             new_block.items = items
