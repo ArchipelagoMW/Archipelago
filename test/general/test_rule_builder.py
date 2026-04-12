@@ -1047,7 +1047,7 @@ class TestExplain(RuleBuilderTestCase):
                 children=(
                     HasAllCounts.Resolved((("Item 6", 1), ("Item 7", 5)), player=1),
                     HasAnyCount.Resolved((("Item 8", 2), ("Item 9", 3)), player=1),
-                    HasFromList.Resolved(("Item 10", "Item 11", "Item 12"), count=2, player=1)
+                    HasFromList.Resolved(("Item 10", "Item 11", "Item 12"), count=2, player=1),
                 ),
                 count=2,
                 player=1,
@@ -1389,8 +1389,7 @@ class TestExplain(RuleBuilderTestCase):
             "((Missing 4x Item 1",
             "| Missing some of (Missing: Item 2, Item 3)",
             "| Missing all of (Missing: Item 4, Item 5))",
-            "& At least 0/2 of "
-            "(Missing some of (Missing: Item 6 x1, Item 7 x5),",
+            "& At least 0/2 of (Missing some of (Missing: Item 6 x1, Item 7 x5),",
             "Missing all of (Missing: Item 8 x2, Item 9 x3),",
             "Has 0/2 items from (Missing: Item 10, Item 11, Item 12))",
             "& Has 0/1 unique items from (Missing: Item 13, Item 14)",
@@ -1411,8 +1410,7 @@ class TestExplain(RuleBuilderTestCase):
             "((Has 4x Item 1",
             "| Has all of (Found: Item 2, Item 3)",
             "| Has some of (Found: Item 4, Item 5))",
-            "& At least 3/2 of "
-            "(Has all of (Found: Item 6 x1, Item 7 x5),",
+            "& At least 3/2 of (Has all of (Found: Item 6 x1, Item 7 x5),",
             "Has some of (Found: Item 8 x2, Item 9 x3),",
             "Has 30/2 items from (Found: Item 10, Item 11, Item 12))",
             "& Has 2/1 unique items from (Found: Item 13, Item 14)",
@@ -1431,8 +1429,7 @@ class TestExplain(RuleBuilderTestCase):
             "((Has 4x Item 1",
             "| Has all of (Item 2, Item 3)",
             "| Has any of (Item 4, Item 5))",
-            "& At least 2 of "
-            "(Has all of (Item 6 x1, Item 7 x5),",
+            "& At least 2 of (Has all of (Item 6 x1, Item 7 x5),",
             "Has any of (Item 8 x2, Item 9 x3),",
             "Has 2x items from (Item 10, Item 11, Item 12))",
             "& Has a unique item from (Item 13, Item 14)",
@@ -1451,8 +1448,7 @@ class TestExplain(RuleBuilderTestCase):
             "((Has 4x Item 1",
             "| Has all of (Item 2, Item 3)",
             "| Has any of (Item 4, Item 5))",
-            "& At least 2 of "
-            "(Has all of (Item 6 x1, Item 7 x5),",
+            "& At least 2 of (Has all of (Item 6 x1, Item 7 x5),",
             "Has any of (Item 8 x2, Item 9 x3),",
             "Has 2x items from (Item 10, Item 11, Item 12))",
             "& Has a unique item from (Item 13, Item 14)",
