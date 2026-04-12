@@ -1,6 +1,6 @@
 from Options import PlandoConnection
-from . import ShuffleTransitions
 from .connections import RANDOMIZED_CONNECTIONS
+from .options import ShuffleTransitions
 from .portals import REGION_ORDER, SHOP_POINTS, CHECKPOINTS
 from .transitions import TRANSITIONS
 
