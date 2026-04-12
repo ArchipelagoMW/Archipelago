@@ -1,4 +1,5 @@
-import pygame, numpy
+import numpy
+import pygame
 from .buttons import Button
 from .events import LocationClearedEvent
 from random import randint

@@ -1,10 +1,12 @@
+import sys
+from os.path import join
+sys.path.insert(0, 'pygame-ce-2.5.7.zip')
 import pygame
 from os import walk
-from os.path import join
 
-def import_image(*path, alpha = True, format = 'png'):
-	full_path = join(*path) + f'.{format}'
-	return pygame.image.load(full_path).convert_alpha() if alpha else pygame.image.load(full_path).convert()
+
+def import_image(path, alpha = True):
+	return pygame.image.load(path).convert_alpha() if alpha else pygame.image.load(path).convert()
 
 def import_folder(*path):
 	frames = []
