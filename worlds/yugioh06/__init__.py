@@ -130,8 +130,8 @@ class Yugioh06World(World):
     campaign_opponents: List[OpponentData]
     is_draft_mode: bool
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
 
     def generate_early(self):
         self.starting_opponent = ""
