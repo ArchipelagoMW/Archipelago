@@ -11,5 +11,5 @@ class MessengerTestBase(WorldTestBase):
     @classmethod
     def setUpClass(cls) -> None:
         if cls is MessengerTestBase:
-            raise unittest.SkipTest("No running tests on UniversalTrackerTestBase import.")
+            raise unittest.SkipTest("No running tests on MessengerTestBase import.")
         super().setUpClass()
