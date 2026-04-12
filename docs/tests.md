@@ -131,7 +131,7 @@ Unless you configured PyCharm to use pytest as a test runner, you may get import
 edit the run configuration, and set the working directory to the Archipelago directory which contains all the project files. 
 
 If you only want to run your world's defined tests, repeat the steps for the test directory within your world.
-Your working directory should be the directory of your world in the worlds directory and the script should be the 
+Your working directory should be the root Archipelago directory and the script should be the 
 tests folder within your world.
 
 You can also find the 'Archipelago Unittests' as an option in the dropdown at the top of the window

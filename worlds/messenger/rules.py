@@ -192,7 +192,7 @@ class MessengerRules:
                               or (self.has_dart(state) and self.has_wingsuit(state)),
             # Dark Cave
             "Dark Cave - Right -> Dark Cave - Left":
-                lambda state: state.has("Candle", self.player) and self.has_dart(state),
+                lambda state: state.has("Candle", self.player) and self.has_dart(state) and self.has_wingsuit(state),
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
