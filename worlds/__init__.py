@@ -144,7 +144,13 @@ if apworlds:
                     )
                     logging.error(e)
                 else:
-                    raise e
+                    if sys.stdout:
+                        e.add_note(f"Affected world source: {apworld_source.resolved_path}")
+                        raise e
+                    else:
+                        err_message = f"{e}\nAffected world source: {apworld_source.resolved_path}"
+                        messagebox("Couldn't load worlds", err_message, error=True)
+                        sys.exit(1)
             except BadZipFile as e:
                 err_message = (f"The world source {apworld_source.resolved_path} is not a valid zip. "
                                "It is likely either corrupted, or was packaged incorrectly.")
