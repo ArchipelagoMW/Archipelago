@@ -851,9 +851,21 @@
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] }, // from the rightmost safety orb's right platform, cloud leap is the only way to the higher middle platform
     // from the middle safety orb, G AND AD AND CL AND WC (in that order) works, but is redundant with these other routes
-    { "from": "Factory (GH) - Hammer Brothers Roof", "to": "Factory (GH) - Above Root Node", "requires": [ { "anyOf": [
-        { "item": "Wall Climb" }, { "item": "Cloud Leap" }
-    ] } ] },
+    {
+        "from": "Factory (GH) - Hammer Brothers Roof", "to": "Factory (GH) - Above Root Node",
+        "requires": [ { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] } ],
+        "medium_requires": [ { "anyOf": [
+            { "item": "Air Dash" }, // plus T-dash, using the enemies on HBRoof
+            [
+                { "item": "Grapple" }, // to reach the platforms high enough to hover from
+                { "item": "Trick - Bow Hover" }
+            ]
+        ] } ],
+        "ls_requires": [
+            { "item": "Grapple" }, // to reach the platforms high enough to hover from
+            { "item": "Ledge Grab" } // T-dash setup using ledge on the right side of the roof, landing on the conveyer
+        ] // CL or AD setups would be redundant with non-LS logic
+    },
     { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Hammer Brothers Roof", "requires": [] }, // fall
     { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Lower Levels & Root Node", "requires": [] }, // fall farther
     { "from": "Factory (GH) - Above Root Node", "to": "Factory (GH) - Upper Platforms of Nymph Puzzle Room", "requires": [
