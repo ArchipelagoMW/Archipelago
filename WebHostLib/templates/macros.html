@@ -6,7 +6,7 @@
         {{ caller() }}
     </ul>
 {%- endmacro %}
-{% macro list_patches_room(room) %}
+{% macro list_patches_room(room, slot_downloads) %}
     {% if room.seed.slots %}
         <table id="slots-table">
             <thead>
@@ -25,22 +25,10 @@
                     <td data-tooltip="Connect via Game Client"><a href="archipelago://{{ patch.player_name | e}}:None@{{ config['HOST_ADDRESS'] }}:{{ room.last_port }}?game={{ patch.game }}&room={{ room.id | suuid }}">{{ patch.player_name }}</a></td>
                     <td>{{ patch.game }}</td>
                     <td>
+                        {% set slot_download = slot_downloads[patch.player_id] %}
                         {% if patch.data %}
-                            {% if patch.game == "VVVVVV" and room.seed.slots|length == 1 %}
-                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                Download APV6 File...</a>
-                            {% elif patch.game == "Super Mario 64" and room.seed.slots|length == 1 %}
-                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                Download APSM64EX File...</a>
-                            {% elif patch.game == "Factorio" %}
-                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                Download Factorio Mod...</a>
-                            {% elif patch.game | is_applayercontainer(patch.data, patch.player_id) %}
-                            <a href="{{ url_for("download_patch", patch_id=patch.id, room_id=room.id) }}" download>
+                            <a href="{{ slot_download["download"] }}" download>
                                 Download Patch File...</a>
-                            {% else %}
-                                No file to download for this game.
-                            {% endif %}
                         {% else %}
                             No file to download for this game.
                         {% endif %}
