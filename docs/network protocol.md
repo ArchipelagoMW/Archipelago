@@ -84,6 +84,7 @@ Sent to clients when they connect to an Archipelago server.
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
 | datapackage_checksums | dict[str, str]                                | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information.                | 
+| dynamic_checksums     | dict[str, str]                                | Checksum hash of the individual games' dynamic datapackages. Used to determine which games should have their datapackages requested to receive per-generation datapackage information. See See [Data Package Contents](#Data-Package-Contents) for more information. |
 | seed_name             | str                                           | Uniquely identifying name of this generation                                                                                                                                                                                          |
 | time                  | float                                         | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce.                                                                                                                               |
 
@@ -715,6 +716,7 @@ server most easily and not maintain their own mappings. Some contents include:
 
    - Name to ID mappings for items and locations.
    - A checksum of each game's data package for clients to tell if a cached package is invalid.
+   - A separate set of mappings (and checksum) for per-generation items and locations.
 
 We encourage clients to cache the data package they receive on disk, or otherwise not tied to a session. You will know 
 when your cache is outdated if the [RoomInfo](#RoomInfo) packet or the datapackage itself denote a different checksum
@@ -748,14 +750,22 @@ than any locally cached ones.
             "Item X": 40
           }
         }
+      },
+    "dynamic": {
+        "Game A": {
+          "location_name_to_id": {
+            "Dynamic Location": 51
+          } 
+        } 
       }
     }
     ```
 
 #### Contents
-| Name | Type | Notes |
-| ------ | ----- | ------ |
-| games | dict[str, GameData] | Mapping of all Games and their respective data |
+| Name    | Type                | Notes                                                                  |
+|---------|---------------------|------------------------------------------------------------------------|
+| games   | dict[str, GameData] | Mapping of all Games and their respective data                         |
+| dynamic | dict[str, GameData] | Mapping of any Games that feature per-generation item or location data |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.

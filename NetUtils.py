@@ -507,6 +507,7 @@ class MultiData(typing.TypedDict):
     seed_name: str
     spheres: list[dict[int, set[int]]]
     datapackage: dict[str, GamesPackage]
+    dynamic_datapackage: dict[str, GamesPackage]
     race_mode: int
 
 
