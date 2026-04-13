@@ -1374,3 +1374,13 @@ def get_all_causes(ex: Exception) -> str:
     top = causes[-1]
     others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
     return f"{top}{others}"
+
+
+_empty_frozenset = frozenset()  # empty frozenset singleton
+
+
+def empty_frozenset_factory() -> frozenset:
+    """
+    returns empty frozenset singleton when called
+    """
+    return _empty_frozenset
