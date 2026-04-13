@@ -83,7 +83,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
 | 0x02020FE1 | 1B | KIRBY_MAX_HP            | Kirby max HP (`s8`) used for one-hit mode enforcement (player 0 struct) |
 | 0x02020FE2 | 1B | KIRBY_LIVES             | Native extra-life counter (`u8`) used for `no_extra_lives` enforcement |
-| 0x02038980 | 2B | KIRBY_VITALITY_COUNTER  | Native vitality counter (`u16`); incremented by ROM payload on Vitality Counter item delivery; read by one-hit mode enforcement |
+| 0x02038980 | 2B | KIRBY_VITALITY_COUNTER  | Native vitality counter (`u16`); incremented by ROM payload on Vitality Counter item delivery and clamped to 4 (the shipped AP vitality item count) to prevent reset/replay over-grants; read by one-hit mode enforcement |
 
 ## Item ID Ranges
 
@@ -194,7 +194,7 @@ DeathLink runtime behavior contract:
 - Generation removes all four Vitality Counter items from the non-filler item pool (replaced by filler) when `one_hit_mode == exclude_vitality_counters` (1). Vitality Chest locations are kept, but this mode does not guarantee location-specific filler placement on those chests.
 - In `exclude_vitality_counters` mode, filler selection also removes health-restoring filler (`Small Food`, `Max Tomato`) so randomized filler does not counteract the 1 HP challenge. If `no_extra_lives` is also enabled, `1 Up` is removed from that reduced filler pool as well.
 - Generation leaves the item pool unchanged when `one_hit_mode == include_vitality_counters` (2).
-- During gameplay, when `one_hit_mode != vanilla`, the BizHawk client reads `kirby_vitality_counter_native` (`u16`) and enforces `desired_max_hp = vitality_counter + 1` (capped to `0x7F`) onto `kirby_max_hp_native` and `kirby_hp_native` for player 0's struct.
+- During gameplay, when `one_hit_mode != off`, the BizHawk client reads `kirby_vitality_counter_native` (`u16`) and enforces `desired_max_hp = vitality_counter + 1` (capped to `0x7F`) onto `kirby_max_hp_native` and `kirby_hp_native` for player 0's struct. In `exclude_vitality_counters` mode it additionally scrubs `kirby_vitality_counter_native` back to `0` every gameplay tick so AP vitality grants cannot persist.
 - Dead/negative HP states (`current_hp <= 0`) are preserved; only alive Kirby's HP is clamped.
 - Any `one_hit_mode` runtime diagnostics must remain gated behind `debug.logging`.
 ```

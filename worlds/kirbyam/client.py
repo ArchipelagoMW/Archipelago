@@ -960,12 +960,15 @@ class KirbyAmClient(BizHawkClient):
         """Clamp Kirby's max HP (and current HP) to vitality_counter + 1 while one-hit mode is active.
 
         Both exclude_vitality_counters and include_vitality_counters modes use a 1 HP base.
-        In exclude mode the vitality counter stays at 0 all game, giving a permanent max of 1.
+        In exclude mode the client also scrubs native vitality counter back to 0 every
+        gameplay tick, giving a permanent max of 1 even if the ROM temporarily applies
+        a vitality grant before watcher reconciliation.
         In include mode each received Vitality Counter item raises the cap by 1.
 
         Enforcement targets player 0's Kirby struct (consistent with DeathLink HP tracking).
         """
-        if self._one_hit_mode_value(ctx) == OneHitMode.option_off:
+        one_hit_mode = self._one_hit_mode_value(ctx)
+        if one_hit_mode == OneHitMode.option_off:
             return
 
         vitality_addr = data.native_ram_addresses.get(_KIRBY_VITALITY_COUNTER_ADDR_KEY)
@@ -985,13 +988,19 @@ class KirbyAmClient(BizHawkClient):
         current_hp = self._s8(hp_raw)
         current_max_hp = self._s8(max_hp_raw)
 
-        # One-hit base is 1; each Vitality Counter adds 1 to the cap.
-        desired_max_hp = min(vitality_count + 1, 0x7F)
+        desired_vitality_count = vitality_count
+        if one_hit_mode == OneHitMode.option_exclude_vitality_counters:
+            desired_vitality_count = 0
 
-        if current_max_hp <= desired_max_hp and current_hp <= desired_max_hp:
+        # One-hit base is 1; each Vitality Counter adds 1 to the cap.
+        desired_max_hp = min(desired_vitality_count + 1, 0x7F)
+
+        if vitality_count == desired_vitality_count and current_max_hp <= desired_max_hp and current_hp <= desired_max_hp:
             return
 
         writes: list[tuple[int, bytes, str]] = []
+        if vitality_count != desired_vitality_count:
+            writes.append((vitality_addr, desired_vitality_count.to_bytes(2, "little"), "System Bus"))
         if current_max_hp > desired_max_hp:
             writes.append((max_hp_addr, bytes([desired_max_hp & 0xFF]), "System Bus"))
         # Clamp alive HP down to new max; preserve dead/negative states.
@@ -1007,15 +1016,17 @@ class KirbyAmClient(BizHawkClient):
                 clamped_max_hp = current_max_hp > desired_max_hp
                 clamped_hp = current_hp > 0 and current_hp > desired_max_hp
                 parts = []
+                if vitality_count != desired_vitality_count:
+                    parts.append(f"vitality_count {vitality_count}->{desired_vitality_count}")
                 if clamped_max_hp:
                     parts.append(f"max_hp {current_max_hp}->{desired_max_hp}")
                 if clamped_hp:
                     parts.append(f"hp {current_hp}->{desired_max_hp}")
                 if parts:
                     logger.info(
-                        "KirbyAM debug: one-hit mode clamped %s (vitality_count=%s)",
+                        "KirbyAM debug: one-hit mode clamped %s (desired_vitality_count=%s)",
                         ", ".join(parts),
-                        vitality_count,
+                        desired_vitality_count,
                     )
 
     @staticmethod

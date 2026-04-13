@@ -153,29 +153,59 @@ _SAMPLE_CHANGELOG = """\
 
 ## Unreleased
 
+### New Features
+
 - Some work in progress.
 
-## v0.0.2
+### Bug Fixes
+
+- None.
+
+### Internal Changes
+
+- None.
+
+## v0.1.1
+
+### New Features
 
 - Second release notes.
 
-## v0.0.1
+### Bug Fixes
 
-- First release notes.
+- Second release fixes.
+
+### Internal Changes
+
+- Second release internal notes.
+
+## v0.1.0
+
+### New Features
+
+- First public release notes.
+
+### Bug Fixes
+
+- First public release fixes.
+
+### Internal Changes
+
+- First public release internal notes.
 """
 
 
 def test_check_changelog_has_version_passes_when_section_exists(tmp_path: Path) -> None:
     changelog = tmp_path / "CHANGELOG.md"
     changelog.write_text(_SAMPLE_CHANGELOG, encoding="utf-8")
-    MODULE.check_changelog_has_version(changelog, "0.0.2")  # should not raise
+    MODULE.check_changelog_has_version(changelog, "0.1.1")  # should not raise
 
 
 def test_check_changelog_has_version_fails_when_section_missing(tmp_path: Path) -> None:
     changelog = tmp_path / "CHANGELOG.md"
     changelog.write_text(_SAMPLE_CHANGELOG, encoding="utf-8")
-    with pytest.raises(ValueError, match="does not contain a section for v0.0.3"):
-        MODULE.check_changelog_has_version(changelog, "0.0.3")
+    with pytest.raises(ValueError, match="does not contain a section for v0.1.2"):
+        MODULE.check_changelog_has_version(changelog, "0.1.2")
 
 
 def test_check_changelog_does_not_treat_unreleased_as_a_version(tmp_path: Path) -> None:
@@ -189,15 +219,15 @@ def test_check_changelog_does_not_treat_unreleased_as_a_version(tmp_path: Path) 
 def test_check_changelog_partial_match_does_not_satisfy(tmp_path: Path) -> None:
     changelog = tmp_path / "CHANGELOG.md"
     changelog.write_text(_SAMPLE_CHANGELOG, encoding="utf-8")
-    # "0.0.1" exists but "0.0.10" should not be satisfied by the 0.0.1 line
-    with pytest.raises(ValueError, match="does not contain a section for v0.0.10"):
-        MODULE.check_changelog_has_version(changelog, "0.0.10")
+    # "0.1.0" exists but "0.1.10" should not be satisfied by the 0.1.0 line
+    with pytest.raises(ValueError, match="does not contain a section for v0.1.10"):
+        MODULE.check_changelog_has_version(changelog, "0.1.10")
 
 
-def test_real_changelog_has_v006_section() -> None:
-    """Smoke-guard the real CHANGELOG against a release tag of v0.0.6."""
+def test_real_changelog_has_v010_section() -> None:
+    """Smoke-guard the real CHANGELOG against the first public release section."""
     real_changelog = Path(__file__).resolve().parents[1] / "CHANGELOG.md"
-    MODULE.check_changelog_has_version(real_changelog, "0.0.6")  # should not raise
+    MODULE.check_changelog_has_version(real_changelog, "0.1.0")  # should not raise
 
 
 def test_main_checks_changelog_on_release_tag(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -216,7 +246,7 @@ def test_main_checks_changelog_on_release_tag(tmp_path: Path, monkeypatch: pytes
         [
             "kirbyam_release_metadata.py",
             "--github-ref",
-            "refs/tags/kirbyam-v0.0.2",
+            "refs/tags/kirbyam-v0.1.1",
             "--github-output",
             str(output_path),
             "--world-manifest",
@@ -229,7 +259,7 @@ def test_main_checks_changelog_on_release_tag(tmp_path: Path, monkeypatch: pytes
     assert MODULE.main() == 0
     # version was injected and changelog passed without raising
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["world_version"] == "0.0.2"
+    assert manifest["world_version"] == "0.1.1"
 
 
 def test_main_fails_when_changelog_missing_release_version(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -238,7 +268,7 @@ def test_main_fails_when_changelog_missing_release_version(tmp_path: Path, monke
         json.dumps({"game": "Kirby & The Amazing Mirror", "world_version": "0.0.1"}, indent=2) + "\n",
         encoding="utf-8",
     )
-    # Changelog does not contain v0.0.9
+    # Changelog does not contain v0.1.9
     changelog_path = tmp_path / "CHANGELOG.md"
     changelog_path.write_text(_SAMPLE_CHANGELOG, encoding="utf-8")
     output_path = tmp_path / "github_output.txt"
@@ -249,7 +279,7 @@ def test_main_fails_when_changelog_missing_release_version(tmp_path: Path, monke
         [
             "kirbyam_release_metadata.py",
             "--github-ref",
-            "refs/tags/kirbyam-v0.0.9",
+            "refs/tags/kirbyam-v0.1.9",
             "--github-output",
             str(output_path),
             "--world-manifest",
@@ -259,7 +289,7 @@ def test_main_fails_when_changelog_missing_release_version(tmp_path: Path, monke
         ],
     )
 
-    with pytest.raises(ValueError, match="does not contain a section for v0.0.9"):
+    with pytest.raises(ValueError, match="does not contain a section for v0.1.9"):
         MODULE.main()
 
 

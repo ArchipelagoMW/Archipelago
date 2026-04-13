@@ -2142,6 +2142,38 @@ async def test_enforce_one_hit_mode_clamps_max_hp_and_current_hp(mock_bizhawk_co
 
 
 @pytest.mark.asyncio
+async def test_enforce_one_hit_mode_exclude_scrubs_native_vitality_counter(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data["one_hit_mode"] = OneHitMode.option_exclude_vitality_counters
+
+    with patch.dict(
+        data.native_ram_addresses,
+        {
+            "kirby_vitality_counter_native": 0x02038980,
+            "kirby_hp_native": 0x02020FE0,
+            "kirby_max_hp_native": 0x02020FE1,
+        },
+        clear=False,
+    ), patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock) as mock_write:
+        mock_read.return_value = [
+            (3).to_bytes(2, 'little'),
+            (1).to_bytes(1, 'little', signed=True),
+            (1).to_bytes(1, 'little', signed=True),
+        ]
+
+        await client._enforce_one_hit_mode(mock_bizhawk_context)
+
+    mock_write.assert_awaited_once_with(
+        mock_bizhawk_context.bizhawk_ctx,
+        [
+            (0x02038980, (0).to_bytes(2, 'little'), 'System Bus'),
+        ],
+    )
+
+
+@pytest.mark.asyncio
 async def test_enforce_one_hit_mode_preserves_dead_hp_state(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()

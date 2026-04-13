@@ -4,6 +4,8 @@ name: ctest
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '**.cc?'
       - '**.cpp'

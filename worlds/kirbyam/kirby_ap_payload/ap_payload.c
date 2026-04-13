@@ -69,6 +69,10 @@
 #define KIRBY_BIG_CHEST_FLAGS   (*(volatile uint32_t*)(KIRBY_BIG_CHEST_FLAGS_ADDR))
 #define KIRBY_VITALITY_COUNTER_ADDR 0x02038980u
 #define KIRBY_VITALITY_COUNTER  (*(volatile uint16_t*)(KIRBY_VITALITY_COUNTER_ADDR))
+// Kirby has four AP vitality counter items in the current item contract.
+// Clamp native vitality state to that count so mailbox replay/reset paths
+// cannot over-grant vitality above intended progression.
+#define KIRBY_MAX_VITALITY_COUNTERS 4u
 
 #define KIRBY_STRUCTS_ADDR       0x02020EE0u
 #define KIRBY_CURRENT_PLAYER_ADDR 0x0203AD3Cu
@@ -373,9 +377,16 @@ static void ap_grant_invincibility_candy(void) {
 }
 
 static void ap_grant_vitality_counter(void) {
-    if (KIRBY_VITALITY_COUNTER < 0xFFFFu) {
-        KIRBY_VITALITY_COUNTER = (uint16_t)(KIRBY_VITALITY_COUNTER + 1u);
+    uint16_t vitality_counter = KIRBY_VITALITY_COUNTER;
+
+    if (vitality_counter > KIRBY_MAX_VITALITY_COUNTERS) {
+        vitality_counter = KIRBY_MAX_VITALITY_COUNTERS;
     }
+    if (vitality_counter < KIRBY_MAX_VITALITY_COUNTERS) {
+        vitality_counter = (uint16_t)(vitality_counter + 1u);
+    }
+
+    KIRBY_VITALITY_COUNTER = vitality_counter;
     ap_sync_active_kirby_health_from_vitality();
 }
 

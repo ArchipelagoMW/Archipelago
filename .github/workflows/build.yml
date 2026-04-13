@@ -5,6 +5,8 @@ name: Build
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
