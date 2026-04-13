@@ -8,6 +8,8 @@ from .data import (
     entrance_info_collection,
     pickup_info_collection,
     entrance_to_entrance_info_collection,
+    entrance_to_pickup_region_info_collection,
+    default_transdoor_entrance_connection_collection,
     AbilityCombo,
 )
 from .locations import CVAOSLocation, location_name_to_id
@@ -52,6 +54,13 @@ def create_regions(world: CVAOSWorld) -> None:
     door_number_to_id_unique: dict[int, str] = {
         e.door_number: e.door_identifier_unique for e in entrance_info_collection
     }
+    # door_identifier_nonunique -> ordered door_numbers
+    door_id_to_numbers: dict[str, list[int]] = {}
+    for entrance_info in entrance_info_collection:
+        door_id_to_numbers.setdefault(
+            entrance_info.door_identifier_nonunique,
+            [],
+        ).append(entrance_info.door_number)
 
     # Create entrance regions (one per door/entrance in the game)
     # Use door_number as the unique key, region name uses door_identifier_unique
@@ -85,6 +94,36 @@ def create_regions(world: CVAOSWorld) -> None:
         first_entrance = entrance_info_collection[0]
         start_region = entrance_regions[first_entrance.door_number]
         menu.connect(start_region, "Start Game")
+
+    # Connect doors between rooms using the explicit transdoor table.
+    transdoor_from_occurrence: dict[str, int] = {}
+    transdoor_to_occurrence: dict[str, int] = {}
+    for transdoor_info in default_transdoor_entrance_connection_collection:
+        from_index = transdoor_from_occurrence.get(transdoor_info.from_entrance, 0)
+        to_index = transdoor_to_occurrence.get(transdoor_info.to_entrance, 0)
+        transdoor_from_occurrence[transdoor_info.from_entrance] = from_index + 1
+        transdoor_to_occurrence[transdoor_info.to_entrance] = to_index + 1
+
+        from_numbers = door_id_to_numbers.get(transdoor_info.from_entrance, [])
+        to_numbers = door_id_to_numbers.get(transdoor_info.to_entrance, [])
+        if from_index >= len(from_numbers) or to_index >= len(to_numbers):
+            continue
+
+        from_door_number = from_numbers[from_index]
+        to_door_number = to_numbers[to_index]
+        from_region = entrance_regions.get(from_door_number)
+        to_region = entrance_regions.get(to_door_number)
+
+        if from_region is None or to_region is None:
+            continue
+
+        from_door_id_unique = door_number_to_id_unique[from_door_number]
+        to_door_id_unique = door_number_to_id_unique[to_door_number]
+        connection_name = (
+            f"Door: {from_door_id_unique} -> {to_door_id_unique}"
+            f" #{transdoor_info.connection_number}"
+        )
+        from_region.connect(to_region, connection_name)
 
     # Connect regions based on routing information
     # Routing describes traversal within a room: from entry point to exit point
@@ -122,6 +161,45 @@ def create_regions(world: CVAOSWorld) -> None:
 
         # Connect the regions
         from_region.connect(to_region, connection_name, access_rule)
+
+    # Build pickup_number -> identifier_key lookup
+    pickup_number_to_identifier: dict[int, str] = {
+        p.pickup_number: p.identifier_key for p in pickup_info_collection
+    }
+
+    # Connect entrance regions to pickup regions
+    for pickup_routing in entrance_to_pickup_region_info_collection:
+        # The entrance_identifier may be unique or nonunique format
+        # door_id_unique_to_number handles both since unique is a superset
+        entrance_id = pickup_routing.entrance_identifier
+        door_number = door_id_unique_to_number.get(entrance_id)
+
+        if door_number is None:
+            # Skip if we can't find this entrance
+            continue
+
+        entrance_region = entrance_regions.get(door_number)
+        if entrance_region is None:
+            continue
+
+        # Look up the pickup region by pickup_number
+        identifier_key = pickup_number_to_identifier.get(pickup_routing.pickup_number)
+        if identifier_key is None:
+            continue
+
+        pickup_region = pickup_regions.get(identifier_key)
+        if pickup_region is None:
+            continue
+
+        # Create connection name using pickup_number to ensure uniqueness
+        entrance_id_unique = door_number_to_id_unique[door_number]
+        connection_name = f"{entrance_id_unique} -> Pickup:{identifier_key} #{pickup_routing.pickup_number}"
+
+        # Create access rule
+        access_rule = _create_access_rule_from_routing(pickup_routing, world)
+
+        # Connect entrance to pickup
+        entrance_region.connect(pickup_region, connection_name, access_rule)
 
 
 def _create_access_rule_from_routing(
