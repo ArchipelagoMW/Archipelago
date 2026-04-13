@@ -30,6 +30,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - Fixed vitality counter replays caused by transitions or resets, and prevented vitality counters from lingering in `One-Hit Mode` when that mode excludes them (Issue #571).
 - Fixed some boss checks not being sent when the matching shard was already owned (Issue #573).
 - Fixed extra reconnect and resend diagnostics showing up in the live client unless debug logging was enabled, while still keeping them in the log file (Issue #582).
+- Updated big chest labels to be consistent and no longer uses room names. Also updated location parent regions to be accurate. (Issue #603)
 
 ### Internal Changes
 

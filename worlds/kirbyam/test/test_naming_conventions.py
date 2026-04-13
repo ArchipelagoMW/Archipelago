@@ -40,20 +40,20 @@ def test_vitality_items_use_area_specific_names() -> None:
 
 def test_physical_big_chest_locations_hide_contents_in_labels() -> None:
     expected = {
-        "Rainbow Route 1-9 - Big Chest",
-        "Moonlight Mansion 2-1 - Big Chest",
-        "Cabbage Cavern 3-7 - Big Chest",
-        "Mustard Mountain 4-25 - Big Chest",
-        "Carrot Castle 5-15 - Big Chest",
-        "Olive Ocean 6-15 - Big Chest",
-        "Peppermint Palace 7-4 - Big Chest",
-        "Radish Ruins 8-29 - Big Chest",
-        "Candy Constellation 9-18 - Big Chest",
-        "Carrot Castle 5-23 - Big Chest",
-        "Olive Ocean 6-21 - Big Chest",
-        "Radish Ruins 8-4 - Big Chest",
-        "Candy Constellation 9-8 - Big Chest",
-        "Candy Constellation 9-4 - Big Chest",
+        "Rainbow Route Map - Big Chest",
+        "Moonlight Mansion Map - Big Chest",
+        "Cabbage Cavern Map - Big Chest",
+        "Mustard Mountain Map - Big Chest",
+        "Carrot Castle Map - Big Chest",
+        "Olive Ocean Map - Big Chest",
+        "Peppermint Palace Map - Big Chest",
+        "Radish Ruins Map - Big Chest",
+        "Candy Constellation Map - Big Chest",
+        "Carrot Castle Vitality - Big Chest",
+        "Olive Ocean Vitality - Big Chest",
+        "Radish Ruins Vitality - Big Chest",
+        "Candy Constellation Vitality - Big Chest",
+        "Candy Constellation Sound Player - Big Chest",
     }
     actual = {
         location.label
