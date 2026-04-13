@@ -1150,6 +1150,8 @@
     { "from": "BR - Gauntlet Part 2 (After Laser Hallway)", "to": "BR - After Gauntlet", "requires": [
         // remaining Part 2 platforming is all doable with AD, among other stuff, but AD is hard-required later
         { "item": "Wall Climb" }, { "item": "Tai-Chi Kick" }, // the start of Part 3 immediately requires WC AND TCK
+        // it is possible to replace the TCK with a "triple jump" (CL, LS vault, CL again) but you need to carry
+        // Ledge Storage from part 2 and you only get one shot at this, so even LS logic won't mention it
         // WC is required again in Part 3 to stall between two horizontal lasers
         // the Part 3 rope to red tunnel platform jump requires AD on vanilla, but T-dash is an option there
         { "item": "Air Dash" }, // start of Part 4 has a vertical laser on a red floor, so AD is hard-required
