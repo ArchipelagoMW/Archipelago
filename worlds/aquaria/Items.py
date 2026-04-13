@@ -271,7 +271,7 @@ item_table = {
     ItemNames.TRIDENT: ItemData(698031, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_trident_head
     ItemNames.TURTLE_EGG: ItemData(698032, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_turtle_egg
     ItemNames.JELLY_EGG: ItemData(698033, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_upsidedown_seed
-    ItemNames.URCHIN_COSTUME: ItemData(698034, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_urchin_costume
+    ItemNames.URCHIN_COSTUME: ItemData(698034, 1, ItemType.PROGRESSION, ItemGroup.COLLECTIBLE),  # collectible_urchin_costume
     ItemNames.BABY_WALKER: ItemData(698035, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_walker
     ItemNames.VEDHA_S_CURE_ALL: ItemData(698036, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_Vedha'sCure-All
     ItemNames.ZUUNA_S_PEROGI: ItemData(698037, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_Zuuna'sperogi
@@ -384,8 +384,8 @@ four_gods_excludes = [ItemNames.ANEMONE, ItemNames.ARNASSI_STATUE, ItemNames.BIG
                       ItemNames.MITHALAS_BANNER, ItemNames.MITHALAS_POT, ItemNames.MUTANT_COSTUME, ItemNames.SEED_BAG,
                       ItemNames.KING_S_SKULL, ItemNames.SONG_PLANT_SPORE, ItemNames.STONE_HEAD, ItemNames.SUN_KEY,
                       ItemNames.GIRL_COSTUME, ItemNames.ODD_CONTAINER, ItemNames.TRIDENT, ItemNames.TURTLE_EGG,
-                      ItemNames.JELLY_EGG, ItemNames.URCHIN_COSTUME, ItemNames.BABY_WALKER,
-                      ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM,
+                      ItemNames.JELLY_EGG, ItemNames.BABY_WALKER, ItemNames.RAINBOW_MUSHROOM,
+                      ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM, ItemNames.FISH_OIL,
                       ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE,
                       ItemNames.LEECHING_POULTICE, ItemNames.LEECHING_POULTICE, ItemNames.ARCANE_POULTICE,
                       ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT,
