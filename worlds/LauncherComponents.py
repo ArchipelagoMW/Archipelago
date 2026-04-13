@@ -56,11 +56,21 @@ class Component:
     """Game name to identify component when handling launch links from WebHost"""
     supports_uri: Optional[bool]
     """Bool to identify if a component supports being launched by launch links from WebHost"""
+    id: str
+    """Stable identifier for declarative launcher/core routing"""
+    handler_id: Optional[str]
+    """Stable handler key used by the core execution layer"""
+    launch_mode: Optional[str]
+    """Preferred execution mode for declarative launcher/core routing"""
+    file_suffixes: Tuple[str, ...]
+    """Declarative file suffixes used by the catalog/resolution layer"""
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "",
+                 component_id: Optional[str] = None, handler_id: Optional[str] = None,
+                 launch_mode: Optional[str] = None, file_suffixes: Optional[Iterable[str]] = None) -> None:
         self.display_name = display_name
         self.description = description
         self.script_name = script_name
@@ -79,6 +89,15 @@ class Component:
         self.file_identifier = file_identifier
         self.game_name = game_name
         self.supports_uri = supports_uri
+        self.id = component_id or display_name.lower().replace(" ", "-").replace("/", "-")
+        self.handler_id = handler_id
+        self.launch_mode = launch_mode
+        if file_suffixes is not None:
+            self.file_suffixes = tuple(file_suffixes)
+        elif isinstance(file_identifier, SuffixIdentifier):
+            self.file_suffixes = tuple(file_identifier.suffixes)
+        else:
+            self.file_suffixes = ()
 
     def handles_file(self, path: str):
         return self.file_identifier(path) if self.file_identifier else False
@@ -218,36 +237,41 @@ def export_datapackage() -> None:
 
 components: List[Component] = [
     # Launcher
-    Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
+    Component('Launcher', 'Launcher', component_type=Type.HIDDEN, handler_id="process", launch_mode="background"),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
-              file_identifier=SuffixIdentifier('.archipelago', '.zip'),
+              file_identifier=SuffixIdentifier('.archipelago', '.zip'), handler_id="host", launch_mode="terminal",
               description="Host a generated multiworld on your computer."),
-    Component('Generate', 'Generate', cli=True,
+    Component('Generate', 'Generate', cli=True, handler_id="process", launch_mode="terminal",
               description="Generate a multiworld with the YAMLs in the players folder."),
     Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
+              handler_id="process", launch_mode="background",
               description="Visual creator for Archipelago option files."),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
+    Component("Install APWorld", file_identifier=SuffixIdentifier(".apworld"), handler_id="install_apworld",
+              launch_mode="direct",
               description="Install an APWorld to play games not included with Archipelago by default."),
-    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
+    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', handler_id="process", launch_mode="background",
               description="Connect to a multiworld using the text client."),
-    Component('LttP Adjuster', 'LttPAdjuster'),
+    Component('LttP Adjuster', 'LttPAdjuster', handler_id="process", launch_mode="background"),
     # Ocarina of Time
-    Component('OoT Client', 'OoTClient',
+    Component('OoT Client', 'OoTClient', handler_id="process", launch_mode="background",
               file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
+    Component('OoT Adjuster', 'OoTAdjuster', handler_id="process", launch_mode="background"),
     # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
+    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz'),
+              handler_id="process", launch_mode="background"),
     # ChecksFinder
-    Component('ChecksFinder Client', 'ChecksFinderClient'),
+    Component('ChecksFinder Client', 'ChecksFinderClient', handler_id="process", launch_mode="background"),
     # Zillion
-    Component('Zillion Client', 'ZillionClient',
+    Component('Zillion Client', 'ZillionClient', handler_id="process", launch_mode="background",
               file_identifier=SuffixIdentifier('.apzl')),
 
     # MegaMan Battle Network 3
-    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3')),
+    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'),
+              handler_id="process", launch_mode="background"),
 
-    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL,
+    Component("Export Datapackage", component_type=Type.TOOL, handler_id="export_datapackage",
+              launch_mode="direct",
               description="Write item/location data for installed worlds to a file and open it."),
 ]
 
@@ -266,7 +290,7 @@ if not is_frozen():
 
         from worlds import AutoWorldRegister
         from worlds.Files import APWorldContainer
-        from Launcher import open_folder
+        from launcher.components.functions import open_folder
 
         import argparse
         parser = argparse.ArgumentParser(prog="Build APWorlds", description="Build script for APWorlds")
