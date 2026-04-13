@@ -50,6 +50,22 @@ jobs:
           thumb_bl = bytes.fromhex("00 f0 00 f8")
           for offset in (0x001D952, 0x0000B144, 0x0000B0CC, 0x0000B264, 0x00039EEE):
             rom[offset:offset + 4] = thumb_bl
+          
+          # Generate a valid Thumb BL at ROM file offset 0x20000 targeting the ability
+          # transition function (0x080547C4). Use absolute GBA addresses (0x08000000 base)
+          # to match how patch_rom.py decodes BL targets via decode_thumb_bl_target().
+          # Thumb bit (0x080547C5 bit 0) is cleared to get the even instruction address.
+          src_abs = 0x08000000 + 0x20000   # absolute GBA address of this BL
+          dst_abs = 0x080547C4             # ORIGINAL_ABILITY_TRANSITION_FN_ADDR (even)
+          diff = dst_abs - (src_abs + 4)   # signed byte offset to target
+          imm22 = diff >> 1                # halfword offset (positive for forward branch)
+          imm11_hi = (imm22 >> 11) & 0x7FF
+          imm11_lo = imm22 & 0x7FF
+          first_hw = 0xF000 | imm11_hi
+          second_hw = 0xF800 | imm11_lo
+          bl_bytes = first_hw.to_bytes(2, "little") + second_hw.to_bytes(2, "little")
+          rom[0x20000:0x20004] = bl_bytes
+          
           rom_path.write_bytes(rom)
           PY
 

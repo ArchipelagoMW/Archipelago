@@ -121,6 +121,60 @@ def ability_for_enemy_type(policy: dict[str, Any], enemy_type_key: str) -> str:
     return abilities[index]
 
 
+def build_shuffled_enemy_type_assignments(
+    policy: dict[str, Any],
+    enemy_type_keys: Iterable[str],
+) -> dict[str, str]:
+    """Build deterministic shuffled assignments with full whitelist coverage when possible.
+
+    For shuffled mode, this guarantees that each allowed ability appears on at
+    least one included enemy type whenever there are enough enemy types in the
+    supplied key set.
+    """
+    if int(policy.get("mode", -1)) != AbilityRandomizationMode.option_shuffled:
+        raise ValueError("build_shuffled_enemy_type_assignments requires shuffled mode policy")
+
+    keys = sorted({key for key in enemy_type_keys if key})
+    if not keys:
+        return {}
+
+    abilities = list(policy.get("allowed_abilities", []))
+    if not abilities:
+        raise ValueError("policy allowed_abilities cannot be empty")
+
+    seed = int(policy.get("seed", 0))
+    no_ability_weight = _normalize_no_ability_weight(
+        policy.get("ability_randomization_no_ability_weight", 0)
+    )
+
+    if no_ability_weight >= 100:
+        return {enemy_type_key: NO_ABILITY_NAME for enemy_type_key in keys}
+
+    # Assign a deterministic subset of enemy keys to cover distinct abilities.
+    # These reserved keys intentionally bypass no-ability selection so every
+    # ability appears at least once when key cardinality permits.
+    key_order = sorted(keys, key=lambda key: _stable_index(seed, f"cover:key:{key}", 1 << 32))
+    ability_order = sorted(
+        abilities,
+        key=lambda ability: _stable_index(seed, f"cover:ability:{ability}", 1 << 32),
+    )
+
+    assignments: dict[str, str] = {}
+    for idx, enemy_type_key in enumerate(key_order[: min(len(key_order), len(ability_order))]):
+        assignments[enemy_type_key] = ability_order[idx]
+
+    for enemy_type_key in keys:
+        if enemy_type_key in assignments:
+            continue
+        if _selects_no_ability(seed, enemy_type_key, no_ability_weight):
+            assignments[enemy_type_key] = NO_ABILITY_NAME
+            continue
+        index = _stable_index(seed, enemy_type_key, len(abilities))
+        assignments[enemy_type_key] = abilities[index]
+
+    return assignments
+
+
 def ability_for_enemy_grant_event(policy: dict[str, Any], event_index: int | str, enemy_type_key: str) -> str:
     """Return the deterministic per-event ability for completely random mode."""
     if int(policy.get("mode", -1)) != AbilityRandomizationMode.option_completely_random:

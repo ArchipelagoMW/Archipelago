@@ -9,7 +9,8 @@ import worlds.kirbyam.enemy_ability_runtime_patch as runtime_patch_module
 
 from ..ability_randomization import build_enemy_copy_ability_policy
 from ..enemy_ability_data import AbilitySource
-from ..enemy_ability_runtime_patch import build_enemy_copy_runtime_patch_writes
+from ..enemy_ability_data import ABILITY_NAME_TO_ID, VALID_ENEMY_COPY_ABILITIES
+from ..enemy_ability_runtime_patch import build_enemy_copy_runtime_patch_writes, build_enemy_copy_spoiler_rows
 from ..options import AbilityRandomizationMode
 
 
@@ -371,3 +372,71 @@ def test_unswallowable_enemy_exclusion_uses_source_metadata(monkeypatch) -> None
     writes = build_enemy_copy_runtime_patch_writes(policy)
 
     assert 0x35FFEE not in writes
+
+
+def test_known_missing_reference_sources_are_now_covered_in_runtime_writes() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260407),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy)
+
+    assert 0x351966 in writes  # GOLEM
+    assert 0x351B16 in writes  # PRANK
+    assert 0x35290E in writes  # MASTER_CRAZY_HAND_BULLET
+
+
+def test_shuffled_mode_can_cover_all_allowed_abilities_when_all_sources_included() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260407),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    writes = build_enemy_copy_runtime_patch_writes(policy)
+    assigned_ids = set(writes.values())
+    allowed_ids = {ABILITY_NAME_TO_ID[name] for name in VALID_ENEMY_COPY_ABILITIES}
+
+    assert allowed_ids.issubset(assigned_ids)
+
+
+def test_shuffled_spoiler_rows_include_expected_known_sources() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260407),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    rows = build_enemy_copy_spoiler_rows(policy)
+    row_keys = {(kind, key) for kind, key, _ in rows}
+
+    assert ("enemy", "GOLEM") in row_keys
+    assert ("enemy", "PRANK") in row_keys
+    assert ("boss_spawned", "MASTER_CRAZY_HAND_BULLET") in row_keys
+
+
+def test_shuffled_spoiler_rows_cover_all_allowed_abilities_when_possible() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260407),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        include_passive_enemies=True,
+        no_ability_weight=0,
+    )
+
+    rows = build_enemy_copy_spoiler_rows(policy)
+    assigned_abilities = {ability_name for _, _, ability_name in rows}
+
+    assert set(VALID_ENEMY_COPY_ABILITIES).issubset(assigned_abilities)

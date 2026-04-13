@@ -11,10 +11,15 @@ Contract for `## Unreleased` and all post-public `## v...` sections:
 ### New Features
 
 - `Starting Kirby Color` lets players begin a seed with a chosen Kirby palette instead of default Pink, including a random-color option for runs that want a surprise look (Issue #597).
-- World-map big switches now count as Archipelago checks, so more of Amazing Mirror's shortcut and unlock progression is tracked as part of the randomizer (Issue #481).
 - Tracker support is broader, making it easier for players to follow room progress, location progress, and unique-item progress in tracker tools (Issue #114).
 - `Start With All Maps` lets players begin with every area map already unlocked for a more guided and readable playthrough (Issue #584).
 - Room names have been updated to match familiar Wikirby naming, making navigation and communication clearer for players (Issue #587).
+- Add 15 decomp-aligned world-map big-switch AP checks (`HUB_SWITCH_*`) with a dedicated ROM transport register (`hub_switch_flags` at `0x0203B04C`), BizHawk resend/dedupe polling, payload hook integration at the world-map unlock dispatcher callsite (`sub_08039ED4`), protocol/address contract updates, and regression coverage for data/polling/patch offsets/region binding (Issue #481).
+- Fix enemy copy-ability shuffled-mode source coverage gaps by adding missing known US-ROM ability sources (`GOLEM`, `PRANK`, `MASTER_CRAZY_HAND_BULLET`) so same-type enemy grants no longer diverge between patched and unpatched table entries across rooms (Issue #420).
+- Improve shuffled enemy copy-ability mapping to guarantee full allowed-ability representation across included enemy types when key cardinality permits (`no_ability_weight < 100`), while preserving explicit `no_ability_weight=100` semantics (all included sources resolve to no ability).
+- Add shuffled enemy copy-ability spoiler output listing each randomized source and resulting copy ability (`kind | source_key -> ability`) so seed analysis can verify enemy mappings and full allowed-ability representation (Issue #586).
+- Add generation-log shuffled assignment table output (`kind | source -> ability`) so seed build logs show deterministic enemy copy-ability grants for shuffled mode.
+- Add completely-random per-swallow reroll telemetry logging (`Kirby swallowed a <EnemyName>. Ability was rerolled to <AbilityName>.`) based on the latest observed runtime swallow event (best-effort; earlier events between polls are noted as missed), while only streaming that line to the live client when `enable_debug_logging` is enabled.
 
 ### Bug Fixes
 

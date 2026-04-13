@@ -21,7 +21,16 @@
       "boss_temp_shard_bitfield": "0x0203B044",
       "delivered_vitality_item_bits": "0x0203B048",
       "hub_switch_flags": "0x0203B04C",
-      "starting_kirby_color_id": "0x0203B050"
+      "starting_kirby_color_id": "0x0203B050",
+      "ability_randomization_mode_runtime": "0x0203B064",
+      "ability_randomization_seed_lo_runtime": "0x0203B068",
+      "ability_randomization_seed_hi_runtime": "0x0203B06C",
+      "ability_randomization_no_ability_weight_runtime": "0x0203B070",
+      "ability_randomization_allowed_mask_runtime": "0x0203B074",
+      "ability_randomization_rng_state_runtime": "0x0203B078",
+      "ability_reroll_event_counter_runtime": "0x0203B07C",
+      "ability_reroll_source_addr_runtime": "0x0203B080",
+      "ability_reroll_ability_id_runtime": "0x0203B084"
     },
     "native": {
       "shard_bitfield_native": "0x02038970",

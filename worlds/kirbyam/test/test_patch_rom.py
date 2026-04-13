@@ -138,3 +138,95 @@ def test_read_rom_path_from_tmp_empty_file() -> None:
         with pytest.raises(SystemExit) as exc_info:
             patch_rom.read_rom_path_from_tmp(tmp_file)
         assert "no usable ROM path" in str(exc_info.value)
+
+
+# ── Tests: decode_thumb_bl_target ─────────────────────────────────────────────
+
+def test_decode_thumb_bl_target_round_trips_forward_branch() -> None:
+    """decode_thumb_bl_target() should recover the exact dst from thumb_bl_bytes()."""
+    src = 0x08000100
+    dst = 0x080547C4
+    opcode = patch_rom.thumb_bl_bytes(src, dst)
+    assert patch_rom.decode_thumb_bl_target(src, opcode) == dst
+
+
+def test_decode_thumb_bl_target_round_trips_backward_branch() -> None:
+    """decode_thumb_bl_target() should handle negative offsets (backward branches)."""
+    src = 0x080547C4
+    dst = 0x08000100
+    opcode = patch_rom.thumb_bl_bytes(src, dst)
+    assert patch_rom.decode_thumb_bl_target(src, opcode) == dst
+
+
+def test_decode_thumb_bl_target_raises_for_non_bl_opcode() -> None:
+    """decode_thumb_bl_target() should raise ValueError for non-BL opcodes."""
+    with pytest.raises(ValueError, match="not a 32-bit Thumb BL"):
+        patch_rom.decode_thumb_bl_target(0x08000000, b"\x00\x20\x70\x47")
+
+
+# ── Tests: ability-transition callsite scan ────────────────────────────────────
+
+def test_ability_transition_callsite_scan_finds_exactly_expected_callsites() -> None:
+    """A synthetic ROM with two BL→target and one BL→unrelated yields only the two matching offsets."""
+    ROM_BASE = 0x08000000
+    _GBA_ROM_CODE_START = 0xC0
+    target = patch_rom.ORIGINAL_ABILITY_TRANSITION_FN_ADDR
+    target_candidates = {target, target | 1}
+
+    # Build a minimal ROM: header zeros, then three BL instructions.
+    # Offset 0xC0: BL → target  (should be found)
+    # Offset 0xC4: BL → target  (should be found)
+    # Offset 0xC8: BL → unrelated address  (should NOT be found)
+    rom = bytearray(_GBA_ROM_CODE_START + 12)
+    off_a = _GBA_ROM_CODE_START       # 0xC0
+    off_b = _GBA_ROM_CODE_START + 4   # 0xC4
+    off_c = _GBA_ROM_CODE_START + 8   # 0xC8
+
+    rom[off_a:off_a + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_a, target)
+    rom[off_b:off_b + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_b, target)
+    rom[off_c:off_c + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_c, 0x08001000)
+
+    found: list[int] = []
+    scan_end = min(patch_rom.PAYLOAD_OFFSET, len(rom) - 3)
+    for offset in range(_GBA_ROM_CODE_START, scan_end, 2):
+        opcode = bytes(rom[offset:offset + 4])
+        if not patch_rom.is_thumb_bl_instruction(opcode):
+            continue
+        src_addr = ROM_BASE + offset
+        try:
+            dst_addr = patch_rom.decode_thumb_bl_target(src_addr, opcode)
+        except ValueError:
+            continue
+        if dst_addr in target_candidates:
+            found.append(offset)
+
+    assert found == [off_a, off_b]
+
+
+def test_ability_transition_callsite_scan_skips_gba_header_region() -> None:
+    """The callsite scan should not look at bytes before 0xC0 (GBA header region)."""
+    ROM_BASE = 0x08000000
+    _GBA_ROM_CODE_START = 0xC0
+    target = patch_rom.ORIGINAL_ABILITY_TRANSITION_FN_ADDR
+    target_candidates = {target, target | 1}
+
+    # Place a BL→target inside the header region (offset 0x10), which should be skipped.
+    rom = bytearray(_GBA_ROM_CODE_START + 4)
+    off_in_header = 0x10
+    rom[off_in_header:off_in_header + 4] = patch_rom.thumb_bl_bytes(ROM_BASE + off_in_header, target)
+
+    found: list[int] = []
+    scan_end = min(patch_rom.PAYLOAD_OFFSET, len(rom) - 3)
+    for offset in range(_GBA_ROM_CODE_START, scan_end, 2):
+        opcode = bytes(rom[offset:offset + 4])
+        if not patch_rom.is_thumb_bl_instruction(opcode):
+            continue
+        src_addr = ROM_BASE + offset
+        try:
+            dst_addr = patch_rom.decode_thumb_bl_target(src_addr, opcode)
+        except ValueError:
+            continue
+        if dst_addr in target_candidates:
+            found.append(offset)
+
+    assert found == []  # BL in header region must not be picked up by the code-region scan

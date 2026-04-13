@@ -32,11 +32,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
     0x02000000 - 0x02040000   EWRAM Region (256 KB)
         ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0203B000 - 0x0203B053   AP Mailbox (reserved, 84 bytes)
+        ├─ 0x0203B000 - 0x0203B087   AP Mailbox (reserved, 136 bytes)
         └─ Remaining EWRAM (excluding AP mailbox block)
 ```
 
-### AP Mailbox Block (0x0203B000 - 0x0203B053)
+### AP Mailbox Block (0x0203B000 - 0x0203B087)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -63,9 +63,19 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x44   | 0x0203B044 | 4B | boss_temp_shard_bitfield | u32 | ROM internal | Bits 0-7 track shard bits temporarily written by boss-defeat hook for cutscene safety. On gameplay resume, payload scrubs only `boss_temp_shard_bitfield & ~delivered_shard_bitfield`, then clears this mask. |
 | 0x48   | 0x0203B048 | 4B | delivered_vitality_item_bits | u32 | ROM internal | Replay guard for vitality counter items. Bit N marks that `VITALITY_COUNTER_(N+1)` has already been applied, preventing duplicate vitality grants if an item is resent during reconnect/reset recovery. |
 | 0x4C   | 0x0203B04C | 4B | hub_switch_flags | u32 | ROM → Client | Bits 0–14 set when world-map big-switch door unlock callbacks fire (`WorldMapDoor` order: Moonlight, RR East, RR South, Cabbage Center, RR West, Carrot, RR North, Mustard, Cabbage West, Radish, Peppermint East, Peppermint West, Cabbage East, Olive, Candy). |
-| 0x50   | 0x0203B050 | 4B | starting_kirby_color_id | u32 | ROM ← Client | Runtime config payload for starting Kirby color. Valid values are `0..13`; `0` (Pink) is intentionally treated as a no-op by payload logic. Non-Pink values are applied through `KIRBY_TRANSITION_COLOR`, so the color becomes visible on the next room/area transition (typically the first transition after game start). |
+| 0x50   | 0x0203B050 | 4B | starting_kirby_color_id | u32 | ROM ← Client | Runtime config payload for starting Kirby color. Valid values are `0..13`; `0` (Pink) is intentionally treated as a no-op by payload logic. Non-Pink values are applied through `KIRBY_TRANSITION_COLOR`, so the color becomes visible on the next room/area transition or when an enemy-hit path refreshes Kirby's runtime color state (typically the first transition after game start). |
+| 0x54–0x63 | 0x0203B054–0x0203B063 | 16B | *(reserved)* | — | — | Reserved; not currently used. |
+| 0x64   | 0x0203B064 | 4B | ability_randomization_mode_runtime | u32 | ROM ← Client | Enemy copy-ability randomization mode (`0`=off, `1`=shuffled, `2`=completely_random). Written once per connection by the Python client from `slot_data`. |
+| 0x68   | 0x0203B068 | 4B | ability_randomization_seed_lo_runtime | u32 | ROM ← Client | Low 32 bits of the 64-bit seed used for per-swallow completely-random rerolls. |
+| 0x6C   | 0x0203B06C | 4B | ability_randomization_seed_hi_runtime | u32 | ROM ← Client | High 32 bits of the 64-bit seed used for per-swallow completely-random rerolls. |
+| 0x70   | 0x0203B070 | 4B | ability_randomization_no_ability_weight_runtime | u32 | ROM ← Client | 0–100 weight for no-ability outcomes in completely-random reroll mode. |
+| 0x74   | 0x0203B074 | 4B | ability_randomization_allowed_mask_runtime | u32 | ROM ← Client | Bitmask of allowed ability IDs (bit N = ability ID N, bits 1–31). |
+| 0x78   | 0x0203B078 | 4B | ability_randomization_rng_state_runtime | u32 | ROM internal | Running xorshift RNG state for per-swallow completely-random rerolls. Reset to 0 by the client when config changes to force a deterministic reseed. |
+| 0x7C   | 0x0203B07C | 4B | ability_reroll_event_counter_runtime | u32 | ROM → Client | Incremented by the payload each time a per-swallow reroll fires. Client polls for rises in this counter to detect that one or more rerolls occurred since the previous poll. |
+| 0x80   | 0x0203B080 | 4B | ability_reroll_source_addr_runtime | u32 | ROM → Client | ROM address of the ability-source byte for the **most recent** per-swallow reroll event only. This is a single-slot mailbox field; if multiple rerolls happen between client polls, earlier source addresses are overwritten and cannot be reconstructed. Used by the client to map the most recent source to an enemy name in telemetry (best-effort). |
+| 0x84   | 0x0203B084 | 4B | ability_reroll_ability_id_runtime | u32 | ROM → Client | Ability ID selected by the **most recent** per-swallow reroll event only. Pairs with `ability_reroll_source_addr_runtime` as a best-effort snapshot; if multiple rerolls happen between polls, intermediate ability IDs are overwritten. The client logs how many events were missed when `ability_reroll_event_counter_runtime` advances by more than 1. |
 
-**Total: 84 bytes (0x0203B000 - 0x0203B053)**
+**Total: 136 bytes (0x0203B000 - 0x0203B087)**
 
 ### Native Game State (Referenced but not Managed by AP)
 
@@ -79,7 +89,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
 | 0x0203AD10 | 4B | DEMO_PLAYBACK_FLAGS     | Native title-demo discriminator (`demo_playback_flags_native`; bit `0x10` indicates title-screen demo playback) |
 | 0x0203ADE0 | 1B | KIRBY_ACTIVE_COLOR      | Native currently selected Kirby palette index (`0..13`). **Boot-time only**: updates only if written before the game's graphics system initialises; writing during gameplay has no visual effect. |
-| 0x02020FBF | 1B | KIRBY_TRANSITION_COLOR  | Kirby palette index applied by the game engine on each screen transition (`0..13`). Writing here takes effect on the next room/area transition; HUD elements (lives, health bar) reflect the new color after the player pauses. |
+| 0x02020FBF | 1B | KIRBY_TRANSITION_COLOR  | Kirby palette index applied by the game engine on each screen transition (`0..13`). Writing here takes effect on the next room/area transition, and can also become visible when an enemy-hit path refreshes Kirby's runtime color state; HUD elements (lives, health bar) reflect the new color after the player pauses. |
 | 0x02020FE0 | 1B | KIRBY_HP                | Kirby HP (`s8`) used for DeathLink runtime receive/apply and local death transition detection |
 | 0x02020FE1 | 1B | KIRBY_MAX_HP            | Kirby max HP (`s8`) used for one-hit mode enforcement (player 0 struct) |
 | 0x02020FE2 | 1B | KIRBY_LIVES             | Native extra-life counter (`u8`) used for `no_extra_lives` enforcement |
@@ -151,7 +161,7 @@ Server → Client: ConnectionRefused | Connected
 - `goal` (int): selected goal option.
 - `shards` (int): shard randomization mode.
 - `start_with_all_maps` (bool): when true, all map items are precollected and removed from randomized placement.
-- `starting_kirby_color` (int): resolved Kirby starting color ID (`0..13`) after generation-time random resolution. Non-Pink colors become visible after the next room/area transition.
+- `starting_kirby_color` (int): resolved Kirby starting color ID (`0..13`) after generation-time random resolution. Non-Pink colors become visible after the next room/area transition or after an enemy-hit runtime refresh.
 - `starting_kirby_color_name` (str): resolved Kirby starting color display name for logs/tracker surfaces.
 - `no_extra_lives` (bool): when true, exclude `1 Up` filler generation and have the BizHawk client clamp the native life counter to `0` during gameplay.
 - `one_hit_mode` (int): one-hit mode selection (`0=off`, `1=exclude_vitality_counters`, `2=include_vitality_counters`). When non-zero, Kirby's max HP is clamped to `vitality_counter + 1` during gameplay. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool (replaced by filler) so the cap stays at 1. In `include_vitality_counters` mode, Vitality Counter items remain in the pool and each one received raises the cap by 1.

@@ -39,6 +39,16 @@
 // Bitfield for AP vitality item replay-guard semantics.
 // Bit N set means VITALITY_COUNTER_(N+1) has already been applied this EWRAM session.
 #define AP_DELIVERED_VITALITY_ITEM_BITS (*(volatile uint32_t*)(AP_BASE + 0x48u))
+// Runtime config for enemy copy-ability randomization live reroll hook.
+#define AP_ABILITY_RANDOMIZATION_MODE   (*(volatile uint32_t*)(AP_BASE + 0x64u))
+#define AP_ABILITY_RANDOMIZATION_SEED_LO (*(volatile uint32_t*)(AP_BASE + 0x68u))
+#define AP_ABILITY_RANDOMIZATION_SEED_HI (*(volatile uint32_t*)(AP_BASE + 0x6Cu))
+#define AP_ABILITY_RANDOMIZATION_NO_ABILITY_WEIGHT (*(volatile uint32_t*)(AP_BASE + 0x70u))
+#define AP_ABILITY_RANDOMIZATION_ALLOWED_MASK (*(volatile uint32_t*)(AP_BASE + 0x74u))
+#define AP_ABILITY_RANDOMIZATION_RNG_STATE (*(volatile uint32_t*)(AP_BASE + 0x78u))
+#define AP_ABILITY_REROLL_EVENT_COUNTER (*(volatile uint32_t*)(AP_BASE + 0x7Cu))
+#define AP_ABILITY_REROLL_SOURCE_ADDR (*(volatile uint32_t*)(AP_BASE + 0x80u))
+#define AP_ABILITY_REROLL_ABILITY_ID (*(volatile uint32_t*)(AP_BASE + 0x84u))
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -238,8 +248,102 @@ __attribute__((used)) void ap_on_collect_vitality_chest(void) {
 typedef void (*KirbyCollectSoundPlayerFn)(uint32_t reward_index);
 #define KIRBY_COLLECT_SOUND_PLAYER_FN ((KirbyCollectSoundPlayerFn)0x08019E69u)
 
+typedef void (*KirbyRequestAbilityTransitionFn)(void*, uint32_t);
+#define KIRBY_REQUEST_ABILITY_TRANSITION_FN ((KirbyRequestAbilityTransitionFn)0x080547C5u)
+
 typedef void (*KirbyGiveInvincibilityFn)(void *kirby, uint16_t duration);
 #define KIRBY_GIVE_INVINCIBILITY_FN ((KirbyGiveInvincibilityFn)0x0808324Du)
+
+#define ABILITY_RANDOMIZATION_MODE_COMPLETELY_RANDOM 2u
+#define KIRBY_ABILITY_MASK 0x1Fu
+#define KIRBY_ABILITY_CHANGE_IS_ABILITY_STAR 0x20u
+#define ENEMY_ABILITY_TABLE_BASE_ADDR 0x35164Eu
+#define ENEMY_ABILITY_TABLE_STRIDE 0x18u
+
+static uint32_t ap_mix_u32(uint32_t x) {
+    x ^= x >> 16;
+    x *= 0x7FEB352Du;
+    x ^= x >> 15;
+    x *= 0x846CA68Bu;
+    x ^= x >> 16;
+    return x;
+}
+
+static uint32_t ap_next_rng_u32(void) {
+    uint32_t state = AP_ABILITY_RANDOMIZATION_RNG_STATE;
+    if (state == 0u) {
+        uint32_t seed_lo = AP_ABILITY_RANDOMIZATION_SEED_LO;
+        uint32_t seed_hi = AP_ABILITY_RANDOMIZATION_SEED_HI;
+        state = ap_mix_u32(seed_lo ^ (seed_hi * 0x9E3779B9u) ^ 0xA5C39E21u);
+        if (state == 0u) {
+            state = 0x6D2B79F5u;
+        }
+    }
+
+    // xorshift32
+    state ^= state << 13;
+    state ^= state >> 17;
+    state ^= state << 5;
+    if (state == 0u) {
+        state = 0x6D2B79F5u;
+    }
+    AP_ABILITY_RANDOMIZATION_RNG_STATE = state;
+    return state;
+}
+
+static uint8_t ap_select_random_allowed_ability(uint32_t allowed_mask, uint32_t random_u32) {
+    uint8_t ids[32];
+    uint32_t count = 0u;
+    uint32_t i;
+    for (i = 1u; i <= KIRBY_ABILITY_MASK; i++) {
+        if ((allowed_mask & (1u << i)) != 0u) {
+            ids[count++] = (uint8_t)i;
+        }
+    }
+
+    if (count == 0u) {
+        return 0u;
+    }
+    return ids[random_u32 % count];
+}
+
+// Hook target for all callsites that request Kirby ability transition.
+// In completely-random mode, this rerolls a fresh ability for each request.
+__attribute__((used)) void ap_on_request_copy_ability_transition(void *kirby, uint32_t ability_flags) {
+    uint32_t mode = AP_ABILITY_RANDOMIZATION_MODE;
+    uint32_t rewritten_flags = ability_flags;
+
+    if (mode == ABILITY_RANDOMIZATION_MODE_COMPLETELY_RANDOM
+        && (ability_flags & KIRBY_ABILITY_CHANGE_IS_ABILITY_STAR) == 0u) {
+        register uint32_t source_obj_ptr asm("r5");
+        uint32_t no_ability_weight = AP_ABILITY_RANDOMIZATION_NO_ABILITY_WEIGHT;
+        uint32_t allowed_mask = AP_ABILITY_RANDOMIZATION_ALLOWED_MASK;
+        uint32_t random_roll = ap_next_rng_u32();
+        uint8_t selected_ability;
+        uint32_t source_addr = 0u;
+
+        if (no_ability_weight >= 100u) {
+            selected_ability = 0u;
+        } else if (no_ability_weight > 0u && (random_roll % 100u) < no_ability_weight) {
+            selected_ability = 0u;
+        } else {
+            selected_ability = ap_select_random_allowed_ability(allowed_mask, ap_next_rng_u32());
+        }
+
+        rewritten_flags = (ability_flags & ~KIRBY_ABILITY_MASK) | (uint32_t)(selected_ability & KIRBY_ABILITY_MASK);
+
+        if (source_obj_ptr >= 0x02000000u && source_obj_ptr < 0x02040000u) {
+            uint16_t source_type = *(volatile uint16_t*)(source_obj_ptr + 0u);
+            source_addr = ENEMY_ABILITY_TABLE_BASE_ADDR + ((uint32_t)source_type * ENEMY_ABILITY_TABLE_STRIDE);
+        }
+
+        AP_ABILITY_REROLL_SOURCE_ADDR = source_addr;
+        AP_ABILITY_REROLL_ABILITY_ID = (uint32_t)(selected_ability & KIRBY_ABILITY_MASK);
+        AP_ABILITY_REROLL_EVENT_COUNTER++;
+    }
+
+    KIRBY_REQUEST_ABILITY_TRANSITION_FN(kirby, rewritten_flags);
+}
 
 // Hook target for native Sound Player chest reward collection. Reward index 0 is
 // the Sound Player unlock and should become AP-owned; all other native rewards on
@@ -512,6 +616,15 @@ void ap_poll_mailbox_c(void) {
         AP_HUB_SWITCH_FLAGS = 0u;
         AP_STARTING_KIRBY_COLOR_ID = 0xFFFFFFFFu;
         ap_starting_kirby_color_applied = 0u;
+        AP_ABILITY_RANDOMIZATION_MODE = 0u;
+        AP_ABILITY_RANDOMIZATION_SEED_LO = 0u;
+        AP_ABILITY_RANDOMIZATION_SEED_HI = 0u;
+        AP_ABILITY_RANDOMIZATION_NO_ABILITY_WEIGHT = 0u;
+        AP_ABILITY_RANDOMIZATION_ALLOWED_MASK = 0u;
+        AP_ABILITY_RANDOMIZATION_RNG_STATE = 0u;
+        AP_ABILITY_REROLL_EVENT_COUNTER = 0u;
+        AP_ABILITY_REROLL_SOURCE_ADDR = 0u;
+        AP_ABILITY_REROLL_ABILITY_ID = 0u;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 

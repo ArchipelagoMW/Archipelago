@@ -11,6 +11,7 @@ from ..ability_randomization import (
     VALID_ENEMY_COPY_ABILITIES,
     ability_for_enemy_grant_event,
     ability_for_enemy_type,
+    build_shuffled_enemy_type_assignments,
     build_enemy_copy_ability_policy,
     policy_is_whitelist_preserving,
 )
@@ -253,3 +254,35 @@ def test_completely_random_weight_changes_observed_no_ability_rate() -> None:
     )
 
     assert high_normal_count > low_normal_count
+
+
+def test_shuffled_assignments_cover_every_allowed_ability_when_enough_enemy_types() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260407),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        no_ability_weight=0,
+    )
+
+    enemy_type_keys = [f"ENEMY_{index:03d}" for index in range(64)]
+    assignments = build_shuffled_enemy_type_assignments(policy, enemy_type_keys)
+
+    assigned_abilities = set(assignments.values())
+    assert set(VALID_ENEMY_COPY_ABILITIES).issubset(assigned_abilities)
+
+
+def test_shuffled_assignments_are_deterministic_for_same_policy_and_keys() -> None:
+    policy = build_enemy_copy_ability_policy(
+        random.Random(20260407),
+        AbilityRandomizationMode.option_shuffled,
+        include_boss_spawns=True,
+        include_minibosses=True,
+        no_ability_weight=25,
+    )
+
+    enemy_type_keys = ["WADDLE_DEE", "SIR_KIBBLE", "SPARKY", "HOT_HEAD"]
+    first = build_shuffled_enemy_type_assignments(policy, enemy_type_keys)
+    second = build_shuffled_enemy_type_assignments(policy, enemy_type_keys)
+
+    assert first == second

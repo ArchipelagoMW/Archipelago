@@ -45,6 +45,7 @@ BIG_CHEST_COLLECT_CALL_OFFSET = 0x0000B144
 VITALITY_CHEST_COLLECT_CALL_OFFSET = 0x0000B0CC
 SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET = 0x0000B264
 BIG_SWITCH_UNLOCK_CALL_OFFSET = 0x00039EEE
+ORIGINAL_ABILITY_TRANSITION_FN_ADDR = 0x080547C4
 
 
 ROM_PATH_TMP = "rom_path.tmp"
@@ -203,6 +204,26 @@ def thumb_bl_bytes(src_rom_addr: int, dst_rom_addr: int) -> bytes:
 def is_thumb_bl_instruction(opcode: bytes) -> bool:
     """Return True when <opcode> encodes a 32-bit Thumb BL instruction."""
     return shared_is_thumb_bl_instruction(opcode)
+
+
+def decode_thumb_bl_target(src_rom_addr: int, opcode: bytes) -> int:
+    """Decode absolute target address from a 32-bit Thumb-1 BL instruction."""
+    if len(opcode) != 4 or not is_thumb_bl_instruction(opcode):
+        raise ValueError("opcode is not a 32-bit Thumb BL instruction")
+
+    first = int.from_bytes(opcode[:2], "little")
+    second = int.from_bytes(opcode[2:], "little")
+
+    # Thumb-1 BL as encoded by thumb_branch.thumb_bl_bytes():
+    #   first halfword:  11110 <imm11_hi>
+    #   second halfword: 11111 <imm11_lo>
+    # signed immediate is 22 bits, byte offset is (imm22 << 1).
+    imm22 = ((first & 0x07FF) << 11) | (second & 0x07FF)
+    if imm22 & (1 << 21):
+        imm22 -= 1 << 22
+
+    next_addr = src_rom_addr + 4
+    return (next_addr + (imm22 << 1)) & 0xFFFFFFFF
 
 
 def validate_thumb_bl_callsite(rom: bytes | bytearray, offset: int, label: str) -> bytes:
@@ -700,6 +721,7 @@ def main():
         vitality_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_vitality_chest")
         sound_player_chest_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_collect_sound_player_chest")
         hub_switch_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_world_map_unlock_call")
+        ability_transition_hook_target = resolve_elf_symbol_address(payload_elf_path, "ap_on_request_copy_ability_transition")
         # arm-none-eabi-nm may encode Thumb function symbols with bit 0 set.
         # Clear the Thumb state bit before passing to thumb_bl_bytes(), which
         # requires a halfword-aligned target address.
@@ -709,6 +731,7 @@ def main():
         vitality_chest_hook_target &= ~1
         sound_player_chest_hook_target &= ~1
         hub_switch_hook_target &= ~1
+        ability_transition_hook_target &= ~1
         rom_base = 0x08000000
         payload_rom_start = rom_base + PAYLOAD_OFFSET
         payload_rom_end = payload_rom_start + len(payload)
@@ -754,6 +777,13 @@ def main():
                 f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
                 "Check your payload.elf link address and PAYLOAD_OFFSET."
             )
+        if not (payload_rom_start <= ability_transition_hook_target < payload_rom_end):
+            raise SystemExit(
+                "Error: ability transition hook target address out of expected payload range.\n"
+                f"Resolved address: 0x{ability_transition_hook_target:08X}, expected within "
+                f"[0x{payload_rom_start:08X}, 0x{payload_rom_end:08X}). "
+                "Check your payload.elf link address and PAYLOAD_OFFSET."
+            )
         main_hook_bl_bytes = thumb_bl_bytes(rom_base + MAIN_HOOK_OFFSET, main_hook_target)
         boss_hook_bl_bytes = thumb_bl_bytes(rom_base + BOSS_COLLECT_SHARD_CALL_OFFSET, boss_hook_target)
         big_chest_hook_bl_bytes = thumb_bl_bytes(rom_base + BIG_CHEST_COLLECT_CALL_OFFSET, big_chest_hook_target)
@@ -784,6 +814,39 @@ def main():
         print(f"  sound player chest @ {SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:#x}: {original_sound_player_hook.hex(' ')}")
         print(f"  hub switch unlock @ {BIG_SWITCH_UNLOCK_CALL_OFFSET:#x}: {original_hub_switch_hook.hex(' ')}")
 
+        # Find and patch all Thumb BL callsites targeting Kirby's ability-transition function.
+        # The ability-transition function is called from many sites throughout the game code,
+        # so auto-discovery is used instead of a single hardcoded offset.
+        # Scan bounds: start past the GBA ROM header (first 0xC0 bytes contain exception
+        # vectors and the Nintendo logo bitmap, never game code callsites); end at
+        # PAYLOAD_OFFSET, which was chosen to be a zero/free-space region of the original
+        # ROM so no game callsites appear at or after that offset.
+        _GBA_ROM_CODE_START = 0xC0
+        ability_transition_target_candidates = {
+            ORIGINAL_ABILITY_TRANSITION_FN_ADDR,
+            ORIGINAL_ABILITY_TRANSITION_FN_ADDR | 1,
+        }
+        ability_transition_callsites: list[int] = []
+        scan_end = min(PAYLOAD_OFFSET, len(rom) - 3)
+        for offset in range(_GBA_ROM_CODE_START, scan_end, 2):
+            opcode = bytes(rom[offset:offset + 4])
+            if not is_thumb_bl_instruction(opcode):
+                continue
+            src_addr = rom_base + offset
+            try:
+                dst_addr = decode_thumb_bl_target(src_addr, opcode)
+            except ValueError:
+                continue
+            if dst_addr in ability_transition_target_candidates:
+                ability_transition_callsites.append(offset)
+
+        if not ability_transition_callsites:
+            raise SystemExit(
+                f"Error: no callsites found for ability transition function "
+                f"0x{ORIGINAL_ABILITY_TRANSITION_FN_ADDR:08X}. "
+                "Refusing to continue without a validated runtime reroll hook site."
+            )
+
         # 4) Insert payload
         rom[PAYLOAD_OFFSET:PAYLOAD_OFFSET + len(payload)] = payload
 
@@ -794,6 +857,8 @@ def main():
         rom[VITALITY_CHEST_COLLECT_CALL_OFFSET:VITALITY_CHEST_COLLECT_CALL_OFFSET + 4] = vitality_chest_hook_bl_bytes
         rom[SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET:SOUND_PLAYER_CHEST_COLLECT_CALL_OFFSET + 4] = sound_player_chest_hook_bl_bytes
         rom[BIG_SWITCH_UNLOCK_CALL_OFFSET:BIG_SWITCH_UNLOCK_CALL_OFFSET + 4] = hub_switch_hook_bl_bytes
+        for offset in ability_transition_callsites:
+            rom[offset:offset + 4] = thumb_bl_bytes(rom_base + offset, ability_transition_hook_target)
 
         # 6) Write the intermediary patched ROM
         with open(INTERMEDIARY_ROM, "wb") as f:
@@ -862,6 +927,12 @@ def main():
             hub_switch_hook_bl_bytes.hex(" "),
             "target=",
             hex(hub_switch_hook_target),
+        )
+        print(
+            "Ability transition callsites patched:",
+            len(ability_transition_callsites),
+            "target=",
+            hex(ability_transition_hook_target),
         )
 
         # 7) Generate base_patch.bsdiff4: clean base -> intermediary patched ROM

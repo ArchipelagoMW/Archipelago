@@ -7,7 +7,7 @@ import pkgutil
 import random
 import time
 from collections import Counter
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, List
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, List, TextIO
 
 import settings
 from BaseClasses import ItemClassification, LocationProgressType, MultiWorld, Tutorial
@@ -20,6 +20,7 @@ from .ability_randomization import (
 )
 from .colors import STARTING_KIRBY_COLOR_RANDOM_OPTION, resolve_kirby_color
 from .data import LocationCategory, load_json_data, data as kirby_data
+from .enemy_ability_runtime_patch import build_enemy_copy_spoiler_rows
 from .generation_logging import (
     generation_stage,
     log_generation_complete,
@@ -287,6 +288,20 @@ class KirbyAmWorld(World):
                     randomize_non_ability,
                     no_ability_weight,
                 )
+                spoiler_rows = build_enemy_copy_spoiler_rows(self._enemy_copy_ability_policy)
+                if spoiler_rows:
+                    logger.info(
+                        "[P%s] Enemy copy-ability shuffled assignments (kind | source -> ability):",
+                        self.player,
+                    )
+                    for source_kind, source_key, ability_name in spoiler_rows:
+                        logger.info(
+                            "[P%s]   %s | %s -> %s",
+                            self.player,
+                            source_kind,
+                            source_key,
+                            ability_name,
+                        )
             else:
                 logger.info(
                     "[P%s] Enemy copy-ability randomization: completely_random "
@@ -662,6 +677,23 @@ class KirbyAmWorld(World):
         key = base64.b64encode(self.auth).decode("ascii")
         connect_names = multidata["connect_names"]
         connect_names[key] = connect_names[self.player_name]
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        mode = int(self.options.ability_randomization_mode.value)
+        if mode != AbilityRandomizationMode.option_shuffled:
+            return
+
+        policy = getattr(self, "_enemy_copy_ability_policy", None)
+        if not isinstance(policy, dict):
+            return
+
+        spoiler_rows = build_enemy_copy_spoiler_rows(policy)
+        if not spoiler_rows:
+            return
+
+        spoiler_handle.write(f"\n\n{self.player_name}'s Enemy Copy Ability Shuffle:\n\n")
+        for source_kind, source_key, ability_name in spoiler_rows:
+            spoiler_handle.write(f"{source_kind:12s} | {source_key:28s} -> {ability_name}\n")
 
     # Helper method to fill slot data
     def fill_slot_data(self) -> dict[str, Any]:

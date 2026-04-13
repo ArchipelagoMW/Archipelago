@@ -20,7 +20,7 @@ LDFLAGS := -T linker.ld -nostdlib
 all: payload.bin
 
 payload.elf: ap_payload.o ap_hook.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -lgcc
 
 ap_payload.o: ap_payload.c
 	$(CC) $(CFLAGS) -c -o $@ $<

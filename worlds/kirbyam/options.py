@@ -191,7 +191,7 @@ def _build_starting_kirby_color_option() -> type[Choice]:
         """
     Choose Kirby's default starting color palette.
       Pink is the in-game default and requires no native color override.
-            Non-Pink colors become visible after the first room transition.
+      Non-Pink colors become visible after the first room transition or after an enemy hit refreshes Kirby's runtime color state.
 
     Supported color names (as listed on Kirby Wiki Spray Paint):
       %s

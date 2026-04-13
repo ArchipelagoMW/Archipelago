@@ -9,6 +9,8 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import LocationCategory, data, load_json_data
+from .enemy_ability_data import ABILITY_SOURCES
+from .enemy_ability_data import ABILITY_NAME_TO_ID
 from .kirby_ap_payload.thumb_branch import is_thumb_bl_instruction
 from .options import Goal, OneHitMode
 from .types import KirbyAmBizHawkClientContext
@@ -48,6 +50,7 @@ _ROOM_VISIT_FLAGS_BIT_MASK = 0x8000
 _STARTING_KIRBY_COLOR_MIN = 0
 _STARTING_KIRBY_COLOR_MAX = 13
 _STARTING_KIRBY_COLOR_REVALIDATE_TICKS = 4
+_ABILITY_RUNTIME_CONFIG_REVALIDATE_TICKS = 4
 _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
     ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
     ("mirra_encounters_native", "mirra_encounters"),
@@ -58,6 +61,15 @@ _LOCATION_ID_TO_LABEL: dict[int, str] = {
     loc.location_id: loc.label
     for loc in data.locations.values()
     if loc.location_id is not None
+}
+_ABILITY_ID_TO_NAME: dict[int, str] = {
+    ability_id: ability_name
+    for ability_name, ability_id in ABILITY_NAME_TO_ID.items()
+}
+_ABILITY_SOURCE_ADDR_TO_KEY: dict[int, str] = {
+    address: source.key
+    for source in ABILITY_SOURCES
+    for address in source.addresses
 }
 
 
@@ -204,6 +216,9 @@ class KirbyAmClient(BizHawkClient):
         self._last_logged_ai_state: int | None = None
         self._last_logged_demo_flags: int | None = None
         self._boss_shard_debug_window_active: bool = False
+        self._last_ability_runtime_config_signature: tuple[int, int, int, int, int] | None = None
+        self._ability_runtime_config_revalidate_counter: int = 0
+        self._last_ability_reroll_event_counter: int | None = None
         self._starting_kirby_color_synced_id: int | None = None
         self._starting_kirby_color_logged_signature: tuple[int, str] | None = None
         self._starting_kirby_color_revalidate_counter: int = 0
@@ -249,6 +264,9 @@ class KirbyAmClient(BizHawkClient):
         self._last_logged_ai_state = None
         self._last_logged_demo_flags = None
         self._boss_shard_debug_window_active = False
+        self._last_ability_runtime_config_signature = None
+        self._ability_runtime_config_revalidate_counter = 0
+        self._last_ability_reroll_event_counter = None
         self._starting_kirby_color_synced_id = None
         self._starting_kirby_color_logged_signature = None
         self._starting_kirby_color_revalidate_counter = 0
@@ -809,6 +827,7 @@ class KirbyAmClient(BizHawkClient):
         self._load_debug_settings(ctx)
         self._log_starting_kirby_color_config_once(ctx)
         await self._sync_death_link_setting(ctx)
+        await self._sync_enemy_copy_ability_runtime_config(ctx)
 
         if not self._watcher_server_ready:
             if self._debug_logging_enabled:
@@ -889,6 +908,9 @@ class KirbyAmClient(BizHawkClient):
             # Research-first observational probes for in-game unsafe delivery windows.
             await self._probe_unsafe_delivery_candidates(ctx)
 
+            # Completely-random reroll telemetry logging from runtime swallow hook.
+            await self._poll_enemy_ability_reroll_events(ctx)
+
             # Item delivery (mailbox protocol)
             await self._deliver_items(ctx)
 
@@ -932,6 +954,135 @@ class KirbyAmClient(BizHawkClient):
             self._last_local_alive_state = None
             self._suppress_next_local_death_send = False
         logger.info("KirbyAM: DeathLink %s", "enabled" if enabled else "disabled")
+
+    async def _sync_enemy_copy_ability_runtime_config(self, ctx: "BizHawkClientContext") -> None:
+        """Write enemy copy-ability runtime config into payload mailbox fields."""
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return
+
+        policy = slot_data.get("enemy_copy_ability_policy")
+        if not isinstance(policy, dict):
+            return
+
+        try:
+            mode = int(policy.get("mode", 0)) & 0xFFFFFFFF
+            seed = int(policy.get("seed", 0)) & 0xFFFFFFFFFFFFFFFF
+            no_ability_weight = int(policy.get("ability_randomization_no_ability_weight", 0)) & 0xFFFFFFFF
+        except (TypeError, ValueError):
+            return
+
+        allowed_mask = 0
+        allowed_abilities = policy.get("allowed_abilities", [])
+        if isinstance(allowed_abilities, list):
+            for ability_name in allowed_abilities:
+                if not isinstance(ability_name, str):
+                    continue
+                ability_id = ABILITY_NAME_TO_ID.get(ability_name)
+                if ability_id is None:
+                    continue
+                if 0 < ability_id <= 31:
+                    allowed_mask |= 1 << ability_id
+
+        seed_lo = seed & 0xFFFFFFFF
+        seed_hi = (seed >> 32) & 0xFFFFFFFF
+        signature = (mode, seed_lo, seed_hi, no_ability_weight, allowed_mask)
+        mode_addr = self._transport_addr("ability_randomization_mode_runtime")
+        seed_lo_addr = self._transport_addr("ability_randomization_seed_lo_runtime")
+        seed_hi_addr = self._transport_addr("ability_randomization_seed_hi_runtime")
+        weight_addr = self._transport_addr("ability_randomization_no_ability_weight_runtime")
+        mask_addr = self._transport_addr("ability_randomization_allowed_mask_runtime")
+        rng_state_addr = self._transport_addr("ability_randomization_rng_state_runtime")
+        if None in (mode_addr, seed_lo_addr, seed_hi_addr, weight_addr, mask_addr, rng_state_addr):
+            return
+
+        if self._last_ability_runtime_config_signature == signature:
+            self._ability_runtime_config_revalidate_counter += 1
+            if self._ability_runtime_config_revalidate_counter < _ABILITY_RUNTIME_CONFIG_REVALIDATE_TICKS:
+                return
+            self._ability_runtime_config_revalidate_counter = 0
+
+            mode_raw, seed_lo_raw, seed_hi_raw, weight_raw, mask_raw = await bizhawk.read(ctx.bizhawk_ctx, [
+                (mode_addr, 4, "System Bus"),
+                (seed_lo_addr, 4, "System Bus"),
+                (seed_hi_addr, 4, "System Bus"),
+                (weight_addr, 4, "System Bus"),
+                (mask_addr, 4, "System Bus"),
+            ])
+            if (
+                self._u32_le(mode_raw) == mode
+                and self._u32_le(seed_lo_raw) == seed_lo
+                and self._u32_le(seed_hi_raw) == seed_hi
+                and self._u32_le(weight_raw) == no_ability_weight
+                and self._u32_le(mask_raw) == (allowed_mask & 0xFFFFFFFF)
+            ):
+                return
+
+        self._ability_runtime_config_revalidate_counter = 0
+
+        await bizhawk.write(ctx.bizhawk_ctx, [
+            (mode_addr, int(mode).to_bytes(4, "little"), "System Bus"),
+            (seed_lo_addr, int(seed_lo).to_bytes(4, "little"), "System Bus"),
+            (seed_hi_addr, int(seed_hi).to_bytes(4, "little"), "System Bus"),
+            (weight_addr, int(no_ability_weight).to_bytes(4, "little"), "System Bus"),
+            (mask_addr, int(allowed_mask & 0xFFFFFFFF).to_bytes(4, "little"), "System Bus"),
+            # Force deterministic reseed when config changes.
+            (rng_state_addr, (0).to_bytes(4, "little"), "System Bus"),
+        ])
+        self._last_ability_runtime_config_signature = signature
+
+    async def _poll_enemy_ability_reroll_events(self, ctx: "BizHawkClientContext") -> None:
+        """Log per-swallow completely-random reroll events from runtime telemetry."""
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return
+        if int(slot_data.get("ability_randomization_mode", 0)) != 2:
+            return
+
+        counter_addr = self._transport_addr("ability_reroll_event_counter_runtime")
+        source_addr_addr = self._transport_addr("ability_reroll_source_addr_runtime")
+        ability_id_addr = self._transport_addr("ability_reroll_ability_id_runtime")
+        if None in (counter_addr, source_addr_addr, ability_id_addr):
+            return
+
+        counter_raw = (await bizhawk.read(ctx.bizhawk_ctx, [
+            (counter_addr, 4, "System Bus"),
+        ]))[0]
+        event_counter = self._u32_le(counter_raw)
+        if self._last_ability_reroll_event_counter is None:
+            self._last_ability_reroll_event_counter = event_counter
+            return
+        if event_counter == self._last_ability_reroll_event_counter:
+            return
+        if event_counter < self._last_ability_reroll_event_counter:
+            self._last_ability_reroll_event_counter = event_counter
+            return
+
+        source_raw, ability_raw = await bizhawk.read(ctx.bizhawk_ctx, [
+            (source_addr_addr, 4, "System Bus"),
+            (ability_id_addr, 4, "System Bus"),
+        ])
+        delta = (event_counter - self._last_ability_reroll_event_counter) & 0xFFFFFFFF
+        source_addr = self._u32_le(source_raw)
+        ability_id = self._u32_le(ability_raw) & 0x1F
+        enemy_name = _ABILITY_SOURCE_ADDR_TO_KEY.get(source_addr, f"UNKNOWN_0x{source_addr:06X}")
+        ability_name = _ABILITY_ID_TO_NAME.get(ability_id, f"Ability_{ability_id}")
+
+        from CommonClient import logger
+
+        if delta > 1:
+            logger.info(
+                "KirbyAM: %d reroll event(s) occurred between polls; only the most recent is available.",
+                delta - 1,
+                extra={"NoStream": not self._debug_logging_enabled},
+            )
+        logger.info(
+            "Kirby swallowed a %s. Ability was rerolled to %s.",
+            enemy_name,
+            ability_name,
+            extra={"NoStream": not self._debug_logging_enabled},
+        )
+        self._last_ability_reroll_event_counter = event_counter
 
     async def _enforce_no_extra_lives(self, ctx: "BizHawkClientContext") -> None:
         if not self._no_extra_lives_enabled(ctx):
