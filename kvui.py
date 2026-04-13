@@ -629,6 +629,14 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.hint = data["status"]["hint"]
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
+    def get_hint_sorter(self, key: str):
+        """Return a callable for sorting hints for the specified sort_key.
+        This is split out to a function to allow custom sorting by subclasses in custom clients."""
+        if key == "status":
+            return lambda element: status_sort_weights[element["status"]["hint"]["status"]]
+        else:
+            return lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+
     def on_touch_down(self, touch):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
@@ -662,12 +670,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             for child in self.children:
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
-                    if key == "status":
-                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
-                    else:
-                        parent.hint_sorter = lambda element: (
-                            remove_between_brackets.sub("", element[key]["text"]).lower()
-                        )
+                    parent.hint_sorter = self.get_hint_sorter(key)
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
