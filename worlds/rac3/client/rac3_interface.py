@@ -82,7 +82,7 @@ from worlds.rac3.constants.region import (
 )
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
-from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
+from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
 from worlds.rac3.constants.version import GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION
 
 
@@ -1112,11 +1112,20 @@ class Rac3Interface(GameInterface):
     def write_vendor_inventory(self, inventory: list[RAC3VENDORSLOTDATA], vendor_type: RAC3VENDORTYPE):
         """Write a list of vendor slot data objects to the current planet's vendor inventory"""
         self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), len(inventory))
-        # If no items in the inventory, clear memory by writing 0s to 10 slots worth of data
         if len(inventory) == 0:
-            slot_size = VENDORTYPE_TO_SLOT_SIZE[vendor_type]
             start_address = RAC3STATUS.VENDOR_BASE + PLANET_VENDOR_OFFSET[self.planet]
-            self._write_bytes(start_address, bytes(slot_size*10))
+            match vendor_type:
+                case RAC3VENDORTYPE.SHIP:
+                    # change the string pointer to no items available message in code cave
+                    item_name_addr = start_address + RAC3SHIPVENDOR.ITEM_NAME_PTR_OFFSET
+                    already_equipped_addr = start_address + RAC3SHIPVENDOR.ITEM_IS_EQUIPPED_OFFSET
+                    self._write32(item_name_addr, self.vendor_string_pointers[RAC3VENDOR.NO_ITEMS_AVAILABLE_LOC_KEY])
+                    self._write32(already_equipped_addr, 1)
+                case _:
+                    # clear out vendor slot memory
+                    slot_size = VENDORTYPE_TO_SLOT_SIZE[vendor_type]
+                    self._write_bytes(start_address, bytes(slot_size*5))
+                
 
         for slot, slot_data in enumerate(inventory):
             for prop in slot_data.get_data():

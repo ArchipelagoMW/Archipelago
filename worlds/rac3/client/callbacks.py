@@ -474,6 +474,12 @@ async def handle_codecave(ctx: "Context") -> None:
     ap_codes = [RAC3_LOCATION_DATA_TABLE[loc].AP_CODE for loc in all_vendor_locations]
     ctx.game_interface.vendor_string_pointers = {}
     offset = 0x10
+    no_items_addr = RAC3INSTRUCTION.CODECAVE_START + offset
+    ctx.game_interface._write_string(no_items_addr, RAC3VENDOR.NO_ITEMS_AVAILABLE_MSG)
+    if ctx.slot_data.get(RAC3OPTION.SHIP_VENDOR, False):
+        ctx.game_interface.vendor_string_pointers[RAC3VENDOR.NO_ITEMS_AVAILABLE_LOC_KEY] = no_items_addr
+    offset += len(RAC3VENDOR.NO_ITEMS_AVAILABLE_MSG) + 1
+
     for loc_key, ap_code in zip(all_vendor_locations, ap_codes, strict=False):
         net_item = ctx.locations_info.get(ap_code, None)
         if net_item is not None:

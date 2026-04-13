@@ -15,6 +15,8 @@ class RAC3VENDOR:
     VENDOR_TYPE_OFFSET: int = -0xF0
     IS_PDA_OFFSET: int = -0xE4
     SLOT_SIZE: int = 0
+    NO_ITEMS_AVAILABLE_LOC_KEY: str = "NO_VENDOR_ITEMS"
+    NO_ITEMS_AVAILABLE_MSG: str = "No items available. 1 infobot = 3 items in stock!"
 
     @staticmethod
     def get_vendor_property_address(planet: str, vendor_prop: int) -> int:
