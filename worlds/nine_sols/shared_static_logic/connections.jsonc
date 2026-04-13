@@ -1514,7 +1514,7 @@
                 { "item": "Ledge Grab" },
                 { "item": "Trick - Bow Hover" } // now hover, then LS parry vault, then grab the ledge
             ],
-            [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // or just CL, LS vault, CL again
+            [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // "triple jump": CL, LS vault, CL again
         ] } ]
     }, // "real elevator skip" in the ASS% speedrun is bow hover, parry vault, T-dash, AD, and 2 bow knockbacks
     { "from": "GoS (Entry) - Greenhouse", "to": "GoS (Entry) - Coffin", "requires": [] }, // fall
@@ -1722,6 +1722,10 @@
             // continue left into the portal, then on the other side keep walking left to the hack point
         ],
         "medium_requires": [] // the statues allow T-dashing over both spike pits
+    },
+    { // since CL is all you need to reach SBR, this could be on the SBR connection instead, but this is more accurate
+        "from": "GoS (West) - Root Node", "to": "GoS (West) - Luyan's Tomb",
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // "triple jump": CL, LS vault, CL again
     },
     { "from": "GoS (West) - Spike Ball Release", "to": "GoS (West) - Luyan's Tomb", "requires": [
         // the portal at SBR lets you take shortcut ropes and more portals back and forth to the platform rotation button

@@ -424,9 +424,10 @@
         "region": "PR (East) - Root Node", "requires": []
     },
     {
-        "address": 803, "name": "PR (East): Top Platform in Upper Right Shaft",
-        "region": "PR (East) - Upper Right", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] // to lower rope
-    }, // wall slide AND T-dash would work, but there's no usable ledge in the area
+        "address": 803, "name": "PR (East): Top Platform in Upper Right Shaft", "region": "PR (East) - Upper Right",
+        "requires": [ { "item": "Mystic Nymph: Scout Mode" } ], // to lower rope
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // "triple jump": CL, LS vault, CL again
+    }, // wall slide AND T-dash technically works, but the usable ledge is so far away I'm only putting the triple jump in logic
     {
         "address": 804, "name": "PR (East): Hack Statue",
         "region": "PR (East) - Upper Right", "requires": [ { "item": "Tai-Chi Kick" } ] // AND hacking
