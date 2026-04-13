@@ -4,5 +4,6 @@
 *.gba
 *.log
 *.apworld
+kirby_ap_payload/rom_path.tmp
 kirby_ap_payload/.vscode/*
 kirby_ap_payload/.idea/*

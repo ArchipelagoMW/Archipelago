@@ -117,6 +117,11 @@ def test_build_main_falls_back_when_make_missing_and_existing_patch_present(tmp_
     (world_root / "data").mkdir()
     (world_root / "data" / "base_patch.bsdiff4").write_bytes(b"existing-patch")
     (world_root / "archipelago.json").write_text("{}\n", encoding="utf-8")
+    payload_dir = world_root / "kirby_ap_payload"
+    payload_dir.mkdir()
+    rom_path = world_root / "base.gba"
+    rom_path.write_bytes(b"rom")
+    (payload_dir / "rom_path.tmp").write_text(str(rom_path), encoding="utf-8")
 
     fake_script = world_root / "build.py"
     fake_script.write_text("# placeholder\n", encoding="utf-8")
@@ -166,6 +171,11 @@ def test_build_main_still_fails_when_make_missing_and_no_existing_patch(tmp_path
     world_root = tmp_path
     (world_root / "data").mkdir()
     (world_root / "archipelago.json").write_text("{}\n", encoding="utf-8")
+    payload_dir = world_root / "kirby_ap_payload"
+    payload_dir.mkdir()
+    rom_path = world_root / "base.gba"
+    rom_path.write_bytes(b"rom")
+    (payload_dir / "rom_path.tmp").write_text(str(rom_path), encoding="utf-8")
 
     fake_script = world_root / "build.py"
     fake_script.write_text("# placeholder\n", encoding="utf-8")
@@ -257,12 +267,9 @@ def test_prepare_args_interactive_invalid_rom_repompts(tmp_path: Path, monkeypat
     assert prepared.rom == str(valid_rom)
 
 
-def test_prepare_args_file_source_prompts_for_arg_fallback(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_prepare_args_file_source_missing_rom_path_tmp_fails_fast(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     payload_dir = tmp_path / "kirby_ap_payload"
     payload_dir.mkdir()
-
-    rom_path = tmp_path / "fallback.gba"
-    rom_path.write_bytes(b"rom")
 
     args = build_mod.argparse.Namespace(
         source_type="file",
@@ -272,12 +279,28 @@ def test_prepare_args_file_source_prompts_for_arg_fallback(tmp_path: Path, monke
     )
 
     monkeypatch.setattr(build_mod, "_can_prompt", lambda _non_interactive: True)
-    monkeypatch.setattr(build_mod, "_prompt_yes_no", lambda *_args, **_kwargs: True)
-    monkeypatch.setattr(build_mod, "_prompt_existing_file", lambda _prompt: str(rom_path))
 
-    prepared = build_mod._prepare_args_for_patch(args, tmp_path)
-    assert prepared.source_type == "arg"
-    assert prepared.rom == str(rom_path)
+    with pytest.raises(SystemExit) as exc_info:
+        build_mod._prepare_args_for_patch(args, tmp_path)
+    assert "rom_path.tmp" in str(exc_info.value)
+
+
+def test_prepare_args_file_source_non_interactive_missing_rom_path_tmp_fails_fast(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    payload_dir = tmp_path / "kirby_ap_payload"
+    payload_dir.mkdir()
+
+    args = build_mod.argparse.Namespace(
+        source_type="file",
+        rom=None,
+        skip_patch=False,
+        non_interactive=True,
+    )
+
+    monkeypatch.setattr(build_mod, "_can_prompt", lambda _non_interactive: False)
+
+    with pytest.raises(SystemExit) as exc_info:
+        build_mod._prepare_args_for_patch(args, tmp_path)
+    assert "rom_path.tmp" in str(exc_info.value)
 
 
 def test_prepare_args_skip_patch_does_not_require_rom(tmp_path: Path) -> None:

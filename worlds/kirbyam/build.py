@@ -303,6 +303,14 @@ def _prompt_existing_file(prompt: str) -> str:
         print(f"File not found: {candidate}")
 
 
+def _file_source_rom_path_error() -> str:
+    return (
+        "--source-type file requires kirby_ap_payload/rom_path.tmp to contain a valid ROM path.\n"
+        "Create kirby_ap_payload/rom_path.tmp with a single line pointing to your clean base ROM, "
+        "or rerun with --source-type arg --rom <path>."
+    )
+
+
 def _prepare_args_for_patch(args: argparse.Namespace, world_root: Path) -> argparse.Namespace:
     if args.skip_patch:
         return args
@@ -347,23 +355,7 @@ def _prepare_args_for_patch(args: argparse.Namespace, world_root: Path) -> argpa
             rom_path_ok = rom_candidate.is_file()
 
         if not rom_path_ok:
-            guidance = (
-                "--source-type file requires kirby_ap_payload/rom_path.tmp to contain a valid ROM path. "
-                "Use --source-type arg --rom <path> instead."
-            )
-            if not can_prompt:
-                # Keep existing non-interactive behavior for automation and tests:
-                # patch_rom.py remains the source of truth for file-source failures.
-                return args
-
-            print(
-                "Could not find a valid ROM path in kirby_ap_payload/rom_path.tmp."
-            )
-            if _prompt_yes_no("Switch to --source-type arg and enter a ROM path now?", default=True):
-                args.source_type = "arg"
-                args.rom = _prompt_existing_file("Enter path to the base ROM (.gba): ")
-            else:
-                print(guidance)
+            raise SystemExit(_file_source_rom_path_error())
 
     return args
 
