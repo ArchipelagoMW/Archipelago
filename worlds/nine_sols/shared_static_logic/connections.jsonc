@@ -922,9 +922,10 @@
                 [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
             ] }
         ],
-        "medium_requires": [
-            { "item": "Cloud Leap" } // and swift runner
-        ] // can't assume you have qi for T-dash since you may have already spent it reaching FU-BS
+        "medium_requires": [ { "anyOf": [
+            { "item": "Cloud Leap" }, // and swift runner
+            { "item": "Trick - Bow Hover" }
+        ] } ] // can't assume you have qi for T-dash since you may have already spent it reaching FU-BS
     },
     {
         "from": "Factory (U) - Broken Shanhai (with qi)", "to": "Factory (U) - Middle Right Exit",
