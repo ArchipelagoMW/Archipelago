@@ -100,6 +100,7 @@ class FactorioContext(CommonContext):
         self.config_file: str = config_file
         self.mod_directory: str = mod_directory
         self.additional_factorio_server_args = factorio_server_args
+        self.local_item_handling = False
 
     @property
     def energylink_key(self) -> str:
@@ -396,7 +397,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 commands = {}
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
-                    if transfer_item.player != ctx.slot:
+                    if transfer_item.player != ctx.slot or ctx.local_item_handling == False:
                         item_id = transfer_item.item
                         player_name = ctx.player_names[transfer_item.player]
                         item_name = ctx.item_names.lookup_in_game(item_id)
@@ -446,6 +447,8 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
     ctx.energy_link_increment = int(info.get("energy_link", 0))
+    if info["local_item_handling"]:
+        ctx.local_item_handling = info["local_item_handling"]
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
         ctx.ui.enable_energy_link()

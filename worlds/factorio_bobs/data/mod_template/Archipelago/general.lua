@@ -14,6 +14,8 @@ general.silo = {{ silo }} -- 0 = normal silo, 1 = random recipe, 2 = spawned at 
 general.allow_import_blueprints = {% if imported_blueprints %}true{% else %}false{% endif %}
 general.allow_cheats =  {% if allow_cheats %}true{% else %}false{% endif %}
 general.player_forces = {"player", "team-1", "team-2", "team-3", "team-4"} --possibly add a modpack setting that allow for adding more forces on the players side.
+general.local_item_handling = true
+
 
 -- mod settings
 general.mod_setting_names = {}

@@ -307,7 +307,8 @@ commands.add_command("ap-rcon-info", "Used by the Archipelago client to get info
         ["slot_name"] = general.slot_name,
         ["seed_name"] = general.seed_name,
         ["death_link"] = DEATH_LINK,
-        ["energy_link"] = ENERGY_INCREMENT
+        ["energy_link"] = ENERGY_INCREMENT,
+        ["local_item_handling"] = general.local_item_handling
     }))
 end)
 
