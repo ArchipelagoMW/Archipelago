@@ -1,3 +1,4 @@
+import os
 from typing import ClassVar
 
 from BaseClasses import MultiWorld, Tutorial
@@ -58,6 +59,9 @@ class CVAOSWorld(World):
 
     def create_regions(self) -> None:
         create_regions(self)
+        # Goal: reach the first pickup in room 900 (Dracula's Tunic location)
+        self.multiworld.completion_condition[self.player] = \
+            lambda state: state.can_reach_location("Dracula's Tunic", self.player)
 
     def create_items(self) -> None:
         itempool = create_itempool(self)
@@ -65,3 +69,21 @@ class CVAOSWorld(World):
 
     def create_item(self, name: str) -> CVAOSItem:
         return create_item(self, name)
+
+    def generate_output(self, output_directory: str) -> None:
+        from .rom import CVAOSProcedurePatch, get_location_data, patch_rom
+
+        active_locations = [loc for loc in self.multiworld.get_locations(self.player)
+                            if loc.address is not None]
+        offset_data = get_location_data(self, active_locations)
+
+        patch = CVAOSProcedurePatch(player=self.player, player_name=self.player_name)
+        patch_rom(self, patch, offset_data)
+
+        rom_path = os.path.join(
+            output_directory,
+            f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}")
+        patch.write(rom_path)
+
+    def fill_slot_data(self) -> dict:
+        return {"randomize_pickups": self.options.randomize_pickups.value}
