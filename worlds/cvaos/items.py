@@ -22,12 +22,12 @@ class ItemData(NamedTuple):
     code: int  # using pickup_number currently
 
 
-# Grab ItemInfos by item_number for classification flags.
-_item_info_by_number: Dict[int, object] = {info.item_number: info for info in item_info_collection}
+# Grab ItemInfos by name for classification flags.
+_item_info_by_name: Dict[str, object] = {info.name: info for info in item_info_collection}
 
 
-def _classification_for_pickup(pickup_number: int) -> ItemClassification:
-    info = _item_info_by_number.get(pickup_number)
+def _classification_for_pickup(simple_name: str) -> ItemClassification:
+    info = _item_info_by_name.get(simple_name)
     if info:
         if info.progression:
             return ItemClassification.progression
@@ -39,7 +39,7 @@ def _classification_for_pickup(pickup_number: int) -> ItemClassification:
 
 
 item_table: Dict[str, ItemData] = {
-    pickup.identifier_key: ItemData(_classification_for_pickup(pickup.pickup_number), pickup.pickup_number)
+    pickup.identifier_key: ItemData(_classification_for_pickup(pickup.simple_name), pickup.pickup_number)
     for pickup in pickup_infos
 }
 
