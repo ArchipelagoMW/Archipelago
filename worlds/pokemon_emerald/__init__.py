@@ -32,8 +32,9 @@ from .util import get_encounter_type_label
 # Try adding the Pokemon Gen 3 Adjuster
 try:
     from worlds._pokemon_gen3_adjuster import __init__
-except:
-    pass
+except Exception as e:
+    message = getattr(e, "message") if hasattr(e, "message") else str(e)
+    logging.warning(f"Could not load the Pokemon Gen 3 Adjuster: {message}")
 
 class PokemonEmeraldWebWorld(WebWorld):
     """
