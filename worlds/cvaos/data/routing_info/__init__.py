@@ -4,14 +4,18 @@ import csv
 import re
 from enum import IntFlag, auto
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Sequence
 
 from pydantic import BaseModel, ConfigDict
 
 __all__ = [
     "AbilityCombo",
     "RoutingInfo",
-    "entrance_to_entrance_info_collection"
+    "entrance_to_entrance_info_collection",
+    "EntranceToPickupRegionInfo",
+    "entrance_to_pickup_region_info_collection",
+    "DefaultTransdoorConnection",
+    "default_transdoor_entrance_connection_collection",
 ]
 
 
@@ -66,6 +70,10 @@ class AbilityCombo(IntFlag):
     """Ceiling reachable"""
     Vert = auto()    # Vertical room entrance
     """Vertical room entrance"""
+    QSave = auto()   # Quick Save Entrance Reset
+    """Quick Save Entrance Reset"""
+    Tform = auto()   # Transform soul (Devil/Curly/Manticore)
+    """Transform soul (Devil/Curly/Manticore)"""
 
 # Canonical enum-key -> bitflag
 _ABILITY_BY_NAME: dict[str, AbilityCombo] = {
@@ -86,6 +94,8 @@ _ABILITY_BY_NAME: dict[str, AbilityCombo] = {
     "Clip": AbilityCombo.Clip,
     "Ceil": AbilityCombo.Ceil,
     "Vert": AbilityCombo.Vert,
+    "QSave": AbilityCombo.QSave,
+    "Tform": AbilityCombo.Tform,
 }
 
 
@@ -278,3 +288,247 @@ def lookup(key: int | tuple[str, str]) -> RoutingInfo:
     if isinstance(key, int):
         return by_connection_number[key]
     return by_from_to[key]
+
+
+# ---------------------------------------------------------------------------
+# EntranceToPickupRegionInfo - routing from entrances to pickup regions
+# ---------------------------------------------------------------------------
+
+def _ability_and_combo_headers(
+    fieldnames: Sequence[str],
+) -> tuple[list[str], list[str]]:
+    """Extract ability headers (None..Kick) and combo headers from fieldnames."""
+    try:
+        start = fieldnames.index("None")
+        # Find the last ability column before combo columns
+        # Look for "<alt 2>" or first "Misc. combo" as end marker
+        end = None
+        for i, name in enumerate(fieldnames[start:], start):
+            if name.strip().startswith("Misc. combo") or name.strip() == "<alt 2>":
+                end = i
+                break
+        if end is None:
+            end = len(fieldnames)
+        ability_headers = list(fieldnames[start:end])
+    except ValueError:
+        ability_headers = []
+
+    combo_headers = [h for h in fieldnames if h.strip().startswith("Misc. combo")]
+    return ability_headers, combo_headers
+
+
+def _extract_abilities_and_combo_texts(
+    row: dict,
+    ability_headers: list[str],
+    combo_headers: list[str],
+) -> tuple[frozenset[str], tuple[str, ...]]:
+    """Extract abilities and combo texts from a row."""
+    abilities = frozenset(
+        _canonical_ability_name(header)
+        for header in ability_headers
+        if _truthy(row.get(header))
+    )
+
+    combo_texts = tuple(
+        (row.get(h) or "").strip()
+        for h in combo_headers
+        if (row.get(h) or "").strip()
+    )
+
+    return abilities, combo_texts
+
+
+def _requirement_bitmasks_from(
+    abilities: frozenset[str],
+    combo_texts: tuple[str, ...],
+    *,
+    include_combos: bool = True,
+    minimize: bool = True,
+    strict_combo_tokens: bool = True,
+) -> tuple[int, ...]:
+    """Compute requirement bitmasks from abilities and combo texts."""
+    masks: list[int] = []
+
+    for a in abilities:
+        if a == "None":
+            masks.append(0)
+            continue
+        flag = _ABILITY_BY_NAME.get(a)
+        if flag is None:
+            if strict_combo_tokens:
+                raise ValueError(f"Unknown ability column/token: {a!r}")
+            continue
+        if flag != AbilityCombo.None_:
+            masks.append(int(flag))
+
+    if include_combos:
+        for text in combo_texts:
+            m = _parse_combo_text_to_mask(text, strict=strict_combo_tokens)
+            if m is not None:
+                masks.append(m)
+
+    if not masks:
+        return tuple()
+
+    return _minimize_req_masks(masks) if minimize else tuple(int(m) for m in masks)
+
+
+def _entrance_identifiers_from_cell(
+    cell: str,
+    room_identifier: str,
+) -> list[str]:
+    """
+    Parse the 'dest_room_identifier' cell value to entrance identifiers.
+
+    - "Any" means all doors in the room (caller must resolve)
+    - "006, 00A" means specific doors -> "009:006", "009:00A" etc.
+    """
+    cell = cell.strip()
+    if cell.lower() == "any":
+        return ["Any"]  # Special marker, caller resolves with doors_for_room
+
+    # Parse comma-separated door IDs
+    result = []
+    for part in cell.split(","):
+        part = part.strip()
+        if part:
+            # Convert to full door identifier format
+            result.append(f"{room_identifier}:{part}")
+    return result
+
+
+class EntranceToPickupRegionInfo(BaseModel):
+    """Routing info for reaching a pickup from an entrance."""
+    model_config = ConfigDict(extra="allow", frozen=True)
+
+    pickup_number: int
+    pickup_room: str
+    item_name: str
+    variant: int | None
+    entrance_identifier: str  # door_identifier (may need unique lookup)
+
+    abilities: frozenset[str]
+    combo_texts: tuple[str, ...] = ()
+
+    @property
+    def key(self) -> tuple[int, str]:
+        return (self.pickup_number, self.entrance_identifier)
+
+    def get_requirement_bitmasks(
+        self,
+        *,
+        include_combos: bool = True,
+        minimize: bool = True,
+        strict_combo_tokens: bool = True,
+    ) -> tuple[int, ...]:
+        """Return requirement masks for this entrance-to-pickup route."""
+        return _requirement_bitmasks_from(
+            self.abilities,
+            self.combo_texts,
+            include_combos=include_combos,
+            minimize=minimize,
+            strict_combo_tokens=strict_combo_tokens,
+        )
+
+
+def _load_pickup_region_requirements() -> tuple[EntranceToPickupRegionInfo, ...]:
+    """Load entrance-to-pickup routing from CSV."""
+    # Import here to avoid circular import
+    from ..entrance_info import doors_for_room
+
+    csv_path = Path(__file__).with_name("symmetric_entrance_to_pickup_region_requirements.csv")
+    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        fieldnames = reader.fieldnames or []
+
+        ability_headers, combo_headers = _ability_and_combo_headers(fieldnames)
+
+        # Track seen (entrance_identifier, pickup_number) pairs to avoid duplicates
+        seen_keys: set[tuple[str, int]] = set()
+        out: list[EntranceToPickupRegionInfo] = []
+        for row in reader:
+            if not any((v or "").strip() for v in row.values()):
+                continue
+
+            pickup_number = int(row["pickup_number"])
+            pickup_room = row["Room"]
+            item_name = row["Item Name"]
+            variant_str = row.get("", "").strip()
+            variant = int(variant_str) if variant_str else None
+            entr_cell = row.get("dest_room_identifier", "").strip()
+
+            abilities, combo_texts = _extract_abilities_and_combo_texts(
+                row, ability_headers, combo_headers
+            )
+
+            # Parse entrance identifiers
+            entrance_ids = _entrance_identifiers_from_cell(entr_cell, pickup_room)
+
+            # Expand "Any" to all doors in the room
+            if entrance_ids == ["Any"]:
+                entrance_ids = list(doors_for_room(pickup_room))
+
+            # Create one entry per entrance (skip duplicates)
+            for ent_id in entrance_ids:
+                key = (ent_id, pickup_number)
+                if key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                out.append(EntranceToPickupRegionInfo(
+                    pickup_number=pickup_number,
+                    pickup_room=pickup_room,
+                    item_name=item_name,
+                    variant=variant,
+                    entrance_identifier=ent_id,
+                    abilities=abilities,
+                    combo_texts=combo_texts,
+                ))
+
+    return tuple(out)
+
+
+pickup_region_rows: tuple[EntranceToPickupRegionInfo, ...] = _load_pickup_region_requirements()
+entrance_to_pickup_region_info_collection = list(pickup_region_rows)
+
+
+class DefaultTransdoorConnection(BaseModel):
+    """A zero-cost transition across a physical doorway."""
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    connection_number: int
+    from_entrance: str
+    to_entrance: str
+
+    @property
+    def key(self) -> tuple[str, str, int]:
+        return (self.from_entrance, self.to_entrance, self.connection_number)
+
+
+def _load_default_transdoor_connections(
+    *,
+    starting_connection_number: int,
+) -> tuple[DefaultTransdoorConnection, ...]:
+    csv_path = Path(__file__).with_name("default_transdoor_entrance_connections.csv")
+    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        out: list[DefaultTransdoorConnection] = []
+        next_connection_number = starting_connection_number
+
+        for row in reader:
+            if not any((value or "").strip() for value in row.values()):
+                continue
+
+            out.append(DefaultTransdoorConnection(
+                connection_number=next_connection_number,
+                from_entrance=(row.get("from_entrance") or "").strip(),
+                to_entrance=(row.get("to_entrance") or "").strip(),
+            ))
+            next_connection_number += 1
+
+    return tuple(out)
+
+
+default_transdoor_rows: tuple[DefaultTransdoorConnection, ...] = _load_default_transdoor_connections(
+    starting_connection_number=(max(by_connection_number, default=0) + 1),
+)
+default_transdoor_entrance_connection_collection = list(default_transdoor_rows)
