@@ -145,7 +145,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
 | HUB_SWITCH_MOONLIGHT .. HUB_SWITCH_CANDY | 3960400 - 3960414 | Hub big-switch checks mapped to `hub_switch_flags` bits 0..14 |
-| ROOM_SANITY_1_01 .. ROOM_SANITY_9_27 | 3961000+ | Room visit checks (`Room X-YY`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15 |
+| ROOM_SANITY_* | 3961000+ | Room visit checks (`Room X-<room_code>`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15; includes designed goal/warp rooms |
 | *Reserved*    | 3960415+ | Future location families |
 
 ## Client Protocol
@@ -172,7 +172,7 @@ Server → Client: ConnectionRefused | Connected
 - `ability_randomization_minny` (bool): include/exclude Minny from enemy copy-ability randomization.
 - `ability_randomization_passive_enemies` (bool): when true, enemies that natively grant no ability participate in copy-ability randomization. Default: `true`.
 - `ability_randomization_no_ability_weight` (int): percentage chance from `0` to `100` that an included randomized enemy grant resolves to no ability instead of a copy ability. Default: `55`.
-- `room_sanity` (bool): enables/disables room-visit locations (`Room X-YY`, 257 checks).
+- `room_sanity` (bool): enables/disables room-visit locations (`Room X-<room code>`, 263 checks).
 - `enable_debug_logging` (bool): enables/disables debug-level client diagnostics.
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.

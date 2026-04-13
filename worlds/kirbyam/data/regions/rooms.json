@@ -131,9 +131,9 @@
       "REGION_RAINBOW_ROUTE/ROOM_1_13"
     ],
     "room_sanity": {
-      "included": false,
-      "location_id": null,
-      "bit_index": null
+      "included": true,
+      "location_id": 3961257,
+      "bit_index": 30
     },
     "ability_gates": {}
   },
@@ -856,9 +856,9 @@
       "REGION_MOONLIGHT_MANSION/ROOM_2_HUB"
     ],
     "room_sanity": {
-      "included": false,
-      "location_id": null,
-      "bit_index": null
+      "included": true,
+      "location_id": 3961258,
+      "bit_index": 69
     },
     "ability_gates": {}
   },
@@ -1560,9 +1560,9 @@
       "REGION_MUSTARD_MOUNTAIN/ROOM_4_CHEST"
     ],
     "room_sanity": {
-      "included": false,
-      "location_id": null,
-      "bit_index": null
+      "included": true,
+      "location_id": 3961259,
+      "bit_index": 134
     },
     "ability_gates": {}
   },
@@ -1923,9 +1923,9 @@
       "REGION_CARROT_CASTLE/ROOM_5_13"
     ],
     "room_sanity": {
-      "included": false,
-      "location_id": null,
-      "bit_index": null
+      "included": true,
+      "location_id": 3961260,
+      "bit_index": 269
     },
     "ability_gates": {}
   },
@@ -2743,9 +2743,9 @@
       "REGION_PEPPERMINT_PALACE/ROOM_7_04"
     ],
     "room_sanity": {
-      "included": false,
-      "location_id": null,
-      "bit_index": null
+      "included": true,
+      "location_id": 3961261,
+      "bit_index": 101
     },
     "ability_gates": {}
   },
@@ -3667,9 +3667,9 @@
       "REGION_CANDY_CONSTELLATION/ROOM_9_GOAL_2"
     ],
     "room_sanity": {
-      "included": false,
-      "location_id": null,
-      "bit_index": null
+      "included": true,
+      "location_id": 3961262,
+      "bit_index": 153
     },
     "ability_gates": {}
   },

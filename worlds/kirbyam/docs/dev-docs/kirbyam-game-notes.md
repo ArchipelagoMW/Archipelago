@@ -398,7 +398,7 @@ Primary local evidence:
 
 Canonical totals from rooms.json:
 - Total room nodes represented: 287
-- Room-sanity included nodes: 257
+- Room-sanity included nodes: 263
 - Room-sanity excluded nodes: 30
 
 Room nodes by region prefix:

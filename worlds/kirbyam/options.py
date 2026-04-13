@@ -217,7 +217,7 @@ StartingKirbyColor = _build_starting_kirby_color_option()
 
 
 class RoomSanity(Toggle):
-    """Adds room-visit checks (Room X-YY). Off by default because it adds 257 locations."""
+    """Adds room-visit checks (for example, `Room X-*`). Off by default because it adds 263 locations."""
     display_name = "Room Sanity"
     default = 0
 

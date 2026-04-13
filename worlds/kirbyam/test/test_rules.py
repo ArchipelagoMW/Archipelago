@@ -172,8 +172,35 @@ def test_room_subareas_pure_topology_with_all_rooms() -> None:
         region.get("room_sanity", {}).get("included", False)
         for region in room_regions.values()
     ]
-    assert sum(1 for included in included_room_sanity if included) == 257
-    
+    assert sum(1 for included in included_room_sanity if included) == 263
+
+    included_room_sanity_ids = [
+        region["room_sanity"]["location_id"]
+        for region in room_regions.values()
+        if region.get("room_sanity", {}).get("included", False)
+    ]
+    included_room_sanity_bits = [
+        region["room_sanity"]["bit_index"]
+        for region in room_regions.values()
+        if region.get("room_sanity", {}).get("included", False)
+    ]
+    assert len(included_room_sanity_ids) == len(set(included_room_sanity_ids))
+    assert len(included_room_sanity_bits) == len(set(included_room_sanity_bits))
+
+    expected_warp_room_sanity = {
+        "REGION_RAINBOW_ROUTE/ROOM_1_WARP",
+        "REGION_MOONLIGHT_MANSION/ROOM_2_WARP",
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP",
+        "REGION_CARROT_CASTLE/ROOM_5_WARP",
+        "REGION_PEPPERMINT_PALACE/ROOM_7_WARP",
+        "REGION_CANDY_CONSTELLATION/ROOM_9_WARP",
+    }
+    for region_key in expected_warp_room_sanity:
+        room_meta = room_regions[region_key]["room_sanity"]
+        assert room_meta["included"] is True
+        assert isinstance(room_meta["location_id"], int)
+        assert isinstance(room_meta["bit_index"], int)
+
     # Rooms may carry location data where the actual in-game pickup occurs.
     # Exactly the rooms with boss defeats and big chests should have locations;
     # all other rooms remain topology-only with empty lists.
@@ -244,6 +271,12 @@ def test_room_sanity_binding_optional() -> None:
     
     _bind_room_sanity_locations(room_regions, enable_room_sanity=True)
     assert "ROOM_SANITY_1_CENTRAL_CIRCLE" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE"]["locations"]
+    assert "ROOM_SANITY_1_WARP" in room_regions["REGION_RAINBOW_ROUTE/ROOM_1_WARP"]["locations"]
+    assert "ROOM_SANITY_2_WARP" in room_regions["REGION_MOONLIGHT_MANSION/ROOM_2_WARP"]["locations"]
+    assert "ROOM_SANITY_4_WARP" in room_regions["REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP"]["locations"]
+    assert "ROOM_SANITY_5_WARP" in room_regions["REGION_CARROT_CASTLE/ROOM_5_WARP"]["locations"]
+    assert "ROOM_SANITY_7_WARP" in room_regions["REGION_PEPPERMINT_PALACE/ROOM_7_WARP"]["locations"]
+    assert "ROOM_SANITY_9_WARP" in room_regions["REGION_CANDY_CONSTELLATION/ROOM_9_WARP"]["locations"]
     assert "ROOM_SANITY_10_01" not in room_regions["REGION_DIMENSION_MIRROR/ROOM_10_01"]["locations"]
     assert "ROOM_SANITY_0_01" not in room_regions["REGION_TUTORIAL/ROOM_0_01"]["locations"]
 
