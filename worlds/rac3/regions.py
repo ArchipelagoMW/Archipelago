@@ -450,7 +450,7 @@ def create_regions(world: "RaC3World"):
 
     # ----- Dummy regions for weapon upgrade organization -----#
 
-    create_region_and_connect(world, RAC3REGION.NANOTECH, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.NANOTECH}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.NANOTECH, f"{RAC3REGION.MENU} -> {RAC3REGION.NANOTECH}", menu)
 
     # New Game Plus
 
