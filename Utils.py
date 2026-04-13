@@ -19,7 +19,6 @@ import warnings
 
 from argparse import Namespace
 from datetime import datetime, timezone
-from enum import Enum, auto
 
 from settings import Settings, get_settings
 from time import sleep
@@ -1375,4 +1374,3 @@ def get_all_causes(ex: Exception) -> str:
     top = causes[-1]
     others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
     return f"{top}{others}"
-
