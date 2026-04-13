@@ -2105,32 +2105,34 @@ class KirbyAmClient(BizHawkClient):
         # or forward (reconnect after stale client state).
         if rom_received_count is not None:
             if rom_received_count > len(ctx.items_received):
-                if self._debug_logging_enabled and not self._delivery_counter_ahead_fallback_active:
+                if not self._delivery_counter_ahead_fallback_active:
                     logger.info(
                         "KirbyAM: ROM delivery counter is ahead of received items (rom=%s, received=%s); "
                         "ignoring ROM counter and continuing mailbox delivery",
                         rom_received_count,
                         len(ctx.items_received),
+                        extra={"NoStream": not self._debug_logging_enabled},
                     )
                 self._delivery_counter_ahead_fallback_active = True
             else:
-                if self._debug_logging_enabled and self._delivery_counter_ahead_fallback_active:
+                if self._delivery_counter_ahead_fallback_active:
                     logger.info(
                         "KirbyAM: ROM delivery counter is back in range (rom=%s, received=%s); "
                         "restoring normal mailbox synchronization",
                         rom_received_count,
                         len(ctx.items_received),
+                        extra={"NoStream": not self._debug_logging_enabled},
                     )
                 self._delivery_counter_ahead_fallback_active = False
                 self._delivery_counter_ahead_resume_logged = False
 
             if rom_received_count < self._delivered_item_index:
-                if self._debug_logging_enabled:
-                    logger.info(
-                        "KirbyAM: ROM delivery counter moved backward from %s to %s; rewinding client delivery cursor",
-                        self._delivered_item_index,
-                        rom_received_count,
-                    )
+                logger.info(
+                    "KirbyAM: ROM delivery counter moved backward from %s to %s; rewinding client delivery cursor",
+                    self._delivered_item_index,
+                    rom_received_count,
+                    extra={"NoStream": not self._debug_logging_enabled},
+                )
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
@@ -2140,16 +2142,21 @@ class KirbyAmClient(BizHawkClient):
                 self._delivery_retry_not_before = 0.0
                 self._delivery_payload_stall_warned = False
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
-            elif rom_received_count > self._delivered_item_index and rom_received_count <= len(ctx.items_received):
-                # Capture pending state before clearing — this counter advance may be the ACK signal.
-                _ff_was_pending = self._delivery_pending
+            elif (
+                rom_received_count > self._delivered_item_index
+                and rom_received_count <= len(ctx.items_received)
+                and self._delivery_pending
+                and flag == 0
+            ):
+                # Treat forward counter movement as authoritative only for a pending
+                # delivery ACK. This avoids stale ROM counters skipping deliveries.
                 _ff_pending_item_index = self._delivery_pending_item_index
-                if self._debug_logging_enabled:
-                    logger.info(
-                        "KirbyAM: ROM delivery counter moved forward from %s to %s; fast-forwarding client delivery cursor",
-                        self._delivered_item_index,
-                        rom_received_count,
-                    )
+                logger.info(
+                    "KirbyAM: ROM delivery counter moved forward from %s to %s on pending ACK; fast-forwarding client delivery cursor",
+                    self._delivered_item_index,
+                    rom_received_count,
+                    extra={"NoStream": not self._debug_logging_enabled},
+                )
                 self._delivered_item_index = rom_received_count
                 self._delivery_pending = False
                 self._delivery_pending_frame = None
@@ -2160,24 +2167,15 @@ class KirbyAmClient(BizHawkClient):
                 self._delivery_payload_stall_warned = False
                 self._hook_heartbeat_stale_ticks = 0
                 await self._persist_u32(ctx, "delivered_item_index", self._delivered_item_index)
-                if flag != 0:
-                    logger.warning(
-                        "KirbyAM: Clearing stale mailbox flag after fast-forward to item index %s",
-                        self._delivered_item_index,
-                    )
-                    await bizhawk.write(ctx.bizhawk_ctx, [
-                        (flag_addr, (0).to_bytes(4, "little"), "System Bus"),
-                    ])
                 # When the ROM counter advances while a delivery was pending and flag == 0,
                 # this IS the ACK: the ROM processed our mailbox item and incremented the
                 # counter in the same frame as clearing the flag.  Emit the receive
                 # notification here so it is not silently dropped by the fast-forward path
                 # taking precedence over the 'if self._delivery_pending' block below.
-                if _ff_was_pending and flag == 0:
-                    _notify_index = _ff_pending_item_index
-                    if _notify_index is None:
-                        _notify_index = self._delivered_item_index - 1
-                    await self._emit_receive_notification(ctx, _notify_index)
+                _notify_index = _ff_pending_item_index
+                if _notify_index is None:
+                    _notify_index = self._delivered_item_index - 1
+                await self._emit_receive_notification(ctx, _notify_index)
 
         # If an item is pending, wait for ROM to clear the flag (ACK)
         if self._delivery_pending:
@@ -2303,23 +2301,23 @@ class KirbyAmClient(BizHawkClient):
             item_id, player_id = item_fields
 
             if self._delivery_counter_ahead_fallback_active and not self._delivery_counter_ahead_resume_logged:
-                if self._debug_logging_enabled:
-                    logger.info(
-                        "KirbyAM: ROM counter fallback active; continuing mailbox delivery at item index %s "
-                        "(rom=%s, received=%s)",
-                        self._delivered_item_index,
-                        rom_received_count,
-                        len(ctx.items_received),
-                    )
+                logger.info(
+                    "KirbyAM: ROM counter fallback active; continuing mailbox delivery at item index %s "
+                    "(rom=%s, received=%s)",
+                    self._delivered_item_index,
+                    rom_received_count,
+                    len(ctx.items_received),
+                    extra={"NoStream": not self._debug_logging_enabled},
+                )
                 self._delivery_counter_ahead_resume_logged = True
 
-            if self._debug_logging_enabled:
-                logger.info(
-                    "KirbyAM: Delivering mailbox item index %s (%s from %s)",
-                    self._delivered_item_index,
-                    self._item_name(ctx, item_id, player_id),
-                    self._player_name(ctx, player_id),
-                )
+            logger.info(
+                "KirbyAM: Delivering mailbox item index %s (%s from %s)",
+                self._delivered_item_index,
+                self._item_name(ctx, item_id, player_id),
+                self._player_name(ctx, player_id),
+                extra={"NoStream": not self._debug_logging_enabled},
+            )
             await bizhawk.write(ctx.bizhawk_ctx, [
                 (id_addr, item_id.to_bytes(4, "little"), "System Bus"),
                 (player_addr, player_id.to_bytes(4, "little"), "System Bus"),

@@ -250,7 +250,7 @@ Fail-open behavior:
 | State | Resync behavior |
 |---|---|
 | Location checks | Level-based poll resends any RAM-derived checks missing from `checked_locations`. |
-| Item delivery | Cursor is reconciled against ROM's `debug_item_counter`; delivery resumes from the correct index. |
+| Item delivery | Cursor rewind still uses ROM `debug_item_counter`; forward reconciliation is only trusted as a pending-delivery ACK signal (`flag == 0` while delivery is pending). |
 | Goal reporting | Idempotent: for current shipped worlds, the client re-sends `CLIENT_GOAL` on reconnect when `finished_game` is set. If a future world exposes a numeric goal location, the client falls back to goal-location acknowledgement before `CLIENT_GOAL`. |
 | Boss probe | Probe snapshot re-baselines on BizHawk stream-identity change (reconnect safe). |
 | Watcher transient state | On first tick after AP session becomes ready (`server/socket/slot_data`), reconnect diagnostics/probe caches are reset to clean baselines. |
@@ -354,7 +354,7 @@ Behavior note:
 
 `debug_item_counter` reconciliation contract:
 - If `debug_item_counter < delivered_item_index`, rewind cursor to the ROM count.
-- If `debug_item_counter` is ahead but still within `len(ctx.items_received)`, fast-forward cursor to the ROM count.
+- If `debug_item_counter` is ahead but still within `len(ctx.items_received)`, treat it as advisory unless a mailbox delivery is currently pending and `incoming_item_flag == 0` (same-tick ROM ACK path).
 - If `debug_item_counter > len(ctx.items_received)`, treat the counter as stale/debug-only and continue normal mailbox delivery once the mailbox is empty. This anti-starvation fallback must not permanently suppress writes.
 - Transition-based logs should make the ahead-counter fallback visible without per-tick spam.
 
