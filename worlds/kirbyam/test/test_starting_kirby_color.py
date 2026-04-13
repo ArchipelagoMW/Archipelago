@@ -181,3 +181,129 @@ def test_reset_reconnect_transient_state_clears_starting_color_log_signature() -
     client._reset_reconnect_transient_state()
 
     assert client._starting_kirby_color_logged_signature is None
+
+
+def test_client_starting_color_config_log_hidden_when_debug_disabled(mock_bizhawk_context) -> None:
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data = {
+        "debug": {"logging": False},
+        "starting_kirby_color": 0,
+        "starting_kirby_color_name": "Pink",
+    }
+
+    client._load_debug_settings(mock_bizhawk_context)
+    with patch("CommonClient.logger.info") as mock_info:
+        client._log_starting_kirby_color_config_once(mock_bizhawk_context)
+        client._log_starting_kirby_color_config_once(mock_bizhawk_context)
+
+    assert mock_info.call_count == 0
+
+
+def test_client_starting_color_config_log_emits_once_when_debug_enabled(mock_bizhawk_context) -> None:
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data = {
+        "debug": {"logging": True},
+        "starting_kirby_color": 0,
+        "starting_kirby_color_name": "Pink",
+    }
+
+    client._load_debug_settings(mock_bizhawk_context)
+    with patch("CommonClient.logger.info") as mock_info:
+        client._log_starting_kirby_color_config_once(mock_bizhawk_context)
+        client._log_starting_kirby_color_config_once(mock_bizhawk_context)
+
+    assert mock_info.call_count == 1
+    assert mock_info.call_args.args[0] == "KirbyAM: configured starting Kirby color is %s (%s)"
+
+
+def test_client_starting_color_config_log_emits_after_debug_toggle_on(mock_bizhawk_context) -> None:
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data = {
+        "debug": {"logging": False},
+        "starting_kirby_color": 0,
+        "starting_kirby_color_name": "Pink",
+    }
+
+    with patch("CommonClient.logger.info") as mock_info:
+        client._load_debug_settings(mock_bizhawk_context)
+        client._log_starting_kirby_color_config_once(mock_bizhawk_context)
+
+        mock_bizhawk_context.slot_data["debug"]["logging"] = True
+        client._load_debug_settings(mock_bizhawk_context)
+        client._log_starting_kirby_color_config_once(mock_bizhawk_context)
+
+    assert mock_info.call_count == 1
+    assert client._starting_kirby_color_logged_signature == (0, "Pink")
+
+
+@pytest.mark.asyncio
+async def test_client_starting_color_sync_log_hidden_when_debug_disabled(mock_bizhawk_context) -> None:
+    client = KirbyAmClient()
+    client.initialize_client()
+    mock_bizhawk_context.slot_data = {
+        "debug": {"logging": False},
+        "starting_kirby_color": 7,
+        "starting_kirby_color_name": "Sapphire",
+    }
+
+    with (
+        patch.dict(
+            data.transport_ram_addresses,
+            {"starting_kirby_color_id": 0x0203B050},
+            clear=False,
+        ),
+        patch(
+            "worlds.kirbyam.client.bizhawk.read",
+            new_callable=AsyncMock,
+            side_effect=[[(0xFFFFFFFF).to_bytes(4, "little")]],
+        ),
+        patch(
+            "worlds.kirbyam.client.bizhawk.write",
+            new_callable=AsyncMock,
+        ),
+        patch("CommonClient.logger.info") as mock_info,
+    ):
+        client._load_debug_settings(mock_bizhawk_context)
+        await client._sync_starting_kirby_color_runtime_config(mock_bizhawk_context)
+
+    assert mock_info.call_count == 0
+
+
+@pytest.mark.asyncio
+async def test_client_game_watcher_logs_starting_color_once_after_initial_ready_transition(
+    mock_bizhawk_context,
+) -> None:
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._ram_state_loaded = True
+    mock_bizhawk_context.slot_data = {
+        "debug": {"logging": True},
+        "starting_kirby_color": 0,
+        "starting_kirby_color_name": "Pink",
+    }
+    mock_bizhawk_context.server = SimpleNamespace(socket=SimpleNamespace(closed=False))
+    mock_bizhawk_context.items_received = []
+    mock_bizhawk_context.bizhawk_ctx = object()
+
+    with (
+        patch.object(client, "_sync_death_link_setting", new=AsyncMock()),
+        patch.object(client, "_sync_enemy_copy_ability_runtime_config", new=AsyncMock()),
+        patch.object(client, "_sync_starting_kirby_color_runtime_config", new=AsyncMock()),
+        patch.object(client, "_runtime_gameplay_state", new=AsyncMock(return_value=(False, "menu", None))),
+        patch.object(client, "_log_boss_shard_debug_window", new=AsyncMock()),
+        patch.object(client, "_display_client_message", new=AsyncMock()),
+        patch.object(client, "_deliver_items", new=AsyncMock()),
+        patch.object(client, "_maybe_report_goal", new=AsyncMock()),
+        patch("CommonClient.logger.info") as mock_info,
+    ):
+        await client.game_watcher(mock_bizhawk_context)
+        await client.game_watcher(mock_bizhawk_context)
+
+    matching = [
+        call for call in mock_info.call_args_list
+        if call.args and call.args[0] == "KirbyAM: configured starting Kirby color is %s (%s)"
+    ]
+    assert len(matching) == 1
