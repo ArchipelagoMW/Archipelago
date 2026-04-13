@@ -202,7 +202,7 @@ def _reachable_rooms_from(
     BFS to find all rooms reachable from a given start region.
     
     Args:
-        start_region: The starting room region name (e.g., "REGION_RAINBOW_ROUTE/ROOM_1_01").
+        start_region: The starting room region name (e.g., "REGION_RAINBOW_ROUTE/ROOM_1_CENTRAL_CIRCLE").
         graph: The room graph dict. If None, loads from data.
     
     Returns:
@@ -261,13 +261,13 @@ def _bind_room_sanity_locations(
         if not isinstance(room_meta, dict) or not bool(room_meta.get("included", False)):
             continue
 
-        match = re.match(r"REGION_[A-Z_]+/ROOM_(\d+)_(\d+)$", region_name)
+        match = re.match(r"REGION_[A-Z_]+/ROOM_(\d+)_([A-Z0-9_]+)$", region_name)
         if not match:
             continue
 
         area_code = int(match.group(1))
-        room_code = int(match.group(2))
-        location_name = f"ROOM_SANITY_{area_code}_{room_code:02d}"
+        room_code = match.group(2)
+        location_name = f"ROOM_SANITY_{area_code}_{room_code}"
 
         if region_name in world_regions:
             if "locations" not in world_regions[region_name]:

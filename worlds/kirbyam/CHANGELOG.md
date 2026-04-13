@@ -10,6 +10,7 @@
 - Fix missing boss-defeat LocationChecks when the matching shard is already owned by adding a conservative client fallback: rising-edge bits from `boss_mirror_table_native` byte 0 (bits 0-7) now backfill boss checks when `boss_defeat_flags` is absent for that fight (Issue #573).
 - Move unswallowable enemy exclusion policy from a static runtime list into `data/enemies.json` source metadata (`can_be_swallowed`) and represent the currently configured non-swallowable enemies there: `GLUNK`, `JACK`, and `SQUISHY` (Issue #570).
 - Hide additional KirbyAM reconnect/resend diagnostics from the live client output unless `Enable Debug Logging` is enabled, while still writing those diagnostics to log files unconditionally (`NoStream`-filtered stream suppression only); includes watcher transport reconnect messages and resend diagnostics for boss/major/vitality/sound-player LocationChecks polling (Issue #582).
+- Updated room names to match the names that Wikirby uses. (Issue #587)
 
 ## v0.1.2
 

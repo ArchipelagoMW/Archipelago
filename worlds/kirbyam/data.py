@@ -69,7 +69,7 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
         return {}
 
     generated_locations: dict[str, dict[str, Any]] = {}
-    room_key_pattern = re.compile(r"^REGION_[A-Z_]+/ROOM_(\d+)_(\d+)$")
+    room_key_pattern = re.compile(r"^REGION_[A-Z_]+/ROOM_(\d+)_([A-Z0-9_]+)$")
 
     for region_name, region_def in room_subareas.items():
         if not isinstance(region_name, str) or not isinstance(region_def, dict):
@@ -89,8 +89,8 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
             )
 
         area_num = int(match.group(1))
-        room_num = int(match.group(2))
-        location_key = f"ROOM_SANITY_{area_num}_{room_num:02d}"
+        room_code = match.group(2)
+        location_key = f"ROOM_SANITY_{area_num}_{room_code}"
 
         bit_index_raw = room_meta.get("bit_index")
         location_id_raw = room_meta.get("location_id")
@@ -100,7 +100,7 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
             )
 
         generated_locations[location_key] = {
-            "label": f"Room {area_num}-{room_num:02d}",
+            "label": f"Room {area_num}-{room_code}",
             "parent_region": region_name,
             "tags": ["RoomSanity"],
             "bit_index": int(bit_index_raw),

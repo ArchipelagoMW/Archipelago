@@ -220,6 +220,8 @@ That means `rooms.json` is doing double duty:
 - topology source for room graph traversal
 - optional generator for `Room X-YY` AP locations
 
+Room region naming in `rooms.json` is intentionally aligned with Wikirby.com room naming (for example, hub/goal labels) so cross-referencing map documentation and world data stays consistent.
+
 ### Region Loading
 
 All region JSON files under `data/regions/` are merged. Each region records:
