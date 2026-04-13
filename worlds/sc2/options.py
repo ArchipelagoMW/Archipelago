@@ -5,14 +5,13 @@ from datetime import timedelta
 
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
-    PerGameCommonOptions, Option, VerifyKeys, StartInventory,
+    PerGameCommonOptions, VerifyKeys, StartInventory,
     is_iterable_except_str, OptionGroup, Visibility, ItemDict,
-    Accessibility, ProgressionBalancing
+    OptionCounter,
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .item import item_names, item_tables
-from .item.item_groups import kerrigan_active_abilities, kerrigan_passives, nova_weapons, nova_gadgets
+from .item import item_names, item_tables, item_groups
 from .mission_tables import (
     SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list,
     campaign_mission_table, SC2Race, MissionFlag
@@ -700,7 +699,7 @@ class KerriganMaxActiveAbilities(Range):
     """
     display_name = "Kerrigan Maximum Active Abilities"
     range_start = 0
-    range_end = len(kerrigan_active_abilities)
+    range_end = len(item_groups.kerrigan_active_abilities)
     default = range_end
 
 
@@ -711,7 +710,7 @@ class KerriganMaxPassiveAbilities(Range):
     """
     display_name = "Kerrigan Maximum Passive Abilities"
     range_start = 0
-    range_end = len(kerrigan_passives)
+    range_end = len(item_groups.kerrigan_passives)
     default = range_end
 
 
@@ -829,7 +828,7 @@ class SpearOfAdunMaxAutocastAbilities(Range):
     """
     display_name = "Spear of Adun Maximum Passive Abilities"
     range_start = 0
-    range_end = sum(item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_castable_passives)
+    range_end = sum(item_tables.item_table[item_name].quantity for item_name in item_groups.spear_of_adun_passives)
     default = range_end
 
 
@@ -883,7 +882,7 @@ class NovaMaxWeapons(Range):
     """
     display_name = "Nova Maximum Weapons"
     range_start = 0
-    range_end = len(nova_weapons)
+    range_end = len(item_groups.nova_weapons)
     default = range_end
 
 
@@ -897,7 +896,7 @@ class NovaMaxGadgets(Range):
     """
     display_name = "Nova Maximum Gadgets"
     range_start = 0
-    range_end = len(nova_gadgets)
+    range_end = len(item_groups.nova_gadgets)
     default = range_end
 
 
@@ -932,33 +931,48 @@ class TakeOverAIAllies(Toggle):
     display_name = "Take Over AI Allies"
 
 
-class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
-    """A branch of ItemDict that supports item counts of 0"""
+class Sc2ItemDict(OptionCounter, VerifyKeys, Mapping[str, int]):
+    """A branch of ItemDict that supports negative item counts"""
     default = {}
     supports_weighting = False
     verify_item_name = True
     # convert_name_groups = True
     display_name = 'Unnamed dictionary'
-    minimum_value: int = 0
+    # Note(phaneros): Limiting minimum to -1 means that if two triggers add -1 to the same item,
+    # the validation fails. So give trigger people space to stack a bunch of triggers.
+    min: int = -1000
+    max: int = 1000
+    valid_keys = set(item_tables.item_table) | set(item_groups.item_name_groups)
 
-    def __init__(self, value: Dict[str, int]):
+    def __init__(self, value: dict[str, int]):
         self.value = {key: val for key, val in value.items()}
 
     @classmethod
-    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'Sc2ItemDict':
+    def from_any(cls, data: list[str] | dict[str, int]) -> 'Sc2ItemDict':
         if isinstance(data, list):
-            # This is a little default that gets us backwards compatibility with lists.
-            # It doesn't play nice with trigger merging dicts and lists together, though, so best not to advertise it overmuch.
-            data = {item: 0 for item in data}
+            raise ValueError(
+                f"{cls.display_name}: Cannot convert from list. "
+                f"Use dict syntax (no dashes, 'value: number' synax)."
+            )
         if isinstance(data, dict):
             for key, value in data.items():
                 if not isinstance(value, int):
-                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
-                if value < cls.minimum_value:
-                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
+                    raise ValueError(
+                        f"Invalid type in '{cls.display_name}': "
+                        f"element '{key}' maps to '{value}', expected an integer"
+                    )
+                if value < cls.min:
+                    raise ValueError(
+                        f"Invalid value for '{cls.display_name}': "
+                        f"element '{key}' maps to {value}, which is less than the minimum ({cls.min})"
+                    )
+                if value > cls.max:
+                    raise ValueError(f"Invalid value for '{cls.display_name}': "
+                    f"element '{key}' maps to {value}, which is greater than the maximum ({cls.max})"
+                )
             return cls(data)
         else:
-            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
+            raise NotImplementedError(f"{cls.display_name}: Cannot convert from non-dictionary, got {type(data)}")
 
     def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
@@ -974,15 +988,16 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                from .item import item_groups
                 picks = get_fuzzy_results(
                     item_name,
                     list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
                     limit=1,
                 )
-                raise Exception(f"Item {item_name} from option {self} "
-                                f"is not a valid item name from {world.game}. "
-                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
+                raise Exception(
+                    f"Item {item_name} from option {self} "
+                    f"is not a valid item name from {world.game}. "
+                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)"
+                )
 
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
@@ -998,25 +1013,25 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
 
 
 class Sc2StartInventory(Sc2ItemDict):
-    """Start with these items."""
+    """Start with these items. Use an amount of -1 to start with all copies of an item."""
     display_name = StartInventory.display_name
 
 
 class LockedItems(Sc2ItemDict):
     """Guarantees that these items will be unlockable, in the amount specified.
-    Specify an amount of 0 to lock all copies of an item."""
+    Specify an amount of -1 to lock all copies of an item."""
     display_name = "Locked Items"
 
 
 class ExcludedItems(Sc2ItemDict):
     """Guarantees that these items will not be unlockable, in the amount specified.
-    Specify an amount of 0 to exclude all copies of an item."""
+    Specify an amount of -1 to exclude all copies of an item."""
     display_name = "Excluded Items"
 
 
 class UnexcludedItems(Sc2ItemDict):
     """Undoes an item exclusion; useful for whitelisting or fine-tuning a category.
-    Specify an amount of 0 to unexclude all copies of an item."""
+    Specify an amount of -1 to unexclude all copies of an item."""
     display_name = "Unexcluded Items"
 
 
@@ -1294,7 +1309,7 @@ class MaximumSupplyReductionPerItem(Range):
 class LowestMaximumSupply(Range):
     """Controls how far max supply reduction traps can reduce maximum supply."""
     display_name = "Lowest Maximum Supply"
-    range_start = 100
+    range_start = 50
     range_end = 200
     default = 180
 
@@ -1561,7 +1576,7 @@ def get_option_value(world: Union['SC2World', None], name: str) -> int:
 
 
 def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
-    race_names = world.options.selected_races.value if world and len(world.options.selected_races.value) > 0 else SelectedRaces.valid_keys
+    race_names = world.options.selected_races.value if world else SelectedRaces.default
     return {race for race in SC2Race if race.get_title() in race_names}
 
 
@@ -1569,16 +1584,7 @@ def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     if world is None:
         return {campaign for campaign in SC2Campaign if campaign.campaign_name in EnabledCampaigns.default}
     campaign_names = world.options.enabled_campaigns
-    campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
-    if (world.options.mission_order.value == MissionOrder.option_vanilla
-        and get_enabled_races(world) != {SC2Race.TERRAN, SC2Race.ZERG, SC2Race.PROTOSS}
-        and SC2Campaign.EPILOGUE in campaigns
-    ):
-        campaigns.remove(SC2Campaign.EPILOGUE)
-    if len(campaigns) == 0:
-        # Everything is disabled, roll as everything enabled
-        return {campaign for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
-    return campaigns
+    return {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
 
 
 def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
@@ -1591,8 +1597,8 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     excluded = (
-            (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
-            ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
+        (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
+        ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
     )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:
@@ -1640,21 +1646,8 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
-    # Omitting unwanted mission variants
-    if world.options.enable_race_swap.value in [EnableRaceSwapVariants.option_pick_one, EnableRaceSwapVariants.option_pick_one_non_vanilla]:
-        swaps = [
-            mission for mission in SC2Mission
-            if mission not in excluded_missions
-            and mission.flags & (MissionFlag.HasRaceSwap|MissionFlag.RaceSwap)
-        ]
-        while len(swaps) > 0:
-            curr = swaps[0]
-            variants = [mission for mission in swaps if mission.map_file == curr.map_file]
-            variants.sort(key=lambda mission: mission.id)
-            swaps = [mission for mission in swaps if mission not in variants]
-            if len(variants) > 1:
-                variants.pop(world.random.randint(0, len(variants)-1))
-                excluded_missions = excluded_missions.union(variants)
+
+    # Exclusions for race_swap: pick_one are handled during mission order generation
 
     return excluded_missions
 

@@ -1047,7 +1047,7 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
         connecting_region=regions["Rooted Ziggurat Portal Room"])
     regions["Rooted Ziggurat Portal Room"].connect(
         connecting_region=regions["Rooted Ziggurat Portal"],
-        rule=lambda state: has_fuses("Activate Ziggurat Fuse", state, world) and has_ability(prayer, state, world))
+        rule=lambda state: has_ability(prayer, state, world))
 
     regions["Rooted Ziggurat Portal Room"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
