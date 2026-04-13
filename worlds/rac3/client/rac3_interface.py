@@ -1144,6 +1144,8 @@ class Rac3Interface(GameInterface):
 
     def overwrite_vendor_item_names(self):
         """Overwrite the names of the weapons in the weapon vendor with the provided list of weapon names"""
+        if self.planet not in PLANET_VENDOR_OFFSET.keys():
+            return
         string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
         combined_locations = ITEM_TO_WEAPON_VENDOR_LOCATION | ITEM_TO_ARMOR_VENDOR_LOCATION
         for item in self.weapon_vendor_items + self.armor_vendor_items:
