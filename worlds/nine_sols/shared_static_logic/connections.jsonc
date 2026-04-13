@@ -1508,11 +1508,14 @@
             { "item": "Cloud Leap" },
             { "item": "Ledge Grab" }
         ],
-        "ls_requires": [
-            { "item": "Trick - Bow Hover" },
-            { "item": "Air Dash" }, // for LS setup (no one to parry for T-dash; CL works but is redundant with medium)
-            { "item": "Ledge Grab" } // then LS parry vault
-        ]
+        "ls_requires": [ { "anyOf": [
+            [
+                { "item": "Air Dash" }, // for LS setup (no one to parry for T-dash, and CL would be redundant)
+                { "item": "Ledge Grab" },
+                { "item": "Trick - Bow Hover" } // now hover, then LS parry vault, then grab the ledge
+            ],
+            [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // or just CL, LS vault, CL again
+        ] } ]
     }, // "real elevator skip" in the ASS% speedrun is bow hover, parry vault, T-dash, AD, and 2 bow knockbacks
     { "from": "GoS (Entry) - Greenhouse", "to": "GoS (Entry) - Coffin", "requires": [] }, // fall
     {
