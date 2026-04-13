@@ -9,8 +9,8 @@ from .data import (
     pickup_info_collection,
     entrance_to_entrance_info_collection,
     entrance_to_pickup_region_info_collection,
-    default_transdoor_entrance_connection_collection,
     AbilityCombo,
+    transdoor_connection_collection,
 )
 from .locations import CVAOSLocation, location_name_to_id
 
@@ -54,13 +54,6 @@ def create_regions(world: CVAOSWorld) -> None:
     door_number_to_id_unique: dict[int, str] = {
         e.door_number: e.door_identifier_unique for e in entrance_info_collection
     }
-    # door_identifier_nonunique -> ordered door_numbers
-    door_id_to_numbers: dict[str, list[int]] = {}
-    for entrance_info in entrance_info_collection:
-        door_id_to_numbers.setdefault(
-            entrance_info.door_identifier_nonunique,
-            [],
-        ).append(entrance_info.door_number)
 
     # Create entrance regions (one per door/entrance in the game)
     # Use door_number as the unique key, region name uses door_identifier_unique
@@ -95,34 +88,21 @@ def create_regions(world: CVAOSWorld) -> None:
         start_region = entrance_regions[first_entrance.door_number]
         menu.connect(start_region, "Start Game")
 
-    # Connect doors between rooms using the explicit transdoor table.
-    transdoor_from_occurrence: dict[str, int] = {}
-    transdoor_to_occurrence: dict[str, int] = {}
-    for transdoor_info in default_transdoor_entrance_connection_collection:
-        from_index = transdoor_from_occurrence.get(transdoor_info.from_entrance, 0)
-        to_index = transdoor_to_occurrence.get(transdoor_info.to_entrance, 0)
-        transdoor_from_occurrence[transdoor_info.from_entrance] = from_index + 1
-        transdoor_to_occurrence[transdoor_info.to_entrance] = to_index + 1
+    # Connect doors between rooms using the transdoor mapping.
+    for transdoor in transdoor_connection_collection:
+        from_door_number = door_id_unique_to_number.get(transdoor.from_entrance)
+        to_door_number = door_id_unique_to_number.get(transdoor.to_entrance)
 
-        from_numbers = door_id_to_numbers.get(transdoor_info.from_entrance, [])
-        to_numbers = door_id_to_numbers.get(transdoor_info.to_entrance, [])
-        if from_index >= len(from_numbers) or to_index >= len(to_numbers):
+        if from_door_number is None or to_door_number is None:
             continue
 
-        from_door_number = from_numbers[from_index]
-        to_door_number = to_numbers[to_index]
         from_region = entrance_regions.get(from_door_number)
         to_region = entrance_regions.get(to_door_number)
 
         if from_region is None or to_region is None:
             continue
 
-        from_door_id_unique = door_number_to_id_unique[from_door_number]
-        to_door_id_unique = door_number_to_id_unique[to_door_number]
-        connection_name = (
-            f"Door: {from_door_id_unique} -> {to_door_id_unique}"
-            f" #{transdoor_info.connection_number}"
-        )
+        connection_name = f"Door: {transdoor.from_entrance} -> {transdoor.to_entrance}"
         from_region.connect(to_region, connection_name)
 
     # Connect regions based on routing information

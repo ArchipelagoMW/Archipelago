@@ -5,7 +5,7 @@ from worlds.AutoWorld import WebWorld, World
 import settings
 
 from .constants import USA_ROM_HASH
-from .items import CVAOSItem, item_name_to_id, item_table, create_item, create_itempool
+from .items import CVAOSItem, item_name_to_id, create_item, create_itempool
 from .locations import location_name_to_id
 from .options import CVAOSOptions
 from .regions import create_regions
