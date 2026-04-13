@@ -52,7 +52,7 @@ jobs:
 
       - name: Build kirbyam.apworld from source
         run: |
-          python worlds/kirbyam/build.py --skip-patch --skip-install
+          python worlds/kirbyam/build.py --skip-patch --skip-install --non-interactive
           if [ ! -f worlds/kirbyam/kirbyam.apworld ]; then
             echo "kirbyam.apworld was not created" >&2
             exit 1

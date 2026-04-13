@@ -254,7 +254,118 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip copying the built .apworld into the Archipelago custom_worlds directory.",
     )
+    p.add_argument(
+        "--non-interactive",
+        action="store_true",
+        help="Disable interactive prompts; fail fast when required inputs are missing.",
+    )
     return p.parse_args()
+
+
+def _can_prompt(non_interactive: bool) -> bool:
+    if non_interactive:
+        return False
+
+    stdin = getattr(sys, "stdin", None)
+    stdout = getattr(sys, "stdout", None)
+    return bool(
+        stdin is not None
+        and stdout is not None
+        and stdin.isatty()
+        and stdout.isatty()
+    )
+
+
+def _prompt_yes_no(prompt: str, *, default: bool) -> bool:
+    suffix = " [Y/n]: " if default else " [y/N]: "
+    while True:
+        raw = input(prompt + suffix).strip().lower()
+        if not raw:
+            return default
+        if raw in {"y", "yes"}:
+            return True
+        if raw in {"n", "no"}:
+            return False
+        print("Please enter 'y' or 'n'.")
+
+
+def _prompt_existing_file(prompt: str) -> str:
+    while True:
+        raw = input(prompt).strip().strip("'\"")
+        if not raw:
+            print("A file path is required.")
+            continue
+
+        candidate = Path(raw).expanduser()
+        if candidate.is_file():
+            return str(candidate.resolve())
+
+        print(f"File not found: {candidate}")
+
+
+def _prepare_args_for_patch(args: argparse.Namespace, world_root: Path) -> argparse.Namespace:
+    if args.skip_patch:
+        return args
+
+    can_prompt = _can_prompt(bool(args.non_interactive))
+
+    if args.source_type == "arg":
+        if args.rom:
+            rom_candidate = Path(args.rom).expanduser()
+            if not rom_candidate.is_file():
+                if not can_prompt:
+                    raise SystemExit(
+                        "--rom must point to an existing base ROM file when using --source-type arg."
+                    )
+                print(f"Provided ROM path does not exist: {rom_candidate}")
+                args.rom = _prompt_existing_file("Enter path to the base ROM (.gba): ")
+            else:
+                args.rom = str(rom_candidate.resolve())
+        else:
+            if not can_prompt:
+                raise SystemExit(
+                    "You selected --source-type arg but did not provide --rom <path>. "
+                    "Run interactively to be prompted, or pass --rom explicitly."
+                )
+            print("--source-type arg requires a base ROM path.")
+            args.rom = _prompt_existing_file("Enter path to the base ROM (.gba): ")
+
+    elif args.source_type == "file":
+        rom_path_tmp = world_root / "kirby_ap_payload" / "rom_path.tmp"
+        rom_path_text = ""
+        if rom_path_tmp.exists():
+            try:
+                rom_path_text = rom_path_tmp.read_text(encoding="utf-8").strip().strip("'\"")
+            except OSError:
+                rom_path_text = ""
+
+        rom_path_ok = False
+        if rom_path_text:
+            rom_candidate = Path(rom_path_text).expanduser()
+            if not rom_candidate.is_absolute():
+                rom_candidate = rom_path_tmp.parent / rom_candidate
+            rom_path_ok = rom_candidate.is_file()
+
+        if not rom_path_ok:
+            guidance = (
+                "--source-type file requires kirby_ap_payload/rom_path.tmp to contain a valid ROM path. "
+                "Use --source-type arg --rom <path> instead."
+            )
+            if not can_prompt:
+                # Keep existing non-interactive behavior for automation and tests:
+                # patch_rom.py remains the source of truth for file-source failures.
+                return args
+
+            print(
+                "Could not find a valid ROM path in kirby_ap_payload/rom_path.tmp."
+            )
+            if _prompt_yes_no("Switch to --source-type arg and enter a ROM path now?", default=True):
+                args.source_type = "arg"
+                args.rom = _prompt_existing_file("Enter path to the base ROM (.gba): ")
+            else:
+                print(guidance)
+
+    return args
 
 
 def main() -> None:
@@ -265,6 +376,7 @@ def main() -> None:
         raise SystemExit("World name must be lowercase.")
 
     world_root = Path(__file__).resolve().parent
+    args = _prepare_args_for_patch(args, world_root)
 
     if Path.cwd().resolve() != world_root:
         print(f"Using world root from script location: {world_root}")

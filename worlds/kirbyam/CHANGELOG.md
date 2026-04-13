@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Improve `worlds/kirbyam/build.py` usability for non-author machines by prompting for missing required patch inputs in interactive runs (including missing `--rom` when `--source-type arg` is selected), adding `--source-type file` fallback guidance when `rom_path.tmp` is invalid, and introducing `--non-interactive` fail-fast behavior for automation/CI (Issue #607).
 - Add 15 decomp-aligned world-map big-switch AP checks (`HUB_SWITCH_*`) with a dedicated ROM transport register (`hub_switch_flags` at `0x0203B04C`), BizHawk resend/dedupe polling, payload hook integration at the world-map unlock dispatcher callsite (`sub_08039ED4`), protocol/address contract updates, and regression coverage for data/polling/patch offsets/region binding (Issue #481).
 - Expand tracker integration surface by exporting all locations, all rooms (including those outside Room Sanity), and all received unique items via expanded KirbyAM `slot_data` for use in tracker templates and generic player/multiworld trackers (Issue #114).
 - Expose all configured KirbyAM seed options in `slot_data` (including `start_with_all_maps` and `enable_debug_logging`) so tracker surfaces can render the exact seed configuration from slot data without inferring from partial fields (Issue #114).

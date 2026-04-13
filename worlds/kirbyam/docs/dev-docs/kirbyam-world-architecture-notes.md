@@ -601,6 +601,8 @@ Important details:
 - it can skip patch rebuild with `--skip-patch`
 - it installs the `.apworld` into Archipelago's custom worlds directory by default on Windows
 - it packages the world in place without a staging directory
+- when required patch inputs are missing, it prompts interactively (for example, missing `--rom` with `--source-type arg`)
+- automation can disable prompts with `--non-interactive` so CI fails fast with actionable messages
 
 So the world's distributable artifact is the `.apworld`, while the player's actual game artifact is the `.apkirbyam` patch generated from world output.
 
