@@ -3,7 +3,7 @@ Options for the Castlevania: Aria of Sorrow randomizer.
 """
 
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, Toggle
+from Options import ItemsAccessibility, PerGameCommonOptions, Toggle
 
 class RandomizePickups(Toggle):
     """
@@ -16,4 +16,5 @@ class RandomizePickups(Toggle):
 @dataclass
 class CVAOSOptions(PerGameCommonOptions):
     """Options for the Castlevania: Aria of Sorrow randomizer."""
+    accessibility: ItemsAccessibility
     randomize_pickups: RandomizePickups
