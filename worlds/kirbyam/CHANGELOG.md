@@ -1,8 +1,9 @@
 # KirbyAM APWorld Changelog
 
-Contract for `## Unreleased` and all post-public `## v...` sections:
+Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 - `### New Features`
+- `### Improvements` (optional for older post-public sections)
 - `### Bug Fixes`
 - `### Internal Changes`
 
@@ -10,33 +11,34 @@ Contract for `## Unreleased` and all post-public `## v...` sections:
 
 ### New Features
 
-- `Starting Kirby Color` lets players begin a seed with a chosen Kirby palette instead of default Pink, including a random-color option for runs that want a surprise look (Issue #597).
-- Tracker support is broader, making it easier for players to follow room progress, location progress, and unique-item progress in tracker tools (Issue #114).
-- `Start With All Maps` lets players begin with every area map already unlocked for a more guided and readable playthrough (Issue #584).
-- Room names have been updated to match familiar Wikirby naming, making navigation and communication clearer for players (Issue #587).
-- Add 15 decomp-aligned world-map big-switch AP checks (`HUB_SWITCH_*`) with a dedicated ROM transport register (`hub_switch_flags` at `0x0203B04C`), BizHawk resend/dedupe polling, payload hook integration at the world-map unlock dispatcher callsite (`sub_08039ED4`), protocol/address contract updates, and regression coverage for data/polling/patch offsets/region binding (Issue #481).
-- Fix enemy copy-ability shuffled-mode source coverage gaps by adding missing known US-ROM ability sources (`GOLEM`, `PRANK`, `MASTER_CRAZY_HAND_BULLET`) so same-type enemy grants no longer diverge between patched and unpatched table entries across rooms (Issue #420).
-- Improve shuffled enemy copy-ability mapping to guarantee full allowed-ability representation across included enemy types when key cardinality permits (`no_ability_weight < 100`), while preserving explicit `no_ability_weight=100` semantics (all included sources resolve to no ability).
-- Add shuffled enemy copy-ability spoiler output listing each randomized source and resulting copy ability (`kind | source_key -> ability`) so seed analysis can verify enemy mappings and full allowed-ability representation (Issue #586).
-- Add generation-log shuffled assignment table output (`kind | source -> ability`) so seed build logs show deterministic enemy copy-ability grants for shuffled mode.
-- Add completely-random per-swallow reroll telemetry logging (`Kirby swallowed a <EnemyName>. Ability was rerolled to <AbilityName>.`) based on the latest observed runtime swallow event (best-effort; earlier events between polls are noted as missed), while only streaming that line to the live client when `enable_debug_logging` is enabled.
+- `Starting Kirby Color` lets players begin with a chosen Kirby color instead of always starting as Pink, including a random option for surprise runs (Issue #597).
+- `Start With All Maps` lets players begin with every area map already unlocked for a more guided playthrough (Issue #584).
+- Room names now match familiar Wikirby names, making the game easier to navigate and discuss (Issue #587).
+- World-map big switches are now full Archipelago checks (Issue #481).
+- Spoiler output and generation logs now show shuffled enemy ability assignments, making seeds easier to review (Issue #586).
+
+### Improvements
+- Enemy Ability Shuffle now covers more enemies, so shuffled abilities stay consistent in more rooms (Issue #420).
+- Enemy Ability Shuffle now spreads allowed abilities more evenly across enemies when possible, while still respecting settings that force no ability.
+- `Ability Randomization: Minny` is now off by default, fixing seeds that changed Minny unexpectedly unless players opted in (Issue #583).
 
 ### Bug Fixes
-
-- Restore room-sanity coverage for designed warp rooms by re-enabling their `room_sanity` metadata mappings (Issue #605).
-- Updated `Ability Randomization: Minny` (`ability_randomization_minny`) so that it's off by default (Issue #583).
-- Prevent skipped in-game item delivery when stale `debug_item_counter` values jump ahead of the client cursor by only trusting forward counter reconciliation for pending mailbox ACKs (`incoming_item_flag == 0` while a delivery is pending), while keeping rewind recovery for true counter rollback.
-- Ensure delivery diagnostics gated by `enable_debug_logging` are still written to log files and only hidden from the live client stream via `NoStream` (Issue #601).
-- Harden vitality delivery against transition/reset replay by clamping native vitality counter grants to the shipped AP vitality item cardinality (4), and in `one_hit_mode=exclude_vitality_counters` scrub native vitality back to `0` during gameplay so vitality receipts cannot persist in that mode (Issue #571).
-- Fix missing boss-defeat LocationChecks when the matching shard is already owned by adding a conservative client fallback: rising-edge bits from `boss_mirror_table_native` byte 0 (bits 0-7) now backfill boss checks when `boss_defeat_flags` is absent for that fight (Issue #573).
-- Hide additional KirbyAM reconnect/resend diagnostics from the live client output unless `Enable Debug Logging` is enabled, while still writing those diagnostics to log files unconditionally (`NoStream`-filtered stream suppression only); includes watcher transport reconnect messages and resend diagnostics for boss/major/vitality/sound-player LocationChecks polling (Issue #582).
+- Enemy Ability Randomization: Completely random now rerolls abilities per swallow, not per room (Issue #420).
+- Warp rooms that were missing Room Sanity checks now have them again (Issue #605).
+- Fixed a delivery issue that could cause items to be skipped when the client and game counters got out of sync.
+- Fixed debug-only delivery diagnostics so they still go to the log file even when they are hidden from the live client output (Issue #601).
+- Fixed vitality counter replays caused by transitions or resets, and prevented vitality counters from lingering in `One-Hit Mode` when that mode excludes them (Issue #571).
+- Fixed some boss checks not being sent when the matching shard was already owned (Issue #573).
+- Fixed extra reconnect and resend diagnostics showing up in the live client unless debug logging was enabled, while still keeping them in the log file (Issue #582).
 
 ### Internal Changes
 
+- Tracker support now gives trackers a clearer view of room progress, location progress, and unique-item progress (Issue #114).
 - Reduce duplicate CI runs on feature branches by limiting push-triggered workflow execution to `main` for native static analysis and other PR-validated checks (`scan-build`, `ctest`, `type check`, `build`, and `analyze-modified-files`), while keeping `pull_request` validation behavior unchanged.
 - Improve `worlds/kirbyam/build.py` usability for non-author machines by prompting for missing required patch inputs in interactive runs (including missing `--rom` when `--source-type arg` is selected), adding `--source-type file` fallback guidance when `rom_path.tmp` is invalid, and introducing `--non-interactive` fail-fast behavior for automation/CI (Issue #607).
 - Expose all configured KirbyAM seed options in `slot_data` (including `start_with_all_maps` and `enable_debug_logging`) so tracker surfaces can render the exact seed configuration from slot data without inferring from partial fields (Issue #114).
 - Move unswallowable enemy exclusion policy from a static runtime list into `data/enemies.json` source metadata (`can_be_swallowed`) and represent the currently configured non-swallowable enemies there: `GLUNK`, `JACK`, and `SQUISHY` (Issue #570).
+- When debug logging is enabled, completely random swallow abilities now log what Kirby got from the latest swallow event.
 
 ## v0.1.2
 

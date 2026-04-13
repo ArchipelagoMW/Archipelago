@@ -8,15 +8,16 @@ import pytest
 
 @pytest.mark.asyncio
 async def test_kirbyam_test_logging_records_protocol_traffic(
-    kirbyam_test_log_file,
+    tmp_path,
     mock_bizhawk_context,
     mock_bizhawk_read,
     mock_bizhawk_write,
     caplog,
 ) -> None:
+    test_log_file = tmp_path / "kirbyam-test-logging.log"
     test_logger = logging.getLogger("worlds.kirbyam.test")
     previous_level = test_logger.level
-    test_file_handler = logging.FileHandler(kirbyam_test_log_file, mode="a", encoding="utf-8")
+    test_file_handler = logging.FileHandler(test_log_file, mode="w", encoding="utf-8")
     test_file_handler.setLevel(logging.DEBUG)
     test_logger.setLevel(logging.DEBUG)
     test_logger.addHandler(test_file_handler)
@@ -35,8 +36,8 @@ async def test_kirbyam_test_logging_records_protocol_traffic(
                 flush()
         test_file_handler.flush()
 
-        assert kirbyam_test_log_file.exists()
-        log_text = kirbyam_test_log_file.read_text(encoding="utf-8", errors="replace")
+        assert test_log_file.exists()
+        log_text = test_log_file.read_text(encoding="utf-8", errors="replace")
         marker_index = log_text.rfind(marker)
         assert marker_index != -1
         log_section = log_text[marker_index:]

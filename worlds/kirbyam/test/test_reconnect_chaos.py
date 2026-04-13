@@ -126,6 +126,7 @@ async def test_reconnect_chaos_goal_reporting_is_idempotent_across_cycles(mock_b
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
          patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
+         patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock), \
          patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
          patch.object(client, '_poll_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \

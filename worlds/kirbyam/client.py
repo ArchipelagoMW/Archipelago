@@ -66,6 +66,25 @@ _ABILITY_ID_TO_NAME: dict[int, str] = {
     ability_id: ability_name
     for ability_name, ability_id in ABILITY_NAME_TO_ID.items()
 }
+_MAP_ITEM_LABEL_TO_AREA_ID: dict[str, int] = {
+    "Rainbow Route - Map": 1,
+    "Moonlight Mansion - Map": 2,
+    "Cabbage Cavern - Map": 3,
+    "Mustard Mountain - Map": 4,
+    "Carrot Castle - Map": 5,
+    "Olive Ocean - Map": 6,
+    "Peppermint Palace - Map": 7,
+    "Radish Ruins - Map": 8,
+    "Candy Constellation - Map": 9,
+}
+_MAP_ITEM_ID_TO_AREA_ID: dict[int, int] = {
+    item.item_id: _MAP_ITEM_LABEL_TO_AREA_ID[item.label]
+    for item in data.items.values()
+    if item.label in _MAP_ITEM_LABEL_TO_AREA_ID
+}
+_MANAGED_NATIVE_MAP_BITMASK = 0
+for area_id in _MAP_ITEM_ID_TO_AREA_ID.values():
+    _MANAGED_NATIVE_MAP_BITMASK |= 1 << area_id
 _ABILITY_SOURCE_ADDR_TO_KEY: dict[int, str] = {
     address: source.key
     for source in ABILITY_SOURCES
@@ -103,6 +122,9 @@ class KirbyAmClient(BizHawkClient):
         self._hook_heartbeat_stale_ticks: int = 0
         self._delivery_counter_ahead_fallback_active: bool = False
         self._delivery_counter_ahead_resume_logged: bool = False
+        self._cached_delivered_map_bits: int = 0
+        self._cached_map_bits_index: int = 0
+        self._cached_map_bits_items_len: int = 0
 
         # Deterministic location ordering
         self._all_location_ids_sorted: list[int] = [
@@ -270,6 +292,9 @@ class KirbyAmClient(BizHawkClient):
         self._starting_kirby_color_synced_id = None
         self._starting_kirby_color_logged_signature = None
         self._starting_kirby_color_revalidate_counter = 0
+        self._cached_delivered_map_bits = 0
+        self._cached_map_bits_index = 0
+        self._cached_map_bits_items_len = 0
 
     def _no_extra_lives_enabled(self, ctx: "BizHawkClientContext") -> bool:
         slot_data = getattr(ctx, "slot_data", None)
@@ -286,6 +311,77 @@ class KirbyAmClient(BizHawkClient):
             return int(value)
         except (TypeError, ValueError):
             return OneHitMode.option_off
+
+    def _start_with_all_maps_enabled(self, ctx: "BizHawkClientContext") -> bool:
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return False
+        return self._coerce_bool(slot_data.get("start_with_all_maps", False), False)
+
+    def _ap_owned_native_map_bits(self, ctx: "BizHawkClientContext") -> int:
+        delivered_items = getattr(ctx, "items_received", ())
+        delivered_count = min(self._delivered_item_index, len(delivered_items))
+
+        # Rebuild cache on reconnect rewinds or when the received-item list shrinks.
+        if (
+            self._cached_map_bits_index > delivered_count
+            or self._cached_map_bits_items_len > len(delivered_items)
+        ):
+            self._cached_delivered_map_bits = 0
+            self._cached_map_bits_index = 0
+
+        # Apply only newly delivered entries so per-tick reconciliation stays O(1) after catch-up.
+        for item_index in range(self._cached_map_bits_index, delivered_count):
+            item_fields = self._extract_delivery_item_fields(delivered_items[item_index])
+            if item_fields is None:
+                continue
+            item_id, _player_id = item_fields
+            area_id = _MAP_ITEM_ID_TO_AREA_ID.get(item_id)
+            if area_id is not None:
+                self._cached_delivered_map_bits |= 1 << area_id
+
+        self._cached_map_bits_index = delivered_count
+        self._cached_map_bits_items_len = len(delivered_items)
+
+        owned_bits = self._cached_delivered_map_bits
+        if self._start_with_all_maps_enabled(ctx):
+            owned_bits |= _MANAGED_NATIVE_MAP_BITMASK
+        return owned_bits
+
+    async def _reconcile_native_map_ownership(self, ctx: "BizHawkClientContext") -> None:
+        """
+        Reassert AP-owned native map bits from runtime state.
+
+        This covers start_with_all_maps precollects immediately from slot_data and
+        restores later map receipts after reconnect/savestate drift without relying
+        on native big-chest map ownership as the AP check authority.
+        """
+        map_addr = self._native_addr("big_chest_bitfield_native")
+        if map_addr is None:
+            return
+
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(map_addr, 4, "System Bus")]))[0]
+        current_bits = self._u32_le(raw)
+        desired_map_bits = self._ap_owned_native_map_bits(ctx)
+        desired_bits = (current_bits & ~_MANAGED_NATIVE_MAP_BITMASK) | desired_map_bits
+        if current_bits == desired_bits:
+            return
+
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [(map_addr, desired_bits.to_bytes(4, "little"), "System Bus")],
+        )
+
+        from CommonClient import logger
+
+        logger.info(
+            "KirbyAM: reconciled native map ownership (current=0x%08X, desired=0x%08X, start_with_all_maps=%s, delivered_item_index=%s)",
+            current_bits,
+            desired_bits,
+            self._start_with_all_maps_enabled(ctx),
+            self._delivered_item_index,
+            extra={"NoStream": not self._debug_logging_enabled},
+        )
 
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
@@ -885,6 +981,7 @@ class KirbyAmClient(BizHawkClient):
                 await self._display_client_message(ctx, "Item sending resumed")
                 self._last_runtime_gate_reason = None
 
+            await self._reconcile_native_map_ownership(ctx)
             await self._enforce_no_extra_lives(ctx)
             await self._enforce_one_hit_mode(ctx)
             await self._apply_pending_death_link(ctx)
