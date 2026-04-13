@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, CollectionRule
+from BaseClasses import CollectionState, CollectionRule, Region
 from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
@@ -13,6 +13,7 @@ class MessengerRules:
     player: int
     world: "MessengerWorld"
     connection_rules: dict[str, CollectionRule]
+    indirect_conditions: dict[str, list[Region]]
     region_rules: dict[str, CollectionRule]
     location_rules: dict[str, CollectionRule]
     maximum_price: int
@@ -219,6 +220,16 @@ class MessengerRules:
                 lambda state: self.can_dboost(state) or self.has_dart(state),
         }
 
+        # dict of connection names and the regions checked in the requirements to traverse the exit
+        self.indirect_conditions = {
+            "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Crushing Pits Shop": [
+                self.world.get_region("Howling Grotto - Emerald Golem Shop")
+            ],
+            "Glacial Peak - Left -> Elemental Skylands - Air Shmup": [
+                self.world.get_location("Quillshroom Marsh - Queen of Quills").parent_region
+            ],
+        }
+
         self.location_rules = {
             # hq
             "Money Wrench": self.can_shop,
@@ -364,6 +375,8 @@ class MessengerRules:
         for entrance_name, rule in self.connection_rules.items():
             entrance = multiworld.get_entrance(entrance_name, self.player)
             entrance.access_rule = rule
+            for region in self.indirect_conditions.get(entrance_name, ()):
+                multiworld.register_indirect_condition(region, entrance)
         for loc in multiworld.get_locations(self.player):
             if loc.name in self.location_rules:
                 loc.access_rule = self.location_rules[loc.name]
