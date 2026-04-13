@@ -210,6 +210,26 @@ def _load_transdoor_connections() -> tuple[TransdoorConnection, ...]:
                 from_entrance=row["from_entrance"].strip(),
                 to_entrance=row["to_entrance"].strip(),
             ))
+
+    # Apply overrides: rows with does_exist=FALSE are removed, rows with
+    # is_override=TRUE are added in their place.
+    override_path = Path(__file__).with_name("override_transdoor_entrance_connections.csv")
+    if override_path.exists():
+        removals: set[tuple[str, str]] = set()
+        additions: list[TransdoorConnection] = []
+        with override_path.open("r", encoding="utf-8", newline="") as handle:
+            for row in csv.DictReader(handle):
+                if not any((v or "").strip() for v in row.values()):
+                    continue
+                from_e = row["from_entrance"].strip()
+                to_e = row["to_entrance"].strip()
+                if not _truthy(row.get("does_exist")):
+                    removals.add((from_e, to_e))
+                if _truthy(row.get("is_override")):
+                    additions.append(TransdoorConnection(from_entrance=from_e, to_entrance=to_e))
+        out = [c for c in out if (c.from_entrance, c.to_entrance) not in removals]
+        out.extend(additions)
+
     return tuple(out)
 
 

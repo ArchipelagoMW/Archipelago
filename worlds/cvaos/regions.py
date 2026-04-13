@@ -89,7 +89,13 @@ def create_regions(world: CVAOSWorld) -> None:
         menu.connect(start_region, "Start Game")
 
     # Connect doors between rooms using the transdoor mapping.
+    seen_transdoors: set[tuple[str, str]] = set()
     for transdoor in transdoor_connection_collection:
+        key = (transdoor.from_entrance, transdoor.to_entrance)
+        if key in seen_transdoors:
+            continue
+        seen_transdoors.add(key)
+
         from_door_number = door_id_unique_to_number.get(transdoor.from_entrance)
         to_door_number = door_id_unique_to_number.get(transdoor.to_entrance)
 
