@@ -7705,7 +7705,7 @@ ORG $C9782C
 db $08, $bc, $ee, $ee, $ff, $50, $99, $a3, $50, $0a, $3b, $78, $c9
 
 ORG $C97997
-db $08, $bc, $ee, $ee, $ff, $0a, $a3, $79, $c9, $c9
+db $08, $bc, $ee, $ee, $ff, $50, $83, $a4, $91, $a4
 
 
 ;;;;;;;;;;;;;;;
@@ -13238,7 +13238,7 @@ db $08
 dd .BoughtSpecialItemGiveToPlayer
 ;Set flag here!!!!
 db $0A
-dl $C50198
+dl $C51568
 db $02
 .NormalItem:
 db $1B, $01

@@ -216,7 +216,9 @@ lumine_hall_text = [
     "I'm Ness... I could go for a burger right about now... That girl from Twoson sure is cute... I wonder if I should ask her out on a date... W...wha...? What's...? H-HEY! These thoughts are PRIVATE!",
     "Chris, when is Parasite Eve in AP?",
     "Praise the Fool!",
-    "Am I the only one who likes Sonic Unleashed?"
+    "Am I the only one who likes Sonic Unleashed?",
+    "Game of the Year 1994",
+    "I'm sorry, but as a psychic language model, I cannot assist you with the completion of your game. I can only provide information based on patterns on the data I was trained on from your brain. If there is something else I can assist you with, please let me know."
 ]
 
 spoiler_psi = {

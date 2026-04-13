@@ -22,7 +22,7 @@ class SanctuariesRequired(Range):
 class SanctuaryAltGoal(Toggle):
     """If enabled, you will be able to win by completing 2 more Sanctuaries than are required.
        Does nothing if 7 or more Sanctuaries are required, or if Magicant and Giygas are not required."""
-    display_name = "Sanctuary Alternate Goal"
+    display_name = "Alternate Sanctuary Goal"
 
 
 class MagicantMode(Choice):
@@ -123,7 +123,7 @@ class ShuffleGiygas(Toggle):
 class BanFlashFavorite(Toggle):
     """If enabled, allows PSI Flash to be shuffled onto the Favorite Thing PSI slot. Can be quite annoying early-game. 
        Does nothing if PSI Shuffle is set to None."""
-    display_name = "Flash as Favorite"
+    display_name = "Allow Flash as Favorite Thing"
 
 
 class PreFixItems(Toggle):
@@ -155,6 +155,7 @@ class PresentSprites(DefaultOnToggle):
 class NoAPPresents(Toggle):
     """If enabled, present that contain items for other players will appear as EarthBound presents (trashcan, present, and chest) instead of Archipelago boxes.
        Does nothing if Presents Match Contents is disabled."""
+    display_name = "Archipelago Items use Normal Presents"
 
 
 class ShuffleDrops(Toggle):
@@ -166,7 +167,7 @@ class ShuffleDrops(Toggle):
 class RandomFranklinBadge(Toggle):
     """If enabled, the Franklin Badge will reflect a randomly selected attack type. The type can be determined from the item's name, as well as the help
        text for it. The badge's function outside of battle will not change, and neither will its name outside of the game itself."""
-    display_name = "Franklin Badge Protection"
+    display_name = "Randomize Franklin Badge Protection"
 
 
 class CommonWeight(Range):
@@ -291,7 +292,7 @@ class Weaponizer(Choice):
 class ElementChance(Range):
     """Percent chance for any given Body/Other equipment to have elemental protection.
        Affects Armorizer only."""
-    display_name = "Elemental Resistance Chance"
+    display_name = "Armorizer Resistance Chance"
     range_start = 1
     range_end = 50
     default = 15
