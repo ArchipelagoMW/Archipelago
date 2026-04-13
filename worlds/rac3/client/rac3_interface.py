@@ -1157,9 +1157,7 @@ class Rac3Interface(GameInterface):
 
     def restore_vendor_item_names(self):
         """Restore the names of the weapons in the weapon vendor to their original values"""
-        # For performance reasons, we only restore the original names when we need to, which is when the player leaves the vendor menu
-        # Otherwise, we just do 20 writes all the time when in reality the vendor is only interacted with a tiny fraction of the time.
-        if not self.should_restore_vendor_item_names:
+        if not self.should_restore_vendor_item_names or self.planet not in PLANET_VENDOR_OFFSET.keys():
             return
         string_id_table_start = self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_STRING_TABLE_BASE)
         all_strings_start = self._read32(string_id_table_start)
