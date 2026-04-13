@@ -119,10 +119,6 @@ class EntranceInfo(BaseModel):
         return self.door_identifier_unique
 
     @property
-    def door_identifier(self) -> str:
-        return self.door_identifier_nonunique
-
-    @property
     def door_hex(self) -> str:
         return hex(self.door_address)
 

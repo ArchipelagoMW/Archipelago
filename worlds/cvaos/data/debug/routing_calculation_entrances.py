@@ -5,8 +5,8 @@ from dataclasses import dataclass
 import heapq
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
-from .routing_info import AbilityCombo, RoutingInfo, TransdoorConnection
-from . import entrance_to_entrance_info_collection, transdoor_connection_collection
+from .routing_info import AbilityCombo, RoutingInfo
+from . import entrance_to_entrance_info_collection
 
 NodeId = str
 ReqMask = int
@@ -67,10 +67,6 @@ class RouteOption:
     steps: Tuple[ParentInfo, ...]
 
 
-# ============================================================
-# Entrance-id helpers
-# ============================================================
-
 class EntranceId:
     """
     Entrance node IDs are "START_ROOM:END_ROOM", e.g. "000:003".
@@ -102,7 +98,6 @@ class EntranceId:
     @staticmethod
     def is_pseudo(node_id: NodeId) -> bool:
         return node_id.startswith(EntranceId._PSEUDO_PREFIX)
-
 
 
 class MaskUtils:
@@ -155,6 +150,7 @@ class MaskUtils:
 Adjacency = Dict[NodeId, List[Edge]]
 FromToKey = Tuple[NodeId, NodeId]
 
+
 @dataclass(frozen=True, slots=True)
 class RoutingGraph:
     """
@@ -179,31 +175,16 @@ class RoutingGraph:
 
 class RoutingGraphBuilder:
     @staticmethod
-    def _add_edge(
-        adjacency: Adjacency,
-        by_connection_number: Dict[int, Tuple[NodeId, Edge]],
-        by_from_to: Dict[FromToKey, List[Edge]],
-        from_node: NodeId,
-        edge: Edge,
-    ) -> None:
-        adjacency.setdefault(from_node, []).append(edge)
-        adjacency.setdefault(edge.to_node, adjacency.get(edge.to_node, []))
-        by_connection_number[edge.connection_number] = (from_node, edge)
-        by_from_to.setdefault((from_node, edge.to_node), []).append(edge)
-
-    @staticmethod
     def from_requirements(
         requirements: Iterable[RoutingInfo],
         *,
         include_combos: bool = True,
         minimize: bool = True,
         strict_combo_tokens: bool = True,
-        transdoors: Iterable[TransdoorConnection] | None = None,
     ) -> RoutingGraph:
         adjacency: Adjacency = {}
         by_connection_number: Dict[int, Tuple[NodeId, Edge]] = {}
         by_from_to: Dict[FromToKey, List[Edge]] = {}
-        next_connection_number = 1
 
         for route_info in requirements:
             req_masks = route_info.get_requirement_bitmasks(
@@ -226,29 +207,11 @@ class RoutingGraphBuilder:
                 variant=route_info.variant,
             )
 
-            RoutingGraphBuilder._add_edge(
-                adjacency,
-                by_connection_number,
-                by_from_to,
-                from_entrance,
-                edge,
-            )
-            next_connection_number = max(next_connection_number, route_info.connection_number + 1)
+            adjacency.setdefault(from_entrance, []).append(edge)
+            adjacency.setdefault(to_entrance, adjacency.get(to_entrance, []))  # ensure node exists
 
-        for transdoor in transdoor_connection_collection if transdoors is None else transdoors:
-            edge = Edge(
-                to_node=transdoor.to_entrance,
-                connection_number=next_connection_number,
-                req_masks=(0,),
-            )
-            RoutingGraphBuilder._add_edge(
-                adjacency,
-                by_connection_number,
-                by_from_to,
-                transdoor.from_entrance,
-                edge,
-            )
-            next_connection_number += 1
+            by_connection_number[edge.connection_number] = (from_entrance, edge)
+            by_from_to.setdefault((from_entrance, to_entrance), []).append(edge)
 
         frozen_by_from_to: Dict[FromToKey, Tuple[Edge, ...]] = {
             key: tuple(edges) for key, edges in by_from_to.items()
