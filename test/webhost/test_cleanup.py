@@ -11,13 +11,13 @@ from . import TestBase
 class TestCleanup(TestBase):
     def test_cleanup_unowned(self) -> None:
         with db_session:
-            s1 = Seed(id=uuid4(), multidata=b'', owner=UUID(int=0))
+            s1 = Seed(id=uuid4(), multidata=b"", owner=UUID(int=0))
             Room(id=uuid4(), owner=UUID(int=0), seed=s1)
 
-            s2 = Seed(id=uuid4(), multidata=b'', owner=uuid4())  # Owned
+            s2 = Seed(id=uuid4(), multidata=b"", owner=uuid4())  # Owned
             Room(id=uuid4(), owner=UUID(int=0), seed=s2)  # Unowned room of owned seed
 
-            Seed(id=uuid4(), multidata=b'', owner=UUID(int=0))  # Unowned seed with no rooms
+            Seed(id=uuid4(), multidata=b"", owner=UUID(int=0))  # Unowned seed with no rooms
 
             commit()
 
@@ -35,21 +35,21 @@ class TestCleanup(TestBase):
 
         with db_session:
             # Case 1: Old room, owned
-            s1 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=old_time)
+            s1 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=old_time)
             r1 = Room(id=uuid4(), owner=uuid4(), seed=s1, last_activity=old_time)
 
             # Case 2: Recent room, owned
-            s2 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=old_time)
+            s2 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=old_time)
             r2 = Room(id=uuid4(), owner=uuid4(), seed=s2, last_activity=recent_time)
 
             # Case 3: Old seed, no rooms, owned
-            s3 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=old_time)
+            s3 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=old_time)
 
             # Case 4: Recent seed, no rooms, owned
-            s4 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=recent_time)
+            s4 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=recent_time)
 
             # Case 5: Old seed with recent room (should not be deleted)
-            s5 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=old_time)
+            s5 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=old_time)
             r5 = Room(id=uuid4(), owner=uuid4(), seed=s5, last_activity=recent_time)
 
             commit()
@@ -74,7 +74,7 @@ class TestCleanup(TestBase):
         old_time = now - timedelta(days=10)
 
         with db_session:
-            s1 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=old_time)
+            s1 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=old_time)
             r1 = Room(id=uuid4(), owner=uuid4(), seed=s1, last_activity=old_time)
             commit()
 
@@ -89,10 +89,10 @@ class TestCleanup(TestBase):
         old_time = now - timedelta(days=10)
 
         with db_session:
-            s1 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=old_time)
+            s1 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=old_time)
             slot1 = Slot(player_id=1, player_name="P1", seed=s1, game="TestGame")
 
-            s2 = Seed(id=uuid4(), multidata=b'', owner=uuid4(), creation_time=now)
+            s2 = Seed(id=uuid4(), multidata=b"", owner=uuid4(), creation_time=now)
             slot2 = Slot(player_id=2, player_name="P2", seed=s2, game="TestGame")
 
             commit()
