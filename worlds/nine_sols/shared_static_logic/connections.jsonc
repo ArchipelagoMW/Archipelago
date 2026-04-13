@@ -208,6 +208,12 @@
         "requires": [{ "item": "Air Dash" }, { "item": "Cloud Leap" }],
         "medium_requires": [{ "item": "Cloud Leap" }] // and swift runner
     },
+    {
+        "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Crystal Caves",
+        "ls_requires": [{ "item": "Cloud Leap" }, { "item": "Ledge Grab" }] // and (AD or SR)
+        // do CL LS setup at ledge by "Below Root Node", then CL + (SR or AD) into Arena entrance, then the fun part:
+        // jump back outside, CL, LS vault, CL again while holding up to grab onto the Crystal Caves platform
+    },
     { "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Small Chest Below Root Node", "requires": [] }, // one-way fall
     { "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Lower Left Exit", "requires": [] }, // one-way fall
     {
