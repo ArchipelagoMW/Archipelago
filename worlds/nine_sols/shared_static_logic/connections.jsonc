@@ -549,11 +549,23 @@
         "medium_requires": [] // just swift runner
     }, // bow hover or (CS + AD + T-dash) works but is redundant // no ledge for parry hover
     {
+        "from": "PR (Central) - Upper Right", "to": "PR (Central) - Upper Right Roof Statue",
+        "requires": [ { "anyOf": [
+            { "item": "Mystic Nymph: Scout Mode" }, // lower rope
+            { "item": "Cloud Leap" } // or skip the rope entirely
+        ] } ]
+    },
+    {
         "from": "PR (Central) - Upper Right", "to": "PR (Central) - Building Right of Light Bridge",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
         "medium_requires": [] // T-dash
+    },
+    {
+        "from": "PR (Central) - Building Right of Light Bridge", "to": "PR (Central) - Upper Right Roof Statue",
+        "medium_requires": [ { "item": "Trick - Bow Hover" } ] // from the upper level
+        // LS parry hover would work if we had a non-CL setup here; CL is redundant with the vanilla connection to URRS
     },
     { "from": "PR (Central) - Building Right of Light Bridge", "to": "PR (Central) - Light Bridge", "requires": [] }, // one-way door
     { "from": "PR (Central) - Light Bridge", "to": "PR (Central) - Backup Control Room", "requires": [] }, // one-way fall

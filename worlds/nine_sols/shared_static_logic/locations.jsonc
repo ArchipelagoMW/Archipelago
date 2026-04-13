@@ -452,7 +452,7 @@
     {
         "address": 903, "name": "PR (Central): Hack Statue",
         "region": "PR (Central) - Upper Right", "requires": [
-            { "anyOf": [ { "item": "Mystic Nymph: Scout Mode" }, { "item": "Cloud Leap" } ] }, // lower or skip rope
+            { "region": "PR (Central) - Upper Right Roof Statue" },
             { "item": "Tai-Chi Kick" } // for the statue
         ]
     },
