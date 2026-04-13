@@ -1,18 +1,27 @@
 from dataclasses import dataclass
-from typing import Dict, Any
 
 from Options import PerGameCommonOptions, DeathLink, StartInventoryPool, Choice, DefaultOnToggle, Range, Toggle, \
     OptionGroup
 
 
-class ExpandedPool(DefaultOnToggle):
+class ExpandedPool(Choice):
     """
-    Determines if places other than chests and special weapons will be locations.
-    This includes boss fights as well as powering the tesla orb and completing the console login.
-    In Expanded Pool, system power is instead restored when receiving the System Power item.
-    Similarly, the final area door will open once the four Key items, one for each main area, have been found.
+    Determines if clearing boss fights, powering the tesla orb and completing the console login will be checks.
+    In Expanded Pool, system power is restored by the System Power item instead of by powering the tesla orb.
+    Similarly, the final area door will open once enough of the four Key items, one for each main area, have been found.
+    The number of Key items required is determined by the Final Area Locks option.
+
+    Finally, if coop is selected, expanded pool locations will sync across players playing the same slot:
+    - Boss kills will result in that boss being defeated for everyone playing that slot.
+    - Checking the console at the start of the game will check it for all players on that slot.
+    - Powering the tesla orb will do so for all players on that slot.
     """
     display_name = "Expanded Item Pool"
+    option_disabled = 0
+    option_enabled = 1
+    option_coop = 2
+    default = option_enabled
+    rich_text_doc = True
 
 
 class InstantSaving(DefaultOnToggle):
@@ -98,6 +107,16 @@ class TrapChance(Range):
     default = 50
 
 
+class TrapLink(Toggle):
+    """
+    When you receive a trap, everyone who enabled trap link does. Of course, the reverse is true too.
+    Games with trap link enabled will try to convert the trap to an equivalent one.
+
+    If you receive a trap link that would be converted to a trap with a weight of 0, the trap link will be ignored.
+    """
+    display_name = "Trap Link"
+
+
 class MusicShuffle(Toggle):
     """
     Enables music shuffling.
@@ -106,19 +125,111 @@ class MusicShuffle(Toggle):
     display_name = "Music Shuffle"
 
 
+class FinalLockCount(Range):
+    """
+    Determines how many area bosses defeated or keys collected are needed to enter the final area.
+    If Expanded Pool is disabled, area bosses will need to be defeated, like in vanilla.
+    If Expanded Pool is enabled, keys will be needed instead.
+    """
+    display_name = "Final Area Locks"
+    range_start = 0
+    range_end = 4
+    default = 2
+
+
+class BattleLog(Choice):
+    """
+    Determines if defeating each enemy type for the first time counts as a check.
+    If extra goodies is selected, new items (5 of each) are added to the pool to help fill these new locations:
+    - Armor Up, which increases Portia's iframes by 20%.
+    - Weapon Up, which decreases enemy iframes by 10% and increases weapon damage by 20%.
+    """
+    display_name = "Battle Log Checks"
+    option_disabled = 0
+    option_enabled = 1
+    option_extra_goodies = 2
+    default = option_extra_goodies
+    rich_text_doc = True
+
+
+class BlastDoors(Choice):
+    """
+    Determines the type of each of the three blast doors found in the hub.
+    - Vanilla: All blast doors require the Powered Blaster.
+    - Random without repeats: Each blast door requires a different randomly selected special weapon to open.
+    - Random uniform: All blast doors require the same randomly selected special weapon to open.
+    - Fully random: Each blast door requires a randomly selected special weapon to open.
+    - Remove blast doors: There are no blast doors, so no special weapons are required to open them.
+    """
+    display_name = "Randomize Blast Doors"
+    option_vanilla = 0
+    option_random_without_repeats = 1
+    option_random_uniform = 2
+    option_fully_random = 3
+    option_remove_blast_doors = 4
+    default = option_random_without_repeats
+    rich_text_doc = True
+
+
+class TrapWeight(Choice):
+    """
+    Relative likelihood of this type of trap to be selected for the pool.
+    For example, a trap with a weight of 4 will be twice as likely to be included as a trap with a weight of 2.
+
+    Setting a trap's weight to 0 will prevent it from ever appearing, including as a result of Trap Link.
+
+    Effect of this trap:
+    """
+    option_disabled = 0
+    option_low = 1
+    option_normal = 2
+    option_high = 4
+    default = option_normal
+
+
+class IceTrapWeight(TrapWeight):
+    __doc__ = TrapWeight.__doc__ + "\nFreezes Portia in place for a few seconds."
+    display_name = "Ice Trap Weight"
+
+
+class ShakeTrapWeight(TrapWeight):
+    __doc__ = TrapWeight.__doc__ + "\n\nMakes the screen shake with (harmless) explosions for a few seconds."
+    display_name = "Shake Trap Weight"
+
+
+class NinjaTrapWeight(TrapWeight):
+    __doc__ = TrapWeight.__doc__ + "\n\nSpawns the ninja to fight you."
+    display_name = "Ninja Trap Weight"
+
+
+class TextTrapWeight(TrapWeight):
+    __doc__ = TrapWeight.__doc__ + "\n\nDisplays a bunch of text."
+    display_name = "Text Trap Weight"
+
+
 @dataclass
 class SavingPrincessOptions(PerGameCommonOptions):
     # generation options
     start_inventory_from_pool: StartInventoryPool
+    final_locks: FinalLockCount
     expanded_pool: ExpandedPool
+    battle_log: BattleLog
+    blast_doors: BlastDoors
     trap_chance: TrapChance
+    # trap weight
+    ice_weight: IceTrapWeight
+    shake_weight: ShakeTrapWeight
+    ninja_weight: NinjaTrapWeight
+    text_weight: TextTrapWeight
     # gameplay options
-    death_link: DeathLink
     instant_saving: InstantSaving
     sprint_availability: SprintAvailability
     cliff_weapon_upgrade: CliffWeaponUpgrade
     ace_weapon_upgrade: AceWeaponUpgrade
     iframes_duration: IFramesDuration
+    # link options
+    death_link: DeathLink
+    trap_link: TrapLink
     # aesthetic options
     shake_intensity: ScreenShakeIntensity
     music_shuffle: MusicShuffle
@@ -126,16 +237,28 @@ class SavingPrincessOptions(PerGameCommonOptions):
 
 groups = [
     OptionGroup("Generation Options", [
+        FinalLockCount,
         ExpandedPool,
+        BattleLog,
+        BlastDoors,
         TrapChance,
     ]),
+    OptionGroup("Trap Weights", [
+        IceTrapWeight,
+        ShakeTrapWeight,
+        NinjaTrapWeight,
+        TextTrapWeight,
+    ]),
     OptionGroup("Gameplay Options", [
-        DeathLink,
         InstantSaving,
         SprintAvailability,
         CliffWeaponUpgrade,
         AceWeaponUpgrade,
         IFramesDuration,
+    ]),
+    OptionGroup("Link Options", [
+        DeathLink,
+        TrapLink,
     ]),
     OptionGroup("Aesthetic Options", [
         ScreenShakeIntensity,
@@ -145,39 +268,44 @@ groups = [
 
 presets = {
     "Vanilla-like": {
-        "expanded_pool": False,
+        "final_locks": 4,
+        "expanded_pool": ExpandedPool.option_disabled,
+        "battle_log": BattleLog.option_disabled,
+        "blast_doors": BlastDoors.option_vanilla,
         "trap_chance": 0,
-        "death_link": False,
+
         "instant_saving": False,
         "sprint_availability": SprintAvailability.option_never_available,
         "cliff_weapon_upgrade": CliffWeaponUpgrade.option_vanilla,
         "ace_weapon_upgrade": AceWeaponUpgrade.option_vanilla,
         "iframes_duration": 100,
+
         "shake_intensity": 100,
-        "music_shuffle": False,
     },
     "Easy": {
-        "expanded_pool": True,
+        "final_locks": 2,
+        "expanded_pool": ExpandedPool.option_enabled,
+        "battle_log": BattleLog.option_extra_goodies,
+        "blast_doors": BlastDoors.option_random_without_repeats,
         "trap_chance": 0,
-        "death_link": False,
+
         "instant_saving": True,
         "sprint_availability": SprintAvailability.option_always_available,
         "cliff_weapon_upgrade": CliffWeaponUpgrade.option_never_upgraded,
         "ace_weapon_upgrade": AceWeaponUpgrade.option_always_upgraded,
         "iframes_duration": 200,
-        "shake_intensity": 50,
-        "music_shuffle": False,
     },
     "Hard": {
-        "expanded_pool": True,
+        "final_locks": 4,
+        "expanded_pool": ExpandedPool.option_enabled,
+        "battle_log": BattleLog.option_enabled,
+        "blast_doors": BlastDoors.option_fully_random,
         "trap_chance": 100,
-        "death_link": True,
+
         "instant_saving": True,
         "sprint_availability": SprintAvailability.option_never_available,
         "cliff_weapon_upgrade": CliffWeaponUpgrade.option_always_upgraded,
         "ace_weapon_upgrade": AceWeaponUpgrade.option_never_upgraded,
         "iframes_duration": 50,
-        "shake_intensity": 100,
-        "music_shuffle": False,
     }
 }
