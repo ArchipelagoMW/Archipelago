@@ -29,6 +29,10 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             goal_weights = game_block["goal"]
             shard_weights = game_block["shards"]
             ability_weights = game_block["ability_randomization_mode"]
+            assert "starting_kirby_color" in game_block, (
+                "'starting_kirby_color' option is missing from the generated template"
+            )
+            color_weights = game_block["starting_kirby_color"]
 
             assert "dark_mind" in goal_weights
             assert "100" not in goal_weights
@@ -43,10 +47,15 @@ def test_kirbyam_template_surface_options_visibility() -> None:
             assert "completely_random" not in ability_weights
             assert "no_extra_lives" in game_block
             assert "ability_randomization_no_ability_weight" in game_block
+            assert "starting_kirby_color" in game_block
+            assert "pink" in color_weights
+            assert "random_color" in color_weights
 
             assert "100% Save File" not in content
             assert "DEBUG: Testing-only goal" not in content
             assert "KirbyAM DeathLink uses native Kirby HP semantics" not in content
+            assert "Supported color names" in content
+            assert "Non-Pink colors become visible" in content
             assert requires_game_version == KirbyAmWorld.world_version.as_simple_string()
 
             assert "local_items" in game_block

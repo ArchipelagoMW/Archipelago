@@ -12,6 +12,8 @@ from Options import (
     Toggle,
 )
 
+from .colors import STARTING_KIRBY_COLOR_RANDOM_OPTION, kirby_color_names_for_docs, load_kirby_colors
+
 
 class Goal(Choice):
     """
@@ -184,6 +186,36 @@ class StartWithAllMaps(Toggle):
     default = 0
 
 
+def _build_starting_kirby_color_option() -> type[Choice]:
+    doc = (
+        """
+    Choose Kirby's default starting color palette.
+      Pink is the in-game default and requires no native color override.
+            Non-Pink colors become visible after the first room transition.
+
+    Supported color names (as listed on Kirby Wiki Spray Paint):
+      %s
+
+    Set to `random_color` to resolve to one supported color at generation.
+    """
+        % kirby_color_names_for_docs()
+    )
+
+    attrs: dict[str, object] = {
+        "__doc__": doc,
+        "display_name": "Starting Kirby Color",
+        "default": 0,
+        "option_random_color": STARTING_KIRBY_COLOR_RANDOM_OPTION,
+    }
+    for color in load_kirby_colors():
+        attrs[f"option_{color.key}"] = color.color_id
+
+    return type("StartingKirbyColor", (Choice,), attrs)
+
+
+StartingKirbyColor = _build_starting_kirby_color_option()
+
+
 class RoomSanity(Toggle):
     """Adds room-visit checks (Room X-YY). Off by default because it adds 257 locations."""
     display_name = "Room Sanity"
@@ -201,6 +233,8 @@ class KirbyAmOptions(PerGameCommonOptions):
     shards: RandomizeShards
 
     start_with_all_maps: StartWithAllMaps
+
+    starting_kirby_color: StartingKirbyColor
 
     no_extra_lives: NoExtraLives
 
@@ -244,5 +278,8 @@ OPTION_GROUPS = [
         AbilityRandomizationMinny,
         AbilityRandomizationPassiveEnemies,
         AbilityRandomizationNoAbilityWeight,
+    ]),
+    OptionGroup("Cosmetics", [
+        StartingKirbyColor,
     ]),
 ]

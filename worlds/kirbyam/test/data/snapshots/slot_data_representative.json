@@ -5286,6 +5286,8 @@
     }
   },
   "shards": 2,
+  "starting_kirby_color": 0,
+  "starting_kirby_color_name": "Pink",
   "unique_items": [
     "Cabbage Cavern - Map",
     "Cabbage Cavern - Mirror Shard",

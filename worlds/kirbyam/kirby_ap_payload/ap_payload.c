@@ -48,8 +48,15 @@
 #define AP_VITALITY_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x2Cu))
 #define AP_SOUND_PLAYER_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x30u))
 #define AP_HUB_SWITCH_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x4Cu))
+#define AP_STARTING_KIRBY_COLOR_ID (*(volatile uint32_t*)(AP_BASE + 0x50u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
+#define KIRBY_ACTIVE_COLOR_ADDR    0x0203ADE0u
+#define KIRBY_ACTIVE_COLOR          (*(volatile uint8_t*)(KIRBY_ACTIVE_COLOR_ADDR))
+// gUnk_0203ADE0 only takes effect before the game's graphics system initialises (boot-time).
+// KIRBY_TRANSITION_COLOR is the variable the game applies on every screen transition (runtime).
+#define KIRBY_TRANSITION_COLOR_ADDR 0x02020FBFu
+#define KIRBY_TRANSITION_COLOR      (*(volatile uint8_t*)(KIRBY_TRANSITION_COLOR_ADDR))
 #define AI_KIRBY_STATE_ADDR     0x0203AD2Cu
 #define AI_KIRBY_STATE          (*(volatile uint32_t*)(AI_KIRBY_STATE_ADDR))
 #define DEMO_PLAYBACK_FLAGS_ADDR 0x0203AD10u
@@ -264,6 +271,51 @@ static void ap_sync_active_kirby_health_from_vitality(void) {
     *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET) = vitality_total;
 }
 
+static uint8_t ap_starting_kirby_color_applied = 0u;
+
+static void ap_apply_starting_kirby_color_config(void) {
+    uint32_t desired_color;
+    uint8_t current_transition_color;
+
+    if (ap_starting_kirby_color_applied != 0u) {
+        return;
+    }
+
+    desired_color = AP_STARTING_KIRBY_COLOR_ID;
+
+    // 0xFFFFFFFF means client has not synced the runtime config yet.
+    if (desired_color == 0xFFFFFFFFu) {
+        return;
+    }
+
+    // Supported native color IDs: 0..13. Value 0 (Pink) is intentionally a no-op.
+    if (desired_color > 13u) {
+        return;
+    }
+    if (desired_color == 0u) {
+        ap_starting_kirby_color_applied = 1u;
+        return;
+    }
+
+    // KIRBY_TRANSITION_COLOR (0x02020FBF) is the variable the game reads on each screen
+    // transition to apply the active palette. If it already equals our desired color we
+    // are done. Otherwise enforce the configured starting color unconditionally: the
+    // spec requires "beginning of the game and on future starts", so we always apply
+    // once per boot/EWRAM session regardless of what a save file or prior session left.
+    current_transition_color = KIRBY_TRANSITION_COLOR;
+
+    if ((uint32_t)current_transition_color == desired_color) {
+        ap_starting_kirby_color_applied = 1u;
+        return;
+    }
+
+    // Write to the transition variable so the color takes effect on the next screen change,
+    // and also to the boot-time state variable in case this hook fires early enough.
+    KIRBY_TRANSITION_COLOR = (uint8_t)desired_color;
+    KIRBY_ACTIVE_COLOR = (uint8_t)desired_color;
+    ap_starting_kirby_color_applied = 1u;
+}
+
 static uint32_t ap_get_active_kirby_addr(void) {
     return KIRBY_STRUCTS_ADDR + ((uint32_t)KIRBY_CURRENT_PLAYER * KIRBY_STRUCT_STRIDE);
 }
@@ -447,6 +499,8 @@ void ap_poll_mailbox_c(void) {
         AP_BOSS_TEMP_SHARD_BITFIELD = 0u;
         AP_DELIVERED_VITALITY_ITEM_BITS = 0u;
         AP_HUB_SWITCH_FLAGS = 0u;
+        AP_STARTING_KIRBY_COLOR_ID = 0xFFFFFFFFu;
+        ap_starting_kirby_color_applied = 0u;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 
@@ -493,6 +547,8 @@ void ap_poll_mailbox_c(void) {
             AP_SHARD_SCRUB_DELAY = 0u;
         }
     }
+
+    ap_apply_starting_kirby_color_config();
 
     // Check if there's an item to process
     uint32_t flag = AP_IN_FLAG;

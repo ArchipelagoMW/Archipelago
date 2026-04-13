@@ -4,6 +4,7 @@ Archipelago World definition for Kirby & The Amazing Mirror
 import base64
 import os
 import pkgutil
+import random
 import time
 from collections import Counter
 from typing import TYPE_CHECKING, Any, ClassVar, Dict, List
@@ -17,6 +18,7 @@ from .ability_randomization import (
     VALID_ENEMY_COPY_ABILITIES,
     build_enemy_copy_ability_policy,
 )
+from .colors import STARTING_KIRBY_COLOR_RANDOM_OPTION, resolve_kirby_color
 from .data import LocationCategory, load_json_data, data as kirby_data
 from .generation_logging import (
     generation_stage,
@@ -110,6 +112,8 @@ class KirbyAmWorld(World):
     # Track generation timing
     _generation_start_time: float
     _enemy_copy_ability_policy: dict[str, Any]
+    _resolved_starting_kirby_color_id: int
+    _resolved_starting_kirby_color_name: str
 
     # Generation stages
     # Active filler pool for random selection.
@@ -183,6 +187,29 @@ class KirbyAmWorld(World):
         value = getattr(option, "value", option)
         return bool(value)
 
+    def _get_resolved_starting_kirby_color(self) -> tuple[int, str]:
+        resolved_id = getattr(self, "_resolved_starting_kirby_color_id", None)
+        resolved_name = getattr(self, "_resolved_starting_kirby_color_name", None)
+        if isinstance(resolved_id, int) and isinstance(resolved_name, str) and resolved_name:
+            return resolved_id, resolved_name
+
+        option = getattr(getattr(self, "options", None), "starting_kirby_color", None)
+        option_value = getattr(option, "value", option)
+        try:
+            choice_value = int(option_value) if option_value is not None else 0
+        except (TypeError, ValueError):
+            choice_value = 0
+        rng = getattr(self, "random", None)
+        if choice_value == STARTING_KIRBY_COLOR_RANDOM_OPTION and not isinstance(rng, random.Random):
+            raise RuntimeError(
+                "KirbyAM starting Kirby color could not be resolved from the world RNG. "
+                "Expected a valid seeded random.Random on self.random or a cached resolved color."
+            )
+        color = resolve_kirby_color(choice_value, rng)
+        self._resolved_starting_kirby_color_id = color.color_id
+        self._resolved_starting_kirby_color_name = color.display_name
+        return self._resolved_starting_kirby_color_id, self._resolved_starting_kirby_color_name
+
     def _active_filler_pool(self) -> tuple[str, ...]:
         pool = self.ACTIVE_FILLER_POOL
         if self._one_hit_mode_value() == OneHitMode.option_exclude_vitality_counters:
@@ -215,6 +242,17 @@ class KirbyAmWorld(World):
 
         with generation_stage("generate_early", self.player, self.player_name):
             logger.info(f"[P{self.player}] Shards mode: {self.options.shards.current_key}")
+            chosen_color_key = self.options.starting_kirby_color.current_key
+            resolved_color = resolve_kirby_color(int(self.options.starting_kirby_color.value), self.random)
+            self._resolved_starting_kirby_color_id = resolved_color.color_id
+            self._resolved_starting_kirby_color_name = resolved_color.display_name
+            logger.info(
+                "[P%s] Starting Kirby color option: %s -> %s (%s)",
+                self.player,
+                chosen_color_key,
+                resolved_color.display_name,
+                resolved_color.color_id,
+            )
 
             mode = int(self.options.ability_randomization_mode.value)
             randomize_boss_spawned = bool(self.options.ability_randomization_boss_spawns.value)
@@ -634,6 +672,7 @@ class KirbyAmWorld(World):
             "goal",
             "shards",
             "start_with_all_maps",
+            "starting_kirby_color",
             "no_extra_lives",
             "one_hit_mode",
             "death_link",
@@ -647,6 +686,9 @@ class KirbyAmWorld(World):
             "enable_debug_logging",
             toggles_as_bools=True,
         )
+        resolved_color_id, resolved_color_name = self._get_resolved_starting_kirby_color()
+        slot_data["starting_kirby_color"] = resolved_color_id
+        slot_data["starting_kirby_color_name"] = resolved_color_name
         policy = getattr(self, "_enemy_copy_ability_policy", None)
         assert policy is not None, (
             "Enemy copy ability policy must be initialized before fill_slot_data is called."

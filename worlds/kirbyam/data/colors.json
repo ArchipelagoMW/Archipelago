@@ -1,0 +1,18 @@
+{
+  "colors": [
+    {"key": "pink", "id": 0, "name": "Pink"},
+    {"key": "yellow", "id": 1, "name": "Yellow"},
+    {"key": "red", "id": 2, "name": "Red"},
+    {"key": "green", "id": 3, "name": "Green"},
+    {"key": "snow", "id": 4, "name": "Snow"},
+    {"key": "carbon", "id": 5, "name": "Carbon"},
+    {"key": "ocean", "id": 6, "name": "Ocean"},
+    {"key": "sapphire", "id": 7, "name": "Sapphire"},
+    {"key": "grape", "id": 8, "name": "Grape"},
+    {"key": "emerald", "id": 9, "name": "Emerald"},
+    {"key": "orange", "id": 10, "name": "Orange"},
+    {"key": "chocolate", "id": 11, "name": "Chocolate"},
+    {"key": "cherry", "id": 12, "name": "Cherry"},
+    {"key": "chalk", "id": 13, "name": "Chalk"}
+  ]
+}

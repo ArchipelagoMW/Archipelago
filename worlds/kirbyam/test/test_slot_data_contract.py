@@ -39,6 +39,7 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "goal": 0,
         "shards": 2,
         "start_with_all_maps": False,
+        "starting_kirby_color": 7,
         "no_extra_lives": False,
         "one_hit_mode": 0,
         "death_link": True,
@@ -53,6 +54,8 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
     }
 
     world.options = options
+    world._resolved_starting_kirby_color_id = 7
+    world._resolved_starting_kirby_color_name = "Sapphire"
     world._enemy_copy_ability_policy = {
         "mode": "shuffled",
         "allowed_abilities": ["Sword", "Beam", "Burning"],
@@ -84,6 +87,14 @@ def test_enemy_randomization_contract_fields_present_with_expected_shapes() -> N
     assert isinstance(slot_data["enemy_copy_ability_whitelist"], list)
     assert slot_data["enemy_copy_ability_whitelist"]
     assert isinstance(slot_data["enemy_copy_ability_policy"], dict)
+
+
+def test_starting_kirby_color_contract_fields_present_with_expected_shapes() -> None:
+    slot_data = _emit_slot_data_for_contract_test()
+
+    assert isinstance(slot_data["starting_kirby_color"], int)
+    assert isinstance(slot_data["starting_kirby_color_name"], str)
+    assert slot_data["starting_kirby_color_name"]
 
 
 def test_debug_settings_contract_fields_present_with_expected_shapes() -> None:

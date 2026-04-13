@@ -45,6 +45,9 @@ _KIRBY_VITALITY_COUNTER_READ_WIDTH = 2
 _ROOM_VISIT_FLAGS_ADDR_KEY = "room_visit_flags_native"
 _ROOM_VISIT_FLAGS_ENTRY_COUNT = 0x120
 _ROOM_VISIT_FLAGS_BIT_MASK = 0x8000
+_STARTING_KIRBY_COLOR_MIN = 0
+_STARTING_KIRBY_COLOR_MAX = 13
+_STARTING_KIRBY_COLOR_REVALIDATE_TICKS = 4
 _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
     ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
     ("mirra_encounters_native", "mirra_encounters"),
@@ -201,6 +204,9 @@ class KirbyAmClient(BizHawkClient):
         self._last_logged_ai_state: int | None = None
         self._last_logged_demo_flags: int | None = None
         self._boss_shard_debug_window_active: bool = False
+        self._starting_kirby_color_synced_id: int | None = None
+        self._starting_kirby_color_logged_signature: tuple[int, str] | None = None
+        self._starting_kirby_color_revalidate_counter: int = 0
 
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
@@ -243,6 +249,9 @@ class KirbyAmClient(BizHawkClient):
         self._last_logged_ai_state = None
         self._last_logged_demo_flags = None
         self._boss_shard_debug_window_active = False
+        self._starting_kirby_color_synced_id = None
+        self._starting_kirby_color_logged_signature = None
+        self._starting_kirby_color_revalidate_counter = 0
 
     def _no_extra_lives_enabled(self, ctx: "BizHawkClientContext") -> bool:
         slot_data = getattr(ctx, "slot_data", None)
@@ -404,6 +413,85 @@ class KirbyAmClient(BizHawkClient):
                     debug_config.get("logging", False),
                     False,
                 )
+
+    def _get_starting_kirby_color_config(self, ctx: "BizHawkClientContext") -> tuple[int, str] | None:
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return None
+
+        color_value = self._coerce_u32(slot_data.get("starting_kirby_color"))
+        if color_value is None:
+            return None
+        if color_value < _STARTING_KIRBY_COLOR_MIN or color_value > _STARTING_KIRBY_COLOR_MAX:
+            return None
+
+        color_name_raw = slot_data.get("starting_kirby_color_name", "")
+        color_name = color_name_raw.strip() if isinstance(color_name_raw, str) else ""
+        if not color_name:
+            color_name = f"Color {color_value}"
+
+        return int(color_value), color_name
+
+    def _log_starting_kirby_color_config_once(self, ctx: "BizHawkClientContext") -> None:
+        config = self._get_starting_kirby_color_config(ctx)
+        if config is None:
+            return
+        if config == self._starting_kirby_color_logged_signature:
+            return
+
+        self._starting_kirby_color_logged_signature = config
+        color_id, color_name = config
+
+        from CommonClient import logger
+
+        logger.info(
+            "KirbyAM: configured starting Kirby color is %s (%s)",
+            color_name,
+            color_id,
+            extra={"NoStream": not self._debug_logging_enabled},
+        )
+
+    async def _sync_starting_kirby_color_runtime_config(self, ctx: "BizHawkClientContext") -> None:
+        config = self._get_starting_kirby_color_config(ctx)
+        if config is None:
+            return
+
+        color_id, color_name = config
+        color_transport_addr = self._transport_addr("starting_kirby_color_id")
+        if color_transport_addr is None:
+            return
+
+        if self._starting_kirby_color_synced_id == color_id:
+            self._starting_kirby_color_revalidate_counter += 1
+            if self._starting_kirby_color_revalidate_counter < _STARTING_KIRBY_COLOR_REVALIDATE_TICKS:
+                return
+        self._starting_kirby_color_revalidate_counter = 0
+
+        # Read back the current mailbox value so soft resets are handled correctly.
+        # A GBA soft reset clears EWRAM and reinstates the sentinel 0xFFFFFFFF even
+        # while BizHawk stays connected, so _starting_kirby_color_synced_id alone
+        # would not trigger a re-sync after a reset.
+        current_raw = (
+            await bizhawk.read(ctx.bizhawk_ctx, [(color_transport_addr, 4, "System Bus")])
+        )[0]
+        if int.from_bytes(current_raw, "little") == color_id:
+            self._starting_kirby_color_synced_id = color_id
+            return
+
+        await bizhawk.write(
+            ctx.bizhawk_ctx,
+            [(color_transport_addr, int(color_id).to_bytes(4, "little"), "System Bus")],
+        )
+        self._starting_kirby_color_synced_id = color_id
+
+        from CommonClient import logger
+
+        logger.info(
+            "KirbyAM: synced starting Kirby color runtime config (%s / %s)",
+            color_name,
+            color_id,
+            extra={"NoStream": not self._debug_logging_enabled},
+        )
 
     @staticmethod
     def _player_name(ctx: "BizHawkClientContext", player_id: int) -> str:
@@ -719,6 +807,7 @@ class KirbyAmClient(BizHawkClient):
 
         self._load_notification_settings(ctx)
         self._load_debug_settings(ctx)
+        self._log_starting_kirby_color_config_once(ctx)
         await self._sync_death_link_setting(ctx)
 
         if not self._watcher_server_ready:
@@ -736,6 +825,8 @@ class KirbyAmClient(BizHawkClient):
             if not self._ram_state_loaded:
                 await self._load_persistent_state(ctx)
                 self._ram_state_loaded = True
+
+            await self._sync_starting_kirby_color_runtime_config(ctx)
 
             gameplay_active, defer_reason, ai_state = await self._runtime_gameplay_state(ctx)
             await self._log_boss_shard_debug_window(
