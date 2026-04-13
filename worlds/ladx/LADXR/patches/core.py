@@ -836,3 +836,8 @@ success:
 exit:
     ret
         """))
+
+def mapExtraCharacters(rom):
+    # patches ß Ä Ö Ü " sprites into CodepointToTileMap so they can be used in text boxes.
+    # " is already mapped but its easier to use on a different slot because of how the assembler handles strings.
+    rom.patch(0x1C, 0x06CE, ASM("db $59, $5A, $5B, $5C, $5D"), ASM("db $54, $55, $56, $57, $41"))
