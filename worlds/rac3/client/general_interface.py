@@ -59,12 +59,23 @@ class GameInterface:
         Initializes the connection to PCSX2 and verifies it is connected to the
         right game
         """
-        if not self.pcsx2_interface.is_connected():
+        if not self.pcsx2_interface._sock_state:
             self.is_connecting = True
             logger.debug("Begin attempting emulator connection...")
-            self.pcsx2_interface.connect()
+            try:
+                self.pcsx2_interface.connect()
+            except Pine.ConnectionError:
+                self.is_connecting = False
+                self.emulator_connected = False
+                logger.debug("No Connection to PCSX2 Emulator")
+                return
+            except Pine.DuplicateConnectionError:
+                self.is_connecting = False
+                self.emulator_connected = False
+                logger.warning("Duplicate connection to PCSX2 Emulator detected")
+                return
             self.is_connecting = False
-            if not self.pcsx2_interface.is_connected():
+            if not self.pcsx2_interface._sock_state:
                 self.emulator_connected = False
                 logger.debug("No Connection to PCSX2 Emulator")
                 return
@@ -148,8 +159,8 @@ class GameInterface:
     def get_connection_state(self) -> bool:
         """Safe connection test"""
         try:
-            if self.pcsx2_interface.is_connected():
-                return self.verify_game_version()
-            return False
+            if not self.pcsx2_interface._sock_state:
+                return False
+            return self.verify_game_version()
         except RuntimeError:
             return False
