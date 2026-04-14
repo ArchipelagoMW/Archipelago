@@ -1478,9 +1478,14 @@ class Rac3Interface(GameInterface):
                     case RAC3ITEM.MIRROR_TRAP:
                         self._write8(RAC3STATUS.MIRROR_UNIVERSE, 0)
                     case RAC3ITEM.BLACK_SCREEN_TRAP:
-                        self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
+                        match self.current_game:
+                            case RAC3VERSION.US_ID:
+                                self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
+                                self._write16(RAC3STATUS.BLACK_SCREEN_2, 0x8C)
+                            case RAC3VERSION.EU_ID:
+                                self._write16(RAC3STATUS.BLACK_SCREEN, 0x80)
+                                self._write16(RAC3STATUS.BLACK_SCREEN_2, 0x80)
                         self._write8(RAC3STATUS.BLACK_SCREEN + 4, 1)
-                        self._write16(RAC3STATUS.BLACK_SCREEN_2, 0x8C)
                     case RAC3ITEM.NO_CLANK_TRAP:
                         self.clank_disabled_trap = False
                     case RAC3ITEM.INVISIBLE_TRAP:
