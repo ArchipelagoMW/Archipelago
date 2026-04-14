@@ -20,6 +20,7 @@ from BaseClasses import ItemClassification
 
 # If your JSON does not provide explicit numeric IDs, we will auto-assign IDs starting here.
 BASE_OFFSET = 3_860_000
+_ROOM_REGION_KEY_PATTERN = re.compile(r"^REGION_[A-Z_]+/ROOM_(\d+)_([A-Z0-9_]+)$")
 
 
 def load_json_data(data_name: str) -> list[Any] | dict[str, Any]:
@@ -62,6 +63,38 @@ def _maybe_load_json_data(data_name: str) -> list[Any] | dict[str, Any] | None:
     return orjson.loads(raw.decode("utf-8-sig"))
 
 
+def _format_room_code_special_label(room_code: str) -> str | None:
+    if room_code == "BOSS":
+        return "Boss Room"
+    if room_code == "HUB":
+        return "Hub Room"
+    if room_code.startswith("HUB_"):
+        suffix = room_code[len("HUB_"):]
+        if suffix.isdigit():
+            return f"Hub Room {int(suffix)}"
+        return f"Hub Room {suffix.replace('_', ' ')}"
+    return None
+
+
+def format_room_region_label(region_key: str) -> str:
+    """
+    Convert raw room region constants into friendly labels for player-facing output.
+
+    Only room types with known readability issues are rewritten (hub and boss rooms);
+    all other region keys are returned unchanged.
+    """
+    match = _ROOM_REGION_KEY_PATTERN.match(region_key)
+    if not match:
+        return region_key
+
+    area_num = int(match.group(1))
+    room_code = match.group(2)
+    special_label = _format_room_code_special_label(room_code)
+    if special_label is None:
+        return region_key
+    return f"Area {area_num} - {special_label}"
+
+
 def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]]:
     """Build ROOM_SANITY location definitions from regions/rooms.json metadata."""
     room_subareas = _maybe_load_json_data("regions/rooms.json")
@@ -69,8 +102,6 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
         return {}
 
     generated_locations: dict[str, dict[str, Any]] = {}
-    room_key_pattern = re.compile(r"^REGION_[A-Z_]+/ROOM_(\d+)_([A-Z0-9_]+)$")
-
     for region_name, region_def in room_subareas.items():
         if not isinstance(region_name, str) or not isinstance(region_def, dict):
             continue
@@ -81,7 +112,7 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
         if not bool(room_meta.get("included", False)):
             continue
 
-        match = room_key_pattern.match(region_name)
+        match = _ROOM_REGION_KEY_PATTERN.match(region_name)
         if not match:
             raise ValueError(
                 "room_sanity metadata is only valid on ROOM regions; "
@@ -91,6 +122,8 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
         area_num = int(match.group(1))
         room_code = match.group(2)
         location_key = f"ROOM_SANITY_{area_num}_{room_code}"
+        special_label = _format_room_code_special_label(room_code)
+        room_label = f"Area {area_num} - {special_label}" if special_label else f"Room {area_num}-{room_code}"
 
         bit_index_raw = room_meta.get("bit_index")
         location_id_raw = room_meta.get("location_id")
@@ -100,7 +133,7 @@ def _load_room_sanity_locations_from_room_subareas() -> dict[str, dict[str, Any]
             )
 
         generated_locations[location_key] = {
-            "label": f"Room {area_num}-{room_code}",
+            "label": room_label,
             "parent_region": region_name,
             "tags": ["RoomSanity"],
             "bit_index": int(bit_index_raw),

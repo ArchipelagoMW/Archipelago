@@ -196,7 +196,7 @@
     "HUB_SWITCH_MOONLIGHT": {
       "category": "HUB_SWITCH",
       "label": "Moonlight Mansion - Big Switch",
-      "location_id": 3960410,
+      "location_id": 3960411,
       "tags": [
         "HubSwitch",
         "MAP_MOONLIGHT_MANSION"
@@ -223,7 +223,7 @@
     "HUB_SWITCH_PEPPERMINT_EAST": {
       "category": "HUB_SWITCH",
       "label": "Peppermint Palace East - Big Switch",
-      "location_id": 3960411,
+      "location_id": 3960410,
       "tags": [
         "HubSwitch",
         "MAP_PEPPERMINT_PALACE"
@@ -761,7 +761,7 @@
     },
     "ROOM_SANITY_1_HUB_1": {
       "category": "ROOM_SANITY",
-      "label": "Room 1-HUB_1",
+      "label": "Area 1 - Hub Room 1",
       "location_id": 3961022,
       "tags": [
         "RoomSanity"
@@ -769,7 +769,7 @@
     },
     "ROOM_SANITY_1_HUB_2": {
       "category": "ROOM_SANITY",
-      "label": "Room 1-HUB_2",
+      "label": "Area 1 - Hub Room 2",
       "location_id": 3961026,
       "tags": [
         "RoomSanity"
@@ -777,7 +777,7 @@
     },
     "ROOM_SANITY_1_HUB_3": {
       "category": "ROOM_SANITY",
-      "label": "Room 1-HUB_3",
+      "label": "Area 1 - Hub Room 3",
       "location_id": 3961049,
       "tags": [
         "RoomSanity"
@@ -785,7 +785,7 @@
     },
     "ROOM_SANITY_1_HUB_4": {
       "category": "ROOM_SANITY",
-      "label": "Room 1-HUB_4",
+      "label": "Area 1 - Hub Room 4",
       "location_id": 3961011,
       "tags": [
         "RoomSanity"
@@ -961,7 +961,7 @@
     },
     "ROOM_SANITY_2_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 2-BOSS",
+      "label": "Area 2 - Boss Room",
       "location_id": 3961064,
       "tags": [
         "RoomSanity"
@@ -993,7 +993,7 @@
     },
     "ROOM_SANITY_2_HUB": {
       "category": "ROOM_SANITY",
-      "label": "Room 2-HUB",
+      "label": "Area 2 - Hub Room",
       "location_id": 3961070,
       "tags": [
         "RoomSanity"
@@ -1137,7 +1137,7 @@
     },
     "ROOM_SANITY_3_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 3-BOSS",
+      "label": "Area 3 - Boss Room",
       "location_id": 3961079,
       "tags": [
         "RoomSanity"
@@ -1153,7 +1153,7 @@
     },
     "ROOM_SANITY_3_HUB_1": {
       "category": "ROOM_SANITY",
-      "label": "Room 3-HUB_1",
+      "label": "Area 3 - Hub Room 1",
       "location_id": 3961094,
       "tags": [
         "RoomSanity"
@@ -1161,7 +1161,7 @@
     },
     "ROOM_SANITY_3_HUB_2": {
       "category": "ROOM_SANITY",
-      "label": "Room 3-HUB_2",
+      "label": "Area 3 - Hub Room 2",
       "location_id": 3961093,
       "tags": [
         "RoomSanity"
@@ -1169,7 +1169,7 @@
     },
     "ROOM_SANITY_3_HUB_3": {
       "category": "ROOM_SANITY",
-      "label": "Room 3-HUB_3",
+      "label": "Area 3 - Hub Room 3",
       "location_id": 3961095,
       "tags": [
         "RoomSanity"
@@ -1329,7 +1329,7 @@
     },
     "ROOM_SANITY_4_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 4-BOSS",
+      "label": "Area 4 - Boss Room",
       "location_id": 3961116,
       "tags": [
         "RoomSanity"
@@ -1361,7 +1361,7 @@
     },
     "ROOM_SANITY_4_HUB": {
       "category": "ROOM_SANITY",
-      "label": "Room 4-HUB",
+      "label": "Area 4 - Hub Room",
       "location_id": 3961119,
       "tags": [
         "RoomSanity"
@@ -1521,7 +1521,7 @@
     },
     "ROOM_SANITY_5_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 5-BOSS",
+      "label": "Area 5 - Boss Room",
       "location_id": 3961138,
       "tags": [
         "RoomSanity"
@@ -1545,7 +1545,7 @@
     },
     "ROOM_SANITY_5_HUB": {
       "category": "ROOM_SANITY",
-      "label": "Room 5-HUB",
+      "label": "Area 5 - Hub Room",
       "location_id": 3961126,
       "tags": [
         "RoomSanity"
@@ -1745,7 +1745,7 @@
     },
     "ROOM_SANITY_6_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 6-BOSS",
+      "label": "Area 6 - Boss Room",
       "location_id": 3961170,
       "tags": [
         "RoomSanity"
@@ -1785,7 +1785,7 @@
     },
     "ROOM_SANITY_6_HUB": {
       "category": "ROOM_SANITY",
-      "label": "Room 6-HUB",
+      "label": "Area 6 - Hub Room",
       "location_id": 3961163,
       "tags": [
         "RoomSanity"
@@ -1985,7 +1985,7 @@
     },
     "ROOM_SANITY_7_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 7-BOSS",
+      "label": "Area 7 - Boss Room",
       "location_id": 3961194,
       "tags": [
         "RoomSanity"
@@ -2017,7 +2017,7 @@
     },
     "ROOM_SANITY_7_HUB_1": {
       "category": "ROOM_SANITY",
-      "label": "Room 7-HUB_1",
+      "label": "Area 7 - Hub Room 1",
       "location_id": 3961188,
       "tags": [
         "RoomSanity"
@@ -2025,7 +2025,7 @@
     },
     "ROOM_SANITY_7_HUB_2": {
       "category": "ROOM_SANITY",
-      "label": "Room 7-HUB_2",
+      "label": "Area 7 - Hub Room 2",
       "location_id": 3961200,
       "tags": [
         "RoomSanity"
@@ -2225,7 +2225,7 @@
     },
     "ROOM_SANITY_8_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 8-BOSS",
+      "label": "Area 8 - Boss Room",
       "location_id": 3961229,
       "tags": [
         "RoomSanity"
@@ -2265,7 +2265,7 @@
     },
     "ROOM_SANITY_8_HUB": {
       "category": "ROOM_SANITY",
-      "label": "Room 8-HUB",
+      "label": "Area 8 - Hub Room",
       "location_id": 3961221,
       "tags": [
         "RoomSanity"
@@ -2433,7 +2433,7 @@
     },
     "ROOM_SANITY_9_BOSS": {
       "category": "ROOM_SANITY",
-      "label": "Room 9-BOSS",
+      "label": "Area 9 - Boss Room",
       "location_id": 3961245,
       "tags": [
         "RoomSanity"
@@ -2481,7 +2481,7 @@
     },
     "ROOM_SANITY_9_HUB": {
       "category": "ROOM_SANITY",
-      "label": "Room 9-HUB",
+      "label": "Area 9 - Hub Room",
       "location_id": 3961256,
       "tags": [
         "RoomSanity"
@@ -2706,7 +2706,7 @@
         "REGION_CABBAGE_CAVERN/ROOM_3_04",
         "REGION_RAINBOW_ROUTE/ROOM_1_01"
       ],
-      "label": "REGION_CABBAGE_CAVERN/ROOM_3_BOSS",
+      "label": "Area 3 - Boss Room",
       "parent_region": "REGION_CABBAGE_CAVERN",
       "room_sanity_location_id": 3961079
     },
@@ -2726,7 +2726,7 @@
         "REGION_CABBAGE_CAVERN/ROOM_3_HUB_2",
         "REGION_RAINBOW_ROUTE/ROOM_1_10"
       ],
-      "label": "REGION_CABBAGE_CAVERN/ROOM_3_HUB_1",
+      "label": "Area 3 - Hub Room 1",
       "parent_region": "REGION_CABBAGE_CAVERN",
       "room_sanity_location_id": 3961094
     },
@@ -2736,7 +2736,7 @@
         "REGION_CABBAGE_CAVERN/ROOM_3_HUB_1",
         "REGION_DIMENSION_MIRROR/ROOM_10_19"
       ],
-      "label": "REGION_CABBAGE_CAVERN/ROOM_3_HUB_2",
+      "label": "Area 3 - Hub Room 2",
       "parent_region": "REGION_CABBAGE_CAVERN",
       "room_sanity_location_id": 3961093
     },
@@ -2746,7 +2746,7 @@
         "REGION_RADISH_RUINS/ROOM_8_BOSS",
         "REGION_RAINBOW_ROUTE/ROOM_1_HUB_3"
       ],
-      "label": "REGION_CABBAGE_CAVERN/ROOM_3_HUB_3",
+      "label": "Area 3 - Hub Room 3",
       "parent_region": "REGION_CABBAGE_CAVERN",
       "room_sanity_location_id": 3961095
     },
@@ -2945,7 +2945,7 @@
       "exits": [
         "REGION_CANDY_CONSTELLATION/ROOM_9_20"
       ],
-      "label": "REGION_CANDY_CONSTELLATION/ROOM_9_BOSS",
+      "label": "Area 9 - Boss Room",
       "parent_region": "REGION_CANDY_CONSTELLATION",
       "room_sanity_location_id": 3961245
     },
@@ -3006,7 +3006,7 @@
         "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_3",
         "REGION_RAINBOW_ROUTE/ROOM_1_HUB_3"
       ],
-      "label": "REGION_CANDY_CONSTELLATION/ROOM_9_HUB",
+      "label": "Area 9 - Hub Room",
       "parent_region": "REGION_CANDY_CONSTELLATION",
       "room_sanity_location_id": 3961256
     },
@@ -3213,7 +3213,7 @@
         "REGION_CARROT_CASTLE/ROOM_5_CHEST_1",
         "REGION_CARROT_CASTLE/ROOM_5_15"
       ],
-      "label": "REGION_CARROT_CASTLE/ROOM_5_BOSS",
+      "label": "Area 5 - Boss Room",
       "parent_region": "REGION_CARROT_CASTLE",
       "room_sanity_location_id": 3961138
     },
@@ -3243,7 +3243,7 @@
         "REGION_PEPPERMINT_PALACE/ROOM_7_01",
         "REGION_PEPPERMINT_PALACE/ROOM_7_17"
       ],
-      "label": "REGION_CARROT_CASTLE/ROOM_5_HUB",
+      "label": "Area 5 - Hub Room",
       "parent_region": "REGION_CARROT_CASTLE",
       "room_sanity_location_id": 3961126
     },
@@ -3625,7 +3625,7 @@
         "REGION_MOONLIGHT_MANSION/ROOM_2_03",
         "REGION_MOONLIGHT_MANSION/ROOM_2_01"
       ],
-      "label": "REGION_MOONLIGHT_MANSION/ROOM_2_BOSS",
+      "label": "Area 2 - Boss Room",
       "parent_region": "REGION_MOONLIGHT_MANSION",
       "room_sanity_location_id": 3961064
     },
@@ -3663,7 +3663,7 @@
         "REGION_MOONLIGHT_MANSION/ROOM_2_15",
         "REGION_MOONLIGHT_MANSION/ROOM_2_WARP"
       ],
-      "label": "REGION_MOONLIGHT_MANSION/ROOM_2_HUB",
+      "label": "Area 2 - Hub Room",
       "parent_region": "REGION_MOONLIGHT_MANSION",
       "room_sanity_location_id": 3961070
     },
@@ -3872,7 +3872,7 @@
         "REGION_MUSTARD_MOUNTAIN/ROOM_4_16",
         "REGION_RAINBOW_ROUTE/ROOM_1_21"
       ],
-      "label": "REGION_MUSTARD_MOUNTAIN/ROOM_4_BOSS",
+      "label": "Area 4 - Boss Room",
       "parent_region": "REGION_MUSTARD_MOUNTAIN",
       "room_sanity_location_id": 3961116
     },
@@ -3910,7 +3910,7 @@
         "REGION_DIMENSION_MIRROR/ROOM_10_19",
         "REGION_MUSTARD_MOUNTAIN/ROOM_4_GOAL_2"
       ],
-      "label": "REGION_MUSTARD_MOUNTAIN/ROOM_4_HUB",
+      "label": "Area 4 - Hub Room",
       "parent_region": "REGION_MUSTARD_MOUNTAIN",
       "room_sanity_location_id": 3961119
     },
@@ -4151,7 +4151,7 @@
         "REGION_OLIVE_OCEAN/ROOM_6_09",
         "REGION_OLIVE_OCEAN/ROOM_6_18"
       ],
-      "label": "REGION_OLIVE_OCEAN/ROOM_6_BOSS",
+      "label": "Area 6 - Boss Room",
       "parent_region": "REGION_OLIVE_OCEAN",
       "room_sanity_location_id": 3961170
     },
@@ -4200,7 +4200,7 @@
         "REGION_OLIVE_OCEAN/ROOM_6_02",
         "REGION_OLIVE_OCEAN/ROOM_6_23"
       ],
-      "label": "REGION_OLIVE_OCEAN/ROOM_6_HUB",
+      "label": "Area 6 - Hub Room",
       "parent_region": "REGION_OLIVE_OCEAN",
       "room_sanity_location_id": 3961163
     },
@@ -4446,7 +4446,7 @@
         "REGION_PEPPERMINT_PALACE/ROOM_7_05",
         "REGION_PEPPERMINT_PALACE/ROOM_7_15"
       ],
-      "label": "REGION_PEPPERMINT_PALACE/ROOM_7_BOSS",
+      "label": "Area 7 - Boss Room",
       "parent_region": "REGION_PEPPERMINT_PALACE",
       "room_sanity_location_id": 3961194
     },
@@ -4486,7 +4486,7 @@
         "REGION_PEPPERMINT_PALACE/ROOM_7_12",
         "REGION_PEPPERMINT_PALACE/ROOM_7_GOAL_2"
       ],
-      "label": "REGION_PEPPERMINT_PALACE/ROOM_7_HUB_1",
+      "label": "Area 7 - Hub Room 1",
       "parent_region": "REGION_PEPPERMINT_PALACE",
       "room_sanity_location_id": 3961188
     },
@@ -4496,7 +4496,7 @@
         "REGION_PEPPERMINT_PALACE/ROOM_7_17",
         "REGION_PEPPERMINT_PALACE/ROOM_7_15"
       ],
-      "label": "REGION_PEPPERMINT_PALACE/ROOM_7_HUB_2",
+      "label": "Area 7 - Hub Room 2",
       "parent_region": "REGION_PEPPERMINT_PALACE",
       "room_sanity_location_id": 3961200
     },
@@ -4744,7 +4744,7 @@
         "REGION_RADISH_RUINS/ROOM_8_14",
         "REGION_RADISH_RUINS/ROOM_8_CHEST_2"
       ],
-      "label": "REGION_RADISH_RUINS/ROOM_8_BOSS",
+      "label": "Area 8 - Boss Room",
       "parent_region": "REGION_RADISH_RUINS",
       "room_sanity_location_id": 3961229
     },
@@ -4796,7 +4796,7 @@
         "REGION_RADISH_RUINS/ROOM_8_15",
         "REGION_RADISH_RUINS/ROOM_8_17"
       ],
-      "label": "REGION_RADISH_RUINS/ROOM_8_HUB",
+      "label": "Area 8 - Hub Room",
       "parent_region": "REGION_RADISH_RUINS",
       "room_sanity_location_id": 3961221
     },
@@ -5285,7 +5285,7 @@
         "REGION_RAINBOW_ROUTE/ROOM_1_15",
         "REGION_RAINBOW_ROUTE/ROOM_1_31"
       ],
-      "label": "REGION_RAINBOW_ROUTE/ROOM_1_HUB_1",
+      "label": "Area 1 - Hub Room 1",
       "parent_region": "REGION_RAINBOW_ROUTE",
       "room_sanity_location_id": 3961022
     },
@@ -5294,7 +5294,7 @@
         "REGION_DIMENSION_MIRROR/ROOM_10_18",
         "REGION_RAINBOW_ROUTE/ROOM_1_16"
       ],
-      "label": "REGION_RAINBOW_ROUTE/ROOM_1_HUB_2",
+      "label": "Area 1 - Hub Room 2",
       "parent_region": "REGION_RAINBOW_ROUTE",
       "room_sanity_location_id": 3961026
     },
@@ -5310,7 +5310,7 @@
         "REGION_RAINBOW_ROUTE/ROOM_1_10",
         "REGION_RAINBOW_ROUTE/ROOM_1_29"
       ],
-      "label": "REGION_RAINBOW_ROUTE/ROOM_1_HUB_3",
+      "label": "Area 1 - Hub Room 3",
       "parent_region": "REGION_RAINBOW_ROUTE",
       "room_sanity_location_id": 3961049
     },
@@ -5319,7 +5319,7 @@
         "REGION_RAINBOW_ROUTE/ROOM_1_30",
         "REGION_RAINBOW_ROUTE/ROOM_1_05"
       ],
-      "label": "REGION_RAINBOW_ROUTE/ROOM_1_HUB_4",
+      "label": "Area 1 - Hub Room 4",
       "parent_region": "REGION_RAINBOW_ROUTE",
       "room_sanity_location_id": 3961011
     },

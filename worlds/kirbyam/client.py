@@ -8,7 +8,7 @@ import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import LocationCategory, data, load_json_data
+from .data import LocationCategory, data, format_room_region_label, load_json_data
 from .enemy_ability_data import ABILITY_SOURCES
 from .enemy_ability_data import ABILITY_NAME_TO_ID
 from .kirby_ap_payload.thumb_branch import is_thumb_bl_instruction
@@ -323,7 +323,7 @@ class KirbyAmClient(BizHawkClient):
 
     @staticmethod
     def _build_room_label_lookup() -> "dict[int, str]":
-        """Build a doorsIdx → region_key mapping from all rooms in rooms.json."""
+        """Build a doorsIdx → room label mapping from all rooms in rooms.json."""
         rooms_json = load_json_data("regions/rooms.json")
         result: dict[int, str] = {}
         if not isinstance(rooms_json, dict):
@@ -334,7 +334,7 @@ class KirbyAmClient(BizHawkClient):
                 continue
             bit_index = rs.get("bit_index")
             if bit_index is not None:
-                result[int(bit_index)] = str(region_key)
+                result[int(bit_index)] = format_room_region_label(str(region_key))
         return result
 
     def _reset_reconnect_transient_state(self) -> None:

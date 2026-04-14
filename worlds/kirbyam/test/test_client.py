@@ -588,6 +588,8 @@ async def test_poll_hub_switch_sends_location_checks_for_set_bits(mock_bizhawk_c
     client.initialize_client()
 
     moonlight = data.locations["HUB_SWITCH_MOONLIGHT"].location_id
+    moonlight_bit = data.locations["HUB_SWITCH_MOONLIGHT"].bit_index
+    assert moonlight_bit is not None
     rainbow_east = data.locations["HUB_SWITCH_RAINBOW_ROUTE_EAST"].location_id
     mock_bizhawk_context.checked_locations = set()
 
@@ -596,7 +598,7 @@ async def test_poll_hub_switch_sends_location_checks_for_set_bits(mock_bizhawk_c
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
         mock_read.side_effect = [
             [(0).to_bytes(4, 'little')],
-            [((1 << 10) | (1 << 1)).to_bytes(4, 'little')],
+            [((1 << moonlight_bit) | (1 << 1)).to_bytes(4, 'little')],
         ]
 
         await client._poll_hub_switch_locations(mock_bizhawk_context)
@@ -638,13 +640,15 @@ async def test_poll_hub_switch_skips_already_server_acknowledged(mock_bizhawk_co
     client._debug_logging_enabled = True
 
     moonlight = data.locations["HUB_SWITCH_MOONLIGHT"].location_id
+    moonlight_bit = data.locations["HUB_SWITCH_MOONLIGHT"].bit_index
+    assert moonlight_bit is not None
     mock_bizhawk_context.checked_locations = {moonlight}
 
     with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:
-        mock_read.return_value = [((1 << 10)).to_bytes(4, 'little')]
+        mock_read.return_value = [((1 << moonlight_bit)).to_bytes(4, 'little')]
 
         await client._poll_hub_switch_locations(mock_bizhawk_context)
 

@@ -19,7 +19,7 @@ from .ability_randomization import (
     build_enemy_copy_ability_policy,
 )
 from .colors import STARTING_KIRBY_COLOR_RANDOM_OPTION, resolve_kirby_color
-from .data import LocationCategory, load_json_data, data as kirby_data
+from .data import LocationCategory, format_room_region_label, load_json_data, data as kirby_data
 from .enemy_ability_runtime_patch import build_enemy_copy_spoiler_rows
 from .generation_logging import (
     generation_stage,
@@ -754,7 +754,7 @@ class KirbyAmWorld(World):
         rooms = rooms_payload if isinstance(rooms_payload, dict) else {}
         slot_data["rooms"] = {
             room_key: {
-                "label": room_data.get("label", room_key),
+                "label": room_data.get("label") or format_room_region_label(room_key),
                 "exits": room_data.get("exits", []),
                 "parent_region": room_key.split("/")[0] if "/" in room_key else "",
                 "room_sanity_location_id": room_data.get("room_sanity", {}).get("location_id"),
