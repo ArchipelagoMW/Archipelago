@@ -117,7 +117,7 @@ class AreaAccess(Choice):
     option_full = 5
     default = 0
 
-class ExcludeWhoa(Toggle):
+class ExcludeWhoa(DefaultOnToggle):
     """
     Excludes the level "Whoa" from logic.
     Only applies if Meta and its levels are accessible.
@@ -125,7 +125,7 @@ class ExcludeWhoa(Toggle):
 
     display_name = "Exclude Whoa"
 
-class ExcludeGallery(Toggle):
+class ExcludeGallery(DefaultOnToggle):
     """
     Excludes the level "Gallery" from logic.
     When disabled, the 3 Bonus items will become progression items.
@@ -134,14 +134,15 @@ class ExcludeGallery(Toggle):
 
     display_name = "Exclude Gallery"
 
-class ExcludeWrite(Toggle):
+class ExcludeMazeTransform(DefaultOnToggle):
     """
-    Excludes the 4 levels in "???" that introduce the "Write" verb from logic.
-    Also excludes the Win location for "???" and transforms for "Ultimate Maze" if Transformsanity is enabled.
+    Excludes transformations for "Ultimate Maze" from logic.
+    This removes some locations if Transformsanity is enabled.
+    This does NOT remove the 4 "Write" levels from logic, as those can be accessed regardless.
     Only applies if ??? and its levels are accessible.
     """
 
-    display_name = "Exclude Write Levels"
+    display_name = "Exclude Ultimate Maze Transform"
 
 class BlossomPetals(Range):
     """
@@ -247,7 +248,7 @@ class BabaIsYouOptions(PerGameCommonOptions):
     area_access: AreaAccess
     exclude_whoa: ExcludeWhoa
     exclude_gallery: ExcludeGallery
-    exclude_write: ExcludeWrite
+    exclude_maze_transform: ExcludeMazeTransform
     blossom_petals: BlossomPetals
     blossoms: Blossoms
     first_gate_blossoms: FirstGateBlossoms

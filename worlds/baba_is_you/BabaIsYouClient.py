@@ -1,8 +1,6 @@
 from __future__ import annotations
-import os
-import sys
+import os, sys, re
 import asyncio
-import re
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -12,18 +10,13 @@ import Utils
 # Items that have multiple copies; makes duplicate files for each copy of the item
 MULTI_ITEMS = ("Blossom Petal", "Blossom", "Bonus Orb")
 
+# Pack version
+VERSION = "0.2.0"
+
 import typing, zipfile
 
-# Some functions for extracting a ZIP file while removing the root
+# Function for extracting a ZIP file while removing the root
 # https://stackoverflow.com/questions/8689938/extract-files-from-zip-without-keep-the-top-level-folder-with-python-zipfile
-def _is_root(info: zipfile.ZipInfo) -> bool:
-    if info.is_dir():
-        parts = info.filename.split("/")
-        # Handle directory names with and without trailing slashes.
-        if len(parts) == 1 or (len(parts) == 2 and parts[1] == ""):
-            return True
-    return False
-
 def _members_without_root(archive: zipfile.ZipFile, root_filename: str) -> typing.Generator:
     for info in archive.infolist():
         parts = info.filename.split(root_filename)
@@ -44,14 +37,37 @@ def auto_install_pack(path: str, world: str, forceInstall: bool = False):
     defaultWorldPath = os.path.join(path, "Data", "Worlds", "baba")
     if os.path.exists(defaultWorldPath):
         worldPath = os.path.join(path, "Data", "Worlds", world)
-        if forceInstall or (not (os.path.exists(worldPath) and os.path.exists(os.path.join(worldPath, "0level.l")))):
+        valid = (forceInstall or (not (os.path.exists(worldPath) and os.path.exists(os.path.join(worldPath, "0level.l")))))
+        updateOnly = False
+        if not valid: # check for only updating the data file
+            updateOnly = True
+            dataPath = os.path.join(worldPath, "world_data.txt")
+            if os.path.isfile(dataPath):
+                lines = []
+                try:
+                    with open(dataPath, 'r') as f:
+                        lines = f.readlines()
+                        f.close()
+                except OSError:
+                    pass
+
+                for line in lines:
+                    if line[0:8] == "version=":
+                        testVersion = line[8:]
+                        if testVersion != VERSION:
+                            valid = True
+                            print("Out of date version: ",testVersion)
+                        break
+
+        if valid:
             print("Attempting to create babapelago world")
 
             import shutil
             from .. import user_folder, local_folder
 
             try:
-                shutil.copytree(defaultWorldPath, worldPath, dirs_exist_ok=True)
+                if not updateOnly:
+                    shutil.copytree(defaultWorldPath, worldPath, dirs_exist_ok=True)
                 
                 isAPWorld = ".apworld" in sys.modules[__name__].__file__
                 if isAPWorld:
@@ -63,10 +79,7 @@ def auto_install_pack(path: str, world: str, forceInstall: bool = False):
                 else:
                     apWorldPath = os.path.join(local_folder, "baba_is_you")
                     shutil.copytree(os.path.join(apWorldPath, "babapelago"), worldPath, dirs_exist_ok=True)
-            except KeyError as e:
-                print(e)
-                return False
-            except zipfile.BadZipFile as e:
+            except Exception as e:
                 print(e)
                 return False
             

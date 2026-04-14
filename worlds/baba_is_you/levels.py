@@ -583,7 +583,7 @@ LEVEL_DATA = {
         "name": "But Where's The Key",
         "parent": "Ruins",
         "winLogic": HasAll("Box", "Is", "Weak", "And", "Has", "Key", "Baba", "You"),
-        "winLogicAdv": HasAll("Is", "Weak", "Has", "Box") & (Has("And" & HasAny("Key", "You")) | (HasAll("Baba", "You") & hard_logic_filter)),
+        "winLogicAdv": HasAll("Is", "Weak", "Has", "Box") & ((Has("And") & HasAny("Key", "You")) | (HasAll("Baba", "You") & hard_logic_filter)),
         "connects": {
             "Ruins-3": can_win,
             "Ruins-9": can_win,

@@ -50,8 +50,8 @@ class BabaIsYouWorld(World):
     item_name_to_id = items.ITEM_NAME_TO_ID
 
     # We can define location and item name groups here as well.
-    item_name_groups = items.item_name_groups
     location_name_groups = locations.location_name_groups
+    item_name_groups = items.item_name_groups
 
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
@@ -94,12 +94,12 @@ class BabaIsYouWorld(World):
         if self.options.area_access == 0: # Early access
             self.options.exclude_whoa.value = True
             self.options.exclude_gallery.value = True
-            self.options.exclude_write.value = True
+            self.options.exclude_maze_transform.value = True
             # When transformsanity is added, it will also be disabled here
         elif self.options.area_access == 1: # Map access
             self.options.exclude_whoa.value = True
             self.options.exclude_gallery.value = True
-            self.options.exclude_write.value = True
+            self.options.exclude_maze_transform.value = True
         elif self.options.area_access == 2 or self.options.area_access == 3: # ??? or Depths access
             self.options.exclude_whoa.value = True
             self.options.exclude_gallery.value = True
@@ -221,13 +221,14 @@ class BabaIsYouWorld(World):
             "goal",
             "goal_levels",
             "goal_blossoms",
+            "logic_difficulty",
             "start_with_default_words",
             "open_map",
             "world_keys",
             "area_access",
             "exclude_whoa",
             "exclude_gallery",
-            "exclude_write",
+            "exclude_maze_transform",
             "blossom_petals",
             "blossoms",
             "first_gate_blossoms",
