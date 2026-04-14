@@ -152,6 +152,12 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | ROOM_SANITY_* | 3961000+ | Room visit checks (`Room X-<room_code>`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15; includes designed goal/warp rooms |
 | *Reserved*    | 3960415+ | Future location families |
 
+Minor chest status (Issue #540):
+- Minor chest locations are not shipped as active AP checks yet.
+- Respawn/reopen policy is documented as non-repeatable (single-fire chest state) based on decomp evidence in `katam/src/treasures.c` and `katam/asm/chest.s`.
+- Multi-chest room index disambiguation remains deferred (tracked in Issue #542).
+- See `worlds/kirbyam/docs/dev-docs/minor-chest-respawn-policy.md` and `worlds/kirbyam/data/minor_chest_manifest.json` metadata (`respawn_reopen_policy`).
+
 ## Client Protocol
 
 ### 1. Connection & Initialization

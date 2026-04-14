@@ -12,6 +12,16 @@
     "identified_entries": 65,
     "unresolved_entries": 0,
     "modeled_non_collection_pool_entries": 14,
+    "respawn_reopen_policy": {
+      "conclusion": "no_repeatable_minor_chest_reopen_path_confirmed",
+      "ap_handling": "Treat each native small chest as single-fire check state when enabled as AP locations; keep unresolved/ambiguous mappings deferred until chest-index proof exists",
+      "evidence": [
+        "katam/src/treasures.c: CollectChest(u8) only sets chestFields bit; no clear/reset helper exists",
+        "katam/src/treasures.c: HasChest(u8) reads persisted chestFields bit",
+        "katam/asm/chest.s: spawn path gates chest state via HasChest at object+0xE2",
+        "katam/asm/chest.s: collect path calls CollectChest with object+0xE2"
+      ]
+    },
     "room_props": {
       "rom_offset": "0x009331AC",
       "size": "0x9998",

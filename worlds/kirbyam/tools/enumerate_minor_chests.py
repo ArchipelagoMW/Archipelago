@@ -40,6 +40,12 @@ AMR_SMALL_CHEST_ITEM_OFFSET = 0x0E
 AMR_SMALL_CHEST_INDEX_OFFSET = 0x11
 AMR_PACKED_ITEM_SIZE = 6
 ROM_ENTRY_READ_SIZE = max(AMR_SMALL_CHEST_ITEM_OFFSET, AMR_SMALL_CHEST_INDEX_OFFSET) + 1
+RESPAWN_POLICY_EVIDENCE = [
+    "katam/src/treasures.c: CollectChest(u8) only sets chestFields bit; no clear/reset helper exists",
+    "katam/src/treasures.c: HasChest(u8) reads persisted chestFields bit",
+    "katam/asm/chest.s: spawn path gates chest state via HasChest at object+0xE2",
+    "katam/asm/chest.s: collect path calls CollectChest with object+0xE2",
+]
 
 
 def load_json(path: Path) -> dict:
@@ -483,6 +489,14 @@ def main() -> int:
             "identified_entries": len(manifest_entries) - sum(unresolved_counts.values()),
             "unresolved_entries": sum(unresolved_counts.values()),
             "modeled_non_collection_pool_entries": modeled_non_collection_pool_entries,
+            "respawn_reopen_policy": {
+                "conclusion": "no_repeatable_minor_chest_reopen_path_confirmed",
+                "ap_handling": (
+                    "Treat each native small chest as single-fire check state when enabled as AP locations; "
+                    "keep unresolved/ambiguous mappings deferred until chest-index proof exists"
+                ),
+                "evidence": RESPAWN_POLICY_EVIDENCE,
+            },
             "room_props": {
                 "rom_offset": f"0x{ROOM_PROPS_ROM_BASE:08X}",
                 "size": f"0x{ROOM_PROPS_SIZE:04X}",
