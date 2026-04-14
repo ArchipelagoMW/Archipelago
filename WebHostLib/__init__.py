@@ -64,6 +64,8 @@ app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "SimpleCache"
 app.config["HOST_ADDRESS"] = ""
 app.config["ASSET_RIGHTS"] = False
+# By Default, archipelago.gg has all its ports.
+app.config["HTTPONLY"] = False
 
 cache = Cache()
 Compress(app)

@@ -1167,7 +1167,7 @@ def handle_url_arg(args: "argparse.Namespace",
         return args
 
     args.url = url
-    args.connect = url.netloc
+    args.connect = url.netloc + url.path
     if url.username:
         args.name = urllib.parse.unquote(url.username)
     if url.password:
