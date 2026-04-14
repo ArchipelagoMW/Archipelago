@@ -92,7 +92,7 @@ class Pine:
             # Flatpak Socket Path
             socket_name = base_socket + "/.flatpak/net.pcsx2.PCSX2/xdg-run" + socket_file
             # Use default XDG_RUNTIME_DIR or /tmp if Flatpak socket is not detected
-            if not os.access(socket_name):
+            if not os.access(socket_name, os.W_OK):
                 socket_name = base_socket + socket_file
         elif system() == "Darwin":
             socket_family = socket.AF_UNIX
