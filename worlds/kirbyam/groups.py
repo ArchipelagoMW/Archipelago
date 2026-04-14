@@ -44,6 +44,7 @@ _LOCATION_GROUP_MAPS: dict[str, set[str]] = {
 _LOCATION_CATEGORY_TO_GROUP_NAME = {
     LocationCategory.MAJOR_CHEST: "Major Chests",
     LocationCategory.HUB_SWITCH: "Hub Switches",
+    LocationCategory.MINOR_CHEST: "Minor Chests",
 }
 
 # Pre-create category groups and map/area groups so they are always present during build.

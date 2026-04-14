@@ -153,6 +153,7 @@ class LocationCategory(IntEnum):
     SOUND_PLAYER_CHEST = 11
     ROOM_SANITY = 12
     HUB_SWITCH = 13
+    MINOR_CHEST = 14
 
 
 class ItemData(NamedTuple):

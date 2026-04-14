@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, Mock, patch
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.context import _game_watcher, AuthStatus
 
-from ..data import data
+from ..data import LocationCategory, data
 from ..client import (
     KirbyAmClient,
     _MAP_ITEM_ID_TO_AREA_ID,
@@ -3845,3 +3845,41 @@ def test_hub_switch_locations_defined_in_regions():
     for key in hub_switch_keys:
         assert key in all_region_locations, \
             f"HUB_SWITCH location '{key}' defined in locations.json but not registered in any region in areas.json"
+
+
+def test_minor_chest_locations_defined_in_regions_when_present():
+    """All MINOR_CHEST locations (when enabled) must be registered in some data/regions entry."""
+    minor_chest_keys = {
+        key
+        for key, loc in data.locations.items()
+        if key.startswith("MINOR_CHEST_")
+        or (getattr(loc, "category", None) == LocationCategory.MINOR_CHEST)
+    }
+
+    if not minor_chest_keys:
+        return
+
+    all_region_locations = set()
+    for region_data in data.regions.values():
+        all_region_locations.update(region_data.locations)
+
+    for key in minor_chest_keys:
+        assert key in all_region_locations, \
+            f"MINOR_CHEST location '{key}' defined in locations.json but not registered in any data/regions/*.json entry"
+
+
+def test_minor_chest_locations_have_unique_bit_indices_when_present():
+    """Enabled MINOR_CHEST locations must not reuse native bit indices."""
+    minor_chest_with_bits = [
+        loc for loc in data.locations.values()
+        if getattr(loc, "category", None) == LocationCategory.MINOR_CHEST
+        and getattr(loc, "bit_index", None) is not None
+    ]
+    if not minor_chest_with_bits:
+        return
+
+    bit_indices = [loc.bit_index for loc in minor_chest_with_bits if loc.bit_index is not None]
+    assert len(bit_indices) == len(set(bit_indices)), (
+        "MINOR_CHEST locations must use unique bit_index values to avoid duplicate AP checks: "
+        f"{bit_indices}"
+    )
