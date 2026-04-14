@@ -8,7 +8,8 @@ local function random_offset_position (position, offset)
 end
 
 local function fire_entity_at_entities (entity_name, entities, speed)
-    if not prototype[entity_name].valid then return end
+    if not prototypes.entity[entity_name] then return end
+    if not prototypes.entity[entity_name].valid then return end
     for _, current_entity in ipairs(entities) do
         local target = current_entity
         if target.health == nil then
@@ -21,7 +22,8 @@ local function fire_entity_at_entities (entity_name, entities, speed)
 end
 
 local function fire_entity_at_players (entity_name, speed)
-    if not prototype[entity_name].valid then return end
+    if not prototypes.entity[entity_name] then return end
+    if not prototypes.entity[entity_name].valid then return end
     local entities = {}
     for _, force in pairs(game.forces) do
         if library.is_valid_ap_force(force) then
