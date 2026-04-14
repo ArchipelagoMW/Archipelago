@@ -3,6 +3,7 @@ from typing import TextIO
 from ..content import StardewContent
 from ..data.fish_data import crab_pot_difficulty
 from ..data.game_item import ItemTag
+from ..data.harvest import HarvestCropSource
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -51,6 +52,8 @@ def prepare_fish_data(content: StardewContent, data_to_randomize: set[str], prep
 def prepare_crop_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
     prepared_data["Crops"] = dict()
     prepare_crop_sell_price_data(content, data_to_randomize, prepared_data)
+    prepare_crop_growth_time_data(content, data_to_randomize, prepared_data)
+    prepare_crop_growth_season_data(content, data_to_randomize, prepared_data)
 
 
 def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -121,6 +124,22 @@ def prepare_crop_sell_price_data(content: StardewContent, data_to_randomize: set
                              "SellPrice")
 
 
+def prepare_crop_growth_time_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_crop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.growth_time,
+                             lambda crop: any(isinstance(source, HarvestCropSource) and source.growth_time >= 1 for source in crop.sources),
+                             lambda crop: [f"{source.growth_time} Days" for source in crop.sources if isinstance(source, HarvestCropSource)],
+                             "GrowthTime:")
+
+
+def prepare_crop_growth_season_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_crop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.growth_season,
+                             lambda crop: any(isinstance(source, HarvestCropSource) and len(source.seasons) >= 1 for source in crop.sources),
+                             lambda crop: [source.seasons for source in crop.sources if isinstance(source, HarvestCropSource)],
+                             "Season")
+
+
 def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
                              randomize_toggle: str, crop_validator, crop_data_extractor, aspect_key: str):
     if randomize_toggle not in data_to_randomize:
@@ -133,4 +152,7 @@ def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str
             continue
         if crop_name not in prepared_data["Crops"]:
             prepared_data["Crops"][crop_name] = dict()
-        prepared_data["Crops"][crop_name][aspect_key] = crop_data_extractor(crop_data)
+        extracted_data = crop_data_extractor(crop_data)
+        if isinstance(extracted_data, list) and len(extracted_data) == 1:
+            extracted_data = extracted_data[0]
+        prepared_data["Crops"][crop_name][aspect_key] = extracted_data

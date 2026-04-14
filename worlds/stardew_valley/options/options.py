@@ -977,15 +977,17 @@ class DataRandomization(OptionSet):
     Fish Catch Method: Whether fish are caught using fishing rods or crab pots.
     Fish Sell Price: Ssell price of all fish
     Crop Sell Price: Sell price of all crops and forage
-    Seed Price: Purchase price and sell price of all seeds
-    Seed Growth Time: Time to grow crops from planting to first harvest
+    Growth Time: Time to grow crops from planting to first harvest
+    Growth Season: Which seasons various seeds can grow in
+    Which Crop From Which Seed: Which crop come from which seeds. Only "Shuffle" behavior
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"
     valid_keys = frozenset({
         DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location,
         DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method, DataRandomizationOptionName.fish_sell_price,
-        DataRandomizationOptionName.crop_sell_price, DataRandomizationOptionName.seed_growth_time, # DataRandomizationOptionName.seed_prices
+        DataRandomizationOptionName.crop_sell_price, DataRandomizationOptionName.growth_time, DataRandomizationOptionName.growth_season,
+        DataRandomizationOptionName.crop_which_seed,
     })
     preset_none = frozenset()
     preset_all = valid_keys
