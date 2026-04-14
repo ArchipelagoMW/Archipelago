@@ -12,6 +12,26 @@ import Utils
 # Items that have multiple copies; makes duplicate files for each copy of the item
 MULTI_ITEMS = ("Blossom Petal", "Blossom", "Bonus Orb")
 
+import typing, zipfile
+
+# Some functions for extracting a ZIP file while removing the root
+# https://stackoverflow.com/questions/8689938/extract-files-from-zip-without-keep-the-top-level-folder-with-python-zipfile
+def _is_root(info: zipfile.ZipInfo) -> bool:
+    if info.is_dir():
+        parts = info.filename.split("/")
+        # Handle directory names with and without trailing slashes.
+        if len(parts) == 1 or (len(parts) == 2 and parts[1] == ""):
+            return True
+    return False
+
+def _members_without_root(archive: zipfile.ZipFile, root_filename: str) -> typing.Generator:
+    for info in archive.infolist():
+        parts = info.filename.split(root_filename)
+        if len(parts) > 1 and parts[1]:
+            # We join using the root filename, because there might be a subdirectory with the same name.
+            info.filename = root_filename.join(parts[1:])
+            yield info
+
 # Removes characters that Baba Is You won't like in the storage files
 # ($ is used for color codes, = is used to tell when the data starts)
 def clean(text: str) -> str:
@@ -19,6 +39,43 @@ def clean(text: str) -> str:
     text.replace("$", "S")
     text.replace("#", "")
     return text
+
+def auto_install_pack(path: str, world: str, forceInstall: bool = False):
+    defaultWorldPath = os.path.join(path, "Data", "Worlds", "baba")
+    if os.path.exists(defaultWorldPath):
+        worldPath = os.path.join(path, "Data", "Worlds", world)
+        if forceInstall or (not (os.path.exists(worldPath) and os.path.exists(os.path.join(worldPath, "0level.l")))):
+            print("Attempting to create babapelago world")
+
+            import shutil
+            from .. import user_folder, local_folder
+
+            try:
+                shutil.copytree(defaultWorldPath, worldPath, dirs_exist_ok=True)
+                
+                isAPWorld = ".apworld" in sys.modules[__name__].__file__
+                if isAPWorld:
+                    apWorldPath = os.path.join(user_folder, "baba_is_you.apworld")
+                    
+                    with zipfile.ZipFile(apWorldPath, mode="r") as archive:
+                        # We will use the first directory with no more than one path segment as the root.
+                        archive.extractall(path=worldPath, members=_members_without_root(archive, "baba_is_you/babapelago"))
+                else:
+                    apWorldPath = os.path.join(local_folder, "baba_is_you")
+                    shutil.copytree(os.path.join(apWorldPath, "babapelago"), worldPath, dirs_exist_ok=True)
+            except KeyError as e:
+                print(e)
+                return False
+            except zipfile.BadZipFile as e:
+                print(e)
+                return False
+            
+            return True
+        else:
+            return True
+    else:
+        print("Unable to locate default Baba world")
+        return False
 
 if __name__ == "__main__":
     Utils.init_logging("BabaIsYouClient", exception_logger="Client")
@@ -42,9 +99,7 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
         path = Utils.open_directory("Select Baba Is You directory...")
         if path is None:
             msg = "No directory was entered!"
-            logger.error("Error: " + msg)
-            Utils.messagebox("Error", msg, error=True)
-            sys.exit(1)
+            self.output("Error: " + msg)
             return False
 
         if osName == "Darwin": # Mac
@@ -62,7 +117,9 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
             self.output("Error: " + msg)
             return False
     
+        self.ctx.game_data_path = path
         self.ctx.game_communication_path = os.path.join(path, "AP", self.ctx.world_folder)
+
         if not os.path.exists(self.ctx.game_communication_path):
             os.makedirs(self.ctx.game_communication_path)
 
@@ -73,19 +130,24 @@ class BabaIsYouClientCommandProcessor(ClientCommandProcessor):
 
         if len(folder) <= 0:
             folder = "babapelago"
-        elif ("/.." in folder):
-            self.output(f"Invalid folder name: {folder}")
-            return False
-        
-        new_communication_path = os.path.abspath(os.path.join(self.ctx.game_communication_path, os.pardir, folder))
 
         self.ctx.world_folder = folder
-        self.ctx.game_communication_path = new_communication_path
+        self.ctx.game_communication_path = os.path.join(self.ctx.game_data_path, "AP", self.world_folder)
+
         if not os.path.exists(self.ctx.game_communication_path):
             os.makedirs(self.ctx.game_communication_path)
         
         self.output(f"Set world folder to: {folder}")
         return True
+    
+    def _cmd_installpack(self) -> bool:
+        """Install the Babapelago level pack at the currently selected world"""
+        result = auto_install_pack(self.ctx.game_data_path, self.ctx.world_folder, True)
+        if result:
+            self.output("Successfully installed the pack!")
+        else:
+            self.output("An error occured when trying to install the pack.")
+        return result
 
 class BabaIsYouContext(CommonContext):
     command_processor: int = BabaIsYouClientCommandProcessor
@@ -121,7 +183,7 @@ class BabaIsYouContext(CommonContext):
             logger.info(f"Found steam installation at: {os.path.abspath(path)}")
         else:
             path = Utils.open_directory("Select Baba Is You directory...")
-            if path is None:
+            if not path:
                 msg = "No directory was entered!"
                 logger.error("Error: " + msg)
                 Utils.messagebox("Error", msg, error=True)
@@ -146,7 +208,11 @@ class BabaIsYouContext(CommonContext):
             return
         
         self.world_folder = "babapelago"
+        self.game_data_path = path
         self.game_communication_path = os.path.join(path, "AP", self.world_folder)
+
+        # auto install pack
+        auto_install_pack(path, self.world_folder)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
