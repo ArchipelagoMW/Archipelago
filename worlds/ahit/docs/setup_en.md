@@ -50,16 +50,17 @@ make sure ***Enable Developer Console*** is checked in Game Settings and press t
 
 ## FAQ/Common Issues
 
-### The game is not connecting when starting a new save!
-For unknown reasons, the mod will randomly disable itself in the mod menu. To fix this, go to the Mods menu 
-(rocket icon) in-game, and re-enable the mod.
+### The game is crashing on startup repeatedly!
+This is a common issue on older versions of the game, caused by the game failing to interface with the Steam Workshop. 
+To fix it you can try the following (from least to most effort required)
+- Subscribe to any random workshop mod, then unsubscribe from it
+- Restart Steam
+- Restart your computer
+- Delete the game's config directory from the files `steamapps/common/HatinTime/HatinTimeGame/Config` then verify the game files
+- Reinstall the game
 
 ### Why do relics disappear from the stands in the Spaceship after they're completed?
 This is intentional behaviour. Because of how randomizer logic works, there is no way to predict the order that 
 a player will place their relics. Since there are a limited amount of relic stands in the Spaceship, relics are removed 
 after being completed to allow for the placement of more relics without being potentially locked out. 
 The level that the relic set unlocked will stay unlocked.
-
-### When I start a new save file, the intro cinematic doesn't get skipped, Hat Kid's body is missing and the mod doesn't work!
-There is a bug on older versions of A Hat in Time that causes save file creation to fail to work properly 
-if you have too many save files. Delete them and it should fix the problem.
