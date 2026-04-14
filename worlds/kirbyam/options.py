@@ -136,15 +136,6 @@ class AbilityRandomizationNoAbilityWeight(Range):
     default = 55
 
 
-class EnableDebugLogging(Toggle):
-    """
-    Enable extra BizHawk client diagnostics for gameplay-state and mailbox delivery troubleshooting.
-      Useful if you want to report a bug to the world developers. Off by default.
-    """
-    display_name = "Enable Debug Logging"
-    default = 0
-
-
 class NoExtraLives(Toggle):
     """
     Start with zero lives and clamp all extra-life gains to zero during gameplay.
@@ -284,8 +275,6 @@ class KirbyAmOptions(PerGameCommonOptions):
     ability_randomization_no_ability_weight: AbilityRandomizationNoAbilityWeight
 
     room_sanity: RoomSanity
-
-    enable_debug_logging: EnableDebugLogging
 
     death_link: KirbyAmDeathLink
 

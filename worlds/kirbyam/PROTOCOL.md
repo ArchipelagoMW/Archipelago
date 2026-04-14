@@ -191,14 +191,11 @@ Server → Client: ConnectionRefused | Connected
 - `ability_randomization_passive_enemies` (bool): when true, enemies that natively grant no ability participate in copy-ability randomization. Default: `true`.
 - `ability_randomization_no_ability_weight` (int): percentage chance from `0` to `100` that an included randomized enemy grant resolves to no ability instead of a copy ability. Default: `55`.
 - `room_sanity` (bool): enables/disables room-visit locations (`Room X-<room code>`, 263 checks).
-- `enable_debug_logging` (bool): enables/disables debug-level client diagnostics.
 - `enemy_copy_ability_whitelist` (list[str]): validated ability pool (must exclude `Wait`).
 - `enemy_copy_ability_policy` (dict): deterministic policy payload used by runtime hooks.
 - `locations` (dict): tracker-facing location metadata keyed by KirbyAM location key.
 - `rooms` (dict): tracker-facing room metadata keyed by room region key, exported regardless of `room_sanity` option.
 - `unique_items` (list[str]): tracker-facing list of KirbyAM unique item labels.
-- `debug` (dict): debug settings payload.
-    - `logging` (bool): when true, client emits diagnostics for gameplay-state/demo-flag transitions (including `hook_heartbeat`) and self-ItemSend fallback decisions.
 
 Compatibility note (Issue #398 option-key reorganization):
 - Legacy keys `enemy_copy_ability_randomization`, `randomize_boss_spawned_ability_grants`, and `randomize_miniboss_ability_grants` are intentionally not emitted in `slot_data` during the pre-public (`< v0.1.0`) phase.
@@ -216,7 +213,7 @@ DeathLink runtime behavior contract:
 `no_extra_lives` runtime behavior contract:
 - Generation removes `1 Up` from the active filler pool when the option is enabled.
 - During gameplay, the BizHawk client clamps `kirby_lives_native` to `0` so the player starts with zero extra lives and native/in-game life gains are overwritten.
-- Any `no_extra_lives` runtime diagnostics must remain gated behind `debug.logging`.
+- Any `no_extra_lives` runtime diagnostics are emitted as file-only logs (`NoStream=True`).
 
 `one_hit_mode` runtime behavior contract:
 - Generation removes all four Vitality Counter items from the non-filler item pool (replaced by filler) when `one_hit_mode == exclude_vitality_counters` (1). Vitality Chest locations are kept, but this mode does not guarantee location-specific filler placement on those chests.
@@ -224,7 +221,7 @@ DeathLink runtime behavior contract:
 - Generation leaves the item pool unchanged when `one_hit_mode == include_vitality_counters` (2).
 - During gameplay, when `one_hit_mode != off`, the BizHawk client reads `kirby_vitality_counter_native` (`u16`) and enforces `desired_max_hp = vitality_counter + 1` (capped to `0x7F`) onto `kirby_max_hp_native` and `kirby_hp_native` for player 0's struct. In `exclude_vitality_counters` mode it additionally scrubs `kirby_vitality_counter_native` back to `0` every gameplay tick so AP vitality grants cannot persist.
 - Dead/negative HP states (`current_hp <= 0`) are preserved; only alive Kirby's HP is clamped.
-- Any `one_hit_mode` runtime diagnostics must remain gated behind `debug.logging`.
+- Any `one_hit_mode` runtime diagnostics are emitted as file-only logs (`NoStream=True`).
 ```
 
 **Preconditions before gameplay watchers run:**

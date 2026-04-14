@@ -752,7 +752,6 @@ async def test_poll_room_entry_logging_logs_only_on_room_change(mock_bizhawk_con
 async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    client._debug_logging_enabled = True
     client._room_label_by_doors_idx = {7: "REGION_LOOKUP_ROOM"}
     client._room_region_key_by_doors_idx = {7: "ROOM_SANITY_2_01"}
 
@@ -788,7 +787,7 @@ async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizh
         "REGION_LOOKUP_ROOM",
         native_room_id,
         7,
-        extra={"NoStream": False},
+        extra={"NoStream": True},
     )
 
 
@@ -920,7 +919,7 @@ async def test_poll_room_entry_logging_retries_after_bounce_send_failure(mock_bi
 
 
 @pytest.mark.asyncio
-async def test_poll_room_entry_logging_nostream_gating_respects_debug_flag(mock_bizhawk_context):
+async def test_poll_room_entry_logging_is_always_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
     client._room_label_by_doors_idx = {9: "REGION_NOSTREAM_ROOM"}
@@ -935,20 +934,6 @@ async def test_poll_room_entry_logging_nostream_gating_respects_debug_flag(mock_
 
     mock_logger.info.assert_called_once()
     assert mock_logger.info.call_args.kwargs.get("extra", {}).get("NoStream") is True
-
-    client._last_native_room_id = None
-    client._debug_logging_enabled = True
-
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch('CommonClient.logger') as mock_logger:
-        mock_read.side_effect = [
-            [(0x0013).to_bytes(2, 'little')],
-            [(9).to_bytes(2, 'little')],
-        ]
-        await client._poll_room_entry_logging(mock_bizhawk_context)
-
-    mock_logger.info.assert_called_once()
-    assert mock_logger.info.call_args.kwargs.get("extra", {}).get("NoStream") is False
 
 
 def test_major_chest_data_sanity():
@@ -1443,7 +1428,7 @@ async def test_deliver_items_fast_forward_on_pending_ack(mock_bizhawk_context):
 
 
 @pytest.mark.asyncio
-async def test_deliver_items_fast_forward_log_gated_by_debug(mock_bizhawk_context):
+async def test_deliver_items_fast_forward_log_is_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
     client._delivered_item_index = 0
@@ -1473,34 +1458,16 @@ async def test_deliver_items_fast_forward_log_gated_by_debug(mock_bizhawk_contex
     ]
     assert matching_disabled
     assert all(call.kwargs.get("extra", {}).get("NoStream") is True for call in matching_disabled)
-
-    client = KirbyAmClient()
-    client.initialize_client()
-    client._debug_logging_enabled = True
-    client._delivered_item_index = 0
-    client._delivery_pending = True
-    client._delivery_pending_item_index = 0
-
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
-         patch('CommonClient.logger') as mock_logger:
-        mock_read.return_value = [
-            (0).to_bytes(4, 'little'),
-            (2).to_bytes(4, 'little'),
-        ]
-
-        await client._deliver_items(mock_bizhawk_context)
-
     mock_logger.info.assert_any_call(
         "KirbyAM: ROM delivery counter moved forward from %s to %s on pending ACK; fast-forwarding client delivery cursor",
         0,
         2,
-        extra={"NoStream": False},
+        extra={"NoStream": True},
     )
 
 
 @pytest.mark.asyncio
-async def test_deliver_items_mailbox_write_log_gated_by_debug(mock_bizhawk_context):
+async def test_deliver_items_mailbox_write_log_is_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -1526,31 +1493,12 @@ async def test_deliver_items_mailbox_write_log_gated_by_debug(mock_bizhawk_conte
     ]
     assert matching_disabled
     assert all(call.kwargs.get("extra", {}).get("NoStream") is True for call in matching_disabled)
-
-    client = KirbyAmClient()
-    client.initialize_client()
-    client._debug_logging_enabled = True
-    mock_bizhawk_context.items_received = [
-        Mock(item=3860001, player=1),
-    ]
-
-    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch('worlds.kirbyam.client.bizhawk.write', new_callable=AsyncMock), \
-         patch('CommonClient.logger') as mock_logger:
-        mock_read.return_value = [
-            (0).to_bytes(4, 'little'),
-            (0).to_bytes(4, 'little'),
-            (1234).to_bytes(4, 'little'),
-        ]
-
-        await client._deliver_items(mock_bizhawk_context)
-
     mock_logger.info.assert_any_call(
         "KirbyAM: Delivering mailbox item index %s (%s from %s)",
         0,
         "1 Up",
         "Player 1",
-        extra={"NoStream": False},
+        extra={"NoStream": True},
     )
 
 
@@ -1982,7 +1930,7 @@ async def test_receive_notification_uses_local_slot_for_item_name_lookup(mock_bi
 
 
 @pytest.mark.asyncio
-async def test_receive_notification_queue_log_gated_by_debug(mock_bizhawk_context):
+async def test_receive_notification_queue_log_emitted_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -1996,26 +1944,13 @@ async def test_receive_notification_queue_log_gated_by_debug(mock_bizhawk_contex
          patch('CommonClient.logger') as mock_logger:
         await client._emit_receive_notification(mock_bizhawk_context, 0)
 
-    assert not any(
-        call.args and isinstance(call.args[0], str) and "receive notification queued" in call.args[0]
-        for call in mock_logger.info.call_args_list
-    )
-
-    client = KirbyAmClient()
-    client.initialize_client()
-    client._debug_logging_enabled = True
-    mock_bizhawk_context.items_received = [Mock(item=3860001, player=2)]
-
-    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock), \
-         patch('CommonClient.logger') as mock_logger:
-        await client._emit_receive_notification(mock_bizhawk_context, 0)
-
     mock_logger.info.assert_any_call(
         "KirbyAM: receive notification queued (index=%s, item=%s, sender=%s, lookup_slot=%s)",
         0,
         "Mirror Shard",
         "PlayerTwo",
         1,
+        extra={"NoStream": True},
     )
 
 
@@ -2310,7 +2245,7 @@ def test_send_notification_rate_limit_suppresses_burst(mock_bizhawk_context):
     assert mock_async_start.call_count == 7
 
 
-def test_send_notification_queue_log_gated_by_debug(mock_bizhawk_context):
+def test_send_notification_queue_log_emitted_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -2330,31 +2265,18 @@ def test_send_notification_queue_log_gated_by_debug(mock_bizhawk_context):
         mock_async_start.side_effect = lambda coro: coro.close()
         client.on_package(mock_bizhawk_context, "PrintJSON", payload)
 
-    assert not any(
-        call.args and isinstance(call.args[0], str) and "send notification queued" in call.args[0]
-        for call in mock_logger.info.call_args_list
-    )
-
-    client = KirbyAmClient()
-    client.initialize_client()
-    client._debug_logging_enabled = True
-    with patch('worlds.kirbyam.client.bizhawk.display_message', new_callable=AsyncMock), \
-         patch('worlds.kirbyam.client.Utils.async_start') as mock_async_start, \
-         patch('CommonClient.logger') as mock_logger:
-        mock_async_start.side_effect = lambda coro: coro.close()
-        client.on_package(mock_bizhawk_context, "PrintJSON", payload)
-
     mock_logger.info.assert_any_call(
         "KirbyAM: send notification queued (item=%s, sender=%s, receiver=%s, location=%s)",
         "Mirror Shard",
         "Player 1",
         "PlayerTwo",
         "Location 123",
+        extra={"NoStream": True},
     )
 
 
 @pytest.mark.asyncio
-async def test_room_sanity_resend_log_gated_by_debug(mock_bizhawk_context):
+async def test_room_sanity_resend_log_is_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
     mock_bizhawk_context.slot_data["room_sanity"] = True
@@ -2380,30 +2302,6 @@ async def test_room_sanity_resend_log_gated_by_debug(mock_bizhawk_context):
     ]
     assert matching_disabled
     assert all(call.kwargs.get("extra", {}).get("NoStream") is True for call in matching_disabled)
-
-    client = KirbyAmClient()
-    client.initialize_client()
-    client._debug_logging_enabled = True
-    mock_bizhawk_context.slot_data["room_sanity"] = True
-    client._room_sanity_location_ids_by_bit = {0: [3961000]}
-    client._room_sanity_bits_sorted = [0]
-    mock_bizhawk_context.checked_locations = set()
-
-    with patch.dict(data.native_ram_addresses, {"room_visit_flags_native": 0x02028CA0}, clear=False), \
-         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
-         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock), \
-         patch('CommonClient.logger') as mock_logger:
-        mock_read.return_value = [bytes(raw)]
-
-        await client._poll_room_sanity_locations(mock_bizhawk_context)
-
-    matching_enabled = [
-        call
-        for call in mock_logger.info.call_args_list
-        if call.args and isinstance(call.args[0], str) and "resending room-sanity LocationChecks missing on server" in call.args[0]
-    ]
-    assert matching_enabled
-    assert all(call.kwargs.get("extra", {}).get("NoStream") is False for call in matching_enabled)
 
 
 @pytest.mark.asyncio
@@ -2536,29 +2434,40 @@ def test_load_debug_settings_defaults_to_disabled(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
 
-    client._load_debug_settings(mock_bizhawk_context)
+    with patch('CommonClient.logger') as mock_logger:
+        mock_logger.getEffectiveLevel.return_value = logging.INFO
+        client._load_debug_settings(mock_bizhawk_context)
 
     assert client._debug_logging_enabled is False
 
 
-def test_load_debug_settings_honors_slot_data_toggle_true(mock_bizhawk_context):
+def test_load_debug_settings_honors_logger_debug_level(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    mock_bizhawk_context.slot_data["debug"] = {"logging": True}
 
-    client._load_debug_settings(mock_bizhawk_context)
+    with patch('CommonClient.logger') as mock_logger:
+        mock_logger.getEffectiveLevel.return_value = logging.DEBUG
+        client._load_debug_settings(mock_bizhawk_context)
 
     assert client._debug_logging_enabled is True
 
 
-def test_load_debug_settings_ignores_removed_gameplay_state_key(mock_bizhawk_context):
+def test_load_debug_settings_honors_inherited_root_debug_level(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    mock_bizhawk_context.slot_data["debug"] = {"gameplay_state_logging": True}
+    inherited_logger = logging.getLogger("worlds.kirbyam.test.inherited_debug")
+    inherited_logger.setLevel(logging.NOTSET)
 
-    client._load_debug_settings(mock_bizhawk_context)
+    root_logger = logging.getLogger()
+    original_root_level = root_logger.level
+    try:
+        root_logger.setLevel(logging.DEBUG)
+        with patch.object(client, '_get_logger', return_value=inherited_logger):
+            client._load_debug_settings(mock_bizhawk_context)
+    finally:
+        root_logger.setLevel(original_root_level)
 
-    assert client._debug_logging_enabled is False
+    assert client._debug_logging_enabled is True
 
 
 def test_no_extra_lives_enabled_defaults_to_false(mock_bizhawk_context):
@@ -2612,10 +2521,9 @@ async def test_enforce_no_extra_lives_skips_write_when_already_zero(mock_bizhawk
 
 
 @pytest.mark.asyncio
-async def test_enforce_no_extra_lives_logs_only_when_debug_enabled(mock_bizhawk_context):
+async def test_enforce_no_extra_lives_log_is_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    client._debug_logging_enabled = True
     mock_bizhawk_context.slot_data["no_extra_lives"] = True
 
     with patch.dict(data.native_ram_addresses, {"kirby_lives_native": 0x02020FE2}, clear=False), \
@@ -2630,6 +2538,7 @@ async def test_enforce_no_extra_lives_logs_only_when_debug_enabled(mock_bizhawk_
     mock_logger.info.assert_any_call(
         "KirbyAM debug: no-extra-lives clamped native lives from %s to 0",
         1,
+        extra={"NoStream": True},
     )
 
 
@@ -2761,8 +2670,7 @@ async def test_enforce_one_hit_mode_skips_writes_when_already_within_cap(mock_bi
 async def test_runtime_gameplay_state_logs_ai_and_demo_changes_with_heartbeat(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    mock_bizhawk_context.slot_data["debug"] = {"logging": True}
-    client._load_debug_settings(mock_bizhawk_context)
+    client._debug_logging_enabled = True
 
     with patch.dict(
         data.native_ram_addresses,
@@ -3031,6 +2939,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
     with patch.object(client, '_reset_reconnect_transient_state') as mock_reset, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock) as mock_load, \
          patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock) as mock_reconcile_maps, \
+            patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock), \
          patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock) as mock_apply_death_link, \
          patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock) as mock_send_death_link, \
@@ -3143,7 +3052,6 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
     """First watcher tick after AP session readiness should reset transient reconnect state and log once."""
     client = KirbyAmClient()
     client.initialize_client()
-    mock_bizhawk_context.slot_data["debug"] = {"logging": True}
 
     client._last_runtime_gate_reason = "non_gameplay_cutscene"
     client._last_shard_poll_log = ("resend", (1,), ())
@@ -3196,7 +3104,10 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._boss_probe_stream_marker is None
         assert client._unsafe_delivery_probe_stream_marker is None
         assert client._last_unsafe_delivery_counter_values == {}
-        mock_logger.info.assert_any_call("KirbyAM: AP session ready; reconnect-safe reconciliation active")
+        mock_logger.info.assert_any_call(
+            "KirbyAM: AP session ready; reconnect-safe reconciliation active",
+            extra={"NoStream": True},
+        )
         mock_load.assert_awaited_once()
         mock_reconcile_maps.assert_awaited()
         mock_poll_locations.assert_not_awaited()
@@ -3217,7 +3128,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
 
 
 @pytest.mark.asyncio
-async def test_game_watcher_reconnect_entry_suppresses_session_ready_log_when_debug_disabled(mock_bizhawk_context):
+async def test_game_watcher_reconnect_entry_emits_file_only_session_ready_log(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -3243,9 +3154,9 @@ async def test_game_watcher_reconnect_entry_suppresses_session_ready_log_when_de
 
         await client.game_watcher(mock_bizhawk_context)
 
-    assert not any(
-        call.args and call.args[0] == "KirbyAM: AP session ready; reconnect-safe reconciliation active"
-        for call in mock_logger.info.call_args_list
+    mock_logger.info.assert_any_call(
+        "KirbyAM: AP session ready; reconnect-safe reconciliation active",
+        extra={"NoStream": True},
     )
 
 
@@ -3405,6 +3316,7 @@ async def test_game_watcher_defers_polling_and_new_writes_when_non_gameplay(mock
 
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock) as mock_load, \
+            patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock), \
          patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
@@ -3434,6 +3346,7 @@ async def test_game_watcher_emits_pause_then_resume_popups_on_transition(mock_bi
 
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
+            patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock), \
          patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock), \
          patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
          patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
@@ -3462,7 +3375,7 @@ async def test_game_watcher_emits_pause_then_resume_popups_on_transition(mock_bi
 
 
 @pytest.mark.asyncio
-async def test_game_watcher_suppresses_runtime_gate_logs_when_debug_disabled(mock_bizhawk_context):
+async def test_game_watcher_emits_file_only_runtime_gate_logs(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -3476,19 +3389,18 @@ async def test_game_watcher_suppresses_runtime_gate_logs_when_debug_disabled(moc
 
         await client.game_watcher(mock_bizhawk_context)
 
-    defer_logs = [
-        call for call in mock_logger.info.call_args_list
-        if call.args and isinstance(call.args[0], str)
-        and "deferring location polling/new item writes" in call.args[0]
-    ]
-    assert defer_logs == []
+    mock_logger.info.assert_any_call(
+        "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
+        "non_gameplay_tutorial_or_menu",
+        0,
+        extra={"NoStream": True},
+    )
 
 
 @pytest.mark.asyncio
-async def test_game_watcher_emits_runtime_gate_logs_when_debug_enabled(mock_bizhawk_context):
+async def test_game_watcher_emits_runtime_gate_logs_file_only(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
-    mock_bizhawk_context.slot_data["debug"] = {"logging": True}
 
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
@@ -3521,9 +3433,11 @@ async def test_game_watcher_emits_runtime_gate_logs_when_debug_enabled(mock_bizh
         "KirbyAM: deferring location polling/new item writes (%s, ai_state=%s)",
         "non_gameplay_tutorial_or_menu",
         0,
+        extra={"NoStream": True},
     )
     mock_logger.info.assert_any_call(
-        "KirbyAM: gameplay-active state restored; resuming normal watcher flow"
+        "KirbyAM: gameplay-active state restored; resuming normal watcher flow",
+        extra={"NoStream": True},
     )
 
 
@@ -3536,6 +3450,7 @@ async def test_game_watcher_syncs_death_link_enabled_from_slot_data(mock_bizhawk
 
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
+            patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock), \
          patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock), \
             patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
             patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
@@ -3565,6 +3480,7 @@ async def test_game_watcher_death_link_sync_is_deduped_until_value_changes(mock_
 
     with patch.object(client, '_runtime_gameplay_state', new_callable=AsyncMock) as mock_gate, \
          patch.object(client, '_load_persistent_state', new_callable=AsyncMock), \
+            patch.object(client, '_log_boss_shard_debug_window', new_callable=AsyncMock), \
          patch.object(client, '_reconcile_native_map_ownership', new_callable=AsyncMock), \
             patch.object(client, '_apply_pending_death_link', new_callable=AsyncMock), \
             patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
@@ -3909,7 +3825,7 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
         "Kirby swallowed a %s. Ability was rerolled to %s.",
         "UNKNOWN_0x123456",
         "Burning",
-        extra={"NoStream": False},
+        extra={"NoStream": True},
     )
 
 

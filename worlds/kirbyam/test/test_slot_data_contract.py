@@ -52,7 +52,6 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "ability_randomization_passive_enemies": False,
         "ability_randomization_no_ability_weight": 55,
         "room_sanity": False,
-        "enable_debug_logging": False,
     }
 
     world.options = options
@@ -97,13 +96,6 @@ def test_starting_kirby_color_contract_fields_present_with_expected_shapes() -> 
     assert isinstance(slot_data["starting_kirby_color"], int)
     assert isinstance(slot_data["starting_kirby_color_name"], str)
     assert slot_data["starting_kirby_color_name"]
-
-
-def test_debug_settings_contract_fields_present_with_expected_shapes() -> None:
-    slot_data = _emit_slot_data_for_contract_test()
-
-    assert isinstance(slot_data["debug"], dict)
-    assert isinstance(slot_data["debug"]["logging"], bool)
 
 
 def test_tracker_surface_contract_fields_present_with_expected_shapes() -> None:

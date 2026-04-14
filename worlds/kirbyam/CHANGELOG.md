@@ -30,7 +30,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### Internal Changes
 
-- None.
+- Removed the `Enable Debug Logging` / `enable_debug_logging` world option and corresponding slot_data debug toggle. Client diagnostics that were previously controlled by that option are now file-only logs and are never emitted to the AP client stream.
 
 ## v0.2.0
 

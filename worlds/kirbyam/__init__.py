@@ -766,7 +766,6 @@ class KirbyAmWorld(World):
             "ability_randomization_passive_enemies",
             "ability_randomization_no_ability_weight",
             "room_sanity",
-            "enable_debug_logging",
             toggles_as_bools=True,
         )
         resolved_color_id, resolved_color_name = self._get_resolved_starting_kirby_color()
@@ -815,10 +814,6 @@ class KirbyAmWorld(World):
             }
         )
 
-        # Debug settings are grouped under one key to keep slot_data extensible.
-        slot_data["debug"] = {
-            "logging": bool(self.options.enable_debug_logging.value),
-        }
         return slot_data
 
     # Helper methods to create items and events

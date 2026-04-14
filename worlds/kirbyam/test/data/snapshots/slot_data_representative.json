@@ -6,9 +6,6 @@
   "ability_randomization_no_ability_weight": 55,
   "ability_randomization_passive_enemies": false,
   "death_link": true,
-  "debug": {
-    "logging": true
-  },
   "enable_traps": false,
   "enemy_copy_ability_policy": {
     "ability_randomization_boss_spawns": true,
