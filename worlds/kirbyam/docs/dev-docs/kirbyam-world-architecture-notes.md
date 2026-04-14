@@ -222,6 +222,8 @@ That means `rooms.json` is doing double duty:
 
 Room region naming in `rooms.json` is intentionally aligned with Wikirby.com room naming (for example, hub/goal labels) so cross-referencing map documentation and world data stays consistent.
 
+For reference, `REGION_MOONLIGHT_MANSION/ROOM_2_10` corresponds to the Area 2 Boss Antechamber.
+
 ### Region Loading
 
 All region JSON files under `data/regions/` are merged. Each region records:
