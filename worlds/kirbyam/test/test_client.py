@@ -14,6 +14,7 @@ from ..client import (
     _ROOM_PROPS_DOORS_IDX_OFFSET,
     _ROOM_PROPS_ROM_BASE,
     _ROOM_PROPS_STRIDE,
+    _ROOM_UPDATE_BOUNCE_TYPE,
 )
 from ..options import OneHitMode
 from ..rom import KirbyAmProcedurePatch
@@ -713,6 +714,7 @@ async def test_poll_room_entry_logging_logs_only_on_room_change(mock_bizhawk_con
     client = KirbyAmClient()
     client.initialize_client()
     client._room_label_by_doors_idx = {42: "REGION_TEST_ROOM"}
+    client._room_region_key_by_doors_idx = {42: "ROOM_SANITY_1_20"}
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('CommonClient.logger') as mock_logger:
@@ -726,6 +728,17 @@ async def test_poll_room_entry_logging_logs_only_on_room_change(mock_bizhawk_con
         await client._poll_room_entry_logging(mock_bizhawk_context)
 
     assert mock_read.await_count == 3
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([{
+        "cmd": "Bounce",
+        "slots": [mock_bizhawk_context.slot],
+        "data": {
+            "type": _ROOM_UPDATE_BOUNCE_TYPE,
+            "nativeRoomId": 0x0010,
+            "doorsIdx": 42,
+            "roomRegionKey": "ROOM_SANITY_1_20",
+            "roomLabel": "REGION_TEST_ROOM",
+        },
+    }])
     mock_logger.info.assert_called_once_with(
         "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
         "REGION_TEST_ROOM",
@@ -741,6 +754,7 @@ async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizh
     client.initialize_client()
     client._debug_logging_enabled = True
     client._room_label_by_doors_idx = {7: "REGION_LOOKUP_ROOM"}
+    client._room_region_key_by_doors_idx = {7: "ROOM_SANITY_2_01"}
 
     native_room_id = 0x0021
     expected_rom_addr = _ROOM_PROPS_ROM_BASE + native_room_id * _ROOM_PROPS_STRIDE + _ROOM_PROPS_DOORS_IDX_OFFSET
@@ -758,6 +772,17 @@ async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizh
         mock_bizhawk_context.bizhawk_ctx,
         [(expected_rom_addr, 2, "ROM")],
     )
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([{
+        "cmd": "Bounce",
+        "slots": [mock_bizhawk_context.slot],
+        "data": {
+            "type": _ROOM_UPDATE_BOUNCE_TYPE,
+            "nativeRoomId": native_room_id,
+            "doorsIdx": 7,
+            "roomRegionKey": "ROOM_SANITY_2_01",
+            "roomLabel": "REGION_LOOKUP_ROOM",
+        },
+    }])
     mock_logger.info.assert_called_once_with(
         "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
         "REGION_LOOKUP_ROOM",
@@ -793,6 +818,7 @@ async def test_poll_room_entry_logging_retries_after_short_rom_read(mock_bizhawk
     client = KirbyAmClient()
     client.initialize_client()
     client._room_label_by_doors_idx = {11: "REGION_RETRY_ROOM"}
+    client._room_region_key_by_doors_idx = {11: "ROOM_SANITY_3_02"}
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('CommonClient.logger') as mock_logger:
@@ -807,11 +833,88 @@ async def test_poll_room_entry_logging_retries_after_short_rom_read(mock_bizhawk
         await client._poll_room_entry_logging(mock_bizhawk_context)
 
     assert client._last_native_room_id == 0x0008
+    mock_bizhawk_context.send_msgs.assert_awaited_once_with([{
+        "cmd": "Bounce",
+        "slots": [mock_bizhawk_context.slot],
+        "data": {
+            "type": _ROOM_UPDATE_BOUNCE_TYPE,
+            "nativeRoomId": 0x0008,
+            "doorsIdx": 11,
+            "roomRegionKey": "ROOM_SANITY_3_02",
+            "roomLabel": "REGION_RETRY_ROOM",
+        },
+    }])
     mock_logger.info.assert_called_once_with(
         "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
         "REGION_RETRY_ROOM",
         0x0008,
         11,
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_re_emits_on_reconnect_state_reset(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {9: "REGION_RECONNECT_ROOM"}
+    client._room_region_key_by_doors_idx = {9: "ROOM_SANITY_4_01"}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [(0x0015).to_bytes(2, 'little')],
+            [(9).to_bytes(2, 'little')],
+            [(0x0015).to_bytes(2, 'little')],
+            [(9).to_bytes(2, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        client._reset_reconnect_transient_state()
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert mock_bizhawk_context.send_msgs.await_count == 2
+    first_payload = mock_bizhawk_context.send_msgs.await_args_list[0].args[0][0]
+    second_payload = mock_bizhawk_context.send_msgs.await_args_list[1].args[0][0]
+    assert first_payload["cmd"] == "Bounce"
+    assert second_payload["cmd"] == "Bounce"
+    assert first_payload["data"]["type"] == _ROOM_UPDATE_BOUNCE_TYPE
+    assert second_payload["data"]["type"] == _ROOM_UPDATE_BOUNCE_TYPE
+    assert first_payload["data"]["nativeRoomId"] == 0x0015
+    assert second_payload["data"]["nativeRoomId"] == 0x0015
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_retries_after_bounce_send_failure(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {12: "REGION_SEND_RETRY_ROOM"}
+    client._room_region_key_by_doors_idx = {12: "ROOM_SANITY_5_10"}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(0x0020).to_bytes(2, 'little')],
+            [(12).to_bytes(2, 'little')],
+            [(0x0020).to_bytes(2, 'little')],
+            [(12).to_bytes(2, 'little')],
+        ]
+        mock_send.side_effect = [RuntimeError("socket down"), None]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        assert client._last_native_room_id == 0x0020
+        assert client._last_sent_room_update_native_room_id is None
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert client._last_native_room_id == 0x0020
+    assert client._last_sent_room_update_native_room_id == 0x0020
+    assert mock_send.await_count == 2
+    mock_logger.info.assert_called_once_with(
+        "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
+        "REGION_SEND_RETRY_ROOM",
+        0x0020,
+        12,
         extra={"NoStream": True},
     )
 

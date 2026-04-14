@@ -94,6 +94,7 @@ _TRAP_ITEM_IDS: frozenset[int] = frozenset(
 _ROOM_PROPS_ROM_BASE = 0x009331AC  # gRoomProps[] — ROM domain offset (GBA ROM 0x089331AC)
 _ROOM_PROPS_STRIDE = 0x28  # sizeof(struct RoomProps)
 _ROOM_PROPS_DOORS_IDX_OFFSET = 0x24  # offsetof(struct RoomProps, doorsIdx)
+_ROOM_UPDATE_BOUNCE_TYPE = "RoomUpdate"
 _MANAGED_NATIVE_MAP_BITMASK = 0
 for area_id in _MAP_ITEM_ID_TO_AREA_ID.values():
     _MANAGED_NATIVE_MAP_BITMASK |= 1 << area_id
@@ -235,7 +236,10 @@ class KirbyAmClient(BizHawkClient):
 
         # Room entry logging (always to file; client display gated by debug flag)
         self._last_native_room_id: int | None = None
-        self._room_label_by_doors_idx: dict[int, str] = self._build_room_label_lookup()
+        self._last_sent_room_update_native_room_id: int | None = None
+        room_label_lookup, room_region_key_lookup = self._build_room_lookup_maps()
+        self._room_label_by_doors_idx: dict[int, str] = room_label_lookup
+        self._room_region_key_by_doors_idx: dict[int, str] = room_region_key_lookup
 
         # Notification pipeline state (Issue #83)
         self._notification_settings_loaded: bool = False
@@ -330,24 +334,29 @@ class KirbyAmClient(BizHawkClient):
         return common_logger
 
     @staticmethod
-    def _build_room_label_lookup() -> "dict[int, str]":
-        """Build a doorsIdx → room label mapping from all rooms in rooms.json."""
+    def _build_room_lookup_maps() -> "tuple[dict[int, str], dict[int, str]]":
+        """Build doorsIdx keyed room label and region-key maps from rooms.json in one pass."""
         rooms_json = load_json_data("regions/rooms.json")
-        result: dict[int, str] = {}
+        label_result: dict[int, str] = {}
+        region_result: dict[int, str] = {}
         if not isinstance(rooms_json, dict):
-            return result
+            return label_result, region_result
         for region_key, room in rooms_json.items():
             rs = room.get("room_sanity")
             if not isinstance(rs, dict):
                 continue
             bit_index = rs.get("bit_index")
             if bit_index is not None:
-                result[int(bit_index)] = format_room_region_label(str(region_key))
-        return result
+                doors_idx = int(bit_index)
+                label_result[doors_idx] = format_room_region_label(str(region_key))
+                region_result[doors_idx] = str(region_key)
+        return label_result, region_result
 
     def _reset_reconnect_transient_state(self) -> None:
         """Reset transient watcher diagnostics/probes so reconnect starts from clean baselines."""
         self._last_runtime_gate_reason = None
+        self._last_native_room_id = None
+        self._last_sent_room_update_native_room_id = None
         self._last_shard_poll_log = None
         self._last_boss_poll_log = None
         self._last_major_chest_poll_log = None
@@ -2140,14 +2149,15 @@ class KirbyAmClient(BizHawkClient):
 
     async def _poll_room_entry_logging(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
-        Detect native room changes and log the current room on every entry.
+        Detect native room changes, log the current room, and broadcast tracker updates.
 
         Reads gCurLevelInfo[0].currentRoom (u16 at current_room_native). When the
         value changes, resolves the native room ID to a doorsIdx via gRoomProps[] in
-        ROM, then maps doorsIdx to a region key from rooms.json.
+        ROM, then maps doorsIdx to room metadata from rooms.json.
 
-        Always written to the log file; shown in the client only when debug logging
-        is enabled.
+        Room changes are written to the log file (shown in the client only when
+        debug logging is enabled). On room change, emits a typed Bounce payload to
+        this slot for tracker consumers.
         """
         from CommonClient import logger
 
@@ -2164,8 +2174,10 @@ class KirbyAmClient(BizHawkClient):
             return
 
         native_room_id = unpack_from("<H", raw)[0]
+        room_changed = native_room_id != self._last_native_room_id
+        send_pending = native_room_id != self._last_sent_room_update_native_room_id
 
-        if native_room_id == self._last_native_room_id:
+        if not room_changed and not send_pending:
             return
 
         # Resolve doorsIdx via gRoomProps[native_room_id].doorsIdx (ROM read).
@@ -2185,14 +2197,42 @@ class KirbyAmClient(BizHawkClient):
 
         doors_idx = unpack_from("<H", doors_raw)[0]
         room_label = self._room_label_by_doors_idx.get(doors_idx, f"<unknown doorsIdx={doors_idx}>")
-        self._last_native_room_id = native_room_id
-        logger.info(
-            "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
-            room_label,
-            native_room_id,
-            doors_idx,
-            extra={"NoStream": not self._debug_logging_enabled},
-        )
+        room_region_key = self._room_region_key_by_doors_idx.get(doors_idx, "")
+
+        if room_changed:
+            self._last_native_room_id = native_room_id
+            logger.info(
+                "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
+                room_label,
+                native_room_id,
+                doors_idx,
+                extra={"NoStream": not self._debug_logging_enabled},
+            )
+
+        if ctx.slot is not None and send_pending:
+            try:
+                await ctx.send_msgs([{
+                    "cmd": "Bounce",
+                    "slots": [ctx.slot],
+                    "data": {
+                        "type": _ROOM_UPDATE_BOUNCE_TYPE,
+                        "nativeRoomId": native_room_id,
+                        "doorsIdx": doors_idx,
+                        "roomRegionKey": room_region_key,
+                        "roomLabel": room_label,
+                    },
+                }])
+            except Exception as exc:
+                # Tracker room updates are best-effort and must not break watcher progression.
+                self._log_verbose(
+                    "warning",
+                    "KirbyAM: failed to send room update bounce (native=0x%04x, doorsIdx=%d): %s",
+                    native_room_id,
+                    doors_idx,
+                    exc,
+                )
+                return
+            self._last_sent_room_update_native_room_id = native_room_id
 
     async def _poll_room_sanity_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

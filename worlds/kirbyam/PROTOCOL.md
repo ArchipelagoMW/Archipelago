@@ -326,12 +326,23 @@ for doors_idx in mapped_room_sanity_doors_indices:
     if room_visits[doors_idx] & 0x8000:
         mapped_checked.add(room_sanity_location_id_for_doors_idx(doors_idx))
 
-# Room-entry diagnostics (best-effort; logging only)
+# Room-entry tracker updates (best-effort)
 current_room_native = RAM[0x02023B28] as u16
 if current_room_native changed:
     doors_idx = ROM[gRoomProps + current_room_native * gRoomPropsStride + doorsIdxOffset] as u16
+    room_region_key = rooms_json_region_key_for_doors_idx(doors_idx)
     room_label = rooms_json_label_for_doors_idx(doors_idx)
     log_room_entry(room_label, current_room_native, doors_idx)
+    send Bounce(
+        slots=[self_slot],
+        data={
+            "type": "RoomUpdate",
+            "nativeRoomId": current_room_native,
+            "doorsIdx": doors_idx,
+            "roomRegionKey": room_region_key,
+            "roomLabel": room_label,
+        },
+    )
 
 # Level-based, reconnect-safe resend:
 # Send only checks that RAM reports as collected but the server has not acknowledged.
@@ -356,6 +367,17 @@ Boss shard scrub timing contract (Issue #505):
 - No checks are sent for reserved/unmapped bits even when set.
 - Boss-defeat, major-chest, vitality-chest, sound-player-chest, hub-switch, and room-sanity polling follow the same resend/dedupe diagnostic contract.
 - Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
+
+Tracker room update contract:
+- The BizHawk client sends a slot-targeted `Bounce` packet when `current_room_native` changes.
+- `data.type` is `RoomUpdate`.
+- Payload fields are:
+    - `nativeRoomId` (`u16` widened to int): current native room ID from `gCurLevelInfo[0].currentRoom`.
+    - `doorsIdx` (`u16` widened to int): room index read from `gRoomProps[current_room].doorsIdx`.
+    - `roomRegionKey` (`str`): KirbyAM room key from `rooms.json` for the resolved `doorsIdx` (empty string when unknown).
+    - `roomLabel` (`str`): formatted tracker-facing room label for the resolved `doorsIdx` (fallback `<unknown doorsIdx=N>` when unknown).
+- De-dupe rule: unchanged `nativeRoomId` does not emit additional `Bounce` packets.
+- Reconnect/session-reset rule: client reconnect transient reset clears the last-seen room so the first post-reconnect watcher tick re-emits the current room.
 
 ### 3. Item Delivery (Mailbox Protocol)
 
