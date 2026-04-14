@@ -37,7 +37,7 @@ Items that can be shuffled:
 - All Maps
 - All Vitality
 - Sound Player
-- All consumable items (Small Food, Battery, Maximum Tomato, Invincibility Candy)
+- All consumable items (Small Food, Energy Drink, Hunk of Meat, Cell Phone Battery, Max Tomato, Invincibility Candy)
 
 
 ## Common Item/Location Options
@@ -63,7 +63,7 @@ Use exact item/location names from this world (or the item groups listed above) 
 
 
 - There is an optional setting to enable one-life mode (no_extra_lives). If you die you are instantly sent back to the Hub, and any 1Ups you receive will be immediately removed.
-- There is an optional setting to enable one-hit mode. Kirby's HP cap is clamped to 1 plus collected Vitality Counters. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool and health-restoring filler (Small Food and Max Tomato) is also removed from filler selection so randomized filler cannot counteract the 1 HP challenge.
+- There is an optional setting to enable one-hit mode. Kirby's HP cap is clamped to 1 plus collected Vitality Counters. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool and health-restoring filler (Small Food, Energy Drink, Hunk of Meat, and Max Tomato) is also removed from filler selection so randomized filler cannot counteract the 1 HP challenge.
 
 
 

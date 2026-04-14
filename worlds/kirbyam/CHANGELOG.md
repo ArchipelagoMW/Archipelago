@@ -11,7 +11,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### New Features
 
-- None.
+- Added two new filler consumables with tiered healing: `Energy Drink` (HP +2) and `Hunk of Meat` (HP +3), alongside existing `Small Food` (HP +1) (Issues #684, #685, #686).
 
 ### Improvements
 

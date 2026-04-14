@@ -428,7 +428,7 @@ static uint32_t ap_get_active_kirby_addr(void) {
     return KIRBY_STRUCTS_ADDR + ((uint32_t)KIRBY_CURRENT_PLAYER * KIRBY_STRUCT_STRIDE);
 }
 
-static void ap_grant_small_food(void) {
+static void ap_grant_heal_amount(uint8_t amount) {
     uint32_t kirby_addr = ap_get_active_kirby_addr();
     int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
     int8_t max_hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_MAX_HP_OFFSET);
@@ -444,8 +444,24 @@ static void ap_grant_small_food(void) {
     }
 
     if (hp < max_hp) {
-        *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = (int8_t)(hp + 1);
+        uint16_t healed_hp = (uint16_t)((uint8_t)hp + (uint16_t)amount);
+        if (healed_hp > (uint16_t)((uint8_t)max_hp)) {
+            healed_hp = (uint16_t)((uint8_t)max_hp);
+        }
+        *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = (int8_t)healed_hp;
     }
+}
+
+static void ap_grant_small_food(void) {
+    ap_grant_heal_amount(1u);
+}
+
+static void ap_grant_energy_drink(void) {
+    ap_grant_heal_amount(2u);
+}
+
+static void ap_grant_hunk_of_meat(void) {
+    ap_grant_heal_amount(3u);
 }
 
 static void ap_grant_battery(void) {
@@ -569,7 +585,7 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
         return 1u;
     }
 
-    // FOOD, BATTERY, MAX_TOMATO, INVINCIBILITY_CANDY = BASE+26 .. BASE+29
+    // SMALL_FOOD, BATTERY, MAX_TOMATO, INVINCIBILITY_CANDY = BASE+26 .. BASE+29
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 26u)) {
         ap_grant_small_food();
         return 1u;
@@ -587,6 +603,17 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
 
     if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 29u)) {
         ap_grant_invincibility_candy();
+        return 1u;
+    }
+
+    // ENERGY_DRINK, HUNK_OF_MEAT = BASE+30 .. BASE+31
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 30u)) {
+        ap_grant_energy_drink();
+        return 1u;
+    }
+
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 31u)) {
+        ap_grant_hunk_of_meat();
         return 1u;
     }
 

@@ -52,6 +52,8 @@ EXPECTED_GROUP_MEMBERS = {
     "Filler": {
         "1 Up",
         "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
         "Cell Phone Battery",
         "Max Tomato",
         "Invincibility Candy",
@@ -117,9 +119,9 @@ class TestItemGroupMembership:
             "Vitality group should have 4 items"
         assert "Candy Constellation - Vitality Counter" in ITEM_GROUPS.get("Vitality", set()), \
             "Vitality group should include Candy Constellation - Vitality Counter"
-        # Filler: 5 shipped filler items (1-Up plus consumables)
-        assert len(ITEM_GROUPS.get("Filler", set())) == 5, \
-            "Filler group should have 5 items (1-Up plus consumables)"
+        # Filler: 7 shipped filler items (1-Up plus consumables)
+        assert len(ITEM_GROUPS.get("Filler", set())) == 7, \
+            "Filler group should have 7 items (1-Up plus consumables)"
 
 
 class TestItemGroupsInWorldContext:
@@ -177,7 +179,7 @@ class TestItemGroupContracts:
             "Maps": "Area map items",
             "Vitality": "Vitality counter increase items",
             "Useful": "Non-critical progression enhancers (e.g., copy ability upgrades)",
-            "Filler": "Generic filler items (1-Up plus consumables)",
+            "Filler": "Generic filler items (1-Up plus consumables, including healing tiers)",
         }
         # Verify all canonical groups are documented
         for group_name in CANONICAL_ITEM_GROUPS:

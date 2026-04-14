@@ -122,12 +122,16 @@ class KirbyAmWorld(World):
     ACTIVE_FILLER_POOL: ClassVar[tuple[str, ...]] = (
         "1 Up",
         "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
         "Cell Phone Battery",
         "Max Tomato",
         "Invincibility Candy",
     )
-    ACTIVE_FILLER_POOL_NO_FOOD: ClassVar[tuple[str, ...]] = tuple(
-        item_name for item_name in ACTIVE_FILLER_POOL if item_name not in {"Small Food", "Max Tomato"}
+    ACTIVE_FILLER_POOL_NO_HEALING: ClassVar[tuple[str, ...]] = tuple(
+        item_name
+        for item_name in ACTIVE_FILLER_POOL
+        if item_name not in {"Small Food", "Energy Drink", "Hunk of Meat", "Max Tomato"}
     )
     ACTIVE_FILLER_POOL_NO_1UP: ClassVar[tuple[str, ...]] = tuple(
         item_name for item_name in ACTIVE_FILLER_POOL if item_name != "1 Up"
@@ -214,7 +218,7 @@ class KirbyAmWorld(World):
     def _active_filler_pool(self) -> tuple[str, ...]:
         pool = self.ACTIVE_FILLER_POOL
         if self._one_hit_mode_value() == OneHitMode.option_exclude_vitality_counters:
-            pool = self.ACTIVE_FILLER_POOL_NO_FOOD
+            pool = self.ACTIVE_FILLER_POOL_NO_HEALING
         if self._no_extra_lives_enabled():
             pool = tuple(item_name for item_name in pool if item_name != "1 Up")
         return pool

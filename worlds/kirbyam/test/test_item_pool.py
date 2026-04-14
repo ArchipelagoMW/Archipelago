@@ -121,6 +121,8 @@ def test_filler_catalog_includes_current_filler_set() -> None:
     assert filler_labels == {
         "1 Up",
         "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
         "Cell Phone Battery",
         "Max Tomato",
         "Invincibility Candy",
@@ -129,6 +131,8 @@ def test_filler_catalog_includes_current_filler_set() -> None:
     assert "Life" in filler_by_label["1 Up"].tags
     assert "Consumable" in filler_by_label["Small Food"].tags
     assert "Health" in filler_by_label["Small Food"].tags
+    assert "Health" in filler_by_label["Energy Drink"].tags
+    assert "Health" in filler_by_label["Hunk of Meat"].tags
     assert "Battery" in filler_by_label["Cell Phone Battery"].tags
     assert "Health" in filler_by_label["Max Tomato"].tags
     assert "Invincibility" in filler_by_label["Invincibility Candy"].tags
@@ -149,6 +153,8 @@ def test_consumable_filler_item_ids_are_stable() -> None:
     assert labels_to_ids["Cell Phone Battery"] == 3860027
     assert labels_to_ids["Max Tomato"] == 3860028
     assert labels_to_ids["Invincibility Candy"] == 3860029
+    assert labels_to_ids["Energy Drink"] == 3860030
+    assert labels_to_ids["Hunk of Meat"] == 3860031
     assert "2 Up" not in labels_to_ids
     assert "3 Up" not in labels_to_ids
 
@@ -189,6 +195,8 @@ def test_active_filler_pool_contents() -> None:
     assert KirbyAmWorld.ACTIVE_FILLER_POOL == (
         "1 Up",
         "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
         "Cell Phone Battery",
         "Max Tomato",
         "Invincibility Candy",
@@ -204,6 +212,8 @@ def test_no_extra_lives_excludes_1_up_from_active_filler_pool() -> None:
 
     assert world._active_filler_pool() == (
         "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
         "Cell Phone Battery",
         "Max Tomato",
         "Invincibility Candy",
@@ -251,7 +261,7 @@ def test_one_hit_mode_exclude_vitality_counters_and_no_extra_lives_stack_filler_
     )
 
 
-def test_one_hit_mode_exclude_vitality_counters_filler_selection_never_picks_food() -> None:
+def test_one_hit_mode_exclude_vitality_counters_filler_selection_never_picks_healing_fillers() -> None:
     world = KirbyAmWorld.__new__(KirbyAmWorld)
     world.random = random.Random(12345)
     world.options = SimpleNamespace(
@@ -262,6 +272,8 @@ def test_one_hit_mode_exclude_vitality_counters_filler_selection_never_picks_foo
     picks = [world.get_filler_item_name() for _ in range(50)]
 
     assert "Small Food" not in picks
+    assert "Energy Drink" not in picks
+    assert "Hunk of Meat" not in picks
     assert "Max Tomato" not in picks
     assert all(pick in world._active_filler_pool() for pick in picks)
 
@@ -273,6 +285,8 @@ def test_payload_supports_consumable_and_life_fillers() -> None:
 
     assert "static void ap_grant_lives(uint8_t amount)" in payload
     assert "static void ap_grant_small_food(void)" in payload
+    assert "static void ap_grant_energy_drink(void)" in payload
+    assert "static void ap_grant_hunk_of_meat(void)" in payload
     assert "static void ap_grant_battery(void)" in payload
     assert "static void ap_grant_max_tomato(void)" in payload
     assert "static void ap_grant_invincibility_candy(void)" in payload
@@ -280,6 +294,8 @@ def test_payload_supports_consumable_and_life_fillers() -> None:
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 27u" in payload
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 28u" in payload
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 29u" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 30u" in payload
+    assert "KIRBY_ITEM_ID_BASE_OFFSET + 31u" in payload
     assert "KIRBY_GIVE_INVINCIBILITY_FN" in payload
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 22u" not in payload
     assert "KIRBY_ITEM_ID_BASE_OFFSET + 23u" not in payload

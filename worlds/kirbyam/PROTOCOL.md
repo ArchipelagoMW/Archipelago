@@ -108,8 +108,9 @@ All item IDs use **BASE_OFFSET = 3860000** for safety (avoids collision with Arc
 | VITALITY_COUNTER_1 .. VITALITY_COUNTER_4 | 3860018 - 3860021 | Useful vitality rewards |
 | MAP_RAINBOW_ROUTE | 3860024 | Useful map reward |
 | SOUND_PLAYER      | 3860025 | Useful unlock reward (applies native Sound Player unlock on receipt) |
-| FOOD, BATTERY, MAX_TOMATO, INVINCIBILITY_CANDY | 3860026 - 3860029 | Filler consumable rewards |
-| *Reserved*        | 3860030+ | Future items (doors, abilities, additional consumables, etc.) |
+| SMALL_FOOD, BATTERY, MAX_TOMATO, INVINCIBILITY_CANDY | 3860026 - 3860029 | Filler consumable rewards |
+| ENERGY_DRINK, HUNK_OF_MEAT | 3860030 - 3860031 | Filler consumable health rewards |
+| *Reserved*        | 3860032+ | Future items (doors, abilities, additional consumables, etc.) |
 
 ### Current filler effect contract
 
@@ -118,7 +119,9 @@ Current shipped filler generation uses a uniform active filler pool:
 | Item | Effect |
 |------|--------|
 | `1 Up` | Grants 1 life, saturating at 255 |
-| `Small Food` | Increments active Kirby HP by 1 if Kirby is alive (`hp > 0`) and below max HP; no effect for `hp <= 0` |
+| `Small Food` | If Kirby is alive (`hp > 0`), normalizes `hp > max_hp` down to `max_hp` and then increments active Kirby HP by 1, capped at `max_hp`; no effect for `hp <= 0` |
+| `Energy Drink` | If Kirby is alive (`hp > 0`), normalizes `hp > max_hp` down to `max_hp` and then increments active Kirby HP by 2, capped at `max_hp`; no effect for `hp <= 0` |
+| `Hunk of Meat` | If Kirby is alive (`hp > 0`), normalizes `hp > max_hp` down to `max_hp` and then increments active Kirby HP by 3, capped at `max_hp`; no effect for `hp <= 0` |
 | `Cell Phone Battery` | Increments active Kirby battery by 1 if below 3 |
 | `Max Tomato` | Sets active Kirby HP to max HP if Kirby is alive (`hp > 0`); no effect for `hp <= 0` |
 | `Invincibility Candy` | Applies the native invincibility state using the decomp-backed 1000-tick helper path |
@@ -203,7 +206,7 @@ DeathLink runtime behavior contract:
 
 `one_hit_mode` runtime behavior contract:
 - Generation removes all four Vitality Counter items from the non-filler item pool (replaced by filler) when `one_hit_mode == exclude_vitality_counters` (1). Vitality Chest locations are kept, but this mode does not guarantee location-specific filler placement on those chests.
-- In `exclude_vitality_counters` mode, filler selection also removes health-restoring filler (`Small Food`, `Max Tomato`) so randomized filler does not counteract the 1 HP challenge. If `no_extra_lives` is also enabled, `1 Up` is removed from that reduced filler pool as well.
+- In `exclude_vitality_counters` mode, filler selection also removes health-restoring filler (`Small Food`, `Energy Drink`, `Hunk of Meat`, `Max Tomato`) so randomized filler does not counteract the 1 HP challenge. If `no_extra_lives` is also enabled, `1 Up` is removed from that reduced filler pool as well.
 - Generation leaves the item pool unchanged when `one_hit_mode == include_vitality_counters` (2).
 - During gameplay, when `one_hit_mode != off`, the BizHawk client reads `kirby_vitality_counter_native` (`u16`) and enforces `desired_max_hp = vitality_counter + 1` (capped to `0x7F`) onto `kirby_max_hp_native` and `kirby_hp_native` for player 0's struct. In `exclude_vitality_counters` mode it additionally scrubs `kirby_vitality_counter_native` back to `0` every gameplay tick so AP vitality grants cannot persist.
 - Dead/negative HP states (`current_hp <= 0`) are preserved; only alive Kirby's HP is clamped.
