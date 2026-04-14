@@ -4,7 +4,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
 
-from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
+from .options import LogicDifficulty
+from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_, OptionFilter
+
+hard_logic_filter = [OptionFilter(LogicDifficulty, LogicDifficulty.option_hard)]
 
 def can_win(level : str, logic_diff : int):
     data = LEVEL_DATA.get(level)
@@ -181,6 +184,7 @@ LEVEL_DATA = {
         },
         "winLogic": HasAll("Keke", "Is", "Move", "Love", "Push"),
         "winLogicAdv": (Has("Is") & HasAny("Keke", "Move", "Push", "Love")) | (HasAny("Keke", "Move") & HasAny("Love", "Push")),
+        "defaultWordOnlyDiff": 1,
     },
     "Lake-4": {
         "name": "Pillar Yard",
@@ -329,6 +333,7 @@ LEVEL_DATA = {
         "parent": "Island",
         "starting": True,
         "winLogic": HasAll("Rose", "Is", "Red", "Violet", "Blue", "Flag", "Win", "Baba", "You"),
+        "winLogicAdv": HasAll("Rose", "Is", "Violet"),
         "connects": {
             "Island": None,
         },
@@ -338,6 +343,7 @@ LEVEL_DATA = {
         "parent": "Island",
         "starting": True,
         "winLogic": HasAll("Baba", "Is", "You", "Flag", "Win", "Wall", "Stop", "Rock", "Push"),
+        "winLogicAdv": Has("Is") & (HasAll("Flag", "Win") | HasAll("Wall", "Stop") | HasAll("Rock", "Push")),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Island": None,
@@ -348,6 +354,7 @@ LEVEL_DATA = {
         "name": "Warm River",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You", "And", "Float"),
+        "winLogicAdv": Has("And") & (Has("Float") | HasAll("Baba", "Is", "You")),
         "connects": {
             "Island-1": can_win,
             "Island-3": can_win,
@@ -369,6 +376,7 @@ LEVEL_DATA = {
         "name": "Bridge Building?", # NOT the same as the previous level
         "parent": "Island",
         "winLogic": HasAll("Is", "You", "Rock", "Push", "Flag", "Win"),
+        "winLogicAdv": HasAll("Rock", "Push") | HasAll("Rock", "Is") | HasAll("Is", "Push") | HasAll("Flag", "Is", "Win"),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Island-3": can_win,
@@ -379,7 +387,7 @@ LEVEL_DATA = {
     "Island-5": {
         "name": "Victory Spring",
         "parent": "Island",
-        "winLogic": HasAll("Text", "Is", "Float", "Win"),
+        "winLogic": HasAll("Text", "Is", "Float", "Win"), # min logic
         "connects": {
             "Island-4": can_win,
             "Island-6": can_win,
@@ -390,6 +398,7 @@ LEVEL_DATA = {
         "name": "Assembly Team",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You"),
+        "winLogicAdv": HasAll("Is", "You"),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Island-5": can_win,
@@ -400,6 +409,7 @@ LEVEL_DATA = {
         "name": "Catch The Thief!",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You", "Robot", "Move", "Win"),
+        "winLogicAdv": HasAll("Baba", "Is", "Robot", "Win"),
         "connects": {
             "Island-6": can_win,
             "Island-8": can_win,
@@ -411,6 +421,7 @@ LEVEL_DATA = {
         "name": "Tiny Pond",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You", "And", "Open", "Flag", "Key", "Win"),
+        "winLogicAdv": HasAll("Baba", "Is", "You", "And", "Open", "Flag", "Key"),
         "connects": {
             "Island-5": can_win,
             "Island-7": can_win,
@@ -422,6 +433,7 @@ LEVEL_DATA = {
         "name": "Research Facility",
         "parent": "Island",
         "winLogic": HasAll("Bolt", "Is", "Push", "Move", "Defeat", "Skull", "Hot", "Win"),
+        "winLogicAdv": HasAll("Defeat", "Hot", "Win", "Skull") & (HasAll("Bolt", "Move") | HasAll("Move", "Push") | HasAll("Bolt", "Push", "Is") | HasAll("Move", "Is")),
         "connects": {
             "Island-7": can_win,
             "Island-10": can_win,
@@ -433,6 +445,7 @@ LEVEL_DATA = {
         "name": "Wireless Connection",
         "parent": "Island",
         "winLogic": HasAll("Cog", "Is", "Stop", "Move", "And", "Robot", "Push"),
+        "winLogicAdv": HasAll("Is", "And") & (HasAny("Robot", "Cog") | HasAll("Move", "Push")),
         "connects": {
             "Island-8": can_win,
             "Island-9": can_win,
@@ -443,6 +456,7 @@ LEVEL_DATA = {
         "name": "Prison",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You", "Keke", "Push", "Wall", "Stop", "Win"),
+        "winLogicAdv": HasAll("Baba", "Is", "Keke", "Push", "Wall", "Stop"),
         "connects": {
             "Island-7": can_win,
             "Island-9": can_win,
@@ -453,7 +467,7 @@ LEVEL_DATA = {
     "Island-Extra 1": {
         "name": "Boiling River",
         "parent": "Island",
-        "winLogic": HasAll("Baba", "Is", "You", "And", "Float"),
+        "winLogic": HasAll("Baba", "Is", "You", "And", "Float"), # min logic
         "connects": {
             "Island-2": can_win,
         },
@@ -462,6 +476,7 @@ LEVEL_DATA = {
         "name": "...Bridges?",
         "parent": "Island",
         "winLogic": HasAll("Is", "You", "Rock", "Push", "Flag", "Win"),
+        "winLogicAdv": Has("Is") & (HasAll("Win", "Rock") | HasAll("Win", "Push") | HasAll("Push", "Rock") | HasAll("Rock", "Flag") | HasAll("Push", "Flag") | HasAll("Rock", "You")),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Island-4": can_win,
@@ -471,6 +486,7 @@ LEVEL_DATA = {
         "name": "Tiny Isle",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You", "And", "Open", "Flag", "Key", "Win"),
+        "winLogicAdv": HasAll("Baba", "Is", "You", "And", "Open", "Flag", "Key"),
         "connects": {
             "Island-8": can_win,
         },
@@ -479,6 +495,7 @@ LEVEL_DATA = {
         "name": "Dim Signal",
         "parent": "Island",
         "winLogic": HasAll("Cog", "Is", "Stop", "Move", "And", "Robot", "Push"),
+        "winLogicAdv": HasAll("Is", "And") & (HasAll("Move", "Push") | HasAll("Robot", "Cog") | (((HasAny("Robot", "Cog") & HasAny("Push", "Move", "Stop")) | HasAll("Move", "Stop")) & hard_logic_filter)),
         "connects": {
             "Island-10": can_win,
         },
@@ -487,6 +504,7 @@ LEVEL_DATA = {
         "name": "Dungeon",
         "parent": "Island",
         "winLogic": HasAll("Baba", "Is", "You", "Keke", "Wall", "Stop", "Win"),
+        "winLogicAdv": HasAll("Is", "Keke", "Wall", "Stop"),
         "connects": {
             "Island-11": can_win,
         },
@@ -494,7 +512,7 @@ LEVEL_DATA = {
     "Island-Extra 6": {
         "name": "Evaporating River",
         "parent": "Island",
-        "winLogic": HasAll("Water", "Is", "Sink", "Flag"),
+        "winLogic": HasAll("Water", "Is", "Sink", "Flag"), # min logic
         "connects": {
             "Island-9": can_win,
             "Island-11": can_win,
@@ -522,6 +540,7 @@ LEVEL_DATA = {
         "parent": "Ruins",
         "starting": True,
         "winLogic": HasAll("Baba", "Is", "You", "Weak"),
+        "winLogicAdv": HasAll("Is", "Weak"),
         "connects": {
             "Ruins": None,
             "Ruins-2": can_win,
@@ -531,6 +550,8 @@ LEVEL_DATA = {
         "name": "Tunnel Vision",
         "parent": "Ruins",
         "winLogic": HasAll("Baba", "Has", "Rock", "Is", "Move"),
+        "winLogicAdv": HasAny("Baba", "Rock") & HasAny("Is", "Has"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Ruins-1": can_win,
             "Ruins-3": can_win,
@@ -540,6 +561,7 @@ LEVEL_DATA = {
         "name": "A Present For You",
         "parent": "Ruins",
         "winLogic": HasAll("Love", "Is", "You", "Box", "Push", "Water", "Hot", "Melt"),
+        "winLogicAdv": Has("Box") & (Has("Love") | HasAll("Is", "You")),
         "connects": {
             "Ruins-2": can_win,
             "Ruins-4": can_win,
@@ -551,6 +573,7 @@ LEVEL_DATA = {
         "name": "Unreachable Shores",
         "parent": "Ruins",
         "winLogic": HasAll("Box", "Is", "Push", "Keke", "Has", "Love"),
+        "winLogicAdv": HasAny("Keke", "Is") & HasAll("Box", "Has"),
         "connects": {
             "Ruins-3": can_win,
             "Ruins-7": can_win,
@@ -560,6 +583,7 @@ LEVEL_DATA = {
         "name": "But Where's The Key",
         "parent": "Ruins",
         "winLogic": HasAll("Box", "Is", "Weak", "And", "Has", "Key", "Baba", "You"),
+        "winLogicAdv": HasAll("Is", "Weak", "Has", "Box") & (Has("And" & HasAny("Key", "You")) | (HasAll("Baba", "You") & hard_logic_filter)),
         "connects": {
             "Ruins-3": can_win,
             "Ruins-9": can_win,
@@ -569,6 +593,7 @@ LEVEL_DATA = {
         "name": "Love Is Out There",
         "parent": "Ruins",
         "winLogic": HasAll("Box", "Is", "Push", "And", "Has", "Key", "Weak"),
+        "winLogicAdv": HasAll("Box", "Is", "Push", "And", "Key", "Weak"),
         "connects": {
             "Ruins-3": can_win,
             "Ruins-7": can_win,
@@ -580,6 +605,7 @@ LEVEL_DATA = {
         "name": "Perilous Gang",
         "parent": "Ruins",
         "winLogic": HasAll("Ghost", "Is", "Push", "Move", "Skull", "Defeat", "Flag", "Win"),
+        "winLogicAdv": Has("Is") & ((Has("Ghost") & (HasAny("Push", "Move"))) | (HasAll("Push", "Move") & (HasAny("Skull", "Flag", "Win")))),
         "connects": {
             "Ruins-4": can_win,
             "Ruins-6": can_win,
@@ -589,6 +615,7 @@ LEVEL_DATA = {
         "name": "Double Moat",
         "parent": "Ruins",
         "winLogic": HasAll("Baba", "Is", "You", "Has", "Keke", "Move"),
+        "winLogicAdv": HasAll("Baba", "Is", "Keke", "Has") & HasAny("You", "Move"),
         "connects": {
             "Ruins-6": can_win,
             "Ruins-9": can_win,
@@ -599,6 +626,7 @@ LEVEL_DATA = {
         "name": "Walls Of Gold",
         "parent": "Ruins",
         "winLogic": HasAll("Wall", "Is", "Win", "Rock"),
+        "winLogicAdv": HasAny("Rock", "Wall") & HasAll("Is", "Win"),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Ruins-8": can_win,
@@ -609,6 +637,7 @@ LEVEL_DATA = {
         "name": "Further Fields",
         "parent": "Ruins",
         "winLogic": HasAll("Baba", "Is", "Move", "Keke", "You", "Push"),
+        "winLogicAdv": HasAll("Keke", "Is", "You") & (Has("Push") | HasAll("Baba", "Move")),
         "connects": {
             "Ruins-8": can_win,
             "Ruins-9": can_win,
@@ -631,6 +660,8 @@ LEVEL_DATA = {
         "parent": "Fall",
         "starting": True,
         "winLogic": HasAll("Love", "Is", "Tele", "Push"),
+        "winLogicAdv": Has("Push") & HasAny("Love", "Is", "Tele"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Fall": None,
             "Fall-2": can_win,
@@ -642,6 +673,7 @@ LEVEL_DATA = {
         "name": "Grand Stream",
         "parent": "Fall",
         "winLogic": HasAll("Key", "Is", "Pull", "Keke"),
+        "winLogicAdv": HasAll("Key", "Is", "Pull"),
         "connects": {
             "Fall-1": can_win,
             "Fall-5": can_win,
@@ -652,6 +684,8 @@ LEVEL_DATA = {
         "name": "Rocky Road",
         "parent": "Fall",
         "winLogic": HasAll("Love", "Is", "Tele", "Push"),
+        "winLogicAdv": HasAny("Is", "Push"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Fall-1": can_win,
             "Fall-4": can_win,
@@ -696,6 +730,8 @@ LEVEL_DATA = {
         "name": "Ghost Friend",
         "parent": "Fall",
         "winLogic": HasAll("Ghost", "Is", "Pull", "Move", "Flag"),
+        "winLogicAdv": HasAll("Flag", "Is"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Fall-2": can_win,
             "Fall-6": can_win,
@@ -797,7 +833,7 @@ LEVEL_DATA = {
     "Fall-E": {
         "name": "Skeletal Door",
         "parent": "Fall",
-        "winLogic": HasAll("Baba", "Is", "You", "Text", "Push"),
+        "winLogic": HasAll("Baba", "Is", "You", "Text", "Push"), # min logic
         "connects": {
             "Fall-C": can_win,
             "Fall-D": can_win,
@@ -807,6 +843,7 @@ LEVEL_DATA = {
         "name": "Jump",
         "parent": "Fall",
         "winLogic": HasAll("Love", "Is", "Tele", "Push"),
+        "winLogicAdv": Has("Push") & HasAny("Love", "Is", "Tele"),
         "connects": {
             "Fall-1": can_win,
         },
@@ -846,6 +883,8 @@ LEVEL_DATA = {
         "parent": "Forest",
         "starting": True,
         "winLogic": HasAll("Belt", "Is", "Shift", "Push"),
+        "winLogicAdv": (Has("Push") & HasAny("Belt", "Is", "Shift")) | HasAll("Belt", "Is"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Forest": None,
             "Forest-2": can_win,
@@ -908,6 +947,8 @@ LEVEL_DATA = {
         "name": "Concrete Goals",
         "parent": "Forest",
         "winLogic": HasAll("Belt", "Is", "Shift", "Push", "Wall", "Stop"),
+        "winLogicAdv": HasAll("Is", "Push"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Forest-3": can_win,
             "Forest-12": can_win,
@@ -918,6 +959,7 @@ LEVEL_DATA = {
         "name": "Victory In The Open",
         "parent": "Forest",
         "winLogic": HasAll("Keke", "Is", "Move", "Right", "Win"),
+        "winLogicAdv": HasAll("Keke", "Is", "Win"),
         "connects": {
             "Forest-6": can_win,
             "Forest-11": can_win,
@@ -926,7 +968,7 @@ LEVEL_DATA = {
     "Forest-9": {
         "name": "Moving Floor",
         "parent": "Forest",
-        "winLogic": HasAll("Flag", "Is", "Push", "Win"),
+        "winLogic": HasAll("Flag", "Is", "Push", "Win"), # min logic
         "connects": {
             "Forest-3": can_win,
             "Forest-12": can_win,
@@ -937,6 +979,8 @@ LEVEL_DATA = {
         "name": "Lovely House",
         "parent": "Forest",
         "winLogic": HasAll("Baba", "Is", "You", "Key", "And", "Rock", "Push"),
+        "winLogicAdv": Has("Is") & ((HasAll("Baba", "You") & HasAny("Rock", "Key")) | HasAll("Rock", "And", "Key")),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Forest-4": can_win,
             "Forest-13": can_win,
@@ -984,7 +1028,7 @@ LEVEL_DATA = {
     "Forest-Extra 1": {
         "name": "Crumbling Floor",
         "parent": "Forest",
-        "winLogic": HasAll("Flag", "Is", "Push", "Win"),
+        "winLogic": HasAll("Flag", "Is", "Push", "Win"), # min logic
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Forest-9": can_win,
@@ -994,6 +1038,8 @@ LEVEL_DATA = {
         "name": "Skull House",
         "parent": "Forest",
         "winLogic": HasAll("Baba", "Is", "You", "Key", "Rock", "Push"),
+        "winLogicAdv": Has("Is") & ((HasAll("Baba", "You") & HasAny("Rock", "Key")) | HasAll("Rock", "Key")),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Forest-10": can_win,
             "Forest-14": can_win,
@@ -1034,6 +1080,7 @@ LEVEL_DATA = {
         "name": "Salvage",
         "parent": "Forest",
         "winLogic": HasAll("Text", "Flag", "Is", "Win", "Swap", "And", "Pull"),
+        "winLogicAdv": HasAll("Text", "Is", "Swap", "And", "Pull"),
         "connects": {
             "Forest-B": can_win,
             "Forest-C": can_win,
@@ -1068,7 +1115,7 @@ LEVEL_DATA = {
         "name": "Empty",
         "parent": "Space",
         "starting": True,
-        "winLogic": HasAll("Is", "Empty"),
+        "winLogic": HasAll("Is", "Empty"), # min logic
         "connects": {
             "Space": None,
             "Space-2": can_win,
@@ -1078,7 +1125,7 @@ LEVEL_DATA = {
     "Space-2": {
         "name": "Lonely Flag",
         "parent": "Space",
-        "winLogic": HasAll("Is", "Empty"),
+        "winLogic": HasAll("Is", "Empty"), # min logic
         "connects": {
             "Space-1": can_win,
             "Space-3": can_win,
@@ -1099,6 +1146,7 @@ LEVEL_DATA = {
         "parent": "Space",
         "starting": True,
         "winLogic": HasAll("Baba", "Is", "You", "Key", "Open"),
+        "winLogicAdv": HasAll("Baba", "Is", "You", "Key"),
         "connects": {
             "Space": None,
             "Space-6": can_win,
@@ -1108,7 +1156,7 @@ LEVEL_DATA = {
     "Space-5": {
         "name": "Horror Story",
         "parent": "Space",
-        "winLogic": HasAll("Baba", "Is", "You", "Empty"),
+        "winLogic": HasAll("Baba", "Is", "You", "Empty"), # min logic
         "connects": {
             "Space-1": can_win,
             "Space-3": can_win,
@@ -1119,6 +1167,8 @@ LEVEL_DATA = {
         "name": "Aiming High",
         "parent": "Space",
         "winLogic": HasAll("Baba", "Is", "You", "Cloud", "Stop"),
+        "winLogicAdv": Has("Is") & (HasAll("Baba", "You") | HasAny("Cloud", "Stop")),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Space-4": can_win,
             "Space-9": can_win,
@@ -1146,7 +1196,7 @@ LEVEL_DATA = {
     "Space-9": {
         "name": "Platformer",
         "parent": "Space",
-        "winLogic": HasAll("Rocket", "And", "UFO", "Open"),
+        "winLogic": HasAll("Rocket", "And", "UFO", "Open"), # min logic
         "connects": {
             "Space-6": can_win,
             "Space-7": can_win,
@@ -1194,6 +1244,7 @@ LEVEL_DATA = {
         "name": "Existential Crisis",
         "parent": "Space",
         "winLogic": HasAll("Baba", "Is", "You", "Empty", "Push", "Win"),
+        "winLogicAdv": HasAll("Empty", "Is", "You", "Win"),
         "connects": {
             "Space-5": can_win,
         },
@@ -1374,6 +1425,7 @@ LEVEL_DATA = {
         "name": "Elusive Condition",
         "parent": "Chasm",
         "winLogic": HasAll("Hand", "Is", "Empty", "All"),
+        "winLogicAdv": Has("Is") & HasAny("All", "Hand"),
         "connects": {
             "Chasm": None,
             "Chasm-A": can_win,
@@ -1449,7 +1501,7 @@ LEVEL_DATA = {
     "Chasm-Extra 2": {
         "name": "Multitool",
         "parent": "Chasm",
-        "winLogic": HasAll("Rock", "Is", "Push"),
+        "winLogic": HasAll("Rock", "Is", "Push"), # min logic
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Chasm-Extra 1": can_win,
@@ -1461,6 +1513,7 @@ LEVEL_DATA = {
         "parent": "Chasm",
         "winLogic": HasAll("Text", "Is", "Not", "Push", "Rock", "Ice", "Tele", "Win"),
         "winLogicAdv": HasAny("Is", "Win"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Chasm-Extra 1": can_win,
             "Chasm-Extra 5": can_win,
@@ -1469,7 +1522,7 @@ LEVEL_DATA = {
     "Chasm-Extra 4": {
         "name": "Alley",
         "parent": "Chasm",
-        "winLogic": HasAll("Water", "Is", "Rock", "Push"),
+        "winLogic": HasAll("Water", "Is", "Rock", "Push"), # min logic
         "connects": {
             "Chasm-Extra 1": can_win,
             "Chasm-Extra 5": can_win,
@@ -1490,6 +1543,8 @@ LEVEL_DATA = {
         "name": "Visiting Baba",
         "parent": "Chasm",
         "winLogic": HasAll("Fungus", "Is", "Word", "Rock", "Push"),
+        "winLogicAdv": HasAll("Rock", "Is"),
+        "defaultWordOnlyDiff": 1,
         "connects": {
             "Chasm-Extra 2": can_win,
             "Chasm-Extra 4": can_win,
@@ -1523,6 +1578,7 @@ LEVEL_DATA = {
         "name": "Tour",
         "parent": "Cavern",
         "winLogic": HasAll("Keke", "Is", "You", "Baba", "Flag"),
+        "winLogicAdv": HasAll("Keke", "Is", "Baba", "Flag"),
         "connects": {
             "Cavern": None,
             "Cavern-2": None,
@@ -1555,7 +1611,7 @@ LEVEL_DATA = {
     "Cavern-4": {
         "name": "Mouse Hole",
         "parent": "Cavern",
-        "winLogic": HasAll("Bat", "Rock", "Is", "Push"),
+        "winLogic": HasAll("Bat", "Rock", "Is", "Push"), # min logic
         "connects": {
             "Cavern-1": can_win,
             "Cavern-2": can_win,
@@ -1565,7 +1621,7 @@ LEVEL_DATA = {
     "Cavern-5": {
         "name": "Torn Apart",
         "parent": "Cavern",
-        "winLogic": HasAll("Baba", "Is", "Group", "You"),
+        "winLogic": HasAll("Baba", "Is", "Group", "You"), # min logic
         "connects": {
             "Cavern-3": can_win,
             "Cavern-6": can_win,
@@ -1649,7 +1705,7 @@ LEVEL_DATA = {
     "Cavern-13": {
         "name": "Tunnel",
         "parent": "Cavern",
-        "winLogic": HasAll("Skull", "Facing", "Is", "Not"),
+        "winLogic": HasAll("Skull", "Facing", "Is", "Not"), # min logic
         "connects": {
             "Cavern-12": can_win,
         },
@@ -1689,7 +1745,7 @@ LEVEL_DATA = {
     "Mountain-1": {
         "name": "Shuffle",
         "parent": "Mountain",
-        "winLogic": HasAll("Lonely", "Baba", "Is", "You", "Skull", "Defeat"),
+        "winLogic": HasAll("Lonely", "Baba", "Is", "You", "Skull", "Defeat"), # min logic
         "connects": {
             "Mountain": None,
             "Mountain-2": can_win,
@@ -1700,6 +1756,7 @@ LEVEL_DATA = {
         "name": "Love At First Sight",
         "parent": "Mountain",
         "winLogic": HasAll("Bird", "Is", "Push", "Flag", "Win"),
+        "winLogicAdv": HasAll("Bird", "Is", "Push", "Flag"),
         "connects": {
             "Mountain-1": can_win,
             "Mountain-4": can_win,
@@ -1709,6 +1766,7 @@ LEVEL_DATA = {
         "name": "Solitude",
         "parent": "Mountain",
         "winLogic": HasAll("Rock", "Is", "Push", "Lonely", "Key", "Open"),
+        "winLogicAdv": HasAll("Rock", "Is", "Push", "Lonely", "Key"),
         "connects": {
             "Mountain-1": can_win,
             "Mountain-4": can_win,
@@ -1730,7 +1788,7 @@ LEVEL_DATA = {
     "Mountain-5": {
         "name": "Connector",
         "parent": "Mountain",
-        "winLogic": HasAll("Sun", "Baba", "Is", "You", "Shut", "Text"),
+        "winLogic": HasAll("Sun", "Baba", "Is", "You", "Shut", "Text"), # min logic
         "connects": {
             "Mountain-2": can_win,
             "Mountain-6": can_win,
@@ -1740,6 +1798,7 @@ LEVEL_DATA = {
         "name": "Floaty Platforms",
         "parent": "Mountain",
         "winLogic": HasAll("Rock", "Is", "Push"),
+        "winLogicAdv": HasAny("Rock", "Is", "Push"),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Mountain-4": can_win,
@@ -1751,7 +1810,7 @@ LEVEL_DATA = {
     "Mountain-7": {
         "name": "Seeking Acceptance",
         "parent": "Mountain",
-        "winLogic": HasAll("Lonely", "Baba", "Is", "Tile", "On", "Flag"),
+        "winLogic": HasAll("Lonely", "Baba", "Is", "Tile", "On", "Flag"), # min logic
         "connects": {
             "Mountain-6": can_win,
             "Mountain-7": can_win,
@@ -1772,6 +1831,7 @@ LEVEL_DATA = {
         "name": "The Floatiest Platforms",
         "parent": "Mountain",
         "winLogic": HasAll("Rock", "Is", "Push"),
+        "winLogicAdv": HasAny("Rock", "Is", "Push"),
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Mountain-6": can_win,

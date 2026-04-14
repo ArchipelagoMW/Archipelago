@@ -3,7 +3,8 @@ didAPLoad = false
 ignoreSaveSeed = false
 manualChecks = false
 local level_mapping = {}
-local thisWorld = "babapelago" -- name of this world
+local thisWorld = generaldata.strings[WORLD] -- name of this world
+if #thisWorld == 0 then thisWorld = "babapelago" end
 
 local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_bird", "text_sun", "text_tile", "text_orb", "text_hedge", "text_cliff", "text_cake"}
 local special_noun_checks = {"text_text", "text_empty", "text_all", "text_level", "text_group", "text_cursor", "text_image"}
@@ -90,7 +91,7 @@ local options = {
     level_shuffle=0,
     seed="",
 }
-MF_setfile("level","AP/AP_OPTIONS.data")
+MF_setfile("level","AP/"..thisWorld.."/AP_OPTIONS.data")
 for option, default in pairs(options) do
     local value = MF_read("level", "options", option) or "0"
     if value == "True" then
@@ -134,7 +135,7 @@ end)
 
 -- Handle win checks
 table.insert(mod_hook_functions.level_win_after, function()
-    MF_setfile("level","AP/AP_CHECKS.data")
+    MF_setfile("level", "AP/"..thisWorld.."/AP_CHECKS.data")
     local levelname = generaldata.strings[LEVELNAME]
     levelname = capitalize(levelname)
     MF_store("level","checks",levelname..": Win", "1")
@@ -570,13 +571,14 @@ function update_checks()
     error_message = ""
     local trueSeed = ""
     local ourSeed = options.seed or ""
-    local files = MF_filelist("AP", "*.data")
+    local files = MF_filelist("AP/"..thisWorld, "/*.data")
     for i, file in ipairs(files) do
         if file:sub(1, 8) == "AP_SEED_" then
             trueSeed = file:sub(9, -6)
             break
         end
     end
+
     if #trueSeed == 0 or trueSeed ~= ourSeed then
         if #trueSeed == 0 then
             error_message = ("$2,2Missing seed file. Please connect to the server using the Baba Is You client.")
@@ -606,12 +608,12 @@ function update_checks()
     local blossom_petal_count = 0
     local bonus_count = 0
 
-    files = MF_filelist("AP", "*.item")
+    files = MF_filelist("AP/"..thisWorld, "/*.item")
     local prevChecks = checks
     checks = {}
     obtained_keys = {}
     for i, file in ipairs(files) do
-        MF_setfile("level","AP/"..file)
+        MF_setfile("level", "AP/"..thisWorld.."/"..file)
         local item = MF_read("level", "data", "item")
         if item and #item ~= 0 then
             local trueName = item
@@ -700,7 +702,7 @@ function update_checks()
         clear_goal_locations["Goal"] = 1
     end
 
-    MF_setfile("level","AP/AP_CHECKS.data")
+    MF_setfile("level", "AP/"..thisWorld.."/AP_CHECKS.data")
     for location, v in pairs(clear_goal_locations) do
         if not prev_clear_goal_locations[location] then
             MF_store("level","checks",location, "1")
@@ -861,7 +863,7 @@ function auto_gen_level_name_to_id(level_name_to_id)
     -- Set up level shuffle (not active in editor)
     level_mapping = {}
     if options.level_shuffle ~= 0 and editor.values[INEDITOR] == 0 then
-        MF_setfile("level","AP/AP_SHUFFLE.data")
+        MF_setfile("level","AP/"..thisWorld.."/AP_SHUFFLE.data")
         local total = tonumber(MF_read("level", "general", "total")) or 0
         for i=0,total-1 do
             local newPath = MF_read("level", "general", tostring(i))

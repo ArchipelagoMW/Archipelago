@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region, CollectionState
-from worlds.generic.Rules import add_rule, set_rule
 from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
 from .levels import LEVEL_DATA, can_win
