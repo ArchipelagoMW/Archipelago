@@ -20,6 +20,9 @@ SystemID GBA
 0203B044	d	h	0	System Bus	boss_temp_shard_bitfield
 0203B048	d	h	0	System Bus	delivered_vitality_item_bits
 0203B04C	d	b	0	System Bus	hub_switch_flags (ROM->Client; bit0=PeppermintW, bit1=RREast, bit2=RRSouth, bit3=CabbageCenter, bit4=RRWest, bit5=Carrot, bit6=RRNorth, bit7=Mustard, bit8=CabbageWest, bit9=Radish, bit10=Moonlight, bit11=PeppermintE, bit12=CabbageEast, bit13=Olive, bit14=Candy)
+0203B050	d	u	0	System Bus	starting_kirby_color_id (Client->ROM; 0=Pink no-op, 1-13=color; 0xFFFFFFFF=not synced)
+0203B054	d	u	0	System Bus	one_hit_mode_runtime (Client->ROM; 0=off, 1=excl_vitality, 2=incl_vitality; 0xFFFFFFFF=not synced)
+0203B058	d	u	0	System Bus	no_extra_lives_runtime (Client->ROM; 0=off, 1=on; 0xFFFFFFFF=not synced)
 0	S	_	1		=== Native Gameplay Addresses (from worlds/kirbyam/data/addresses.json) ===
 02038960	d	h	0	System Bus	small_chest_flags_native[0:31] (native chest/switch state block)
 02038964	d	h	0	System Bus	small_chest_flags_native[32:63]

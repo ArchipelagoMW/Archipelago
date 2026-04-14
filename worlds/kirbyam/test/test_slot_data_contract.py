@@ -41,6 +41,8 @@ def _emit_slot_data_for_contract_test() -> dict[str, object]:
         "start_with_all_maps": False,
         "starting_kirby_color": 7,
         "no_extra_lives": False,
+        "enable_traps": False,
+        "trap_fill_percentage": 25,
         "one_hit_mode": 0,
         "death_link": True,
         "ability_randomization_mode": 1,

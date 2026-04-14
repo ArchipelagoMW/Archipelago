@@ -41,6 +41,30 @@
     "item_id": 3860029,
     "tags": ["Filler", "Consumable", "Invincibility"]
   },
+  "TRAP_HEALTH_DOWN": {
+    "label": "Health Down Trap",
+    "classification": "TRAP",
+    "item_id": 3860032,
+    "tags": ["Trap"]
+  },
+  "TRAP_LIFE_DOWN": {
+    "label": "Life Down Trap",
+    "classification": "TRAP",
+    "item_id": 3860033,
+    "tags": ["Trap"]
+  },
+  "TRAP_BOMB": {
+    "label": "Bomb Trap",
+    "classification": "TRAP",
+    "item_id": 3860034,
+    "tags": ["Trap"]
+  },
+  "TRAP_BATTERY_DRAIN": {
+    "label": "Battery Drain Trap",
+    "classification": "TRAP",
+    "item_id": 3860035,
+    "tags": ["Trap"]
+  },
   "SHARD_1": {
     "label": "Mustard Mountain - Mirror Shard",
     "classification": "PROGRESSION",

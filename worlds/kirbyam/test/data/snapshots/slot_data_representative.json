@@ -9,6 +9,7 @@
   "debug": {
     "logging": true
   },
+  "enable_traps": false,
   "enemy_copy_ability_policy": {
     "ability_randomization_boss_spawns": true,
     "ability_randomization_minibosses": false,
@@ -2547,6 +2548,7 @@
     }
   },
   "no_extra_lives": false,
+  "one_hit_mode": 0,
   "room_sanity": false,
   "rooms": {
     "REGION_CABBAGE_CAVERN/ROOM_3_01": {
@@ -5363,6 +5365,7 @@
   "shards": 2,
   "starting_kirby_color": 0,
   "starting_kirby_color_name": "Pink",
+  "trap_fill_percentage": 25,
   "unique_items": [
     "Cabbage Cavern - Map",
     "Cabbage Cavern - Mirror Shard",

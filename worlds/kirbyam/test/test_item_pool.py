@@ -48,6 +48,8 @@ def _build_world_for_create_items(
     shard_mode: int,
     one_hit_mode: int = OneHitMode.option_off,
     start_with_all_maps: int = 0,
+    enable_traps: int = 0,
+    trap_fill_percentage: int = 25,
 ) -> tuple[KirbyAmWorld, list[KirbyAmLocation]]:
     locations = _build_fill_locations()
     world = KirbyAmWorld.__new__(KirbyAmWorld)
@@ -60,6 +62,8 @@ def _build_world_for_create_items(
             RandomizeShards.option_completely_random: "completely_random",
         }[shard_mode]),
         no_extra_lives=SimpleNamespace(value=False),
+        enable_traps=SimpleNamespace(value=enable_traps),
+        trap_fill_percentage=SimpleNamespace(value=trap_fill_percentage),
         one_hit_mode=SimpleNamespace(value=one_hit_mode),
         start_with_all_maps=SimpleNamespace(value=start_with_all_maps),
     )
@@ -155,8 +159,34 @@ def test_consumable_filler_item_ids_are_stable() -> None:
     assert labels_to_ids["Invincibility Candy"] == 3860029
     assert labels_to_ids["Energy Drink"] == 3860030
     assert labels_to_ids["Hunk of Meat"] == 3860031
+    assert labels_to_ids["Health Down Trap"] == 3860032
+    assert labels_to_ids["Life Down Trap"] == 3860033
+    assert labels_to_ids["Bomb Trap"] == 3860034
+    assert labels_to_ids["Battery Drain Trap"] == 3860035
     assert "2 Up" not in labels_to_ids
     assert "3 Up" not in labels_to_ids
+
+
+def test_available_trap_item_labels_are_driven_by_traps_json() -> None:
+    assert data.available_trap_item_labels == (
+        "Health Down Trap",
+        "Life Down Trap",
+        "Bomb Trap",
+        "Battery Drain Trap",
+    )
+
+
+def test_trap_filler_percentage_replaces_eligible_filler_slots() -> None:
+    world, _ = _build_world_for_create_items(
+        RandomizeShards.option_completely_random,
+        enable_traps=1,
+        trap_fill_percentage=100,
+    )
+
+    world.create_items()
+
+    trap_items = [item for item in world.multiworld.itempool if item.trap]
+    assert trap_items, "Expected traps in pool when trap_fill_percentage is 100"
 
 
 def test_active_filler_selection_is_seed_stable() -> None:
@@ -409,7 +439,9 @@ def test_completely_random_pool_contains_each_non_filler_item_exactly_once() -> 
     world.create_items()
 
     expected_non_filler_codes = {
-        item.item_id for item in data.items.values() if item.classification != ItemClassification.filler
+        item.item_id
+        for item in data.items.values()
+        if item.classification not in (ItemClassification.filler, ItemClassification.trap)
     }
     pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
     pool_non_filler_codes = [code for code in pool_codes if get_item_classification(code) != ItemClassification.filler]
@@ -430,7 +462,7 @@ def test_vanilla_pool_contains_each_non_shard_non_filler_item_exactly_once() -> 
     expected_non_filler_codes = {
         item.item_id
         for item in data.items.values()
-        if item.classification != ItemClassification.filler and item.item_id not in shard_codes
+        if item.classification not in (ItemClassification.filler, ItemClassification.trap) and item.item_id not in shard_codes
     }
     pool_codes = [item.code for item in world.multiworld.itempool if item.code is not None]
     pool_non_filler_codes = [code for code in pool_codes if get_item_classification(code) != ItemClassification.filler]

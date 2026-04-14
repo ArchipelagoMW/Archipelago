@@ -59,6 +59,10 @@
 #define AP_SOUND_PLAYER_CHEST_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x30u))
 #define AP_HUB_SWITCH_FLAGS (*(volatile uint32_t*)(AP_BASE + 0x4Cu))
 #define AP_STARTING_KIRBY_COLOR_ID (*(volatile uint32_t*)(AP_BASE + 0x50u))
+// Challenge-mode runtime config. Written by Python client on connect/reconnect.
+// 0xFFFFFFFF means client has not synced yet (treat as off/0).
+#define AP_ONE_HIT_MODE_RUNTIME    (*(volatile uint32_t*)(AP_BASE + 0x54u))
+#define AP_NO_EXTRA_LIVES_RUNTIME  (*(volatile uint32_t*)(AP_BASE + 0x58u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 #define KIRBY_ACTIVE_COLOR_ADDR    0x0203ADE0u
@@ -525,6 +529,63 @@ static void ap_grant_lives(uint8_t amount) {
     KIRBY_LIVES = (uint8_t)(lives + amount);
 }
 
+// --- Trap effect helpers ---
+
+static uint8_t ap_one_hit_mode_runtime_enabled(void) {
+    uint32_t mode = AP_ONE_HIT_MODE_RUNTIME;
+    if (mode == 0xFFFFFFFFu) {
+        return 0u;
+    }
+    return mode != 0u;
+}
+
+static uint8_t ap_no_extra_lives_runtime_enabled(void) {
+    uint32_t enabled = AP_NO_EXTRA_LIVES_RUNTIME;
+    if (enabled == 0xFFFFFFFFu) {
+        return 0u;
+    }
+    return enabled != 0u;
+}
+
+static void ap_trap_health_down(void) {
+    if (ap_one_hit_mode_runtime_enabled() != 0u) {
+        return;
+    }
+
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+    int8_t hp = *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET);
+    if (hp <= 1) {
+        return;
+    }
+    int8_t new_hp = (int8_t)((uint8_t)hp - 2u);
+    if (new_hp < 1) {
+        new_hp = 1;
+    }
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = new_hp;
+}
+
+static void ap_trap_life_down(void) {
+    if (ap_no_extra_lives_runtime_enabled() != 0u) {
+        return;
+    }
+
+    uint8_t lives = KIRBY_LIVES;
+    if (lives == 0u) {
+        return;
+    }
+    KIRBY_LIVES = (uint8_t)(lives - 1u);
+}
+
+static void ap_trap_bomb(void) {
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+    *(volatile int8_t*)(kirby_addr + KIRBY_STRUCT_HP_OFFSET) = 0;
+}
+
+static void ap_trap_battery_drain(void) {
+    uint32_t kirby_addr = ap_get_active_kirby_addr();
+    *(volatile uint8_t*)(kirby_addr + KIRBY_STRUCT_BATTERY_OFFSET) = 0u;
+}
+
 // Returns 1 if item was successfully processed, 0 if unrecognized
 static uint8_t ap_apply_item(uint32_t ap_item_id) {
     // 1_UP = BASE+1
@@ -617,6 +678,30 @@ static uint8_t ap_apply_item(uint32_t ap_item_id) {
         return 1u;
     }
 
+    // TRAP_HEALTH_DOWN = BASE+32
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 32u)) {
+        ap_trap_health_down();
+        return 1u;
+    }
+
+    // TRAP_LIFE_DOWN = BASE+33
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 33u)) {
+        ap_trap_life_down();
+        return 1u;
+    }
+
+    // TRAP_BOMB = BASE+34
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 34u)) {
+        ap_trap_bomb();
+        return 1u;
+    }
+
+    // TRAP_BATTERY_DRAIN = BASE+35
+    if (ap_item_id == (KIRBY_ITEM_ID_BASE_OFFSET + 35u)) {
+        ap_trap_battery_drain();
+        return 1u;
+    }
+
     // Unhandled item - return 0 to signal that the flag should NOT be cleared
     return 0u;
 }
@@ -642,6 +727,8 @@ void ap_poll_mailbox_c(void) {
         AP_DELIVERED_VITALITY_ITEM_BITS = 0u;
         AP_HUB_SWITCH_FLAGS = 0u;
         AP_STARTING_KIRBY_COLOR_ID = 0xFFFFFFFFu;
+        AP_ONE_HIT_MODE_RUNTIME = 0xFFFFFFFFu;
+        AP_NO_EXTRA_LIVES_RUNTIME = 0xFFFFFFFFu;
         ap_starting_kirby_color_applied = 0u;
         AP_ABILITY_RANDOMIZATION_MODE = 0u;
         AP_ABILITY_RANDOMIZATION_SEED_LO = 0u;

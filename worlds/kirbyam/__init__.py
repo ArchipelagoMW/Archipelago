@@ -40,6 +40,7 @@ from .options import (
     KirbyAmOptions,
     OneHitMode,
     RandomizeShards,
+    TrapFillPercentage,
 )
 from .rom import KirbyAmProcedurePatch, write_tokens
 
@@ -187,6 +188,20 @@ class KirbyAmWorld(World):
         value = getattr(option, "value", option)
         return int(value) if value is not None else 0
 
+    def _traps_enabled(self) -> bool:
+        option = getattr(getattr(self, "options", None), "enable_traps", None)
+        value = getattr(option, "value", option)
+        return bool(value)
+
+    def _trap_fill_percentage(self) -> int:
+        option = getattr(getattr(self, "options", None), "trap_fill_percentage", None)
+        value = getattr(option, "value", option)
+        try:
+            percentage = int(value)
+        except (TypeError, ValueError):
+            percentage = TrapFillPercentage.default
+        return max(TrapFillPercentage.range_start, min(TrapFillPercentage.range_end, percentage))
+
     def _start_with_all_maps_enabled(self) -> bool:
         option = getattr(getattr(self, "options", None), "start_with_all_maps", None)
         value = getattr(option, "value", option)
@@ -226,6 +241,13 @@ class KirbyAmWorld(World):
     # Filler item name
     def get_filler_item_name(self) -> str:
         return self.random.choice(self._active_filler_pool())
+
+    def get_trap_item_name(self) -> str:
+        if not kirby_data.available_trap_item_labels:
+            raise ValueError(
+                "KirbyAM trap pool is empty. Configure at least one available trap in worlds/kirbyam/data/traps.json"
+            )
+        return self.random.choice(kirby_data.available_trap_item_labels)
 
     def _ordered_boss_defeat_locations(self, boss_locations: list[KirbyAmLocation]) -> list[KirbyAmLocation]:
         boss_locations_by_key = {
@@ -467,7 +489,7 @@ class KirbyAmWorld(World):
                 non_filler_item_codes = [
                     item.item_id
                     for item in kirby_data.items.values()
-                    if item.classification != ItemClassification.filler
+                    if item.classification not in (ItemClassification.filler, ItemClassification.trap)
                 ]
                 vitality_item_codes = getattr(self, "_vitality_item_codes", None)
                 if vitality_item_codes is None:
@@ -523,8 +545,16 @@ class KirbyAmWorld(World):
                         % (len(non_filler_item_codes), needed_pool_size)
                     )
 
-                filler_needed = needed_pool_size - len(non_filler_item_codes)
+                eligible_filler_slots = needed_pool_size - len(non_filler_item_codes)
+                trap_count = 0
+                if self._traps_enabled() and eligible_filler_slots > 0:
+                    trap_count = (eligible_filler_slots * self._trap_fill_percentage()) // 100
+                filler_needed = eligible_filler_slots - trap_count
                 randomized_item_codes.extend(non_filler_item_codes)
+                randomized_item_codes.extend(
+                    self.item_name_to_id[self.get_trap_item_name()]
+                    for _ in range(trap_count)
+                )
                 randomized_item_codes.extend(
                     self.item_name_to_id[self.get_filler_item_name()]
                     for _ in range(filler_needed)
@@ -534,7 +564,7 @@ class KirbyAmWorld(World):
                 non_filler_pool_codes = [
                     code
                     for code in randomized_item_codes
-                    if get_item_classification(code) != ItemClassification.filler
+                    if get_item_classification(code) not in (ItemClassification.filler, ItemClassification.trap)
                 ]
                 if sorted(non_filler_pool_codes) != sorted(non_filler_item_codes):
                     raise ValueError(
@@ -575,6 +605,15 @@ class KirbyAmWorld(World):
                     self.player,
                     dict(sorted(vitality_code_counts.items())),
                 )
+                logger.info(
+                    "[P%s] Trap pool summary: enabled=%s percentage=%s eligible_filler_slots=%s selected_traps=%s filler_remaining=%s",
+                    self.player,
+                    self._traps_enabled(),
+                    self._trap_fill_percentage(),
+                    eligible_filler_slots,
+                    trap_count,
+                    filler_needed,
+                )
 
                 if self._start_with_all_maps_enabled():
                     map_code_counts = Counter(
@@ -607,6 +646,7 @@ class KirbyAmWorld(World):
             useful_count = sum(1 for item in itempool if item.useful)
             filler_count = sum(1 for item in itempool if item.filler)
             progression_count = sum(1 for item in itempool if item.advancement)
+            trap_count = sum(1 for item in itempool if item.trap)
             shard_group = resolve_item_group(
                 self.item_name_groups,
                 "Shards",
@@ -614,11 +654,12 @@ class KirbyAmWorld(World):
             )
             pool_shard_count = sum(1 for item in itempool if item.name in shard_group)
             logger.info(
-                "[P%s] Item pool classification summary: useful=%s filler=%s progression=%s",
+                "[P%s] Item pool classification summary: useful=%s filler=%s progression=%s trap=%s",
                 self.player,
                 useful_count,
                 filler_count,
                 progression_count,
+                trap_count,
             )
 
             goal_event_count = 0
@@ -714,6 +755,8 @@ class KirbyAmWorld(World):
             "start_with_all_maps",
             "starting_kirby_color",
             "no_extra_lives",
+            "enable_traps",
+            "trap_fill_percentage",
             "one_hit_mode",
             "death_link",
             "ability_randomization_mode",

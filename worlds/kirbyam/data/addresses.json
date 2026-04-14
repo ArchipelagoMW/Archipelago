@@ -22,6 +22,8 @@
       "delivered_vitality_item_bits": "0x0203B048",
       "hub_switch_flags": "0x0203B04C",
       "starting_kirby_color_id": "0x0203B050",
+      "one_hit_mode_runtime": "0x0203B054",
+      "no_extra_lives_runtime": "0x0203B058",
       "ability_randomization_mode_runtime": "0x0203B064",
       "ability_randomization_seed_lo_runtime": "0x0203B068",
       "ability_randomization_seed_hi_runtime": "0x0203B06C",

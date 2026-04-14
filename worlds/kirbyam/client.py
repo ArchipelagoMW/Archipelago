@@ -54,6 +54,7 @@ _STARTING_KIRBY_COLOR_MIN = 0
 _STARTING_KIRBY_COLOR_MAX = 13
 _STARTING_KIRBY_COLOR_REVALIDATE_TICKS = 4
 _ABILITY_RUNTIME_CONFIG_REVALIDATE_TICKS = 4
+_CHALLENGE_RUNTIME_CONFIG_REVALIDATE_TICKS = 4
 _OPTIONAL_UNSAFE_DELIVERY_COUNTERS = (
     ("shadow_kirby_encounters_native", "shadow_kirby_encounters"),
     ("mirra_encounters_native", "mirra_encounters"),
@@ -85,6 +86,11 @@ _MAP_ITEM_ID_TO_AREA_ID: dict[int, int] = {
     for item in data.items.values()
     if item.label in _MAP_ITEM_LABEL_TO_AREA_ID
 }
+_TRAP_ITEM_IDS: frozenset[int] = frozenset(
+    item.item_id
+    for item in data.items.values()
+    if type(item.classification).trap in item.classification and item.item_id is not None
+)
 _ROOM_PROPS_ROM_BASE = 0x009331AC  # gRoomProps[] — ROM domain offset (GBA ROM 0x089331AC)
 _ROOM_PROPS_STRIDE = 0x28  # sizeof(struct RoomProps)
 _ROOM_PROPS_DOORS_IDX_OFFSET = 0x24  # offsetof(struct RoomProps, doorsIdx)
@@ -265,6 +271,8 @@ class KirbyAmClient(BizHawkClient):
         self._starting_kirby_color_synced_id: int | None = None
         self._starting_kirby_color_logged_signature: tuple[int, str] | None = None
         self._starting_kirby_color_revalidate_counter: int = 0
+        self._last_challenge_runtime_config_signature: tuple[int, int] | None = None
+        self._challenge_runtime_config_revalidate_counter: int = 0
 
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
@@ -369,6 +377,8 @@ class KirbyAmClient(BizHawkClient):
         self._starting_kirby_color_synced_id = None
         self._starting_kirby_color_logged_signature = None
         self._starting_kirby_color_revalidate_counter = 0
+        self._last_challenge_runtime_config_signature = None
+        self._challenge_runtime_config_revalidate_counter = 0
         self._cached_delivered_map_bits = 0
         self._cached_map_bits_index = 0
         self._cached_map_bits_items_len = 0
@@ -388,6 +398,11 @@ class KirbyAmClient(BizHawkClient):
             return int(value)
         except (TypeError, ValueError):
             return OneHitMode.option_off
+
+    @staticmethod
+    def _is_trap_item(item_id: int) -> bool:
+        """Return True if item_id is a trap item."""
+        return item_id in _TRAP_ITEM_IDS
 
     def _start_with_all_maps_enabled(self, ctx: "BizHawkClientContext") -> bool:
         slot_data = getattr(ctx, "slot_data", None)
@@ -728,7 +743,8 @@ class KirbyAmClient(BizHawkClient):
         lookup_slot = receiver_slot if receiver_slot is not None else player_id
         item_name = self._item_name(ctx, item_id, lookup_slot)
         sender_name = self._player_name(ctx, player_id)
-        message = f"Received {item_name} from {sender_name}"
+        prefix = "Received trap: " if self._is_trap_item(item_id) else "Received "
+        message = f"{prefix}{item_name} from {sender_name}"
 
 
         if self._debug_logging_enabled:
@@ -983,6 +999,7 @@ class KirbyAmClient(BizHawkClient):
         self._load_debug_settings(ctx)
         await self._sync_death_link_setting(ctx)
         await self._sync_enemy_copy_ability_runtime_config(ctx)
+        await self._sync_challenge_runtime_config(ctx)
 
         if not self._watcher_server_ready:
             if self._debug_logging_enabled:
@@ -1345,6 +1362,52 @@ class KirbyAmClient(BizHawkClient):
         if not value:
             return 0
         return int.from_bytes(value[:1], "little", signed=True)
+
+    async def _sync_challenge_runtime_config(self, ctx: "BizHawkClientContext") -> None:
+        """Write challenge-mode runtime config (one_hit_mode, no_extra_lives) to transport mailbox."""
+        slot_data = getattr(ctx, "slot_data", None)
+        if not isinstance(slot_data, dict):
+            return
+
+        # Legacy/minimal test contexts may not include these slot keys.
+        # Real KirbyAM slot_data always includes both keys explicitly.
+        if "one_hit_mode" not in slot_data and "no_extra_lives" not in slot_data:
+            return
+
+        one_hit_mode = self._one_hit_mode_value(ctx) & 0xFFFFFFFF
+        no_extra_lives = (1 if self._no_extra_lives_enabled(ctx) else 0) & 0xFFFFFFFF
+        signature = (one_hit_mode, no_extra_lives)
+
+        # Always synchronize explicit off values to prevent stale non-zero mailbox
+        # values from previous sessions affecting runtime trap behavior.
+
+        one_hit_addr = self._transport_addr("one_hit_mode_runtime")
+        no_extra_lives_addr = self._transport_addr("no_extra_lives_runtime")
+        if one_hit_addr is None or no_extra_lives_addr is None:
+            return
+
+        if self._last_challenge_runtime_config_signature == signature:
+            self._challenge_runtime_config_revalidate_counter += 1
+            if self._challenge_runtime_config_revalidate_counter < _CHALLENGE_RUNTIME_CONFIG_REVALIDATE_TICKS:
+                return
+            self._challenge_runtime_config_revalidate_counter = 0
+
+            one_hit_raw, no_extra_lives_raw = await bizhawk.read(ctx.bizhawk_ctx, [
+                (one_hit_addr, 4, "System Bus"),
+                (no_extra_lives_addr, 4, "System Bus"),
+            ])
+            if (
+                self._u32_le(one_hit_raw) == one_hit_mode
+                and self._u32_le(no_extra_lives_raw) == no_extra_lives
+            ):
+                return
+
+        self._challenge_runtime_config_revalidate_counter = 0
+        await bizhawk.write(ctx.bizhawk_ctx, [
+            (one_hit_addr, one_hit_mode.to_bytes(4, "little"), "System Bus"),
+            (no_extra_lives_addr, no_extra_lives.to_bytes(4, "little"), "System Bus"),
+        ])
+        self._last_challenge_runtime_config_signature = signature
 
     def _load_death_link_flavor_templates(self) -> list[str]:
         """Load outgoing DeathLink flavor text templates from data file."""

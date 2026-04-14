@@ -64,7 +64,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x48   | 0x0203B048 | 4B | delivered_vitality_item_bits | u32 | ROM internal | Replay guard for vitality counter items. Bit N marks that `VITALITY_COUNTER_(N+1)` has already been applied, preventing duplicate vitality grants if an item is resent during reconnect/reset recovery. |
 | 0x4C   | 0x0203B04C | 4B | hub_switch_flags | u32 | ROM → Client | Bits 0–14 set when world-map big-switch door unlock callbacks fire (`WorldMapDoor` order: Peppermint West, RR East, RR South, Cabbage Center, RR West, Carrot, RR North, Mustard, Cabbage West, Radish, Moonlight, Peppermint East, Cabbage East, Olive, Candy). |
 | 0x50   | 0x0203B050 | 4B | starting_kirby_color_id | u32 | ROM ← Client | Runtime config payload for starting Kirby color. Valid values are `0..13`; `0` (Pink) is intentionally treated as a no-op by payload logic. Non-Pink values are applied through `KIRBY_TRANSITION_COLOR`, so the color becomes visible on the next room/area transition or when an enemy-hit path refreshes Kirby's runtime color state (typically the first transition after game start). |
-| 0x54–0x63 | 0x0203B054–0x0203B063 | 16B | *(reserved)* | — | — | Reserved; not currently used. |
+| 0x54   | 0x0203B054 | 4B | one_hit_mode_runtime | u32 | ROM ← Client | Challenge-mode runtime config: one-hit mode value (`0`=off, `1`=exclude_vitality_counters, `2`=include_vitality_counters). Initialized to `0xFFFFFFFF` by payload on cold boot; overwritten by the Python client each connection. |
+| 0x58   | 0x0203B058 | 4B | no_extra_lives_runtime | u32 | ROM ← Client | Challenge-mode runtime config: no-extra-lives flag (`0`=off, `1`=on). Initialized to `0xFFFFFFFF` by payload on cold boot; overwritten by the Python client each connection. |
+| 0x5C–0x63 | 0x0203B05C–0x0203B063 | 8B | *(reserved)* | — | — | Reserved; not currently used. |
 | 0x64   | 0x0203B064 | 4B | ability_randomization_mode_runtime | u32 | ROM ← Client | Enemy copy-ability randomization mode (`0`=off, `1`=shuffled, `2`=completely_random). Written once per connection by the Python client from `slot_data`. |
 | 0x68   | 0x0203B068 | 4B | ability_randomization_seed_lo_runtime | u32 | ROM ← Client | Low 32 bits of the 64-bit seed used for per-swallow completely-random rerolls. |
 | 0x6C   | 0x0203B06C | 4B | ability_randomization_seed_hi_runtime | u32 | ROM ← Client | High 32 bits of the 64-bit seed used for per-swallow completely-random rerolls. |
@@ -179,6 +181,8 @@ Server → Client: ConnectionRefused | Connected
 - `starting_kirby_color_name` (str): resolved Kirby starting color display name for logs/tracker surfaces.
 - `no_extra_lives` (bool): when true, exclude `1 Up` filler generation and have the BizHawk client clamp the native life counter to `0` during gameplay.
 - `one_hit_mode` (int): one-hit mode selection (`0=off`, `1=exclude_vitality_counters`, `2=include_vitality_counters`). When non-zero, Kirby's max HP is clamped to `vitality_counter + 1` during gameplay. In `exclude_vitality_counters` mode, Vitality Counter items are removed from the item pool (replaced by filler) so the cap stays at 1. In `include_vitality_counters` mode, Vitality Counter items remain in the pool and each one received raises the cap by 1.
+- `enable_traps` (bool): when true, trap items may appear in the randomized item pool.
+- `trap_fill_percentage` (int): percentage (`0..100`) of eligible filler slots that are replaced by trap items when `enable_traps` is true.
 - `death_link` (bool): enables/disables AP DeathLink tag synchronization in the client.
 - `ability_randomization_mode` (int): enemy copy-ability mode (`0=off`, `1=shuffled`, `2=completely_random`).
 - `ability_randomization_boss_spawns` (bool): include/exclude ability-granting boss-spawned objects.

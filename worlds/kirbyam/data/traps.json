@@ -1,0 +1,17 @@
+{
+  "TRAP_HEALTH_DOWN": {
+    "available": true
+  },
+  "TRAP_LIFE_DOWN": {
+    "available": true
+  },
+  "TRAP_BOMB": {
+    "available": true
+  },
+  "TRAP_BATTERY_DRAIN": {
+    "available": true
+  },
+  "TRAP_SLOWDOWN": {
+    "available": false
+  }
+}

@@ -246,6 +246,7 @@ class KirbyAmData:
     regions: dict[str, RegionData]
     locations: dict[str, LocationData]
     items: dict[int, ItemData]
+    available_trap_item_labels: tuple[str, ...]
 
     def __init__(self) -> None:
         self.ram_addresses = {}
@@ -255,6 +256,7 @@ class KirbyAmData:
         self.regions = {}
         self.locations = {}
         self.items = {}
+        self.available_trap_item_labels = tuple()
 
 
 def _classification_from_string(s: str) -> ItemClassification:
@@ -359,6 +361,57 @@ def _init() -> None:
 
         data.items[item_id] = ItemData(label=label, item_id=item_id, classification=classification, tags=tags)
         item_key_to_id[item_key] = item_id
+
+    traps_json = _maybe_load_json_data("traps.json")
+    if traps_json is None:
+        data.available_trap_item_labels = tuple(
+            item.label
+            for item in data.items.values()
+            if item.classification == ItemClassification.trap
+        )
+    else:
+        if not isinstance(traps_json, dict):
+            raise TypeError("traps.json must be a JSON object mapping trap item keys to attributes")
+
+        available_traps: list[str] = []
+        for trap_key, attrs in traps_json.items():
+            if not isinstance(trap_key, str) or not isinstance(attrs, dict):
+                continue
+
+            is_available = attrs.get("available", False)
+            if not isinstance(is_available, bool):
+                raise TypeError(
+                    "traps.json 'available' must be a boolean for trap key "
+                    f"'{trap_key}', got {type(is_available).__name__}"
+                )
+
+            if not is_available:
+                continue
+
+            item_key = attrs.get("item_key", trap_key)
+            if not isinstance(item_key, str):
+                raise TypeError(
+                    "traps.json 'item_key' must be a string when provided for trap key "
+                    f"'{trap_key}'"
+                )
+
+            item_id = item_key_to_id.get(item_key)
+            if item_id is None:
+                raise ValueError(
+                    "traps.json enabled trap references unknown item key: "
+                    f"trap_key='{trap_key}' item_key='{item_key}'"
+                )
+
+            item_data = data.items[item_id]
+            if item_data.classification != ItemClassification.trap:
+                raise ValueError(
+                    "traps.json enabled trap must reference an item with classification TRAP: "
+                    f"trap_key='{trap_key}' item_key='{item_key}' classification={item_data.classification}"
+                )
+
+            available_traps.append(item_data.label)
+
+        data.available_trap_item_labels = tuple(available_traps)
 
     # Load locations.json (+ optional locations_*.json fragments)
     # Expected forms:
