@@ -47,6 +47,10 @@ _KIRBY_VITALITY_COUNTER_READ_WIDTH = 2
 _ROOM_VISIT_FLAGS_ADDR_KEY = "room_visit_flags_native"
 _ROOM_VISIT_FLAGS_ENTRY_COUNT = 0x120
 _ROOM_VISIT_FLAGS_BIT_MASK = 0x8000
+_CURRENT_ROOM_ADDR_KEY = "current_room_native"
+_ROOM_PROPS_ROM_BASE = 0x009331AC  # gRoomProps[] — ROM domain offset (GBA ROM 0x089331AC)
+_ROOM_PROPS_STRIDE = 0x28  # sizeof(struct RoomProps)
+_ROOM_PROPS_DOORS_IDX_OFFSET = 0x24  # offsetof(struct RoomProps, doorsIdx)
 _STARTING_KIRBY_COLOR_MIN = 0
 _STARTING_KIRBY_COLOR_MAX = 13
 _STARTING_KIRBY_COLOR_REVALIDATE_TICKS = 4
@@ -208,6 +212,9 @@ class KirbyAmClient(BizHawkClient):
         self._last_vitality_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_sound_player_chest_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
         self._last_hub_switch_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+        self._hub_switch_baseline_mask: int | None = None
+        self._hub_switch_session_initialized: bool = False
+        self._hub_switch_stream_marker: object = None
         self._last_room_sanity_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
         # Notification pipeline state (Issue #83)
@@ -244,6 +251,10 @@ class KirbyAmClient(BizHawkClient):
         self._starting_kirby_color_synced_id: int | None = None
         self._starting_kirby_color_logged_signature: tuple[int, str] | None = None
         self._starting_kirby_color_revalidate_counter: int = 0
+
+        # Room entry logging (always to file; client display gated by debug flag)
+        self._last_native_room_id: int | None = None
+        self._room_label_by_doors_idx: dict[int, str] = self._build_room_label_lookup()
 
     @staticmethod
     def _server_session_ready(ctx: "BizHawkClientContext") -> bool:
@@ -372,16 +383,16 @@ class KirbyAmClient(BizHawkClient):
             [(map_addr, desired_bits.to_bytes(4, "little"), "System Bus")],
         )
 
-        from CommonClient import logger
+        if self._debug_logging_enabled:
+            from CommonClient import logger
 
-        logger.info(
-            "KirbyAM: reconciled native map ownership (current=0x%08X, desired=0x%08X, start_with_all_maps=%s, delivered_item_index=%s)",
-            current_bits,
-            desired_bits,
-            self._start_with_all_maps_enabled(ctx),
-            self._delivered_item_index,
-            extra={"NoStream": not self._debug_logging_enabled},
-        )
+            logger.info(
+                "KirbyAM: reconciled native map ownership (current=0x%08X, desired=0x%08X, start_with_all_maps=%s, delivered_item_index=%s)",
+                current_bits,
+                desired_bits,
+                self._start_with_all_maps_enabled(ctx),
+                self._delivered_item_index,
+            )
 
     @staticmethod
     def _item_signature(item: object) -> tuple[int, int, int, int] | None:
@@ -564,7 +575,6 @@ class KirbyAmClient(BizHawkClient):
             "KirbyAM: configured starting Kirby color is %s (%s)",
             color_name,
             color_id,
-            extra={"NoStream": not self._debug_logging_enabled},
         )
 
     async def _sync_starting_kirby_color_runtime_config(self, ctx: "BizHawkClientContext") -> None:
@@ -609,7 +619,6 @@ class KirbyAmClient(BizHawkClient):
             "KirbyAM: synced starting Kirby color runtime config (%s / %s)",
             color_name,
             color_id,
-            extra={"NoStream": not self._debug_logging_enabled},
         )
 
     @staticmethod
@@ -1004,6 +1013,9 @@ class KirbyAmClient(BizHawkClient):
 
             # Room-sanity location polling via native gVisitedDoors bit 15.
             await self._poll_room_sanity_locations(ctx)
+
+            # Room entry logging (always to file; client display gated by debug flag).
+            await self._poll_room_entry_logging(ctx)
 
             # Candidate discovery for non-shard boss defeat signals.
             await self._probe_boss_defeat_candidates(ctx)
@@ -1635,6 +1647,22 @@ class KirbyAmClient(BizHawkClient):
         return None
 
     @staticmethod
+    def _build_room_label_lookup() -> "dict[int, str]":
+        """Build a doorsIdx → region_key mapping from all rooms in rooms.json."""
+        rooms_json = load_json_data("regions/rooms.json")
+        result: dict[int, str] = {}
+        if not isinstance(rooms_json, dict):
+            return result
+        for region_key, room in rooms_json.items():
+            rs = room.get("room_sanity")
+            if not isinstance(rs, dict):
+                continue
+            bit_index = rs.get("bit_index")
+            if bit_index is not None:
+                result[int(bit_index)] = str(region_key)
+        return result
+
+    @staticmethod
     def _coerce_u32(value: object) -> int | None:
         try:
             parsed = int(value)
@@ -1720,10 +1748,10 @@ class KirbyAmClient(BizHawkClient):
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
-            from CommonClient import logger
-
             boss_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if boss_log_state != self._last_boss_poll_log:
+                from CommonClient import logger
+
                 logger.info(
                     "KirbyAM: resending boss-defeat LocationChecks missing on server (missing=%s, acked=%s)",
                     missing_on_server,
@@ -1734,13 +1762,14 @@ class KirbyAmClient(BizHawkClient):
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
         elif mapped_checked_locations:
-            from CommonClient import logger
-
             boss_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
             if boss_log_state != self._last_boss_poll_log:
+                from CommonClient import logger
+
                 logger.debug(
                     "KirbyAM: dedupe suppressed boss-defeat LocationChecks (all RAM-derived checks already acknowledged: %s)",
                     already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
                 )
                 self._last_boss_poll_log = boss_log_state
         else:
@@ -1776,10 +1805,10 @@ class KirbyAmClient(BizHawkClient):
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
-            from CommonClient import logger
-
             chest_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if chest_log_state != self._last_major_chest_poll_log:
+                from CommonClient import logger
+
                 logger.info(
                     "KirbyAM: resending major-chest LocationChecks missing on server (missing=%s, acked=%s)",
                     missing_on_server,
@@ -1790,13 +1819,14 @@ class KirbyAmClient(BizHawkClient):
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
         elif mapped_checked_locations:
-            from CommonClient import logger
-
             chest_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
             if chest_log_state != self._last_major_chest_poll_log:
+                from CommonClient import logger
+
                 logger.debug(
                     "KirbyAM: dedupe suppressed major-chest LocationChecks (all RAM-derived checks already acknowledged: %s)",
                     already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
                 )
                 self._last_major_chest_poll_log = chest_log_state
         else:
@@ -1825,10 +1855,10 @@ class KirbyAmClient(BizHawkClient):
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
-            from CommonClient import logger
-
             chest_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if chest_log_state != self._last_vitality_chest_poll_log:
+                from CommonClient import logger
+
                 logger.info(
                     "KirbyAM: resending vitality-chest LocationChecks missing on server (missing=%s, acked=%s)",
                     missing_on_server,
@@ -1839,13 +1869,14 @@ class KirbyAmClient(BizHawkClient):
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
         elif mapped_checked_locations:
-            from CommonClient import logger
-
             chest_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
             if chest_log_state != self._last_vitality_chest_poll_log:
+                from CommonClient import logger
+
                 logger.debug(
                     "KirbyAM: dedupe suppressed vitality-chest LocationChecks (all RAM-derived checks already acknowledged: %s)",
                     already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
                 )
                 self._last_vitality_chest_poll_log = chest_log_state
         else:
@@ -1873,10 +1904,10 @@ class KirbyAmClient(BizHawkClient):
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
-            from CommonClient import logger
-
             chest_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if chest_log_state != self._last_sound_player_chest_poll_log:
+                from CommonClient import logger
+
                 logger.info(
                     "KirbyAM: resending sound-player-chest LocationChecks missing on server (missing=%s, acked=%s)",
                     missing_on_server,
@@ -1887,13 +1918,14 @@ class KirbyAmClient(BizHawkClient):
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
         elif mapped_checked_locations:
-            from CommonClient import logger
-
             chest_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
             if chest_log_state != self._last_sound_player_chest_poll_log:
+                from CommonClient import logger
+
                 logger.debug(
                     "KirbyAM: dedupe suppressed sound-player-chest LocationChecks (all RAM-derived checks already acknowledged: %s)",
                     already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
                 )
                 self._last_sound_player_chest_poll_log = chest_log_state
         else:
@@ -1914,18 +1946,45 @@ class KirbyAmClient(BizHawkClient):
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(switch_addr, 4, "System Bus")]))[0]
         switch_bits = self._u32_le(raw)
 
+        # Keep baseline across AP reconnects, but re-baseline on BizHawk/ROM stream
+        # identity changes (transport reconnect, core swap, or ROM resync).
+        stream_marker = getattr(ctx.bizhawk_ctx, "streams", None)
+        if self._hub_switch_stream_marker is None:
+            self._hub_switch_stream_marker = stream_marker
+        elif stream_marker is not self._hub_switch_stream_marker:
+            self._hub_switch_stream_marker = stream_marker
+            self._hub_switch_session_initialized = False
+            self._hub_switch_baseline_mask = None
+
+        # Capture baseline only on first hub-switch poll of a session when the server
+        # has not yet acknowledged any locations. This suppresses pre-session stale
+        # transport bits while avoiding suppression when the session is already active.
+        if not self._hub_switch_session_initialized:
+            self._hub_switch_session_initialized = True
+            if self._hub_switch_baseline_mask is None and switch_bits != 0 and not ctx.checked_locations:
+                self._hub_switch_baseline_mask = switch_bits
+                if self._debug_logging_enabled:
+                    from CommonClient import logger
+
+                    logger.info(
+                        "KirbyAM: hub-switch baseline initialized from first-poll transport state before any server acknowledgements (baseline=0x%08X)",
+                        switch_bits,
+                    )
+
+        effective_switch_bits = switch_bits & ~(self._hub_switch_baseline_mask or 0)
+
         mapped_checked_locations: set[int] = set()
         for bit in sorted(self._hub_switch_location_ids_by_bit.keys()):
-            if (switch_bits >> bit) & 1:
+            if (effective_switch_bits >> bit) & 1:
                 mapped_checked_locations.update(self._hub_switch_location_ids_by_bit.get(bit, []))
 
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
-            from CommonClient import logger
-
             switch_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if switch_log_state != self._last_hub_switch_poll_log:
+                from CommonClient import logger
+
                 logger.info(
                     "KirbyAM: resending hub-switch LocationChecks missing on server (missing=%s, acked=%s)",
                     missing_on_server,
@@ -1936,13 +1995,14 @@ class KirbyAmClient(BizHawkClient):
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
         elif mapped_checked_locations:
-            from CommonClient import logger
-
             switch_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
             if switch_log_state != self._last_hub_switch_poll_log:
+                from CommonClient import logger
+
                 logger.debug(
                     "KirbyAM: dedupe suppressed hub-switch LocationChecks (all RAM-derived checks already acknowledged: %s)",
                     already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
                 )
                 self._last_hub_switch_poll_log = switch_log_state
         else:
@@ -1995,31 +2055,88 @@ class KirbyAmClient(BizHawkClient):
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
         if missing_on_server:
-            from CommonClient import logger
-
             room_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
             if room_log_state != self._last_room_sanity_poll_log:
-                if self._debug_logging_enabled:
-                    logger.info(
-                        "KirbyAM: resending room-sanity LocationChecks missing on server (missing=%s, acked=%s)",
-                        missing_on_server,
-                        already_acknowledged,
-                    )
+                from CommonClient import logger
+
+                logger.info(
+                    "KirbyAM: resending room-sanity LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
+                )
                 self._last_room_sanity_poll_log = room_log_state
 
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
         elif mapped_checked_locations:
-            from CommonClient import logger
-
             room_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
             if room_log_state != self._last_room_sanity_poll_log:
+                from CommonClient import logger
+
                 logger.debug(
                     "KirbyAM: dedupe suppressed room-sanity LocationChecks (all RAM-derived checks already acknowledged: %s)",
                     already_acknowledged,
+                    extra={"NoStream": not self._debug_logging_enabled},
                 )
                 self._last_room_sanity_poll_log = room_log_state
         else:
             self._last_room_sanity_poll_log = None
+
+    async def _poll_room_entry_logging(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Detect native room changes and log the current room on every entry.
+
+        Reads gCurLevelInfo[0].currentRoom (u16 at current_room_native). When the
+        value changes, resolves the native room ID to a doorsIdx via gRoomProps[] in
+        ROM, then maps doorsIdx to a region key from rooms.json.
+
+        Always written to the log file; shown in the client only when debug logging
+        is enabled.
+        """
+        from CommonClient import logger
+
+        current_room_addr = self._native_addr(_CURRENT_ROOM_ADDR_KEY)
+        if current_room_addr is None:
+            return
+
+        try:
+            raw = (await bizhawk.read(ctx.bizhawk_ctx, [(current_room_addr, 2, "System Bus")]))[0]
+        except (bizhawk.RequestFailedError, bizhawk.ConnectorError, bizhawk.SyncError, TypeError, AttributeError):
+            # Room-entry diagnostics are best-effort and must never block watcher progress.
+            return
+        if len(raw) != 2:
+            return
+
+        native_room_id = unpack_from("<H", raw)[0]
+
+        if native_room_id == self._last_native_room_id:
+            return
+
+        # Resolve doorsIdx via gRoomProps[native_room_id].doorsIdx (ROM read).
+        rom_doors_idx_addr = _ROOM_PROPS_ROM_BASE + native_room_id * _ROOM_PROPS_STRIDE + _ROOM_PROPS_DOORS_IDX_OFFSET
+        try:
+            doors_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(rom_doors_idx_addr, 2, "ROM")]))[0]
+        except (bizhawk.RequestFailedError, bizhawk.ConnectorError, bizhawk.SyncError, TypeError, AttributeError):
+            logger.info(
+                "KirbyAM: room entry — native=0x%04x (doorsIdx lookup failed)",
+                native_room_id,
+                extra={"NoStream": not self._debug_logging_enabled},
+            )
+            return
+
+        if len(doors_raw) != 2:
+            return
+
+        doors_idx = unpack_from("<H", doors_raw)[0]
+        room_label = self._room_label_by_doors_idx.get(doors_idx, f"<unknown doorsIdx={doors_idx}>")
+        self._last_native_room_id = native_room_id
+        logger.info(
+            "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
+            room_label,
+            native_room_id,
+            doors_idx,
+            extra={"NoStream": not self._debug_logging_enabled},
+        )
 
     async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """

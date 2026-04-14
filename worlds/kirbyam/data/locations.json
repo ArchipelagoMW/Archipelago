@@ -268,9 +268,9 @@
       "HubSwitch",
       "MAP_MOONLIGHT_MANSION"
     ],
-    "bit_index": 0,
+    "bit_index": 10,
     "category": "HUB_SWITCH",
-    "location_id": 3960400
+    "location_id": 3960410
   },
   "HUB_SWITCH_RAINBOW_ROUTE_EAST": {
     "label": "Rainbow Route East - Big Switch",
@@ -378,9 +378,9 @@
       "HubSwitch",
       "MAP_PEPPERMINT_PALACE"
     ],
-    "bit_index": 10,
+    "bit_index": 11,
     "category": "HUB_SWITCH",
-    "location_id": 3960410
+    "location_id": 3960411
   },
   "HUB_SWITCH_PEPPERMINT_WEST": {
     "label": "Peppermint Palace West - Big Switch",
@@ -389,9 +389,9 @@
       "HubSwitch",
       "MAP_PEPPERMINT_PALACE"
     ],
-    "bit_index": 11,
+    "bit_index": 0,
     "category": "HUB_SWITCH",
-    "location_id": 3960411
+    "location_id": 3960400
   },
   "HUB_SWITCH_CABBAGE_CAVERN_EAST": {
     "label": "Cabbage Cavern East - Big Switch",

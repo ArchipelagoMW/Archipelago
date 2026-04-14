@@ -8,7 +8,13 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.context import _game_watcher, AuthStatus
 
 from ..data import data
-from ..client import KirbyAmClient, _MAP_ITEM_ID_TO_AREA_ID
+from ..client import (
+    KirbyAmClient,
+    _MAP_ITEM_ID_TO_AREA_ID,
+    _ROOM_PROPS_DOORS_IDX_OFFSET,
+    _ROOM_PROPS_ROM_BASE,
+    _ROOM_PROPS_STRIDE,
+)
 from ..options import OneHitMode
 from ..rom import KirbyAmProcedurePatch
 
@@ -349,6 +355,7 @@ async def test_poll_major_chest_skips_already_server_acknowledged(mock_bizhawk_c
     """No major-chest resend when server already acknowledges all mapped transport checks."""
     client = KirbyAmClient()
     client.initialize_client()
+    client._debug_logging_enabled = True
 
     olive = data.locations["MAJOR_CHEST_OLIVE_OCEAN"].location_id
     mock_bizhawk_context.checked_locations = {olive}
@@ -428,6 +435,7 @@ async def test_poll_vitality_chest_skips_already_server_acknowledged(mock_bizhaw
     """No vitality-chest resend when server already acknowledges all mapped transport checks."""
     client = KirbyAmClient()
     client.initialize_client()
+    client._debug_logging_enabled = True
 
     carrot = data.locations["VITALITY_CHEST_CARROT_CASTLE"].location_id
     mock_bizhawk_context.checked_locations = {carrot}
@@ -509,7 +517,7 @@ async def test_poll_sound_player_chest_skips_when_address_missing(mock_bizhawk_c
 
 @pytest.mark.asyncio
 async def test_poll_hub_switch_sends_location_checks_for_set_bits(mock_bizhawk_context):
-    """Set transport hub-switch bits should map to hub-switch LocationChecks."""
+    """Set transport hub-switch bits after baseline should map to LocationChecks."""
     client = KirbyAmClient()
     client.initialize_client()
 
@@ -520,14 +528,40 @@ async def test_poll_hub_switch_sends_location_checks_for_set_bits(mock_bizhawk_c
     with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
-        # Bits 0 and 1 set => Moonlight and Rainbow Route East hub switch checks.
-        mock_read.return_value = [((1 << 0) | (1 << 1)).to_bytes(4, 'little')]
+        mock_read.side_effect = [
+            [(0).to_bytes(4, 'little')],
+            [((1 << 10) | (1 << 1)).to_bytes(4, 'little')],
+        ]
 
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
         await client._poll_hub_switch_locations(mock_bizhawk_context)
 
     mock_send.assert_awaited_once_with([
-        {"cmd": "LocationChecks", "locations": [moonlight, rainbow_east]}
+        {"cmd": "LocationChecks", "locations": [rainbow_east, moonlight]}
     ])
+
+
+@pytest.mark.asyncio
+async def test_poll_hub_switch_suppresses_pre_session_stale_bits(mock_bizhawk_context):
+    """First hub-switch poll with empty checked_locations should baseline and suppress stale bits."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+
+    mock_bizhawk_context.checked_locations = set()
+
+    with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [((1 << 0)).to_bytes(4, 'little')]
+
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+    assert mock_logger.info.called
+    assert "hub-switch baseline initialized" in mock_logger.info.call_args.args[0]
 
 
 @pytest.mark.asyncio
@@ -535,6 +569,7 @@ async def test_poll_hub_switch_skips_already_server_acknowledged(mock_bizhawk_co
     """No hub-switch resend when server already acknowledges all mapped transport checks."""
     client = KirbyAmClient()
     client.initialize_client()
+    client._debug_logging_enabled = True
 
     moonlight = data.locations["HUB_SWITCH_MOONLIGHT"].location_id
     mock_bizhawk_context.checked_locations = {moonlight}
@@ -543,7 +578,7 @@ async def test_poll_hub_switch_skips_already_server_acknowledged(mock_bizhawk_co
          patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
          patch('CommonClient.logger') as mock_logger:
-        mock_read.return_value = [((1 << 0)).to_bytes(4, 'little')]
+        mock_read.return_value = [((1 << 10)).to_bytes(4, 'little')]
 
         await client._poll_hub_switch_locations(mock_bizhawk_context)
 
@@ -570,6 +605,177 @@ async def test_poll_hub_switch_skips_when_address_missing(mock_bizhawk_context):
 
     mock_read.assert_not_awaited()
     mock_send.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_poll_hub_switch_rebaselines_on_stream_marker_change(mock_bizhawk_context):
+    """Hub-switch baseline persists across AP reconnect, but stream change forces re-baseline."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    rainbow_east = data.locations["HUB_SWITCH_RAINBOW_ROUTE_EAST"].location_id
+    mock_bizhawk_context.checked_locations = set()
+    mock_bizhawk_context.bizhawk_ctx.streams = object()
+
+    with patch.dict(data.transport_ram_addresses, {"hub_switch_flags": 0x0203B04C}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.side_effect = [
+            [((1 << 10)).to_bytes(4, 'little')],
+            [((1 << 10)).to_bytes(4, 'little')],
+            [((1 << 10) | (1 << 1)).to_bytes(4, 'little')],
+        ]
+
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+        # Simulate BizHawk stream identity change (ROM resync / reconnect).
+        mock_bizhawk_context.bizhawk_ctx.streams = object()
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+        await client._poll_hub_switch_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [rainbow_east]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_logs_only_on_room_change(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {42: "REGION_TEST_ROOM"}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(0x0010).to_bytes(2, 'little')],
+            [(42).to_bytes(2, 'little')],
+            [(0x0010).to_bytes(2, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert mock_read.await_count == 3
+    mock_logger.info.assert_called_once_with(
+        "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
+        "REGION_TEST_ROOM",
+        0x0010,
+        42,
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+    client._room_label_by_doors_idx = {7: "REGION_LOOKUP_ROOM"}
+
+    native_room_id = 0x0021
+    expected_rom_addr = _ROOM_PROPS_ROM_BASE + native_room_id * _ROOM_PROPS_STRIDE + _ROOM_PROPS_DOORS_IDX_OFFSET
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [native_room_id.to_bytes(2, 'little')],
+            [(7).to_bytes(2, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    mock_read.assert_any_await(
+        mock_bizhawk_context.bizhawk_ctx,
+        [(expected_rom_addr, 2, "ROM")],
+    )
+    mock_logger.info.assert_called_once_with(
+        "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
+        "REGION_LOOKUP_ROOM",
+        native_room_id,
+        7,
+        extra={"NoStream": False},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_handles_rom_lookup_failure(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(0x0003).to_bytes(2, 'little')],
+            bizhawk.SyncError("lookup failed"),
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    mock_logger.info.assert_called_once_with(
+        "KirbyAM: room entry — native=0x%04x (doorsIdx lookup failed)",
+        0x0003,
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_retries_after_short_rom_read(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {11: "REGION_RETRY_ROOM"}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(0x0008).to_bytes(2, 'little')],
+            [b'\x0b'],
+            [(0x0008).to_bytes(2, 'little')],
+            [(11).to_bytes(2, 'little')],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert client._last_native_room_id == 0x0008
+    mock_logger.info.assert_called_once_with(
+        "KirbyAM: entered room %s (native=0x%04x, doorsIdx=%d)",
+        "REGION_RETRY_ROOM",
+        0x0008,
+        11,
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_nostream_gating_respects_debug_flag(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._room_label_by_doors_idx = {9: "REGION_NOSTREAM_ROOM"}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(0x0012).to_bytes(2, 'little')],
+            [(9).to_bytes(2, 'little')],
+        ]
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    mock_logger.info.assert_called_once()
+    assert mock_logger.info.call_args.kwargs.get("extra", {}).get("NoStream") is True
+
+    client._last_native_room_id = None
+    client._debug_logging_enabled = True
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(0x0013).to_bytes(2, 'little')],
+            [(9).to_bytes(2, 'little')],
+        ]
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    mock_logger.info.assert_called_once()
+    assert mock_logger.info.call_args.kwargs.get("extra", {}).get("NoStream") is False
 
 
 def test_major_chest_data_sanity():
@@ -1994,10 +2200,13 @@ async def test_room_sanity_resend_log_gated_by_debug(mock_bizhawk_context):
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
     mock_send.assert_awaited_once_with([{"cmd": "LocationChecks", "locations": [3961000]}])
-    assert not any(
-        call.args and isinstance(call.args[0], str) and "resending room-sanity LocationChecks missing on server" in call.args[0]
+    matching_disabled = [
+        call
         for call in mock_logger.info.call_args_list
-    )
+        if call.args and isinstance(call.args[0], str) and "resending room-sanity LocationChecks missing on server" in call.args[0]
+    ]
+    assert matching_disabled
+    assert all(call.kwargs.get("extra", {}).get("NoStream") is True for call in matching_disabled)
 
     client = KirbyAmClient()
     client.initialize_client()
@@ -2015,11 +2224,13 @@ async def test_room_sanity_resend_log_gated_by_debug(mock_bizhawk_context):
 
         await client._poll_room_sanity_locations(mock_bizhawk_context)
 
-    mock_logger.info.assert_any_call(
-        "KirbyAM: resending room-sanity LocationChecks missing on server (missing=%s, acked=%s)",
-        [3961000],
-        [],
-    )
+    matching_enabled = [
+        call
+        for call in mock_logger.info.call_args_list
+        if call.args and isinstance(call.args[0], str) and "resending room-sanity LocationChecks missing on server" in call.args[0]
+    ]
+    assert matching_enabled
+    assert all(call.kwargs.get("extra", {}).get("NoStream") is False for call in matching_enabled)
 
 
 @pytest.mark.asyncio
@@ -2766,6 +2977,10 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
     client._last_vitality_chest_poll_log = ("resend", (4,), ())
     client._last_sound_player_chest_poll_log = ("resend", (5,), ())
     client._last_hub_switch_poll_log = ("resend", (6,), ())
+    client._hub_switch_baseline_mask = 0x00000400
+    client._hub_switch_session_initialized = True
+    hub_stream_marker = object()
+    client._hub_switch_stream_marker = hub_stream_marker
     client._last_boss_probe_snapshot = bytes(32)
     client._boss_probe_stream_marker = object()
     client._unsafe_delivery_probe_stream_marker = object()
@@ -2798,6 +3013,9 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         assert client._last_vitality_chest_poll_log is None
         assert client._last_sound_player_chest_poll_log is None
         assert client._last_hub_switch_poll_log is None
+        assert client._hub_switch_baseline_mask == 0x00000400
+        assert client._hub_switch_session_initialized is True
+        assert client._hub_switch_stream_marker is hub_stream_marker
         assert client._last_boss_probe_snapshot is None
         assert client._boss_probe_stream_marker is None
         assert client._unsafe_delivery_probe_stream_marker is None
@@ -3219,7 +3437,7 @@ def test_death_link_flavor_templates_loaded_from_data_file():
         client = KirbyAmClient()
         client.initialize_client()
 
-    mock_loader.assert_called_once_with("deathlink_flavor_text.json")
+    mock_loader.assert_any_call("deathlink_flavor_text.json")
     assert client._death_link_flavor_templates == sentinel_templates
 
 
@@ -3371,6 +3589,7 @@ async def test_poll_boss_defeat_skips_already_server_acknowledged(mock_bizhawk_c
     """No LocationChecks sent when boss defeat bit is set but server already acknowledged it."""
     client = KirbyAmClient()
     client.initialize_client()
+    client._debug_logging_enabled = True
 
     boss1_loc = data.locations["BOSS_DEFEAT_1"].location_id
     mock_bizhawk_context.checked_locations = {boss1_loc}

@@ -196,7 +196,7 @@
     "HUB_SWITCH_MOONLIGHT": {
       "category": "HUB_SWITCH",
       "label": "Moonlight Mansion - Big Switch",
-      "location_id": 3960400,
+      "location_id": 3960410,
       "tags": [
         "HubSwitch",
         "MAP_MOONLIGHT_MANSION"
@@ -223,7 +223,7 @@
     "HUB_SWITCH_PEPPERMINT_EAST": {
       "category": "HUB_SWITCH",
       "label": "Peppermint Palace East - Big Switch",
-      "location_id": 3960410,
+      "location_id": 3960411,
       "tags": [
         "HubSwitch",
         "MAP_PEPPERMINT_PALACE"
@@ -232,7 +232,7 @@
     "HUB_SWITCH_PEPPERMINT_WEST": {
       "category": "HUB_SWITCH",
       "label": "Peppermint Palace West - Big Switch",
-      "location_id": 3960411,
+      "location_id": 3960400,
       "tags": [
         "HubSwitch",
         "MAP_PEPPERMINT_PALACE"

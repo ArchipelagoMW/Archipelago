@@ -1,5 +1,5 @@
 SystemID GBA
-0	S	_	0		=== KirbyAM AP Transport Mailbox (0x0203B000 block) ===
+0	S	_	1		=== KirbyAM AP Transport Mailbox (0x0203B000 block) ===
 0203B000	d	h	0	System Bus	shard_bitfield (ROM->Client)
 0203B004	d	h	0	System Bus	incoming_item_flag (Client->ROM)
 0203B008	d	h	0	System Bus	incoming_item_id (Client->ROM)
@@ -19,17 +19,19 @@ SystemID GBA
 0203B040	d	h	0	System Bus	mailbox_init_cookie (expect 4B41504D)
 0203B044	d	h	0	System Bus	boss_temp_shard_bitfield
 0203B048	d	h	0	System Bus	delivered_vitality_item_bits
-0	S	_	0		=== Native Gameplay Addresses (from worlds/kirbyam/data/addresses.json) ===
+0203B04C	d	b	0	System Bus	hub_switch_flags (ROM->Client; bit0=PeppermintW, bit1=RREast, bit2=RRSouth, bit3=CabbageCenter, bit4=RRWest, bit5=Carrot, bit6=RRNorth, bit7=Mustard, bit8=CabbageWest, bit9=Radish, bit10=Moonlight, bit11=PeppermintE, bit12=CabbageEast, bit13=Olive, bit14=Candy)
+0	S	_	1		=== Native Gameplay Addresses (from worlds/kirbyam/data/addresses.json) ===
 02038970	b	h	0	System Bus	shard_bitfield_native (KIRBY_SHARD_FLAGS)
 0203897C	d	h	0	System Bus	big_chest_bitfield_native (gTreasures.bigChestField)
 02028C14	d	h	0	System Bus	boss_mirror_table_native [probe]
 02028CA0	w	h	0	System Bus	room_visit_flags_native[0] (gVisitedDoors base)
 02028CA2	w	h	0	System Bus	room_visit_flags_native[1]
 02028CA4	w	h	0	System Bus	room_visit_flags_native[2]
+02023B28	w	u	0	System Bus	current_room_native (gCurLevelInfo[0].currentRoom; native room ID)
 0203AD2C	d	u	0	System Bus	ai_kirby_state_native
 0203AD10	d	h	0	System Bus	demo_playback_flags_native
 02020FE0	b	s	0	System Bus	kirby_hp_native (s8)
-0	S	_	0		=== Cheat/Freeze Targets (manual RAM manipulation) ===
+0	S	_	1		=== Cheat/Freeze Targets (manual RAM manipulation) ===
 02020FE0	b	s	0	System Bus	CHEAT: freeze HP > 0 (commonly 6) to avoid death
 02038970	b	h	0	System Bus	CHEAT: freeze shard flags to FF (all mirror shards)
 0203897C	d	h	0	System Bus	CHEAT: freeze major chest map flags (1..9 bits)
@@ -39,11 +41,13 @@ SystemID GBA
 0203B028	d	h	0	System Bus	CHEAT: force major_chest_flags bits for AP checks
 0203B02C	d	h	0	System Bus	CHEAT: force vitality_chest_flags bits for AP checks
 0203B030	d	h	0	System Bus	CHEAT: force sound_player_chest_flags bit0
-0	S	_	0		=== Internet Cheat Notes (USA Gameshark source: almarsguides.com) ===
-0	S	_	0		GS Master: 34165F72 B08D117B / 25982608 B17B6C25
-0	S	_	0		GS Invulnerability: 771681C5 6954AFCA
-0	S	_	0		GS Unlimited Lives: 87650B7E 2F78AE65
-0	S	_	0		GS Unlimited Batteries: 4117F0AB 1D88A2C5
-0	S	_	0		GS Unlimited Energy: EEDEF930 E6D64031
-0	S	_	0		NOTE: Internet GS/CB codes are region/version dependent (USA listed). Verify against your ROM build.
-0	S	_	0		WARNING: Freezing AP transport fields can desync server/client/ROM state; use in offline testing only.
+0203B04C	d	h	0	System Bus	CHEAT: force hub_switch_flags bits (bit0=PeppermintW, bit10=Moonlight, bit11=PeppermintE, bits0-14)
+0	S	_	1		=== Internet Cheat Notes (USA Gameshark source: almarsguides.com) ===
+0	S	_	1		GS Master: 34165F72 B08D117B / 25982608 B17B6C25
+0	S	_	1		GS Invulnerability: 771681C5 6954AFCA
+0	S	_	1		GS Unlimited Lives: 87650B7E 2F78AE65
+0	S	_	1		GS Unlimited Batteries: 4117F0AB 1D88A2C5
+0	S	_	1		GS Unlimited Energy: EEDEF930 E6D64031
+0	S	_	1		NOTE: Internet GS/CB codes are region/version dependent (USA listed). Verify against your ROM build.
+0	S	_	1		WARNING: Freezing AP transport fields can desync server/client/ROM state; use in offline testing only.
+

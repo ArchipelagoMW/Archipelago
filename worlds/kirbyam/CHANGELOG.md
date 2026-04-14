@@ -14,7 +14,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 - `Starting Kirby Color` lets players begin with a chosen Kirby color instead of always starting as Pink, including a random option for surprise runs (Issue #597).
 - `Start With All Maps` lets players begin with every area map already unlocked for a more guided playthrough (Issue #584).
 - Room names now match familiar Wikirby names, making the game easier to navigate and discuss (Issue #587).
-- World-map big switches are now full Archipelago checks (Issue #481).
+- Hub big switches are now full Archipelago checks (Issue #481).
 - Spoiler output and generation logs now show shuffled enemy ability assignments, making seeds easier to review (Issue #586).
 
 ### Improvements

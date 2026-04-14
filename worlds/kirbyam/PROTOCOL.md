@@ -62,7 +62,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x40   | 0x0203B040 | 4B | mailbox_init_cookie | u32 | ROM internal | Initialization cookie (`0x4B41504D`). If absent/mismatched, payload seeds `delivered_shard_bitfield` from native shard state, clears scrub delay + boss-defeat flags + boss temp shard mask, and stores the cookie to prevent stale EWRAM transport values from triggering scrub writes. |
 | 0x44   | 0x0203B044 | 4B | boss_temp_shard_bitfield | u32 | ROM internal | Bits 0-7 track shard bits temporarily written by boss-defeat hook for cutscene safety. On gameplay resume, payload scrubs only `boss_temp_shard_bitfield & ~delivered_shard_bitfield`, then clears this mask. |
 | 0x48   | 0x0203B048 | 4B | delivered_vitality_item_bits | u32 | ROM internal | Replay guard for vitality counter items. Bit N marks that `VITALITY_COUNTER_(N+1)` has already been applied, preventing duplicate vitality grants if an item is resent during reconnect/reset recovery. |
-| 0x4C   | 0x0203B04C | 4B | hub_switch_flags | u32 | ROM → Client | Bits 0–14 set when world-map big-switch door unlock callbacks fire (`WorldMapDoor` order: Moonlight, RR East, RR South, Cabbage Center, RR West, Carrot, RR North, Mustard, Cabbage West, Radish, Peppermint East, Peppermint West, Cabbage East, Olive, Candy). |
+| 0x4C   | 0x0203B04C | 4B | hub_switch_flags | u32 | ROM → Client | Bits 0–14 set when world-map big-switch door unlock callbacks fire (`WorldMapDoor` order: Peppermint West, RR East, RR South, Cabbage Center, RR West, Carrot, RR North, Mustard, Cabbage West, Radish, Moonlight, Peppermint East, Cabbage East, Olive, Candy). |
 | 0x50   | 0x0203B050 | 4B | starting_kirby_color_id | u32 | ROM ← Client | Runtime config payload for starting Kirby color. Valid values are `0..13`; `0` (Pink) is intentionally treated as a no-op by payload logic. Non-Pink values are applied through `KIRBY_TRANSITION_COLOR`, so the color becomes visible on the next room/area transition or when an enemy-hit path refreshes Kirby's runtime color state (typically the first transition after game start). |
 | 0x54–0x63 | 0x0203B054–0x0203B063 | 16B | *(reserved)* | — | — | Reserved; not currently used. |
 | 0x64   | 0x0203B064 | 4B | ability_randomization_mode_runtime | u32 | ROM ← Client | Enemy copy-ability randomization mode (`0`=off, `1`=shuffled, `2`=completely_random). Written once per connection by the Python client from `slot_data`. |
@@ -86,6 +86,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x02028CA0 | 576B | gVisitedDoors (`room_visit_flags_native`) | Native room-visit array (`u16[0x120]`); bit 15 marks visited state by `doorsIdx` |
+| 0x02023B28 | 2B | current_room_native | Current native room ID (`gCurLevelInfo[0].currentRoom`) used for room-entry diagnostics |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
 | 0x0203AD10 | 4B | DEMO_PLAYBACK_FLAGS     | Native title-demo discriminator (`demo_playback_flags_native`; bit `0x10` indicates title-screen demo playback) |
 | 0x0203ADE0 | 1B | KIRBY_ACTIVE_COLOR      | Native currently selected Kirby palette index (`0..13`). **Boot-time only**: updates only if written before the game's graphics system initialises; writing during gameplay has no visual effect. |
@@ -144,7 +145,7 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_RADISH_RUINS | 3960302 | Radish Ruins 8-4 vitality big chest (transport vitality bit 2) |
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
-| HUB_SWITCH_MOONLIGHT .. HUB_SWITCH_CANDY | 3960400 - 3960414 | Hub big-switch checks mapped to `hub_switch_flags` bits 0..14 |
+| HUB_SWITCH_* | 3960400 - 3960414 | Hub big-switch checks mapped to `hub_switch_flags` bits 0..14 (bit 0 = Peppermint West, bit 10 = Moonlight; others sequential) |
 | ROOM_SANITY_* | 3961000+ | Room visit checks (`Room X-<room_code>`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15; includes designed goal/warp rooms |
 | *Reserved*    | 3960415+ | Future location families |
 
@@ -293,8 +294,13 @@ for bit in mapped_sound_player_chest_bits:
 
 # Hub switch checks (transport hub_switch_flags)
 hub_switch_bits = RAM[0x0203B04C] as u32
+hub_switch_baseline = 0
+if first_hub_switch_poll and server_checked_locations is empty and hub_switch_bits != 0:
+    # Treat pre-existing transport bits as baseline to avoid stale cross-session resend.
+    hub_switch_baseline = hub_switch_bits
+effective_hub_switch_bits = hub_switch_bits & ~hub_switch_baseline
 for bit in mapped_hub_switch_bits:
-    if (hub_switch_bits >> bit) & 1:
+    if (effective_hub_switch_bits >> bit) & 1:
         mapped_checked.add(hub_switch_location_id_for_bit(bit))
 
 # Room sanity checks (native gVisitedDoors)
@@ -302,6 +308,13 @@ room_visits = RAM[0x02028CA0 : 0x02028CA0 + 0x240] as u16[0x120]
 for doors_idx in mapped_room_sanity_doors_indices:
     if room_visits[doors_idx] & 0x8000:
         mapped_checked.add(room_sanity_location_id_for_doors_idx(doors_idx))
+
+# Room-entry diagnostics (best-effort; logging only)
+current_room_native = RAM[0x02023B28] as u16
+if current_room_native changed:
+    doors_idx = ROM[gRoomProps + current_room_native * gRoomPropsStride + doorsIdxOffset] as u16
+    room_label = rooms_json_label_for_doors_idx(doors_idx)
+    log_room_entry(room_label, current_room_native, doors_idx)
 
 # Level-based, reconnect-safe resend:
 # Send only checks that RAM reports as collected but the server has not acknowledged.
@@ -321,6 +334,7 @@ Boss shard scrub timing contract (Issue #505):
 
 **Behavior notes:**
 - Detection is **level-based** (current bitfield state), not edge-based, to be reconnect-safe.
+- Hub-switch polling suppresses only pre-session baseline bits on first poll when server state is empty, preventing stale EWRAM bits from being resent as fresh checks.
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
 - Boss-defeat, major-chest, vitality-chest, sound-player-chest, hub-switch, and room-sanity polling follow the same resend/dedupe diagnostic contract.
