@@ -1176,6 +1176,8 @@ class Rac3Interface(GameInterface):
             item_string_offset = ITEM_TO_STRING_TABLE_INDEX_OFFSET.get(item, None)
             if item_string_offset is not None:
                 item_string_address = string_id_table_start + item_string_offset
+                if self._read32(item_string_address) not in self.vendor_string_pointers.values():
+                     continue
                 original_string_ptr = all_strings_start + ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET[item]
                 if self.current_game == RAC3VERSION.EU_ID:
                     original_string_ptr += 0x11
