@@ -11,6 +11,24 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
 
 ### New Features
 
+- None.
+
+### Improvements
+
+- None.
+
+### Bug Fixes
+
+- None.
+
+### Internal Changes
+
+- None.
+
+## v0.2.0
+
+### New Features
+
 - `Starting Kirby Color` lets players begin with a chosen Kirby color instead of always starting as Pink, including a random option for surprise runs (Issue #597).
 - `Start With All Maps` lets players begin with every area map already unlocked for a more guided playthrough (Issue #584).
 - Room names now match familiar Wikirby names, making the game easier to navigate and discuss (Issue #587).
