@@ -83,7 +83,7 @@ from worlds.rac3.constants.region import (
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
-from worlds.rac3.constants.version import GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION
+from worlds.rac3.constants.version import GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION, VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE
 
 
 class Rac3Interface(GameInterface):
@@ -1478,13 +1478,9 @@ class Rac3Interface(GameInterface):
                     case RAC3ITEM.MIRROR_TRAP:
                         self._write8(RAC3STATUS.MIRROR_UNIVERSE, 0)
                     case RAC3ITEM.BLACK_SCREEN_TRAP:
-                        match self.current_game:
-                            case RAC3VERSION.US_ID:
-                                self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
-                                self._write16(RAC3STATUS.BLACK_SCREEN_2, 0x8C)
-                            case RAC3VERSION.EU_ID:
-                                self._write16(RAC3STATUS.BLACK_SCREEN, 0x80)
-                                self._write16(RAC3STATUS.BLACK_SCREEN_2, 0x80)
+                        blackscreen_orig_value = VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE.get(self.current_game, 0x8C)
+                        self._write16(RAC3STATUS.BLACK_SCREEN, blackscreen_orig_value)
+                        self._write16(RAC3STATUS.BLACK_SCREEN_2, blackscreen_orig_value)
                         self._write8(RAC3STATUS.BLACK_SCREEN + 4, 1)
                     case RAC3ITEM.NO_CLANK_TRAP:
                         self.clank_disabled_trap = False
