@@ -2,51 +2,8 @@
 
 local general = require("Archipelago/general")
 local library = require("libs/lib")
+local traps = require("trap_handling")
 local util = require("util")
-
-
-TRAP_TABLE = {
-["Attack Trap"] = function ()
-        game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
-    end,
-["Evolution Trap"] = function ()
-        local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
-            (general.traps.evo_increase * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
-        game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
-        game.print({"", "New evolution factor:", new_factor})
-    end,
-["Teleport Trap"] = function()
-        for _, player in ipairs(game.forces["player"].players) do
-            if player.character then
-                library.attempt_teleport_player(player, 1)
-            end
-        end
-    end,
-["Grenade Trap"] = function ()
-        library.fire_entity_at_players("grenade", 0.1)
-    end,
-["Cluster Grenade Trap"] = function ()
-        library.fire_entity_at_players("cluster-grenade", 0.1)
-    end,
-["Artillery Trap"] = function ()
-        library.fire_entity_at_players("artillery-projectile", 1)
-    end,
-["Atomic Rocket Trap"] = function ()
-        library.fire_entity_at_players("atomic-rocket", 0.1)
-    end,
-["Atomic Cliff Remover Trap"] = function ()
-        local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
-
-        if #cliffs > 0 then
-            library.fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
-        end
-    end,
-["Inventory Spill Trap"] = function ()
-        for _, player in ipairs(game.forces["player"].players) do
-            library.spill_character_inventory(player.character)
-        end
-    end,
-}
 
 local function update_player(index)
     local player = game.players[index]
@@ -285,8 +242,6 @@ lib.events = {
     --[defines.events.on_surface_created] = on_surface_created,
     --[defines.events.on_surface_created] = on_surface_created,
 
-
-    [defines.events.on_script_path_request_finished] = library.handle_teleport_attempt
 }
 lib.on_init = on_init
 --lib.on_configuration_changed = on_configuration_changed
