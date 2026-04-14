@@ -217,9 +217,10 @@ def test_room_subareas_pure_topology_with_all_rooms() -> None:
             assert loc_key in known_locations, (
                 f"Room {room_key} claims unknown location key {loc_key!r}"
             )
-    # Exactly 22 rooms carry locations (9 major chests + 5 vitality/sound + 8 boss defeats)
-    assert len(rooms_with_locations) == 22, (
-        f"Expected 22 rooms with locations, got {len(rooms_with_locations)}: {list(rooms_with_locations.keys())}"
+    # Exactly 25 rooms carry locations
+    # (9 major chests + 5 vitality/sound + 8 boss defeats + 3 enabled minor chests).
+    assert len(rooms_with_locations) == 25, (
+        f"Expected 25 rooms with locations, got {len(rooms_with_locations)}: {list(rooms_with_locations.keys())}"
     )
 
     # Topology includes all rooms, but Room Sanity remains optional metadata.

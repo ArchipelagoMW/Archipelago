@@ -83,7 +83,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 |----------|------|-------------------------|-----------|
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
 | 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. This is the native map-ownership field. AP major-chest checks use `major_chest_flags` in the transport block, and the BizHawk client may reassert AP-owned map bits here from `start_with_all_maps` plus confirmed delivered map items to recover from reconnect/save-state drift. |
-| 0x02038960 - 0x0203896A | 10B | Chest/Switch state    | Native chest and switch flags |
+| 0x02038960 - 0x02038969 | 10B | small_chest_flags_native | Native small-chest/switch bitfield block. Enabled MINOR_CHEST AP checks read this block directly and map `bit_index` to location IDs. |
 | 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x02028CA0 | 576B | gVisitedDoors (`room_visit_flags_native`) | Native room-visit array (`u16[0x120]`); bit 15 marks visited state by `doorsIdx` |
 | 0x02023B28 | 2B | current_room_native | Current native room ID (`gCurLevelInfo[0].currentRoom`) used for room-entry diagnostics |
@@ -149,11 +149,15 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
 | HUB_SWITCH_* | 3960400 - 3960414 | Hub big-switch checks mapped to `hub_switch_flags` bits 0..14 (bit 0 = Peppermint West, bit 10 = Moonlight; others sequential) |
+| MINOR_CHEST_RAINBOW_ROUTE_1_20 | 3960500 | Rainbow Route 1-20 small chest (native small_chest_flags_native bit 1) |
+| MINOR_CHEST_RAINBOW_ROUTE_1_22 | 3960501 | Rainbow Route 1-22 small chest (native small_chest_flags_native bit 23) |
+| MINOR_CHEST_RAINBOW_ROUTE_1_38 | 3960502 | Rainbow Route 1-38 small chest (native small_chest_flags_native bit 41) |
 | ROOM_SANITY_* | 3961000+ | Room visit checks (`Room X-<room_code>`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15; includes designed goal/warp rooms |
 | *Reserved*    | 3960415+ | Future location families |
 
 Minor chest status (Issue #540):
-- Minor chest locations are not shipped as active AP checks yet.
+- Initial MINOR_CHEST AP checks are active for Rainbow Route rooms 1-20, 1-22, and 1-38.
+- Active MINOR_CHEST checks are polled from native `small_chest_flags_native` and use direct native chest bit semantics.
 - Respawn/reopen policy is documented as non-repeatable (single-fire chest state) based on decomp evidence in `katam/src/treasures.c` and `katam/asm/chest.s`.
 - Multi-chest room index disambiguation remains deferred (tracked in Issue #542).
 - See `worlds/kirbyam/docs/dev-docs/minor-chest-respawn-policy.md` and `worlds/kirbyam/data/minor_chest_manifest.json` metadata (`respawn_reopen_policy`).

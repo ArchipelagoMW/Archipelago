@@ -364,6 +364,33 @@
         "MAP_RAINBOW_ROUTE"
       ]
     },
+    "MINOR_CHEST_RAINBOW_ROUTE_1_20": {
+      "category": "MINOR_CHEST",
+      "label": "Rainbow Route 1-20 - Small Chest",
+      "location_id": 3960500,
+      "tags": [
+        "MAP_RAINBOW_ROUTE",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_RAINBOW_ROUTE_1_22": {
+      "category": "MINOR_CHEST",
+      "label": "Rainbow Route 1-22 - Small Chest",
+      "location_id": 3960501,
+      "tags": [
+        "MAP_RAINBOW_ROUTE",
+        "SmallChest"
+      ]
+    },
+    "MINOR_CHEST_RAINBOW_ROUTE_1_38": {
+      "category": "MINOR_CHEST",
+      "label": "Rainbow Route 1-38 - Small Chest",
+      "location_id": 3960502,
+      "tags": [
+        "MAP_RAINBOW_ROUTE",
+        "SmallChest"
+      ]
+    },
     "ROOM_SANITY_1_01": {
       "category": "ROOM_SANITY",
       "label": "Room 1-01",

@@ -433,7 +433,9 @@
     "ability_gates": {}
   },
   "REGION_RAINBOW_ROUTE/ROOM_1_20": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_RAINBOW_ROUTE_1_20"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/ROOM_1_36",
@@ -462,7 +464,9 @@
     "ability_gates": {}
   },
   "REGION_RAINBOW_ROUTE/ROOM_1_22": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_RAINBOW_ROUTE_1_22"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/ROOM_1_34",
@@ -710,7 +714,9 @@
     "ability_gates": {}
   },
   "REGION_RAINBOW_ROUTE/ROOM_1_38": {
-    "locations": [],
+    "locations": [
+      "MINOR_CHEST_RAINBOW_ROUTE_1_38"
+    ],
     "events": [],
     "exits": [
       "REGION_RAINBOW_ROUTE/ROOM_1_34",

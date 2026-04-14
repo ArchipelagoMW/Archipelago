@@ -40,6 +40,18 @@
         }
       ]
     },
+    "minor_chest_checks": {
+      "status": "integrated",
+      "entries": [
+        {
+          "name": "small_chest_flags_native",
+          "address": "0x02038960",
+          "width": "u8[10]",
+          "source": "Native gTreasures chest/switch state block; chest bits interpreted by minor-chest manifest mapping",
+          "verification": "Integrated and used by client polling path for enabled MINOR_CHEST AP checks; bits are treated as single-fire check state"
+        }
+      ]
+    },
     "vitality_chest_checks": {
       "status": "integrated",
       "entries": [

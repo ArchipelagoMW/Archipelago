@@ -33,6 +33,7 @@
       "ability_reroll_ability_id_runtime": "0x0203B084"
     },
     "native": {
+      "small_chest_flags_native": "0x02038960",
       "shard_bitfield_native": "0x02038970",
       "big_chest_bitfield_native": "0x0203897C",
       "boss_mirror_table_native": "0x02028C14",

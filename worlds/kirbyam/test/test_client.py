@@ -408,6 +408,72 @@ async def test_shard_poll_does_not_trigger_major_chest_locations(mock_bizhawk_co
 
 
 @pytest.mark.asyncio
+async def test_poll_minor_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
+    """Set native minor-chest bits should map to MINOR_CHEST LocationChecks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    room_1_20 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_20"].location_id
+    room_1_22 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_22"].location_id
+    room_1_38 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_38"].location_id
+    mock_bizhawk_context.checked_locations = set()
+
+    bits = (1 << 1) | (1 << 23) | (1 << 41)
+
+    with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        mock_read.return_value = [bits.to_bytes(10, 'little')]
+
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_awaited_once_with([
+        {"cmd": "LocationChecks", "locations": [room_1_20, room_1_22, room_1_38]}
+    ])
+
+
+@pytest.mark.asyncio
+async def test_poll_minor_chest_skips_when_address_missing(mock_bizhawk_context):
+    """Missing native minor chest address should no-op safely."""
+    client = KirbyAmClient()
+    client.initialize_client()
+
+    native_without_minor = {k: v for k, v in data.native_ram_addresses.items() if k != "small_chest_flags_native"}
+
+    with patch.dict(data.native_ram_addresses, native_without_minor, clear=True), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send:
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_read.assert_not_awaited()
+    mock_send.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_poll_minor_chest_skips_already_server_acknowledged(mock_bizhawk_context):
+    """No minor-chest resend when server already acknowledges all mapped checks."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+
+    room_1_20 = data.locations["MINOR_CHEST_RAINBOW_ROUTE_1_20"].location_id
+    mock_bizhawk_context.checked_locations = {room_1_20}
+
+    with patch.dict(data.native_ram_addresses, {"small_chest_flags_native": 0x02038960}, clear=False), \
+         patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch.object(mock_bizhawk_context, 'send_msgs', new_callable=AsyncMock) as mock_send, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.return_value = [((1 << 1)).to_bytes(10, 'little')]
+
+        await client._poll_minor_chest_locations(mock_bizhawk_context)
+
+    mock_send.assert_not_awaited()
+    assert mock_logger.debug.called
+    assert "dedupe suppressed minor-chest LocationChecks" in mock_logger.debug.call_args.args[0]
+    assert mock_logger.debug.call_args.args[1] == [room_1_20]
+
+
+@pytest.mark.asyncio
 async def test_poll_vitality_chest_sends_location_checks_for_set_bits(mock_bizhawk_context):
     """Set transport vitality-chest bits should map to vitality-chest LocationChecks."""
     client = KirbyAmClient()
@@ -2863,6 +2929,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
          patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock) as mock_send_death_link, \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major, \
+         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock) as mock_poll_minor, \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality, \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player, \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock) as mock_poll_hub_switch, \
@@ -2881,6 +2948,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
     mock_send_death_link.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_boss.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_major.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_minor.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_vitality.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_sound_player.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_hub_switch.assert_awaited_once_with(mock_bizhawk_context)
@@ -2994,6 +3062,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
          patch.object(client, '_poll_locations', new_callable=AsyncMock) as mock_poll_locations, \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock) as mock_poll_boss, \
             patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock) as mock_poll_major_chests, \
+                patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock) as mock_poll_minor_chests, \
             patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality_chests, \
             patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player_chests, \
                 patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock) as mock_poll_hub_switches, \
@@ -3026,6 +3095,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         mock_poll_locations.assert_not_awaited()
         mock_poll_boss.assert_awaited_once()
         mock_poll_major_chests.assert_awaited_once()
+        mock_poll_minor_chests.assert_awaited_once()
         mock_poll_vitality_chests.assert_awaited_once()
         mock_poll_sound_player_chests.assert_awaited_once()
         mock_poll_hub_switches.assert_awaited_once()
@@ -3053,6 +3123,7 @@ async def test_game_watcher_reconnect_entry_suppresses_session_ready_log_when_de
          patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
@@ -3262,6 +3333,7 @@ async def test_game_watcher_emits_pause_then_resume_popups_on_transition(mock_bi
          patch.object(client, '_poll_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
@@ -3319,6 +3391,7 @@ async def test_game_watcher_emits_runtime_gate_logs_when_debug_enabled(mock_bizh
          patch.object(client, '_poll_and_send_local_death_link', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
@@ -3362,6 +3435,7 @@ async def test_game_watcher_syncs_death_link_enabled_from_slot_data(mock_bizhawk
          patch.object(client, '_poll_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
@@ -3390,6 +3464,7 @@ async def test_game_watcher_death_link_sync_is_deduped_until_value_changes(mock_
          patch.object(client, '_poll_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_boss_defeat_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_major_chest_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_minor_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \

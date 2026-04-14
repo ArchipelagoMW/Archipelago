@@ -425,5 +425,41 @@
     "bit_index": 14,
     "category": "HUB_SWITCH",
     "location_id": 3960414
+  },
+  "MINOR_CHEST_RAINBOW_ROUTE_1_20": {
+    "label": "Rainbow Route 1-20 - Small Chest",
+    "parent_region": "REGION_RAINBOW_ROUTE/ROOM_1_20",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_RAINBOW_ROUTE"
+    ],
+    "bit_index": 1,
+    "category": "MINOR_CHEST",
+    "location_id": 3960500
+  },
+  "MINOR_CHEST_RAINBOW_ROUTE_1_22": {
+    "label": "Rainbow Route 1-22 - Small Chest",
+    "parent_region": "REGION_RAINBOW_ROUTE/ROOM_1_22",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_RAINBOW_ROUTE"
+    ],
+    "bit_index": 23,
+    "category": "MINOR_CHEST",
+    "location_id": 3960501
+  },
+  "MINOR_CHEST_RAINBOW_ROUTE_1_38": {
+    "label": "Rainbow Route 1-38 - Small Chest",
+    "parent_region": "REGION_RAINBOW_ROUTE/ROOM_1_38",
+    "default_item": "SMALL_FOOD",
+    "tags": [
+      "SmallChest",
+      "MAP_RAINBOW_ROUTE"
+    ],
+    "bit_index": 41,
+    "category": "MINOR_CHEST",
+    "location_id": 3960502
   }
 }
