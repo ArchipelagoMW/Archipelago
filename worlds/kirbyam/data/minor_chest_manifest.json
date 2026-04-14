@@ -1,0 +1,3799 @@
+{
+  "metadata": {
+    "rom": "external:Kirby & The Amazing Mirror (USA).gba",
+    "rom_sha256": "cfb194cd0cb373787094a962852e3e564fb2ecdb0609fe065afdd8de3f4e11f1",
+    "amr_items": "external:items.json",
+    "amr_items_sha256": "ba82ef182efcef45a3031720e9e1980d8bf4b92d0ede636de50973d70d01a368",
+    "rooms": "worlds/kirbyam/data/regions/rooms.json",
+    "rooms_sha256": "cd1df1420687f6fe261caace2a5419d6433ff82a87faea9adcbf34eb637c01a9",
+    "total_minor_chests": 65,
+    "total_unique_amr_room_slots": 55,
+    "ambiguous_entries": 65,
+    "identified_entries": 65,
+    "unresolved_entries": 0,
+    "modeled_non_collection_pool_entries": 14,
+    "room_props": {
+      "rom_offset": "0x009331AC",
+      "size": "0x9998",
+      "stride": "0x28",
+      "object_list2_idx_offset": "0x20",
+      "object_list_idx_offset": "0x22",
+      "doors_idx_offset": "0x24"
+    }
+  },
+  "entries": [
+    {
+      "entry_index": 0,
+      "amr_room_slot": 13,
+      "raw_address": "0x00886140",
+      "rom_offset": "0x00886140",
+      "amr_packed_item": 141833394323457,
+      "amr_packed_item_hex": "80ff29160001",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "0c0424bb6f42a3cddba969855226af5dff93869edbeacbf94e22b603dc63f626",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 41,
+      "native_chest_flag_index_hex": "0x29",
+      "native_treasure_id": 22,
+      "native_treasure_id_hex": "0x16",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x402",
+      "native_in_game_item": "Music Sheet #3",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 1,
+      "item_id": 169,
+      "item_id_hex": "0xA9",
+      "native_item_name": "Bonkers Nut Large (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        536,
+        536
+      ],
+      "candidate_doors_idx": [
+        13
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_38"
+      ]
+    },
+    {
+      "entry_index": 1,
+      "amr_room_slot": 17,
+      "raw_address": "0x008866A8",
+      "rom_offset": "0x008866A8",
+      "amr_packed_item": 141832755347458,
+      "amr_packed_item_hex": "80ff03000002",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "9a0282d1273bf35a6d4e746e61670e4ed4084ff8b6c19f72dee2d85652553e68",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 3,
+      "native_chest_flag_index_hex": "0x03",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 2,
+      "item_id": 128,
+      "item_id_hex": "0x80",
+      "native_item_name": "Small Chest (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 13,
+      "chest_index_hex": "0x0D",
+      "candidate_native_room_ids": [
+        543,
+        543
+      ],
+      "candidate_doors_idx": [
+        17
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_40"
+      ]
+    },
+    {
+      "entry_index": 2,
+      "amr_room_slot": 23,
+      "raw_address": "0x0088704C",
+      "rom_offset": "0x0088704C",
+      "amr_packed_item": 141832705015811,
+      "amr_packed_item_hex": "80ff00000003",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "643ee6705034c4891d9cfac72f66011905398bcfc1f6497942cfb25690a6072b",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 3,
+      "item_id": 128,
+      "item_id_hex": "0x80",
+      "native_item_name": "Small Chest (controller/object reference, not direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 76,
+      "chest_index_hex": "0x4C",
+      "candidate_native_room_ids": [
+        104,
+        104
+      ],
+      "candidate_doors_idx": [
+        23
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_04"
+      ]
+    },
+    {
+      "entry_index": 3,
+      "amr_room_slot": 25,
+      "raw_address": "0x00887420",
+      "rom_offset": "0x00887420",
+      "amr_packed_item": 141832705015812,
+      "amr_packed_item_hex": "80ff00000004",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "fe20343a2589de57fe817c4d4ae7f5c9d921721ef562102ad642679392a2ce84",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 4,
+      "item_id": 12,
+      "item_id_hex": "0x0C",
+      "native_item_name": "Cupie",
+      "item_id_is_direct_reward": true,
+      "chest_index": 1,
+      "chest_index_hex": "0x01",
+      "candidate_native_room_ids": [
+        107,
+        107
+      ],
+      "candidate_doors_idx": [
+        25
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_03"
+      ]
+    },
+    {
+      "entry_index": 4,
+      "amr_room_slot": 42,
+      "raw_address": "0x00889418",
+      "rom_offset": "0x00889418",
+      "amr_packed_item": 141832738570246,
+      "amr_packed_item_hex": "80ff02000006",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "1766c9d4ddc1235c994eb509815ff25fa090c4e09c4285c8430f2b21ced79d56",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 2,
+      "native_chest_flag_index_hex": "0x02",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x404",
+      "native_in_game_item": "Music Sheet #5",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 6,
+      "item_id": 13,
+      "item_id_hex": "0x0D",
+      "native_item_name": "Blockin (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 128,
+      "chest_index_hex": "0x80",
+      "candidate_native_room_ids": [
+        556,
+        556
+      ],
+      "candidate_doors_idx": [
+        42
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_11"
+      ]
+    },
+    {
+      "entry_index": 5,
+      "amr_room_slot": 48,
+      "raw_address": "0x0088A170",
+      "rom_offset": "0x0088A170",
+      "amr_packed_item": 141833091350535,
+      "amr_packed_item_hex": "80ff17070007",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "8d9e80479e375bf275e6941c2f125a0899a3937ce4bf10f3a8686912ba2ac85c",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 23,
+      "native_chest_flag_index_hex": "0x17",
+      "native_treasure_id": 7,
+      "native_treasure_id_hex": "0x07",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x103",
+      "native_in_game_item": "Spray Paint #3",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 7,
+      "item_id": 129,
+      "item_id_hex": "0x81",
+      "native_item_name": "Big Chest (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        119,
+        119
+      ],
+      "candidate_doors_idx": [
+        48
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_22"
+      ]
+    },
+    {
+      "entry_index": 6,
+      "amr_room_slot": 52,
+      "raw_address": "0x0088A93C",
+      "rom_offset": "0x0088A93C",
+      "amr_packed_item": 141832721793032,
+      "amr_packed_item_hex": "80ff01000008",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "da71c0a0e908451458b16558b6fe2da3d181343ddecfca295a48f5b93f15f310",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 1,
+      "native_chest_flag_index_hex": "0x01",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 8,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        172,
+        172
+      ],
+      "candidate_doors_idx": [
+        52
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_20"
+      ]
+    },
+    {
+      "entry_index": 7,
+      "amr_room_slot": 55,
+      "raw_address": "0x0088B078",
+      "rom_offset": "0x0088B078",
+      "amr_packed_item": 141832772124681,
+      "amr_packed_item_hex": "80ff04000009",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "b1c65d3cbc513627e8a9ba25ad23598bc8fcc87edb2e9c7c1ee87f70dbe3161d",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 9,
+      "item_id": 18,
+      "item_id_hex": "0x12",
+      "native_item_name": "Waddle Doo (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        175,
+        175
+      ],
+      "candidate_doors_idx": [
+        55
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_19"
+      ]
+    },
+    {
+      "entry_index": 8,
+      "amr_room_slot": 56,
+      "raw_address": "0x0088B254",
+      "rom_offset": "0x0088B254",
+      "amr_packed_item": 141832705015818,
+      "amr_packed_item_hex": "80ff0000000a",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "f178e1b0c2e9dd312898398784cd887d65319069e4c8188dcf12afe122899324",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 10,
+      "item_id": 129,
+      "item_id_hex": "0x81",
+      "native_item_name": "Big Chest (controller/object reference, not direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        176,
+        176
+      ],
+      "candidate_doors_idx": [
+        56
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_GOAL_2"
+      ]
+    },
+    {
+      "entry_index": 9,
+      "amr_room_slot": 60,
+      "raw_address": "0x0088BC90",
+      "rom_offset": "0x0088BC90",
+      "amr_packed_item": 141833512091659,
+      "amr_packed_item_hex": "80ff301b000b",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "93b3539ae678d33e0f6509ae481e39f855cf9ddbdbac1e6d2594cfcc7fb5f583",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 48,
+      "native_chest_flag_index_hex": "0x30",
+      "native_treasure_id": 27,
+      "native_treasure_id_hex": "0x1B",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x404",
+      "native_in_game_item": "Music Sheet #5",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 11,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 2,
+      "chest_index_hex": "0x02",
+      "candidate_native_room_ids": [
+        144,
+        144
+      ],
+      "candidate_doors_idx": [
+        60
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_16"
+      ]
+    },
+    {
+      "entry_index": 10,
+      "amr_room_slot": 63,
+      "raw_address": "0x0088C1B0",
+      "rom_offset": "0x0088C1B0",
+      "amr_packed_item": 141832739684364,
+      "amr_packed_item_hex": "80ff0211000c",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "0c603f43c111e3af053f32adee721d999d7d8c7f3373cfcce4fd363c45a76f44",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 2,
+      "native_chest_flag_index_hex": "0x02",
+      "native_treasure_id": 17,
+      "native_treasure_id_hex": "0x11",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x10D",
+      "native_in_game_item": "Spray Paint #13",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 12,
+      "item_id": 13,
+      "item_id_hex": "0x0D",
+      "native_item_name": "Blockin (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        147,
+        147
+      ],
+      "candidate_doors_idx": [
+        63
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_19"
+      ]
+    },
+    {
+      "entry_index": 11,
+      "amr_room_slot": 63,
+      "raw_address": "0x0088C2AC",
+      "rom_offset": "0x0088C2AC",
+      "amr_packed_item": 141833259778061,
+      "amr_packed_item_hex": "80ff2111000d",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "0a55f7d3f5c0c373c8c66efcfa52ec3be82cb5f685af7bd5d9228f086ba01a01",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 33,
+      "native_chest_flag_index_hex": "0x21",
+      "native_treasure_id": 17,
+      "native_treasure_id_hex": "0x11",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x10D",
+      "native_in_game_item": "Spray Paint #13",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 13,
+      "item_id": 13,
+      "item_id_hex": "0x0D",
+      "native_item_name": "Blockin (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        147,
+        147
+      ],
+      "candidate_doors_idx": [
+        63
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_19"
+      ]
+    },
+    {
+      "entry_index": 12,
+      "amr_room_slot": 64,
+      "raw_address": "0x0088C638",
+      "rom_offset": "0x0088C638",
+      "amr_packed_item": 141832705015822,
+      "amr_packed_item_hex": "80ff0000000e",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "6d96cce8a8862ac9a4d15f110f31385b77ad9be85f4839ade21a05376e3f9d99",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 14,
+      "item_id": 130,
+      "item_id_hex": "0x82",
+      "native_item_name": "Large Block Controller 0x82 (controller/object reference, not direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 13,
+      "chest_index_hex": "0x0D",
+      "candidate_native_room_ids": [
+        148,
+        148
+      ],
+      "candidate_doors_idx": [
+        64
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2"
+      ]
+    },
+    {
+      "entry_index": 13,
+      "amr_room_slot": 72,
+      "raw_address": "0x0088D348",
+      "rom_offset": "0x0088D348",
+      "amr_packed_item": 141833209249808,
+      "amr_packed_item_hex": "80ff1e0e0010",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "f9c7b3eaaa9606e36fc00322a9a3c978b1fea81903ceef9b5aeb67760b1a9099",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 30,
+      "native_chest_flag_index_hex": "0x1E",
+      "native_treasure_id": 14,
+      "native_treasure_id_hex": "0x0E",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x10A",
+      "native_in_game_item": "Spray Paint #10",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 16,
+      "item_id": 135,
+      "item_id_hex": "0x87",
+      "native_item_name": "Large Block State Marker 0x87 (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        708,
+        708
+      ],
+      "candidate_doors_idx": [
+        72
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_01"
+      ]
+    },
+    {
+      "entry_index": 14,
+      "amr_room_slot": 78,
+      "raw_address": "0x0088DEA8",
+      "rom_offset": "0x0088DEA8",
+      "amr_packed_item": 141832755347473,
+      "amr_packed_item_hex": "80ff03000011",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "85807ad3e044be8389c17fb604b8de650895616f9e987fc6257979f3195614ba",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 3,
+      "native_chest_flag_index_hex": "0x03",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 17,
+      "item_id": 13,
+      "item_id_hex": "0x0D",
+      "native_item_name": "Blockin (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        741,
+        741
+      ],
+      "candidate_doors_idx": [
+        78
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_14"
+      ]
+    },
+    {
+      "entry_index": 15,
+      "amr_room_slot": 85,
+      "raw_address": "0x0088E778",
+      "rom_offset": "0x0088E778",
+      "amr_packed_item": 141832705015827,
+      "amr_packed_item_hex": "80ff00000013",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "8a4e53893e4dff8bfc034def1776cb1e30d47e20b6a690104073f66f22a35063",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 19,
+      "item_id": 5,
+      "item_id_hex": "0x05",
+      "native_item_name": "Scarfy",
+      "item_id_is_direct_reward": true,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        200,
+        200
+      ],
+      "candidate_doors_idx": [
+        85
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_24"
+      ]
+    },
+    {
+      "entry_index": 16,
+      "amr_room_slot": 85,
+      "raw_address": "0x0088E8BC",
+      "rom_offset": "0x0088E8BC",
+      "amr_packed_item": 141832755347476,
+      "amr_packed_item_hex": "80ff03000014",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "151c19a1acd83b41d7718cc01b59e8268e82fb238af01a628e244bb30965a8d3",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 3,
+      "native_chest_flag_index_hex": "0x03",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 20,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 147,
+      "chest_index_hex": "0x93",
+      "candidate_native_room_ids": [
+        200,
+        200
+      ],
+      "candidate_doors_idx": [
+        85
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_24"
+      ]
+    },
+    {
+      "entry_index": 17,
+      "amr_room_slot": 89,
+      "raw_address": "0x0088F11C",
+      "rom_offset": "0x0088F11C",
+      "amr_packed_item": 141833461694485,
+      "amr_packed_item_hex": "80ff2d1a0015",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "5b7bfe044ae5f22e88817618ebb117b45cba16336ecaa6c6e5ded6fa42ee3196",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 45,
+      "native_chest_flag_index_hex": "0x2D",
+      "native_treasure_id": 26,
+      "native_treasure_id_hex": "0x1A",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x405",
+      "native_in_game_item": "Music Sheet #6",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 21,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 240,
+      "chest_index_hex": "0xF0",
+      "candidate_native_room_ids": [
+        205,
+        205
+      ],
+      "candidate_doors_idx": [
+        89
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_07"
+      ]
+    },
+    {
+      "entry_index": 18,
+      "amr_room_slot": 91,
+      "raw_address": "0x0088F560",
+      "rom_offset": "0x0088F560",
+      "amr_packed_item": 141832707112983,
+      "amr_packed_item_hex": "80ff00200017",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "2c814fe6949376fd2d72439ecbc41978c61609e03ca2290910f76938d2033435",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 32,
+      "native_treasure_id_hex": "0x20",
+      "native_collection_group": "major_chest",
+      "native_collection_code": "0x202",
+      "native_in_game_item": "Moonlight Mansion - Map",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 23,
+      "item_id": 85,
+      "item_id_hex": "0x55",
+      "native_item_name": "Empty Object Slot 0x55 (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 135,
+      "chest_index_hex": "0x87",
+      "candidate_native_room_ids": [
+        208,
+        208
+      ],
+      "candidate_doors_idx": [
+        91
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_03"
+      ]
+    },
+    {
+      "entry_index": 19,
+      "amr_room_slot": 91,
+      "raw_address": "0x0088F584",
+      "rom_offset": "0x0088F584",
+      "amr_packed_item": 141832774221848,
+      "amr_packed_item_hex": "80ff04200018",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "c76e44065420af0c68614939ae03bc9d2d9f9b0418363b9a5ae229b14356719f",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 32,
+      "native_treasure_id_hex": "0x20",
+      "native_collection_group": "major_chest",
+      "native_collection_code": "0x202",
+      "native_in_game_item": "Moonlight Mansion - Map",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 24,
+      "item_id": 11,
+      "item_id_hex": "0x0B",
+      "native_item_name": "Roly Poly (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 85,
+      "chest_index_hex": "0x55",
+      "candidate_native_room_ids": [
+        208,
+        208
+      ],
+      "candidate_doors_idx": [
+        91
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_03"
+      ]
+    },
+    {
+      "entry_index": 20,
+      "amr_room_slot": 92,
+      "raw_address": "0x0088F7A8",
+      "rom_offset": "0x0088F7A8",
+      "amr_packed_item": 141833108193305,
+      "amr_packed_item_hex": "80ff18080019",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "7d494435155c30040fbd58d5142a2c47056bb792bad945cb7a82eda7b37e4a2d",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 24,
+      "native_chest_flag_index_hex": "0x18",
+      "native_treasure_id": 8,
+      "native_treasure_id_hex": "0x08",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x104",
+      "native_in_game_item": "Spray Paint #4",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 25,
+      "item_id": 4,
+      "item_id_hex": "0x04",
+      "native_item_name": "Squishy (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        209,
+        209
+      ],
+      "candidate_doors_idx": [
+        92
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_CHEST"
+      ]
+    },
+    {
+      "entry_index": 21,
+      "amr_room_slot": 95,
+      "raw_address": "0x0088FF10",
+      "rom_offset": "0x0088FF10",
+      "amr_packed_item": 141832755347482,
+      "amr_packed_item_hex": "80ff0300001a",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "3fa965098cd8a072cfb41a42d6bb299ea26418e4fe8e255b391324a3f1d87908",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 3,
+      "native_chest_flag_index_hex": "0x03",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 26,
+      "item_id": 130,
+      "item_id_hex": "0x82",
+      "native_item_name": "Large Block Controller 0x82 (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        214,
+        214
+      ],
+      "candidate_doors_idx": [
+        95
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_GOAL_1"
+      ]
+    },
+    {
+      "entry_index": 22,
+      "amr_room_slot": 97,
+      "raw_address": "0x00890404",
+      "rom_offset": "0x00890404",
+      "amr_packed_item": 141833410904091,
+      "amr_packed_item_hex": "80ff2a13001b",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "77084caa91794026468a2690ef889fcdc48c5c2c2d07bb38beacacda4ef97669",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 42,
+      "native_chest_flag_index_hex": "0x2A",
+      "native_treasure_id": 19,
+      "native_treasure_id_hex": "0x13",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x406",
+      "native_in_game_item": "Music Sheet #7",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 27,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 128,
+      "chest_index_hex": "0x80",
+      "candidate_native_room_ids": [
+        226,
+        226
+      ],
+      "candidate_doors_idx": [
+        97
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_04"
+      ]
+    },
+    {
+      "entry_index": 23,
+      "amr_room_slot": 97,
+      "raw_address": "0x00890428",
+      "rom_offset": "0x00890428",
+      "amr_packed_item": 141832739815452,
+      "amr_packed_item_hex": "80ff0213001c",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "eab6391540d660b9588899ba3288248697776947b653dfec072ea3f1f23ac39b",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 2,
+      "native_chest_flag_index_hex": "0x02",
+      "native_treasure_id": 19,
+      "native_treasure_id_hex": "0x13",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x406",
+      "native_in_game_item": "Music Sheet #7",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 28,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 128,
+      "chest_index_hex": "0x80",
+      "candidate_native_room_ids": [
+        226,
+        226
+      ],
+      "candidate_doors_idx": [
+        97
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_04"
+      ]
+    },
+    {
+      "entry_index": 24,
+      "amr_room_slot": 97,
+      "raw_address": "0x0089044C",
+      "rom_offset": "0x0089044C",
+      "amr_packed_item": 141832706261021,
+      "amr_packed_item_hex": "80ff0013001d",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "64eed8c4bba4cc4816644fb7afb819d20b0c0f3ed02cbd40c83d2657d6fc69bb",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 19,
+      "native_treasure_id_hex": "0x13",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x406",
+      "native_in_game_item": "Music Sheet #7",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 29,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        226,
+        226
+      ],
+      "candidate_doors_idx": [
+        97
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_04"
+      ]
+    },
+    {
+      "entry_index": 25,
+      "amr_room_slot": 98,
+      "raw_address": "0x00890604",
+      "rom_offset": "0x00890604",
+      "amr_packed_item": 141832705015838,
+      "amr_packed_item_hex": "80ff0000001e",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "c4ed7678d9810b2debb93005266cdbe67f99c692242cc16d938c78af108a5491",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 30,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt",
+      "item_id_is_direct_reward": true,
+      "chest_index": 136,
+      "chest_index_hex": "0x88",
+      "candidate_native_room_ids": [
+        227,
+        227
+      ],
+      "candidate_doors_idx": [
+        98
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_06"
+      ]
+    },
+    {
+      "entry_index": 26,
+      "amr_room_slot": 98,
+      "raw_address": "0x00890670",
+      "rom_offset": "0x00890670",
+      "amr_packed_item": 141832755347487,
+      "amr_packed_item_hex": "80ff0300001f",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "970d42aafe61b285b26a1fdb6f3854b17a63bfe28e9119ae4580637d67389c40",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 3,
+      "native_chest_flag_index_hex": "0x03",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 31,
+      "item_id": 129,
+      "item_id_hex": "0x81",
+      "native_item_name": "Big Chest (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        227,
+        227
+      ],
+      "candidate_doors_idx": [
+        98
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_06"
+      ]
+    },
+    {
+      "entry_index": 27,
+      "amr_room_slot": 99,
+      "raw_address": "0x008907E0",
+      "rom_offset": "0x008907E0",
+      "amr_packed_item": 141833175564320,
+      "amr_packed_item_hex": "80ff1c0c0020",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "6738d726760faf6c2e768d0efe0755f8b595d43ddcc2f3371112314d32a9f124",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 28,
+      "native_chest_flag_index_hex": "0x1C",
+      "native_treasure_id": 12,
+      "native_treasure_id_hex": "0x0C",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x108",
+      "native_in_game_item": "Spray Paint #8",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 32,
+      "item_id": 70,
+      "item_id_hex": "0x46",
+      "native_item_name": "King Golem (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 2,
+      "chest_index_hex": "0x02",
+      "candidate_native_room_ids": [
+        228,
+        228
+      ],
+      "candidate_doors_idx": [
+        99
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_09"
+      ]
+    },
+    {
+      "entry_index": 28,
+      "amr_room_slot": 99,
+      "raw_address": "0x0089084C",
+      "rom_offset": "0x0089084C",
+      "amr_packed_item": 141832705802273,
+      "amr_packed_item_hex": "80ff000c0021",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "97186d71f0c3106f1bf7e202ef228c6f8e43b0be9816fd9b0177c22d86849e1b",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 12,
+      "native_treasure_id_hex": "0x0C",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x108",
+      "native_in_game_item": "Spray Paint #8",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 33,
+      "item_id": 39,
+      "item_id_hex": "0x27",
+      "native_item_name": "Minny (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        228,
+        228
+      ],
+      "candidate_doors_idx": [
+        99
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_09"
+      ]
+    },
+    {
+      "entry_index": 29,
+      "amr_room_slot": 99,
+      "raw_address": "0x00890870",
+      "rom_offset": "0x00890870",
+      "amr_packed_item": 141832772911138,
+      "amr_packed_item_hex": "80ff040c0022",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "4b7ea256e2dcd798ae13e424301f0be25a365f3bbb1643c69a8f0f9e5654439b",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 12,
+      "native_treasure_id_hex": "0x0C",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x108",
+      "native_in_game_item": "Spray Paint #8",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 34,
+      "item_id": 43,
+      "item_id_hex": "0x2B",
+      "native_item_name": "Metal Guardian (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        228,
+        228
+      ],
+      "candidate_doors_idx": [
+        99
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_09"
+      ]
+    },
+    {
+      "entry_index": 30,
+      "amr_room_slot": 102,
+      "raw_address": "0x00890FD0",
+      "rom_offset": "0x00890FD0",
+      "amr_packed_item": 141832772124707,
+      "amr_packed_item_hex": "80ff04000023",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "fc43a7e4fa3473982b37a7d4fef814c0fb7c7de7805a7e7432ed7e9c07d04c6b",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 35,
+      "item_id": 128,
+      "item_id_hex": "0x80",
+      "native_item_name": "Small Chest (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        231,
+        231
+      ],
+      "candidate_doors_idx": [
+        102
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_16"
+      ]
+    },
+    {
+      "entry_index": 31,
+      "amr_room_slot": 106,
+      "raw_address": "0x00891518",
+      "rom_offset": "0x00891518",
+      "amr_packed_item": 141832705015844,
+      "amr_packed_item_hex": "80ff00000024",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "5ac81578ed00d24cafe574a140dc5ae9404bfce16c50614500f5bf057d4e7a2a",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 36,
+      "item_id": 13,
+      "item_id_hex": "0x0D",
+      "native_item_name": "Blockin",
+      "item_id_is_direct_reward": true,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        215,
+        215
+      ],
+      "candidate_doors_idx": [
+        106
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_17"
+      ]
+    },
+    {
+      "entry_index": 32,
+      "amr_room_slot": 110,
+      "raw_address": "0x00891C74",
+      "rom_offset": "0x00891C74",
+      "amr_packed_item": 141833040822309,
+      "amr_packed_item_hex": "80ff14040025",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "0cbd6054e34bc666944ab2d9510875602d90645ad25af3566cff63859c5dbf93",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 20,
+      "native_chest_flag_index_hex": "0x14",
+      "native_treasure_id": 4,
+      "native_treasure_id_hex": "0x04",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x100",
+      "native_in_game_item": "Spray Paint Hub",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 37,
+      "item_id": 6,
+      "item_id_hex": "0x06",
+      "native_item_name": "Gordo (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        219,
+        219
+      ],
+      "candidate_doors_idx": [
+        110
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_BOSS"
+      ]
+    },
+    {
+      "entry_index": 33,
+      "amr_room_slot": 113,
+      "raw_address": "0x00892344",
+      "rom_offset": "0x00892344",
+      "amr_packed_item": 141832738570278,
+      "amr_packed_item_hex": "80ff02000026",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "b5d75a4895db25bbec14a0ece3319d53c84a90df413346c2095f586516674ba1",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 2,
+      "native_chest_flag_index_hex": "0x02",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x404",
+      "native_in_game_item": "Music Sheet #5",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 38,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 36,
+      "chest_index_hex": "0x24",
+      "candidate_native_room_ids": [
+        223,
+        223
+      ],
+      "candidate_doors_idx": [
+        113
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_21"
+      ]
+    },
+    {
+      "entry_index": 34,
+      "amr_room_slot": 131,
+      "raw_address": "0x00894930",
+      "rom_offset": "0x00894930",
+      "amr_packed_item": 141832772124712,
+      "amr_packed_item_hex": "80ff04000028",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "ced6cd07cb374aca5666598a6f167585dbabb6ed575bc3ef5665d2a586154377",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 40,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 9,
+      "chest_index_hex": "0x09",
+      "candidate_native_room_ids": [
+        315,
+        315
+      ],
+      "candidate_doors_idx": [
+        131
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_12"
+      ]
+    },
+    {
+      "entry_index": 35,
+      "amr_room_slot": 134,
+      "raw_address": "0x00894F94",
+      "rom_offset": "0x00894F94",
+      "amr_packed_item": 141832705015849,
+      "amr_packed_item_hex": "80ff00000029",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "949eaaa510beaa700e18f81fd5094f48937732185d03cf82fac9d8edd6f01779",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 41,
+      "item_id": 255,
+      "item_id_hex": "0xFF",
+      "native_item_name": "No Direct Item (0xFF) (controller/object reference, not direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        318,
+        318
+      ],
+      "candidate_doors_idx": [
+        134
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP"
+      ]
+    },
+    {
+      "entry_index": 36,
+      "amr_room_slot": 135,
+      "raw_address": "0x008950BC",
+      "rom_offset": "0x008950BC",
+      "amr_packed_item": 141832705015850,
+      "amr_packed_item_hex": "80ff0000002a",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "36cd2e46c628a5b59dec1b5ba96fef50059d25e0a90f6c017a013dda403d01b9",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 42,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        321,
+        321
+      ],
+      "candidate_doors_idx": [
+        135
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_05"
+      ]
+    },
+    {
+      "entry_index": 37,
+      "amr_room_slot": 139,
+      "raw_address": "0x00895648",
+      "rom_offset": "0x00895648",
+      "amr_packed_item": 141833242935339,
+      "amr_packed_item_hex": "80ff2010002b",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "1ae3dc1b927003c3477822f368b9d51ba814720a75084c85cb9d8cdf8c53dece",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 32,
+      "native_chest_flag_index_hex": "0x20",
+      "native_treasure_id": 16,
+      "native_treasure_id_hex": "0x10",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x10C",
+      "native_in_game_item": "Spray Paint #12",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 43,
+      "item_id": 255,
+      "item_id_hex": "0xFF",
+      "native_item_name": "No Direct Item (0xFF) (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        325,
+        325
+      ],
+      "candidate_doors_idx": [
+        139
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_16"
+      ]
+    },
+    {
+      "entry_index": 38,
+      "amr_room_slot": 143,
+      "raw_address": "0x00895D3C",
+      "rom_offset": "0x00895D3C",
+      "amr_packed_item": 141832705015852,
+      "amr_packed_item_hex": "80ff0000002c",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "319a0447bd2f556e8db6eb9e5b2e2980b53d9ebda0a09a22c182f5c7b8b1dc29",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 44,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        401,
+        401
+      ],
+      "candidate_doors_idx": [
+        143
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_06"
+      ]
+    },
+    {
+      "entry_index": 39,
+      "amr_room_slot": 144,
+      "raw_address": "0x00896038",
+      "rom_offset": "0x00896038",
+      "amr_packed_item": 141833125036077,
+      "amr_packed_item_hex": "80ff1909002d",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "7ccf2941d54a857ac90877a4d01f0053f7881b279a2aa1217d12ccfce825875e",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 25,
+      "native_chest_flag_index_hex": "0x19",
+      "native_treasure_id": 9,
+      "native_treasure_id_hex": "0x09",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x105",
+      "native_in_game_item": "Spray Paint #5",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 45,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 11,
+      "chest_index_hex": "0x0B",
+      "candidate_native_room_ids": [
+        402,
+        402
+      ],
+      "candidate_doors_idx": [
+        144
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_12"
+      ]
+    },
+    {
+      "entry_index": 40,
+      "amr_room_slot": 158,
+      "raw_address": "0x00897A90",
+      "rom_offset": "0x00897A90",
+      "amr_packed_item": 141832788901936,
+      "amr_packed_item_hex": "80ff05000030",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "47306a7dc85c35048477306d0fc9e2e38b7692d31c9c83c78201ab2be3c37477",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 5,
+      "native_chest_flag_index_hex": "0x05",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x402",
+      "native_in_game_item": "Music Sheet #3",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 48,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 17,
+      "chest_index_hex": "0x11",
+      "candidate_native_room_ids": [
+        417,
+        417
+      ],
+      "candidate_doors_idx": [
+        158
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_BOSS"
+      ]
+    },
+    {
+      "entry_index": 41,
+      "amr_room_slot": 164,
+      "raw_address": "0x00898850",
+      "rom_offset": "0x00898850",
+      "amr_packed_item": 141833494724657,
+      "amr_packed_item_hex": "80ff2f120031",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "451c69c1fa620069c2fef26a172af84af71a93049a89471ae1ffa80767793f9f",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 47,
+      "native_chest_flag_index_hex": "0x2F",
+      "native_treasure_id": 18,
+      "native_treasure_id_hex": "0x12",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x10E",
+      "native_in_game_item": "Spray Paint #14",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 49,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        423,
+        423
+      ],
+      "candidate_doors_idx": [
+        164
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_17"
+      ]
+    },
+    {
+      "entry_index": 42,
+      "amr_room_slot": 165,
+      "raw_address": "0x00898904",
+      "rom_offset": "0x00898904",
+      "amr_packed_item": 141832738570290,
+      "amr_packed_item_hex": "80ff02000032",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "9d7e39f322b3f08bf679a66e8178c6e4fc800a19b99d30765eedc6b918f37bc7",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 2,
+      "native_chest_flag_index_hex": "0x02",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x404",
+      "native_in_game_item": "Music Sheet #5",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 50,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        424,
+        424
+      ],
+      "candidate_doors_idx": [
+        165
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_16"
+      ]
+    },
+    {
+      "entry_index": 43,
+      "amr_room_slot": 167,
+      "raw_address": "0x00898C44",
+      "rom_offset": "0x00898C44",
+      "amr_packed_item": 141833074507828,
+      "amr_packed_item_hex": "80ff16060034",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "39c0cb901e4c5bc2699db669b19b69f24077678acb1291046fba16ada34b0a4b",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 22,
+      "native_chest_flag_index_hex": "0x16",
+      "native_treasure_id": 6,
+      "native_treasure_id_hex": "0x06",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x102",
+      "native_in_game_item": "Spray Paint #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 52,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        426,
+        426
+      ],
+      "candidate_doors_idx": [
+        167
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_3"
+      ]
+    },
+    {
+      "entry_index": 44,
+      "amr_room_slot": 172,
+      "raw_address": "0x008992AC",
+      "rom_offset": "0x008992AC",
+      "amr_packed_item": 141832705015861,
+      "amr_packed_item_hex": "80ff00000035",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "7b97f060d80d51a10e21d4c5be0056ebb83ef848f353208c6368f9922a1eb4ba",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 53,
+      "item_id": 42,
+      "item_id_hex": "0x2A",
+      "native_item_name": "Giant Rocky",
+      "item_id_is_direct_reward": true,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        509,
+        509
+      ],
+      "candidate_doors_idx": [
+        172
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_10"
+      ]
+    },
+    {
+      "entry_index": 45,
+      "amr_room_slot": 174,
+      "raw_address": "0x00899610",
+      "rom_offset": "0x00899610",
+      "amr_packed_item": 141833427812406,
+      "amr_packed_item_hex": "80ff2b150036",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "b1eef22572a2ad16f68e14266a4f2dab8d779f5acb64cb40030875188ac5f932",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 43,
+      "native_chest_flag_index_hex": "0x2B",
+      "native_treasure_id": 21,
+      "native_treasure_id_hex": "0x15",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x403",
+      "native_in_game_item": "Music Sheet #4",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 54,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 13,
+      "chest_index_hex": "0x0D",
+      "candidate_native_room_ids": [
+        516,
+        516
+      ],
+      "candidate_doors_idx": [
+        174
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_BOSS"
+      ]
+    },
+    {
+      "entry_index": 46,
+      "amr_room_slot": 176,
+      "raw_address": "0x00899880",
+      "rom_offset": "0x00899880",
+      "amr_packed_item": 141833528672311,
+      "amr_packed_item_hex": "80ff31180037",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "04781ce22520067940a1682281c4992a9ca5de83420e339535bb47b1c6d61807",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 49,
+      "native_chest_flag_index_hex": "0x31",
+      "native_treasure_id": 24,
+      "native_treasure_id_hex": "0x18",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x409",
+      "native_in_game_item": "Music Sheet #10",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 55,
+      "item_id": 68,
+      "item_id_hex": "0x44",
+      "native_item_name": "Empty Object Slot 0x44 (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 1,
+      "chest_index_hex": "0x01",
+      "candidate_native_room_ids": [
+        501,
+        501
+      ],
+      "candidate_doors_idx": [
+        176
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_08"
+      ]
+    },
+    {
+      "entry_index": 47,
+      "amr_room_slot": 180,
+      "raw_address": "0x0089A194",
+      "rom_offset": "0x0089A194",
+      "amr_packed_item": 141832705015864,
+      "amr_packed_item_hex": "80ff00000038",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "243c20bf1b7723c42cc76b801ccd009bff304fd28d10e1564ab34e114381b794",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 56,
+      "item_id": 105,
+      "item_id_hex": "0x69",
+      "native_item_name": "Goal Game Bonus",
+      "item_id_is_direct_reward": true,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        514,
+        514
+      ],
+      "candidate_doors_idx": [
+        180
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_07"
+      ]
+    },
+    {
+      "entry_index": 48,
+      "amr_room_slot": 181,
+      "raw_address": "0x0089A250",
+      "rom_offset": "0x0089A250",
+      "amr_packed_item": 141833226092601,
+      "amr_packed_item_hex": "80ff1f0f0039",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "20bcd3ff1a9523e8e13e2057028c213d6488018f47bd3cb2c35160ac634f40ba",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 31,
+      "native_chest_flag_index_hex": "0x1F",
+      "native_treasure_id": 15,
+      "native_treasure_id_hex": "0x0F",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x10B",
+      "native_in_game_item": "Spray Paint #11",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 57,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        515,
+        515
+      ],
+      "candidate_doors_idx": [
+        181
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_15"
+      ]
+    },
+    {
+      "entry_index": 49,
+      "amr_room_slot": 183,
+      "raw_address": "0x0089A6B8",
+      "rom_offset": "0x0089A6B8",
+      "amr_packed_item": 141833158721594,
+      "amr_packed_item_hex": "80ff1b0b003a",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "0ddd5b780fa94cd07ea6e9e25c87e8cfe61445c698ba3afef6e03111b486a339",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 27,
+      "native_chest_flag_index_hex": "0x1B",
+      "native_treasure_id": 11,
+      "native_treasure_id_hex": "0x0B",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x107",
+      "native_in_game_item": "Spray Paint #7",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 58,
+      "item_id": 18,
+      "item_id_hex": "0x12",
+      "native_item_name": "Waddle Doo (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        523,
+        523
+      ],
+      "candidate_doors_idx": [
+        183
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_01"
+      ]
+    },
+    {
+      "entry_index": 50,
+      "amr_room_slot": 186,
+      "raw_address": "0x0089B0A0",
+      "rom_offset": "0x0089B0A0",
+      "amr_packed_item": 141832757772348,
+      "amr_packed_item_hex": "80ff0325003c",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "006ab52218f0fc625b3773d7d30d88620873de66d58a6e4f61c9c55f0d7b258a",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 3,
+      "native_chest_flag_index_hex": "0x03",
+      "native_treasure_id": 37,
+      "native_treasure_id_hex": "0x25",
+      "native_collection_group": "major_chest",
+      "native_collection_code": "0x205",
+      "native_in_game_item": "Carrot Castle - Map",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 60,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 3,
+      "chest_index_hex": "0x03",
+      "candidate_native_room_ids": [
+        530,
+        530
+      ],
+      "candidate_doors_idx": [
+        186
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_02"
+      ]
+    },
+    {
+      "entry_index": 51,
+      "amr_room_slot": 193,
+      "raw_address": "0x0089BF44",
+      "rom_offset": "0x0089BF44",
+      "amr_packed_item": 141833141878845,
+      "amr_packed_item_hex": "80ff1a0a003d",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "4202f1886cf3936e9d4b22944edd824e507b0a9658749053b975fd5fa97d481c",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 26,
+      "native_chest_flag_index_hex": "0x1A",
+      "native_treasure_id": 10,
+      "native_treasure_id_hex": "0x0A",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x106",
+      "native_in_game_item": "Spray Paint #6",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 61,
+      "item_id": 131,
+      "item_id_hex": "0x83",
+      "native_item_name": "Respawn Point Marker (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        133,
+        133
+      ],
+      "candidate_doors_idx": [
+        193
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_05"
+      ]
+    },
+    {
+      "entry_index": 52,
+      "amr_room_slot": 196,
+      "raw_address": "0x0089C5F0",
+      "rom_offset": "0x0089C5F0",
+      "amr_packed_item": 141832705015870,
+      "amr_packed_item_hex": "80ff0000003e",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "e99a4fe71a4fa7cfb73bc5cb1343d0c9a4903f67a108436d0b99da0fb21169af",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 62,
+      "item_id": 132,
+      "item_id_hex": "0x84",
+      "native_item_name": "Warp Star",
+      "item_id_is_direct_reward": true,
+      "chest_index": 50,
+      "chest_index_hex": "0x32",
+      "candidate_native_room_ids": [
+        551,
+        551
+      ],
+      "candidate_doors_idx": [
+        196
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_15"
+      ]
+    },
+    {
+      "entry_index": 53,
+      "amr_room_slot": 200,
+      "raw_address": "0x0089D094",
+      "rom_offset": "0x0089D094",
+      "amr_packed_item": 141832788901952,
+      "amr_packed_item_hex": "80ff05000040",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "618c26a4cdabd46b24a9bd543f2f988e2067bec54bd42992ab03cb5292966884",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 5,
+      "native_chest_flag_index_hex": "0x05",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x402",
+      "native_in_game_item": "Music Sheet #3",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 64,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        815,
+        815
+      ],
+      "candidate_doors_idx": [
+        200
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_CHEST_1"
+      ]
+    },
+    {
+      "entry_index": 54,
+      "amr_room_slot": 202,
+      "raw_address": "0x0089D48C",
+      "rom_offset": "0x0089D48C",
+      "amr_packed_item": 141833545384002,
+      "amr_packed_item_hex": "80ff32170042",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "4d627f1183e2513114ec64e74faf1ff486c1b3f4ddc1e625eb5f98bb82fab4d1",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 50,
+      "native_chest_flag_index_hex": "0x32",
+      "native_treasure_id": 23,
+      "native_treasure_id_hex": "0x17",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 66,
+      "item_id": 255,
+      "item_id_hex": "0xFF",
+      "native_item_name": "No Direct Item (0xFF) (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 4,
+      "chest_index_hex": "0x04",
+      "candidate_native_room_ids": [
+        824,
+        824
+      ],
+      "candidate_doors_idx": [
+        202
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_13"
+      ]
+    },
+    {
+      "entry_index": 55,
+      "amr_room_slot": 203,
+      "raw_address": "0x0089D5FC",
+      "rom_offset": "0x0089D5FC",
+      "amr_packed_item": 141832772124739,
+      "amr_packed_item_hex": "80ff04000043",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "65a29856268358fc6d05666374ccbda98ca059f5dfc49b671c0123f34772ec2c",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 67,
+      "item_id": 82,
+      "item_id_hex": "0x52",
+      "native_item_name": "Dark Meta Knight W8 (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        825,
+        825
+      ],
+      "candidate_doors_idx": [
+        203
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_GOAL_2"
+      ]
+    },
+    {
+      "entry_index": 56,
+      "amr_room_slot": 228,
+      "raw_address": "0x008A0458",
+      "rom_offset": "0x008A0458",
+      "amr_packed_item": 141833192407110,
+      "amr_packed_item_hex": "80ff1d0d0046",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "518924953c8cc0680bc8e2b87a3c6114104bfa51a03396e9edff01aac14a76e5",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 29,
+      "native_chest_flag_index_hex": "0x1D",
+      "native_treasure_id": 13,
+      "native_treasure_id_hex": "0x0D",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x109",
+      "native_in_game_item": "Spray Paint #9",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 70,
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 7,
+      "chest_index_hex": "0x07",
+      "candidate_native_room_ids": [
+        621,
+        621
+      ],
+      "candidate_doors_idx": [
+        228
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_02"
+      ]
+    },
+    {
+      "entry_index": 57,
+      "amr_room_slot": 229,
+      "raw_address": "0x008A0534",
+      "rom_offset": "0x008A0534",
+      "amr_packed_item": 141832772124743,
+      "amr_packed_item_hex": "80ff04000047",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "6e97d91d6269dc85784195e84d1769c226bdfda80471f9c07a469e0e9272c2c4",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 4,
+      "native_chest_flag_index_hex": "0x04",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x400",
+      "native_in_game_item": "Music Sheet #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 71,
+      "item_id": 18,
+      "item_id_hex": "0x12",
+      "native_item_name": "Waddle Doo (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        622,
+        622
+      ],
+      "candidate_doors_idx": [
+        229
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_GOAL_1"
+      ]
+    },
+    {
+      "entry_index": 58,
+      "amr_room_slot": 230,
+      "raw_address": "0x008A057C",
+      "rom_offset": "0x008A057C",
+      "amr_packed_item": 141832705015880,
+      "amr_packed_item_hex": "80ff00000048",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "444dbbfbf093735a56cfb86e30ca61963fdb9b49a8fdc331eebb592e875ed355",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "unknown",
+      "native_collection_code": null,
+      "native_in_game_item": "Collection Treasure #00",
+      "native_reward_path": "non_collection_consumable_pool",
+      "can_yield_1up": true,
+      "possible_native_rewards": [
+        "Small Food",
+        "Energy Drink",
+        "Hunk of Meat",
+        "Max Tomato",
+        "Cell Phone Battery",
+        "1-Up",
+        "Invincibility Candy"
+      ],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 72,
+      "item_id": 18,
+      "item_id_hex": "0x12",
+      "native_item_name": "Waddle Doo",
+      "item_id_is_direct_reward": true,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        623,
+        623
+      ],
+      "candidate_doors_idx": [
+        230
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_07"
+      ]
+    },
+    {
+      "entry_index": 59,
+      "amr_room_slot": 244,
+      "raw_address": "0x008A23CC",
+      "rom_offset": "0x008A23CC",
+      "amr_packed_item": 141832790212683,
+      "amr_packed_item_hex": "80ff0514004b",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "886e5f507aa1d92320c74338b391a44a19485d5339fd25a92642796ce29f8659",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 5,
+      "native_chest_flag_index_hex": "0x05",
+      "native_treasure_id": 20,
+      "native_treasure_id_hex": "0x14",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 75,
+      "item_id": 255,
+      "item_id_hex": "0xFF",
+      "native_item_name": "No Direct Item (0xFF) (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 29,
+      "chest_index_hex": "0x1D",
+      "candidate_native_room_ids": [
+        526,
+        526
+      ],
+      "candidate_doors_idx": [
+        244
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_GOAL_2"
+      ]
+    },
+    {
+      "entry_index": 60,
+      "amr_room_slot": 244,
+      "raw_address": "0x008A24A4",
+      "rom_offset": "0x008A24A4",
+      "amr_packed_item": 141833444524108,
+      "amr_packed_item_hex": "80ff2c14004c",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "8593b9f11f0e6c813623943d8806a2ed2fef9af734787df67431dbb6ef859484",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 44,
+      "native_chest_flag_index_hex": "0x2C",
+      "native_treasure_id": 20,
+      "native_treasure_id_hex": "0x14",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x401",
+      "native_in_game_item": "Music Sheet #2",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 76,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 13,
+      "chest_index_hex": "0x0D",
+      "candidate_native_room_ids": [
+        526,
+        526
+      ],
+      "candidate_doors_idx": [
+        244
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_GOAL_2"
+      ]
+    },
+    {
+      "entry_index": 61,
+      "amr_room_slot": 257,
+      "raw_address": "0x008A3B94",
+      "rom_offset": "0x008A3B94",
+      "amr_packed_item": 141832788901966,
+      "amr_packed_item_hex": "80ff0500004e",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "bc66ce1d4323f776bda68e844128cb51af39ba435db58e66b7abe19a65c9a52d",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 5,
+      "native_chest_flag_index_hex": "0x05",
+      "native_treasure_id": 0,
+      "native_treasure_id_hex": "0x00",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x402",
+      "native_in_game_item": "Music Sheet #3",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 78,
+      "item_id": 24,
+      "item_id_hex": "0x18",
+      "native_item_name": "Sir Kibble (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 0,
+      "chest_index_hex": "0x00",
+      "candidate_native_room_ids": [
+        717,
+        717
+      ],
+      "candidate_doors_idx": [
+        257
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_17"
+      ]
+    },
+    {
+      "entry_index": 62,
+      "amr_room_slot": 259,
+      "raw_address": "0x008A3F68",
+      "rom_offset": "0x008A3F68",
+      "amr_packed_item": 141833057665104,
+      "amr_packed_item_hex": "80ff15050050",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "fcdf20570f39a563a3aef842232423743f96002b8b39de8cccae6ba8a1ddd61f",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 21,
+      "native_chest_flag_index_hex": "0x15",
+      "native_treasure_id": 5,
+      "native_treasure_id_hex": "0x05",
+      "native_collection_group": "spray_paint",
+      "native_collection_code": "0x101",
+      "native_in_game_item": "Spray Paint #1",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 80,
+      "item_id": 132,
+      "item_id_hex": "0x84",
+      "native_item_name": "Warp Star (script/object reference, not grantable chest reward)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 18,
+      "chest_index_hex": "0x12",
+      "candidate_native_room_ids": [
+        732,
+        732
+      ],
+      "candidate_doors_idx": [
+        259
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_CHEST_2"
+      ]
+    },
+    {
+      "entry_index": 63,
+      "amr_room_slot": 260,
+      "raw_address": "0x008A3FFC",
+      "rom_offset": "0x008A3FFC",
+      "amr_packed_item": 141833478406225,
+      "amr_packed_item_hex": "80ff2e190051",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "729f552b7d2009c7c8c764ee757dad45bfdc441d1cbc9ca9022c1f631f49b365",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 46,
+      "native_chest_flag_index_hex": "0x2E",
+      "native_treasure_id": 25,
+      "native_treasure_id_hex": "0x19",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x408",
+      "native_in_game_item": "Music Sheet #9",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 81,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        733,
+        733
+      ],
+      "candidate_doors_idx": [
+        260
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_16"
+      ]
+    },
+    {
+      "entry_index": 64,
+      "amr_room_slot": 260,
+      "raw_address": "0x008A4020",
+      "rom_offset": "0x008A4020",
+      "amr_packed_item": 141832706654290,
+      "amr_packed_item_hex": "80ff00190052",
+      "rom_slice_length": 18,
+      "rom_slice_sha256": "da66397e3e0bcf0b11bba0e5988384c1ede98e114115c6265a14bdf0d56ef6f3",
+      "entry_type": 128,
+      "entry_type_hex": "0x80",
+      "entry_marker": 255,
+      "entry_marker_hex": "0xFF",
+      "native_chest_flag_index": 0,
+      "native_chest_flag_index_hex": "0x00",
+      "native_treasure_id": 25,
+      "native_treasure_id_hex": "0x19",
+      "native_collection_group": "music_sheet",
+      "native_collection_code": "0x408",
+      "native_in_game_item": "Music Sheet #9",
+      "native_reward_path": "collection_reward",
+      "can_yield_1up": false,
+      "possible_native_rewards": [],
+      "entry_aux_hi": 0,
+      "entry_aux_lo": 82,
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee (sentinel/no direct chest grant)",
+      "item_id_is_direct_reward": false,
+      "chest_index": 255,
+      "chest_index_hex": "0xFF",
+      "candidate_native_room_ids": [
+        733,
+        733
+      ],
+      "candidate_doors_idx": [
+        260
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_16"
+      ]
+    }
+  ],
+  "item_summary": [
+    {
+      "item_id": 0,
+      "item_id_hex": "0x00",
+      "native_item_name": "Waddle Dee",
+      "count": 17
+    },
+    {
+      "item_id": 1,
+      "item_id_hex": "0x01",
+      "native_item_name": "Bronto Burt",
+      "count": 8
+    },
+    {
+      "item_id": 4,
+      "item_id_hex": "0x04",
+      "native_item_name": "Squishy",
+      "count": 1
+    },
+    {
+      "item_id": 5,
+      "item_id_hex": "0x05",
+      "native_item_name": "Scarfy",
+      "count": 1
+    },
+    {
+      "item_id": 6,
+      "item_id_hex": "0x06",
+      "native_item_name": "Gordo",
+      "count": 1
+    },
+    {
+      "item_id": 11,
+      "item_id_hex": "0x0B",
+      "native_item_name": "Roly Poly",
+      "count": 1
+    },
+    {
+      "item_id": 12,
+      "item_id_hex": "0x0C",
+      "native_item_name": "Cupie",
+      "count": 1
+    },
+    {
+      "item_id": 13,
+      "item_id_hex": "0x0D",
+      "native_item_name": "Blockin",
+      "count": 5
+    },
+    {
+      "item_id": 18,
+      "item_id_hex": "0x12",
+      "native_item_name": "Waddle Doo",
+      "count": 4
+    },
+    {
+      "item_id": 24,
+      "item_id_hex": "0x18",
+      "native_item_name": "Sir Kibble",
+      "count": 1
+    },
+    {
+      "item_id": 39,
+      "item_id_hex": "0x27",
+      "native_item_name": "Minny",
+      "count": 1
+    },
+    {
+      "item_id": 42,
+      "item_id_hex": "0x2A",
+      "native_item_name": "Giant Rocky",
+      "count": 1
+    },
+    {
+      "item_id": 43,
+      "item_id_hex": "0x2B",
+      "native_item_name": "Metal Guardian",
+      "count": 1
+    },
+    {
+      "item_id": 68,
+      "item_id_hex": "0x44",
+      "native_item_name": "Empty Object Slot 0x44",
+      "count": 1
+    },
+    {
+      "item_id": 70,
+      "item_id_hex": "0x46",
+      "native_item_name": "King Golem",
+      "count": 1
+    },
+    {
+      "item_id": 82,
+      "item_id_hex": "0x52",
+      "native_item_name": "Dark Meta Knight W8",
+      "count": 1
+    },
+    {
+      "item_id": 85,
+      "item_id_hex": "0x55",
+      "native_item_name": "Empty Object Slot 0x55",
+      "count": 1
+    },
+    {
+      "item_id": 105,
+      "item_id_hex": "0x69",
+      "native_item_name": "Goal Game Bonus",
+      "count": 1
+    },
+    {
+      "item_id": 128,
+      "item_id_hex": "0x80",
+      "native_item_name": "Small Chest",
+      "count": 3
+    },
+    {
+      "item_id": 129,
+      "item_id_hex": "0x81",
+      "native_item_name": "Big Chest",
+      "count": 3
+    },
+    {
+      "item_id": 130,
+      "item_id_hex": "0x82",
+      "native_item_name": "Large Block Controller 0x82",
+      "count": 2
+    },
+    {
+      "item_id": 131,
+      "item_id_hex": "0x83",
+      "native_item_name": "Respawn Point Marker",
+      "count": 1
+    },
+    {
+      "item_id": 132,
+      "item_id_hex": "0x84",
+      "native_item_name": "Warp Star",
+      "count": 2
+    },
+    {
+      "item_id": 135,
+      "item_id_hex": "0x87",
+      "native_item_name": "Large Block State Marker 0x87",
+      "count": 1
+    },
+    {
+      "item_id": 169,
+      "item_id_hex": "0xA9",
+      "native_item_name": "Bonkers Nut Large",
+      "count": 1
+    },
+    {
+      "item_id": 255,
+      "item_id_hex": "0xFF",
+      "native_item_name": "No Direct Item (0xFF)",
+      "count": 4
+    }
+  ],
+  "unresolved_summary": [],
+  "slot_resolution_summary": [
+    {
+      "amr_room_slot": 13,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        536,
+        536
+      ],
+      "candidate_doors_idx": [
+        13
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_38"
+      ]
+    },
+    {
+      "amr_room_slot": 17,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        543,
+        543
+      ],
+      "candidate_doors_idx": [
+        17
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_40"
+      ]
+    },
+    {
+      "amr_room_slot": 23,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        104,
+        104
+      ],
+      "candidate_doors_idx": [
+        23
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_04"
+      ]
+    },
+    {
+      "amr_room_slot": 25,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        107,
+        107
+      ],
+      "candidate_doors_idx": [
+        25
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_03"
+      ]
+    },
+    {
+      "amr_room_slot": 42,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        556,
+        556
+      ],
+      "candidate_doors_idx": [
+        42
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_11"
+      ]
+    },
+    {
+      "amr_room_slot": 48,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        119,
+        119
+      ],
+      "candidate_doors_idx": [
+        48
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_22"
+      ]
+    },
+    {
+      "amr_room_slot": 52,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        172,
+        172
+      ],
+      "candidate_doors_idx": [
+        52
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_20"
+      ]
+    },
+    {
+      "amr_room_slot": 55,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        175,
+        175
+      ],
+      "candidate_doors_idx": [
+        55
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_19"
+      ]
+    },
+    {
+      "amr_room_slot": 56,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        176,
+        176
+      ],
+      "candidate_doors_idx": [
+        56
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RAINBOW_ROUTE/ROOM_1_GOAL_2"
+      ]
+    },
+    {
+      "amr_room_slot": 60,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        144,
+        144
+      ],
+      "candidate_doors_idx": [
+        60
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_16"
+      ]
+    },
+    {
+      "amr_room_slot": 63,
+      "chest_count": 2,
+      "candidate_native_room_ids": [
+        147,
+        147
+      ],
+      "candidate_doors_idx": [
+        63
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_19"
+      ]
+    },
+    {
+      "amr_room_slot": 64,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        148,
+        148
+      ],
+      "candidate_doors_idx": [
+        64
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_GOAL_2"
+      ]
+    },
+    {
+      "amr_room_slot": 72,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        708,
+        708
+      ],
+      "candidate_doors_idx": [
+        72
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_01"
+      ]
+    },
+    {
+      "amr_room_slot": 78,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        741,
+        741
+      ],
+      "candidate_doors_idx": [
+        78
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MOONLIGHT_MANSION/ROOM_2_14"
+      ]
+    },
+    {
+      "amr_room_slot": 85,
+      "chest_count": 2,
+      "candidate_native_room_ids": [
+        200,
+        200
+      ],
+      "candidate_doors_idx": [
+        85
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_24"
+      ]
+    },
+    {
+      "amr_room_slot": 89,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        205,
+        205
+      ],
+      "candidate_doors_idx": [
+        89
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_07"
+      ]
+    },
+    {
+      "amr_room_slot": 91,
+      "chest_count": 2,
+      "candidate_native_room_ids": [
+        208,
+        208
+      ],
+      "candidate_doors_idx": [
+        91
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_03"
+      ]
+    },
+    {
+      "amr_room_slot": 92,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        209,
+        209
+      ],
+      "candidate_doors_idx": [
+        92
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_CHEST"
+      ]
+    },
+    {
+      "amr_room_slot": 95,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        214,
+        214
+      ],
+      "candidate_doors_idx": [
+        95
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_GOAL_1"
+      ]
+    },
+    {
+      "amr_room_slot": 97,
+      "chest_count": 3,
+      "candidate_native_room_ids": [
+        226,
+        226
+      ],
+      "candidate_doors_idx": [
+        97
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_04"
+      ]
+    },
+    {
+      "amr_room_slot": 98,
+      "chest_count": 2,
+      "candidate_native_room_ids": [
+        227,
+        227
+      ],
+      "candidate_doors_idx": [
+        98
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_06"
+      ]
+    },
+    {
+      "amr_room_slot": 99,
+      "chest_count": 3,
+      "candidate_native_room_ids": [
+        228,
+        228
+      ],
+      "candidate_doors_idx": [
+        99
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_09"
+      ]
+    },
+    {
+      "amr_room_slot": 102,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        231,
+        231
+      ],
+      "candidate_doors_idx": [
+        102
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_16"
+      ]
+    },
+    {
+      "amr_room_slot": 106,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        215,
+        215
+      ],
+      "candidate_doors_idx": [
+        106
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_17"
+      ]
+    },
+    {
+      "amr_room_slot": 110,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        219,
+        219
+      ],
+      "candidate_doors_idx": [
+        110
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_BOSS"
+      ]
+    },
+    {
+      "amr_room_slot": 113,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        223,
+        223
+      ],
+      "candidate_doors_idx": [
+        113
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_PEPPERMINT_PALACE/ROOM_7_21"
+      ]
+    },
+    {
+      "amr_room_slot": 131,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        315,
+        315
+      ],
+      "candidate_doors_idx": [
+        131
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_12"
+      ]
+    },
+    {
+      "amr_room_slot": 134,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        318,
+        318
+      ],
+      "candidate_doors_idx": [
+        134
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP"
+      ]
+    },
+    {
+      "amr_room_slot": 135,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        321,
+        321
+      ],
+      "candidate_doors_idx": [
+        135
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_05"
+      ]
+    },
+    {
+      "amr_room_slot": 139,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        325,
+        325
+      ],
+      "candidate_doors_idx": [
+        139
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_MUSTARD_MOUNTAIN/ROOM_4_16"
+      ]
+    },
+    {
+      "amr_room_slot": 143,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        401,
+        401
+      ],
+      "candidate_doors_idx": [
+        143
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_06"
+      ]
+    },
+    {
+      "amr_room_slot": 144,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        402,
+        402
+      ],
+      "candidate_doors_idx": [
+        144
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_12"
+      ]
+    },
+    {
+      "amr_room_slot": 158,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        417,
+        417
+      ],
+      "candidate_doors_idx": [
+        158
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_BOSS"
+      ]
+    },
+    {
+      "amr_room_slot": 164,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        423,
+        423
+      ],
+      "candidate_doors_idx": [
+        164
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_17"
+      ]
+    },
+    {
+      "amr_room_slot": 165,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        424,
+        424
+      ],
+      "candidate_doors_idx": [
+        165
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_16"
+      ]
+    },
+    {
+      "amr_room_slot": 167,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        426,
+        426
+      ],
+      "candidate_doors_idx": [
+        167
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CANDY_CONSTELLATION/ROOM_9_CHEST_3"
+      ]
+    },
+    {
+      "amr_room_slot": 172,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        509,
+        509
+      ],
+      "candidate_doors_idx": [
+        172
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_10"
+      ]
+    },
+    {
+      "amr_room_slot": 174,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        516,
+        516
+      ],
+      "candidate_doors_idx": [
+        174
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_BOSS"
+      ]
+    },
+    {
+      "amr_room_slot": 176,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        501,
+        501
+      ],
+      "candidate_doors_idx": [
+        176
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_08"
+      ]
+    },
+    {
+      "amr_room_slot": 180,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        514,
+        514
+      ],
+      "candidate_doors_idx": [
+        180
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_07"
+      ]
+    },
+    {
+      "amr_room_slot": 181,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        515,
+        515
+      ],
+      "candidate_doors_idx": [
+        181
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_15"
+      ]
+    },
+    {
+      "amr_room_slot": 183,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        523,
+        523
+      ],
+      "candidate_doors_idx": [
+        183
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_01"
+      ]
+    },
+    {
+      "amr_room_slot": 186,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        530,
+        530
+      ],
+      "candidate_doors_idx": [
+        186
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CABBAGE_CAVERN/ROOM_3_02"
+      ]
+    },
+    {
+      "amr_room_slot": 193,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        133,
+        133
+      ],
+      "candidate_doors_idx": [
+        193
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_05"
+      ]
+    },
+    {
+      "amr_room_slot": 196,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        551,
+        551
+      ],
+      "candidate_doors_idx": [
+        196
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_15"
+      ]
+    },
+    {
+      "amr_room_slot": 200,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        815,
+        815
+      ],
+      "candidate_doors_idx": [
+        200
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_CHEST_1"
+      ]
+    },
+    {
+      "amr_room_slot": 202,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        824,
+        824
+      ],
+      "candidate_doors_idx": [
+        202
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_13"
+      ]
+    },
+    {
+      "amr_room_slot": 203,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        825,
+        825
+      ],
+      "candidate_doors_idx": [
+        203
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_OLIVE_OCEAN/ROOM_6_GOAL_2"
+      ]
+    },
+    {
+      "amr_room_slot": 228,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        621,
+        621
+      ],
+      "candidate_doors_idx": [
+        228
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_02"
+      ]
+    },
+    {
+      "amr_room_slot": 229,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        622,
+        622
+      ],
+      "candidate_doors_idx": [
+        229
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_GOAL_1"
+      ]
+    },
+    {
+      "amr_room_slot": 230,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        623,
+        623
+      ],
+      "candidate_doors_idx": [
+        230
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_07"
+      ]
+    },
+    {
+      "amr_room_slot": 244,
+      "chest_count": 2,
+      "candidate_native_room_ids": [
+        526,
+        526
+      ],
+      "candidate_doors_idx": [
+        244
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_RADISH_RUINS/ROOM_8_GOAL_2"
+      ]
+    },
+    {
+      "amr_room_slot": 257,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        717,
+        717
+      ],
+      "candidate_doors_idx": [
+        257
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_17"
+      ]
+    },
+    {
+      "amr_room_slot": 259,
+      "chest_count": 1,
+      "candidate_native_room_ids": [
+        732,
+        732
+      ],
+      "candidate_doors_idx": [
+        259
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_CHEST_2"
+      ]
+    },
+    {
+      "amr_room_slot": 260,
+      "chest_count": 2,
+      "candidate_native_room_ids": [
+        733,
+        733
+      ],
+      "candidate_doors_idx": [
+        260
+      ],
+      "candidate_ap_room_keys": [
+        "REGION_CARROT_CASTLE/ROOM_5_16"
+      ]
+    }
+  ]
+}
