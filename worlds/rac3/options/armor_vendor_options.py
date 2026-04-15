@@ -13,6 +13,9 @@ class ArmorVendors(Choice):
     Adamantite: Aquatos
     Aegis Mark V: Zeldrin Starport
     Infernox: Koros
+
+    Disabling this option will not make armor work like in the vanilla game.
+    Armor is determined by the number of progressive armor items you have.
     """
     display_name = RAC3OPTION.ARMOR_VENDOR
     option_disabled = 0
