@@ -85,7 +85,7 @@
           "offset": "0x00",
           "width": "u8[32]",
           "source": "Protocol reverse-engineering candidate",
-          "verification": "Integrated as observational probe only; rising-edge transitions are logged in client for live mapping"
+          "verification": "Integrated as a diagnostic probe; rising-edge transitions are logged in client, and only room-scoped observations in rooms that explicitly carry a boss-defeat location may stage a fallback resend when boss_defeat_flags stays clear"
         }
       ]
     },
