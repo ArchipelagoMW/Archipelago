@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.status import RAC3STATUS
@@ -9,7 +8,7 @@ from worlds.rac3.constants.status import RAC3STATUS
 class RAC3STATUSDATA:
     SLOT_ADDRESS: int = None
 
-    def __init__(self, slot: Optional[int] = None):
+    def __init__(self, slot: int | None = None):
         self.SLOT_ADDRESS = 4 * slot + RAC3STATUS.QUICK_SELECT
 
 

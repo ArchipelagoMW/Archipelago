@@ -13,4 +13,4 @@ class TrapWeight(ItemDict):
     min = 0
     max = 100
     valid_keys = trap_data.keys()
-    default = {name: 2 for name in trap_data.keys()}
+    default = dict.fromkeys(trap_data.keys(), 2)

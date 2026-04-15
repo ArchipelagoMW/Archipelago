@@ -14,4 +14,5 @@ class RAC3ITEMTAG:
     VIDCOMIC = "VidComic"
     WEAPON = "Weapon"
     WEAPON_UPGRADE = "Weapon Upgrade"
-    CLANK = "Clank pack"
+    CLANK = "Clank Packs"
+    CHEAT = "Cheat Codes"

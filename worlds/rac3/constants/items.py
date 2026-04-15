@@ -198,11 +198,11 @@ class RAC3ITEM:
     WRENCH_V7 = "OmniWrench V7"
     WRENCH_V8 = "OmniWrench V8"
     GRIND_BOOTS_2 = "Grind Boots 2"
-    MAGNAPLATE = "Magnaplate armor"
-    ADAMANTINE = "Adamantine armor"
-    AEGIS = "Aegis Mark V armor"
-    INFERNOX = "Infernox armor"
-    CLANK = "Clank pack"
+    MAGNAPLATE = "Magnaplate Armor"
+    ADAMANTINE = "Adamantine Armor"
+    AEGIS = "Aegis Mark V Armor"
+    INFERNOX = "Infernox Armor"
+    CLANK = "Clank Pack"
 
     PROGRESSIVE_SHOCK_BLASTER = "Progressive Shock Blaster"
     PROGRESSIVE_NITRO_LAUNCHER = "Progressive Nitro Launcher"
@@ -248,6 +248,8 @@ class RAC3ITEM:
     KOROS = "Infobot: Koros"
     COMMAND_CENTER = "Infobot: Command Center"
     MUSEUM = "Infobot: Insomniac Museum"
+
+    LIGHTSABER_WRENCH = "Lightsaber Wrench"
 
     TITANIUM_BOLT = "Titanium Bolt"
     WEAPON_XP = "Weapon Level-Up"

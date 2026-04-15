@@ -12,8 +12,8 @@ the emulator to make it more easily extensible, more portable, require less code
 performant.
 """
 import os
-import socket
 import struct
+import socket
 from enum import IntEnum
 from platform import system
 
@@ -62,6 +62,17 @@ class Pine:
         INT32 = 4,
         INT64 = 8,
 
+    class EmuStatus(IntEnum):
+        RUNNING = 0,
+        PAUSED = 1,
+        SHUTDOWN = 2,
+
+    class ConnectionError(Exception):
+        pass
+
+    class DuplicateConnectionError(Exception):
+        pass
+
     def __init__(self, slot: int = 28011):
         if not 0 < slot <= 65536:
             raise ValueError("Provided slot number is outside valid range")
@@ -70,14 +81,19 @@ class Pine:
         self._sock_state: bool = False
         # self._init_socket()
 
-    def _init_socket(self) -> None:
+    def _init_socket(self) -> bool:
         if system() == "Windows":
             socket_family = socket.AF_INET
             socket_name = ("127.0.0.1", self._slot)
         elif system() == "Linux":
             socket_family = socket.AF_UNIX
-            socket_name = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
-            socket_name += "/pcsx2.sock"
+            base_socket = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+            socket_file = "/pcsx2.sock"
+            # Flatpak Socket Path
+            socket_name = base_socket + "/.flatpak/net.pcsx2.PCSX2/xdg-run" + socket_file
+            # Use default XDG_RUNTIME_DIR or /tmp if Flatpak socket is not detected
+            if not os.access(socket_name, os.W_OK):
+                socket_name = base_socket + socket_file
         elif system() == "Darwin":
             socket_family = socket.AF_UNIX
             socket_name = os.environ.get("TMPDIR", "/tmp")
@@ -93,20 +109,33 @@ class Pine:
         except socket.error:
             self._sock.close()
             self._sock_state = False
-            return
+            return False
 
         self._sock_state = True
+        return True
 
     def connect(self) -> None:
-        if not self._sock_state:
-            self._init_socket()
+        if not self.is_connected():
+            if not self._init_socket():
+                raise Pine.ConnectionError()
+
+            if not self.is_connected():
+                raise Pine.DuplicateConnectionError()
 
     def disconnect(self) -> None:
         if self._sock_state:
             self._sock.close()
+            self._sock_state = False
 
     def is_connected(self) -> bool:
-        return self._sock_state
+        try:
+            _ = self.get_emu_status()
+        except socket.error:
+            self._sock_state = False
+            self._sock.close()
+            return False
+
+        return True
 
     def read_int8(self, address: int) -> int:
         request = Pine._create_request(Pine.IPCCommand.READ8, address, 9)
@@ -169,20 +198,17 @@ class Pine:
         bytes_written = 0
         while bytes_written < len(data):
             if len(data) - bytes_written >= 8:
-                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written,
-                                               9 + Pine.DataSize.INT64)
+                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written, 9 + Pine.DataSize.INT64)
                 request += data[bytes_written:bytes_written + 8]
                 self._send_request(request)
                 bytes_written += 8
             elif len(data) - bytes_written >= 4:
-                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written,
-                                               9 + Pine.DataSize.INT32)
+                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written, 9 + Pine.DataSize.INT32)
                 request += data[bytes_written:bytes_written + 4]
                 self._send_request(request)
                 bytes_written += 4
             elif len(data) - bytes_written >= 2:
-                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written,
-                                               9 + Pine.DataSize.INT16)
+                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written, 9 + Pine.DataSize.INT16)
                 request += data[bytes_written:bytes_written + 2]
                 self._send_request(request)
                 bytes_written += 2
@@ -196,10 +222,19 @@ class Pine:
         data = value.encode("ascii") + b'\x00'
         self.write_bytes(address, data)
 
+    def read_string(self, address: int, max_length: int) -> str:
+        data = self.read_bytes(address, max_length)
+        return data.split(b'\x00', 1)[0].decode("ascii")
+
     def get_game_id(self) -> str:
         request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.ID, 1)
         response = self._send_request(request)
         return response[9:-1].decode("ascii")
+
+    def get_emu_status(self) -> EmuStatus:
+        request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.STATUS, 1)
+        response = self._send_request(request)
+        return Pine.EmuStatus(Pine.from_bytes(response[-4:]))
 
     def _send_request(self, request: bytes) -> bytes:
         if not self._sock_state:

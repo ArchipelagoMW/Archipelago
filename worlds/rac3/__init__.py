@@ -18,7 +18,7 @@ components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client",
                             component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier(".aprac3"),
                             icon="uya_icon",
-                            description="Launch the Client for connecting to Ratchet & Clank 3 [PlayStation 2]",
+                            description="Launch the Client for connecting to Ratchet and Clank 3 [PlayStation 2]",
                             ))
 
 icon_paths["uya_icon"] = f"ap:{__name__}/images/uya_icon.png"

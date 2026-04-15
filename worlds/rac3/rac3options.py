@@ -1,17 +1,17 @@
 """This module contains the RAC3 Option class, containing all adjustable YAML options"""
 from dataclasses import dataclass
 
-from Options import Accessibility, OptionGroup, ProgressionBalancing, StartInventoryPool
+from Options import Accessibility, DeathLink, OptionGroup, ProgressionBalancing, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
 from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
+from worlds.rac3.options.armor_vendor_options import ArmorVendors
 from worlds.rac3.options.clank_options import ClankOptions
-from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
-from worlds.rac3.options.holostar_skip import HolostarSkip
-from worlds.rac3.options.intro_skip import IntroSkip
+from worlds.rac3.options.holostar_skip_options import HolostarSkip
+from worlds.rac3.options.intro_skip_options import IntroSkip
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
@@ -19,10 +19,12 @@ from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
+from worlds.rac3.options.scout_vendors import ScoutVendors
 from worlds.rac3.options.sewer_limitation_options import SewerLimitation
 from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
 from worlds.rac3.options.ship_skin_options import ShipSkin
+from worlds.rac3.options.ship_vendor_options import ShipVendors
 from worlds.rac3.options.ship_wings_options import ShipWings
 from worlds.rac3.options.skillpoints_options import SkillPoints
 from worlds.rac3.options.starting_weapons_options import StartingWeapons
@@ -47,7 +49,7 @@ def create_option_groups() -> list[OptionGroup]:
 @dataclass
 class RaC3Options(PerGameCommonOptions):
     """YAML Options for RAC3"""
-    deathlink: Deathlink
+    deathlink: DeathLink
     start_inventory_from_pool: StartInventoryPool
     starting_weapons: StartingWeapons
     bolt_and_xp_multiplier: BoltAndXPMultiplier
@@ -77,13 +79,16 @@ class RaC3Options(PerGameCommonOptions):
     intro_skip: IntroSkip
     holostar_skip: HolostarSkip
     clank_options: ClankOptions
+    ship_vendor: ShipVendors
+    armor_vendor: ArmorVendors
+    scout_vendors: ScoutVendors
 
 
 rac3_option_groups = [
     OptionGroup("Generic Options", [
         ProgressionBalancing,
         Accessibility,
-        Deathlink,
+        DeathLink,
     ]),
     OptionGroup("RAC3 Game Options", [
         IntroSkip,
@@ -102,6 +107,9 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Location Options", [
         WeaponVendors,
+        ArmorVendors,
+        ShipVendors,
+        ScoutVendors,
         SkillPoints,
         Trophies,
         TitaniumBolts,
@@ -155,4 +163,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.ONE_HP_CHALLENGE,
     RAC3OPTION.INTRO_SKIP,
     RAC3OPTION.CLANK_OPTIONS,
+    RAC3OPTION.SHIP_VENDOR,
+    RAC3OPTION.ARMOR_VENDOR,
+    RAC3OPTION.SCOUT_VENDORS,
 ]

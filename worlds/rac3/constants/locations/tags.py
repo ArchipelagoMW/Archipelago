@@ -16,3 +16,6 @@ class RAC3TAG:
     ONE_HP_UNSTABLE = "One HP Challenge Unstable"
     VR = "VR"
     NOT_IMPLEMENTED = "Not Implemented"
+    NGPLUS = "New Game Plus"
+    SHIP = "Ship"
+    ARMOR = "Armor"

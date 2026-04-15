@@ -1845,6 +1845,10 @@
           {
             "name": "107",
             "item_count": 1
+          },
+          {
+            "name": "401",
+            "item_count": 1
           }
         ]
       },
@@ -2108,6 +2112,170 @@
           },
           {
             "name": "177",
+            "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "8",
+        "map_locations": [
+          {
+            "map": "Starship Phoenix",
+            "x": 400,
+            "y": 490
+          }
+        ],
+        "sections": [
+          {
+            "name": "402",
+            "item_count": 1
+          },
+          {
+            "name": "403",
+            "item_count": 1
+          },
+          {
+            "name": "404",
+            "item_count": 1
+          },
+          {
+            "name": "405",
+            "item_count": 1
+          },
+          {
+            "name": "406",
+            "item_count": 1
+          },
+          {
+            "name": "407",
+            "item_count": 1
+          },
+          {
+            "name": "408",
+            "item_count": 1
+          },
+          {
+            "name": "409",
+            "item_count": 1
+          },
+          {
+            "name": "410",
+            "item_count": 1
+          },
+          {
+            "name": "411",
+            "item_count": 1
+          },
+          {
+            "name": "412",
+            "item_count": 1
+          },
+          {
+            "name": "413",
+            "item_count": 1
+          },
+          {
+            "name": "414",
+            "item_count": 1
+          },
+          {
+            "name": "415",
+            "item_count": 1
+          },
+          {
+            "name": "416",
+            "item_count": 1
+          },
+          {
+            "name": "417",
+            "item_count": 1
+          },
+          {
+            "name": "418",
+            "item_count": 1
+          },
+          {
+            "name": "419",
+            "item_count": 1
+          },
+          {
+            "name": "420",
+            "item_count": 1
+          },
+          {
+            "name": "421",
+            "item_count": 1
+          },
+          {
+            "name": "422",
+            "item_count": 1
+          },
+          {
+            "name": "423",
+            "item_count": 1
+          },
+          {
+            "name": "424",
+            "item_count": 1
+          },
+          {
+            "name": "425",
+            "item_count": 1
+          },
+          {
+            "name": "426",
+            "item_count": 1
+          },
+          {
+            "name": "427",
+            "item_count": 1
+          },
+          {
+            "name": "428",
+            "item_count": 1
+          },
+          {
+            "name": "429",
+            "item_count": 1
+          },
+          {
+            "name": "430",
+            "item_count": 1
+          },
+          {
+            "name": "431",
+            "item_count": 1
+          },
+          {
+            "name": "432",
+            "item_count": 1
+          },
+          {
+            "name": "433",
+            "item_count": 1
+          },
+          {
+            "name": "434",
+            "item_count": 1
+          },
+          {
+            "name": "435",
+            "item_count": 1
+          },
+          {
+            "name": "436",
+            "item_count": 1
+          },
+          {
+            "name": "437",
+            "item_count": 1
+          },
+          {
+            "name": "438",
+            "item_count": 1
+          },
+          {
+            "name": "439",
             "item_count": 1
           }
         ]

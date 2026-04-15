@@ -136,8 +136,8 @@ jobs:
           if (-Not (Test-Path Players)) { New-Item -ItemType Directory -Path Players }
 
           # Copy the RaC3 template YAML
-          $yamlSource = Join-Path $rootDir 'Players/Templates/Ratchet & Clank 3.yaml'
-          $yamlDest   = Join-Path $rootDir 'Players/Ratchet & Clank 3.yaml'
+          $yamlSource = Join-Path $rootDir 'Players/Templates/Ratchet and Clank 3.yaml'
+          $yamlDest   = Join-Path $rootDir 'Players/Ratchet and Clank 3.yaml'
           $yamlRoot   = Join-Path $rootDir 'rac3.yaml'
           if (-Not (Test-Path $yamlSource)) { Write-Error "Template YAML not found: $yamlSource" }
           Copy-Item -LiteralPath $yamlSource -Destination $yamlDest -Force
