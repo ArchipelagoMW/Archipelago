@@ -45,6 +45,7 @@ _LOCATION_CATEGORY_TO_GROUP_NAME = {
     LocationCategory.MAJOR_CHEST: "Major Chests",
     LocationCategory.HUB_SWITCH: "Hub Switches",
     LocationCategory.MINOR_CHEST: "Minor Chests",
+    LocationCategory.AREA_VISIT: "Area First Visits",
 }
 
 # Pre-create category groups and map/area groups so they are always present during build.

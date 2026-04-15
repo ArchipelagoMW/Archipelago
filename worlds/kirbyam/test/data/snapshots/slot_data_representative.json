@@ -73,6 +73,87 @@
   ],
   "goal": 0,
   "locations": {
+    "AREA_VISIT_1_RAINBOW_ROUTE": {
+      "category": "AREA_VISIT",
+      "label": "Rainbow Route - First Visit",
+      "location_id": 3960451,
+      "tags": [
+        "AreaVisit",
+        "MAP_RAINBOW_ROUTE"
+      ]
+    },
+    "AREA_VISIT_2_MOONLIGHT_MANSION": {
+      "category": "AREA_VISIT",
+      "label": "Moonlight Mansion - First Visit",
+      "location_id": 3960452,
+      "tags": [
+        "AreaVisit",
+        "MAP_MOONLIGHT_MANSION"
+      ]
+    },
+    "AREA_VISIT_3_CABBAGE_CAVERN": {
+      "category": "AREA_VISIT",
+      "label": "Cabbage Cavern - First Visit",
+      "location_id": 3960453,
+      "tags": [
+        "AreaVisit",
+        "MAP_CABBAGE_CAVERN"
+      ]
+    },
+    "AREA_VISIT_4_MUSTARD_MOUNTAIN": {
+      "category": "AREA_VISIT",
+      "label": "Mustard Mountain - First Visit",
+      "location_id": 3960454,
+      "tags": [
+        "AreaVisit",
+        "MAP_MUSTARD_MOUNTAIN"
+      ]
+    },
+    "AREA_VISIT_5_CARROT_CASTLE": {
+      "category": "AREA_VISIT",
+      "label": "Carrot Castle - First Visit",
+      "location_id": 3960455,
+      "tags": [
+        "AreaVisit",
+        "MAP_CARROT_CASTLE"
+      ]
+    },
+    "AREA_VISIT_6_OLIVE_OCEAN": {
+      "category": "AREA_VISIT",
+      "label": "Olive Ocean - First Visit",
+      "location_id": 3960456,
+      "tags": [
+        "AreaVisit",
+        "MAP_OLIVE_OCEAN"
+      ]
+    },
+    "AREA_VISIT_7_PEPPERMINT_PALACE": {
+      "category": "AREA_VISIT",
+      "label": "Peppermint Palace - First Visit",
+      "location_id": 3960457,
+      "tags": [
+        "AreaVisit",
+        "MAP_PEPPERMINT_PALACE"
+      ]
+    },
+    "AREA_VISIT_8_RADISH_RUINS": {
+      "category": "AREA_VISIT",
+      "label": "Radish Ruins - First Visit",
+      "location_id": 3960458,
+      "tags": [
+        "AreaVisit",
+        "MAP_RADISH_RUINS"
+      ]
+    },
+    "AREA_VISIT_9_CANDY_CONSTELLATION": {
+      "category": "AREA_VISIT",
+      "label": "Candy Constellation - First Visit",
+      "location_id": 3960459,
+      "tags": [
+        "AreaVisit",
+        "MAP_CANDY_CONSTELLATION"
+      ]
+    },
     "BOSS_DEFEAT_1": {
       "category": "BOSS_DEFEAT",
       "label": "Mustard Mountain - Boss Defeat",

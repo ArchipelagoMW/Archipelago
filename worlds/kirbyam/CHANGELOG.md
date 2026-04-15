@@ -19,6 +19,7 @@ Contract for `## Unreleased` and post-public `## v...` sections going forward:
   - Trap receive notifications are prefixed with "Received trap:" to distinguish them from regular items.
 - Added two new filler consumables with tiered healing: `Energy Drink` (HP +2) and `Hunk of Meat` (HP +3), alongside existing `Small Food` (HP +1).
 - Enabled the first concrete `MINOR_CHEST` AP checks (Rainbow Route 1-20, 1-22, 1-38).
+- Added area-first-visit checks for all nine gameplay areas so the first room entry in each area grants one AP location check (Issue #606).
 
 ### Improvements
 

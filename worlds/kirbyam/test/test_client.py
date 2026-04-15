@@ -1025,6 +1025,23 @@ def test_hub_switch_data_sanity():
     assert len(bits) == len(set(bits))
 
 
+def test_area_visit_data_sanity():
+    """Area-first-visit entries should have explicit unique IDs and area IDs 1..9."""
+    area_visits = [
+        loc for loc in data.locations.values()
+        if loc.category.name == "AREA_VISIT"
+    ]
+
+    assert len(area_visits) == 9
+
+    ids = [loc.location_id for loc in area_visits]
+    assert all(loc_id is not None for loc_id in ids)
+    assert len(ids) == len(set(ids))
+
+    bits = sorted(loc.bit_index for loc in area_visits if loc.bit_index is not None)
+    assert bits == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
 def test_client_initialization():
     """Test client state is properly initialized."""
     client = KirbyAmClient()
@@ -2974,6 +2991,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality, \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player, \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock) as mock_poll_hub_switch, \
+         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock) as mock_poll_area_visit, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe_boss, \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
@@ -2993,6 +3011,7 @@ async def test_game_watcher_reloads_state_after_transport_recovery(mock_bizhawk_
     mock_poll_vitality.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_sound_player.assert_awaited_once_with(mock_bizhawk_context)
     mock_poll_hub_switch.assert_awaited_once_with(mock_bizhawk_context)
+    mock_poll_area_visit.assert_awaited_once_with(mock_bizhawk_context)
     mock_probe_boss.assert_awaited_once_with(mock_bizhawk_context)
     mock_probe_unsafe.assert_awaited_once_with(mock_bizhawk_context)
     mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
@@ -3106,6 +3125,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
             patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock) as mock_poll_vitality_chests, \
             patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock) as mock_poll_sound_player_chests, \
                 patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock) as mock_poll_hub_switches, \
+                patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock) as mock_poll_area_visits, \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock) as mock_probe, \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock) as mock_probe_unsafe, \
          patch.object(client, '_deliver_items', new_callable=AsyncMock) as mock_deliver, \
@@ -3142,6 +3162,7 @@ async def test_game_watcher_reconnect_entry_resets_transient_state_once(mock_biz
         mock_poll_vitality_chests.assert_awaited_once()
         mock_poll_sound_player_chests.assert_awaited_once()
         mock_poll_hub_switches.assert_awaited_once()
+        mock_poll_area_visits.assert_awaited_once()
         mock_probe.assert_awaited_once()
         mock_probe_unsafe.assert_awaited_once()
         mock_deliver.assert_awaited_once_with(mock_bizhawk_context)
@@ -3170,6 +3191,7 @@ async def test_game_watcher_reconnect_entry_emits_file_only_session_ready_log(mo
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_room_sanity_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
@@ -3382,6 +3404,7 @@ async def test_game_watcher_emits_pause_then_resume_popups_on_transition(mock_bi
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \
@@ -3439,6 +3462,7 @@ async def test_game_watcher_emits_runtime_gate_logs_file_only(mock_bizhawk_conte
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_room_sanity_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
@@ -3486,6 +3510,7 @@ async def test_game_watcher_syncs_death_link_enabled_from_slot_data(mock_bizhawk
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \
@@ -3516,6 +3541,7 @@ async def test_game_watcher_death_link_sync_is_deduped_until_value_changes(mock_
          patch.object(client, '_poll_vitality_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_sound_player_chest_locations', new_callable=AsyncMock), \
          patch.object(client, '_poll_hub_switch_locations', new_callable=AsyncMock), \
+         patch.object(client, '_poll_area_visit_locations', new_callable=AsyncMock), \
          patch.object(client, '_probe_boss_defeat_candidates', new_callable=AsyncMock), \
          patch.object(client, '_probe_unsafe_delivery_candidates', new_callable=AsyncMock), \
          patch.object(client, '_deliver_items', new_callable=AsyncMock), \

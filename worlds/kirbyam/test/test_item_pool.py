@@ -390,6 +390,7 @@ def test_vanilla_shards_are_locked_to_boss_defeats() -> None:
     _minor_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MINOR_CHEST)
     _hub_switch_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.HUB_SWITCH)
     _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
+    _area_visit_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.AREA_VISIT)
     _expected_pool_size = (
         _major_chest_count
         + _vitality_chest_count
@@ -397,6 +398,7 @@ def test_vanilla_shards_are_locked_to_boss_defeats() -> None:
         + _minor_chest_count
         + _hub_switch_count
         + _room_sanity_count
+        + _area_visit_count
     )
     assert len(world.multiworld.itempool) == _expected_pool_size
     assert all("Mirror Shard" not in item.name for item in world.multiworld.itempool)
@@ -418,6 +420,7 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
     _minor_chest_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.MINOR_CHEST)
     _hub_switch_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.HUB_SWITCH)
     _room_sanity_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.ROOM_SANITY)
+    _area_visit_count = sum(1 for m in data.locations.values() if m.category == LocationCategory.AREA_VISIT)
     _shard_item_count = len(KirbyAmWorld._SHARD_ITEM_LABEL_ORDER)
     _open_non_goal_location_count = (
         _boss_defeat_count
@@ -427,6 +430,7 @@ def test_completely_random_pool_contains_all_shards_but_bosses_are_unlocked() ->
         + _minor_chest_count
         + _hub_switch_count
         + _room_sanity_count
+        + _area_visit_count
     )
     _expected_pool_size = _open_non_goal_location_count
     assert len(world.multiworld.itempool) == _expected_pool_size
