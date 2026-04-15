@@ -2229,6 +2229,10 @@ class KirbyAmClient(BizHawkClient):
         if not room_changed and not send_pending:
             return
 
+        if room_changed:
+            # Clear stale room context before any lookup that may fail.
+            self._last_room_region_key = ""
+
         # Resolve doorsIdx via gRoomProps[native_room_id].doorsIdx (ROM read).
         rom_doors_idx_addr = _ROOM_PROPS_ROM_BASE + native_room_id * _ROOM_PROPS_STRIDE + _ROOM_PROPS_DOORS_IDX_OFFSET
         try:

@@ -795,6 +795,8 @@ async def test_poll_room_entry_logging_reads_doors_idx_from_rom_lookup(mock_bizh
 async def test_poll_room_entry_logging_handles_rom_lookup_failure(mock_bizhawk_context):
     client = KirbyAmClient()
     client.initialize_client()
+    client._last_native_room_id = 0x0002
+    client._last_room_region_key = "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP"
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('CommonClient.logger') as mock_logger:
@@ -810,6 +812,25 @@ async def test_poll_room_entry_logging_handles_rom_lookup_failure(mock_bizhawk_c
         0x0003,
         extra={"NoStream": True},
     )
+    assert client._last_room_region_key == ""
+
+
+@pytest.mark.asyncio
+async def test_poll_room_entry_logging_clears_room_region_key_on_short_rom_read(mock_bizhawk_context):
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._last_native_room_id = 0x0002
+    client._last_room_region_key = "REGION_MUSTARD_MOUNTAIN/ROOM_4_WARP"
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read:
+        mock_read.side_effect = [
+            [(0x0008).to_bytes(2, 'little')],
+            [b'\x0b'],
+        ]
+
+        await client._poll_room_entry_logging(mock_bizhawk_context)
+
+    assert client._last_room_region_key == ""
 
 
 @pytest.mark.asyncio
