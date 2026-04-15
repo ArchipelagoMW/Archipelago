@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import ClassVar, Optional
+from typing import ClassVar
 
+from .base import FeatureBase
 from ...data.fish_data import FishItem
 from ...strings.fish_names import Fish
 
@@ -12,7 +13,7 @@ def to_location_name(fish: str) -> str:
     return location_prefix + fish
 
 
-def extract_fish_from_location_name(location_name: str) -> Optional[str]:
+def extract_fish_from_location_name(location_name: str) -> str | None:
     if not location_name.startswith(location_prefix):
         return None
 
@@ -20,7 +21,7 @@ def extract_fish_from_location_name(location_name: str) -> Optional[str]:
 
 
 @dataclass(frozen=True)
-class FishsanityFeature(ABC):
+class FishsanityFeature(FeatureBase, ABC):
     is_enabled: ClassVar[bool]
 
     randomization_ratio: float = 1

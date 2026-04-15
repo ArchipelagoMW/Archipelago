@@ -17,8 +17,10 @@ class Entity:
 
 
 class InteractableMixin:
+    auto_move_attempt_passing_through = False
+
     @abstractmethod
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         pass
 
 
@@ -89,15 +91,16 @@ class Chest(Entity, InteractableMixin, LocationMixin):
         self.is_open = True
         self.update_solidity()
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.has_given_content:
-            return
+            return False
 
         if self.is_open:
             self.give_content(player)
-            return
+            return True
 
         self.open()
+        return True
 
     def content_success(self) -> None:
         self.update_solidity()
@@ -135,46 +138,58 @@ class Door(Entity):
 
 
 class KeyDoor(Door, InteractableMixin):
+    auto_move_attempt_passing_through = True
+
     closed_graphic = Graphic.KEY_DOOR
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.is_open:
-            return
+            return False
 
         if not player.has_item(Item.KEY):
-            return
+            return False
 
         player.remove_item(Item.KEY)
 
         self.open()
 
+        return True
+
 
 class BreakableBlock(Door, InteractableMixin):
+    auto_move_attempt_passing_through = True
+
     closed_graphic = Graphic.BREAKABLE_BLOCK
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.is_open:
-            return
+            return False
 
         if not player.has_item(Item.HAMMER):
-            return
+            return False
 
         player.remove_item(Item.HAMMER)
 
         self.open()
 
+        return True
+
 
 class Bush(Door, InteractableMixin):
+    auto_move_attempt_passing_through = True
+
     closed_graphic = Graphic.BUSH
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.is_open:
-            return
+            return False
 
         if not player.has_item(Item.SWORD):
-            return
+            return False
 
         self.open()
+
+        return True
 
 
 class Button(Entity, InteractableMixin):
@@ -186,12 +201,13 @@ class Button(Entity, InteractableMixin):
     def __init__(self, activates: ActivatableMixin) -> None:
         self.activates = activates
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.activated:
-            return
+            return False
 
         self.activated = True
         self.activates.activate(player)
+        return True
 
     @property
     def graphic(self) -> Graphic:
@@ -240,9 +256,9 @@ class Enemy(Entity, InteractableMixin):
             return
         self.current_health = self.max_health
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.dead:
-            return
+            return False
 
         if player.has_item(Item.SWORD):
             self.current_health = max(0, self.current_health - 1)
@@ -250,9 +266,10 @@ class Enemy(Entity, InteractableMixin):
             if self.current_health == 0:
                 if not self.dead:
                     self.die()
-                return
+                return True
 
         player.damage(2)
+        return True
 
     @property
     def graphic(self) -> Graphic:
@@ -270,13 +287,15 @@ class EnemyWithLoot(Enemy, LocationMixin):
         self.dead = True
         self.solid = not self.has_given_content
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         if self.dead:
             if not self.has_given_content:
                 self.give_content(player)
-            return
+                return True
+            return False
 
         super().interact(player)
+        return True
 
     @property
     def graphic(self) -> Graphic:
@@ -303,10 +322,12 @@ class FinalBoss(Enemy):
     }
     enemy_default_graphic = Graphic.BOSS_1_HEALTH
 
-    def interact(self, player: Player) -> None:
+    def interact(self, player: Player) -> bool:
         dead_before = self.dead
 
-        super().interact(player)
+        changed = super().interact(player)
 
         if not dead_before and self.dead:
             player.victory()
+
+        return changed

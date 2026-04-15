@@ -1,10 +1,10 @@
 import pkgutil
-from collections.abc import Buffer
 from enum import Enum
 from io import BytesIO
 from typing import Literal, NamedTuple, Protocol, cast
 
 from kivy.uix.image import CoreImage
+from typing_extensions import Buffer
 
 from CommonClient import logger
 
