@@ -86,7 +86,7 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x02038970 | 1B | KIRBY_SHARD_FLAGS       | Native mirror shard bitfield (bits 0-7) |
 | 0x0203897C | 4B | big_chest_bitfield_native | gTreasures.bigChestField; bit N = area ID N (enum AreaId): bit 1=Rainbow Route, 2=Moonlight Mansion, 3=Cabbage Cavern, 4=Mustard Mountain, 5=Carrot Castle, 6=Olive Ocean, 7=Peppermint Palace, 8=Radish Ruins, 9=Candy Constellation. This is the native map-ownership field. AP major-chest checks use `major_chest_flags` in the transport block, and the BizHawk client may reassert AP-owned map bits here from `start_with_all_maps` plus confirmed delivered map items to recover from reconnect/save-state drift. |
 | 0x02038960 - 0x02038969 | 10B | small_chest_flags_native | Native small-chest/switch bitfield block. Enabled MINOR_CHEST AP checks read this block directly and map `bit_index` to location IDs. |
-| 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped). The BizHawk client probes rising edges here, but only stages a boss-defeat fallback when the current resolved room explicitly carries a boss-defeat location in `rooms.json`. |
+| 0x02028C14+ |  -  | Boss/Mirror table       | Native location flags (TBD - not yet mapped) |
 | 0x02028CA0 | 576B | gVisitedDoors (`room_visit_flags_native`) | Native room-visit array (`u16[0x120]`); bit 15 marks visited state by `doorsIdx` |
 | 0x02023B28 | 2B | current_room_native | Current native room ID (`gCurLevelInfo[0].currentRoom`) used for room-entry diagnostics |
 | 0x0203AD2C | 4B | AI_KIRBY_STATE          | Runtime phase classifier (Issue #56 gameplay gate) |
@@ -267,7 +267,7 @@ Fail-open behavior:
 | Location checks | Level-based poll resends any RAM-derived checks missing from `checked_locations`. |
 | Item delivery | Cursor rewind still uses ROM `debug_item_counter`; forward reconciliation is only trusted as a pending-delivery ACK signal (`flag == 0` while delivery is pending). |
 | Goal reporting | Idempotent: for current shipped worlds, the client re-sends `CLIENT_GOAL` on reconnect when `finished_game` is set. If a future world exposes a numeric goal location, the client falls back to goal-location acknowledgement before `CLIENT_GOAL`. |
-| Boss probe | Probe snapshot and staged room-scoped fallback checks re-baseline on BizHawk stream-identity change (reconnect safe). |
+| Boss probe | Probe snapshot re-baselines on BizHawk stream-identity change (reconnect safe). |
 | Watcher transient state | On first tick after AP session becomes ready (`server/socket/slot_data`), reconnect diagnostics/probe caches are reset to clean baselines. |
 
 The watcher includes an AP session-readiness transition hook that resets
@@ -363,7 +363,6 @@ Boss shard scrub timing contract (Issue #505):
 - No checks are sent for bits already in `server_checked_locations`.
 - No checks are sent for reserved/unmapped bits even when set.
 - Boss-defeat, major-chest, vitality-chest, sound-player-chest, hub-switch, and room-sanity polling follow the same resend/dedupe diagnostic contract.
-- Boss-defeat fallback is intentionally room-scoped: `boss_mirror_table_native` probe rises never map directly to boss IDs. They only backfill a boss-defeat check when the current resolved room already carries that boss-defeat location in `rooms.json`.
 - Diagnostics are transition-based to avoid per-tick log spam when mapped state is unchanged.
 
 Tracker room update contract:

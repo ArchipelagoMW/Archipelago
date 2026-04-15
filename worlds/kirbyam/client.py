@@ -213,7 +213,7 @@ class KirbyAmClient(BizHawkClient):
         # Boss candidate probing state
         self._last_boss_probe_snapshot: bytes | None = None
         self._boss_probe_stream_marker: object = None
-        self._boss_probe_fallback_location_ids: set[int] = set()
+        self._boss_probe_fallback_bits: set[int] = set()
 
         # Runtime gameplay-state gate tracking
         self._last_runtime_gate_reason: str | None = None
@@ -237,11 +237,9 @@ class KirbyAmClient(BizHawkClient):
         # Room entry logging (always file-only via NoStream=True).
         self._last_native_room_id: int | None = None
         self._last_sent_room_update_native_room_id: int | None = None
-        self._last_room_region_key: str = ""
         room_label_lookup, room_region_key_lookup = self._build_room_lookup_maps()
         self._room_label_by_doors_idx: dict[int, str] = room_label_lookup
         self._room_region_key_by_doors_idx: dict[int, str] = room_region_key_lookup
-        self._boss_location_ids_by_room_region: dict[str, list[int]] = self._build_boss_room_lookup_map()
 
         # Notification pipeline state (Issue #83)
         self._notification_settings_loaded: bool = False
@@ -354,33 +352,6 @@ class KirbyAmClient(BizHawkClient):
                 region_result[doors_idx] = str(region_key)
         return label_result, region_result
 
-    @staticmethod
-    def _build_boss_room_lookup_map() -> "dict[str, list[int]]":
-        """Build a region-key -> boss-defeat location ID map from rooms.json."""
-        rooms_json = load_json_data("regions/rooms.json")
-        result: dict[str, list[int]] = {}
-        if not isinstance(rooms_json, dict):
-            return result
-
-        for region_key, room in rooms_json.items():
-            locations = room.get("locations")
-            if not isinstance(locations, list):
-                continue
-
-            boss_location_ids: list[int] = []
-            for location_key in locations:
-                if not isinstance(location_key, str):
-                    continue
-                loc_meta = data.locations.get(location_key)
-                if loc_meta is None or loc_meta.category != LocationCategory.BOSS_DEFEAT:
-                    continue
-                boss_location_ids.append(loc_meta.location_id)
-
-            if boss_location_ids:
-                result[str(region_key)] = sorted(boss_location_ids)
-
-        return result
-
     def _reset_reconnect_transient_state(self) -> None:
         """Reset transient watcher diagnostics/probes so reconnect starts from clean baselines."""
         self._last_runtime_gate_reason = None
@@ -396,8 +367,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_room_sanity_poll_log = None
         self._last_boss_probe_snapshot = None
         self._boss_probe_stream_marker = None
-        self._boss_probe_fallback_location_ids.clear()
-        self._last_room_region_key = ""
+        self._boss_probe_fallback_bits.clear()
         self._unsafe_delivery_probe_stream_marker = None
         self._last_unsafe_delivery_counter_values = {}
         self._incoming_death_link_pending = False
@@ -1888,9 +1858,10 @@ class KirbyAmClient(BizHawkClient):
                 mapped_checked_locations.update(self._boss_location_ids_by_bit.get(bit, []))
 
         # Fallback source for Issue #573: if boss_defeat_flags does not rise because
-        # native CollectShard() was skipped (already-owned shard), use room-scoped
-        # probe observations staged by _probe_boss_defeat_candidates().
-        mapped_checked_locations.update(self._boss_probe_fallback_location_ids)
+        # native CollectShard() was skipped (already-owned shard), use rising-edge
+        # observations from boss_mirror_table_native collected by probe polling.
+        for bit in sorted(self._boss_probe_fallback_bits):
+            mapped_checked_locations.update(self._boss_location_ids_by_bit.get(bit, []))
 
         missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
         already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
@@ -2247,7 +2218,6 @@ class KirbyAmClient(BizHawkClient):
         doors_idx = unpack_from("<H", doors_raw)[0]
         room_label = self._room_label_by_doors_idx.get(doors_idx, f"<unknown doorsIdx={doors_idx}>")
         room_region_key = self._room_region_key_by_doors_idx.get(doors_idx, "")
-        self._last_room_region_key = room_region_key
 
         if room_changed:
             self._last_native_room_id = native_room_id
@@ -2356,11 +2326,10 @@ class KirbyAmClient(BizHawkClient):
 
     async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
-        Probe native candidate boss table bytes and stage room-scoped fallback checks.
+        Probe native candidate boss table bytes and log rising-edge bit transitions.
 
-        Rising edges remain diagnostic first. They only backfill AP boss-defeat checks
-        when observed while the client is in a room that explicitly carries a
-        boss-defeat location in rooms.json.
+        This is intentionally observational: it does not send AP location checks yet.
+        The logs are meant to support live BizHawk address verification for Issue #110.
         """
         base_addr = self._native_addr("boss_mirror_table_native")
         if base_addr is None:
@@ -2375,7 +2344,7 @@ class KirbyAmClient(BizHawkClient):
         elif stream_marker is not self._boss_probe_stream_marker:
             self._boss_probe_stream_marker = stream_marker
             self._last_boss_probe_snapshot = None
-            self._boss_probe_fallback_location_ids.clear()
+            self._boss_probe_fallback_bits.clear()
 
         raw = (await bizhawk.read(
             ctx.bizhawk_ctx,
@@ -2414,25 +2383,24 @@ class KirbyAmClient(BizHawkClient):
                 ", ".join(rising_edges),
             )
 
-        boss_location_ids = self._boss_location_ids_by_room_region.get(self._last_room_region_key, [])
-        if not boss_location_ids:
-            self._log_verbose(
-                "debug",
-                "KirbyAM: ignoring boss candidate probe fallback outside a boss-defeat room (room=%s, rising=%s)",
-                self._last_room_region_key or "<unknown>",
-                ", ".join(rising_edges),
-            )
+        # Conservative fallback mapping: only byte 0 bits 0-7 are considered,
+        # and only when observed as rising edges. This preserves probe behavior
+        # while providing a low-risk backup for boss check signaling.
+        supported_bits = set(self._boss_location_ids_by_bit.keys())
+        if not supported_bits:
             return
 
-        staged_before = set(self._boss_probe_fallback_location_ids)
-        self._boss_probe_fallback_location_ids.update(boss_location_ids)
-        if self._boss_probe_fallback_location_ids != staged_before:
-            self._log_verbose(
-                "info",
-                "KirbyAM: staged boss probe fallback from room-scoped observation (room=%s, locations=%s)",
-                self._last_room_region_key,
-                sorted(boss_location_ids),
-            )
+        prev_byte0 = old[0] if old else 0
+        new_byte0 = raw[0] if raw else 0
+        rising_mask = (~prev_byte0 & 0xFF) & new_byte0
+        if rising_mask == 0:
+            return
+
+        for bit in supported_bits:
+            if bit < 0 or bit > 7:
+                continue
+            if (rising_mask >> bit) & 1:
+                self._boss_probe_fallback_bits.add(bit)
 
     async def _probe_unsafe_delivery_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
