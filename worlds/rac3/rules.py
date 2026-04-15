@@ -1,6 +1,7 @@
 """This module contains the logic implementation for RAC3"""
+from collections.abc import Callable
 from logging import DEBUG, getLogger
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule
@@ -13,7 +14,7 @@ from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
-from worlds.rac3.constants.locations.vendors import RAC3VENDOR
+from worlds.rac3.constants.locations.vendors import RAC3VENDORLOCATION
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.locations import location_groups
@@ -127,10 +128,49 @@ def set_rules(world: "RaC3World"):
 
         # RAC3VENDOR.PHOENIX_SUCK
         # RAC3VENDOR.PHOENIX_INFECTOR
-        # RAC3VENDOR.PHOENIX_MAGNA_ARMOR
-        RAC3VENDOR.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
-        RAC3VENDOR.PHOENIX_AEGIS_ARMOR: lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
-        RAC3VENDOR.PHOENIX_INFERNOX: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
+        #RAC3VENDORLOCATION.PHOENIX_MAGNA_ARMOR
+        RAC3VENDORLOCATION.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
+        RAC3VENDORLOCATION.PHOENIX_AEGIS_ARMOR:
+            lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
+        RAC3VENDORLOCATION.PHOENIX_INFERNOX: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
+        RAC3VENDORLOCATION.PHOENIX_WINGS_1: lambda state: state.has_from_list(infobot_data.keys(), world.player, 2),
+        RAC3VENDORLOCATION.PHOENIX_WINGS_2: lambda state: state.has_from_list(infobot_data.keys(), world.player, 2),
+        RAC3VENDORLOCATION.PHOENIX_WINGS_3: lambda state: state.has_from_list(infobot_data.keys(), world.player, 2),
+        RAC3VENDORLOCATION.PHOENIX_NOSE_1: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3VENDORLOCATION.PHOENIX_NOSE_2: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3VENDORLOCATION.PHOENIX_NOSE_3: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_1: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_2: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_3: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_4: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_5: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_6: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_7: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_8: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_9: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_10: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_11: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_12: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_13: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_14: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_15: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_16: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_17: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_18: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_19: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_20: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_21: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_22: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_23: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_24: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_25: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_26: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_27: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_28: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_29: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_30: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_31: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
+        RAC3VENDORLOCATION.PHOENIX_SKIN_32: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
         RAC3SKILLPOINT.PHOENIX_ARMOR: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         # RAC3LOCATION.PHOENIX_MEET_SASHA
         RAC3SKILLPOINT.PHOENIX_MONKEY: lambda state: state.has(RAC3ITEM.TYHRRA_GUISE, world.player),
@@ -318,10 +358,11 @@ def set_rules(world: "RaC3World"):
         RAC3TBOLT.AQUATOS_GATE: lambda state: state.has(RAC3ITEM.HACKER, world.player),
         # RAC3VENDOR.AQUATOS_MINI_TURRET
         # RAC3VENDOR.AQUATOS_LAVA_GUN
-        RAC3VENDOR.AQUATOS_SHIELD_CHARGER:
+        RAC3VENDORLOCATION.AQUATOS_SHIELD_CHARGER:
             lambda state: state.can_reach_region(RAC3REGION.COMMAND_CENTER, world.player),
-        RAC3VENDOR.AQUATOS_BOUNCER: lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player),
-        RAC3VENDOR.AQUATOS_PLASMA_COIL: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
+        RAC3VENDORLOCATION.AQUATOS_BOUNCER:
+            lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player),
+        RAC3VENDORLOCATION.AQUATOS_PLASMA_COIL: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         # RAC3LOCATION.AQUATOS_BASE
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3TBOLT.SEWER_SWING: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS], world.player),
@@ -430,7 +471,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
 
         # RAC3VENDOR.TYHRRANOSIS_ANNIHILATOR
-        RAC3VENDOR.TYHRRANOSIS_SHIELD_GLOVE:
+        RAC3VENDORLOCATION.TYHRRANOSIS_SHIELD_GLOVE:
             lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_BOSS, world.player),
         RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER:
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE], world.player),
@@ -609,13 +650,15 @@ def set_rules(world: "RaC3World"):
                           and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
                                              RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
 
-        RAC3NANOTECH.LEVEL_11: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
-        RAC3NANOTECH.LEVEL_12: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
-        RAC3NANOTECH.LEVEL_13: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
-        RAC3NANOTECH.LEVEL_14: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
-        RAC3NANOTECH.LEVEL_15: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
-        RAC3NANOTECH.LEVEL_16: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
-        RAC3NANOTECH.LEVEL_17: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3VENDORLOCATION.NGPLUS_RY3N0: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+
+        RAC3NANOTECH.LEVEL_11: lambda state: state.has_from_list(infobot_data.keys(), world.player, 1),
+        RAC3NANOTECH.LEVEL_12: lambda state: state.has_from_list(infobot_data.keys(), world.player, 1),
+        RAC3NANOTECH.LEVEL_13: lambda state: state.has_from_list(infobot_data.keys(), world.player, 2),
+        RAC3NANOTECH.LEVEL_14: lambda state: state.has_from_list(infobot_data.keys(), world.player, 2),
+        RAC3NANOTECH.LEVEL_15: lambda state: state.has_from_list(infobot_data.keys(), world.player, 2),
+        RAC3NANOTECH.LEVEL_16: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3NANOTECH.LEVEL_17: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
         RAC3NANOTECH.LEVEL_18: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
         RAC3NANOTECH.LEVEL_19: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
         RAC3NANOTECH.LEVEL_20: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),

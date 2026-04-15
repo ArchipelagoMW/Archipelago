@@ -1,24 +1,34 @@
 """This module contains the World class for Ratchet and Clank 3"""
 from logging import DEBUG, getLogger
-from typing import Any, ClassVar, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from BaseClasses import CollectionState, Item, MultiWorld
 from Options import OptionError
 from worlds.AutoWorld import World
-from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
+from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE, item_groups
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.items import (create_item, create_itempool, get_filler_selection, process_start_inventory,
-                               starting_planets, starting_weapons)
-from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
-                                   location_groups)
+from worlds.rac3.items import (
+    create_item,
+    create_itempool,
+    get_filler_selection,
+    process_start_inventory,
+    starting_planets,
+    starting_weapons,
+)
+from worlds.rac3.locations import (
+    get_level_locations,
+    get_location_names,
+    get_regions,
+    get_total_locations,
+    location_groups,
+)
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3.regions import create_regions
+from worlds.rac3.regions import create_regions, every_5_nanotech, every_10_nanotech, every_20_nanotech, every_nanotech
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web
-
 
 rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
@@ -58,9 +68,9 @@ class RaC3World(World):
     def generate_early(self):
         # count number of . in the version number to determine if dev build
         version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
-        if version_dots >= 3:
+        if version_dots >= 3 or "dev" in RAC3OPTION.VERSION_NUMBER:
             rac3_logger.warning("\nYou are using a development build of the RaC3 Archipelago Randomizer!\n"
-                                "There may be bugs present that have not been tested fully.\n"
+                                "There may be bugs present and features that have not been tested fully.\n"
                                 "These builds are meant for testing and bug reporting purposes "
                                 "and should not be used for normal play!\n")
         # implement .yaml-less Universal Tracker support
@@ -69,6 +79,7 @@ class RaC3World(World):
 
         starting_weapon_list, starting_planet_list = self.generate_starting_items()
         self.handle_option_errors(starting_planet_list, starting_weapon_list)
+        self.dead_seed_check(starting_planet_list, starting_weapon_list)
         self.place_starting_items(starting_planet_list, starting_weapon_list)
 
     def place_starting_items(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
@@ -116,6 +127,36 @@ class RaC3World(World):
                 and self.multiworld.players == 1):
             raise OptionError("Options selected do not allow Ratchet to collect a Clank Pack and advance past Florana")
 
+    def dead_seed_check(self, starting_planet_list: list[str], starting_weapon_list: list[str]):
+        """Check for option combinations that will result in a dead seed and raise an OptionError to warn the player"""
+        nanotech_milestones = self.options.nanotech_milestones.value
+        nanotech_limitation = self.options.nanotech_limitation.value
+        nanotech_locations = []
+        if nanotech_milestones == 1:  # every 20
+            nanotech_locations = [lvl for lvl in every_20_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
+        elif nanotech_milestones == 2:  # every 10
+            nanotech_locations = [lvl for lvl in every_10_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
+        elif nanotech_milestones == 3:  # every 5
+            nanotech_locations = [lvl for lvl in every_5_nanotech if int(lvl.split()[-1]) <= nanotech_limitation]
+        elif nanotech_milestones == 4:  # all
+            nanotech_locations = every_nanotech[:nanotech_limitation - 10]
+
+        no_nanotech_locations = not nanotech_milestones or (nanotech_milestones != 0 and len(nanotech_locations) == 0)
+
+        if (not self.options.intro_skip.value
+                and not self.options.titanium_bolts.value
+                and not self.options.trophies.value
+                and not self.options.weapon_vendors.value
+                and not self.options.ship_vendor.value
+                and not self.options.armor_vendor.value
+                and not self.options.vr_challenges.value
+                and self.options.skill_points.value < 2
+                and no_nanotech_locations
+                and len(starting_weapon_list) > 1
+                and starting_planet_list
+                and self.multiworld.players == 1):
+            raise OptionError("Options selected do not allow Ratchet to advance past Starship Phoenix")
+
     def generate_starting_items(self):
         """Process player options to generate a list of early placed items, ensuring successful seed generation"""
         self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.THIRD_PERSON, RAC3ITEM.FIRST_PERSON, RAC3ITEM.LOCK_STRAFE]
@@ -132,13 +173,14 @@ class RaC3World(World):
         location_count = len(self.multiworld.get_unfilled_locations(self.player))
         item_count = len(itempool)
         excluded_count = self.get_excluded_count()
-        if excluded_count > location_count - item_count:
-            raise OptionError("Too many locations have been excluded, not enough locations remain to place all items.")
-        if location_count - item_count >= 0:
-            filler = [self.create_filler() for _ in range(location_count - item_count)]
+        filler_count = location_count - item_count
+        if excluded_count > filler_count and self.multiworld.players == 1:
+            self.handle_not_enough_locations(excluded_count - filler_count)
+        if filler_count >= 0:
+            filler = [self.create_filler() for _ in range(filler_count)]
             self.multiworld.itempool.extend(filler)
         else:
-            self.handle_not_enough_locations(item_count - location_count)
+            self.handle_not_enough_locations(-filler_count)
 
     def get_excluded_count(self) -> int:
         """Get the number of unique excluded locations for this player"""
@@ -171,6 +213,12 @@ class RaC3World(World):
             option_list.append(RAC3OPTION.VIDCOMICS)
         if self.options.vr_challenges.value == 0:
             option_list.append(RAC3OPTION.VR_CHALLENGES)
+        if self.options.weapon_vendors.value == 0:
+            option_list.append(RAC3OPTION.WEAPON_VENDORS)
+        if self.options.armor_vendor.value == 0:
+            option_list.append(RAC3OPTION.ARMOR_VENDOR)
+        if self.options.ship_vendor.value == 0:
+            option_list.append(RAC3OPTION.SHIP_VENDOR)
         if self.options.sewer_crystals.value < 3:
             option_list.append(RAC3OPTION.SEWER_CRYSTALS)
         if self.options.sewer_limitation.value < 20:
@@ -183,12 +231,12 @@ class RaC3World(World):
             option_list: str = "dunno"  # ¯\_(''/)_/¯
         message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
-            message += (f"\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
-                        f"Crystal Trade locations, or Additional Nanotech level locations.")
+            message += ("\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
+                        "Crystal Trade locations, or Additional Nanotech level locations.")
         if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
-            message += f"Consider adding some items to your starting_items_from_pool or "
+            message += "Consider adding some items to your starting_items_from_pool or "
         else:
-            message += f"Consider "
+            message += "Consider "
         message += f"adjusting some of the following options: {option_list}"
         raise OptionError(message)
 
@@ -236,6 +284,9 @@ class RaC3World(World):
             RAC3OPTION.INTRO_SKIP: self.options.intro_skip.value,
             RAC3OPTION.HOLOSTAR_SKIP: self.options.holostar_skip.value,
             RAC3OPTION.CLANK_OPTIONS: self.options.clank_options.value,
+            RAC3OPTION.SHIP_VENDOR: self.options.ship_vendor.value,
+            RAC3OPTION.ARMOR_VENDOR: self.options.armor_vendor.value,
+            RAC3OPTION.SCOUT_VENDORS: self.options.scout_vendors.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

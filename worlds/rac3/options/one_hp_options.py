@@ -14,11 +14,11 @@ class OneHpChallenge(OptionCounter):
     Giant Clank: Giant Clank has only 1 HP. This one is impossible as terror of talos will one hit you immediately
     If you feel like this is too hard for you, you can always toggle the challenge for a character using /one_hp [
     character name]
-    
+
     1 = Enabled, 0 = Disabled
     """
     min = 0
     max = 1
     display_name = RAC3OPTION.ONE_HP_CHALLENGE
-    default = {name: 0 for name in ONE_HP_CHALLENGE_CHARACTERS}
+    default = dict.fromkeys(ONE_HP_CHALLENGE_CHARACTERS, 0)
     valid_keys = ONE_HP_CHALLENGE_CHARACTERS

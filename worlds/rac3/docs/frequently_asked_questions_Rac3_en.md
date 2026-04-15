@@ -8,8 +8,7 @@ You can read about the changes [here](https://github.com/Taoshix/Archipelago-RaC
 
 All game region versions are able to be played at various levels of compatibility:
 - **US (Black Label `SCUS-97353` + Greatest Hits `SCUS-97518`):** Fully Supported
-- **PAL (EU/AUS `SCES-52456`):** Intro skip, Home Warp, and Ship Warp are not supported. The game will crash if you try to 
-use these, disable intro skip and do not use the button combos for warping.
+- **PAL (EU/AUS `SCES-52456`):** Mostly Supported. One HP Challenge patches on Annihilation Nation wont work
 - **Japanese (`SCPS-15084` + The Best release `SCPS-19309`):** No Information, Please provide feedback (previously 
 supported but got removed)
 - **Korean (`SCKA-20037`):** No Information, Please provide feedback
@@ -32,12 +31,6 @@ Try updating [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/
 Sometimes it just refuses to load the client if you have an outdated version installed.
 Updating Universal Tracker appears to solve this problem for those reporting this issue.
 
-## In the vendors I can purchase a weapon multiple times, but I get nothing, why?
-
-Until you don't have a weapon it's vendor slot will be active, because the game tries to put it back to the shop because
-you don't have it, don't purchase weapons or Armor in the current versions.
-
-
 ## X check is in logic, but when I go there I don't receive it, why?
 
 Currently, there are some checks that doesn't work with sequence breaking (For example most of the Phoenix checks) 
@@ -58,15 +51,15 @@ A location can have multiple tags and be part of multiple groups at the same tim
 
 ## My cosmetics are missing, what can I do?
 
-The client tells you to reload the save file as soon you start the game on Veldin. To reapply cosmetics, restart the client and reconnect, then reload your save file without saving first.
+The client tells you to reload the save file as soon you start the game on Veldin or Phoenix if intro skip is enabled. To reapply cosmetics, restart the client and reconnect, then visit the armor vendor or reload your save file without saving first. If you accidentially overwrite your skin with the skin vendor, you can visit the ship vendor to have the randomizer apply your skin values and then visit the armor vendor to have the game reapply your player skin.
 
 ## How do I toggle death link?
 
-You can run the /death_link command in the Ratchet and Clank 3 client to toggle it.
+You can run the /deathlink command in the Ratchet and Clank 3 client to toggle it.
 
 ## Sometimes the message popup does not show when I send/receive items
 
-If the game is paused, you are in a menu, selecting a mission, and in other situations, the game cannot display the message box we use to show these messages.
+If the game is paused, you are in a menu, selecting a mission, and in other situations, the game cannot display the message box we use to show these messages. If messages cannot be displayed, they stay in the notification queue until they can be displayed.
 
 ## A Gadget didn't spawn in the world when I haven't checked the location yet
 

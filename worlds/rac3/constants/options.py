@@ -7,7 +7,7 @@ class RAC3OPTION:
     GAME_TITLE = "Rac3"
     GAME_TITLE_FULL = "Ratchet and Clank 3"
     VERSION = "Version"
-    VERSION_NUMBER = "0.1.0"  # This is automatically updated by the GitHub actions workflow
+    VERSION_NUMBER = "PLSGIVEVERSIONNUMBER-dev"  # This is automatically updated by the GitHub actions workflow
     START_INVENTORY_FROM_POOL = "Start Inventory From Pool"
     STARTING_WEAPONS = "Starting Weapons"
     BOLT_AND_XP_MULTIPLIER = "Bolt and XP Multiplier"
@@ -40,3 +40,6 @@ class RAC3OPTION:
     INTRO_SKIP = "Intro Skip"
     HOLOSTAR_SKIP = "Holostar Skip"
     CLANK_OPTIONS = "Clank Pack Options"
+    SHIP_VENDOR = "Ship Vendor"
+    ARMOR_VENDOR = "Armor Vendor"
+    SCOUT_VENDORS = "Scout Vendors"

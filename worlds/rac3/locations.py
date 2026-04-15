@@ -18,12 +18,11 @@ def get_location_names() -> dict[str, int]:
 
 
 def get_regions() -> list[str]:
-    regions = [data.REGION for data in RAC3_LOCATION_DATA_TABLE.values()]
-    return regions
+    return [data.REGION for data in RAC3_LOCATION_DATA_TABLE.values()]
 
 
 def get_from_tag(tag) -> set[str]:
-    return set(loc for loc in RAC3_LOCATION_DATA_TABLE.keys() if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS)
+    return {loc for loc in RAC3_LOCATION_DATA_TABLE.keys() if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS}
 
 
 # class LocData(NamedTuple):
@@ -164,6 +163,8 @@ all_tags: list[str] = [
     RAC3TAG.NANOTECH,
     RAC3TAG.UNSTABLE,
     RAC3TAG.WEAPONS,
+    RAC3TAG.ARMOR,
+    RAC3TAG.SHIP,
     RAC3TAG.GADGETS,
     RAC3TAG.INFOBOT,
     RAC3TAG.VR,
@@ -201,6 +202,8 @@ location_groups: dict[str, set[str]] = {
     RAC3TAG.NANOTECH: get_from_tag(RAC3TAG.NANOTECH),
     RAC3TAG.UNSTABLE: get_from_tag(RAC3TAG.UNSTABLE),
     RAC3TAG.WEAPONS: get_from_tag(RAC3TAG.WEAPONS),
+    RAC3TAG.ARMOR: get_from_tag(RAC3TAG.ARMOR),
+    RAC3TAG.SHIP: get_from_tag(RAC3TAG.SHIP),
     RAC3TAG.GADGETS: get_from_tag(RAC3TAG.GADGETS),
     RAC3TAG.INFOBOT: get_from_tag(RAC3TAG.INFOBOT),
     RAC3TAG.ONE_HP_UNSTABLE: get_from_tag(RAC3TAG.ONE_HP_UNSTABLE),
@@ -208,8 +211,8 @@ location_groups: dict[str, set[str]] = {
 
 
 def get_level_locations(region: str) -> map:
-    return map(lambda l: l[0], get_level_location_data(region))
+    return (level[0] for level in get_level_location_data(region))
 
 
 def get_level_location_data(region: str) -> filter:
-    return filter(lambda l: l[1].REGION == region, RAC3_LOCATION_DATA_TABLE.items())
+    return filter(lambda level: level[1].REGION == region, RAC3_LOCATION_DATA_TABLE.items())

@@ -1,10 +1,17 @@
 """This module contains the dataclass for levels in the game and exportable constants"""
 from dataclasses import dataclass
-from typing import Optional
 
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
-from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_LOAD_OFFSET, PLANET_SPECIAL_OFFSET,
-                                          PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET)
+from worlds.rac3.constants.region import (
+    PLANET_CHECKPOINT,
+    PLANET_LOAD_OFFSET,
+    PLANET_MENU_OFFSET,
+    PLANET_NAME_FROM_ID,
+    PLANET_SPECIAL_OFFSET,
+    PLANET_VENDOR_OFFSET,
+    RAC3REGION,
+    RESPAWN_COORDS_OFFSET,
+)
 from worlds.rac3.constants.status import RAC3STATUS
 
 
@@ -12,28 +19,31 @@ from worlds.rac3.constants.status import RAC3STATUS
 class RAC3REGIONDATA:
     """Data class for each level of the game"""
     ID: int = None
-    SLOT_ADDRESS: Optional[int] = None
-    CHECKPOINT: Optional[RAC3POSITIONDATA] = None
-    PAUSE_ADDRESS: Optional[int] = None
-    PLANET_TO_LOAD: Optional[int] = None
-    PLANET_SPECIAL_OFFSET: Optional[int] = None
-    RESPAWN_COORDS_ADDRESS: Optional[int] = None
+    SLOT_ADDRESS: int | None = None
+    CHECKPOINT: RAC3POSITIONDATA | None = None
+    PAUSE_ADDRESS: int | None = None
+    PLANET_TO_LOAD: int | None = None
+    PLANET_SPECIAL_OFFSET: int | None = None
+    RESPAWN_COORDS_ADDRESS: int | None = None
+    VENDOR_OFFSET: int | None = None
 
     def __init__(self,
-                 idx: Optional[int] = None,
-                 slot: Optional[int] = None,
-                 checkpoint: Optional[RAC3POSITIONDATA] = None,
-                 pause_address: Optional[int] = None,
-                 planet_to_load_address: Optional[int] = None,
-                 planet_special_offset: Optional[int] = None,
-                 respawn_coords_address: Optional[int] = None):
-        self.ID: Optional[int] = idx
-        self.SLOT_ADDRESS: Optional[int] = slot
-        self.CHECKPOINT: Optional[RAC3POSITIONDATA] = checkpoint
-        self.PAUSE_ADDRESS: Optional[int] = pause_address
-        self.PLANET_TO_LOAD: Optional[int] = planet_to_load_address
-        self.PLANET_SPECIAL_OFFSET: Optional[int] = planet_special_offset
-        self.RESPAWN_COORDS_ADDRESS: Optional[int] = respawn_coords_address
+                 idx: int | None = None,
+                 slot: int | None = None,
+                 checkpoint: RAC3POSITIONDATA | None = None,
+                 pause_address: int | None = None,
+                 planet_to_load_address: int | None = None,
+                 planet_special_offset: int | None = None,
+                 respawn_coords_address: int | None = None,
+                 vendor_offset: int | None = None):
+        self.ID: int | None = idx
+        self.SLOT_ADDRESS: int | None = slot
+        self.CHECKPOINT: RAC3POSITIONDATA | None = checkpoint
+        self.PAUSE_ADDRESS: int | None = pause_address
+        self.PLANET_TO_LOAD: int | None = planet_to_load_address
+        self.PLANET_SPECIAL_OFFSET: int | None = planet_special_offset
+        self.RESPAWN_COORDS_ADDRESS: int | None = respawn_coords_address
+        self.VENDOR_OFFSET: int | None = vendor_offset
 
     @staticmethod
     def construct_slot(slot: int):
@@ -55,6 +65,9 @@ class RAC3REGIONDATA:
         respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
         if respawn_coords_address is not None:  # Not all planets should have respawn coords changed
             respawn_coords_address += RAC3STATUS.RESPAWN_BASE
+        vendor_offset = PLANET_VENDOR_OFFSET.get(name, None)
+        if vendor_offset is not None:
+            vendor_offset += RAC3STATUS.VENDOR_BASE
         return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=pause, planet_to_load_address=load,
                               planet_special_offset=offset, respawn_coords_address=respawn_coords_address)
 
@@ -100,6 +113,7 @@ RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {
     RAC3REGION.QWARK_VID_COMIC_3: RAC3REGIONDATA(0x22, pause_address=RAC3STATUS.VIDCOMIC_PAUSE),
     RAC3REGION.QWARK_VID_COMIC_5: RAC3REGIONDATA(0x23, pause_address=RAC3STATUS.VIDCOMIC_PAUSE),
     RAC3REGION.QWARK_VID_COMIC_UNUSED_2: RAC3REGIONDATA(0x24),
+    RAC3REGION.NGPLUS: RAC3REGIONDATA(0xFE),
     RAC3REGION.MENU: RAC3REGIONDATA(0xFF),
     RAC3REGION.SLOT_0: RAC3REGIONDATA.construct_slot(slot=0x00),
     RAC3REGION.SLOT_1: RAC3REGIONDATA.construct_slot(slot=0x01),
