@@ -151,11 +151,12 @@ All location IDs use **BASE_OFFSET + 100_000** as the auto-assignment start (= 3
 | VITALITY_CHEST_CANDY_CONSTELLATION | 3960303 | Candy Constellation 9-8 vitality big chest (transport vitality bit 3) |
 | SOUND_PLAYER_CHEST | 3960304 | Candy Constellation Sound Player chest (transport sound_player_chest bit 0) |
 | HUB_SWITCH_* | 3960400 - 3960414 | Hub big-switch checks mapped to `hub_switch_flags` bits 0..14 (bit 0 = Peppermint West, bit 10 = Moonlight; others sequential) |
+| AREA_VISIT_* | 3960451 - 3960459 | First-visit checks for gameplay areas 1..9 (Rainbow Route through Candy Constellation), derived from first visited room per area via native `gVisitedDoors` |
 | MINOR_CHEST_RAINBOW_ROUTE_1_20 | 3960500 | Rainbow Route 1-20 small chest (native small_chest_flags_native bit 1) |
 | MINOR_CHEST_RAINBOW_ROUTE_1_22 | 3960501 | Rainbow Route 1-22 small chest (native small_chest_flags_native bit 23) |
 | MINOR_CHEST_RAINBOW_ROUTE_1_38 | 3960502 | Rainbow Route 1-38 small chest (native small_chest_flags_native bit 41) |
 | ROOM_SANITY_* | 3961000+ | Room visit checks (`Room X-<room_code>`) keyed by native `doorsIdx` and polled from `gVisitedDoors[doorsIdx]` bit 15; includes designed goal/warp rooms |
-| *Reserved*    | 3960415+ | Future location families |
+| *Reserved*    | 3960460+ | Future location families |
 
 Minor chest status (Issue #540):
 - Initial MINOR_CHEST AP checks are active for Rainbow Route rooms 1-20, 1-22, and 1-38.
@@ -322,6 +323,11 @@ room_visits = RAM[0x02028CA0 : 0x02028CA0 + 0x240] as u16[0x120]
 for doors_idx in mapped_room_sanity_doors_indices:
     if room_visits[doors_idx] & 0x8000:
         mapped_checked.add(room_sanity_location_id_for_doors_idx(doors_idx))
+
+# Area-first-visit checks (native gVisitedDoors)
+for doors_idx, area_id in mapped_room_doors_idx_to_area_ids:
+    if room_visits[doors_idx] & 0x8000:
+        mapped_checked.add(area_first_visit_location_id_for_area(area_id))
 
 # Room-entry tracker updates (best-effort)
 current_room_native = RAM[0x02023B28] as u16

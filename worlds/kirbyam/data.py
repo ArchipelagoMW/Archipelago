@@ -187,6 +187,7 @@ class LocationCategory(IntEnum):
     ROOM_SANITY = 12
     HUB_SWITCH = 13
     MINOR_CHEST = 14
+    AREA_VISIT = 15
 
 
 class ItemData(NamedTuple):

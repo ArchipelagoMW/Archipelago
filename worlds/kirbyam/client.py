@@ -1,5 +1,6 @@
 import logging
 import random
+import re
 import time
 from struct import unpack_from
 from typing import TYPE_CHECKING, Optional
@@ -50,6 +51,18 @@ _ROOM_VISIT_FLAGS_ADDR_KEY = "room_visit_flags_native"
 _ROOM_VISIT_FLAGS_ENTRY_COUNT = 0x120
 _ROOM_VISIT_FLAGS_BIT_MASK = 0x8000
 _CURRENT_ROOM_ADDR_KEY = "current_room_native"
+_ROOM_REGION_AREA_TOKEN_PATTERN = re.compile(r"^REGION_([A-Z_]+)/ROOM_[A-Z0-9_]+$")
+_AREA_REGION_TOKEN_TO_AREA_ID: dict[str, int] = {
+    "RAINBOW_ROUTE": 1,
+    "MOONLIGHT_MANSION": 2,
+    "CABBAGE_CAVERN": 3,
+    "MUSTARD_MOUNTAIN": 4,
+    "CARROT_CASTLE": 5,
+    "OLIVE_OCEAN": 6,
+    "PEPPERMINT_PALACE": 7,
+    "RADISH_RUINS": 8,
+    "CANDY_CONSTELLATION": 9,
+}
 _STARTING_KIRBY_COLOR_MIN = 0
 _STARTING_KIRBY_COLOR_MAX = 13
 _STARTING_KIRBY_COLOR_REVALIDATE_TICKS = 4
@@ -202,6 +215,14 @@ class KirbyAmClient(BizHawkClient):
             self._room_sanity_location_ids_by_bit.setdefault(loc.bit_index, []).append(loc.location_id)
         self._room_sanity_bits_sorted: list[int] = sorted(self._room_sanity_location_ids_by_bit.keys())
 
+        # Area-first-visit location map keyed by area id (1..9).
+        self._area_visit_location_ids_by_area_id: dict[int, list[int]] = {}
+        for loc in data.locations.values():
+            if loc.bit_index is None or loc.category != LocationCategory.AREA_VISIT:
+                continue
+            self._area_visit_location_ids_by_area_id.setdefault(loc.bit_index, []).append(loc.location_id)
+        self._area_visit_area_ids_sorted: list[int] = sorted(self._area_visit_location_ids_by_area_id.keys())
+
         # One-time RAM state load
         self._ram_state_loaded: bool = False
 
@@ -233,6 +254,7 @@ class KirbyAmClient(BizHawkClient):
         self._hub_switch_session_initialized: bool = False
         self._hub_switch_stream_marker: object = None
         self._last_room_sanity_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
+        self._last_area_visit_poll_log: tuple[str, tuple[int, ...], tuple[int, ...]] | None = None
 
         # Room entry logging (always file-only via NoStream=True).
         self._last_native_room_id: int | None = None
@@ -241,6 +263,7 @@ class KirbyAmClient(BizHawkClient):
         room_label_lookup, room_region_key_lookup = self._build_room_lookup_maps()
         self._room_label_by_doors_idx: dict[int, str] = room_label_lookup
         self._room_region_key_by_doors_idx: dict[int, str] = room_region_key_lookup
+        self._room_area_id_by_doors_idx: dict[int, int] = self._build_room_area_lookup_map()
         self._boss_location_ids_by_room_region: dict[str, list[int]] = self._build_boss_room_lookup_map()
 
         # Notification pipeline state (Issue #83)
@@ -381,6 +404,36 @@ class KirbyAmClient(BizHawkClient):
 
         return result
 
+    @staticmethod
+    def _build_room_area_lookup_map() -> "dict[int, int]":
+        """Build doorsIdx -> gameplay area id map from rooms.json."""
+        rooms_json = load_json_data("regions/rooms.json")
+        result: dict[int, int] = {}
+        if not isinstance(rooms_json, dict):
+            return result
+
+        for region_key, room in rooms_json.items():
+            if not isinstance(region_key, str) or not isinstance(room, dict):
+                continue
+            match = _ROOM_REGION_AREA_TOKEN_PATTERN.match(region_key)
+            if match is None:
+                continue
+            area_id = _AREA_REGION_TOKEN_TO_AREA_ID.get(match.group(1))
+            if area_id is None:
+                continue
+
+            rs = room.get("room_sanity")
+            if not isinstance(rs, dict):
+                continue
+
+            bit_index = rs.get("bit_index")
+            if bit_index is None:
+                continue
+
+            result[int(bit_index)] = area_id
+
+        return result
+
     def _reset_reconnect_transient_state(self) -> None:
         """Reset transient watcher diagnostics/probes so reconnect starts from clean baselines."""
         self._last_runtime_gate_reason = None
@@ -394,6 +447,7 @@ class KirbyAmClient(BizHawkClient):
         self._last_sound_player_chest_poll_log = None
         self._last_hub_switch_poll_log = None
         self._last_room_sanity_poll_log = None
+        self._last_area_visit_poll_log = None
         self._last_boss_probe_snapshot = None
         self._boss_probe_stream_marker = None
         self._boss_probe_fallback_location_ids.clear()
@@ -1136,6 +1190,9 @@ class KirbyAmClient(BizHawkClient):
 
             # Hub switch location polling via dedicated hub_switch_flags register
             await self._poll_hub_switch_locations(ctx)
+
+            # Area-first-visit location polling via native gVisitedDoors bit 15.
+            await self._poll_area_visit_locations(ctx)
 
             # Room-sanity location polling via native gVisitedDoors bit 15.
             await self._poll_room_sanity_locations(ctx)
@@ -2357,6 +2414,74 @@ class KirbyAmClient(BizHawkClient):
                 self._last_room_sanity_poll_log = room_log_state
         else:
             self._last_room_sanity_poll_log = None
+
+    async def _poll_area_visit_locations(self, ctx: KirbyAmBizHawkClientContext) -> None:
+        """
+        Map first visited rooms to area-first-visit location checks.
+
+        Uses native gVisitedDoors[doorsIdx] bit 15 and a static doorsIdx -> area mapping
+        built from rooms.json. Polling is level-based and reconnect-safe: checks are
+        resent until server acknowledgement is present in ctx.checked_locations.
+        """
+        if not self._area_visit_location_ids_by_area_id or not self._room_area_id_by_doors_idx:
+            return
+
+        room_visit_addr = self._native_addr(_ROOM_VISIT_FLAGS_ADDR_KEY)
+        if room_visit_addr is None:
+            return
+
+        read_width = _ROOM_VISIT_FLAGS_ENTRY_COUNT * 2
+        raw = (await bizhawk.read(ctx.bizhawk_ctx, [(room_visit_addr, read_width, "System Bus")]))[0]
+
+        if len(raw) != read_width:
+            self._log_client(
+                "warning",
+                "KirbyAM: area-visit poll expected %s bytes from gVisitedDoors, got %s; skipping tick",
+                read_width,
+                len(raw),
+            )
+            return
+
+        raw_view = memoryview(raw)
+
+        visited_area_ids: set[int] = set()
+        for doors_idx, area_id in self._room_area_id_by_doors_idx.items():
+            if doors_idx < 0 or doors_idx >= _ROOM_VISIT_FLAGS_ENTRY_COUNT:
+                continue
+            entry_value = unpack_from("<H", raw_view, doors_idx * 2)[0]
+            if entry_value & _ROOM_VISIT_FLAGS_BIT_MASK:
+                visited_area_ids.add(area_id)
+
+        mapped_checked_locations: set[int] = set()
+        for area_id in self._area_visit_area_ids_sorted:
+            if area_id in visited_area_ids:
+                mapped_checked_locations.update(self._area_visit_location_ids_by_area_id.get(area_id, []))
+
+        missing_on_server = sorted(mapped_checked_locations - ctx.checked_locations)
+        already_acknowledged = sorted(mapped_checked_locations & ctx.checked_locations)
+        if missing_on_server:
+            area_log_state = ("resend", tuple(missing_on_server), tuple(already_acknowledged))
+            if area_log_state != self._last_area_visit_poll_log:
+                self._log_verbose(
+                    "info",
+                    "KirbyAM: resending area-first-visit LocationChecks missing on server (missing=%s, acked=%s)",
+                    missing_on_server,
+                    already_acknowledged,
+                )
+                self._last_area_visit_poll_log = area_log_state
+
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": missing_on_server}])
+        elif mapped_checked_locations:
+            area_log_state = ("dedupe", tuple(), tuple(already_acknowledged))
+            if area_log_state != self._last_area_visit_poll_log:
+                self._log_verbose(
+                    "debug",
+                    "KirbyAM: dedupe suppressed area-first-visit LocationChecks (all RAM-derived checks already acknowledged: %s)",
+                    already_acknowledged,
+                )
+                self._last_area_visit_poll_log = area_log_state
+        else:
+            self._last_area_visit_poll_log = None
 
     async def _probe_boss_defeat_candidates(self, ctx: KirbyAmBizHawkClientContext) -> None:
         """
