@@ -23,22 +23,6 @@ local function get_progressives()
 end
 
 --more icons need to be placed here.
-local function get_ap_icon()
-    return {
-        icon = "__"..general.mod_name.."__/graphics/icons/ap.png",
-        icon_size = 128,
-        scale = 1
-    }
-end
-
-local function get_ap_unimportant_icon()
-    return {
-        icon = "__"..general.mod_name.."__/graphics/icons/ap_unimportant.png",
-        icon_size = 128,
-        scale = 1
-    }
-end
-
 local function get_gears_bright()
     return {
         icon = "__"..general.mod_name.."__/graphics/icons/gears_bright.png",
@@ -74,18 +58,9 @@ end
 local function get_white_progression_arrow()
     return {
         icon = "__"..general.mod_name.."__/graphics/icons/white_progression_arrow.png",
-        icon_size = 155,
-        scale = 0.41,
-        shift = {-32, 32}
-    }
-end
-
-local function get_ap_progression_arrow()
-    return {
-        icon = "__"..general.mod_name.."__/graphics/icons/ap_progression_arrow.png",
-        icon_size = 260,
-        scale = 0.125,
-        shift = {-48, 48}
+        icon_size = 64,
+        scale = 0.75,
+        shift = {-40, 40}
     }
 end
 
