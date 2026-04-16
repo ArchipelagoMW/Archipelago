@@ -4,8 +4,9 @@ from argparse import Namespace
 from enum import Enum
 from typing import TYPE_CHECKING, Any
 
-from CommonClient import CommonContext, gui_enabled, logger, server_loop
+from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop
 from NetUtils import ClientStatus
+from Utils import gui_enabled
 
 from ..game.events import ConfettiFired, LocationClearedEvent, MathProblemSolved, MathProblemStarted, VictoryEvent
 from ..game.game import Game
@@ -41,6 +42,16 @@ class ConnectionStatus(Enum):
     GAME_RUNNING = 3
 
 
+class APQuestClientCommandProcessor(ClientCommandProcessor):
+    ctx: "APQuestContext"
+
+    def default(self, raw: str) -> None:
+        if self.ctx.external_math_trap_input(raw):
+            return
+
+        super().default(raw)
+
+
 class APQuestContext(CommonContext):
     game = "APQuest"
     items_handling = 0b111  # full remote
@@ -65,6 +76,7 @@ class APQuestContext(CommonContext):
     delay_intro_song: bool
 
     ui: APQuestManager
+    command_processor = APQuestClientCommandProcessor
 
     def __init__(
         self, server_address: str | None = None, password: str | None = None, delay_intro_song: bool = False
@@ -172,7 +184,6 @@ class APQuestContext(CommonContext):
             assert self.ap_quest_game is not None
             self.ap_quest_game.gameboard.fill_remote_location_content(remote_item_graphic_overrides)
             self.render()
-            self.ui.game_view.bind_keyboard()
 
             self.connection_status = ConnectionStatus.GAME_RUNNING
             self.ui.game_started()
@@ -243,6 +254,59 @@ class APQuestContext(CommonContext):
             return
         self.ap_quest_game.input(input_key)
         self.render()
+
+    def queue_auto_move(self, target_x: int, target_y: int) -> None:
+        if self.ap_quest_game is None:
+            return
+        if not self.ap_quest_game.gameboard.ready:
+            return
+        if not self.ui.game_view.focused > 1:  # Must already be in focus
+            return
+        self.ap_quest_game.queue_auto_move(target_x, target_y)
+        self.ui.start_auto_move()
+
+    def do_auto_move_and_rerender(self) -> None:
+        if self.ap_quest_game is None:
+            return
+        if not self.ap_quest_game.gameboard.ready:
+            return
+        changed = self.ap_quest_game.do_auto_move()
+        if changed:
+            self.render()
+
+    def confetti_and_rerender(self) -> None:
+        # Used by tap mode
+        if self.ap_quest_game is None:
+            return
+        if not self.ap_quest_game.gameboard.ready:
+            return
+
+        if self.ap_quest_game.attempt_fire_confetti_cannon():
+            self.render()
+
+    def external_math_trap_input(self, raw: str) -> bool:
+        if self.ap_quest_game is None:
+            return False
+        if not self.ap_quest_game.gameboard.ready:
+            return False
+        if not self.ap_quest_game.active_math_problem:
+            return False
+
+        raw = raw.strip()
+
+        if not raw:
+            return False
+        if not raw.isnumeric():
+            return False
+
+        self.ap_quest_game.math_problem_replace([int(digit) for digit in raw])
+
+        if not self.ap_quest_game.active_math_problem:
+            self.ui.game_view.force_focus()
+
+        self.render()
+
+        return True
 
     def make_gui(self) -> "type[kvui.GameManager]":
         self.load_kv()

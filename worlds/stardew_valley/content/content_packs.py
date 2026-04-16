@@ -11,14 +11,6 @@ from .vanilla.the_desert import the_desert
 from .vanilla.the_farm import the_farm
 from .vanilla.the_mines import the_mines
 
-assert base_game
-assert ginger_island_content_pack
-assert pelican_town
-assert qi_board_content_pack
-assert the_desert
-assert the_farm
-assert the_mines
-
 # Dynamically register everything currently in the mods folder. This would ideally be done through a metaclass, but I have not looked into that yet.
 mod_modules = pkgutil.iter_modules(mods.__path__)
 
@@ -28,4 +20,13 @@ for mod_module in mod_modules:
     module = importlib.import_module("." + module_name, mods.__name__)
     loaded_modules[module_name] = module
 
-assert by_mod
+vanilla_content_pack_names = frozenset({
+    base_game.name,
+    ginger_island_content_pack.name,
+    pelican_town.name,
+    qi_board_content_pack.name,
+    the_desert.name,
+    the_farm.name,
+    the_mines.name
+})
+all_content_pack_names = vanilla_content_pack_names | frozenset(by_mod.keys())
