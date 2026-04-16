@@ -1,5 +1,7 @@
+local general = require("Archipelago/general")
+
 -- Find out if more than one AP mod is loaded, and if so, error out.
-function mod_is_AP(str)
+local function mod_is_AP(str)
     -- lua string.match is way more restrictive than regex. Regex would be "^AP-W?\d{20}-P[1-9]\d*-.+$"
 	local result = string.match(str, "^AP%-W?%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%-P[1-9]%d-%-.+$")
 	if result ~= nil then
@@ -19,28 +21,27 @@ end
 data:extend({
     {
         type = "bool-setting",
-        name = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}",
+        name = general.mod_setting_names.death_link,
         setting_type = "runtime-global",
         localised_name = {"mod-setting-name.archipelago-death-link"},
         localised_description = {"mod-setting-description.archipelago-death-link"},
-        {% if death_link %}
-            default_value = true
-        {% else %}
-            default_value = false
-        {% endif %}
-    }
-})
-data:extend({
+        default_value = general.mod_setting_defaults.death_link
+    },
     {
         type = "bool-setting",
-        name = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}",
+        name = general.mod_setting_names.energy_link,
         setting_type = "runtime-global",
         localised_name = {"mod-setting-name.archipelago-energy-link"},
         localised_description = {"mod-setting-description.archipelago-energy-link"},
-        {% if energy_link %}
-            default_value = true
-        {% else %}
-            default_value = false
-        {% endif %}
+        default_value = general.mod_setting_defaults.energy_link
+    },
+    {
+        type = "string-setting",
+        name = "archipelago-progressive-technology-icons",
+        setting_type = "startup",
+        localised_name = {"mod-setting-name.archipelago-progressive-technology-icons"},
+        localised_description = {"mod-setting-description.archipelago-progressive-technology-icons"},
+        default_value = "only-own",
+        allowed_values = {"never", "only-own", "always"}
     }
 })

@@ -1,4 +1,7 @@
-{% from "macros.lua" import dict_to_lua %}
+
+local general = require("Archipelago/general")
+
+
 -- TODO: Replace the tinting code with an actual rendered picture of the energy bridge icon.
 -- This tint is so that one is less likely to accidentally mass-produce energy-bridges, then wonder why their rocket is not building.
 function energy_bridge_tint()
@@ -25,7 +28,6 @@ data.raw["accumulator"]["ap-energy-bridge"] = energy_bridge
 
 local energy_bridge_item = table.deepcopy(data.raw["item"]["accumulator"])
 energy_bridge_item.name = "ap-energy-bridge"
-energy_bridge_item.localised_name = "Archipelago EnergyLink Bridge"
 energy_bridge_item.place_result = energy_bridge.name
 tint_icon(energy_bridge_item, energy_bridge_tint())
 data.raw["item"]["ap-energy-bridge"] = energy_bridge_item
@@ -34,26 +36,19 @@ local energy_bridge_recipe = table.deepcopy(data.raw["recipe"]["accumulator"])
 energy_bridge_recipe.name = "ap-energy-bridge"
 energy_bridge_recipe.results = { {type = "item", name = energy_bridge_item.name, amount = 1} }
 energy_bridge_recipe.energy_required = 1
-energy_bridge_recipe.enabled = {% if energy_link %}true{% else %}false{% endif %}
-energy_bridge_recipe.localised_name = "Archipelago EnergyLink Bridge"
+energy_bridge_recipe.enabled = general.energy_link.enabled --might need change to the setting of energyLink? So that it can be made if the setting is turned on.
 data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe
 
-data.raw["map-gen-presets"].default["archipelago"] = {{ dict_to_lua({"default": False, "order": "a", "basic_settings": world_gen_settings["basic"], "advanced_settings": world_gen_settings["advanced"]}) }}
+data.raw["map-gen-presets"].default["archipelago"] = general.map_preset
+
 if mods["science-not-invited"] then
-    local weights = {
-        ["automation-science-pack"] =   0, -- Red science
-        ["logistic-science-pack"]   =   0, -- Green science
-        ["military-science-pack"]   =   0, -- Black science
-        ["chemical-science-pack"]   =   0, -- Blue science
-        ["production-science-pack"] =   0, -- Purple science
-        ["utility-science-pack"]    =   0, -- Yellow science
-        ["space-science-pack"]      =   0  -- Space science
-    }
-{% if max_science_pack == 6 -%}
-    weights["space-science-pack"] = 1
-{%- endif %}
-{% for key in allowed_science_packs -%}
-    weights["{{key}}"] = 1
-{% endfor %}
+    --this should make these mods still compatiable.
+    local weights = {}
+    for _, name in pairs(general.science_packs.ordered) do
+        weights[name] = 0
+    end
+    for _, name in pairs(general.science_packs.allowed) do
+        weights[name] = 1
+    end
     SNI.setWeights(weights)
 end
