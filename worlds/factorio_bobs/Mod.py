@@ -157,7 +157,9 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
         "mod_settings": world.modpack.mod_settings,
-        "world_gen_settings": world_gen_settings
+        "world_gen_settings": world_gen_settings,
+        "techs_to_hint": world.techs_to_hint,
+        "tech_craft_obscurity": False, #to ensure that the tech obscurity does not break, but does not need to be an option in the Yaml.
     }
 
     for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():

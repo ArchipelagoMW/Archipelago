@@ -19,9 +19,15 @@ general.player_forces = {"player", "team-1", "team-2", "team-3", "team-4"} --pos
 general.mod_setting_names = {}
 general.mod_setting_names.death_link = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 general.mod_setting_names.energy_link = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_names.layer_obscurity = "archipelago-tech-layer-obscurity-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_names.depth_obscurity = "archipelago-tech-depth-obscurity-{{ slot_player }}-{{ seed_name }}"
+general.mod_setting_names.craft_obscurity = "archipelago-tech-craft-obscurity-{{ slot_player }}-{{ seed_name }}"
 general.mod_setting_defaults = {}
 general.mod_setting_defaults.death_link = {% if death_link %}true{% else %}false{% endif %}
 general.mod_setting_defaults.energy_link = {% if energy_link %}true{% else %}false{% endif %}
+general.mod_setting_defaults.layer_obscurity = {% if tech_layer_obscurity %}true{% else %}false{% endif %}
+general.mod_setting_defaults.depth_obscurity = {{ tech_depth_obscurity }}
+general.mod_setting_defaults.craft_obscurity = {% if tech_craft_obscurity %}true{% else %}false{% endif %}
 
 
 -- energy_link
@@ -65,6 +71,7 @@ end
 function general.technologies.removed_technologies ()
     return {{ variable_to_lua(removed_technologies) }}
 end
+general.technologies.hint_list = {{dict_to_lua(techs_to_hint)}}
 
 --recipes
 general.recipes = {}
