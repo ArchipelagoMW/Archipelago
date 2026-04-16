@@ -443,6 +443,9 @@
         ],
         "medium_requires": [ // skip nymph / activating the crate by platforming all the way through the tunnel with:
             { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } // and T-dash
+        ],
+        "ls_requires": [ // instead of TCK, we use CL and slash vault inside the tunnel to get a 2nd AD and CL
+            { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } // and T-dash
         ]
     },
     { "from": "CTH - Yanren Arena", "to": "CTH - Middle Left Exit & Elevator", "requires": [] }, // one-way door
