@@ -43,6 +43,7 @@ class FactorioModpack(BaseModpack):
         self._add_item("Evolution Trap")
         self._add_item("Teleport Trap")
         self._add_item("Evolution Trap")
+        self._add_item("Grenade Trap")
         self._add_item("Cluster Grenade Trap")
         self._add_item("Artillery Trap")
         self._add_item("Atomic Rocket Trap")
