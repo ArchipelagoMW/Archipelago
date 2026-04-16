@@ -10,6 +10,7 @@ class ScoutVendors(OptionCounter):
     Ship: Ship vendor sends out hints.
     Weapon: Gadgetron vendors and Slim Cognito's shop send out hints.
 
+    The vendors will always show the item names inside them in game, regardless of this option.
     1 = Enabled, 0 = Disabled
     """
     min = 0

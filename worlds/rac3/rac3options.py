@@ -19,7 +19,7 @@ from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
-from worlds.rac3.options.scout_vendors import ScoutVendors
+from worlds.rac3.options.scout_vendors_options import ScoutVendors
 from worlds.rac3.options.sewer_limitation_options import SewerLimitation
 from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
