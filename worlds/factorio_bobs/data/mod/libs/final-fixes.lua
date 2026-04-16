@@ -39,19 +39,75 @@ local function get_ap_unimportant_icon()
     }
 end
 
+local function get_gears_bright()
+    return {
+        icon = "__"..general.mod_name.."__/graphics/icons/gears_bright.png",
+        icon_size = 300,
+        scale = 0.426
+    }
+end
+
+local function get_gears_mat()
+    return {
+        icon = "__"..general.mod_name.."__/graphics/icons/ap_gears_mat.png",
+        icon_size = 300,
+        scale = 0.426
+    }
+end
+
+local function get_gears_grey()
+    return {
+        icon = "__"..general.mod_name.."__/graphics/icons/gears_gray.png",
+        icon_size = 300,
+        scale = 0.426
+    }
+end
+
+local function get_gears_red()
+    return {
+        icon = "__"..general.mod_name.."__/graphics/icons/gears_red.png",
+        icon_size = 300,
+        scale = 0.426
+    }
+end
+
+local function get_white_progression_arrow()
+    return {
+        icon = "__"..general.mod_name.."__/graphics/icons/white_progression_arrow.png",
+        icon_size = 155,
+        scale = 0.41,
+        shift = {-32, 32}
+    }
+end
+
+local function get_ap_progression_arrow()
+    return {
+        icon = "__"..general.mod_name.."__/graphics/icons/ap_progression_arrow.png",
+        icon_size = 260,
+        scale = 0.125,
+        shift = {-48, 48}
+    }
+end
+
 --more icons need to be added to this if statement
 local function get_icon_from_type(type)
     if type == "advancement" or type == "unkown" then
-        return get_ap_icon()
+        return get_gears_bright()
+    elseif type == "useful" then
+        return get_gears_mat()
+    elseif type == "trap" then
+        return get_gears_red()
     else
-        return get_ap_unimportant_icon()
+        return get_gears_grey()
     end
 end
 
 local function set_top_layer(icons, type)
-    --if type == "advancement" then
-    --    table.insert(icons, get_advancement_arrow()) --this is the up arrow. I placed this code already here to not need to really think about it anymore.
-    --end
+    if type == "advancement" then
+        table.insert(icons, get_white_progression_arrow()) --this is the up arrow. I placed this code already here to not need to really think about it anymore.
+    else
+        --table.insert(icons, get_ap_progression_arrow())
+    end
 end
 
 local function get_background(icons, type, this_world)
