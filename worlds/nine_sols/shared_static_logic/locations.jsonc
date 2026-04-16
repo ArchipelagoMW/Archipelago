@@ -1128,10 +1128,13 @@
     // Factory (Production Area)
     {
         "address": 2601, "name": "Factory (PA): Behind Fire in Lower Left Vents",
-        "region": "Factory (PA) - Lower Left Elevator", "requires": [ { "anyOf": [
+        "region": "Factory (PA) - Lower Left Elevator",
+        "requires": [ { "anyOf": [
             { "item": "Mystic Nymph: Scout Mode" }, // turn off the fire
             { "item": "Cloud Leap" } // or jump straight up to it from the far left
-        ] } ] // or you could tank the fire damage
+        ] } ], // or you could tank the fire damage
+        "ls_requires": [ { "item": "Air Dash" } ] // AD setup earlier in vents, then parry vault up to chest
+        // T-dash setup is possible by UCing the enemies, but we don't want to assume players know about that
     },
     {
         "address": 2602, "name": "Factory (PA): Hallway Near Jiequan Statue",
