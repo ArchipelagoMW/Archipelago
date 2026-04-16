@@ -6,7 +6,7 @@ class ItemData:
     def __init__(self, item_id, classification, groups):
         self.groups = groups
         self.classification = classification
-        self.id = None if item_id is None else item_id + 172000000
+        self.id = None if item_id is None else item_id
 
 
 item_table = {
@@ -196,6 +196,8 @@ item_table = {
     "Become Champion": ItemData(None, ItemClassification.progression, []),
     "Mt Moon Fossils": ItemData(None, ItemClassification.progression, []),
     "Cinnabar Lab": ItemData(None, ItemClassification.progression, []),
+
+    "ut_glitch": ItemData(None, ItemClassification.progression, []),
 
     "Trainer Parties": ItemData(None, ItemClassification.filler, [])
 }
