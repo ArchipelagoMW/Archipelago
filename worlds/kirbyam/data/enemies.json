@@ -109,6 +109,8 @@
   "GOLEM": {
     "kind": "enemy",
     "addresses": [
+      "0x351936",
+      "0x35194E",
       "0x351966"
     ],
     "default_ability": "Stone"
@@ -444,10 +446,25 @@
     ],
     "default_ability": "Wheel"
   },
+  "MR_FROSTY_ICE_CUBE": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3525DE",
+      "0x3525F6"
+    ],
+    "default_ability": "Ice"
+  },
   "PARASOL_OBJECT": {
     "kind": "boss_spawned",
     "addresses": [
       "0x35257E"
+    ],
+    "default_ability": "Parasol"
+  },
+  "BOXY_SPAWNED_OBJECT": {
+    "kind": "boss_spawned",
+    "addresses": [
+      "0x3526CE"
     ],
     "default_ability": "Parasol"
   },

@@ -343,5 +343,48 @@ def test_ap_hook_preserves_register_context_without_r4_temp_restore():
         "Hook must not rebuild lr through r4"
 
 
+def test_copy_ability_reroll_hook_reads_object2_type_field() -> None:
+    """Regression: source type must come from Object2.type (+0x82), not ObjectBase header bytes."""
+    payload_path = os.path.join(_WORLD_DIR, "kirby_ap_payload", "ap_payload.c")
+
+    with open(payload_path, "r") as f:
+        content = f.read()
+
+    match = re.search(
+        r"void\s+ap_on_request_copy_ability_transition[^{]*\{(?P<body>.*?)^}",
+        content,
+        flags=re.DOTALL | re.MULTILINE,
+    )
+    assert match is not None, "ap_on_request_copy_ability_transition definition must exist"
+    hook_body = match.group(0)
+
+    assert "OBJECT2_TYPE_OFFSET 0x82u" in content, \
+        "Payload must define Object2.type offset constant as +0x82"
+    assert "uint8_t source_type" in hook_body, \
+        "Reroll hook must load source_type as an 8-bit object type"
+    assert "source_obj_ptr + OBJECT2_TYPE_OFFSET" in hook_body, \
+        "Reroll hook must read source type from Object2.type field"
+    assert "AP_ABILITY_REROLL_SOURCE_KIND" in content, \
+        "Payload must expose reroll source-kind telemetry register"
+    assert "AP_ABILITY_REROLL_CALLSITE_PC" in content, \
+        "Payload must expose reroll callsite telemetry register"
+    assert "AP_ABILITY_REROLL_KIRBY_INDEX" in content, \
+        "Payload must expose reroll Kirby-index telemetry register"
+    assert "AP_ABILITY_REROLL_SOURCE_KIND = source_kind" in hook_body, \
+        "Reroll hook must write source-kind discriminator telemetry"
+    assert "AP_ABILITY_REROLL_CALLSITE_PC = caller_pc" in hook_body, \
+        "Reroll hook must write caller PC discriminator telemetry"
+    assert "AP_ABILITY_REROLL_KIRBY_INDEX = kirby_index" in hook_body, \
+        "Reroll hook must write Kirby index telemetry"
+    assert "mov %0, lr" in hook_body, \
+        "Reroll hook must snapshot lr before any BL clobbers the caller return address"
+    assert "caller_lr_snapshot" in hook_body, \
+        "Reroll hook should capture caller lr into a normal variable before helper calls"
+    assert "ABILITY_REROLL_SOURCE_KIND_OBJECT2_TYPE" in content, \
+        "Payload should define explicit source-kind enum values"
+    assert "uint16_t source_type = *(volatile uint16_t*)(source_obj_ptr + 0u);" not in hook_body, \
+        "Reroll hook must not read source_type from ObjectBase header at +0"
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

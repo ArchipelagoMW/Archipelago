@@ -116,6 +116,12 @@ _ABILITY_SOURCE_ADDR_TO_KEY: dict[int, str] = {
     for source in ABILITY_SOURCES
     for address in source.addresses
 }
+_ABILITY_REROLL_SOURCE_KIND_TO_LABEL: dict[int, str] = {
+    0: "UNSPECIFIED",
+    1: "OBJECT2_TYPE",
+    2: "NULL_SOURCE_PTR",
+    3: "NON_EWRAM_SOURCE_PTR",
+}
 
 
 def _normalize_gba_rom_address(value: int) -> int:
@@ -1342,6 +1348,9 @@ class KirbyAmClient(BizHawkClient):
         ability_id_addr = self._transport_addr("ability_reroll_ability_id_runtime")
         if None in (counter_addr, source_addr_addr, ability_id_addr):
             return
+        source_kind_addr = self._transport_addr("ability_reroll_source_kind_runtime")
+        callsite_pc_addr = self._transport_addr("ability_reroll_callsite_pc_runtime")
+        kirby_index_addr = self._transport_addr("ability_reroll_kirby_index_runtime")
 
         counter_raw = (await bizhawk.read(ctx.bizhawk_ctx, [
             (counter_addr, 4, "System Bus"),
@@ -1356,15 +1365,51 @@ class KirbyAmClient(BizHawkClient):
             self._last_ability_reroll_event_counter = event_counter
             return
 
-        source_raw, ability_raw = await bizhawk.read(ctx.bizhawk_ctx, [
+        payload_reads = [
             (source_addr_addr, 4, "System Bus"),
             (ability_id_addr, 4, "System Bus"),
-        ])
+        ]
+        if source_kind_addr is not None:
+            payload_reads.append((source_kind_addr, 4, "System Bus"))
+        if callsite_pc_addr is not None:
+            payload_reads.append((callsite_pc_addr, 4, "System Bus"))
+        if kirby_index_addr is not None:
+            payload_reads.append((kirby_index_addr, 4, "System Bus"))
+        payload_raw = await bizhawk.read(ctx.bizhawk_ctx, payload_reads)
+
+        source_raw = payload_raw[0]
+        ability_raw = payload_raw[1]
+        source_kind = 0
+        callsite_pc = 0
+        kirby_index = 0xFFFFFFFF
+        next_idx = 2
+        if source_kind_addr is not None:
+            source_kind = self._u32_le(payload_raw[next_idx])
+            next_idx += 1
+        if callsite_pc_addr is not None:
+            callsite_pc = self._u32_le(payload_raw[next_idx])
+            next_idx += 1
+        if kirby_index_addr is not None:
+            kirby_index = self._u32_le(payload_raw[next_idx])
+
         delta = (event_counter - self._last_ability_reroll_event_counter) & 0xFFFFFFFF
         source_addr = self._u32_le(source_raw)
         ability_id = self._u32_le(ability_raw) & 0x1F
-        enemy_name = _ABILITY_SOURCE_ADDR_TO_KEY.get(source_addr, f"UNKNOWN_0x{source_addr:06X}")
+        normalized_source_addr = _normalize_gba_rom_address(source_addr)
+        enemy_name = _ABILITY_SOURCE_ADDR_TO_KEY.get(source_addr)
+        if enemy_name is None:
+            enemy_name = _ABILITY_SOURCE_ADDR_TO_KEY.get(normalized_source_addr)
+        if enemy_name is None:
+            if source_kind == 2:
+                enemy_name = f"UNKNOWN_NULL_SRC_0x{source_addr:08X}"
+            elif source_kind == 3:
+                enemy_name = f"UNKNOWN_NON_EWRAM_SRC_0x{source_addr:08X}"
+            else:
+                enemy_name = f"UNKNOWN_0x{source_addr:08X}"
         ability_name = _ABILITY_ID_TO_NAME.get(ability_id, f"Ability_{ability_id}")
+        kirby_label = "Kirby"
+        if kirby_index <= 3:
+            kirby_label = f"Kirby P{kirby_index + 1}"
 
 
         if delta > 1:
@@ -1375,10 +1420,21 @@ class KirbyAmClient(BizHawkClient):
             )
         self._log_verbose(
             "info",
-            "Kirby swallowed a %s. Ability was rerolled to %s.",
+            "%s swallowed a %s. Ability was rerolled to %s.",
+            kirby_label,
             enemy_name,
             ability_name,
         )
+        if enemy_name.startswith("UNKNOWN"):
+            self._log_verbose(
+                "info",
+                "KirbyAM reroll telemetry detail: kirby_index=%d, source_kind=%s(%d), callsite=0x%08X, raw_source=0x%08X.",
+                kirby_index,
+                _ABILITY_REROLL_SOURCE_KIND_TO_LABEL.get(source_kind, "UNRECOGNIZED"),
+                source_kind,
+                callsite_pc,
+                source_addr,
+            )
         self._last_ability_reroll_event_counter = event_counter
 
     async def _enforce_no_extra_lives(self, ctx: "BizHawkClientContext") -> None:

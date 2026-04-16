@@ -3897,6 +3897,9 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
     counter_addr = data.transport_ram_addresses["ability_reroll_event_counter_runtime"]
     source_addr_addr = data.transport_ram_addresses["ability_reroll_source_addr_runtime"]
     ability_id_addr = data.transport_ram_addresses["ability_reroll_ability_id_runtime"]
+    source_kind_addr = data.transport_ram_addresses["ability_reroll_source_kind_runtime"]
+    callsite_addr = data.transport_ram_addresses["ability_reroll_callsite_pc_runtime"]
+    kirby_index_addr = data.transport_ram_addresses["ability_reroll_kirby_index_runtime"]
 
     with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
          patch('CommonClient.logger') as mock_logger:
@@ -3904,7 +3907,13 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
             [(5).to_bytes(4, 'little')],
             [(0).to_bytes(4, 'little')],
             [(1).to_bytes(4, 'little')],
-            [(0x00123456).to_bytes(4, 'little'), (3).to_bytes(4, 'little')],
+            [
+                (0x00123456).to_bytes(4, 'little'),
+                (3).to_bytes(4, 'little'),
+                (2).to_bytes(4, 'little'),
+                (0x0806F7A0).to_bytes(4, 'little'),
+                (2).to_bytes(4, 'little'),
+            ],
         ]
 
         await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
@@ -3930,6 +3939,9 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
         [
             (source_addr_addr, 4, "System Bus"),
             (ability_id_addr, 4, "System Bus"),
+            (source_kind_addr, 4, "System Bus"),
+            (callsite_addr, 4, "System Bus"),
+            (kirby_index_addr, 4, "System Bus"),
         ],
     )
 
@@ -3940,9 +3952,155 @@ async def test_poll_enemy_ability_reroll_events_treats_counter_rollback_as_reset
     ]
     assert unexpected_missed_event_logs == []
     mock_logger.info.assert_any_call(
-        "Kirby swallowed a %s. Ability was rerolled to %s.",
-        "UNKNOWN_0x123456",
+        "%s swallowed a %s. Ability was rerolled to %s.",
+        "Kirby P3",
+        "UNKNOWN_NULL_SRC_0x00123456",
         "Burning",
+        extra={"NoStream": True},
+    )
+    mock_logger.info.assert_any_call(
+        "KirbyAM reroll telemetry detail: kirby_index=%d, source_kind=%s(%d), callsite=0x%08X, raw_source=0x%08X.",
+        2,
+        "NULL_SOURCE_PTR",
+        2,
+        0x0806F7A0,
+        0x00123456,
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_enemy_ability_reroll_events_resolves_rom_domain_source_address(mock_bizhawk_context):
+    """ROM-bus source addresses should resolve to canonical enemy keys in telemetry logs."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+    mock_bizhawk_context.slot_data = {"ability_randomization_mode": 2}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(1).to_bytes(4, 'little')],
+            [(2).to_bytes(4, 'little')],
+            [
+                (0x08351816).to_bytes(4, 'little'),
+                (3).to_bytes(4, 'little'),
+                (1).to_bytes(4, 'little'),
+                (0x08017BA4).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+            ],
+        ]
+
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+
+    mock_logger.info.assert_any_call(
+        "%s swallowed a %s. Ability was rerolled to %s.",
+        "Kirby P1",
+        "FLAMER",
+        "Burning",
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_enemy_ability_reroll_events_resolves_alternate_golem_form_address(mock_bizhawk_context):
+    """Alternate Golem form source addresses should resolve to the canonical GOLEM key."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+    mock_bizhawk_context.slot_data = {"ability_randomization_mode": 2}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(1).to_bytes(4, 'little')],
+            [(2).to_bytes(4, 'little')],
+            [
+                (0x08351936).to_bytes(4, 'little'),
+                (4).to_bytes(4, 'little'),
+                (1).to_bytes(4, 'little'),
+                (0x08017BA4).to_bytes(4, 'little'),
+                (1).to_bytes(4, 'little'),
+            ],
+        ]
+
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+
+    mock_logger.info.assert_any_call(
+        "%s swallowed a %s. Ability was rerolled to %s.",
+        "Kirby P2",
+        "GOLEM",
+        "Wheel",
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_enemy_ability_reroll_events_resolves_large_mr_frosty_ice_cube(mock_bizhawk_context):
+    """Large Mr. Frosty ice-cube source addresses should resolve to the canonical spawned-object key."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+    mock_bizhawk_context.slot_data = {"ability_randomization_mode": 2}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(1).to_bytes(4, 'little')],
+            [(2).to_bytes(4, 'little')],
+            [
+                (0x083525F6).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+                (1).to_bytes(4, 'little'),
+                (0x08017BA4).to_bytes(4, 'little'),
+                (3).to_bytes(4, 'little'),
+            ],
+        ]
+
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+
+    mock_logger.info.assert_any_call(
+        "%s swallowed a %s. Ability was rerolled to %s.",
+        "Kirby P4",
+        "MR_FROSTY_ICE_CUBE",
+        "Normal",
+        extra={"NoStream": True},
+    )
+
+
+@pytest.mark.asyncio
+async def test_poll_enemy_ability_reroll_events_resolves_boxy_spawned_object(mock_bizhawk_context):
+    """Boxy spawned-object source address should resolve to a Boxy-specific key."""
+    client = KirbyAmClient()
+    client.initialize_client()
+    client._debug_logging_enabled = True
+    mock_bizhawk_context.slot_data = {"ability_randomization_mode": 2}
+
+    with patch('worlds.kirbyam.client.bizhawk.read', new_callable=AsyncMock) as mock_read, \
+         patch('CommonClient.logger') as mock_logger:
+        mock_read.side_effect = [
+            [(1).to_bytes(4, 'little')],
+            [(2).to_bytes(4, 'little')],
+            [
+                (0x083526CE).to_bytes(4, 'little'),
+                (5).to_bytes(4, 'little'),
+                (1).to_bytes(4, 'little'),
+                (0x08017BA4).to_bytes(4, 'little'),
+                (0).to_bytes(4, 'little'),
+            ],
+        ]
+
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+        await client._poll_enemy_ability_reroll_events(mock_bizhawk_context)
+
+    mock_logger.info.assert_any_call(
+        "%s swallowed a %s. Ability was rerolled to %s.",
+        "Kirby P1",
+        "BOXY_SPAWNED_OBJECT",
+        "Parasol",
         extra={"NoStream": True},
     )
 

@@ -32,11 +32,11 @@ EWRAM Layout (0x02000000 - 0x02040000):
   
     0x02000000 - 0x02040000   EWRAM Region (256 KB)
         ├─ 0x02000000 - 0x0202BFFF   Native game state
-        ├─ 0x0203B000 - 0x0203B087   AP Mailbox (reserved, 136 bytes)
+        ├─ 0x0203B000 - 0x0203B08B   AP Mailbox (reserved, 140 bytes)
         └─ Remaining EWRAM (excluding AP mailbox block)
 ```
 
-### AP Mailbox Block (0x0203B000 - 0x0203B087)
+### AP Mailbox Block (0x0203B000 - 0x0203B08B)
 
 **Transport Layer: Client ↔ ROM Communication**
 
@@ -66,7 +66,8 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x50   | 0x0203B050 | 4B | starting_kirby_color_id | u32 | ROM ← Client | Runtime config payload for starting Kirby color. Valid values are `0..13`; `0` (Pink) is intentionally treated as a no-op by payload logic. Non-Pink values are applied through `KIRBY_TRANSITION_COLOR`, so the color becomes visible on the next room/area transition or when an enemy-hit path refreshes Kirby's runtime color state (typically the first transition after game start). |
 | 0x54   | 0x0203B054 | 4B | one_hit_mode_runtime | u32 | ROM ← Client | Challenge-mode runtime config: one-hit mode value (`0`=off, `1`=exclude_vitality_counters, `2`=include_vitality_counters). Initialized to `0xFFFFFFFF` by payload on cold boot; overwritten by the Python client each connection. |
 | 0x58   | 0x0203B058 | 4B | no_extra_lives_runtime | u32 | ROM ← Client | Challenge-mode runtime config: no-extra-lives flag (`0`=off, `1`=on). Initialized to `0xFFFFFFFF` by payload on cold boot; overwritten by the Python client each connection. |
-| 0x5C–0x63 | 0x0203B05C–0x0203B063 | 8B | *(reserved)* | — | — | Reserved; not currently used. |
+| 0x5C   | 0x0203B05C | 4B | ability_reroll_source_kind_runtime | u32 | ROM → Client | Source-pointer classifier for the **most recent** reroll event: `0` unknown/unspecified, `1` r5 looked like an `Object2*` in EWRAM and source type was sampled at `+0x82`, `2` r5 was null, `3` r5 was non-null but outside EWRAM. Helps distinguish real swallow-source events from helper call paths that do not carry an enemy object pointer. |
+| 0x60   | 0x0203B060 | 4B | ability_reroll_callsite_pc_runtime | u32 | ROM → Client | Return-site discriminator for the **most recent** reroll event. Payload records caller PC derived from `lr` (`(lr & ~1) - 4`) so telemetry can distinguish call families that route into the same ability transition function. |
 | 0x64   | 0x0203B064 | 4B | ability_randomization_mode_runtime | u32 | ROM ← Client | Enemy copy-ability randomization mode (`0`=off, `1`=shuffled, `2`=completely_random). Written once per connection by the Python client from `slot_data`. |
 | 0x68   | 0x0203B068 | 4B | ability_randomization_seed_lo_runtime | u32 | ROM ← Client | Low 32 bits of the 64-bit seed used for per-swallow completely-random rerolls. |
 | 0x6C   | 0x0203B06C | 4B | ability_randomization_seed_hi_runtime | u32 | ROM ← Client | High 32 bits of the 64-bit seed used for per-swallow completely-random rerolls. |
@@ -76,8 +77,9 @@ EWRAM Layout (0x02000000 - 0x02040000):
 | 0x7C   | 0x0203B07C | 4B | ability_reroll_event_counter_runtime | u32 | ROM → Client | Incremented by the payload each time a per-swallow reroll fires. Client polls for rises in this counter to detect that one or more rerolls occurred since the previous poll. |
 | 0x80   | 0x0203B080 | 4B | ability_reroll_source_addr_runtime | u32 | ROM → Client | ROM address of the ability-source byte for the **most recent** per-swallow reroll event only. This is a single-slot mailbox field; if multiple rerolls happen between client polls, earlier source addresses are overwritten and cannot be reconstructed. Used by the client to map the most recent source to an enemy name in telemetry (best-effort). |
 | 0x84   | 0x0203B084 | 4B | ability_reroll_ability_id_runtime | u32 | ROM → Client | Ability ID selected by the **most recent** per-swallow reroll event only. Pairs with `ability_reroll_source_addr_runtime` as a best-effort snapshot; if multiple rerolls happen between polls, intermediate ability IDs are overwritten. The client logs how many events were missed when `ability_reroll_event_counter_runtime` advances by more than 1. |
+| 0x88   | 0x0203B088 | 4B | ability_reroll_kirby_index_runtime | u32 | ROM → Client | Kirby slot index (`0..3`) for the **most recent** reroll event, derived from the `kirby` pointer passed into the transition hook. `0xFFFFFFFF` indicates the pointer did not match an aligned player-struct slot. |
 
-**Total: 136 bytes (0x0203B000 - 0x0203B087)**
+**Total: 140 bytes (0x0203B000 - 0x0203B08B)**
 
 ### Native Game State (Referenced by AP; some fields are client-reconciled)
 

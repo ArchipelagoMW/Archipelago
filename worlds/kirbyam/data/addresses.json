@@ -24,6 +24,8 @@
       "starting_kirby_color_id": "0x0203B050",
       "one_hit_mode_runtime": "0x0203B054",
       "no_extra_lives_runtime": "0x0203B058",
+      "ability_reroll_source_kind_runtime": "0x0203B05C",
+      "ability_reroll_callsite_pc_runtime": "0x0203B060",
       "ability_randomization_mode_runtime": "0x0203B064",
       "ability_randomization_seed_lo_runtime": "0x0203B068",
       "ability_randomization_seed_hi_runtime": "0x0203B06C",
@@ -32,7 +34,8 @@
       "ability_randomization_rng_state_runtime": "0x0203B078",
       "ability_reroll_event_counter_runtime": "0x0203B07C",
       "ability_reroll_source_addr_runtime": "0x0203B080",
-      "ability_reroll_ability_id_runtime": "0x0203B084"
+      "ability_reroll_ability_id_runtime": "0x0203B084",
+      "ability_reroll_kirby_index_runtime": "0x0203B088"
     },
     "native": {
       "small_chest_flags_native": "0x02038960",

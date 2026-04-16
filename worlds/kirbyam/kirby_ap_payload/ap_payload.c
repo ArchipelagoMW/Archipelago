@@ -49,6 +49,7 @@
 #define AP_ABILITY_REROLL_EVENT_COUNTER (*(volatile uint32_t*)(AP_BASE + 0x7Cu))
 #define AP_ABILITY_REROLL_SOURCE_ADDR (*(volatile uint32_t*)(AP_BASE + 0x80u))
 #define AP_ABILITY_REROLL_ABILITY_ID (*(volatile uint32_t*)(AP_BASE + 0x84u))
+#define AP_ABILITY_REROLL_KIRBY_INDEX (*(volatile uint32_t*)(AP_BASE + 0x88u))
 // Boss Defeat Transport Register (Issue #35: Boss-defeat locations with shard-delivery decoupling)
 // Written by ROM payload when an area boss is defeated; polled by Python client for location checks.
 // Bit N set <=> boss of area N was defeated (same bit ordering as shard_bitfield, bits 0-7 used).
@@ -63,6 +64,8 @@
 // 0xFFFFFFFF means client has not synced yet (treat as off/0).
 #define AP_ONE_HIT_MODE_RUNTIME    (*(volatile uint32_t*)(AP_BASE + 0x54u))
 #define AP_NO_EXTRA_LIVES_RUNTIME  (*(volatile uint32_t*)(AP_BASE + 0x58u))
+#define AP_ABILITY_REROLL_SOURCE_KIND (*(volatile uint32_t*)(AP_BASE + 0x5Cu))
+#define AP_ABILITY_REROLL_CALLSITE_PC (*(volatile uint32_t*)(AP_BASE + 0x60u))
 #define KIRBY_SHARD_FLAGS_ADDR  0x02038970u
 #define KIRBY_SHARD_FLAGS       (*(volatile uint8_t*)(KIRBY_SHARD_FLAGS_ADDR))
 #define KIRBY_ACTIVE_COLOR_ADDR    0x0203ADE0u
@@ -263,6 +266,13 @@ typedef void (*KirbyGiveInvincibilityFn)(void *kirby, uint16_t duration);
 #define KIRBY_ABILITY_CHANGE_IS_ABILITY_STAR 0x20u
 #define ENEMY_ABILITY_TABLE_BASE_ADDR 0x35164Eu
 #define ENEMY_ABILITY_TABLE_STRIDE 0x18u
+#define OBJECT2_TYPE_OFFSET 0x82u
+#define KIRBY_PLAYER_COUNT 4u
+#define AP_REROLL_KIRBY_INDEX_UNKNOWN 0xFFFFFFFFu
+#define ABILITY_REROLL_SOURCE_KIND_UNSPECIFIED 0u
+#define ABILITY_REROLL_SOURCE_KIND_OBJECT2_TYPE 1u
+#define ABILITY_REROLL_SOURCE_KIND_NULL_SOURCE_PTR 2u
+#define ABILITY_REROLL_SOURCE_KIND_NON_EWRAM_SOURCE_PTR 3u
 
 static uint32_t ap_mix_u32(uint32_t x) {
     x ^= x >> 16;
@@ -320,11 +330,33 @@ __attribute__((used)) void ap_on_request_copy_ability_transition(void *kirby, ui
     if (mode == ABILITY_RANDOMIZATION_MODE_COMPLETELY_RANDOM
         && (ability_flags & KIRBY_ABILITY_CHANGE_IS_ABILITY_STAR) == 0u) {
         register uint32_t source_obj_ptr asm("r5");
+        uint32_t caller_lr_snapshot;
         uint32_t no_ability_weight = AP_ABILITY_RANDOMIZATION_NO_ABILITY_WEIGHT;
         uint32_t allowed_mask = AP_ABILITY_RANDOMIZATION_ALLOWED_MASK;
-        uint32_t random_roll = ap_next_rng_u32();
+        uint32_t random_roll;
         uint8_t selected_ability;
         uint32_t source_addr = 0u;
+        uint32_t source_kind = ABILITY_REROLL_SOURCE_KIND_UNSPECIFIED;
+        uint32_t caller_pc;
+        uint32_t kirby_index = AP_REROLL_KIRBY_INDEX_UNKNOWN;
+        uint32_t kirby_addr = (uint32_t)kirby;
+
+        __asm__ volatile ("mov %0, lr" : "=r" (caller_lr_snapshot));
+        caller_pc = (caller_lr_snapshot & ~1u);
+
+        if (caller_pc >= 4u) {
+            caller_pc -= 4u;
+        }
+
+        if (kirby_addr >= KIRBY_STRUCTS_ADDR
+            && kirby_addr < (KIRBY_STRUCTS_ADDR + (KIRBY_STRUCT_STRIDE * KIRBY_PLAYER_COUNT))) {
+            uint32_t kirby_offset = kirby_addr - KIRBY_STRUCTS_ADDR;
+            if ((kirby_offset % KIRBY_STRUCT_STRIDE) == 0u) {
+                kirby_index = kirby_offset / KIRBY_STRUCT_STRIDE;
+            }
+        }
+
+        random_roll = ap_next_rng_u32();
 
         if (no_ability_weight >= 100u) {
             selected_ability = 0u;
@@ -337,12 +369,21 @@ __attribute__((used)) void ap_on_request_copy_ability_transition(void *kirby, ui
         rewritten_flags = (ability_flags & ~KIRBY_ABILITY_MASK) | (uint32_t)(selected_ability & KIRBY_ABILITY_MASK);
 
         if (source_obj_ptr >= 0x02000000u && source_obj_ptr < 0x02040000u) {
-            uint16_t source_type = *(volatile uint16_t*)(source_obj_ptr + 0u);
+            // source_obj_ptr points at Object2 in this hook path; type is a u8 at +0x82.
+            uint8_t source_type = *(volatile uint8_t*)(source_obj_ptr + OBJECT2_TYPE_OFFSET);
             source_addr = ENEMY_ABILITY_TABLE_BASE_ADDR + ((uint32_t)source_type * ENEMY_ABILITY_TABLE_STRIDE);
+            source_kind = ABILITY_REROLL_SOURCE_KIND_OBJECT2_TYPE;
+        } else if (source_obj_ptr == 0u) {
+            source_kind = ABILITY_REROLL_SOURCE_KIND_NULL_SOURCE_PTR;
+        } else {
+            source_kind = ABILITY_REROLL_SOURCE_KIND_NON_EWRAM_SOURCE_PTR;
         }
 
         AP_ABILITY_REROLL_SOURCE_ADDR = source_addr;
         AP_ABILITY_REROLL_ABILITY_ID = (uint32_t)(selected_ability & KIRBY_ABILITY_MASK);
+        AP_ABILITY_REROLL_SOURCE_KIND = source_kind;
+        AP_ABILITY_REROLL_CALLSITE_PC = caller_pc;
+        AP_ABILITY_REROLL_KIRBY_INDEX = kirby_index;
         AP_ABILITY_REROLL_EVENT_COUNTER++;
     }
 
@@ -739,6 +780,9 @@ void ap_poll_mailbox_c(void) {
         AP_ABILITY_REROLL_EVENT_COUNTER = 0u;
         AP_ABILITY_REROLL_SOURCE_ADDR = 0u;
         AP_ABILITY_REROLL_ABILITY_ID = 0u;
+        AP_ABILITY_REROLL_SOURCE_KIND = 0u;
+        AP_ABILITY_REROLL_CALLSITE_PC = 0u;
+        AP_ABILITY_REROLL_KIRBY_INDEX = AP_REROLL_KIRBY_INDEX_UNKNOWN;
         AP_MAILBOX_INIT_COOKIE = AP_MAILBOX_INIT_COOKIE_VALUE;
     }
 
