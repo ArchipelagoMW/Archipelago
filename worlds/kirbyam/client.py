@@ -551,7 +551,7 @@ class KirbyAmClient(BizHawkClient):
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(room_visit_addr, read_width, "System Bus")]))[0]
 
         if len(raw) != read_width:
-            self._log_client(
+            self._log_verbose(
                 "warning",
                 "KirbyAM: visited-door poll expected %s bytes from gVisitedDoors, got %s; skipping tick",
                 read_width,
@@ -1675,7 +1675,7 @@ class KirbyAmClient(BizHawkClient):
         try:
             loaded = load_json_data("deathlink_flavor_text.json")
         except Exception:
-            self._log_client(
+            self._log_verbose(
                 "warning",
                 "KirbyAM: failed to load DeathLink flavor text file; using fallback text",
                 exc_info=True,
@@ -1707,14 +1707,14 @@ class KirbyAmClient(BizHawkClient):
                 skipped_without_placeholder += 1
 
         if skipped_without_placeholder:
-            self._log_client(
+            self._log_verbose(
                 "warning",
                 "KirbyAM: skipped %d DeathLink flavor text template(s) without '{player}' placeholder",
                 skipped_without_placeholder,
             )
 
         if not valid_templates:
-            self._log_client(
+            self._log_verbose(
                 "warning",
                 "KirbyAM: DeathLink flavor text pool empty; using fallback text"
             )
@@ -2237,7 +2237,7 @@ class KirbyAmClient(BizHawkClient):
 
         raw = (await bizhawk.read(ctx.bizhawk_ctx, [(chest_addr, _MINOR_CHEST_FLAGS_READ_WIDTH, "System Bus")]))[0]
         if len(raw) != _MINOR_CHEST_FLAGS_READ_WIDTH:
-            self._log_client(
+            self._log_verbose(
                 "warning",
                 "KirbyAM: minor-chest poll expected %s bytes from native chest flags, got %s; skipping tick",
                 _MINOR_CHEST_FLAGS_READ_WIDTH,
@@ -2357,7 +2357,7 @@ class KirbyAmClient(BizHawkClient):
             self._hub_switch_session_initialized = True
             if self._hub_switch_baseline_mask is None and switch_bits != 0 and not ctx.checked_locations:
                 self._hub_switch_baseline_mask = switch_bits
-                self._log_client(
+                self._log_verbose(
                     "info",
                     "KirbyAM: hub-switch baseline initialized from first-poll transport state before any server acknowledgements (baseline=0x%08X)",
                     switch_bits,
@@ -3097,7 +3097,7 @@ class KirbyAmClient(BizHawkClient):
                 ai_state_override=ai_state_override,
             )
             if self._native_goal_signal_seen:
-                self._log_client(
+                self._log_verbose(
                     "info",
                     "KirbyAM: native goal signal seen (goal_option=%s)",
                     slot_goal,
@@ -3117,7 +3117,7 @@ class KirbyAmClient(BizHawkClient):
                 self._goal_reported = True
                 return
 
-            self._log_client(
+            self._log_verbose(
                 "info",
                 "KirbyAM: goal location is addressless in this world; sending CLIENT_GOAL directly (goal_option=%s)",
                 slot_goal,
@@ -3137,7 +3137,7 @@ class KirbyAmClient(BizHawkClient):
             if locations_checked is not None:
                 if goal_location_id in locations_checked:
                     return
-                self._log_client(
+                self._log_verbose(
                     "info",
                     "KirbyAM: sending goal location check (location_id=%s)",
                     goal_location_id,
@@ -3146,7 +3146,7 @@ class KirbyAmClient(BizHawkClient):
                 locations_checked.add(goal_location_id)
             else:
                 if not self._goal_location_reported:
-                    self._log_client(
+                    self._log_verbose(
                         "info",
                         "KirbyAM: sending goal location check (location_id=%s)",
                         goal_location_id,

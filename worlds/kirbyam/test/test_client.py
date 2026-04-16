@@ -776,6 +776,7 @@ async def test_poll_hub_switch_suppresses_pre_session_stale_bits(mock_bizhawk_co
     mock_send.assert_not_awaited()
     assert mock_logger.info.called
     assert "hub-switch baseline initialized" in mock_logger.info.call_args.args[0]
+    assert mock_logger.info.call_args.kwargs.get("extra", {}).get("NoStream") is True
 
 
 @pytest.mark.asyncio
@@ -1926,6 +1927,7 @@ async def test_goal_reporting_logs_native_signal_seen(mock_bizhawk_context):
     ]
     assert len(signal_calls) == 1
     assert signal_calls[0].args[1:] == (0,)  # goal_option=0
+    assert signal_calls[0].kwargs.get("extra", {}).get("NoStream") is True
 
 
 @pytest.mark.asyncio
@@ -1951,6 +1953,7 @@ async def test_goal_reporting_logs_location_check_sent(mock_bizhawk_context):
     ]
     assert len(check_calls) == 1
     assert check_calls[0].args[1:] == (goal_id,)
+    assert check_calls[0].kwargs.get("extra", {}).get("NoStream") is True
 
 
 @pytest.mark.asyncio
@@ -2008,6 +2011,7 @@ async def test_goal_reporting_logs_direct_client_goal_for_addressless_event(mock
     ]
     assert len(direct_calls) == 1
     assert direct_calls[0].args[1:] == (0,)
+    assert direct_calls[0].kwargs.get("extra", {}).get("NoStream") is True
 
 
 @pytest.mark.asyncio
