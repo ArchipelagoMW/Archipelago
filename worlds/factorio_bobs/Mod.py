@@ -18,18 +18,17 @@ if TYPE_CHECKING:
 
 template_env: Optional[jinja2.Environment] = None
 
-data_template: Optional[jinja2.Template] = None
-data_final_template: Optional[jinja2.Template] = None
-control_template: Optional[jinja2.Template] = None
-settings_template: Optional[jinja2.Template] = None
 settings_final_template: Optional[jinja2.Template] = None
+general_template: Optional[jinja2.Template] = None
+locations_template: Optional[jinja2.Template] = None
+custom_recipes_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
 
 base_info = {
     "version": Utils.__version__,
     "title": "Archipelago",
-    "author": "Berserker",
+    "author": "Berserker, Orisis, CosmicWolf",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
     "factorio_version": "2.0",
@@ -88,9 +87,9 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, control_template, data_template, settings_template, settings_final_template
+    global settings_final_template, general_template, locations_template, custom_recipes_template
     with template_load_lock:
-        if not data_final_template:
+        if not settings_final_template:
             def load_template(name: str):
                 import pkgutil
                 data = pkgutil.get_data(__name__, "data/mod_template/" + name).decode()
@@ -99,11 +98,10 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
             template_env: Optional[jinja2.Environment] = \
                 jinja2.Environment(loader=jinja2.FunctionLoader(load_template))
 
-            data_template = template_env.get_template("data.lua")
-            data_final_template = template_env.get_template("data-final-fixes.lua")
-            control_template = template_env.get_template("control.lua")
-            settings_template = template_env.get_template("settings.lua")
-            settings_final_template = template_env.get_template(r"settings-final-fixes.lua")
+            settings_final_template = template_env.get_template(r"Archipelago/settings-final-fixes.lua")
+            general_template = template_env.get_template(r"Archipelago/general.lua")
+            locations_template = template_env.get_template(r"Archipelago/locations.lua")
+            custom_recipes_template = template_env.get_template(r"Archipelago/custom_recipes.lua")
     # get data for templates
     locations = [(location, location.item)
                  for location in world.science_locations]
@@ -149,7 +147,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "flop_random": flop_random,
         "recipe_time_scale": recipe_time_scales.get(world.options.recipe_time.value, None),
         "recipe_time_range": recipe_time_ranges.get(world.options.recipe_time.value, None),
-        "free_sample_blacklist": {item: 1 for item in (set(world.modpack.ordered_science_packs) | {"rocket-part"})},
+        "free_sample_blacklist": {item: True for item in (set(world.modpack.ordered_science_packs) | {"rocket-part"})},
         "free_sample_quality_name": world.options.free_samples_quality.current_key,
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          world.modpack.progressive_technology_table.values()},
@@ -159,7 +157,9 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
         "mod_settings": world.modpack.mod_settings,
-        "world_gen_settings": world_gen_settings
+        "world_gen_settings": world_gen_settings,
+        "techs_to_hint": world.techs_to_hint,
+        "tech_craft_obscurity": False, #to ensure that the tech obscurity does not break, but does not need to be an option in the Yaml.
     }
 
     for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():
@@ -168,13 +168,13 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         template_data[factorio_option] = factorio_option_instance.value
 
     if world.options.silo == Silo.option_randomize_recipe:
-        template_data["free_sample_blacklist"]["rocket-silo"] = 1
+        template_data["free_sample_blacklist"]["rocket-silo"] = True
 
     if world.options.satellite == Satellite.option_randomize_recipe:
-        template_data["free_sample_blacklist"]["satellite"] = 1
+        template_data["free_sample_blacklist"]["satellite"] = True
 
-    template_data["free_sample_blacklist"].update({item: 1 for item in world.options.free_sample_blacklist.value})
-    template_data["free_sample_blacklist"].update({item: 0 for item in world.options.free_sample_whitelist.value})
+    template_data["free_sample_blacklist"].update({item: True for item in world.options.free_sample_blacklist.value})
+    template_data["free_sample_blacklist"].update({item: False for item in world.options.free_sample_whitelist.value})
 
     zf_path = os.path.join(output_directory, versioned_mod_name + ".zip")
     mod = FactorioBobsModFile(zf_path, player=player, player_name=world.player_name)
@@ -195,16 +195,14 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                                                 file_path=os.path.join(dirpath, filename):
                                          (arcpath, open(file_path, "rb").read()))
 
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/data.lua",
-                                      data_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/data-final-fixes.lua",
-                                      data_final_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
-                                      control_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
-                                      settings_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings-final-fixes.lua",
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/settings-final-fixes.lua",
                                       settings_final_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/general.lua",
+                                      general_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/locations.lua",
+                                      locations_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/Archipelago/custom_recipes.lua",
+                                      custom_recipes_template.render(**template_data)))
 
     info = copy.deepcopy(base_info)
     info["name"] = mod_name

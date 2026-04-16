@@ -1,4 +1,8 @@
-function get_any_stack_size(name)
+
+local general = require("Archipelago/general")
+local library = {}
+
+function library.get_any_stack_size (name)
     local item = prototypes.item[name]
     if item ~= nil then
         return item.stack_size
@@ -13,7 +17,7 @@ end
 
 -- from https://stackoverflow.com/a/40180465
 -- split("a,b,c", ",") => {"a", "b", "c"}
-function split(s, sep)
+function library.split (s, sep)
     local fields = {}
 
     sep = sep or " "
@@ -23,28 +27,28 @@ function split(s, sep)
     return fields
 end
 
-function random_offset_position(position, offset)
+function library.random_offset_position (position, offset)
     return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-offset, offset)}
 end
 
-function fire_entity_at_players(entity_name, speed)
+function library.fire_entity_at_players (entity_name, speed)
     local entities = {}
     for _, player in ipairs(game.forces["player"].players) do
         if player.character ~= nil then
             table.insert(entities, player.character)
         end
     end
-    return fire_entity_at_entities(entity_name, entities, speed)
+    return library.fire_entity_at_entities(entity_name, entities, speed)
 end
 
-function fire_entity_at_entities(entity_name, entities, speed)
+function library.fire_entity_at_entities (entity_name, entities, speed)
     for _, current_entity in ipairs(entities) do
         local target = current_entity
         if target.health == nil then
             target = target.position
         end
         current_entity.surface.create_entity{name=entity_name,
-            position=random_offset_position(current_entity.position, 128),
+            position=library.random_offset_position(current_entity.position, 128),
             target=target, speed=speed}
     end
 end
@@ -53,7 +57,7 @@ local teleport_requests = {}
 local teleport_attempts = {}
 local max_attempts = 100
 
-function attempt_teleport_player(player, attempt)
+function library.attempt_teleport_player (player, attempt)
     -- global attempt storage as metadata can't be stored
     if attempt == nil then
         attempt = teleport_attempts[player.index]
@@ -70,7 +74,7 @@ function attempt_teleport_player(player, attempt)
     local surface = player.character.surface
     local prototype_name = player.character.prototype.name
     local original_position = player.character.position
-    local candidate_position = random_offset_position(original_position, 1024)
+    local candidate_position = library.random_offset_position(original_position, 1024)
 
     local non_colliding_position = surface.find_non_colliding_position(
         prototype_name, candidate_position, 0, 1
@@ -91,11 +95,11 @@ function attempt_teleport_player(player, attempt)
         -- Store the request with the player index as the key
         teleport_requests[player.index] = path_id
     else
-        attempt_teleport_player(player, attempt + 1)
+        library.attempt_teleport_player(player, attempt + 1)
     end
 end
 
-function handle_teleport_attempt(event)
+function library.handle_teleport_attempt (event)
     for player_index, path_id in pairs(teleport_requests) do
         -- Check if the event matches the stored path_id
         if path_id == event.id then
@@ -111,12 +115,13 @@ function handle_teleport_attempt(event)
                 return
             end
 
-            attempt_teleport_player(player, nil)
+            library.attempt_teleport_player(player, nil)
             break
         end
     end
 end
-function spill_character_inventory(character)
+
+function library.spill_character_inventory (character)
     if not (character and character.valid) then
         return false
     end
@@ -152,3 +157,25 @@ function spill_character_inventory(character)
         end
     end
 end
+
+local last_dump = 0
+function library.dump_info()
+    if last_dump == game.tick then return end --prevent multiple calls in the same game tick.
+    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
+    last_dump = game.tick
+end
+
+function library.string_starts_with(str, start)
+    return str:sub(1, #start) == start
+end
+
+function library.is_valid_ap_force(force)
+    for _, force_name in pairs(general.player_forces) do
+        if force.name == force_name then
+            return true
+        end
+    end
+    return false
+end
+
+return library
