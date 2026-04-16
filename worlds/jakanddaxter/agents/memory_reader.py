@@ -8,6 +8,7 @@ from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExists
 from dataclasses import dataclass
 
 import Utils
+from .utils import user_data_path
 from ..game_id import jak1_gk
 from ..locs import (orb_locations as orbs,
                     cell_locations as cells,
@@ -482,7 +483,7 @@ class JakAndDaxterMemoryReader:
             signed=False)
 
     def save_data(self):
-        with open("jakanddaxter_location_outbox.json", "w+") as f:
+        with open(user_data_path("jakanddaxter_location_outbox.json"), "w+") as f:
             dump = {
                 "outbox_index": self.outbox_index,
                 "location_outbox": self.location_outbox
@@ -491,7 +492,7 @@ class JakAndDaxterMemoryReader:
 
     def load_data(self):
         try:
-            with open("jakanddaxter_location_outbox.json", "r") as f:
+            with open(user_data_path("jakanddaxter_location_outbox.json"), "r") as f:
                 load = json.load(f)
                 self.outbox_index = load["outbox_index"]
                 self.location_outbox = load["location_outbox"]
