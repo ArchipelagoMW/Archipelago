@@ -124,6 +124,88 @@ _ABILITY_REROLL_SOURCE_KIND_TO_LABEL: dict[int, str] = {
 }
 
 
+def _build_kirbyam_command_processor(base_command_processor: type) -> type:
+    _base_cls = base_command_processor
+
+    def _cmd_locations(self) -> bool:
+        """List active location names for the current KirbyAM seed when available."""
+        if getattr(self.ctx, "game", None) != KirbyAmClient.game:
+            return _base_cls._cmd_locations(self)
+
+        slot_data = getattr(self.ctx, "slot_data", None)
+        slot_locations = slot_data.get("locations") if isinstance(slot_data, dict) else None
+        if not isinstance(slot_locations, dict):
+            return _base_cls._cmd_locations(self)
+
+        server_locations = getattr(self.ctx, "server_locations", None)
+        if not isinstance(server_locations, set):
+            missing_locations = getattr(self.ctx, "missing_locations", None)
+            checked_locations = getattr(self.ctx, "checked_locations", None)
+            if isinstance(missing_locations, set) and isinstance(checked_locations, set):
+                server_locations = missing_locations | checked_locations
+            else:
+                server_locations = None
+
+        if not server_locations:
+            return _base_cls._cmd_locations(self)
+
+        location_names_lookup = getattr(self.ctx, "location_names", None)
+        try:
+            location_names = location_names_lookup[self.ctx.game] if location_names_lookup is not None else {}
+        except (KeyError, TypeError):
+            location_names = {}
+        active_location_labels: dict[int, str] = {}
+        for location_meta in slot_locations.values():
+            if not isinstance(location_meta, dict):
+                continue
+            location_id = location_meta.get("location_id")
+            label = location_meta.get("label")
+            if isinstance(location_id, int) and location_id in server_locations and isinstance(label, str):
+                active_location_labels[location_id] = label
+
+        if not active_location_labels:
+            for location_id in server_locations:
+                if location_id < 0:
+                    continue
+                label = location_names.get(location_id)
+                if isinstance(label, str):
+                    active_location_labels[location_id] = label
+
+        if not active_location_labels:
+            return _base_cls._cmd_locations(self)
+
+        self.output(f"Active Locations for {self.ctx.game}")
+        for location_id in sorted(active_location_labels):
+            self.output(active_location_labels[location_id])
+        return True
+
+    return type(
+        "KirbyAmCommandProcessor",
+        (base_command_processor,),
+        {"_cmd_locations": _cmd_locations, "_is_kirbyam_wrapper": True},
+    )
+
+
+def _patch_kirbyam_command_processor(base_command_processor: type) -> type:
+    if getattr(base_command_processor, "_kirbyam_runtime_patched", False):
+        return base_command_processor
+
+    wrapped_command_processor = _build_kirbyam_command_processor(base_command_processor)
+    for attr_name, attr_value in wrapped_command_processor.__dict__.items():
+        if attr_name in {"__dict__", "__doc__", "__module__", "__weakref__"}:
+            continue
+        if attr_name == "_is_kirbyam_wrapper":
+            continue
+        if hasattr(base_command_processor, attr_name):
+            original_attr_name = f"_kirbyam_original_{attr_name}"
+            if not hasattr(base_command_processor, original_attr_name):
+                setattr(base_command_processor, original_attr_name, getattr(base_command_processor, attr_name))
+        setattr(base_command_processor, attr_name, attr_value)
+
+    setattr(base_command_processor, "_kirbyam_runtime_patched", True)
+    return base_command_processor
+
+
 def _normalize_gba_rom_address(value: int) -> int:
     if 0x08000000 <= value < 0x0A000000:
         return value - 0x08000000
@@ -1080,6 +1162,11 @@ class KirbyAmClient(BizHawkClient):
         ctx.items_handling = 0b001
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
+        base_command_processor = getattr(ctx, "command_processor", None)
+        if base_command_processor is not None:
+            if not isinstance(base_command_processor, type):
+                base_command_processor = base_command_processor.__class__
+            ctx.command_processor = _patch_kirbyam_command_processor(base_command_processor)
 
         self.initialize_client()
         self._log_client("info", "KirbyAM: ROM validated.")
