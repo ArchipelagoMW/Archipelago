@@ -1968,7 +1968,15 @@
             { "item": "Cloud Leap" },
             { "item": "Air Dash" },
             { "item": "Charged Strike" }
-        ] // bow hover works on the 1st zipline, but not the 2nd, so it's not relevant here
+        ], // bow hover works on the 1st zipline, but not the 2nd, so it's not relevant to medium
+        "ls_requires": [
+            { "item": "Tai-Chi Kick" },
+            { "item": "Trick - Bow Hover" }, // for the 1st zipline
+            { "item": "Air Dash" }, // pink waterfall hard requires AD, also a T-dash using qi from the TCKs earlier
+            { "item": "Cloud Leap" }, // to reach green platforms between ziplines, which are the only source of LS here
+            { "item": "Ledge Grab" } // finally, do AD setup on the green platforms to get LS,
+            // then bypass the 2nd zipline with a wall slide followed by a CL over the final hazard
+        ]
     },
     { "from": "ED (Passages) - Outside Tianshou Arena", "to": "ED (Passages) - Between Root Node & Tianshou Arena", "requires": [] }, // shortcut rope
     // this region probably has no practical impact on logic, but let's map it out anyway
