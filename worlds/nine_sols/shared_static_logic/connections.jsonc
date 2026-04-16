@@ -234,13 +234,19 @@
         [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
         { "item": "Cloud Leap" }
     ] } ] },
-    { "from": "AF (Depths) - Lower Level", "to": "AF (Depths) - Under Lower Left Exit", "requires": [ { "anyOf": [
-        { "item": "Cloud Leap" },
-        [
-            { "item": "Grapple" },
-            { "anyOf": [ { "item": "Air Dash" }, { "item": "Tai-Chi Kick" } ] }
+    {
+        "from": "AF (Depths) - Lower Level", "to": "AF (Depths) - Under Lower Left Exit",
+        "requires": [ { "anyOf": [
+            { "item": "Cloud Leap" },
+            [
+                { "item": "Grapple" },
+                { "anyOf": [ { "item": "Air Dash" }, { "item": "Tai-Chi Kick" } ] }
+            ]
+        ] } ], // bow hover and T-dash would work, but no arrow/qi source
+        "ls_requires": [ // do the AD setup on the ledge right of Lower Level chest
+            { "item": "Ledge Grab" }, { "item": "Air Dash" } // then parry vault up to the rope instead of CL or G
         ]
-    ] } ] }, // bow hover and T-dash work, but no arrow/qi source
+    },
     {
         "from": "AF (Depths) - Under Lower Left Exit", "to": "AF (Depths) - Lower Level",
         "requires": [ { "anyOf": [
