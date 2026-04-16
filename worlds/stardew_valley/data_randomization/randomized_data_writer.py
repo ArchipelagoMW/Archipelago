@@ -128,8 +128,8 @@ def prepare_crop_growth_time_data(content: StardewContent, data_to_randomize: se
     prepare_crop_data_aspect(content, data_to_randomize, prepared_data,
                              DataRandomizationOptionName.growth_time,
                              lambda crop: any(isinstance(source, HarvestCropSource) and source.growth_time >= 1 for source in crop.sources),
-                             lambda crop: [f"{source.growth_time} Days" for source in crop.sources if isinstance(source, HarvestCropSource)],
-                             "GrowthTime:")
+                             lambda crop: [source.growth_time for source in crop.sources if isinstance(source, HarvestCropSource)],
+                             "GrowthTime")
 
 
 def prepare_crop_growth_season_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):

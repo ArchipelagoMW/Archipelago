@@ -949,7 +949,7 @@ class DataRandomizationBehavior(Choice):
     """
         If any Data Randomization toggles are on, this decides how the data is randomized. Not all toggles can handle all behaviors, when not applicable, the closest lower behavior is chosen.
         Off: No Data Randomization occurs
-        Shuffle: All values are maintained, but shuffled between entries.
+        Shuffled: All values are maintained, but shuffled between entries.
         Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
         Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Can be imbalanced
         Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values. Can be imbalanced
@@ -959,7 +959,7 @@ class DataRandomizationBehavior(Choice):
     display_name = "Data Randomization Behavior"
     default = 1
     option_off = 0
-    option_shuffle = 1
+    option_shuffled = 1
     option_weighted_randomized = 2
     option_randomized = 3
     option_normal_randomized = 4

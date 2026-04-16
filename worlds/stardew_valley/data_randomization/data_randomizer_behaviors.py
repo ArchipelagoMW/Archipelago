@@ -171,7 +171,7 @@ def randomize_wild(existing_values: dict[Any, Any], random: Random) -> dict[Any,
 
 randomizers_per_behavior = {
     DataRandomizationBehavior.option_off: None,
-    DataRandomizationBehavior.option_shuffle: shuffle_data,
+    DataRandomizationBehavior.option_shuffled: shuffle_data,
     DataRandomizationBehavior.option_weighted_randomized: weight_randomize,
     DataRandomizationBehavior.option_normal_randomized: normal_randomize,
     DataRandomizationBehavior.option_randomized: randomize,

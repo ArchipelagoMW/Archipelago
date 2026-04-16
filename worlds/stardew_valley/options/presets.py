@@ -235,7 +235,7 @@ nightmare_settings = {
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_none,
     options.ExcludeGingerIsland.internal_name:          options.ExcludeGingerIsland.option_false,
     options.TrapDifficulty.internal_name:               options.TrapDifficulty.option_hell,
-    options.DataRandomizationBehavior.internal_name:    options.DataRandomizationBehavior.option_shuffle,
+    options.DataRandomizationBehavior.internal_name:    options.DataRandomizationBehavior.option_shuffled,
     options.DataRandomization.internal_name:            options.DataRandomization.preset_all,
     options.MultipleDaySleepEnabled.internal_name:      options.MultipleDaySleepEnabled.option_true,
     options.MultipleDaySleepCost.internal_name:         "expensive",
