@@ -33,6 +33,18 @@ OPERATOR_STRINGS: Final[dict[Operator, str]] = {
     "ge": ">=",
     "le": "<=",
 }
+OPERATOR_INVERSES: Final[dict[Operator, Operator]] = {
+    "eq": "ne",
+    "ne": "eq",
+    "gt": "le",
+    "le": "gt",
+    "lt": "ge",
+    "ge": "lt",
+    "contains": "does not contain",
+    "does not contain": "contains",
+    "in": "not in",
+    "not in": "in",
+}
 REVERSE_OPERATORS: Final[tuple[Operator, ...]] = ("in", "not in")
 
 
@@ -89,6 +101,10 @@ class OptionFilter:
     def multiple_from_dict(cls, data: Iterable[dict[str, Any]]) -> tuple[Self, ...]:
         """Returns a tuple of OptionFilters instances from an iterable of dict representations"""
         return tuple(cls.from_dict(o) for o in data)
+
+    def __invert__(self) -> "OptionFilter":
+        """Returns a new OptionFilter instance that is a negation of the original"""
+        return OptionFilter(self.option, self.value, OPERATOR_INVERSES[self.operator])
 
     @override
     def __str__(self) -> str:
