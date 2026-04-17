@@ -15,7 +15,7 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .items import TIERS_PER_STAT, UPGRADE_STATS, item_name_groups, item_name_to_id, item_table
-from .locations import location_name_to_id, location_table
+from .locations import book_location_table, location_name_to_id, upgrade_location_table
 from .options import DucksOptions
 
 
@@ -63,18 +63,20 @@ class DucksWorld(World):
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
-        garage = Region("Garage", self.player, self.multiworld)
+        city = Region("City", self.player, self.multiworld)
 
-        for name, data in location_table.items():
-            location = DucksLocation(self.player, name, data.id, garage)
-            garage.locations.append(location)
+        for name, data in upgrade_location_table.items():
+            city.locations.append(DucksLocation(self.player, name, data.id, city))
 
-        victory = DucksLocation(self.player, "Fully Upgraded Car", None, garage)
+        for name, loc_id in book_location_table.items():
+            city.locations.append(DucksLocation(self.player, name, loc_id, city))
+
+        victory = DucksLocation(self.player, "Fully Upgraded Car", None, city)
         victory.place_locked_item(DucksItem("Victory", ItemClassification.progression, None, self.player))
-        garage.locations.append(victory)
+        city.locations.append(victory)
 
-        menu.connect(garage)
-        self.multiworld.regions += [menu, garage]
+        menu.connect(city)
+        self.multiworld.regions += [menu, city]
 
     def create_items(self) -> None:
         for name, data in item_table.items():
@@ -85,8 +87,9 @@ class DucksWorld(World):
         # Tier N requires N-1 progressives of its stat, so every Tier 1 location
         # is a free sphere-1 check (the player's starting money buys the first
         # upgrade without AP input). A circular rule — tier N requires N — would
-        # leave sphere-1 empty and the seed unfillable.
-        for name, data in location_table.items():
+        # leave sphere-1 empty and the seed unfillable. Book locations are free
+        # pickups and get no access rule.
+        for name, data in upgrade_location_table.items():
             progressive = f"Progressive {data.stat}"
             required = data.tier - 1
             location = self.multiworld.get_location(name, self.player)
