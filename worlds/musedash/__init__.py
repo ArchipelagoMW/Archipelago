@@ -291,7 +291,7 @@ class MuseDashWorld(World):
             menu_region.locations.append(loc1)
 
             loc2 = MuseDashLocation(self.player,  name + "-1", self.md_collection.song_locations[name + "-1"], menu_region)
-            self.set_rule(loc1, rule)
+            self.set_rule(loc2, rule)
             menu_region.locations.append(loc2)
 
     def set_rules(self) -> None:
