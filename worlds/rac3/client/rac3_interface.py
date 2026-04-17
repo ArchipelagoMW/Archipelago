@@ -542,37 +542,37 @@ class Rac3Interface(GameInterface):
                 elif location > 0:
                     if classification == ItemClassification.trap:
                         self.enqueue_notification(
-                                f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
-                                f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]} "
-                                f"{RAC3TEXTFORMATSTRING.WHITE}at\n"
-                                f"{RAC3TEXTFORMATSTRING.WHITE}{LOCATION_FROM_AP_CODE[location]}",
-                                RAC3BOXTHEME.WARNING)
+                            f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
+                            f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]} "
+                            f"{RAC3TEXTFORMATSTRING.WHITE}at\n"
+                            f"{RAC3TEXTFORMATSTRING.WHITE}{LOCATION_FROM_AP_CODE[location]}",
+                            RAC3BOXTHEME.WARNING)
                     else:
                         self.enqueue_notification(
-                                f"Found "
-                                f"{CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
-                                f"{RAC3TEXTFORMATSTRING.NORMAL}at\n{LOCATION_FROM_AP_CODE[location]}")
+                            f"Found "
+                            f"{CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
+                            f"{RAC3TEXTFORMATSTRING.NORMAL}at\n{LOCATION_FROM_AP_CODE[location]}")
                 else:
                     if classification == ItemClassification.trap:
                         self.enqueue_notification(
-                                f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
-                                f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}",
-                                RAC3BOXTHEME.WARNING)
+                            f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
+                            f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}",
+                            RAC3BOXTHEME.WARNING)
                     else:
                         self.enqueue_notification(
-                                f"Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}")
+                            f"Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}")
             else:
                 if classification == ItemClassification.trap:
                     self.enqueue_notification(
-                            f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}"
-                            f"{RAC3TEXTFORMATSTRING.WHITE} activated your "
-                            f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}",
-                            RAC3BOXTHEME.WARNING)
+                        f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}"
+                        f"{RAC3TEXTFORMATSTRING.WHITE} activated your "
+                        f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}",
+                        RAC3BOXTHEME.WARNING)
                 else:
                     self.enqueue_notification(
-                            f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
-                            f"{RAC3TEXTFORMATSTRING.NORMAL}from "
-                            f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}")
+                        f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
+                        f"{RAC3TEXTFORMATSTRING.NORMAL}from "
+                        f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}")
         logger.debug(f"Item received: {ITEM_FROM_AP_CODE[item_code]}, AP code: {item_code}")
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
