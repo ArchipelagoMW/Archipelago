@@ -1,7 +1,7 @@
 import math
+import random #I know this looks wrong, but it's only used to randomly select a message for the launcher!
 from typing import TextIO
 from Utils import local_path, logging
-from random import choice as random_message #I know this looks wrong, but it's only used to randomly select a message for the launcher!
 
 import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region, Location, Tutorial, LocationProgressType
@@ -47,6 +47,7 @@ messages = ["OpenRCT2 is a really good value!", "OpenRCT2 looks too intense for 
     "I'm not paying that much to use the bathroom!", "OpenRCT2 has crashed!", "OpenRCT2 has broken down.", "This on-"
     "Ride Photo from OpenRCT2 is a really good value!"]
 
+_random_message = random.Random()
 try: LauncherComponents.components.append(
     LauncherComponents.Component(
         "OpenRCT2 Client",
@@ -56,7 +57,7 @@ try: LauncherComponents.components.append(
         # https://github.com/OpenRCT2/OpenRCT2/blob/develop/resources/logo/icon_x96.png
         icon='openrct2icon',
         description="Open the OpenRCT2 client to connect your game to the multiworld!\n"
-            + random_message(messages)
+            + _random_message.choice(messages)
     )
 ) # On older versions of Archipelago, having description text breaks the program.
 except: LauncherComponents.components.append(
