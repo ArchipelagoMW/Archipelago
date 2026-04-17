@@ -8,6 +8,7 @@ from NetUtils import NetworkItem
 from Utils import Any, async_start, init_logging
 from worlds.rac3.client.callbacks import handle_respawn, pcsx2_sync_task, update
 from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.client.notification import RAC3NOTIFICATION
 from worlds.rac3.client.rac3_interface import Rac3Interface
 from worlds.rac3.client.texthelper import colorize_item_name
 from worlds.rac3.constants.data.item import RAC3_ITEM_DATA_TABLE
@@ -171,8 +172,8 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
-            message = " ".join(args)
-            self.ctx.game_interface.notification_queue.append((message[:235:], RAC3BOXTHEME.DEFAULT))
+            message = " ".join(args).replace("\\n", "\n")
+            self.ctx.game_interface.notification_queue.append(RAC3NOTIFICATION(message[:235:], RAC3BOXTHEME.DEFAULT, 5.0))
             if len(message) > 235:
                 self.output("Message longer than 235 characters, truncated to fit in message box.")
             self.output(f"Message box displayed with message: {message[:235:]}")
@@ -297,12 +298,12 @@ class Rac3Context(CommonContext):
                 )
                 format_color = RAC3TEXTFORMATSTRING.NORMAL if receiving_player == self.slot else RAC3TEXTFORMATSTRING.GREEN
                 player_name = self.player_names.get(receiving_player, "???")
-                hint_text = f"{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}"
+                hint_text = f"{RAC3TEXTFORMATSTRING.WHITE}Hint: {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s {item_name}{RAC3TEXTFORMATSTRING.WHITE} is at\n{RAC3TEXTFORMATSTRING.GREEN}{location_name}"
                 if net_item.player != self.slot:
                     player_name = self.player_names.get(net_item.player, "???")
                     format_color = RAC3TEXTFORMATSTRING.NORMAL if net_item.player == self.slot else RAC3TEXTFORMATSTRING.GREEN
-                    hint_text += f"\\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s world."
-                self.game_interface.notification_queue.append((hint_text, RAC3BOXTHEME.HINT))
+                    hint_text += f"\n{RAC3TEXTFORMATSTRING.WHITE}in {format_color}{player_name}{RAC3TEXTFORMATSTRING.WHITE}'s world."
+                self.game_interface.notification_queue.append(RAC3NOTIFICATION(hint_text, RAC3BOXTHEME.HINT))
 
 
 def launch_client():

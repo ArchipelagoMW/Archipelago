@@ -8,6 +8,7 @@ from BaseClasses import ItemClassification
 from CommonClient import logger
 from Utils import __version__
 from worlds.rac3.client.general_interface import GameInterface
+from worlds.rac3.client.notification import RAC3NOTIFICATION
 from worlds.rac3.client.texthelper import (
     ITEM_TO_ORIGINAL_STRING_POINTER_OFFSET,
     ITEM_TO_STRING_TABLE_INDEX_OFFSET,
@@ -168,7 +169,7 @@ class Rac3Interface(GameInterface):
     has_died: bool = False
     died_in_vehicle: bool = False
     inside_hacker_puzzle: bool = False
-    notification_queue: list[tuple] = []
+    notification_queue: list[RAC3NOTIFICATION] = []
     notification_time: float | None = None
     notification_paused_remaining: float = 0
     notification_merge_count: int = 1
@@ -541,36 +542,46 @@ class Rac3Interface(GameInterface):
                 elif location > 0:
                     if classification == ItemClassification.trap:
                         self.notification_queue.append(
-                            (f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
-                             f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]} "
-                             f"{RAC3TEXTFORMATSTRING.WHITE}at\\n"
-                             f"{RAC3TEXTFORMATSTRING.WHITE}{LOCATION_FROM_AP_CODE[location]}", RAC3BOXTHEME.WARNING))
+                            RAC3NOTIFICATION(
+                                f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
+                                f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]} "
+                                f"{RAC3TEXTFORMATSTRING.WHITE}at\n"
+                                f"{RAC3TEXTFORMATSTRING.WHITE}{LOCATION_FROM_AP_CODE[location]}",
+                                RAC3BOXTHEME.WARNING))
                     else:
                         self.notification_queue.append(
-                            (f"Found "
-                             f"{CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
-                             f"{RAC3TEXTFORMATSTRING.NORMAL}at\\n{LOCATION_FROM_AP_CODE[location]}",
-                             RAC3BOXTHEME.DEFAULT))
+                            RAC3NOTIFICATION(
+                                f"Found "
+                                f"{CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
+                                f"{RAC3TEXTFORMATSTRING.NORMAL}at\n{LOCATION_FROM_AP_CODE[location]}",
+                                RAC3BOXTHEME.DEFAULT))
                 else:
                     if classification == ItemClassification.trap:
                         self.notification_queue.append(
-                            (f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
-                             f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}", RAC3BOXTHEME.WARNING))
+                            RAC3NOTIFICATION(
+                                f"{RAC3TEXTFORMATSTRING.WHITE}Activated "
+                                f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}",
+                                RAC3BOXTHEME.WARNING))
                     else:
                         self.notification_queue.append(
-                            (f"Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}",
-                             RAC3BOXTHEME.DEFAULT))
+                            RAC3NOTIFICATION(
+                                f"Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}",
+                                RAC3BOXTHEME.DEFAULT))
             else:
                 if classification == ItemClassification.trap:
-                    self.notification_queue.append((
-                        f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}"
-                        f"{RAC3TEXTFORMATSTRING.WHITE} activated your "
-                        f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}", RAC3BOXTHEME.WARNING))
+                    self.notification_queue.append(
+                        RAC3NOTIFICATION(
+                            f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}"
+                            f"{RAC3TEXTFORMATSTRING.WHITE} activated your "
+                            f"{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}",
+                            RAC3BOXTHEME.WARNING))
                 else:
-                    self.notification_queue.append((
-                        f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
-                        f"{RAC3TEXTFORMATSTRING.NORMAL}from "
-                        f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}", RAC3BOXTHEME.DEFAULT))
+                    self.notification_queue.append(
+                        RAC3NOTIFICATION(
+                            f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
+                            f"{RAC3TEXTFORMATSTRING.NORMAL}from "
+                            f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}",
+                            RAC3BOXTHEME.DEFAULT))
         logger.debug(f"Item received: {ITEM_FROM_AP_CODE[item_code]}, AP code: {item_code}")
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
@@ -926,11 +937,19 @@ class Rac3Interface(GameInterface):
                 if not (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status):
                     logger.info("You do not have the items required to leave this planet through your ship. If you are"
                                 " stuck, hold L2 + R2 + L1 + R1 + SELECT to warp back to the phoenix")
-                    self.notification_queue.append((f"You do not have the items required\\nto leave this planet through your ship.\\n\\n"
-                                f"Hold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT{RAC3TEXTFORMATSTRING.NORMAL}\\nto warp back to the {RAC3TEXTFORMATSTRING.GREEN}Starship Phoenix{RAC3TEXTFORMATSTRING.NORMAL}.", RAC3BOXTHEME.WARNING))
+                    self.notification_queue.append(
+                        RAC3NOTIFICATION(
+                            f"You do not have the items required\nto leave this planet through your ship.\n\n"
+                            f"Hold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT{RAC3TEXTFORMATSTRING.NORMAL}\nto warp back to the {RAC3TEXTFORMATSTRING.GREEN}Starship Phoenix{RAC3TEXTFORMATSTRING.NORMAL}.",
+                            RAC3BOXTHEME.WARNING,
+                            5.0))
             case RAC3REGION.PHOENIX_ASSAULT:
                 logger.info("If you want to travel to the regular phoenix, hold L2 + R2 + L1 + R1 + SELECT")
-                self.notification_queue.append((f"If you want to travel to the regular phoenix\\nHold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT", RAC3BOXTHEME.WARNING))
+                self.notification_queue.append(
+                    RAC3NOTIFICATION(
+                        f"If you want to travel to the regular phoenix\nHold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT",
+                        RAC3BOXTHEME.WARNING,
+                        5.0))
 
     ##################
     # Player Respawn #
@@ -1262,7 +1281,7 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if ((time.time() - self.last_in_ship_time) < 1.25
+        if ((time.time() - self.last_in_ship_time) < 1.5
                 or self.is_reloading
                 or self.self_respawning
                 or self.action_2 == 0x09):
@@ -1465,11 +1484,15 @@ class Rac3Interface(GameInterface):
                 self.timers.pop(name)
                 if "Jackpot" in name:
                     self.notification_queue.append(
-                        (f"{RAC3TEXTFORMATSTRING.WHITE}Jackpot x{2 ** self.bolt_and_xp_multiplier_value} "
-                         f"{RAC3TEXTFORMATSTRING.NORMAL}effect has worn off.", RAC3BOXTHEME.DEFAULT))
+                        RAC3NOTIFICATION(
+                            f"{RAC3TEXTFORMATSTRING.WHITE}Jackpot x{2 ** self.bolt_and_xp_multiplier_value} "
+                            f"{RAC3TEXTFORMATSTRING.NORMAL}effect has worn off.",
+                            RAC3BOXTHEME.DEFAULT))
                 else:
                     self.notification_queue.append(
-                        (f"{name}{RAC3TEXTFORMATSTRING.WHITE} effect has worn off.", RAC3BOXTHEME.WARNING))
+                        RAC3NOTIFICATION(
+                            f"{name}{RAC3TEXTFORMATSTRING.WHITE} effect has worn off.",
+                            RAC3BOXTHEME.WARNING))
                 match _name:
                     case RAC3ITEM.LOCK_TRAP:  # Special case for lock trap
                         # Clear when timer ends directly rather than from the trap cleanup loop below
@@ -1657,7 +1680,7 @@ class Rac3Interface(GameInterface):
         if self.nanotech_exp > 0x7FFFFFFF:
             self._write32(RAC3STATUS.NANOTECH_EXP, 0)
             self.notification_queue.append(
-                ("Negative Nanotech EXP detected! Resetting EXP to 0", RAC3BOXTHEME.WARNING))
+                RAC3NOTIFICATION("Negative Nanotech EXP detected! Resetting EXP to 0", RAC3BOXTHEME.WARNING))
         # If other stuff needs overflow fixing, add here
 
     def health_cycler(self):
@@ -1763,18 +1786,18 @@ class Rac3Interface(GameInterface):
         """Handle the current displayed pop-up message notification, and message queue"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
-        paused = (self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) or (current_time - self.last_in_ship_time) < 1
+        paused = (self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) or (current_time - self.last_in_ship_time) < 1.25
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
                       int(self.inside_hacker_puzzle or paused))
         if self.notification_queue:
             if not self.notification_time:
-                self.notification_time = current_time + 3
+                self.notification_time = current_time + self.notification_queue[0].duration
             if tyhrranoid_game or paused:
                 if self.notification_paused_remaining:
                     # Pause the notification timer
                     self.notification_time = current_time + self.notification_paused_remaining
                 else:
-                    self.notification_time = current_time + 3
+                    self.notification_time = current_time + self.notification_queue[0].duration
                 return
             if self.notification_time < current_time and not self.message_display:
                 # Pop the number of messages that were displayed last cycle
@@ -1783,18 +1806,23 @@ class Rac3Interface(GameInterface):
                         self.notification_queue.pop(0)
                 self.write_messagebox_theme()
                 logger.debug(f"notification queue: {len(self.notification_queue)}")
-                self.notification_time = current_time + 3
+                if self.notification_queue:
+                    self.notification_time = current_time + self.notification_queue[0].duration
             if self.notification_queue:
                 # Merge up to 3 notifications of the same theme, but do not exceed 235 chars
-                merged_message, theme = self.notification_queue[0]
+                merged_notification = self.notification_queue[0]
+                merged_message = merged_notification.message
+                theme = merged_notification.theme
                 merge_count = 1
                 total_length = len(merged_message)
                 for i in range(1, min(3, len(self.notification_queue))):
-                    next_message, next_theme = self.notification_queue[i]
+                    next_notification = self.notification_queue[i]
+                    next_message = next_notification.message
+                    next_theme = next_notification.theme
                     # +2 for the '\n' separator
                     add_length = 2 + len(next_message)
                     if next_theme == theme and (total_length + add_length) <= 235:
-                        merged_message += "\\n" + next_message
+                        merged_message += "\n" + next_message
                         total_length += add_length
                         merge_count += 1
                     else:
@@ -1803,7 +1831,7 @@ class Rac3Interface(GameInterface):
                 msg_list, longest_line_length = self.format_textbox_string(merged_message)
                 if not self.message_display:
                     if self.notification_time < current_time:
-                        self.notification_time = current_time + 3
+                        self.notification_time = current_time + merged_notification.duration
                     display_time = int((self.notification_time - current_time) * 120)
                     self.messagebox(msg_list, longest_line_length, theme, display_time)
                 else:
@@ -1843,7 +1871,7 @@ class Rac3Interface(GameInterface):
     def format_textbox_string(self, msg: str) -> tuple[list[bytes], int]:
         """Process a full message into game insertable bytes, for use with in game pop-ups"""
         # Split message on \n to handle newlines
-        lines = msg.split("\\n")
+        lines = msg.split("\n")
         # Write each line to memory, update string pointers
         longest_line_length = 0
         message_list: list[bytes] = []
