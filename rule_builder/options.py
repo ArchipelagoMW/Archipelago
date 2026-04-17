@@ -8,7 +8,10 @@ from typing_extensions import override
 
 from Options import CommonOptions, Option
 
-Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains", "in"]
+Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains", "in", "does not contain", "not in"]
+
+def _does_not_contain(a: Any, b: Any, /) -> bool:
+    return b not in a
 
 OPERATORS: Final[dict[Operator, Callable[..., bool]]] = {
     "eq": operator.eq,
@@ -19,6 +22,8 @@ OPERATORS: Final[dict[Operator, Callable[..., bool]]] = {
     "le": operator.le,
     "contains": operator.contains,
     "in": operator.contains,
+    "does not contain": _does_not_contain,
+    "not in": _does_not_contain,
 }
 OPERATOR_STRINGS: Final[dict[Operator, str]] = {
     "eq": "==",
@@ -28,7 +33,7 @@ OPERATOR_STRINGS: Final[dict[Operator, str]] = {
     "ge": ">=",
     "le": "<=",
 }
-REVERSE_OPERATORS: Final[tuple[Operator, ...]] = ("in",)
+REVERSE_OPERATORS: Final[tuple[Operator, ...]] = ("in", "not in")
 
 
 @dataclasses.dataclass(frozen=True)
