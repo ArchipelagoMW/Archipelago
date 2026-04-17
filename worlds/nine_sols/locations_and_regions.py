@@ -260,15 +260,9 @@ def create_regions(world: "NineSolsWorld") -> None:
 
     world.origin_region_name = "FSP - Root Node"
     first_node_region = first_root_node_to_region_name[options.first_root_node.value]
-
-    # if this is one of the root nodes with a corresponding node item,
-    # then we want to change the logic from has(node item) to just True
-    try:
-        e = mw.get_entrance(world.origin_region_name + " -> " + first_node_region, p)
-        e.access_rule = lambda state: True  # on 0.6.7: from BaseClasses import DEFAULT_COLLECTION_RULE
-    # otherwise, there won't be an existing connection; we can just add a new one with no rule
-    except KeyError:
-        mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
+    mw.get_region(world.origin_region_name, p).connect(
+        mw.get_region(first_node_region, p),
+        "Teleport to first_root_node")  # explicit name so we don't duplicate any of the node item connections
 
 # `logic` can be a location or a connection
 def get_combined_rb_rule(logic: Any, world: "NineSolsWorld") -> Any:  # TODO: proper return type when 0.6.7 is the minimum
