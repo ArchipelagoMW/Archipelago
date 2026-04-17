@@ -54,6 +54,7 @@ def prepare_crop_data(content: StardewContent, data_to_randomize: set[str], prep
     prepare_crop_sell_price_data(content, data_to_randomize, prepared_data)
     prepare_crop_growth_time_data(content, data_to_randomize, prepared_data)
     prepare_crop_growth_season_data(content, data_to_randomize, prepared_data)
+    prepare_crop_which_seed_data(content, data_to_randomize, prepared_data)
 
 
 def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -140,13 +141,22 @@ def prepare_crop_growth_season_data(content: StardewContent, data_to_randomize: 
                              "Season")
 
 
+def prepare_crop_which_seed_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_crop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.crop_which_seed,
+                             lambda crop: any(isinstance(source, HarvestCropSource) and source.seed in content.game_items for source in crop.sources),
+                             lambda crop: [source.seed for source in crop.sources if isinstance(source, HarvestCropSource)],
+                             "Seed")
+
+
 def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
                              randomize_toggle: str, crop_validator, crop_data_extractor, aspect_key: str):
     if randomize_toggle not in data_to_randomize:
         return
-    crop_item_tags = [ItemTag.FRUIT, ItemTag.VEGETABLE, ItemTag.FORAGE, ItemTag.EDIBLE_MUSHROOM]
+    crop_item_tags = [ItemTag.FRUIT, ItemTag.VEGETABLE, ItemTag.CROPSANITY, ItemTag.FORAGE, ItemTag.EDIBLE_MUSHROOM]
     for crop_name, crop_data in content.game_items.items():
-        if not any(tag in crop_data.tags for tag in crop_item_tags):
+        tags_valid = any(tag in crop_data.tags for tag in crop_item_tags)
+        if not tags_valid:
             continue
         if not crop_validator(crop_data):
             continue

@@ -74,8 +74,8 @@ class SpecialOrderLogic(BaseLogic):
 
         if qi_board_content_pack.name in self.content.registered_packs:
             self.update_rules({
-                SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.greenhouse) &
-                                       self.logic.region.can_reach(Region.island_west) & self.logic.skill.has_total_level(50) &
+                SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.skill.has_total_level(50) &
+                                       self.logic.region.can_reach(Region.greenhouse) & self.logic.has(Fruit.qi_fruit) &
                                        self.logic.has(Machine.seed_maker) & self.logic.shipping.can_use_any_shipping_bin,
                 SpecialOrder.lets_play_a_game: self.logic.arcade.has_junimo_kart_max_level(),
                 SpecialOrder.four_precious_stones: self.logic.time.has_lived_max_months & self.logic.has("Prismatic Shard") &

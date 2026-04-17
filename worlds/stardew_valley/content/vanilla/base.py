@@ -1,6 +1,6 @@
 from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
-from ...data.game_item import ItemTag, CustomRuleSource, GameItem, Tag
+from ...data.game_item import ItemTag, CustomRuleSource, Tag
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.requirement import ToolRequirement, TotalEarningsRequirement, ShipOneCropRequirement, CraftedItemsRequirement, CookedRecipesRequirement, \
@@ -47,8 +47,8 @@ non_juiceable_vegetables = (Vegetable.hops, Vegetable.tea_leaves, Vegetable.whea
 class BaseGameContentPack(ContentPack):
 
     def harvest_source_hook(self, content: StardewContent):
-        coffee_starter = content.game_items[Seed.coffee_starter]
-        content.game_items[Seed.coffee_starter] = GameItem(Seed.coffee, sources=coffee_starter.sources, tags=coffee_starter.tags)
+        # coffee_starter = content.game_items[Seed.coffee_starter]
+        # content.game_items[Seed.coffee_starter] = GameItem(Seed.coffee, sources=coffee_starter.sources, tags=coffee_starter.tags)
 
         content.untag_item(WildSeeds.ancient, ItemTag.CROPSANITY_SEED)
 

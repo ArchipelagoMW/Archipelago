@@ -3,6 +3,7 @@ from ...strings.fish_names import WaterItem
 from ...strings.flower_names import Flower
 from ...strings.forageable_names import Mushroom, Forageable
 from ...strings.material_names import Material
+from ...strings.seed_names import Seed
 
 pelican_town_fruit_sell_prices = {
     Fruit.ancient_fruit: 550,
@@ -34,7 +35,7 @@ pelican_town_vegetable_sell_prices = {
     Vegetable.broccoli: 70,
     Vegetable.carrot: 35,
     Vegetable.cauliflower: 175,
-    # TODO: Vegetable.coffee_bean: 15,
+    Seed.coffee: 15,
     Vegetable.corn: 50,
     Vegetable.eggplant: 60,
     Vegetable.garlic: 60,

@@ -979,7 +979,7 @@ class DataRandomization(OptionSet):
     Crop Sell Price: Sell price of all crops and forage
     Growth Time: Time to grow crops from planting to first harvest
     Growth Season: Which seasons various seeds can grow in
-    Which Crop From Which Seed: Which crop come from which seeds. Only "Shuffle" behavior
+    Which Crop From Which Seed: Which crop come from which seeds. Only "Shuffled" behavior
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"

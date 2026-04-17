@@ -393,7 +393,8 @@ def create_seeds(item_factory: StardewItemFactory, content: StardewContent, item
     if not content.features.cropsanity.is_enabled:
         return
 
-    items.extend(item_factory(item_table[seed.name]) for seed in content.find_tagged_items(ItemTag.CROPSANITY_SEED))
+    cropsanity_seed_items = content.find_tagged_items(ItemTag.CROPSANITY_SEED)
+    items.extend(item_factory(item_table[content.features.cropsanity.to_prog_item_name(seed.name)]) for seed in cropsanity_seed_items)
 
 
 def create_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

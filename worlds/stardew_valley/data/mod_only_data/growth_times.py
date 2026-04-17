@@ -12,7 +12,7 @@ pelican_town_seed_growth_times = {
     Seed.cactus: 12,
     Seed.carrot: 3,
     Seed.cauliflower: 12,
-    Seed.coffee: 10,
+    Seed.coffee_starter: 10,
     Seed.corn: 14,
     Seed.cranberry: 7,
     Seed.eggplant: 5,
@@ -30,7 +30,7 @@ pelican_town_seed_growth_times = {
     Seed.potato: 6,
     Seed.powdermelon: 7,
     Seed.pumpkin: 13,
-    # Seed.qi_bean: 4, Can't randomize this... or the quest will become impossible I think?
+    Seed.qi_bean: 4,
     Seed.radish: 6,
     Seed.red_cabbage: 9,
     Seed.rhubarb: 13,

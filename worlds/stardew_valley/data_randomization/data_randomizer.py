@@ -35,7 +35,7 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
     randomize_crop_sell_prices(content, data_to_randomize, behavior, random)
     randomize_crop_growth_times(content, data_to_randomize, behavior, random)
     randomize_crop_growth_seasons(content, data_to_randomize, behavior, random)
-    # randomize_crop_which_seed(content, data_to_randomize, behavior, random)
+    randomize_crop_which_seed(content, data_to_randomize, behavior, random)
 
     return content
 
@@ -201,8 +201,6 @@ def randomize_crop_growth_seasons(content: StardewContent, data_to_randomize: se
         return
 
     harvest_sources_included = list(content.find_sources_of_type(HarvestCropSource))
-    seed_names_included = [source.seed for source in harvest_sources_included]
-    seeds_included = {item_name: seed_data for item_name, seed_data in content.game_items.items() if item_name in seed_names_included}
 
     seasons_by_seed = {harvest_source.seed: harvest_source.seasons for harvest_source in harvest_sources_included if len(harvest_source.seasons) >= 1}
     randomized_seasons_per_seed = randomizers_per_behavior[behavior](seasons_by_seed, random)
@@ -212,6 +210,34 @@ def randomize_crop_growth_seasons(content: StardewContent, data_to_randomize: se
         if len(harvest_sources) <= 0:
             continue
         modified_harvest_sources = [override(source, seasons=randomized_seasons_per_seed[source.seed]) for source in harvest_sources]
+        new_sources = list(item.sources)
+        new_sources = [source for source in new_sources if source not in harvest_sources]
+        new_sources.extend(modified_harvest_sources)
+        content.game_items[item_name] = override(item, sources=new_sources)
+
+
+def randomize_crop_which_seed(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.crop_which_seed not in data_to_randomize:
+        return
+
+    harvest_sources_included = list(content.find_sources_of_type(HarvestCropSource))
+
+    seed_by_crop = dict()
+    for game_item in content.game_items.values():
+        harvest_sources = [source for source in game_item.sources if source in harvest_sources_included]
+        if any(harvest_sources):
+            assert len(harvest_sources) == 1
+            seed_by_crop[game_item.name] = harvest_sources[0].seed
+
+    randomized_seeds_by_crops = randomizers_per_behavior[DataRandomizationBehavior.option_shuffled](seed_by_crop, random)
+
+    for item_name, item in content.game_items.items():
+        if item_name not in randomized_seeds_by_crops:
+            continue
+        harvest_sources = [source for source in item.sources if isinstance(source, HarvestCropSource)]
+        if len(harvest_sources) <= 0:
+            continue
+        modified_harvest_sources = [override(source, seed=randomized_seeds_by_crops[item_name]) for source in harvest_sources]
         new_sources = list(item.sources)
         new_sources = [source for source in new_sources if source not in harvest_sources]
         new_sources.extend(modified_harvest_sources)

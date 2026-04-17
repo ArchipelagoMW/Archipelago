@@ -344,7 +344,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
 
         content_rules = {
             item_name: self.source.has_access_to_item(game_item)
-            for item_name, game_item in self.content.game_items.items()
+            for item_name, game_item in self.content.game_items.items() if game_item.sources
         }
 
         for item in set(content_rules.keys()).intersection(self.registry.item_rules.keys()):
