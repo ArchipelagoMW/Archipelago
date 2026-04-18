@@ -1,0 +1,192 @@
+[
+  {
+    "name": "Cloud Ruins",
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 1348,
+        "y": 94,
+        "size": 30
+      }
+    ],
+    "sections": [
+      {
+        "name": "Cloud Ruins - Acro"
+      },
+      {
+        "name": "Cloud Ruins Seal - Ghost Pit"
+      },
+      {
+        "name": "Cloud Ruins Seal - Toothbrush Alley"
+      },
+      {
+        "name": "Cloud Ruins Seal - Saw Pit"
+      },
+      {
+        "name": "Cloud Ruins Seal - Money Farm Room"
+      },
+      {
+        "name": "Cloud Entrance Mega Shard"
+      },
+      {
+        "name": "Time Warp Mega Shard"
+      },
+      {
+        "name": "Money Farm Room Mega Shard 1"
+      },
+      {
+        "name": "Money Farm Room Mega Shard 2"
+      }
+    ]
+  },
+  {
+    "name": "Cloud Ruins - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Cloud Ruins - Acro"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 845,
+            "y": 168,
+            "size": 18
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cloud Ruins - Power Seals",
+    "children": [
+      {
+        "name": "Cloud Ruins Seal",
+        "sections": [
+          {
+            "name": "Cloud Ruins Seal - Ghost Pit"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 229,
+            "y": 63
+          }
+        ]
+      },
+      {
+        "name": "Cloud Ruins Seal",
+        "sections": [
+          {
+            "name": "Cloud Ruins Seal - Toothbrush Alley"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 372,
+            "y": 116
+          }
+        ]
+      },
+      {
+        "name": "Cloud Ruins Seal",
+        "sections": [
+          {
+            "name": "Cloud Ruins Seal - Saw Pit"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 729,
+            "y": 117
+          }
+        ]
+      },
+      {
+        "name": "Cloud Ruins Seal",
+        "sections": [
+          {
+            "name": "Cloud Ruins Seal - Money Farm Room"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 943,
+            "y": 82
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cloud Ruins - Mega Shards",
+    "children": [
+      {
+        "name": "Cloud Ruins Mega Shard",
+        "sections": [
+          {
+            "name": "Cloud Entrance Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 100,
+            "y": 165
+          }
+        ]
+      },
+      {
+        "name": "Cloud Ruins Mega Shard",
+        "sections": [
+          {
+            "name": "Time Warp Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 155,
+            "y": 155
+          }
+        ]
+      },
+      {
+        "name": "Cloud Ruins Mega Shard",
+        "sections": [
+          {
+            "name": "Money Farm Room Mega Shard 1"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 917,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "name": "Cloud Ruins Mega Shard",
+        "sections": [
+          {
+            "name": "Money Farm Room Mega Shard 2"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Cloud Ruins",
+            "x": 970,
+            "y": 40
+          }
+        ]
+      }
+    ]
+  }
+]
