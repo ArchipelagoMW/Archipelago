@@ -84,7 +84,7 @@ class TestProgressiveSymbols(WitnessTestBase):
 
 class TestIndependentSecondStageSymbols(WitnessTestBase):
     options = {
-        "early_symbol_item": False,
+        "early_symbol_item": {},
         "puzzle_randomization": "umbra_variety",
         "progressive_symbols": {},
         "second_stage_symbols_act_independently": {
@@ -178,7 +178,7 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
 
 class TestDependentSecondStageSymbols(WitnessTestBase):
     options = {
-        "early_symbol_item": False,
+        "early_symbol_item": {},
         "puzzle_randomization": "umbra_variety",
         "progressive_symbols": {},
         "second_stage_symbols_act_independently": {},
@@ -278,7 +278,7 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
 
 class TestAlternateProgressiveDots(WitnessTestBase):
     options = {
-        "early_symbol_item": False,
+        "early_symbol_item": {},
         "puzzle_randomization": "umbra_variety",
         "progressive_symbols": {
             "Progressive Dots",
