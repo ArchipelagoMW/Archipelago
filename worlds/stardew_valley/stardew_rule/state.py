@@ -27,7 +27,7 @@ class TotalReceived(BaseStardewRule):
     def __call__(self, state: CollectionState) -> bool:
         c = 0
         for item in self.items:
-            c += state.count(item, self.player)
+            c += state.prog_items[self.player][item]
             if c >= self.count:
                 return True
         return False
@@ -56,7 +56,7 @@ class Received(CombinableStardewRule):
         return self.count
 
     def __call__(self, state: CollectionState) -> bool:
-        return state.has(self.item, self.player, self.count)
+        return state.prog_items[self.player][self.item] >= self.count
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self, self(state)
