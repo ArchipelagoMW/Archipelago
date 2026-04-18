@@ -84,16 +84,17 @@ class AdventureContext(CommonContext):
         options = get_settings().adventure_options
         self.display_msgs = options.display_msgs
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(AdventureContext, self).server_auth(password_requested)
+            await super(AdventureContext, self).server_auth(password_requested, team_required)
         if not self.auth:
             self.auth = self.player_name
         if not self.auth:
             self.awaiting_rom = True
             logger.info('Awaiting connection to adventure_connector to get Player information')
             return
-
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     def _set_message(self, msg: str, msg_id: int):

@@ -73,6 +73,7 @@ class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
     worlds: Dict[int, "AutoWorld.World"]
+    teams: int = 1
     groups: Dict[int, Group]
     regions: RegionManager
     itempool: List[Item]

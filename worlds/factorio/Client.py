@@ -114,15 +114,18 @@ class FactorioContext(CommonContext):
         else:
             return "EnergyLink"
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(FactorioContext, self).server_auth(password_requested)
+            await super(FactorioContext, self).server_auth(password_requested, team_required)
 
         if self.rcon_client:
             await get_info(self, self.rcon_client)  # retrieve current auth code
         else:
             raise Exception("Cannot connect to a server with unknown own identity, "
                             "bridge to Factorio first.")
+
+        if team_required:
+            await self.get_team()
 
         await self.send_connect()
 

@@ -53,10 +53,12 @@ class ChecksFinderContext(CommonContext):
                 "drive_c",
                 os.path.expandvars("users/$USER/Local Settings/Application Data/ChecksFinder"))
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(ChecksFinderContext, self).server_auth(password_requested)
+            await super(ChecksFinderContext, self).server_auth(password_requested, team_required)
         await self.get_username()
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     async def connection_closed(self):

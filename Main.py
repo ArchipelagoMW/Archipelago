@@ -332,7 +332,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 multidata: NetUtils.MultiData = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
-                    "connect_names": {name: (0, player) for player, name in multiworld.player_name.items()},
+                    "connect_names": {name: player for player, name in multiworld.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
                     "server_options": baked_server_options,

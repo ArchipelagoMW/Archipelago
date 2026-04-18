@@ -53,8 +53,11 @@ class ClientCommandProcessor(CommandProcessor):
 
     In addition all docstrings for command methods will be displayed to the user on launch and when using "/help"
     """
+    team_only: bool
+
     def __init__(self, ctx: CommonContext):
         self.ctx = ctx
+        self.team_only = True
 
     def output(self, text: str):
         """Helper function to abstract logging to the CommonClient UI"""
@@ -221,11 +224,22 @@ class ClientCommandProcessor(CommandProcessor):
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
         return True
 
+    def _cmd_team(self):
+        """Send default messages to team only."""
+        self.team_only = True
+        self.output("Sending messages to team.")
+
+    def _cmd_all(self):
+        """Send default messages to all players."""
+        self.team_only = False
+        self.output("Sending messages to all players.")
+
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
         raw = self.ctx.on_user_say(raw)
         if raw:
-            async_start(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]), name="send Say")
+            async_start(self.ctx.send_msgs([{"cmd": "Say", "text": raw,
+                                             **({"team": self.ctx.team} if self.team_only else {})}]), name="send Say")
 
 
 class CommonContext:
@@ -498,7 +512,7 @@ class CommonContext:
     def event_invalid_game(self):
         raise Exception('Invalid Game; please verify that you connected with the right game to the correct world.')
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
             logger.info('Enter the password required to join this game:')
             self.password = await self.console_input()
@@ -510,6 +524,15 @@ class CommonContext:
             if not self.auth:
                 logger.info('Enter slot name:')
                 self.auth = await self.console_input()
+
+    async def get_team(self):
+        if "@" in self.auth:
+            slot_name, team = self.auth.rsplit("@", 1)
+            if team.replace("Team", "").isnumeric():
+                return
+        logger.info('Enter your team number:')
+        team = await self.console_input()
+        self.auth += f"@Team{team}"
 
     async def send_connect(self, **kwargs: typing.Any) -> None:
         """
@@ -971,13 +994,16 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             data_package_checksums = args.get("datapackage_checksums", {})
             await ctx.prepare_data_package(set(args["games"]), data_package_checksums)
 
-            await ctx.server_auth(args['password'])
+            await ctx.server_auth(args['password'], args["teams"] > 1)
 
     elif cmd == 'DataPackage':
         ctx.consume_network_data_package(args['data'])
 
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
+        team_requested = False
+        if "NoTeam" in errors or "InvalidTeam" in errors:
+            team_requested = True
         if 'InvalidSlot' in errors:
             ctx.disconnected_intentionally = True
             ctx.event_invalid_slot()
@@ -994,7 +1020,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         elif 'InvalidPassword' in errors:
             logger.error('Invalid password')
             ctx.password = None
-            await ctx.server_auth(True)
+            await ctx.server_auth(True, team_requested)
+        elif "NoTeam" in errors or "InvalidTeam" in errors:
+            logger.error("Invalid team")
+            ctx.auth = None
+            await ctx.server_auth(False, team_requested)
         elif errors:
             raise Exception("Unknown connection errors: " + str(errors))
         else:
@@ -1009,6 +1039,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
+        for key in ctx.stored_data_notification_keys.copy():
+            if "_read_hints_" in key:
+                ctx.stored_data_notification_keys.remove(key)
         ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")
         if ctx.game:
             game = ctx.game
@@ -1184,10 +1217,12 @@ def run_as_textclient(*args):
         items_handling = 0b111  # receive all items for /received
         want_slot_data = False  # Can't use game specific slot_data
 
-        async def server_auth(self, password_requested: bool = False):
+        async def server_auth(self, password_requested: bool = False, team_required: bool = False):
             if password_requested and not self.password:
-                await super(TextContext, self).server_auth(password_requested)
+                await super(TextContext, self).server_auth(password_requested, team_required)
             await self.get_username()
+            if team_required:
+                await self.get_team()
             await self.send_connect(game="")
 
         def on_package(self, cmd: str, args: dict):

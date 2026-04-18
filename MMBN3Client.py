@@ -73,9 +73,9 @@ class MMBN3Context(CommonContext):
         self.patching_error = False
         self.sent_hints = []
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(MMBN3Context, self).server_auth(password_requested)
+            await super(MMBN3Context, self).server_auth(password_requested, team_required)
 
         if self.auth_name is None:
             self.awaiting_rom = True
@@ -86,6 +86,8 @@ class MMBN3Context(CommonContext):
         self.awaiting_rom = False
         self.auth = self.auth_name.decode("utf8").replace('\x00', '')
         logger.info("Connecting as "+self.auth)
+        if team_required:
+            await self.get_team()
         await self.send_connect(name=self.auth)
 
     def run_gui(self):

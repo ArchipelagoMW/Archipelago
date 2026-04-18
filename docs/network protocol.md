@@ -406,6 +406,7 @@ Basic chat command which sends text to the server to be distributed to other cli
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | text | str  | Text to send to others. |
+| team | int  | Optional. If specified, the message will only be sent to the team specified. |
 
 ### GetDataPackage
 Requests the data package from the server. Does not require client authentication.

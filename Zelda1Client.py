@@ -76,14 +76,15 @@ class ZeldaContext(CommonContext):
         self.shop_slots = [self.shop_slots_left, self.shop_slots_middle, self.shop_slots_right]
         self.slot_data = dict()
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False, team_required: bool = False):
         if password_requested and not self.password:
-            await super(ZeldaContext, self).server_auth(password_requested)
+            await super(ZeldaContext, self).server_auth(password_requested, team_required)
         if not self.auth:
             self.awaiting_rom = True
             logger.info('Awaiting connection to NES to get Player information')
             return
-
+        if team_required:
+            await self.get_team()
         await self.send_connect()
 
     def _set_message(self, msg: str, msg_id: int):
