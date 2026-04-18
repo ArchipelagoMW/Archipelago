@@ -108,17 +108,18 @@ class MessengerRules:
             "Searing Crags - Right -> Searing Crags - Portal":
                 lambda state: self.has_tabi(state) and self.has_wingsuit(state),
             "Searing Crags - Colossuses Shop -> Searing Crags - Key of Strength Shop":
-                lambda state: state.has("Power Thistle", self.player)
-                              and (self.has_dart(state)
-                                   or (self.has_wingsuit(state)
-                                       and self.can_destroy_projectiles(state))),
+                lambda state: state.has("Power Thistle", self.player),
+            "Searing Crags - Key of Strength Shop -> Searing Crags - Key of Strength Room":
+                lambda state: self.has_dart(state)
+                              or (self.has_wingsuit(state)
+                                  and self.can_destroy_projectiles(state)),
             "Searing Crags - Falling Rocks Shop -> Searing Crags - Searing Mega Shard Shop":
                 self.has_dart,
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Before Final Climb Shop":
                 lambda state: self.has_dart(state) or self.can_destroy_projectiles(state),
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Falling Rocks Shop":
                 self.has_dart,
-            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Room":
                 self.false,
             "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                 self.has_dart,
@@ -406,7 +407,7 @@ class MessengerHardRules(MessengerRules):
                     lambda state: self.has_dart(state) or
                                   (self.can_destroy_projectiles(state) and
                                    (self.has_wingsuit(state) or self.can_dboost(state))),
-                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Room":
                     lambda state: self.can_leash(state) or self.has_windmill(state),
                 "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                     self.true,
@@ -512,7 +513,6 @@ class MessengerOOBRules(MessengerRules):
 
         self.location_rules = {
             "Bamboo Creek - Claustro": self.has_wingsuit,
-            "Searing Crags - Key of Strength": self.has_wingsuit,
             "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Searing Crags - Pyro": self.has_tabi,
             "Underworld - Key of Chaos": self.has_tabi,
