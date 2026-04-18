@@ -66,10 +66,14 @@ class WitnessPlayerItems:
         assert all(
             static_witness_items.ALL_ITEM_ALIASES.get(value, None) == key
             for key, value in self.replacement_items.items()
-        ), "A replacement item was used without setting up the alias in static_witness_logic.ALL_ITEM_ALIASES"
+        ), "A replacement item was used without setting up the alias in static_witness_items.ALL_ITEM_ALIASES"
 
         self.all_progressive_item_lists = copy.deepcopy(self._logic.THEORETICAL_PROGRESSIVE_LISTS)
         self.progressive_item_lists_in_use = copy.deepcopy(self._logic.FINALIZED_PROGRESSIVE_LISTS)
+
+        self.progressive_item_lookup: Dict[str, str] = {}
+        for progressive_item, chain_items in self.progressive_item_lists_in_use.items():
+            self.progressive_item_lookup.update({chain_item: progressive_item for chain_item in chain_items})
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
         self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
@@ -237,7 +241,7 @@ class WitnessPlayerItems:
 
             # Replace progressive items with their parents.
             good_symbols = [
-                static_witness_logic.get_parent_progressive_item(item) for item in good_symbols
+                self.progressive_item_lookup.get(item, item) for item in good_symbols
             ]
 
             output["Symbol"] = [symbol for symbol in good_symbols if symbol in existing_items]
