@@ -82,37 +82,11 @@ end
 local function remote_unlock(item_name, index, source)
     if storage.index_sync[index] ~= item_name then -- not yet received prog item
         storage.index_sync[index] = item_name
-        --storage.local_items = storage.local_items or {}
-        --if not storage.local_items[item_name] then --if it is not recently send locally, just recieve the item.
-            recieve_item(item_name, source)
-        --    return
-        --end
-        ----if source ~= general.slot_name then --if the name does not equal the slot name it might still be an alias.
-        ----    local alias_end = "("..general.slot_name..")"
-        ----    local alias_length = string.len(alias_end)
-        ----    if alias_length <= string.len(source) then --name is too short to be an alias.
-        ----        recieve_item(item_name, source)
-        ----        return
-        ----    end
-        ----    if not string.find(source, alias_end, -alias_length, true) then --name is not an alias of this slot.
-        ----        recieve_item(item_name, source)
-        ----        return
-        ----    end
-        ----end
-        --storage.local_items[item_name] = storage.local_items[item_name] - 1
-        --if storage.local_items[item_name] == 0 then
-        --    storage.local_items[item_name] = nil
-        --end
+        recieve_item(item_name, source)
     end
 end
 
 local function local_unlock(item_name)
-    --storage.local_items = storage.local_items or {}
-    --if storage.local_items[item_name] then
-    --    storage.local_items[item_name] = storage.local_items[item_name] + 1
-    --else
-    --    storage.local_items[item_name] = 1
-    --end
     recieve_item(item_name, general.slot_name)
 end
 
@@ -297,7 +271,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if index == nil then
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
-    elseif index == -1 then -- for coop sync and restoring from an older savegame
+    elseif index == "-1" then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
             game.print({"archipelago.recieve-ap-catchup", "[technology=" .. tech.name .. "]"})

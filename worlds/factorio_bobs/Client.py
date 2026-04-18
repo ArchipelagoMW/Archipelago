@@ -447,7 +447,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     ctx.seed_name = info["seed_name"]
     death_link = info["death_link"]
     ctx.energy_link_increment = int(info.get("energy_link", 0))
-    if info["local_item_handling"]:
+    if "local_item_handling" in info:
         ctx.local_item_handling = info["local_item_handling"]
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:
