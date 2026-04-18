@@ -104,6 +104,8 @@ class TestSinglePlayerOutput(MultiworldTestBase):
         with self.subTest("filling multiworld", game=world_type.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            call_all(self.multiworld, "finalize_multiworld")
+            call_all(self.multiworld, "pre_output")
             output = tempfile.TemporaryDirectory()
             with output as temp_dir:
                 call_stage(self.multiworld, "generate_output", temp_dir)
