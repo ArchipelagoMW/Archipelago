@@ -1804,11 +1804,11 @@ class Rac3Interface(GameInterface):
                 return
             if self.notification_time < current_time and not self.message_display:
                 # Pop the number of messages that were displayed last cycle
+                dequeued_duration = self.notification_queue[0].duration
                 self.dequeue_notifications(self.notification_merge_count)
                 self.write_messagebox_theme()
                 logger.debug(f"notification queue: {len(self.notification_queue)}")
-                if self.notification_queue:
-                    self.notification_time = current_time + self.notification_queue[0].duration
+                self.notification_time = current_time + dequeued_duration
             if self.notification_queue:
                 # Merge up to 3 notifications of the same theme, but do not exceed 235 chars
                 merged_notification = self.notification_queue[0]
