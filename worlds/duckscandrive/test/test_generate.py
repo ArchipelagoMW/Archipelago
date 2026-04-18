@@ -55,26 +55,40 @@ class TestDucksGenerate(WorldTestBase):
             assert location.can_reach(self.multiworld.state), f"Book {n} must be sphere-1"
 
     def test_rubber_duck_count_matches_non_upgrade_locations(self) -> None:
-        # 8 books + 13 TT locations = 21 rubber ducks
+        # 8 books + 13 TT locations - 7 track-unlock items = 14 rubber ducks
         rubber_ducks = [item for item in self.multiworld.itempool if item.name == "Rubber Duck"]
-        assert len(rubber_ducks) == 21
+        assert len(rubber_ducks) == 14
 
-    def test_all_seven_time_trial_finishes_exist_and_are_free(self) -> None:
+    def test_seven_track_unlock_items_exist_once_each(self) -> None:
+        for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
+                        "Blackbill Ship", "Bill Beach", "Banana"):
+            matches = [item for item in self.multiworld.itempool if item.name == f"{display} Unlock"]
+            assert len(matches) == 1, f"expected exactly one '{display} Unlock', got {len(matches)}"
+
+    def test_time_trial_finishes_require_matching_unlock(self) -> None:
         for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
                         "Blackbill Ship", "Bill Beach", "Banana"):
             location = self.multiworld.get_location(f"Finish {display}", self.player)
-            assert location.can_reach(self.multiworld.state), f"Finish {display} must be sphere-1"
+            assert not location.can_reach(self.multiworld.state), f"Finish {display} must require unlock"
+
+            state = self.multiworld.state.copy()
+            state.collect(self.get_item_by_name(f"{display} Unlock"))
+            assert location.can_reach(state), f"Finish {display} must unlock after its item"
 
     def test_banana_has_no_par_location(self) -> None:
         import pytest
         with pytest.raises(KeyError):
             self.multiworld.get_location("Beat par on Banana", self.player)
 
-    def test_six_par_locations_exist(self) -> None:
+    def test_par_locations_require_matching_unlock(self) -> None:
         for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
                         "Blackbill Ship", "Bill Beach"):
             location = self.multiworld.get_location(f"Beat par on {display}", self.player)
-            assert location.can_reach(self.multiworld.state)
+            assert not location.can_reach(self.multiworld.state)
+
+            state = self.multiworld.state.copy()
+            state.collect(self.get_item_by_name(f"{display} Unlock"))
+            assert location.can_reach(state)
 
     def test_fill_slot_data_emits_starting_money(self) -> None:
         data = self.world.fill_slot_data()

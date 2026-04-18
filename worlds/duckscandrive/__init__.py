@@ -77,8 +77,8 @@ class DucksWorld(World):
         for name, loc_id in book_location_table.items():
             city.locations.append(DucksLocation(self.player, name, loc_id, city))
 
-        for name, loc_id in time_trial_location_table.items():
-            time_trials.locations.append(DucksLocation(self.player, name, loc_id, time_trials))
+        for name, data in time_trial_location_table.items():
+            time_trials.locations.append(DucksLocation(self.player, name, data.id, time_trials))
 
         victory = DucksLocation(self.player, "Fully Upgraded Car", None, city)
         victory.place_locked_item(DucksItem("Victory", ItemClassification.progression, None, self.player))
@@ -95,15 +95,21 @@ class DucksWorld(World):
 
     def set_rules(self) -> None:
         # Strict rule: Upgrade tier N requires N Progressive <Stat> items.
-        # That makes the number of progressives received equal to the number
-        # of tiers the player can buy in-game (1-to-1). Sphere-1 is populated
-        # by the 21 free book + time-trial locations, so Fill can seed the
-        # upgrade ladders from there — no circular dependency.
+        # Sphere-1 comes from the 8 book locations plus whatever track
+        # unlocks Fill decides to place there, which is enough capacity to
+        # seed both the upgrade ladders and the TT locations themselves.
         for name, data in upgrade_location_table.items():
             progressive = f"Progressive {data.stat}"
             required = data.tier
             location = self.multiworld.get_location(name, self.player)
             location.access_rule = lambda state, item=progressive, count=required: state.has(item, self.player, count)
+
+        # Time-trial locations require the matching per-track unlock. The
+        # client mod disables the menu button until the unlock arrives.
+        for name, data in time_trial_location_table.items():
+            unlock = f"{data.track.display} Unlock"
+            location = self.multiworld.get_location(name, self.player)
+            location.access_rule = lambda state, item=unlock: state.has(item, self.player)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has_all_counts(
             {f"Progressive {stat}": TIERS_PER_STAT for stat in UPGRADE_STATS},
