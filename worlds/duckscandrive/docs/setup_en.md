@@ -89,7 +89,7 @@ The top-left of the screen shows recent Archipelago events — connects, item re
 
 - **`[ap] no server URL configured; skipping connect.`** — You haven't edited `UserData\DucksAP.cfg`, or the `server` line is still empty quotes. Add a URL, save, and relaunch.
 - **`[ap] <- ConnectionRefused`** — Slot name mismatch, wrong password, or your APWorld version doesn't match what the server expects. Check the tracker page for the correct slot name; re-generate the multiworld if you've bumped the APWorld version.
-- **Money feels stuck at $0 despite unspent deliveries.** — The AP money pool is separate from in-session delivery earnings, and in-session earnings don't persist across city entries. If `starting_money` is spent, further city entries start you at $0 from the AP side; you have to grind deliveries each session.
+- **Money feels stuck at \$0 despite unspent deliveries.** — The AP money pool is separate from in-session delivery earnings, and in-session earnings don't persist across city entries. If `starting_money` is spent, further city entries start you at $0 from the AP side; you have to grind deliveries each session.
 - **Buttons in the Track Select menu are greyed out.** — That's intended — you haven't received the matching `<Track> Unlock` item yet. Keep playing; checks in the city will eventually deliver them.
 - **Garage tier squares don't turn green until I buy.** — Leaving and re-entering the city should re-paint them from your AP inventory. If it still doesn't, the squares will at least fill in as you buy each tier.
 
