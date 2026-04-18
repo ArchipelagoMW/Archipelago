@@ -89,8 +89,8 @@ class TestSinglePlayerOutput(MultiworldTestBase):
     game: ClassVar[str]
 
     def test_single_player_game_can_generate_output(self) -> None:
-        if self.game in ("Archipelago", "Sudoku", "Final Fantasy"):
-            self.skipTest("Cannot generate")
+        if self.game in ("Archipelago", "Final Fantasy"):
+            self.skipTest("Cannot generate output.")
         world_type = AutoWorldRegister.world_types[self.game]
         self.multiworld = setup_multiworld(world_type, ())
         # LttP requires this while sprite isn't on the options API
