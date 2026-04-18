@@ -221,7 +221,7 @@ jobs:
       
           # Create container
           world = MyWorldContainer(dest_file)
-          world.game = "RaC3"
+          world.game = "Ratchet and Clank 3"
           world.world_folder = src_folder
           world.world_version = Version(1, 0, 0)
           world.minimum_ap_version = Version(0, 5, 0)
