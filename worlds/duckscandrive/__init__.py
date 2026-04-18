@@ -15,7 +15,12 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .items import TIERS_PER_STAT, UPGRADE_STATS, item_name_groups, item_name_to_id, item_table
-from .locations import book_location_table, location_name_to_id, upgrade_location_table
+from .locations import (
+    book_location_table,
+    location_name_to_id,
+    time_trial_location_table,
+    upgrade_location_table,
+)
 from .options import DucksOptions
 
 
@@ -64,6 +69,7 @@ class DucksWorld(World):
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         city = Region("City", self.player, self.multiworld)
+        time_trials = Region("Time Trials", self.player, self.multiworld)
 
         for name, data in upgrade_location_table.items():
             city.locations.append(DucksLocation(self.player, name, data.id, city))
@@ -71,12 +77,16 @@ class DucksWorld(World):
         for name, loc_id in book_location_table.items():
             city.locations.append(DucksLocation(self.player, name, loc_id, city))
 
+        for name, loc_id in time_trial_location_table.items():
+            time_trials.locations.append(DucksLocation(self.player, name, loc_id, time_trials))
+
         victory = DucksLocation(self.player, "Fully Upgraded Car", None, city)
         victory.place_locked_item(DucksItem("Victory", ItemClassification.progression, None, self.player))
         city.locations.append(victory)
 
         menu.connect(city)
-        self.multiworld.regions += [menu, city]
+        menu.connect(time_trials)
+        self.multiworld.regions += [menu, city, time_trials]
 
     def create_items(self) -> None:
         for name, data in item_table.items():

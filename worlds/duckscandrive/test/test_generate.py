@@ -28,10 +28,10 @@ class TestDucksGenerate(WorldTestBase):
         self.assertBeatable(True)
 
     def test_location_and_item_counts(self) -> None:
-        # 25 upgrades + 8 books + 1 victory event
-        assert len(self.multiworld.get_locations(self.player)) == 34
-        # 25 progressives + 8 rubber ducks; victory is placed, not pooled
-        assert len(self.multiworld.itempool) == 33
+        # 25 upgrades + 8 books + 13 time-trial + 1 victory event
+        assert len(self.multiworld.get_locations(self.player)) == 47
+        # 25 progressives + 21 rubber ducks; victory is placed, not pooled
+        assert len(self.multiworld.itempool) == 46
 
     def test_victory_location_holds_victory_event(self) -> None:
         victory = self.multiworld.get_location("Fully Upgraded Car", self.player)
@@ -48,9 +48,27 @@ class TestDucksGenerate(WorldTestBase):
             location = self.multiworld.get_location(f"Book {n}", self.player)
             assert location.can_reach(self.multiworld.state), f"Book {n} must be sphere-1"
 
-    def test_rubber_duck_item_is_pooled_eight_times(self) -> None:
+    def test_rubber_duck_count_matches_non_upgrade_locations(self) -> None:
+        # 8 books + 13 TT locations = 21 rubber ducks
         rubber_ducks = [item for item in self.multiworld.itempool if item.name == "Rubber Duck"]
-        assert len(rubber_ducks) == 8
+        assert len(rubber_ducks) == 21
+
+    def test_all_seven_time_trial_finishes_exist_and_are_free(self) -> None:
+        for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
+                        "Blackbill Ship", "Bill Beach", "Banana"):
+            location = self.multiworld.get_location(f"Finish {display}", self.player)
+            assert location.can_reach(self.multiworld.state), f"Finish {display} must be sphere-1"
+
+    def test_banana_has_no_par_location(self) -> None:
+        import pytest
+        with pytest.raises(KeyError):
+            self.multiworld.get_location("Beat par on Banana", self.player)
+
+    def test_six_par_locations_exist(self) -> None:
+        for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
+                        "Blackbill Ship", "Bill Beach"):
+            location = self.multiworld.get_location(f"Beat par on {display}", self.player)
+            assert location.can_reach(self.multiworld.state)
 
     def test_tier_five_requires_four_progressives_of_that_stat(self) -> None:
         location = self.multiworld.get_location("Upgrade Speed Tier 5", self.player)

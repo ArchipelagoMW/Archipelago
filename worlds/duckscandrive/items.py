@@ -7,9 +7,12 @@ Ducks are pool padding with no gameplay effect.
 
 ID ranges on the shared base `DUCKS_BASE_ID = 0xDCD000`:
 * `+0x00..0x04` — Progressive upgrade items
-* `+0x10`      — Rubber Duck (single item id, count = 8)
+* `+0x10`      — Rubber Duck filler (single item id; count tracks the
+                  non-upgrade location pool)
 * `+0x100..0x1FF` — Upgrade locations (see `locations.py`)
-* `+0x200..0x2FF` — Book locations (see `locations.py`)
+* `+0x200..0x2FF` — Book locations
+* `+0x300..0x3FF` — Time-trial finish locations
+* `+0x400..0x4FF` — Time-trial par-time locations
 """
 from __future__ import annotations
 
@@ -22,6 +25,8 @@ TIERS_PER_STAT: int = 5
 
 FILLER_OFFSET: int = 0x10
 BOOK_COUNT: int = 8
+TIME_TRIAL_LOCATION_COUNT: int = 13  # 7 finishes + 6 pars (Banana has no par)
+RUBBER_DUCK_COUNT: int = BOOK_COUNT + TIME_TRIAL_LOCATION_COUNT
 
 
 @dataclass(frozen=True)
@@ -36,7 +41,7 @@ item_table: dict[str, ItemData] = {
         f"Progressive {stat}": ItemData(id=DUCKS_BASE_ID + i, count=TIERS_PER_STAT, progression=True)
         for i, stat in enumerate(UPGRADE_STATS)
     },
-    "Rubber Duck": ItemData(id=DUCKS_BASE_ID + FILLER_OFFSET, count=BOOK_COUNT, progression=False),
+    "Rubber Duck": ItemData(id=DUCKS_BASE_ID + FILLER_OFFSET, count=RUBBER_DUCK_COUNT, progression=False),
 }
 
 item_name_to_id: dict[str, int] = {name: data.id for name, data in item_table.items()}
