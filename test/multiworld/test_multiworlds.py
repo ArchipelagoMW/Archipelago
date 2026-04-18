@@ -99,7 +99,7 @@ class TestSinglePlayerOutput(MultiworldTestBase):
         try:
             call_stage(self.multiworld, "assert_generate")
         except FileNotFoundError:
-            self.skipTest("Cannot generate")
+            self.skipTest("Cannot generate.")
         self.assertSteps(gen_steps)
         with self.subTest("filling multiworld", game=world_type.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
