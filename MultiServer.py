@@ -1688,9 +1688,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("Cheating is disabled.")
             return False
 
-    def get_hints(self, input_text: str, for_location: bool = False) -> bool:
+    def get_hints(self, input_text: str, for_location: bool = False, hint_count: int = 1) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
+        if hint_count > 1000 or hint_count < 0:
+            hint_count = 1000
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1758,18 +1760,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if hints:
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = list(set(hints) - new_hints)
-            if old_hints and not new_hints:
-                self.ctx.notify_hints(self.client.team, old_hints)
-                self.output("Hint was previously used, no points deducted.")
             if new_hints:
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
-                if not not_found_hints:  # everything's been found, no need to pay
-                    can_pay = 1000
-                elif cost:
-                    can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
+                if not cost:
+                    can_pay = hint_count
                 else:
-                    can_pay = 1000
+                    can_pay = min(points_available // cost, hint_count)
 
                 self.ctx.random.shuffle(not_found_hints)
                 # By popular vote, make hints prefer non-local placements
@@ -1779,32 +1776,39 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                      reverse=True)
 
                 hints = found_hints + old_hints
-                while can_pay > 0:
-                    if not not_found_hints:
-                        break
-                    hint = not_found_hints.pop()
-                    hints.append(hint)
+                while can_pay > 0 and not_found_hints:
+                    hints.append(not_found_hints.pop())
                     can_pay -= 1
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
 
                 self.ctx.notify_hints(self.client.team, hints)
-                if not_found_hints:
-                    points_available = get_client_points(self.ctx, self.client)
-                    if hints and cost and int((points_available // cost) == 0):
-                        self.output(
-                            f"There may be more hintables, however, you cannot afford to pay for any more. "
-                            f" You have {points_available} and need at least "
-                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                    elif hints:
-                        self.output(
-                            "There may be more hintables, you can rerun the command to find more.")
-                    else:
-                        self.output(f"You can't afford the hint. "
-                                    f"You have {points_available} points and need at least "
-                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                points_available = get_client_points(self.ctx, self.client)
+                if hint_count <= 0 and not hints:
+                    self.output("No matching hints already exist.")
+                elif not hints:
+                    self.output(f"You can't afford the hint. "
+                                f"You have {points_available} points and need at least {cost}.")
+                elif not cost or points_available // cost > 0:
+                    self.output(
+                        f"There may be more hintables, you can rerun the command"
+                        f"{'' if hint_count > 0 else 'with a non-zero count '} to find more.")
+                else:
+                    self.output(
+                        f"There may be more hintables, however, you cannot afford to pay for any more. "
+                        f" You have {points_available} and need at least {cost}.")
                 self.ctx.save()
                 return True
-
+            elif old_hints:
+                self.ctx.notify_hints(self.client.team, old_hints)
+                if cost and points_available // cost <= 0:
+                    self.output(
+                        f"There may be more hintables, however, you cannot afford to pay for any more. "
+                        f" You have {points_available} and need at least {cost}.")
+                elif hint_count > 0:  # only give the information that there are no more hints if the user COULD have paid the cost
+                    self.output(f"No new hint(s) found.{' No points deducted.' if cost else ''}")
+                else:
+                    self.output(
+                        "There may be more hintables, you can rerun the command with a non-zero amount to find more.")
         else:
             if points_available >= cost:
                 if for_location:
@@ -1815,23 +1819,30 @@ class ClientMessageProcessor(CommonCommandProcessor):
                                 f"Item appears to not exist in this multiworld.")
             else:
                 self.output(f"You can't afford the hint. "
-                            f"You have {points_available} points and need at least "
-                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                            f"You have {points_available} points and need at least {cost}.")
             return False
 
     @mark_raw
     def _cmd_hint(self, item_name: str = "") -> bool:
-        """Use !hint {item_name},
-        for example !hint Lamp to get a spoiler peek for that item.
-        If hint costs are on, this will only give you one new result,
-        you can rerun the command to get more in that case."""
-        return self.get_hints(item_name)
+        """For example, '!hint Lamp' to get a spoiler peek for that item.
+        Only gives one result per command; see !hint_multiple for multiple at once."""
+        return self.get_hints(item_name, False, 1)
 
     @mark_raw
-    def _cmd_hint_location(self, location: str = "") -> bool:
-        """Use !hint_location {location_name},
-        for example !hint_location atomic-bomb to get a spoiler peek for that location."""
-        return self.get_hints(location, True)
+    def _cmd_hint_location(self, location_name: str = "") -> bool:
+        """For example, '!hint_location atomic-bomb' to get a spoiler peek for that location.
+        Only gives 1 result per command; use !hint_location_multiple for multiple at once."""
+        return self.get_hints(location_name, True, 1)
+
+    def _cmd_hint_multiple(self, amount: int | str, *item_name: str) -> bool:
+        """For example, '!hint_multiple 5 Power Star' to get a spoiler peek for that item.
+        Will return as many results as possible up to the specified amount, possibly spending multiple hints worth of hint points in the process."""
+        return self.get_hints(" ".join(item_name), False, int(amount))
+
+    def _cmd_hint_location_multiple(self, amount: int | str, *location_name: str) -> bool:
+        """For example, '!hint_location_multiple 5 Everywhere' to get a spoiler peek for matching locations.
+        Will return as many results as possible up to the specified amount, possibly spending multiple hints worth of hint points in the process."""
+        return self.get_hints(" ".join(location_name), True, int(amount))
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
@@ -2432,83 +2443,92 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
-        """Send out a hint for a player's item to their team"""
+    def get_hints(self, player_name: str, input_text: str, for_location: bool = False, hint_count: int = 1) -> bool:
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
-            game = self.ctx.games[slot]
-            full_name = " ".join(item_name)
-
-            if full_name.isnumeric():
-                item, usable, response = int(full_name), True, None
-            elif game in self.ctx.all_item_and_group_names:
-                item, usable, response = get_intended_text(full_name, self.ctx.all_item_and_group_names[game])
-            else:
-                self.output("Can't look up item for unknown game. Hint for ID instead.")
-                return False
-
-            if usable:
-                if game in self.ctx.item_name_groups and item in self.ctx.item_name_groups[game]:
-                    hints = []
-                    for item_name_from_group in self.ctx.item_name_groups[game][item]:
-                        if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
-                else:  # item name or id
-                    hints = collect_hints(self.ctx, team, slot, item)
-
-                if hints:
-                    self.ctx.notify_hints(team, hints)
-
-                else:
-                    self.output("No hints found.")
-                return True
-            else:
-                self.output(response)
-                return False
-
-        else:
+        if hint_count > 1000 or hint_count < 0:
+            hint_count = 1000
+        if not usable:
             self.output(response)
             return False
-
-    def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
-        """Send out a hint for a player's location to their team"""
-        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
-            game = self.ctx.games[slot]
-            full_name = " ".join(location_name)
-
-            if full_name.isnumeric():
-                location, usable, response = int(full_name), True, None
-            elif game in self.ctx.all_location_and_group_names:
-                location, usable, response = get_intended_text(full_name, self.ctx.all_location_and_group_names[game])
+        team, slot = self.ctx.player_name_lookup[seeked_player]
+        game = self.ctx.games[slot]
+        if input_text.isnumeric():
+            target_id, usable, response = int(input_text), True, None
+        elif for_location:
+            if game in self.ctx.all_location_and_group_names:
+                target_id, usable, response = get_intended_text(input_text, self.ctx.all_location_and_group_names[game])
             else:
                 self.output("Can't look up location for unknown game. Hint for ID instead.")
                 return False
-
-            if usable:
-                if isinstance(location, int):
-                    hints = collect_hint_location_id(self.ctx, team, slot, location)
-                elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
-                    hints = []
-                    for loc_name_from_group in self.ctx.location_name_groups[game][location]:
-                        if loc_name_from_group in self.ctx.location_names_for_game(game):
-                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
-                else:
-                    hints = collect_hint_location_name(self.ctx, team, slot, location)
-                if hints:
-                    self.ctx.notify_hints(team, hints)
-                else:
-                    self.output("No hints found.")
-                return True
-            else:
-                self.output(response)
-                return False
-
         else:
+            if game in self.ctx.all_item_and_group_names:
+                target_id, usable, response = get_intended_text(input_text, self.ctx.all_item_and_group_names[game])
+            else:
+                self.output("Can't look up item for unknown game. Hint for ID instead.")
+                return False
+        if not usable:
             self.output(response)
             return False
+        if for_location:
+            if isinstance(target_id, int):
+                hints = collect_hint_location_id(self.ctx, team, slot, target_id)
+            elif game in self.ctx.location_name_groups and target_id in self.ctx.location_name_groups[game]:
+                hints = []
+                for loc_name_from_group in self.ctx.location_name_groups[game][target_id]:
+                    if loc_name_from_group in self.ctx.location_names_for_game(game):
+                        hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
+            else:
+                hints = collect_hint_location_name(self.ctx, team, slot, target_id)
+        else:
+            if game in self.ctx.item_name_groups and target_id in self.ctx.item_name_groups[game]:
+                hints = []
+                for item_name_from_group in self.ctx.item_name_groups[game][target_id]:
+                    if item_name_from_group in self.ctx.item_names_for_game(game):  # ensure item has an ID
+                        hints.extend(collect_hints(self.ctx, team, slot, item_name_from_group))
+            else:  # item name or id
+                hints = collect_hints(self.ctx, team, slot, target_id)
+        if not hints:
+            self.output("No hints found.")
+        else:
+            new_hints = set(hints) - self.ctx.hints[team, slot]
+            old_hints = list(set(hints) - new_hints)
+            if new_hints:
+                found_hints = [hint for hint in new_hints if hint.found]
+                not_found_hints = [hint for hint in new_hints if not hint.found]
+
+                self.ctx.random.shuffle(not_found_hints)
+                # By popular vote, make hints prefer non-local placements
+                not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
+                # By another popular vote, prefer early sphere
+                not_found_hints.sort(key=lambda hint: self.ctx.get_sphere(hint.finding_player, hint.location),
+                                     reverse=True)
+
+                hints = found_hints + old_hints
+                while not_found_hints and hint_count > 0:
+                    hints.append(not_found_hints.pop())
+                    hint_count -= 1
+
+                self.ctx.notify_hints(team, hints)
+                self.ctx.save()
+            elif old_hints:
+                self.ctx.notify_hints(team, old_hints)
+        return True
+
+    def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
+        """Send out a single new hint for a player's item or item group to their team"""
+        return self.get_hints(player_name, " ".join(item_name), False, 1)
+
+    def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
+        """Send out a single new hint for a player's location or location group to their team"""
+        return self.get_hints(player_name, " ".join(location_name), True, 1)
+
+    def _cmd_hint_multiple(self, amount: int | str, player_name: str, *item_name: str) -> bool:
+        """Send out multiple matching hints for a player's item or item group to their team"""
+        return self.get_hints(player_name, " ".join(item_name), False, int(amount))
+
+    def _cmd_hint_location_multiple(self, amount: int | str, player_name: str, *location_name: str) -> bool:
+        """Send out multiple matching hints for a player's location or location group to their team"""
+        return self.get_hints(player_name, " ".join(location_name), True, int(amount))
 
     def _cmd_option(self, option_name: str, option_value: str):
         """Set an option for the server."""
