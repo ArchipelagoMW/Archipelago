@@ -48,6 +48,9 @@ window.addEventListener('load', () => {
     // Save data to localStorage
     const weightedOptions = {};
     document.querySelectorAll('input[name]').forEach((input) => {
+      // Ignore hidden input meant to ensure an empty value is submitted in form
+      if (input.type == 'hidden') return;
+
       const keys = input.getAttribute('name').split('||');
 
       // Determine keys
@@ -216,6 +219,7 @@ const unsetDeletedOption = (optionName, value) => {
  * 
  * @param {string} optionName - The name of the option.
  * @param {string} value - The value that the range was set to.
+ * @returns {void}
  */
 const updateRangeText = (optionName, value) => {
   // Update span containing range value. All ranges have a corresponding `{rangeId}-value` span
@@ -231,4 +235,4 @@ const updateRangeText = (optionName, value) => {
       gameDiv.classList.add('hidden');
     }
   }
-}
+};
