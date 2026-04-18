@@ -1,0 +1,69 @@
+.inventory {
+    margin: 3px;
+    border: 2px solid black;
+    border-radius: 4px;
+    background-color: #242424;
+    color: white;
+    width: 450px;
+
+    .inventory-body {
+        height: 450px;
+    }
+
+    .inventory-footer {
+        font-size: 8px;
+        font-weight: normal;
+    }
+}
+
+.tab-header {
+    margin-bottom: 5px;
+}
+
+.tab-header > .tab-head {
+    display: inline-block;
+}
+
+.tab-head {
+    cursor: pointer;
+    margin: 0.5px;
+}
+
+.tab-head-active,
+.tab-head:hover {
+    background-color: #e39827;
+}
+
+.hidden {
+    display: none;
+}
+
+.factorio-icon {
+    display: inline-block;
+    position: relative;
+    padding: 3px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #4b4543;
+
+    margin: 0.5px;
+    background-color: #313131;
+    border-top: 1px solid #454545;
+    border-left: 1px solid #212121;
+    border-right: 1px solid #212121;
+    border-bottom: 1px solid #191919;
+    color: #c1c1c1;
+}
+
+.factorio-icon:hover {
+    background-color: #e39827;
+}
+
+.factorio-icon > img {
+    display: block;
+    margin: auto;
+}
+
+.item-row {
+    width: fit-content;
+}
