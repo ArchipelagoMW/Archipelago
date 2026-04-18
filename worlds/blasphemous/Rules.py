@@ -645,7 +645,7 @@ class BlasRules:
     def aubade(self, state: CollectionState) -> bool:
         return (
             state.has("Aubade of the Nameless Guardian", self.player)
-            and self.total_fervour(state) >= 90
+            and self.total_fervour(state) >= 100
         )
     
     def tirana(self, state: CollectionState) -> bool:
