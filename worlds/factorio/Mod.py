@@ -23,16 +23,18 @@ template_env: Optional[jinja2.Environment] = None
 
 data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
+    # if locale PR is also added then remove the line below:
 locale_template: Optional[jinja2.Template] = None
-control_template: Optional[jinja2.Template] = None
+main_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
+constants_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
 
 base_info = {
     "version": Utils.__version__,
     "title": "Archipelago",
-    "author": "Berserker",
+    "author": "Berserker, CosmicWolf",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
     "factorio_version": "2.0",
@@ -94,7 +96,9 @@ def generate_mod(world: "Factorio", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, locale_template, control_template, data_template, settings_template
+    global data_final_template, locale_template, main_template, data_template, settings_template, constants_template
+    # if locale PR is also added then use this line (or in other words, just remove locale_template.):
+    # global data_final_template, main_template, data_template, settings_template, constants_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -107,9 +111,11 @@ def generate_mod(world: "Factorio", output_directory: str):
 
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
+            # if locale PR is also added then remove the line below:
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
-            control_template = template_env.get_template("control.lua")
+            main_template = template_env.get_template(r"/script/main.lua")
             settings_template = template_env.get_template("settings.lua")
+            constants_template = template_env.get_template("constants.lua")
     # get data for templates
     locations = [(location, location.item)
                  for location in world.science_locations + world.craftsanity_locations]
@@ -152,6 +158,7 @@ def generate_mod(world: "Factorio", output_directory: str):
         "liquids": fluids,
         "removed_technologies": world.removed_technologies,
         "chunk_shuffle": 0,
+        "techs_to_hint": world.techs_to_hint,
     }
 
     for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():
@@ -191,12 +198,16 @@ def generate_mod(world: "Factorio", output_directory: str):
                                       data_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/data-final-fixes.lua",
                                       data_final_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
-                                      control_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/scripts/main.lua",
+                                      main_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
                                       settings_template.render(**template_data)))
+    
+    # if locale PR is also added then remove the locale template line below:
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
                                       locale_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/constants.lua",
+                                      constants_template.render(**template_data)))
 
     info = base_info.copy()
     info["name"] = mod_name
