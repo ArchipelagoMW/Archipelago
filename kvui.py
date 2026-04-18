@@ -638,13 +638,15 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                 status_label = self.ids["status"]
                 if status_label.collide_point(*touch.pos):
                     if self.hint["status"] == HintStatus.HINT_FOUND:
-                        return
+                        return True
                     ctx = MDApp.get_running_app().ctx
                     if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
                         self.dropdown.open()
+                        return True
                 elif self.selected:
                     self.parent.clear_selection()
+                    return True
                 else:
                     text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
@@ -661,20 +663,11 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             # find correct column
             for child in self.children:
                 if child.collide_point(*touch.pos):
-                    key = child.sort_key
-                    if key == "status":
-                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
-                    else:
-                        parent.hint_sorter = lambda element: (
-                            remove_between_brackets.sub("", element[key]["text"]).lower()
-                        )
-                    if key == parent.sort_key:
-                        # second click reverses order
-                        parent.reversed = not parent.reversed
-                    else:
-                        parent.sort_key = key
-                        parent.reversed = False
-                    MDApp.get_running_app().update_hints()
+                    if parent.sort_by_key(child.sort_key):
+                        MDApp.get_running_app().update_hints()
+                        return True
+                    return False
+        return False
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
@@ -1215,7 +1208,48 @@ status_sort_weights: dict[HintStatus, int] = {
     HintStatus.HINT_PRIORITY: 4,
 }
 
-class HintLog(MDRecycleView):
+
+class ColumnSorter:
+    key: str
+    sort_func: typing.Callable[[dict], typing.Any]
+    reverse: bool
+
+    def __init__(self, key: str, sort_func: typing.Callable[[dict], typing.Any], reverse: bool = False):
+        self.key = key
+        self.sort_func = sort_func
+        self.reverse = reverse
+
+    def sort(self, data: list[typing.Any]):
+        data.sort(key=self.sort_func, reverse=self.reverse)
+
+
+class ColumnSortMixin:
+    column_sorters: list[ColumnSorter]
+
+    def __init__(self):
+        self.column_sorters = []
+
+    def sort_by_key(self, key: str) -> bool:
+        found_sorter: ColumnSorter | None = None
+        for sorter in self.column_sorters:
+            if sorter.key == key:
+                found_sorter = sorter
+                break
+        if found_sorter:
+            idx = self.column_sorters.index(found_sorter)
+            if idx == len(self.column_sorters) - 1:  # reverse the order if already primarily sorted by this key
+                found_sorter.reverse = not found_sorter.reverse
+            else:
+                self.column_sorters.append(self.column_sorters.pop(idx))  # move this sorter to the end
+            return True
+        return False
+
+    def sort_columns(self, data):
+        for sorter in self.column_sorters:
+            sorter.sort(data)
+
+
+class HintLog(MDRecycleView, ColumnSortMixin):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
         "item": {"text": "[u]Item[/u]"},
@@ -1227,13 +1261,24 @@ class HintLog(MDRecycleView):
         "striped": True,
     }
     data: list[typing.Any]
-    sort_key: str = ""
-    reversed: bool = True
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
         self.data = [self.header]
         self.parser = parser
+        # Setup default sorters for each key in a sensible default order
+        # The last in the list will end up being the 'primary' sort, as each sorter is applied in-order.
+        # Custom clients should be able to modify these and add additional sorters
+        for key in ["entrance", "receiving", "finding", "item", "location"]:
+            self.column_sorters.append(ColumnSorter(
+                key,
+                lambda element, k=key: remove_between_brackets.sub("", element[k]["text"]).lower(),
+            ))
+        self.column_sorters.append(ColumnSorter(
+            "status",
+            lambda element: status_sort_weights[element["status"]["hint"]["status"]],
+            True
+        ))
 
     def refresh_hints(self, hints):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
@@ -1271,15 +1316,12 @@ class HintLog(MDRecycleView):
                 },
             })
 
-        data.sort(key=self.hint_sorter, reverse=self.reversed)
+        self.sort_columns(data)
+
         for i in range(0, len(data), 2):
             data[i]["striped"] = True
         data.insert(0, self.header)
         self.data = data
-
-    @staticmethod
-    def hint_sorter(element: dict) -> str:
-        return element["status"]["hint"]["status"]  # By status by default
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
