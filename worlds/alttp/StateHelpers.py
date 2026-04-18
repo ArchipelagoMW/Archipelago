@@ -14,13 +14,13 @@ def can_bomb_clip(state: CollectionState, region: LTTPRegion, player: int) -> bo
 
 
 def can_buy_unlimited(state: CollectionState, item: str, player: int) -> bool:
-    return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(state) for
-               shop in state.multiworld.shops)
+    return any(shop.has_unlimited(item) and shop.region.can_reach(state) for
+               shop in state.multiworld.worlds[player].shops)
 
 
 def can_buy(state: CollectionState, item: str, player: int) -> bool:
-    return any(shop.region.player == player and shop.has(item) and shop.region.can_reach(state) for
-               shop in state.multiworld.shops)
+    return any(shop.has(item) and shop.region.can_reach(state) for
+               shop in state.multiworld.worlds[player].shops)
 
 
 def can_shoot_arrows(state: CollectionState, player: int, count: int = 0) -> bool:
@@ -59,10 +59,11 @@ def has_hearts(state: CollectionState, player: int, count: int) -> int:
 
 def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
-    diff = state.multiworld.worlds[player].difficulty_requirements
-    return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
+    max_heart_pieces = state.multiworld.worlds[player].logical_heart_pieces
+    max_heart_containers = state.multiworld.worlds[player].logical_heart_containers
+    return min(state.count('Boss Heart Container', player), max_heart_containers) \
         + state.count('Sanctuary Heart Container', player) \
-        + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
+        + min(state.count('Piece of Heart', player), max_heart_pieces) // 4 \
         + 3  # starting hearts
 
 
@@ -137,6 +138,16 @@ def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) 
                 or state.has('Fire Rod', player)
                 or (state.multiworld.worlds[player].options.enemy_health in ("easy", "default")
                     and can_use_bombs(state, player, enemies * 4)))
+
+
+def can_kill_standard_start(state: CollectionState, player: int, enemies: int = 5) -> bool:
+    # Enemizer does not randomize standard start enemies
+        return (has_melee_weapon(state, player)
+                or state.has('Cane of Somaria', player)
+                or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
+                or state.has_any(["Bow", "Progressive Bow"], player)
+                or state.has('Fire Rod', player)
+                or can_use_bombs(state, player, enemies)) # Escape assist is set
 
 
 def can_get_good_bee(state: CollectionState, player: int) -> bool:

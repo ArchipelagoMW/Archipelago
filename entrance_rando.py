@@ -74,13 +74,12 @@ class EntranceLookup:
         if entrance in self._expands_graph_cache:
             return self._expands_graph_cache[entrance]
 
-        visited = set()
+        seen = {entrance.connected_region}
         q: deque[Region] = deque()
         q.append(entrance.connected_region)
 
         while q:
             region = q.popleft()
-            visited.add(region)
 
             # check if the region itself is progression
             if region in region.multiworld.indirect_connections:
@@ -103,7 +102,8 @@ class EntranceLookup:
                         and exit_ in self._usable_exits):
                     self._expands_graph_cache[entrance] = True
                     return True
-                elif exit_.connected_region and exit_.connected_region not in visited:
+                elif exit_.connected_region and exit_.connected_region not in seen:
+                    seen.add(exit_.connected_region)
                     q.append(exit_.connected_region)
 
         self._expands_graph_cache[entrance] = False
@@ -186,8 +186,19 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_all_state(False, True)
         self.entrance_lookup = entrance_lookup
+
+        # Construct an 'all state', similar to MultiWorld.get_all_state(), but only for the world which is having its
+        # entrances randomized.
+        single_player_all_state = CollectionState(world.multiworld, True)
+        player = world.player
+        for item in world.multiworld.itempool:
+            if item.player == player:
+                world.collect(single_player_all_state, item)
+        for item in world.get_pre_fill_items():
+            world.collect(single_player_all_state, item)
+        single_player_all_state.sweep_for_advancements(world.get_locations())
+        self.collection_state = single_player_all_state
 
     @property
     def placed_regions(self) -> set[Region]:
@@ -226,7 +237,7 @@ class ERPlacementState:
         copied_state.blocked_connections[self.world.player].remove(source_exit)
         copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
         copied_state.update_reachable_regions(self.world.player)
-        copied_state.sweep_for_advancements()
+        copied_state.sweep_for_advancements(self.world.get_locations())
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
@@ -402,7 +413,7 @@ def randomize_entrances(
         placed_exits, paired_entrances = er_state.connect(source_exit, target_entrance)
         # propagate new connections
         er_state.collection_state.update_reachable_regions(world.player)
-        er_state.collection_state.sweep_for_advancements()
+        er_state.collection_state.sweep_for_advancements(world.get_locations())
         if on_connect:
             change = on_connect(er_state, placed_exits, paired_entrances)
             if change:
@@ -525,7 +536,7 @@ def randomize_entrances(
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:
-        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player},"
+        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player}, "
                      f"named {world.multiworld.player_name[world.player]}")
 
     return er_state

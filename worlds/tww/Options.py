@@ -800,6 +800,7 @@ class TWWOptions(PerGameCommonOptions):
             "swift_sail",
             "skip_rematch_bosses",
             "remove_music",
+            "death_link",
         )
 
     def get_output_dict(self) -> dict[str, Any]:

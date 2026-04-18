@@ -72,6 +72,7 @@ def adjust_options(world: "HatInTimeWorld"):
         world.options.EndGoal.value = EndGoal.option_seal_the_deal
         world.options.ActRandomizer.value = 0
         world.options.ShuffleAlpineZiplines.value = 0
+        world.options.ShuffleDirectorTokens.value = 0
         world.options.ShuffleSubconPaintings.value = 0
         world.options.ShuffleStorybookPages.value = 0
         world.options.ShuffleActContracts.value = 0
@@ -217,6 +218,12 @@ class ShuffleStorybookPages(DefaultOnToggle):
     """If enabled, each storybook page in the purple Time Rifts is an item check.
     The Compass Badge can track these down for you."""
     display_name = "Shuffle Storybook Pages"
+
+
+class ShuffleDirectorTokens(Toggle):
+    """If enabled, causes the Conductor/DJ Grooves tokens found in Chapter 2 levels to become item checks.
+    NOTE: This also includes the time bonus pickups from Train Rush, since the level doesn't have any tokens."""
+    display_name = "Shuffle Director Tokens"
 
 
 class ShuffleActContracts(DefaultOnToggle):
@@ -623,6 +630,23 @@ class ParadeTrapWeight(Range):
     default = 20
 
 
+class DeathLinkAmnesty(Range):
+    """Amount of forgiven deaths before sending a Death Link.
+    0 means that every death will send a Death Link."""
+    display_name = "Death Link Amnesty"
+    range_start = 0
+    range_end = 20
+    default = 0
+
+
+class DWDeathLinkAmnesty(Range):
+    """Amount of forgiven deaths before sending a Death Link during Death Wish levels."""
+    display_name = "Death Wish Amnesty"
+    range_start = 0
+    range_end = 30
+    default = 5
+
+
 @dataclass
 class AHITOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -641,6 +665,7 @@ class AHITOptions(PerGameCommonOptions):
     StartWithCompassBadge:    StartWithCompassBadge
     CompassBadgeMode:         CompassBadgeMode
     ShuffleStorybookPages:    ShuffleStorybookPages
+    ShuffleDirectorTokens:    ShuffleDirectorTokens
     ShuffleActContracts:      ShuffleActContracts
     ShuffleSubconPaintings:   ShuffleSubconPaintings
     NoPaintingSkips:          NoPaintingSkips
@@ -700,10 +725,13 @@ class AHITOptions(PerGameCommonOptions):
     ParadeTrapWeight:         ParadeTrapWeight
 
     death_link:               DeathLink
+    death_link_amnesty:       DeathLinkAmnesty
+    dw_death_link_amnesty:    DWDeathLinkAmnesty
 
 
 ahit_option_groups: Dict[str, List[Any]] = {
-    "General Options": [EndGoal, ShuffleStorybookPages, ShuffleAlpineZiplines, ShuffleSubconPaintings,
+    "General Options": [EndGoal, ShuffleStorybookPages, ShuffleDirectorTokens,
+                        ShuffleAlpineZiplines, ShuffleSubconPaintings,
                         ShuffleActContracts, MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems,
                         LogicDifficulty, NoPaintingSkips, CTRLogic],
 
@@ -740,6 +768,7 @@ slot_data_options: List[str] = [
     "StartWithCompassBadge",
     "CompassBadgeMode",
     "ShuffleStorybookPages",
+    "ShuffleDirectorTokens",
     "ShuffleActContracts",
     "ShuffleSubconPaintings",
     "NoPaintingSkips",
@@ -769,4 +798,6 @@ slot_data_options: List[str] = [
     "MaxPonCost",
 
     "death_link",
+    "death_link_amnesty",
+    "dw_death_link_amnesty",
 ]
