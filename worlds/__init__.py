@@ -1,16 +1,20 @@
 import importlib
-import importlib.util
+import importlib.abc
+import importlib.machinery
 import logging
 import os
 import sys
-import warnings
 import zipimport
 import time
 import dataclasses
-from typing import List
+import json
+from pathlib import Path
+from types import ModuleType
+from typing import List, Sequence
+from zipfile import BadZipFile
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -19,14 +23,14 @@ try:
 except OSError:  # can't access/write?
     user_folder = None
 
-__all__ = {
+__all__ = [
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
     "failed_world_loads",
-}
+]
 
 
 failed_world_loads: List[str] = []
@@ -38,6 +42,7 @@ class WorldSource:
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
     time_taken: float = -1.0
+    version: Version = Version(0, 0, 0)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
@@ -51,21 +56,7 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            if self.is_zip:
-                importer = zipimport.zipimporter(self.resolved_path)
-                spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
-                assert spec, f"{self.path} is not a loadable module"
-                mod = importlib.util.module_from_spec(spec)
-
-                mod.__package__ = f"worlds.{mod.__package__}"
-
-                mod.__name__ = f"worlds.{mod.__name__}"
-                sys.modules[mod.__name__] = mod
-                with warnings.catch_warnings():
-                    warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-                    importer.exec_module(mod)
-            else:
-                importlib.import_module(f".{self.path}", "worlds")
+            importlib.import_module(f".{Path(self.path).stem}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
 
@@ -102,12 +93,118 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
 
 # import all submodules to trigger AutoWorldRegister
 world_sources.sort()
+apworlds: list[WorldSource] = []
 for world_source in world_sources:
-    world_source.load()
+    # load all loose files first:
+    if world_source.is_zip:
+        apworlds.append(world_source)
+    else:
+        world_source.load()
 
-# Build the data package for each game.
 from .AutoWorld import AutoWorldRegister
 
+for world_source in world_sources:
+    if not world_source.is_zip:
+        # look for manifest
+        manifest = {}
+        for dirpath, dirnames, filenames in os.walk(world_source.resolved_path):
+            for file in filenames:
+                if file.endswith("archipelago.json"):
+                    with open(os.path.join(dirpath, file), mode="r", encoding="utf-8") as manifest_file:
+                        manifest = json.load(manifest_file)
+                    break
+            if manifest:
+                break
+        game = manifest.get("game")
+        if game in AutoWorldRegister.world_types:
+            AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+
+if apworlds:
+    # encapsulation for namespace / gc purposes
+    def load_apworlds() -> None:
+        global apworlds
+        from .Files import APWorldContainer, InvalidDataError
+        core_compatible: list[tuple[WorldSource, APWorldContainer]] = []
+
+        def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
+            if add_as_failed_to_load:
+                failed_world_loads.append(game_name)
+            logging.warning(reason)
+
+        for apworld_source in apworlds:
+            apworld: APWorldContainer = APWorldContainer(apworld_source.resolved_path)
+            # populate metadata
+            try:
+                apworld.read()
+            except InvalidDataError as e:
+                if version_tuple < (0, 7, 0):
+                    logging.error(
+                        f"Invalid or missing manifest file for {apworld_source.resolved_path}. "
+                        "This apworld will stop working with Archipelago 0.7.0."
+                    )
+                    logging.error(e)
+                else:
+                    raise e
+            except BadZipFile as e:
+                err_message = (f"The world source {apworld_source.resolved_path} is not a valid zip. "
+                               "It is likely either corrupted, or was packaged incorrectly.")
+
+                if sys.stdout:
+                    raise RuntimeError(err_message) from e
+                else:
+                    messagebox("Couldn't load worlds", err_message, error=True)
+                    sys.exit(1)
+
+            if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as its minimum core version {apworld.minimum_ap_version} "
+                           f"is higher than current core version {version_tuple}.")
+            elif apworld.maximum_ap_version and apworld.maximum_ap_version < version_tuple:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as its maximum core version {apworld.maximum_ap_version} "
+                           f"is lower than current core version {version_tuple}.")
+            else:
+                core_compatible.append((apworld_source, apworld))
+        # load highest version first
+        core_compatible.sort(
+            key=lambda element: element[1].world_version if element[1].world_version else Version(0, 0, 0),
+            reverse=True)
+
+        apworld_module_specs = {}
+        class APWorldModuleFinder(importlib.abc.MetaPathFinder):
+            def find_spec(
+                    self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
+            ) -> importlib.machinery.ModuleSpec | None:
+                return apworld_module_specs.get(fullname)
+
+        sys.meta_path.insert(0, APWorldModuleFinder())
+
+        for apworld_source, apworld in core_compatible:
+            if apworld.game and apworld.game in AutoWorldRegister.world_types:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as its game {apworld.game} is already loaded.",
+                           add_as_failed_to_load=False)
+            else:
+                importer = zipimport.zipimporter(apworld_source.resolved_path)
+                world_name = Path(apworld.path).stem
+
+                spec = importer.find_spec(f"worlds.{world_name}")
+                apworld_module_specs[f"worlds.{world_name}"] = spec
+
+                apworld_source.load()
+                if apworld.game in AutoWorldRegister.world_types:
+                    # world could fail to load at this point
+                    if apworld.world_version:
+                        AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+    load_apworlds()
+    del load_apworlds
+
+del apworlds
+
+# Build the data package for each game.
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }

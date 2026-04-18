@@ -87,7 +87,7 @@ Pour les listes, chaque *item* doit être sur sa propre ligne et doit être pré
 ```yaml
 excluded_items:
   - Battlecruiser
-  - Drop-Pods (Kerrigan Tier 7)
+  - Drop-Pods (Kerrigan Ability)
 ```
 
 Une liste vide est représentée par une paire de crochets: `[]`. 
@@ -117,7 +117,7 @@ La page [*datapackage*](/datapackage) d'Archipelago liste l'ensemble des *items*
 que le site web prend en charge actuellement, dont ceux de *StarCraft 2*.
 
 Vous trouverez aussi la liste complète des *items* de *StarCraft 2 Archipelago* à la page 
-[*Icon Repository*](https://matthewmarinets.github.io/ap_sc2_icons/). 
+[*APSC2 Item Docs*](https://archipelago-sc2.github.io/content-docs/). 
 Notez que cette page contient diverses informations supplémentaires sur chacun des *items*.
 Cependant, l'information présente dans cette dernière peut différer de celle du *datapackage* d'Archipelago 
 puisqu'elle est générée, habituellement, à partir de la version en développement de *StarCraft 2 Archipelago* qui 
@@ -203,7 +203,7 @@ PATH_TO_ARCHIPELAGO=
 ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
 
 # Lance le client de Archipelago
-$ARCHIPELAGO Starcraft2Client
+$ARCHIPELAGO "Starcraft 2 Client"
 ```
 
 Pour une installation via Lutris, vous pouvez exécuter `lutris -l` pour obtenir l'identifiant numérique de votre 

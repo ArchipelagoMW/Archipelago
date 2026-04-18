@@ -3,7 +3,7 @@ from ..test.bases import WitnessMultiworldTestBase, WitnessTestBase
 
 class TestProgressiveSymbols(WitnessTestBase):
     options = {
-        "early_symbol_item": False,
+        "early_good_items": {},
         "puzzle_randomization": "umbra_variety",
         "progressive_symbols": {
             "Progressive Dots",
@@ -409,7 +409,7 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
 
     common_options = {
         "shuffle_discarded_panels": True,
-        "early_symbol_item": False,
+        "early_good_items": {},
     }
 
     def test_arrows_exist_and_are_required_in_expert_seeds_only(self) -> None:

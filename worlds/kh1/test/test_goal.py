@@ -5,29 +5,29 @@ class TestDefault(KH1TestBase):
 
 class TestSephiroth(KH1TestBase):
     options = {
-        "Goal": 0,
+        "Final Rest Door Key": 0,
     }
 
 class TestUnknown(KH1TestBase):
     options = {
-        "Goal": 1,
+        "Final Rest Door Key": 1,
     }
 
 class TestPostcards(KH1TestBase):
     options = {
-        "Goal": 2,
+        "Final Rest Door Key": 2,
     }
 
-class TestFinalAnsem(KH1TestBase):
+class TestLuckyEmblems(KH1TestBase):
     options = {
-        "Goal": 3,
+        "Final Rest Door Key": 3,
     }
 
 class TestPuppies(KH1TestBase):
     options = {
-        "Goal": 4,
+        "Final Rest Door Key": 4,
     }
 class TestFinalRest(KH1TestBase):
     options = {
-        "Goal": 5,
+        "Final Rest Door Key": 5,
     }

@@ -28,7 +28,7 @@ if it does not exist.
 ## Global Settings
 
 All non-world-specific settings are defined directly in settings.py.
-Each value needs to have a default. If the default should be `None`, define it as `typing.Optional` and assign `None`.
+Each value needs to have a default. If the default should be `None`, annotate it using `T | None = None`.
 
 To access a "global" config value, with correct typing, use one of
 ```python

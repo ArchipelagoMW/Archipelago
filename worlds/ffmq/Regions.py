@@ -33,10 +33,10 @@ def process_rules(spot, access):
     add_rule(spot, lambda state: state.has_all(access, spot.player))
 
 
-def create_region(world: MultiWorld, player: int, name: str, room_id=None, locations=None, links=None):
+def create_region(multiworld: MultiWorld, player: int, name: str, room_id=None, locations=None, links=None):
     if links is None:
         links = []
-    ret = Region(name, player, world)
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             location.parent_region = ret
@@ -154,6 +154,10 @@ def set_rules(self) -> None:
                         if check_foresta(entrance.parent_region):
                             return True
             check_foresta(loc.parent_region)
+
+    if self.options.map_shuffle or self.options.crest_shuffle:
+        process_rules(self.multiworld.get_entrance("Subregion Frozen Fields to Subregion Aquaria", self.player),
+                      ["SummerAquaria"])
 
     if self.options.logic == "friendly":
         process_rules(self.multiworld.get_entrance("Overworld - Ice Pyramid", self.player),
