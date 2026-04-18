@@ -1,0 +1,37 @@
+ContainerLayout:
+    md_bg_color: app.theme_cls.backgroundColor
+
+    MainLayout:
+        id: main
+        cols: 3
+        padding: 3, 10, 0, 3
+        spacing: "2dp"
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_x: None
+            width: "200dp"
+            spacing: "8dp"
+
+            MDTextField:
+                id: search_field
+                mode: "outlined"
+                size_hint_y: None
+                height: "56dp"
+                set_text: app.on_search_text
+
+                MDTextFieldLeadingIcon:
+                    icon: "magnify"
+
+                MDTextFieldHintText:
+                    text: "Search"
+
+            ScrollBox:
+                id: game_list
+
+        MDDivider:
+            orientation: "vertical"
+            width: "4dp"
+
+        ScrollBox:
+            id: detail_panel
