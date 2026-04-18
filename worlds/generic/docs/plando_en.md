@@ -77,9 +77,9 @@ Each block can have several different options to tailor it the way you like.
     * `null`: Locations will be in a random world in the multiworld.
 
 * `force` determines whether the generator will fail if the plando block cannot be fulfilled.
-    * `true`: The generator will throw an error if it is unable to place an item.
+    * `true`: The generator will throw an error if it is unable to place an item. **(Default)**
     * `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
-    * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
+    * `silent`: If the placement fails, it will be ignored entirely.
 
 * `percentage` is the percentage chance for the block to trigger. This can be any integer from 0 to 100. 
     **(Default: 100)**
