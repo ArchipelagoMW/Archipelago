@@ -9,7 +9,7 @@ from NetUtils import JSONMessagePart
 from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Range, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
 from rule_builder.field_resolvers import FieldResolver, FromOption, FromWorldAttr, resolve_field
-from rule_builder.options import Operator, OptionFilter
+from rule_builder.options import Operator, OptionFilter, OPERATORS, OPERATOR_INVERSES
 from rule_builder.rules import (
     And,
     CanReachEntrance,
@@ -155,6 +155,13 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
 
         self.world_cls = RuleBuilderWorld
 
+class TestOperatorInverses(unittest.TestCase):
+    def test_all_operators_have_inverses(self) -> None:
+        self.assertEqual(set(OPERATORS), set(OPERATOR_INVERSES))
+
+    def test_operator_inverses_are_involutions(self) -> None:
+        for operator, inverse in OPERATOR_INVERSES.items():
+            self.assertEqual(operator, OPERATOR_INVERSES[inverse])
 
 @classvar_matrix(
     rules=(
@@ -276,10 +283,14 @@ class TestSimplify(RuleBuilderTestCase):
         (ChoiceOption, 1, "ge", "second", True),
         (ChoiceOption, 1, "in", (0, 1), True),
         (ChoiceOption, 1, "in", ("first", "second"), True),
+        (ChoiceOption, 1, "not in", (0, 1), False),
+        (ChoiceOption, 1, "not in", ("first", "second"), False),
         (FreeTextOption, "no", "eq", "yes", False),
         (FreeTextOption, "yes", "eq", "yes", True),
         (SetOption, ("one", "two"), "contains", "three", False),
         (SetOption, ("one", "two"), "contains", "two", True),
+        (SetOption, ("one", "two"), "does not contain", "three", True),
+        (SetOption, ("one", "two"), "does not contain", "two", False),
     )
 )
 class TestOptions(RuleBuilderTestCase):
