@@ -1,3 +1,4 @@
+#:import Utils Utils
 <LauncherCard>:
     id: main
     style: "filled"
@@ -61,7 +62,6 @@
                 text: "Open"
 
 
-#:import Type worlds.LauncherComponents.Type
 MDFloatLayout:
     id: top_screen
 
@@ -79,7 +79,7 @@ MDFloatLayout:
             MDButton:
                 id: all
                 style: "text"
-                type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+                type: ("CLIENT", "TOOL", "ADJUSTER", "MISC")
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -89,7 +89,7 @@ MDFloatLayout:
             MDButton:
                 id: client
                 style: "text"
-                type: (Type.CLIENT, )
+                type: ("CLIENT", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -99,7 +99,7 @@ MDFloatLayout:
             MDButton:
                 id: Tool
                 style: "text"
-                type: (Type.TOOL, )
+                type: ("TOOL", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -109,7 +109,7 @@ MDFloatLayout:
             MDButton:
                 id: adjuster
                 style: "text"
-                type: (Type.ADJUSTER, )
+                type: ("ADJUSTER", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -119,7 +119,7 @@ MDFloatLayout:
             MDButton:
                 id: misc
                 style: "text"
-                type: (Type.MISC, )
+                type: ("MISC", )
                 on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
@@ -159,3 +159,24 @@ MDFloatLayout:
 
             ScrollBox:
                 id: button_layout
+
+
+<LoadingScreen>:
+    label: label
+    md_bg_color: self.theme_cls.backgroundColor
+    ApAsyncImage:
+        source: Utils.local_path("data/icon.png")
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        size_hint: None, None
+        size: 512, 512
+        opacity: 0.5
+    MDCircularProgressIndicator:
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        size: 550, 550
+        size_hint: None, None
+    MDLabel:
+        id: label
+        text: "Loading..."
+        halign: "center"
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        theme_text_color: "Primary"
