@@ -59,7 +59,7 @@ class KH2Rules:
         return state.has(ItemName.NamineSketches, self.player, Amount)
 
     def dc_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.CastleKey, self.player, Amount)  # Using Dummy 13 for this
+        return state.has(ItemName.RoyalSummons, self.player, Amount)  # Using Dummy 13 for this
 
     def hb_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.MembershipCard, self.player, Amount)
@@ -297,7 +297,7 @@ class KH2WorldRules(KH2Rules):
             else:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value)
         else:
-          
+
             final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
                                                               state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
             if self.world.options.FinalXemnas:
@@ -514,7 +514,7 @@ class KH2FightRules(KH2Rules):
         return shan_yu_rules[self.fight_logic]
 
     def get_ansem_riku_rules(self, state: CollectionState) -> bool:
-        # easy: gap closer,defensive tool,ground finisher/limit form 
+        # easy: gap closer,defensive tool,ground finisher/limit form
         # normal: defensive tool and (gap closer/ground finisher/limit form)
         # hard: defensive tool or limit form
         ansem_riku_rules = {
@@ -527,7 +527,7 @@ class KH2FightRules(KH2Rules):
     def get_storm_rider_rules(self, state: CollectionState) -> bool:
         # easy: has defensive tool,drive form, party limit,aerial move
         # normal: has 3 of those things
-        # hard: has 2 of those things 
+        # hard: has 2 of those things
         storm_rider_rules = {
             "easy":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 4,
             "normal": self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, form_list], state) >= 3,

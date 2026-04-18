@@ -614,7 +614,7 @@ final_leveling_access = {
 }
 
 multi_form_region_access = {
-    ItemName.CastleKey,
+    ItemName.RoyalSummons,
     ItemName.BattlefieldsofWar,
     ItemName.SwordoftheAncestor,
     ItemName.BeastsClaw,
@@ -627,7 +627,7 @@ multi_form_region_access = {
     ItemName.IdentityDisk,
 }
 limit_form_region_access = {
-    ItemName.CastleKey,
+    ItemName.RoyalSummons,
     ItemName.BattlefieldsofWar,
     ItemName.SwordoftheAncestor,
     ItemName.BeastsClaw,
