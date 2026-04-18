@@ -1,9 +1,11 @@
 # Dark Souls III Locations
 
-[Game Page] | [Items] | Locations
+[Game Page] | [Setup] | [Items] | Locations | [Enemy Randomization]
 
 [Game Page]: /games/Dark%20Souls%20III/info/en
+[Setup]: /tutorial/Dark%20Souls%20III/setup/en
 [Items]: /tutorial/Dark%20Souls%20III/items/en
+[Enemy Randomization]: /tutorial/Dark%20Souls%20III/enemy-randomization/en
 
 ## Table of Contents
 
@@ -61,6 +63,11 @@ at once:
   or from non-violent interaction.
 
 * **Small Crystal Lizards:** Drops from small crystal lizards.
+
+* **Drops:** Drops from anything other than bosses, including minibosses,
+  mimics, lizards, NPCs, or just normal enemies.
+
+* **Shops:** Locations in shops, including soul transposition.
 
 * **Upgrade:** Locations that contain upgrade items in vanilla, including
   titanite, gems, and Shriving Stones.
@@ -1280,11 +1287,11 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Fire Surge - Cornyx</td><td>Sold by Cornyx after recruiting him, or in his ashes</td></tr>
 <tr><td>FS: Fire Whip - Karla for Quelana Tome</td><td>Sold by Karla after giving her the Quelana Pyromancy Tome</td></tr>
 <tr><td>FS: Fireball - Cornyx</td><td>Sold by Cornyx after recruiting him, or in his ashes</td></tr>
-<tr><td>FS: Firelink Armor - shop after placing all Cinders</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
-<tr><td>FS: Firelink Gauntlets - shop after placing all Cinders</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
+<tr><td>FS: Firelink Armor - shop after beating KFF boss</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
+<tr><td>FS: Firelink Gauntlets - shop after beating KFF boss</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
 <tr><td>FS: Firelink Greatsword - Ludleth for Cinder</td><td>Boss weapon for Soul of Cinder</td></tr>
-<tr><td>FS: Firelink Helm - shop after placing all Cinders</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
-<tr><td>FS: Firelink Leggings - shop after placing all Cinders</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
+<tr><td>FS: Firelink Helm - shop after beating KFF boss</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
+<tr><td>FS: Firelink Leggings - shop after beating KFF boss</td><td>Sold by Handmaid after defeating Soul of Cinder</td></tr>
 <tr><td>FS: Firestorm - Karla for Quelana Tome</td><td>Sold by Karla after giving her the Quelana Pyromancy Tome</td></tr>
 <tr><td>FS: Flash Sweat - Cornyx</td><td>Sold by Cornyx after recruiting him, or in his ashes</td></tr>
 <tr><td>FS: Force - Irina for Tome of Carim</td><td>Sold by Irina after giving her the Braille Divine Tome of Carim</td></tr>

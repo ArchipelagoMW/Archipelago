@@ -18,7 +18,7 @@ location_re = re.compile(r'^([A-Z0-9]+): (.*?)(?:$| - )')
 
 if __name__ == '__main__':
     # TODO: update this to the main branch of the main randomizer once Archipelago support is merged
-    url = 'https://raw.githubusercontent.com/nex3/SoulsRandomizers/archipelago-server/dist/Base/annotations.txt'
+    url = 'https://raw.githubusercontent.com/fswap/SoulsRandomizers/archipelago/dist/Base/annotations.txt'
     response = requests.get(url)
     if response.status_code != 200:
         raise Exception(f"Got {response.status_code} when downloading static randomizer locations")
