@@ -938,7 +938,7 @@ class Rac3Interface(GameInterface):
                 self.enqueue_notification(
                     f"If you want to travel to the regular phoenix\nHold:{RAC3TEXTFORMATSTRING.WHITE}{RAC3TEXTFORMATSTRING.L2}+{RAC3TEXTFORMATSTRING.R2}+{RAC3TEXTFORMATSTRING.L1}+{RAC3TEXTFORMATSTRING.R1}+ SELECT",
                     RAC3BOXTHEME.WARNING,
-                    8.0)
+                    5.0)
 
     ##################
     # Player Respawn #
