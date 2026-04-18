@@ -52,7 +52,7 @@ class Component:
     Function that is run against patch file arg to identify which component is appropriate to launch
     If the function is an Instance of SuffixIdentifier the suffixes will also be valid for the Open Patch component
     """
-    game_name: Optional[str]
+    game_name: list[str]
     """Game name to identify component when handling launch links from WebHost"""
     supports_uri: Optional[bool]
     """Bool to identify if a component supports being launched by launch links from WebHost"""
@@ -60,7 +60,7 @@ class Component:
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
+                 game_name: Optional[str | list[str]] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
         self.display_name = display_name
         self.description = description
         self.script_name = script_name
@@ -77,7 +77,12 @@ class Component:
             Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
-        self.game_name = game_name
+        if game_name is None:
+            self.game_name = []
+        elif isinstance(game_name, str):
+            self.game_name = [game_name]
+        else:
+            self.game_name = game_name
         self.supports_uri = supports_uri
 
     def handles_file(self, path: str):
