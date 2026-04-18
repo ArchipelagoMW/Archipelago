@@ -109,3 +109,10 @@ class DucksWorld(World):
             {f"Progressive {stat}": TIERS_PER_STAT for stat in UPGRADE_STATS},
             self.player,
         )
+
+    def fill_slot_data(self) -> dict[str, object]:
+        # Sent to the client in the Connected packet; read by the mod to
+        # configure behaviour that has to live client-side (money top-up, etc).
+        return {
+            "starting_money": self.options.starting_money.value,
+        }

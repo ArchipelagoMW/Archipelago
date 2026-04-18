@@ -70,6 +70,10 @@ class TestDucksGenerate(WorldTestBase):
             location = self.multiworld.get_location(f"Beat par on {display}", self.player)
             assert location.can_reach(self.multiworld.state)
 
+    def test_fill_slot_data_emits_starting_money(self) -> None:
+        data = self.world.fill_slot_data()
+        assert data["starting_money"] == 12_500  # matches StartingMoney.default
+
     def test_tier_five_requires_four_progressives_of_that_stat(self) -> None:
         location = self.multiworld.get_location("Upgrade Speed Tier 5", self.player)
         assert not location.can_reach(self.multiworld.state)
