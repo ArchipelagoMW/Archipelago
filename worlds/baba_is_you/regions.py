@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable
 
 from BaseClasses import Entrance, Region, CollectionState
 from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
@@ -68,8 +68,19 @@ def connect_regions(world: BabaIsYouWorld) -> None:
                 
                 # Add connection rules, ignoring for map levels if open map is enabled
                 connectRule = connections.get(orgOtherRegion)
+
                 if (connectRule is not None) and (parent != "Map" or not world.options.open_map):
-                    rule = rule & connectRule(name, world.options.logic_difficulty)
+                    if callable(connectRule):
+                        rule = rule & connectRule(name, world.options.logic_difficulty)
+                    elif isinstance(connectRule, Iterable):
+                        rule = rule & connectRule
+                    else:
+                        # iterate through tuple
+                        for subRule in connectRule:
+                            if callable(connectRule):
+                                rule = rule & subRule(name, world.options.logic_difficulty)
+                            else:
+                                rule = rule & subRule
                 
                 world.set_rule(entrance, rule)
 
