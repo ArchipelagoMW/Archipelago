@@ -71,7 +71,9 @@ CLI(app)
 
 
 def to_python(value: str) -> uuid.UUID:
-    return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+    if "=" in value or any(c.isspace() for c in value):
+        raise ValueError("Invalid UUID format")
+    return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=' * (-len(value) % 4)))
 
 
 def to_url(value: uuid.UUID) -> str:
