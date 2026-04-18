@@ -70,25 +70,24 @@ IMAGE_GRAPHICS: dict[Graphic, str | RelatedTexture] = {
     Graphic.SEVEN: RelatedTexture("numbers.png", 32, 0, 16, 16),
     Graphic.EIGHT: RelatedTexture("numbers.png", 48, 0, 16, 16),
     Graphic.NINE: RelatedTexture("numbers.png", 64, 0, 16, 16),
-
     Graphic.LETTER_A: RelatedTexture("letters.png", 0, 16, 16, 16),
     Graphic.LETTER_E: RelatedTexture("letters.png", 16, 16, 16, 16),
     Graphic.LETTER_H: RelatedTexture("letters.png", 32, 16, 16, 16),
     Graphic.LETTER_I: RelatedTexture("letters.png", 0, 0, 16, 16),
     Graphic.LETTER_M: RelatedTexture("letters.png", 16, 0, 16, 16),
     Graphic.LETTER_T: RelatedTexture("letters.png", 32, 0, 16, 16),
-
     Graphic.DIVIDE: RelatedTexture("symbols.png", 0, 16, 16, 16),
     Graphic.EQUALS: RelatedTexture("symbols.png", 16, 16, 16, 16),
     Graphic.MINUS: RelatedTexture("symbols.png", 32, 16, 16, 16),
     Graphic.PLUS: RelatedTexture("symbols.png", 0, 0, 16, 16),
     Graphic.TIMES: RelatedTexture("symbols.png", 16, 0, 16, 16),
     Graphic.NO: RelatedTexture("symbols.png", 32, 0, 16, 16),
-
     Graphic.UNKNOWN: RelatedTexture("symbols.png", 32, 0, 16, 16),  # Same as "No"
 }
 
 BACKGROUND_TILE = RelatedTexture("inanimates.png", 0, 32, 16, 16)
+
+EASY_MODE_BOSS_2_HEALTH = RelatedTexture("boss.png", 16, 0, 16, 16)
 
 
 class PlayerSprite(Enum):
@@ -160,12 +159,17 @@ def get_texture_by_identifier(texture_identifier: str | RelatedTexture) -> Textu
     return sub_texture
 
 
-def get_texture(graphic: Graphic | Literal["Grass"], player_sprite: PlayerSprite | None = None) -> Texture | None:
+def get_texture(
+    graphic: Graphic | Literal["Grass"], player_sprite: PlayerSprite | None = None, hard_mode: bool = False
+) -> Texture | None:
     if graphic == Graphic.EMPTY:
         return None
 
     if graphic == "Grass":
         return get_texture_by_identifier(BACKGROUND_TILE)
+
+    if graphic == Graphic.BOSS_2_HEALTH and not hard_mode:
+        return get_texture_by_identifier(EASY_MODE_BOSS_2_HEALTH)
 
     if graphic in IMAGE_GRAPHICS:
         return get_texture_by_identifier(IMAGE_GRAPHICS[graphic])

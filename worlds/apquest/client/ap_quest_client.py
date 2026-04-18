@@ -198,7 +198,7 @@ class APQuestContext(CommonContext):
         if self.ap_quest_game is None:
             raise RuntimeError("Tried to render before self.ap_quest_game was initialized.")
 
-        self.ui.render(self.ap_quest_game, self.player_sprite)
+        self.ui.render(self.ap_quest_game, self.player_sprite, self.hard_mode)
         self.handle_game_events()
 
     def location_checked_side_effects(self, location: int) -> None:
