@@ -58,7 +58,7 @@ all_items["Atomic Cliff Remover Trap"] = factorio_base_id - 8
 all_items["Inventory Spill Trap"] = factorio_base_id - 9
 
 
-class Factorio(World):
+class Factorio(ProgressiveItemMixin, World):
     """
     Factorio is a game about automation. You play as an engineer who has crash landed on the planet
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
