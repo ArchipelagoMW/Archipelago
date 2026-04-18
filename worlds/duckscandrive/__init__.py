@@ -94,14 +94,14 @@ class DucksWorld(World):
                 self.multiworld.itempool.append(self.create_item(name))
 
     def set_rules(self) -> None:
-        # Tier N requires N-1 progressives of its stat, so every Tier 1 location
-        # is a free sphere-1 check (the player's starting money buys the first
-        # upgrade without AP input). A circular rule — tier N requires N — would
-        # leave sphere-1 empty and the seed unfillable. Book locations are free
-        # pickups and get no access rule.
+        # Strict rule: Upgrade tier N requires N Progressive <Stat> items.
+        # That makes the number of progressives received equal to the number
+        # of tiers the player can buy in-game (1-to-1). Sphere-1 is populated
+        # by the 21 free book + time-trial locations, so Fill can seed the
+        # upgrade ladders from there — no circular dependency.
         for name, data in upgrade_location_table.items():
             progressive = f"Progressive {data.stat}"
-            required = data.tier - 1
+            required = data.tier
             location = self.multiworld.get_location(name, self.player)
             location.access_rule = lambda state, item=progressive, count=required: state.has(item, self.player, count)
 

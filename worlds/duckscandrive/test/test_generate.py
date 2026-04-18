@@ -38,10 +38,16 @@ class TestDucksGenerate(WorldTestBase):
         assert victory.item is not None
         assert victory.item.name == "Victory"
 
-    def test_tier_one_locations_are_always_reachable(self) -> None:
+    def test_upgrade_tier_one_requires_one_progressive(self) -> None:
+        # Strict rule: not sphere-1 from empty state; becomes reachable once a
+        # matching progressive is collected.
         for stat in ("Speed", "Acceleration", "Offroad", "Boost", "Handling"):
             location = self.multiworld.get_location(f"Upgrade {stat} Tier 1", self.player)
-            assert location.can_reach(self.multiworld.state), f"Tier 1 {stat} must be sphere-1"
+            assert not location.can_reach(self.multiworld.state), f"Tier 1 {stat} must require a progressive"
+
+            state = self.multiworld.state.copy()
+            state.collect(self.get_item_by_name(f"Progressive {stat}"))
+            assert location.can_reach(state), f"Tier 1 {stat} must be reachable after one Progressive {stat}"
 
     def test_all_eight_books_exist_and_are_free_sphere_one(self) -> None:
         for n in range(1, 9):
@@ -74,11 +80,13 @@ class TestDucksGenerate(WorldTestBase):
         data = self.world.fill_slot_data()
         assert data["starting_money"] == 12_500  # matches StartingMoney.default
 
-    def test_tier_five_requires_four_progressives_of_that_stat(self) -> None:
+    def test_tier_five_requires_five_progressives_of_that_stat(self) -> None:
         location = self.multiworld.get_location("Upgrade Speed Tier 5", self.player)
         assert not location.can_reach(self.multiworld.state)
         state = self.multiworld.state.copy()
         progressives = self.get_items_by_name("Progressive Speed")[:4]
         for item in progressives:
             state.collect(item)
+        assert not location.can_reach(state), "four progressives must not yet unlock tier 5"
+        state.collect(self.get_items_by_name("Progressive Speed")[4])
         assert location.can_reach(state)
