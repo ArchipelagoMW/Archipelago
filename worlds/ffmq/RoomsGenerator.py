@@ -4,7 +4,7 @@ import hashlib
 from copy import deepcopy
 from dataclasses import dataclass, field
 from pathlib import Path
-import random
+import random as randomlib
 from typing import Any
 
 import json
@@ -200,32 +200,6 @@ BOSSES = {
 FAVORED_COMPANIONS = {"Tristam", "Phoebe", "Reuben"}
 
 
-class MT19337Compat:
-    """Best-effort MT19337 compatibility using Python's MT19937 core."""
-
-    def __init__(self, seed: int):
-        self._rng = random.Random(seed & 0xFFFFFFFF)
-
-    def between(self, low: int, high: int) -> int:
-        return self._rng.randrange(low, high + 1)
-
-    def pick_from(self, seq: list[Any]):
-        if not seq:
-            raise ValueError("Cannot pick from empty sequence")
-        return seq[self.between(0, len(seq) - 1)]
-
-    def take_from(self, seq: list[Any]):
-        val = self.pick_from(seq)
-        seq.remove(val)
-        return val
-
-    def shuffle(self, seq: list[Any]) -> None:
-        # Fisher-Yates, emulating common rando utility shuffles.
-        for i in range(len(seq) - 1, 0, -1):
-            j = self.between(0, i)
-            seq[i], seq[j] = seq[j], seq[i]
-
-
 @dataclass
 class LogicLink:
     room: int
@@ -257,12 +231,12 @@ class ClusterRoom:
         if self.location is None:
             self.location = room.location
 
-    def update_links(self, origin_link: LogicLink, rng: MT19337Compat) -> None:
+    def update_links(self, origin_link: LogicLink, random: randomlib.Random) -> None:
         if origin_link.force_link_origin:
             valid_origins = [x for x in self.links if not x.force_link_origin and not x.force_link_destination]
             if not valid_origins:
                 raise RuntimeError("Floor Shuffle: One way Orientation Error")
-            new_origin = rng.pick_from(valid_origins)
+            new_origin = random.choice(valid_origins)
             new_origin.force_link_origin = True
             new_origin.forced_destination = origin_link.forced_destination
 
@@ -385,12 +359,18 @@ def _battlefield_reward_type(reward: str) -> str:
     return "Item"
 
 
-def _shuffle_battlefield_rewards(rooms: list[dict[str, Any]], battlefield_shuffle: bool, rng: MT19337Compat) -> dict[str, str]:
+def _take_random(seq: list[Any], random: randomlib.Random) -> Any:
+    value = random.choice(seq)
+    seq.remove(value)
+    return value
+
+
+def _shuffle_battlefield_rewards(rooms: list[dict[str, Any]], battlefield_shuffle: bool, random: randomlib.Random) -> dict[str, str]:
     rewards_by_location = dict(BATTLEFIELD_REWARDS)
     if battlefield_shuffle:
         rewards = [rewards_by_location[location] for location in BATTLEFIELD_LOCATIONS]
         for location in BATTLEFIELD_LOCATIONS:
-            rewards_by_location[location] = rng.take_from(rewards)
+            rewards_by_location[location] = _take_random(rewards, random)
 
     battlefield_types = {"BattlefieldGp", "BattlefieldXp", "BattlefieldItem"}
     type_by_reward = {"Gold": "BattlefieldGp", "Experience": "BattlefieldXp", "Item": "BattlefieldItem"}
@@ -423,7 +403,7 @@ def _companions_shuffle(
     rooms: list[dict[str, Any]],
     companion_shuffle: int | bool,
     kaeli_mom: bool,
-    rng: MT19337Compat,
+    random: randomlib.Random,
 ) -> None:
     shuffle_type = int(companion_shuffle)
     if shuffle_type == 0:
@@ -463,15 +443,15 @@ def _companions_shuffle(
             ]
         )
         windia_rooms = [("Windia", 123), ("Windia", 153), ("Windia", 154), ("Windia", 185)]
-        valid_rooms.append(rng.take_from(windia_rooms))
-        valid_rooms.append(rng.take_from(windia_rooms))
+        valid_rooms.append(_take_random(windia_rooms, random))
+        valid_rooms.append(_take_random(windia_rooms, random))
 
-    guaranteed_foresta = rng.pick_from([room for room in valid_rooms if room[0] == "Foresta"])
+    guaranteed_foresta = random.choice([room for room in valid_rooms if room[0] == "Foresta"])
     valid_rooms.remove(guaranteed_foresta)
-    _room_by_id(rooms, guaranteed_foresta[1])["game_objects"].append(rng.take_from(companions))
+    _room_by_id(rooms, guaranteed_foresta[1])["game_objects"].append(_take_random(companions, random))
 
     for companion in companions:
-        region, room_id = rng.take_from(valid_rooms)
+        region, room_id = _take_random(valid_rooms, random)
         room = _room_by_id(rooms, room_id)
         room["game_objects"].append(companion)
         if companion["on_trigger"] == ["Kaeli"] and not kaeli_mom:
@@ -572,7 +552,7 @@ def _connect_overworld_link(
 
 
 def _select_overworld_link(
-    rng: MT19337Compat,
+    random: randomlib.Random,
     links_from_overworld: list[LogicLink],
     *,
     room_location: str | None,
@@ -623,8 +603,8 @@ def _select_overworld_link(
 
     for group in candidate_groups:
         if group:
-            return rng.pick_from(group)
-    return rng.pick_from(available)
+            return random.choice(group)
+    return random.choice(available)
 
 
 def _shuffle_error(stage: str, **context: Any) -> RuntimeError:
@@ -809,7 +789,7 @@ def _shuffle_overworld(
     overworld_shuffle: bool,
     kaeli_mom: bool,
     battlefield_rewards: dict[str, str],
-    rng: MT19337Compat,
+    random: randomlib.Random,
 ) -> None:
     if not overworld_shuffle:
         return
@@ -856,18 +836,18 @@ def _shuffle_overworld(
 
     companion_candidates = [location for location in NON_BATTLEFIELD_LOCATIONS if location in shuffle_locations]
     companions_rating = [_crawl_for_companion_rating(rooms, location, kaeli_mom) for location in companion_candidates]
-    rng.shuffle(companions_rating)
+    random.shuffle(companions_rating)
     companions_rating = [entry for entry in companions_rating if entry[1] > 0]
     if not companions_rating:
         return
     companions_rating.sort(key=lambda entry: entry[1], reverse=True)
-    companion_location = companions_rating[0][0] if _normalize_map_shuffle_mode(map_shuffle) == 3 else rng.pick_from(companions_rating)[0]
+    companion_location = companions_rating[0][0] if _normalize_map_shuffle_mode(map_shuffle) == 3 else random.choice(companions_rating)[0]
 
     location_rating = [_crawl_for_chest_rating2(rooms, location) for location in companion_candidates]
     location_rating = [entry for entry in location_rating if entry[0] != companion_location and entry[1] > 0]
     if not location_rating:
         return
-    guaranteed_chest_locations = [rng.pick_from(location_rating)[0]]
+    guaranteed_chest_locations = [random.choice(location_rating)[0]]
 
     special_regions_access = [
         {"subregion": "AquariaFrozenField", "access": "SummerAquaria", "barred_locations": []},
@@ -898,7 +878,7 @@ def _shuffle_overworld(
         loc1 = early_locations.pop(0)
         if not foresta_locations:
             break
-        loc2 = rng.pick_from(foresta_locations)
+        loc2 = random.choice(foresta_locations)
         next(entry for entry in movable_locations if entry["origins"] == loc1)["destination"] = loc2
         placed_locations.add(loc1)
         taken_locations.add(loc2)
@@ -912,8 +892,8 @@ def _shuffle_overworld(
     while foresta_locations:
         if not starting_locations:
             break
-        loc1 = rng.pick_from(starting_locations)
-        loc2 = rng.pick_from(foresta_locations)
+        loc1 = random.choice(starting_locations)
+        loc2 = random.choice(foresta_locations)
         next(entry for entry in movable_locations if entry["origins"] == loc1)["destination"] = loc2
         placed_locations.add(loc1)
         taken_locations.add(loc2)
@@ -938,7 +918,7 @@ def _shuffle_overworld(
             ]
             if not region_safe_locations:
                 continue
-            loc1 = rng.pick_from(region_safe_locations)
+            loc1 = random.choice(region_safe_locations)
             if loc1 in gating_locations_list:
                 gating_location_placed = True
             next(entry for entry in movable_locations if entry["origins"] == loc1)["destination"] = location
@@ -948,8 +928,8 @@ def _shuffle_overworld(
     shuffle_locations = [location for location in shuffle_locations if location not in placed_locations]
     destination_locations = [location for location in destination_locations if location not in taken_locations]
     while shuffle_locations and destination_locations:
-        loc1 = rng.take_from(shuffle_locations)
-        loc2 = rng.take_from(destination_locations)
+        loc1 = _take_random(shuffle_locations, random)
+        loc2 = _take_random(destination_locations, random)
         next(entry for entry in movable_locations if entry["origins"] == loc1)["destination"] = loc2
 
     for room in region_rooms:
@@ -973,7 +953,7 @@ def _shuffle_overworld(
             link_to_update["target_room"] = target_region["id"]
 
 
-def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, rng: MT19337Compat) -> None:
+def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, random: randomlib.Random) -> None:
     crest_list = [
         {"entrance": [67, 8], "origins": [64, 8], "deadend": True, "priority": 0},
         {"entrance": [68, 8], "origins": [65, 8], "deadend": True, "priority": 0},
@@ -1010,7 +990,7 @@ def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, rng: MT1933
         "MobiusCrest",
     ]
 
-    rng.shuffle(crest_list)
+    random.shuffle(crest_list)
     crest_list.sort(key=lambda x: x["priority"], reverse=True)
     crest_priority: list[tuple[int, str]] = []
     new_link_to_process: list[tuple[int, dict[str, Any]]] = []
@@ -1023,11 +1003,11 @@ def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, rng: MT1933
 
         if crest1["deadend"]:
             non_deadend = [x for x in crest_list if not x["deadend"]]
-            crest2 = rng.pick_from(non_deadend)
+            crest2 = random.choice(non_deadend)
             crest_list.remove(crest2)
         else:
             if deadend_count < passable_count:
-                crest2 = rng.take_from(crest_list)
+                crest2 = _take_random(crest_list, random)
             else:
                 crest2 = [x for x in crest_list if x["deadend"]][0]
                 crest_list.remove(crest2)
@@ -1039,10 +1019,10 @@ def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, rng: MT1933
                 if crest1_crest in crest_tiles:
                     crest_tiles.remove(crest1_crest)
             else:
-                crest1_crest = rng.take_from(crest_tiles)
+                crest1_crest = _take_random(crest_tiles, random)
                 crest_priority.append((crest1["priority"], crest1_crest))
         else:
-            crest1_crest = rng.take_from(crest_tiles)
+            crest1_crest = _take_random(crest_tiles, random)
 
         crest2_crest = crest1_crest
         if crest2["priority"] > 0 and not any(x[0] == crest2["priority"] for x in crest_priority):
@@ -1069,7 +1049,7 @@ def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, rng: MT1933
 def _floor_shuffle(
     rooms: list[dict[str, Any]],
     map_shuffle: str | int,
-    rng: MT19337Compat,
+    random: randomlib.Random,
     overworld_shuffle: bool | None = None,
 ) -> None:
     map_shuffle = _normalize_map_shuffle_mode(map_shuffle)
@@ -1256,8 +1236,8 @@ def _floor_shuffle(
     init_prog = [x for x in cluster_rooms if len(x.links) > 1 and not set(x.rooms).intersection(seed_rooms) and 0 not in x.rooms] + seed_prog
     init_dead = [x for x in cluster_rooms if len(x.links) == 1 and not set(x.rooms).intersection(seed_rooms) and 0 not in x.rooms] + seed_dead
 
-    rng.shuffle(init_prog)
-    rng.shuffle(init_dead)
+    random.shuffle(init_prog)
+    random.shuffle(init_dead)
 
     if intradungeon:
         core_cluster_rooms = []
@@ -1267,7 +1247,7 @@ def _floor_shuffle(
                 for room in init_prog
                 if room.location == progress_room.location and sum(1 for link in room.links if not link.forbidden_destinations) > 1
             ]
-            core_cluster_rooms.append(rng.pick_from(valid_rooms))
+            core_cluster_rooms.append(random.choice(valid_rooms))
         core_cluster_rooms.extend(seed_dead)
     else:
         non_crystal_prog = [x for x in init_prog if not set(x.rooms).intersection([c["target"] for c in crystal_rooms])]
@@ -1315,11 +1295,11 @@ def _floor_shuffle(
 
         progress_room = next((room for room in valid_crystal_source if room.location == crystal["location"]), None)
         if progress_room is None:
-            progress_room = rng.pick_from(valid_crystal_source)
+            progress_room = random.choice(valid_crystal_source)
 
         valid_links = [link for link in progress_room.links if link.exit]
         priority_links = [link for link in valid_links if link.priority_exit]
-        core_link = priority_links[0] if priority_links else rng.pick_from(valid_links)
+        core_link = priority_links[0] if priority_links else random.choice(valid_links)
         crystal["base"] = progress_room.rooms[0]
 
         progress_room.links.remove(core_link)
@@ -1342,7 +1322,7 @@ def _floor_shuffle(
     for room in valid_seed_switch:
         valid_links = [link for link in room.links if link.exit]
         priority_links = [link for link in valid_links if link.priority_exit]
-        core_link = priority_links[0] if priority_links else rng.pick_from(valid_links)
+        core_link = priority_links[0] if priority_links else random.choice(valid_links)
         links_from_overworld = [
             link
             for cluster in cluster_rooms
@@ -1351,7 +1331,7 @@ def _floor_shuffle(
         ]
         ow_link = next((link for link in links_from_overworld if link.current.get("location") == room.location), None)
         if ow_link is None:
-            ow_link = rng.pick_from(links_from_overworld)
+            ow_link = random.choice(links_from_overworld)
         room.links.remove(core_link)
         ow_cluster = next((cluster for cluster in cluster_rooms if ow_link in cluster.links), None)
         if ow_cluster is not None:
@@ -1369,7 +1349,7 @@ def _floor_shuffle(
     progress_cluster_rooms = [x for x in cluster_rooms if len(x.links) > 1 and not set(x.rooms).intersection(core_ids)]
     deadend_cluster_rooms = [x for x in cluster_rooms if len(x.links) == 1 and not set(x.rooms).intersection(core_ids)]
 
-    rng.shuffle(core_cluster_rooms)
+    random.shuffle(core_cluster_rooms)
     core_cluster_rooms = [x for x in core_cluster_rooms if x.links]
 
     if intradungeon:
@@ -1405,7 +1385,7 @@ def _floor_shuffle(
                 pairs: list[tuple[LogicLink, LogicLink]] = []
                 valid = True
 
-                rng.shuffle(chosen_progress)
+                random.shuffle(chosen_progress)
 
                 # Progress placement
                 for dest in chosen_progress:
@@ -1413,7 +1393,7 @@ def _floor_shuffle(
                     if not origin_candidates:
                         valid = False
                         break
-                    origin_link = rng.pick_from(origin_candidates)
+                    origin_link = random.choice(origin_candidates)
 
                     if set(dest.rooms).intersection(origin_cluster.forbidden_destinations_for(origin_link)):
                         valid = False
@@ -1424,7 +1404,7 @@ def _floor_shuffle(
                         valid = False
                         break
                     priority_dest = next((l for l in dest_candidates if l.priority_exit), None)
-                    dest_link = priority_dest if priority_dest is not None else rng.pick_from(dest_candidates)
+                    dest_link = priority_dest if priority_dest is not None else random.choice(dest_candidates)
 
                     pairs.append((origin_link, dest_link))
                     origin_cluster.merge(dest, origin_link, dest_link)
@@ -1433,7 +1413,7 @@ def _floor_shuffle(
                     continue
 
                 # Deadend placement
-                rng.shuffle(chosen_dead)
+                random.shuffle(chosen_dead)
                 for dest in chosen_dead:
                     available_locations = [room for room in origin_cluster.rooms if room.links]
                     odd_links_locations = [room for room in origin_cluster.rooms if (len(room.links) % 2) == 1]
@@ -1448,13 +1428,13 @@ def _floor_shuffle(
                     if not available_locations or not dest.links:
                         valid = False
                         break
-                    origin_location = rng.pick_from(available_locations)
+                    origin_location = random.choice(available_locations)
                     origin_links = [link for link in origin_location.links if not link.exit] if no_exit else origin_location.links
-                    origin_link = rng.pick_from(origin_links)
+                    origin_link = random.choice(origin_links)
                     if set(dest.rooms).intersection(origin_cluster.forbidden_destinations_for(origin_link)):
                         valid = False
                         break
-                    dest_link = rng.pick_from(dest.links)
+                    dest_link = random.choice(dest.links)
                     pairs.append((origin_link, dest_link))
                     origin_cluster.merge(dest, origin_link, dest_link)
 
@@ -1467,8 +1447,8 @@ def _floor_shuffle(
 
                 for room in origin_cluster.rooms:
                     while room.links:
-                        first = rng.take_from(room.links)
-                        second = rng.take_from(room.links)
+                        first = _take_random(room.links, random)
+                        second = _take_random(room.links, random)
                         pairs.append((first, second))
 
                 valid_pairs = pairs
@@ -1539,8 +1519,8 @@ def _floor_shuffle(
         valid_origins = origin_locations
         if mac_ship is not None and mac_ship_merging_count >= (mac_ship_max_size - 2):
             valid_origins = [location for location in origin_locations if location is not mac_ship]
-        origin_room = rng.pick_from(valid_origins)
-        origin_link = rng.pick_from(origin_room.links)
+        origin_room = random.choice(valid_origins)
+        origin_link = random.choice(origin_room.links)
 
         destination_rooms = [
             cluster
@@ -1550,12 +1530,12 @@ def _floor_shuffle(
         if not destination_rooms:
             continue
 
-        destination_room = rng.pick_from(destination_rooms)
+        destination_room = random.choice(destination_rooms)
         _remove_identity(progress_cluster_rooms, destination_room)
 
         priority_link = next((link for link in destination_room.links if link.priority_exit), None)
         exit_links = [link for link in destination_room.links if link.exit]
-        destination_link = priority_link if priority_link is not None else rng.pick_from(exit_links)
+        destination_link = priority_link if priority_link is not None else random.choice(exit_links)
 
         _connect_link(rooms, pending_links, origin_link, destination_link)
         origin_room.merge(destination_room, origin_link, destination_link)
@@ -1572,8 +1552,8 @@ def _floor_shuffle(
             None,
         )
         if sky_location is not None:
-            destination_link = rng.pick_from(sky_crystal_room.links)
-            origin_link = rng.pick_from(sky_location.links)
+            destination_link = random.choice(sky_crystal_room.links)
+            origin_link = random.choice(sky_location.links)
             _connect_link(rooms, pending_links, origin_link, destination_link)
             sky_location.merge(sky_crystal_room, origin_link, destination_link)
 
@@ -1591,8 +1571,8 @@ def _floor_shuffle(
             for location in origin_locations
             if any(crystal_room["base"] in room.rooms for room in location.rooms)
         )
-        origin_link = rng.pick_from(origin_room.links)
-        destination_link = rng.pick_from(crystal_cluster.links)
+        origin_link = random.choice(origin_room.links)
+        destination_link = random.choice(crystal_cluster.links)
         _connect_link(rooms, pending_links, origin_link, destination_link)
         origin_room.merge(crystal_cluster, origin_link, destination_link)
 
@@ -1605,9 +1585,9 @@ def _floor_shuffle(
             for location in origin_locations
             if location is not mac_ship and any(link.exit for link in location.rooms[0].links)
         ]
-        origin_room = rng.pick_from(valid_origins)
+        origin_room = random.choice(valid_origins)
         origin_links = [link for link in origin_room.rooms[0].links if link.exit]
-        origin_link = rng.pick_from(origin_links)
+        origin_link = random.choice(origin_links)
 
         destination_rooms = [
             cluster
@@ -1617,9 +1597,9 @@ def _floor_shuffle(
         if not destination_rooms:
             continue
 
-        destination_room = rng.pick_from(destination_rooms)
+        destination_room = random.choice(destination_rooms)
         _remove_identity(crest_clusters, destination_room)
-        destination_link = rng.pick_from(destination_room.links)
+        destination_link = random.choice(destination_room.links)
         _connect_link(rooms, pending_links, origin_link, destination_link)
         origin_room.merge(destination_room, origin_link, destination_link)
 
@@ -1660,14 +1640,14 @@ def _floor_shuffle(
                 available_locations = odd_links_locations
                 odd_links = True
 
-            origin_room = rng.pick_from(available_locations)
+            origin_room = random.choice(available_locations)
             origin_links = origin_room.links
             if no_exit:
                 origin_links = [link for link in origin_room.links if not link.exit]
             elif odd_links:
                 origin_links = [link for room in origin_room.rooms if (len(room.links) % 2) == 1 for link in room.links]
 
-            origin_link = rng.pick_from(origin_links)
+            origin_link = random.choice(origin_links)
             destination_rooms = [
                 cluster
                 for cluster in deadend_rooms_to_process
@@ -1686,9 +1666,9 @@ def _floor_shuffle(
             if abort_run:
                 break
 
-            destination_room = rng.pick_from(destination_rooms)
+            destination_room = random.choice(destination_rooms)
             _remove_identity(deadend_rooms_to_process, destination_room)
-            destination_link = rng.pick_from(destination_room.links)
+            destination_link = random.choice(destination_room.links)
             dead_end_link_pairs.append((origin_link, destination_link))
             origin_room.merge(destination_room, origin_link, destination_link)
             if origin_room is mac_ship:
@@ -1707,7 +1687,7 @@ def _floor_shuffle(
         dummy_room = ClusterRoom([500], [LogicLink(500, destination_link, origin_link)], location=None)
         orphaned_room = orphaned_rooms[0]
         orphaned_location = next(location for location in origin_locations if orphaned_room in location.rooms)
-        orphaned_link = rng.pick_from(orphaned_room.links)
+        orphaned_link = random.choice(orphaned_room.links)
         dummy_room_link = dummy_room.links[0]
         _connect_link(rooms, pending_links, orphaned_link, dummy_room_link)
         orphaned_location.merge(dummy_room, orphaned_link, dummy_room_link)
@@ -1720,7 +1700,7 @@ def _floor_shuffle(
             while room.links:
                 if (len(room.links) % 2) == 1:
                     raise RuntimeError("Floor Shuffle: Gap Connection Error")
-                _connect_link(rooms, pending_links, rng.take_from(room.links), rng.take_from(room.links))
+                _connect_link(rooms, pending_links, _take_random(room.links, random), _take_random(room.links, random))
 
     for room_id, link in pending_links:
         _room_by_id(rooms, room_id)["links"].append(link)
@@ -1781,35 +1761,9 @@ def _normalize_yaml_rooms(rooms: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return normalized_rooms
 
 
-def generate_rooms_yaml(
-    seed: int | str,
-    map_shuffle: str | int,
-    crest_shuffle: bool,
-    battlefield_shuffle: bool,
-    companion_shuffle: int | bool,
-    kaeli_mom: bool,
-    overworld_shuffle: bool,
-) -> str:
-    """
-    Generate a shuffled rooms.yaml payload without calling the FFMQR Web API.
 
-    Parameters are API-compatible and mutate the same room data dimensions as the API.
-    """
-    rng = MT19337Compat(_seed_to_uint32(seed))
-    return _generate_rooms_yaml_with_rng(
-        rng=rng,
-        map_shuffle=map_shuffle,
-        crest_shuffle=crest_shuffle,
-        battlefield_shuffle=battlefield_shuffle,
-        companion_shuffle=companion_shuffle,
-        kaeli_mom=kaeli_mom,
-        overworld_shuffle=overworld_shuffle,
-    )
-
-
-def _generate_rooms_yaml_with_rng(
-    *,
-    rng: Any,
+def generate_rooms(
+    random: randomlib.Random,
     map_shuffle: str | int,
     crest_shuffle: bool,
     battlefield_shuffle: bool,
@@ -1819,31 +1773,19 @@ def _generate_rooms_yaml_with_rng(
 ) -> list[dict[str, Any]]:
 
     rooms = deepcopy(base_rooms)
-    battlefield_rewards = _shuffle_battlefield_rewards(rooms, battlefield_shuffle=battlefield_shuffle, rng=rng)
-    _companions_shuffle(rooms, companion_shuffle=companion_shuffle, kaeli_mom=kaeli_mom, rng=rng)
+    battlefield_rewards = _shuffle_battlefield_rewards(rooms, battlefield_shuffle=battlefield_shuffle, random=random)
+    _companions_shuffle(rooms, companion_shuffle=companion_shuffle, kaeli_mom=kaeli_mom, random=random)
 
-    _crest_shuffle(rooms, crest_shuffle=crest_shuffle, rng=rng)
-    _floor_shuffle(rooms, map_shuffle=map_shuffle, rng=rng, overworld_shuffle=overworld_shuffle)
+    _crest_shuffle(rooms, crest_shuffle=crest_shuffle, random=random)
+    _floor_shuffle(rooms, map_shuffle=map_shuffle, random=random, overworld_shuffle=overworld_shuffle)
     _shuffle_overworld(
         rooms,
         map_shuffle=map_shuffle,
         overworld_shuffle=overworld_shuffle,
         kaeli_mom=kaeli_mom,
         battlefield_rewards=battlefield_rewards,
-        rng=rng,
+        random=random,
     )
 
     return _normalize_yaml_rooms(rooms)
 
-
-if __name__ == "__main__":
-    out = generate_rooms_yaml(
-        seed="00000001",
-        map_shuffle="DungeonsMixed",
-        crest_shuffle=True,
-        battlefield_shuffle=True,
-        companion_shuffle=True,
-        kaeli_mom=True,
-        overworld_shuffle=True
-    )
-    print(out)
