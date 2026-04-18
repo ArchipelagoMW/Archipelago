@@ -1,5 +1,5 @@
 from copy import deepcopy
-from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification
+from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification, CollectionState
 from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
 from . import logic
@@ -2419,7 +2419,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
 
-        state = multiworld.state.copy()
+        state = CollectionState(multiworld)
         state.allow_partial_entrances = True
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \

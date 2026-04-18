@@ -8,7 +8,7 @@ from copy import deepcopy
 from typing import TextIO
 
 from Utils import __version__
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType, CollectionState
 from Fill import fill_restrictive, FillError, sweep_from_pool
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
@@ -271,6 +271,7 @@ class PokemonRedBlueWorld(World):
     @classmethod
     def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
         locs = []
+        base_state = CollectionState(multiworld)
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             locs += world.local_locs
         for loc in sorted(locs):
@@ -282,7 +283,7 @@ class PokemonRedBlueWorld(World):
             for i, item in enumerate(itempool):
                 if ((item.player == loc.player or (item.player in multiworld.groups
                                                    and loc.player in multiworld.groups[item.player]["players"]))
-                        and loc.can_fill(multiworld.state, item, False)):
+                        and loc.can_fill(base_state, item, False)):
                     if item.advancement:
                         pool = progitempool
                     elif item.useful:
@@ -294,7 +295,7 @@ class PokemonRedBlueWorld(World):
                             pool.pop(i)
                             break
                     if item.advancement:
-                        state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
+                        state = sweep_from_pool(base_state, progitempool + unplaced_items)
                     if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
                         multiworld.push_item(loc, item, False)
                         fill_locations.remove(loc)
