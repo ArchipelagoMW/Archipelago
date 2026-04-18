@@ -46,6 +46,9 @@ class DucksWeb(WebWorld):
     ]
 
 
+BANANA_DISPLAY = "Banana"
+
+
 class DucksWorld(World):
     """Ducks Can Drive is a chaotic small-scale driving game by Joseph Cook (2023)."""
 
@@ -60,6 +63,9 @@ class DucksWorld(World):
     item_name_groups = item_name_groups
 
     required_client_version = (0, 5, 0)
+
+    def _banana_included(self) -> bool:
+        return bool(self.options.include_banana.value)
 
     def create_item(self, name: str) -> DucksItem:
         data = item_table[name]
@@ -78,6 +84,8 @@ class DucksWorld(World):
             city.locations.append(DucksLocation(self.player, name, loc_id, city))
 
         for name, data in time_trial_location_table.items():
+            if data.track.display == BANANA_DISPLAY and not self._banana_included():
+                continue
             time_trials.locations.append(DucksLocation(self.player, name, data.id, time_trials))
 
         victory = DucksLocation(self.player, "Fully Upgraded Car", None, city)
@@ -89,7 +97,13 @@ class DucksWorld(World):
         self.multiworld.regions += [menu, city, time_trials]
 
     def create_items(self) -> None:
+        banana_unlock = f"{BANANA_DISPLAY} Unlock"
         for name, data in item_table.items():
+            if name == banana_unlock and not self._banana_included():
+                # Dropping Banana drops exactly one location and one item,
+                # so the 25 progressives + rubber-duck pool stays balanced
+                # with no further adjustment.
+                continue
             for _ in range(data.count):
                 self.multiworld.itempool.append(self.create_item(name))
 
@@ -107,6 +121,8 @@ class DucksWorld(World):
         # Time-trial locations require the matching per-track unlock. The
         # client mod disables the menu button until the unlock arrives.
         for name, data in time_trial_location_table.items():
+            if data.track.display == BANANA_DISPLAY and not self._banana_included():
+                continue
             unlock = f"{data.track.display} Unlock"
             location = self.multiworld.get_location(name, self.player)
             location.access_rule = lambda state, item=unlock: state.has(item, self.player)
@@ -121,4 +137,5 @@ class DucksWorld(World):
         # configure behaviour that has to live client-side (money top-up, etc).
         return {
             "starting_money": self.options.starting_money.value,
+            "include_banana": self._banana_included(),
         }

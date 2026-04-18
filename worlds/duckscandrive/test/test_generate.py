@@ -28,10 +28,10 @@ class TestDucksGenerate(WorldTestBase):
         self.assertBeatable(True)
 
     def test_location_and_item_counts(self) -> None:
-        # 25 upgrades + 8 books + 13 time-trial + 1 victory event
-        assert len(self.multiworld.get_locations(self.player)) == 47
-        # 25 progressives + 21 rubber ducks; victory is placed, not pooled
-        assert len(self.multiworld.itempool) == 46
+        # Default (banana off): 25 upgrades + 8 books + 12 TT (no Finish Banana) + 1 victory
+        assert len(self.multiworld.get_locations(self.player)) == 46
+        # 25 progressives + 6 track unlocks (no Banana Unlock) + 14 rubber ducks
+        assert len(self.multiworld.itempool) == 45
 
     def test_victory_location_holds_victory_event(self) -> None:
         victory = self.multiworld.get_location("Fully Upgraded Car", self.player)
@@ -59,15 +59,18 @@ class TestDucksGenerate(WorldTestBase):
         rubber_ducks = [item for item in self.multiworld.itempool if item.name == "Rubber Duck"]
         assert len(rubber_ducks) == 14
 
-    def test_seven_track_unlock_items_exist_once_each(self) -> None:
+    def test_six_track_unlock_items_exist_once_each_by_default(self) -> None:
+        # Banana Unlock is excluded when include_banana is off.
         for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
-                        "Blackbill Ship", "Bill Beach", "Banana"):
+                        "Blackbill Ship", "Bill Beach"):
             matches = [item for item in self.multiworld.itempool if item.name == f"{display} Unlock"]
             assert len(matches) == 1, f"expected exactly one '{display} Unlock', got {len(matches)}"
+        banana = [item for item in self.multiworld.itempool if item.name == "Banana Unlock"]
+        assert len(banana) == 0, "Banana Unlock must not be in the pool with include_banana off"
 
     def test_time_trial_finishes_require_matching_unlock(self) -> None:
         for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
-                        "Blackbill Ship", "Bill Beach", "Banana"):
+                        "Blackbill Ship", "Bill Beach"):
             location = self.multiworld.get_location(f"Finish {display}", self.player)
             assert not location.can_reach(self.multiworld.state), f"Finish {display} must require unlock"
 
@@ -75,8 +78,10 @@ class TestDucksGenerate(WorldTestBase):
             state.collect(self.get_item_by_name(f"{display} Unlock"))
             assert location.can_reach(state), f"Finish {display} must unlock after its item"
 
-    def test_banana_has_no_par_location(self) -> None:
+    def test_banana_locations_absent_by_default(self) -> None:
         import pytest
+        with pytest.raises(KeyError):
+            self.multiworld.get_location("Finish Banana", self.player)
         with pytest.raises(KeyError):
             self.multiworld.get_location("Beat par on Banana", self.player)
 
@@ -93,6 +98,27 @@ class TestDucksGenerate(WorldTestBase):
     def test_fill_slot_data_emits_starting_money(self) -> None:
         data = self.world.fill_slot_data()
         assert data["starting_money"] == 12_500  # matches StartingMoney.default
+
+    def test_fill_slot_data_emits_include_banana_false_by_default(self) -> None:
+        assert self.world.fill_slot_data()["include_banana"] is False
+
+
+class TestDucksGenerateWithBanana(WorldTestBase):
+    game = "Ducks Can Drive"
+    options = {"include_banana": True}
+
+    def test_banana_locations_and_unlock_present(self) -> None:
+        assert self.multiworld.get_location("Finish Banana", self.player) is not None
+        bananas = [item for item in self.multiworld.itempool if item.name == "Banana Unlock"]
+        assert len(bananas) == 1
+
+    def test_location_and_item_counts_with_banana(self) -> None:
+        # 25 upgrades + 8 books + 13 TT + 1 victory = 47 locations
+        assert len(self.multiworld.get_locations(self.player)) == 47
+        assert len(self.multiworld.itempool) == 46
+
+    def test_fill_slot_data_flags_include_banana(self) -> None:
+        assert self.world.fill_slot_data()["include_banana"] is True
 
     def test_tier_five_requires_five_progressives_of_that_stat(self) -> None:
         location = self.multiworld.get_location("Upgrade Speed Tier 5", self.player)

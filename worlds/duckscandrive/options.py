@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Range
+from Options import PerGameCommonOptions, Range, Toggle
 
 
 class StartingMoney(Range):
@@ -24,6 +24,21 @@ class StartingMoney(Range):
     default = 12_500
 
 
+class IncludeBanana(Toggle):
+    """Include the secret Banana track in the seed.
+
+    Banana Offline has no Track Select menu button — in the stock game it
+    only loads when a time-trial timer runs past 10 minutes without the
+    player finishing. Enabling this adds one finish location and one
+    track-unlock item to the pool, but the player has to know the secret
+    timeout path to actually reach Banana. Off by default so most seeds
+    don't contain a location that's practically unreachable without
+    meta-knowledge.
+    """
+    display_name = "Include Banana Track"
+
+
 @dataclass
 class DucksOptions(PerGameCommonOptions):
     starting_money: StartingMoney
+    include_banana: IncludeBanana
