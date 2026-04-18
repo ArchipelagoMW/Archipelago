@@ -613,7 +613,8 @@ class SA2BWorld(World):
            self.options.chao_stats.value > 0 or \
            self.options.chao_animal_parts or \
            self.options.chao_kindergarten or \
-           self.options.black_market_slots.value > 0:
+           self.options.black_market_slots.value > 0 or \
+           self.options.goal.value == 7:
             return True;
 
         return False
@@ -757,13 +758,16 @@ class SA2BWorld(World):
         item_names = []
         player_names = []
         progression_flags = []
-        totally_real_item_names_copy = totally_real_item_names.copy()
         location_names = [(LocationName.chao_black_market_base + str(i)) for i in range(1, self.options.black_market_slots.value + 1)]
         locations = [self.multiworld.get_location(location_name, self.player) for location_name in location_names]
         for location in locations:
             if location.item.classification & ItemClassification.trap:
-                item_name = self.random.choice(totally_real_item_names_copy)
-                totally_real_item_names_copy.remove(item_name)
+                item_name = ""
+                if location.item.game in totally_real_item_names:
+                    item_name = self.random.choice(totally_real_item_names[location.item.game])
+                else:
+                    random_game_names: list[str] = self.random.choice(list(totally_real_item_names.values()))
+                    item_name = self.random.choice(random_game_names)
                 item_names.append(item_name)
             else:
                 item_names.append(location.item.name)

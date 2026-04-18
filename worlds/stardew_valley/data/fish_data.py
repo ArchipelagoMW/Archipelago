@@ -2,9 +2,18 @@ from dataclasses import dataclass
 from typing import Tuple, Union, Optional
 
 from . import season_data as season
+from .game_item import Source
 from ..mods.mod_data import ModNames
 from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
 from ..strings.region_names import Region, SVERegion, LogicRegion
+from ..strings.tool_names import FishingRod
+
+
+@dataclass(frozen=True, kw_only=True)
+class FishingSource(Source):
+    region: str
+    minimum_rod: str = FishingRod.training
+    fishing_level: int = 0
 
 
 @dataclass(frozen=True)
@@ -15,6 +24,7 @@ class FishItem:
     difficulty: int
     legendary: bool
     extended_family: bool
+    minimum_level: int
     mod_name: Optional[str] = None
 
     def __repr__(self):
@@ -55,11 +65,11 @@ vineyard = (SVERegion.blue_moon_vineyard,)
 
 
 def create_fish(name: str, locations: Tuple[str, ...], seasons: Union[str, Tuple[str, ...]],
-                difficulty: int, legendary: bool = False, extended_family: bool = False, mod_name: Optional[str] = None) -> FishItem:
+                difficulty: int, legendary: bool = False, extended_family: bool = False, minimum_level: int = 0, mod_name: Optional[str] = None) -> FishItem:
     if isinstance(seasons, str):
         seasons = (seasons,)
 
-    fish_item = FishItem(name, locations, seasons, difficulty, legendary, extended_family, mod_name)
+    fish_item = FishItem(name, locations, seasons, difficulty, legendary, extended_family, minimum_level, mod_name)
     return fish_item
 
 
@@ -118,16 +128,16 @@ blobfish = create_fish(Fish.blobfish, night_market, season.winter, 75)
 midnight_squid = create_fish(Fish.midnight_squid, night_market, season.winter, 55)
 spook_fish = create_fish(Fish.spook_fish, night_market, season.winter, 60)
 
-angler = create_fish(Fish.angler, town_river, season.fall, 85, True, False)
-crimsonfish = create_fish(Fish.crimsonfish, tide_pools, season.summer, 95, True, False)
-glacierfish = create_fish(Fish.glacierfish, forest_river, season.winter, 100, True, False)
-legend = create_fish(Fish.legend, mountain_lake, season.spring, 110, True, False)
+angler = create_fish(Fish.angler, town_river, season.fall, 85, True, False, minimum_level=3)
+crimsonfish = create_fish(Fish.crimsonfish, tide_pools, season.summer, 95, True, False, minimum_level=5)
+glacierfish = create_fish(Fish.glacierfish, forest_river, season.winter, 100, True, False, minimum_level=6)
+legend = create_fish(Fish.legend, mountain_lake, season.spring, 110, True, False, minimum_level=10)
 mutant_carp = create_fish(Fish.mutant_carp, sewers, season.all_seasons, 80, True, False)
 
-ms_angler = create_fish(Fish.ms_angler, town_river, season.fall, 85, True, True)
-son_of_crimsonfish = create_fish(Fish.son_of_crimsonfish, tide_pools, season.summer, 95, True, True)
-glacierfish_jr = create_fish(Fish.glacierfish_jr, forest_river, season.winter, 100, True, True)
-legend_ii = create_fish(Fish.legend_ii, mountain_lake, season.spring, 110, True, True)
+ms_angler = create_fish(Fish.ms_angler, town_river, season.fall, 85, True, True, minimum_level=3)
+son_of_crimsonfish = create_fish(Fish.son_of_crimsonfish, tide_pools, season.summer, 95, True, True, minimum_level=5)
+glacierfish_jr = create_fish(Fish.glacierfish_jr, forest_river, season.winter, 100, True, True, minimum_level=6)
+legend_ii = create_fish(Fish.legend_ii, mountain_lake, season.spring, 110, True, True, minimum_level=10)
 radioactive_carp = create_fish(Fish.radioactive_carp, sewers, season.all_seasons, 80, True, True)
 
 baby_lunaloo = create_fish(SVEFish.baby_lunaloo, ginger_island_ocean, season.all_seasons, 15, mod_name=ModNames.sve)

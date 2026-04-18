@@ -3,10 +3,10 @@ import threading
 import json
 
 from Utils import local_path, user_path
-from worlds.alttp.Rom import Sprite
 
 
 def update_sprites_lttp():
+    from worlds.alttp.Rom import Sprite
     from tkinter import Tk
     from LttPAdjuster import get_image_for_sprite
     from LttPAdjuster import BackgroundTaskProgress

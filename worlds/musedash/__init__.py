@@ -2,7 +2,7 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Region, Item, ItemClassification, Tutorial
 from typing import List, ClassVar, Type, Set
 from math import floor
-from Options import PerGameCommonOptions
+from Options import PerGameCommonOptions, OptionError
 
 from .Options import MuseDashOptions, md_option_groups
 from .Items import MuseDashSongItem, MuseDashFixedItem
@@ -102,7 +102,8 @@ class MuseDashWorld(World):
             # If the above fails, we want to adjust the difficulty thresholds.
             # Easier first, then harder
             if lower_diff_threshold <= 1 and higher_diff_threshold >= 11:
-                raise Exception("Failed to find enough songs, even with maximum difficulty thresholds.")
+                raise OptionError("Failed to find enough songs, even with maximum difficulty thresholds. "
+                                  "Too many songs have been excluded or set to be starter songs.")
             elif lower_diff_threshold <= 1:
                 higher_diff_threshold += 1
             else:
@@ -123,7 +124,8 @@ class MuseDashWorld(World):
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
-        self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
+        # Sort first for deterministic iteration order.
+        self.included_songs = [s for s in sorted(include_songs) if s in song_items and s not in self.starting_songs]
         self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
 
         # Making sure songs chosen for goal are allowed by DLC and remove the chosen from being added to the pool.

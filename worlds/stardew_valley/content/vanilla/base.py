@@ -1,20 +1,30 @@
 from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
-from ...data.game_item import ItemTag, CustomRuleSource, GameItem
+from ...data.game_item import ItemTag, CustomRuleSource, GameItem, Tag
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
+from ...data.hats_data import Hats
+from ...data.requirement import ToolRequirement, TotalEarningsRequirement, ShipOneCropRequirement, CraftedItemsRequirement, CookedRecipesRequirement, \
+    CaughtFishRequirement
+from ...data.shop import HatMouseSource
 from ...data.skill import Skill
+from ...logic.tailoring_logic import TailoringSource
+from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
-from ...strings.craftable_names import WildSeeds
+from ...strings.craftable_names import WildSeeds, Edible, Consumable, Lighting
 from ...strings.crop_names import Fruit, Vegetable
+from ...strings.fish_names import Fish, WaterChest
 from ...strings.flower_names import Flower
-from ...strings.food_names import Beverage
+from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import all_edible_mushrooms, Mushroom, Forageable
 from ...strings.fruit_tree_names import Sapling
+from ...strings.gift_names import Gift
 from ...strings.machine_names import Machine
+from ...strings.metal_names import Fossil, Artifact
 from ...strings.monster_names import Monster
 from ...strings.season_names import Season
-from ...strings.seed_names import Seed
+from ...strings.seed_names import Seed, TreeSeed
 from ...strings.skill_names import Skill as SkillName
+from ...strings.tool_names import Tool, ToolMaterial
 
 all_fruits = (
     Fruit.ancient_fruit, Fruit.apple, Fruit.apricot, Fruit.banana, Forageable.blackberry, Fruit.blueberry, Forageable.cactus_fruit, Fruit.cherry,
@@ -110,16 +120,19 @@ base_game = BaseGameContentPack(
         Vegetable.cauliflower: (HarvestCropSource(seed=Seed.cauliflower, seasons=(Season.spring,)),),
         Vegetable.potato: (HarvestCropSource(seed=Seed.potato, seasons=(Season.spring,)),),
         Flower.tulip: (HarvestCropSource(seed=Seed.tulip, seasons=(Season.spring,)),),
-        Vegetable.kale: (HarvestCropSource(seed=Seed.kale, seasons=(Season.spring,)),),
+        Vegetable.kale: (HarvestCropSource(seed=Seed.kale, seasons=(Season.spring,),
+                                           other_requirements=(ToolRequirement(Tool.scythe),)),),
         Flower.blue_jazz: (HarvestCropSource(seed=Seed.jazz, seasons=(Season.spring,)),),
         Vegetable.garlic: (HarvestCropSource(seed=Seed.garlic, seasons=(Season.spring,)),),
-        Vegetable.unmilled_rice: (HarvestCropSource(seed=Seed.rice, seasons=(Season.spring,)),),
+        Vegetable.unmilled_rice: (HarvestCropSource(seed=Seed.rice, seasons=(Season.spring,),
+                                                    other_requirements=(ToolRequirement(Tool.scythe),)),),
 
         Fruit.melon: (HarvestCropSource(seed=Seed.melon, seasons=(Season.summer,)),),
         Vegetable.tomato: (HarvestCropSource(seed=Seed.tomato, seasons=(Season.summer,)),),
         Fruit.blueberry: (HarvestCropSource(seed=Seed.blueberry, seasons=(Season.summer,)),),
         Fruit.hot_pepper: (HarvestCropSource(seed=Seed.pepper, seasons=(Season.summer,)),),
-        Vegetable.wheat: (HarvestCropSource(seed=Seed.wheat, seasons=(Season.summer, Season.fall)),),
+        Vegetable.wheat: (HarvestCropSource(seed=Seed.wheat, seasons=(Season.summer, Season.fall),
+                                            other_requirements=(ToolRequirement(Tool.scythe),)),),
         Vegetable.radish: (HarvestCropSource(seed=Seed.radish, seasons=(Season.summer,)),),
         Flower.poppy: (HarvestCropSource(seed=Seed.poppy, seasons=(Season.summer,)),),
         Flower.summer_spangle: (HarvestCropSource(seed=Seed.spangle, seasons=(Season.summer,)),),
@@ -134,7 +147,8 @@ base_game = BaseGameContentPack(
         Vegetable.yam: (HarvestCropSource(seed=Seed.yam, seasons=(Season.fall,)),),
         Fruit.cranberries: (HarvestCropSource(seed=Seed.cranberry, seasons=(Season.fall,)),),
         Flower.fairy_rose: (HarvestCropSource(seed=Seed.fairy, seasons=(Season.fall,)),),
-        Vegetable.amaranth: (HarvestCropSource(seed=Seed.amaranth, seasons=(Season.fall,)),),
+        Vegetable.amaranth: (HarvestCropSource(seed=Seed.amaranth, seasons=(Season.fall,),
+                                               other_requirements=(ToolRequirement(Tool.scythe),)),),
         Fruit.grape: (HarvestCropSource(seed=Seed.grape, seasons=(Season.fall,)),),
         Vegetable.artichoke: (HarvestCropSource(seed=Seed.artichoke, seasons=(Season.fall,)),),
 
@@ -147,18 +161,18 @@ base_game = BaseGameContentPack(
         Fruit.sweet_gem_berry: (HarvestCropSource(seed=Seed.rare_seed, seasons=(Season.fall,)),),
         Fruit.ancient_fruit: (HarvestCropSource(seed=WildSeeds.ancient, seasons=(Season.spring, Season.summer, Season.fall,)),),
 
-        Seed.coffee_starter: (CustomRuleSource(lambda logic: logic.traveling_merchant.has_days(3) & logic.monster.can_kill_many(Monster.dust_sprite)),),
+        Seed.coffee_starter: (CustomRuleSource(create_rule=lambda logic: logic.traveling_merchant.has_days(3) & logic.monster.can_kill_many(Monster.dust_sprite)),),
         Seed.coffee: (HarvestCropSource(seed=Seed.coffee_starter, seasons=(Season.spring, Season.summer,)),),
 
         Vegetable.tea_leaves: (
-        CustomRuleSource(lambda logic: logic.has(WildSeeds.tea_sapling) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
+            CustomRuleSource(create_rule=lambda logic: logic.has(WildSeeds.tea_sapling) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
     },
     artisan_good_sources={
         Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),
         # Ingredient.vinegar: (MachineSource(item=Ingredient.rice, machine=Machine.keg),),
         Beverage.coffee: (MachineSource(item=Seed.coffee, machine=Machine.keg),
-                          CustomRuleSource(lambda logic: logic.has(Machine.coffee_maker)),
-                          CustomRuleSource(lambda logic: logic.has("Hot Java Ring"))),
+                          CustomRuleSource(create_rule=lambda logic: logic.has(Machine.coffee_maker)),
+                          CustomRuleSource(create_rule=lambda logic: logic.has("Hot Java Ring"))),
         ArtisanGood.green_tea: (MachineSource(item=Vegetable.tea_leaves, machine=Machine.keg),),
         ArtisanGood.mead: (MachineSource(item=ArtisanGood.honey, machine=Machine.keg),),
         ArtisanGood.pale_ale: (MachineSource(item=Vegetable.hops, machine=Machine.keg),),
@@ -169,5 +183,48 @@ base_game = BaseGameContentPack(
         Skill(SkillName.fishing, has_mastery=True),
         Skill(SkillName.mining, has_mastery=True),
         Skill(SkillName.combat, has_mastery=True),
-    )
+    ),
+    hat_sources={
+        Hats.good_ol_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(15000),)),),
+        Hats.lucky_bow: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(50000),)),),
+        Hats.cool_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(250000),)),),
+        Hats.bowler: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(1000000),)),),
+        Hats.sombrero: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(10000000),)),),
+        Hats.delicate_bow: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(10),)),),
+        Hats.plum_chapeau: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(25),)),),
+        Hats.daisy: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(15),)),),
+        Hats.trucker_hat: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(30),)),),
+        Hats.souwester: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(10, unique=True),)),),
+        Hats.official_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(24, unique=True),)),),
+        Hats.watermelon_band: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(100, unique=False),)),),
+        Hats.cowgal_hat: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(ShipOneCropRequirement(300),)),),
+        Hats.living_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.grind.can_grind_weeds(100000)),),
+        Hats.spotted_headscarf: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Mushroom.red,)),),
+        Hats.beanie: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(TreeSeed.acorn, TreeSeed.mahogany, TreeSeed.maple, TreeSeed.pine,)),),
+        Hats.blobfish_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fish.blobfish,)),),
+        Hats.bridal_veil: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Gift.pearl,)),),
+        Hats.dinosaur_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.dinosaur_egg,)),),
+        Hats.fashion_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(ArtisanGood.caviar,)),),
+        Hats.flat_topped_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Meal.cranberry_sauce, Meal.stuffing,)),),
+        Hats.floppy_beanie: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(ArtisanGood.maple_syrup, ArtisanGood.oak_resin, ArtisanGood.pine_tar,)),),
+        Hats.goggles: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Edible.bug_steak,)),),
+        Hats.hair_bone: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fossil.prehistoric_tibia,)),),
+        Hats.party_hat_blue: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Meal.chocolate_cake, Consumable.fireworks_purple,)),),
+        Hats.party_hat_green: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Consumable.fireworks_green, Meal.fish_taco,)),),
+        Hats.party_hat_red: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Consumable.fireworks_red, Meal.pizza,)),),
+        Hats.pirate_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(WaterChest.treasure,)),),
+        Hats.propeller_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Meal.miners_treat,)),),
+        Hats.pumpkin_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Lighting.jack_o_lantern,)),),
+        Hats.wearable_dwarf_helm: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Artifact.dwarf_gadget, Artifact.dwarvish_helm,)),),
+        Hats.white_turban: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.sweet_gem_berry,)),),
+        Hats.witch_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Gift.golden_pumpkin,)),),
+        Hats.totem_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Consumable.rain_totem, Consumable.warp_totem_farm,
+                                                                                  Consumable.warp_totem_mountains, Consumable.warp_totem_beach,
+                                                                                  Consumable.warp_totem_desert, Consumable.treasure_totem)),),
+
+        Hats.copper_pan_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.copper)),),
+        Hats.steel_pan_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.iron)),),
+        Hats.gold_pan_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.gold)),),
+        Hats.iridium_pan_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.iridium)),),
+    },
 )

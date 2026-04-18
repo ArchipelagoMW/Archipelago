@@ -15,14 +15,13 @@
 # A Link to the Past
 /worlds/alttp/ @Berserker66
 
-# Sudoku (APSudoku)
-/worlds/apsudoku/ @EmilyV99
+# APQuest
+# NewSoupVi is acting maintainer, but world belongs to core with the exception of the music
+/worlds/apquest/ @NewSoupVi
+
 
 # Aquaria
 /worlds/aquaria/ @tioui
-
-# ArchipIDLE
-/worlds/archipidle/ @LegendaryLinux
 
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
@@ -42,17 +41,20 @@
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
+# Celeste (Open World)
+/worlds/celeste_open_world/ @PoryGone
+
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
+
+# Choo-Choo Charles
+/worlds/cccharles/ @Yaranorgoth
 
 # Civilization VI
 /worlds/civ6/ @hesto2
 
 # Dark Souls III
 /worlds/dark_souls_3/ @Marechal-L @nex3
-
-# Donkey Kong Country 3
-/worlds/dkc3/ @PoryGone
 
 # DLCQuest
 /worlds/dlcquest/ @axe-y @agilbert1412
@@ -63,11 +65,17 @@
 # DOOM II
 /worlds/doom_ii/ @Daivuk @KScl
 
+# EarthBound
+/worlds/earthbound/ @PinkSwitch
+
 # Factorio
 /worlds/factorio/ @Berserker66
 
 # Faxanadu
 /worlds/faxanadu/ @Daivuk
+
+# Final Fantasy (1)
+/worlds/ff1/ @Rosalie-A
 
 # Final Fantasy Mystic Quest
 /worlds/ffmq/ @Alchav @wildham0
@@ -121,6 +129,9 @@
 # Mega Man 2
 /worlds/mm2/ @Silvris
 
+# Mega Man 3
+/worlds/mm3/ @Silvris
+
 # MegaMan Battle Network 3
 /worlds/mmbn3/ @digiholic
 
@@ -166,8 +177,12 @@
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
+# Satisfactory
+/worlds/satisfactory/ @Jarno458 @budak7273
+
 # Starcraft 2
-/worlds/sc2/ @Ziktofel
+# Note: @Ziktofel acts as a mentor
+/worlds/sc2/ @MatthewMarinets @Snarkie @SirChuckOfTheChuckles
 
 # Super Metroid
 /worlds/sm/ @lordlou
@@ -237,9 +252,6 @@
 # The following worlds in this repo are currently unmaintained, but currently still work in core. If any update breaks
 # compatibility, these worlds may be deleted. If you are interested in stepping up as maintainer for
 # any of these worlds, please review `/docs/world maintainer.md` documentation.
-
-# Final Fantasy (1)
-# /worlds/ff1/
 
 # Ocarina of Time
 # /worlds/oot/
