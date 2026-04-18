@@ -6,7 +6,7 @@ import typing
 
 import Utils
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import ProgressiveItemsMixin, World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
 from .Locations import location_pools, location_table, craftsanity_locations
@@ -58,7 +58,7 @@ all_items["Atomic Cliff Remover Trap"] = factorio_base_id - 8
 all_items["Inventory Spill Trap"] = factorio_base_id - 9
 
 
-class Factorio(ProgressiveItemMixin, World):
+class Factorio(ProgressiveItemsMixin, World):
     """
     Factorio is a game about automation. You play as an engineer who has crash landed on the planet
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
@@ -94,6 +94,7 @@ class Factorio(ProgressiveItemMixin, World):
     trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
                               "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
     want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
+    progressive_items = {name: technology.progressive for name, technology in progressive_technology_table.items()}
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -368,20 +369,6 @@ class Factorio(ProgressiveItemMixin, World):
             # make spoiler match mod info
             elif loc.revealed:
                 start_location_hints.add(loc.name)
-
-    def collect_item(self, state, item, remove=False):
-        if item.advancement and item.name in progressive_technology_table:
-            prog_table = progressive_technology_table[item.name].progressive
-            if remove:
-                for item_name in reversed(prog_table):
-                    if state.has(item_name, item.player):
-                        return item_name
-            else:
-                for item_name in prog_table:
-                    if not state.has(item_name, item.player):
-                        return item_name
-
-        return super(Factorio, self).collect_item(state, item, remove)
 
     @classmethod
     def stage_write_spoiler(cls, world, spoiler_handle):
