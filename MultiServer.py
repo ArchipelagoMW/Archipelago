@@ -1691,7 +1691,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
-        if not input_text:
+        if self.ctx.hint_cost > 100:
+            self.output("Sorry, hints are disabled.")
+            return True
+        elif not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
@@ -2026,7 +2029,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     return
 
                 target_item, target_player, flags = ctx.locations[client.slot][location]
-                if create_as_hint:
+                if create_as_hint and ctx.hint_cost <= 100:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
             ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2, persist_even_if_found=True)
@@ -2039,7 +2042,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locations = args["locations"]
             status = args.get("status", HintStatus.HINT_UNSPECIFIED)
 
-            if not locations:
+            if ctx.hint_cost > 100:
+                return
+            elif not locations:
                 await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
                                               "text": "CreateHints: No locations specified.", "original_cmd": cmd}])
                 return
