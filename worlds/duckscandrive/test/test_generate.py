@@ -99,8 +99,10 @@ class TestDucksGenerate(WorldTestBase):
         data = self.world.fill_slot_data()
         assert data["starting_money"] == 12_500  # matches StartingMoney.default
 
-    def test_fill_slot_data_emits_include_banana_false_by_default(self) -> None:
-        assert self.world.fill_slot_data()["include_banana"] is False
+    def test_fill_slot_data_defaults(self) -> None:
+        data = self.world.fill_slot_data()
+        assert data["include_banana"] is False
+        assert data["include_par_times"] is True
 
 
 class TestDucksGenerateWithBanana(WorldTestBase):
@@ -119,6 +121,34 @@ class TestDucksGenerateWithBanana(WorldTestBase):
 
     def test_fill_slot_data_flags_include_banana(self) -> None:
         assert self.world.fill_slot_data()["include_banana"] is True
+
+
+class TestDucksGenerateNoPars(WorldTestBase):
+    game = "Ducks Can Drive"
+    options = {"include_par_times": False}
+
+    def test_par_locations_absent(self) -> None:
+        import pytest
+        for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
+                        "Blackbill Ship", "Bill Beach"):
+            with pytest.raises(KeyError):
+                self.multiworld.get_location(f"Beat par on {display}", self.player)
+
+    def test_finishes_still_present(self) -> None:
+        for display in ("Duck Circuit", "Lake Loop", "Quack Crossing", "Wing Circuit",
+                        "Blackbill Ship", "Bill Beach"):
+            assert self.multiworld.get_location(f"Finish {display}", self.player) is not None
+
+    def test_location_and_item_counts_no_pars(self) -> None:
+        # 25 upgrades + 8 books + 6 finishes (no pars, no banana) + 1 victory = 40
+        assert len(self.multiworld.get_locations(self.player)) == 40
+        # 25 progressives + 6 unlocks + 8 rubber ducks = 39
+        assert len(self.multiworld.itempool) == 39
+        ducks = [item for item in self.multiworld.itempool if item.name == "Rubber Duck"]
+        assert len(ducks) == 8
+
+    def test_fill_slot_data_flags_pars_off(self) -> None:
+        assert self.world.fill_slot_data()["include_par_times"] is False
 
     def test_tier_five_requires_five_progressives_of_that_stat(self) -> None:
         location = self.multiworld.get_location("Upgrade Speed Tier 5", self.player)

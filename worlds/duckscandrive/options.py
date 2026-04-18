@@ -38,7 +38,21 @@ class IncludeBanana(Toggle):
     display_name = "Include Banana Track"
 
 
+class IncludeParTimes(Toggle):
+    """Include the per-track par-time locations in the seed.
+
+    Six of the seven tracks (all except Banana) have a par time the player
+    has to beat to fire the "Beat par on <track>" location check. Pars are
+    reachable — they just require skillful driving — so this defaults on.
+    Turn off if you'd rather a seed that only rewards finishing tracks, not
+    speedrunning them.
+    """
+    display_name = "Include Par-Time Locations"
+    default = 1  # on
+
+
 @dataclass
 class DucksOptions(PerGameCommonOptions):
     starting_money: StartingMoney
     include_banana: IncludeBanana
+    include_par_times: IncludeParTimes

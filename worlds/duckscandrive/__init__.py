@@ -67,6 +67,16 @@ class DucksWorld(World):
     def _banana_included(self) -> bool:
         return bool(self.options.include_banana.value)
 
+    def _pars_included(self) -> bool:
+        return bool(self.options.include_par_times.value)
+
+    def _location_active(self, data) -> bool:
+        if data.track.display == BANANA_DISPLAY and not self._banana_included():
+            return False
+        if data.is_par and not self._pars_included():
+            return False
+        return True
+
     def create_item(self, name: str) -> DucksItem:
         data = item_table[name]
         classification = ItemClassification.progression if data.progression else ItemClassification.filler
@@ -84,7 +94,7 @@ class DucksWorld(World):
             city.locations.append(DucksLocation(self.player, name, loc_id, city))
 
         for name, data in time_trial_location_table.items():
-            if data.track.display == BANANA_DISPLAY and not self._banana_included():
+            if not self._location_active(data):
                 continue
             time_trials.locations.append(DucksLocation(self.player, name, data.id, time_trials))
 
@@ -97,14 +107,21 @@ class DucksWorld(World):
         self.multiworld.regions += [menu, city, time_trials]
 
     def create_items(self) -> None:
+        # Pool invariant: item count == non-victory location count.
+        # Dropping Banana subtracts exactly one location and one item, so no
+        # duck rebalance needed for that option. Dropping par times removes
+        # 6 locations with no matching items, so Rubber Duck count drops by
+        # 6 to keep the pool balanced.
+        banana_on = self._banana_included()
+        pars_on = self._pars_included()
+        duck_override = 8 + (6 if pars_on else 0)  # BOOK_COUNT + par locations
+
         banana_unlock = f"{BANANA_DISPLAY} Unlock"
         for name, data in item_table.items():
-            if name == banana_unlock and not self._banana_included():
-                # Dropping Banana drops exactly one location and one item,
-                # so the 25 progressives + rubber-duck pool stays balanced
-                # with no further adjustment.
+            if name == banana_unlock and not banana_on:
                 continue
-            for _ in range(data.count):
+            count = duck_override if name == "Rubber Duck" else data.count
+            for _ in range(count):
                 self.multiworld.itempool.append(self.create_item(name))
 
     def set_rules(self) -> None:
@@ -121,7 +138,7 @@ class DucksWorld(World):
         # Time-trial locations require the matching per-track unlock. The
         # client mod disables the menu button until the unlock arrives.
         for name, data in time_trial_location_table.items():
-            if data.track.display == BANANA_DISPLAY and not self._banana_included():
+            if not self._location_active(data):
                 continue
             unlock = f"{data.track.display} Unlock"
             location = self.multiworld.get_location(name, self.player)
@@ -138,4 +155,5 @@ class DucksWorld(World):
         return {
             "starting_money": self.options.starting_money.value,
             "include_banana": self._banana_included(),
+            "include_par_times": self._pars_included(),
         }

@@ -47,6 +47,7 @@ Options you can set in your player YAML (see `StartingMoney` in `options.py`):
 
 - **`starting_money`** — lifetime money budget the mod grants across all city entries for this seed. Default `12500` covers every tier in one sitting; lower values (e.g. `3000`) force you to budget across sessions. Once spent, the pool is empty — you can still earn money from in-session deliveries but it won't carry over.
 - **`include_banana`** — off by default. When on, adds the secret Banana Offline track to the seed as a location (and its unlock to the item pool). Banana has no Track Select menu button — the only way into it is to let a time-trial's timer run past 10 minutes without finishing. Leave off unless you specifically want a scavenger-hunt objective in your seed.
+- **`include_par_times`** — on by default. The six par-time locations (Duck Circuit under 35s, Lake Loop under 40s, etc.) reward skillful driving. Turn off if you'd rather a gentler seed that only rewards finishing the tracks, not speedrunning them; Rubber Duck filler count scales down automatically to keep the pool balanced.
 
 ## Joining a multiworld
 
