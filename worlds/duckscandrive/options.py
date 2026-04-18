@@ -7,13 +7,16 @@ from Options import PerGameCommonOptions, Range
 
 
 class StartingMoney(Range):
-    """Money the car spawns with every time the player enters the City scene.
+    """Lifetime money budget the client mod grants for this seed.
 
-    The stock game hard-codes $100 and `Car.Start` resets stats every time, so
-    without a top-up sphere-1 requires grinding the Photon delivery loop before
-    any AP check can fire. The default of 12,500 covers all 25 upgrade tiers in
-    one session; lower values make money matter again and can be used for
-    slower-paced seeds. Range covers everything from 'pure grind' to 'pure AP'.
+    The stock game resets Car.money to $500 on every City entry, so "starting
+    money" as a per-entry top-up was trivially farmable by re-entering the
+    city. Under the current policy the mod overwrites the stock prefab money
+    with (starting_money - lifetime_spent) on every City entry and tracks each
+    Garage purchase in PlayerPrefs, so the option is a true one-shot pool
+    shared across all city entries. Deliveries still earn money in-session
+    (stock PayDay) but those earnings don't carry across scene loads.
+    12,500 covers every tier in the seed; lower values force budget choices.
     """
     display_name = "Starting Money"
     range_start = 100
