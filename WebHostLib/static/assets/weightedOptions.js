@@ -8,19 +8,7 @@ window.addEventListener('load', () => {
   document.addEventListener('change', (evt) => {
     // Handle updates to range inputs
     if (evt.target.type === 'range') {
-      // Update span containing range value. All ranges have a corresponding `{rangeId}-value` span
-      document.getElementById(`${evt.target.id}-value`).innerText = evt.target.value;
-
-      // If the changed option was the name of a game, determine whether to show or hide that game's div
-      if (evt.target.id.startsWith('game||')) {
-        const gameName = evt.target.id.split('||')[1];
-        const gameDiv = document.getElementById(`${gameName}-container`);
-        if (evt.target.value > 0) {
-          gameDiv.classList.remove('hidden');
-        } else {
-          gameDiv.classList.add('hidden');
-        }
-      }
+      updateRangeText(evt.target.id, evt.target.value);
     }
   });
 
@@ -110,6 +98,7 @@ window.addEventListener('load', () => {
             break;
           case 'range':
             input.value = parseInt(previousSettings[option][value], 10);
+            updateRangeText(input.id, previousSettings[option][value]);
             break;
           case 'number':
             input.value = previousSettings[option][value].toString();
@@ -221,3 +210,25 @@ const unsetDeletedOption = (optionName, value) => {
     delete deletedOptions[optionName];
   }
 };
+
+/**
+ * Updates a range's associated text to given value.
+ * 
+ * @param {string} optionName - The name of the option.
+ * @param {string} value - The value that the range was set to.
+ */
+const updateRangeText = (optionName, value) => {
+  // Update span containing range value. All ranges have a corresponding `{rangeId}-value` span
+  document.getElementById(`${optionName}-value`).innerText = value;
+
+  // If the changed option was the name of a game, determine whether to show or hide that game's div
+  if (optionName.startsWith('game||')) {
+    const gameName = evt.target.id.split('||')[1];
+    const gameDiv = document.getElementById(`${gameName}-container`);
+    if (value > 0) {
+      gameDiv.classList.remove('hidden');
+    } else {
+      gameDiv.classList.add('hidden');
+    }
+  }
+}
