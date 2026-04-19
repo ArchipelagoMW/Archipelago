@@ -14,6 +14,7 @@ from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import ALTTPOptions, small_key_shuffle
+from .PotShuffle import apply_pot_shuffle, generate_pot_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
 from .EnemizerPatches import patch_bosses
@@ -306,6 +307,7 @@ class ALTTPWorld(World):
         self.required_medallions = ["Ether", "Quake"]
         self.escape_assist = []
         self.shops = []
+        self.pot_shuffle_state = None
         self.logical_heart_containers = 10
         self.logical_heart_pieces = 24
         super(ALTTPWorld, self).__init__(*args, **kwargs)
@@ -339,6 +341,9 @@ class ALTTPWorld(World):
             bottle_options.append("Bottle (Fairy)")
         self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
         self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
+
+        if self.options.pot_shuffle:
+            self.pot_shuffle_state = generate_pot_shuffle(self)
 
         if self.options.mode == 'standard':
             if self.options.small_key_shuffle:
@@ -577,7 +582,6 @@ class ALTTPWorld(World):
         return bool(self.options.enemy_shuffle
                     or self.options.enemy_health != 'default'
                     or self.options.enemy_damage != 'default'
-                    or self.options.pot_shuffle
                     or self.options.bush_shuffle
                     or self.options.killable_thieves)
 
@@ -598,6 +602,9 @@ class ALTTPWorld(World):
                 patch_enemizer(self, rom, self.enemizer_path, output_directory)
             elif self.options.boss_shuffle:
                 patch_bosses(self, rom)
+
+            if self.options.pot_shuffle:
+                apply_pot_shuffle(rom, self.pot_shuffle_state)
 
             if multiworld.is_race:
                 patch_race_rom(rom, multiworld, player)

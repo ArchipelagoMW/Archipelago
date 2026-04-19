@@ -354,7 +354,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.options.pot_shuffle.value,
+        'RandomizePots': False,  # Pot shuffle is now generated in-world and patched natively from saved state.
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
