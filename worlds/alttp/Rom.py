@@ -13,6 +13,7 @@ import json
 import hashlib
 import logging
 import os
+import pkgutil
 import random
 import struct
 import subprocess
@@ -54,7 +55,6 @@ except:
     xxtea = None
 
 enemizer_logger = logging.getLogger("Enemizer")
-enemizer_data_dir = os.path.join(os.path.dirname(__file__), "data", "enemizer")
 
 
 class LocalRom:
@@ -183,26 +183,23 @@ class LocalRom:
 check_lock = threading.Lock()
 
 
-def get_enemizer_data_path(*path: str) -> str:
-    return os.path.join(enemizer_data_dir, *path)
+def get_vendored_enemizer_asset(name: str) -> bytes:
+    asset_path = f"data/enemizer/{name}"
+    asset = pkgutil.get_data(__name__, asset_path)
+    if asset is None:
+        raise FileNotFoundError(f"Missing vendored Enemizer data required by ALTTP native integration: {asset_path}")
+    return asset
 
 
-def get_vendored_enemizer_assets() -> dict[str, str]:
+def get_vendored_enemizer_assets() -> dict[str, bytes]:
     return {
-        "base_patch": get_enemizer_data_path("enemizerBasePatch.json"),
-        "symbols": get_enemizer_data_path("exported_symbols.txt"),
+        "base_patch": get_vendored_enemizer_asset("enemizerBasePatch.json"),
+        "symbols": get_vendored_enemizer_asset("exported_symbols.txt"),
     }
 
 
 def check_vendored_enemizer_data() -> None:
-    missing = [
-        f"{name}: {asset_path}" for name, asset_path in get_vendored_enemizer_assets().items()
-        if not os.path.exists(asset_path)
-    ]
-    if missing:
-        raise FileNotFoundError(
-            "Missing vendored Enemizer data required by ALTTP native integration:\n" + "\n".join(missing)
-        )
+    get_vendored_enemizer_assets()
 
 
 def check_enemizer(enemizercli):
