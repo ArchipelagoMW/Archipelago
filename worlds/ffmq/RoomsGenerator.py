@@ -4,7 +4,7 @@ import hashlib
 from copy import deepcopy
 from dataclasses import dataclass, field
 from pathlib import Path
-import random as randomlib
+from random import Random
 from typing import Any
 
 import json
@@ -231,7 +231,7 @@ class ClusterRoom:
         if self.location is None:
             self.location = room.location
 
-    def update_links(self, origin_link: LogicLink, random: randomlib.Random) -> None:
+    def update_links(self, origin_link: LogicLink, random: Random) -> None:
         if origin_link.force_link_origin:
             valid_origins = [x for x in self.links if not x.force_link_origin and not x.force_link_destination]
             if not valid_origins:
@@ -359,13 +359,13 @@ def _battlefield_reward_type(reward: str) -> str:
     return "Item"
 
 
-def _take_random(seq: list[Any], random: randomlib.Random) -> Any:
+def _take_random(seq: list[Any], random: Random) -> Any:
     value = random.choice(seq)
     seq.remove(value)
     return value
 
 
-def _shuffle_battlefield_rewards(rooms: list[dict[str, Any]], battlefield_shuffle: bool, random: randomlib.Random) -> dict[str, str]:
+def _shuffle_battlefield_rewards(rooms: list[dict[str, Any]], battlefield_shuffle: bool, random: Random) -> dict[str, str]:
     rewards_by_location = dict(BATTLEFIELD_REWARDS)
     if battlefield_shuffle:
         rewards = [rewards_by_location[location] for location in BATTLEFIELD_LOCATIONS]
@@ -403,7 +403,7 @@ def _companions_shuffle(
     rooms: list[dict[str, Any]],
     companion_shuffle: int | bool,
     kaeli_mom: bool,
-    random: randomlib.Random,
+    random: Random,
 ) -> None:
     shuffle_type = int(companion_shuffle)
     if shuffle_type == 0:
@@ -552,7 +552,7 @@ def _connect_overworld_link(
 
 
 def _select_overworld_link(
-    random: randomlib.Random,
+    random: Random,
     links_from_overworld: list[LogicLink],
     *,
     room_location: str | None,
@@ -789,7 +789,7 @@ def _shuffle_overworld(
     overworld_shuffle: bool,
     kaeli_mom: bool,
     battlefield_rewards: dict[str, str],
-    random: randomlib.Random,
+    random: Random,
 ) -> None:
     if not overworld_shuffle:
         return
@@ -953,7 +953,7 @@ def _shuffle_overworld(
             link_to_update["target_room"] = target_region["id"]
 
 
-def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, random: randomlib.Random) -> None:
+def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, random: Random) -> None:
     crest_list = [
         {"entrance": [67, 8], "origins": [64, 8], "deadend": True, "priority": 0},
         {"entrance": [68, 8], "origins": [65, 8], "deadend": True, "priority": 0},
@@ -1049,7 +1049,7 @@ def _crest_shuffle(rooms: list[dict[str, Any]], crest_shuffle: bool, random: ran
 def _floor_shuffle(
     rooms: list[dict[str, Any]],
     map_shuffle: str | int,
-    random: randomlib.Random,
+    random: Random,
     overworld_shuffle: bool | None = None,
 ) -> None:
     map_shuffle = _normalize_map_shuffle_mode(map_shuffle)
@@ -1761,9 +1761,8 @@ def _normalize_yaml_rooms(rooms: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return normalized_rooms
 
 
-
 def generate_rooms(
-    random: randomlib.Random,
+    random: Random,
     map_shuffle: str | int,
     crest_shuffle: bool,
     battlefield_shuffle: bool,
