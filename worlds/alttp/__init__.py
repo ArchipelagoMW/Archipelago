@@ -16,6 +16,7 @@ from .Items import item_init_table, item_name_groups, item_table, GetBeemizerIte
 from .Options import ALTTPOptions, small_key_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
+from .EnemizerPatches import patch_bosses
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
@@ -317,7 +318,7 @@ class ALTTPWorld(World):
         if multiworld.is_race:
             import xxtea  # noqa
         for player in multiworld.get_game_players(cls.game):
-            if multiworld.worlds[player].use_enemizer:
+            if multiworld.worlds[player].use_enemizer_cli:
                 check_enemizer(multiworld.worlds[player].enemizer_path)
                 break
 
@@ -571,6 +572,15 @@ class ALTTPWorld(World):
                     or self.options.pot_shuffle or self.options.bush_shuffle
                     or self.options.killable_thieves)
 
+    @property
+    def use_enemizer_cli(self) -> bool:
+        return bool(self.options.enemy_shuffle
+                    or self.options.enemy_health != 'default'
+                    or self.options.enemy_damage != 'default'
+                    or self.options.pot_shuffle
+                    or self.options.bush_shuffle
+                    or self.options.killable_thieves)
+
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
         player = self.player
@@ -584,8 +594,10 @@ class ALTTPWorld(World):
 
             patch_rom(multiworld, rom, player, use_enemizer)
 
-            if use_enemizer:
+            if self.use_enemizer_cli:
                 patch_enemizer(self, rom, self.enemizer_path, output_directory)
+            elif self.options.boss_shuffle:
+                patch_bosses(self, rom)
 
             if multiworld.is_race:
                 patch_race_rom(rom, multiworld, player)
