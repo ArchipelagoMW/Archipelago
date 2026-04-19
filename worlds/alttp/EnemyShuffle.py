@@ -465,7 +465,7 @@ def _read_room_sprites(rom_bytes: bytes, sprite_table_address: int) -> tuple[Dun
 
 
 def _get_enemizer_symbol(symbol_name: str) -> int:
-    raw_symbols = pkgutil.get_data(__package__, "data/enemizer/exported_symbols.txt")
+    raw_symbols = pkgutil.get_data(__package__, "enemizer_data/exported_symbols.txt")
     if raw_symbols is None:
         raise FileNotFoundError("Missing vendored Enemizer symbols required by ALTTP enemy state generation")
 
@@ -478,7 +478,7 @@ def _get_enemizer_symbol(symbol_name: str) -> int:
 
 
 def _load_enemy_room_metadata() -> dict[str, object]:
-    raw_metadata = pkgutil.get_data(__package__, "data/enemizer/enemy_room_metadata.json")
+    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/enemy_room_metadata.json")
     if raw_metadata is None:
         raise FileNotFoundError("Missing vendored Enemizer enemy room metadata required by ALTTP enemy state generation")
 
@@ -504,7 +504,7 @@ def _load_enemy_room_metadata() -> dict[str, object]:
 
 
 def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
-    raw_metadata = pkgutil.get_data(__package__, "data/enemizer/enemy_sprite_requirements.json")
+    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/enemy_sprite_requirements.json")
     if raw_metadata is None:
         raise FileNotFoundError("Missing vendored Enemizer enemy sprite metadata required by ALTTP enemy state generation")
 
@@ -541,7 +541,7 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
 
 
 def _load_overworld_enemy_metadata() -> dict[str, object]:
-    raw_metadata = pkgutil.get_data(__package__, "data/enemizer/overworld_enemy_metadata.json")
+    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/overworld_enemy_metadata.json")
     if raw_metadata is None:
         raise FileNotFoundError("Missing vendored Enemizer overworld enemy metadata required by ALTTP enemy state generation")
 

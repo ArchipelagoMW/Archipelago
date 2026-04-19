@@ -184,7 +184,7 @@ check_lock = threading.Lock()
 
 
 def get_vendored_enemizer_asset(name: str) -> bytes:
-    asset_path = f"data/enemizer/{name}"
+    asset_path = f"enemizer_data/{name}"
     asset = pkgutil.get_data(__name__, asset_path)
     if asset is None:
         raise FileNotFoundError(f"Missing vendored Enemizer data required by ALTTP native integration: {asset_path}")
