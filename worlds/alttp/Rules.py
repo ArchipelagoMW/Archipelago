@@ -12,6 +12,7 @@ from .Bosses import GanonDefeatRule
 from .Items import item_factory, item_name_groups, item_table, progression_items
 from .Options import small_key_shuffle
 from .OverworldGlitchRules import overworld_glitches_rules
+from .PotShuffle import POT_KEY, POT_SWITCH, get_unique_pot_item_position
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
@@ -26,6 +27,22 @@ from .UnderworldGlitchRules import underworld_glitches_rules
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
+
+
+SWAMP_HOOKSHOT_ROOM_ID = 0x36
+SWAMP_HOOKSHOT_TOP_RIGHT_POTS = frozenset(((108, 4), (112, 4)))
+SWAMP_WATERWAY_ROOM_ID = 0x16
+SWAMP_WATERWAY_VANILLA_POT = (188, 3)
+POD_STALFOS_BASEMENT_ROOM_ID = 0x0A
+POD_STALFOS_BASEMENT_BOMB_SWITCH_POTS = frozenset(((156, 17), (160, 17)))
+GT_CONVEYOR_CROSS_ROOM_ID = 0x8B
+GT_CONVEYOR_CROSS_TOP_RIGHT_POTS = frozenset(((76, 12), (112, 12)))
+
+
+def _get_shuffled_pot_item_position(world: "ALTTPWorld", room_id: int, item: int) -> tuple[int, int]:
+    if not world.pot_shuffle_state:
+        raise ValueError(f"Pot shuffle state is required to inspect room {hex(room_id)}")
+    return get_unique_pot_item_position(world.pot_shuffle_state, room_id, item)
 
 
 def set_rules(world: "ALTTPWorld"):
@@ -392,10 +409,11 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Swamp Palace - Map Chest', player), lambda state: can_use_bombs(state, player))
     set_rule(multiworld.get_location('Swamp Palace - Trench 1 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 2))
     set_rule(multiworld.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 3))
-    set_rule(multiworld.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: state.has('Hookshot', player))
-    if world.options.pot_shuffle:
-        # it could move the key to the top right platform which can only be reached with bombs
-        add_rule(multiworld.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: can_use_bombs(state, player))
+    swamp_hookshot_pot_key = multiworld.get_location('Swamp Palace - Hookshot Pot Key', player)
+    if world.options.pot_shuffle and _get_shuffled_pot_item_position(world, SWAMP_HOOKSHOT_ROOM_ID, POT_KEY) in SWAMP_HOOKSHOT_TOP_RIGHT_POTS:
+        set_rule(swamp_hookshot_pot_key, lambda state: can_use_bombs(state, player))
+    else:
+        set_rule(swamp_hookshot_pot_key, lambda state: state.has('Hookshot', player))
     set_rule(multiworld.get_entrance('Swamp Palace (West)', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     set_rule(multiworld.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player))
     if world.options.accessibility != 'full':
@@ -405,8 +423,7 @@ def global_rules(multiworld: MultiWorld, player: int):
         forbid_item(multiworld.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
     add_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     add_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    if world.options.pot_shuffle:
-        # key can (and probably will) be moved behind bombable wall
+    if world.options.pot_shuffle and _get_shuffled_pot_item_position(world, SWAMP_WATERWAY_ROOM_ID, POT_KEY) != SWAMP_WATERWAY_VANILLA_POT:
         set_rule(multiworld.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
 
     set_rule(multiworld.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
@@ -524,8 +541,7 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
     set_rule(multiworld.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
     set_rule(multiworld.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
-    if world.options.pot_shuffle:
-        # chest switch may be up on ledge where bombs are required
+    if world.options.pot_shuffle and _get_shuffled_pot_item_position(world, POD_STALFOS_BASEMENT_ROOM_ID, POT_SWITCH) in POD_STALFOS_BASEMENT_BOMB_SWITCH_POTS:
         set_rule(multiworld.get_location('Palace of Darkness - Stalfos Basement', player), lambda state: can_use_bombs(state, player))
 
     set_rule(multiworld.get_entrance('Palace of Darkness Big Key Chest Staircase', player), lambda state: can_use_bombs(state, player) and (state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
@@ -550,7 +566,7 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
     set_rule(multiworld.get_location('Ganons Tower - Double Switch Pot Key', player), lambda state: state.has('Cane of Somaria', player) or can_use_bombs(state, player))
     set_rule(multiworld.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state.has('Cane of Somaria', player) or can_use_bombs(state, player))
-    if world.options.pot_shuffle:
+    if world.options.pot_shuffle and _get_shuffled_pot_item_position(world, GT_CONVEYOR_CROSS_ROOM_ID, POT_KEY) not in GT_CONVEYOR_CROSS_TOP_RIGHT_POTS:
         set_rule(multiworld.get_location('Ganons Tower - Conveyor Cross Pot Key', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
     set_rule(multiworld.get_entrance('Ganons Tower (Map Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
                 location_item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player)] and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
