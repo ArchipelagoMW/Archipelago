@@ -7,6 +7,7 @@ from typing import Optional, TYPE_CHECKING
 
 from Utils import snes_to_pc
 
+from .EnemizerPatches import apply_enemizer_base_patch
 from .Rom import LocalRom, get_base_rom_path
 
 if TYPE_CHECKING:
@@ -293,6 +294,7 @@ def _get_base_patched_rom_bytes() -> bytes:
     patched_rom_bytes = getattr(_get_base_patched_rom_bytes, "patched_rom_bytes", None)
     if patched_rom_bytes is None:
         patched_rom = LocalRom(get_base_rom_path())
+        apply_enemizer_base_patch(patched_rom)
         patched_rom_bytes = bytes(patched_rom.buffer)
         _get_base_patched_rom_bytes.patched_rom_bytes = patched_rom_bytes
     return patched_rom_bytes
