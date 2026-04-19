@@ -366,7 +366,7 @@ def _take_random(seq: list[Any], random: Random) -> Any:
 
 
 def _shuffle_battlefield_rewards(rooms: list[dict[str, Any]], battlefield_shuffle: bool, random: Random) -> dict[str, str]:
-    rewards_by_location = dict(BATTLEFIELD_REWARDS)
+    rewards_by_location = BATTLEFIELD_REWARDS.copy()
     if battlefield_shuffle:
         rewards = [rewards_by_location[location] for location in BATTLEFIELD_LOCATIONS]
         for location in BATTLEFIELD_LOCATIONS:
@@ -1764,7 +1764,7 @@ def generate_rooms(
     map_shuffle: str | int,
     crest_shuffle: bool,
     battlefield_shuffle: bool,
-    companion_shuffle: int | bool,
+    companion_shuffle: int,
     kaeli_mom: bool,
     overworld_shuffle: bool,
 ) -> list[dict[str, Any]]:

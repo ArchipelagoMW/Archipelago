@@ -99,11 +99,11 @@ class FFMQWorld(World):
             shuffle_random = random.Random()
             shuffle_random.seed(world.map_shuffle_seed)
             map_shuffle = world.options.map_shuffle.value
-            crest_shuffle = world.options.crest_shuffle.current_key
-            battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
+            crest_shuffle = world.options.crest_shuffle.value
+            battlefield_shuffle = world.options.shuffle_battlefield_rewards.value
             companion_shuffle = world.options.companions_locations.value
-            kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
-            overworld_shuffle = world.options.overworld_shuffle.current_key
+            kaeli_mom = world.options.kaelis_mom_fight_minotaur.value
+            overworld_shuffle = world.options.overworld_shuffle.value
             world.rooms = generate_rooms(world.random, map_shuffle, crest_shuffle, battlefield_shuffle,
                                          companion_shuffle, kaeli_mom, overworld_shuffle)
 
