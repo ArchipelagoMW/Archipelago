@@ -331,7 +331,7 @@
         ],
         // CL setup wherever, then CL + LS vault + CL again onto the Half-Grown Tree Chest ledge,
         // use that ledge for another CL setup, then one more CL + LS vault + CL combo
-        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Storage" } ]
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     },
 
     // Cortex Center
