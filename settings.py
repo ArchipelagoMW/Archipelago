@@ -634,7 +634,7 @@ class GeneratorOptions(Group):
     """Options for Generation"""
 
     class EnemizerPath(LocalFilePath):
-        """Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases"""
+        """Location of your Enemizer CLI. ALTTP's base patch and symbol data are now vendored in Archipelago."""
         is_exe = True
 
     class PlayerFilesPath(OptionalUserFolderPath):

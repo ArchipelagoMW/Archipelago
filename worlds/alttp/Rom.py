@@ -54,6 +54,7 @@ except:
     xxtea = None
 
 enemizer_logger = logging.getLogger("Enemizer")
+enemizer_data_dir = os.path.join(os.path.dirname(__file__), "data", "enemizer")
 
 
 class LocalRom:
@@ -182,9 +183,32 @@ class LocalRom:
 check_lock = threading.Lock()
 
 
+def get_enemizer_data_path(*path: str) -> str:
+    return os.path.join(enemizer_data_dir, *path)
+
+
+def get_vendored_enemizer_assets() -> dict[str, str]:
+    return {
+        "base_patch": get_enemizer_data_path("enemizerBasePatch.json"),
+        "symbols": get_enemizer_data_path("exported_symbols.txt"),
+    }
+
+
+def check_vendored_enemizer_data() -> None:
+    missing = [
+        f"{name}: {asset_path}" for name, asset_path in get_vendored_enemizer_assets().items()
+        if not os.path.exists(asset_path)
+    ]
+    if missing:
+        raise FileNotFoundError(
+            "Missing vendored Enemizer data required by ALTTP native integration:\n" + "\n".join(missing)
+        )
+
+
 def check_enemizer(enemizercli):
     if getattr(check_enemizer, "done", None):
         return
+    check_vendored_enemizer_data()
     if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
         raise Exception(f"Enemizer not found at {enemizercli}, please install it. "
                         f"Such as https://github.com/Ijwu/Enemizer/releases")
@@ -193,6 +217,7 @@ def check_enemizer(enemizercli):
         # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
         if getattr(check_enemizer, "done", None):
             return
+        check_vendored_enemizer_data()
         wanted_version = (7, 1, 0)
         # version info is saved on the lib, for some reason
         library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
