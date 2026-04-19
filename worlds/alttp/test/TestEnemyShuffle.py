@@ -12,6 +12,8 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedDungeonEnemySprite,
     RandomizedOverworldEnemyArea,
     RandomizedOverworldEnemySprite,
+    _get_requirements_for_usable_dungeon_enemies,
+    _get_requirements_for_usable_overworld_enemies,
     validate_enemy_shuffle_state,
 )
 
@@ -127,6 +129,25 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_enemy_shuffle_state(state, is_standard_mode=False)
 
+    def test_excludes_absorbables_from_usable_enemy_pools(self) -> None:
+        state = self._build_state(
+            sprite_requirements=(
+                self._requirement(0x10, subgroup_0=(1,)),
+                self._requirement(0xE3, subgroup_0=(1,), absorbable=True),
+                self._requirement(0x20, subgroup_0=(1,), never_use_dungeon=True),
+                self._requirement(0x21, subgroup_0=(1,), never_use_overworld=True),
+            ),
+        )
+
+        self.assertEqual(
+            [requirement.sprite_id for requirement in _get_requirements_for_usable_dungeon_enemies(state)],
+            [0x10, 0x21],
+        )
+        self.assertEqual(
+            [requirement.sprite_id for requirement in _get_requirements_for_usable_overworld_enemies(state)],
+            [0x10, 0x20],
+        )
+
     @staticmethod
     def _requirement(
         sprite_id: int,
@@ -134,6 +155,9 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         killable: bool = False,
         subgroup_0: tuple[int, ...] = tuple(),
         group_ids: tuple[int, ...] = tuple(),
+        absorbable: bool = False,
+        never_use_dungeon: bool = False,
+        never_use_overworld: bool = False,
     ) -> EnemySpriteRequirement:
         return EnemySpriteRequirement(
             sprite_name=f"sprite_{sprite_id:02x}",
@@ -143,11 +167,11 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             do_not_randomize=False,
             killable=killable,
             npc=False,
-            never_use_dungeon=False,
-            never_use_overworld=False,
+            never_use_dungeon=never_use_dungeon,
+            never_use_overworld=never_use_overworld,
             cannot_have_key=False,
             is_object=False,
-            absorbable=False,
+            absorbable=absorbable,
             is_water_sprite=False,
             is_enemy_sprite=True,
             group_ids=group_ids,

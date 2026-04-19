@@ -668,6 +668,7 @@ def _get_requirements_for_usable_dungeon_enemies(state: EnemyShuffleState) -> tu
         and not requirement.boss
         and not requirement.overlord
         and not requirement.is_object
+        and not requirement.absorbable
         and not requirement.never_use_dungeon
     )
 
@@ -680,6 +681,7 @@ def _get_requirements_for_usable_overworld_enemies(state: EnemyShuffleState) -> 
         and not requirement.boss
         and not requirement.overlord
         and not requirement.is_object
+        and not requirement.absorbable
         and not requirement.never_use_overworld
     )
 
