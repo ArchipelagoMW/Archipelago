@@ -15,6 +15,7 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedOverworldEnemyArea,
     RandomizedOverworldEnemySprite,
     WALLMASTER_SPRITE_ID,
+    get_possible_dungeon_sprite_groups,
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
     _get_randomizable_sprites_in_room,
@@ -105,7 +106,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                     original_graphics_block_id=1,
                     graphics_block_id=1,
                     original_bush_sprite_id=0x20,
-                    bush_sprite_id=0x20,
+                    bush_sprite_id=0xD2,
                     sprites=(
                         RandomizedOverworldEnemySprite(
                             address=0x2000,
@@ -128,12 +129,65 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             sprite_requirements=(
                 self._requirement(0x20, group_ids=(1,)),
                 self._requirement(0x21, group_ids=(1,)),
+                self._requirement(0x22, group_ids=(1,)),
                 self._requirement(0xD2, group_ids=(1,)),
             ),
         )
 
         with self.assertRaises(ValueError):
             validate_enemy_shuffle_state(state, is_standard_mode=False)
+
+    def test_allows_multiple_flopping_fish_when_no_other_sprite_is_possible(self) -> None:
+        area = OverworldEnemyArea(
+            area_id=0x10,
+            sprite_table_address=0,
+            graphics_block_address=0,
+            graphics_block_id=1,
+            bush_sprite_id=0x20,
+            sprites=(
+                OverworldEnemySprite(address=0x2000, y_coord=0, x_coord=0, sprite_id=0x20),
+                OverworldEnemySprite(address=0x2003, y_coord=0, x_coord=0, sprite_id=0x21),
+            ),
+            do_not_randomize=False,
+        )
+        state = self._build_state(
+            overworld_areas={0x10: area},
+            randomized_overworld_areas={
+                0x10: RandomizedOverworldEnemyArea(
+                    area_id=0x10,
+                    sprite_table_address=0,
+                    graphics_block_address=0,
+                    original_graphics_block_id=1,
+                    graphics_block_id=1,
+                    original_bush_sprite_id=0x20,
+                    bush_sprite_id=0xD2,
+                    sprites=(
+                        RandomizedOverworldEnemySprite(
+                            address=0x2000,
+                            y_coord=0,
+                            x_coord=0,
+                            original_sprite_id=0x20,
+                            sprite_id=0xD2,
+                        ),
+                        RandomizedOverworldEnemySprite(
+                            address=0x2003,
+                            y_coord=0,
+                            x_coord=0,
+                            original_sprite_id=0x21,
+                            sprite_id=0xD2,
+                        ),
+                    ),
+                    skipped_randomization=False,
+                )
+            },
+            sprite_requirements=(
+                self._requirement(0x20, group_ids=(2,)),
+                self._requirement(0x21, group_ids=(2,)),
+                self._requirement(0xD2, group_ids=(1,)),
+            ),
+        )
+
+        validate_enemy_shuffle_state(state, is_standard_mode=False)
 
     def test_excludes_absorbables_from_usable_enemy_pools(self) -> None:
         state = self._build_state(
@@ -294,6 +348,45 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         )
 
         self.assertIn(randomized_room.sprites[0].sprite_id, {0x21, 0x22})
+
+    def test_dungeon_group_selection_excludes_groups_without_enemy_requirements(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=1,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=1,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x20, is_overlord=False, has_key=False),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=False,
+        )
+        state = self._build_state(
+            dungeon_rooms={1: room},
+            sprite_requirements=(self._requirement(0x20, subgroup_0=(1,)),),
+        )
+        state.sprite_groups[0x42] = DungeonSpriteGroup(
+            group_id=0x42,
+            dungeon_group_id=2,
+            subgroup_0=0,
+            subgroup_1=0,
+            subgroup_2=0,
+            subgroup_3=0,
+        )
+
+        possible_groups = get_possible_dungeon_sprite_groups(state, room)
+
+        self.assertEqual([group.group_id for group in possible_groups], [0x41])
 
     @staticmethod
     def _requirement(
