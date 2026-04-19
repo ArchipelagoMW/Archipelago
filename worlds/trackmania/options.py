@@ -152,6 +152,10 @@ class HasAward(Toggle):
     """Enable to guarantee every rolled track will have at least one award on Trackmania Exchange."""
     display_name = "Must Be Awarded"
 
+class InTotd(Toggle):
+    """Enable to guarantee every rolled track has been a Track of the Day (TOTD)."""
+    display_name = "Must Be TOTD"
+
 class DisableBronzeLocations(Toggle):
     """Disable Bronze Medal times from counting as locations."""
     display_name = "Remove Bronze Locations"
@@ -204,6 +208,7 @@ class CustomSeries(OptionDict):
     - "map_tags_inclusive"
     - "difficulties"
     - "has_award"
+    - "in_totd"
 
     In addition, the following custom search parameters are available:
     - "map_ids": A list of specific map IDs to randomly choose between (max 100)
@@ -221,6 +226,7 @@ class CustomSeries(OptionDict):
     custom_series:
       all:
         has_award: true
+        in_totd: true
       1:
         map_tags: ["LOL"]
         difficulties: ["Beginner", "Intermediate"]
@@ -265,6 +271,7 @@ class CustomSeries(OptionDict):
             Optional("min_length"): int,  # API ref: `authortimemin`
             Optional("max_length"): int,  # API ref: `authortimemax`
             Optional("has_award"): LuaBool,  # API ref: `inlatestawardedauthor`
+            Optional("in_totd"): LuaBool, # API ref: `intotd`
             Optional("has_replay"): LuaBool,  # API ref: `inhasreplay`
         }
     })
@@ -293,6 +300,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
     map_min_length: MapMinimumLength
     difficulties: MapDifficulties
     has_award: HasAward
+    in_totd: InTotd
     disable_bronze_locations: DisableBronzeLocations
     disable_bronze_medals: DisableBronzeMedals
     disable_silver_locations: DisableSilverLocations
@@ -307,7 +315,7 @@ option_groups: dict[str, list[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, DiscountPercentage, DiscountAmount, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
-    "Map Search Settings":[MapTags, MapETags, MapTagsInclusive, RandomSeriesTags, HasAward, MapMinimumLength, MapMaximumLength],
+    "Map Search Settings":[MapTags, MapETags, MapTagsInclusive, RandomSeriesTags, HasAward, InTotd, MapMinimumLength, MapMaximumLength],
     "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableBronzeMedals, DisableSilverLocations, DisableSilverMedals, DisableGoldLocations, DisableGoldMedals, DisableAuthorLocations, CustomSeries]#, PlandoItems]
 }
 
