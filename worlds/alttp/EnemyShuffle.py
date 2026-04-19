@@ -614,7 +614,11 @@ def get_room_do_not_update_requirements(state: EnemyShuffleState, room: DungeonE
 
 def get_possible_dungeon_sprite_groups(state: EnemyShuffleState, room: DungeonEnemyRoom) -> tuple[DungeonSpriteGroup, ...]:
     do_not_update = get_room_do_not_update_requirements(state, room)
-    usable_groups = tuple(group for group in state.sprite_groups.values() if 0 < group.dungeon_group_id < 60)
+    usable_groups = tuple(
+        group for group in state.sprite_groups.values()
+        if 0 < group.dungeon_group_id < 60
+        and _get_possible_enemy_requirements_for_group(state, room, group)
+    )
     needs_key = any(sprite.has_key for sprite in room.sprites)
     needs_killable = room.is_shutter_room
     needs_water = room.is_water_room
@@ -820,7 +824,11 @@ def get_possible_overworld_sprite_groups(
     state: EnemyShuffleState,
     area: OverworldEnemyArea,
 ) -> tuple[DungeonSpriteGroup, ...]:
-    usable_groups = tuple(group for group in state.sprite_groups.values() if 0 < group.group_id < 0x40)
+    usable_groups = tuple(
+        group for group in state.sprite_groups.values()
+        if 0 < group.group_id < 0x40
+        and _get_possible_enemy_requirements_for_overworld_group(state, group)
+    )
     do_not_update = get_overworld_do_not_update_requirements(state, area)
     if not do_not_update:
         return usable_groups
@@ -1332,7 +1340,8 @@ def _validate_overworld_area(
             raise ValueError(f"Enemy shuffle placed illegal overworld sprite {hex(randomized_sprite.sprite_id)} in area {hex(area.area_id)}")
 
     randomizable_addresses = {sprite.address for sprite in _get_randomizable_sprites_in_overworld_area(state, area)}
-    if sum(
+    non_fish_sprite_ids = possible_sprite_ids - {FLOPPING_FISH_SPRITE_ID}
+    if non_fish_sprite_ids and sum(
         1 for sprite in randomized_area.sprites
         if sprite.address in randomizable_addresses and sprite.sprite_id == FLOPPING_FISH_SPRITE_ID
     ) > 1:
