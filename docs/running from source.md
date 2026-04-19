@@ -78,14 +78,10 @@ first generate the binary distribution and then run `python setup.py bdist_appim
 put an `appimagetool` into the directory you run the command from, rename it to `appimagetool` and make it executable.
 
 
-## Optional: A Link to the Past Enemizer
+## A Link to the Past
 
-Only required to generate seeds that include A Link to the Past with certain options enabled. You will receive an
-error if it is required.
-
-You can get the latest Enemizer release at [Enemizer Github releases](https://github.com/Ijwu/Enemizer/releases).
-It should be dropped as "EnemizerCLI" into the root folder of the project. Alternatively, you can point the Enemizer
-setting in host.yaml at your Enemizer executable.
+A Link to the Past no longer requires an external Enemizer download. Its enemy shuffle, boss shuffle, pot shuffle,
+and related ROM patch data are handled directly by Archipelago.
 
 
 ## Optional: SNI

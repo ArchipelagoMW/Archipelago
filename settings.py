@@ -633,10 +633,6 @@ class ServerOptions(Group):
 class GeneratorOptions(Group):
     """Options for Generation"""
 
-    class EnemizerPath(LocalFilePath):
-        """Deprecated. ALTTP no longer requires an external Enemizer CLI."""
-        is_exe = True
-
     class PlayerFilesPath(OptionalUserFolderPath):
         """Folder from which the player yaml files are pulled from"""
         # created on demand, so marked as optional
@@ -687,7 +683,6 @@ class GeneratorOptions(Group):
         start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
         """
 
-    enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")

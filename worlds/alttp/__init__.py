@@ -256,17 +256,6 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
-    _enemizer_path: typing.ClassVar[typing.Optional[str]] = None
-
-    @property
-    def enemizer_path(self) -> str:
-        # TODO: directly use settings
-        cls = self.__class__
-        if cls._enemizer_path is None:
-            cls._enemizer_path = settings.get_settings().generator.enemizer_path
-            assert isinstance(cls._enemizer_path, str)
-        return cls._enemizer_path
-
     # custom instance vars
     dungeon_local_item_names: typing.Set[str]
     dungeon_specific_item_names: typing.Set[str]
