@@ -85,6 +85,7 @@ class FFMQWorld(World):
             for key, value in self.multiworld.re_gen_passthrough[self.game].items():
                 if hasattr(self.options, key):
                     getattr(self.options, key).value = value
+            self.map_shuffle_seed = self.multiworld.re_gen_passthrough[self.game]["map_shuffle_seed"]
         else:
             if self.options.map_shuffle_seed.value.isdigit():
                 self.map_shuffle_seed = self.options.map_shuffle_seed.value
@@ -104,7 +105,7 @@ class FFMQWorld(World):
             companion_shuffle = world.options.companions_locations.value
             kaeli_mom = world.options.kaelis_mom_fight_minotaur.value
             overworld_shuffle = world.options.overworld_shuffle.value
-            world.rooms = generate_rooms(world.random, map_shuffle, crest_shuffle, battlefield_shuffle,
+            world.rooms = generate_rooms(shuffle_random, map_shuffle, crest_shuffle, battlefield_shuffle,
                                          companion_shuffle, kaeli_mom, overworld_shuffle)
 
     def create_item(self, name: str):
