@@ -1050,13 +1050,11 @@ def _floor_shuffle(
     rooms: list[dict[str, Any]],
     map_shuffle: str | int,
     random: Random,
-    overworld_shuffle: bool | None = None,
 ) -> None:
     map_shuffle = _normalize_map_shuffle_mode(map_shuffle)
     if map_shuffle not in MAP_SHUFFLE_DUNGEON_MODES:
         return
 
-    _ = overworld_shuffle
     include_temples_towns = map_shuffle in {"Everything", 3}
     intradungeon = map_shuffle in {"DungeonsInternal", 1}
     pending_links: list[tuple[int, dict[str, Any]]] = []
@@ -1776,7 +1774,7 @@ def generate_rooms(
     _companions_shuffle(rooms, companion_shuffle=companion_shuffle, kaeli_mom=kaeli_mom, random=random)
 
     _crest_shuffle(rooms, crest_shuffle=crest_shuffle, random=random)
-    _floor_shuffle(rooms, map_shuffle=map_shuffle, random=random, overworld_shuffle=overworld_shuffle)
+    _floor_shuffle(rooms, map_shuffle=map_shuffle, random=random)
     _shuffle_overworld(
         rooms,
         map_shuffle=map_shuffle,
