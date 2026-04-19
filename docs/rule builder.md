@@ -115,8 +115,8 @@ If you would like to provide option filters when reusing or composing rules, you
 common_rule = Has("A") | HasAny("B", "C")
 ...
 rule = (
-    Filtered(common_rule, options=[OptionFilter(Opt, 0)]),
-    | Filtered(Has("X") | CanReachRegion("Y"), options=[OptionFilter(Opt, 1)]),
+    Filtered(common_rule, options=[OptionFilter(Opt, 0)])
+    | Filtered(Has("X") | CanReachRegion("Y"), options=[OptionFilter(Opt, 1)])
 )
 ```
 
