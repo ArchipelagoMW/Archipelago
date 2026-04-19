@@ -634,7 +634,7 @@ class GeneratorOptions(Group):
     """Options for Generation"""
 
     class EnemizerPath(LocalFilePath):
-        """Location of your Enemizer CLI. ALTTP's base patch and symbol data are now vendored in Archipelago."""
+        """Deprecated. ALTTP no longer requires an external Enemizer CLI."""
         is_exe = True
 
     class PlayerFilesPath(OptionalUserFolderPath):

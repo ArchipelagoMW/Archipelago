@@ -18,8 +18,8 @@ from .Options import ALTTPOptions, small_key_shuffle
 from .PotShuffle import apply_pot_shuffle, generate_pot_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
-from .EnemizerPatches import patch_bosses
-from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
+from .EnemizerPatches import apply_native_enemizer_features, patch_bosses
+from .Rom import LocalRom, patch_rom, patch_race_rom, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
 from .Shops import create_shops, Shop, push_shop_inventories, ShopType, price_rate_display, price_type_display_name
@@ -321,10 +321,6 @@ class ALTTPWorld(World):
             raise FileNotFoundError(rom_file)
         if multiworld.is_race:
             import xxtea  # noqa
-        for player in multiworld.get_game_players(cls.game):
-            if multiworld.worlds[player].use_enemizer_cli:
-                check_enemizer(multiworld.worlds[player].enemizer_path)
-                break
 
     def generate_early(self):
         multiworld = self.multiworld
@@ -584,10 +580,7 @@ class ALTTPWorld(World):
 
     @property
     def use_enemizer_cli(self) -> bool:
-        return bool(self.options.enemy_health != 'default'
-                    or self.options.enemy_damage != 'default'
-                    or self.options.bush_shuffle
-                    or self.options.killable_thieves)
+        return False
 
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
@@ -602,9 +595,9 @@ class ALTTPWorld(World):
 
             patch_rom(multiworld, rom, player, use_enemizer)
 
-            if self.use_enemizer_cli:
-                patch_enemizer(self, rom, self.enemizer_path, output_directory)
-            elif self.options.boss_shuffle:
+            apply_native_enemizer_features(self, rom)
+
+            if self.options.boss_shuffle:
                 patch_bosses(self, rom)
 
             if self.options.enemy_shuffle:

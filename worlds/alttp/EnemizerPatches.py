@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 import hashlib
 import json
 import os
+import pkgutil
+import random
 from typing import TYPE_CHECKING, Optional
 
 from Utils import local_path, pc_to_snes, snes_to_pc
@@ -144,6 +146,33 @@ TRINEXX_SHELL_OBJECT_ID = 0xFF2
 KHOLDSTARE_SHELL_OBJECT_ID = 0xF95
 TRINEXX_VANILLA_ROOM_ID = 164
 KHOLDSTARE_VANILLA_ROOM_ID = 222
+ENEMY_HP_TABLE_ADDRESS = 0x6B173
+ENEMY_DAMAGE_TABLE_ADDRESS = 0x6B266
+HIDDEN_ENEMY_CHANCE_POOL_ADDRESS = 0xD7BBB
+DAMAGE_GROUP_TABLE_ADDRESS = 0x3742D
+RETRO_ARROW_REPLACEMENT_CHECK_ADDRESS = 0x301FC
+RETRO_RUPEE_REPLACEMENT_SPRITE_ID = 0xDA
+ARROW_REFILL_5_SPRITE_ID = 0xE1
+THIEF_SPRITE_ID = 0xC4
+THIEF_DEFAULT_HP = 4
+VANILLA_HIDDEN_ENEMY_CHANCE_POOL = (
+    0x01, 0x01, 0x01, 0x01, 0x0F, 0x01, 0x01, 0x12,
+    0x10, 0x01, 0x01, 0x01, 0x11, 0x01, 0x01, 0x03,
+)
+RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL = (
+    0x01, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x12,
+    0x0F, 0x01, 0x0F, 0x0F, 0x11, 0x0F, 0x0F, 0x03,
+)
+EXCLUDED_ENEMY_TABLE_SPRITE_IDS = frozenset({
+    0x09, 0x53, 0x54, 0x70, 0x7A, 0x7B, 0x88, 0x89, 0x8C, 0x8D, 0x92,
+    0xA2, 0xA3, 0xA4, 0xBD, 0xBE, 0xBF, 0xCB, 0xCC, 0xCD, 0xCE, 0xD6, 0xD7,
+})
+ENEMY_HEALTH_RANGE_BY_KEY = {
+    "easy": (1, 4),
+    "normal": (2, 15),
+    "hard": (2, 25),
+    "expert": (4, 50),
+}
 
 _ENEMIZER_SYMBOLS: Optional[dict[str, int]] = None
 
@@ -169,6 +198,46 @@ BOSS_GFX_SHEET_INDEXES = {
     "Trinexx1": 0xB2,
     "Trinexx2": 0xB3,
 }
+
+
+def apply_native_enemizer_features(world: "ALTTPWorld", rom: "LocalRom") -> None:
+    enemy_shuffle_enabled = bool(world.options.enemy_shuffle)
+    bush_shuffle_enabled = bool(world.options.bush_shuffle)
+    enemy_health_key = _option_key(world.options.enemy_health)
+    enemy_damage_key = _option_key(world.options.enemy_damage)
+
+    if enemy_shuffle_enabled or bush_shuffle_enabled:
+        _set_enemizer_flag(rom, "EnemizerFlags_randomize_bushes", True)
+        hidden_enemy_chance_pool = (
+            RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL if bush_shuffle_enabled else VANILLA_HIDDEN_ENEMY_CHANCE_POOL
+        )
+        rom.write_bytes(HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, hidden_enemy_chance_pool)
+        _update_hidden_enemy_item_table_for_retro_mode(rom)
+
+    if enemy_shuffle_enabled:
+        _set_enemizer_flag(rom, "EnemizerFlags_randomize_sprites", True)
+        _set_enemizer_flag(rom, "EnemizerFlags_enable_mimic_override", True)
+        _set_enemizer_flag(rom, "EnemizerFlags_enable_terrorpin_ai_fix", True)
+        rom.write_bytes(0x1F2D5, (0x54, 0x9C))
+        rom.write_byte(0x1F2E5, 0xB0)
+        rom.write_byte(0x1F2EB, 0xD0)
+
+    if world.options.killable_thieves:
+        _apply_killable_thief(rom)
+
+    if enemy_health_key != "default" or enemy_damage_key != "default":
+        rng = _make_native_enemizer_rng(world)
+    else:
+        rng = None
+
+    if enemy_health_key != "default":
+        assert rng is not None
+        _randomize_enemy_health(rom, rng, enemy_health_key)
+
+    if enemy_damage_key != "default":
+        assert rng is not None
+        _randomize_enemy_damage(rom, rng, allow_zero_damage=True)
+        _shuffle_damage_groups(rom, rng, chaos_mode=enemy_damage_key == "chaos", allow_zero_damage=True)
 
 def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
     _patch_boss_gfx_tables(rom)
@@ -298,6 +367,87 @@ def _object_id(object_bytes: bytes) -> Optional[int]:
     if object_bytes[2] >= 0xF8:
         return 0xF00 | ((object_bytes[2] & 0x0F) << 4) | ((object_bytes[1] & 0x03) << 2) | (object_bytes[0] & 0x03)
     return object_bytes[2]
+
+
+def _set_enemizer_flag(rom: "LocalRom", symbol_name: str, enabled: bool) -> None:
+    rom.write_byte(_get_enemizer_symbol(symbol_name), 0x01 if enabled else 0x00)
+
+
+def _apply_killable_thief(rom: "LocalRom") -> None:
+    rom.write_byte(_get_enemizer_symbol("notItemSprite_Mimic") + 4, THIEF_SPRITE_ID)
+    thief_hp_address = ENEMY_HP_TABLE_ADDRESS + THIEF_SPRITE_ID
+    if rom.read_byte(thief_hp_address) != 0xFF:
+        rom.write_byte(thief_hp_address, THIEF_DEFAULT_HP)
+
+
+def _randomize_enemy_health(rom: "LocalRom", rng: random.Random, enemy_health_key: str) -> None:
+    min_hp, max_hp = ENEMY_HEALTH_RANGE_BY_KEY[enemy_health_key]
+    for sprite_id in range(0xF3):
+        hp_address = ENEMY_HP_TABLE_ADDRESS + sprite_id
+        if rom.read_byte(hp_address) == 0xFF or sprite_id in EXCLUDED_ENEMY_TABLE_SPRITE_IDS:
+            continue
+        rom.write_byte(hp_address, rng.randrange(min_hp, max_hp))
+
+
+def _randomize_enemy_damage(rom: "LocalRom", rng: random.Random, allow_zero_damage: bool) -> None:
+    for sprite_id in range(0xF3):
+        if sprite_id in EXCLUDED_ENEMY_TABLE_SPRITE_IDS:
+            continue
+        new_damage = rng.randrange(8)
+        if not allow_zero_damage and new_damage == 2:
+            continue
+        rom.write_byte(ENEMY_DAMAGE_TABLE_ADDRESS + sprite_id, new_damage)
+
+
+def _shuffle_damage_groups(
+    rom: "LocalRom",
+    rng: random.Random,
+    *,
+    chaos_mode: bool,
+    allow_zero_damage: bool,
+) -> None:
+    min_damage = 0 if allow_zero_damage else 4
+    max_damage = 64 if chaos_mode else 32
+
+    for group_id in range(10):
+        green_mail_damage = rng.randrange(min_damage, max_damage)
+        if chaos_mode:
+            blue_mail_damage = rng.randrange(min_damage, max_damage)
+            red_mail_damage = rng.randrange(min_damage, max_damage)
+        else:
+            blue_mail_damage = green_mail_damage * 3 // 4
+            red_mail_damage = green_mail_damage * 3 // 8
+        group_address = DAMAGE_GROUP_TABLE_ADDRESS + (group_id * 3)
+        rom.write_bytes(group_address, (green_mail_damage, blue_mail_damage, red_mail_damage))
+
+
+def _update_hidden_enemy_item_table_for_retro_mode(rom: "LocalRom") -> None:
+    if rom.read_byte(RETRO_ARROW_REPLACEMENT_CHECK_ADDRESS) != RETRO_RUPEE_REPLACEMENT_SPRITE_ID:
+        return
+
+    item_table_address = _get_enemizer_symbol("sprite_bush_spawn_item_table")
+    for index in range(22):
+        if rom.read_byte(item_table_address + index) == ARROW_REFILL_5_SPRITE_ID:
+            rom.write_byte(item_table_address + index, RETRO_RUPEE_REPLACEMENT_SPRITE_ID)
+
+
+def _make_native_enemizer_rng(world: "ALTTPWorld") -> random.Random:
+    seed_material = "|".join((
+        str(world.multiworld.seed),
+        world.multiworld.seed_name,
+        str(world.player),
+        _option_key(world.options.enemy_health),
+        _option_key(world.options.enemy_damage),
+        str(int(bool(world.options.enemy_shuffle))),
+        str(int(bool(world.options.bush_shuffle))),
+        str(int(bool(world.options.killable_thieves))),
+    ))
+    seed = int.from_bytes(hashlib.sha256(seed_material.encode("utf-8")).digest()[:8], "big")
+    return random.Random(seed)
+
+
+def _option_key(option: object) -> str:
+    return str(getattr(option, "current_key", option))
 
 
 def _get_enemizer_symbol(symbol_name: str) -> int:
