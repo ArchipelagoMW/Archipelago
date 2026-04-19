@@ -313,8 +313,9 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
     enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{player}.sfc'))
 
     # write options file for enemizer
+    native_enemy_shuffle = getattr(world, "enemy_shuffle_state", None) is not None
     options = {
-        'RandomizeEnemies': world.options.enemy_shuffle.value,
+        'RandomizeEnemies': False if native_enemy_shuffle else world.options.enemy_shuffle.value,
         'RandomizeEnemiesType': 3,
         'RandomizeBushEnemyChance': world.options.bush_shuffle.value,
         'RandomizeEnemyHealthRange': world.options.enemy_health != 'default',

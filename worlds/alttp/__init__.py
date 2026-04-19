@@ -11,7 +11,7 @@ from .Client import ALTTPSNIClient
 from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from .EnemyShuffle import generate_enemy_shuffle_state
+from .EnemyShuffle import generate_enemy_shuffle_state, apply_enemy_shuffle
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import ALTTPOptions, small_key_shuffle
@@ -584,8 +584,7 @@ class ALTTPWorld(World):
 
     @property
     def use_enemizer_cli(self) -> bool:
-        return bool(self.options.enemy_shuffle
-                    or self.options.enemy_health != 'default'
+        return bool(self.options.enemy_health != 'default'
                     or self.options.enemy_damage != 'default'
                     or self.options.bush_shuffle
                     or self.options.killable_thieves)
@@ -607,6 +606,9 @@ class ALTTPWorld(World):
                 patch_enemizer(self, rom, self.enemizer_path, output_directory)
             elif self.options.boss_shuffle:
                 patch_bosses(self, rom)
+
+            if self.options.enemy_shuffle:
+                apply_enemy_shuffle(rom, self.enemy_shuffle_state)
 
             if self.options.pot_shuffle:
                 apply_pot_shuffle(rom, self.pot_shuffle_state)

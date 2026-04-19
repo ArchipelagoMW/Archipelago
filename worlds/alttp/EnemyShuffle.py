@@ -11,6 +11,7 @@ from .Rom import get_base_rom_bytes
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
+    from .Rom import LocalRom
 
 
 DUNGEON_HEADER_POINTER_TABLE_BASE = 0x271E2
@@ -1156,3 +1157,43 @@ def _build_randomized_room(
         sprites=tuple(sprites),
         skipped_randomization=skipped_randomization,
     )
+
+
+def apply_enemy_shuffle(rom: "LocalRom", state: EnemyShuffleState) -> None:
+    for room in state.randomized_dungeon_rooms.values():
+        rom.write_byte(room.room_header_address + 3, room.graphics_block_id)
+        for sprite in room.sprites:
+            _write_dungeon_sprite(rom, sprite)
+
+    rom.write_byte(0x04CF4F, 0x10)
+    for area in state.randomized_overworld_areas.values():
+        rom.write_byte(area.graphics_block_address, area.graphics_block_id)
+        for sprite in area.sprites:
+            _write_overworld_sprite(rom, sprite)
+
+    bush_spawn_table_address = _get_enemizer_symbol("sprite_bush_spawn_table_overworld")
+    for area in state.randomized_overworld_areas.values():
+        rom.write_byte(bush_spawn_table_address + area.area_id, area.bush_sprite_id)
+
+
+def _write_dungeon_sprite(rom: "LocalRom", sprite: RandomizedDungeonEnemySprite) -> None:
+    sprite_id = sprite.sprite_id
+    byte_1 = sprite.byte_1
+
+    if sprite_id == WALLMASTER_SPRITE_ID:
+        sprite_id = 0x09
+        byte_1 |= SPRITE_OVERLORD_MASK
+
+    rom.write_byte(sprite.address, sprite.byte_0)
+    rom.write_byte(sprite.address + 1, byte_1)
+    rom.write_byte(sprite.address + 2, sprite_id & 0xFF)
+
+
+def _write_overworld_sprite(rom: "LocalRom", sprite: RandomizedOverworldEnemySprite) -> None:
+    sprite_id = sprite.sprite_id
+    if sprite_id == OW_FALLING_ROCKS_SPRITE_ID:
+        rom.write_byte(sprite.address, 0)
+        rom.write_byte(sprite.address + 1, 0)
+    if sprite_id == WALLMASTER_SPRITE_ID:
+        sprite_id = OW_WALLMASTER_TO_HOULIHAN_SPRITE_ID
+    rom.write_byte(sprite.address + 2, sprite_id & 0xFF)
