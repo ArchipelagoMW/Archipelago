@@ -1699,8 +1699,7 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
 
     # set rom name
     # 21 bytes
-    from Utils import __version__
-    rom.name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'AP{local_world.world_version.as_simple_string().replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 

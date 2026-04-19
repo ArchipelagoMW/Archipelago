@@ -773,7 +773,7 @@ class CommonContext:
         if len(parts) == 1:
             parts = title.split(', ', 1)
         if len(parts) > 1:
-            text = parts[1] + '\n\n' + text
+            text = f"{parts[1]}\n\n{text}" if text else parts[1]
             title = parts[0]
         # display error
         self._messagebox = MessageBox(title, text, error=True)
@@ -896,6 +896,8 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
                                    "May not be running Archipelago on that address or port.")
     except websockets.InvalidURI:
         ctx.handle_connection_loss("Failed to connect to the multiworld server (invalid URI)")
+    except asyncio.TimeoutError:
+        ctx.handle_connection_loss("Failed to connect to the multiworld server. Connection timed out.")
     except OSError:
         ctx.handle_connection_loss("Failed to connect to the multiworld server")
     except Exception:
