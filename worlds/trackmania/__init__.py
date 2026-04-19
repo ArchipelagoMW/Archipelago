@@ -121,6 +121,9 @@ class TrackmaniaWorld(World):
             if "has_award" not in search_criteria:
                 search_criteria["has_award"] = self.options.has_award.value
 
+            if "in_totd" not in search_criteria:
+                search_criteria["in_totd"] = self.options.in_totd.value
+
             values : dict = {"MedalTotal": medals,
                              "MapCount": map_count,
                              "SearchCriteria": search_criteria}
