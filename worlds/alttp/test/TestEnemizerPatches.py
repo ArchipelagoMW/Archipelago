@@ -15,6 +15,7 @@ from worlds.alttp.EnemizerPatches import (
     THIEF_SPRITE_ID,
     VANILLA_HIDDEN_ENEMY_CHANCE_POOL,
     _get_enemizer_symbol,
+    _make_native_enemizer_rng,
     apply_native_enemizer_features,
 )
 
@@ -110,6 +111,38 @@ class TestEnemizerPatches(unittest.TestCase):
         apply_native_enemizer_features(world, rom)
 
         self.assertEqual(rom.read_byte(ENEMY_HP_TABLE_ADDRESS + THIEF_SPRITE_ID), THIEF_DEFAULT_HP)
+
+    def test_bush_shuffle_without_enemy_shuffle_does_not_enable_sprite_randomization_flags(self) -> None:
+        rom = FakeRom()
+
+        apply_native_enemizer_features(self._build_world(bush_shuffle=True), rom)
+
+        self.assertEqual(rom.read_byte(_get_enemizer_symbol("EnemizerFlags_randomize_bushes")), 0x01)
+        self.assertEqual(rom.read_byte(_get_enemizer_symbol("EnemizerFlags_randomize_sprites")), 0x00)
+        self.assertEqual(rom.read_byte(_get_enemizer_symbol("EnemizerFlags_enable_mimic_override")), 0x00)
+        self.assertEqual(rom.read_byte(_get_enemizer_symbol("EnemizerFlags_enable_terrorpin_ai_fix")), 0x00)
+        self.assertEqual(tuple(rom.read_bytes(0x1F2D5, 2)), (0x00, 0x00))
+        self.assertEqual(rom.read_byte(0x1F2E5), 0x00)
+        self.assertEqual(rom.read_byte(0x1F2EB), 0x00)
+
+    def test_non_chaos_enemy_damage_uses_expected_mail_scaling(self) -> None:
+        rom = FakeRom()
+
+        apply_native_enemizer_features(self._build_world(enemy_damage="hard"), rom)
+
+        for group_id in range(10):
+            group_address = DAMAGE_GROUP_TABLE_ADDRESS + (group_id * 3)
+            green_mail, blue_mail, red_mail = rom.read_bytes(group_address, 3)
+            self.assertEqual(blue_mail, green_mail * 3 // 4)
+            self.assertEqual(red_mail, green_mail * 3 // 8)
+
+    def test_native_enemizer_rng_is_deterministic_for_same_world_settings(self) -> None:
+        world = self._build_world(enemy_health="hard", enemy_damage="chaos", bush_shuffle=True)
+
+        rng_a = _make_native_enemizer_rng(world)
+        rng_b = _make_native_enemizer_rng(world)
+
+        self.assertEqual([rng_a.randrange(256) for _ in range(8)], [rng_b.randrange(256) for _ in range(8)])
 
     @staticmethod
     def _build_world(
