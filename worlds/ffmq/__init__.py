@@ -10,8 +10,6 @@ from .Output import generate_output
 from .Options import FFMQOptions
 from .Client import FFMQClient
 from .RoomsGenerator import generate_rooms
-import zlib
-import msgpack
 
 
 class FFMQWebWorld(WebWorld):
@@ -72,6 +70,7 @@ class FFMQWorld(World):
         self.hint_data = []
         self.ut = False
         self.finished_hint_data_collection = threading.Event()
+        self.map_shuffle_seed = None
         super().__init__(world, player)
 
     def generate_early(self):
@@ -86,42 +85,27 @@ class FFMQWorld(World):
             for key, value in self.multiworld.re_gen_passthrough[self.game].items():
                 if hasattr(self.options, key):
                     getattr(self.options, key).value = value
-                elif key == "rooms":
-                    # Temporary handling of apworld generations without msgpack
-                    if type(value) is list:
-                        self.rooms = value
-                    else:
-                        self.rooms = msgpack.unpackb(zlib.decompress(base64.b64decode(value)), raw=False)
+        else:
+            if self.options.map_shuffle_seed.value.isdigit():
+                self.map_shuffle_seed = self.options.map_shuffle_seed.value
+            elif self.options.map_shuffle_seed.value != "random":
+                self.map_shuffle_seed = int(hash(self.options.map_shuffle_seed.value)) + int(self.multiworld.seed)
+            else:
+                self.map_shuffle_seed = self.random.randint(0, 0xFFFFFFFF)
 
     @classmethod
     def stage_generate_early(cls, multiworld):
-
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
-            if world.ut:
-                if not world.rooms:
-                    world.rooms = rooms
-                continue
-            if (world.options.map_shuffle or world.options.crest_shuffle or world.options.shuffle_battlefield_rewards
-                    or world.options.companions_locations or world.options.overworld_shuffle):
-                if world.options.map_shuffle_seed.value.isdigit():
-                    multiworld.random.seed(int(world.options.map_shuffle_seed.value))
-                elif world.options.map_shuffle_seed.value != "random":
-                    multiworld.random.seed(int(hash(world.options.map_shuffle_seed.value))
-                                           + int(world.multiworld.seed))
-
-                seed = world.random.randint(0, 0xFFFFFFFF)
-                shuffle_random = random.Random()
-                shuffle_random.seed(seed)
-                map_shuffle = world.options.map_shuffle.value
-                crest_shuffle = world.options.crest_shuffle.current_key
-                battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
-                companion_shuffle = world.options.companions_locations.value
-                kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
-                overworld_shuffle = world.options.overworld_shuffle.current_key
-                world.rooms = generate_rooms(world.random, map_shuffle, crest_shuffle, battlefield_shuffle,
-                                             companion_shuffle, kaeli_mom, overworld_shuffle)
-            else:
-                world.rooms = rooms
+            shuffle_random = random.Random()
+            shuffle_random.seed(world.map_shuffle_seed)
+            map_shuffle = world.options.map_shuffle.value
+            crest_shuffle = world.options.crest_shuffle.current_key
+            battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
+            companion_shuffle = world.options.companions_locations.value
+            kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
+            overworld_shuffle = world.options.overworld_shuffle.current_key
+            world.rooms = generate_rooms(world.random, map_shuffle, crest_shuffle, battlefield_shuffle,
+                                         companion_shuffle, kaeli_mom, overworld_shuffle)
 
     def create_item(self, name: str):
         return FFMQItem(name, self.player)
@@ -220,11 +204,7 @@ class FFMQWorld(World):
 
     def fill_slot_data(self):
         ret = self.options.as_dict("logic", "sky_coin_mode", "shattered_sky_coin_quantity", "map_shuffle")
-        if self.rooms != rooms:
-            compressed_rooms = base64.b64encode(zlib.compress(msgpack.packb(self.rooms, use_bin_type=True))).decode("ascii")
-            ret["rooms"] = compressed_rooms
-        else:
-            ret["rooms"] = None
+        ret["map_shuffle_seed"] = self.map_shuffle_seed
         return ret
 
     @staticmethod
