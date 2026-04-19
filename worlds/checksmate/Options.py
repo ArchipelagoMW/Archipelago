@@ -288,6 +288,26 @@ class FairyChessPawns(Choice):
     option_any_pawn = 5
     option_any_fairy = 6
     option_any_classical = 7
+
+
+class FairyChessPawnSergeants(Choice):
+    """
+    Whether the player army may include Sergeants (a stronger pawn variant from ChessV).
+
+    Off: Default. Sergeants only appear via the existing post-fill upgrade pass when leftover budget remains.
+
+    Add: Bonus material upgrades existing pawns into sergeants.
+
+    Replace: Bonus material spawns sergeants instead of additional pawns.
+
+    Random: Bonus pawn slots randomly become sergeants.
+    """
+    display_name = "Fairy Chess Pawn Sergeants"
+    option_off = 0
+    option_add = 1
+    option_replace = 2
+    option_randomize = 3
+    default = 0
     default = 0
 
 
@@ -413,6 +433,7 @@ class CMOptions(PerGameCommonOptions):
     fairy_chess_pieces_configure: FairyChessPiecesConfigure
     fairy_chess_army: FairyChessArmy
     fairy_chess_pawns: FairyChessPawns
+    fairy_chess_pawn_sergeants: FairyChessPawnSergeants
     minor_piece_limit_by_type: MinorPieceLimitByType
     major_piece_limit_by_type: MajorPieceLimitByType
     queen_piece_limit_by_type: QueenPieceLimitByType

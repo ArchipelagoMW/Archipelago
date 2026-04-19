@@ -1,6 +1,6 @@
 import unittest
 import random
-from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns,
+from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns, FairyChessPawnSergeants,
                       Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations, AsymmetricTrades)
 from unittest.mock import patch
 
@@ -33,6 +33,7 @@ class CMMockTestCase(unittest.TestCase):
                     'fairy_chess_pieces': FairyChessPieces(FairyChessPieces.option_fide),
                     'fairy_chess_pieces_configure': FairyChessPiecesConfigure(FairyChessPiecesConfigure.default),
                     'fairy_chess_pawns': FairyChessPawns(FairyChessPawns.option_vanilla),
+                    'fairy_chess_pawn_sergeants': FairyChessPawnSergeants(FairyChessPawnSergeants.option_off),
                     'difficulty': Difficulty(Difficulty.option_daily),
                     'piece_locations': PieceLocations(PieceLocations.option_chaos),
                     'minor_piece_limit_by_type': type('MinorPieceLimitByType', (), {'value': 2})(),
