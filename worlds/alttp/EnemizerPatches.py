@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import hashlib
-import json
-import os
 import pkgutil
 import random
 from typing import TYPE_CHECKING, Optional
 
-from Utils import local_path, pc_to_snes, snes_to_pc
+from Utils import pc_to_snes, snes_to_pc
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -197,6 +195,29 @@ BOSS_GFX_SHEET_INDEXES = {
     "Vitreous1": 0xB0,
     "Trinexx1": 0xB2,
     "Trinexx2": 0xB3,
+}
+
+BOSS_GFX_TABLE = {
+    "Agahnim1": (21, 190, 228),
+    "Agahnim2": (22, 255, 135),
+    "Agahnim3": (23, 220, 101),
+    "Agahnim4": (23, 132, 92),
+    "ArmosKnight1": (21, 206, 27),
+    "Ganon1": (21, 227, 160),
+    "Ganon2": (22, 186, 55),
+    "Ganon3": (22, 250, 199),
+    "Ganon4": (23, 142, 33),
+    "Moldorm1": (22, 175, 152),
+    "Lanmola1": (22, 180, 23),
+    "Arrghus1": (22, 214, 147),
+    "Mothula1": (22, 210, 84),
+    "Helmasaure1": (22, 219, 114),
+    "Helmasaure2": (22, 239, 177),
+    "Blind1": (22, 224, 90),
+    "Kholdstare1": (22, 230, 31),
+    "Vitreous1": (22, 235, 9),
+    "Trinexx1": (22, 243, 89),
+    "Trinexx2": (22, 246, 35),
 }
 
 
@@ -473,46 +494,8 @@ def _load_enemizer_symbols() -> dict[str, int]:
 
 
 def _patch_boss_gfx_tables(rom: "LocalRom") -> None:
-    boss_gfx_table = _load_cached_boss_gfx_table()
     for sheet_name, table_index in BOSS_GFX_SHEET_INDEXES.items():
-        bank, high, low = boss_gfx_table[sheet_name]
+        bank, high, low = BOSS_GFX_TABLE[sheet_name]
         rom.write_byte(0x4FC0 + table_index, bank)
         rom.write_byte(0x509F + table_index, high)
         rom.write_byte(0x517E + table_index, low)
-
-
-def _load_cached_boss_gfx_table() -> dict[str, tuple[int, int, int]]:
-    cache_dir = local_path("data", "enemizer_cache")
-    cache_path = os.path.join(cache_dir, "boss_gfx_table_v1.json")
-
-    from .Rom import LTTPJPN10HASH, get_base_rom_bytes
-
-    if os.path.exists(cache_path):
-        with open(cache_path, "r", encoding="utf-8") as cache_file:
-            payload = json.load(cache_file)
-        if payload.get("base_rom_md5") == LTTPJPN10HASH and payload.get("version") == 1:
-            return {name: tuple(values) for name, values in payload["table"].items()}
-
-    base_rom_bytes = get_base_rom_bytes()
-    table = {
-        sheet_name: (
-            base_rom_bytes[0x4FC0 + table_index],
-            base_rom_bytes[0x509F + table_index],
-            base_rom_bytes[0x517E + table_index],
-        )
-        for sheet_name, table_index in BOSS_GFX_SHEET_INDEXES.items()
-    }
-
-    os.makedirs(cache_dir, exist_ok=True)
-    with open(cache_path, "w", encoding="utf-8") as cache_file:
-        json.dump(
-            {
-                "version": 1,
-                "base_rom_md5": hashlib.md5(base_rom_bytes).hexdigest(),
-                "table": {name: list(values) for name, values in table.items()},
-            },
-            cache_file,
-            separators=(",", ":"),
-        )
-
-    return table
