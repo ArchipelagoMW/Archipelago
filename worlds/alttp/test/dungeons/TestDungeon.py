@@ -3,6 +3,7 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
+from worlds.alttp.PotShuffle import FilledPot, POT_KEY, POT_SWITCH
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
 from worlds.alttp.test.bases import LTTPTestBase
@@ -10,12 +11,18 @@ from worlds.alttp.test.bases import LTTPTestBase
 
 class TestDungeon(LTTPTestBase):
     def setUp(self):
-        self.world_setup()
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
+        self._build_dungeon_world()
+
+    def _build_dungeon_world(self, pot_shuffle_state=None):
+        self.world_setup()
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
         self.multiworld.worlds[1].options.bombless_start.value = True
         self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
+        if pot_shuffle_state is not None:
+            self.multiworld.worlds[1].options.pot_shuffle.value = True
+            self.multiworld.worlds[1].pot_shuffle_state = pot_shuffle_state
         create_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)
@@ -28,6 +35,21 @@ class TestDungeon(LTTPTestBase):
         self.world.create_items()
         self.multiworld.itempool.extend(get_dungeon_item_pool(self.multiworld))
         self.multiworld.itempool.extend(item_factory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], self.world))
+
+    def rebuild_with_pot_shuffle(self, pot_shuffle_state=None):
+        self._build_dungeon_world(pot_shuffle_state=pot_shuffle_state)
+
+    @staticmethod
+    def get_test_pot_shuffle_state(overrides=None):
+        state = {
+            0x36: (FilledPot(10, 16, POT_KEY),),
+            0x16: (FilledPot(188, 3, POT_KEY),),
+            0x0A: (FilledPot(100, 7, POT_SWITCH),),
+            0x8B: (FilledPot(112, 12, POT_KEY),),
+        }
+        if overrides:
+            state.update(overrides)
+        return state
 
     def run_tests(self, access_pool):
         for exit in self.remove_exits:

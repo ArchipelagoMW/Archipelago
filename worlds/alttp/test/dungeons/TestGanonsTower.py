@@ -1,4 +1,5 @@
 from .TestDungeon import TestDungeon
+from worlds.alttp.PotShuffle import FilledPot, POT_KEY
 
 
 class TestGanonsTower(TestDungeon):
@@ -147,4 +148,23 @@ class TestGanonsTower(TestDungeon):
             ["Ganons Tower - Validation Chest", True, ['Bomb Upgrade (50)', 'Progressive Bow', 'Big Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Fire Rod', 'Hookshot', 'Progressive Sword']],
             ["Ganons Tower - Validation Chest", True, ['Bomb Upgrade (50)', 'Progressive Bow', 'Big Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Lamp', 'Hookshot', 'Hammer']],
             ["Ganons Tower - Validation Chest", True, ['Bomb Upgrade (50)', 'Progressive Bow', 'Big Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Fire Rod', 'Hookshot', 'Hammer']],
+        ])
+
+    def testGanonsTowerPotShuffleConveyorCrossLogic(self):
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state())
+        self.starting_regions = ['Ganons Tower (Entrance)']
+        self.run_tests([
+            ["Ganons Tower - Conveyor Cross Pot Key", True, []],
+        ])
+
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state({
+            0x8B: (FilledPot(32, 9, POT_KEY),),
+        }))
+        self.starting_regions = ['Ganons Tower (Entrance)']
+        self.run_tests([
+            ["Ganons Tower - Conveyor Cross Pot Key", False, []],
+            ["Ganons Tower - Conveyor Cross Pot Key", False, [], ['Hammer']],
+            ["Ganons Tower - Conveyor Cross Pot Key", False, [], ['Hookshot', 'Pegasus Boots']],
+            ["Ganons Tower - Conveyor Cross Pot Key", True, ['Hammer', 'Hookshot']],
+            ["Ganons Tower - Conveyor Cross Pot Key", True, ['Hammer', 'Pegasus Boots']],
         ])

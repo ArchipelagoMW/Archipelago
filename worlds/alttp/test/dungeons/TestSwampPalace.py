@@ -1,4 +1,5 @@
 from .TestDungeon import TestDungeon
+from worlds.alttp.PotShuffle import FilledPot, POT_KEY
 
 
 class TestSwampPalace(TestDungeon):
@@ -78,4 +79,45 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Boss", False, [], ['Hookshot']],
             ["Swamp Palace - Boss", False, [], ['Small Key (Swamp Palace)']],
             ["Swamp Palace - Boss", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
+        ])
+
+    def testSwampPalacePotShuffleHookshotKeyLogic(self):
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state())
+        self.starting_regions = ['Swamp Palace (Entrance)']
+        baseline = ['Open Floodgate', 'Flippers', 'Hammer',
+                    'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)']
+        self.run_tests([
+            ["Swamp Palace - Hookshot Pot Key", False, baseline],
+            ["Swamp Palace - Hookshot Pot Key", True, baseline + ['Hookshot']],
+        ])
+
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state({
+            0x36: (FilledPot(108, 4, POT_KEY),),
+        }))
+        self.starting_regions = ['Swamp Palace (Entrance)']
+        baseline = ['Open Floodgate', 'Flippers', 'Hammer',
+                    'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)']
+        self.run_tests([
+            ["Swamp Palace - Hookshot Pot Key", False, baseline],
+            ["Swamp Palace - Hookshot Pot Key", False, baseline + ['Hookshot']],
+            ["Swamp Palace - Hookshot Pot Key", True, baseline + ['Bomb Upgrade (+5)']],
+        ])
+
+    def testSwampPalacePotShuffleWaterwayKeyLogic(self):
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state())
+        self.starting_regions = ['Swamp Palace (Entrance)']
+        baseline = ['Open Floodgate', 'Flippers', 'Hammer', 'Hookshot',
+                    'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)',
+                    'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)']
+        self.run_tests([
+            ["Swamp Palace - Waterway Pot Key", True, baseline],
+        ])
+
+        self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state({
+            0x16: (FilledPot(240, 19, POT_KEY),),
+        }))
+        self.starting_regions = ['Swamp Palace (Entrance)']
+        self.run_tests([
+            ["Swamp Palace - Waterway Pot Key", False, baseline],
+            ["Swamp Palace - Waterway Pot Key", True, baseline + ['Bomb Upgrade (+5)']],
         ])
