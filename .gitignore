@@ -63,6 +63,7 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/data/enemizer_cache/
 /datapackage
 /datapackage_export.json
 /custom_worlds

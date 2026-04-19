@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-import pkgutil
+import hashlib
+import json
+import os
 from typing import TYPE_CHECKING, Optional
 
-from Utils import pc_to_snes, snes_to_pc
+from Utils import local_path, pc_to_snes, snes_to_pc
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -145,8 +147,31 @@ KHOLDSTARE_VANILLA_ROOM_ID = 222
 
 _ENEMIZER_SYMBOLS: Optional[dict[str, int]] = None
 
+BOSS_GFX_SHEET_INDEXES = {
+    "Agahnim1": 0x8D,
+    "Agahnim2": 0xB5,
+    "Agahnim3": 0xC8,
+    "Agahnim4": 0xB6,
+    "ArmosKnight1": 0x90,
+    "Ganon1": 0x94,
+    "Ganon2": 0xA6,
+    "Ganon3": 0xB4,
+    "Ganon4": 0xB8,
+    "Moldorm1": 0xA3,
+    "Lanmola1": 0xA4,
+    "Arrghus1": 0xAC,
+    "Mothula1": 0xAB,
+    "Helmasaure1": 0xAD,
+    "Helmasaure2": 0xB1,
+    "Blind1": 0xAE,
+    "Kholdstare1": 0xAF,
+    "Vitreous1": 0xB0,
+    "Trinexx1": 0xB2,
+    "Trinexx2": 0xB3,
+}
 
 def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
+    _patch_boss_gfx_tables(rom)
     dungeon_header_base = _get_enemizer_symbol("room_header_table")
     moved_room_object_base = _get_enemizer_symbol("modified_room_object_table")
     gt_dungeon_name = "Ganons Tower" if world.options.mode != "inverted" else "Inverted Ganons Tower"
@@ -213,6 +238,7 @@ def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
         rom.write_bytes(write_address, table_bytes)
         write_address += len(table_bytes)
 
+    rom.write_byte(0x1B0101, 0x01)
     rom.write_byte(0x04DE81, 0x00)
     if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
         rom.write_byte(0x04DE81, 0x06)
@@ -294,3 +320,49 @@ def _load_enemizer_symbols() -> dict[str, int]:
         snes_address = int(parts[0].replace(":", ""), 16)
         symbols[parts[1]] = snes_to_pc(snes_address)
     return symbols
+
+
+def _patch_boss_gfx_tables(rom: "LocalRom") -> None:
+    boss_gfx_table = _load_cached_boss_gfx_table()
+    for sheet_name, table_index in BOSS_GFX_SHEET_INDEXES.items():
+        bank, high, low = boss_gfx_table[sheet_name]
+        rom.write_byte(0x4FC0 + table_index, bank)
+        rom.write_byte(0x509F + table_index, high)
+        rom.write_byte(0x517E + table_index, low)
+
+
+def _load_cached_boss_gfx_table() -> dict[str, tuple[int, int, int]]:
+    cache_dir = local_path("data", "enemizer_cache")
+    cache_path = os.path.join(cache_dir, "boss_gfx_table_v1.json")
+
+    from .Rom import LTTPJPN10HASH, get_base_rom_bytes
+
+    if os.path.exists(cache_path):
+        with open(cache_path, "r", encoding="utf-8") as cache_file:
+            payload = json.load(cache_file)
+        if payload.get("base_rom_md5") == LTTPJPN10HASH and payload.get("version") == 1:
+            return {name: tuple(values) for name, values in payload["table"].items()}
+
+    base_rom_bytes = get_base_rom_bytes()
+    table = {
+        sheet_name: (
+            base_rom_bytes[0x4FC0 + table_index],
+            base_rom_bytes[0x509F + table_index],
+            base_rom_bytes[0x517E + table_index],
+        )
+        for sheet_name, table_index in BOSS_GFX_SHEET_INDEXES.items()
+    }
+
+    os.makedirs(cache_dir, exist_ok=True)
+    with open(cache_path, "w", encoding="utf-8") as cache_file:
+        json.dump(
+            {
+                "version": 1,
+                "base_rom_md5": hashlib.md5(base_rom_bytes).hexdigest(),
+                "table": {name: list(values) for name, values in table.items()},
+            },
+            cache_file,
+            separators=(",", ":"),
+        )
+
+    return table
