@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 
 DUNGEON_HEADER_POINTER_TABLE_BASE = 0x271E2
 DUNGEON_SPRITE_POINTER_TABLE_BASE = 0x4D62E
+OVERWORLD_SPRITE_POINTER_TABLE_BASE = 0x4C901
+OVERWORLD_AREA_GRAPHICS_BLOCK_BASE = 0x7A81
 SPRITE_GROUP_BASE_ADDRESS = 0x5B97
 TOTAL_SPRITE_GROUPS = 144
 TOTAL_DUNGEON_ROOMS = 0x128
@@ -26,6 +28,9 @@ KEY_SPRITE_ID = 0xE4
 BIG_KEY_SPRITE_ID = 0xE5
 WALLMASTER_SPRITE_ID = 0x90
 STAL_SPRITE_ID = 0xD3
+FLOPPING_FISH_SPRITE_ID = 0xD2
+OW_FALLING_ROCKS_SPRITE_ID = 0xF4
+OW_WALLMASTER_TO_HOULIHAN_SPRITE_ID = 0xFB
 
 @dataclass(frozen=True)
 class RoomGroupRequirement:
@@ -35,6 +40,16 @@ class RoomGroupRequirement:
     subgroup_2: Optional[int]
     subgroup_3: Optional[int]
     rooms: tuple[int, ...]
+
+
+@dataclass(frozen=True)
+class OverworldGroupRequirement:
+    group_id: Optional[int]
+    subgroup_0: Optional[int]
+    subgroup_1: Optional[int]
+    subgroup_2: Optional[int]
+    subgroup_3: Optional[int]
+    areas: tuple[int, ...]
 
 
 @dataclass(frozen=True)
@@ -148,27 +163,78 @@ class RandomizedDungeonEnemyRoom:
 
 
 @dataclass(frozen=True)
+class OverworldEnemySprite:
+    address: int
+    y_coord: int
+    x_coord: int
+    sprite_id: int
+
+
+@dataclass(frozen=True)
+class OverworldEnemyArea:
+    area_id: int
+    sprite_table_address: int
+    graphics_block_address: int
+    graphics_block_id: int
+    bush_sprite_id: int
+    sprites: tuple[OverworldEnemySprite, ...]
+    do_not_randomize: bool
+
+
+@dataclass(frozen=True)
+class RandomizedOverworldEnemySprite:
+    address: int
+    y_coord: int
+    x_coord: int
+    original_sprite_id: int
+    sprite_id: int
+
+
+@dataclass(frozen=True)
+class RandomizedOverworldEnemyArea:
+    area_id: int
+    sprite_table_address: int
+    graphics_block_address: int
+    original_graphics_block_id: int
+    graphics_block_id: int
+    original_bush_sprite_id: int
+    bush_sprite_id: int
+    sprites: tuple[RandomizedOverworldEnemySprite, ...]
+    skipped_randomization: bool
+
+
+@dataclass(frozen=True)
 class EnemyShuffleState:
     dungeon_rooms: dict[int, DungeonEnemyRoom]
+    overworld_areas: dict[int, OverworldEnemyArea]
     sprite_groups: dict[int, DungeonSpriteGroup]
     sprite_requirements: tuple[EnemySpriteRequirement, ...]
     room_group_requirements: tuple[RoomGroupRequirement, ...]
+    overworld_group_requirements: tuple[OverworldGroupRequirement, ...]
     shutter_room_ids: frozenset[int]
     water_room_ids: frozenset[int]
     dont_randomize_room_ids: frozenset[int]
     no_special_enemies_standard_room_ids: frozenset[int]
     boss_room_ids: frozenset[int]
+    dont_randomize_overworld_area_ids: frozenset[int]
     randomized_dungeon_rooms: dict[int, RandomizedDungeonEnemyRoom]
+    randomized_overworld_areas: dict[int, RandomizedOverworldEnemyArea]
 
 
 def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
     rom_bytes = get_base_rom_bytes()
     moved_header_bank = _get_enemizer_symbol("moved_room_header_bank_value_address")
+    bush_spawn_table_address = _get_enemizer_symbol("sprite_bush_spawn_table_overworld")
     metadata = _load_enemy_room_metadata()
+    overworld_metadata = _load_overworld_enemy_metadata()
     sprite_requirements = _load_enemy_sprite_requirements()
     dungeon_rooms = {
         room.room_id: room
         for room in _read_dungeon_rooms(rom_bytes, moved_header_bank, metadata)
+    }
+    overworld_areas = {
+        area.area_id: area
+        for area in _read_overworld_areas(rom_bytes, bush_spawn_table_address, overworld_metadata)
     }
     sprite_groups = {
         group.group_id: group
@@ -176,19 +242,29 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
     }
     return EnemyShuffleState(
         dungeon_rooms=dungeon_rooms,
+        overworld_areas=overworld_areas,
         sprite_groups=sprite_groups,
         sprite_requirements=sprite_requirements,
         room_group_requirements=metadata["room_requirements"],
+        overworld_group_requirements=overworld_metadata["forced_group_requirements"],
         shutter_room_ids=metadata["shutter_room_ids"],
         water_room_ids=metadata["water_room_ids"],
         dont_randomize_room_ids=metadata["dont_randomize_room_ids"],
         no_special_enemies_standard_room_ids=metadata["no_special_enemies_standard_room_ids"],
         boss_room_ids=metadata["boss_room_ids"],
+        dont_randomize_overworld_area_ids=overworld_metadata["do_not_randomize_area_ids"],
         randomized_dungeon_rooms=_randomize_dungeon_rooms(
             world,
             dungeon_rooms,
             sprite_groups,
             sprite_requirements,
+        ),
+        randomized_overworld_areas=_randomize_overworld_areas(
+            world,
+            overworld_areas,
+            sprite_groups,
+            sprite_requirements,
+            overworld_metadata["forced_group_requirements"],
         ),
     )
 
@@ -265,6 +341,72 @@ def _read_room_sprite_table_address(rom_bytes: bytes, room_id: int) -> int:
         | (0x09 << 16)
     )
     return snes_to_pc(snes_address)
+
+
+def _read_overworld_areas(
+    rom_bytes: bytes,
+    bush_spawn_table_address: int,
+    metadata: dict[str, object],
+) -> list[OverworldEnemyArea]:
+    areas: list[OverworldEnemyArea] = []
+    do_not_randomize_area_ids = metadata["do_not_randomize_area_ids"]
+
+    for area_id in metadata["area_ids"]:
+        sprite_table_address = _read_overworld_sprite_table_address(rom_bytes, area_id)
+        graphics_block_address = _get_overworld_graphics_block_address(area_id)
+        areas.append(
+            OverworldEnemyArea(
+                area_id=area_id,
+                sprite_table_address=sprite_table_address,
+                graphics_block_address=graphics_block_address,
+                graphics_block_id=rom_bytes[graphics_block_address],
+                bush_sprite_id=rom_bytes[bush_spawn_table_address + area_id],
+                sprites=_read_overworld_sprites(rom_bytes, sprite_table_address),
+                do_not_randomize=area_id in do_not_randomize_area_ids,
+            )
+        )
+
+    return areas
+
+
+def _read_overworld_sprite_table_address(rom_bytes: bytes, area_id: int) -> int:
+    pointer_address = OVERWORLD_SPRITE_POINTER_TABLE_BASE + (area_id * 2)
+    snes_address = (
+        rom_bytes[pointer_address]
+        | (rom_bytes[pointer_address + 1] << 8)
+        | (0x09 << 16)
+    )
+    return snes_to_pc(snes_address)
+
+
+def _get_overworld_graphics_block_address(area_id: int) -> int:
+    if area_id in {0x80, 0x81}:
+        return 0x16576 + (area_id - 0x80)
+    if area_id in {0x110, 0x111}:
+        return 0x16576 + (area_id - 0x110)
+
+    address = OVERWORLD_AREA_GRAPHICS_BLOCK_BASE + area_id
+    if 0x40 <= area_id < 0x80:
+        address += 0x40
+    if 0x90 <= area_id < 0x110:
+        address -= 0x50
+    return address
+
+
+def _read_overworld_sprites(rom_bytes: bytes, sprite_table_address: int) -> tuple[OverworldEnemySprite, ...]:
+    sprites: list[OverworldEnemySprite] = []
+    index = sprite_table_address
+    while rom_bytes[index] != 0xFF:
+        sprites.append(
+            OverworldEnemySprite(
+                address=index,
+                y_coord=rom_bytes[index],
+                x_coord=rom_bytes[index + 1],
+                sprite_id=rom_bytes[index + 2],
+            )
+        )
+        index += 3
+    return tuple(sprites)
 
 
 def _read_room_sprites(rom_bytes: bytes, sprite_table_address: int) -> tuple[DungeonEnemySprite, ...]:
@@ -376,6 +518,29 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
     )
 
 
+def _load_overworld_enemy_metadata() -> dict[str, object]:
+    raw_metadata = pkgutil.get_data(__package__, "data/enemizer/overworld_enemy_metadata.json")
+    if raw_metadata is None:
+        raise FileNotFoundError("Missing vendored Enemizer overworld enemy metadata required by ALTTP enemy state generation")
+
+    payload = json.loads(raw_metadata.decode("utf-8"))
+    return {
+        "area_ids": tuple(payload["area_ids"]),
+        "do_not_randomize_area_ids": frozenset(payload["do_not_randomize_areas"]),
+        "forced_group_requirements": tuple(
+            OverworldGroupRequirement(
+                group_id=requirement["group_id"],
+                subgroup_0=requirement["subgroup_0"],
+                subgroup_1=requirement["subgroup_1"],
+                subgroup_2=requirement["subgroup_2"],
+                subgroup_3=requirement["subgroup_3"],
+                areas=tuple(requirement["areas"]),
+            )
+            for requirement in payload["forced_group_requirements"]
+        ),
+    }
+
+
 @dataclass(frozen=True)
 class MergedRoomRequirement:
     group_id: Optional[int]
@@ -485,6 +650,18 @@ def _get_requirements_for_usable_dungeon_enemies(state: EnemyShuffleState) -> tu
     )
 
 
+def _get_requirements_for_usable_overworld_enemies(state: EnemyShuffleState) -> tuple[EnemySpriteRequirement, ...]:
+    return tuple(
+        requirement for requirement in state.sprite_requirements
+        if not requirement.npc
+        and requirement.is_enemy_sprite
+        and not requirement.boss
+        and not requirement.overlord
+        and not requirement.is_object
+        and not requirement.never_use_overworld
+    )
+
+
 def _get_unconstrained_possible_dungeon_sprite_groups(
     usable_groups: tuple[DungeonSpriteGroup, ...],
     room_requirements: tuple[EnemySpriteRequirement, ...],
@@ -533,6 +710,29 @@ def _build_requirement_group_matcher(requirements: tuple[EnemySpriteRequirement,
     return matches
 
 
+def _build_overworld_requirement_group_matcher(requirements: tuple[EnemySpriteRequirement, ...]):
+    allowed_group_ids = set(_flatten_requirement_values(requirements, "group_ids"))
+    allowed_subgroup_0 = set(_flatten_requirement_values(requirements, "subgroup_0"))
+    allowed_subgroup_1 = set(_flatten_requirement_values(requirements, "subgroup_1"))
+    allowed_subgroup_2 = set(_flatten_requirement_values(requirements, "subgroup_2"))
+    allowed_subgroup_3 = set(_flatten_requirement_values(requirements, "subgroup_3"))
+
+    def matches(group: DungeonSpriteGroup) -> bool:
+        return (
+            not allowed_group_ids or group.group_id in allowed_group_ids
+        ) and (
+            not allowed_subgroup_0 or group.subgroup_0 in allowed_subgroup_0
+        ) and (
+            not allowed_subgroup_1 or group.subgroup_1 in allowed_subgroup_1
+        ) and (
+            not allowed_subgroup_2 or group.subgroup_2 in allowed_subgroup_2
+        ) and (
+            not allowed_subgroup_3 or group.subgroup_3 in allowed_subgroup_3
+        )
+
+    return matches
+
+
 def _flatten_requirement_values(requirements: tuple[EnemySpriteRequirement, ...], attribute: str) -> tuple[int, ...]:
     return tuple(
         value
@@ -549,6 +749,32 @@ def _group_matches_room_requirement(group: DungeonSpriteGroup, room: DungeonEnem
         and (not room.required_subgroup_2 or group.subgroup_2 in room.required_subgroup_2)
         and (not room.required_subgroup_3 or group.subgroup_3 in room.required_subgroup_3)
     )
+
+
+def get_overworld_do_not_update_requirements(
+    state: EnemyShuffleState,
+    area: OverworldEnemyArea,
+) -> tuple[EnemySpriteRequirement, ...]:
+    area_sprite_ids = {sprite.sprite_id for sprite in area.sprites}
+    return tuple(
+        requirement for requirement in state.sprite_requirements
+        if requirement.do_not_randomize and requirement.sprite_id in area_sprite_ids
+    )
+
+
+def get_possible_overworld_sprite_groups(
+    state: EnemyShuffleState,
+    area: OverworldEnemyArea,
+) -> tuple[DungeonSpriteGroup, ...]:
+    usable_groups = tuple(group for group in state.sprite_groups.values() if 0 < group.group_id < 0x40)
+    do_not_update = get_overworld_do_not_update_requirements(state, area)
+    if not do_not_update:
+        return usable_groups
+
+    do_not_update_matcher = _build_overworld_requirement_group_matcher(do_not_update)
+    return tuple(group for group in usable_groups if do_not_update_matcher(group))
+
+
 def _get_possible_enemy_requirements_for_group(
     state: EnemyShuffleState,
     room: DungeonEnemyRoom,
@@ -579,6 +805,34 @@ def _get_randomizable_sprites_in_room(
     return tuple(sprite for sprite in room.sprites if sprite.sprite_id in randomizable_sprite_ids)
 
 
+def _get_possible_enemy_requirements_for_overworld_group(
+    state: EnemyShuffleState,
+    group: DungeonSpriteGroup,
+) -> tuple[EnemySpriteRequirement, ...]:
+    overworld_requirements = _get_requirements_for_usable_overworld_enemies(state)
+    return tuple(
+        requirement for requirement in overworld_requirements
+        if (
+            not requirement.group_ids or group.group_id in requirement.group_ids
+        )
+        and (not requirement.subgroup_0 or group.subgroup_0 in requirement.subgroup_0)
+        and (not requirement.subgroup_1 or group.subgroup_1 in requirement.subgroup_1)
+        and (not requirement.subgroup_2 or group.subgroup_2 in requirement.subgroup_2)
+        and (not requirement.subgroup_3 or group.subgroup_3 in requirement.subgroup_3)
+    )
+
+
+def _get_randomizable_sprites_in_overworld_area(
+    state: EnemyShuffleState,
+    area: OverworldEnemyArea,
+) -> tuple[OverworldEnemySprite, ...]:
+    randomizable_sprite_ids = {
+        requirement.sprite_id for requirement in state.sprite_requirements
+        if not requirement.do_not_randomize
+    }
+    return tuple(sprite for sprite in area.sprites if sprite.sprite_id in randomizable_sprite_ids)
+
+
 def _randomize_dungeon_rooms(
     world: "ALTTPWorld",
     dungeon_rooms: dict[int, DungeonEnemyRoom],
@@ -587,17 +841,21 @@ def _randomize_dungeon_rooms(
 ) -> dict[int, RandomizedDungeonEnemyRoom]:
     state = EnemyShuffleState(
         dungeon_rooms=dungeon_rooms,
+        overworld_areas={},
         sprite_groups=sprite_groups,
         sprite_requirements=sprite_requirements,
         room_group_requirements=tuple(),
+        overworld_group_requirements=tuple(),
         shutter_room_ids=frozenset(room.room_id for room in dungeon_rooms.values() if room.is_shutter_room),
         water_room_ids=frozenset(room.room_id for room in dungeon_rooms.values() if room.is_water_room),
         dont_randomize_room_ids=frozenset(room.room_id for room in dungeon_rooms.values() if room.do_not_randomize),
         no_special_enemies_standard_room_ids=frozenset(
             room.room_id for room in dungeon_rooms.values() if room.no_special_enemies_standard
         ),
-        boss_room_ids=boss_room_ids,
+        boss_room_ids=frozenset(),
+        dont_randomize_overworld_area_ids=frozenset(),
         randomized_dungeon_rooms={},
+        randomized_overworld_areas={},
     )
     randomized_rooms: dict[int, RandomizedDungeonEnemyRoom] = {}
 
@@ -625,6 +883,68 @@ def _randomize_dungeon_rooms(
         )
 
     return randomized_rooms
+
+
+def _randomize_overworld_areas(
+    world: "ALTTPWorld",
+    overworld_areas: dict[int, OverworldEnemyArea],
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    sprite_requirements: tuple[EnemySpriteRequirement, ...],
+    forced_group_requirements: tuple[OverworldGroupRequirement, ...],
+) -> dict[int, RandomizedOverworldEnemyArea]:
+    state = EnemyShuffleState(
+        dungeon_rooms={},
+        overworld_areas=overworld_areas,
+        sprite_groups=sprite_groups,
+        sprite_requirements=sprite_requirements,
+        room_group_requirements=tuple(),
+        overworld_group_requirements=forced_group_requirements,
+        shutter_room_ids=frozenset(),
+        water_room_ids=frozenset(),
+        dont_randomize_room_ids=frozenset(),
+        no_special_enemies_standard_room_ids=frozenset(),
+        boss_room_ids=frozenset(),
+        dont_randomize_overworld_area_ids=frozenset(area.area_id for area in overworld_areas.values() if area.do_not_randomize),
+        randomized_dungeon_rooms={},
+        randomized_overworld_areas={},
+    )
+    randomized_areas: dict[int, RandomizedOverworldEnemyArea] = {}
+
+    for area_id in sorted(overworld_areas):
+        area = overworld_areas[area_id]
+        selected_group = sprite_groups.get(area.graphics_block_id)
+        if not area.do_not_randomize:
+            possible_groups = get_possible_overworld_sprite_groups(state, area)
+            if possible_groups:
+                selected_group = world.random.choice(possible_groups)
+
+        forced_group = _get_forced_overworld_group(area.area_id, forced_group_requirements, sprite_groups)
+        if forced_group is not None:
+            selected_group = forced_group
+        if selected_group is None:
+            selected_group = sprite_groups[area.graphics_block_id]
+
+        randomized_areas[area_id] = _randomize_overworld_area_sprites(
+            world,
+            state,
+            area,
+            selected_group,
+            area.do_not_randomize,
+        )
+
+    return randomized_areas
+
+
+def _get_forced_overworld_group(
+    area_id: int,
+    forced_group_requirements: tuple[OverworldGroupRequirement, ...],
+    sprite_groups: dict[int, DungeonSpriteGroup],
+) -> Optional[DungeonSpriteGroup]:
+    for requirement in forced_group_requirements:
+        if area_id not in requirement.areas or requirement.group_id is None:
+            continue
+        return sprite_groups.get(requirement.group_id)
+    return None
 
 
 def _randomize_room_sprites(
@@ -694,6 +1014,64 @@ def _randomize_room_sprites(
     return _build_randomized_room(room, selected_group, randomized_sprites, skip_randomization)
 
 
+def _randomize_overworld_area_sprites(
+    world: "ALTTPWorld",
+    state: EnemyShuffleState,
+    area: OverworldEnemyArea,
+    selected_group: DungeonSpriteGroup,
+    skip_randomization: bool,
+) -> RandomizedOverworldEnemyArea:
+    randomized_sprites = list(_clone_overworld_area_sprites(area))
+    bush_sprite_id = area.bush_sprite_id
+
+    if not skip_randomization:
+        possible_requirements = _get_possible_enemy_requirements_for_overworld_group(state, selected_group)
+        possible_sprite_ids = [requirement.sprite_id for requirement in possible_requirements]
+        sprites_to_update = _get_randomizable_sprites_in_overworld_area(state, area)
+
+        if possible_sprite_ids:
+            for sprite in sprites_to_update:
+                _set_randomized_overworld_sprite_id(
+                    randomized_sprites,
+                    sprite.address,
+                    world.random.choice(possible_sprite_ids),
+                )
+
+            flopping_fish_addresses = [
+                sprite.address for sprite in randomized_sprites if sprite.sprite_id == FLOPPING_FISH_SPRITE_ID
+            ]
+            if len(flopping_fish_addresses) > 1:
+                non_fish_sprite_ids = [
+                    sprite_id for sprite_id in possible_sprite_ids if sprite_id != FLOPPING_FISH_SPRITE_ID
+                ]
+                for address in flopping_fish_addresses[1:]:
+                    if non_fish_sprite_ids:
+                        _set_randomized_overworld_sprite_id(
+                            randomized_sprites,
+                            address,
+                            world.random.choice(non_fish_sprite_ids),
+                        )
+
+            bush_candidates = [
+                requirement.sprite_id for requirement in possible_requirements
+                if not requirement.overlord
+            ]
+            if bush_candidates:
+                bush_sprite_id = world.random.choice(bush_candidates)
+
+    return RandomizedOverworldEnemyArea(
+        area_id=area.area_id,
+        sprite_table_address=area.sprite_table_address,
+        graphics_block_address=area.graphics_block_address,
+        original_graphics_block_id=area.graphics_block_id,
+        graphics_block_id=selected_group.group_id,
+        original_bush_sprite_id=area.bush_sprite_id,
+        bush_sprite_id=bush_sprite_id,
+        sprites=tuple(randomized_sprites),
+        skipped_randomization=skip_randomization,
+    )
+
+
 def _clone_room_sprites(room: DungeonEnemyRoom) -> list[RandomizedDungeonEnemySprite]:
     return [
         RandomizedDungeonEnemySprite(
@@ -706,6 +1084,19 @@ def _clone_room_sprites(room: DungeonEnemyRoom) -> list[RandomizedDungeonEnemySp
             has_key=sprite.has_key,
         )
         for sprite in room.sprites
+    ]
+
+
+def _clone_overworld_area_sprites(area: OverworldEnemyArea) -> list[RandomizedOverworldEnemySprite]:
+    return [
+        RandomizedOverworldEnemySprite(
+            address=sprite.address,
+            y_coord=sprite.y_coord,
+            x_coord=sprite.x_coord,
+            original_sprite_id=sprite.sprite_id,
+            sprite_id=sprite.sprite_id,
+        )
+        for sprite in area.sprites
     ]
 
 
@@ -725,6 +1116,24 @@ def _set_randomized_sprite_id(
             sprite_id=sprite_id,
             is_overlord=sprite.is_overlord,
             has_key=sprite.has_key,
+        )
+        return
+
+
+def _set_randomized_overworld_sprite_id(
+    randomized_sprites: list[RandomizedOverworldEnemySprite],
+    address: int,
+    sprite_id: int,
+) -> None:
+    for index, sprite in enumerate(randomized_sprites):
+        if sprite.address != address:
+            continue
+        randomized_sprites[index] = RandomizedOverworldEnemySprite(
+            address=sprite.address,
+            y_coord=sprite.y_coord,
+            x_coord=sprite.x_coord,
+            original_sprite_id=sprite.original_sprite_id,
+            sprite_id=sprite_id,
         )
         return
 
