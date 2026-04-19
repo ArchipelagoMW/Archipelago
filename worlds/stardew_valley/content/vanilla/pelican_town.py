@@ -1,6 +1,7 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.building import Building
+from ...data.festival_data import all_festival_data
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, AllRegionsSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.hats_data import Hats
@@ -742,5 +743,18 @@ pelican_town = ContentPack(
 
         Hats.squid_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.festival.can_squidfest_iridium_reward()),),
 
-    }
+    },
+    festivals=(
+        all_festival_data[LogicRegion.egg_festival],
+        all_festival_data[LogicRegion.flower_dance],
+        all_festival_data[LogicRegion.luau],
+        all_festival_data[LogicRegion.moonlight_jellies],
+        all_festival_data[LogicRegion.fair],
+        all_festival_data[LogicRegion.spirit_eve],
+        all_festival_data[LogicRegion.festival_of_ice],
+        all_festival_data[LogicRegion.winter_star],
+        all_festival_data[LogicRegion.night_market],
+        all_festival_data[LogicRegion.trout_derby],
+        all_festival_data[LogicRegion.squidfest],
+    ),
 )

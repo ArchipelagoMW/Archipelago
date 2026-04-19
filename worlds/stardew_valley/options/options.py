@@ -988,6 +988,7 @@ class DataRandomization(OptionSet):
         DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method, DataRandomizationOptionName.fish_sell_price,
         DataRandomizationOptionName.crop_sell_price, DataRandomizationOptionName.growth_time, DataRandomizationOptionName.growth_season,
         DataRandomizationOptionName.crop_which_seed,
+        DataRandomizationOptionName.festival_season, DataRandomizationOptionName.festival_date
     })
     preset_none = frozenset()
     preset_all = valid_keys

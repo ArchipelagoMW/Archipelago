@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from typing import List, Dict, Set
 
 from BaseClasses import MultiWorld, CollectionState
+from worlds.generic.Rules import add_rule as _add_rule
 from worlds.generic.Rules import set_rule as _set_rule
-from worlds.stardew_valley.data import building
 from . import locations
 from .bundles.bundle_room import BundleRoom
 from .content import StardewContent
@@ -89,6 +89,20 @@ class StardewRuleCollector:
                                                                 self.multiworld.get_entrance(entrance_name, self.player))
 
             _set_rule(self.multiworld.get_entrance(entrance_name, self.player), rule)
+        except KeyError as ex:
+            logger.error(f"""Failed to evaluate indirect connection in: {explain(rule, CollectionState(self.multiworld))}""")
+            raise ex
+
+    def add_entrance_rule(self, entrance_name: str, rule: StardewRule) -> None:
+        try:
+            potentially_required_regions = look_for_indirect_connection(rule)
+            if potentially_required_regions:
+                for region in potentially_required_regions:
+                    logger.debug(f"Registering indirect condition for {region} -> {entrance_name}")
+                    self.multiworld.register_indirect_condition(self.multiworld.get_region(region, self.player),
+                                                                self.multiworld.get_entrance(entrance_name, self.player))
+
+            _add_rule(self.multiworld.get_entrance(entrance_name, self.player), rule)
         except KeyError as ex:
             logger.error(f"""Failed to evaluate indirect connection in: {explain(rule, CollectionState(self.multiworld))}""")
             raise ex
@@ -301,7 +315,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_casino, logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, rule_collector, content)
-    set_festival_entrance_rules(logic, rule_collector)
+    set_festival_entrance_rules(logic, rule_collector, content)
 
     # I can't remember why this was here, but clearly we do not need kitchen rules for island cooking....
     # rule_collector.set_island_entrance_rule(LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen)
@@ -551,23 +565,14 @@ def set_blacksmith_upgrade_rule(logic, rule_collector: StardewRuleCollector, ent
     rule_collector.set_entrance_rule(entrance_name, upgrade_rule)
 
 
-def set_festival_entrance_rules(logic, rule_collector: StardewRuleCollector):
-    rule_collector.set_entrance_rule(LogicEntrance.attend_egg_festival, logic.season.has(Season.spring))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_desert_festival, logic.season.has(Season.spring) & logic.received(Transportation.bus_repair))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_flower_dance, logic.season.has(Season.spring))
+def set_festival_entrance_rules(logic, rule_collector: StardewRuleCollector, content: StardewContent):
+    for festival_name in content.festivals.keys():
+        festival_data = content.festivals[festival_name]
+        rule_collector.set_entrance_rule(festival_data.entrance, logic.season.has(festival_data.season))
 
-    rule_collector.set_entrance_rule(LogicEntrance.attend_luau, logic.season.has(Season.summer))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_trout_derby,
-                                     logic.season.has(Season.summer) & logic.fishing.can_use_specific_bait(Fish.rainbow_trout))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_moonlight_jellies, logic.season.has(Season.summer))
-
-    rule_collector.set_entrance_rule(LogicEntrance.attend_fair, logic.season.has(Season.fall))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_spirit_eve, logic.season.has(Season.fall))
-
-    rule_collector.set_entrance_rule(LogicEntrance.attend_festival_of_ice, logic.season.has(Season.winter))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_squidfest, logic.season.has(Season.winter) & logic.fishing.can_use_specific_bait(Fish.squid))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_night_market, logic.season.has(Season.winter))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_winter_star, logic.season.has(Season.winter))
+    rule_collector.add_entrance_rule(LogicEntrance.attend_desert_festival, logic.received(Transportation.bus_repair))
+    rule_collector.add_entrance_rule(LogicEntrance.attend_trout_derby, logic.fishing.can_use_specific_bait(Fish.rainbow_trout))
+    rule_collector.add_entrance_rule(LogicEntrance.attend_squidfest, logic.fishing.can_use_specific_bait(Fish.squid))
 
 
 def set_ginger_island_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):

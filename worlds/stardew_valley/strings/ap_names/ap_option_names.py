@@ -132,6 +132,8 @@ class DataRandomizationOptionName:
     # villager_birthday = "Villager Birthdays"
     # villager_gift_preference = "Villager Gift Preferences"
     # universal_gift_preference = "Universal Gift Preferences"
+    festival_season = "Festival Season"
+    festival_date = "Festival Date"
     # opening_hours = "Opening Hours"
     # story_quest_villager = "Story Quest Villagers"
     # story_quest_item = "Story Quest Items"

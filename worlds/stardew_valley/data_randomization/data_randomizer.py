@@ -26,18 +26,33 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
     if len(data_to_randomize) <= 0:
         return content
 
+    randomize_fish_data(behavior, content, data_to_randomize, random)
+    randomize_crops_data(behavior, content, data_to_randomize, random)
+    randomize_festivals_data(behavior, content, data_to_randomize, random)
+
+    return content
+
+
+def randomize_fish_data(behavior, content, data_to_randomize, random):
     randomize_fish_catch_method(content, data_to_randomize, behavior, random)
     randomize_fish_difficulty(content, data_to_randomize, behavior, random)
     randomize_fish_location(content, data_to_randomize, behavior, random)
     randomize_fish_season(content, data_to_randomize, behavior, random)
     randomize_fish_weather(content, data_to_randomize, behavior, random)
     randomize_fish_sell_prices(content, data_to_randomize, behavior, random)
+
+
+def randomize_crops_data(behavior, content, data_to_randomize, random):
     randomize_crop_sell_prices(content, data_to_randomize, behavior, random)
     randomize_crop_growth_times(content, data_to_randomize, behavior, random)
     randomize_crop_growth_seasons(content, data_to_randomize, behavior, random)
     randomize_crop_which_seed(content, data_to_randomize, behavior, random)
 
-    return content
+
+def randomize_festivals_data(behavior, content, data_to_randomize, random):
+    randomize_festival_seasons(content, data_to_randomize, behavior, random)
+    randomize_festival_dates(content, data_to_randomize, behavior, random)
+    sanitize_festival_dates(content, data_to_randomize, behavior, random)
 
 
 def fish_is_included(data_to_randomize: set[str], fish_data: FishItem) -> bool:
@@ -242,3 +257,52 @@ def randomize_crop_which_seed(content: StardewContent, data_to_randomize: set[st
         new_sources = [source for source in new_sources if source not in harvest_sources]
         new_sources.extend(modified_harvest_sources)
         content.game_items[item_name] = override(item, sources=new_sources)
+
+
+def randomize_festival_seasons(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.festival_season not in data_to_randomize:
+        return
+
+    seasons_by_festival = {festival_name: festival_data.season for festival_name, festival_data in content.festivals.items()}
+    randomized_seasons_per_festival = randomizers_per_behavior[behavior](seasons_by_festival, random)
+
+    for festival_name, festival_season in randomized_seasons_per_festival.items():
+        original_festival = content.festivals[festival_name]
+        content.festivals[festival_name] = override(original_festival, season=festival_season)
+
+
+def randomize_festival_dates(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.festival_date not in data_to_randomize:
+        return
+
+    day_by_festival = {festival_name: festival_data.day for festival_name, festival_data in content.festivals.items()}
+    randomized_days_per_festival = randomizers_per_behavior[behavior](day_by_festival, random, 1, 28)
+
+    for festival_name, festival_day in randomized_days_per_festival.items():
+        original_festival = content.festivals[festival_name]
+        content.festivals[festival_name] = override(original_festival, day=festival_day)
+
+
+def sanitize_festival_dates(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    festival_names = list(content.festivals.keys())
+    all_valid = False
+    while not all_valid:
+        all_valid = True
+        taken_days = set()
+        random.shuffle(festival_names)
+        for festival_name in festival_names:
+            festival_data = content.festivals[festival_name]
+            for i in range(0, festival_data.duration):
+                day = festival_data.day+i
+                if day < 1 or day > 28:
+                    all_valid = False
+                    break
+                day_key = f"{festival_data.season}{day}"
+                if day_key in taken_days:
+                    all_valid = False
+                    break
+                taken_days.add(day_key)
+            if not all_valid:
+                new_day = random.randint(1, 29)
+                content.festivals[festival_name] = override(festival_data, day=new_day)
+                break

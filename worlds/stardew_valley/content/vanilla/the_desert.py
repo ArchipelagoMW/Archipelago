@@ -1,6 +1,7 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
+from ...data.festival_data import all_festival_data
 from ...data.game_item import CustomRuleSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
@@ -85,5 +86,8 @@ the_desert = ContentPack(
         Hats.white_turban: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.skull_cavern_100,))),
         Hats.knights_helmet: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.pepper_rex,), amount_tier=MAX_MONTHS,
                                                                    other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
-    }
+    },
+    festivals=(
+        all_festival_data[LogicRegion.desert_festival],
+    ),
 )

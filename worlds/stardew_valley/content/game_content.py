@@ -10,6 +10,7 @@ from .feature import BooksanityFeature, BuildingProgressionFeature, CropsanityFe
 from .feature.base import DisableSourceHook, DisableRequirementHook, FeatureBase
 from ..data.animal import Animal
 from ..data.building import Building
+from ..data.festival_data import FestivalData
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag, Requirement
 from ..data.hats_data import HatItem
@@ -32,6 +33,7 @@ class StardewContent:
     skills: dict[str, Skill] = field(default_factory=dict)
     quests: dict[str, Any] = field(default_factory=dict)
     hats: dict[str, HatItem] = field(default_factory=dict)
+    festivals: dict[str, FestivalData] = field(default_factory=dict)
 
     def find_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
         for item in self.game_items.values():
@@ -201,6 +203,11 @@ class ContentPack:
     hat_sources: Mapping[HatItem, Iterable[Source]] = field(default_factory=dict)
 
     def hat_source_hook(self, content: StardewContent):
+        ...
+
+    festivals: Iterable[FestivalData] = ()
+
+    def festival_source_hook(self, content: StardewContent):
         ...
 
     def finalize_hook(self, content: StardewContent):

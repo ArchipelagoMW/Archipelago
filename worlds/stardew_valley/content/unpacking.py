@@ -86,6 +86,10 @@ def register_pack(content: StardewContent, pack: ContentPack):
             content.hats[hat.name] = hat
     pack.hat_source_hook(content)
 
+    for festival in pack.festivals:
+        content.festivals[festival.name] = festival
+    pack.festival_source_hook(content)
+
     # register_quests
 
     # ...

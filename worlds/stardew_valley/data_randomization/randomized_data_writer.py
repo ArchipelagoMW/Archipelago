@@ -35,6 +35,7 @@ def prepare_randomized_data(content: StardewContent, options: StardewValleyOptio
     prepared_data = dict()
     prepare_fish_data(content, data_to_randomize, prepared_data)
     prepare_crop_data(content, data_to_randomize, prepared_data)
+    prepare_festival_data(content, data_to_randomize, prepared_data)
 
     return prepared_data
 
@@ -55,6 +56,12 @@ def prepare_crop_data(content: StardewContent, data_to_randomize: set[str], prep
     prepare_crop_growth_time_data(content, data_to_randomize, prepared_data)
     prepare_crop_growth_season_data(content, data_to_randomize, prepared_data)
     prepare_crop_which_seed_data(content, data_to_randomize, prepared_data)
+
+
+def prepare_festival_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
+    prepared_data["Festivals"] = dict()
+    prepare_festival_season_data(content, data_to_randomize, prepared_data)
+    prepare_festival_days_data(content, data_to_randomize, prepared_data)
 
 
 def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -166,3 +173,31 @@ def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str
         if isinstance(extracted_data, list) and len(extracted_data) == 1:
             extracted_data = extracted_data[0]
         prepared_data["Crops"][crop_name][aspect_key] = extracted_data
+
+
+def prepare_festival_season_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_festival_data_aspect(content, data_to_randomize, prepared_data,
+                                 DataRandomizationOptionName.festival_season,
+                                 lambda festival: True,
+                                 lambda festival: festival.season,
+                                 "Season")
+
+
+def prepare_festival_days_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_festival_data_aspect(content, data_to_randomize, prepared_data,
+                                 DataRandomizationOptionName.festival_season,
+                                 lambda festival: True,
+                                 lambda festival: ",".join([str(x) for x in range(festival.day, festival.day+festival.duration)]),
+                                 "Day")
+
+
+def prepare_festival_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
+                                 randomize_toggle: str, festival_validator, festival_data_extractor, aspect_key: str):
+    if randomize_toggle not in data_to_randomize:
+        return
+    for festival_name, festival_data in content.festivals.items():
+        if not festival_validator(festival_data):
+            continue
+        if festival_name not in prepared_data["Festivals"]:
+            prepared_data["Festivals"][festival_name] = dict()
+        prepared_data["Festivals"][festival_name][aspect_key] = festival_data_extractor(festival_data)

@@ -1,12 +1,12 @@
 import math
 from numbers import Number
 from random import Random
-from typing import Any, Hashable, Iterable
+from typing import Any, Iterable
 
 from ..options.options import DataRandomizationBehavior
 
 
-def shuffle_data(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
+def shuffle_data(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
     values = sorted([val for val in existing_values.values()])
 
@@ -19,7 +19,7 @@ def shuffle_data(existing_values: dict[Any, Any], random: Random) -> dict[Any, A
     return new_values
 
 
-def weight_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
+def weight_randomize(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
     values = sorted([val for val in existing_values.values()])
 
@@ -30,7 +30,7 @@ def weight_randomize(existing_values: dict[Any, Any], random: Random) -> dict[An
     return new_values
 
 
-def normal_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
+def normal_randomize(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     if len(existing_values) < 2 or all(isinstance(val, bool) for val in existing_values.values()):
         return randomize(existing_values, random)
     if any(not isinstance(val, Number) for val in existing_values.values()):
@@ -39,8 +39,8 @@ def normal_randomize(existing_values: dict[Any, Any], random: Random) -> dict[An
     keys = sorted([key for key in existing_values.keys()])
     values = sorted([val for val in existing_values.values()])
 
-    min_value = min(values)
-    max_value = max(values)
+    min_value = min(values) if len(args) < 1 else args[0]
+    max_value = max(values) if len(args) < 2 else args[1]
 
     all_integer = all(isinstance(val, int) for val in values)
 
@@ -74,10 +74,7 @@ def normal_sample(random: Random, mean: float = 0.0, standard_deviation: float =
     return mean + z0 * standard_deviation
 
 
-def randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
-    if any(not isinstance(val, Hashable) for val in existing_values.values()):
-        return randomize(existing_values, random)
-
+def randomize(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
     values = sorted({val for val in existing_values.values()})
 
@@ -88,17 +85,17 @@ def randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]
     return new_values
 
 
-def range_randomize(existing_values: dict[Any, Any], random: Random) -> dict[Any, Any]:
+def range_randomize(existing_values: dict[Any, Any], random: Random, *args, **kwargs) -> dict[Any, Any]:
     if len(existing_values) < 2 or all(isinstance(val, bool) for val in existing_values.values()):
-        return randomize(existing_values, random)
+        return randomize(existing_values, random, *args, **kwargs)
     if all(isinstance(val, Number) for val in existing_values.values()):
-        return range_randomize_numeric(existing_values, random)
-    if all(isinstance(val, Iterable) for val in existing_values.values()):
-        return range_randomize_iterable(existing_values, random)
-    return randomize(existing_values, random)
+        return range_randomize_numeric(existing_values, random, *args, **kwargs)
+    if all(isinstance(val, Iterable) and not isinstance(val, str) for val in existing_values.values()):
+        return range_randomize_iterable(existing_values, random, *args, **kwargs)
+    return randomize(existing_values, random, *args, **kwargs)
 
 
-def range_randomize_numeric(existing_values: dict[Any, Number], random: Random) -> dict[Any, Any]:
+def range_randomize_numeric(existing_values: dict[Any, Number], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
     values = sorted({val for val in existing_values.values()})
 
@@ -112,13 +109,13 @@ def range_randomize_numeric(existing_values: dict[Any, Number], random: Random) 
         round_digits += 1
     round_digits -= 1
 
-    range_start = values[0]
-    range_end = values[-1]
+    range_start = values[0] if len(args) < 1 else args[0]
+    range_end = values[-1] if len(args) < 2 else args[1]
 
     new_values = dict()
     for i in range(len(keys)):
         # if max_decimals == 0:
-        random_value = random.randrange(range_start, range_end)
+        random_value = random.randrange(range_start, range_end+1)
         random_value = round(random_value, -round_digits)
         # else:
         #     random_value = random.random()
@@ -128,7 +125,7 @@ def range_randomize_numeric(existing_values: dict[Any, Number], random: Random) 
     return new_values
 
 
-def range_randomize_iterable(existing_values: dict[Any, Iterable], random: Random) -> dict[Any, Any]:
+def range_randomize_iterable(existing_values: dict[Any, Iterable], random: Random, *args, **kwargs) -> dict[Any, Any]:
     keys = sorted([key for key in existing_values.keys()])
     values = sorted({val for val in existing_values.values()})
     value_for_type = values[0]
