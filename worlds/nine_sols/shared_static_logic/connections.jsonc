@@ -206,7 +206,10 @@
     {
         "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Shangui Arena",
         "requires": [{ "item": "Air Dash" }, { "item": "Cloud Leap" }],
-        "medium_requires": [{ "item": "Cloud Leap" }] // and swift runner
+        "medium_requires": [ { "anyOf": [
+            { "item": "Air Dash" }, // and T-dash
+            { "item": "Cloud Leap" } // and swift runner
+        ] } ]
     },
     {
         "from": "AF (Depths) - Root Node", "to": "AF (Depths) - Crystal Caves",
