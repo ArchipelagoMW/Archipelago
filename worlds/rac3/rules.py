@@ -118,7 +118,8 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
                                          RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3TBOLT.FLORANA_PATH_OF_DEATH:
-            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player)
+                          or state.has_all([RAC3ITEM.CHARGE_BOOTS, RAC3ITEM.THRUSTER_PACK], world.player),
         RAC3SKILLPOINT.FLORANA_PATH:
             lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
                                          RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
@@ -337,12 +338,14 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_PYRO_PLAYGROUND, world.player),
         RAC3LOCATION.NATION_BBQ_BOULEVARD:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, world.player)
-                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
-                                             RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK,
+                                             RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3LOCATION.NATION_MAZE_OF_BLAZE:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, world.player),
         RAC3TBOLT.NATION_PLATFORM:
-            lambda state: state.can_reach_location(RAC3LOCATION.NATION_MAZE_OF_BLAZE, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.NATION_MAZE_OF_BLAZE, world.player)
+                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK,
+                                             RAC3ITEM.PROGRESSIVE_PACK], world.player),
         RAC3LOCATION.NATION_CREMATION_STATION:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_MAZE_OF_BLAZE, world.player),
         RAC3LOCATION.NATION_THE_ANNIHILATOR:
