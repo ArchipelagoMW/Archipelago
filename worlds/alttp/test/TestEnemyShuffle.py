@@ -19,7 +19,9 @@ from worlds.alttp.EnemyShuffle import (
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
     _get_randomizable_sprites_in_room,
+    _randomize_overworld_groups,
     _randomize_room_sprites,
+    _setup_required_overworld_groups,
     can_spawn_in_room,
     validate_enemy_shuffle_state,
 )
@@ -387,6 +389,32 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         possible_groups = get_possible_dungeon_sprite_groups(state, room)
 
         self.assertEqual([group.group_id for group in possible_groups], [0x41])
+
+    def test_overworld_group_randomization_preserves_forced_subgroups(self) -> None:
+        sprite_groups = {
+            7: DungeonSpriteGroup(group_id=7, dungeon_group_id=-57, subgroup_0=1, subgroup_1=2, subgroup_2=3, subgroup_3=4),
+        }
+
+        _setup_required_overworld_groups(
+            sprite_groups,
+            (
+                SimpleNamespace(
+                    group_id=7,
+                    subgroup_0=None,
+                    subgroup_1=None,
+                    subgroup_2=None,
+                    subgroup_3=17,
+                    areas=(0x02,),
+                ),
+            ),
+        )
+        _randomize_overworld_groups(SimpleNamespace(random=random.Random(0)), sprite_groups)
+
+        group = sprite_groups[7]
+        self.assertEqual(group.subgroup_3, 17)
+        self.assertIn(group.subgroup_0, {22, 31, 47, 14})
+        self.assertIn(group.subgroup_1, {44, 30, 32})
+        self.assertIn(group.subgroup_2, {12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 42})
 
     @staticmethod
     def _requirement(

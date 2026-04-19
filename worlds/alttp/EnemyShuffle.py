@@ -34,6 +34,11 @@ FLOPPING_FISH_SPRITE_ID = 0xD2
 OW_FALLING_ROCKS_SPRITE_ID = 0xF4
 OW_WALLMASTER_TO_HOULIHAN_SPRITE_ID = 0xFB
 WATER_TEKTITE_SPRITE_ID = 0x81
+POTENTIAL_SUBGROUP_0 = (22, 31, 47, 14)
+POTENTIAL_SUBGROUP_1 = (44, 30, 32)
+POTENTIAL_SUBGROUP_2 = (12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 42)
+POTENTIAL_SUBGROUP_3 = (17, 16, 27, 20, 82, 83)
+GUARD_SUBGROUP_1_DUNGEON_GROUP_IDS = frozenset((1, 2, 3, 4))
 
 @dataclass(frozen=True)
 class RoomGroupRequirement:
@@ -55,7 +60,7 @@ class OverworldGroupRequirement:
     areas: tuple[int, ...]
 
 
-@dataclass(frozen=True)
+@dataclass
 class DungeonSpriteGroup:
     group_id: int
     dungeon_group_id: int
@@ -63,6 +68,10 @@ class DungeonSpriteGroup:
     subgroup_1: int
     subgroup_2: int
     subgroup_3: int
+    preserve_subgroup_0: bool = False
+    preserve_subgroup_1: bool = False
+    preserve_subgroup_2: bool = False
+    preserve_subgroup_3: bool = False
 
 
 @dataclass(frozen=True)
@@ -243,6 +252,23 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
         group.group_id: group
         for group in _read_sprite_groups(rom_bytes)
     }
+    _setup_required_dungeon_groups(world, sprite_groups, metadata["room_requirements"])
+    _randomize_dungeon_groups(world, sprite_groups)
+    randomized_dungeon_rooms = _randomize_dungeon_rooms(
+        world,
+        dungeon_rooms,
+        sprite_groups,
+        sprite_requirements,
+    )
+    _setup_required_overworld_groups(sprite_groups, overworld_metadata["forced_group_requirements"])
+    _randomize_overworld_groups(world, sprite_groups)
+    randomized_overworld_areas = _randomize_overworld_areas(
+        world,
+        overworld_areas,
+        sprite_groups,
+        sprite_requirements,
+        overworld_metadata["forced_group_requirements"],
+    )
     state = EnemyShuffleState(
         dungeon_rooms=dungeon_rooms,
         overworld_areas=overworld_areas,
@@ -256,19 +282,8 @@ def generate_enemy_shuffle_state(world: "ALTTPWorld") -> EnemyShuffleState:
         no_special_enemies_standard_room_ids=metadata["no_special_enemies_standard_room_ids"],
         boss_room_ids=metadata["boss_room_ids"],
         dont_randomize_overworld_area_ids=overworld_metadata["do_not_randomize_area_ids"],
-        randomized_dungeon_rooms=_randomize_dungeon_rooms(
-            world,
-            dungeon_rooms,
-            sprite_groups,
-            sprite_requirements,
-        ),
-        randomized_overworld_areas=_randomize_overworld_areas(
-            world,
-            overworld_areas,
-            sprite_groups,
-            sprite_requirements,
-            overworld_metadata["forced_group_requirements"],
-        ),
+        randomized_dungeon_rooms=randomized_dungeon_rooms,
+        randomized_overworld_areas=randomized_overworld_areas,
     )
     validate_enemy_shuffle_state(state, is_standard_mode=world.options.mode == "standard")
     return state
@@ -343,6 +358,156 @@ def _read_sprite_groups(rom_bytes: bytes) -> tuple[DungeonSpriteGroup, ...]:
             )
         )
     return tuple(groups)
+
+
+def _setup_required_dungeon_groups(
+    world: "ALTTPWorld",
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    room_requirements: tuple[RoomGroupRequirement, ...],
+) -> None:
+    for requirement in room_requirements:
+        if requirement.group_id is None:
+            continue
+        group = sprite_groups.get(requirement.group_id + 0x40)
+        if group is None:
+            continue
+        _apply_required_subgroups(group, requirement)
+
+    merged_room_requirements = {
+        room_id: _merge_room_requirements(room_id, room_requirements)
+        for requirement in room_requirements
+        for room_id in requirement.rooms
+    }
+
+    for merged_requirement in merged_room_requirements.values():
+        if merged_requirement.group_id is not None:
+            continue
+        if _has_preserved_group_for_room_requirement(sprite_groups, merged_requirement):
+            continue
+
+        possible_groups = [
+            group for group in sprite_groups.values()
+            if 0 < group.dungeon_group_id < 60
+            and (
+                not group.preserve_subgroup_0
+                or not group.preserve_subgroup_1
+                or not group.preserve_subgroup_2
+                or not group.preserve_subgroup_3
+            )
+            and (not merged_requirement.subgroup_0 or not group.preserve_subgroup_0)
+            and (not merged_requirement.subgroup_1 or not group.preserve_subgroup_1)
+            and (not merged_requirement.subgroup_2 or not group.preserve_subgroup_2)
+            and (not merged_requirement.subgroup_3 or not group.preserve_subgroup_3)
+        ]
+        if not possible_groups:
+            continue
+
+        selected_group = world.random.choice(possible_groups)
+        _apply_merged_room_requirement(selected_group, merged_requirement)
+
+
+def _setup_required_overworld_groups(
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    overworld_group_requirements: tuple[OverworldGroupRequirement, ...],
+) -> None:
+    for requirement in overworld_group_requirements:
+        if requirement.group_id is None:
+            continue
+        group = sprite_groups.get(requirement.group_id)
+        if group is None:
+            continue
+        if (
+            requirement.subgroup_0 is None
+            and requirement.subgroup_1 is None
+            and requirement.subgroup_2 is None
+            and requirement.subgroup_3 is None
+        ):
+            group.preserve_subgroup_0 = True
+            group.preserve_subgroup_1 = True
+            group.preserve_subgroup_2 = True
+            group.preserve_subgroup_3 = True
+            continue
+        _apply_required_subgroups(group, requirement)
+
+
+def _apply_required_subgroups(group: DungeonSpriteGroup, requirement: RoomGroupRequirement | OverworldGroupRequirement) -> None:
+    if requirement.subgroup_0 is not None:
+        group.subgroup_0 = requirement.subgroup_0
+        group.preserve_subgroup_0 = True
+    if requirement.subgroup_1 is not None:
+        group.subgroup_1 = requirement.subgroup_1
+        group.preserve_subgroup_1 = True
+    if requirement.subgroup_2 is not None:
+        group.subgroup_2 = requirement.subgroup_2
+        group.preserve_subgroup_2 = True
+    if requirement.subgroup_3 is not None:
+        group.subgroup_3 = requirement.subgroup_3
+        group.preserve_subgroup_3 = True
+
+
+def _apply_merged_room_requirement(group: DungeonSpriteGroup, requirement: MergedRoomRequirement) -> None:
+    if requirement.subgroup_0:
+        group.subgroup_0 = requirement.subgroup_0[0]
+        group.preserve_subgroup_0 = True
+    if requirement.subgroup_1:
+        group.subgroup_1 = requirement.subgroup_1[0]
+        group.preserve_subgroup_1 = True
+    if requirement.subgroup_2:
+        group.subgroup_2 = requirement.subgroup_2[0]
+        group.preserve_subgroup_2 = True
+    if requirement.subgroup_3:
+        group.subgroup_3 = requirement.subgroup_3[0]
+        group.preserve_subgroup_3 = True
+
+
+def _has_preserved_group_for_room_requirement(
+    sprite_groups: dict[int, DungeonSpriteGroup],
+    requirement: MergedRoomRequirement,
+) -> bool:
+    for group in sprite_groups.values():
+        if not (0 < group.dungeon_group_id < 60):
+            continue
+        if requirement.subgroup_0 and (group.subgroup_0 != requirement.subgroup_0[0] or not group.preserve_subgroup_0):
+            continue
+        if requirement.subgroup_1 and (group.subgroup_1 != requirement.subgroup_1[0] or not group.preserve_subgroup_1):
+            continue
+        if requirement.subgroup_2 and (group.subgroup_2 != requirement.subgroup_2[0] or not group.preserve_subgroup_2):
+            continue
+        if requirement.subgroup_3 and (group.subgroup_3 != requirement.subgroup_3[0] or not group.preserve_subgroup_3):
+            continue
+        return True
+    return False
+
+
+def _randomize_dungeon_groups(world: "ALTTPWorld", sprite_groups: dict[int, DungeonSpriteGroup]) -> None:
+    for group in sprite_groups.values():
+        if not (0 < group.dungeon_group_id < 60):
+            continue
+        if not group.preserve_subgroup_1 and group.dungeon_group_id in GUARD_SUBGROUP_1_DUNGEON_GROUP_IDS:
+            group.preserve_subgroup_1 = True
+            group.subgroup_1 = world.random.choice((73, 13))
+        if not group.preserve_subgroup_0:
+            group.subgroup_0 = world.random.choice(POTENTIAL_SUBGROUP_0)
+        if not group.preserve_subgroup_1:
+            group.subgroup_1 = world.random.choice(POTENTIAL_SUBGROUP_1)
+        if not group.preserve_subgroup_2:
+            group.subgroup_2 = world.random.choice(POTENTIAL_SUBGROUP_2)
+        if not group.preserve_subgroup_3:
+            group.subgroup_3 = world.random.choice(POTENTIAL_SUBGROUP_3)
+
+
+def _randomize_overworld_groups(world: "ALTTPWorld", sprite_groups: dict[int, DungeonSpriteGroup]) -> None:
+    for group in sprite_groups.values():
+        if not (0 < group.group_id < 0x40):
+            continue
+        if not group.preserve_subgroup_0:
+            group.subgroup_0 = world.random.choice(POTENTIAL_SUBGROUP_0)
+        if not group.preserve_subgroup_1:
+            group.subgroup_1 = world.random.choice(POTENTIAL_SUBGROUP_1)
+        if not group.preserve_subgroup_2:
+            group.subgroup_2 = world.random.choice(POTENTIAL_SUBGROUP_2)
+        if not group.preserve_subgroup_3:
+            group.subgroup_3 = world.random.choice(POTENTIAL_SUBGROUP_3)
 
 
 def _read_room_header_address(rom_bytes: bytes, room_id: int, room_header_bank: int) -> int:
@@ -1354,6 +1519,9 @@ def _validate_overworld_area(
 
 
 def apply_enemy_shuffle(rom: "LocalRom", state: EnemyShuffleState) -> None:
+    for group in state.sprite_groups.values():
+        _write_sprite_group(rom, group)
+
     for room in state.randomized_dungeon_rooms.values():
         rom.write_byte(room.room_header_address + 3, room.graphics_block_id)
         for sprite in room.sprites:
@@ -1368,6 +1536,14 @@ def apply_enemy_shuffle(rom: "LocalRom", state: EnemyShuffleState) -> None:
     bush_spawn_table_address = _get_enemizer_symbol("sprite_bush_spawn_table_overworld")
     for area in state.randomized_overworld_areas.values():
         rom.write_byte(bush_spawn_table_address + area.area_id, area.bush_sprite_id)
+
+
+def _write_sprite_group(rom: "LocalRom", group: DungeonSpriteGroup) -> None:
+    address = SPRITE_GROUP_BASE_ADDRESS + (group.group_id * 4)
+    rom.write_byte(address, group.subgroup_0)
+    rom.write_byte(address + 1, group.subgroup_1)
+    rom.write_byte(address + 2, group.subgroup_2)
+    rom.write_byte(address + 3, group.subgroup_3)
 
 
 def _write_dungeon_sprite(rom: "LocalRom", sprite: RandomizedDungeonEnemySprite) -> None:
