@@ -11,6 +11,7 @@ from .Client import ALTTPSNIClient
 from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
+from .EnemyShuffle import generate_enemy_shuffle_state
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import ALTTPOptions, small_key_shuffle
@@ -307,6 +308,7 @@ class ALTTPWorld(World):
         self.required_medallions = ["Ether", "Quake"]
         self.escape_assist = []
         self.shops = []
+        self.enemy_shuffle_state = None
         self.pot_shuffle_state = None
         self.logical_heart_containers = 10
         self.logical_heart_pieces = 24
@@ -341,6 +343,9 @@ class ALTTPWorld(World):
             bottle_options.append("Bottle (Fairy)")
         self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
         self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
+
+        if self.options.enemy_shuffle:
+            self.enemy_shuffle_state = generate_enemy_shuffle_state()
 
         if self.options.pot_shuffle:
             self.pot_shuffle_state = generate_pot_shuffle(self)
