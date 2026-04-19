@@ -1,4 +1,6 @@
 import unittest
+from types import SimpleNamespace
+import random
 
 from worlds.alttp.EnemyShuffle import (
     DungeonEnemyRoom,
@@ -14,6 +16,7 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedOverworldEnemySprite,
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
+    _randomize_room_sprites,
     validate_enemy_shuffle_state,
 )
 
@@ -148,6 +151,47 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             [0x10, 0x20],
         )
 
+    def test_key_enemy_replacements_exclude_moblins(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=1,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=1,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x12, is_overlord=False, has_key=True),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=False,
+        )
+        state = self._build_state(
+            dungeon_rooms={1: room},
+            sprite_requirements=(
+                self._requirement(0x12, killable=True, subgroup_0=(1,), cannot_have_key=True),
+                self._requirement(0x13, killable=True, subgroup_0=(1,)),
+            ),
+        )
+        selected_group = state.sprite_groups[0x41]
+
+        randomized_room = _randomize_room_sprites(
+            SimpleNamespace(random=random.Random(0)),
+            state,
+            room,
+            selected_group,
+            False,
+        )
+
+        self.assertEqual(randomized_room.sprites[0].sprite_id, 0x13)
+
     @staticmethod
     def _requirement(
         sprite_id: int,
@@ -158,6 +202,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         absorbable: bool = False,
         never_use_dungeon: bool = False,
         never_use_overworld: bool = False,
+        cannot_have_key: bool = False,
     ) -> EnemySpriteRequirement:
         return EnemySpriteRequirement(
             sprite_name=f"sprite_{sprite_id:02x}",
@@ -169,7 +214,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             npc=False,
             never_use_dungeon=never_use_dungeon,
             never_use_overworld=never_use_overworld,
-            cannot_have_key=False,
+            cannot_have_key=cannot_have_key,
             is_object=False,
             absorbable=absorbable,
             is_water_sprite=False,
