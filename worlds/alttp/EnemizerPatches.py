@@ -458,7 +458,7 @@ def _get_enemizer_symbol(symbol_name: str) -> int:
 
 
 def _load_enemizer_symbols() -> dict[str, int]:
-    raw_symbols = pkgutil.get_data(__package__, "data/enemizer/exported_symbols.txt")
+    raw_symbols = pkgutil.get_data(__package__, "enemizer_data/exported_symbols.txt")
     if raw_symbols is None:
         raise FileNotFoundError("Missing vendored Enemizer symbols required by ALTTP native boss patching")
 

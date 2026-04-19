@@ -113,7 +113,7 @@ def apply_pot_shuffle(rom: "LocalRom", shuffled_pots: dict[int, tuple[FilledPot,
 
 
 def _load_pot_room_data() -> tuple[PotRoomData, ...]:
-    raw_data = pkgutil.get_data(__package__, "data/enemizer/pot_shuffle.json")
+    raw_data = pkgutil.get_data(__package__, "enemizer_data/pot_shuffle.json")
     if raw_data is None:
         raise FileNotFoundError("Missing vendored Enemizer pot shuffle data required by ALTTP native integration")
 
