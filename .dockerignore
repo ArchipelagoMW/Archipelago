@@ -46,6 +46,7 @@ dist
 /prof/
 README.html
 .vs/
+EnemizerCLI/
 /Players/
 /SNI/
 /sni-*/
