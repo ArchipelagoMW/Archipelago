@@ -65,20 +65,31 @@ def generate_pot_shuffle(world: "ALTTPWorld") -> dict[int, tuple[FilledPot, ...]
             elif pot.reserved == 2:
                 reserved_switches += 1
 
-        while (reserved_keys > 0 or reserved_switches > 0) and empty_pots:
-            pot_index = world.random.randrange(len(empty_pots))
-            pot = empty_pots[pot_index]
-            if reserved_keys > 0 and pot.reserved == 1 and POT_KEY in room_items:
+        while reserved_keys > 0:
+            candidate_indices = [index for index, pot in enumerate(empty_pots) if pot.reserved == 1]
+            if not candidate_indices:
+                break
+            pot_index = world.random.choice(candidate_indices)
+            pot = empty_pots.pop(pot_index)
+            if POT_KEY in room_items:
                 room_items.remove(POT_KEY)
-                filled_pots.append(FilledPot(pot.x, pot.y, POT_KEY))
-                empty_pots.pop(pot_index)
                 reserved_keys -= 1
-                continue
-            if reserved_switches > 0 and pot.reserved == 2 and POT_SWITCH in room_items:
+            else:
+                reserved_keys = 0
+            filled_pots.append(FilledPot(pot.x, pot.y, POT_KEY))
+
+        while reserved_switches > 0:
+            candidate_indices = [index for index, pot in enumerate(empty_pots) if pot.reserved == 2]
+            if not candidate_indices:
+                break
+            pot_index = world.random.choice(candidate_indices)
+            pot = empty_pots.pop(pot_index)
+            if POT_SWITCH in room_items:
                 room_items.remove(POT_SWITCH)
-                filled_pots.append(FilledPot(pot.x, pot.y, POT_SWITCH))
-                empty_pots.pop(pot_index)
                 reserved_switches -= 1
+            else:
+                reserved_switches = 0
+            filled_pots.append(FilledPot(pot.x, pot.y, POT_SWITCH))
 
         while room_items and empty_pots:
             pot_index = world.random.randrange(len(empty_pots))
