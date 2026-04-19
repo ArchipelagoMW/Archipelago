@@ -290,25 +290,23 @@ class FairyChessPawns(Choice):
     option_any_classical = 7
 
 
-class FairyChessPawnSergeants(Choice):
+class FairyChessPawnUpgrades(Choice):
     """
-    Whether the player army may include Sergeants (a stronger pawn variant from ChessV).
+    Adds chances for stronger upgraded pieces to appear in your pawn rank, drawn from your pawn material budget.
 
-    Off: Default. Sergeants only appear via the existing post-fill upgrade pass when leftover budget remains.
+    Off: No upgrades; only standard pawns.
 
-    Add: Bonus material upgrades existing pawns into sergeants.
+    Pool: Upgraded pieces are added as one extra option in the random pawn pool. The generator guards against
+    picking too many upgrades and leaving you short on overall pawn count.
 
-    Replace: Bonus material spawns sergeants instead of additional pawns.
-
-    Random: Bonus pawn slots randomly become sergeants.
+    Max: Prefer upgrades whenever possible, falling back to a regular pawn when adding another upgrade would
+    prevent reaching your earned pawn count.
     """
-    display_name = "Fairy Chess Pawn Sergeants"
+    display_name = "Pawn Upgrades"
     option_off = 0
-    option_add = 1
-    option_replace = 2
-    option_randomize = 3
-    default = 0
-    default = 0
+    option_pool = 1
+    option_max = 2
+    default = option_off
 
 
 class AsymmetricTrades(Choice):
@@ -433,7 +431,7 @@ class CMOptions(PerGameCommonOptions):
     fairy_chess_pieces_configure: FairyChessPiecesConfigure
     fairy_chess_army: FairyChessArmy
     fairy_chess_pawns: FairyChessPawns
-    fairy_chess_pawn_sergeants: FairyChessPawnSergeants
+    fairy_chess_pawn_upgrades: FairyChessPawnUpgrades
     minor_piece_limit_by_type: MinorPieceLimitByType
     major_piece_limit_by_type: MajorPieceLimitByType
     queen_piece_limit_by_type: QueenPieceLimitByType

@@ -5,17 +5,27 @@ class TestWorldGeneration(CMTestBase):
         """Test that a complete world generates successfully"""
         pass
 
-    def test_fairy_chess_pawn_sergeants_in_slot_data_default(self):
+    def test_fairy_chess_pawn_upgrades_in_slot_data_default(self):
         """Default off (0) should appear in fill_slot_data output."""
         slot_data = self.world.fill_slot_data()
-        self.assertIn("fairy_chess_pawn_sergeants", slot_data)
-        self.assertEqual(slot_data["fairy_chess_pawn_sergeants"], 0)
+        self.assertIn("fairy_chess_pawn_upgrades", slot_data)
+        self.assertEqual(slot_data["fairy_chess_pawn_upgrades"], 0)
 
 
-class TestWorldGenerationSergeantsReplace(CMTestBase):
-    options = {"fairy_chess_pawn_sergeants": 2}
+class TestWorldGenerationPawnUpgradesPool(CMTestBase):
+    options = {"fairy_chess_pawn_upgrades": 1}
 
-    def test_fairy_chess_pawn_sergeants_round_trip(self):
-        """Setting option to replace (2) should round-trip through fill_slot_data."""
+    def test_fairy_chess_pawn_upgrades_round_trip(self):
+        """Setting option to pool (1) should round-trip through fill_slot_data."""
         slot_data = self.world.fill_slot_data()
-        self.assertEqual(slot_data["fairy_chess_pawn_sergeants"], 2)
+        self.assertEqual(slot_data["fairy_chess_pawn_upgrades"], 1)
+
+
+class TestWorldGenerationPawnUpgradesMax(CMTestBase):
+    options = {"fairy_chess_pawn_upgrades": 2}
+
+    def test_fairy_chess_pawn_upgrades_round_trip(self):
+        """Setting option to max (2) should round-trip through fill_slot_data."""
+        slot_data = self.world.fill_slot_data()
+        self.assertEqual(slot_data["fairy_chess_pawn_upgrades"], 2)
+
