@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import lru_cache
 import hashlib
+import json
 import pkgutil
 import random
 from typing import TYPE_CHECKING, Optional
@@ -219,6 +221,11 @@ BOSS_GFX_TABLE = {
     "Trinexx1": (22, 243, 89),
     "Trinexx2": (22, 246, 35),
 }
+
+
+def apply_enemizer_base_patch(rom: "LocalRom") -> None:
+    for address, patch_data in _load_enemizer_base_patches():
+        rom.write_bytes(address, patch_data)
 
 
 def apply_native_enemizer_features(world: "ALTTPWorld", rom: "LocalRom") -> None:
@@ -465,6 +472,19 @@ def _make_native_enemizer_rng(world: "ALTTPWorld") -> random.Random:
     ))
     seed = int.from_bytes(hashlib.sha256(seed_material.encode("utf-8")).digest()[:8], "big")
     return random.Random(seed)
+
+
+@lru_cache(maxsize=1)
+def _load_enemizer_base_patches() -> tuple[tuple[int, bytes], ...]:
+    raw_patches = pkgutil.get_data(__package__, "enemizer_data/enemizerBasePatch.json")
+    if raw_patches is None:
+        raise FileNotFoundError("Missing vendored Enemizer base patch data.")
+
+    payload = json.loads(raw_patches.decode("utf-8"))
+    return tuple(
+        (entry["address"], bytes(entry["patchData"]))
+        for entry in payload
+    )
 
 
 def _option_key(option: object) -> str:

@@ -16,6 +16,7 @@ from worlds.alttp.EnemizerPatches import (
     VANILLA_HIDDEN_ENEMY_CHANCE_POOL,
     _get_enemizer_symbol,
     _make_native_enemizer_rng,
+    apply_enemizer_base_patch,
     apply_native_enemizer_features,
 )
 
@@ -38,6 +39,17 @@ class FakeRom:
 
 
 class TestEnemizerPatches(unittest.TestCase):
+    def test_enemizer_base_patch_applies_mimic_hooks(self) -> None:
+        rom = FakeRom()
+
+        apply_enemizer_base_patch(rom)
+
+        self.assertEqual(tuple(rom.read_bytes(0x307CB, 2)), (0xB6, 0x91))
+        self.assertEqual(tuple(rom.read_bytes(0x311B6, 4)), (0x22, 0x1A, 0x9A, 0x36))
+        self.assertEqual(tuple(rom.read_bytes(0x36C08, 5)), (0x22, 0x4E, 0x9A, 0x36, 0xEA))
+        self.assertEqual(tuple(rom.read_bytes(0x36DA6, 4)), (0x22, 0x66, 0x9A, 0x36))
+        self.assertEqual(tuple(rom.read_bytes(0xF0BB1, 2)), (0x95, 0xC7))
+
     def test_enemy_shuffle_enables_hidden_enemy_and_mimic_support(self) -> None:
         rom = FakeRom()
         world = self._build_world(enemy_shuffle=True, bush_shuffle=False)

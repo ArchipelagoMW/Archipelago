@@ -18,7 +18,7 @@ from .Options import ALTTPOptions, small_key_shuffle
 from .PotShuffle import apply_pot_shuffle, generate_pot_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
-from .EnemizerPatches import apply_native_enemizer_features, patch_bosses
+from .EnemizerPatches import apply_enemizer_base_patch, apply_native_enemizer_features, patch_bosses
 from .Rom import LocalRom, patch_rom, patch_race_rom, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
@@ -583,6 +583,9 @@ class ALTTPWorld(World):
             rom = LocalRom(get_base_rom_path())
 
             patch_rom(multiworld, rom, player, use_enemizer)
+
+            if use_enemizer:
+                apply_enemizer_base_patch(rom)
 
             apply_native_enemizer_features(self, rom)
 
