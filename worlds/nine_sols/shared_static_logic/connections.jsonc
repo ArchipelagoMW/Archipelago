@@ -1846,7 +1846,11 @@
             { "item": "Mystic Nymph: Scout Mode" },
             { "item": "Grapple" }
         ],
-        "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL + LS vault replaces G
+        "ls_requires": [
+            { "item": "Mystic Nymph: Scout Mode" },
+            { "item": "Ledge Grab" }, // CL + LS vault replaces G
+            { "item": "Cloud Leap" }
+        ]
     },
     { "from": "Sky Tower - Upper Exit & Root Node", "to": "Sky Tower - Right Exit", "requires": [
         { "item": "Air Dash" } // since you have to cross the pink waterfall from the side with no platform
