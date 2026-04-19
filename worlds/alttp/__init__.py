@@ -345,7 +345,7 @@ class ALTTPWorld(World):
         self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
 
         if self.options.enemy_shuffle:
-            self.enemy_shuffle_state = generate_enemy_shuffle_state()
+            self.enemy_shuffle_state = generate_enemy_shuffle_state(self)
 
         if self.options.pot_shuffle:
             self.pot_shuffle_state = generate_pot_shuffle(self)
