@@ -203,7 +203,9 @@ class FFMQWorld(World):
                                         hint_data[self.player][location.address] = hint
 
     def fill_slot_data(self):
-        ret = self.options.as_dict("logic", "sky_coin_mode", "shattered_sky_coin_quantity", "map_shuffle")
+        ret = self.options.as_dict("logic", "sky_coin_mode", "shattered_sky_coin_quantity", "map_shuffle",
+                                   "overworld_shuffle", "crest_shuffle", "shuffle_battlefield_rewards",
+                                   "companions_locations", "kaelis_mom_fight_minotaur")
         ret["map_shuffle_seed"] = self.map_shuffle_seed
         return ret
 
