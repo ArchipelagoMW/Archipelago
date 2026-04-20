@@ -259,8 +259,10 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Library', player), lambda state: state.has('Pegasus Boots', player))
 
     if world.options.enemy_shuffle:
-        set_rule(multiworld.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player) and
-                                                                              can_kill_most_things(state, player, 4))
+        set_rule(
+            multiworld.get_location('Mimic Cave', player),
+            lambda state: state.has('Hammer', player) and can_clear_enemy_room(state, player, "Mimic Cave")
+        )
     else:
         set_rule(multiworld.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player)
                                                                               and ((state.multiworld.worlds[player].options.enemy_health in ("easy", "default")
