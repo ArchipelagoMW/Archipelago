@@ -683,24 +683,32 @@ class World(metaclass=AutoWorldRegister):
 
 
 class ProgressiveItemsMixin:
-    progressive_items: dict[str, tuple[str]] = {}
-    """Progressive item rows that will be collected in order"""
+    progressive_chains: dict[str, tuple[str]] = {}
+    """Progressive item chains that will be collected in order"""
 
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
-        if item.advancement and item.name in self.progressive_items:
-            item_names = self.progressive_items[item.name]
-            if remove:
-                for item_name in reversed(item_names):
-                    if state.has(item_name, item.player):
-                        return item_name
-                return None
-            else:
-                for item_name in item_names:
-                    if not state.has(item_name, item.player):
-                        return item_name
-                return item_names[-1]
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        if super().collect(state, item):
+            if item.name in self.progressive_chains:
+                progressive_chain = self.progressive_chains[item.name]
+                collected_index = state.count(item.name, self.player) - 1
+                if collected_index < len(progressive_chain):
+                    state.add_item(progressive_chain[collected_index], self.player)
 
-        return super().collect_item(state, item, remove)
+            return True
+
+        return False
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        if super().remove(state, item):
+            if item.name in self.progressive_chains:
+                progressive_chain = self.progressive_chains[item.name]
+                removed_index = state.count(item.name, self.player)
+                if removed_index < len(progressive_chain):
+                    state.remove_item(progressive_chain[removed_index], self.player)
+
+            return True
+
+        return False
 
 
 # any methods attached to this can be used as part of CollectionState,
