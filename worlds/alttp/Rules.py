@@ -1157,12 +1157,11 @@ def open_rules(multiworld: MultiWorld, player: int):
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3) and can_kill_most_things(state, player, 1))
 
     set_rule(multiworld.get_location('Hyrule Castle - Big Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) and can_kill_most_things(state, player, 1))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4)
+             and can_kill_key_enemy_in_room(state, player, "Hyrule Castle (Jail Cell Room)"))
     set_rule(multiworld.get_location('Hyrule Castle - Zelda\'s Chest', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4)
-                           and state.has('Big Key (Hyrule Castle)', player)
-                           and (multiworld.worlds[player].options.enemy_health in ("easy", "default")
-                                or can_kill_most_things(state, player, 1)))
+                           and state.has('Big Key (Hyrule Castle)', player))
 
 
 def swordless_rules(multiworld: MultiWorld, player: int):
@@ -1216,7 +1215,8 @@ def standard_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location('Hyrule Castle - Map Guard Key Drop', player),
                  lambda state: can_kill_standard_start(state, player, 1))
         set_rule(multiworld.get_location('Hyrule Castle - Big Key Drop', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2)
+                               and can_kill_key_enemy_in_room(state, player, "Hyrule Castle (Jail Cell Room)"))
         set_rule(multiworld.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2)
                                and state.has('Big Key (Hyrule Castle)', player)
