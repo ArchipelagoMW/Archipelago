@@ -15,11 +15,13 @@ class TestDungeon(LTTPTestBase):
         self.remove_exits = []      # Block dungeon exits
         self._build_dungeon_world()
 
-    def _build_dungeon_world(self, pot_shuffle_state=None):
+    def _build_dungeon_world(self, pot_shuffle_state=None, enemy_health_value=None):
         self.world_setup()
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
         self.multiworld.worlds[1].options.bombless_start.value = True
         self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
+        if enemy_health_value is not None:
+            self.multiworld.worlds[1].options.enemy_health.value = enemy_health_value
         if pot_shuffle_state is not None:
             self.multiworld.worlds[1].options.pot_shuffle.value = True
             self.multiworld.worlds[1].pot_shuffle_state = pot_shuffle_state
@@ -38,6 +40,9 @@ class TestDungeon(LTTPTestBase):
 
     def rebuild_with_pot_shuffle(self, pot_shuffle_state=None):
         self._build_dungeon_world(pot_shuffle_state=pot_shuffle_state)
+
+    def rebuild_with_enemy_health(self, enemy_health_value):
+        self._build_dungeon_world(enemy_health_value=enemy_health_value)
 
     @staticmethod
     def get_test_pot_shuffle_state(overrides=None):

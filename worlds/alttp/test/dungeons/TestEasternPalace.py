@@ -62,3 +62,12 @@ class TestEasternPalace(TestDungeon):
         self.run_tests([
             ["Eastern Palace - Big Key Chest", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)']],
         ])
+
+    def testEasternPalaceHardEnemyHealthNeedsRealStalfosKillMethod(self):
+        self.starting_regions = ["Eastern Palace"]
+        self.rebuild_with_enemy_health(2)
+        self.run_tests([
+            ["Eastern Palace - Compass Chest", False, []],
+            ["Eastern Palace - Compass Chest", True, ['Fighter Sword']],
+            ["Eastern Palace - Compass Chest", True, ['Bomb Upgrade (+5)']],
+        ])
