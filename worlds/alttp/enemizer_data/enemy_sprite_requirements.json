@@ -35,22 +35,39 @@
       "guide_enemy_name": "Shared:  Crow/Raven (Light World)",
       "mapping_confidence": "shared_id",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": "Guide enemy 0 is a shared Crow/Raven slot. This mapping is treated as exact enough for RavenSprite."
     },
@@ -88,22 +105,39 @@
       "guide_enemy_name": "Vulture (Tendoru)",
       "mapping_confidence": "exact",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -402,23 +436,41 @@
       "guide_enemy_name": "Octoballoon/Octoblimp",
       "mapping_confidence": "exact",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -453,22 +505,39 @@
       "guide_enemy_name": "Octoballoon/Octoblimp spawn (after explosion)",
       "mapping_confidence": "exact",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -617,9 +686,11 @@
       "guide_enemy_id": 21,
       "guide_enemy_name": "Fire Faerie / Anti-faerie / Bubble",
       "mapping_confidence": "exact",
-      "kill_damage_classes": [],
+      "kill_damage_classes": [
+        10
+      ],
       "kill_items": [
-        "Magic powder"
+        "Magic Powder"
       ],
       "damage_notes": "Guide kill method is magic powder only; this transforms the anti-faerie into a faerie rather than dealing conventional damage."
     },
@@ -707,7 +778,50 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 24,
+      "guide_enemy_name": "Mini Moldorm / Tail",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Bomb",
+        "Silver Bow",
+        "Magic Powder",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "PoeSprite",
@@ -744,22 +858,39 @@
       "guide_enemy_name": "Shared:  Poe (Ghost) (Light World)",
       "mapping_confidence": "shared_id",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
       ],
       "damage_notes": "Guide enemy 25 is a shared Poe slot; this mapping is treated as exact enough for PoeSprite."
     },
@@ -1025,15 +1156,28 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        9,
+        10,
+        11,
+        13,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
-        "Bow + silver arrow",
-        "Magic powder",
-        "Fire rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Magic Powder",
+        "Fire Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": "Guide enemy name is Bomb Slug (Nuranuru); this is treated as the same enemy as Enemizer's SluggulaSprite."
     },
@@ -1216,11 +1360,20 @@
         2,
         3,
         4,
-        5
+        5,
+        9,
+        13
       ],
       "kill_items": [
-        "Bow + silver arrow",
-        "Bombos medallion"
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Silver Bow",
+        "Bombos"
       ],
       "damage_notes": "Guide enemy 38 is a shared red/blue hardhat beetle slot. The guide notes sword and hammer hits also knock Link back despite doing damage."
     },
@@ -1257,10 +1410,13 @@
       "guide_enemy_id": 39,
       "guide_enemy_name": "Deadrock (Deddorokku) - annoying bugger, turns to stone when hit",
       "mapping_confidence": "exact",
-      "kill_damage_classes": [],
+      "kill_damage_classes": [
+        10,
+        15
+      ],
       "kill_items": [
-        "Magic powder",
-        "Quake medallion"
+        "Magic Powder",
+        "Quake"
       ],
       "damage_notes": "Guide kill methods are magic powder and Quake; both use the special 250 effect that turns Deadrock into a 0-HP yellow slime."
     },
@@ -1896,23 +2052,41 @@
       "guide_enemy_name": "Rock Spider/Beetle/Crab",
       "mapping_confidence": "alias",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow",
-        "Magic powder",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Magic Powder",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": "Guide enemy name is Rock Spider/Beetle/Crab; this is treated as the same enemy as Enemizer's RockHoarderSprite."
     },
@@ -2356,21 +2530,37 @@
       "guide_enemy_name": "Swamp hare/bunny/rabbit (Toppo)",
       "mapping_confidence": "alias",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
       ],
       "damage_notes": "Guide enemy name is Swamp hare/bunny/rabbit (Toppo); this is treated as the same enemy as Enemizer's RabbitSprite."
     },
@@ -2604,22 +2794,39 @@
       "guide_enemy_name": "Shared:  Fireball Zora (Light World)",
       "mapping_confidence": "shared_id",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": "Guide entry is a shared Fireball Zora slot; this mapping is treated as exact enough for FireballZoraSprite."
     },
@@ -2799,9 +3006,11 @@
       "guide_enemy_id": 91,
       "guide_enemy_name": "Spark (clockwise)",
       "mapping_confidence": "shared_id",
-      "kill_damage_classes": [],
+      "kill_damage_classes": [
+        13
+      ],
       "kill_items": [
-        "Bombos medallion"
+        "Bombos"
       ],
       "damage_notes": "Guide only lists Bombos as a kill method for Spark; all ordinary direct attacks are zero-damage."
     },
@@ -2835,9 +3044,11 @@
       "guide_enemy_id": 92,
       "guide_enemy_name": "Spark (counterclockwise)",
       "mapping_confidence": "shared_id",
-      "kill_damage_classes": [],
+      "kill_damage_classes": [
+        13
+      ],
       "kill_items": [
-        "Bombos medallion"
+        "Bombos"
       ],
       "damage_notes": "Guide only lists Bombos as a kill method for Spark; all ordinary direct attacks are zero-damage."
     },
@@ -3968,15 +4179,28 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Ether medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
       ],
       "damage_notes": null
     },
@@ -4197,17 +4421,32 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": "Guide enemy name is Water bug/tektite; this is treated as the same enemy as Enemizer's WaterTektiteSprite."
     },
@@ -4277,12 +4516,22 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow"
+        "Silver Bow"
       ],
       "damage_notes": "Guide enemy 131 is a shared Green Eyegore/Green Goriya slot. This entry uses the shared-ID data for the Eyegore interpretation."
     },
@@ -4316,10 +4565,13 @@
       "guide_enemy_id": 132,
       "guide_enemy_name": "Shared:  Red Rocklops/Eyegore",
       "mapping_confidence": "shared_id",
-      "kill_damage_classes": [],
+      "kill_damage_classes": [
+        6,
+        9
+      ],
       "kill_items": [
-        "Normal bow + arrow",
-        "Bow + silver arrow"
+        "Bow",
+        "Silver Bow"
       ],
       "damage_notes": "Guide enemy 132 is a shared Red Eyegore/Red Goriya slot. This entry uses the shared-ID data for the Eyegore interpretation."
     },
@@ -4358,14 +4610,26 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        9,
+        11,
+        13,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": "Guide uses the name Kodondo; this is treated as the same enemy as Enemizer's KodongosSprite."
     },
@@ -4639,15 +4903,9 @@
         5
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
-        "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Ether medallion"
+        "Hammer"
       ],
-      "damage_notes": "Guide enemy name is Turtle Shell; this is treated as the same enemy as Enemizer's TerrorpinSprite."
+      "damage_notes": "Guide enemy name is Turtle Shell; this is treated as the same enemy as Enemizer's TerrorpinSprite. Only Hammer is listed in kill_items because Terrorpins must be flipped before any of the guide-positive damage classes can finish them."
     },
     {
       "sprite_name": "SlimeSprite_JumpsOutOfTheFloor",
@@ -4684,16 +4942,30 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": "Guide enemy 143 is a shared Blob/Gel/Zol slot. This mapping is treated as exact enough for Enemizer's floor-jumping slime sprite."
     },
@@ -4947,6 +5219,7 @@
       "guide_enemy_name": "Stalfos Knight",
       "mapping_confidence": "exact",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
@@ -4954,7 +5227,15 @@
         5
       ],
       "kill_items": [
-        "Boomerang"
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword"
       ],
       "damage_notes": "Guide notes bombs only damage Stalfos Knights while collapsed; sword and hammer damage applies while upright."
     },
@@ -5222,21 +5503,37 @@
       "guide_enemy_name": "Kyameron - Splash (water blob)",
       "mapping_confidence": "alias",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": "Guide enemy name is Kyameron - Splash (water blob); this is treated as the same entity as Enemizer's KyameronWaterSplashSprite."
     },
@@ -5276,16 +5573,30 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -5659,16 +5970,30 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -5710,16 +6035,30 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        15
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Bombos medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -6138,12 +6477,22 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow"
+        "Silver Bow"
       ],
       "damage_notes": "AP currently treats Enemizer's synthetic MimicSprite (0xB8) as a green mimic. The kill methods are borrowed from guide enemy 131, the shared Green Eyegore/Green Goriya slot."
     },
@@ -6824,15 +7173,28 @@
         2,
         3,
         4,
-        5
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13
       ],
       "kill_items": [
-        "Normal bow + arrow",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos"
       ],
       "damage_notes": "Guide enemy name is Fuzzy Stack (Hokkubokku); this is treated as the same enemy as Enemizer's HokkuBokkuSprite."
     },
@@ -7073,23 +7435,41 @@
       "guide_enemy_name": "Swamola (Swamp snake)",
       "mapping_confidence": "exact",
       "kill_damage_classes": [
+        0,
         1,
         2,
         3,
         4,
-        5
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "kill_items": [
-        "Boomerang",
-        "Normal bow + arrow",
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
         "Hookshot",
         "Bomb",
-        "Bow + silver arrow",
-        "Fire rod",
-        "Ice rod",
-        "Bombos medallion",
-        "Ether medallion",
-        "Quake medallion"
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
       ],
       "damage_notes": null
     },
@@ -7126,10 +7506,15 @@
       "kill_damage_classes": [
         3,
         4,
-        5
+        5,
+        9
       ],
       "kill_items": [
-        "Bow + silver arrow"
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Silver Bow"
       ],
       "damage_notes": "Guide data shows ordinary arrows do not damage this Lynel, but stronger sword/hammer classes and silver arrows do."
     },

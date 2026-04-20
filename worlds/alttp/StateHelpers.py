@@ -120,6 +120,117 @@ def can_activate_crystal_switch(state: CollectionState, player: int) -> bool:
                               "Red Boomerang"], player))
 
 
+def can_clear_enemy_room(state: CollectionState, player: int, room_name_or_id: str | int) -> bool:
+    from .EnemyShuffle import get_effective_dungeon_room_sprite_requirements, get_room_id
+
+    room_id = room_name_or_id if isinstance(room_name_or_id, int) else get_room_id(room_name_or_id)
+    if room_id is None:
+        raise ValueError(f"Unknown ALTTP room {room_name_or_id!r}")
+
+    room_enemies = tuple(
+        requirement
+        for requirement in get_effective_dungeon_room_sprite_requirements(state.multiworld.worlds[player], room_id)
+        if requirement.killable
+    )
+    if not room_enemies:
+        return True
+
+    available_damage_classes = _get_available_damage_classes(state, player, len(room_enemies))
+    for requirement in room_enemies:
+        if available_damage_classes.intersection(requirement.kill_damage_classes):
+            continue
+        if _can_use_guide_kill_items(state, player, requirement.kill_items, len(room_enemies)):
+            continue
+        return False
+    return True
+
+
+def _get_available_damage_classes(state: CollectionState, player: int, enemy_count: int) -> set[int]:
+    available_damage_classes: set[int] = set()
+
+    if state.has("Fighter Sword", player):
+        available_damage_classes.add(2)
+    if state.has("Master Sword", player):
+        available_damage_classes.add(3)
+    if state.has("Tempered Sword", player):
+        available_damage_classes.add(4)
+    if state.has("Golden Sword", player):
+        available_damage_classes.add(5)
+    if state.has("Hammer", player):
+        available_damage_classes.add(3)
+    if state.has("Blue Boomerang", player) or state.has("Red Boomerang", player):
+        available_damage_classes.add(0)
+    if state.has("Hookshot", player):
+        available_damage_classes.add(7)
+    if can_shoot_arrows(state, player, enemy_count):
+        if state.has("Bow", player):
+            available_damage_classes.add(6)
+        if state.has("Silver Bow", player) or (state.has("Bow", player) and state.has("Silver Arrows", player)):
+            available_damage_classes.add(9)
+    if can_use_bombs(state, player, enemy_count):
+        available_damage_classes.add(8)
+    if state.has("Cane of Somaria", player):
+        available_damage_classes.add(1)
+    if state.has("Cane of Byrna", player) and can_extend_magic(state, player, 8):
+        available_damage_classes.add(1)
+    if state.has("Magic Powder", player):
+        available_damage_classes.add(10)
+    if state.has("Fire Rod", player) and can_extend_magic(state, player, 8 * enemy_count):
+        available_damage_classes.add(11)
+    if state.has("Ice Rod", player) and can_extend_magic(state, player, 8 * enemy_count):
+        available_damage_classes.add(12)
+    if state.has("Bombos", player) and _can_cast_medallion(state, player):
+        available_damage_classes.add(13)
+    if state.has("Ether", player) and _can_cast_medallion(state, player):
+        available_damage_classes.add(14)
+    if state.has("Quake", player) and _can_cast_medallion(state, player):
+        available_damage_classes.add(15)
+
+    return available_damage_classes
+
+
+def _can_use_guide_kill_items(state: CollectionState, player: int, kill_items: tuple[str, ...], enemy_count: int) -> bool:
+    return any(
+        _can_use_guide_kill_item(state, player, kill_item, enemy_count)
+        for kill_item in kill_items
+    )
+
+
+def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str, enemy_count: int) -> bool:
+    if kill_item in {"Blue Boomerang", "Red Boomerang"}:
+        return state.has(kill_item, player)
+    if kill_item in {"Fighter Sword", "Master Sword", "Tempered Sword", "Golden Sword", "Hammer"}:
+        return state.has(kill_item, player)
+    if kill_item in {"Cane of Somaria", "Cane of Byrna"}:
+        return state.has(kill_item, player)
+    if kill_item == "Bow":
+        return state.has("Bow", player) and can_shoot_arrows(state, player, enemy_count)
+    if kill_item == "Silver Bow":
+        return (state.has("Silver Bow", player) or (state.has("Bow", player) and state.has("Silver Arrows", player))) \
+            and can_shoot_arrows(state, player, enemy_count)
+    if kill_item == "Hookshot":
+        return state.has("Hookshot", player)
+    if kill_item == "Bomb":
+        return can_use_bombs(state, player, enemy_count)
+    if kill_item == "Magic Powder":
+        return state.has("Magic Powder", player)
+    if kill_item == "Fire Rod":
+        return state.has("Fire Rod", player) and can_extend_magic(state, player, 8 * enemy_count)
+    if kill_item == "Ice Rod":
+        return state.has("Ice Rod", player) and can_extend_magic(state, player, 8 * enemy_count)
+    if kill_item == "Bombos":
+        return state.has("Bombos", player) and _can_cast_medallion(state, player)
+    if kill_item == "Ether":
+        return state.has("Ether", player) and _can_cast_medallion(state, player)
+    if kill_item == "Quake":
+        return state.has("Quake", player) and _can_cast_medallion(state, player)
+    return False
+
+
+def _can_cast_medallion(state: CollectionState, player: int) -> bool:
+    return (state.multiworld.worlds[player].options.swordless or has_sword(state, player)) and can_extend_magic(state, player, 16)
+
+
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
     if state.multiworld.worlds[player].options.enemy_shuffle:
         # I don't fully understand Enemizer's logic for placing enemies in spots where they need to be killable, if any.

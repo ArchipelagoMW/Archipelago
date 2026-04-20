@@ -727,6 +727,44 @@ def get_room_id(room_name: str) -> Optional[int]:
     return _load_room_name_to_id().get(room_name)
 
 
+def get_effective_dungeon_room_sprite_requirements(world: "ALTTPWorld", room_id: int) -> tuple[EnemySpriteRequirement, ...]:
+    sprite_requirements = _get_sprite_requirement_lookup()
+    room_sprites = _get_effective_dungeon_room_sprite_ids(world, room_id)
+    return tuple(
+        sprite_requirements[sprite_id]
+        for sprite_id in room_sprites
+        if sprite_id in sprite_requirements
+        and sprite_requirements[sprite_id].is_enemy_sprite
+        and not sprite_requirements[sprite_id].npc
+        and not sprite_requirements[sprite_id].is_object
+    )
+
+
+def _get_effective_dungeon_room_sprite_ids(world: "ALTTPWorld", room_id: int) -> tuple[int, ...]:
+    if world.options.enemy_shuffle and world.enemy_shuffle_state is not None:
+        randomized_room = world.enemy_shuffle_state.randomized_dungeon_rooms.get(room_id)
+        if randomized_room is not None:
+            return tuple(sprite.sprite_id for sprite in randomized_room.sprites)
+
+    room = _get_default_dungeon_rooms().get(room_id)
+    if room is None:
+        raise KeyError(f"Unknown ALTTP room id {room_id}")
+    return tuple(sprite.sprite_id for sprite in room.sprites)
+
+
+def _get_default_dungeon_rooms() -> dict[int, DungeonEnemyRoom]:
+    dungeon_rooms = getattr(_get_default_dungeon_rooms, "dungeon_rooms", None)
+    if dungeon_rooms is None:
+        rom_bytes = _get_base_patched_rom_bytes()
+        metadata = _load_enemy_room_metadata()
+        dungeon_rooms = {
+            room.room_id: room
+            for room in _read_dungeon_rooms(rom_bytes, _get_enemizer_symbol("moved_room_header_bank_value_address"), metadata)
+        }
+        _get_default_dungeon_rooms.dungeon_rooms = dungeon_rooms
+    return dungeon_rooms
+
+
 def _load_room_names() -> dict[int, str]:
     room_names = getattr(_load_room_names, "room_names", None)
     if room_names is None:
@@ -757,6 +795,17 @@ def _load_room_name_to_id() -> dict[str, int]:
         }
         _load_room_name_to_id.room_name_to_id = room_name_to_id
     return room_name_to_id
+
+
+def _get_sprite_requirement_lookup() -> dict[int, EnemySpriteRequirement]:
+    requirement_lookup = getattr(_get_sprite_requirement_lookup, "requirement_lookup", None)
+    if requirement_lookup is None:
+        requirement_lookup = {
+            requirement.sprite_id: requirement
+            for requirement in _load_enemy_sprite_requirements()
+        }
+        _get_sprite_requirement_lookup.requirement_lookup = requirement_lookup
+    return requirement_lookup
 
 
 def _load_overworld_enemy_metadata() -> dict[str, object]:

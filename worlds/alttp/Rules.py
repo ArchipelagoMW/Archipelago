@@ -14,7 +14,7 @@ from .Options import small_key_shuffle
 from .OverworldGlitchRules import overworld_glitches_rules
 from .PotShuffle import POT_KEY, POT_SWITCH, get_unique_pot_item_position
 from .Regions import LTTPRegionType, location_table
-from .StateHelpers import (can_extend_magic, can_kill_most_things,
+from .StateHelpers import (can_extend_magic, can_kill_most_things, can_clear_enemy_room,
                            can_lift_heavy_rocks, can_lift_rocks,
                            can_melt_things, can_retrieve_tablet,
                            can_shoot_arrows, has_beam_sword, has_crystals,
@@ -287,11 +287,11 @@ def global_rules(multiworld: MultiWorld, player: int):
                                                                                              or state.has_any(["Fire Rod", "Cane of Somaria"], player))
     set_rule(multiworld.get_location('Paradox Cave Upper - Left', player), lambda state: can_use_bombs(state, player))
     set_rule(multiworld.get_location('Paradox Cave Upper - Right', player), lambda state: can_use_bombs(state, player))
-    set_rule(multiworld.get_location('Mini Moldorm Cave - Far Left', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(multiworld.get_location('Mini Moldorm Cave - Left', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(multiworld.get_location('Mini Moldorm Cave - Far Right', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(multiworld.get_location('Mini Moldorm Cave - Right', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(multiworld.get_location('Mini Moldorm Cave - Generous Guy', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Far Left', player), lambda state: can_clear_enemy_room(state, player, "Mini-Moldorm Cave"))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Left', player), lambda state: can_clear_enemy_room(state, player, "Mini-Moldorm Cave"))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Far Right', player), lambda state: can_clear_enemy_room(state, player, "Mini-Moldorm Cave"))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Right', player), lambda state: can_clear_enemy_room(state, player, "Mini-Moldorm Cave"))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Generous Guy', player), lambda state: can_clear_enemy_room(state, player, "Mini-Moldorm Cave"))
     set_rule(multiworld.get_location('Hype Cave - Bottom', player), lambda state: can_use_bombs(state, player))
     set_rule(multiworld.get_location('Hype Cave - Middle Left', player), lambda state: can_use_bombs(state, player))
     set_rule(multiworld.get_location('Hype Cave - Middle Right', player), lambda state: can_use_bombs(state, player))

@@ -8,6 +8,7 @@ from worlds.alttp.EnemyShuffle import (
     DungeonSpriteGroup,
     EnemyShuffleState,
     EnemySpriteRequirement,
+    ITEM_NAME_TO_DAMAGE_CLASS,
     OverworldEnemyArea,
     OverworldEnemySprite,
     RandomizedDungeonEnemyRoom,
@@ -15,6 +16,7 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedOverworldEnemyArea,
     RandomizedOverworldEnemySprite,
     WALLMASTER_SPRITE_ID,
+    get_effective_dungeon_room_sprite_requirements,
     get_room_id,
     get_room_name,
     get_possible_dungeon_sprite_groups,
@@ -32,10 +34,71 @@ from worlds.alttp.EnemyShuffle import (
     can_spawn_in_room,
     validate_enemy_shuffle_state,
 )
+from worlds.alttp.Items import item_table
 from worlds.alttp.Rom import LocalRom, get_base_rom_path
+from worlds.alttp.StateHelpers import can_clear_enemy_room
+from worlds.alttp.test.bases import item_factory
+from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
 
 class TestEnemyShuffleValidation(unittest.TestCase):
+    def test_effective_room_enemy_requirements_fall_back_to_default_room_data(self) -> None:
+        world = SimpleNamespace(
+            options=SimpleNamespace(enemy_shuffle=False),
+            enemy_shuffle_state=None,
+        )
+
+        requirements = get_effective_dungeon_room_sprite_requirements(world, 291)
+
+        self.assertEqual(
+            [requirement.sprite_name for requirement in requirements],
+            [
+                "MiniMoldormSprite",
+                "MiniMoldormSprite",
+                "MiniMoldormSprite",
+                "MiniMoldormSprite",
+            ],
+        )
+
+    def test_red_eyegore_in_mini_moldorm_cave_requires_arrows(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    291: RandomizedDungeonEnemyRoom(
+                        room_id=291,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 24, 24, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 24, 24, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 24, 24, False, False),
+                            RandomizedDungeonEnemySprite(0, 0, 0, 24, 0x84, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+5)"], world))
+            self.assertFalse(can_clear_enemy_room(bomb_state, 1, "Mini-Moldorm Cave"))
+
+            bow_state = logic_test.get_state(item_factory(["Bomb Upgrade (+5)", "Bow"], world))
+            self.assertTrue(can_clear_enemy_room(bow_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
     def test_room_name_helpers_are_bidirectional(self) -> None:
         self.assertEqual(get_room_name(184), "Eastern Palace (Big Key Room)")
         self.assertEqual(get_room_id("Eastern Palace (Big Key Room)"), 184)
@@ -52,15 +115,22 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
         deadrock = requirements["DeadrockSprite"]
         mimic = requirements["MimicSprite"]
+        terrorpin = requirements["TerrorpinSprite"]
 
         self.assertTrue(deadrock.killable)
         self.assertEqual(deadrock.guide_enemy_id, 39)
-        self.assertEqual(deadrock.kill_items, ("Magic powder", "Quake medallion"))
+        self.assertEqual(
+            deadrock.kill_items,
+            ("Magic Powder", "Quake"),
+        )
         self.assertIn("250 effect", deadrock.damage_notes)
 
         self.assertEqual(mimic.guide_enemy_id, 131)
         self.assertEqual(mimic.mapping_confidence, "assumed_shared_green_mimic")
         self.assertIn("green mimic", mimic.damage_notes)
+        self.assertEqual(terrorpin.kill_items, ("Hammer",))
+        self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
+
 
     def test_base_patched_enemy_shuffle_data_uses_relocated_room_headers(self) -> None:
         vanilla_rom_bytes = bytes(LocalRom(get_base_rom_path()).buffer)
