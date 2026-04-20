@@ -532,8 +532,10 @@ def global_rules(multiworld: MultiWorld, player: int):
 
     set_rule(multiworld.get_entrance('Turtle Rock Entrance Gap', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(multiworld.get_entrance('Turtle Rock Entrance Gap Reverse', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(multiworld.get_location('Turtle Rock - Pokey 1 Key Drop', player), lambda state: can_kill_most_things(state, player, 5))
-    set_rule(multiworld.get_location('Turtle Rock - Pokey 2 Key Drop', player), lambda state: can_kill_most_things(state, player, 5))
+    set_rule(multiworld.get_location('Turtle Rock - Pokey 1 Key Drop', player),
+             lambda state: can_kill_key_enemy_in_room(state, player, "Turtle Rock (Chain Chomps Room)"))
+    set_rule(multiworld.get_location('Turtle Rock - Pokey 2 Key Drop', player),
+             lambda state: can_kill_key_enemy_in_room(state, player, "Turtle Rock (Hokku-Bokku Key Room 2)"))
     set_rule(multiworld.get_location('Turtle Rock - Compass Chest', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(multiworld.get_location('Turtle Rock - Roller Room - Left', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
     set_rule(multiworld.get_location('Turtle Rock - Roller Room - Right', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
