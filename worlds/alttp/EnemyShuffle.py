@@ -203,6 +203,22 @@ class RandomizedDungeonEnemySprite:
     is_overlord: bool
     has_key: bool
 
+    @property
+    def is_on_bg2(self) -> bool:
+        return bool(self.byte_0 & 0x80)
+
+    @property
+    def hm_param(self) -> int:
+        return ((self.byte_0 & 0x60) >> 2) | ((self.byte_1 & 0xE0) >> 5)
+
+    @property
+    def y_coord_pixels(self) -> int:
+        return (self.byte_0 & 0x1F) * 16
+
+    @property
+    def x_coord_pixels(self) -> int:
+        return (self.byte_1 & 0x1F) * 16
+
 
 @dataclass(frozen=True)
 class RandomizedDungeonEnemyRoom:
@@ -222,6 +238,8 @@ class RandomizedDungeonEnemyRoom:
 class EffectiveDungeonEnemySprite:
     requirement: EnemySpriteRequirement
     has_key: bool
+    x_coord_pixels: int
+    y_coord_pixels: int
 
 
 @dataclass(frozen=True)
@@ -785,7 +803,12 @@ def get_effective_dungeon_room_enemies(world: "ALTTPWorld", room_id: int) -> tup
     sprite_requirements = _get_sprite_requirement_lookup()
     room_sprites = _get_effective_dungeon_room_sprites(world, room_id)
     return tuple(
-        EffectiveDungeonEnemySprite(requirement=sprite_requirements[sprite.sprite_id], has_key=sprite.has_key)
+        EffectiveDungeonEnemySprite(
+            requirement=sprite_requirements[sprite.sprite_id],
+            has_key=sprite.has_key,
+            x_coord_pixels=sprite.x_coord_pixels,
+            y_coord_pixels=sprite.y_coord_pixels,
+        )
         for sprite in room_sprites
         if sprite.sprite_id in sprite_requirements
         and sprite_requirements[sprite.sprite_id].is_enemy_sprite

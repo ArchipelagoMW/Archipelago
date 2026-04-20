@@ -14,7 +14,8 @@ from .Options import small_key_shuffle
 from .OverworldGlitchRules import overworld_glitches_rules
 from .PotShuffle import POT_KEY, POT_SWITCH, get_unique_pot_item_position
 from .Regions import LTTPRegionType, location_table
-from .StateHelpers import (can_extend_magic, can_kill_most_things, can_clear_enemy_room, can_kill_key_enemy_in_room,
+from .StateHelpers import (can_extend_magic, can_kill_most_things, can_clear_enemy_room, can_clear_enemy_region,
+                           can_kill_key_enemy_in_room,
                            can_lift_heavy_rocks, can_lift_rocks,
                            can_melt_things, can_retrieve_tablet,
                            can_shoot_arrows, has_beam_sword, has_crystals,
@@ -38,6 +39,8 @@ POD_STALFOS_BASEMENT_BOMB_SWITCH_POTS = frozenset(((156, 17), (160, 17)))
 GT_CONVEYOR_CROSS_ROOM_ID = 0x8B
 GT_CONVEYOR_CROSS_TOP_RIGHT_POTS = frozenset(((76, 12), (112, 12)))
 EP_BIG_KEY_ROOM_ID = 0xB8
+AGA_TOWER_ENTRANCE_ROOM_NAME = "Agahnim's Tower (Entrance Room)"
+AGA_TOWER_CIRCLE_OF_POTS_ROOM_NAME = "Agahnim's Tower (Circle of Pots)"
 EP_BIG_KEY_VANILLA_SWITCH_POT = (104, 16)
 
 
@@ -339,18 +342,23 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Sewers Secret Room', player), lambda state: can_bomb_or_bonk(state, player))
 
     set_rule(multiworld.get_entrance('Agahnim 1', player),
-             lambda state: has_sword(state, player) and state._lttp_has_key('Small Key (Agahnims Tower)', player, 4))
+             lambda state: has_sword(state, player)
+             and state._lttp_has_key('Small Key (Agahnims Tower)', player, 4)
+             and can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_ROOM_NAME, max_x=256, max_y=256)
+             and can_clear_enemy_region(state, player, AGA_TOWER_CIRCLE_OF_POTS_ROOM_NAME, max_y=256))
 
-    set_rule(multiworld.get_location('Castle Tower - Room 03', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Castle Tower - Room 03', player),
+             lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_ROOM_NAME, max_x=256, max_y=256))
     set_rule(multiworld.get_location('Castle Tower - Dark Maze', player),
-             lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
-                                                                                   player))
+             lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_ROOM_NAME, max_x=256, max_y=256)
+             and state._lttp_has_key('Small Key (Agahnims Tower)', player))
     set_rule(multiworld.get_location('Castle Tower - Dark Archer Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
-                                                                                   player, 2))
+             lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_ROOM_NAME, max_x=256, max_y=256)
+             and state._lttp_has_key('Small Key (Agahnims Tower)', player, 2))
     set_rule(multiworld.get_location('Castle Tower - Circle of Pots Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
-                                                                                   player, 3))
+             lambda state: can_clear_enemy_region(state, player, AGA_TOWER_ENTRANCE_ROOM_NAME, max_x=256, max_y=256)
+             and can_clear_enemy_region(state, player, AGA_TOWER_CIRCLE_OF_POTS_ROOM_NAME, max_y=256)
+             and state._lttp_has_key('Small Key (Agahnims Tower)', player, 3))
     set_always_allow(multiworld.get_location('Eastern Palace - Big Key Chest', player),
                      lambda state, item: item.name == 'Big Key (Eastern Palace)' and item.player == player)
     eastern_big_key_chest_needs_room_clear = _eastern_big_key_chest_needs_room_clear(world)
