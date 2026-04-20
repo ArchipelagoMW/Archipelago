@@ -1419,8 +1419,13 @@ class Rac3Interface(GameInterface):
             addr = vidcomic_data[name].UNLOCK_ADDRESS
             if index == 0:
                 continue
+            if (index == 2 
+                and self.planet == RAC3REGION.ANNIHILATION_NATION 
+                and RAC3LOCATION.NATION_HEAT_STREET in self.checked_locations):
+                 self._write8(addr, 1)
+                 continue
 
-            unlock_delay_count = 30 if index == 2 else 1  # extra delay for Annihilation Nation Proceeding
+            unlock_delay_count = 1
             if comic.unlock_delay < unlock_delay_count:
                 comic.unlock_delay += 1
                 continue
