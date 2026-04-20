@@ -94,3 +94,62 @@ class TestDesertPalace(TestDungeon):
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def testBeamosHallAndBossUseBottomLeftSubroomEnemies(self):
+        self.starting_regions = ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)']
+        world = self.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    0x53: RandomizedDungeonEnemyRoom(
+                        room_id=0x53,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x15, 0x04, 0x4E, 0x84, False, False),
+                            RandomizedDungeonEnemySprite(0, 0x04, 0x14, 0x4E, 0x8E, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            self.run_tests([
+                ["Desert Palace - Beamos Hall Pot Key", False, ['Hammer',
+                                                                'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+                ["Desert Palace - Beamos Hall Pot Key", True, ['Bow',
+                                                               'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+                ["Desert Palace - Desert Tiles 2 Pot Key", False, ['Hammer',
+                                                                    'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                                    'Small Key (Desert Palace)']],
+                ["Desert Palace - Desert Tiles 2 Pot Key", True, ['Bow',
+                                                                   'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                                   'Small Key (Desert Palace)']],
+                ["Desert Palace - Boss", False, ['Hammer',
+                                                 'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                 'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                 'Big Key (Desert Palace)', 'Lamp']],
+                ["Desert Palace - Boss", True, ['Bow',
+                                                'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                'Big Key (Desert Palace)', 'Lamp']],
+                ["Desert Palace - Prize", False, ['Hammer',
+                                                  'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                  'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                  'Big Key (Desert Palace)', 'Lamp']],
+                ["Desert Palace - Prize", True, ['Bow',
+                                                 'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                 'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                 'Big Key (Desert Palace)', 'Lamp']],
+            ])
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state

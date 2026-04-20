@@ -287,9 +287,9 @@ def _get_available_damage_classes(state: CollectionState, player: int, enemy_cou
         available_damage_classes.add(1)
     if state.has("Magic Powder", player):
         available_damage_classes.add(10)
-    if state.has("Fire Rod", player) and can_extend_magic(state, player, 8 * enemy_count):
+    if state.has("Fire Rod", player) and can_extend_magic(state, player, enemy_count):
         available_damage_classes.add(11)
-    if state.has("Ice Rod", player) and can_extend_magic(state, player, 8 * enemy_count):
+    if state.has("Ice Rod", player) and can_extend_magic(state, player, 2 * enemy_count):
         available_damage_classes.add(12)
     if state.has("Bombos", player) and _can_cast_medallion(state, player):
         available_damage_classes.add(13)
@@ -343,9 +343,9 @@ def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str
     if kill_item == "Magic Powder":
         return state.has("Magic Powder", player)
     if kill_item == "Fire Rod":
-        return state.has("Fire Rod", player) and can_extend_magic(state, player, 8 * enemy_count)
+        return state.has("Fire Rod", player) and can_extend_magic(state, player, enemy_count)
     if kill_item == "Ice Rod":
-        return state.has("Ice Rod", player) and can_extend_magic(state, player, 8 * enemy_count)
+        return state.has("Ice Rod", player) and can_extend_magic(state, player, 2 * enemy_count)
     if kill_item == "Bombos":
         return state.has("Bombos", player) and _can_cast_medallion(state, player)
     if kill_item == "Ether":

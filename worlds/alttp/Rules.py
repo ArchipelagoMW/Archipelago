@@ -403,10 +403,48 @@ def global_rules(multiworld: MultiWorld, player: int):
                  min_x=256,
                  max_y=256,
              ))
-    set_rule(multiworld.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2) and can_kill_most_things(state, player, 4))
-    set_rule(multiworld.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3) and can_kill_most_things(state, player, 4))
-    add_rule(multiworld.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
-    add_rule(multiworld.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
+    set_rule(multiworld.get_location('Desert Palace - Beamos Hall Pot Key', player),
+             lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Desert Palace (Popos 2 / Beamos Hellway Room)",
+                 max_x=256,
+                 min_y=256,
+             ))
+    set_rule(multiworld.get_location('Desert Palace - Desert Tiles 2 Pot Key', player),
+             lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Desert Palace (Popos 2 / Beamos Hellway Room)",
+                 max_x=256,
+                 min_y=256,
+             ))
+    add_rule(multiworld.get_location('Desert Palace - Prize', player),
+             lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4)
+             and state.has('Big Key (Desert Palace)', player)
+             and has_fire_source(state, player)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Desert Palace (Popos 2 / Beamos Hellway Room)",
+                 max_x=256,
+                 min_y=256,
+             )
+             and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
+    add_rule(multiworld.get_location('Desert Palace - Boss', player),
+             lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4)
+             and state.has('Big Key (Desert Palace)', player)
+             and has_fire_source(state, player)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Desert Palace (Popos 2 / Beamos Hellway Room)",
+                 max_x=256,
+                 min_y=256,
+             )
+             and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
 
     # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
     if not (world.options.small_key_shuffle and world.options.big_key_shuffle):
