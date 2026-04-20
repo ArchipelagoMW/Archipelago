@@ -1,6 +1,7 @@
 import unittest
 from types import SimpleNamespace
 import random
+from unittest.mock import patch
 
 from worlds.alttp.EnemyShuffle import (
     DungeonEnemyRoom,
@@ -27,6 +28,7 @@ from worlds.alttp.EnemyShuffle import (
     _get_base_patched_rom_bytes,
     _get_enemizer_symbol,
     _get_room_header_bank,
+    _load_default_dungeon_room_sprites,
     _load_enemy_sprite_requirements,
     _randomize_overworld_groups,
     _randomize_room_sprites,
@@ -53,7 +55,11 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             enemy_shuffle_state=None,
         )
 
-        requirements = get_effective_dungeon_room_sprite_requirements(world, 291)
+        if hasattr(_load_default_dungeon_room_sprites, "room_sprites"):
+            delattr(_load_default_dungeon_room_sprites, "room_sprites")
+
+        with patch("worlds.alttp.EnemyShuffle._get_base_patched_rom_bytes", side_effect=AssertionError("logic should not read the base ROM")):
+            requirements = get_effective_dungeon_room_sprite_requirements(world, 291)
 
         self.assertEqual(
             [requirement.sprite_name for requirement in requirements],

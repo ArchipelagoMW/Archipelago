@@ -245,6 +245,14 @@ class EffectiveDungeonEnemySprite:
 
 
 @dataclass(frozen=True)
+class DefaultDungeonEnemySprite:
+    sprite_id: int
+    has_key: bool
+    x_coord_pixels: int
+    y_coord_pixels: int
+
+
+@dataclass(frozen=True)
 class OverworldEnemySprite:
     address: int
     y_coord: int
@@ -821,29 +829,42 @@ def get_effective_dungeon_room_enemies(world: "ALTTPWorld", room_id: int) -> tup
     )
 
 
-def _get_effective_dungeon_room_sprites(world: "ALTTPWorld", room_id: int) -> tuple[DungeonEnemySprite | RandomizedDungeonEnemySprite, ...]:
+def _get_effective_dungeon_room_sprites(
+    world: "ALTTPWorld",
+    room_id: int,
+) -> tuple[DefaultDungeonEnemySprite | RandomizedDungeonEnemySprite, ...]:
     if world.options.enemy_shuffle and world.enemy_shuffle_state is not None:
         randomized_room = world.enemy_shuffle_state.randomized_dungeon_rooms.get(room_id)
         if randomized_room is not None:
             return randomized_room.sprites
 
-    room = _get_default_dungeon_rooms().get(room_id)
-    if room is None:
+    room_sprites = _load_default_dungeon_room_sprites().get(room_id)
+    if room_sprites is None:
         raise KeyError(f"Unknown ALTTP room id {room_id}")
-    return room.sprites
+    return room_sprites
 
 
-def _get_default_dungeon_rooms() -> dict[int, DungeonEnemyRoom]:
-    dungeon_rooms = getattr(_get_default_dungeon_rooms, "dungeon_rooms", None)
-    if dungeon_rooms is None:
-        rom_bytes = _get_base_patched_rom_bytes()
-        metadata = _load_enemy_room_metadata()
-        dungeon_rooms = {
-            room.room_id: room
-            for room in _read_dungeon_rooms(rom_bytes, _get_enemizer_symbol("moved_room_header_bank_value_address"), metadata)
+def _load_default_dungeon_room_sprites() -> dict[int, tuple[DefaultDungeonEnemySprite, ...]]:
+    room_sprites = getattr(_load_default_dungeon_room_sprites, "room_sprites", None)
+    if room_sprites is None:
+        raw_data = pkgutil.get_data(__package__, "enemizer_data/default_dungeon_room_enemies.json")
+        if raw_data is None:
+            raise FileNotFoundError("Missing vendored default dungeon enemy metadata required by ALTTP logic")
+        parsed_data = json.loads(raw_data.decode("utf-8"))
+        room_sprites = {
+            int(room_id): tuple(
+                DefaultDungeonEnemySprite(
+                    sprite_id=sprite["sprite_id"],
+                    has_key=sprite["has_key"],
+                    x_coord_pixels=sprite["x_coord_pixels"],
+                    y_coord_pixels=sprite["y_coord_pixels"],
+                )
+                for sprite in sprites
+            )
+            for room_id, sprites in parsed_data.items()
         }
-        _get_default_dungeon_rooms.dungeon_rooms = dungeon_rooms
-    return dungeon_rooms
+        _load_default_dungeon_room_sprites.room_sprites = room_sprites
+    return room_sprites
 
 
 def _load_room_names() -> dict[int, str]:
