@@ -41,6 +41,39 @@ POTENTIAL_SUBGROUP_2 = (12, 18, 23, 24, 28, 46, 34, 35, 39, 40, 38, 41, 36, 37, 
 POTENTIAL_SUBGROUP_3 = (17, 16, 27, 20, 82, 83)
 GUARD_SUBGROUP_1_DUNGEON_GROUP_IDS = frozenset((1, 2, 3, 4))
 
+# Swords use their highest charged attack class rather than the weaker swing class.
+ITEM_NAME_TO_DAMAGE_CLASS = {
+    "Blue Boomerang": 0,
+    "Red Boomerang": 0,
+    "Fighter Sword": 2,
+    "Master Sword": 3,
+    "Tempered Sword": 4,
+    "Golden Sword": 5,
+    "Cane of Somaria": 1,
+    "Cane of Byrna": 1,
+    "Hammer": 3,
+    "Bow": 6,
+    "Silver Arrows": 9,
+    "Silver Bow": 9,
+    "Hookshot": 7,
+    "Single Bomb": 8,
+    "Bombs (3)": 8,
+    "Bombs (10)": 8,
+    "Bomb Upgrade (+5)": 8,
+    "Bomb Upgrade (+10)": 8,
+    "Bomb Upgrade (50)": 8,
+    "Magic Powder": 10,
+    "Fire Rod": 11,
+    "Ice Rod": 12,
+    "Bombos": 13,
+    "Ether": 14,
+    "Quake": 15,
+    "Bee": 1,
+    "Good Bee": 1,
+    "Bottle (Bee)": 1,
+    "Bottle (Good Bee)": 1,
+}
+
 @dataclass(frozen=True)
 class RoomGroupRequirement:
     group_id: Optional[int]
@@ -106,6 +139,10 @@ class EnemySpriteRequirement:
     mapping_confidence: Optional[str] = None
     kill_damage_classes: tuple[int, ...] = tuple()
     kill_items: tuple[str, ...] = tuple()
+    kill_abilities: tuple[str, ...] = tuple()
+    yellow_slime_transform_items: tuple[str, ...] = tuple()
+    yellow_slime_follow_up_items: tuple[str, ...] = tuple()
+    yellow_slime_follow_up_abilities: tuple[str, ...] = tuple()
     damage_notes: Optional[str] = None
 
 
@@ -713,6 +750,10 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             mapping_confidence=entry.get("mapping_confidence"),
             kill_damage_classes=tuple(entry.get("kill_damage_classes", ())),
             kill_items=tuple(entry.get("kill_items", ())),
+            kill_abilities=tuple(entry.get("kill_abilities", ())),
+            yellow_slime_transform_items=tuple(entry.get("yellow_slime_transform_items", ())),
+            yellow_slime_follow_up_items=tuple(entry.get("yellow_slime_follow_up_items", ())),
+            yellow_slime_follow_up_abilities=tuple(entry.get("yellow_slime_follow_up_abilities", ())),
             damage_notes=entry.get("damage_notes"),
         )
         for entry in payload["requirements"]

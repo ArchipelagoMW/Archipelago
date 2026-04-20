@@ -137,12 +137,56 @@ def can_clear_enemy_room(state: CollectionState, player: int, room_name_or_id: s
 
     available_damage_classes = _get_available_damage_classes(state, player, len(room_enemies))
     for requirement in room_enemies:
-        if available_damage_classes.intersection(requirement.kill_damage_classes):
-            continue
-        if _can_use_guide_kill_items(state, player, requirement.kill_items, len(room_enemies)):
+        if _can_kill_enemy_requirement(state, player, requirement, len(room_enemies), available_damage_classes):
             continue
         return False
     return True
+
+
+def _can_kill_enemy_requirement(
+    state: CollectionState,
+    player: int,
+    requirement,
+    enemy_count: int,
+    available_damage_classes: set[int],
+) -> bool:
+    direct_damage_classes = set(requirement.kill_damage_classes)
+    direct_kill_items = requirement.kill_items
+
+    if requirement.yellow_slime_transform_items:
+        transform_damage_classes = {
+            _get_kill_item_damage_class(item_name)
+            for item_name in requirement.yellow_slime_transform_items
+        }
+        direct_damage_classes -= transform_damage_classes
+        direct_kill_items = tuple(
+            item_name
+            for item_name in requirement.kill_items
+            if item_name not in requirement.yellow_slime_transform_items
+        )
+
+    if available_damage_classes.intersection(direct_damage_classes):
+        return True
+    if _can_use_guide_kill_items(state, player, direct_kill_items, enemy_count):
+        return True
+    if _can_use_guide_kill_abilities(state, player, requirement.kill_abilities, enemy_count):
+        return True
+
+    if requirement.yellow_slime_transform_items:
+        return (
+            _can_use_guide_kill_items(state, player, requirement.yellow_slime_transform_items, enemy_count)
+            and (
+                _can_use_guide_kill_items(state, player, requirement.yellow_slime_follow_up_items, enemy_count)
+                or _can_use_guide_kill_abilities(
+                    state,
+                    player,
+                    requirement.yellow_slime_follow_up_abilities,
+                    enemy_count,
+                )
+            )
+        )
+
+    return False
 
 
 def _get_available_damage_classes(state: CollectionState, player: int, enemy_count: int) -> set[int]:
@@ -196,6 +240,24 @@ def _can_use_guide_kill_items(state: CollectionState, player: int, kill_items: t
     )
 
 
+def _can_use_guide_kill_abilities(
+    state: CollectionState,
+    player: int,
+    kill_abilities: tuple[str, ...],
+    enemy_count: int,
+) -> bool:
+    return any(
+        _can_use_guide_kill_ability(state, player, kill_ability, enemy_count)
+        for kill_ability in kill_abilities
+    )
+
+
+def _get_kill_item_damage_class(kill_item: str) -> int:
+    from .EnemyShuffle import ITEM_NAME_TO_DAMAGE_CLASS
+
+    return ITEM_NAME_TO_DAMAGE_CLASS[kill_item]
+
+
 def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str, enemy_count: int) -> bool:
     if kill_item in {"Blue Boomerang", "Red Boomerang"}:
         return state.has(kill_item, player)
@@ -210,8 +272,6 @@ def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str
             and can_shoot_arrows(state, player, enemy_count)
     if kill_item == "Hookshot":
         return state.has("Hookshot", player)
-    if kill_item == "Bomb":
-        return can_use_bombs(state, player, enemy_count)
     if kill_item == "Magic Powder":
         return state.has("Magic Powder", player)
     if kill_item == "Fire Rod":
@@ -224,6 +284,12 @@ def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str
         return state.has("Ether", player) and _can_cast_medallion(state, player)
     if kill_item == "Quake":
         return state.has("Quake", player) and _can_cast_medallion(state, player)
+    return False
+
+
+def _can_use_guide_kill_ability(state: CollectionState, player: int, kill_ability: str, enemy_count: int) -> bool:
+    if kill_ability == "bombs":
+        return can_use_bombs(state, player, enemy_count)
     return False
 
 

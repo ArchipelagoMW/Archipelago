@@ -40,6 +40,10 @@ from worlds.alttp.StateHelpers import can_clear_enemy_room
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
+KILL_ABILITY_TO_DAMAGE_CLASS = {
+    "bombs": 8,
+}
+
 
 class TestEnemyShuffleValidation(unittest.TestCase):
     def test_effective_room_enemy_requirements_fall_back_to_default_room_data(self) -> None:
@@ -99,6 +103,45 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
+    def test_deadrock_requires_transform_and_follow_up_item(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    291: RandomizedDungeonEnemyRoom(
+                        room_id=291,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 39, 39, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            powder_only_state = logic_test.get_state(item_factory(["Magic Powder"], world))
+            self.assertFalse(can_clear_enemy_room(powder_only_state, 1, "Mini-Moldorm Cave"))
+
+            bow_only_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertFalse(can_clear_enemy_room(bow_only_state, 1, "Mini-Moldorm Cave"))
+
+            powder_bow_state = logic_test.get_state(item_factory(["Magic Powder", "Bow"], world))
+            self.assertTrue(can_clear_enemy_room(powder_bow_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
     def test_room_name_helpers_are_bidirectional(self) -> None:
         self.assertEqual(get_room_name(184), "Eastern Palace (Big Key Room)")
         self.assertEqual(get_room_id("Eastern Palace (Big Key Room)"), 184)
@@ -123,13 +166,53 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             deadrock.kill_items,
             ("Magic Powder", "Quake"),
         )
+        self.assertEqual(deadrock.kill_abilities, tuple())
+        self.assertEqual(deadrock.yellow_slime_transform_items, ("Magic Powder", "Quake"))
+        self.assertIn("Bow", deadrock.yellow_slime_follow_up_items)
+        self.assertIn("Hammer", deadrock.yellow_slime_follow_up_items)
+        self.assertEqual(deadrock.yellow_slime_follow_up_abilities, ("bombs",))
         self.assertIn("250 effect", deadrock.damage_notes)
 
         self.assertEqual(mimic.guide_enemy_id, 131)
         self.assertEqual(mimic.mapping_confidence, "assumed_shared_green_mimic")
         self.assertIn("green mimic", mimic.damage_notes)
         self.assertEqual(terrorpin.kill_items, ("Hammer",))
+        self.assertEqual(terrorpin.kill_abilities, tuple())
         self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
+
+    def test_guide_kill_metadata_uses_real_items_and_explicit_abilities(self) -> None:
+        for requirement in _load_enemy_sprite_requirements():
+            if requirement.guide_enemy_id is None:
+                continue
+
+            with self.subTest(sprite=requirement.sprite_name):
+                for item_name in requirement.kill_items:
+                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
+                for item_name in requirement.yellow_slime_transform_items:
+                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
+                for item_name in requirement.yellow_slime_follow_up_items:
+                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
+
+                self.assertNotIn("Bomb", requirement.kill_items)
+                self.assertNotIn("Bomb", requirement.yellow_slime_follow_up_items)
+
+                item_classes = {
+                    ITEM_NAME_TO_DAMAGE_CLASS[item_name]
+                    for item_name in requirement.kill_items
+                }
+                ability_classes = {
+                    KILL_ABILITY_TO_DAMAGE_CLASS[ability_name]
+                    for ability_name in requirement.kill_abilities
+                }
+                if requirement.sprite_name == "TerrorpinSprite":
+                    self.assertEqual(requirement.kill_items, ("Hammer",))
+                    self.assertEqual(
+                        item_classes | ability_classes,
+                        {ITEM_NAME_TO_DAMAGE_CLASS["Hammer"]},
+                    )
+                    self.assertTrue((item_classes | ability_classes).issubset(set(requirement.kill_damage_classes)))
+                else:
+                    self.assertEqual(item_classes | ability_classes, set(requirement.kill_damage_classes))
 
 
     def test_base_patched_enemy_shuffle_data_uses_relocated_room_headers(self) -> None:

@@ -62,14 +62,16 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
         "Bombos",
         "Quake"
       ],
-      "damage_notes": "Guide enemy 0 is a shared Crow/Raven slot. This mapping is treated as exact enough for RavenSprite."
+      "damage_notes": "Guide enemy 0 is a shared Crow/Raven slot. This mapping is treated as exact enough for RavenSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "VultureSprite",
@@ -132,14 +134,16 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
         "Bombos",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "EmptySprite",
@@ -464,7 +468,6 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
@@ -472,7 +475,10 @@
         "Ether",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "OctoballoonHatchlingsSprite",
@@ -531,7 +537,6 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
@@ -539,7 +544,10 @@
         "Ether",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "HinoxSprite",
@@ -812,7 +820,6 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Magic Powder",
         "Fire Rod",
@@ -821,7 +828,10 @@
         "Ether",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "PoeSprite",
@@ -885,14 +895,16 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
         "Bombos",
         "Ether"
       ],
-      "damage_notes": "Guide enemy 25 is a shared Poe slot; this mapping is treated as exact enough for PoeSprite."
+      "damage_notes": "Guide enemy 25 is a shared Poe slot; this mapping is treated as exact enough for PoeSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "DwarvesSprite",
@@ -1418,7 +1430,28 @@
         "Magic Powder",
         "Quake"
       ],
-      "damage_notes": "Guide kill methods are magic powder and Quake; both use the special 250 effect that turns Deadrock into a 0-HP yellow slime."
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos"
+      ],
+      "damage_notes": "Guide kill methods are magic powder and Quake; both use the special 250 effect that turns Deadrock into a 0-HP yellow slime. Room-clear logic therefore requires one of those transform items plus a valid yellow slime finisher.",
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "StorytellersSprite",
@@ -2079,7 +2112,6 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow",
         "Magic Powder",
         "Fire Rod",
@@ -2088,7 +2120,10 @@
         "Ether",
         "Quake"
       ],
-      "damage_notes": "Guide enemy name is Rock Spider/Beetle/Crab; this is treated as the same enemy as Enemizer's RockHoarderSprite."
+      "damage_notes": "Guide enemy name is Rock Spider/Beetle/Crab; this is treated as the same enemy as Enemizer's RockHoarderSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "TutorialSoldierSprite",
@@ -2555,14 +2590,16 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
         "Bombos",
         "Ether"
       ],
-      "damage_notes": "Guide enemy name is Swamp hare/bunny/rabbit (Toppo); this is treated as the same enemy as Enemizer's RabbitSprite."
+      "damage_notes": "Guide enemy name is Swamp hare/bunny/rabbit (Toppo); this is treated as the same enemy as Enemizer's RabbitSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "PopoSprite",
@@ -2820,7 +2857,6 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
@@ -2828,7 +2864,10 @@
         "Ether",
         "Quake"
       ],
-      "damage_notes": "Guide entry is a shared Fireball Zora slot; this mapping is treated as exact enough for FireballZoraSprite."
+      "damage_notes": "Guide entry is a shared Fireball Zora slot; this mapping is treated as exact enough for FireballZoraSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "WalkingZoraSprite",
@@ -4196,13 +4235,15 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Bombos",
         "Ether"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "BigSpikeTrapSprite",
@@ -4441,14 +4482,16 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Bombos",
         "Ether",
         "Quake"
       ],
-      "damage_notes": "Guide enemy name is Water bug/tektite; this is treated as the same enemy as Enemizer's WaterTektiteSprite."
+      "damage_notes": "Guide enemy name is Water bug/tektite; this is treated as the same enemy as Enemizer's WaterTektiteSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "AntifairyCircleSprite",
@@ -4530,10 +4573,12 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow"
       ],
-      "damage_notes": "Guide enemy 131 is a shared Green Eyegore/Green Goriya slot. This entry uses the shared-ID data for the Eyegore interpretation."
+      "damage_notes": "Guide enemy 131 is a shared Green Eyegore/Green Goriya slot. This entry uses the shared-ID data for the Eyegore interpretation.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "RedEyegoreSprite",
@@ -4961,13 +5006,15 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Bombos",
         "Quake"
       ],
-      "damage_notes": "Guide enemy 143 is a shared Blob/Gel/Zol slot. This mapping is treated as exact enough for Enemizer's floor-jumping slime sprite."
+      "damage_notes": "Guide enemy 143 is a shared Blob/Gel/Zol slot. This mapping is treated as exact enough for Enemizer's floor-jumping slime sprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "WallmasterSprite",
@@ -5529,13 +5576,15 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Bombos",
         "Quake"
       ],
-      "damage_notes": "Guide enemy name is Kyameron - Splash (water blob); this is treated as the same entity as Enemizer's KyameronWaterSplashSprite."
+      "damage_notes": "Guide enemy name is Kyameron - Splash (water blob); this is treated as the same entity as Enemizer's KyameronWaterSplashSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "WizzrobeSprite",
@@ -5989,13 +6038,15 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Bombos",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "BomberFlyingCreaturesFromDarkworld2Sprite",
@@ -6054,13 +6105,15 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Bombos",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "PikitSprite",
@@ -6491,10 +6544,12 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow"
       ],
-      "damage_notes": "AP currently treats Enemizer's synthetic MimicSprite (0xB8) as a green mimic. The kill methods are borrowed from guide enemy 131, the shared Green Eyegore/Green Goriya slot."
+      "damage_notes": "AP currently treats Enemizer's synthetic MimicSprite (0xB8) as a green mimic. The kill methods are borrowed from guide enemy 131, the shared Green Eyegore/Green Goriya slot.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "FeudingFriendsOnDeathMountainSprite",
@@ -7190,13 +7245,15 @@
         "Tempered Sword",
         "Golden Sword",
         "Bow",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
         "Bombos"
       ],
-      "damage_notes": "Guide enemy name is Fuzzy Stack (Hokkubokku); this is treated as the same enemy as Enemizer's HokkuBokkuSprite."
+      "damage_notes": "Guide enemy name is Fuzzy Stack (Hokkubokku); this is treated as the same enemy as Enemizer's HokkuBokkuSprite.",
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "BigFairyWhoHealsYouSprite",
@@ -7463,7 +7520,6 @@
         "Golden Sword",
         "Bow",
         "Hookshot",
-        "Bomb",
         "Silver Bow",
         "Fire Rod",
         "Ice Rod",
@@ -7471,7 +7527,10 @@
         "Ether",
         "Quake"
       ],
-      "damage_notes": null
+      "damage_notes": null,
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "LynelSprite",
