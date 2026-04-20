@@ -219,6 +219,12 @@ class RandomizedDungeonEnemyRoom:
 
 
 @dataclass(frozen=True)
+class EffectiveDungeonEnemySprite:
+    requirement: EnemySpriteRequirement
+    has_key: bool
+
+
+@dataclass(frozen=True)
 class OverworldEnemySprite:
     address: int
     y_coord: int
@@ -769,28 +775,35 @@ def get_room_id(room_name: str) -> Optional[int]:
 
 
 def get_effective_dungeon_room_sprite_requirements(world: "ALTTPWorld", room_id: int) -> tuple[EnemySpriteRequirement, ...]:
-    sprite_requirements = _get_sprite_requirement_lookup()
-    room_sprites = _get_effective_dungeon_room_sprite_ids(world, room_id)
     return tuple(
-        sprite_requirements[sprite_id]
-        for sprite_id in room_sprites
-        if sprite_id in sprite_requirements
-        and sprite_requirements[sprite_id].is_enemy_sprite
-        and not sprite_requirements[sprite_id].npc
-        and not sprite_requirements[sprite_id].is_object
+        enemy.requirement
+        for enemy in get_effective_dungeon_room_enemies(world, room_id)
     )
 
 
-def _get_effective_dungeon_room_sprite_ids(world: "ALTTPWorld", room_id: int) -> tuple[int, ...]:
+def get_effective_dungeon_room_enemies(world: "ALTTPWorld", room_id: int) -> tuple[EffectiveDungeonEnemySprite, ...]:
+    sprite_requirements = _get_sprite_requirement_lookup()
+    room_sprites = _get_effective_dungeon_room_sprites(world, room_id)
+    return tuple(
+        EffectiveDungeonEnemySprite(requirement=sprite_requirements[sprite.sprite_id], has_key=sprite.has_key)
+        for sprite in room_sprites
+        if sprite.sprite_id in sprite_requirements
+        and sprite_requirements[sprite.sprite_id].is_enemy_sprite
+        and not sprite_requirements[sprite.sprite_id].npc
+        and not sprite_requirements[sprite.sprite_id].is_object
+    )
+
+
+def _get_effective_dungeon_room_sprites(world: "ALTTPWorld", room_id: int) -> tuple[DungeonEnemySprite | RandomizedDungeonEnemySprite, ...]:
     if world.options.enemy_shuffle and world.enemy_shuffle_state is not None:
         randomized_room = world.enemy_shuffle_state.randomized_dungeon_rooms.get(room_id)
         if randomized_room is not None:
-            return tuple(sprite.sprite_id for sprite in randomized_room.sprites)
+            return randomized_room.sprites
 
     room = _get_default_dungeon_rooms().get(room_id)
     if room is None:
         raise KeyError(f"Unknown ALTTP room id {room_id}")
-    return tuple(sprite.sprite_id for sprite in room.sprites)
+    return room.sprites
 
 
 def _get_default_dungeon_rooms() -> dict[int, DungeonEnemyRoom]:

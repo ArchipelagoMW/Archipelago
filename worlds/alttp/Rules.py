@@ -14,7 +14,7 @@ from .Options import small_key_shuffle
 from .OverworldGlitchRules import overworld_glitches_rules
 from .PotShuffle import POT_KEY, POT_SWITCH, get_unique_pot_item_position
 from .Regions import LTTPRegionType, location_table
-from .StateHelpers import (can_extend_magic, can_kill_most_things, can_clear_enemy_room,
+from .StateHelpers import (can_extend_magic, can_kill_most_things, can_clear_enemy_room, can_kill_key_enemy_in_room,
                            can_lift_heavy_rocks, can_lift_rocks,
                            can_melt_things, can_retrieve_tablet,
                            can_shoot_arrows, has_beam_sword, has_crystals,
@@ -359,7 +359,7 @@ def global_rules(multiworld: MultiWorld, player: int):
                              == ('Big Key (Eastern Palace)', player) and state.has('Small Key (Eastern Palace)',
                                                                                    player)))))
     set_rule(multiworld.get_location('Eastern Palace - Dark Eyegore Key Drop', player),
-             lambda state: state.has('Big Key (Eastern Palace)', player) and can_kill_most_things(state, player, 1))
+             lambda state: state.has('Big Key (Eastern Palace)', player) and can_kill_key_enemy_in_room(state, player, "Eastern Palace (Eyegore Key Room)"))
     set_rule(multiworld.get_location('Eastern Palace - Big Chest', player),
              lambda state: state.has('Big Key (Eastern Palace)', player))
     # not bothering to check for can_kill_most_things in the rooms leading to boss, as if you can kill a boss you should

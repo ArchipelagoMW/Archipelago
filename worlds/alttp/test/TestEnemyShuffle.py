@@ -17,6 +17,7 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedOverworldEnemySprite,
     WALLMASTER_SPRITE_ID,
     get_effective_dungeon_room_sprite_requirements,
+    get_effective_dungeon_room_enemies,
     get_room_id,
     get_room_name,
     get_possible_dungeon_sprite_groups,
@@ -36,7 +37,7 @@ from worlds.alttp.EnemyShuffle import (
 )
 from worlds.alttp.Items import item_table
 from worlds.alttp.Rom import LocalRom, get_base_rom_path
-from worlds.alttp.StateHelpers import can_clear_enemy_room
+from worlds.alttp.StateHelpers import can_clear_enemy_room, can_kill_key_enemy_in_room
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
@@ -138,6 +139,111 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             powder_bow_state = logic_test.get_state(item_factory(["Magic Powder", "Bow"], world))
             self.assertTrue(can_clear_enemy_room(powder_bow_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_red_eyegore_key_enemy_requires_arrows(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    153: RandomizedDungeonEnemyRoom(
+                        room_id=153,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 0x84, 0x84, False, True),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+5)", "Big Key (Eastern Palace)"], world))
+            self.assertFalse(can_kill_key_enemy_in_room(bomb_state, 1, "Eastern Palace (Eyegore Key Room)"))
+
+            bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
+            self.assertTrue(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_terrorpin_key_enemy_requires_hammer(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    153: RandomizedDungeonEnemyRoom(
+                        room_id=153,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 0x8E, 0x8E, False, True),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
+            self.assertFalse(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer", "Big Key (Eastern Palace)"], world))
+            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Eastern Palace (Eyegore Key Room)"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_green_eyegore_key_enemy_does_not_require_hammer(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    153: RandomizedDungeonEnemyRoom(
+                        room_id=153,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 0x83, 0x83, False, True),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
+            self.assertTrue(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state

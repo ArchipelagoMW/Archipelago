@@ -22,6 +22,9 @@ class TestEasternPalace(TestDungeon):
                 ["Eastern Palace - Big Key Chest", False, [], ['Lamp']],
                 ["Eastern Palace - Big Key Chest", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)', 'Progressive Bow']],
 
+                ["Eastern Palace - Dark Eyegore Key Drop", False, ['Big Key (Eastern Palace)']],
+                ["Eastern Palace - Dark Eyegore Key Drop", True, ['Lamp', 'Big Key (Eastern Palace)', 'Progressive Bow']],
+
                 #@todo: Advanced?
                 ["Eastern Palace - Boss", False, []],
                 ["Eastern Palace - Boss", False, [], ['Lamp']],

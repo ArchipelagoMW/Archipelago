@@ -121,16 +121,16 @@ def can_activate_crystal_switch(state: CollectionState, player: int) -> bool:
 
 
 def can_clear_enemy_room(state: CollectionState, player: int, room_name_or_id: str | int) -> bool:
-    from .EnemyShuffle import get_effective_dungeon_room_sprite_requirements, get_room_id
+    from .EnemyShuffle import get_effective_dungeon_room_enemies, get_room_id
 
     room_id = room_name_or_id if isinstance(room_name_or_id, int) else get_room_id(room_name_or_id)
     if room_id is None:
         raise ValueError(f"Unknown ALTTP room {room_name_or_id!r}")
 
     room_enemies = tuple(
-        requirement
-        for requirement in get_effective_dungeon_room_sprite_requirements(state.multiworld.worlds[player], room_id)
-        if requirement.killable
+        enemy.requirement
+        for enemy in get_effective_dungeon_room_enemies(state.multiworld.worlds[player], room_id)
+        if enemy.requirement.killable
     )
     if not room_enemies:
         return True
@@ -141,6 +141,28 @@ def can_clear_enemy_room(state: CollectionState, player: int, room_name_or_id: s
             continue
         return False
     return True
+
+
+def can_kill_key_enemy_in_room(state: CollectionState, player: int, room_name_or_id: str | int) -> bool:
+    from .EnemyShuffle import get_effective_dungeon_room_enemies, get_room_id
+
+    room_id = room_name_or_id if isinstance(room_name_or_id, int) else get_room_id(room_name_or_id)
+    if room_id is None:
+        raise ValueError(f"Unknown ALTTP room {room_name_or_id!r}")
+
+    key_enemies = tuple(
+        enemy.requirement
+        for enemy in get_effective_dungeon_room_enemies(state.multiworld.worlds[player], room_id)
+        if enemy.has_key and enemy.requirement.killable
+    )
+    if not key_enemies:
+        return False
+
+    available_damage_classes = _get_available_damage_classes(state, player, 1)
+    return any(
+        _can_kill_enemy_requirement(state, player, requirement, 1, available_damage_classes)
+        for requirement in key_enemies
+    )
 
 
 def _can_kill_enemy_requirement(
