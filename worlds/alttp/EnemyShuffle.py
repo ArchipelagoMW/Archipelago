@@ -682,7 +682,6 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
         raise FileNotFoundError("Missing vendored Enemizer enemy sprite metadata required by ALTTP enemy state generation")
 
     payload = json.loads(raw_metadata.decode("utf-8"))
-    damage_metadata = _load_enemy_damage_metadata()
     return tuple(
         EnemySpriteRequirement(
             sprite_name=entry["sprite_name"],
@@ -709,27 +708,55 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             excluded_rooms=tuple(entry["excluded_rooms"]),
             dont_randomize_rooms=tuple(entry["dont_randomize_rooms"]),
             spawnable_rooms=tuple(entry["spawnable_rooms"]),
-            guide_enemy_id=damage_metadata.get(entry["sprite_name"], {}).get("guide_enemy_id"),
-            guide_enemy_name=damage_metadata.get(entry["sprite_name"], {}).get("guide_enemy_name"),
-            mapping_confidence=damage_metadata.get(entry["sprite_name"], {}).get("mapping_confidence"),
-            kill_damage_classes=tuple(damage_metadata.get(entry["sprite_name"], {}).get("kill_damage_classes", ())),
-            kill_items=tuple(damage_metadata.get(entry["sprite_name"], {}).get("kill_items", ())),
-            damage_notes=damage_metadata.get(entry["sprite_name"], {}).get("damage_notes"),
+            guide_enemy_id=entry.get("guide_enemy_id"),
+            guide_enemy_name=entry.get("guide_enemy_name"),
+            mapping_confidence=entry.get("mapping_confidence"),
+            kill_damage_classes=tuple(entry.get("kill_damage_classes", ())),
+            kill_items=tuple(entry.get("kill_items", ())),
+            damage_notes=entry.get("damage_notes"),
         )
         for entry in payload["requirements"]
     )
 
 
-def _load_enemy_damage_metadata() -> dict[str, dict[str, object]]:
-    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/enemy_damage_metadata.json")
-    if raw_metadata is None:
-        raise FileNotFoundError("Missing vendored Enemizer enemy damage metadata required by ALTTP enemy state generation")
+def get_room_name(room_id: int) -> Optional[str]:
+    return _load_room_names().get(room_id)
 
-    payload = json.loads(raw_metadata.decode("utf-8"))
-    return {
-        entry["sprite_name"]: entry
-        for entry in payload["metadata"]
-    }
+
+def get_room_id(room_name: str) -> Optional[int]:
+    return _load_room_name_to_id().get(room_name)
+
+
+def _load_room_names() -> dict[int, str]:
+    room_names = getattr(_load_room_names, "room_names", None)
+    if room_names is None:
+        raw_metadata = pkgutil.get_data(__package__, "enemizer_data/room_names.json")
+        if raw_metadata is None:
+            raise FileNotFoundError("Missing vendored Enemizer room-name metadata required by ALTTP enemy state generation")
+
+        payload = json.loads(raw_metadata.decode("utf-8"))
+        room_names = {
+            room_id: room_name
+            for room_name, room_id in payload["room_name_to_id"].items()
+        }
+        _load_room_names.room_names = room_names
+    return room_names
+
+
+def _load_room_name_to_id() -> dict[str, int]:
+    room_name_to_id = getattr(_load_room_name_to_id, "room_name_to_id", None)
+    if room_name_to_id is None:
+        raw_metadata = pkgutil.get_data(__package__, "enemizer_data/room_names.json")
+        if raw_metadata is None:
+            raise FileNotFoundError("Missing vendored Enemizer room-name metadata required by ALTTP enemy state generation")
+
+        payload = json.loads(raw_metadata.decode("utf-8"))
+        room_name_to_id = {
+            room_name: int(room_id)
+            for room_name, room_id in payload["room_name_to_id"].items()
+        }
+        _load_room_name_to_id.room_name_to_id = room_name_to_id
+    return room_name_to_id
 
 
 def _load_overworld_enemy_metadata() -> dict[str, object]:

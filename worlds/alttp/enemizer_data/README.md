@@ -16,9 +16,9 @@ Archipelago-authored companion metadata:
 
 - `enemy_room_metadata.json`
 - `enemy_sprite_requirements.json`
-- `enemy_damage_metadata.json`
 - `overworld_enemy_metadata.json`
 - `pot_shuffle.json`
+- `room_names.json`
 
 Purpose:
 

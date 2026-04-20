@@ -15,6 +15,8 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedOverworldEnemyArea,
     RandomizedOverworldEnemySprite,
     WALLMASTER_SPRITE_ID,
+    get_room_id,
+    get_room_name,
     get_possible_dungeon_sprite_groups,
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
@@ -22,6 +24,7 @@ from worlds.alttp.EnemyShuffle import (
     _get_base_patched_rom_bytes,
     _get_enemizer_symbol,
     _get_room_header_bank,
+    _load_enemy_sprite_requirements,
     _randomize_overworld_groups,
     _randomize_room_sprites,
     _read_room_header_address,
@@ -33,6 +36,32 @@ from worlds.alttp.Rom import LocalRom, get_base_rom_path
 
 
 class TestEnemyShuffleValidation(unittest.TestCase):
+    def test_room_name_helpers_are_bidirectional(self) -> None:
+        self.assertEqual(get_room_name(184), "Eastern Palace (Big Key Room)")
+        self.assertEqual(get_room_id("Eastern Palace (Big Key Room)"), 184)
+        self.assertEqual(get_room_name(291), "Mini-Moldorm Cave")
+        self.assertEqual(get_room_id("Misery Mire (Mire02 / Wizzrobes Room)"), 210)
+        self.assertIsNone(get_room_name(9999))
+        self.assertIsNone(get_room_id("Not A Real ALTTP Room"))
+
+    def test_merged_sprite_metadata_loads_damage_fields(self) -> None:
+        requirements = {
+            requirement.sprite_name: requirement
+            for requirement in _load_enemy_sprite_requirements()
+        }
+
+        deadrock = requirements["DeadrockSprite"]
+        mimic = requirements["MimicSprite"]
+
+        self.assertTrue(deadrock.killable)
+        self.assertEqual(deadrock.guide_enemy_id, 39)
+        self.assertEqual(deadrock.kill_items, ("Magic powder", "Quake medallion"))
+        self.assertIn("250 effect", deadrock.damage_notes)
+
+        self.assertEqual(mimic.guide_enemy_id, 131)
+        self.assertEqual(mimic.mapping_confidence, "assumed_shared_green_mimic")
+        self.assertIn("green mimic", mimic.damage_notes)
+
     def test_base_patched_enemy_shuffle_data_uses_relocated_room_headers(self) -> None:
         vanilla_rom_bytes = bytes(LocalRom(get_base_rom_path()).buffer)
         patched_rom_bytes = _get_base_patched_rom_bytes()

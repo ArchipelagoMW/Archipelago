@@ -30,7 +30,29 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 0,
+      "guide_enemy_name": "Shared:  Crow/Raven (Light World)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide enemy 0 is a shared Crow/Raven slot. This mapping is treated as exact enough for RavenSprite."
     },
     {
       "sprite_name": "VultureSprite",
@@ -61,7 +83,29 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 1,
+      "guide_enemy_name": "Vulture (Tendoru)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "EmptySprite",
@@ -353,7 +397,30 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 15,
+      "guide_enemy_name": "Octoballoon/Octoblimp",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "OctoballoonHatchlingsSprite",
@@ -381,7 +448,29 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 16,
+      "guide_enemy_name": "Octoballoon/Octoblimp spawn (after explosion)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "HinoxSprite",
@@ -524,7 +613,15 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 21,
+      "guide_enemy_name": "Fire Faerie / Anti-faerie / Bubble",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [],
+      "kill_items": [
+        "Magic powder"
+      ],
+      "damage_notes": "Guide kill method is magic powder only; this transforms the anti-faerie into a faerie rather than dealing conventional damage."
     },
     {
       "sprite_name": "SahasrahlaAginahSprite",
@@ -642,7 +739,29 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 25,
+      "guide_enemy_name": "Shared:  Poe (Ghost) (Light World)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion"
+      ],
+      "damage_notes": "Guide enemy 25 is a shared Poe slot; this mapping is treated as exact enough for PoeSprite."
     },
     {
       "sprite_name": "DwarvesSprite",
@@ -897,7 +1016,26 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 32,
+      "guide_enemy_name": "Bomb Slug (Nuranuru)",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bow + silver arrow",
+        "Magic powder",
+        "Fire rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide enemy name is Bomb Slug (Nuranuru); this is treated as the same enemy as Enemizer's SluggulaSprite."
     },
     {
       "sprite_name": "PushSwitchSprite",
@@ -1069,7 +1207,22 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 38,
+      "guide_enemy_name": "Shared:  Red Hardhat Beetle (hard-shelled) (faster than blue one)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Bow + silver arrow",
+        "Bombos medallion"
+      ],
+      "damage_notes": "Guide enemy 38 is a shared red/blue hardhat beetle slot. The guide notes sword and hammer hits also knock Link back despite doing damage."
     },
     {
       "sprite_name": "DeadrockSprite",
@@ -1100,7 +1253,16 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 39,
+      "guide_enemy_name": "Deadrock (Deddorokku) - annoying bugger, turns to stone when hit",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [],
+      "kill_items": [
+        "Magic powder",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide kill methods are magic powder and Quake; both use the special 250 effect that turns Deadrock into a 0-HP yellow slime."
     },
     {
       "sprite_name": "StorytellersSprite",
@@ -1729,7 +1891,30 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 62,
+      "guide_enemy_name": "Rock Spider/Beetle/Crab",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Magic powder",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide enemy name is Rock Spider/Beetle/Crab; this is treated as the same enemy as Enemizer's RockHoarderSprite."
     },
     {
       "sprite_name": "TutorialSoldierSprite",
@@ -2166,7 +2351,28 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 77,
+      "guide_enemy_name": "Swamp hare/bunny/rabbit (Toppo)",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion"
+      ],
+      "damage_notes": "Guide enemy name is Swamp hare/bunny/rabbit (Toppo); this is treated as the same enemy as Enemizer's RabbitSprite."
     },
     {
       "sprite_name": "PopoSprite",
@@ -2393,7 +2599,29 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 85,
+      "guide_enemy_name": "Shared:  Fireball Zora (Light World)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide entry is a shared Fireball Zora slot; this mapping is treated as exact enough for FireballZoraSprite."
     },
     {
       "sprite_name": "WalkingZoraSprite",
@@ -2567,7 +2795,15 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 91,
+      "guide_enemy_name": "Spark (clockwise)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [],
+      "kill_items": [
+        "Bombos medallion"
+      ],
+      "damage_notes": "Guide only lists Bombos as a kill method for Spark; all ordinary direct attacks are zero-damage."
     },
     {
       "sprite_name": "Spark_RightToLeftSprite",
@@ -2595,7 +2831,15 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 92,
+      "guide_enemy_name": "Spark (counterclockwise)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [],
+      "kill_items": [
+        "Bombos medallion"
+      ],
+      "damage_notes": "Guide only lists Bombos as a kill method for Spark; all ordinary direct attacks are zero-damage."
     },
     {
       "sprite_name": "Roller_VerticalMovingSprite",
@@ -3715,7 +3959,26 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 124,
+      "guide_enemy_name": "Floating Stalfos head (a skull)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Ether medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "BigSpikeTrapSprite",
@@ -3925,7 +4188,28 @@
       "dont_randomize_rooms": [
         40
       ],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 129,
+      "guide_enemy_name": "Water bug/tektite",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide enemy name is Water bug/tektite; this is treated as the same enemy as Enemizer's WaterTektiteSprite."
     },
     {
       "sprite_name": "AntifairyCircleSprite",
@@ -3984,7 +4268,23 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 131,
+      "guide_enemy_name": "Shared:  Green Rocklops/Eyegore",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow"
+      ],
+      "damage_notes": "Guide enemy 131 is a shared Green Eyegore/Green Goriya slot. This entry uses the shared-ID data for the Eyegore interpretation."
     },
     {
       "sprite_name": "RedEyegoreSprite",
@@ -4012,7 +4312,16 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 132,
+      "guide_enemy_name": "Shared:  Red Rocklops/Eyegore",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bow + silver arrow"
+      ],
+      "damage_notes": "Guide enemy 132 is a shared Red Eyegore/Red Goriya slot. This entry uses the shared-ID data for the Eyegore interpretation."
     },
     {
       "sprite_name": "KodongosSprite",
@@ -4040,7 +4349,25 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 134,
+      "guide_enemy_name": "Kodondo - Fire-breathing triceratops, comes in green and red",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide uses the name Kodondo; this is treated as the same enemy as Enemizer's KodongosSprite."
     },
     {
       "sprite_name": "MothulaSprite",
@@ -4300,7 +4627,27 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 142,
+      "guide_enemy_name": "Turtle Shell",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Ether medallion"
+      ],
+      "damage_notes": "Guide enemy name is Turtle Shell; this is treated as the same enemy as Enemizer's TerrorpinSprite."
     },
     {
       "sprite_name": "SlimeSprite_JumpsOutOfTheFloor",
@@ -4328,7 +4675,27 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 143,
+      "guide_enemy_name": "Shared:  Blob / Gel / Zol (comes in red, yellow-brown, green)",
+      "mapping_confidence": "shared_id",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide enemy 143 is a shared Blob/Gel/Zol slot. This mapping is treated as exact enough for Enemizer's floor-jumping slime sprite."
     },
     {
       "sprite_name": "WallmasterSprite",
@@ -4575,7 +4942,21 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 145,
+      "guide_enemy_name": "Stalfos Knight",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang"
+      ],
+      "damage_notes": "Guide notes bombs only damage Stalfos Knights while collapsed; sword and hammer damage applies while upright."
     },
     {
       "sprite_name": "HelmasaurKingSprite",
@@ -4836,7 +5217,28 @@
       "dont_randomize_rooms": [
         40
       ],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 154,
+      "guide_enemy_name": "Kyameron - Splash (water blob)",
+      "mapping_confidence": "alias",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": "Guide enemy name is Kyameron - Splash (water blob); this is treated as the same entity as Enemizer's KyameronWaterSplashSprite."
     },
     {
       "sprite_name": "WizzrobeSprite",
@@ -4865,7 +5267,27 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 155,
+      "guide_enemy_name": "Wizzrobe",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "VerminHorizontalSprite",
@@ -5228,7 +5650,27 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 168,
+      "guide_enemy_name": "Green Zirro - mushroom air bomber",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "BomberFlyingCreaturesFromDarkworld2Sprite",
@@ -5259,7 +5701,27 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 169,
+      "guide_enemy_name": "Blue Zirro - mushroom air bomber",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Bombos medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "PikitSprite",
@@ -5667,7 +6129,23 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 131,
+      "guide_enemy_name": "Shared:  Green Rocklops/Eyegore",
+      "mapping_confidence": "assumed_shared_green_mimic",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow"
+      ],
+      "damage_notes": "AP currently treats Enemizer's synthetic MimicSprite (0xB8) as a green mimic. The kill methods are borrowed from guide enemy 131, the shared Green Eyegore/Green Goriya slot."
     },
     {
       "sprite_name": "FeudingFriendsOnDeathMountainSprite",
@@ -6337,7 +6815,26 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 199,
+      "guide_enemy_name": "Fuzzy Stack (Hokkubokku)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Normal bow + arrow",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion"
+      ],
+      "damage_notes": "Guide enemy name is Fuzzy Stack (Hokkubokku); this is treated as the same enemy as Enemizer's HokkuBokkuSprite."
     },
     {
       "sprite_name": "BigFairyWhoHealsYouSprite",
@@ -6571,7 +7068,30 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 207,
+      "guide_enemy_name": "Swamola (Swamp snake)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Boomerang",
+        "Normal bow + arrow",
+        "Hookshot",
+        "Bomb",
+        "Bow + silver arrow",
+        "Fire rod",
+        "Ice rod",
+        "Bombos medallion",
+        "Ether medallion",
+        "Quake medallion"
+      ],
+      "damage_notes": null
     },
     {
       "sprite_name": "LynelSprite",
@@ -6599,7 +7119,19 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 208,
+      "guide_enemy_name": "Lynel (mountain lion)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        3,
+        4,
+        5
+      ],
+      "kill_items": [
+        "Bow + silver arrow"
+      ],
+      "damage_notes": "Guide data shows ordinary arrows do not damage this Lynel, but stronger sword/hammer classes and silver arrows do."
     },
     {
       "sprite_name": "BunnyBeamSprite",
