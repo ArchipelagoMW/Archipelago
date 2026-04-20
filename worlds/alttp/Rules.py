@@ -329,7 +329,7 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
 
     set_rule(multiworld.get_location('Hyrule Castle - Map Guard Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 1))
+             lambda state: can_kill_key_enemy_in_room(state, player, "Hyrule Castle (Map Chest Room)"))
 
     set_rule(multiworld.get_entrance('Sewers Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) or (

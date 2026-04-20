@@ -7,7 +7,7 @@ class TestDungeons(TestVanillaOWG):
         self.run_location_tests([
             ["Hyrule Castle - Map Chest", True, []],
             ["Hyrule Castle - Map Guard Key Drop", False, []],
-            ["Hyrule Castle - Map Guard Key Drop", True, ['Progressive Sword']],
+            ["Hyrule Castle - Map Guard Key Drop", True, ['Fighter Sword']],
 
             ["Sanctuary", True, []],
 

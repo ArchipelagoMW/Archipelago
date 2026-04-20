@@ -169,7 +169,64 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 65,
+      "guide_enemy_name": "Shared: Blue soldier carrying sword",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 65 is a shared blue soldier/blue taurus slot. Quake transforms it into a 0-HP yellow slime, so room logic requires a yellow slime follow-up kill when using Quake."
     },
     {
       "sprite_name": "PullSwitch_GoodSprite",
@@ -198,7 +255,64 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 65,
+      "guide_enemy_name": "Shared: Blue soldier carrying sword",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 65 is a shared blue soldier/blue taurus slot. Quake transforms it into a 0-HP yellow slime, so room logic requires a yellow slime follow-up kill when using Quake."
     },
     {
       "sprite_name": "PullSwitch_TrapSprite",
@@ -2206,7 +2320,64 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 65,
+      "guide_enemy_name": "Shared: Blue soldier carrying sword",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 65 is a shared blue soldier/blue taurus slot. Quake transforms it into a 0-HP yellow slime, so room logic requires a yellow slime follow-up kill when using Quake."
     },
     {
       "sprite_name": "GreenSwordSoldierSprite",
