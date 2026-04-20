@@ -1420,7 +1420,9 @@ class Rac3Interface(GameInterface):
                 continue
             if (index == 2 
                 and self.planet == RAC3REGION.ANNIHILATION_NATION 
-                and self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE)):
+                and self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE)
+                and self.pause_state_value != RAC3PAUSESTATE.PAUSED
+                and comic.status == 0):
                  self._write8(addr, 1)
                  continue
 
