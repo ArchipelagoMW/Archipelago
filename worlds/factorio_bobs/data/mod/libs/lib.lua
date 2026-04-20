@@ -47,4 +47,14 @@ function library.is_valid_ap_force(force)
     return false
 end
 
+function library.all_valid_ap_forces()
+    local forces = {}
+    for _, force_name in pairs(general.player_forces) do
+        if game.forces[force_name] then
+            forces[force_name] = game.forces[force_name]
+        end
+    end
+    return forces
+end
+
 return library

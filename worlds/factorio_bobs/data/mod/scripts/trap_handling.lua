@@ -3,6 +3,19 @@
 local general = require("Archipelago/general")
 local library = require("libs/lib")
 
+local function add_action_to_tick (tick, action_name, action)
+    storage.on_tick[tick] = storage.on_tick[tick] or {}
+    storage.on_tick[tick][action_name] = action
+end
+
+local function remove_action_from_tick (tick, action_name)
+    storage.on_tick[tick][action_name] = nil
+    if  storage.on_tick[tick] == {} then
+        storage.on_tick[tick] = nil
+    end
+end
+
+
 local function random_offset_position (position, offset)
     return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-offset, offset)}
 end
@@ -142,6 +155,31 @@ local function spill_character_inventory (character)
     end
 end
 
+local function undo_peekaboo_trap()
+    for name, data in pairs(storage.trap_memory.peekaboo.force) do
+        for _, tech in pairs(data.temp_hidden_tech) do
+            game.forces[name].technologies[tech].enabled = true
+        end
+        game.forces[name].research_queue = data.temp_hidden_queue
+    end
+    storage.trap_memory.peekaboo.active = false
+end
+
+local function set_energy_spiral(number)
+    for _, surface in pairs(game.surfaces) do
+        surface.global_effect = {
+            consumption = 1 + (number * 2),
+            pollution = 1 + (number * 1),
+        }
+    end
+end
+
+local function undo_energy_spiral()
+    for _, force in pairs(library.all_valid_ap_forces()) do
+        force.clear_chart()
+    end
+end
+
 --##### ####   ###  ####        ##### #   # #   #  ###  #####  ###   ###  #   #  #### 
 --  #   #   # #   # #   #       #     #   # ##  # #   #   #     #   #   # ##  # #     
 --  #   ####  ##### ####        ###   #   # # # # #       #     #   #   # # # #  ###  
@@ -175,10 +213,6 @@ local function cluster_grenade_trap ()
     fire_entity_at_players("cluster-grenade", 0.1)
 end
 
-local function fake_nade_trap ()
-    fire_entity_at_players("fake-grenade", 0.1)
-end
-
 local function artillery_trap ()
     fire_entity_at_players("artillery-projectile", 1)
 end
@@ -201,7 +235,56 @@ local function inventory_spill_trap()
     end
 end
 
+local function hide_technology_trap()
+    -- TODO: Make this compatiable with tech obscurity.
+    storage.trap_memory.peekaboo = storage.trap_memory.peekaboo or {reveal_tech_tick = 0, force = {}}
+    if storage.trap_memory.peekaboo.reveal_tech_tick > game.tick then
+        remove_action_from_tick(storage.trap_memory.peekaboo.reveal_tech_tick, "undo-peekaboo-trap")
+        storage.trap_memory.peekaboo.reveal_tech_tick = storage.trap_memory.peekaboo.reveal_tech_tick + general.traps.hide_tech_time / 2
+        add_action_to_tick(storage.trap_memory.peekaboo.reveal_tech_tick, "undo-peekaboo-trap", undo_peekaboo_trap)
+    else
+        for _, force in pairs(library.all_valid_ap_forces()) do
+            storage.trap_memory.peekaboo.force[force.name] = storage.trap_memory.peekaboo.force[force.name] or {}
+            storage.trap_memory.peekaboo.force[force.name].temp_hidden_tech = {}
+            storage.trap_memory.peekaboo.force[force.name].temp_hidden_queue = force.research_queue
+            force.research_queue = nil
+            for _, tech in pairs(force.technologies) do
+                if tech.enabled and (not tech.researched) and (tech.name ~= "crash-prevention") then
+                    storage.trap_memory.peekaboo.force[force.name].temp_hidden_tech[tech.name] = tech.name
+                    tech.enabled = false
+                end
+            end
+        end
+        storage.trap_memory.peekaboo.active = true
+        storage.trap_memory.peekaboo.reveal_tech_tick = game.tick + general.traps.hide_tech_time
+        add_action_to_tick(storage.trap_memory.peekaboo.reveal_tech_tick, "undo-peekaboo-trap", undo_peekaboo_trap)
+    end
+end
 
+local function reset_technology_progress_trap()
+    for _, force in pairs(library.all_valid_ap_forces()) do
+        force.research_progress = 0
+        for _, tech in pairs(force.technologies) do
+            tech.saved_progress = 0
+        end
+    end
+end
+
+local function clear_map_trap()
+    for _, force in pairs(library.all_valid_ap_forces()) do
+        force.clear_chart()
+    end
+end
+
+local function clear_map_trap()
+    local clear_effect = game.tick + general.traps.energy_pollution_duration
+    repeat
+        clear_effect = clear_effect + 1
+    until storage.on_tick[clear_effect]["undo-energy-spiral-trap"] == nil end
+
+    #To fix
+    add_action_to_tick(clear_effect, "undo-energy-spiral-trap", undo_energy_spiral)
+end
 
 local trap_table = {
     ["Attack Trap"] = attack_trap,
@@ -209,14 +292,20 @@ local trap_table = {
     ["Teleport Trap"] = teleport_trap,
     ["Grenade Trap"] = grenade_trap,
     ["Cluster Grenade Trap"] = cluster_grenade_trap,
-    ["fake nade Trap"] = fake_nade_trap,
     ["Artillery Trap"] = artillery_trap,
     ["Atomic Rocket Trap"] = atomic_rocket_trap,
     ["Atomic Cliff Remover Trap"] = atomic_cliff_remover,
-    ["Inventory Spill Trap"] =  inventory_spill_trap
+    ["Inventory Spill Trap"] =  inventory_spill_trap,
+    ["Peek a Tech Trap"] =  hide_technology_trap,
+    ["Tech Reset Trap"] =  reset_technology_progress_trap,
+    ["Reset Map Info Trap"] =  clear_map_trap
 }
 
-
+--##### ####   ###  ####   ####       #   #  ###  ####  ##### 
+--  #   #   # #   # #   # #           ## ## #   # #   # #     
+--  #   ####  ##### ####   ###        # # # ##### #   # ###   
+--  #   #   # #   # #         #       #   # #   # #   # #     
+--  #   #   # #   # #     ####        #   # #   # ####  ##### 
 
 local function is_trap(trap_name)
     if trap_table[trap_name] ~= nil then
@@ -231,6 +320,18 @@ local function run_trap(trap_name)
     end
 end
 
+local function on_tick(event)
+    if not storage.on_tick[game.tick] then return end --there is nothing to do.
+    for _, action in pairs(storage.on_tick[game.tick]) do
+        action()
+    end
+    storage.on_tick[game.tick] = nil
+end
+
+local function on_init()
+    storage.on_tick = storage.on_tick or {} --will contain a list of actions on each tick.
+    storage.trap_memory = storage.trap_memory or {} --will contain a list of actions on each tick.
+end
 
 commands.add_command("activate-AP-trap", "sends an AP trap", function(call)
     if call.parameter == nil then
@@ -244,7 +345,7 @@ end)
 local lib = {}
 
 lib.events = {
-    --[defines.events.on_tick] = on_tick,
+    [defines.events.on_tick] = on_tick,
     --[defines.events.on_research_finished] = on_research_finished,
     --[defines.events.on_force_created] = on_force_created,
     --[defines.events.on_player_created] = on_player_created,
