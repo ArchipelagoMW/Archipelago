@@ -665,11 +665,11 @@
       "boss": false,
       "overlord": false,
       "do_not_randomize": false,
-      "killable": true,
+      "killable": false,
       "npc": false,
       "never_use_dungeon": false,
       "never_use_overworld": false,
-      "cannot_have_key": false,
+      "cannot_have_key": true,
       "is_object": false,
       "absorbable": false,
       "is_water_sprite": false,
@@ -2627,7 +2627,68 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 78,
+      "guide_enemy_name": "Popo - Blue and red tentacle plant",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide damage table includes Magic Powder and Quake turning Popos into 0-HP yellow slimes; room-clear logic requires a follow-up yellow slime finisher when using those transforms."
     },
     {
       "sprite_name": "Popo2Sprite",
@@ -4519,7 +4580,9 @@
       "parameters": null,
       "special_glitched": false,
       "excluded_rooms": [],
-      "dont_randomize_rooms": [],
+      "dont_randomize_rooms": [
+        184
+      ],
       "spawnable_rooms": []
     },
     {
@@ -5979,7 +6042,70 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 167,
+      "guide_enemy_name": "Shared: Skeleton/Stalfos",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 167 is a shared purple/red Stalfos slot. Magic Powder and Quake turn it into a 0-HP yellow slime, so room-clear logic requires a follow-up yellow slime finisher for those transforms."
     },
     {
       "sprite_name": "BomberFlyingCreaturesFromDarkworldSprite",

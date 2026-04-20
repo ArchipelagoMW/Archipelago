@@ -37,12 +37,20 @@ POD_STALFOS_BASEMENT_ROOM_ID = 0x0A
 POD_STALFOS_BASEMENT_BOMB_SWITCH_POTS = frozenset(((156, 17), (160, 17)))
 GT_CONVEYOR_CROSS_ROOM_ID = 0x8B
 GT_CONVEYOR_CROSS_TOP_RIGHT_POTS = frozenset(((76, 12), (112, 12)))
+EP_BIG_KEY_ROOM_ID = 0xB8
+EP_BIG_KEY_VANILLA_SWITCH_POT = (104, 16)
 
 
 def _get_shuffled_pot_item_position(world: "ALTTPWorld", room_id: int, item: int) -> tuple[int, int]:
     if not world.pot_shuffle_state:
         raise ValueError(f"Pot shuffle state is required to inspect room {hex(room_id)}")
     return get_unique_pot_item_position(world.pot_shuffle_state, room_id, item)
+
+
+def _eastern_big_key_chest_needs_room_clear(world: "ALTTPWorld") -> bool:
+    if not world.options.pot_shuffle:
+        return True
+    return _get_shuffled_pot_item_position(world, EP_BIG_KEY_ROOM_ID, POT_SWITCH) == EP_BIG_KEY_VANILLA_SWITCH_POT
 
 
 def set_rules(world: "ALTTPWorld"):
@@ -343,8 +351,10 @@ def global_rules(multiworld: MultiWorld, player: int):
                                                                                    player, 3))
     set_always_allow(multiworld.get_location('Eastern Palace - Big Key Chest', player),
                      lambda state, item: item.name == 'Big Key (Eastern Palace)' and item.player == player)
+    eastern_big_key_chest_needs_room_clear = _eastern_big_key_chest_needs_room_clear(world)
     set_rule(multiworld.get_location('Eastern Palace - Big Key Chest', player),
-             lambda state: can_kill_most_things(state, player, 5) and (state._lttp_has_key('Small Key (Eastern Palace)',
+             lambda state: (not eastern_big_key_chest_needs_room_clear or can_clear_enemy_room(state, player, "Eastern Palace (Big Key Room)")) and
+             (state._lttp_has_key('Small Key (Eastern Palace)',
              player, 2) or ((location_item_name(state, 'Eastern Palace - Big Key Chest', player)
                              == ('Big Key (Eastern Palace)', player) and state.has('Small Key (Eastern Palace)',
                                                                                    player)))))
