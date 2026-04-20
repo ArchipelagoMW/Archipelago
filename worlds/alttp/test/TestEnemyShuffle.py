@@ -37,7 +37,7 @@ from worlds.alttp.EnemyShuffle import (
 )
 from worlds.alttp.Items import item_table
 from worlds.alttp.Rom import LocalRom, get_base_rom_path
-from worlds.alttp.StateHelpers import can_clear_enemy_room, can_kill_key_enemy_in_room
+from worlds.alttp.StateHelpers import can_clear_enemy_room, can_clear_enemy_region, can_kill_key_enemy_in_room
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
@@ -398,6 +398,59 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
             self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Turtle Rock (Hokku-Bokku Key Room 2)"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_turtle_rock_big_key_room_region_only_checks_top_left_section(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    20: RandomizedDungeonEnemyRoom(
+                        room_id=20,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x04, 0x04, 0x00, 0x84, False, False),
+                            RandomizedDungeonEnemySprite(0, 0x18, 0x18, 0x00, 0x8E, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(
+                can_clear_enemy_region(
+                    hammer_state,
+                    1,
+                    "Turtle Rock (Big Key Room)",
+                    max_x=256,
+                    max_y=256,
+                )
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertTrue(
+                can_clear_enemy_region(
+                    bow_state,
+                    1,
+                    "Turtle Rock (Big Key Room)",
+                    max_x=256,
+                    max_y=256,
+                )
+            )
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state

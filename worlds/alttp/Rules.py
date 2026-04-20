@@ -541,7 +541,16 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Turtle Rock - Roller Room - Right', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
     set_rule(multiworld.get_location('Turtle Rock - Big Chest', player), lambda state: state.has('Big Key (Turtle Rock)', player) and (state.has('Cane of Somaria', player) or state.has('Hookshot', player)))
     set_rule(multiworld.get_entrance('Turtle Rock (Big Chest) (North)', player), lambda state: state.has('Cane of Somaria', player) or state.has('Hookshot', player))
-    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10) and can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player),
+             lambda state: state.has('Big Key (Turtle Rock)', player)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Turtle Rock (Big Key Room)",
+                 max_x=256,
+                 max_y=256,
+             )
+             and can_bomb_or_bonk(state, player))
     set_rule(multiworld.get_location('Turtle Rock - Chain Chomps', player), lambda state: can_use_bombs(state, player) or can_shoot_arrows(state, player)
                                                                                           or has_beam_sword(state, player) or state.has_any(["Blue Boomerang", "Red Boomerang", "Hookshot", "Cane of Somaria", "Fire Rod", "Ice Rod"], player))
     set_rule(multiworld.get_entrance('Turtle Rock (Dark Room) (North)', player), lambda state: state.has('Cane of Somaria', player))
@@ -551,7 +560,14 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Turtle Rock - Eye Bridge - Top Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(multiworld.get_location('Turtle Rock - Eye Bridge - Top Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(multiworld.get_entrance('Turtle Rock (Trinexx)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6) and state.has('Big Key (Turtle Rock)', player) and state.has('Cane of Somaria', player))
-    set_rule(multiworld.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_kill_most_things(state, player, 10))
+    set_rule(multiworld.get_entrance('Turtle Rock Second Section Bomb Wall', player),
+             lambda state: can_clear_enemy_region(
+                 state,
+                 player,
+                 "Turtle Rock (Big Key Room)",
+                 max_x=256,
+                 max_y=256,
+             ))
 
     if not world.fix_trock_doors:
         add_rule(multiworld.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player))
@@ -1208,7 +1224,16 @@ def set_trock_key_rules(multiworld: MultiWorld, player: int):
 
     # Big key door requires the big key, obviously. We removed this rule in the previous section to flag front_locked_locations correctly,
     # otherwise crystaroller room might not be properly marked as reachable through the back.
-    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10) and can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player),
+             lambda state: state.has('Big Key (Turtle Rock)', player)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Turtle Rock (Big Key Room)",
+                 max_x=256,
+                 max_y=256,
+             )
+             and can_bomb_or_bonk(state, player))
 
 
     # No matter what, the key requirement for going from the middle to the bottom should be five keys.
