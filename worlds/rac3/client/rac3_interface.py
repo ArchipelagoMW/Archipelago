@@ -1213,10 +1213,6 @@ class Rac3Interface(GameInterface):
             # Bring qwark back to life until Ratchet has met Sasha on the bridge
             if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
-        # if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 150:
-        #     if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
-        #         self.vidcomic_2_fix += 1
-        #         self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
         if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
             self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
 
@@ -1420,6 +1416,8 @@ class Rac3Interface(GameInterface):
             addr = vidcomic_data[name].UNLOCK_ADDRESS
             if index == 0:
                 continue
+
+            # Prevent Vidcomic 2 from reappearing after being collected the first time on Heat Street
             if (index == 2 
                 and self.planet == RAC3REGION.ANNIHILATION_NATION 
                 and self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE)
