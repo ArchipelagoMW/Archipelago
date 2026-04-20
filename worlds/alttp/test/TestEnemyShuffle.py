@@ -320,6 +320,25 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                 else:
                     self.assertEqual(item_classes | ability_classes, set(requirement.kill_damage_classes))
 
+    def test_enemy_shuffle_placeable_enemies_have_kill_items_or_are_unkillable(self) -> None:
+        requirements = _load_enemy_sprite_requirements()
+        placeable_requirements = [
+            requirement
+            for requirement in requirements
+            if not requirement.npc
+            and requirement.is_enemy_sprite
+            and not requirement.boss
+            and not requirement.overlord
+            and not requirement.is_object
+            and not requirement.absorbable
+            and (not requirement.never_use_dungeon or not requirement.never_use_overworld)
+        ]
+
+        for requirement in placeable_requirements:
+            with self.subTest(sprite=requirement.sprite_name):
+                if requirement.killable:
+                    self.assertTrue(requirement.kill_items)
+
 
     def test_base_patched_enemy_shuffle_data_uses_relocated_room_headers(self) -> None:
         vanilla_rom_bytes = bytes(LocalRom(get_base_rom_path()).buffer)

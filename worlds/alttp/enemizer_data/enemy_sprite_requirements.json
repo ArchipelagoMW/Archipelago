@@ -370,7 +370,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 8,
+      "guide_enemy_name": "Shared:  Octorok (Light World) Slarok (purple rock spitter) (Dark World)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 8 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "MoldormSprite",
@@ -426,7 +484,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 10,
+      "guide_enemy_name": "Shared:  4-way Octorok (Light World) 4-way Slarok (Dark World, purple rock spitter.  I'm not even sure this variety exists, but it is valid when put on the map with Hyrule Magic.)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 10 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "ChickenSprite",
@@ -488,7 +604,42 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 13,
+      "guide_enemy_name": "Buzz Blob",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "SnapdragonSprite",
@@ -518,7 +669,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 14,
+      "guide_enemy_name": "Snap Dragon",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 14 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "OctoballoonSprite",
@@ -689,7 +898,69 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 17,
+      "guide_enemy_name": "Hinox",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 17 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "MoblinSprite",
@@ -717,7 +988,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 18,
+      "guide_enemy_name": "Pig Spear Man (Moblin?)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 18 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "MiniHelmasaurSprite",
@@ -745,7 +1074,59 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 19,
+      "guide_enemy_name": "Mini Helmasaur/Hiploop",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 19 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "GargoylesDomainGateSprite",
@@ -872,7 +1253,70 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 23,
+      "guide_enemy_name": "Bush Spider/Beetle/Crab",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 23 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "MiniMoldormSprite",
@@ -1361,7 +1805,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 34,
+      "guide_enemy_name": "Ropa (Hopping Bulb Plant)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 34 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "RedBariSprite",
@@ -1391,7 +1893,44 @@
       "dont_randomize_rooms": [
         127
       ],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 35,
+      "guide_enemy_name": "Red Bari (electric jellyfish)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "BlueBariSprite",
@@ -1421,7 +1960,44 @@
       "dont_randomize_rooms": [
         127
       ],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 36,
+      "guide_enemy_name": "Blue Bari (dark green on GBA) (electric jellyfish)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "TalkingTreeSprite",
@@ -2405,7 +2981,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 66,
+      "guide_enemy_name": "Green soldier carrying sword",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 66 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "RedSpearSoldierSprite",
@@ -2434,7 +3068,61 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 67,
+      "guide_enemy_name": "Shared:  Red Soldier carrying spear (Light World) Red Taurus (Torosu) - helmeted bull carrying fork (Dark World)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 67 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "AssaultSwordSoldierSprite",
@@ -2464,7 +3152,61 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 68,
+      "guide_enemy_name": "Warrior - blue, horned helmet, carrying sword, runs fast",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 68 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "GreenSpearSoldierSprite",
@@ -2493,7 +3235,61 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 69,
+      "guide_enemy_name": "Shared:  Red Soldier carrying spear (Light World) Red Taurus (Torosu) - helmeted bull carrying fork (Dark World) Green Soldier carrying spear, summoned by townspeople (Light World)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 69 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "BlueArcherSprite",
@@ -2523,7 +3319,64 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 70,
+      "guide_enemy_name": "Blue archer soldier",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 70 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "GreenArcherSprite",
@@ -2553,7 +3406,64 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 71,
+      "guide_enemy_name": "Green, grass-hiding, archer soldier",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 71 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "RedJavelinSoldierSprite",
@@ -2583,7 +3493,61 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 72,
+      "guide_enemy_name": "Red knight (has horned helmet), spear-throwing",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 72 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "RedJavelinSoldier2Sprite",
@@ -2613,7 +3577,61 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 73,
+      "guide_enemy_name": "Red, grass-hiding, spear-throwing soldier",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 73 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "RedBombSoldiersSprite",
@@ -2643,7 +3661,64 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 74,
+      "guide_enemy_name": "Red bomb-throwing knight",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 74 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "GreenSoldierRecruits_HMKnightSprite",
@@ -2673,7 +3748,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 75,
+      "guide_enemy_name": "Green soldier carrying dagger (in Hyrule Castle, relaxed)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 75 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "GeldmanSprite",
@@ -2703,7 +3836,45 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 76,
+      "guide_enemy_name": "Geldman",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "RabbitSprite",
@@ -2887,7 +4058,68 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 79,
+      "guide_enemy_name": "Popo - Blue and red tentacle plant",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 79 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "CannonBallsSprite",
@@ -2945,7 +4177,42 @@
         268
       ],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 81,
+      "guide_enemy_name": "Armos statue",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "GiantZoraSprite",
@@ -3129,7 +4396,44 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 86,
+      "guide_enemy_name": "Walking Zora",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "DesertPalaceBarriersSprite",
@@ -3185,7 +4489,65 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 88,
+      "guide_enemy_name": "Crab (fast, has pincers)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 88 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "BirdSprite",
@@ -4007,7 +5369,66 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 106,
+      "guide_enemy_name": "Ball and chain trooper (Morning Star)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 106 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "CannonSoldierSprite",
@@ -4037,7 +5458,44 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 107,
+      "guide_enemy_name": "Shared:  Cannon soldier (blue, wears horned helmet, holds red cannon, shoots spiked blue cannon ball, stationary aside from rotating to face Link and raising arm to fire cannon) - I'm told he's never used in the game, so take a look at him hacked in here: http://www14.brinkster.com/assassin17/cannon001.png Spiked blue cannon ball shot by Cannon soldier Smooth black cannon ball shot by wall cannon",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "MirrorPortalSprite",
@@ -4092,7 +5550,68 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 109,
+      "guide_enemy_name": "Shared:  Rat (Light World) Bazu (little green reptile, moves like rat) (Dark World)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 109 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "RopeSprite",
@@ -4121,7 +5640,68 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 110,
+      "guide_enemy_name": "Shared:  Rope (Gray Snake) (Light World) Skullrope (Green snake with white skull mask) (Dark World)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 110 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "KeeseSprite",
@@ -4150,7 +5730,47 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 111,
+      "guide_enemy_name": "Shared:  Blue bat (Keese) (Light World) Blue big-eyed bat (Patra/Chasupa) (Dark World)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "LeeverSprite",
@@ -4178,7 +5798,42 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 113,
+      "guide_enemy_name": "Shared:  Purple Leever (Spinning flower plant, submerges in sand) (slightly faster than green) Green Leever (Spinning flower plant, submerges in sand)",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "ActivatoForThePonds_WhereYouThrowInItemsSprite",
@@ -5084,7 +6739,40 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 139,
+      "guide_enemy_name": "Gibdos",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "ArrghusSprite",
@@ -5747,7 +7435,47 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 153,
+      "guide_enemy_name": "Penguin / Pengator",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        14,
+        15
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "KyameronWaterSplashSprite",
@@ -5909,7 +7637,46 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 156,
+      "guide_enemy_name": "Zoro - Little black spiders / bats / whatever, come out of holes where you bombed",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "VerminVerticalSprite",
@@ -5937,7 +7704,46 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 157,
+      "guide_enemy_name": "Babusu - black thing with arms and tail, jumps out of pipes",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether",
+        "Quake"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "Ostrich_HauntedGroveSprite",
@@ -6157,7 +7963,42 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 165,
+      "guide_enemy_name": "Shared:  Blue mohawk lizard (Zazakku/Daira) Large yellow Fireball shot by Red mohawk lizard and Lynel",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "RedZazakSprite",
@@ -6185,7 +8026,42 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 166,
+      "guide_enemy_name": "Red mohawk lizard (shoots fire) (Zazakku/Daira)",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "StalfosSprite",
@@ -6438,7 +8314,45 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 170,
+      "guide_enemy_name": "Pikit",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "MaidenSprite",
@@ -7407,7 +9321,34 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 195,
+      "guide_enemy_name": "Gibo - brown translucent star, spits out glowing red thing",
+      "mapping_confidence": "exact",
+      "kill_damage_classes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "kill_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ]
     },
     {
       "sprite_name": "ThiefSprite",
@@ -7608,7 +9549,69 @@
       "special_glitched": false,
       "excluded_rooms": [],
       "dont_randomize_rooms": [],
-      "spawnable_rooms": []
+      "spawnable_rooms": [],
+      "guide_enemy_id": 201,
+      "guide_enemy_name": "Shared:  Blue Tektite (big-eyed hopping spider) Red Tektite",
+      "mapping_confidence": "shared",
+      "kill_damage_classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "kill_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "kill_abilities": [
+        "bombs"
+      ],
+      "yellow_slime_transform_items": [
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Blue Boomerang",
+        "Red Boomerang",
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Silver Bow",
+        "Fire Rod",
+        "Ice Rod",
+        "Bombos",
+        "Ether"
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 201 uses Magic Powder and/or Quake to transform into a 0-HP yellow slime; room logic requires a yellow slime follow-up kill when using those transforms."
     },
     {
       "sprite_name": "ChainChompSprite",
