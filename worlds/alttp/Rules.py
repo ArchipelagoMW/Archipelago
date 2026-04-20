@@ -1154,7 +1154,8 @@ def open_rules(multiworld: MultiWorld, player: int):
              lambda state: basement_key_rule(state) and can_clear_enemy_region(state, player, "Hyrule Castle (Boomerang Chest Room)", min_x=256, min_y=256))
 
     set_rule(multiworld.get_location('Sewers - Key Rat Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3) and can_kill_most_things(state, player, 1))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3)
+             and can_kill_key_enemy_in_room(state, player, "Hyrule Castle (Key-rat Room)"))
 
     set_rule(multiworld.get_location('Hyrule Castle - Big Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4)
@@ -1225,7 +1226,7 @@ def standard_rules(multiworld: MultiWorld, player: int):
 
         set_rule(multiworld.get_location('Sewers - Key Rat Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3)
-                               and can_kill_standard_start(state, player, 1))
+                               and can_kill_key_enemy_in_room(state, player, "Hyrule Castle (Key-rat Room)"))
     else:
         set_rule(multiworld.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state.has('Big Key (Hyrule Castle)', player))

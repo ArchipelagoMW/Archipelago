@@ -590,6 +590,42 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
+    def test_hyrule_castle_key_rat_drop_uses_key_enemy_in_key_rat_room(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    33: RandomizedDungeonEnemyRoom(
+                        room_id=33,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 0x6D, 0x6D, False, True),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            empty_state = logic_test.get_state(item_factory([], world))
+            self.assertFalse(can_kill_key_enemy_in_room(empty_state, 1, "Hyrule Castle (Key-rat Room)"))
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Hyrule Castle (Key-rat Room)"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
     def test_room_name_helpers_are_bidirectional(self) -> None:
         self.assertEqual(get_room_name(184), "Eastern Palace (Big Key Room)")
         self.assertEqual(get_room_id("Eastern Palace (Big Key Room)"), 184)
