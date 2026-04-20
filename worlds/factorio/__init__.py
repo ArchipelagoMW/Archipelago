@@ -94,7 +94,7 @@ class Factorio(ProgressiveItemsMixin, World):
     trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
                               "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
     want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
-    progressive_items = {name: technology.progressive for name, technology in progressive_technology_table.items()}
+    progressive_chains = {name: technology.progressive for name, technology in progressive_technology_table.items()}
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
