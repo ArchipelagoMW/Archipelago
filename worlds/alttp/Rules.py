@@ -372,19 +372,16 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has('Big Key (Eastern Palace)', player) and can_kill_key_enemy_in_room(state, player, "Eastern Palace (Eyegore Key Room)"))
     set_rule(multiworld.get_location('Eastern Palace - Big Chest', player),
              lambda state: state.has('Big Key (Eastern Palace)', player))
-    # not bothering to check for can_kill_most_things in the rooms leading to boss, as if you can kill a boss you should
-    # be able to get through these rooms
     ep_boss = multiworld.get_location('Eastern Palace - Boss', player)
     add_rule(ep_boss, lambda state: state.has('Big Key (Eastern Palace)', player) and
                                     state._lttp_has_key('Small Key (Eastern Palace)', player, 2) and
+                                    can_clear_enemy_room(state, player, "Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)") and
                                     ep_boss.parent_region.dungeon.boss.can_defeat(state))
     ep_prize = multiworld.get_location('Eastern Palace - Prize', player)
     add_rule(ep_prize, lambda state: state.has('Big Key (Eastern Palace)', player) and
                                      state._lttp_has_key('Small Key (Eastern Palace)', player, 2) and
+                                     can_clear_enemy_room(state, player, "Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)") and
                                      ep_prize.parent_region.dungeon.boss.can_defeat(state))
-    if not world.options.enemy_shuffle:
-        add_rule(ep_boss, lambda state: can_shoot_arrows(state, player))
-        add_rule(ep_prize, lambda state: can_shoot_arrows(state, player))
 
     # You can always kill the Stalfos' with the pots on easy/normal
     if world.options.enemy_health in ("hard", "expert") or world.options.enemy_shuffle:

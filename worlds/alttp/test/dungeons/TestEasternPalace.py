@@ -31,6 +31,7 @@ class TestEasternPalace(TestDungeon):
                 ["Eastern Palace - Boss", False, [], ['Progressive Bow']],
                 ["Eastern Palace - Boss", False, [], ['Big Key (Eastern Palace)']],
                 ["Eastern Palace - Boss", False, ['Small Key (Eastern Palace)', 'Small Key (Eastern Palace)']],
+                ["Eastern Palace - Prize", False, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)', 'Big Key (Eastern Palace)']],
                 ["Eastern Palace - Boss", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)', 'Progressive Bow', 'Big Key (Eastern Palace)']]
             ])
 
