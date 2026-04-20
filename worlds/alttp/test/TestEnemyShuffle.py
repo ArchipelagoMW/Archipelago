@@ -402,6 +402,42 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
+    def test_gt_mini_helmasaur_key_drop_uses_torch_room_2_key_enemy(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    0x3D: RandomizedDungeonEnemyRoom(
+                        room_id=0x3D,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 0x8E, 0x8E, False, True),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertFalse(can_kill_key_enemy_in_room(bow_state, 1, "Ganon's Tower (Torch Room 2)"))
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Ganon's Tower (Torch Room 2)"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
     def test_turtle_rock_big_key_room_region_only_checks_top_left_section(self) -> None:
         logic_test = TestLightWorld()
         logic_test.setUp()

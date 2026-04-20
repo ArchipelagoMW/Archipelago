@@ -702,7 +702,7 @@ def global_rules(multiworld: MultiWorld, player: int):
                  lambda state: state.has('Big Key (Ganons Tower)', player) and can_shoot_arrows(state, player))
     set_rule(multiworld.get_entrance('Ganons Tower Torch Rooms', player),
              lambda state: can_clear_enemy_region(state, player, "Ganon's Tower (Wizzrobes Rooms)", max_y=256) and has_fire_source(state, player) and state.multiworld.get_entrance('Ganons Tower Torch Rooms', player).parent_region.dungeon.bosses['middle'].can_defeat(state))
-    set_rule(multiworld.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_most_things(state, player, 1))
+    set_rule(multiworld.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_key_enemy_in_room(state, player, "Ganon's Tower (Torch Room 2)"))
     set_rule(multiworld.get_location('Ganons Tower - Pre-Moldorm Chest', player),
              lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) and can_use_bombs(state, player))
     set_rule(multiworld.get_entrance('Ganons Tower Moldorm Door', player),
