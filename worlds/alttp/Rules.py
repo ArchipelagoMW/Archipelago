@@ -415,14 +415,16 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Tower of Hera - Basement Cage', player), lambda state: can_activate_crystal_switch(state, player))
     set_rule(multiworld.get_location('Tower of Hera - Map Chest', player), lambda state: can_activate_crystal_switch(state, player))
     set_rule(multiworld.get_entrance('Tower of Hera Small Key Door', player), lambda state: can_activate_crystal_switch(state, player) and (state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player)))
-    set_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_activate_crystal_switch(state, player) and state.has('Big Key (Tower of Hera)', player))
-    if world.options.enemy_shuffle:
-        add_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_kill_most_things(state, player, 3))
-    else:
-        add_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player),
-                 lambda state: (has_melee_weapon(state, player) or (state.has('Silver Bow', player)
-                                and can_shoot_arrows(state, player)) or state.has("Cane of Byrna", player)
-                                or state.has("Cane of Somaria", player)))
+    set_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player),
+             lambda state: can_activate_crystal_switch(state, player)
+             and state.has('Big Key (Tower of Hera)', player)
+             and can_clear_enemy_region(
+                 state,
+                 player,
+                 "Tower of Hera (Hardhat Beetles Room)",
+                 min_x=256,
+                 min_y=256,
+             ))
     set_rule(multiworld.get_location('Tower of Hera - Big Chest', player), lambda state: state.has('Big Key (Tower of Hera)', player))
     set_rule(multiworld.get_location('Tower of Hera - Big Key Chest', player), lambda state: has_fire_source(state, player))
     if world.options.accessibility != 'full':
