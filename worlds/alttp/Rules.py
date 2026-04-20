@@ -1149,8 +1149,9 @@ def open_rules(multiworld: MultiWorld, player: int):
             return state._lttp_has_key("Small Key (Hyrule Castle)", player, 3)
 
     set_rule(multiworld.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-             lambda state: basement_key_rule(state) and can_kill_most_things(state, player, 2))
-    set_rule(multiworld.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: basement_key_rule(state) and can_kill_most_things(state, player, 1))
+             lambda state: basement_key_rule(state) and can_clear_enemy_room(state, player, "Hyrule Castle (Boomerang Chest Room)"))
+    set_rule(multiworld.get_location('Hyrule Castle - Boomerang Chest', player),
+             lambda state: basement_key_rule(state) and can_clear_enemy_region(state, player, "Hyrule Castle (Boomerang Chest Room)", min_x=256, min_y=256))
 
     set_rule(multiworld.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3) and can_kill_most_things(state, player, 1))
@@ -1202,10 +1203,16 @@ def standard_rules(multiworld: MultiWorld, player: int):
     if multiworld.worlds[player].options.small_key_shuffle != small_key_shuffle.option_universal:
         set_rule(multiworld.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
-                               and can_kill_standard_start(state, player, 2))
+                               and can_clear_enemy_room(state, player, "Hyrule Castle (Boomerang Chest Room)"))
         set_rule(multiworld.get_location('Hyrule Castle - Boomerang Chest', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
-                               and can_kill_standard_start(state, player, 1))
+                               and can_clear_enemy_region(
+                                   state,
+                                   player,
+                                   "Hyrule Castle (Boomerang Chest Room)",
+                                   min_x=256,
+                                   min_y=256,
+                               ))
         set_rule(multiworld.get_location('Hyrule Castle - Map Guard Key Drop', player),
                  lambda state: can_kill_standard_start(state, player, 1))
         set_rule(multiworld.get_location('Hyrule Castle - Big Key Drop', player),
