@@ -185,7 +185,6 @@ class Rac3Interface(GameInterface):
     clank_disabled: bool = False
     clank_disabled_trap: bool = False
     unfreeze_packs: bool = False
-    vidcomic_2_fix: int = 0
     visited_planets: set[str] = set()
     weapon_vendor_items: list[str] = []
     armor_vendor_items: list[str] = []
@@ -756,9 +755,9 @@ class Rac3Interface(GameInterface):
         if not loc_data:
             return False
         if location == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
-            _x = abs(self._read_float(RAC3STATUS.POS_X) - 201.2) < 10
-            _y = abs(self._read_float(RAC3STATUS.POS_Y) - 364) < 10
-            _z = abs(self._read_float(RAC3STATUS.POS_Z) - 296.8) < 10
+            _x = abs(self._read_float(RAC3STATUS.POS_X) - 201.2) < 8
+            _y = abs(self._read_float(RAC3STATUS.POS_Y) - 364) < 8
+            _z = abs(self._read_float(RAC3STATUS.POS_Z) - 296.8) < 8
             return _x & _y & _z
         check_all: bool = True
         for check in loc_data.CHECK_ADDRESS:
@@ -1212,10 +1211,10 @@ class Rac3Interface(GameInterface):
             # Bring qwark back to life until Ratchet has met Sasha on the bridge
             if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
-        if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 150:
-            if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
-                self.vidcomic_2_fix += 1
-                self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
+        # if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 150:
+        #     if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
+        #         self.vidcomic_2_fix += 1
+        #         self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
         if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
             self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
 
@@ -1421,7 +1420,7 @@ class Rac3Interface(GameInterface):
                 continue
             if (index == 2 
                 and self.planet == RAC3REGION.ANNIHILATION_NATION 
-                and RAC3LOCATION.NATION_HEAT_STREET in self.checked_locations):
+                and self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE)):
                  self._write8(addr, 1)
                  continue
 
