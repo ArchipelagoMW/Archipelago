@@ -14,6 +14,7 @@ from worlds.rac3.client.texthelper import (
     ITEM_TO_STRING_TABLE_INDEX_OFFSET,
     TEXT_BYTE_TO_EXPECTED_WIDTH,
 )
+from worlds.rac3.constants.action_type import RAC3ACTIONTYPE
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (
@@ -71,6 +72,7 @@ from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, 
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
+from worlds.rac3.constants.player_action import RAC3PLAYERACTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
 from worlds.rac3.constants.region import (
     PLANET_FROM_INFOBOT,
@@ -152,9 +154,9 @@ class Rac3Interface(GameInterface):
     planet: str = RAC3REGION.GALAXY
     player_type: str = RAC3PLAYERTYPE.RATCHET
     vehicle: int = 0
-    action: int = 0  # Todo: Player Action
-    action_2: int = 0
-    prev_action: int = 0
+    action: int = RAC3PLAYERACTION.IDLE
+    action_type: int = RAC3ACTIONTYPE.STATIONARY
+    prev_action: int = RAC3PLAYERACTION.IDLE
     pause_menu: bool = False
     pause_state: bool = False
     pause_state_value: int = 0
@@ -407,7 +409,7 @@ class Rac3Interface(GameInterface):
         self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
-        self.action_2 = self._read8(RAC3STATUS.ACTION_2)
+        self.action_type = self._read8(RAC3STATUS.ACTION_TYPE)
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = RAC3INPUT(self._read16(RAC3STATUS.READ_INPUT))
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -475,7 +477,7 @@ class Rac3Interface(GameInterface):
         Used to detect if the player died while in a vehicle for deathlink.
         """
         current_time = time.time()
-        if self.vehicle or (current_time - self.last_in_vehicle_time < 1 and self.action == 0x39):
+        if self.vehicle or (current_time - self.last_in_vehicle_time < 1 and self.action == RAC3PLAYERACTION.DEATH):
             self.last_in_vehicle_time = current_time
 
     def pause_check(self):
@@ -857,35 +859,35 @@ class Rac3Interface(GameInterface):
                 match self.player_type:
                     case RAC3PLAYERTYPE.RATCHET:
                         if self.action not in DEATH_FROM_ACTION.keys() and self.vehicle == 0:
-                            self._write8(RAC3STATUS.ACTION, 0x16)
+                            self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.DAMAGE)
                             # update ratchet state to cancel free fall and other problematic states
 
                         # self._write8(RAC3STATUS.ACTION, death)
                         # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
                     case RAC3PLAYERTYPE.CLANK:
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
-                        self._write8(RAC3STATUS.ACTION, 0x42)
-                        self._write8(RAC3STATUS.PREV_ACTION, 0x42)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x42)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.CLANK_DAMAGE)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.CLANK_DAMAGE)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.CLANK_DAMAGE)  # This helps the death animation trigger
                         logger.debug("player is clank, clank must die dramatically")
                     case RAC3PLAYERTYPE.GIANT:
                         # Giant Clank punched state (updates state to trigger death animation once at 0 health)
                         self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 0)
-                        self._write8(RAC3STATUS.ACTION, 0x5D)
-                        self._write8(RAC3STATUS.PREV_ACTION, 0x5D)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x5D)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.GIANT_CLANK_DAMAGE)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.GIANT_CLANK_DAMAGE)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.GIANT_CLANK_DAMAGE)  # This helps the death animation trigger
                         logger.debug("player is giant clank, giant clank must die dramatically")
                     case RAC3PLAYERTYPE.TYHRRANOID:
                         # Tyhrranoid taking damage state (updates state to trigger death animation once at 0 health)
-                        self._write8(RAC3STATUS.ACTION, 0x55)
-                        self._write8(RAC3STATUS.PREV_ACTION, 0x55)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x55)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.TYHRRANOID_HURT)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.TYHRRANOID_HURT)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.TYHRRANOID_HURT)  # This helps the death animation trigger
                         logger.debug("player is tyhrranoid, tyhrranoid must be squished")
                     case RAC3PLAYERTYPE.QWARK:
                         # Qwark taking damage state (updates state to trigger death animation once at 0 health)
-                        self._write8(RAC3STATUS.ACTION, 0x9E)
-                        self._write8(RAC3STATUS.PREV_ACTION, 0x9E)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x9E)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.QWARK_DAMAGED)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.QWARK_DAMAGED)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.QWARK_DAMAGED)  # This helps the death animation trigger
                         logger.debug("player is qwark, qwark must die dramatically")
             logger.debug("player successfully killed")
             return True
@@ -1272,7 +1274,7 @@ class Rac3Interface(GameInterface):
         if ((time.time() - self.last_in_ship_time) < 1.5
                 or self.is_reloading
                 or self.self_respawning
-                or self.action_2 == 0x09):
+                or self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED):
             return False
         return True
 
@@ -1281,7 +1283,7 @@ class Rac3Interface(GameInterface):
         if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 15.0:
             # In case the PDA vendor bugs out and doesn't play the cutscene
             if (self._read32(PLANET_LOAD_OFFSET[self.planet] + RAC3STATUS.PLANET_BOLT_DIFFERENCE_BASE) & 0x80000000 # If bolt difference is negative
-                and self.action_2 != 0x09):
+                and self.action_type != RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED):
                  self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS_2, 1)
             return True
         return False
@@ -1794,7 +1796,7 @@ class Rac3Interface(GameInterface):
     def notification_cycler(self):
         """Handle the current displayed pop-up message notification, and message queue"""
         current_time = time.time()
-        tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
+        tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == RAC3PLAYERACTION.TYHRRANOID_MINIGAME
         paused = (self.pause_state and self.pause_state_value != RAC3PAUSESTATE.QUICK_SELECT) or (current_time - self.last_in_ship_time) < 1.25
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
                       int(self.inside_hacker_puzzle or paused))
