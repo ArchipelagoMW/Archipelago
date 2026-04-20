@@ -165,7 +165,7 @@ def can_kill_key_enemy_in_room(state: CollectionState, player: int, room_name_or
         raise ValueError(f"Unknown ALTTP room {room_name_or_id!r}")
 
     key_enemies = tuple(
-        enemy.requirement
+        enemy
         for enemy in get_effective_dungeon_room_enemies(state.multiworld.worlds[player], room_id)
         if enemy.has_key and enemy.requirement.killable
     )
@@ -174,8 +174,8 @@ def can_kill_key_enemy_in_room(state: CollectionState, player: int, room_name_or
 
     available_damage_classes = _get_available_damage_classes(state, player, 1)
     return any(
-        _can_kill_enemy_requirement(state, player, requirement, 1, available_damage_classes)
-        for requirement in key_enemies
+        _can_collect_key_from_enemy_requirement(state, player, enemy.requirement, 1, available_damage_classes)
+        for enemy in key_enemies
     )
 
 
@@ -240,6 +240,21 @@ def _can_kill_enemy_requirement(
         )
 
     return False
+
+
+def _can_collect_key_from_enemy_requirement(
+    state: CollectionState,
+    player: int,
+    requirement,
+    enemy_count: int,
+    available_damage_classes: set[int],
+) -> bool:
+    if requirement.key_drop_kill_items or requirement.key_drop_kill_abilities:
+        return (
+            _can_use_guide_kill_items(state, player, requirement.key_drop_kill_items, enemy_count)
+            or _can_use_guide_kill_abilities(state, player, requirement.key_drop_kill_abilities, enemy_count)
+        )
+    return _can_kill_enemy_requirement(state, player, requirement, enemy_count, available_damage_classes)
 
 
 def _get_available_damage_classes(state: CollectionState, player: int, enemy_count: int) -> set[int]:

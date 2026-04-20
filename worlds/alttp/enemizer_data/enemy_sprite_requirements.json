@@ -586,7 +586,7 @@
       "npc": false,
       "never_use_dungeon": false,
       "never_use_overworld": false,
-      "cannot_have_key": true,
+      "cannot_have_key": false,
       "is_object": false,
       "absorbable": false,
       "is_water_sprite": false,
@@ -610,9 +610,8 @@
       "mapping_confidence": "exact",
       "kill_damage_classes": [
         1,
-        2,
-        3,
-        4,
+        10,
+        15,
         5,
         6,
         8,
@@ -625,10 +624,8 @@
       "kill_items": [
         "Cane of Somaria",
         "Cane of Byrna",
-        "Fighter Sword",
-        "Master Sword",
-        "Hammer",
-        "Tempered Sword",
+        "Magic Powder",
+        "Quake",
         "Golden Sword",
         "Bow",
         "Silver Bow",
@@ -637,9 +634,31 @@
         "Bombos",
         "Ether"
       ],
+      "yellow_slime_transform_items": [
+        "Magic Powder",
+        "Quake"
+      ],
+      "yellow_slime_follow_up_items": [
+        "Cane of Somaria",
+        "Cane of Byrna",
+        "Fighter Sword",
+        "Master Sword",
+        "Hammer",
+        "Tempered Sword",
+        "Golden Sword",
+        "Bow",
+        "Hookshot",
+        "Silver Bow",
+        "Fire Rod",
+        "Bombos"
+      ],
       "kill_abilities": [
         "bombs"
-      ]
+      ],
+      "yellow_slime_follow_up_abilities": [
+        "bombs"
+      ],
+      "damage_notes": "Guide enemy 13 lists damage for classes 2-4, but level 1-3 swords and Hammer actually shock Link instead of damaging Buzz Blob. Logical direct kill methods therefore exclude Fighter/Master/Tempered Sword and Hammer; Golden Sword remains allowed. Magic Powder and Quake can also transform Buzz Blob into a yellow slime, which then requires a normal yellow slime finisher."
     },
     {
       "sprite_name": "SnapdragonSprite",
@@ -1930,7 +1949,12 @@
       ],
       "kill_abilities": [
         "bombs"
-      ]
+      ],
+      "key_drop_kill_items": [
+        "Fire Rod",
+        "Bombos"
+      ],
+      "damage_notes": "Guide enemy 35 splits into miniature Baris instead of dropping its prize unless it is incinerated. Room-clear logic uses the normal kill methods, but keyed Red Bari requires Fire Rod or Bombos so the drop appears."
     },
     {
       "sprite_name": "BlueBariSprite",

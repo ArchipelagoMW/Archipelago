@@ -143,6 +143,8 @@ class EnemySpriteRequirement:
     yellow_slime_transform_items: tuple[str, ...] = tuple()
     yellow_slime_follow_up_items: tuple[str, ...] = tuple()
     yellow_slime_follow_up_abilities: tuple[str, ...] = tuple()
+    key_drop_kill_items: tuple[str, ...] = tuple()
+    key_drop_kill_abilities: tuple[str, ...] = tuple()
     damage_notes: Optional[str] = None
 
 
@@ -778,6 +780,8 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             yellow_slime_transform_items=tuple(entry.get("yellow_slime_transform_items", ())),
             yellow_slime_follow_up_items=tuple(entry.get("yellow_slime_follow_up_items", ())),
             yellow_slime_follow_up_abilities=tuple(entry.get("yellow_slime_follow_up_abilities", ())),
+            key_drop_kill_items=tuple(entry.get("key_drop_kill_items", ())),
+            key_drop_kill_abilities=tuple(entry.get("key_drop_kill_abilities", ())),
             damage_notes=entry.get("damage_notes"),
         )
         for entry in payload["requirements"]
