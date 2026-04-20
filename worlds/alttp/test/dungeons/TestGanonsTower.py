@@ -1,4 +1,10 @@
+from types import SimpleNamespace
+
+from BaseClasses import CollectionState, ItemClassification
+
 from .TestDungeon import TestDungeon
+from worlds.alttp.EnemyShuffle import RandomizedDungeonEnemyRoom, RandomizedDungeonEnemySprite, get_room_id
+from worlds.alttp.Items import item_factory
 from worlds.alttp.PotShuffle import FilledPot, POT_KEY
 
 
@@ -168,3 +174,52 @@ class TestGanonsTower(TestDungeon):
             ["Ganons Tower - Conveyor Cross Pot Key", True, ['Hammer', 'Hookshot']],
             ["Ganons Tower - Conveyor Cross Pot Key", True, ['Hammer', 'Pegasus Boots']],
         ])
+
+    def testGanonsTowerTorchRoomsOnlyRequireClearingTopHalfOfWizzrobesRoom(self):
+        world = self.multiworld.worlds[1]
+        entrance = self.multiworld.get_entrance('Ganons Tower Torch Rooms', 1)
+        room_id = get_room_id("Ganon's Tower (Wizzrobes Rooms)")
+        self.assertIsNotNone(room_id)
+
+        original_enemy_shuffle = world.options.enemy_shuffle.value
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle.value = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    room_id: RandomizedDungeonEnemyRoom(
+                        room_id=room_id,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 5, 4, 0x84, 0x84, False, False),
+                            RandomizedDungeonEnemySprite(0, 18, 4, 0x92, 0x92, False, False),
+                        ),
+                        skipped_randomization=False,
+                    ),
+                },
+            )
+
+            no_bow_state = CollectionState(self.multiworld)
+            for item in item_factory(['Fighter Sword', 'Hammer', 'Lamp'], world):
+                item.classification = ItemClassification.progression
+                no_bow_state.collect(item, prevent_sweep=True)
+            no_bow_state.sweep_for_advancements()
+            no_bow_state.reachable_regions[1].add(entrance.parent_region)
+            self.assertFalse(entrance.can_reach(no_bow_state))
+
+            bow_state = CollectionState(self.multiworld)
+            for item in item_factory(['Fighter Sword', 'Bow', 'Lamp'], world):
+                item.classification = ItemClassification.progression
+                bow_state.collect(item, prevent_sweep=True)
+            bow_state.sweep_for_advancements()
+            bow_state.reachable_regions[1].add(entrance.parent_region)
+            self.assertTrue(entrance.can_reach(bow_state))
+        finally:
+            world.options.enemy_shuffle.value = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state

@@ -46,6 +46,11 @@ class TestDungeon(LTTPTestBase):
             0x16: (FilledPot(188, 3, POT_KEY),),
             0x0A: (FilledPot(100, 7, POT_SWITCH),),
             0x8B: (FilledPot(112, 12, POT_KEY),),
+            0xB8: (
+                FilledPot(96, 13, 11),
+                FilledPot(88, 16, 11),
+                FilledPot(104, 16, POT_SWITCH),
+            ),
         }
         if overrides:
             state.update(overrides)
