@@ -142,7 +142,7 @@ class Rac3Interface(GameInterface):
         clank_options: int
         ship_vendor: int
         armor_vendor: int
-        scout_vendors: int
+        scout_vendors: dict[str, int]
 
     UnlockItem: dict[str, UnlockData] = None
     options = Options
