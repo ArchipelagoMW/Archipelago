@@ -1,3 +1,7 @@
+from types import SimpleNamespace
+
+from worlds.alttp.EnemyShuffle import RandomizedDungeonEnemyRoom, RandomizedDungeonEnemySprite
+
 from .TestDungeon import TestDungeon
 
 
@@ -51,3 +55,42 @@ class TestDesertPalace(TestDungeon):
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Cane of Somaria']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Cane of Byrna']],
         ])
+
+    def testBigKeyChestUsesTopRightSubroomEnemies(self):
+        self.starting_regions = ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)']
+        world = self.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    0x85: RandomizedDungeonEnemyRoom(
+                        room_id=0x85,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x04, 0x04, 0x63, 0x8E, False, False),
+                            RandomizedDungeonEnemySprite(0, 0x05, 0x14, 0x4F, 0x84, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            self.run_tests([
+                ["Desert Palace - Big Key Chest", False, ['Hammer',
+                                                          'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                          'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+                ["Desert Palace - Big Key Chest", True, ['Bow',
+                                                         'Small Key (Desert Palace)', 'Small Key (Desert Palace)',
+                                                         'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+            ])
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state

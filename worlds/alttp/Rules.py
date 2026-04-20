@@ -395,7 +395,14 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Desert Palace - Torch', player), lambda state: state.has('Pegasus Boots', player))
 
     set_rule(multiworld.get_entrance('Desert Palace East Wing', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4))
-    set_rule(multiworld.get_location('Desert Palace - Big Key Chest', player), lambda state: can_kill_most_things(state, player, 3))
+    set_rule(multiworld.get_location('Desert Palace - Big Key Chest', player),
+             lambda state: can_clear_enemy_region(
+                 state,
+                 player,
+                 "Desert Palace (East Entrance Room)",
+                 min_x=256,
+                 max_y=256,
+             ))
     set_rule(multiworld.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2) and can_kill_most_things(state, player, 4))
     set_rule(multiworld.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3) and can_kill_most_things(state, player, 4))
     add_rule(multiworld.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
