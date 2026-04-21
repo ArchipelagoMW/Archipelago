@@ -494,9 +494,9 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 3))
     swamp_hookshot_pot_key = multiworld.get_location('Swamp Palace - Hookshot Pot Key', player)
     if world.options.pot_shuffle and _get_shuffled_pot_item_position(world, SWAMP_HOOKSHOT_ROOM_ID, POT_KEY) in SWAMP_HOOKSHOT_TOP_RIGHT_POTS:
-        set_rule(swamp_hookshot_pot_key, lambda state: can_use_bombs(state, player))
+        set_rule(swamp_hookshot_pot_key, lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 3) and can_use_bombs(state, player))
     else:
-        set_rule(swamp_hookshot_pot_key, lambda state: state.has('Hookshot', player))
+        set_rule(swamp_hookshot_pot_key, lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 3) and state.has('Hammer', player) and state.has('Hookshot', player))
     set_rule(multiworld.get_entrance('Swamp Palace (West)', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     set_rule(multiworld.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player))
     if world.options.accessibility != 'full':

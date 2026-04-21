@@ -84,21 +84,24 @@ class TestSwampPalace(TestDungeon):
     def testSwampPalacePotShuffleHookshotKeyLogic(self):
         self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state())
         self.starting_regions = ['Swamp Palace (Entrance)']
-        baseline = ['Open Floodgate', 'Flippers', 'Hammer',
+        baseline = ['Open Floodgate', 'Flippers',
                     'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)']
         self.run_tests([
             ["Swamp Palace - Hookshot Pot Key", False, baseline],
-            ["Swamp Palace - Hookshot Pot Key", True, baseline + ['Hookshot']],
+            ["Swamp Palace - Hookshot Pot Key", False, baseline + ['Hammer']],
+            ["Swamp Palace - Hookshot Pot Key", False, baseline + ['Hookshot']],
+            ["Swamp Palace - Hookshot Pot Key", True, baseline + ['Hammer', 'Hookshot']],
         ])
 
         self.rebuild_with_pot_shuffle(self.get_test_pot_shuffle_state({
             0x36: (FilledPot(108, 4, POT_KEY),),
         }))
         self.starting_regions = ['Swamp Palace (Entrance)']
-        baseline = ['Open Floodgate', 'Flippers', 'Hammer',
+        baseline = ['Open Floodgate', 'Flippers',
                     'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)']
         self.run_tests([
             ["Swamp Palace - Hookshot Pot Key", False, baseline],
+            ["Swamp Palace - Hookshot Pot Key", False, baseline + ['Hammer']],
             ["Swamp Palace - Hookshot Pot Key", False, baseline + ['Hookshot']],
             ["Swamp Palace - Hookshot Pot Key", True, baseline + ['Bomb Upgrade (+5)']],
         ])
