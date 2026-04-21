@@ -13,7 +13,15 @@ ITEM_GROUPS: Dict[str, Set[str]] = {}
 # item list during get_progression_items.
 _special_usefuls: List[str] = ["Puzzle Skip"]
 
-ALWAYS_GOOD_SYMBOL_ITEMS: Set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+
+ALL_ITEM_ALIASES: Dict[str, str] = {  # Keeping this as str->str for now for efficiency
+    "Sparse Dots": "Dots",
+    "Simple Stars": "Stars",
+}
+
+ALWAYS_GOOD_SYMBOL_ITEMS: Set[str] = {
+    "Dots", "Sparse Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars", "Simple Stars"
+}
 
 MODE_SPECIFIC_GOOD_ITEMS: Dict[str, Set[str]] = {
     "none": set(),

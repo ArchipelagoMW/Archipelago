@@ -478,7 +478,7 @@ def space_zone_2_boss(state, player):
 
 def space_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Space Zone 2")
-    reachable_coins = 12
+    reachable_coins = 9
     if state.has_any(["Mushroom", "Fire Flower", "Carrot", "Space Physics"], player):
         reachable_coins += 15
         if state.has("Space Physics", player) or not auto_scroll:
@@ -487,7 +487,7 @@ def space_zone_2_coins(state, player, coins):
             state.has("Mushroom", player) and state.has_any(["Fire Flower", "Carrot"], player))):
         reachable_coins += 3
     if state.has("Space Physics", player):
-        reachable_coins += 79
+        reachable_coins += 82
         if not auto_scroll:
             reachable_coins += 21
     return coins <= reachable_coins
@@ -604,8 +604,8 @@ def macro_zone_4_coins(state, player, coins):
 
 
 def marios_castle_wario(state, player):
-    return ((has_pipe_right(state, player) and has_pipe_left(state, player))
-            or state.has("Mario's Castle Midway Bell", player))
+    return (has_pipe_right(state, player) and 
+           (has_pipe_left(state, player) or state.has("Mario's Castle Midway Bell", player)))
 
 
 def marios_castle_midway_bell(state, player):

@@ -1,0 +1,13 @@
+# This file specifies patterns that are ignored by default for any world built with the "Build APWorlds" component.
+# These patterns can be overriden by a world-specific .apignore using !-prefixed patterns for negation.
+
+# Auto-created folders
+__MACOSX
+.DS_Store
+__pycache__
+
+# Unneeded files
+/archipelago.json
+/.apignore
+/.git
+/.gitignore

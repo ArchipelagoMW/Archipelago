@@ -37,7 +37,7 @@ class FactorioWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Berserker, Farrak Kilhn"]
+        ["Berserker", "Farrak Kilhn"]
     )]
     option_groups = option_groups
 
@@ -291,7 +291,7 @@ class Factorio(World):
 
         silo_recipe = None
         cargo_pad_recipe = None
-        if self.options.silo == Silo.option_spawn:
+        if self.options.silo != Silo.option_spawn:
             silo_recipe = self.get_recipe("rocket-silo")
             cargo_pad_recipe = self.get_recipe("cargo-landing-pad")
         part_recipe = self.custom_recipes["rocket-part"]
