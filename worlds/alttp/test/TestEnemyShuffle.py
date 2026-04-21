@@ -1116,6 +1116,58 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
         self.assertEqual([group.group_id for group in possible_groups], [0x41])
 
+    def test_key_room_group_selection_excludes_groups_without_room_spawnable_key_enemies(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=61,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=1,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x20, is_overlord=False, has_key=True),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=False,
+        )
+        state = self._build_state(
+            dungeon_rooms={61: room},
+            sprite_requirements=(
+                self._requirement(0x20, subgroup_0=(1,)),
+                self._requirement(0x50, killable=True, subgroup_1=(32,), excluded_rooms=(61,)),
+                self._requirement(0x9C, killable=True, subgroup_1=(32,), cannot_have_key=True),
+                self._requirement(0x51, killable=True, subgroup_1=(33,)),
+            ),
+        )
+        state.sprite_groups[0x41] = DungeonSpriteGroup(
+            group_id=0x41,
+            dungeon_group_id=1,
+            subgroup_0=1,
+            subgroup_1=32,
+            subgroup_2=1,
+            subgroup_3=1,
+        )
+        state.sprite_groups[0x42] = DungeonSpriteGroup(
+            group_id=0x42,
+            dungeon_group_id=2,
+            subgroup_0=1,
+            subgroup_1=33,
+            subgroup_2=1,
+            subgroup_3=1,
+        )
+
+        possible_groups = get_possible_dungeon_sprite_groups(state, room)
+
+        self.assertEqual([group.group_id for group in possible_groups], [0x42])
+
     def test_overworld_group_randomization_preserves_forced_subgroups(self) -> None:
         sprite_groups = {
             7: DungeonSpriteGroup(group_id=7, dungeon_group_id=-57, subgroup_0=1, subgroup_1=2, subgroup_2=3, subgroup_3=4),
@@ -1148,12 +1200,16 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         *,
         killable: bool = False,
         subgroup_0: tuple[int, ...] = tuple(),
+        subgroup_1: tuple[int, ...] = tuple(),
+        subgroup_2: tuple[int, ...] = tuple(),
+        subgroup_3: tuple[int, ...] = tuple(),
         group_ids: tuple[int, ...] = tuple(),
         absorbable: bool = False,
         never_use_dungeon: bool = False,
         never_use_overworld: bool = False,
         cannot_have_key: bool = False,
         is_water_sprite: bool = False,
+        excluded_rooms: tuple[int, ...] = tuple(),
         dont_randomize_rooms: tuple[int, ...] = tuple(),
     ) -> EnemySpriteRequirement:
         return EnemySpriteRequirement(
@@ -1173,12 +1229,12 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             is_enemy_sprite=True,
             group_ids=group_ids,
             subgroup_0=subgroup_0,
-            subgroup_1=tuple(),
-            subgroup_2=tuple(),
-            subgroup_3=tuple(),
+            subgroup_1=subgroup_1,
+            subgroup_2=subgroup_2,
+            subgroup_3=subgroup_3,
             parameters=None,
             special_glitched=False,
-            excluded_rooms=tuple(),
+            excluded_rooms=excluded_rooms,
             dont_randomize_rooms=dont_randomize_rooms,
             spawnable_rooms=tuple(),
         )
