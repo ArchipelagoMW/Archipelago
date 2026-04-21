@@ -16,6 +16,3 @@ Purpose:
 
 - `enemizerBasePatch.json` contains the generated base patch Enemizer applies before feature-specific randomization.
 - `exported_symbols.txt` contains the assembled symbol map consumed by Enemizer's runtime code for ROM addresses.
-
-These copies exist so Archipelago can transition away from depending on an external Enemizer executable and release
-bundle layout.

@@ -13,10 +13,8 @@ import json
 import hashlib
 import logging
 import os
-import pkgutil
 import random
 import struct
-import subprocess
 import threading
 import concurrent.futures
 import bsdiff4
@@ -53,9 +51,6 @@ try:
     import xxtea
 except:
     xxtea = None
-
-enemizer_logger = logging.getLogger("Enemizer")
-
 
 class LocalRom:
 
@@ -180,64 +175,6 @@ class LocalRom:
             self.write_int32(startaddress + (i * 4), value)
 
 
-check_lock = threading.Lock()
-
-
-def get_vendored_enemizer_asset(name: str) -> bytes:
-    asset_path = f"enemizer_data/{name}"
-    asset = pkgutil.get_data(__name__, asset_path)
-    if asset is None:
-        raise FileNotFoundError(f"Missing vendored Enemizer data required by ALTTP: {asset_path}")
-    return asset
-
-
-def get_vendored_enemizer_assets() -> dict[str, bytes]:
-    return {
-        "base_patch": get_vendored_enemizer_asset("enemizerBasePatch.json"),
-        "symbols": get_vendored_enemizer_asset("exported_symbols.txt"),
-    }
-
-
-def check_vendored_enemizer_data() -> None:
-    get_vendored_enemizer_assets()
-
-
-def check_enemizer(enemizercli):
-    if getattr(check_enemizer, "done", None):
-        return
-    check_vendored_enemizer_data()
-    if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
-        raise Exception(f"Enemizer not found at {enemizercli}, please install it. "
-                        f"Such as https://github.com/Ijwu/Enemizer/releases")
-
-    with check_lock:
-        # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
-        if getattr(check_enemizer, "done", None):
-            return
-        check_vendored_enemizer_data()
-        wanted_version = (7, 1, 0)
-        # version info is saved on the lib, for some reason
-        library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
-        with open(library_info) as f:
-            info = json.load(f)
-
-        for lib in info["libraries"]:
-            if lib.startswith("EnemizerLibrary/"):
-                version = lib.split("/")[-1]
-                version = tuple(int(element) for element in version.split("."))
-                enemizer_logger.debug(f"Found Enemizer version {version}")
-                if version < wanted_version:
-                    raise Exception(
-                        f"Enemizer found at {enemizercli} is outdated ({version}) < ({wanted_version}), "
-                        f"please update your Enemizer. "
-                        f"Such as from https://github.com/Ijwu/Enemizer/releases")
-                break
-        else:
-            raise Exception(f"Could not find Enemizer library version information in {library_info}")
-
-    check_enemizer.done = True
-
-
 def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
     userandomsprites = False
     if sprite and not isinstance(sprite, Sprite):
@@ -303,163 +240,6 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x300000 + (i * 0x8000), sprite.sprite)
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
-
-
-def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
-    player = world.player
-    check_enemizer(enemizercli)
-    randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
-    options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
-    enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{player}.sfc'))
-
-    # write options file for enemizer
-    native_enemy_shuffle = getattr(world, "enemy_shuffle_state", None) is not None
-    options = {
-        'RandomizeEnemies': False if native_enemy_shuffle else world.options.enemy_shuffle.value,
-        'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.options.bush_shuffle.value,
-        'RandomizeEnemyHealthRange': world.options.enemy_health != 'default',
-        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
-            world.options.enemy_health.current_key],
-        'OHKO': False,
-        'RandomizeEnemyDamage': world.options.enemy_damage != 'default',
-        'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': world.options.enemy_damage != 'default',
-        'EnemyDamageChaosMode': world.options.enemy_damage == 'chaos',
-        'EasyModeEscape': world.options.mode == "standard",
-        'EnemiesAbsorbable': False,
-        'AbsorbableSpawnRate': 10,
-        'AbsorbableTypes': {
-            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True,
-            'Key': True,
-            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True,
-            'RedRupee': True
-        },
-        'BossMadness': False,
-        'RandomizeBosses': True,
-        'RandomizeBossesType': 0,
-        'RandomizeBossHealth': False,
-        'RandomizeBossHealthMinAmount': 0,
-        'RandomizeBossHealthMaxAmount': 300,
-        'RandomizeBossDamage': False,
-        'RandomizeBossDamageMinAmount': 0,
-        'RandomizeBossDamageMaxAmount': 200,
-        'RandomizeBossBehavior': False,
-        'RandomizeDungeonPalettes': False,
-        'SetBlackoutMode': False,
-        'RandomizeOverworldPalettes': False,
-        'RandomizeSpritePalettes': False,
-        'SetAdvancedSpritePalettes': False,
-        'PukeMode': False,
-        'NegativeMode': False,
-        'GrayscaleMode': False,
-        'GenerateSpoilers': False,
-        'RandomizeLinkSpritePalette': False,
-        'RandomizePots': False,  # Pot shuffle is now generated in-world and patched natively from saved state.
-        'ShuffleMusic': False,
-        'BootlegMagic': True,
-        'CustomBosses': False,
-        'AndyMode': False,
-        'HeartBeepSpeed': 0,
-        'AlternateGfx': False,
-        'ShieldGraphics': "shield_gfx/normal.gfx",
-        'SwordGraphics': "sword_gfx/normal.gfx",
-        'BeeMizer': False,
-        'BeesLevel': 0,
-        'RandomizeTileTrapPattern': False,
-        'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.options.killable_thieves.value,
-        'RandomizeSpriteOnHit': False,
-        'DebugMode': False,
-        'DebugForceEnemy': False,
-        'DebugForceEnemyId': 0,
-        'DebugForceBoss': False,
-        'DebugForceBossId': 0,
-        'DebugOpenShutterDoors': False,
-        'DebugForceEnemyDamageZero': False,
-        'DebugShowRoomIdInRupeeCounter': False,
-        'UseManualBosses': True,
-        'ManualBosses': {
-            'EasternPalace': world.dungeons["Eastern Palace"].boss.enemizer_name,
-            'DesertPalace': world.dungeons["Desert Palace"].boss.enemizer_name,
-            'TowerOfHera': world.dungeons["Tower of Hera"].boss.enemizer_name,
-            'AgahnimsTower': 'Agahnim',
-            'PalaceOfDarkness': world.dungeons["Palace of Darkness"].boss.enemizer_name,
-            'SwampPalace': world.dungeons["Swamp Palace"].boss.enemizer_name,
-            'SkullWoods': world.dungeons["Skull Woods"].boss.enemizer_name,
-            'ThievesTown': world.dungeons["Thieves Town"].boss.enemizer_name,
-            'IcePalace': world.dungeons["Ice Palace"].boss.enemizer_name,
-            'MiseryMire': world.dungeons["Misery Mire"].boss.enemizer_name,
-            'TurtleRock': world.dungeons["Turtle Rock"].boss.enemizer_name,
-            'GanonsTower1':
-                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
-                               "Inverted Ganons Tower"].bosses['bottom'].enemizer_name,
-            'GanonsTower2':
-                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
-                               "Inverted Ganons Tower"].bosses['middle'].enemizer_name,
-            'GanonsTower3':
-                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
-                               "Inverted Ganons Tower"].bosses['top'].enemizer_name,
-            'GanonsTower4': 'Agahnim2',
-            'Ganon': 'Ganon',
-        }
-    }
-
-    rom.write_to_file(randopatch_path)
-
-    with open(options_path, 'w') as f:
-        json.dump(options, f)
-
-    max_enemizer_tries = 5
-    for i in range(max_enemizer_tries):
-        enemizer_seed = str(world.random.randint(0, 999999999))
-        enemizer_command = [os.path.abspath(enemizercli),
-                            '--rom', randopatch_path,
-                            '--seed', enemizer_seed,
-                            '--binary',
-                            '--enemizer', options_path,
-                            '--output', enemizer_output_path]
-
-        p_open = subprocess.Popen(enemizer_command,
-                                  cwd=os.path.dirname(enemizercli),
-                                  stdout=subprocess.PIPE,
-                                  stderr=subprocess.STDOUT,
-                                  universal_newlines=True)
-
-        enemizer_logger.debug(
-            f"Enemizer attempt {i + 1} of {max_enemizer_tries} for player {player} using enemizer seed {enemizer_seed}")
-        for stdout_line in iter(p_open.stdout.readline, ""):
-            if i == max_enemizer_tries - 1:
-                enemizer_logger.warning(stdout_line.rstrip())
-            else:
-                enemizer_logger.debug(stdout_line.rstrip())
-        p_open.stdout.close()
-
-        return_code = p_open.wait()
-        if return_code:
-            if i == max_enemizer_tries - 1:
-                raise subprocess.CalledProcessError(return_code, enemizer_command)
-            continue
-
-        for j in range(i + 1, max_enemizer_tries):
-            world.random.randint(0, 999999999)
-            # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
-            # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
-        break
-
-    rom.read_from_file(enemizer_output_path)
-    os.remove(enemizer_output_path)
-
-    if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
-        rom.write_byte(0x04DE81, 6)
-        rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
-
-    for used in (randopatch_path, options_path):
-        try:
-            os.remove(used)
-        except OSError:
-            pass
-
 
 tile_list_lock = threading.Lock()
 _tile_collection_table = []
@@ -1938,7 +1718,7 @@ def apply_oof_sfx(rom: LocalRom, oof: str):
     rom.write_bytes(0x12803A, oof_bytes)
     rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
 
-    # Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    # Preserve SPC $3188 instead of writing the unused "WHAT" sound effect there.
     rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
 
 
