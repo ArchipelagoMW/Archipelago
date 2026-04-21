@@ -754,8 +754,6 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             with self.subTest(sprite=requirement.sprite_name):
                 if requirement.killable:
                     self.assertTrue(requirement.kill_items)
-
-
     def test_rejects_non_killable_shutter_room(self) -> None:
         room = DungeonEnemyRoom(
             room_id=1,
