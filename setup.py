@@ -71,7 +71,6 @@ non_apworlds: set[str] = {
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Sudoku",
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
@@ -394,11 +393,11 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                         manifest = json.load(manifest_file)
 
                     assert "game" in manifest, (
-                        f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                        f"World directory {world_directory} has an archipelago.json manifest file, but it "
                         "does not define a \"game\"."
                     )
                     assert manifest["game"] == worldtype.game, (
-                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the "
                         f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
                     )
                 else:
@@ -658,7 +657,7 @@ cx_Freeze.setup(
     options={
         "build_exe": {
             "packages": ["worlds", "kivy", "cymem", "websockets", "kivymd"],
-            "includes": [],
+            "includes": ["rule_builder.cached_world"],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_includes": [],
