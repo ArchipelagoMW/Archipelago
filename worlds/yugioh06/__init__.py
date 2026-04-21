@@ -336,9 +336,6 @@ class Yugioh06World(World):
             classification = ItemClassification.useful
         return Item(name, classification, self.item_name_to_id[name], self.player)
 
-    def create_filler(self) -> Item:
-        return self.create_item("5000DP")
-
     def get_filler_item_name(self) -> str:
         return "5000DP"
 
