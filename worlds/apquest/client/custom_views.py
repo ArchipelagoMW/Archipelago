@@ -4,29 +4,26 @@ from math import sqrt
 from random import choice, random
 from typing import Any
 
-from kivy.core.window import Keyboard, Window
+from kivy.core.window import Window
 from kivy.graphics import Color, Triangle
 from kivy.graphics.instructions import Canvas
-from kivy.input import MotionEvent
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
+from kivy.uix.widget import Widget
 from kivymd.uix.recycleview import MDRecycleView
 
 from CommonClient import logger
 
 from ..game.inputs import Input
 
-
-INPUT_MAP = {
-    "up": Input.UP,
+INPUT_MAP_STR = {
     "w": Input.UP,
-    "down": Input.DOWN,
     "s": Input.DOWN,
-    "right": Input.RIGHT,
     "d": Input.RIGHT,
-    "left": Input.LEFT,
     "a": Input.LEFT,
-    "spacebar": Input.ACTION,
+    " ": Input.ACTION,
     "c": Input.CONFETTI,
     "0": Input.ZERO,
     "1": Input.ONE,
@@ -38,38 +35,52 @@ INPUT_MAP = {
     "7": Input.SEVEN,
     "8": Input.EIGHT,
     "9": Input.NINE,
-    "backspace": Input.BACKSPACE,
+}
+
+INPUT_MAP_SPECIAL_INT = {
+    # Arrow Keys and Backspace
+    273: Input.UP,
+    274: Input.DOWN,
+    275: Input.RIGHT,
+    276: Input.LEFT,
+    8: Input.BACKSPACE,
 }
 
 
 class APQuestGameView(MDRecycleView):
-    _keyboard: Keyboard | None = None
+    focused: int = 1
     input_function: Callable[[Input], None]
 
     def __init__(self, input_function: Callable[[Input], None], **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.input_function = input_function
-        self.bind_keyboard()
+        Window.bind(on_key_down=self._on_keyboard_down)
+        Window.bind(on_touch_down=self.check_focus)
+        self.opacity = 0.5
 
-    def on_touch_down(self, touch: MotionEvent) -> None:
-        self.bind_keyboard()
-
-    def bind_keyboard(self) -> None:
-        if self._keyboard is not None:
+    def check_focus(self, _, touch, *args, **kwargs) -> None:
+        if self.parent.collide_point(*touch.pos):
+            self.focused += 1
+            self.opacity = 1
             return
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
-    def _keyboard_closed(self) -> None:
-        if self._keyboard is None:
-            return
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
-        self._keyboard = None
+        self.focused = 0
+        self.opacity = 0.5
 
-    def _on_keyboard_down(self, _: Any, keycode: tuple[int, str], _1: Any, _2: Any) -> bool:
-        if keycode[1] in INPUT_MAP:
-            self.input_function(INPUT_MAP[keycode[1]])
-        return True
+    def force_focus(self) -> None:
+        Window.release_keyboard()
+        self.focused = 1
+        self.opacity = 1
+
+    def _on_keyboard_down(self, _: Any, keycode_int: int, _2: Any, keycode: str, _4: Any) -> bool:
+        if not self.focused:
+            return False
+
+        if keycode in INPUT_MAP_STR:
+            self.input_function(INPUT_MAP_STR[keycode])
+        elif keycode_int in INPUT_MAP_SPECIAL_INT:
+            self.input_function(INPUT_MAP_SPECIAL_INT[keycode_int])
+        return False
 
 
 class APQuestGrid(GridLayout):
@@ -77,7 +88,7 @@ class APQuestGrid(GridLayout):
         parent_width, parent_height = self.parent.size
 
         self_width_according_to_parent_height = parent_height * 12 / 11
-        self_height_according_to_parent_width = parent_height * 11 / 12
+        self_height_according_to_parent_width = parent_width * 11 / 12
 
         if self_width_according_to_parent_height > parent_width:
             self.size = parent_width, self_height_according_to_parent_width
@@ -203,12 +214,22 @@ class Confetti:
         return True
 
 
-class ConfettiView(MDRecycleView):
+class ConfettiView(Widget):
     confetti: list[Confetti]
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.confetti = []
+
+    # Don't eat tap events for the game grid under the confetti view
+    def on_touch_down(self, touch) -> bool:
+        return False
+
+    def on_touch_move(self, touch) -> bool:
+        return False
+
+    def on_touch_up(self, touch) -> bool:
+        return False
 
     def check_resize(self, _: int, _1: int) -> None:
         parent_width, parent_height = self.parent.size
@@ -254,3 +275,32 @@ class VolumeSliderView(BoxLayout):
 
 class APQuestControlsView(BoxLayout):
     pass
+
+
+class TapImage(ButtonBehavior, Image):
+    callback: Callable[[], None]
+
+    def __init__(self, callback: Callable[[], None], **kwargs) -> None:
+        self.callback = callback
+        super().__init__(**kwargs)
+
+    def on_release(self) -> bool:
+        self.callback()
+
+        return True
+
+
+class TapIfConfettiCannonImage(ButtonBehavior, Image):
+    callback: Callable[[], None]
+
+    is_confetti_cannon: bool = False
+
+    def __init__(self, callback: Callable[[], None], **kwargs: dict[str, Any]) -> None:
+        self.callback = callback
+        super().__init__(**kwargs)
+
+    def on_release(self) -> bool:
+        if self.is_confetti_cannon:
+            self.callback()
+
+        return True

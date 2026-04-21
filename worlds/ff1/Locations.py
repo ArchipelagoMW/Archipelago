@@ -41,8 +41,8 @@ class FF1Locations:
 
     @staticmethod
     def create_menu_region(player: int, locations: Dict[str, int],
-                           rules: Dict[str, List[List[str]]], world: MultiWorld) -> Region:
-        menu_region = Region("Menu", player, world)
+                           rules: Dict[str, List[List[str]]], multiworld: MultiWorld) -> Region:
+        menu_region = Region("Menu", player, multiworld)
         for name, address in locations.items():
             location = Location(player, name, address, menu_region)
             ## TODO REMOVE WHEN LOGIC FOR TOFR IS CORRECT
