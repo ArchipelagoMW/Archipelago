@@ -3,12 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from functools import lru_cache
 import hashlib
-import json
-import pkgutil
 import random
 from typing import TYPE_CHECKING, Optional
 
 from Utils import pc_to_snes, snes_to_pc
+from .enemizer_data.base_patch_data import ENEMIZER_BASE_PATCHES
+from .enemizer_data.symbols import ENEMIZER_SYMBOLS
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -436,14 +436,9 @@ def _make_native_enemizer_rng(world: "ALTTPWorld") -> random.Random:
 
 @lru_cache(maxsize=1)
 def _load_enemizer_base_patches() -> tuple[tuple[int, bytes], ...]:
-    raw_patches = pkgutil.get_data(__package__, "enemizer_data/enemizerBasePatch.json")
-    if raw_patches is None:
-        raise FileNotFoundError("Missing vendored Enemizer base patch data.")
-
-    payload = json.loads(raw_patches.decode("utf-8"))
     return tuple(
-        (entry["address"], bytes(entry["patchData"]))
-        for entry in payload
+        (entry.address, entry.patch_data)
+        for entry in ENEMIZER_BASE_PATCHES
     )
 
 
@@ -459,18 +454,10 @@ def _get_enemizer_symbol(symbol_name: str) -> int:
 
 
 def _load_enemizer_symbols() -> dict[str, int]:
-    raw_symbols = pkgutil.get_data(__package__, "enemizer_data/exported_symbols.txt")
-    if raw_symbols is None:
-        raise FileNotFoundError("Missing vendored Enemizer symbols required by ALTTP native boss patching")
-
-    symbols: dict[str, int] = {}
-    for line in raw_symbols.decode("utf-8").splitlines():
-        parts = line.split(maxsplit=1)
-        if len(parts) != 2:
-            continue
-        snes_address = int(parts[0].replace(":", ""), 16)
-        symbols[parts[1]] = snes_to_pc(snes_address)
-    return symbols
+    return {
+        name: snes_to_pc(snes_address)
+        for name, snes_address in ENEMIZER_SYMBOLS.items()
+    }
 
 
 def _patch_boss_gfx_tables(rom: "LocalRom") -> None:
