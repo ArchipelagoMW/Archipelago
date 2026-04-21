@@ -808,18 +808,30 @@ def get_possible_dungeon_sprite_groups(state: EnemyShuffleState, room: DungeonEn
     ):
         return _get_unconstrained_possible_dungeon_sprite_groups(usable_groups, room_requirements, water_requirements)
 
-    do_not_update_matcher = _build_requirement_group_matcher(do_not_update)
-    killable_matcher = _build_requirement_group_presence_matcher(killable_requirements)
-    key_matcher = _build_requirement_group_presence_matcher(key_requirements)
-    water_matcher = _build_requirement_group_presence_matcher(water_requirements)
-
     return tuple(
         group for group in usable_groups
-        if do_not_update_matcher(group)
-        and _group_matches_room_requirement(group, room)
-        and (not needs_killable or killable_matcher(group))
-        and (not needs_key or key_matcher(group))
-        and (not needs_water or water_matcher(group))
+        if (
+            (not do_not_update or _build_requirement_group_matcher(do_not_update)(group))
+            and _group_matches_room_requirement(group, room)
+            and (
+                lambda possible_requirements: (
+                    (not needs_killable or any(
+                        _is_effectively_killable(requirement) and requirement.sprite_id != STAL_SPRITE_ID
+                        for requirement in possible_requirements
+                    ))
+                    and (not needs_key or any(
+                        _is_effectively_killable(requirement)
+                        and not requirement.cannot_have_key
+                        and requirement.sprite_id != STAL_SPRITE_ID
+                        for requirement in possible_requirements
+                    ))
+                    and (not needs_water or any(
+                        requirement.is_water_sprite
+                        for requirement in possible_requirements
+                    ))
+                )
+            )(_get_possible_enemy_requirements_for_group(state, room, group))
+        )
     )
 
 
