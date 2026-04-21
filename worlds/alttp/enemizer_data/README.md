@@ -11,6 +11,7 @@ Vendored artifacts:
 
 - `enemizerBasePatch.json`
 - `exported_symbols.txt`
+- `dungeon_sprite_addresses.json`
 
 Archipelago-authored companion metadata:
 
@@ -28,3 +29,4 @@ Purpose:
   ALTTP room-combat logic when enemy shuffle is off. This copy exists so logic and unit tests do not need access to a
   local base ROM.
 - `exported_symbols.txt` contains the assembled symbol map consumed by Enemizer's runtime code for ROM addresses.
+- `dungeon_sprite_addresses.json` contains dungeon sprite slot metadata derived from Enemizer's source tables and keyed-enemy address list.

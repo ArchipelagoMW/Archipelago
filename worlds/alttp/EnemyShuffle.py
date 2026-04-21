@@ -380,6 +380,7 @@ def _get_base_patched_rom_bytes() -> bytes:
 def _read_dungeon_rooms(rom_bytes: bytes, moved_header_bank_address: int, metadata: dict[str, object]) -> list[DungeonEnemyRoom]:
     rooms: list[DungeonEnemyRoom] = []
     room_header_bank = _get_room_header_bank(rom_bytes, moved_header_bank_address)
+    dungeon_sprite_metadata = _load_dungeon_sprite_metadata()
     shutter_room_ids = metadata["shutter_room_ids"]
     water_room_ids = metadata["water_room_ids"]
     dont_randomize_room_ids = metadata["dont_randomize_room_ids"]
@@ -399,7 +400,7 @@ def _read_dungeon_rooms(rom_bytes: bytes, moved_header_bank_address: int, metada
                 tag_1=rom_bytes[room_header_address + 5],
                 tag_2=rom_bytes[room_header_address + 6],
                 sort_sprites_value=rom_bytes[sprite_table_address],
-                sprites=_read_room_sprites(rom_bytes, sprite_table_address),
+                sprites=_read_room_sprites(rom_bytes, room_id, sprite_table_address, dungeon_sprite_metadata),
                 required_group_id=merged_requirement.group_id,
                 required_subgroup_0=merged_requirement.subgroup_0,
                 required_subgroup_1=merged_requirement.subgroup_1,
@@ -675,11 +676,34 @@ def _read_overworld_sprites(rom_bytes: bytes, sprite_table_address: int) -> tupl
     return tuple(sprites)
 
 
-def _read_room_sprites(rom_bytes: bytes, sprite_table_address: int) -> tuple[DungeonEnemySprite, ...]:
+def _read_room_sprites(
+    rom_bytes: bytes,
+    room_id: int,
+    sprite_table_address: int,
+    dungeon_sprite_metadata: dict[str, object],
+) -> tuple[DungeonEnemySprite, ...]:
     sprites: list[DungeonEnemySprite] = []
-    index = sprite_table_address + 1  # byte 0 is sort-sprites metadata
+    keyed_sprite_id_addresses = dungeon_sprite_metadata["keyed_sprite_id_addresses"]
+    editable_sprite_id_addresses = dungeon_sprite_metadata["room_sprite_id_addresses"].get(room_id)
 
-    while rom_bytes[index] != 0xFF:
+    if editable_sprite_id_addresses is None:
+        sprite_addresses = []
+        index = sprite_table_address + 1  # byte 0 is sort-sprites metadata
+        while rom_bytes[index] != 0xFF:
+            sprite_addresses.append(index)
+            index += 3
+    else:
+        sprite_addresses = [sprite_id_address - 2 for sprite_id_address in editable_sprite_id_addresses]
+
+    seen_sprite_addresses: set[int] = set()
+    unique_sprite_addresses = []
+    for address in sprite_addresses:
+        if address in seen_sprite_addresses:
+            continue
+        seen_sprite_addresses.add(address)
+        unique_sprite_addresses.append(address)
+
+    for index in unique_sprite_addresses:
         byte_0 = rom_bytes[index]
         byte_1 = rom_bytes[index + 1]
         sprite_id = rom_bytes[index + 2]
@@ -689,10 +713,7 @@ def _read_room_sprites(rom_bytes: bytes, sprite_table_address: int) -> tuple[Dun
         if not is_overlord and sprite_id not in {KEY_SPRITE_ID, WALLMASTER_SPRITE_ID}:
             byte_0 &= 0x9F
             byte_1 &= SPRITE_OVERLORD_REMOVE_MASK
-        has_key = bool(
-            rom_bytes[index + 3] != 0xFF
-            and rom_bytes[index + 5] in {KEY_SPRITE_ID, BIG_KEY_SPRITE_ID}
-        )
+        has_key = (index + 2) in keyed_sprite_id_addresses
         sprites.append(
             DungeonEnemySprite(
                 address=index,
@@ -703,7 +724,6 @@ def _read_room_sprites(rom_bytes: bytes, sprite_table_address: int) -> tuple[Dun
                 has_key=has_key,
             )
         )
-        index += 3
 
     return tuple(sprites)
 
@@ -744,6 +764,21 @@ def _load_enemy_room_metadata() -> dict[str, object]:
             )
             for requirement in payload["room_requirements"]
         ),
+    }
+
+
+def _load_dungeon_sprite_metadata() -> dict[str, object]:
+    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/dungeon_sprite_addresses.json")
+    if raw_metadata is None:
+        raise FileNotFoundError("Missing vendored Enemizer dungeon sprite metadata required by ALTTP enemy state generation")
+
+    payload = json.loads(raw_metadata.decode("utf-8"))
+    return {
+        "room_sprite_id_addresses": {
+            int(room_id): tuple(sprite_id_addresses)
+            for room_id, sprite_id_addresses in payload["room_sprite_id_addresses"].items()
+        },
+        "keyed_sprite_id_addresses": frozenset(payload["keyed_sprite_id_addresses"]),
     }
 
 
@@ -1422,9 +1457,23 @@ def _randomize_room_sprites(
 
             if room.is_water_room:
                 if water_sprite_ids:
+                    replacement_water_sprite_ids = water_sprite_ids
+                    if room.is_shutter_room:
+                        killable_water_sprite_ids = [
+                            requirement.sprite_id for requirement in possible_requirements
+                            if requirement.is_water_sprite
+                            and _is_effectively_killable(requirement)
+                            and requirement.sprite_id != STAL_SPRITE_ID
+                        ]
+                        if killable_water_sprite_ids:
+                            replacement_water_sprite_ids = killable_water_sprite_ids
                     for sprite in randomized_sprites:
                         if sprite.address in sprites_to_update_addresses:
-                            _set_randomized_sprite_id(randomized_sprites, sprite.address, world.random.choice(water_sprite_ids))
+                            _set_randomized_sprite_id(
+                                randomized_sprites,
+                                sprite.address,
+                                world.random.choice(replacement_water_sprite_ids),
+                            )
                 return _build_randomized_room(room, selected_group, randomized_sprites, False)
 
             possible_sprite_ids = [sprite_id for sprite_id in possible_sprite_ids if sprite_id not in water_sprite_ids]
