@@ -78,12 +78,6 @@ first generate the binary distribution and then run `python setup.py bdist_appim
 put an `appimagetool` into the directory you run the command from, rename it to `appimagetool` and make it executable.
 
 
-## A Link to the Past
-
-A Link to the Past no longer requires an external Enemizer download. Its enemy shuffle, boss shuffle, pot shuffle,
-and related ROM patch data are handled directly by Archipelago.
-
-
 ## Optional: SNI
 
 [SNI](https://github.com/alttpo/sni/blob/main/README.md) is required to use SNIClient. If not integrated into the project, it has to be started manually.
