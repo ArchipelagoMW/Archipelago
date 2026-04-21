@@ -1,3 +1,10 @@
+# 2.5.1
+
+### Fixes
+
+- Fixed dexsanity logic to correctly account only for catching species in their enabled encounter types, even if they
+can be found elsewhere.
+
 # 2.5.0
 
 ### Features
