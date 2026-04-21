@@ -624,10 +624,9 @@ def global_rules(multiworld: MultiWorld, player: int):
                  "Turtle Rock (Big Key Room)",
                  max_x=256,
                  max_y=256,
-             ))
+             ) and can_use_bombs(state, player))
 
     if not world.fix_trock_doors:
-        add_rule(multiworld.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(multiworld.get_entrance('Turtle Rock Second Section from Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(multiworld.get_entrance('Turtle Rock Eye Bridge from Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(multiworld.get_entrance('Turtle Rock Eye Bridge Bomb Wall', player), lambda state: can_use_bombs(state, player))

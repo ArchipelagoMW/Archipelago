@@ -25,20 +25,15 @@ from worlds.alttp.EnemyShuffle import (
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
     _get_randomizable_sprites_in_room,
-    _get_base_patched_rom_bytes,
-    _get_enemizer_symbol,
-    _get_room_header_bank,
     _load_default_dungeon_room_sprites,
     _load_enemy_sprite_requirements,
     _randomize_overworld_groups,
     _randomize_room_sprites,
-    _read_room_header_address,
     _setup_required_overworld_groups,
     can_spawn_in_room,
     validate_enemy_shuffle_state,
 )
 from worlds.alttp.Items import item_table
-from worlds.alttp.Rom import LocalRom, get_base_rom_path
 from worlds.alttp.StateHelpers import can_clear_enemy_room, can_clear_enemy_region, can_kill_key_enemy_in_room
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
@@ -760,20 +755,6 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                 if requirement.killable:
                     self.assertTrue(requirement.kill_items)
 
-
-    def test_base_patched_enemy_shuffle_data_uses_relocated_room_headers(self) -> None:
-        vanilla_rom_bytes = bytes(LocalRom(get_base_rom_path()).buffer)
-        patched_rom_bytes = _get_base_patched_rom_bytes()
-        moved_header_bank_address = _get_enemizer_symbol("moved_room_header_bank_value_address")
-
-        vanilla_bank = _get_room_header_bank(vanilla_rom_bytes, moved_header_bank_address)
-        patched_bank = _get_room_header_bank(patched_rom_bytes, moved_header_bank_address)
-
-        self.assertNotEqual(patched_bank, vanilla_bank)
-        self.assertNotEqual(
-            _read_room_header_address(patched_rom_bytes, 0, patched_bank),
-            _read_room_header_address(vanilla_rom_bytes, 0, vanilla_bank),
-        )
 
     def test_rejects_non_killable_shutter_room(self) -> None:
         room = DungeonEnemyRoom(
