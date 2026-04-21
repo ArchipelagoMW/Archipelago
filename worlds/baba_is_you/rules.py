@@ -44,9 +44,10 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
         add_rule(entrance, check_second_gate)
 
     # Conditions for ending
-    ending = world.get_location("Ending")
-    a_way_out_rule = can_win("Map-Finale", world.options.logic_difficulty)
-    world.set_rule(ending, a_way_out_rule & Has("End"))
+    if world.options.goal == 0:
+        ending = world.get_location("Ending")
+        a_way_out_rule = can_win("Map-Finale", world.options.logic_difficulty)
+        world.set_rule(ending, a_way_out_rule & Has("End"))
 
 
 def set_all_location_rules(world: BabaIsYouWorld) -> None:
@@ -92,16 +93,8 @@ def set_all_location_rules(world: BabaIsYouWorld) -> None:
                 world.set_rule(location, Has(itemName, wins))
 
 def set_completion_condition(world: BabaIsYouWorld) -> None:
-    if world.options.goal == 0: # end
-        world.set_completion_rule(Has("goal_end"))
-    elif world.options.goal == 1: # flower
-        world.set_completion_rule(Has("goal_flower"))
-    elif world.options.goal == 2: # depths
-        world.set_completion_rule(Has("goal_depths"))
-    elif world.options.goal == 3: # meta
-        world.set_completion_rule(Has("goal_meta"))
-    elif world.options.goal == 4: # done
-        world.set_completion_rule(Has("goal_done"))
+    if world.options.goal <= 4: # end, flower, depths, meta
+        world.set_completion_rule(Has("goal_reached"))
     elif world.options.goal == 5: # levels
         world.multiworld.completion_condition[world.player] = lambda state: get_win_count(state, world) >= world.options.goal_levels
     elif world.options.goal == 6: # blossoms

@@ -7,8 +7,8 @@ local level_mapping = {}
 local thisWorld = generaldata.strings[WORLD] -- name of this world
 if #thisWorld == 0 then thisWorld = "babapelago" end
 
-local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_bird", "text_sun", "text_tile", "text_orb", "text_hedge", "text_cliff", "text_cake"}
-local special_noun_checks = {"text_text", "text_empty", "text_all", "text_level", "text_group", "text_cursor", "text_image"}
+local noun_checks = {"text_baba", "text_flag", "text_wall", "text_rock", "text_skull", "text_lava", "text_star", "text_crab", "text_keke", "text_love", "text_pillar", "text_jelly", "text_key", "text_door", "text_rose", "text_violet", "text_water", "text_robot", "text_bolt", "text_cog", "text_box", "text_ghost", "text_ice", "text_leaf", "text_fence", "text_me", "text_belt", "text_tree", "text_bug", "text_fungus", "text_anni", "text_cloud", "text_rocket", "text_ufo", "text_moon", "text_dust", "text_grass", "text_hand", "text_fruit", "text_bat", "text_fire", "text_tile", "text_bird", "text_sun", "text_orb", "text_hedge", "text_cliff", "text_line", "text_cake"}
+local special_noun_checks = {"text_text", "text_empty", "text_all", "text_group", "text_level", "text_cursor", "text_image"}
 local verb_checks = {"text_is", "text_has", "text_make", "text_write"}
 local prop_checks = {"text_you", "text_win", "text_stop", "text_push", "text_sink", "text_defeat", "text_hot", "text_melt", "text_move", "text_open", "text_shut", "text_red", "text_blue", "text_float", "text_weak", "text_tele", "text_pull", "text_shift", "text_up", "text_down", "text_left", "text_right", "text_swap", "text_best", "text_fall", "text_more", "text_word", "text_sleep", "text_end", "text_hide", "text_bonus", "text_done"}
 local condition_checks = {"text_on", "text_facing", "text_lonely", "text_near"}
@@ -71,7 +71,7 @@ function add_to_messages(text)
     table.insert(message_list, {text, 300})
 end
 
--- Set up options
+-- Set up default options
 local options = {
     goal=0,
     goal_levels=80,
@@ -522,7 +522,7 @@ function update_checks()
         if #trueSeed == 0 then
             error_message = ("$2,2Missing seed file. Please connect to the server using the Baba Is You client.")
         else
-            error_message = ("$2,2Game seed does not match AP seed. Please relaunch Baba Is You.")
+            error_message = ourSeed .. " : " .. trueSeed--("$2,2Game seed does not match AP seed. Please relaunch Baba Is You.")
         end
         didAPLoad = false
         MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
@@ -542,24 +542,7 @@ function update_checks()
             end
         end
 
-        -- load options
-        MF_setfile("level","AP/"..thisWorld.."/AP_OPTIONS.data")
-        for option, default in pairs(options) do
-            local value = MF_read("level", "options", option) or "0"
-            if value == "True" then
-                value = "1"
-            elseif value == "False" then
-                value = "0"
-            end
-            if option ~= "seed" then
-                options[option] = tonumber(value) or default
-            else
-                options[option] = value
-            end
-        end
-        if options.level_shuffle ~= 0 then
-            auto_gen_level_name_to_id(level_name_to_id)
-        end
+        load_ap_options()
     end
     
     local world = generaldata.strings[WORLD]
@@ -856,3 +839,28 @@ function auto_gen_level_name_to_id(level_name_to_id)
             "Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
     end
 end
+
+-- load options from file
+function load_ap_options()
+    MF_setfile("level","AP/"..thisWorld.."/AP_OPTIONS.data")
+    for option, default in pairs(options) do
+        local value = MF_read("level", "options", option) or "0"
+        if value == "True" then
+            value = "1"
+        elseif value == "False" then
+            value = "0"
+        end
+        if option ~= "seed" then
+            options[option] = tonumber(value) or default
+        else
+            options[option] = value
+        end
+    end
+    if options.level_shuffle ~= 0 then
+        auto_gen_level_name_to_id(level_name_to_id)
+    end
+    MF_setfile("level","Data/Worlds/" .. generaldata.strings[WORLD] .. "/" .. generaldata.strings[CURRLEVEL] .. ".ld")
+end
+
+-- run on startup
+load_ap_options()

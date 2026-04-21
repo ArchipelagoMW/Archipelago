@@ -119,7 +119,7 @@ class AreaAccess(Choice):
 
 class ExcludeWhoa(DefaultOnToggle):
     """
-    Excludes the level "Whoa" from logic.
+    Excludes the level "Whoa" from logic and level shuffle.
     Only applies if Meta and its levels are accessible.
     """
 
@@ -218,8 +218,7 @@ class Transformsanity(Toggle):
 class LevelShuffle(Choice):
     """
     Swaps normal levels with other normal levels.
-    Levels with transformations will also be shuffled in a way that does not break logic.
-    Note that "A Way Out?", "The End", and "Gallery" will never be shuffled.
+    Levels with transformations, as well as "A Way Out?", "The End", and "Gallery", will not be shuffled.
     disabled: Levels will not be shuffled (default).
     limited: Only levels within accessible areas will be shuffled.
     full: All levels will be shuffled, minus the exceptions listed above.

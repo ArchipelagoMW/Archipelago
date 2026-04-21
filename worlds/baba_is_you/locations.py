@@ -91,34 +91,21 @@ def create_locations(world: BabaIsYouWorld) -> None:
 
 
 def create_events(world: BabaIsYouWorld) -> None:
-    # Ending event
-    a_way_out = world.get_region("Map-Finale")
-    a_way_out.add_event(
-        "Ending", "goal_end", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
+    # Create goal event (not applicable to level or blossom goal)
 
-    """
-    # Reached ??? event
-    flower = world.get_region("???")
-    flower.add_event(
-        "??? Reached", "goal_flower", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-
-    # Reached Depths event
-    depths = world.get_region("Depths")
-    depths.add_event(
-        "Depths Reached", "goal_depths", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-
-    # Reached Meta event
-    meta = world.get_region("Meta")
-    meta.add_event(
-        "Meta Reached", "goal_meta", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-
-    # Done event
-    center = world.get_region("Center")
-    center.add_event(
-        "Done", "goal_done", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
-    )
-    """
+    region = None
+    if world.options.goal == 0:
+        region = world.get_region("Map-Finale")
+    elif world.options.goal == 1:
+        region = world.get_region("???")
+    elif world.options.goal == 2:
+        region = world.get_region("Depths")
+    elif world.options.goal == 3:
+        region = world.get_region("Meta")
+    elif world.options.goal == 4:
+        region = world.get_region("Center")
+        
+    if region is not None:
+        region.add_event(
+            "Goal Reached", "goal_reached", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem
+        )

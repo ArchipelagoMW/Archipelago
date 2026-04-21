@@ -637,7 +637,8 @@ LEVEL_DATA = {
         "name": "Further Fields",
         "parent": "Ruins",
         "winLogic": HasAll("Baba", "Is", "Move", "Keke", "You", "Push"),
-        "winLogicAdv": HasAll("Keke", "Is", "You") & (Has("Push") | HasAll("Baba", "Move")),
+        "winLogicAdv": (HasAll("Keke", "Is", "You") & (Has("Push") | HasAll("Baba", "Move"))) | (hard_logic_filter & Has("Push") & ((HasAny("Baba", "Is") & Has("You")) | HasAll("Baba", "Is", "Move"))),
+        "defaultWordOnlyDiff": 2,
         "connects": {
             "Ruins-8": can_win,
             "Ruins-9": can_win,
@@ -1348,7 +1349,7 @@ LEVEL_DATA = {
         "name": "Maritime Adventures",
         "parent": "Garden",
         "winLogic": HasAll("Baba", "Is", "You", "Hand", "Move", "On", "Wall", "Push", "Defeat"),
-        "winLogicAdv": HasAll("Defeat", "Is") & ((hard_logic_filter & ((Has("You") & (HasAll("Baba", "Move") | HasAll("Hand", "Wall"))) | HasAll("Wall", "Move", "Hand"))) | (HasAll("Wall", "Move", "On") & (Has("Hand") | HasAll("Baba", "You")))),
+        "winLogicAdv": HasAll("Defeat", "Is") & ((hard_logic_filter & (HasAll("You", "Baba", "Move") | (HasAll("Wall", "Hand") & HasAny("Baba", "Move", "You")))) | (HasAll("Wall", "Move", "On") & (Has("Hand") | HasAll("Baba", "You")))),
         "connects": {
             "Garden-4": can_win,
             "Garden-8": can_win,
@@ -1636,8 +1637,7 @@ LEVEL_DATA = {
     "Cavern-2": {
         "name": "Peril At Every Turn",
         "parent": "Cavern",
-        "winLogic": HasAll("Baba", "Is", "You", "Keke", "Push"),
-        "winLogicAdv": HasAll("Is", "You", "Keke", "Push"),
+        "winLogic": HasAll("Is", "You", "Keke", "Push"), # min logic
         "connects": {
             "Cavern": None,
             "Cavern-1": None,
