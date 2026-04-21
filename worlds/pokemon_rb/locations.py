@@ -2817,8 +2817,9 @@ class PokemonRBLocation(Location):
         if type == "Trainer Parties":
             self.item_rule = lambda i: i.player == player and i.name == "Trainer Parties"
         elif type == "Wild Encounter" or "Pokemon" in type:
-            self.item_rule = lambda i: (i.player == player and i.name in poke_data.pokemon_data or
-                                        " ".join(i.name.split(" ")[1:]) in poke_data.pokemon_data)
+            self.item_rule = lambda i: (i.player == player and
+                                        (i.name in poke_data.pokemon_data or
+                                         " ".join(i.name.split(" ")[1:]) in poke_data.pokemon_data))
 
 
 location_groups = defaultdict(list)
