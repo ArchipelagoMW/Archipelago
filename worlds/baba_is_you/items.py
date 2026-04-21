@@ -28,6 +28,9 @@ ITEM_NAME_TO_ID = {
     "Cavern Key": 13,
     "Mountain Key": 14,
     "ABC Key": 15,
+    "Depths Key": 16,
+    "Meta Key": 17,
+    "Center Key": 18,
 }
 
 # Items should have a defined default classification.
@@ -48,6 +51,9 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Cavern Key": ItemClassification.progression,
     "Mountain Key": ItemClassification.progression,
     "ABC Key": ItemClassification.progression,
+    "Depths Key": ItemClassification.progression,
+    "Meta Key": ItemClassification.progression,
+    "Center Key": ItemClassification.progression,
 }
 
 nextID = 101 # In case we decide to add more items, leave a large gap
@@ -113,8 +119,9 @@ item_name_groups = {
                 "L", "M", "N", "O", "R", "S", "T", "U", "V", "W",
                 "X"},
     "Misc": {"Not", "And"},
-    "World Keys": {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key",
-                   "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key"},
+    "World Keys": {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key",
+                   "Space Key", "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key",
+                   "ABC Key", "Depths Key", "Meta Key", "Center Key"},
 }
 
 
@@ -147,6 +154,11 @@ def create_all_items(world: BabaIsYouWorld) -> None:
         itempool.append(world.create_item("Mountain Key"))
         if world.options.area_access >= 2: # ??? level access
             itempool.append(world.create_item("ABC Key"))
+            itempool.append(world.create_item("Depths Key"))
+        if world.options.area_access >= 3: # Depths level access
+            itempool.append(world.create_item("Meta Key"))
+        if world.options.area_access >= 4: # Center level access
+            itempool.append(world.create_item("Center Key"))
     
     # Create all word items
     for word in ALL_PROG_WORDS:

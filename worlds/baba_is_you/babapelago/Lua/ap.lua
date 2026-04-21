@@ -14,7 +14,7 @@ local prop_checks = {"text_you", "text_win", "text_stop", "text_push", "text_sin
 local condition_checks = {"text_on", "text_facing", "text_lonely", "text_near"}
 local letter_checks = {"text_a", "text_ab", "text_b", "text_ba", "text_c", "text_e", "text_f", "text_g", "text_h", "text_i", "text_l", "text_m", "text_n", "text_o", "text_r", "text_s", "text_t", "text_u", "text_v", "text_w", "text_x"}
 local other_checks = {"text_and", "text_not"}
-local world_key_list = {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key", "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key"}
+local world_key_list = {"Lake Key", "Island Key", "Ruins Key", "Fall Key", "Forest Key", "Space Key", "Garden Key", "Chasm Key", "Cavern Key", "Mountain Key", "ABC Key", "Depths Key", "Meta Key", "Center Key"}
 local non_word_items = {
     ["Speck"] = 0,
     ["Blossom"] = 0,
@@ -31,6 +31,9 @@ local non_word_items = {
     ["Cavern Key"] = 1,
     ["Mountain Key"] = 1,
     ["ABC Key"] = 1,
+    ["Depths Key"] = 1,
+    ["Meta Key"] = 1,
+    ["Center Key"] = 1,
 }
 
 local all_checks_list = {noun_checks, verb_checks, prop_checks, condition_checks, special_noun_checks, other_checks, letter_checks, world_key_list}
@@ -50,6 +53,9 @@ local need_key = {
     ["179level"] = "Cavern Key",
     ["232level"] = "Mountain Key",
     ["282level"] = "ABC Key",
+    ["264level"] = "Depths Key",
+    ["283level"] = "Meta Key",
+    ["304level"] = "Center Key",
 }
 local have_clears_or_completes = {
     ["177level"] = 3,

@@ -45,7 +45,7 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
 
     # Conditions for ending
     if world.options.goal == 0:
-        ending = world.get_location("Ending")
+        ending = world.get_location("Goal Reached")
         a_way_out_rule = can_win("Map-Finale", world.options.logic_difficulty)
         world.set_rule(ending, a_way_out_rule & Has("End"))
 
