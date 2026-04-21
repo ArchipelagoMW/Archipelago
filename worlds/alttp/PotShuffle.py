@@ -52,43 +52,29 @@ def generate_pot_shuffle(world: "ALTTPWorld") -> dict[int, tuple[FilledPot, ...]
 
         empty_pots: list[PotData] = []
         filled_pots: list[FilledPot] = []
-        reserved_keys = 0
-        reserved_switches = 0
 
         for pot in room.pots:
             if pot.reserved == 3:
                 filled_pots.append(FilledPot(pot.x, pot.y, POT_HOLE))
             else:
                 empty_pots.append(pot)
-            if pot.reserved == 1:
-                reserved_keys += 1
-            elif pot.reserved == 2:
-                reserved_switches += 1
 
-        while reserved_keys > 0:
+        while POT_KEY in room_items:
             candidate_indices = [index for index, pot in enumerate(empty_pots) if pot.reserved == 1]
             if not candidate_indices:
                 break
             pot_index = world.random.choice(candidate_indices)
             pot = empty_pots.pop(pot_index)
-            if POT_KEY in room_items:
-                room_items.remove(POT_KEY)
-                reserved_keys -= 1
-            else:
-                reserved_keys = 0
+            room_items.remove(POT_KEY)
             filled_pots.append(FilledPot(pot.x, pot.y, POT_KEY))
 
-        while reserved_switches > 0:
+        while POT_SWITCH in room_items:
             candidate_indices = [index for index, pot in enumerate(empty_pots) if pot.reserved == 2]
             if not candidate_indices:
                 break
             pot_index = world.random.choice(candidate_indices)
             pot = empty_pots.pop(pot_index)
-            if POT_SWITCH in room_items:
-                room_items.remove(POT_SWITCH)
-                reserved_switches -= 1
-            else:
-                reserved_switches = 0
+            room_items.remove(POT_SWITCH)
             filled_pots.append(FilledPot(pot.x, pot.y, POT_SWITCH))
 
         while room_items and empty_pots:
@@ -110,6 +96,23 @@ def apply_pot_shuffle(rom: "LocalRom", shuffled_pots: dict[int, tuple[FilledPot,
         address = snes_to_pc(snes_address)
         for index, pot in enumerate(pots):
             rom.write_bytes(address + (index * 3), (pot.x, pot.y, pot.item))
+
+
+def get_unique_pot_item_position(
+    shuffled_pots: dict[int, tuple[FilledPot, ...]],
+    room_id: int,
+    item: int,
+) -> tuple[int, int]:
+    positions = [
+        (pot.x, pot.y)
+        for pot in shuffled_pots.get(room_id, ())
+        if pot.item == item
+    ]
+    if len(positions) != 1:
+        raise ValueError(
+            f"Expected exactly one pot item {hex(item)} in room {hex(room_id)}, found {len(positions)}"
+        )
+    return positions[0]
 
 
 def _load_pot_room_data() -> tuple[PotRoomData, ...]:
