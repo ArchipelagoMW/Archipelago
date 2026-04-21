@@ -11,14 +11,13 @@ from .Client import ALTTPSNIClient
 from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from .EnemyShuffle import generate_enemy_shuffle_state, apply_enemy_shuffle
+from .EnemyShuffle import generate_enemy_shuffle_state
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
 from .Options import ALTTPOptions, small_key_shuffle
-from .PotShuffle import apply_pot_shuffle, generate_pot_shuffle
+from .PotShuffle import generate_pot_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
-from .EnemizerPatches import apply_enemizer_base_patch, apply_native_enemizer_features, patch_bosses
 from .Rom import LocalRom, patch_rom, patch_race_rom, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
@@ -560,17 +559,6 @@ class ALTTPWorld(World):
     def stage_generate_output(cls, multiworld, output_directory):
         push_shop_inventories(multiworld)
 
-    @property
-    def use_enemizer(self) -> bool:
-        return bool(self.options.boss_shuffle or self.options.enemy_shuffle
-                    or self.options.enemy_health != 'default' or self.options.enemy_damage != 'default'
-                    or self.options.pot_shuffle or self.options.bush_shuffle
-                    or self.options.killable_thieves)
-
-    @property
-    def use_enemizer_cli(self) -> bool:
-        return False
-
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
         player = self.player
@@ -578,25 +566,9 @@ class ALTTPWorld(World):
         self.pushed_shop_inventories.wait()
 
         try:
-            use_enemizer = self.use_enemizer
-
             rom = LocalRom(get_base_rom_path())
 
-            patch_rom(multiworld, rom, player, use_enemizer)
-
-            if use_enemizer:
-                apply_enemizer_base_patch(rom)
-
-            apply_native_enemizer_features(self, rom)
-
-            if self.options.boss_shuffle:
-                patch_bosses(self, rom)
-
-            if self.options.enemy_shuffle:
-                apply_enemy_shuffle(rom, self.enemy_shuffle_state)
-
-            if self.options.pot_shuffle:
-                apply_pot_shuffle(rom, self.pot_shuffle_state)
+            patch_rom(multiworld, rom, player)
 
             if multiworld.is_race:
                 patch_race_rom(rom, multiworld, player)

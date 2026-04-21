@@ -227,46 +227,6 @@ def apply_enemizer_base_patch(rom: "LocalRom") -> None:
     for address, patch_data in _load_enemizer_base_patches():
         rom.write_bytes(address, patch_data)
 
-
-def apply_native_enemizer_features(world: "ALTTPWorld", rom: "LocalRom") -> None:
-    enemy_shuffle_enabled = bool(world.options.enemy_shuffle)
-    bush_shuffle_enabled = bool(world.options.bush_shuffle)
-    enemy_health_key = _option_key(world.options.enemy_health)
-    enemy_damage_key = _option_key(world.options.enemy_damage)
-
-    if enemy_shuffle_enabled or bush_shuffle_enabled:
-        _set_enemizer_flag(rom, "EnemizerFlags_randomize_bushes", True)
-        hidden_enemy_chance_pool = (
-            RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL if bush_shuffle_enabled else VANILLA_HIDDEN_ENEMY_CHANCE_POOL
-        )
-        rom.write_bytes(HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, hidden_enemy_chance_pool)
-        _update_hidden_enemy_item_table_for_retro_mode(rom)
-
-    if enemy_shuffle_enabled:
-        _set_enemizer_flag(rom, "EnemizerFlags_randomize_sprites", True)
-        _set_enemizer_flag(rom, "EnemizerFlags_enable_mimic_override", True)
-        _set_enemizer_flag(rom, "EnemizerFlags_enable_terrorpin_ai_fix", True)
-        rom.write_bytes(0x1F2D5, (0x54, 0x9C))
-        rom.write_byte(0x1F2E5, 0xB0)
-        rom.write_byte(0x1F2EB, 0xD0)
-
-    if world.options.killable_thieves:
-        _apply_killable_thief(rom)
-
-    if enemy_health_key != "default" or enemy_damage_key != "default":
-        rng = _make_native_enemizer_rng(world)
-    else:
-        rng = None
-
-    if enemy_health_key != "default":
-        assert rng is not None
-        _randomize_enemy_health(rom, rng, enemy_health_key)
-
-    if enemy_damage_key != "default":
-        assert rng is not None
-        _randomize_enemy_damage(rom, rng, allow_zero_damage=True)
-        _shuffle_damage_groups(rom, rng, chaos_mode=enemy_damage_key == "chaos", allow_zero_damage=True)
-
 def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
     _patch_boss_gfx_tables(rom)
     dungeon_header_base = _get_enemizer_symbol("room_header_table")

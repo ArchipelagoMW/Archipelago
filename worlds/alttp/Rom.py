@@ -187,7 +187,7 @@ def get_vendored_enemizer_asset(name: str) -> bytes:
     asset_path = f"enemizer_data/{name}"
     asset = pkgutil.get_data(__name__, asset_path)
     if asset is None:
-        raise FileNotFoundError(f"Missing vendored Enemizer data required by ALTTP native integration: {asset_path}")
+        raise FileNotFoundError(f"Missing vendored Enemizer data required by ALTTP: {asset_path}")
     return asset
 
 
@@ -806,9 +806,13 @@ def get_nonnative_item_sprite(code: int) -> int:
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool):
+def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int):
     local_random = multiworld.worlds[player].random
     local_world = multiworld.worlds[player]
+    enemized = bool(local_world.options.boss_shuffle or local_world.options.enemy_shuffle
+                    or local_world.options.enemy_health != 'default' or local_world.options.enemy_damage != 'default'
+                    or local_world.options.pot_shuffle or local_world.options.bush_shuffle
+                    or local_world.options.killable_thieves)
 
     # patch items
 
@@ -1720,6 +1724,69 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool
         rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(multiworld.player_name[p]))
     if encoded_players > ROM_PLAYER_LIMIT:
         rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
+
+    if enemized:
+        from . import EnemizerPatches as enemizer_patches
+        from .EnemyShuffle import apply_enemy_shuffle
+        from .PotShuffle import apply_pot_shuffle
+
+        enemizer_patches.apply_enemizer_base_patch(rom)
+
+        enemy_shuffle_enabled = bool(local_world.options.enemy_shuffle)
+        bush_shuffle_enabled = bool(local_world.options.bush_shuffle)
+        enemy_health_key = enemizer_patches._option_key(local_world.options.enemy_health)
+        enemy_damage_key = enemizer_patches._option_key(local_world.options.enemy_damage)
+
+        if enemy_shuffle_enabled or bush_shuffle_enabled:
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_randomize_bushes", True)
+            hidden_enemy_chance_pool = (
+                enemizer_patches.RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL
+                if bush_shuffle_enabled
+                else enemizer_patches.VANILLA_HIDDEN_ENEMY_CHANCE_POOL
+            )
+            rom.write_bytes(enemizer_patches.HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, hidden_enemy_chance_pool)
+            enemizer_patches._update_hidden_enemy_item_table_for_retro_mode(rom)
+
+        if enemy_shuffle_enabled:
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_randomize_sprites", True)
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_enable_mimic_override", True)
+            enemizer_patches._set_enemizer_flag(rom, "EnemizerFlags_enable_terrorpin_ai_fix", True)
+            rom.write_bytes(0x1F2D5, (0x54, 0x9C))
+            rom.write_byte(0x1F2E5, 0xB0)
+            rom.write_byte(0x1F2EB, 0xD0)
+
+        if local_world.options.killable_thieves:
+            enemizer_patches._apply_killable_thief(rom)
+
+        if enemy_health_key != "default" or enemy_damage_key != "default":
+            rng = enemizer_patches._make_native_enemizer_rng(local_world)
+        else:
+            rng = None
+
+        if enemy_health_key != "default":
+            assert rng is not None
+            enemizer_patches._randomize_enemy_health(rom, rng, enemy_health_key)
+
+        if enemy_damage_key != "default":
+            assert rng is not None
+            enemizer_patches._randomize_enemy_damage(rom, rng, allow_zero_damage=True)
+            enemizer_patches._shuffle_damage_groups(
+                rom,
+                rng,
+                chaos_mode=enemy_damage_key == "chaos",
+                allow_zero_damage=True,
+            )
+
+        if local_world.options.boss_shuffle:
+            enemizer_patches.patch_bosses(local_world, rom)
+
+        enemy_shuffle_state = getattr(local_world, "enemy_shuffle_state", None)
+        if local_world.options.enemy_shuffle and enemy_shuffle_state is not None:
+            apply_enemy_shuffle(rom, enemy_shuffle_state)
+
+        pot_shuffle_state = getattr(local_world, "pot_shuffle_state", None)
+        if local_world.options.pot_shuffle and pot_shuffle_state is not None:
+            apply_pot_shuffle(rom, pot_shuffle_state)
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
