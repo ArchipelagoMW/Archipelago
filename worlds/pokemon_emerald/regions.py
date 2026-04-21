@@ -77,7 +77,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
 
                             # Fill the location with an event for catching that species
                             encounter_location.place_locked_item(PokemonEmeraldItem(
-                                f"CATCH_{data.species[species_id].name}",
+                                f"CATCH_{data.species[species_id].name}_{encounter_type.value}",
                                 ItemClassification.progression_skip_balancing,
                                 None,
                                 world.player

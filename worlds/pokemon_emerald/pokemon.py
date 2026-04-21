@@ -258,7 +258,7 @@ def _rename_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slo
         try:
             # Get the corresponding location and change the event name to reflect the new species
             slot_location = world.multiworld.get_location(encounter_location_name, world.player)
-            slot_location.item.name = f"CATCH_{data.species[new_species_id].name}"
+            slot_location.item.name = f"CATCH_{data.species[new_species_id].name}_{encounter_type.value}"
         except KeyError:
             pass  # Map probably isn't included; should be careful here about bad encounter location names
 

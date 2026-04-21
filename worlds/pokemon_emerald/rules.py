@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable, Dict
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
-from .data import LocationCategory, NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
+from .data import LocationCategory, EncounterType, SpeciesData, NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
 from .locations import PokemonEmeraldLocation
 from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
 
@@ -1438,7 +1438,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_location("EVENT_UNDO_REGI_SEAL"),
-        lambda state: state.has("CATCH_SPECIES_WAILORD", world.player) and state.has("CATCH_SPECIES_RELICANTH", world.player)
+        lambda state: state.has_any([
+            "CATCH_SPECIES_WAILORD_LAND",
+            "CATCH_SPECIES_WAILORD_WATER",
+            "CATCH_SPECIES_WAILORD_FISHING",
+        ], world.player) and state.has_any([
+            "CATCH_SPECIES_RELICANTH_LAND",
+            "CATCH_SPECIES_RELICANTH_WATER",
+            "CATCH_SPECIES_RELICANTH_FISHING",
+        ], world.player)
     )
     set_rule(
         get_entrance("REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN -> REGION_SEALED_CHAMBER_OUTER_ROOM/CRUMBLED_WALL"),
@@ -1545,6 +1553,18 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Pokedex Rewards
     if world.options.dexsanity:
+        encounter_type_map = {
+            "Land": EncounterType.LAND,
+            "Water": EncounterType.WATER,
+            "Fishing": EncounterType.FISHING,
+        }
+        def create_dexsanity_rule(species_name: str):
+            allowed_encounter_events = [
+                f"CATCH_{species_name}_{encounter_type_map[enabled_encounter_type].value}"
+                for enabled_encounter_type in world.options.dexsanity_encounter_types.value
+            ]
+            return lambda state: state.has_any(allowed_encounter_events, world.player)
+
         for i in range(NUM_REAL_SPECIES):
             species = data.species[NATIONAL_ID_TO_SPECIES_ID[i + 1]]
 
@@ -1553,7 +1573,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
             set_rule(
                 get_location(f"Pokedex - {species.label}"),
-                lambda state, species_name=species.name: state.has(f"CATCH_{species_name}", world.player)
+                create_dexsanity_rule(species.name)
             )
 
         # Legendary hunt prevents Latios from being a wild spawn so the roamer
