@@ -19,8 +19,6 @@
 # NewSoupVi is acting maintainer, but world belongs to core with the exception of the music
 /worlds/apquest/ @NewSoupVi
 
-# Sudoku (APSudoku)
-/worlds/apsudoku/ @EmilyV99
 
 # Aquaria
 /worlds/aquaria/ @tioui
@@ -57,9 +55,6 @@
 
 # Dark Souls III
 /worlds/dark_souls_3/ @Marechal-L @nex3
-
-# Donkey Kong Country 3
-/worlds/dkc3/ @PoryGone
 
 # DLCQuest
 /worlds/dlcquest/ @axe-y @agilbert1412

@@ -109,7 +109,7 @@ class TestOptions(unittest.TestCase):
     def test_option_set_keys_random(self):
         """Tests that option sets do not contain 'random' and its variants as valid keys"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if game_name not in ("Archipelago", "Sudoku", "Super Metroid"):
+            if game_name not in ("Archipelago", "Super Metroid"):
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     if issubclass(option, OptionSet):
                         with self.subTest(game=game_name, option=option_key):
