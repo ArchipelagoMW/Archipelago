@@ -682,7 +682,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         terrorpin = requirements["TerrorpinSprite"]
 
         self.assertTrue(deadrock.killable)
-        self.assertEqual(deadrock.guide_enemy_id, 39)
+        self.assertEqual(deadrock.combat_reference_id, 39)
         self.assertEqual(
             deadrock.kill_items,
             ("Magic Powder", "Quake"),
@@ -694,7 +694,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertEqual(deadrock.yellow_slime_follow_up_abilities, ("bombs",))
         self.assertIn("250 effect", deadrock.damage_notes)
 
-        self.assertEqual(mimic.guide_enemy_id, 131)
+        self.assertEqual(mimic.combat_reference_id, 131)
         self.assertEqual(mimic.mapping_confidence, "assumed_shared_green_mimic")
         self.assertIn("green mimic", mimic.damage_notes)
         self.assertEqual(terrorpin.kill_items, ("Hammer",))
@@ -702,9 +702,9 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
         self.assertEqual(requirements["RedBariSprite"].key_drop_kill_items, ("Fire Rod", "Bombos"))
 
-    def test_guide_kill_metadata_uses_real_items_and_explicit_abilities(self) -> None:
+    def test_kill_metadata_uses_real_items_and_explicit_abilities(self) -> None:
         for requirement in _load_enemy_sprite_requirements():
-            if requirement.guide_enemy_id is None:
+            if requirement.combat_reference_id is None:
                 continue
 
             with self.subTest(sprite=requirement.sprite_name):

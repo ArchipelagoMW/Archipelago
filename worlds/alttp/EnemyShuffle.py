@@ -134,8 +134,8 @@ class EnemySpriteRequirement:
     excluded_rooms: tuple[int, ...]
     dont_randomize_rooms: tuple[int, ...]
     spawnable_rooms: tuple[int, ...]
-    guide_enemy_id: Optional[int] = None
-    guide_enemy_name: Optional[str] = None
+    combat_reference_id: Optional[int] = None
+    combat_reference_name: Optional[str] = None
     mapping_confidence: Optional[str] = None
     kill_damage_classes: tuple[int, ...] = tuple()
     kill_items: tuple[str, ...] = tuple()
@@ -779,8 +779,8 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             excluded_rooms=tuple(entry["excluded_rooms"]),
             dont_randomize_rooms=tuple(entry["dont_randomize_rooms"]),
             spawnable_rooms=tuple(entry["spawnable_rooms"]),
-            guide_enemy_id=entry.get("guide_enemy_id"),
-            guide_enemy_name=entry.get("guide_enemy_name"),
+            combat_reference_id=entry.get("combat_reference_id"),
+            combat_reference_name=entry.get("combat_reference_name"),
             mapping_confidence=entry.get("mapping_confidence"),
             kill_damage_classes=tuple(entry.get("kill_damage_classes", ())),
             kill_items=tuple(entry.get("kill_items", ())),

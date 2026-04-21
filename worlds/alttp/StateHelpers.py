@@ -220,17 +220,17 @@ def _can_kill_enemy_requirement(
 
     if available_damage_classes.intersection(direct_damage_classes):
         return True
-    if _can_use_guide_kill_items(state, player, direct_kill_items, enemy_count):
+    if _can_use_kill_items(state, player, direct_kill_items, enemy_count):
         return True
-    if _can_use_guide_kill_abilities(state, player, requirement.kill_abilities, enemy_count):
+    if _can_use_kill_abilities(state, player, requirement.kill_abilities, enemy_count):
         return True
 
     if requirement.yellow_slime_transform_items:
         return (
-            _can_use_guide_kill_items(state, player, requirement.yellow_slime_transform_items, enemy_count)
+            _can_use_kill_items(state, player, requirement.yellow_slime_transform_items, enemy_count)
             and (
-                _can_use_guide_kill_items(state, player, requirement.yellow_slime_follow_up_items, enemy_count)
-                or _can_use_guide_kill_abilities(
+                _can_use_kill_items(state, player, requirement.yellow_slime_follow_up_items, enemy_count)
+                or _can_use_kill_abilities(
                     state,
                     player,
                     requirement.yellow_slime_follow_up_abilities,
@@ -251,8 +251,8 @@ def _can_collect_key_from_enemy_requirement(
 ) -> bool:
     if requirement.key_drop_kill_items or requirement.key_drop_kill_abilities:
         return (
-            _can_use_guide_kill_items(state, player, requirement.key_drop_kill_items, enemy_count)
-            or _can_use_guide_kill_abilities(state, player, requirement.key_drop_kill_abilities, enemy_count)
+            _can_use_kill_items(state, player, requirement.key_drop_kill_items, enemy_count)
+            or _can_use_kill_abilities(state, player, requirement.key_drop_kill_abilities, enemy_count)
         )
     return _can_kill_enemy_requirement(state, player, requirement, enemy_count, available_damage_classes)
 
@@ -301,21 +301,21 @@ def _get_available_damage_classes(state: CollectionState, player: int, enemy_cou
     return available_damage_classes
 
 
-def _can_use_guide_kill_items(state: CollectionState, player: int, kill_items: tuple[str, ...], enemy_count: int) -> bool:
+def _can_use_kill_items(state: CollectionState, player: int, kill_items: tuple[str, ...], enemy_count: int) -> bool:
     return any(
-        _can_use_guide_kill_item(state, player, kill_item, enemy_count)
+        _can_use_kill_item(state, player, kill_item, enemy_count)
         for kill_item in kill_items
     )
 
 
-def _can_use_guide_kill_abilities(
+def _can_use_kill_abilities(
     state: CollectionState,
     player: int,
     kill_abilities: tuple[str, ...],
     enemy_count: int,
 ) -> bool:
     return any(
-        _can_use_guide_kill_ability(state, player, kill_ability, enemy_count)
+        _can_use_kill_ability(state, player, kill_ability, enemy_count)
         for kill_ability in kill_abilities
     )
 
@@ -326,7 +326,7 @@ def _get_kill_item_damage_class(kill_item: str) -> int:
     return ITEM_NAME_TO_DAMAGE_CLASS[kill_item]
 
 
-def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str, enemy_count: int) -> bool:
+def _can_use_kill_item(state: CollectionState, player: int, kill_item: str, enemy_count: int) -> bool:
     if kill_item in {"Blue Boomerang", "Red Boomerang"}:
         return state.has(kill_item, player)
     if kill_item in {"Fighter Sword", "Master Sword", "Tempered Sword", "Golden Sword", "Hammer"}:
@@ -355,7 +355,7 @@ def _can_use_guide_kill_item(state: CollectionState, player: int, kill_item: str
     return False
 
 
-def _can_use_guide_kill_ability(state: CollectionState, player: int, kill_ability: str, enemy_count: int) -> bool:
+def _can_use_kill_ability(state: CollectionState, player: int, kill_ability: str, enemy_count: int) -> bool:
     if kill_ability == "bombs":
         return can_use_bombs(state, player, enemy_count)
     return False
