@@ -964,7 +964,7 @@ class OptionCounter(OptionDict):
     def from_any(cls, data: Mapping[str, int] | Sequence[str]) -> Self:
         if isinstance(data, Mapping):
             return cls(data)
-        elif isinstance(data, Sequence):
+        elif isinstance(data, Sequence) and not isinstance(data, str):
             return cls(collections.Counter(data))
         else:
             raise NotImplementedError(f"Can only Convert from Mapping or Sequence, got {type(data)}")
