@@ -263,7 +263,7 @@ def randomize_festival_seasons(content: StardewContent, data_to_randomize: set[s
     if DataRandomizationOptionName.festival_season not in data_to_randomize:
         return
 
-    seasons_by_festival = {festival_name: festival_data.season for festival_name, festival_data in content.festivals.items()}
+    seasons_by_festival = {festival_name: festival_data.season for festival_name, festival_data in content.festivals.items() if festival_data.duration == 1}
     randomized_seasons_per_festival = randomizers_per_behavior[behavior](seasons_by_festival, random)
 
     for festival_name, festival_season in randomized_seasons_per_festival.items():
@@ -275,7 +275,7 @@ def randomize_festival_dates(content: StardewContent, data_to_randomize: set[str
     if DataRandomizationOptionName.festival_date not in data_to_randomize:
         return
 
-    day_by_festival = {festival_name: festival_data.day for festival_name, festival_data in content.festivals.items()}
+    day_by_festival = {festival_name: festival_data.day for festival_name, festival_data in content.festivals.items() if festival_data.duration == 1}
     randomized_days_per_festival = randomizers_per_behavior[behavior](day_by_festival, random, 1, 28)
 
     for festival_name, festival_day in randomized_days_per_festival.items():
@@ -284,13 +284,15 @@ def randomize_festival_dates(content: StardewContent, data_to_randomize: set[str
 
 
 def sanitize_festival_dates(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
-    festival_names = list(content.festivals.keys())
+    festival_names = list([festival_name for festival_name, festival_data in content.festivals.items() if festival_data.duration == 1])
     all_valid = False
     while not all_valid:
         all_valid = True
         taken_days = set()
         random.shuffle(festival_names)
-        for festival_name in festival_names:
+        festival_order = list([festival_name for festival_name, festival_data in content.festivals.items() if festival_data.duration != 1])
+        festival_order.extend(festival_names)
+        for festival_name in festival_order:
             festival_data = content.festivals[festival_name]
             for i in range(0, festival_data.duration):
                 day = festival_data.day+i
@@ -303,6 +305,7 @@ def sanitize_festival_dates(content: StardewContent, data_to_randomize: set[str]
                     break
                 taken_days.add(day_key)
             if not all_valid:
+                assert festival_data.duration == 1
                 new_day = random.randint(1, 29)
                 content.festivals[festival_name] = override(festival_data, day=new_day)
                 break

@@ -980,6 +980,8 @@ class DataRandomization(OptionSet):
     Growth Time: Time to grow crops from planting to first harvest
     Growth Season: Which seasons various seeds can grow in
     Which Crop From Which Seed: Which crop come from which seeds. Only "Shuffled" behavior
+    Festival Season: Which seasons festivals occur in
+    Festival Date: Which day of the month festivals occur in
     """
     internal_name = "data_randomization"
     display_name = "Data Randomization"

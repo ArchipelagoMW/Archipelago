@@ -178,7 +178,7 @@ def prepare_crop_data_aspect(content: StardewContent, data_to_randomize: set[str
 def prepare_festival_season_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
     prepare_festival_data_aspect(content, data_to_randomize, prepared_data,
                                  DataRandomizationOptionName.festival_season,
-                                 lambda festival: True,
+                                 lambda festival: festival.duration == 1,
                                  lambda festival: festival.season,
                                  "Season")
 
@@ -186,7 +186,7 @@ def prepare_festival_season_data(content: StardewContent, data_to_randomize: set
 def prepare_festival_days_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
     prepare_festival_data_aspect(content, data_to_randomize, prepared_data,
                                  DataRandomizationOptionName.festival_season,
-                                 lambda festival: True,
+                                 lambda festival: festival.duration == 1,
                                  lambda festival: ",".join([str(x) for x in range(festival.day, festival.day+festival.duration)]),
                                  "Day")
 
