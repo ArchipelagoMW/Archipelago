@@ -184,7 +184,7 @@ def process_pokemon_locations(self):
             location.place_locked_item(mon)
             if slot.type in ("Legendary Pokemon", "Static Pokemon"):
                 static_placed_mons[mon.name.replace("Static ", "")] += 1
-            elif slot.type == "Repeatable Static Pokemon":
+            elif slot.type == "Static Repeatable Pokemon":
                 placed_mons[mon.name] += 1
     assert not (non_randomized_catch_em_all_mons and non_randomized_catch_em_all_slots)
 
