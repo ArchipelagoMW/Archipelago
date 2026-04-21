@@ -15,6 +15,8 @@ from worlds.alttp.EnemyShuffle import (
     RandomizedOverworldEnemyArea,
     RandomizedOverworldEnemySprite,
     WALLMASTER_SPRITE_ID,
+    _load_dungeon_sprite_metadata,
+    _read_room_sprites,
     get_possible_dungeon_sprite_groups,
     _get_requirements_for_usable_dungeon_enemies,
     _get_requirements_for_usable_overworld_enemies,
@@ -28,6 +30,58 @@ from worlds.alttp.EnemyShuffle import (
 
 
 class TestEnemyShuffleValidation(unittest.TestCase):
+    def test_curated_room_sprite_addresses_exclude_hera_basement_key_slot(self) -> None:
+        room_id = 135
+        sprite_table_address = 0x4E397
+        rom_bytes = bytearray(0x4E3C0)
+        rom_bytes[sprite_table_address] = 0
+        room_135_sprite_records = (
+            (0x4E398, 0x05, 0x14, 0x18),
+            (0x4E39B, 0x07, 0x1A, 0x18),
+            (0x4E39E, 0x0B, 0x13, 0x18),
+            (0x4E3A1, 0x19, 0x06, 0x18),
+            (0x4E3A4, 0x08, 0xE7, 0x14),
+            (0x4E3A7, 0x04, 0x17, 0x1E),
+            (0x4E3AA, 0x0C, 0x03, 0x1E),
+            (0x4E3AD, 0x15, 0x04, 0x1E),
+            (0x4E3B0, 0x17, 0x0B, 0xA7),
+            (0x4E3B3, 0x18, 0x19, 0xA7),
+            (0x4E3B6, 0x19, 0x04, 0xA7),
+            (0x4E3B9, 0x1A, 0x08, 0xE4),
+            (0x4E3BC, 0x1C, 0x15, 0xA7),
+        )
+        for address, byte_0, byte_1, sprite_id in room_135_sprite_records:
+            rom_bytes[address] = byte_0
+            rom_bytes[address + 1] = byte_1
+            rom_bytes[address + 2] = sprite_id
+        rom_bytes[0x4E3BF] = 0xFF
+
+        sprites = _read_room_sprites(rom_bytes, room_id, sprite_table_address, _load_dungeon_sprite_metadata())
+        sprite_addresses = {sprite.address for sprite in sprites}
+
+        self.assertNotIn(0x4E3B9, sprite_addresses)
+        self.assertIn(0x4E3B6, sprite_addresses)
+        self.assertFalse(any(sprite.has_key for sprite in sprites))
+
+    def test_curated_room_sprite_addresses_deduplicate_duplicate_slots(self) -> None:
+        room_id = 125
+        sprite_table_address = 0x4E2CA
+        metadata = _load_dungeon_sprite_metadata()
+        max_sprite_id_address = max(metadata["room_sprite_id_addresses"][room_id])
+        rom_bytes = bytearray(max_sprite_id_address + 2)
+        rom_bytes[sprite_table_address] = 0
+        for offset, sprite_id_address in enumerate(metadata["room_sprite_id_addresses"][room_id]):
+            address = sprite_id_address - 2
+            sprite_id = 0x80 if offset % 2 == 0 else 0x81
+            rom_bytes[address] = 0
+            rom_bytes[address + 1] = 0
+            rom_bytes[address + 2] = sprite_id
+
+        sprites = _read_room_sprites(rom_bytes, room_id, sprite_table_address, metadata)
+        sprite_addresses = [sprite.address for sprite in sprites]
+
+        self.assertEqual(len(sprite_addresses), len(set(sprite_addresses)))
+
     def test_rejects_non_killable_shutter_room(self) -> None:
         room = DungeonEnemyRoom(
             room_id=1,
@@ -250,6 +304,49 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         )
 
         self.assertEqual(randomized_room.sprites[0].sprite_id, 0x13)
+
+    def test_shutter_water_room_prefers_killable_water_enemy(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=40,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=1,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x8A, is_overlord=False, has_key=False),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=True,
+            is_water_room=True,
+            do_not_randomize=False,
+            no_special_enemies_standard=False,
+        )
+        state = self._build_state(
+            dungeon_rooms={40: room},
+            sprite_requirements=(
+                self._requirement(0x8A, killable=False, subgroup_2=(34,)),
+                self._requirement(0x81, killable=True, subgroup_2=(34,), is_water_sprite=True),
+                self._requirement(0x9A, killable=False, subgroup_2=(34,), is_water_sprite=True),
+            ),
+        )
+        selected_group = state.sprite_groups[0x41]
+        selected_group.subgroup_2 = 34
+
+        randomized_room = _randomize_room_sprites(
+            SimpleNamespace(random=random.Random(0)),
+            state,
+            room,
+            selected_group,
+            False,
+        )
+
+        self.assertEqual(randomized_room.sprites[0].sprite_id, 0x81)
 
     def test_wallmaster_cannot_spawn_in_high_room_ids(self) -> None:
         room = DungeonEnemyRoom(

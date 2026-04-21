@@ -11,8 +11,10 @@ Vendored artifacts:
 
 - `enemizerBasePatch.json`
 - `exported_symbols.txt`
+- `dungeon_sprite_addresses.json`
 
 Purpose:
 
 - `enemizerBasePatch.json` contains the generated base patch Enemizer applies before feature-specific randomization.
 - `exported_symbols.txt` contains the assembled symbol map consumed by Enemizer's runtime code for ROM addresses.
+- `dungeon_sprite_addresses.json` contains dungeon sprite slot metadata derived from Enemizer's source tables and keyed-enemy address list.
