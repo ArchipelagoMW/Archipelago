@@ -14,10 +14,16 @@ from worlds.alttp.EnemizerPatches import (
     THIEF_DEFAULT_HP,
     THIEF_SPRITE_ID,
     VANILLA_HIDDEN_ENEMY_CHANCE_POOL,
+    _apply_killable_thief,
     _get_enemizer_symbol,
     _make_native_enemizer_rng,
+    _option_key,
+    _randomize_enemy_damage,
+    _randomize_enemy_health,
+    _set_enemizer_flag,
+    _shuffle_damage_groups,
+    _update_hidden_enemy_item_table_for_retro_mode,
     apply_enemizer_base_patch,
-    apply_native_enemizer_features,
 )
 
 
@@ -54,7 +60,7 @@ class TestEnemizerPatches(unittest.TestCase):
         rom = FakeRom()
         world = self._build_world(enemy_shuffle=True, bush_shuffle=False)
 
-        apply_native_enemizer_features(world, rom)
+        self._apply_native_enemizer_features(world, rom)
 
         self.assertEqual(
             tuple(rom.read_bytes(HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, len(VANILLA_HIDDEN_ENEMY_CHANCE_POOL))),
@@ -91,7 +97,7 @@ class TestEnemizerPatches(unittest.TestCase):
             enemy_damage="chaos",
         )
 
-        apply_native_enemizer_features(world, rom)
+        self._apply_native_enemizer_features(world, rom)
 
         self.assertEqual(
             tuple(rom.read_bytes(HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, len(RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL))),
@@ -120,14 +126,14 @@ class TestEnemizerPatches(unittest.TestCase):
 
         world = self._build_world(killable_thieves=True)
 
-        apply_native_enemizer_features(world, rom)
+        self._apply_native_enemizer_features(world, rom)
 
         self.assertEqual(rom.read_byte(ENEMY_HP_TABLE_ADDRESS + THIEF_SPRITE_ID), THIEF_DEFAULT_HP)
 
     def test_bush_shuffle_without_enemy_shuffle_does_not_enable_sprite_randomization_flags(self) -> None:
         rom = FakeRom()
 
-        apply_native_enemizer_features(self._build_world(bush_shuffle=True), rom)
+        self._apply_native_enemizer_features(self._build_world(bush_shuffle=True), rom)
 
         self.assertEqual(rom.read_byte(_get_enemizer_symbol("EnemizerFlags_randomize_bushes")), 0x01)
         self.assertEqual(rom.read_byte(_get_enemizer_symbol("EnemizerFlags_randomize_sprites")), 0x00)
@@ -140,7 +146,7 @@ class TestEnemizerPatches(unittest.TestCase):
     def test_non_chaos_enemy_damage_uses_expected_mail_scaling(self) -> None:
         rom = FakeRom()
 
-        apply_native_enemizer_features(self._build_world(enemy_damage="hard"), rom)
+        self._apply_native_enemizer_features(self._build_world(enemy_damage="hard"), rom)
 
         for group_id in range(10):
             group_address = DAMAGE_GROUP_TABLE_ADDRESS + (group_id * 3)
@@ -155,6 +161,46 @@ class TestEnemizerPatches(unittest.TestCase):
         rng_b = _make_native_enemizer_rng(world)
 
         self.assertEqual([rng_a.randrange(256) for _ in range(8)], [rng_b.randrange(256) for _ in range(8)])
+
+    @staticmethod
+    def _apply_native_enemizer_features(world: SimpleNamespace, rom: FakeRom) -> None:
+        enemy_shuffle_enabled = bool(world.options.enemy_shuffle)
+        bush_shuffle_enabled = bool(world.options.bush_shuffle)
+        enemy_health_key = _option_key(world.options.enemy_health)
+        enemy_damage_key = _option_key(world.options.enemy_damage)
+
+        if enemy_shuffle_enabled or bush_shuffle_enabled:
+            _set_enemizer_flag(rom, "EnemizerFlags_randomize_bushes", True)
+            hidden_enemy_chance_pool = (
+                RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL if bush_shuffle_enabled else VANILLA_HIDDEN_ENEMY_CHANCE_POOL
+            )
+            rom.write_bytes(HIDDEN_ENEMY_CHANCE_POOL_ADDRESS, hidden_enemy_chance_pool)
+            _update_hidden_enemy_item_table_for_retro_mode(rom)
+
+        if enemy_shuffle_enabled:
+            _set_enemizer_flag(rom, "EnemizerFlags_randomize_sprites", True)
+            _set_enemizer_flag(rom, "EnemizerFlags_enable_mimic_override", True)
+            _set_enemizer_flag(rom, "EnemizerFlags_enable_terrorpin_ai_fix", True)
+            rom.write_bytes(0x1F2D5, (0x54, 0x9C))
+            rom.write_byte(0x1F2E5, 0xB0)
+            rom.write_byte(0x1F2EB, 0xD0)
+
+        if world.options.killable_thieves:
+            _apply_killable_thief(rom)
+
+        if enemy_health_key != "default" or enemy_damage_key != "default":
+            rng = _make_native_enemizer_rng(world)
+        else:
+            rng = None
+
+        if enemy_health_key != "default":
+            assert rng is not None
+            _randomize_enemy_health(rom, rng, enemy_health_key)
+
+        if enemy_damage_key != "default":
+            assert rng is not None
+            _randomize_enemy_damage(rom, rng, allow_zero_damage=True)
+            _shuffle_damage_groups(rom, rng, chaos_mode=enemy_damage_key == "chaos", allow_zero_damage=True)
 
     @staticmethod
     def _build_world(
