@@ -65,6 +65,10 @@ If the game is paused, you are in a menu, selecting a mission, and in other situ
 
 We remove your gadget to make the game think you haven't picked it up yet in order to make it respawn in the world. If it fails to respawn, teleport to the ship to force a reload of the planet and there is a good chance it should have spawned then. If not, repeat until it has appeared. Should not take more than 1-2 times at most.
 
+## Tracker says X check is in logic, but I don't have a Clank Pack, why?
+
+Some checks can be obtained logically with the charge boots as well, like the ones on Florana after the big gap next to the second weapon vendor. You can glide with the charge boots if you double tap the charge button and keep holding forward in the meantime.
+
 ## How can I contribute to the project?
 
 - **As a player**: The best way to contribute to the project as a player is to report every issue you encounter with the most details possible.
