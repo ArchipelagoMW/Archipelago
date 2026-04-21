@@ -77,14 +77,6 @@ Changes made to `docker-compose.yaml` can be applied by running `docker compose 
 It is possible to carry out these deployment steps on Windows under [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install).
 
 
-## A Link to the Past
-
-A Link to the Past no longer requires an external Enemizer download or container-side bundle. It still requires the
-version 1.0 Japanese "Zelda no Densetsu" `.sfc` ROM to be available to Archipelago when generating or patching ALTTP
-content:
-`docker run archipelago -v "/path/to/zelda.sfc:/app/Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"`.
-
-
 ## Optional: Git
 
 Building the image requires a local copy of the ArchipelagoMW source code.
