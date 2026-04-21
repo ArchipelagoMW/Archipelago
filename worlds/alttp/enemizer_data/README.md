@@ -28,6 +28,3 @@ Purpose:
   ALTTP room-combat logic when enemy shuffle is off. This copy exists so logic and unit tests do not need access to a
   local base ROM.
 - `exported_symbols.txt` contains the assembled symbol map consumed by Enemizer's runtime code for ROM addresses.
-
-These copies exist so Archipelago can transition away from depending on an external Enemizer executable and release
-bundle layout.
