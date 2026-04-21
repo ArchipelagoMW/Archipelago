@@ -1,5 +1,5 @@
-These files are vendored from the upstream Enemizer compiled release that was already present locally in
-`/home/alchav/PycharmProjects/Archipelago/EnemizerCLI`.
+These modules are vendored/generated from the upstream Enemizer compiled release and source that were already present
+locally in `/home/alchav/PycharmProjects/Archipelago/EnemizerCLI` and `/home/alchav/PycharmProjects/Archipelago/Enemizer`.
 
 Source details:
 
@@ -7,26 +7,30 @@ Source details:
 - Release family: `7.1`
 - Library version from `EnemizerCLI/EnemizerCLI.Core.deps.json`: `EnemizerLibrary/7.1.0`
 
-Vendored artifacts:
+Vendored data modules:
 
-- `enemizerBasePatch.json`
-- `exported_symbols.txt`
-- `dungeon_sprite_addresses.json`
+- `base_patch_data.py`
+- `symbols.py`
+- `dungeon_sprite_addresses.py`
 
-Archipelago-authored companion metadata:
+Archipelago-authored companion data modules:
 
-- `default_dungeon_room_enemies.json`
-- `enemy_room_metadata.json`
-- `enemy_sprite_requirements.json`
-- `overworld_enemy_metadata.json`
-- `pot_shuffle.json`
-- `room_names.json`
+- `default_dungeon_room_enemies.py`
+- `enemy_room_metadata.py`
+- `enemy_sprite_requirements.py`
+- `overworld_enemy_metadata.py`
+- `pot_shuffle_data.py`
+- `room_names.py`
 
 Purpose:
 
-- `enemizerBasePatch.json` contains the generated base patch Enemizer applies before feature-specific randomization.
-- `default_dungeon_room_enemies.json` contains the default dungeon enemy placements, key flags, and coordinates used by
+- `base_patch_data.py` contains the generated base patch Enemizer applies before feature-specific randomization.
+- `default_dungeon_room_enemies.py` contains the default dungeon enemy placements, key flags, and coordinates used by
   ALTTP room-combat logic when enemy shuffle is off. This copy exists so logic and unit tests do not need access to a
   local base ROM.
-- `exported_symbols.txt` contains the assembled symbol map consumed by Enemizer's runtime code for ROM addresses.
-- `dungeon_sprite_addresses.json` contains dungeon sprite slot metadata derived from Enemizer's source tables and keyed-enemy address list.
+- `symbols.py` contains the assembled symbol map consumed by Enemizer's runtime code for ROM addresses.
+- `dungeon_sprite_addresses.py` contains dungeon sprite slot metadata derived from Enemizer's source tables and keyed-enemy address list.
+- `enemy_room_metadata.py` and `overworld_enemy_metadata.py` contain room and area grouping/randomization constraints.
+- `enemy_sprite_requirements.py` contains the sprite metadata used by the native enemy shuffle implementation.
+- `pot_shuffle_data.py` contains the native pot shuffle room/item source data.
+- `room_names.py` contains the named room lookup table used by ALTTP room-combat logic.

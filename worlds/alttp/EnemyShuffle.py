@@ -1,14 +1,30 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import json
-import pkgutil
 from typing import Optional, TYPE_CHECKING
 
 from Utils import snes_to_pc
 
 from .EnemizerPatches import apply_enemizer_base_patch
 from .Rom import LocalRom, get_base_rom_path
+from .enemizer_data.default_dungeon_room_enemies import DEFAULT_DUNGEON_ROOM_ENEMIES
+from .enemizer_data.dungeon_sprite_addresses import DUNGEON_SPRITE_ADDRESSES, KEYED_SPRITE_ID_ADDRESSES
+from .enemizer_data.enemy_room_metadata import (
+    BOSS_ROOM_IDS,
+    DONT_RANDOMIZE_ROOM_IDS,
+    NO_SPECIAL_ENEMIES_STANDARD_ROOM_IDS,
+    ROOM_GROUP_REQUIREMENTS,
+    SHUTTER_ROOM_IDS,
+    WATER_ROOM_IDS,
+)
+from .enemizer_data.enemy_sprite_requirements import ENEMY_SPRITE_REQUIREMENTS
+from .enemizer_data.overworld_enemy_metadata import (
+    AREA_IDS,
+    DO_NOT_RANDOMIZE_AREA_IDS,
+    FORCED_GROUP_REQUIREMENTS,
+)
+from .enemizer_data.room_names import ROOM_NAME_TO_ID
+from .enemizer_data.symbols import ENEMIZER_SYMBOLS
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -729,105 +745,81 @@ def _read_room_sprites(
 
 
 def _get_enemizer_symbol(symbol_name: str) -> int:
-    raw_symbols = pkgutil.get_data(__package__, "enemizer_data/exported_symbols.txt")
-    if raw_symbols is None:
-        raise FileNotFoundError("Missing vendored Enemizer symbols required by ALTTP enemy state generation")
-
-    for line in raw_symbols.decode("utf-8").splitlines():
-        parts = line.split(maxsplit=1)
-        if len(parts) != 2 or parts[1] != symbol_name:
-            continue
-        return snes_to_pc(int(parts[0].replace(":", ""), 16))
-    raise KeyError(symbol_name)
+    return snes_to_pc(ENEMIZER_SYMBOLS[symbol_name])
 
 
 def _load_enemy_room_metadata() -> dict[str, object]:
-    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/enemy_room_metadata.json")
-    if raw_metadata is None:
-        raise FileNotFoundError("Missing vendored Enemizer enemy room metadata required by ALTTP enemy state generation")
-
-    payload = json.loads(raw_metadata.decode("utf-8"))
     return {
-        "shutter_room_ids": frozenset(payload["shutter_rooms"]),
-        "water_room_ids": frozenset(payload["water_rooms"]),
-        "dont_randomize_room_ids": frozenset(payload["dont_randomize_rooms"]),
-        "no_special_enemies_standard_room_ids": frozenset(payload["no_special_enemies_standard_rooms"]),
-        "boss_room_ids": frozenset(payload["boss_rooms"]),
+        "shutter_room_ids": SHUTTER_ROOM_IDS,
+        "water_room_ids": WATER_ROOM_IDS,
+        "dont_randomize_room_ids": DONT_RANDOMIZE_ROOM_IDS,
+        "no_special_enemies_standard_room_ids": NO_SPECIAL_ENEMIES_STANDARD_ROOM_IDS,
+        "boss_room_ids": BOSS_ROOM_IDS,
         "room_requirements": tuple(
             RoomGroupRequirement(
-                group_id=requirement["group_id"],
-                subgroup_0=requirement["subgroup_0"],
-                subgroup_1=requirement["subgroup_1"],
-                subgroup_2=requirement["subgroup_2"],
-                subgroup_3=requirement["subgroup_3"],
-                rooms=tuple(requirement["rooms"]),
+                group_id=requirement.group_id,
+                subgroup_0=requirement.subgroup_0,
+                subgroup_1=requirement.subgroup_1,
+                subgroup_2=requirement.subgroup_2,
+                subgroup_3=requirement.subgroup_3,
+                rooms=requirement.rooms,
             )
-            for requirement in payload["room_requirements"]
+            for requirement in ROOM_GROUP_REQUIREMENTS
         ),
     }
 
 
 def _load_dungeon_sprite_metadata() -> dict[str, object]:
-    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/dungeon_sprite_addresses.json")
-    if raw_metadata is None:
-        raise FileNotFoundError("Missing vendored Enemizer dungeon sprite metadata required by ALTTP enemy state generation")
-
-    payload = json.loads(raw_metadata.decode("utf-8"))
     return {
         "room_sprite_id_addresses": {
-            int(room_id): tuple(sprite_id_addresses)
-            for room_id, sprite_id_addresses in payload["room_sprite_id_addresses"].items()
+            room.room_id: room.sprite_id_addresses
+            for room in DUNGEON_SPRITE_ADDRESSES
         },
-        "keyed_sprite_id_addresses": frozenset(payload["keyed_sprite_id_addresses"]),
+        "keyed_sprite_id_addresses": KEYED_SPRITE_ID_ADDRESSES,
     }
 
 
 def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
-    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/enemy_sprite_requirements.json")
-    if raw_metadata is None:
-        raise FileNotFoundError("Missing vendored Enemizer enemy sprite metadata required by ALTTP enemy state generation")
-
-    payload = json.loads(raw_metadata.decode("utf-8"))
     return tuple(
         EnemySpriteRequirement(
-            sprite_name=entry["sprite_name"],
-            sprite_id=entry["sprite_id"],
-            boss=entry["boss"],
-            overlord=entry["overlord"],
-            do_not_randomize=entry["do_not_randomize"],
-            killable=entry["killable"],
-            npc=entry["npc"],
-            never_use_dungeon=entry["never_use_dungeon"],
-            never_use_overworld=entry["never_use_overworld"],
-            cannot_have_key=entry["cannot_have_key"],
-            is_object=entry["is_object"],
-            absorbable=entry["absorbable"],
-            is_water_sprite=entry["is_water_sprite"],
-            is_enemy_sprite=entry["is_enemy_sprite"],
-            group_ids=tuple(entry["group_ids"]),
-            subgroup_0=tuple(entry["subgroup_0"]),
-            subgroup_1=tuple(entry["subgroup_1"]),
-            subgroup_2=tuple(entry["subgroup_2"]),
-            subgroup_3=tuple(entry["subgroup_3"]),
-            parameters=entry["parameters"],
-            special_glitched=entry["special_glitched"],
-            excluded_rooms=tuple(entry["excluded_rooms"]),
-            dont_randomize_rooms=tuple(entry["dont_randomize_rooms"]),
-            spawnable_rooms=tuple(entry["spawnable_rooms"]),
-            combat_reference_id=entry.get("combat_reference_id"),
-            combat_reference_name=entry.get("combat_reference_name"),
-            mapping_confidence=entry.get("mapping_confidence"),
-            kill_damage_classes=tuple(entry.get("kill_damage_classes", ())),
-            kill_items=tuple(entry.get("kill_items", ())),
-            kill_abilities=tuple(entry.get("kill_abilities", ())),
-            yellow_slime_transform_items=tuple(entry.get("yellow_slime_transform_items", ())),
-            yellow_slime_follow_up_items=tuple(entry.get("yellow_slime_follow_up_items", ())),
-            yellow_slime_follow_up_abilities=tuple(entry.get("yellow_slime_follow_up_abilities", ())),
-            key_drop_kill_items=tuple(entry.get("key_drop_kill_items", ())),
-            key_drop_kill_abilities=tuple(entry.get("key_drop_kill_abilities", ())),
-            damage_notes=entry.get("damage_notes"),
+            sprite_name=entry.sprite_name,
+            sprite_id=entry.sprite_id,
+            boss=entry.boss,
+            overlord=entry.overlord,
+            do_not_randomize=entry.do_not_randomize,
+            killable=entry.killable,
+            npc=entry.npc,
+            never_use_dungeon=entry.never_use_dungeon,
+            never_use_overworld=entry.never_use_overworld,
+            cannot_have_key=entry.cannot_have_key,
+            is_object=entry.is_object,
+            absorbable=entry.absorbable,
+            is_water_sprite=entry.is_water_sprite,
+            is_enemy_sprite=entry.is_enemy_sprite,
+            group_ids=entry.group_ids,
+            subgroup_0=entry.subgroup_0,
+            subgroup_1=entry.subgroup_1,
+            subgroup_2=entry.subgroup_2,
+            subgroup_3=entry.subgroup_3,
+            parameters=entry.parameters,
+            special_glitched=entry.special_glitched,
+            excluded_rooms=entry.excluded_rooms,
+            dont_randomize_rooms=entry.dont_randomize_rooms,
+            spawnable_rooms=entry.spawnable_rooms,
+            combat_reference_id=entry.combat_reference_id,
+            combat_reference_name=entry.combat_reference_name,
+            mapping_confidence=entry.mapping_confidence,
+            kill_damage_classes=entry.kill_damage_classes,
+            kill_items=entry.kill_items,
+            kill_abilities=entry.kill_abilities,
+            yellow_slime_transform_items=entry.yellow_slime_transform_items,
+            yellow_slime_follow_up_items=entry.yellow_slime_follow_up_items,
+            yellow_slime_follow_up_abilities=entry.yellow_slime_follow_up_abilities,
+            key_drop_kill_items=entry.key_drop_kill_items,
+            key_drop_kill_abilities=entry.key_drop_kill_abilities,
+            damage_notes=entry.damage_notes,
         )
-        for entry in payload["requirements"]
+        for entry in ENEMY_SPRITE_REQUIREMENTS
     )
 
 
@@ -882,21 +874,17 @@ def _get_effective_dungeon_room_sprites(
 def _load_default_dungeon_room_sprites() -> dict[int, tuple[DefaultDungeonEnemySprite, ...]]:
     room_sprites = getattr(_load_default_dungeon_room_sprites, "room_sprites", None)
     if room_sprites is None:
-        raw_data = pkgutil.get_data(__package__, "enemizer_data/default_dungeon_room_enemies.json")
-        if raw_data is None:
-            raise FileNotFoundError("Missing vendored default dungeon enemy metadata required by ALTTP logic")
-        parsed_data = json.loads(raw_data.decode("utf-8"))
         room_sprites = {
-            int(room_id): tuple(
+            room.room_id: tuple(
                 DefaultDungeonEnemySprite(
-                    sprite_id=sprite["sprite_id"],
-                    has_key=sprite["has_key"],
-                    x_coord_pixels=sprite["x_coord_pixels"],
-                    y_coord_pixels=sprite["y_coord_pixels"],
+                    sprite_id=sprite.sprite_id,
+                    has_key=sprite.has_key,
+                    x_coord_pixels=sprite.x_coord_pixels,
+                    y_coord_pixels=sprite.y_coord_pixels,
                 )
-                for sprite in sprites
+                for sprite in room.sprites
             )
-            for room_id, sprites in parsed_data.items()
+            for room in DEFAULT_DUNGEON_ROOM_ENEMIES
         }
         _load_default_dungeon_room_sprites.room_sprites = room_sprites
     return room_sprites
@@ -905,14 +893,9 @@ def _load_default_dungeon_room_sprites() -> dict[int, tuple[DefaultDungeonEnemyS
 def _load_room_names() -> dict[int, str]:
     room_names = getattr(_load_room_names, "room_names", None)
     if room_names is None:
-        raw_metadata = pkgutil.get_data(__package__, "enemizer_data/room_names.json")
-        if raw_metadata is None:
-            raise FileNotFoundError("Missing vendored Enemizer room-name metadata required by ALTTP enemy state generation")
-
-        payload = json.loads(raw_metadata.decode("utf-8"))
         room_names = {
             room_id: room_name
-            for room_name, room_id in payload["room_name_to_id"].items()
+            for room_name, room_id in ROOM_NAME_TO_ID.items()
         }
         _load_room_names.room_names = room_names
     return room_names
@@ -921,14 +904,9 @@ def _load_room_names() -> dict[int, str]:
 def _load_room_name_to_id() -> dict[str, int]:
     room_name_to_id = getattr(_load_room_name_to_id, "room_name_to_id", None)
     if room_name_to_id is None:
-        raw_metadata = pkgutil.get_data(__package__, "enemizer_data/room_names.json")
-        if raw_metadata is None:
-            raise FileNotFoundError("Missing vendored Enemizer room-name metadata required by ALTTP enemy state generation")
-
-        payload = json.loads(raw_metadata.decode("utf-8"))
         room_name_to_id = {
             room_name: int(room_id)
-            for room_name, room_id in payload["room_name_to_id"].items()
+            for room_name, room_id in ROOM_NAME_TO_ID.items()
         }
         _load_room_name_to_id.room_name_to_id = room_name_to_id
     return room_name_to_id
@@ -946,24 +924,19 @@ def _get_sprite_requirement_lookup() -> dict[int, EnemySpriteRequirement]:
 
 
 def _load_overworld_enemy_metadata() -> dict[str, object]:
-    raw_metadata = pkgutil.get_data(__package__, "enemizer_data/overworld_enemy_metadata.json")
-    if raw_metadata is None:
-        raise FileNotFoundError("Missing vendored Enemizer overworld enemy metadata required by ALTTP enemy state generation")
-
-    payload = json.loads(raw_metadata.decode("utf-8"))
     return {
-        "area_ids": tuple(payload["area_ids"]),
-        "do_not_randomize_area_ids": frozenset(payload["do_not_randomize_areas"]),
+        "area_ids": AREA_IDS,
+        "do_not_randomize_area_ids": DO_NOT_RANDOMIZE_AREA_IDS,
         "forced_group_requirements": tuple(
             OverworldGroupRequirement(
-                group_id=requirement["group_id"],
-                subgroup_0=requirement["subgroup_0"],
-                subgroup_1=requirement["subgroup_1"],
-                subgroup_2=requirement["subgroup_2"],
-                subgroup_3=requirement["subgroup_3"],
-                areas=tuple(requirement["areas"]),
+                group_id=requirement.group_id,
+                subgroup_0=requirement.subgroup_0,
+                subgroup_1=requirement.subgroup_1,
+                subgroup_2=requirement.subgroup_2,
+                subgroup_3=requirement.subgroup_3,
+                areas=requirement.areas,
             )
-            for requirement in payload["forced_group_requirements"]
+            for requirement in FORCED_GROUP_REQUIREMENTS
         ),
     }
 

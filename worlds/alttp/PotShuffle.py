@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import json
-import pkgutil
 from typing import TYPE_CHECKING
 
 from Utils import snes_to_pc
+from .enemizer_data.pot_shuffle_data import POT_ROOMS
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -116,16 +115,11 @@ def get_unique_pot_item_position(
 
 
 def _load_pot_room_data() -> tuple[PotRoomData, ...]:
-    raw_data = pkgutil.get_data(__package__, "enemizer_data/pot_shuffle.json")
-    if raw_data is None:
-        raise FileNotFoundError("Missing vendored Enemizer pot shuffle data required by ALTTP native integration")
-
-    payload = json.loads(raw_data.decode("utf-8"))
     return tuple(
         PotRoomData(
-            room_id=room["room_id"],
-            pots=tuple(PotData(**pot) for pot in room["pots"]),
-            items=tuple(room["items"]),
+            room_id=room.room_id,
+            pots=tuple(PotData(x=pot.x, y=pot.y, reserved=pot.reserved) for pot in room.pots),
+            items=room.items,
         )
-        for room in payload["rooms"]
+        for room in POT_ROOMS
     )
