@@ -1128,7 +1128,10 @@ class Rac3Interface(GameInterface):
                     # change the string pointer to no items available message in code cave
                     item_name_addr = start_address + RAC3SHIPVENDOR.ITEM_NAME_PTR_OFFSET
                     already_equipped_addr = start_address + RAC3SHIPVENDOR.ITEM_IS_EQUIPPED_OFFSET
-                    self._write32(item_name_addr, self.vendor_string_pointers[RAC3VENDOR.NO_ITEMS_AVAILABLE_LOC_KEY])
+                    string_key = (RAC3VENDOR.ALL_ITEMS_SOLD_OUT_LOC_KEY 
+                                  if self.has_checked_all_locations_with_tag(RAC3TAG.SHIP) 
+                                  else RAC3VENDOR.NO_ITEMS_AVAILABLE_LOC_KEY)
+                    self._write32(item_name_addr, self.vendor_string_pointers[string_key])
                     self._write32(already_equipped_addr, 1)
                 case _:
                     # clear out vendor slot memory
@@ -1300,6 +1303,17 @@ class Rac3Interface(GameInterface):
                     (player_pos[1] - moby_pos[1]) ** 2 +
                     (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
         return distance
+
+    def get_checked_locations_by_tag(self, tag: str) -> list[int]:
+        """Get a list of checked locations that match the given tag"""
+        return [loc for loc in self.checked_locations if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS]
+
+    def has_checked_all_locations_with_tag(self, tag: str) -> bool:
+        """Check if all locations with the given tag have been checked"""
+        for loc in RAC3_LOCATION_DATA_TABLE.keys():
+            if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS and loc not in self.checked_locations:
+                return False
+        return True
 
     def respawn_gadgets(self):
         """Respawn gadget if the associated location isn't checked but the gadget is unlocked through AP"""

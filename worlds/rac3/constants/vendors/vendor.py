@@ -17,6 +17,8 @@ class RAC3VENDOR:
     SLOT_SIZE: int = 0
     NO_ITEMS_AVAILABLE_LOC_KEY: str = "NO_VENDOR_ITEMS"
     NO_ITEMS_AVAILABLE_MSG: str = "No items available. 1 infobot = 3 items in stock!"
+    ALL_ITEMS_SOLD_OUT_LOC_KEY: str = "ALL_VENDOR_ITEMS_SOLD_OUT"
+    ALL_ITEMS_SOLD_OUT_MSG: str = "All items purchased."
 
     @staticmethod
     def get_vendor_property_address(planet: str, vendor_prop: int) -> int:
