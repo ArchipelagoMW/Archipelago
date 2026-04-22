@@ -206,6 +206,7 @@ class Rac3Interface(GameInterface):
     vendor_type: RAC3VENDORTYPE | None = None
     vendor_string_pointers: dict[str, int] = None
     should_restore_vendor_item_names: bool = True
+    cycle_times: list[float] = []
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -2047,6 +2048,7 @@ class Rac3Interface(GameInterface):
         logger.info(f"AP World Version: {RAC3OPTION.VERSION_NUMBER}")
         logger.info(f'Game Version: {GAME_ID_TO_VERSION.get(self.current_game, "Unknown")} ({self.current_game})')
         logger.info(f"Current planet Tracked: {self.planet}")
+        logger.info(f"Average update cycle execution time last 100 cycles: {sum(self.cycle_times) / len(self.cycle_times):.4f} seconds")
         logger.info(f"Sewer Crystals Inventory: {self._read8(RAC3STATUS.CRYSTALS_CURRENT)}")
         logger.info(f"Sewer Crystals Traded: {self._read8(RAC3STATUS.CRYSTALS_TRADED)}")
         logger.info(f"Ship Slot Limit: {self.ship_slot_limit}")

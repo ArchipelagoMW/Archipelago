@@ -202,6 +202,9 @@ async def _handle_game_ready(ctx: "Context") -> None:
             elapsed = after_time - current_time
             logger.debug(f"Update cycle took {elapsed:.5f} seconds")
             logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
+            ctx.game_interface.cycle_times.append(elapsed)
+            if len(ctx.game_interface.cycle_times) > 100:
+                ctx.game_interface.cycle_times.pop(0)
 
 
 ##################################################
@@ -213,8 +216,9 @@ async def _handle_game_ready(ctx: "Context") -> None:
 async def update(ctx: "Context") -> None:
     """Called continuously"""
     ctx.game_interface.early_update()
+    # Check codecave and set values if needed
     await handle_codecave(ctx)
-
+    # Skip the intro and set the Veldin flags if the option is enabled
     await handle_intro_skip(ctx)
     # Check received items
     await handle_received_items(ctx)
