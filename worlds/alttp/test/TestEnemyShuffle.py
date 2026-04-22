@@ -191,6 +191,89 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
+    def test_kyameron_requires_freeze_and_hammer(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    291: RandomizedDungeonEnemyRoom(
+                        room_id=291,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 154, 154, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            hammer_only_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(can_clear_enemy_room(hammer_only_state, 1, "Mini-Moldorm Cave"))
+
+            ice_only_state = logic_test.get_state(item_factory(["Ice Rod"], world))
+            self.assertFalse(can_clear_enemy_room(ice_only_state, 1, "Mini-Moldorm Cave"))
+
+            ice_hammer_state = logic_test.get_state(item_factory(["Ice Rod", "Hammer"], world))
+            self.assertTrue(can_clear_enemy_room(ice_hammer_state, 1, "Mini-Moldorm Cave"))
+
+            ether_hammer_state = logic_test.get_state(
+                item_factory(["Ether", "Hammer", "Fighter Sword", "Magic Upgrade (1/2)"], world)
+            )
+            self.assertTrue(can_clear_enemy_room(ether_hammer_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_floating_stalfos_head_is_not_logically_killable_with_sword_or_hammer(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    291: RandomizedDungeonEnemyRoom(
+                        room_id=291,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0, 0, 124, 124, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            fighter_state = logic_test.get_state(item_factory(["Fighter Sword"], world))
+            self.assertFalse(can_clear_enemy_room(fighter_state, 1, "Mini-Moldorm Cave"))
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(can_clear_enemy_room(hammer_state, 1, "Mini-Moldorm Cave"))
+
+            somaria_state = logic_test.get_state(item_factory(["Cane of Somaria"], world))
+            self.assertTrue(can_clear_enemy_room(somaria_state, 1, "Mini-Moldorm Cave"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
     def test_red_eyegore_key_enemy_requires_arrows(self) -> None:
         logic_test = TestLightWorld()
         logic_test.setUp()
@@ -682,6 +765,9 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         deadrock = requirements["DeadrockSprite"]
         mimic = requirements["MimicSprite"]
         terrorpin = requirements["TerrorpinSprite"]
+        kyameron = requirements["KyameronWaterSplashSprite"]
+        floating_stalfos_head = requirements["FloatingStalfosHeadSprite"]
+        spark = requirements["Spark_LeftToRightSprite"]
 
         self.assertTrue(deadrock.killable)
         self.assertEqual(deadrock.combat_reference_id, 39)
@@ -703,6 +789,19 @@ class TestEnemyShuffleValidation(unittest.TestCase):
         self.assertEqual(terrorpin.kill_abilities, tuple())
         self.assertIn("Only Hammer is listed in kill_items", terrorpin.damage_notes)
         self.assertEqual(requirements["RedBariSprite"].key_drop_kill_items, ("Fire Rod", "Bombos"))
+        self.assertEqual(kyameron.kill_items, ("Hammer", "Ice Rod", "Ether"))
+        self.assertEqual(kyameron.kill_combo_all_of_items, ("Hammer",))
+        self.assertEqual(kyameron.kill_combo_one_of_items, ("Ice Rod", "Ether"))
+        self.assertIn("freezing it with Ice Rod or Ether", kyameron.damage_notes)
+        self.assertEqual(
+            floating_stalfos_head.kill_items,
+            ("Blue Boomerang", "Red Boomerang", "Cane of Somaria", "Cane of Byrna"),
+        )
+        self.assertIn("without dealing damage", floating_stalfos_head.damage_notes)
+        self.assertFalse(spark.killable)
+        self.assertTrue(spark.cannot_have_key)
+        self.assertEqual(spark.kill_items, tuple())
+        self.assertIn("cannot be killed or stunned", spark.damage_notes)
 
     def test_kill_metadata_uses_real_items_and_explicit_abilities(self) -> None:
         for requirement in _load_enemy_sprite_requirements():
@@ -711,6 +810,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             with self.subTest(sprite=requirement.sprite_name):
                 for item_name in requirement.kill_items:
+                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
+                for item_name in requirement.kill_combo_all_of_items:
+                    self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
+                for item_name in requirement.kill_combo_one_of_items:
                     self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
                 for item_name in requirement.yellow_slime_transform_items:
                     self.assertIn(item_name, ITEM_NAME_TO_DAMAGE_CLASS)
@@ -1016,6 +1119,48 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             dungeon_rooms={1: room},
             sprite_requirements=(
                 self._requirement(0x12, killable=True, subgroup_0=(1,), cannot_have_key=True),
+                self._requirement(0x13, killable=True, subgroup_0=(1,)),
+            ),
+        )
+        selected_group = state.sprite_groups[0x41]
+
+        randomized_room = _randomize_room_sprites(
+            SimpleNamespace(random=random.Random(0)),
+            state,
+            room,
+            selected_group,
+            False,
+        )
+
+        self.assertEqual(randomized_room.sprites[0].sprite_id, 0x13)
+
+    def test_key_enemy_replacements_exclude_sparks(self) -> None:
+        room = DungeonEnemyRoom(
+            room_id=1,
+            room_header_address=0,
+            sprite_table_address=0,
+            graphics_block_id=1,
+            tag_1=0,
+            tag_2=0,
+            sort_sprites_value=0,
+            sprites=(
+                DungeonEnemySprite(address=0x1000, byte_0=0, byte_1=0, sprite_id=0x12, is_overlord=False, has_key=True),
+            ),
+            required_group_id=None,
+            required_subgroup_0=tuple(),
+            required_subgroup_1=tuple(),
+            required_subgroup_2=tuple(),
+            required_subgroup_3=tuple(),
+            is_shutter_room=False,
+            is_water_room=False,
+            do_not_randomize=False,
+            no_special_enemies_standard=False,
+        )
+        state = self._build_state(
+            dungeon_rooms={1: room},
+            sprite_requirements=(
+                self._requirement(0x12, killable=True, subgroup_0=(1,)),
+                self._requirement(0x5B, killable=False, subgroup_0=(1,), cannot_have_key=True),
                 self._requirement(0x13, killable=True, subgroup_0=(1,)),
             ),
         )

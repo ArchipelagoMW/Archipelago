@@ -203,6 +203,15 @@ def _can_kill_enemy_requirement(
     enemy_count: int,
     available_damage_classes: set[int],
 ) -> bool:
+    if requirement.kill_combo_all_of_items or requirement.kill_combo_one_of_items:
+        return (
+            _can_use_all_kill_items(state, player, requirement.kill_combo_all_of_items, enemy_count)
+            and (
+                not requirement.kill_combo_one_of_items
+                or _can_use_kill_items(state, player, requirement.kill_combo_one_of_items, enemy_count)
+            )
+        )
+
     direct_damage_classes = set(requirement.kill_damage_classes)
     direct_kill_items = requirement.kill_items
 
@@ -303,6 +312,13 @@ def _get_available_damage_classes(state: CollectionState, player: int, enemy_cou
 
 def _can_use_kill_items(state: CollectionState, player: int, kill_items: tuple[str, ...], enemy_count: int) -> bool:
     return any(
+        _can_use_kill_item(state, player, kill_item, enemy_count)
+        for kill_item in kill_items
+    )
+
+
+def _can_use_all_kill_items(state: CollectionState, player: int, kill_items: tuple[str, ...], enemy_count: int) -> bool:
+    return all(
         _can_use_kill_item(state, player, kill_item, enemy_count)
         for kill_item in kill_items
     )

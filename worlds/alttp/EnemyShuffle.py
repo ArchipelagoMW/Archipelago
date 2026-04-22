@@ -156,6 +156,8 @@ class EnemySpriteRequirement:
     kill_damage_classes: tuple[int, ...] = tuple()
     kill_items: tuple[str, ...] = tuple()
     kill_abilities: tuple[str, ...] = tuple()
+    kill_combo_all_of_items: tuple[str, ...] = tuple()
+    kill_combo_one_of_items: tuple[str, ...] = tuple()
     yellow_slime_transform_items: tuple[str, ...] = tuple()
     yellow_slime_follow_up_items: tuple[str, ...] = tuple()
     yellow_slime_follow_up_abilities: tuple[str, ...] = tuple()
@@ -812,6 +814,8 @@ def _load_enemy_sprite_requirements() -> tuple[EnemySpriteRequirement, ...]:
             kill_damage_classes=entry.kill_damage_classes,
             kill_items=entry.kill_items,
             kill_abilities=entry.kill_abilities,
+            kill_combo_all_of_items=entry.kill_combo_all_of_items,
+            kill_combo_one_of_items=entry.kill_combo_one_of_items,
             yellow_slime_transform_items=entry.yellow_slime_transform_items,
             yellow_slime_follow_up_items=entry.yellow_slime_follow_up_items,
             yellow_slime_follow_up_abilities=entry.yellow_slime_follow_up_abilities,
