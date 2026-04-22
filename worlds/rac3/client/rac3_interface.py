@@ -859,23 +859,23 @@ class Rac3Interface(GameInterface):
                 match self.player_type:
                     case RAC3PLAYERTYPE.RATCHET:
                         if self.action not in DEATH_FROM_ACTION.keys() and self.vehicle == 0:
-                            self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.DAMAGE)
+                            self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.HURT)
                             # update ratchet state to cancel free fall and other problematic states
 
                         # self._write8(RAC3STATUS.ACTION, death)
                         # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
                     case RAC3PLAYERTYPE.CLANK:
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
-                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.CLANK_DAMAGE)
-                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.CLANK_DAMAGE)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.CLANK_DAMAGE)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.CLANK_HURT)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.CLANK_HURT)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.CLANK_HURT)  # This helps the death animation trigger
                         logger.debug("player is clank, clank must die dramatically")
                     case RAC3PLAYERTYPE.GIANT:
                         # Giant Clank punched state (updates state to trigger death animation once at 0 health)
                         self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 0)
-                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.GIANT_CLANK_DAMAGE)
-                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.GIANT_CLANK_DAMAGE)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.GIANT_CLANK_DAMAGE)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.GIANT_CLANK_HURT)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.GIANT_CLANK_HURT)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.GIANT_CLANK_HURT)  # This helps the death animation trigger
                         logger.debug("player is giant clank, giant clank must die dramatically")
                     case RAC3PLAYERTYPE.TYHRRANOID:
                         # Tyhrranoid taking damage state (updates state to trigger death animation once at 0 health)
@@ -885,9 +885,9 @@ class Rac3Interface(GameInterface):
                         logger.debug("player is tyhrranoid, tyhrranoid must be squished")
                     case RAC3PLAYERTYPE.QWARK:
                         # Qwark taking damage state (updates state to trigger death animation once at 0 health)
-                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.QWARK_DAMAGED)
-                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.QWARK_DAMAGED)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.QWARK_DAMAGED)  # This helps the death animation trigger
+                        self._write8(RAC3STATUS.ACTION, RAC3PLAYERACTION.QWARK_HURT)
+                        self._write8(RAC3STATUS.PREV_ACTION, RAC3PLAYERACTION.QWARK_HURT)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, RAC3PLAYERACTION.QWARK_HURT)  # This helps the death animation trigger
                         logger.debug("player is qwark, qwark must die dramatically")
             logger.debug("player successfully killed")
             return True
