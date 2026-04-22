@@ -44,6 +44,7 @@ from .OverworldGlitchRules import overworld_glitches_rules
 from .PotShuffle import POT_KEY, POT_SWITCH, get_unique_pot_item_position
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_clear_enemy_region,
+                           can_kill_enemy_sprite,
                            can_kill_key_drop_enemy,
                            can_lift_heavy_rocks, can_lift_rocks,
                            can_melt_things, can_retrieve_tablet,
@@ -490,6 +491,8 @@ def global_rules(multiworld: MultiWorld, player: int):
         set_rule(swamp_hookshot_pot_key, lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 3) and state.has('Hammer', player) and state.has('Hookshot', player))
     set_rule(multiworld.get_entrance('Swamp Palace (West)', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     set_rule(multiworld.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player))
+    add_rule(multiworld.get_location('Swamp Palace - Entrance', player),
+             lambda state: can_kill_enemy_sprite(state, player, "WaterTektiteSprite"))
     if world.options.accessibility != 'full':
         allow_self_locking_items(multiworld.get_location('Swamp Palace - Big Chest', player), 'Big Key (Swamp Palace)')
     set_rule(multiworld.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))

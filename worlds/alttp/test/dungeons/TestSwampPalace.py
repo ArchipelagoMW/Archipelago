@@ -10,7 +10,8 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Entrance", False, []],
             ["Swamp Palace - Entrance", False, [], ['Flippers']],
             ["Swamp Palace - Entrance", False, [], ['Open Floodgate']],
-            ["Swamp Palace - Entrance", True, ['Open Floodgate', 'Flippers']],
+            ["Swamp Palace - Entrance", False, [], ['Open Floodgate', 'Flippers']],
+            ["Swamp Palace - Entrance", True, ['Open Floodgate', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - Big Chest", False, []],
             ["Swamp Palace - Big Chest", False, [], ['Flippers']],

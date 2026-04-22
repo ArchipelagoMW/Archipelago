@@ -162,6 +162,24 @@ def can_kill_key_drop_enemy(state: CollectionState, player: int, location_name: 
         available_damage_classes,
     )
 
+
+def can_kill_enemy_sprite(state: CollectionState, player: int, sprite_name: str) -> bool:
+    from .EnemyShuffle import _load_enemy_sprite_requirements
+
+    if not hasattr(can_kill_enemy_sprite, "requirement_lookup"):
+        can_kill_enemy_sprite.requirement_lookup = {
+            requirement.sprite_name: requirement
+            for requirement in _load_enemy_sprite_requirements()
+        }
+
+    requirement = can_kill_enemy_sprite.requirement_lookup[sprite_name]
+    if not requirement.killable:
+        return False
+
+    available_damage_classes = _get_available_damage_classes(state, player, 1)
+    return _can_kill_enemy_requirement(state, player, requirement, 1, available_damage_classes)
+
+
 def _can_clear_enemy_requirements(
     state: CollectionState,
     player: int,
