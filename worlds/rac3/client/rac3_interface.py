@@ -38,6 +38,7 @@ from worlds.rac3.constants.data.location import (
     RAC3LOCATIONDATA,
     REGION_TO_INFOBOT_LOCATION,
 )
+from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.data.vendorslot import (
@@ -419,6 +420,10 @@ class Rac3Interface(GameInterface):
         """Ran early in the update cycle, memory reads should happen here before any evaluations begin"""
         self.planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
         self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
+        self.player_pos = RAC3POSITIONDATA(
+            self._read_float(RAC3STATUS.POS_X),
+            self._read_float(RAC3STATUS.POS_Y),
+            self._read_float(RAC3STATUS.POS_Z))
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
         self.action_type = self._read8(RAC3STATUS.ACTION_TYPE)
@@ -768,11 +773,15 @@ class Rac3Interface(GameInterface):
         loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
         if not loc_data:
             return False
+        #TODO: Implement a distance based checktype
         if location == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
-            _x = abs(self._read_float(RAC3STATUS.POS_X) - 201.2) < 8
-            _y = abs(self._read_float(RAC3STATUS.POS_Y) - 364) < 8
-            _z = abs(self._read_float(RAC3STATUS.POS_Z) - 296.8) < 8
-            return _x & _y & _z
+            current_pos = self.player_pos
+            skidd_pos = RAC3POSITIONDATA(201.2, 364, 296.8)
+            return (
+                abs(current_pos.X - skidd_pos.X) < 8
+                and abs(current_pos.Y - skidd_pos.Y) < 8
+                and abs(current_pos.Z - skidd_pos.Z) < 8
+            )
         check_all: bool = True
         for check in loc_data.CHECK_ADDRESS:
             match check.TYPE & CHECKTYPE.SIZE:
@@ -1304,15 +1313,14 @@ class Rac3Interface(GameInterface):
             return float("inf")
         assert RAC3STATUS.HIDEOUT_MOBY_TABLE_START < moby < RAC3STATUS.HIDEOUT_MOBY_TABLE_START + 0x00100000, \
             "Moby not in the typical moby range"
-        player_pos = (self._read_float(RAC3STATUS.POS_X),
-                      self._read_float(RAC3STATUS.POS_Y),
-                      self._read_float(RAC3STATUS.POS_Z))
-        moby_pos = (self._read_float(moby + 0x10),
-                    self._read_float(moby + 0x14),
-                    self._read_float(moby + 0x18))
-        distance = ((player_pos[0] - moby_pos[0]) ** 2 +
-                    (player_pos[1] - moby_pos[1]) ** 2 +
-                    (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
+        player_pos = self.player_pos
+        moby_pos = RAC3POSITIONDATA(
+            self._read_float(moby + 0x10),
+            self._read_float(moby + 0x14),
+            self._read_float(moby + 0x18))
+        distance = ((player_pos.X - moby_pos.X) ** 2 +
+                    (player_pos.Y - moby_pos.Y) ** 2 +
+                    (player_pos.Z - moby_pos.Z) ** 2) ** 0.5
         return distance
 
     def get_checked_locations_by_tag(self, tag: str) -> list[int]:
