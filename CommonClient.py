@@ -221,7 +221,7 @@ class ClientCommandProcessor(CommandProcessor):
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
         return True
 
-    def _cmd_clearchat(self, which_log: str = "All"):
+    def _cmd_clear_chat(self, which_log: str = "All"):
         """Clears the specified text log.
         'All' clears every text log."""
         if self.ctx.ui:
