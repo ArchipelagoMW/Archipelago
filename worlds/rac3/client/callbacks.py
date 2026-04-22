@@ -359,7 +359,7 @@ async def handle_respawn(ctx: "Context", force_respawn: bool = False, force_load
             logger.error("Player cannot homewarp right now")
         elif force_respawn:
             logger.error("Player cannot respawn right now")
-        return  # Todo: Action states
+        return
     planet_data = RAC3_REGION_DATA_TABLE[ctx.game_interface.planet]
     if planet_data.ID > 55:
         return
