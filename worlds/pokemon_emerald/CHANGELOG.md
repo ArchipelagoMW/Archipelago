@@ -1,3 +1,9 @@
+# 2.6.0
+
+### Features
+
+- Added `dexsanity_encounter_types` and `world_version` to slot data for trackers.
+
 # 2.5.1
 
 ### Fixes
