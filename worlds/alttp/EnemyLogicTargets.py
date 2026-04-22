@@ -41,26 +41,43 @@ class KeyDropEnemyTarget:
         )
 
 
+MIMIC_CAVE_ROOM = "Mimic Cave"
+MINI_MOLDORM_CAVE_ROOM = "Mini-Moldorm Cave"
 AGA_TOWER_ENTRANCE_TOP_LEFT = "Agahnim's Tower (Entrance Room) - Top Left"
 AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF = "Agahnim's Tower (Circle of Pots) - Top Half"
+EASTERN_BIG_KEY_ROOM = "Eastern Palace (Big Key Room)"
+EASTERN_PRE_ARMOS_ROOM = "Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)"
 DESERT_EAST_ENTRANCE_TOP_RIGHT = "Desert Palace (East Entrance Room) - Top Right"
 DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT = "Desert Palace (Popos 2 / Beamos Hellway Room) - Bottom Left"
 HERA_HARDHAT_BEETLES_BOTTOM_RIGHT = "Tower of Hera (Hardhat Beetles Room) - Bottom Right"
 TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT = "Turtle Rock (Double Hokku-Bokku / Big chest Room) - Top Left"
 POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (Warps / South Mimics Room) - Top Left"
 GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms) - Top Half"
+HYRULE_CASTLE_BOOMERANG_CHEST_ROOM = "Hyrule Castle (Boomerang Chest Room)"
 HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT = "Hyrule Castle (Boomerang Chest Room) - Bottom Right"
 
+HYRULE_CASTLE_MAP_GUARD_KEY_DROP = "Hyrule Castle - Map Guard Key Drop"
+HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP = "Hyrule Castle - Boomerang Guard Key Drop"
+SEWERS_KEY_RAT_KEY_DROP = "Sewers - Key Rat Key Drop"
+HYRULE_CASTLE_BIG_KEY_DROP = "Hyrule Castle - Big Key Drop"
+EASTERN_DARK_EYEGORE_KEY_DROP = "Eastern Palace - Dark Eyegore Key Drop"
+CASTLE_TOWER_DARK_ARCHER_KEY_DROP = "Castle Tower - Dark Archer Key Drop"
+CASTLE_TOWER_CIRCLE_OF_POTS_KEY_DROP = "Castle Tower - Circle of Pots Key Drop"
+SKULL_WOODS_SPIKE_CORNER_KEY_DROP = "Skull Woods - Spike Corner Key Drop"
+ICE_PALACE_JELLY_KEY_DROP = "Ice Palace - Jelly Key Drop"
+ICE_PALACE_CONVEYOR_KEY_DROP = "Ice Palace - Conveyor Key Drop"
+MISERY_MIRE_CONVEYOR_CRYSTAL_KEY_DROP = "Misery Mire - Conveyor Crystal Key Drop"
+TURTLE_ROCK_POKEY_1_KEY_DROP = "Turtle Rock - Pokey 1 Key Drop"
+TURTLE_ROCK_POKEY_2_KEY_DROP = "Turtle Rock - Pokey 2 Key Drop"
+GANONS_TOWER_MINI_HELMASAUR_KEY_DROP = "Ganons Tower - Mini Helmasaur Key Drop"
+
 ENEMY_CLEAR_TARGETS = (
-    EnemyClearTarget(name="Mimic Cave", room_name="Mimic Cave"),
-    EnemyClearTarget(name="Mini-Moldorm Cave", room_name="Mini-Moldorm Cave"),
+    EnemyClearTarget(name=MIMIC_CAVE_ROOM, room_name="Mimic Cave"),
+    EnemyClearTarget(name=MINI_MOLDORM_CAVE_ROOM, room_name="Mini-Moldorm Cave"),
     EnemyClearTarget(name=AGA_TOWER_ENTRANCE_TOP_LEFT, room_name="Agahnim's Tower (Entrance Room)", max_x=256, max_y=256),
     EnemyClearTarget(name=AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF, room_name="Agahnim's Tower (Circle of Pots)", max_y=256),
-    EnemyClearTarget(name="Eastern Palace (Big Key Room)", room_name="Eastern Palace (Big Key Room)"),
-    EnemyClearTarget(
-        name="Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)",
-        room_name="Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)",
-    ),
+    EnemyClearTarget(name=EASTERN_BIG_KEY_ROOM, room_name="Eastern Palace (Big Key Room)"),
+    EnemyClearTarget(name=EASTERN_PRE_ARMOS_ROOM, room_name="Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)"),
     EnemyClearTarget(name=DESERT_EAST_ENTRANCE_TOP_RIGHT, room_name="Desert Palace (East Entrance Room)", min_x=256, max_y=256),
     EnemyClearTarget(
         name=DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT,
@@ -87,7 +104,7 @@ ENEMY_CLEAR_TARGETS = (
         max_y=256,
     ),
     EnemyClearTarget(name=GANONS_TOWER_WIZZROBES_TOP_HALF, room_name="Ganon's Tower (Wizzrobes Rooms)", max_y=256),
-    EnemyClearTarget(name="Hyrule Castle (Boomerang Chest Room)", room_name="Hyrule Castle (Boomerang Chest Room)"),
+    EnemyClearTarget(name=HYRULE_CASTLE_BOOMERANG_CHEST_ROOM, room_name="Hyrule Castle (Boomerang Chest Room)"),
     EnemyClearTarget(
         name=HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT,
         room_name="Hyrule Castle (Boomerang Chest Room)",
@@ -100,85 +117,85 @@ ENEMY_CLEAR_TARGET_LOOKUP = {target.name: target for target in ENEMY_CLEAR_TARGE
 
 KEY_DROP_ENEMY_TARGETS = (
     KeyDropEnemyTarget(
-        location_name="Hyrule Castle - Map Guard Key Drop",
+        location_name=HYRULE_CASTLE_MAP_GUARD_KEY_DROP,
         room_name="Hyrule Castle (Map Chest Room)",
         x_coord_pixels=272,
         y_coord_pixels=96,
     ),
     KeyDropEnemyTarget(
-        location_name="Hyrule Castle - Boomerang Guard Key Drop",
+        location_name=HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
         room_name="Hyrule Castle (Boomerang Chest Room)",
         x_coord_pixels=416,
         y_coord_pixels=384,
     ),
     KeyDropEnemyTarget(
-        location_name="Sewers - Key Rat Key Drop",
+        location_name=SEWERS_KEY_RAT_KEY_DROP,
         room_name="Hyrule Castle (Key-rat Room)",
         x_coord_pixels=80,
         y_coord_pixels=96,
     ),
     KeyDropEnemyTarget(
-        location_name="Hyrule Castle - Big Key Drop",
+        location_name=HYRULE_CASTLE_BIG_KEY_DROP,
         room_name="Hyrule Castle (Jail Cell Room)",
         x_coord_pixels=416,
         y_coord_pixels=144,
     ),
     KeyDropEnemyTarget(
-        location_name="Eastern Palace - Dark Eyegore Key Drop",
+        location_name=EASTERN_DARK_EYEGORE_KEY_DROP,
         room_name="Eastern Palace (Eyegore Key Room)",
         x_coord_pixels=272,
         y_coord_pixels=368,
     ),
     KeyDropEnemyTarget(
-        location_name="Castle Tower - Dark Archer Key Drop",
+        location_name=CASTLE_TOWER_DARK_ARCHER_KEY_DROP,
         room_name="Agahnim's Tower (Dark Bridge Room)",
         x_coord_pixels=320,
         y_coord_pixels=176,
     ),
     KeyDropEnemyTarget(
-        location_name="Castle Tower - Circle of Pots Key Drop",
+        location_name=CASTLE_TOWER_CIRCLE_OF_POTS_KEY_DROP,
         room_name="Agahnim's Tower (Circle of Pots)",
         x_coord_pixels=128,
         y_coord_pixels=384,
     ),
     KeyDropEnemyTarget(
-        location_name="Skull Woods - Spike Corner Key Drop",
+        location_name=SKULL_WOODS_SPIKE_CORNER_KEY_DROP,
         room_name="Skull Woods (Gibdo Key / Mothula Hole Room)",
         x_coord_pixels=80,
         y_coord_pixels=336,
     ),
     KeyDropEnemyTarget(
-        location_name="Ice Palace - Jelly Key Drop",
+        location_name=ICE_PALACE_JELLY_KEY_DROP,
         room_name="Ice Palace (Entrance Room)",
         x_coord_pixels=80,
         y_coord_pixels=416,
     ),
     KeyDropEnemyTarget(
-        location_name="Ice Palace - Conveyor Key Drop",
+        location_name=ICE_PALACE_CONVEYOR_KEY_DROP,
         room_name="Ice Palace (Stalfos Knights / Conveyor Hellway)",
         x_coord_pixels=272,
         y_coord_pixels=384,
     ),
     KeyDropEnemyTarget(
-        location_name="Misery Mire - Conveyor Crystal Key Drop",
+        location_name=MISERY_MIRE_CONVEYOR_CRYSTAL_KEY_DROP,
         room_name="Misery Mire (Compass Chest / Tile Room)",
         x_coord_pixels=304,
         y_coord_pixels=432,
     ),
     KeyDropEnemyTarget(
-        location_name="Turtle Rock - Pokey 1 Key Drop",
+        location_name=TURTLE_ROCK_POKEY_1_KEY_DROP,
         room_name="Turtle Rock (Chain Chomps Room)",
         x_coord_pixels=112,
         y_coord_pixels=336,
     ),
     KeyDropEnemyTarget(
-        location_name="Turtle Rock - Pokey 2 Key Drop",
+        location_name=TURTLE_ROCK_POKEY_2_KEY_DROP,
         room_name="Turtle Rock (Hokku-Bokku Key Room 2)",
         x_coord_pixels=352,
         y_coord_pixels=384,
     ),
     KeyDropEnemyTarget(
-        location_name="Ganons Tower - Mini Helmasaur Key Drop",
+        location_name=GANONS_TOWER_MINI_HELMASAUR_KEY_DROP,
         room_name="Ganon's Tower (Torch Room 2)",
         x_coord_pixels=368,
         y_coord_pixels=112,
