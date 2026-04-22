@@ -5,11 +5,12 @@ if TYPE_CHECKING:
     from .world import BabaIsYouWorld
 
 from .options import LogicDifficulty
-from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_, OptionFilter
+from rule_builder.rules import And, False_, CanReachRegion, Has, HasAny, HasAll, OptionFilter, Or, Rule, True_
 
 hard_logic_filter = [OptionFilter(LogicDifficulty, LogicDifficulty.option_hard)]
 
-def can_win(level : str, logic_diff : int):
+# Gets the rule to win a level
+def can_win(level : str, logic_diff : int) -> Rule:
     data = LEVEL_DATA.get(level)
 
     # Clears for maps
@@ -24,12 +25,82 @@ def can_win(level : str, logic_diff : int):
     if rule is None: return True_()
     return rule
 
+# Gets the rule to get the bonus in a level
+def can_bonus(level : str, logic_diff : int) -> Rule:
+    data = LEVEL_DATA.get(level)
+
+    rule = data.get("bonusLogic")
+    advRule = data.get("bonusLogicAdv")
+    if (advRule is not None) and (logic_diff != 0):
+        rule = advRule
+    if rule is None: return False_()
+    return rule
+
+# Gets the rule to get the specified transformation in a level
+def can_transform(level : str, transform: str, logic_diff : int) -> Rule:
+    data = LEVEL_DATA.get(level)
+
+    transforms = data.get("transforms")
+    if transforms is None: return False_()
+    
+    rule = transforms.get(transform)
+    if rule is None: return False_()
+
+    # Also require winning in easy logic
+    if logic_diff == 0:
+        rule = rule & can_win(level, 0)
+    
+    return rule
+
+# Checks if a level has a valid win location
+def is_level_winnable(data: dict, area_access: int) -> bool:
+    if data.get("map"):
+        if (data.get("winLogic") is not None and (data.get("winAreaAccess") is None or data.get("winAreaAccess") <= area_access)):
+            return True
+        return False
+    return True
+
+# Gets all valid locations associated with a level
+def get_level_locations(data: dict, world) -> list:
+    area_access = 99
+    if world is not None:
+        area_access = world.options.area_access
+    
+    locations = []
+    prefix = f"{data["name"]}: "
+    if is_level_winnable(data, area_access):
+        # Add win location
+        locations.append(prefix + "Win")
+    
+    if data.get("bonusLogic") is not None:
+        # Add bonus location
+        locations.append(prefix + "Bonus")
+    
+    if (world is None or world.options.transformsanity) and data.get("transforms"):
+        # Add transform locations
+        for transform in data["transforms"]:
+            locations.append(f"{prefix}{transform} Transform")
+        
+    # Add clear and complete locations
+    if data.get("clearCount"):
+        locations.append(prefix + "Clear")
+    if (world is None or world.options.complete_checks) and data.get("completeCount"):
+        locations.append(prefix + "Complete")
+    
+    return locations
+
 LEVEL_DATA = {
     "Map": {
         "name": "Map",
+        "parent": "???",
         "map": True,
+        "winLogic": HasAll("Fragile Existence -> Baba", "Hostile Environment -> Flag"),
+        "winAreaAccess": 1,
         "connects": {
             "Map-0": None,
+            "Map-?": HasAll("Fragile Existence -> Baba"),
+            "Map-Finale": HasAll("Fragile Existence -> Baba"), # TODO: disable gate when taking this route
+            "???": can_win,
         },
     },
     "Map-0": {
@@ -135,11 +206,69 @@ LEVEL_DATA = {
         "winLogicAdv": HasAll("Flag", "Win"),
         "defaultWordOnlyDiff": 0,
     },
+    "Map-8": {
+        "name": "Slideshow",
+        "parent": "Map",
+        "defaultWordOnlyDiff": 0,
+        "areaAccess": 1,
+        "connects": {
+            "Map-9": can_win,
+            "Map-10": can_win,
+            "Ruins": can_win,
+            "Garden": can_win,
+            "Cavern": can_win,
+        },
+    },
+    "Map-9": {
+        "name": "Fragile Existence",
+        "parent": "Map",
+        "winLogic": HasAll("Baba", "Is", "You", "Key", "Hot", "Weak", "Door", "Defeat", "Melt", "Win"),
+        "winLogicAdv": HasAll("Key", "Is", "You", "Hot", "Melt"),
+        "areaAccess": 1,
+        "transforms": {
+            "Baba": HasAll("Baba", "Is", "Key"),
+            "Key": HasAll("Is", "Key"),
+            "Wall": HasAll("Key", "Is", "You", "Hot", "Melt") & HasAny("Wall", "Level"),
+            "Door": HasAll("Key", "Is", "You") & (Has("Door") | HasAll("Hot", "Melt", "Level")),
+        },
+        "connects": {
+            "Map-8": can_win,
+        },
+    },
+    "Map-10": {
+        "name": "Hostile Environment",
+        "parent": "Map",
+        "winLogic": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat", "Push", "Win"),
+        "winLogicAdv": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat"),
+        "areaAccess": 1,
+        "transforms": {
+            "Flag": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat"),
+            "Keke": HasAll("Keke", "Flag", "Is", "Has", "And", "Weak", "Move", "Defeat"),
+        },
+        "connects": {
+            "Map-8": can_win,
+        },
+    },
     "Map-Finale": {
         "name": "A Way Out?",
         "parent": "Map",
+        "noShuffle": True,
+        "connects": {
+            "Map-4": None,
+            "Map-6": None,
+        },
         "winLogic": HasAll("Keke", "Is", "Push", "Belt", "Shift", "Rock", "Win"),
         "winLogicAdv": HasAll("Keke", "Is", "You", "Rock", "Push"),
+    },
+    "Map-?": {
+        "name": "?",
+        "parent": "Map",
+        "areaAccess": 1,
+        "bonusLogic": HasAll("Orb", "Is", "Bonus", "Hide", "Text"),
+        "bonusLogicAdv": Has("Is") | (Has("Bonus") & (Has("Hide") | (Has("Orb") & (Has("Text") | hard_logic_filter)))),
+        "connects": {
+            "Map": None,
+        },
     },
     "Lake": {
         "name": "1. The Lake",
@@ -528,7 +657,7 @@ LEVEL_DATA = {
         "connects": {
             "Island": None,
             "Ruins-1": None,
-            #"Map-8": can_win,
+            "Map-8": can_win,
             "Forest": can_win,
             "Space": can_win,
             "Garden": can_win,
@@ -1296,7 +1425,7 @@ LEVEL_DATA = {
         "connects": {
             "Ruins": None,
             "Cavern": None,
-            #"Map-8": None,
+            "Map-8": None,
             "Garden-1": None,
             "Garden-2": None,
         },
@@ -1617,7 +1746,7 @@ LEVEL_DATA = {
             "Garden": None,
             "Cavern-1": None,
             "Cavern-2": None,
-            #"Map-8": None,
+            "Map-8": None,
             "Mountain": can_win,
         },
     },
@@ -1750,7 +1879,7 @@ LEVEL_DATA = {
         "name": "Trapped",
         "parent": "Cavern",
         "winLogic": HasAll("Flag", "Belt", "Is", "Shift", "Baba", "Box", "Tele"),
-        "winLogicAdv": Has("Flag") & (HasAll("Baba", "Shift") | (HasAny("Baba", "Shift") | HasAll("Box", "Is", "Tele"))),
+        "winLogicAdv": Has("Flag") & (HasAll("Baba", "Shift") | (HasAny("Baba", "Shift") & HasAll("Box", "Is", "Tele"))),
         "connects": {
             "Cavern-11": can_win,
             "Cavern-13": can_win,
@@ -1891,6 +2020,21 @@ LEVEL_DATA = {
         "defaultWordOnlyDiff": 0,
         "connects": {
             "Mountain-6": can_win,
+        },
+    },
+    "???": {
+        "name": "???",
+        "parent": "Null",
+        "map": True,
+        "areaAccess": 1,
+        "winLogic": HasAll("Written Instructions -> Baba", "Turn The Corner -> Baba", "Level", "Is", "Win"),
+        "winLogicAdv": HasAll("Written Instructions -> Baba", "Turn The Corner -> Baba") & ((Has("Win") & (HasAny("Rock", "Is", "And") | HasAll("Level", "Ultimate Maze -> Text"))) | (Has("Is") & (Has("Rock") | HasAll("Level", "Ultimate Maze -> Text")))),
+        "winAreaAccess": 2,
+        "connects": {
+            "Map": None,
+            # "???-1": None,
+            # "Depths": None,
+            # more...
         },
     },
 }

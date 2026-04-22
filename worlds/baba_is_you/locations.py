@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import ItemClassification, Location
 
 from . import items
-from .levels import LEVEL_DATA
+from .levels import LEVEL_DATA, get_level_locations
 
 if TYPE_CHECKING:
     from .world import BabaIsYouWorld
@@ -18,6 +18,8 @@ LOCATION_NAME_TO_ID = {}
 # Define location groups
 location_name_groups = {
     "Level Wins": set(),
+    "Level Bonuses": set(),
+    "Level Transforms": set(),
     "World Clears": set(),
     "World Completes": set(),
 }
@@ -26,25 +28,11 @@ location_name_groups = {
 locationID = 1
 for name in LEVEL_DATA:
     data = LEVEL_DATA[name]
-
-    if data.get("map") != True:
-        # Add win location
-        locationName = data["name"] + ": Win"
+    
+    for locationName in get_level_locations(data, None):
         LOCATION_NAME_TO_ID[locationName] = locationID
         location_name_groups["Level Wins"].add(locationName)
         locationID += 1
-    else:
-        # Add clear and complete locations
-        if data.get("clearCount") != None:
-            locationName = data["name"] + ": Clear"
-            LOCATION_NAME_TO_ID[locationName] = locationID
-            location_name_groups["World Clears"].add(locationName)
-            locationID += 1
-        if data.get("completeCount") != None:
-            locationName = data["name"] + ": Complete"
-            LOCATION_NAME_TO_ID[locationName] = locationID
-            location_name_groups["World Completes"].add(locationName)
-            locationID += 1
 
 
 # Each Location instance must correctly report the "game" it belongs to.
@@ -70,21 +58,18 @@ def create_all_locations(world: BabaIsYouWorld) -> None:
 
 def create_locations(world: BabaIsYouWorld) -> None:
     # Add each level's win, clears, completes, and bonuses as locations
+    # Also add transforms if transformsanity is enabled
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
+        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+            continue
+
+        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
+            name = world.level_shuffle_dict.get(name)
+            data = LEVEL_DATA[name]
+        
         level = world.get_region(name)
-        loc_list = []
-        # Add win, clear, and complete locations
-        if data.get("map") != True:
-            locationName = data["name"] + ": Win"
-            loc_list.append(locationName)
-        else:
-            if data.get("clearCount") != None:
-                locationName = data["name"] + ": Clear"
-                loc_list.append(locationName)
-            if world.options.complete_checks and data.get("completeCount") != None:
-                locationName = data["name"] + ": Complete"
-                loc_list.append(locationName)
+        loc_list = get_level_locations(data, world)
 
         level_locations = get_location_names_with_ids(loc_list)
         level.add_locations(level_locations, BabaIsYouLocation)

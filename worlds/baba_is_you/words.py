@@ -43,14 +43,20 @@ ALL_PROG_WORDS = DEFAULT_WORDS + EARLY_PROG_WORDS + TOP_GATE_PROG_WORDS + FLOWER
 ALL_WORDS = ALL_PROG_WORDS + ALL_FILLER_WORDS
 
 # Function to get the current progression words given the area access
-def get_curr_prog_words(area_access):
+def get_curr_prog_words(world):
     curr_prog_words = DEFAULT_WORDS + EARLY_PROG_WORDS
-    if area_access <= 1:
+    area_access = world.options.area_access
+    if area_access < 4 and world.options.level_shuffle == 2:
+        area_access = 4 # The End and Gallery don't shuffle, so they could still be filler
+
+    if area_access >= 1:
         curr_prog_words += TOP_GATE_PROG_WORDS
-    if area_access <= 2:
+    if area_access >= 2:
         curr_prog_words += FLOWER_PROG_WORDS
-    if area_access <= 3:
+    if area_access >= 3:
         curr_prog_words += DEPTHS_PROG_WORDS
-    if area_access <= 4:
+    if area_access >= 4:
         curr_prog_words += META_PROG_WORDS
+    if area_access >= 5:
+        curr_prog_words += CENTER_PROG_WORDS
     return curr_prog_words

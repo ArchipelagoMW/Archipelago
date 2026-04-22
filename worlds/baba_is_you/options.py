@@ -22,7 +22,7 @@ class Goal(Choice):
     levels: Win a specified amount of levels.
     blossoms: Collect a specified amount of blossoms.
 
-    NOTICE: Only "end", "levels", and "blossoms" are implemented at this time. Do not select the other options.
+    NOTICE: Only "end", "flower", "levels", and "blossoms" are implemented at this time. Do not select the other options.
     """
 
     display_name = "Goal"
@@ -38,12 +38,12 @@ class Goal(Choice):
 class GoalLevels(Range):
     """
     Determines how many levels need to be won when the goal is set to "levels".
-    160 requires every level in the early game.
+    160 requires every level in the early game. 231 requires all levels.
     """
 
     display_name = "Goal Levels"
     range_start = 0
-    range_end = 160 # TEMP: true max total is 231
+    range_end = 231
     default = 80 # 160 total before top gate
 
 class GoalBlossoms(Range):

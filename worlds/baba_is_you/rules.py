@@ -6,7 +6,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
 from . import items
-from .levels import LEVEL_DATA, can_win
+from .levels import LEVEL_DATA, can_win, can_bonus, can_transform, is_level_winnable
 from .locations import BabaIsYouLocation
 from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
@@ -33,6 +33,9 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
     def check_second_gate(state: CollectionState):
         return get_blossom_count(state, world) >= world.options.second_gate_blossoms
     
+    def check_third_gate(state: CollectionState):
+        return get_blossom_count(state, world) >= world.options.third_gate_blossoms
+    
     # Gate to A Way Out?
     a_way_out = world.get_region("Map-Finale")
     for entrance in a_way_out.entrances:
@@ -43,54 +46,88 @@ def set_up_gates(world: BabaIsYouWorld) -> None:
     for entrance in cavern.entrances:
         add_rule(entrance, check_second_gate)
 
+    # Gate to Slideshow
+    if world.options.area_access > 0:
+        slideshow = world.get_region("Map-8")
+        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get("Map-8"):
+            slideshow = world.get_region(world.level_shuffle_dict.get("Map-8"))
+        for entrance in slideshow.entrances:
+            add_rule(entrance, check_third_gate)
+
     # Conditions for ending
     if world.options.goal == 0:
         ending = world.get_location("Goal Reached")
         a_way_out_rule = can_win("Map-Finale", world.options.logic_difficulty)
         world.set_rule(ending, a_way_out_rule & Has("End"))
 
-
 def set_all_location_rules(world: BabaIsYouWorld) -> None:
-    # Set up win, clear, complete, and bonus location logic
+    # Set up win, clear, complete, transform, and bonus location logic
     for name in LEVEL_DATA:
         data = LEVEL_DATA[name]
+        if data.get("areaAccess") and data.get("areaAccess") > world.options.area_access:
+            continue # skip non-accessible areas
 
-        if data.get("map") != True:
+        if world.options.level_shuffle != 0 and world.level_shuffle_dict.get(name) is not None:
+            name = world.level_shuffle_dict.get(name)
+            data = LEVEL_DATA[name]
+
+        # Win rule
+        if is_level_winnable(data, world.options.area_access):
             locationName = data["name"] + ": Win"
             location = world.get_location(locationName)
 
             rule = can_win(name, world.options.logic_difficulty)
+            world.set_rule(location, rule)
 
             # Get parent based where the level is placed
             parent = data.get("parent")
-            if world.options.level_shuffle != 0:
+            if world.options.level_shuffle != 0 and not (data.get("map") or data.get("noShuffle") or data.get("transforms")):
                 for oldName in world.level_shuffle_dict:
                     name2 = world.level_shuffle_dict[oldName]
                     if name == name2: # This level got shuffled into the other one, get the old parent
                         parent = LEVEL_DATA[oldName].get("parent")
                         break
-            
-            world.set_rule(location, rule)
-
             # Create win event with same logic as winning using parent
-            if parent != None:
+            if parent is not None:
                 region = world.get_region(name)
                 region.add_event(location_name = locationName + " Event", item_name = f"{parent} Win", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem, rule=rule)
-        else:
-            if data.get("clearCount") != None:
-                wins = data.get("clearCount")
-                locationName = data["name"] + ": Clear"
-                itemName = f"{name} Win"
+
+        # Bonus rule
+        if data.get("bonusLogic") is not None:
+            locationName = data["name"] + ": Bonus"
+            location = world.get_location(locationName)
+
+            rule = can_bonus(name, world.options.logic_difficulty)
+            world.set_rule(location, rule)
+        
+        # Transform rules
+        if world.options.transformsanity and data.get("transforms"):
+            for transform in data["transforms"]:
+                locationName = f"{data["name"]}: {transform} Transform"
                 location = world.get_location(locationName)
+
+                rule = can_transform(name, transform, world.options.logic_difficulty)
+                world.set_rule(location, rule)
                 
-                world.set_rule(location, Has(itemName, wins))
-            if world.options.complete_checks and data.get("completeCount") != None:
-                wins = data.get("completeCount")
-                locationName = data["name"] + ": Complete"
-                itemName = f"{name} Win"
-                location = world.get_location(locationName)
-                
-                world.set_rule(location, Has(itemName, wins))
+                # Create event with same logic
+                region = world.get_region(name)
+                region.add_event(location_name = locationName + " Event", item_name = f"{data["name"]} -> {transform}", location_type=BabaIsYouLocation, item_type=items.BabaIsYouItem, rule=rule)
+        
+        # Add clear and completion checks for maps
+        if data.get("clearCount") is not None:
+            wins = data.get("clearCount")
+            locationName = data["name"] + ": Clear"
+            itemName = f"{name} Win"
+            location = world.get_location(locationName)
+            
+            world.set_rule(location, Has(itemName, wins))
+        if world.options.complete_checks and data.get("completeCount") is not None:
+            wins = data.get("completeCount")
+            locationName = data["name"] + ": Complete"
+            itemName = f"{name} Win"
+            location = world.get_location(locationName)
+            
+            world.set_rule(location, Has(itemName, wins))
 
 def set_completion_condition(world: BabaIsYouWorld) -> None:
     if world.options.goal <= 4: # end, flower, depths, meta
@@ -120,4 +157,5 @@ def get_win_count(state: CollectionState, world: BabaIsYouWorld):
     wins += state.count("Chasm Win", world.player)
     wins += state.count("Cavern Win", world.player)
     wins += state.count("Mountain Win", world.player)
+    wins += state.count("??? Win", world.player)
     return wins

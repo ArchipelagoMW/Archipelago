@@ -92,9 +92,9 @@ def create_item_with_correct_classification(world: BabaIsYouWorld, name: str) ->
     # Hedge becomes filler outside of easy logic (It's only used in Living Lands)
     if (name == "Bonus Orb" and world.options.exclude_gallery) or (name == "End" and world.options.goal != 0) or (name == "Hedge" and world.options.logic_difficulty != 0):
         classification = ItemClassification.filler
-    elif ITEM_NAME_TO_ID[name] > 100 and (name in ALL_PROG_WORDS) and world.options.area_access < 5:
+    elif ITEM_NAME_TO_ID[name] > 100 and (name in ALL_PROG_WORDS):
         # Check if name is in the current progression word list; if not, mark as filler
-        if not (name in get_curr_prog_words(world.options.area_access)):
+        if not (name in get_curr_prog_words(world)):
             classification = ItemClassification.filler
 
     return BabaIsYouItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
@@ -161,7 +161,7 @@ def create_all_items(world: BabaIsYouWorld) -> None:
             itempool.append(world.create_item("Center Key"))
     
     # Create all word items
-    for word in ALL_PROG_WORDS:
+    for word in ALL_WORDS:
         if world.options.start_with_default_words and word in DEFAULT_WORDS:
             # Start with the words in "Baba Is You"
             world.push_precollected(world.create_item(word))

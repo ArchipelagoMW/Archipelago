@@ -7,7 +7,7 @@ from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
 from . import items, locations, regions, rules
-from .levels import LEVEL_DATA
+from .levels import LEVEL_DATA, get_level_locations
 from . import options as babaisyou_options  # rename due to a name conflict with World.options
 from rule_builder.rules import And, CanReachRegion, Has, HasAny, HasAll, Or, Rule, True_
 
@@ -164,11 +164,12 @@ class BabaIsYouWorld(World):
         level_hint_data = {}
         for name in LEVEL_DATA:
             data = LEVEL_DATA[name]
-            if data.get("map") == True or data.get("parent") == None:
+            if self.options.level_shuffle != 0 and self.level_shuffle_dict.get(name) is not None:
+                name = self.level_shuffle_dict.get(name)
+                data = LEVEL_DATA[name]
+            if data.get("areaAccess") and data.get("areaAccess") > self.options.area_access:
                 continue
             
-            # TODO: Need to also do this for bonus, etc.
-            locationName = data.get("name") + ": Win"
             # Get parent based where the level is placed
             mapName = name
             if self.options.level_shuffle != 0:
@@ -177,9 +178,10 @@ class BabaIsYouWorld(World):
                     if name == name2: # This level got shuffled into the other one, get the old parent
                         mapName = oldName
                         break
-                    
-            location = self.multiworld.get_location(locationName, self.player)
-            level_hint_data[location.address] = mapName
+            
+            for locationName in get_level_locations(data, self):
+                location = self.multiworld.get_location(locationName, self.player)
+                level_hint_data[location.address] = mapName
                             
             hint_data[self.player] = level_hint_data
 
