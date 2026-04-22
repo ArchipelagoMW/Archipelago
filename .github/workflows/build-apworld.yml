@@ -492,7 +492,9 @@ jobs:
           </details>
       
           **Full changelog and compare**: ${changelog}
-      
+
+          ### [Setup Guide](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/docs/setup_en.md)
+
           ### Notes
           This release was automatically generated from the **${branch}** branch.  
           Latest (main) releases are recommended, as pre-releases (staging) may contain experimental or in-progress changes.
