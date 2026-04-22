@@ -1291,11 +1291,6 @@ class Rac3Interface(GameInterface):
         for name in gadget_data.keys():
             addr = gadget_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
-                if (name == RAC3ITEM.TYHRRA_GUISE
-                        and self.planet == RAC3REGION.STARSHIP_PHOENIX
-                        and RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations):
-                    self._write8(addr, 0)
-                    continue
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(addr, 1)
                     self.UnlockItem[name].unlock_delay = 0
@@ -2074,7 +2069,6 @@ class Rac3Interface(GameInterface):
             pda_vendor_str = hex(self.pda_vendor) if self.pda_vendor else "Not Found"
         logger.info(f"PDA Vendor Address: {pda_vendor_str}")
         logger.info(f"Meet Sasha Bridge: {RAC3LOCATION.PHOENIX_MEET_SASHA in self.checked_locations}")
-        logger.info(f"No Tyhrraguise Phoenix: {bool(RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations and self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status)}")
         logger.info(f"Visited Planets: {[planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]}")
         logger.info(f"Active Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in self.get_active_patches()]}")
         failed_patches = self.get_failed_patches()
