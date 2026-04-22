@@ -86,7 +86,7 @@ from worlds.rac3.constants.region import (
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
-from worlds.rac3.constants.version import GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION, VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE
+from worlds.rac3.constants.version import GAME_ID_TO_OFFSET, GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION, VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE
 
 
 class Rac3Interface(GameInterface):
@@ -245,7 +245,7 @@ class Rac3Interface(GameInterface):
         if (0x001d6a90 <= _addr <= 0x00300000
             and self.planet in PAL_SHIFTED_PLANETS
             and self.current_game == RAC3VERSION.EU_ID):
-                _addr += -0x80
+                _addr += GAME_ID_TO_OFFSET[RAC3VERSION.EU_ID]
 
         return _addr
 
