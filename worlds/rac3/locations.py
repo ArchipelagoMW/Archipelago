@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 def get_total_locations(world: "RaC3World") -> int:
-    locations = [l for l in world.multiworld.get_locations() if l.player == world.player]
+    locations = [loc for loc in world.multiworld.get_locations() if loc.player == world.player]
     return len(locations)
 
 
