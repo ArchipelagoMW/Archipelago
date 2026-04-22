@@ -51,6 +51,7 @@ from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACT
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import (
     ORIGINAL_INSTRUCTIONS,
+    PATCH_INSTRUCTION_TO_GAME_IDS,
     PATCH_INSTRUCTION_TO_NAME,
     PATCH_INSTRUCTION_TO_PLANET,
     PATCHED_INSTRUCTIONS,
@@ -1655,10 +1656,12 @@ class Rac3Interface(GameInterface):
             self._write32(instruction_address, target)
 
     def get_planet_patch_instructions(self) -> list[int]:
-        """Return all patch instructions associated with the current planet."""
+        """Return all patch instructions associated with the current planet and game version."""
         return [
             instruction for instruction, planet in PATCH_INSTRUCTION_TO_PLANET.items()
-            if planet == self.planet]
+            if planet == self.planet
+            and (PATCH_INSTRUCTION_TO_GAME_IDS[instruction] is None
+                 or self.current_game == PATCH_INSTRUCTION_TO_GAME_IDS[instruction])]
 
     def patch_cycler(self):
         """Apply runtime instruction patches based on current planet."""
@@ -1692,6 +1695,15 @@ class Rac3Interface(GameInterface):
         return [
             instruction for instruction in self.get_planet_patch_instructions()
             if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]]
+
+    def get_failed_patches(self) -> list[int]:
+        """Return patch addresses whose opcode is neither the original nor patched value."""
+        return [
+            instruction for instruction in self.get_planet_patch_instructions()
+            if self._read32(instruction) not in {
+                ORIGINAL_INSTRUCTIONS[instruction],
+                PATCHED_INSTRUCTIONS[instruction],
+            }]
 
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
@@ -2039,3 +2051,9 @@ class Rac3Interface(GameInterface):
         logger.info(f"No Tyhrraguise Phoenix: {bool(RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations and self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status)}")
         logger.info(f"Visited Planets: {[planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]}")
         logger.info(f"Active Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in self.get_active_patches()]}")
+        failed_patches = self.get_failed_patches()
+        logger.info(f"Failed Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in failed_patches]}")
+        if len(failed_patches) > 0:
+            logger.warning("Failed patches detected: instruction opcodes were neither source nor patched values. "
+                           "This may indicate a corrupted ISO or an unsupported game version. "
+                           "Please report this to the developers with the above information.")
