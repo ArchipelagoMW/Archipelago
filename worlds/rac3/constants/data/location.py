@@ -2371,7 +2371,7 @@ class RAC3LOCATIONDATA:
 
 RAC3_LOCATION_DATA_TABLE: dict[str, RAC3LOCATIONDATA] = {name: RAC3LOCATIONDATA.construct(name) for name in
                                                          _LOCATION_NAME_TO_REGION.keys()}
-LOCATION_FROM_AP_CODE: dict[int, str] = dict((kv[1].AP_CODE, kv[0]) for kv in RAC3_LOCATION_DATA_TABLE.items())
+LOCATION_FROM_AP_CODE: dict[int, str] = {kv[1].AP_CODE: kv[0] for kv in RAC3_LOCATION_DATA_TABLE.items()}
 
 LOCATION_TO_INFOBOT_FLAG: dict[str, int] = {
     RAC3LOCATION.VELDIN_SAVE_VELDIN: RAC3STATUS.INFOBOT_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.FLORANA].ID,
@@ -2398,7 +2398,7 @@ LOCATION_TO_INFOBOT_FLAG: dict[str, int] = {
     RAC3LOCATION.KOROS_BASE: RAC3STATUS.INFOBOT_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.COMMAND_CENTER].ID,
 }
 
-LOCATION_TO_VISIT_FLAG: dict[str, int] = dict((loc, flag + 0x40) for loc, flag in LOCATION_TO_INFOBOT_FLAG.items())
+LOCATION_TO_VISIT_FLAG: dict[str, int] = {loc: flag + 0x40 for loc, flag in LOCATION_TO_INFOBOT_FLAG.items()}
 
 REGION_TO_INFOBOT_LOCATION: dict[str, str] = {
     RAC3REGION.FLORANA: RAC3LOCATION.VELDIN_SAVE_VELDIN,

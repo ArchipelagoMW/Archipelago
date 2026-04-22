@@ -1139,8 +1139,8 @@ class Rac3Interface(GameInterface):
                     # change the string pointer to no items available message in code cave
                     item_name_addr = start_address + RAC3SHIPVENDOR.ITEM_NAME_PTR_OFFSET
                     already_equipped_addr = start_address + RAC3SHIPVENDOR.ITEM_IS_EQUIPPED_OFFSET
-                    string_key = (RAC3VENDOR.ALL_ITEMS_SOLD_OUT_LOC_KEY 
-                                  if self.has_checked_all_locations_with_tag(RAC3TAG.SHIP) 
+                    string_key = (RAC3VENDOR.ALL_ITEMS_SOLD_OUT_LOC_KEY
+                                  if self.has_checked_all_locations_with_tag(RAC3TAG.SHIP)
                                   else RAC3VENDOR.NO_ITEMS_AVAILABLE_LOC_KEY)
                     self._write32(item_name_addr, self.vendor_string_pointers[string_key])
                     self._write32(already_equipped_addr, 1)
@@ -1442,8 +1442,8 @@ class Rac3Interface(GameInterface):
                 continue
 
             # Prevent Vidcomic 2 from reappearing after being collected the first time on Heat Street
-            if (index == 2 
-                and self.planet == RAC3REGION.ANNIHILATION_NATION 
+            if (index == 2
+                and self.planet == RAC3REGION.ANNIHILATION_NATION
                 and self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE)
                 and self.pause_state_value != RAC3PAUSESTATE.PAUSED
                 and comic.status == 0):
