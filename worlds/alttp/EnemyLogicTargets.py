@@ -52,6 +52,7 @@ DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT = "Desert Palace (4 Statues Room)"
 HERA_HARDHAT_BEETLES_BOTTOM_RIGHT = "Tower of Hera (Hardhat Beetles Room)"
 TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT = "Turtle Rock (Double Hokku-Bokku Room)"
 POD_NORTH_MIMICS_BOTTOM_LEFT = "Palace of Darkness (North Mimics Room)"
+POD_TURTLE_ROOM_BOTTOM_LEFT = "Palace of Darkness (Turtle Room)"
 POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (South Mimics Room)"
 GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms)"
 HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM = "Hyrule Castle (Pre-Boomerang Chest Room)"
@@ -100,6 +101,12 @@ ENEMY_CLEAR_TARGETS = (
     EnemyClearTarget(
         name=POD_NORTH_MIMICS_BOTTOM_LEFT,
         room_name="Palace of Darkness (Mimics / Moving Wall Room)",
+        max_x=256,
+        min_y=256,
+    ),
+    EnemyClearTarget(
+        name=POD_TURTLE_ROOM_BOTTOM_LEFT,
+        room_name="Palace of Darkness (Turtle Room)",
         max_x=256,
         min_y=256,
     ),

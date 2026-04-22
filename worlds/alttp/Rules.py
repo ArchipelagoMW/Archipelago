@@ -28,6 +28,7 @@ from .EnemyLogicTargets import (
     MIMIC_CAVE_ROOM,
     MINI_MOLDORM_CAVE_ROOM,
     POD_NORTH_MIMICS_BOTTOM_LEFT,
+    POD_TURTLE_ROOM_BOTTOM_LEFT,
     POD_SOUTH_MIMICS_TOP_LEFT,
     SEWERS_KEY_RAT_KEY_DROP,
     TURTLE_ROCK_POKEY_1_KEY_DROP,
@@ -617,7 +618,8 @@ def global_rules(multiworld: MultiWorld, player: int):
              and state.has('Big Key (Palace of Darkness)', player)
              and can_shoot_arrows(state, player)
              and state.has('Hammer', player)
-             and can_clear_enemy_region(state, player, POD_NORTH_MIMICS_BOTTOM_LEFT))
+             and can_clear_enemy_region(state, player, POD_NORTH_MIMICS_BOTTOM_LEFT)
+             and can_clear_enemy_region(state, player, POD_TURTLE_ROOM_BOTTOM_LEFT))
     set_rule(multiworld.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
     set_rule(multiworld.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
     set_rule(multiworld.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
