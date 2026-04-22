@@ -52,8 +52,8 @@ from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import (
     ORIGINAL_INSTRUCTIONS,
     PATCH_INSTRUCTION_TO_NAME,
+    PATCH_INSTRUCTION_TO_PLANET,
     PATCHED_INSTRUCTIONS,
-    RAC3INSTRUCTION,
 )
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
@@ -1640,88 +1640,58 @@ class Rac3Interface(GameInterface):
                 else:
                     self.UnlockItem[name].unlock_delay += 1
 
-    def safe_patch_instruction(self, instruction_address: int, patch: bool = True):
+    def safe_patch_instruction(self, instruction_address: int, restore: bool = False):
         """Safely apply or restore an instruction patch if current opcode matches the expected source opcode."""
         original = ORIGINAL_INSTRUCTIONS.get(instruction_address)
         patched = PATCHED_INSTRUCTIONS.get(instruction_address)
         if original is None or patched is None:
             return
 
-        # Determine source and target opcodes based on whether we are patching or restoring
-        source = original if patch else patched
-        target = patched if patch else original
+        # Determine source and target opcodes based on whether we are restoring or patching
+        source = patched if restore else original
+        target = original if restore else patched
         current = self._read32(instruction_address)
         if current == source:
             self._write32(instruction_address, target)
 
+    def get_planet_patch_instructions(self) -> list[int]:
+        """Return all patch instructions associated with the current planet."""
+        return [
+            instruction for instruction, planet in PATCH_INSTRUCTION_TO_PLANET.items()
+            if planet == self.planet]
+
     def patch_cycler(self):
         """Apply runtime instruction patches based on current planet."""
-        match self.planet:
-            case RAC3REGION.STARSHIP_PHOENIX:
-                # Allow buying weaker armor
-                # Allow keeping hypershot on quick select even if you havent completed VR Gadget Training
-                phoenix_patches = [
-                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC,
-                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL,
-                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC,
-                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL,
-                ]
-                for instruction in phoenix_patches:
+        planet_patches = self.get_planet_patch_instructions()
+        if not planet_patches:
+            return
+
+        if self.planet == RAC3REGION.ANNIHILATION_NATION:
+            # One HP challenge patches for Ratchet to prevent automatically losing One Hit Wonder type challenges.
+            # Sadly doesnt fix Flee Flawlessly skill point.
+            character = self.player_type
+            if character == RAC3PLAYERTYPE.TYHRRANOID:
+                character = RAC3PLAYERTYPE.RATCHET
+
+            # Apply patches if one HP challenge is enabled for Ratchet.
+            if self.one_hp_challenge.get(character, False) and character == RAC3PLAYERTYPE.RATCHET:
+                for instruction in planet_patches:
                     self.safe_patch_instruction(instruction)
+            # Restore original instructions if one HP challenge is not enabled for Ratchet.
+            elif not self.one_hp_challenge.get(character, False):
+                for instruction in planet_patches:
+                    self.safe_patch_instruction(instruction, restore=True)
+            return
 
-            case RAC3REGION.ANNIHILATION_NATION:
-                # One HP challenge patches for Ratchet to prevent automatically losing One Hit Wonder type challenges
-                # Sadly doesnt fix Flee Flawlessly skill point
-                nation_patches = [
-                    RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE,
-                    RAC3INSTRUCTION.NATION_HEALTH_REFILL,
-                    RAC3INSTRUCTION.NATION_LEVELUP_HEALING,
-                    RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING,
-                ]
-                character = self.player_type
-                if character == RAC3PLAYERTYPE.TYHRRANOID:
-                    character = RAC3PLAYERTYPE.RATCHET
-
-                # Apply patches if one HP challenge is enabled for Ratchet
-                if self.one_hp_challenge.get(character, False) and character == RAC3PLAYERTYPE.RATCHET:
-                    for instruction in nation_patches:
-                        self.safe_patch_instruction(instruction)
-                # Restore original instructions if one HP challenge is not enabled for Ratchet
-                elif not self.one_hp_challenge.get(character, False):
-                    for instruction in nation_patches:
-                        self.safe_patch_instruction(instruction, patch=False)
+        # Apply all non-conditional patches for the current planet.
+        for instruction in planet_patches:
+            self.safe_patch_instruction(instruction)
 
     def get_active_patches(self) -> list[int]:
         """Return a list of currently active patch addresses based on the current planet."""
-        active_patches = []
-        match self.planet:
-            case RAC3REGION.STARSHIP_PHOENIX:
-                phoenix_patches = [
-                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC,
-                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL,
-                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC,
-                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL,
-                ]
-                for instruction in phoenix_patches:
-                    if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]:
-                        active_patches.append(instruction)
-
-            case RAC3REGION.ANNIHILATION_NATION:
-                nation_patches = [
-                    RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE,
-                    RAC3INSTRUCTION.NATION_HEALTH_REFILL,
-                    RAC3INSTRUCTION.NATION_LEVELUP_HEALING,
-                    RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING,
-                ]
-                character = self.player_type
-                if character == RAC3PLAYERTYPE.TYHRRANOID:
-                    character = RAC3PLAYERTYPE.RATCHET
-
-                if self.one_hp_challenge.get(character, False) and character == RAC3PLAYERTYPE.RATCHET:
-                    for instruction in nation_patches:
-                        if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]:
-                            active_patches.append(instruction)
-        return active_patches
+        return [
+            instruction for instruction in self.get_planet_patch_instructions()
+            if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]]
 
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
