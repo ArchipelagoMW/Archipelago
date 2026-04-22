@@ -43,18 +43,17 @@ class KeyDropEnemyTarget:
 
 MIMIC_CAVE_ROOM = "Mimic Cave"
 MINI_MOLDORM_CAVE_ROOM = "Mini-Moldorm Cave"
-AGA_TOWER_ENTRANCE_TOP_LEFT = "Agahnim's Tower (Entrance Room) - Top Left"
-AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF = "Agahnim's Tower (Circle of Pots) - Top Half"
+AGA_TOWER_ENTRANCE_TOP_LEFT = "Agahnim's Tower (Second Room)"
+AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF = "Agahnim's Tower (Pre-Circle of Pots)"
 EASTERN_BIG_KEY_ROOM = "Eastern Palace (Big Key Room)"
-EASTERN_PRE_ARMOS_ROOM = "Eastern Palace ('Zeldagamer Room' / Pre-Armos Knights Room)"
-DESERT_EAST_ENTRANCE_TOP_RIGHT = "Desert Palace (East Entrance Room) - Top Right"
-DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT = "Desert Palace (Popos 2 / Beamos Hellway Room) - Bottom Left"
-HERA_HARDHAT_BEETLES_BOTTOM_RIGHT = "Tower of Hera (Hardhat Beetles Room) - Bottom Right"
-TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT = "Turtle Rock (Double Hokku-Bokku / Big chest Room) - Top Left"
-POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (Warps / South Mimics Room) - Top Left"
-GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms) - Top Half"
-HYRULE_CASTLE_BOOMERANG_CHEST_ROOM = "Hyrule Castle (Boomerang Chest Room)"
-HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT = "Hyrule Castle (Boomerang Chest Room) - Bottom Right"
+EASTERN_PRE_ARMOS_ROOM = "Eastern Palace (Pre-Armos Knights Rooms)"
+DESERT_EAST_ENTRANCE_TOP_RIGHT = "Desert Palace (Compass Room)"
+DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT = "Desert Palace (4 Statues Room)"
+HERA_HARDHAT_BEETLES_BOTTOM_RIGHT = "Tower of Hera (Hardhat Beetles Room)"
+TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT = "Turtle Rock (Double Hokku-Bokku Room)"
+POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (South Mimics Room)"
+GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms)"
+HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM = "Hyrule Castle (Pre-Boomerang Chest Room)"
 
 HYRULE_CASTLE_MAP_GUARD_KEY_DROP = "Hyrule Castle - Map Guard Key Drop"
 HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP = "Hyrule Castle - Boomerang Guard Key Drop"
@@ -104,11 +103,10 @@ ENEMY_CLEAR_TARGETS = (
         max_y=256,
     ),
     EnemyClearTarget(name=GANONS_TOWER_WIZZROBES_TOP_HALF, room_name="Ganon's Tower (Wizzrobes Rooms)", max_y=256),
-    EnemyClearTarget(name=HYRULE_CASTLE_BOOMERANG_CHEST_ROOM, room_name="Hyrule Castle (Boomerang Chest Room)"),
     EnemyClearTarget(
-        name=HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT,
+        name=HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
         room_name="Hyrule Castle (Boomerang Chest Room)",
-        min_x=256,
+        max_x=256,
         min_y=256,
     ),
 )

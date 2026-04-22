@@ -4,7 +4,8 @@ import random
 from unittest.mock import patch
 
 from worlds.alttp.EnemyLogicTargets import (
-    HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT,
+    HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
+    HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
     POD_SOUTH_MIMICS_TOP_LEFT,
     TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT,
 )
@@ -648,7 +649,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
-    def test_hyrule_castle_boomerang_room_chest_uses_bottom_right_region_only(self) -> None:
+    def test_hyrule_castle_boomerang_room_splits_pre_room_and_guard_enemy_logic(self) -> None:
         logic_test = TestLightWorld()
         logic_test.setUp()
         world = logic_test.multiworld.worlds[1]
@@ -677,10 +678,21 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertFalse(
+                can_clear_enemy_region(bow_state, 1, HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM)
+            )
             self.assertTrue(
-                can_clear_enemy_region(bow_state, 1, HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT)
+                can_kill_key_drop_enemy(bow_state, 1, HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP)
             )
             self.assertFalse(can_clear_enemy_room(bow_state, 1, "Hyrule Castle (Boomerang Chest Room)"))
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertTrue(
+                can_clear_enemy_region(hammer_state, 1, HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM)
+            )
+            self.assertFalse(
+                can_kill_key_drop_enemy(hammer_state, 1, HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP)
+            )
 
             hammer_bow_state = logic_test.get_state(item_factory(["Hammer", "Bow"], world))
             self.assertTrue(can_clear_enemy_room(hammer_bow_state, 1, "Hyrule Castle (Boomerang Chest Room)"))

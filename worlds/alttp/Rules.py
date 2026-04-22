@@ -21,10 +21,10 @@ from .EnemyLogicTargets import (
     GANONS_TOWER_MINI_HELMASAUR_KEY_DROP,
     GANONS_TOWER_WIZZROBES_TOP_HALF,
     HYRULE_CASTLE_BIG_KEY_DROP,
-    HYRULE_CASTLE_BOOMERANG_CHEST_ROOM,
+    HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
     HYRULE_CASTLE_MAP_GUARD_KEY_DROP,
     HERA_HARDHAT_BEETLES_BOTTOM_RIGHT,
-    HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT,
+    HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
     MIMIC_CAVE_ROOM,
     MINI_MOLDORM_CAVE_ROOM,
     POD_SOUTH_MIMICS_TOP_LEFT,
@@ -1136,9 +1136,12 @@ def open_rules(multiworld: MultiWorld, player: int):
             return state._lttp_has_key("Small Key (Hyrule Castle)", player, 3)
 
     set_rule(multiworld.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-             lambda state: basement_key_rule(state) and can_clear_enemy_region(state, player, HYRULE_CASTLE_BOOMERANG_CHEST_ROOM))
+             lambda state: basement_key_rule(state)
+             and can_clear_enemy_region(state, player, HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM)
+             and can_kill_key_drop_enemy(state, player, HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP))
     set_rule(multiworld.get_location('Hyrule Castle - Boomerang Chest', player),
-             lambda state: basement_key_rule(state) and can_clear_enemy_region(state, player, HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT))
+             lambda state: basement_key_rule(state)
+             and can_clear_enemy_region(state, player, HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM))
 
     set_rule(multiworld.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3)
@@ -1190,10 +1193,11 @@ def standard_rules(multiworld: MultiWorld, player: int):
     if multiworld.worlds[player].options.small_key_shuffle != small_key_shuffle.option_universal:
         set_rule(multiworld.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
-                               and can_clear_enemy_region(state, player, HYRULE_CASTLE_BOOMERANG_CHEST_ROOM))
+                               and can_clear_enemy_region(state, player, HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM)
+                               and can_kill_key_drop_enemy(state, player, HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP))
         set_rule(multiworld.get_location('Hyrule Castle - Boomerang Chest', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
-                               and can_clear_enemy_region(state, player, HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT))
+                               and can_clear_enemy_region(state, player, HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM))
         set_rule(multiworld.get_location('Hyrule Castle - Map Guard Key Drop', player),
                  lambda state: can_kill_key_drop_enemy(state, player, HYRULE_CASTLE_MAP_GUARD_KEY_DROP))
         set_rule(multiworld.get_location('Hyrule Castle - Big Key Drop', player),
