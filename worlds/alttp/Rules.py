@@ -27,6 +27,7 @@ from .EnemyLogicTargets import (
     HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
     MIMIC_CAVE_ROOM,
     MINI_MOLDORM_CAVE_ROOM,
+    POD_NORTH_MIMICS_BOTTOM_LEFT,
     POD_SOUTH_MIMICS_TOP_LEFT,
     SEWERS_KEY_RAT_KEY_DROP,
     TURTLE_ROCK_POKEY_1_KEY_DROP,
@@ -611,7 +612,12 @@ def global_rules(multiworld: MultiWorld, player: int):
              and can_clear_enemy_region(state, player, POD_SOUTH_MIMICS_TOP_LEFT))
     set_rule(multiworld.get_entrance('Palace of Darkness Hammer Peg Drop', player), lambda state: state.has('Hammer', player))
     set_rule(multiworld.get_entrance('Palace of Darkness Bridge Room', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 1))  # If we can reach any other small key door, we already have back door access to this area
-    set_rule(multiworld.get_entrance('Palace of Darkness Big Key Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) and state.has('Big Key (Palace of Darkness)', player) and can_shoot_arrows(state, player) and state.has('Hammer', player))
+    set_rule(multiworld.get_entrance('Palace of Darkness Big Key Door', player),
+             lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6)
+             and state.has('Big Key (Palace of Darkness)', player)
+             and can_shoot_arrows(state, player)
+             and state.has('Hammer', player)
+             and can_clear_enemy_region(state, player, POD_NORTH_MIMICS_BOTTOM_LEFT))
     set_rule(multiworld.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
     set_rule(multiworld.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
     set_rule(multiworld.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
