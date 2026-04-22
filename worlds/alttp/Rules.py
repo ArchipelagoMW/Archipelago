@@ -22,6 +22,7 @@ from .EnemyLogicTargets import (
     GANONS_TOWER_WIZZROBES_TOP_HALF,
     ICE_PALACE_COMPASS_ROOM,
     ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
+    ICE_PALACE_PENGATORS_ROOM,
     HYRULE_CASTLE_BIG_KEY_DROP,
     HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
     HYRULE_CASTLE_MAP_GUARD_KEY_DROP,
@@ -533,7 +534,9 @@ def global_rules(multiworld: MultiWorld, player: int):
              and can_clear_enemy_region(state, player, ICE_PALACE_COMPASS_ROOM)
              and can_clear_enemy_region(state, player, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT))
 
-    set_rule(multiworld.get_entrance('Ice Palace (Main)', player), lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2))
+    set_rule(multiworld.get_entrance('Ice Palace (Main)', player),
+             lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2)
+             and can_clear_enemy_region(state, player, ICE_PALACE_PENGATORS_ROOM))
     set_rule(multiworld.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
     set_rule(multiworld.get_entrance('Ice Palace (Kholdstare)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state._lttp_has_key('Small Key (Ice Palace)', player, 6) or (state.has('Cane of Somaria', player) and state._lttp_has_key('Small Key (Ice Palace)', player, 5))))
     # This is a complicated rule, so let's break it down.
