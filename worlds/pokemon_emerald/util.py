@@ -1,7 +1,7 @@
 import orjson
 from typing import Any, Dict, List, Optional, Tuple, Iterable
 
-from .data import NATIONAL_ID_TO_SPECIES_ID, EncounterType, data
+from .data import NATIONAL_ID_TO_SPECIES_ID, PokemonSource, data
 
 
 CHARACTER_DECODING_MAP = {
@@ -86,8 +86,8 @@ def decode_string(string_data: Iterable[int]) -> str:
     return string
 
 
-def get_encounter_type_label(encounter_type: EncounterType, slot: int) -> str:
-    if encounter_type == EncounterType.FISHING:
+def get_encounter_type_label(encounter_type: PokemonSource, slot: int) -> str:
+    if encounter_type == PokemonSource.FISHING:
         return {
             0: "Old Rod",
             1: "Old Rod",
@@ -102,9 +102,9 @@ def get_encounter_type_label(encounter_type: EncounterType, slot: int) -> str:
         }[slot]
     
     return {
-        EncounterType.LAND: 'Land',
-        EncounterType.WATER: 'Water',
-        EncounterType.ROCK_SMASH: 'Rock Smash',
+        PokemonSource.LAND: 'Land',
+        PokemonSource.WATER: 'Water',
+        PokemonSource.ROCK_SMASH: 'Rock Smash',
     }[encounter_type]
 
 

@@ -4,8 +4,9 @@ Functions related to pokemon species and moves
 import functools
 from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
-from .data import (NUM_REAL_SPECIES, OUT_OF_LOGIC_MAPS, EncounterType, EncounterTableData, LearnsetMove, SpeciesData,
+from .data import (NUM_REAL_SPECIES, OUT_OF_LOGIC_MAPS, PokemonSource, EncounterTableData, LearnsetMove, SpeciesData,
                    MapData, data)
+from .items import PokemonEmeraldObtainPokemonEventItem
 from .options import (Goal, HmCompatibility, LevelUpMoves, RandomizeAbilities, RandomizeLegendaryEncounters,
                       RandomizeMiscPokemon, RandomizeStarters, RandomizeTypes, RandomizeWildPokemon,
                       TmTutorCompatibility)
@@ -227,14 +228,14 @@ def randomize_types(world: "PokemonEmeraldWorld") -> None:
                 evolutions += [world.modified_species[evo.species_id] for evo in evolution.evolutions]
 
 
-_encounter_subcategory_ranges: Dict[EncounterType, Dict[range, Optional[str]]] = {
-    EncounterType.LAND: {range(0, 12): None},
-    EncounterType.WATER: {range(0, 5): None},
-    EncounterType.FISHING: {range(0, 2): "OLD_ROD", range(2, 5): "GOOD_ROD", range(5, 10): "SUPER_ROD"},
+_encounter_subcategory_ranges: Dict[PokemonSource, Dict[range, Optional[str]]] = {
+    PokemonSource.LAND: {range(0, 12): None},
+    PokemonSource.WATER: {range(0, 5): None},
+    PokemonSource.FISHING: {range(0, 2): "OLD_ROD", range(2, 5): "GOOD_ROD", range(5, 10): "SUPER_ROD"},
 }
 
 
-def _rename_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slots: List[int], encounter_type: EncounterType):
+def _adjust_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slots: List[int], encounter_type: PokemonSource):
     """
     Renames the events that correspond to wild encounters to reflect the new species there after randomization
     """
@@ -254,22 +255,17 @@ def _rename_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slo
         # Fishing locations include the rod name
         subcategory_str = "" if subcategory_name is None else "_" + subcategory_name
         encounter_location_index = subcategory_species.index(new_species_id) + 1
-        encounter_location_name = f"{map_data.name}_{encounter_type.value}_ENCOUNTERS{subcategory_str}_{encounter_location_index}"
+        encounter_location_name = f"{map_data.name}_{encounter_type}_ENCOUNTERS{subcategory_str}_{encounter_location_index}"
         try:
             # Get the corresponding location and change the event name to reflect the new species
             slot_location = world.multiworld.get_location(encounter_location_name, world.player)
-            slot_location.item.name = f"CATCH_{data.species[new_species_id].name}_{encounter_type.value}"
+            assert isinstance(slot_location.item, PokemonEmeraldObtainPokemonEventItem)
+            slot_location.item.replace_species(new_species_id)
         except KeyError:
             pass  # Map probably isn't included; should be careful here about bad encounter location names
 
 
 def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
-    encounter_table = {
-        "Land": EncounterType.LAND,
-        "Water": EncounterType.WATER,
-        "Fishing": EncounterType.FISHING,
-    }
-    enabled_encounters = {encounter_table[encounter_type] for encounter_type in world.options.dexsanity_encounter_types.value}
     if world.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
         return
 
@@ -296,7 +292,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
         placed_priority_species = False
         map_data = world.modified_maps[map_name]
 
-        new_encounters: Dict[EncounterType, EncounterTableData] = {}
+        new_encounters: Dict[PokemonSource, EncounterTableData] = {}
 
         for encounter_type, table in map_data.encounters.items():
             # Create a map from the original species to new species
@@ -306,7 +302,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
             for species_id in table.slots:
                 if species_id not in species_old_to_new_map:
                     if not placed_priority_species and len(priority_species) > 0 \
-                            and encounter_type != EncounterType.ROCK_SMASH and map_name not in OUT_OF_LOGIC_MAPS:
+                            and encounter_type != PokemonSource.ROCK_SMASH and map_name not in OUT_OF_LOGIC_MAPS:
                         new_species_id = priority_species.pop()
                         placed_priority_species = True
                     else:
@@ -370,7 +366,7 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
 
                     species_old_to_new_map[species_id] = new_species_id
 
-                    if world.options.dexsanity and encounter_type != EncounterType.ROCK_SMASH \
+                    if world.options.dexsanity and encounter_type != PokemonSource.ROCK_SMASH \
                             and map_name not in OUT_OF_LOGIC_MAPS and new_species_id not in world.blacklisted_wilds:
                         already_placed.add(new_species_id)
 
@@ -378,14 +374,14 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
             new_slots: List[int] = []
             for species_id in table.slots:
                 new_slots.append(species_old_to_new_map[species_id])
-            if encounter_type in enabled_encounters:
+            if encounter_type in world.enabled_dexsanity_encounter_types:
                 world.allowed_dexsanity_species.update(new_slots)
 
             new_encounters[encounter_type] = EncounterTableData(new_slots, table.address)
 
             # Rock smash encounters not used in logic, so they have no events
-            if encounter_type != EncounterType.ROCK_SMASH:
-                _rename_wild_events(world, map_data, new_slots, encounter_type)
+            if encounter_type != PokemonSource.ROCK_SMASH:
+                _adjust_wild_events(world, map_data, new_slots, encounter_type)
 
         map_data.encounters = new_encounters
 

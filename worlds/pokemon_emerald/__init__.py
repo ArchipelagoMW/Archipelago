@@ -8,16 +8,18 @@ import os
 import pkgutil
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Union
 
-from BaseClasses import CollectionState, ItemClassification, MultiWorld, Tutorial, LocationProgressType
+from BaseClasses import CollectionState, Item, ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Fill import FillError, fill_restrictive
 from Options import OptionError, Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, LocationCategory, data as emerald_data
+from .data import (LEGENDARY_POKEMON, PokemonSource, MapData, SpeciesData, TrainerData, LocationCategory,
+                   data as emerald_data)
 from .groups import ITEM_GROUPS, LOCATION_GROUPS
-from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
+from .items import (PokemonEmeraldItem, PokemonEmeraldObtainPokemonEventItem, create_item_label_to_code_map,
+                    get_item_classification, offset_item_value)
 from .locations import (PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_by_category,
                         set_free_fly, set_legendary_cave_entrances)
 from .opponents import randomize_opponent_parties
@@ -124,6 +126,7 @@ class PokemonEmeraldWorld(World):
     blacklisted_starters: Set[int]
     blacklisted_opponent_pokemon: Set[int]
     allowed_dexsanity_species: set[int]
+    enabled_dexsanity_encounter_types: set[PokemonSource]
     hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
 
@@ -144,6 +147,7 @@ class PokemonEmeraldWorld(World):
         self.blacklisted_starters = set()
         self.blacklisted_opponent_pokemon = set()
         self.allowed_dexsanity_species = set()
+        self.enabled_dexsanity_encounter_types = set()
         self.modified_maps = copy.deepcopy(emerald_data.maps)
         self.modified_species = copy.deepcopy(emerald_data.species)
         self.modified_tmhm_moves = []
@@ -200,6 +204,16 @@ class PokemonEmeraldWorld(World):
         }
         if "_Legendaries" in self.options.trainer_party_blacklist.value:
             self.blacklisted_opponent_pokemon |= LEGENDARY_POKEMON
+
+        encounter_table = {
+            "Land": PokemonSource.LAND,
+            "Water": PokemonSource.WATER,
+            "Fishing": PokemonSource.FISHING,
+        }
+        self.enabled_dexsanity_encounter_types = {
+            encounter_table[encounter_type] 
+            for encounter_type in self.options.dexsanity_encounter_types.value
+        }
 
         # In race mode we don't patch any item location information into the ROM
         if self.multiworld.is_race and not self.options.remote_items:
@@ -762,3 +776,31 @@ class PokemonEmeraldWorld(World):
             None,
             self.player
         )
+
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        changed = super().collect(state, item)
+        if changed:
+            if isinstance(item, PokemonEmeraldObtainPokemonEventItem):
+                if item.source in self.enabled_dexsanity_encounter_types:
+                    state.prog_items[self.player].update({
+                        f"DEXSANITY_{emerald_data.species[item.species].name}": 1,
+                    })
+                if item.species in (emerald_data.constants["SPECIES_WAILORD"], emerald_data.constants["SPECIES_RELICANTH"]):
+                    state.prog_items[self.player].update({
+                        f"REGI_WALL_{emerald_data.species[item.species].name}": 1,
+                    })
+        return changed
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        changed = super().remove(state, item)
+        if changed:
+            if isinstance(item, PokemonEmeraldObtainPokemonEventItem):
+                if item.source in self.enabled_dexsanity_encounter_types:
+                    state.prog_items[self.player].subtract({
+                        f"DEXSANITY_{emerald_data.species[item.species].name}": 1,
+                    })
+                if item.species in (emerald_data.constants["SPECIES_WAILORD"], emerald_data.constants["SPECIES_RELICANTH"]):
+                    state.prog_items[self.player].subtract({
+                        f"REGI_WALL_{emerald_data.species[item.species].name}": 1,
+                    })
+        return changed
