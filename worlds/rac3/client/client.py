@@ -163,8 +163,12 @@ class CommandProcessor(ClientCommandProcessor):
             self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
             if self.ctx.game_interface.ryno:
                 self.output("RYNO max upgrade is Lv4")
+                if self.verify():
+                    self.ctx.game_interface.enqueue_notification("RY3NO max upgrade set to Lv4")
             else:
                 self.output("RYNO max upgrade is Lv5")
+                if self.verify():
+                    self.ctx.game_interface.enqueue_notification("RY3NO max upgrade set to Lv5")
 
     def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
