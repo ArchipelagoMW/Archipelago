@@ -46,7 +46,7 @@ AGA_TOWER_CIRCLE_OF_POTS_TOP_HALF = "Agahnim's Tower (Circle of Pots) - Top Half
 DESERT_EAST_ENTRANCE_TOP_RIGHT = "Desert Palace (East Entrance Room) - Top Right"
 DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT = "Desert Palace (Popos 2 / Beamos Hellway Room) - Bottom Left"
 HERA_HARDHAT_BEETLES_BOTTOM_RIGHT = "Tower of Hera (Hardhat Beetles Room) - Bottom Right"
-TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT = "Turtle Rock (Big Key Room) - Top Left"
+TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT = "Turtle Rock (Double Hokku-Bokku / Big chest Room) - Top Left"
 POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (Warps / South Mimics Room) - Top Left"
 GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms) - Top Half"
 HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT = "Hyrule Castle (Boomerang Chest Room) - Bottom Right"
@@ -74,7 +74,12 @@ ENEMY_CLEAR_TARGETS = (
         min_x=256,
         min_y=256,
     ),
-    EnemyClearTarget(name=TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT, room_name="Turtle Rock (Big Key Room)", max_x=256, max_y=256),
+    EnemyClearTarget(
+        name=TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT,
+        room_name="Turtle Rock (Double Hokku-Bokku / Big chest Room)",
+        max_x=256,
+        max_y=256,
+    ),
     EnemyClearTarget(
         name=POD_SOUTH_MIMICS_TOP_LEFT,
         room_name="Palace of Darkness (Warps / South Mimics Room)",

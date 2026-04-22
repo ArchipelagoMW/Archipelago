@@ -6,7 +6,7 @@ from unittest.mock import patch
 from worlds.alttp.EnemyLogicTargets import (
     HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT,
     POD_SOUTH_MIMICS_TOP_LEFT,
-    TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT,
+    TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT,
 )
 from worlds.alttp.EnemyShuffle import (
     DungeonEnemyRoom,
@@ -566,7 +566,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
 
-    def test_turtle_rock_big_key_room_region_only_checks_top_left_section(self) -> None:
+    def test_turtle_rock_big_chest_room_region_only_checks_top_left_section(self) -> None:
         logic_test = TestLightWorld()
         logic_test.setUp()
         world = logic_test.multiworld.worlds[1]
@@ -576,8 +576,8 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             world.options.enemy_shuffle = True
             world.enemy_shuffle_state = SimpleNamespace(
                 randomized_dungeon_rooms={
-                    20: RandomizedDungeonEnemyRoom(
-                        room_id=20,
+                    36: RandomizedDungeonEnemyRoom(
+                        room_id=36,
                         room_header_address=0,
                         sprite_table_address=0,
                         original_graphics_block_id=0,
@@ -596,12 +596,12 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
             self.assertFalse(
-                can_clear_enemy_region(hammer_state, 1, TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT)
+                can_clear_enemy_region(hammer_state, 1, TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT)
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
             self.assertTrue(
-                can_clear_enemy_region(bow_state, 1, TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT)
+                can_clear_enemy_region(bow_state, 1, TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT)
             )
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle

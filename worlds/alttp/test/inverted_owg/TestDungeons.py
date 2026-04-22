@@ -102,7 +102,7 @@ class TestDungeons(TestInvertedOWG):
             ["Turtle Rock - Chain Chomps", True, ['Progressive Sword', 'Progressive Sword', 'Pegasus Boots']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
-            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Big Key (Turtle Rock)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Big Key (Turtle Rock)', 'Bomb Upgrade (50)']],
             ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Lamp', 'Cane of Somaria']],
 
             ["Ganons Tower - Hope Room - Left", False, []],

@@ -7,7 +7,7 @@ class TestDungeons(TestVanillaOWG):
         self.run_location_tests([
             ["Hyrule Castle - Map Chest", True, []],
             ["Hyrule Castle - Map Guard Key Drop", False, []],
-            ["Hyrule Castle - Map Guard Key Drop", True, ['Fighter Sword']],
+            ["Hyrule Castle - Map Guard Key Drop", True, ['Progressive Sword']],
 
             ["Sanctuary", True, []],
 
@@ -120,8 +120,8 @@ class TestDungeons(TestVanillaOWG):
             #todo: does clip require sword?
             #["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)']],
             ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Progressive Sword']],
-            ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Hookshot']],
-            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Big Key (Turtle Rock)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Hookshot', 'Bomb Upgrade (50)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Big Key (Turtle Rock)', 'Bomb Upgrade (50)']],
 
             ["Ganons Tower - Hope Room - Left", False, []],
             ["Ganons Tower - Hope Room - Left", False, ['Moon Pearl', 'Crystal 1']],
