@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState
-from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
+from BaseClasses import CollectionState, CollectionRule
+from worlds.generic.Rules import add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
 
@@ -192,7 +192,7 @@ class MessengerRules:
                               or (self.has_dart(state) and self.has_wingsuit(state)),
             # Dark Cave
             "Dark Cave - Right -> Dark Cave - Left":
-                lambda state: state.has("Candle", self.player) and self.has_dart(state),
+                lambda state: state.has("Candle", self.player) and self.has_dart(state) and self.has_wingsuit(state),
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
