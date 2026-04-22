@@ -51,6 +51,8 @@ DESERT_EAST_ENTRANCE_TOP_RIGHT = "Desert Palace (Compass Room)"
 DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT = "Desert Palace (4 Statues Room)"
 HERA_HARDHAT_BEETLES_BOTTOM_RIGHT = "Tower of Hera (Hardhat Beetles Room)"
 TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT = "Turtle Rock (Double Hokku-Bokku Room)"
+ICE_PALACE_COMPASS_ROOM = "Ice Palace (Compass Room)"
+ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT = "Ice Palace (Conveyor Hellway)"
 POD_NORTH_MIMICS_BOTTOM_LEFT = "Palace of Darkness (North Mimics Room)"
 POD_TURTLE_ROOM_BOTTOM_LEFT = "Palace of Darkness (Turtle Room)"
 POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (South Mimics Room)"
@@ -96,6 +98,13 @@ ENEMY_CLEAR_TARGETS = (
         name=TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT,
         room_name="Turtle Rock (Double Hokku-Bokku / Big chest Room)",
         max_x=256,
+        max_y=256,
+    ),
+    EnemyClearTarget(name=ICE_PALACE_COMPASS_ROOM, room_name="Ice Palace (Compass Room)"),
+    EnemyClearTarget(
+        name=ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
+        room_name="Ice Palace (Stalfos Knights / Conveyor Hellway)",
+        min_x=256,
         max_y=256,
     ),
     EnemyClearTarget(

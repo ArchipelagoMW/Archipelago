@@ -6,6 +6,8 @@ from unittest.mock import patch
 from worlds.alttp.EnemyLogicTargets import (
     HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
     HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
+    ICE_PALACE_COMPASS_ROOM,
+    ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
     POD_NORTH_MIMICS_BOTTOM_LEFT,
     POD_SOUTH_MIMICS_TOP_LEFT,
     POD_TURTLE_ROOM_BOTTOM_LEFT,
@@ -779,6 +781,87 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             hammer_bow_state = logic_test.get_state(item_factory(["Hammer", "Bow"], world))
             self.assertTrue(
                 can_clear_enemy_region(hammer_bow_state, 1, POD_TURTLE_ROOM_BOTTOM_LEFT)
+            )
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_ice_palace_compass_room_target_checks_the_whole_supertile(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    46: RandomizedDungeonEnemyRoom(
+                        room_id=46,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x06, 0x14, 0x84, 0x84, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(
+                can_clear_enemy_region(hammer_state, 1, ICE_PALACE_COMPASS_ROOM)
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertTrue(
+                can_clear_enemy_region(bow_state, 1, ICE_PALACE_COMPASS_ROOM)
+            )
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_ice_palace_conveyor_hellway_top_right_requires_top_right_clear(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    62: RandomizedDungeonEnemyRoom(
+                        room_id=62,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x04, 0x14, 0x84, 0x84, False, False),
+                            RandomizedDungeonEnemySprite(0, 0x12, 0x04, 0x24, 0x24, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(
+                can_clear_enemy_region(hammer_state, 1, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT)
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertTrue(
+                can_clear_enemy_region(bow_state, 1, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT)
             )
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle

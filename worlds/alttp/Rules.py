@@ -20,6 +20,8 @@ from .EnemyLogicTargets import (
     DESERT_EAST_ENTRANCE_TOP_RIGHT,
     GANONS_TOWER_MINI_HELMASAUR_KEY_DROP,
     GANONS_TOWER_WIZZROBES_TOP_HALF,
+    ICE_PALACE_COMPASS_ROOM,
+    ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
     HYRULE_CASTLE_BIG_KEY_DROP,
     HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
     HYRULE_CASTLE_MAP_GUARD_KEY_DROP,
@@ -524,7 +526,12 @@ def global_rules(multiworld: MultiWorld, player: int):
 
     set_rule(multiworld.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_melt_things(state, player))
     set_rule(multiworld.get_location('Ice Palace - Compass Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
-    set_rule(multiworld.get_entrance('Ice Palace (Second Section)', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player) and can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Ice Palace (Second Section)', player),
+             lambda state: can_melt_things(state, player)
+             and state._lttp_has_key('Small Key (Ice Palace)', player)
+             and can_use_bombs(state, player)
+             and can_clear_enemy_region(state, player, ICE_PALACE_COMPASS_ROOM)
+             and can_clear_enemy_region(state, player, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT))
 
     set_rule(multiworld.get_entrance('Ice Palace (Main)', player), lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2))
     set_rule(multiworld.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
@@ -1169,7 +1176,11 @@ def swordless_rules(multiworld: MultiWorld, player: int):
 
     set_rule(multiworld.get_location('Ice Palace - Jelly Key Drop', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player))
     set_rule(multiworld.get_location('Ice Palace - Compass Chest', player), lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player)) and state._lttp_has_key('Small Key (Ice Palace)', player))
-    set_rule(multiworld.get_entrance('Ice Palace (Second Section)', player), lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player)) and state._lttp_has_key('Small Key (Ice Palace)', player))
+    set_rule(multiworld.get_entrance('Ice Palace (Second Section)', player),
+             lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player))
+             and state._lttp_has_key('Small Key (Ice Palace)', player)
+             and can_clear_enemy_region(state, player, ICE_PALACE_COMPASS_ROOM)
+             and can_clear_enemy_region(state, player, ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT))
 
     set_rule(multiworld.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
