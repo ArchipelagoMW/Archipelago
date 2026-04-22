@@ -786,11 +786,11 @@ class Rac3Interface(GameInterface):
             )
         elif location == RAC3LOCATION.PHOENIX_MEET_SASHA and self.planet == RAC3REGION.STARSHIP_PHOENIX:
             current_pos = self.player_pos
-            sasha_pos = RAC3POSITIONDATA(157, 360, 118)
+            sasha_pos = RAC3POSITIONDATA(157, 362, 118)
             return (
-                abs(current_pos.X - sasha_pos.X) < 4
-                and abs(current_pos.Y - sasha_pos.Y) < 4
-                and abs(current_pos.Z - sasha_pos.Z) < 4
+                abs(current_pos.X - sasha_pos.X) < 8
+                and abs(current_pos.Y - sasha_pos.Y) < 8
+                and abs(current_pos.Z - sasha_pos.Z) < 8
             )
         check_all: bool = True
         for check in loc_data.CHECK_ADDRESS:
