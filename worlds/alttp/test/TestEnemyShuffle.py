@@ -3,6 +3,11 @@ from types import SimpleNamespace
 import random
 from unittest.mock import patch
 
+from worlds.alttp.EnemyLogicTargets import (
+    HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT,
+    POD_SOUTH_MIMICS_TOP_LEFT,
+    TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT,
+)
 from worlds.alttp.EnemyShuffle import (
     DungeonEnemyRoom,
     DungeonEnemySprite,
@@ -36,7 +41,7 @@ from worlds.alttp.EnemyShuffle import (
     validate_enemy_shuffle_state,
 )
 from worlds.alttp.Items import item_table
-from worlds.alttp.StateHelpers import can_clear_enemy_room, can_clear_enemy_region, can_kill_key_enemy_in_room
+from worlds.alttp.StateHelpers import can_clear_enemy_room, can_clear_enemy_region, can_kill_key_drop_enemy
 from worlds.alttp.test.bases import item_factory
 from worlds.alttp.test.owg.TestLightWorld import TestLightWorld
 
@@ -294,7 +299,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x84, 0x84, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x17, 0x11, 0x84, 0x84, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -302,10 +307,47 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             bomb_state = logic_test.get_state(item_factory(["Bomb Upgrade (+5)", "Big Key (Eastern Palace)"], world))
-            self.assertFalse(can_kill_key_enemy_in_room(bomb_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertFalse(can_kill_key_drop_enemy(bomb_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
 
             bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(bow_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_key_drop_logic_uses_exact_target_sprite(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    114: RandomizedDungeonEnemyRoom(
+                        room_id=114,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x06, 0x11, 0x84, 0x84, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x19, 0x0A, 0x8E, 0x8E, False, True),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(can_kill_key_drop_enemy(hammer_state, 1, "Hyrule Castle - Map Guard Key Drop"))
+
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertTrue(can_kill_key_drop_enemy(bow_state, 1, "Hyrule Castle - Map Guard Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -330,7 +372,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x8E, 0x8E, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x17, 0x11, 0x8E, 0x8E, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -338,10 +380,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
-            self.assertFalse(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertFalse(can_kill_key_drop_enemy(bow_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
 
             hammer_state = logic_test.get_state(item_factory(["Hammer", "Big Key (Eastern Palace)"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(hammer_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -366,7 +408,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x83, 0x83, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x17, 0x11, 0x83, 0x83, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -374,7 +416,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(bow_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -399,7 +441,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x23, 0x23, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x17, 0x11, 0x23, 0x23, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -408,10 +450,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             bow_state = logic_test.get_state(item_factory(["Bow", "Big Key (Eastern Palace)"], world))
             self.assertTrue(can_clear_enemy_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
-            self.assertFalse(can_kill_key_enemy_in_room(bow_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertFalse(can_kill_key_drop_enemy(bow_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
 
             fire_rod_state = logic_test.get_state(item_factory(["Fire Rod", "Big Key (Eastern Palace)"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(fire_rod_state, 1, "Eastern Palace (Eyegore Key Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(fire_rod_state, 1, "Eastern Palace - Dark Eyegore Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -436,7 +478,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x84, 0x84, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x15, 0x07, 0x84, 0x84, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -444,10 +486,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
-            self.assertFalse(can_kill_key_enemy_in_room(hammer_state, 1, "Turtle Rock (Chain Chomps Room)"))
+            self.assertFalse(can_kill_key_drop_enemy(hammer_state, 1, "Turtle Rock - Pokey 1 Key Drop"))
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(bow_state, 1, "Turtle Rock (Chain Chomps Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(bow_state, 1, "Turtle Rock - Pokey 1 Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -472,7 +514,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x8E, 0x8E, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x18, 0x16, 0x8E, 0x8E, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -480,10 +522,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
-            self.assertFalse(can_kill_key_enemy_in_room(bow_state, 1, "Turtle Rock (Hokku-Bokku Key Room 2)"))
+            self.assertFalse(can_kill_key_drop_enemy(bow_state, 1, "Turtle Rock - Pokey 2 Key Drop"))
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Turtle Rock (Hokku-Bokku Key Room 2)"))
+            self.assertTrue(can_kill_key_drop_enemy(hammer_state, 1, "Turtle Rock - Pokey 2 Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -508,7 +550,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x8E, 0x8E, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x07, 0x17, 0x8E, 0x8E, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -516,10 +558,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
-            self.assertFalse(can_kill_key_enemy_in_room(bow_state, 1, "Ganon's Tower (Torch Room 2)"))
+            self.assertFalse(can_kill_key_drop_enemy(bow_state, 1, "Ganons Tower - Mini Helmasaur Key Drop"))
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Ganon's Tower (Torch Room 2)"))
+            self.assertTrue(can_kill_key_drop_enemy(hammer_state, 1, "Ganons Tower - Mini Helmasaur Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -554,24 +596,12 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
             self.assertFalse(
-                can_clear_enemy_region(
-                    hammer_state,
-                    1,
-                    "Turtle Rock (Big Key Room)",
-                    max_x=256,
-                    max_y=256,
-                )
+                can_clear_enemy_region(hammer_state, 1, TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT)
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
             self.assertTrue(
-                can_clear_enemy_region(
-                    bow_state,
-                    1,
-                    "Turtle Rock (Big Key Room)",
-                    max_x=256,
-                    max_y=256,
-                )
+                can_clear_enemy_region(bow_state, 1, TURTLE_ROCK_BIG_KEY_ROOM_TOP_LEFT)
             )
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
@@ -607,24 +637,12 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
             self.assertFalse(
-                can_clear_enemy_region(
-                    hammer_state,
-                    1,
-                    "Palace of Darkness (Warps / South Mimics Room)",
-                    max_x=256,
-                    max_y=256,
-                )
+                can_clear_enemy_region(hammer_state, 1, POD_SOUTH_MIMICS_TOP_LEFT)
             )
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
             self.assertTrue(
-                can_clear_enemy_region(
-                    bow_state,
-                    1,
-                    "Palace of Darkness (Warps / South Mimics Room)",
-                    max_x=256,
-                    max_y=256,
-                )
+                can_clear_enemy_region(bow_state, 1, POD_SOUTH_MIMICS_TOP_LEFT)
             )
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
@@ -660,13 +678,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
 
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
             self.assertTrue(
-                can_clear_enemy_region(
-                    bow_state,
-                    1,
-                    "Hyrule Castle (Boomerang Chest Room)",
-                    min_x=256,
-                    min_y=256,
-                )
+                can_clear_enemy_region(bow_state, 1, HYRULE_CASTLE_BOOMERANG_CHEST_BOTTOM_RIGHT)
             )
             self.assertFalse(can_clear_enemy_room(bow_state, 1, "Hyrule Castle (Boomerang Chest Room)"))
 
@@ -696,7 +708,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x6A, 0x6A, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x09, 0x1A, 0x6A, 0x6A, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -704,10 +716,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             empty_state = logic_test.get_state(item_factory([], world))
-            self.assertFalse(can_kill_key_enemy_in_room(empty_state, 1, "Hyrule Castle (Jail Cell Room)"))
+            self.assertFalse(can_kill_key_drop_enemy(empty_state, 1, "Hyrule Castle - Big Key Drop"))
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Hyrule Castle (Jail Cell Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(hammer_state, 1, "Hyrule Castle - Big Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state
@@ -732,7 +744,7 @@ class TestEnemyShuffleValidation(unittest.TestCase):
                         tag_2=0,
                         sort_sprites_value=0,
                         sprites=(
-                            RandomizedDungeonEnemySprite(0, 0, 0, 0x6D, 0x6D, False, True),
+                            RandomizedDungeonEnemySprite(0, 0x06, 0x05, 0x6D, 0x6D, False, True),
                         ),
                         skipped_randomization=False,
                     )
@@ -740,10 +752,10 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             )
 
             empty_state = logic_test.get_state(item_factory([], world))
-            self.assertFalse(can_kill_key_enemy_in_room(empty_state, 1, "Hyrule Castle (Key-rat Room)"))
+            self.assertFalse(can_kill_key_drop_enemy(empty_state, 1, "Sewers - Key Rat Key Drop"))
 
             hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
-            self.assertTrue(can_kill_key_enemy_in_room(hammer_state, 1, "Hyrule Castle (Key-rat Room)"))
+            self.assertTrue(can_kill_key_drop_enemy(hammer_state, 1, "Sewers - Key Rat Key Drop"))
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
             world.enemy_shuffle_state = original_enemy_shuffle_state

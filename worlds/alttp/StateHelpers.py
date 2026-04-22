@@ -121,19 +121,6 @@ def can_activate_crystal_switch(state: CollectionState, player: int) -> bool:
 
 
 def can_clear_enemy_room(state: CollectionState, player: int, room_name_or_id: str | int) -> bool:
-    return can_clear_enemy_region(state, player, room_name_or_id)
-
-
-def can_clear_enemy_region(
-    state: CollectionState,
-    player: int,
-    room_name_or_id: str | int,
-    *,
-    min_x: int = 0,
-    max_x: int | None = None,
-    min_y: int = 0,
-    max_y: int | None = None,
-) -> bool:
     from .EnemyShuffle import get_effective_dungeon_room_enemies, get_room_id
 
     room_id = room_name_or_id if isinstance(room_name_or_id, int) else get_room_id(room_name_or_id)
@@ -143,9 +130,43 @@ def can_clear_enemy_region(
     room_enemies = tuple(
         enemy.requirement
         for enemy in get_effective_dungeon_room_enemies(state.multiworld.worlds[player], room_id)
-        if _enemy_is_in_region(enemy, min_x=min_x, max_x=max_x, min_y=min_y, max_y=max_y)
         if enemy.requirement.killable
     )
+    return _can_clear_enemy_requirements(state, player, room_enemies)
+
+
+def can_clear_enemy_region(state: CollectionState, player: int, target_name: str) -> bool:
+    from .EnemyLogicTargets import get_enemy_clear_target_enemies
+
+    room_enemies = tuple(
+        enemy.requirement
+        for enemy in get_enemy_clear_target_enemies(state.multiworld.worlds[player], target_name)
+        if enemy.requirement.killable
+    )
+    return _can_clear_enemy_requirements(state, player, room_enemies)
+
+
+def can_kill_key_drop_enemy(state: CollectionState, player: int, location_name: str) -> bool:
+    from .EnemyLogicTargets import get_key_drop_enemy
+
+    enemy = get_key_drop_enemy(state.multiworld.worlds[player], location_name)
+    if enemy is None or not enemy.has_key or not enemy.requirement.killable:
+        return False
+
+    available_damage_classes = _get_available_damage_classes(state, player, 1)
+    return _can_collect_key_from_enemy_requirement(
+        state,
+        player,
+        enemy.requirement,
+        1,
+        available_damage_classes,
+    )
+
+def _can_clear_enemy_requirements(
+    state: CollectionState,
+    player: int,
+    room_enemies: tuple,
+) -> bool:
     if not room_enemies:
         return True
 
@@ -153,45 +174,6 @@ def can_clear_enemy_region(
     for requirement in room_enemies:
         if _can_kill_enemy_requirement(state, player, requirement, len(room_enemies), available_damage_classes):
             continue
-        return False
-    return True
-
-
-def can_kill_key_enemy_in_room(state: CollectionState, player: int, room_name_or_id: str | int) -> bool:
-    from .EnemyShuffle import get_effective_dungeon_room_enemies, get_room_id
-
-    room_id = room_name_or_id if isinstance(room_name_or_id, int) else get_room_id(room_name_or_id)
-    if room_id is None:
-        raise ValueError(f"Unknown ALTTP room {room_name_or_id!r}")
-
-    key_enemies = tuple(
-        enemy
-        for enemy in get_effective_dungeon_room_enemies(state.multiworld.worlds[player], room_id)
-        if enemy.has_key and enemy.requirement.killable
-    )
-    if not key_enemies:
-        return False
-
-    available_damage_classes = _get_available_damage_classes(state, player, 1)
-    return any(
-        _can_collect_key_from_enemy_requirement(state, player, enemy.requirement, 1, available_damage_classes)
-        for enemy in key_enemies
-    )
-
-
-def _enemy_is_in_region(
-    enemy,
-    *,
-    min_x: int = 0,
-    max_x: int | None = None,
-    min_y: int = 0,
-    max_y: int | None = None,
-) -> bool:
-    if enemy.x_coord_pixels < min_x or enemy.y_coord_pixels < min_y:
-        return False
-    if max_x is not None and enemy.x_coord_pixels >= max_x:
-        return False
-    if max_y is not None and enemy.y_coord_pixels >= max_y:
         return False
     return True
 

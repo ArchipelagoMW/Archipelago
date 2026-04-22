@@ -717,6 +717,13 @@ class ALTTPWorld(World):
             return "Yes" if variable else "No"
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        from .EnemyLogicTargets import (
+            ENEMY_CLEAR_TARGETS,
+            KEY_DROP_ENEMY_TARGETS,
+            get_enemy_clear_target_enemies,
+            get_key_drop_enemy,
+        )
+
         player_name = self.multiworld.get_player_name(self.player)
         spoiler_handle.write("\n\nMedallions:\n")
         spoiler_handle.write(f"\nMisery Mire ({player_name}):"
@@ -767,6 +774,34 @@ class ALTTPWorld(World):
             spoiler_handle.write(
                 f'\n\nBosses{(f" ({self.multiworld.get_player_name(self.player)})" if self.multiworld.players > 1 else "")}:\n')
             spoiler_handle.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
+
+        spoiler_handle.write(
+            f'\n\nEnemy Clear Rooms{(f" ({player_name})" if self.multiworld.players > 1 else "")}:\n'
+        )
+        spoiler_handle.write(
+            '    ' + '\n    '.join(
+                f"{target.name}: "
+                + (
+                    ", ".join(enemy.requirement.sprite_name for enemy in get_enemy_clear_target_enemies(self, target.name))
+                    or "None"
+                )
+                for target in ENEMY_CLEAR_TARGETS
+            )
+        )
+        spoiler_handle.write(
+            f'\n\nKey Drop Enemies{(f" ({player_name})" if self.multiworld.players > 1 else "")}:\n'
+        )
+        spoiler_handle.write(
+            '    ' + '\n    '.join(
+                f"{target.location_name}: "
+                + (
+                    key_enemy.requirement.sprite_name
+                    if (key_enemy := get_key_drop_enemy(self, target.location_name)) is not None
+                    else "None"
+                )
+                for target in KEY_DROP_ENEMY_TARGETS
+            )
+        )
 
         def build_shop_info(shop: Shop) -> typing.Dict[str, str]:
             shop_data = {
