@@ -49,7 +49,12 @@ from worlds.rac3.constants.data.vendorslot import (
 )
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
-from worlds.rac3.constants.instruction import ORIGINAL_INSTRUCTIONS, PATCHED_INSTRUCTIONS, RAC3INSTRUCTION
+from worlds.rac3.constants.instruction import (
+    ORIGINAL_INSTRUCTIONS,
+    PATCH_INSTRUCTION_TO_NAME,
+    PATCHED_INSTRUCTIONS,
+    RAC3INSTRUCTION,
+)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -86,7 +91,13 @@ from worlds.rac3.constants.region import (
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 from worlds.rac3.constants.vendors.vendor import RAC3SHIPVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR, VENDORTYPE_TO_SLOT_SIZE
-from worlds.rac3.constants.version import GAME_ID_TO_OFFSET, GAME_ID_TO_VERSION, PAL_SHIFTED_PLANETS, RAC3VERSION, VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE
+from worlds.rac3.constants.version import (
+    GAME_ID_TO_OFFSET,
+    GAME_ID_TO_VERSION,
+    PAL_SHIFTED_PLANETS,
+    RAC3VERSION,
+    VERSION_TO_BLACK_SCREEN_ORIGINAL_VALUE,
+)
 
 
 class Rac3Interface(GameInterface):
@@ -1137,7 +1148,6 @@ class Rac3Interface(GameInterface):
                     # clear out vendor slot memory
                     slot_size = VENDORTYPE_TO_SLOT_SIZE[vendor_type]
                     self._write_bytes(start_address, bytes(slot_size*5))
-                
 
         for slot, slot_data in enumerate(inventory):
             for prop in slot_data.get_data():
@@ -1681,6 +1691,38 @@ class Rac3Interface(GameInterface):
                     for instruction in nation_patches:
                         self.safe_patch_instruction(instruction, patch=False)
 
+    def get_active_patches(self) -> list[int]:
+        """Return a list of currently active patch addresses based on the current planet."""
+        active_patches = []
+        match self.planet:
+            case RAC3REGION.STARSHIP_PHOENIX:
+                phoenix_patches = [
+                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_NTSC,
+                    RAC3INSTRUCTION.PHOENIX_CAN_BUY_ARMOR_PAL,
+                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_NTSC,
+                    RAC3INSTRUCTION.PHOENIX_HYPERSHOT_QUICK_SELECT_REMOVAL_PAL,
+                ]
+                for instruction in phoenix_patches:
+                    if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]:
+                        active_patches.append(instruction)
+
+            case RAC3REGION.ANNIHILATION_NATION:
+                nation_patches = [
+                    RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE,
+                    RAC3INSTRUCTION.NATION_HEALTH_REFILL,
+                    RAC3INSTRUCTION.NATION_LEVELUP_HEALING,
+                    RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING,
+                ]
+                character = self.player_type
+                if character == RAC3PLAYERTYPE.TYHRRANOID:
+                    character = RAC3PLAYERTYPE.RATCHET
+
+                if self.one_hp_challenge.get(character, False) and character == RAC3PLAYERTYPE.RATCHET:
+                    for instruction in nation_patches:
+                        if self._read32(instruction) == PATCHED_INSTRUCTIONS[instruction]:
+                            active_patches.append(instruction)
+        return active_patches
+
     def overflow_fix(self):
         """Detect any integer overflows and reset the value"""
         if self.nanotech_exp > 0x7FFFFFFF:
@@ -2026,3 +2068,4 @@ class Rac3Interface(GameInterface):
         logger.info(f"Meet Sasha Bridge: {RAC3LOCATION.PHOENIX_MEET_SASHA in self.checked_locations}")
         logger.info(f"No Tyhrraguise Phoenix: {bool(RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations and self.UnlockItem[RAC3ITEM.TYHRRA_GUISE].status)}")
         logger.info(f"Visited Planets: {[planet for planet in PLANET_NAME_FROM_ID.values() if planet in self.visited_planets and not (planet == RAC3REGION.HOLOSTAR_STUDIOS_CLANK and self.options.holostar_skip)]}")
+        logger.info(f"Active Patches: {[PATCH_INSTRUCTION_TO_NAME[patch] for patch in self.get_active_patches()]}")
