@@ -183,6 +183,7 @@ class Rac3Interface(GameInterface):
     last_death_state: int = 0
     has_died: bool = False
     died_in_vehicle: bool = False
+    died_from_softlock: bool = False
     inside_hacker_puzzle: bool = False
     notification_queue: list[RAC3NOTIFICATION] = []
     notification_time: float | None = None
@@ -825,6 +826,7 @@ class Rac3Interface(GameInterface):
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
             self.died_in_vehicle = time.time() - self.last_in_vehicle_time < 1.5
+            self.died_from_softlock = self._read16(RAC3STATUS.SOFTLOCK_TIMER) >= 0xF0
             self.reloading_handled = True
             logger.debug(f"{self.player_type} is Respawning, death state: {self.last_death_state},"
                          f" death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}")
@@ -851,7 +853,9 @@ class Rac3Interface(GameInterface):
             # vehicle death
             if self.died_in_vehicle:
                 # Vehicle death uses state 34 which is the same as getting eaten by a shark
-                death = "Didn't leave the vehicle in time."
+                death = "didn't leave the vehicle in time."
+            elif self.died_from_softlock:
+                death = "softlocked."
             return False, f"{self.player_type} {death}"
 
         logger.debug(f"{self.player_type} is Alive")
