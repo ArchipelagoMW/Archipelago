@@ -59,6 +59,7 @@ POD_TURTLE_ROOM_BOTTOM_LEFT = "Palace of Darkness (Turtle Room)"
 POD_SOUTH_MIMICS_TOP_LEFT = "Palace of Darkness (South Mimics Room)"
 GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms)"
 HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM = "Hyrule Castle (Pre-Boomerang Chest Room)"
+THIEVES_TOWN_JAIL_CELLS_TOP_LEFT = "Thieves Town (Basement)"
 
 HYRULE_CASTLE_MAP_GUARD_KEY_DROP = "Hyrule Castle - Map Guard Key Drop"
 HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP = "Hyrule Castle - Boomerang Guard Key Drop"
@@ -124,6 +125,12 @@ ENEMY_CLEAR_TARGETS = (
     EnemyClearTarget(
         name=POD_SOUTH_MIMICS_TOP_LEFT,
         room_name="Palace of Darkness (Warps / South Mimics Room)",
+        max_x=256,
+        max_y=256,
+    ),
+    EnemyClearTarget(
+        name=THIEVES_TOWN_JAIL_CELLS_TOP_LEFT,
+        room_name="Thieves Town (Jail Cells Room)",
         max_x=256,
         max_y=256,
     ),

@@ -34,6 +34,7 @@ from .EnemyLogicTargets import (
     POD_TURTLE_ROOM_BOTTOM_LEFT,
     POD_SOUTH_MIMICS_TOP_LEFT,
     SEWERS_KEY_RAT_KEY_DROP,
+    THIEVES_TOWN_JAIL_CELLS_TOP_LEFT,
     TURTLE_ROCK_POKEY_1_KEY_DROP,
     TURTLE_ROCK_POKEY_2_KEY_DROP,
     TURTLE_ROCK_BIG_CHEST_ROOM_TOP_LEFT,
@@ -504,12 +505,24 @@ def global_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
 
     set_rule(multiworld.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
+    thieves_town_jail_cells_rule = (
+        lambda state: can_lift_rocks(state, player)
+        or can_clear_enemy_region(state, player, THIEVES_TOWN_JAIL_CELLS_TOP_LEFT)
+    )
     if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
-        set_rule(multiworld.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3) and can_use_bombs(state, player))
+        set_rule(multiworld.get_entrance('Blind Fight', player),
+                 lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3)
+                 and can_use_bombs(state, player)
+                 and thieves_town_jail_cells_rule(state))
     set_rule(multiworld.get_location('Thieves\' Town - Big Chest', player),
-             lambda state: ((state._lttp_has_key('Small Key (Thieves Town)', player, 3)) or (location_item_name(state, 'Thieves\' Town - Big Chest', player) == ("Small Key (Thieves Town)", player)) and state._lttp_has_key('Small Key (Thieves Town)', player, 2)) and state.has('Hammer', player))
+             lambda state: (((state._lttp_has_key('Small Key (Thieves Town)', player, 3))
+                             or (location_item_name(state, 'Thieves\' Town - Big Chest', player) == ("Small Key (Thieves Town)", player))
+                             and state._lttp_has_key('Small Key (Thieves Town)', player, 2))
+                            and state.has('Hammer', player)
+                            and thieves_town_jail_cells_rule(state)))
     set_rule(multiworld.get_location('Thieves\' Town - Blind\'s Cell', player),
-             lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
+             lambda state: state._lttp_has_key('Small Key (Thieves Town)', player)
+             and thieves_town_jail_cells_rule(state))
     if world.options.accessibility != 'full' and not world.options.key_drop_shuffle:
         set_always_allow(multiworld.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player)
     set_rule(multiworld.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
