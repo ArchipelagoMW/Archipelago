@@ -32,8 +32,8 @@ class ShipSkin(Choice):
     option_Agent_Orange = 21
     option_Helgas_Hues = 22
     option_Ameboid_Green = 23
-    option_Pulsing_Purple = 24
-    option_Obani_Orange = 25
+    option_Obani_Orange = 24
+    option_Pulsing_Purple = 25
     option_Low_Rider = 26
     option_Black_Hole = 27
     option_Sun_Storm = 28
