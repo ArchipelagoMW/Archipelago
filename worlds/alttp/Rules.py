@@ -22,6 +22,7 @@ from .EnemyLogicTargets import (
     GANONS_TOWER_GAUNTLET_123_ROOM,
     GANONS_TOWER_GAUNTLET_45_ROOM,
     GANONS_TOWER_MIMICS_BOTTOM_HALF,
+    GANONS_TOWER_TILE_TORCH_PUZZLE_TOP_LEFT,
     GANONS_TOWER_WIZZROBES_TOP_HALF,
     ICE_PALACE_COMPASS_ROOM,
     ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
@@ -702,7 +703,9 @@ def global_rules(multiworld: MultiWorld, player: int):
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6))))
 
     # Once again it is possible to need more than 7 keys...
-    set_rule(multiworld.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
+    set_rule(multiworld.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player)
+             and can_clear_enemy_region(state, player, GANONS_TOWER_TILE_TORCH_PUZZLE_TOP_LEFT)
+             and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
     set_rule(multiworld.get_entrance('Ganons Tower (Bottom) (East)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(back_chests, [player] * len(back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
