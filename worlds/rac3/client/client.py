@@ -64,8 +64,13 @@ class CommandProcessor(ClientCommandProcessor):
     # This is not mandatory for the game. Just a client command implementation.
     def _cmd_kill(self):
         """Kill the player."""
+        if not self.verify():
+            return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.on_deathlink({"time": time(), "cause": "Amondo got gaslit"})
+            if self.ctx.death_link:
+                self.ctx.on_deathlink({"time": time(), "cause": "Amondo got gaslit"})
+            else:
+                self.output("Death Link is not enabled. You can toggle Death Link with /deathlink")
 
     def _cmd_connect_rac3(self):
         """Attempt to connect the client to the emulator"""
