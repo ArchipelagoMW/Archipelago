@@ -19,6 +19,8 @@ from .EnemyLogicTargets import (
     DESERT_BEAMOS_HELLWAY_BOTTOM_LEFT,
     DESERT_EAST_ENTRANCE_TOP_RIGHT,
     GANONS_TOWER_MINI_HELMASAUR_KEY_DROP,
+    GANONS_TOWER_GAUNTLET_123_ROOM,
+    GANONS_TOWER_GAUNTLET_45_ROOM,
     GANONS_TOWER_WIZZROBES_TOP_HALF,
     ICE_PALACE_COMPASS_ROOM,
     ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
@@ -723,7 +725,11 @@ def global_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_entrance('Ganons Tower Big Key Door', player),
                  lambda state: state.has('Big Key (Ganons Tower)', player) and can_shoot_arrows(state, player))
     set_rule(multiworld.get_entrance('Ganons Tower Torch Rooms', player),
-             lambda state: can_clear_enemy_region(state, player, GANONS_TOWER_WIZZROBES_TOP_HALF) and has_fire_source(state, player) and state.multiworld.get_entrance('Ganons Tower Torch Rooms', player).parent_region.dungeon.bosses['middle'].can_defeat(state))
+             lambda state: can_clear_enemy_region(state, player, GANONS_TOWER_WIZZROBES_TOP_HALF)
+             and can_clear_enemy_region(state, player, GANONS_TOWER_GAUNTLET_123_ROOM)
+             and can_clear_enemy_region(state, player, GANONS_TOWER_GAUNTLET_45_ROOM)
+             and has_fire_source(state, player)
+             and state.multiworld.get_entrance('Ganons Tower Torch Rooms', player).parent_region.dungeon.bosses['middle'].can_defeat(state))
     set_rule(multiworld.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_key_drop_enemy(state, player, GANONS_TOWER_MINI_HELMASAUR_KEY_DROP))
     set_rule(multiworld.get_location('Ganons Tower - Pre-Moldorm Chest', player),
              lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) and can_use_bombs(state, player))

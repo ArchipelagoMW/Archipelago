@@ -214,6 +214,7 @@ def _can_kill_enemy_requirement(
 
     direct_damage_classes = set(requirement.kill_damage_classes)
     direct_kill_items = requirement.kill_items
+    explicit_kill_rules_present = bool(direct_kill_items or requirement.kill_abilities)
 
     if requirement.yellow_slime_transform_items:
         transform_damage_classes = {
@@ -227,11 +228,11 @@ def _can_kill_enemy_requirement(
             if item_name not in requirement.yellow_slime_transform_items
         )
 
-    if available_damage_classes.intersection(direct_damage_classes):
-        return True
     if _can_use_kill_items(state, player, direct_kill_items, enemy_count):
         return True
     if _can_use_kill_abilities(state, player, requirement.kill_abilities, enemy_count):
+        return True
+    if not explicit_kill_rules_present and available_damage_classes.intersection(direct_damage_classes):
         return True
 
     if requirement.yellow_slime_transform_items:
