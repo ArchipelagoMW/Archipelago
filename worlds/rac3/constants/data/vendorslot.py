@@ -55,7 +55,7 @@ class RAC3WEAPONVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     all_ammo: RAC3VENDORSLOTDATA.Property
     memcard: RAC3VENDORSLOTDATA.Property
 
-    def __init__(self, values_list: list[int] = None):
+    def __init__(self, values_list: list[int] | None = None):
         values = [0, 0, 0x0CDB, 0, 0, 0, 0] if values_list is None else values_list
         self.item_id = self.Property("ID", values[0], 2, RAC3WEAPONVENDOR.ITEM_ID_SIZE, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
         self.ammo_text = self.Property("Ammo text?", values[1], 1, RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_SIZE,
@@ -83,7 +83,7 @@ class RAC3ARMORVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     cost: RAC3VENDORSLOTDATA.Property
     armor_level: RAC3VENDORSLOTDATA.Property
 
-    def __init__(self, values_list: list[int] = None):
+    def __init__(self, values_list: list[int] | None = None):
         values = [0, 0, 0] if values_list is None else values_list
         self.icon = self.Property("Icon", values[0], 2, RAC3ARMORVENDOR.ITEM_ICON_SIZE, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
         self.cost = self.Property("Cost", values[1], 0, RAC3ARMORVENDOR.ITEM_COST_SIZE, RAC3ARMORVENDOR.ITEM_COST_OFFSET)
@@ -106,7 +106,7 @@ class RAC3SHIPVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     icon_color: RAC3VENDORSLOTDATA.Property
     is_equipped: RAC3VENDORSLOTDATA.Property
 
-    def __init__(self, values_list: list[int] = None):
+    def __init__(self, values_list: list[int] | None = None):
         values = [0, 0, 0, 0, 0, 0, 0, 0, 0] if values_list is None else values_list
         self.icon_id = self.Property("Icon ID", values[0], 2, RAC3SHIPVENDOR.ITEM_ICON_SIZE, RAC3SHIPVENDOR.ITEM_ICON_OFFSET)
         self.cost = self.Property("Cost", values[1], 0, RAC3SHIPVENDOR.ITEM_COST_SIZE, RAC3SHIPVENDOR.ITEM_COST_OFFSET)

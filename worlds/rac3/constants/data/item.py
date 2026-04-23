@@ -34,7 +34,7 @@ class RAC3ITEMDATA:
                  level_address: int | None = None,
                  armor: float | None = None,
                  ap_classification: ItemClassification | None = ItemClassification.filler,
-                 tags: list[str] = None):
+                 tags: list[str] | None = None):
         self.ID = idx
         self.AP_CODE = idx + 50000000
         self.AP_CLASSIFICATION = ap_classification

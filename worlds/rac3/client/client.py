@@ -137,7 +137,7 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output(f"Death Link set to {self.ctx.death_link}")
                 if self.verify():
                     self.ctx.game_interface.enqueue_notification(
-                        f"{RAC3TEXTFORMATSTRING.WHITE}Death Link {'Enabled' if self.ctx.death_link else 'Disabled'}", 
+                        f"{RAC3TEXTFORMATSTRING.WHITE}Death Link {'Enabled' if self.ctx.death_link else 'Disabled'}",
                         RAC3BOXTHEME.DEATHLINK)
             else:
                 self.output("Death Link not found in slot_data. Please report this")
@@ -199,7 +199,7 @@ class CommandProcessor(ClientCommandProcessor):
                 self.ctx.game_interface.one_hp_challenge[char_name] = new_state
                 self.output(f'One HP Challenge for {char_name} set to {"Enabled" if new_state else "Disabled"}')
                 self.ctx.game_interface.enqueue_notification(
-                    f'One HP Challenge for {char_name} {"Enabled" if new_state else "Disabled"}', RAC3BOXTHEME.DEATHLINK)
+                    f'One HP Challenge for {char_name} {"Enabled" if new_state else "Disabled"}')
             else:
                 self.output(f'Invalid character name. Valid options are: {", ".join(ONE_HP_CHALLENGE_CHARACTERS)}')
 

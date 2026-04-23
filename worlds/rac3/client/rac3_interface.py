@@ -784,7 +784,7 @@ class Rac3Interface(GameInterface):
                 and abs(current_pos.Y - skidd_pos.Y) < 8
                 and abs(current_pos.Z - skidd_pos.Z) < 8
             )
-        elif location == RAC3LOCATION.PHOENIX_MEET_SASHA and self.planet == RAC3REGION.STARSHIP_PHOENIX:
+        if location == RAC3LOCATION.PHOENIX_MEET_SASHA and self.planet == RAC3REGION.STARSHIP_PHOENIX:
             current_pos = self.player_pos
             sasha_pos = RAC3POSITIONDATA(157, 362, 118)
             return (
@@ -871,8 +871,8 @@ class Rac3Interface(GameInterface):
 
     def kill_player(self) -> bool:
         """Checks the current game state to determine if and how to kill the player, returns success/failure"""
-        if (self.pause_state 
-                or self.inside_hacker_puzzle 
+        if (self.pause_state
+                or self.inside_hacker_puzzle
                 or (self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED and not self.vehicle)
                 or self.action_type == RAC3ACTIONTYPE.IN_CUTSCENE
                 or time.time() - self.last_in_ship_time < 1.5):

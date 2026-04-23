@@ -2330,7 +2330,7 @@ class RAC3LOCATIONDATA:
                  idx: int,
                  region: str = RAC3REGION.GALAXY,
                  check: list[RAC3ADDRESSDATA] = (),
-                 tags: set[str] = None):
+                 tags: set[str] | None = None):
         self.ID = idx
         self.REGION = region
         self.CHECK_ADDRESS = check

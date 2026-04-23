@@ -1,4 +1,4 @@
-""" Constants for Ratchet & Clank 3 player action states."""
+""" Constants for Ratchet & Clank 3 player action states. States without a character name defaults to Ratchet."""
 
 class RAC3PLAYERACTION:
     IDLE = 0x00
