@@ -61,6 +61,7 @@ MISERY_MIRE_WIZZROBES_ROOM = "Misery Mire (Wizzrobes Room)"
 GANONS_TOWER_WIZZROBES_TOP_HALF = "Ganon's Tower (Wizzrobes Rooms)"
 GANONS_TOWER_GAUNTLET_123_ROOM = "Ganon's Tower (Gauntlet 1/2/3)"
 GANONS_TOWER_GAUNTLET_45_ROOM = "Ganon's Tower (Gauntlet 4/5)"
+GANONS_TOWER_MIMICS_BOTTOM_HALF = "Ganon's Tower (Mimics Rooms) - Bottom Half"
 HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM = "Hyrule Castle (Pre-Boomerang Chest Room)"
 THIEVES_TOWN_JAIL_CELLS_TOP_LEFT = "Thieves Town (Basement)"
 
@@ -142,6 +143,11 @@ ENEMY_CLEAR_TARGETS = (
     EnemyClearTarget(
         name=GANONS_TOWER_GAUNTLET_45_ROOM,
         room_name="Ganon's Tower (Gauntlet 4/5)",
+    ),
+    EnemyClearTarget(
+        name=GANONS_TOWER_MIMICS_BOTTOM_HALF,
+        room_name="Ganon's Tower (Mimics Rooms)",
+        min_y=256,
     ),
     EnemyClearTarget(
         name=THIEVES_TOWN_JAIL_CELLS_TOP_LEFT,

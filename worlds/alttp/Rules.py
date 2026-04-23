@@ -21,6 +21,7 @@ from .EnemyLogicTargets import (
     GANONS_TOWER_MINI_HELMASAUR_KEY_DROP,
     GANONS_TOWER_GAUNTLET_123_ROOM,
     GANONS_TOWER_GAUNTLET_45_ROOM,
+    GANONS_TOWER_MIMICS_BOTTOM_HALF,
     GANONS_TOWER_WIZZROBES_TOP_HALF,
     ICE_PALACE_COMPASS_ROOM,
     ICE_PALACE_CONVEYOR_HELLWAY_TOP_RIGHT,
@@ -718,12 +719,9 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Chest', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
     set_rule(multiworld.get_location('Ganons Tower - Big Key Room - Right', player),
              lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Room - Right', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
-    if world.options.enemy_shuffle:
-        set_rule(multiworld.get_entrance('Ganons Tower Big Key Door', player),
-                 lambda state: state.has('Big Key (Ganons Tower)', player))
-    else:
-        set_rule(multiworld.get_entrance('Ganons Tower Big Key Door', player),
-                 lambda state: state.has('Big Key (Ganons Tower)', player) and can_shoot_arrows(state, player))
+    set_rule(multiworld.get_entrance('Ganons Tower Big Key Door', player),
+             lambda state: state.has('Big Key (Ganons Tower)', player)
+             and can_clear_enemy_region(state, player, GANONS_TOWER_MIMICS_BOTTOM_HALF))
     set_rule(multiworld.get_entrance('Ganons Tower Torch Rooms', player),
              lambda state: can_clear_enemy_region(state, player, GANONS_TOWER_WIZZROBES_TOP_HALF)
              and can_clear_enemy_region(state, player, GANONS_TOWER_GAUNTLET_123_ROOM)

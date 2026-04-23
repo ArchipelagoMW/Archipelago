@@ -4,6 +4,7 @@ import random
 from unittest.mock import patch
 
 from worlds.alttp.EnemyLogicTargets import (
+    GANONS_TOWER_MIMICS_BOTTOM_HALF,
     HYRULE_CASTLE_BOOMERANG_GUARD_KEY_DROP,
     HYRULE_CASTLE_PRE_BOOMERANG_CHEST_ROOM,
     ICE_PALACE_COMPASS_ROOM,
@@ -926,6 +927,47 @@ class TestEnemyShuffleValidation(unittest.TestCase):
             bow_state = logic_test.get_state(item_factory(["Bow"], world))
             self.assertTrue(
                 can_clear_enemy_region(bow_state, 1, MISERY_MIRE_WIZZROBES_ROOM)
+            )
+        finally:
+            world.options.enemy_shuffle = original_enemy_shuffle
+            world.enemy_shuffle_state = original_enemy_shuffle_state
+
+    def test_ganons_tower_mimics_bottom_half_only_checks_bottom_half(self) -> None:
+        logic_test = TestLightWorld()
+        logic_test.setUp()
+        world = logic_test.multiworld.worlds[1]
+        original_enemy_shuffle = world.options.enemy_shuffle
+        original_enemy_shuffle_state = world.enemy_shuffle_state
+        try:
+            world.options.enemy_shuffle = True
+            world.enemy_shuffle_state = SimpleNamespace(
+                randomized_dungeon_rooms={
+                    107: RandomizedDungeonEnemyRoom(
+                        room_id=107,
+                        room_header_address=0,
+                        sprite_table_address=0,
+                        original_graphics_block_id=0,
+                        graphics_block_id=0,
+                        tag_1=0,
+                        tag_2=0,
+                        sort_sprites_value=0,
+                        sprites=(
+                            RandomizedDungeonEnemySprite(0, 0x04, 0x06, 0x24, 0x24, False, False),
+                            RandomizedDungeonEnemySprite(0, 0x12, 0x04, 0x84, 0x84, False, False),
+                        ),
+                        skipped_randomization=False,
+                    )
+                }
+            )
+
+            hammer_state = logic_test.get_state(item_factory(["Hammer"], world))
+            self.assertFalse(
+                can_clear_enemy_region(hammer_state, 1, GANONS_TOWER_MIMICS_BOTTOM_HALF)
+            )
+
+            bow_state = logic_test.get_state(item_factory(["Bow"], world))
+            self.assertTrue(
+                can_clear_enemy_region(bow_state, 1, GANONS_TOWER_MIMICS_BOTTOM_HALF)
             )
         finally:
             world.options.enemy_shuffle = original_enemy_shuffle
