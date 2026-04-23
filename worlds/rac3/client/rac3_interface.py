@@ -195,6 +195,7 @@ class Rac3Interface(GameInterface):
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
     last_in_ship_time: float = 0.0
+    deathlink_grace_period: float = 0.0
     nanotech_exp: int = 0
     homewarping: bool = False
     checked_locations: set[str] = set()
@@ -869,13 +870,21 @@ class Rac3Interface(GameInterface):
         #logger.debug(f"{self.player_type} is Alive")
         return True, f"{self.player_type} is Alive"
 
-    def kill_player(self) -> bool:
-        """Checks the current game state to determine if and how to kill the player, returns success/failure"""
+    def can_be_killed(self) -> bool:
+        """Checks if the player can be killed based on the current game state."""
+        current_time = time.time()
         if (self.pause_state
                 or self.inside_hacker_puzzle
                 or (self.action_type == RAC3ACTIONTYPE.PLAYER_MOVEMENT_LOCKED and not self.vehicle)
-                or self.action_type == RAC3ACTIONTYPE.IN_CUTSCENE
-                or time.time() - self.last_in_ship_time < 1.5):
+                or self.action_type == RAC3ACTIONTYPE.IN_CUTSCENE):
+            self.deathlink_grace_period = current_time
+        if current_time - self.deathlink_grace_period < 1:
+            return False
+        return True
+
+    def kill_player(self) -> bool:
+        """Checks the current game state to determine if and how to kill the player, returns success/failure"""
+        if not self.can_be_killed():
             logger.debug("player unable to be killed")
             return False
         self._write8(RAC3STATUS.HEALTH, 0)
