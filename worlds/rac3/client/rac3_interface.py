@@ -1677,11 +1677,14 @@ class Rac3Interface(GameInterface):
 
     def get_planet_patch_instructions(self) -> list[int]:
         """Return all patch instructions associated with the current planet and game version."""
+        game_version = self.current_game
+        if game_version == RAC3VERSION.US_GH_ID:
+            game_version = RAC3VERSION.US_ID  # US and US GH versions have the same instruction offsets
         return [
             instruction for instruction, planet in PATCH_INSTRUCTION_TO_PLANET.items()
             if planet == self.planet
             and (PATCH_INSTRUCTION_TO_GAME_IDS[instruction] is None
-                 or self.current_game == PATCH_INSTRUCTION_TO_GAME_IDS[instruction])]
+                 or game_version == PATCH_INSTRUCTION_TO_GAME_IDS[instruction])]
 
     def patch_cycler(self):
         """Apply runtime instruction patches based on current planet."""

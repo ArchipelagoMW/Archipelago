@@ -128,7 +128,7 @@ class RAC3SKINVENDORSLOTDATA(RAC3VENDORSLOTDATA):
     skin_id: RAC3VENDORSLOTDATA.Property
     description_string_id: RAC3VENDORSLOTDATA.Property
 
-    def __init__(self, values_list: list[int] = None):
+    def __init__(self, values_list: list[int] | None = None):
         values = [0, 0, 0] if values_list is None else values_list
         self.cost = self.Property("Cost", values[0], 0, RAC3SKINVENDOR.ITEM_COST_SIZE, RAC3SKINVENDOR.ITEM_COST_OFFSET)
         self.skin_id = self.Property("Skin ID", values[1], 2, RAC3SKINVENDOR.ITEM_SKIN_ID_SIZE, RAC3SKINVENDOR.ITEM_SKIN_ID_OFFSET)
