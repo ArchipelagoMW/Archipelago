@@ -12,6 +12,7 @@ from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
+from ...strings.festival_check_names import FestivalCheck
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.geode_names import Geode
 from ...strings.metal_names import Artifact
@@ -50,6 +51,8 @@ the_desert = ContentPack(
         Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
         Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
         Seed.beet: (ShopSource(price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
+
+        FestivalCheck.rarecrow_3: (ShopSource(price=10_000, currency=Currency.qi_coin, shop_region=Region.casino),),
     },
     fishes=(
         fish_data.sandfish,

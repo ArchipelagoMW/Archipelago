@@ -18,6 +18,13 @@ from ..data.skill import Skill
 from ..data.villagers_data import Villager
 
 
+def find_sources_of_type_on_items(items, *types: type[Source]):
+    for item in items.values():
+        for source in item.sources:
+            if isinstance(source, types):
+                yield source
+
+
 @dataclass(frozen=True)
 class StardewContent:
     features: StardewFeatures
@@ -36,10 +43,12 @@ class StardewContent:
     festivals: dict[str, FestivalData] = field(default_factory=dict)
 
     def find_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
-        for item in self.game_items.values():
-            for source in item.sources:
-                if isinstance(source, types):
-                    yield source
+        yield from find_sources_of_type_on_items(self.game_items, *types)
+        yield from find_sources_of_type_on_items(self.farm_buildings, *types)
+        yield from find_sources_of_type_on_items(self.animals, *types)
+
+    def find_item_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
+        yield from find_sources_of_type_on_items(self.game_items, *types)
 
     def source_item(self, item_name: str, *sources: Source) -> GameItem:
         filtered_sources = list(self._filter_sources(sources))

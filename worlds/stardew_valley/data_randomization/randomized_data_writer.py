@@ -4,6 +4,7 @@ from ..content import StardewContent
 from ..data.fish_data import crab_pot_difficulty
 from ..data.game_item import ItemTag
 from ..data.harvest import HarvestCropSource
+from ..data.shop import ShopSource
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -21,12 +22,21 @@ def add_randomized_data_to_spoiler_log(spoiler_handle: TextIO, player_name: str,
     prepared_data = prepare_randomized_data(content, options)
 
     spoiler_handle.write(f"\n\nRandomized Data ({player_name}):\n")
-    for category in sorted(prepared_data.keys()):
-        spoiler_handle.write(f"\t{category}:\n")
-        for item_name in sorted(prepared_data[category].keys()):
+    for category_name in sorted(prepared_data.keys()):
+        spoiler_handle.write(f"\t{category_name}:\n")
+        category_value = prepared_data[category_name]
+        for item_name in sorted(category_value.keys()):
             spoiler_handle.write(f"\t\t{item_name}:\n")
-            for value_name in sorted(prepared_data[category][item_name].keys()):
-                spoiler_handle.write(f"\t\t\t{value_name}: {prepared_data[category][item_name][value_name]}\n")
+            item_value = category_value[item_name]
+            for value_name in sorted(item_value.keys()):
+                value = item_value[value_name]
+                if isinstance(value, dict):
+                    spoiler_handle.write(f"\t\t\t{value_name}:\n")
+                    for sub_value_name in sorted(value.keys()):
+                        sub_value = value[sub_value_name]
+                        spoiler_handle.write(f"\t\t\t\t{sub_value_name}: {sub_value}\n")
+                else:
+                    spoiler_handle.write(f"\t\t\t{value_name}: {value}\n")
 
 
 def prepare_randomized_data(content: StardewContent, options: StardewValleyOptions):
@@ -36,6 +46,7 @@ def prepare_randomized_data(content: StardewContent, options: StardewValleyOptio
     prepare_fish_data(content, data_to_randomize, prepared_data)
     prepare_crop_data(content, data_to_randomize, prepared_data)
     prepare_festival_data(content, data_to_randomize, prepared_data)
+    prepare_shops_data(content, data_to_randomize, prepared_data)
 
     return prepared_data
 
@@ -62,6 +73,11 @@ def prepare_festival_data(content: StardewContent, data_to_randomize: set[str], 
     prepared_data["Festivals"] = dict()
     prepare_festival_season_data(content, data_to_randomize, prepared_data)
     prepare_festival_days_data(content, data_to_randomize, prepared_data)
+
+
+def prepare_shops_data(content: StardewContent, data_to_randomize: set[str], prepared_data):
+    prepared_data["Shops"] = dict()
+    prepare_shops_prices_data(content, data_to_randomize, prepared_data)
 
 
 def prepare_fish_catch_method_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
@@ -201,3 +217,48 @@ def prepare_festival_data_aspect(content: StardewContent, data_to_randomize: set
         if festival_name not in prepared_data["Festivals"]:
             prepared_data["Festivals"][festival_name] = dict()
         prepared_data["Festivals"][festival_name][aspect_key] = festival_data_extractor(festival_data)
+
+
+def prepare_shops_prices_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.shop_prices,
+                             lambda shop_source: shop_source.price is not None and shop_source.price >= 1,
+                             lambda shop_source: shop_source.price,
+                             "Price")
+
+
+def prepare_shops_currencies_data(content: StardewContent, data_to_randomize: set[str], prepared_data: dict):
+    prepare_shop_data_aspect(content, data_to_randomize, prepared_data,
+                             DataRandomizationOptionName.shop_currencies,
+                             lambda shop_source: shop_source.currency is not None and shop_source.price is not None and shop_source.price >= 1,
+                             lambda shop_source: shop_source.currency,
+                             "Currency")
+
+
+def prepare_shop_data_aspect(content: StardewContent, data_to_randomize: set[str], prepared_data: dict,
+                             randomize_toggle: str, shop_source_validator, shop_source_data_extractor, aspect_key: str):
+    if randomize_toggle not in data_to_randomize:
+        return
+    for item_name, item_data in content.game_items.items():
+        prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, item_name, item_data)
+    for building_name, building_data in content.farm_buildings.items():
+        prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, building_name, building_data)
+    for animal_name, animal_data in content.animals.items():
+        prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, animal_name, animal_data)
+
+
+def prepare_shop_item_aspect(prepared_data, shop_source_validator, shop_source_data_extractor, aspect_key, item_name: str, item_data):
+    shop_sources = [source for source in item_data.sources if isinstance(source, ShopSource)]
+    if len(shop_sources) <= 0:
+        return
+    for source in shop_sources:
+        if not shop_source_validator(source):
+            continue
+        if source.shop_region not in prepared_data["Shops"]:
+            prepared_data["Shops"][source.shop_region] = dict()
+        if item_name not in prepared_data["Shops"][source.shop_region]:
+            prepared_data["Shops"][source.shop_region][item_name] = dict()
+        extracted_data = shop_source_data_extractor(source)
+        if isinstance(extracted_data, list) and len(extracted_data) == 1:
+            extracted_data = extracted_data[0]
+        prepared_data["Shops"][source.shop_region][item_name][aspect_key] = extracted_data

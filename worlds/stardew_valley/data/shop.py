@@ -20,6 +20,12 @@ class ShopSource(Source):
         assert self.price is not None or self.items_price is not None, "At least money price or items price need to be defined."
         assert self.items_price is None or all(isinstance(p, tuple) for p in self.items_price), "Items price should be a tuple."
 
+    def __repr__(self):
+        return f"Region: {self.shop_region}, Price: {self.price}, Items: {self.items_price}, Seasons: {self.seasons}, Currency: {self.currency}"
+
+    def __lt__(self, other):
+        return self.__repr__() < other.__repr__()
+
 
 @dataclass(frozen=True, kw_only=True)
 class MysteryBoxSource(Source):

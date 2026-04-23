@@ -59,7 +59,7 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.lupini_land_of_clay: self.logic.time.has_year_three & self.logic.money.can_spend(1200),
             FestivalCheck.secret_santa: self.logic.gifts.has_any_universal_love,
             FestivalCheck.legend_of_the_winter_star: self.logic.true_,
-            FestivalCheck.rarecrow_3: self.logic.true_,
+            FestivalCheck.rarecrow_3: self.logic.money.can_shop_from(self.content.game_items[FestivalCheck.rarecrow_3].sources[0]),
             FestivalCheck.all_rarecrows: self.logic.region.can_reach(Region.farm) & self.logic.festival.has_all_rarecrows(),
             FestivalCheck.calico_race: self.logic.true_,
             FestivalCheck.mummy_mask: self.logic.true_,

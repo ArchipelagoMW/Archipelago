@@ -1,4 +1,5 @@
 from random import Random
+from typing import cast
 
 from .data_randomizer_behaviors import randomizers_per_behavior
 from ..content import StardewContent, content_packs
@@ -9,6 +10,7 @@ from ..data.harvest import HarvestCropSource
 from ..data.mod_only_data.crops_prices import all_crop_sell_prices
 from ..data.mod_only_data.fish_prices import all_fish_sell_prices
 from ..data.mod_only_data.growth_times import all_growth_times
+from ..data.shop import ShopSource
 from ..options import StardewValleyOptions
 from ..options.options import DataRandomizationBehavior
 from ..strings.ap_names.ap_option_names import DataRandomizationOptionName
@@ -29,6 +31,7 @@ def randomize_data(content: StardewContent, options: StardewValleyOptions, rando
     randomize_fish_data(behavior, content, data_to_randomize, random)
     randomize_crops_data(behavior, content, data_to_randomize, random)
     randomize_festivals_data(behavior, content, data_to_randomize, random)
+    randomize_shops_data(behavior, content, data_to_randomize, random)
 
     return content
 
@@ -53,6 +56,10 @@ def randomize_festivals_data(behavior, content, data_to_randomize, random):
     randomize_festival_seasons(content, data_to_randomize, behavior, random)
     randomize_festival_dates(content, data_to_randomize, behavior, random)
     sanitize_festival_dates(content, data_to_randomize, behavior, random)
+
+
+def randomize_shops_data(behavior, content, data_to_randomize, random):
+    randomize_shop_prices(content, data_to_randomize, behavior, random)
 
 
 def fish_is_included(data_to_randomize: set[str], fish_data: FishItem) -> bool:
@@ -309,3 +316,55 @@ def sanitize_festival_dates(content: StardewContent, data_to_randomize: set[str]
                 new_day = random.randint(1, 29)
                 content.festivals[festival_name] = override(festival_data, day=new_day)
                 break
+
+
+def randomize_shop_prices(content: StardewContent, data_to_randomize: set[str], behavior: DataRandomizationBehavior, random: Random):
+    if DataRandomizationOptionName.shop_prices not in data_to_randomize:
+        return
+
+    shop_sources_included = list([cast(ShopSource, shop_source) for shop_source in content.find_sources_of_type(ShopSource) if shop_source.price is not None and shop_source.price >= 1])
+    shop_sources_by_currency = dict()
+    for shop_source in shop_sources_included:
+        if shop_source.currency not in shop_sources_by_currency:
+            shop_sources_by_currency[shop_source.currency]: list[ShopSource] = []
+        shop_sources_by_currency[shop_source.currency].append(shop_source)
+
+    for currency, shop_sources in shop_sources_by_currency.items():
+        if DataRandomizationOptionName.shop_prices_across_vendors not in data_to_randomize:
+            shop_sources_by_vendor = dict()
+            for shop_source in shop_sources:
+                if shop_source.shop_region not in shop_sources_by_vendor:
+                    shop_sources_by_vendor[shop_source.shop_region] = []
+                shop_sources_by_vendor[shop_source.shop_region].append(shop_source)
+            for vendor, vendor_shop_sources in shop_sources_by_vendor.items():
+                randomize_shop_prices_group(content, behavior, random, vendor_shop_sources)
+        else:
+            randomize_shop_prices_group(content, behavior, random, shop_sources)
+
+
+def randomize_shop_prices_group(content: StardewContent, behavior: DataRandomizationBehavior, random: Random, shop_sources: list[ShopSource]):
+    prices_by_shop_sources = {shop_source: shop_source.price for shop_source in shop_sources if shop_source.price is not None and shop_source.price >= 1}
+    randomized_prices_per_shop_source = randomizers_per_behavior[behavior](prices_by_shop_sources, random)
+    for item_name, item_data in content.game_items.items():
+        new_sources = get_new_sources(item_data, randomized_prices_per_shop_source)
+        if new_sources is not None:
+            content.game_items[item_name] = override(item_data, sources=new_sources)
+    for building_name, building_data in content.farm_buildings.items():
+        new_sources = get_new_sources(building_data, randomized_prices_per_shop_source)
+        if new_sources is not None:
+            content.farm_buildings[building_name] = override(building_data, sources=new_sources)
+    for animal_name, animal_data in content.animals.items():
+        new_sources = get_new_sources(animal_data, randomized_prices_per_shop_source)
+        if new_sources is not None:
+            content.animals[animal_name] = override(animal_data, sources=new_sources)
+
+
+def get_new_sources(data, randomized_prices_per_shop_source):
+    shop_sources = [source for source in data.sources if isinstance(source, ShopSource) and source in randomized_prices_per_shop_source]
+    if len(shop_sources) <= 0:
+        return None
+    modified_shop_sources = [override(source, price=randomized_prices_per_shop_source[source]) for source in shop_sources]
+    new_sources = list(data.sources)
+    new_sources = [source for source in new_sources if source not in shop_sources]
+    new_sources.extend(modified_shop_sources)
+    return new_sources
